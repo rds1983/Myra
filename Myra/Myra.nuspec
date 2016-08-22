@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Myra</id>
+    <version>0.1</version>
+    <title>Myra</title>
+    <authors>MyraTeam</authors>
+    <owners>MyraTeam</owners>
+    <licenseUrl>https://en.wikipedia.org/wiki/MIT_License</licenseUrl>
+    <projectUrl>https://github.com/abarim-games/Myra</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Game Engine</description>
+    <copyright>Copyright 2016</copyright>
+    <tags>gamedev 3d</tags>
+  </metadata>
+  <files>
+	<file src="bin\Release\Cyotek.Drawing.BitmapFont.dll" target="lib\net40\Cyotek.Drawing.BitmapFont.dll"/>
+	<file src="bin\Release\Myra.dll" target="lib\net40\Myra.dll"/>
+	<file src="bin\Release\Newtonsoft.Json.dll" target="lib\net40\Newtonsoft.Json.dll"/>
+  </files>
+</package>

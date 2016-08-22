@@ -1,0 +1,638 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Cyotek.Drawing.BitmapFont</name>
+    </assembly>
+    <members>
+        <member name="T:Cyotek.Drawing.BitmapFont.BitmapFont">
+            <summary>
+            A bitmap font.
+            </summary>
+            <seealso cref="T:System.Collections.Generic.IEnumerable{Cyotek.Drawing.BitmapFont.Character}"/>
+        </member>
+        <member name="F:Cyotek.Drawing.BitmapFont.BitmapFont.NoMaxWidth">
+            <summary>
+            When used with <see cref="M:Cyotek.Drawing.BitmapFont.BitmapFont.MeasureFont(System.String,System.Double)"/>, specifies that no wrapping should occur.
+            </summary>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.AlphaChannel">
+            <summary>
+            Gets or sets the alpha channel.
+            </summary>
+            <value>
+            The alpha channel.
+            </value>
+            <remarks>Set to 0 if the channel holds the glyph data, 1 if it holds the outline, 2 if it holds the glyph and the outline, 3 if its set to zero, and 4 if its set to one.</remarks>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.BaseHeight">
+            <summary>
+            Gets or sets the number of pixels from the absolute top of the line to the base of the characters.
+            </summary>
+            <value>
+            The number of pixels from the absolute top of the line to the base of the characters.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.BlueChannel">
+            <summary>
+            Gets or sets the blue channel.
+            </summary>
+            <value>
+            The blue channel.
+            </value>
+            <remarks>Set to 0 if the channel holds the glyph data, 1 if it holds the outline, 2 if it holds the glyph and the outline, 3 if its set to zero, and 4 if its set to one.</remarks>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.Bold">
+            <summary>
+            Gets or sets a value indicating whether the font is bold.
+            </summary>
+            <value>
+            <c>true</c> if the font is bold, otherwise <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.Characters">
+            <summary>
+            Gets or sets the characters that comprise the font.
+            </summary>
+            <value>
+            The characters that comprise the font.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.Charset">
+            <summary>
+            Gets or sets the name of the OEM charset used.
+            </summary>
+            <value>
+            The name of the OEM charset used (when not unicode).
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.FamilyName">
+            <summary>
+            Gets or sets the name of the true type font.
+            </summary>
+            <value>
+            The font family name.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.FontSize">
+            <summary>
+            Gets or sets the size of the font.
+            </summary>
+            <value>
+            The size of the font.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.GreenChannel">
+            <summary>
+            Gets or sets the green channel.
+            </summary>
+            <value>
+            The green channel.
+            </value>
+            <remarks>Set to 0 if the channel holds the glyph data, 1 if it holds the outline, 2 if it holds the glyph and the outline, 3 if its set to zero, and 4 if its set to one.</remarks>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.Italic">
+            <summary>
+            Gets or sets a value indicating whether the font is italic.
+            </summary>
+            <value>
+            <c>true</c> if the font is italic, otherwise <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.Item(System.Char)">
+            <summary>
+            Indexer to get items within this collection using array index syntax.
+            </summary>
+            <param name="character">The character.</param>
+            <returns>
+            The indexed item.
+            </returns>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.Kernings">
+            <summary>
+            Gets or sets the character kernings for the font.
+            </summary>
+            <value>
+            The character kernings for the font.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.LineHeight">
+            <summary>
+            Gets or sets the distance in pixels between each line of text.
+            </summary>
+            <value>
+            The distance in pixels between each line of text.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.OutlineSize">
+            <summary>
+            Gets or sets the outline thickness for the characters.
+            </summary>
+            <value>
+            The outline thickness for the characters.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.Packed">
+            <summary>
+            Gets or sets a value indicating whether the monochrome characters have been packed into each of the texture channels.
+            </summary>
+            <value>
+            <c>true</c> if the characters are packed, otherwise <c>false</c>.
+            </value>
+            <remarks>
+            When packed, the <see cref="P:Cyotek.Drawing.BitmapFont.BitmapFont.AlphaChannel"/> property describes what is stored in each channel.
+            </remarks>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.Padding">
+            <summary>
+            Gets or sets the padding for each character.
+            </summary>
+            <value>
+            The padding for each character.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.Pages">
+            <summary>
+            Gets or sets the texture pages for the font.
+            </summary>
+            <value>
+            The pages.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.RedChannel">
+            <summary>
+            Gets or sets the red channel.
+            </summary>
+            <value>
+            The red channel.
+            </value>
+            <remarks>Set to 0 if the channel holds the glyph data, 1 if it holds the outline, 2 if it holds the glyph and the outline, 3 if its set to zero, and 4 if its set to one.</remarks>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.Smoothed">
+            <summary>
+            Gets or sets a value indicating whether the font is smoothed.
+            </summary>
+            <value>
+            <c>true</c> if the font is smoothed, otherwise <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.Spacing">
+            <summary>
+            Gets or sets the spacing for each character.
+            </summary>
+            <value>
+            The spacing for each character.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.StretchedHeight">
+            <summary>
+            Gets or sets the font height stretch.
+            </summary>
+            <value>
+            The font height stretch.
+            </value>
+            <remarks>100% means no stretch.</remarks>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.SuperSampling">
+            <summary>
+            Gets or sets the level of super sampling used by the font.
+            </summary>
+            <value>
+            The super sampling level of the font.
+            </value>
+            <remarks>A value of 1 indicates no super sampling is in use.</remarks>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.TextureSize">
+            <summary>
+            Gets or sets the size of the texture images used by the font.
+            </summary>
+            <value>
+            The size of the texture.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.BitmapFont.Unicode">
+            <summary>
+            Gets or sets a value indicating whether the font is unicode.
+            </summary>
+            <value>
+            <c>true</c> if the font is unicode, otherwise <c>false</c>.
+            </value>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFont.GetKerning(System.Char,System.Char)">
+            <summary>
+            Gets the kerning for the specified character combination.
+            </summary>
+            <param name="previous">The previous character.</param>
+            <param name="current">The current character.</param>
+            <returns>
+            The spacing between the specified characters.
+            </returns>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFont.Load(System.IO.Stream)">
+            <summary>
+            Load font information from the specified <see cref="T:System.IO.Stream"/>.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when one or more required arguments are null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when one or more arguments have unsupported or
+            illegal values.</exception>
+            <exception cref="T:System.IO.InvalidDataException">Thrown when an Invalid Data error condition occurs.</exception>
+            <param name="stream">The stream to load.</param>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFont.Load(System.String)">
+            <summary>
+            Load font information from the specified file.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when one or more required arguments are null.</exception>
+            <exception cref="T:System.IO.FileNotFoundException">Thrown when the requested file is not present.</exception>
+            <param name="fileName">The file name to load.</param>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFont.LoadText(System.String)">
+            <summary>
+            Loads font information from the specified string.
+            </summary>
+            <param name="text">String containing the font to load.</param>
+            <remarks>The source data must be in BMFont text format.</remarks>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFont.LoadText(System.IO.Stream)">
+            <summary>
+            Loads font information from the specified stream.
+            </summary>
+            <remarks>
+            The source data must be in BMFont text format.
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">Thrown when one or more required arguments are null.</exception>
+            <param name="stream">The stream containing the font to load.</param>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFont.LoadText(System.IO.TextReader)">
+            <summary>
+            Loads font information from the specified <see cref="T:System.IO.TextReader"/>.
+            </summary>
+            <remarks>
+            The source data must be in BMFont text format.
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">Thrown when one or more required arguments are null.</exception>
+            <param name="reader">The <strong>TextReader</strong> used to feed the data into the font.</param>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFont.LoadXml(System.String)">
+            <summary>
+            Loads font information from the specified string.
+            </summary>
+            <param name="xml">String containing the font to load.</param>
+            <remarks>The source data must be in BMFont XML format.</remarks>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFont.LoadXml(System.IO.TextReader)">
+            <summary>
+            Loads font information from the specified <see cref="T:System.IO.TextReader"/>.
+            </summary>
+            <remarks>
+            The source data must be in BMFont XML format.
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">Thrown when one or more required arguments are null.</exception>
+            <param name="reader">The <strong>TextReader</strong> used to feed the data into the font.</param>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFont.LoadXml(System.IO.Stream)">
+            <summary>
+            Loads font information from the specified stream.
+            </summary>
+            <remarks>
+            The source data must be in BMFont XML format.
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">Thrown when one or more required arguments are null.</exception>
+            <param name="stream">The stream containing the font to load.</param>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFont.MeasureFont(System.String)">
+            <summary>
+            Provides the size, in pixels, of the specified text when drawn with this font.
+            </summary>
+            <param name="text">The text to measure.</param>
+            <returns>
+            The <see cref="T:System.Drawing.Size"/>, in pixels, of <paramref name="text"/> drawn with this font.
+            </returns>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFont.MeasureFont(System.String,System.Double)">
+            <summary>
+            Provides the size, in pixels, of the specified text when drawn with this font, automatically wrapping to keep within the specified with.
+            </summary>
+            <param name="text">The text to measure.</param>
+            <param name="maxWidth">The maximum width.</param>
+            <returns>
+            The <see cref="T:System.Drawing.Size"/>, in pixels, of <paramref name="text"/> drawn with this font.
+            </returns>
+            <remarks>The MeasureText method uses the <paramref name="maxWidth"/> parameter to automatically wrap when determining text size.</remarks>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFont.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>
+            A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through
+            the collection.
+            </returns>
+            <seealso cref="M:System.Collections.Generic.IEnumerable{Cyotek.Drawing.BitmapFont.Character}.GetEnumerator()"/>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFont.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Gets the enumerator.
+            </summary>
+            <returns>
+            The enumerator.
+            </returns>
+        </member>
+        <member name="T:Cyotek.Drawing.BitmapFont.BitmapFontLoader">
+            <summary>
+            Parsing class for bitmap fonts generated by AngelCode BMFont
+            </summary>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFontLoader.LoadFontFromFile(System.String)">
+            <summary>
+            Loads a bitmap font from a file, attempting to auto detect the file type
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when one or more required arguments are null.</exception>
+            <exception cref="T:System.IO.FileNotFoundException">Thrown when the requested file is not present.</exception>
+            <exception cref="T:System.IO.InvalidDataException">Thrown when an Invalid Data error condition occurs.</exception>
+            <param name="fileName">Name of the file to load.</param>
+            <returns>
+            A <see cref="T:Cyotek.Drawing.BitmapFont.BitmapFont"/> containing the loaded data.
+            </returns>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFontLoader.LoadFontFromTextFile(System.String)">
+            <summary>
+            Loads a bitmap font from a file containing font data in text format.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when one or more required arguments are null.</exception>
+            <exception cref="T:System.IO.FileNotFoundException">Thrown when the requested file is not present.</exception>
+            <param name="fileName">Name of the file to load.</param>
+            <returns>
+            A <see cref="T:Cyotek.Drawing.BitmapFont.BitmapFont"/> containing the loaded data.
+            </returns>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFontLoader.LoadFontFromXmlFile(System.String)">
+            <summary>
+            Loads a bitmap font from a file containing font data in XML format.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when one or more required arguments are null.</exception>
+            <exception cref="T:System.IO.FileNotFoundException">Thrown when the requested file is not present.</exception>
+            <param name="fileName">Name of the file to load.</param>
+            <returns>
+            A <see cref="T:Cyotek.Drawing.BitmapFont.BitmapFont"/> containing the loaded data.
+            </returns>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFontLoader.GetNamedBool(System.String[],System.String,System.Boolean)">
+            <summary>
+            Returns a boolean from an array of name/value pairs.
+            </summary>
+            <param name="parts">The array of parts.</param>
+            <param name="name">The name of the value to return.</param>
+            <param name="defaultValue">Default value(if the key doesnt exist or can't be parsed)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFontLoader.GetNamedInt(System.String[],System.String,System.Int32)">
+            <summary>
+            Returns an integer from an array of name/value pairs.
+            </summary>
+            <param name="parts">The array of parts.</param>
+            <param name="name">The name of the value to return.</param>
+            <param name="defaultValue">Default value(if the key doesnt exist or can't be parsed)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFontLoader.GetNamedString(System.String[],System.String)">
+            <summary>
+            Returns a string from an array of name/value pairs.
+            </summary>
+            <param name="parts">The array of parts.</param>
+            <param name="name">The name of the value to return.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFontLoader.ParsePadding(System.String)">
+            <summary>
+            Creates a Padding object from a string representation
+            </summary>
+            <param name="s">The string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFontLoader.ParsePoint(System.String)">
+            <summary>
+            Creates a Point object from a string representation
+            </summary>
+            <param name="s">The string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFontLoader.QualifyResourcePaths(Cyotek.Drawing.BitmapFont.BitmapFont,System.String)">
+            <summary>
+            Updates <see cref="T:Cyotek.Drawing.BitmapFont.Page"/> data with a fully qualified path
+            </summary>
+            <param name="font">The <see cref="T:Cyotek.Drawing.BitmapFont.BitmapFont"/> to update.</param>
+            <param name="resourcePath">The path where texture resources are located.</param>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFontLoader.Split(System.String,System.Char)">
+            <summary>
+            Splits the specified string using a given delimiter, ignoring any instances of the delimiter as part of a quoted string.
+            </summary>
+            <param name="s">The string to split.</param>
+            <param name="delimiter">The delimiter.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.BitmapFontLoader.ToArray``1(System.Collections.Generic.ICollection{``0})">
+            <summary>
+            Converts the given collection into an array
+            </summary>
+            <typeparam name="T">Type of the items in the array</typeparam>
+            <param name="values">The values.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Cyotek.Drawing.BitmapFont.Character">
+            <summary>
+            Represents the definition of a single character in a <see cref="T:Cyotek.Drawing.BitmapFont.BitmapFont"/>
+            </summary>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.Character.Bounds">
+            <summary>
+            Gets or sets the bounds of the character image in the source texture.
+            </summary>
+            <value>
+            The bounds of the character image in the source texture.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.Character.Channel">
+            <summary>
+            Gets or sets the texture channel where the character image is found.
+            </summary>
+            <value>
+            The texture channel where the character image is found.
+            </value>
+            <remarks>
+            1 = blue, 2 = green, 4 = red, 8 = alpha, 15 = all channels
+            </remarks>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.Character.Char">
+            <summary>
+            Gets or sets the character.
+            </summary>
+            <value>
+            The character.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.Character.Offset">
+            <summary>
+            Gets or sets the offset when copying the image from the texture to the screen.
+            </summary>
+            <value>
+            The offset when copying the image from the texture to the screen.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.Character.TexturePage">
+            <summary>
+            Gets or sets the texture page where the character image is found.
+            </summary>
+            <value>
+            The texture page where the character image is found.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.Character.XAdvance">
+            <summary>
+            Gets or sets the value used to advance the current position after drawing the character.
+            </summary>
+            <value>
+            How much the current position should be advanced after drawing the character.
+            </value>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.Character.ToString">
+            <summary>
+            Returns the fully qualified type name of this instance.
+            </summary>
+            <returns>
+            A <see cref="T:System.String" /> containing a fully qualified type name.
+            </returns>
+            <seealso cref="M:System.ValueType.ToString()"/>
+        </member>
+        <member name="T:Cyotek.Drawing.BitmapFont.Kerning">
+            <summary>
+            Represents the font kerning between two characters.
+            </summary>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.Kerning.Amount">
+            <summary>
+            Gets or sets how much the x position should be adjusted when drawing the second character immediately following the first.
+            </summary>
+            <value>
+            How much the x position should be adjusted when drawing the second character immediately following the first.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.Kerning.FirstCharacter">
+            <summary>
+            Gets or sets the first character.
+            </summary>
+            <value>
+            The first character.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.Kerning.SecondCharacter">
+            <summary>
+            Gets or sets the second character.
+            </summary>
+            <value>
+            The second character.
+            </value>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.Kerning.ToString">
+            <summary>
+            Returns the fully qualified type name of this instance.
+            </summary>
+            <returns>
+            A <see cref="T:System.String" /> containing a fully qualified type name.
+            </returns>
+            <seealso cref="M:System.ValueType.ToString()"/>
+        </member>
+        <member name="T:Cyotek.Drawing.BitmapFont.Padding">
+            <summary>
+            Represents padding or margin information associated with an element.
+            </summary>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.Padding.#ctor(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Cyotek.Drawing.BitmapFont.Padding"/> stricture using a separate padding size for each edge.
+            </summary>
+            <param name="left">The padding size, in pixels, for the left edge.</param>
+            <param name="top">The padding size, in pixels, for the top edge.</param>
+            <param name="right">The padding size, in pixels, for the right edge.</param>
+            <param name="bottom">The padding size, in pixels, for the bottom edge.</param>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.Padding.Bottom">
+            <summary>
+            Gets or sets the padding value for the bottom edge.
+            </summary>
+            <value>
+            The padding, in pixels, for the bottom edge.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.Padding.Left">
+            <summary>
+            Gets or sets the padding value for the left edge.
+            </summary>
+            <value>
+            The padding, in pixels, for the left edge.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.Padding.Right">
+            <summary>
+            Gets or sets the padding value for the right edge.
+            </summary>
+            <value>
+            The padding, in pixels, for the right edge.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.Padding.Top">
+            <summary>
+            Gets or sets the padding value for the top edge.
+            </summary>
+            <value>
+            The padding, in pixels, for the top edge.
+            </value>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.Padding.ToString">
+            <summary>
+            Returns the fully qualified type name of this instance.
+            </summary>
+            <returns>
+            A <see cref="T:System.String" /> containing a fully qualified type name.
+            </returns>
+            <seealso cref="M:System.ValueType.ToString()"/>
+        </member>
+        <member name="T:Cyotek.Drawing.BitmapFont.Page">
+            <summary>
+            Represents a texture page.
+            </summary>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.Page.#ctor(System.Int32,System.String)">
+            <summary>
+            Creates a texture page using the specified ID and source file name.
+            </summary>
+            <param name="id">The identifier.</param>
+            <param name="fileName">Filename of the texture image.</param>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.Page.FileName">
+            <summary>
+            Gets or sets the filename of the source texture image.
+            </summary>
+            <value>
+            The name of the file containing the source texture image.
+            </value>
+        </member>
+        <member name="P:Cyotek.Drawing.BitmapFont.Page.Id">
+            <summary>
+            Gets or sets the page identifier.
+            </summary>
+            <value>
+            The page identifier.
+            </value>
+        </member>
+        <member name="M:Cyotek.Drawing.BitmapFont.Page.ToString">
+            <summary>
+            Returns the fully qualified type name of this instance.
+            </summary>
+            <returns>
+            A <see cref="T:System.String" /> containing a fully qualified type name.
+            </returns>
+            <seealso cref="M:System.ValueType.ToString()"/>
+        </member>
+    </members>
+</doc>
