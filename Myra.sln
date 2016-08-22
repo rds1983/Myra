@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra", "Myra\Myra.csproj", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E7C2030A-AF9E-41B2-BD5C-39D8F70A09A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Sample", "Myra.Samples\Myra.Sample.csproj", "{F897E015-14EA-4FA6-B127-263E73827996}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples", "Myra.Samples\Myra.Samples.csproj", "{F897E015-14EA-4FA6-B127-263E73827996}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.DesktopGLLauncher", "Myra.Samples.DesktopGLLauncher\Myra.Samples.DesktopGLLauncher.csproj", "{27E7CA89-5B70-4554-9626-0A0A80A89F7F}"
 EndProject

@@ -61,9 +61,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Myra.Samples\Myra.Sample.csproj">
+    <ProjectReference Include="..\Myra.Samples\Myra.Samples.csproj">
       <Project>{f897e015-14ea-4fa6-b127-263e73827996}</Project>
-      <Name>Myra.Sample</Name>
+      <Name>Myra.Samples</Name>
     </ProjectReference>
     <ProjectReference Include="..\Myra\Myra.csproj">
       <Project>{4dcbb001-9c79-4f6b-996d-d654062d93e0}</Project>
