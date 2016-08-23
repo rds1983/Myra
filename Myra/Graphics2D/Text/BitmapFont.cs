@@ -132,8 +132,8 @@ namespace Myra.Graphics2D.Text
 
 				var dest = new Rectangle(pos.X + glyph.Offset.X,
 					pos.Y + glyph.Offset.Y,
-					glyph.Region.Bounds.X, 
-					glyph.Region.Bounds.Y);
+					glyph.Region.Bounds.Width, 
+					glyph.Region.Bounds.Height);
 
 				glyph.Region.Draw(batch, dest, color);
 
