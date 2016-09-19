@@ -33,8 +33,14 @@
         "background": "button",
         "pressedBackground": "button-down",
         "overBackground": "button-down",
-        "font": "default-font",
-        "textColor": "white",
+        "label": {
+            "font": "default-font",
+            "textColor": "white"
+        }
+    },
+    "checkBox": {
+        "image": "check-off",
+        "pressedImage":  "check-on",
         "label": {
             "font": "default-font",
             "textColor": "white"

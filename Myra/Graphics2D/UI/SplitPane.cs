@@ -5,8 +5,6 @@ using System.Collections.Specialized;
 using Microsoft.Xna.Framework;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
-using Myra.Input;
-using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
 {
@@ -42,7 +40,6 @@ namespace Myra.Graphics2D.UI
 			Widget = new Grid();
 
 			_widgets.CollectionChanged += WidgetsOnCollectionChanged;
-			InputAPI.MouseMoved += InputOnMouseMoved;
 
 			if (style != null)
 			{
@@ -69,8 +66,10 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		private void InputOnMouseMoved(object sender, GenericEventArgs<Point> args)
+		public override void OnMouseMoved(Point position)
 		{
+			base.OnMouseMoved(position);
+
 			if (_mouseCoord == null)
 			{
 				return;
@@ -88,7 +87,7 @@ namespace Myra.Graphics2D.UI
 
 			if (_orientation == Orientation.Horizontal)
 			{
-				var firstWidth = args.Data.X - bounds.X - _mouseCoord.Value;
+				var firstWidth = position.X - bounds.X - _mouseCoord.Value;
 
 				for (var i = 0; i < handleIndex - 1; ++i)
 				{
@@ -102,7 +101,7 @@ namespace Myra.Graphics2D.UI
 			}
 			else
 			{
-				var firstHeight = args.Data.Y - bounds.Y - _mouseCoord.Value;
+				var firstHeight = position.Y - bounds.Y - _mouseCoord.Value;
 
 				for (var i = 0; i < handleIndex - 1; ++i)
 				{
@@ -134,18 +133,18 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void HandleOnUp(object sender, GenericEventArgs<MouseButtons> genericEventArgs)
+		private void HandleOnUp(object sender, EventArgs args)
 		{
 			_handleDown = null;
 			_mouseCoord = null;
 		}
 
-		private void HandleOnDown(object sender, GenericEventArgs<MouseButtons> genericEventArgs)
+		private void HandleOnDown(object sender, EventArgs args)
 		{
 			_handleDown = (Button) sender;
 			_mouseCoord = _orientation == Orientation.Horizontal
-				? InputAPI.MouseState.X - _handleDown.Bounds.X
-				: InputAPI.MouseState.Y - _handleDown.Bounds.Y;
+				? Desktop.MousePosition.X - _handleDown.Bounds.X
+				: Desktop.MousePosition.Y - _handleDown.Bounds.Y;
 		}
 
 		private void WidgetsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)

@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
-using Myra.Input;
-using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
 {
@@ -90,25 +88,23 @@ namespace Myra.Graphics2D.UI
 			{
 				ApplyWindowStyle(style);
 			}
-
-			InputAPI.MouseDown += InputOnMouseDown;
-			InputAPI.MouseUp += InputOnMouseUp;
-			InputAPI.MouseMoved += InputOnMouseMoved;
 		}
 
 		public Window(): this(Stylesheet.Current.WindowStyle)
 		{
 		}
 
-		private void InputOnMouseMoved(object sender, GenericEventArgs<Point> args)
+		public override void OnMouseMoved(Point position)
 		{
+			base.OnMouseMoved(position);
+
 			if (_startPos == null)
 			{
 				return;
 			}
 
-			var newPos = new Point(args.Data.X - _startPos.Value.X,
-				args.Data.Y - _startPos.Value.Y);
+			var newPos = new Point(position.X - _startPos.Value.X,
+				position.Y - _startPos.Value.Y);
 
 			if (newPos.X < 0)
 			{
@@ -155,14 +151,18 @@ namespace Myra.Graphics2D.UI
 			YHint = newPos.Y;
 		}
 
-		private void InputOnMouseUp(object sender, GenericEventArgs<MouseButtons> args)
+		public override void OnMouseUp(MouseButtons mb)
 		{
+			base.OnMouseUp(mb);
+
 			_startPos = null;
 		}
 
-		private void InputOnMouseDown(object sender, GenericEventArgs<MouseButtons> args)
+		public override void OnMouseDown(MouseButtons mb)
 		{
-			var mousePos = InputAPI.MousePosition;
+			base.OnMouseDown(mb);
+
+			var mousePos = Desktop.MousePosition;
 			if (_titleGrid.Bounds.Contains(mousePos))
 			{
 				mousePos.X -= _titleGrid.Bounds.X;

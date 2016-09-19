@@ -1,9 +1,10 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
-using Myra.Input;
+using Myra.Utility;
 using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
@@ -13,6 +14,8 @@ namespace Myra.Graphics2D.UI
 		public const string DefaultStyleName = "default";
 
 		private Point _locationInParent;
+		private MouseButtons? _mouseButtonsDown;
+
 		private Rectangle _bounds;
 		private Desktop _desktop;
 		private bool _visible;
@@ -98,17 +101,11 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
-				if (_frameInfo != null)
-				{
-					_frameInfo.SizeChanged -= FrameInfoOnSizeChanged;
-				}
+				_frameInfo.SizeChanged -= FrameInfoOnSizeChanged;
 
 				_frameInfo = value;
 
-				if (_frameInfo != null)
-				{
-					_frameInfo.SizeChanged += FrameInfoOnSizeChanged;
-				}
+				_frameInfo.SizeChanged += FrameInfoOnSizeChanged;
 
 				FireMeasureChanged();
 			}
@@ -143,9 +140,14 @@ namespace Myra.Graphics2D.UI
 		public Drawable OverBackground { get; set; }
 		public Drawable DisabledBackground { get; set; }
 
-		public bool IsOver
+		public bool IsMouseOver { get; private set; }
+
+		public MouseButtons? MouseButtonsDown
 		{
-			get { return Bounds.Contains(InputAPI.MousePosition); }
+			get
+			{
+				return _mouseButtonsDown;
+			}
 		}
 
 		[JsonIgnore]
@@ -269,6 +271,18 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler LocationChanged;
 		public event EventHandler SizeChanged;
 
+		public event EventHandler MouseLeft;
+		public event EventHandler<GenericEventArgs<Point>> MouseEntered;
+		public event EventHandler<GenericEventArgs<Point>> MouseMoved;
+		public event EventHandler<GenericEventArgs<MouseButtons>> MouseDown;
+		public event EventHandler<GenericEventArgs<MouseButtons>> MouseUp;
+
+		public event EventHandler<GenericEventArgs<float>>  MouseWheelChanged;
+
+		public event EventHandler<GenericEventArgs<char>> KeyPressed;
+		public event EventHandler<GenericEventArgs<Keys>> KeyUp;
+		public event EventHandler<GenericEventArgs<Keys>> KeyDown;
+
 		public Widget()
 		{
 			InvalidateLayout();
@@ -284,7 +298,7 @@ namespace Myra.Graphics2D.UI
 			{
 				result = DisabledBackground;
 			}
-			else if (IsOver && OverBackground != null)
+			else if (IsMouseOver && OverBackground != null)
 			{
 				result = OverBackground;
 			}
@@ -476,6 +490,95 @@ namespace Myra.Graphics2D.UI
 		private void FrameInfoOnSizeChanged(object sender, EventArgs eventArgs)
 		{
 			FireMeasureChanged();
+		}
+
+		public virtual void OnMouseLeft()
+		{
+			IsMouseOver = false;
+
+			var ev = MouseLeft;
+			if (ev != null)
+			{
+				ev(this, EventArgs.Empty);
+			}
+		}
+
+		public virtual void OnMouseEntered(Point position)
+		{
+			IsMouseOver = true;
+
+			var ev = MouseEntered;
+			if (ev != null)
+			{
+				ev(this, new GenericEventArgs<Point>(position));
+			}
+		}
+
+		public virtual void OnMouseMoved(Point position)
+		{
+			var ev = MouseMoved;
+			if (ev != null)
+			{
+				ev(this, new GenericEventArgs<Point>(position));
+			}
+		}
+
+		public virtual void OnMouseDown(MouseButtons mb)
+		{
+			_mouseButtonsDown = mb;
+
+			var ev = MouseDown;
+			if (ev != null)
+			{
+				ev (this, new GenericEventArgs<MouseButtons>(mb));
+			}
+		}
+
+		public virtual void OnMouseUp(MouseButtons mb)
+		{
+			_mouseButtonsDown = null;
+
+			var ev = MouseUp;
+			if (ev != null)
+			{
+				ev(this, new GenericEventArgs<MouseButtons>(mb));
+			}
+		}
+
+		public virtual void OnMouseWheel(float delta)
+		{
+			var ev = MouseWheelChanged;
+			if (ev != null)
+			{
+				ev(this, new GenericEventArgs<float>(delta));
+			}
+		}
+
+		public virtual void OnKeyPressed(char k)
+		{
+			var ev = KeyPressed;
+			if (ev != null)
+			{
+				ev(this, new GenericEventArgs<char>(k));
+			}
+		}
+
+		public virtual void OnKeyDown(Keys k)
+		{
+			var ev = KeyDown;
+			if (ev != null)
+			{
+				ev(this, new GenericEventArgs<Keys>(k));
+			}
+		}
+
+		public virtual void OnKeyUp(Keys k)
+		{
+			var ev = KeyUp;
+			if (ev != null)
+			{
+				ev(this, new GenericEventArgs<Keys>(k));
+			}
 		}
 	}
 }

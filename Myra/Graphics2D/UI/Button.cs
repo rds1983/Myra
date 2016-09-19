@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
-using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
 {
@@ -78,16 +77,16 @@ namespace Myra.Graphics2D.UI
 			_image.Drawable = IsPressed ? PressedImage : Image;
 		}
 
-		protected override void FireUp(GenericEventArgs<MouseButtons> args)
+		protected override void FireUp()
 		{
-			base.FireUp(args);
+			base.FireUp();
 
 			UpdateDrawable();
 		}
 
-		protected override void FireDown(GenericEventArgs<MouseButtons> args)
+		protected override void FireDown()
 		{
-			base.FireDown(args);
+			base.FireDown();
 
 			UpdateDrawable();
 		}

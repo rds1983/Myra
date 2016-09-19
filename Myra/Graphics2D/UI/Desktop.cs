@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Myra.Graphics2D.Text;
-using Myra.Input;
 using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
@@ -14,7 +15,29 @@ namespace Myra.Graphics2D.UI
 		private SpriteBatch _batch;
 		private bool _layoutDirty = true;
 		private Rectangle _bounds;
+		private bool _widgetsDirty = true;
+		private readonly List<Widget> _widgetsCopy = new List<Widget>();
 		protected readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
+
+		public Point MousePosition { get; private set; }
+		public float MouseWheel { get; private set; }
+		public MouseState MouseState { get; private set; }
+
+		private IEnumerable<Widget> WidgetsCopy
+		{
+			get
+			{
+				if (_widgetsDirty)
+				{
+					_widgetsCopy.Clear();
+					_widgetsCopy.AddRange(_widgets);
+
+					_widgetsDirty = false;
+				}
+
+				return _widgetsCopy;
+			}
+		}
 
 		public ObservableCollection<Widget> Widgets
 		{
@@ -42,21 +65,14 @@ namespace Myra.Graphics2D.UI
 		public Desktop()
 		{
 			_widgets.CollectionChanged += WidgetsOnCollectionChanged;
-
-			InputAPI.MouseDown += InputOnMouseDown;
-			InputAPI.MouseUp += InputOnMouseUp;
-		}
-
-		private void InputOnMouseUp(object sender, GenericEventArgs<MouseButtons> genericEventArgs)
-		{
 		}
 
 		private void InputOnMouseDown(object sender, GenericEventArgs<MouseButtons> genericEventArgs)
 		{
-			if (ContextMenu != null && !ContextMenu.Bounds.Contains(InputAPI.MousePosition))
+/*			if (ContextMenu != null && !ContextMenu.Bounds.Contains(InputAPI.MousePosition))
 			{
 				HideContextMenu();
-			}
+			}*/
 		}
 
 		public void ShowContextMenu(Menu menu, Point position)
@@ -115,6 +131,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			InvalidateLayout();
+			_widgetsDirty = true;
 		}
 
 		private void WOnMeasureChanged(object sender, EventArgs eventArgs)
@@ -124,8 +141,7 @@ namespace Myra.Graphics2D.UI
 
 		public void Render(GraphicsDevice device)
 		{
-			InputAPI.Update();
-
+			UpdateInput();
 			UpdateLayout();
 
 			if (_batch == null)
@@ -135,7 +151,7 @@ namespace Myra.Graphics2D.UI
 
 			_batch.BeginUI();
 
-			foreach (var widget in _widgets)
+			foreach (var widget in WidgetsCopy)
 			{
 				if (widget.Visible)
 				{
@@ -158,7 +174,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			foreach (var widget in _widgets)
+			foreach (var widget in WidgetsCopy)
 			{
 				if (widget.Visible)
 				{
@@ -167,6 +183,62 @@ namespace Myra.Graphics2D.UI
 			}
 
 			_layoutDirty = false;
+		}
+
+		public int CalculateTotalWidgets()
+		{
+			var result = 0;
+			foreach (var w in _widgets)
+			{
+				++result;
+
+				var asContainer = w as Container;
+				if (asContainer != null)
+				{
+					result += asContainer.CalculateTotalChildCount();
+				}
+			}
+
+			return result;
+		}
+
+		public void HandleButton(ButtonState buttonState, ButtonState lastState, MouseButtons buttons)
+		{
+			if (buttonState == ButtonState.Pressed && lastState == ButtonState.Released)
+			{
+				WidgetsCopy.HandleMouseDown(buttons);
+			}
+			else if (buttonState == ButtonState.Released && lastState == ButtonState.Pressed)
+			{
+				WidgetsCopy.HandleMouseUp(buttons);
+			}
+		}
+
+		public void UpdateInput()
+		{
+			var lastState = MouseState;
+
+			MouseState = Mouse.GetState();
+			MousePosition = MouseState.Position;
+			MouseWheel = MouseState.ScrollWheelValue;
+
+			if (MouseState.X != lastState.X || MouseState.Y != lastState.Y)
+			{
+				WidgetsCopy.HandleMouseMovement(MousePosition);
+			}
+
+			HandleButton(MouseState.LeftButton, lastState.LeftButton, MouseButtons.Left);
+			HandleButton(MouseState.MiddleButton, lastState.MiddleButton, MouseButtons.Middle);
+			HandleButton(MouseState.RightButton, lastState.RightButton, MouseButtons.Right);
+
+/*			if (!MouseWheel.EpsilonEquals(lastState.ScrollWheelValue))
+			{
+				var ev = MouseWheelChanged;
+				if (ev != null)
+				{
+					ev(null, EventArgs.Empty);
+				}
+			}*/
 		}
 	}
 }

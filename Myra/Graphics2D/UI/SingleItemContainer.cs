@@ -39,6 +39,11 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public override int ChildCount
+		{
+			get { return 1; }
+		}
+
 		private void ChildOnVisibleChanged(object sender, EventArgs eventArgs)
 		{
 			FireMeasureChanged();

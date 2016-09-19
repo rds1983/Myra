@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 
@@ -9,6 +10,9 @@ namespace Myra.Graphics2D.UI
 	{
 		[JsonIgnore]
 		public abstract IEnumerable<Widget> Items { get; }
+
+		[JsonIgnore]
+		public abstract int ChildCount { get; }
 
 		protected Container()
 		{
@@ -25,6 +29,52 @@ namespace Myra.Graphics2D.UI
 
 				child.Location = Location + child.LocationInParent;
 			}
+		}
+
+		public override void OnMouseEntered(Point position)
+		{
+			base.OnMouseEntered(position);
+
+			Items.HandleMouseMovement(position);
+		}
+
+		public override void OnMouseLeft()
+		{
+			base.OnMouseLeft();
+
+			foreach (var w in Items)
+			{
+				if (!w.Visible)
+				{
+					continue;
+				}
+
+				if (w.IsMouseOver)
+				{
+					w.OnMouseLeft();
+				}
+			}
+		}
+
+		public override void OnMouseMoved(Point position)
+		{
+			base.OnMouseMoved(position);
+
+			Items.HandleMouseMovement(position);
+		}
+
+		public override void OnMouseDown(MouseButtons mb)
+		{
+			base.OnMouseDown(mb);
+
+			Items.HandleMouseDown(mb);
+		}
+
+		public override void OnMouseUp(MouseButtons mb)
+		{
+			base.OnMouseUp(mb);
+
+			Items.HandleMouseUp(mb);
 		}
 
 		public override void OnCharDown(char c)
@@ -82,6 +132,22 @@ namespace Myra.Graphics2D.UI
 			{
 				child.Desktop = Desktop;
 			}
+		}
+
+		public int CalculateTotalChildCount()
+		{
+			var result = ChildCount;
+
+			foreach (var child in Items)
+			{
+				var asCont = child as Container;
+				if (asCont != null)
+				{
+					result += asCont.CalculateTotalChildCount();
+				}
+			}
+
+			return result;
 		}
 	}
 }

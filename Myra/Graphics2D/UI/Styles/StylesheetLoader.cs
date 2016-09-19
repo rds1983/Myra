@@ -14,6 +14,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string TextFieldName = "textField";
 		public const string ScrollAreaName = "scrollArea";
 		public const string ButtonName = "button";
+		public const string CheckBoxName = "checkBox";
 		public const string TreeName = "tree";
 		public const string SplitPaneName = "splitPane";
 		public const string HorizontalSplitPaneName = "horizontalSplitPane";
@@ -444,6 +445,7 @@ namespace Myra.Graphics2D.UI.Styles
 			FillStyles(TextFieldName, result.TextFieldStyle, LoadTextFieldStyleFromSource);
 			FillStyles(ScrollAreaName, result.ScrollAreaStyle, LoadScrollAreaStyleFromSource);
 			FillStyles(ButtonName, result.ButtonStyle, LoadButtonStyleFromSource);
+			FillStyles(CheckBoxName, result.CheckBoxStyle, LoadButtonStyleFromSource);
 			FillStyles(TreeName, result.TreeStyle, LoadTreeStyleFromSource);
 			FillStyles(HorizontalSplitPaneName, result.HorizontalSplitPaneStyle, LoadSplitPaneStyleFromSource);
 			FillStyles(VerticalSplitPaneName, result.VerticalSplitPaneStyle, LoadSplitPaneStyleFromSource);

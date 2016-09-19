@@ -89,6 +89,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		private bool _childrenDirty = true;
+		private readonly List<Widget> _childrenCopy = new List<Widget>();
 		protected readonly ObservableCollection<Widget> _children = new ObservableCollection<Widget>();
 		private int _columnSpacing;
 		private int _rowSpacing;
@@ -104,7 +106,25 @@ namespace Myra.Graphics2D.UI
 
 		public override IEnumerable<Widget> Items
 		{
-			get { return _children; }
+			get
+			{
+				// We return copy of our collection
+				// To prevent exception when someone modifies the collection during the iteration
+				if (_childrenDirty)
+				{
+					_childrenCopy.Clear();
+					_childrenCopy.AddRange(_children);
+
+					_childrenDirty = false;
+				}
+
+				return _childrenCopy;
+			}
+		}
+
+		public override int ChildCount
+		{
+			get { return _children.Count; }
 		}
 
 		public IList<Widget> Children
@@ -215,6 +235,8 @@ namespace Myra.Graphics2D.UI
 			}
 
 			FireMeasureChanged();
+
+			_childrenDirty = true;
 		}
 
 		private void ChildOnMeasureChanged(object sender, EventArgs eventArgs)

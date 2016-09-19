@@ -3,31 +3,29 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.UI.Styles;
-using Myra.Input;
-using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
 {
 	public class Tree : TreeNode
 	{
-		private readonly List<RowInfo> _rowInfos = new List<RowInfo>();
-		private RowInfo _selectedRow;
+		private readonly List<TreeNode> _allNodes = new List<TreeNode>();
+		private TreeNode _selectedRow;
 
 		public Drawable RowOverBackground { get; set; }
 		public Drawable RowSelectionBackground { get; set; }
 
-		internal List<RowInfo> RowInfos
+		public List<TreeNode> AllNodes
 		{
-			get { return _rowInfos; }
+			get { return _allNodes; }
 		}
 
-		private RowInfo HoverRow { get; set; }
+		private TreeNode HoverRow { get; set; }
 
-		private RowInfo SelectedRow
+		public TreeNode SelectedRow
 		{
 			get { return _selectedRow; }
 
-			set
+			private set
 			{
 				if (value == _selectedRow)
 				{
@@ -44,18 +42,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public TreeNode SelectedTreeNode
-		{
-			get { return _selectedRow != null ? _selectedRow.TreeNode : null; }
-		}
-
 		public event EventHandler SelectionChanged; 
 
 		public Tree(TreeStyle style): base(style, null)
 		{
-			InputAPI.MouseMoved += InputOnMouseMoved;
-			InputAPI.MouseDown += InputOnMouseDown;
-
 			if (style != null)
 			{
 				ApplyTreeStyle(style);
@@ -66,21 +56,23 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
-		private void InputOnMouseDown(object sender, GenericEventArgs<MouseButtons> genericEventArgs)
+		public override void OnMouseDown(MouseButtons mb)
 		{
-			if (genericEventArgs.Data != MouseButtons.Left)
+			base.OnMouseDown(mb);
+
+			if (mb != MouseButtons.Left)
 			{
 				return;
 			}
 
 			if (HoverRow != null)
 			{
-				if (!HoverRow.Visible)
+				if (!HoverRow.RowVisible)
 				{
 					return;
 				}
 
-				if (HoverRow.TreeNode.Mark.Bounds.Contains(InputAPI.MousePosition))
+				if (HoverRow.Mark.Bounds.Contains(Desktop.MousePosition))
 				{
 					return;
 				}
@@ -89,18 +81,20 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void InputOnMouseMoved(object sender, GenericEventArgs<Point> genericEventArgs)
+		public override void OnMouseMoved(Point position)
 		{
+			base.OnMouseMoved(position);
+
 			HoverRow = null;
 
-			if (!ClientBounds.Contains(genericEventArgs.Data))
+			if (!Bounds.Contains(position))
 			{
 				return;
 			}
 
-			foreach (var rowInfo in _rowInfos)
+			foreach (var rowInfo in _allNodes)
 			{
-				if (rowInfo.Visible && rowInfo.Bounds.Contains(genericEventArgs.Data))
+				if (rowInfo.RowVisible && rowInfo.RowBounds.Contains(position))
 				{
 					HoverRow = rowInfo;
 					return;
@@ -112,13 +106,16 @@ namespace Myra.Graphics2D.UI
 		{
 			base.RemoveAllSubNodes();
 
-			_rowInfos.Clear();
-			_rowInfos.Add(ThisRow);
+			_allNodes.Clear();
+			_allNodes.Add(this);
+
+			_selectedRow = null;
+			HoverRow = null;
 		}
 
 		private static void RecursiveUpdateRowVisibility(TreeNode tree)
 		{
-			tree.ThisRow.Visible = true;
+			tree.RowVisible = true;
 
 			if (tree.IsExpanded)
 			{
@@ -134,19 +131,19 @@ namespace Myra.Graphics2D.UI
 		{
 			var bounds = ClientBounds;
 
-			foreach (var rowInfo in _rowInfos)
+			foreach (var rowInfo in _allNodes)
 			{
-				rowInfo.Visible = false;
+				rowInfo.RowVisible = false;
 			}
 
 			RecursiveUpdateRowVisibility(this);
 
-			foreach (var rowInfo in _rowInfos)
+			foreach (var rowInfo in _allNodes)
 			{
-				if (rowInfo.Visible)
+				if (rowInfo.RowVisible)
 				{
-					rowInfo.Bounds = new Rectangle(bounds.X, rowInfo.TreeNode.ClientBounds.Y, bounds.Width,
-						rowInfo.TreeNode.Widget.GetRowHeight(0));
+					rowInfo.RowBounds = new Rectangle(bounds.X, rowInfo.ClientBounds.Y, bounds.Width,
+						rowInfo.Widget.GetRowHeight(0));
 				}
 			}
 		}
@@ -167,14 +164,14 @@ namespace Myra.Graphics2D.UI
 
 		public override void InternalRender(SpriteBatch batch)
 		{
-			if (SelectedRow != null && SelectedRow.Visible && RowSelectionBackground != null)
+			if (SelectedRow != null && SelectedRow.RowVisible && RowSelectionBackground != null)
 			{
-				RowSelectionBackground.Draw(batch, SelectedRow.Bounds);
+				RowSelectionBackground.Draw(batch, SelectedRow.RowBounds);
 			}
 
-			if (HoverRow != null && HoverRow.Visible && RowOverBackground != null && HoverRow != SelectedRow)
+			if (HoverRow != null && HoverRow.RowVisible && RowOverBackground != null && HoverRow != SelectedRow)
 			{
-				RowOverBackground.Draw(batch, HoverRow.Bounds);
+				RowOverBackground.Draw(batch, HoverRow.RowBounds);
 			}
 
 			base.InternalRender(batch);

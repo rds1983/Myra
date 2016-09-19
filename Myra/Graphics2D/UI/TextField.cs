@@ -5,8 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
-using Myra.Input;
-using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
 {
@@ -99,19 +97,16 @@ namespace Myra.Graphics2D.UI
 			}
 
 			BlinkIntervalInMs = 450;
-
-			InputAPI.MouseDown += InputOnMouseDown;
-
-			InputAPI.KeyPressed += InputOnKeyPressed;
-			InputAPI.KeyDown += InputOnKeyDown;
 		}
 
 		public TextField() : this(Stylesheet.Current.TextFieldStyle)
 		{
 		}
 
-		private void InputOnKeyPressed(object sender, GenericEventArgs<char> genericEventArgs)
+		public override void OnKeyPressed(char k)
 		{
+			base.OnKeyPressed(k);
+
 			if (_cursorIndex == null)
 			{
 				return;
@@ -119,7 +114,7 @@ namespace Myra.Graphics2D.UI
 
 			var sb = new StringBuilder();
 			sb.Append(Text.Substring(0, _cursorIndex.Value));
-			sb.Append(genericEventArgs.Data);
+			sb.Append(k);
 			sb.Append(Text.Substring(_cursorIndex.Value));
 
 			Text = sb.ToString();
@@ -127,8 +122,10 @@ namespace Myra.Graphics2D.UI
 			_cursorIndex = _cursorIndex.Value + 1;
 		}
 
-		private void InputOnKeyDown(object sender, GenericEventArgs<Keys> genericEventArgs)
+		public override void OnKeyDown(Keys k)
 		{
+			base.OnKeyDown(k);
+
 			if (_cursorIndex == null)
 			{
 				return;
@@ -137,7 +134,7 @@ namespace Myra.Graphics2D.UI
 			var renderGlyph = _formattedText.GetGlyphRenderByIndex(_cursorIndex.Value);
 			var charIndex = renderGlyph.CharInfo.OriginalIndex;
 
-			switch (genericEventArgs.Data)
+			switch (k)
 			{
 				case Keys.Back:
 				{
@@ -254,9 +251,11 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void InputOnMouseDown(object sender, GenericEventArgs<MouseButtons> args)
+		public override void OnMouseDown(MouseButtons mb)
 		{
-			var mousePos = InputAPI.MousePosition;
+			base.OnMouseDown(mb);
+
+			var mousePos = Desktop.MousePosition;
 			var glyphRender = _formattedText.Hit(mousePos);
 
 			if (glyphRender == null)

@@ -2,7 +2,7 @@
 
 namespace Myra.Graphics2D.UI
 {
-	public class FrameInfo
+	public struct FrameInfo
 	{
 		private PaddingInfo _margin, _padding, _border;
 
@@ -32,7 +32,6 @@ namespace Myra.Graphics2D.UI
 				{
 					return;
 				}
-
 
 				_padding = value;
 				FireChanged();
@@ -81,6 +80,18 @@ namespace Myra.Graphics2D.UI
 			{
 				ev(this, EventArgs.Empty);
 			}
-		}	
+		}
+
+		public static bool operator ==(FrameInfo a, FrameInfo b)
+		{
+			return a._margin == b._margin &&
+			       a._border == b._border &&
+			       a._padding == b._padding;
+		}
+
+		public static bool operator !=(FrameInfo a, FrameInfo b)
+		{
+			return !(a == b);
+		}
 	}
 }

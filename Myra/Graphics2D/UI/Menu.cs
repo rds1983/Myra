@@ -1,8 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
-using Myra.Input;
-using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
 {
@@ -26,8 +25,6 @@ namespace Myra.Graphics2D.UI
 			Widget = new Grid();
 
 			_orientation = orientation;
-
-			InputAPI.MouseMoved += InputOnMouseMoved;
 
 			if (style != null)
 			{
@@ -78,7 +75,7 @@ namespace Myra.Graphics2D.UI
 			AddItem(separator);
 		}
 
-		private void ButtonOnDown(object sender, GenericEventArgs<MouseButtons> genericEventArgs)
+		private void ButtonOnDown(object sender, EventArgs args)
 		{
 			var menuItem = (MenuItem) sender;
 
@@ -93,8 +90,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void InputOnMouseMoved(object sender, GenericEventArgs<Point> genericEventArgs)
+		public override void OnMouseMoved(Point position)
 		{
+			base.OnMouseMoved(position);
+
 			if (Desktop == null || Desktop.ContextMenu == null)
 			{
 				return;
@@ -103,7 +102,7 @@ namespace Myra.Graphics2D.UI
 			foreach (var widget in Widget.Children)
 			{
 				var menuItem = widget as MenuItem;
-				if (menuItem != null && menuItem.SubMenu != null && menuItem.Bounds.Contains(genericEventArgs.Data) &&
+				if (menuItem != null && menuItem.SubMenu != null && menuItem.Bounds.Contains(position) &&
 				    Desktop.ContextMenu != menuItem.SubMenu)
 				{
 					Desktop.ShowContextMenu(menuItem.SubMenu, new Point(menuItem.Bounds.X, Bounds.Bottom));

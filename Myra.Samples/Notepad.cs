@@ -265,7 +265,7 @@ namespace Myra.Samples
 			_textField.Text = string.Empty;
 		}
 
-		private void QuitItemOnDown(object sender, GenericEventArgs<MouseButtons> genericEventArgs)
+		private void QuitItemOnDown(object sender, EventArgs genericEventArgs)
 		{
 			Exit();
 		}

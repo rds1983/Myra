@@ -58,6 +58,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public TextBlockStyle TextBlockStyle { get; private set; }
 		public TextFieldStyle TextFieldStyle { get; private set; }
 		public ButtonStyle ButtonStyle { get; private set; }
+		public ButtonStyle CheckBoxStyle { get; private set; }
 		public TreeStyle TreeStyle { get; private set; }
 		public SplitPaneStyle HorizontalSplitPaneStyle { get; private set; }
 		public SplitPaneStyle VerticalSplitPaneStyle { get; private set; }
@@ -71,6 +72,7 @@ namespace Myra.Graphics2D.UI.Styles
 			TextBlockStyle = new TextBlockStyle();
 			TextFieldStyle = new TextFieldStyle();
 			ButtonStyle = new ButtonStyle();
+			CheckBoxStyle = new ButtonStyle();
 			TreeStyle = new TreeStyle();
 			HorizontalSplitPaneStyle = new SplitPaneStyle();
 			VerticalSplitPaneStyle = new SplitPaneStyle();

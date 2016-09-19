@@ -32,7 +32,7 @@ namespace Myra.Graphics2D.Text
 
 			private class Lexeme
 			{
-				public StringBuilder text = new StringBuilder();
+				public readonly StringBuilder text = new StringBuilder();
 				public LexemeType type = LexemeType.Word;
 				public readonly List<CharInfo> chars = new List<CharInfo>();
 				public Color color;
@@ -55,7 +55,7 @@ namespace Myra.Graphics2D.Text
 			private Color? _currentColor;
 			private readonly StringBuilder _fullString = new StringBuilder();
 			private GlyphRun _lastRun;
-			private readonly List<GlyphRun>  _result = new List<GlyphRun>();
+			private readonly List<GlyphRun> _result = new List<GlyphRun>();
 			private BitmapFont _font;
 
 			private void StoreLexeme()
@@ -135,7 +135,7 @@ namespace Myra.Graphics2D.Text
 								++pos;
 							}
 						}
-					} 
+					}
 					else if (pt == ParseType.Color)
 					{
 						if (c != ']')
@@ -337,10 +337,7 @@ namespace Myra.Graphics2D.Text
 
 		public bool IsColored
 		{
-			get
-			{
-				return _colored;
-			}
+			get { return _colored; }
 			set
 			{
 				if (value == _colored)
@@ -496,7 +493,7 @@ namespace Myra.Graphics2D.Text
 
 				if (pos.Y >= si.RenderedBounds.Value.Top &&
 				    pos.Y < si.RenderedBounds.Value.Bottom &&
-					si.GlyphRenders.Count > 0)
+				    si.GlyphRenders.Count > 0)
 				{
 					// If position fits into the entire line, use the last glyph as result
 					return si.GlyphRenders[si.GlyphRenders.Count - 1];

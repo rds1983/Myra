@@ -1,29 +1,16 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
-using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
 {
 	public class TreeNode : SingleItemContainer<Grid>
 	{
-		internal class RowInfo
-		{
-			public Rectangle Bounds;
-			public TreeNode TreeNode { get; private set; }
-			public bool Visible { get; set; }
-
-			public RowInfo(TreeNode treeNode)
-			{
-				TreeNode = treeNode;
-			}
-		}
-
 		private readonly Tree _topTree;
 		private readonly Grid _childNodesGrid;
 		private readonly Button _mark;
 		private readonly TextBlock _label;
-		private readonly RowInfo _thisRowInfo;
 
 		public bool IsExpanded
 		{
@@ -63,21 +50,19 @@ namespace Myra.Graphics2D.UI
 			get { return _childNodesGrid; }
 		}
 
-		public TreeStyle TreeStyle { get; private set; }
+		internal Rectangle RowBounds { get; set; }
 
-		internal RowInfo ThisRow
-		{
-			get { return _thisRowInfo; }
-		}
+		internal bool RowVisible { get; set; }
+
+		public TreeStyle TreeStyle { get; private set; }
 
 		public TreeNode(TreeStyle style, Tree topTree)
 		{
 			_topTree = topTree;
-			_thisRowInfo = new RowInfo(this);
 
 			if (_topTree != null)
 			{
-				_topTree.RowInfos.Add(_thisRowInfo);
+				_topTree.AllNodes.Add(this);
 			}
 
 			HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -97,7 +82,8 @@ namespace Myra.Graphics2D.UI
 				HorizontalAlignment = HorizontalAlignment.Center,
 				VerticalAlignment = VerticalAlignment.Center,
 			};
-
+			
+			_mark.Down += MarkOnDown;
 			_mark.Up += MarkOnUp;
 
 			Widget.Children.Add(_mark);
@@ -135,9 +121,14 @@ namespace Myra.Graphics2D.UI
 			UpdateMark();
 		}
 
-		private void MarkOnUp(object sender, GenericEventArgs<MouseButtons> genericEventArgs)
+		private void MarkOnDown(object sender, EventArgs eventArgs)
 		{
-			_childNodesGrid.Visible = !_childNodesGrid.Visible;
+			_childNodesGrid.Visible = true;
+		}
+
+		private void MarkOnUp(object sender, EventArgs args)
+		{
+			_childNodesGrid.Visible = false;
 		}
 
 		private void UpdateMark()
@@ -155,10 +146,10 @@ namespace Myra.Graphics2D.UI
 
 		public TreeNode AddSubNode(string text)
 		{
-			var result = new TreeNode(TreeStyle, _topTree ?? (Tree)this)
+			var result = new TreeNode(TreeStyle, _topTree ?? (Tree) this)
 			{
 				Text = text,
-				GridPosition = { Y = _childNodesGrid.Children.Count },
+				GridPosition = {Y = _childNodesGrid.Children.Count},
 			};
 
 			_childNodesGrid.Children.Add(result);

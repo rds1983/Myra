@@ -3,8 +3,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
-using Myra.Input;
-using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
 {
@@ -39,24 +37,22 @@ namespace Myra.Graphics2D.UI
 			{
 				ApplyScrollPaneStyle(style);
 			}
-
-			InputAPI.MouseDown += InputOnMouseDown;
-			InputAPI.MouseUp += InputOnMouseUp;
-			InputAPI.MouseMoved += InputOnMouseMoved;
 		}
 
 		public ScrollPane() : this(Stylesheet.Current.ScrollAreaStyle)
 		{
 		}
 
-		private void InputOnMouseMoved(object sender, GenericEventArgs<Point> args)
+		public override void OnMouseMoved(Point position)
 		{
+			base.OnMouseMoved(position);
+
 			if (!_startBoundsPos.HasValue) return;
 			var origin = _origin;
 
 			if (_scrollbarOrientation == Orientation.Horizontal)
 			{
-				var delta = args.Data.X - Bounds.X - _startBoundsPos.Value;
+				var delta = position.X - Bounds.X - _startBoundsPos.Value;
 				if (delta < 0)
 				{
 					delta = 0;
@@ -77,7 +73,7 @@ namespace Myra.Graphics2D.UI
 			}
 			else
 			{
-				var delta = args.Data.Y - Bounds.Y - _startBoundsPos.Value;
+				var delta = position.Y - Bounds.Y - _startBoundsPos.Value;
 				if (delta < 0)
 				{
 					delta = 0;
@@ -106,15 +102,19 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void InputOnMouseUp(object sender, GenericEventArgs<MouseButtons> genericEventArgs)
+		public override void OnMouseUp(MouseButtons mb)
 		{
+			base.OnMouseUp(mb);
+
 			_startBoundsPos = null;
 		}
 
-		private void InputOnMouseDown(object sender, GenericEventArgs<MouseButtons> args)
+		public override void OnMouseDown(MouseButtons mb)
 		{
-			var mousePosition = InputAPI.MousePosition;
-			if (args.Data == MouseButtons.Left)
+			base.OnMouseDown(mb);
+
+			var mousePosition = Desktop.MousePosition;
+			if (mb == MouseButtons.Left)
 			{
 				if (_verticalScrollbarVisible && _verticalScrollbarThumb.Contains(mousePosition))
 				{

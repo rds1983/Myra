@@ -1,92 +1,97 @@
 ﻿using System;
 using Myra.Graphics2D.UI.Styles;
-using Myra.Input;
-using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
 {
 	public class ButtonBase<T> : SingleItemContainer<T> where T : Widget
 	{
-		private bool _wasDown;
+		private bool _isPressed;
 
 		public Drawable PressedBackground { get; set; }
 		public bool Toggleable { get; set; }
 
-		public bool IsPressed { get; set; }
+		public bool IsPressed
+		{
+			get
+			{
+				return _isPressed;
+			}
 
-		public event EventHandler<GenericEventArgs<MouseButtons>> Down;
-		public event EventHandler<GenericEventArgs<MouseButtons>> Up;
+			set
+			{
+				if (value == _isPressed)
+				{
+					return;
+				}
+
+				_isPressed = value;
+
+				if (value)
+				{
+					FireDown();
+				}
+				else
+				{
+					FireUp();
+				}
+			}
+		}
+
+		public event EventHandler Down;
+		public event EventHandler Up;
 
 		public ButtonBase()
 		{
-			InputAPI.MouseDown += InputOnMouseDown;
-			InputAPI.MouseUp += InputOnMouseUp;
-
 			Toggleable = false;
 		}
 
-		private void InputOnMouseUp(object sender, GenericEventArgs<MouseButtons> args)
+		public override void OnMouseUp(MouseButtons mb)
 		{
+			base.OnMouseUp(mb);
+
 			if (!Toggleable)
 			{
 				IsPressed = false;
 			}
-
-			if (_wasDown)
-			{
-				FireUp(args);
-
-				_wasDown = false;
-			}
 		}
 
-		private void InputOnMouseDown(object sender, GenericEventArgs<MouseButtons> args)
+		public override void OnMouseDown(MouseButtons mb)
 		{
-			if (IsOver)
+			base.OnMouseDown(mb);
+
+			if (!IsMouseOver) return;
+
+			if (!Toggleable)
 			{
-				if (!Toggleable)
-				{
-					var fireDown = !IsPressed;
-
-					IsPressed = true;
-
-					if (fireDown)
-					{
-						FireDown(args);
-					}
-				}
-				else
-				{
-					IsPressed = !IsPressed;
-
-					FireDown(args);
-				}
-
-				_wasDown = true;
+				IsPressed = true;
+			}
+			else
+			{
+				IsPressed = !IsPressed;
 			}
 		}
 
-		protected virtual void FireUp(GenericEventArgs<MouseButtons> args)
+		protected virtual void FireUp()
 		{
 			var ev = Up;
 			if (ev != null)
 			{
-				ev(this, args);
+				ev(this, EventArgs.Empty);
 			}
 		}
 
-		protected virtual void FireDown(GenericEventArgs<MouseButtons> args)
+		protected virtual void FireDown()
 		{
 			var ev = Down;
 			if (ev != null)
 			{
-				ev(this, args);
+				ev(this, EventArgs.Empty);
 			}
 		}
 
 		public override Drawable GetCurrentBackground()
 		{
-			var isOver = IsOver;
+			var isOver = IsMouseOver;
 
 			var result = Background;
 			if (!Enabled && DisabledBackground != null)

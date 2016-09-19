@@ -5,11 +5,6 @@
 		public Drawable Background { get; set; }
 		public Drawable OverBackground { get; set; }
 		public Drawable DisabledBackground { get; set; }
-		public FrameInfo FrameInfo { get;set; }
-
-		public WidgetStyle()
-		{
-			FrameInfo = new FrameInfo();
-		}
+		public FrameInfo FrameInfo;
 	}
 }
