@@ -91,7 +91,9 @@
     <Compile Include="Graphics2D\UI\RenderUtils.cs" />
     <Compile Include="Graphics2D\UI\ScrollPane.cs" />
     <Compile Include="Graphics2D\UI\Styles\ButtonBaseStyle.cs" />
+    <Compile Include="Graphics2D\UI\Styles\ImageStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\MenuSeparatorStyle.cs" />
+    <Compile Include="Graphics2D\UI\Styles\PressableImageStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\SplitPaneStyle.cs" />
     <Compile Include="Graphics2D\UI\TreeNode.cs" />
     <Compile Include="Resources.cs" />

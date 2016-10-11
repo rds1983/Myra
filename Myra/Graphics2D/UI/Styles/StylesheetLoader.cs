@@ -56,6 +56,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string ShortcutWidthName = "shortcutWidth";
 		public const string SpacingName = "spacing";
 		public const string LabelStyleName = "label";
+		public const string ImageStyleName = "image";
 		public const string MenuItemName = "menuItem";
 		public const string HandleName = "handle";
 		public const string MarkName = "mark";
@@ -290,6 +291,28 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		private void LoadImageStyleFromSource(JObject source, ImageStyle result)
+		{
+			LoadWidgetStyleFromSource(source, result);
+
+			string name;
+			if (source.GetStyle(ImageName, out name))
+			{
+				result.Image = GetDrawable(name);
+			}
+		}
+
+		private void LoadPressableImageStyleFromSource(JObject source, PressableImageStyle result)
+		{
+			LoadImageStyleFromSource(source, result);
+
+			string name;
+			if (source.GetStyle(PressedImageName, out name))
+			{
+				result.PressedImage = GetDrawable(name);
+			}
+		}
+
 		private void LoadButtonStyleFromSource(JObject source, ButtonStyle result)
 		{
 			LoadWidgetStyleFromSource(source, result);
@@ -306,14 +329,9 @@ namespace Myra.Graphics2D.UI.Styles
 				LoadTextBlockStyleFromSource(labelStyle, result.LabelStyle);
 			}
 
-			if (source.GetStyle(ImageName, out name))
+			if (source.GetStyle(ImageStyleName, out labelStyle))
 			{
-				result.Image = GetDrawable(name);
-			}
-
-			if (source.GetStyle(PressedImageName, out name))
-			{
-				result.PressedImage = GetDrawable(name);
+				LoadPressableImageStyleFromSource(labelStyle, result.ImageStyle);
 			}
 		}
 

@@ -67,8 +67,37 @@ namespace Myra.Graphics2D.UI
 				_textBlock.ApplyTextBlockStyle(style.LabelStyle);
 			}
 
-			Image = style.Image;
-			PressedImage = style.PressedImage;
+			if (style.ImageStyle != null)
+			{
+				var imageStyle = style.ImageStyle;
+
+				_image.ApplyWidgetStyle(imageStyle);
+
+				Image = imageStyle.Image;
+				PressedImage = imageStyle.PressedImage;
+
+				if (Image != null)
+				{
+					_image.WidthHint = imageStyle.Image.Size.X;
+					_image.HeightHint = imageStyle.Image.Size.Y;
+				}
+
+				if (imageStyle.PressedImage != null)
+				{
+					if (_image.WidthHint == null || 
+						imageStyle.PressedImage.Size.X > _image.WidthHint.Value)
+					{
+						_image.WidthHint = imageStyle.PressedImage.Size.X;
+					}
+
+					if (_image.HeightHint == null || 
+						imageStyle.PressedImage.Size.Y > _image.HeightHint.Value)
+					{
+						_image.HeightHint = imageStyle.PressedImage.Size.Y;
+					}
+				}
+			}
+
 			UpdateDrawable();
 		}
 

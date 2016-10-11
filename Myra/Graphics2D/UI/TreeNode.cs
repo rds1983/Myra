@@ -175,30 +175,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			TreeStyle = style;
-
-			_mark.WidthHint = null;
-			_mark.HeightHint = null;
-			if (style.MarkStyle != null)
-			{
-				if (style.MarkStyle.Image != null)
-				{
-					_mark.WidthHint = style.MarkStyle.Image.Size.X;
-					_mark.HeightHint = style.MarkStyle.Image.Size.Y;
-				}
-
-				if (style.MarkStyle.PressedImage != null)
-				{
-					if (_mark.WidthHint != null && style.MarkStyle.PressedImage.Size.X > _mark.WidthHint.Value)
-					{
-						_mark.WidthHint = style.MarkStyle.PressedImage.Size.X;
-					}
-
-					if (_mark.HeightHint != null && style.MarkStyle.PressedImage.Size.Y > _mark.HeightHint.Value)
-					{
-						_mark.HeightHint = style.MarkStyle.PressedImage.Size.Y;
-					}
-				}
-			}
 		}
 	}
 }

@@ -39,11 +39,14 @@
         }
     },
     "checkBox": {
-        "image": "check-off",
-        "pressedImage":  "check-on",
         "label": {
             "font": "default-font",
             "textColor": "white"
+        },
+        "image": {
+            "background": "vis-check",
+            "overBackground": "vis-check-over",
+            "pressedImage": "vis-check-tick"
         }
     },
     "tree": {
@@ -54,8 +57,10 @@
                 "left": 2.0,
                 "right": 2.0
             },
-            "image": "tree-plus",
-            "pressedImage": "tree-minus"
+            "image": {
+                "image": "tree-plus",
+                "pressedImage": "tree-minus"
+            }
         },
         "label": {
             "padding": {
@@ -82,7 +87,7 @@
         "background": "button",
         "separator": {
             "image": "separator",
-            "thickness":  3
+            "thickness": 3
         },
         "menuItem": {
             "pressedBackground": "button-down",
@@ -104,10 +109,10 @@
         "background": "button",
         "separator": {
             "image": "separator-menu",
-            "thickness":  4,
+            "thickness": 4,
             "padding": {
                 "top": 2.0,
-                "bottom":  2.0
+                "bottom": 2.0
             }
         },
         "menuItem": {
