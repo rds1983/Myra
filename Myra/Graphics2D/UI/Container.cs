@@ -77,19 +77,6 @@ namespace Myra.Graphics2D.UI
 			Items.HandleMouseUp(mb);
 		}
 
-		public override void OnCharDown(char c)
-		{
-			base.OnCharDown(c);
-
-			foreach (var child in Items)
-			{
-				if (!child.Visible)
-					continue;
-
-				child.OnCharDown(c);
-			}
-		}
-
 		public override void InternalRender(SpriteBatch batch)
 		{
 			var bounds = ClientBounds;

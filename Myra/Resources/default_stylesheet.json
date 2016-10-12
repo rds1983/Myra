@@ -51,7 +51,7 @@
     },
     "tree": {
         "rowSelectionBackground": "tree-selection",
-        "rowOverBackground": "tree-over",
+        "rowSelectionBackgroundWithoutFocus": "tree-over",
         "mark": {
             "padding": {
                 "left": 2.0,

@@ -26,6 +26,11 @@ namespace Myra.Graphics2D.UI
 		public Drawable VerticalScrollBackground { get; set; }
 		public Drawable VerticalScrollKnob { get; set; }
 
+		public override bool CanFocus
+		{
+			get { return true; }
+		}
+
 		public ScrollPane(ScrollAreaStyle style)
 		{
 			_horizontalScrollbarVisible = _verticalScrollbarVisible = false;

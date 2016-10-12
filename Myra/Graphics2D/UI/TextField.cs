@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
+using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
 {
@@ -85,6 +86,7 @@ namespace Myra.Graphics2D.UI
 			get { return true; }
 		}
 
+
 		public event EventHandler TextChanged;
 
 		public TextField(TextFieldStyle style)
@@ -103,18 +105,11 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
-		public override void OnKeyPressed(char k)
+		private void ProcessChar(char ch)
 		{
-			base.OnKeyPressed(k);
-
-			if (_cursorIndex == null)
-			{
-				return;
-			}
-
 			var sb = new StringBuilder();
 			sb.Append(Text.Substring(0, _cursorIndex.Value));
-			sb.Append(k);
+			sb.Append(ch);
 			sb.Append(Text.Substring(_cursorIndex.Value));
 
 			Text = sb.ToString();
@@ -191,7 +186,6 @@ namespace Myra.Graphics2D.UI
 						break;
 					}
 
-
 					// Move up
 					--lineIndex;
 
@@ -246,7 +240,16 @@ namespace Myra.Graphics2D.UI
 
 					_cursorIndex = _cursorIndex.Value + 1;
 				}
+					break;
 
+				default:
+					var ch =
+						k.ToChar(Desktop.KeyboardState.IsKeyDown(Keys.LeftShift) || Desktop.KeyboardState.IsKeyDown(Keys.RightShift));
+
+					if (ch.HasValue)
+					{
+						ProcessChar(ch.Value);
+					}
 					break;
 			}
 		}
@@ -287,6 +290,12 @@ namespace Myra.Graphics2D.UI
 			}
 
 			_formattedText.Draw(batch, ClientBounds, TextColor);
+
+			if (!IsFocused)
+			{
+				// Skip cursor rendering if the widget doesnt have the focus
+				return;
+			}
 
 			var now = DateTime.Now;
 			if ((now - _lastBlinkStamp).TotalMilliseconds >= BlinkIntervalInMs)

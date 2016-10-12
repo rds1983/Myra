@@ -16,12 +16,17 @@ namespace Myra.Graphics2D.UI
 		private bool _layoutDirty = true;
 		private Rectangle _bounds;
 		private bool _widgetsDirty = true;
+		private Widget _focusedWidget;
 		private readonly List<Widget> _widgetsCopy = new List<Widget>();
 		protected readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
+		private readonly List<Widget> _focusableWidgets = new List<Widget>();
+		private readonly List<Widget> _focusedWidgets = new List<Widget>();
+		private int? _focusedWidgetIndex;
 
 		public Point MousePosition { get; private set; }
 		public float MouseWheel { get; private set; }
 		public MouseState MouseState { get; private set; }
+		public KeyboardState KeyboardState { get; private set; }
 
 		private IEnumerable<Widget> WidgetsCopy
 		{
@@ -61,6 +66,31 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public Menu ContextMenu { get; private set; }
+
+		public Widget FocusedWidget
+		{
+			get { return _focusedWidget; }
+
+			set
+			{
+				if (value == _focusedWidget)
+				{
+					return;
+				}
+
+				if (_focusedWidget != null)
+				{
+					SetFocus(_focusedWidget, false);
+				}
+
+				_focusedWidget = value;
+
+				if (_focusedWidget != null)
+				{
+					SetFocus(_focusedWidget, true);
+				}
+			}
+		}
 
 		public Desktop()
 		{
@@ -174,6 +204,8 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
+			UpdateFocusableWidgets();
+
 			foreach (var widget in WidgetsCopy)
 			{
 				if (widget.Visible)
@@ -231,6 +263,42 @@ namespace Myra.Graphics2D.UI
 			HandleButton(MouseState.MiddleButton, lastState.MiddleButton, MouseButtons.Middle);
 			HandleButton(MouseState.RightButton, lastState.RightButton, MouseButtons.Right);
 
+			var lastKeyboardState = KeyboardState;
+			KeyboardState = Keyboard.GetState();
+
+			var pressedKeys = KeyboardState.GetPressedKeys();
+			for (var i = 0; i < pressedKeys.Length; ++i)
+			{
+				var key = pressedKeys[i];
+				if (!lastKeyboardState.IsKeyDown(key))
+				{
+					var acceptsTab = false;
+					foreach (var w in _focusedWidgets)
+					{
+						if (key != Keys.Tab || w.AcceptsTab)
+						{
+							w.OnKeyDown(key);
+
+							if (w.AcceptsTab)
+							{
+								acceptsTab = true;
+							}
+						}
+					}
+
+					if (key == Keys.Tab && !acceptsTab && _focusableWidgets.Count > 0)
+					{
+						var newIndex = _focusedWidgetIndex + 1 ?? 0;
+						if (newIndex >= _focusableWidgets.Count)
+						{
+							newIndex = 0;
+						}
+
+						FocusedWidget = _focusableWidgets[newIndex];
+					}
+				}
+			}
+
 /*			if (!MouseWheel.EpsilonEquals(lastState.ScrollWheelValue))
 			{
 				var ev = MouseWheelChanged;
@@ -239,6 +307,87 @@ namespace Myra.Graphics2D.UI
 					ev(null, EventArgs.Empty);
 				}
 			}*/
+		}
+
+		private bool UpdateFocusableWidgets(IEnumerable<Widget> widgets)
+		{
+			var result = false;
+
+			foreach (var w in widgets)
+			{
+				if (!w.Visible)
+				{
+					continue;
+				}
+
+				var asContainer = w as Container;
+				if (w.CanFocus)
+				{
+					if (asContainer == null ||
+					    !UpdateFocusableWidgets(asContainer.Items))
+					{
+						w.MouseDown += FocusableWidgetOnMouseDown;
+						_focusableWidgets.Add(w);
+						result = true;
+					}
+				}
+				else
+				{
+					if (asContainer != null)
+					{
+						if (UpdateFocusableWidgets(asContainer.Items))
+						{
+							result = true;
+						}
+					}
+				}
+			}
+
+			return result;
+		}
+
+		private void FocusableWidgetOnMouseDown(object sender, GenericEventArgs<MouseButtons> genericEventArgs)
+		{
+			var widget = (Widget) sender;
+
+			if (!widget.IsFocused)
+			{
+				FocusedWidget = widget;
+			}
+		}
+
+		private void SetFocus(Widget w, bool focused)
+		{
+			_focusedWidgets.Clear();
+
+			_focusedWidgetIndex = _focusableWidgets.IndexOf(w);
+
+			while (w != null)
+			{
+				if (!focused || w.CanFocus)
+				{
+					w.IsFocused = focused;
+
+					if (focused)
+					{
+						_focusedWidgets.Add(w);
+					}
+				}
+
+				w = w.Parent;
+			}
+		}
+
+		private void UpdateFocusableWidgets()
+		{
+			foreach (var w in _focusableWidgets)
+			{
+				w.MouseDown -= FocusableWidgetOnMouseDown;
+			}
+
+			_focusableWidgets.Clear();
+
+			UpdateFocusableWidgets(_widgets);
 		}
 	}
 }

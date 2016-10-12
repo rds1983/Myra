@@ -11,7 +11,7 @@ namespace Myra.Graphics2D.UI
 		private readonly List<TreeNode> _allNodes = new List<TreeNode>();
 		private TreeNode _selectedRow;
 
-		public Drawable RowOverBackground { get; set; }
+		public Drawable RowSelectionBackgroundWithoutFocus { get; set; }
 		public Drawable RowSelectionBackground { get; set; }
 
 		public List<TreeNode> AllNodes
@@ -42,9 +42,14 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public event EventHandler SelectionChanged; 
+		public override bool CanFocus
+		{
+			get { return true; }
+		}
 
-		public Tree(TreeStyle style): base(style, null)
+		public event EventHandler SelectionChanged;
+
+		public Tree(TreeStyle style) : base(style, null)
 		{
 			if (style != null)
 			{
@@ -77,7 +82,7 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
-				SelectedRow = SelectedRow != HoverRow ? HoverRow : null;
+				SelectedRow = HoverRow;
 			}
 		}
 
@@ -166,12 +171,14 @@ namespace Myra.Graphics2D.UI
 		{
 			if (SelectedRow != null && SelectedRow.RowVisible && RowSelectionBackground != null)
 			{
-				RowSelectionBackground.Draw(batch, SelectedRow.RowBounds);
-			}
-
-			if (HoverRow != null && HoverRow.RowVisible && RowOverBackground != null && HoverRow != SelectedRow)
-			{
-				RowOverBackground.Draw(batch, HoverRow.RowBounds);
+				if (!IsFocused && RowSelectionBackgroundWithoutFocus != null)
+				{
+					RowSelectionBackgroundWithoutFocus.Draw(batch, SelectedRow.RowBounds);
+				}
+				else
+				{
+					RowSelectionBackground.Draw(batch, SelectedRow.RowBounds);
+				}
 			}
 
 			base.InternalRender(batch);
@@ -181,8 +188,8 @@ namespace Myra.Graphics2D.UI
 		{
 			ApplyTreeNodeStyle(style);
 
-			RowOverBackground = style.RowOverBackground;
 			RowSelectionBackground = style.RowSelectionBackground;
+			RowSelectionBackgroundWithoutFocus = style.RowSelectionBackgroundWithoutFocus;
 		}
 	}
 }

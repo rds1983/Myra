@@ -117,8 +117,11 @@ namespace Myra.Graphics2D.Text
 							StoreLexeme();
 							_lexeme.type = LexemeType.Space;
 							_lexeme.AppendChar(c, pos);
+						} else if (c == ' ')
+						{
+							_lexeme.AppendChar(c, pos);
 						}
-						else if (c > 32)
+						else if (c > ' ')
 						{
 							if (_lexeme.type == LexemeType.Space)
 							{

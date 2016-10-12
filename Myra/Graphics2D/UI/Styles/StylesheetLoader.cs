@@ -62,8 +62,8 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string MarkName = "mark";
 		public const string ImageName = "image";
 		public const string PressedImageName = "pressedImage";
-		public const string RowOverBackgroundName = "rowOverBackground";
 		public const string RowSelectionBackgroundName = "rowSelectionBackground";
+		public const string RowSelectionBackgroundWithoutFocusName = "rowSelectionBackgroundWithoutFocus";
 		public const string MenuSeparatorName = "separator";
 		public const string ThicknessName = "thickness";
 
@@ -399,9 +399,9 @@ namespace Myra.Graphics2D.UI.Styles
 			LoadWidgetStyleFromSource(source, result);
 
 			string name;
-			if (source.GetStyle(RowOverBackgroundName, out name))
+			if (source.GetStyle(RowSelectionBackgroundWithoutFocusName, out name))
 			{
-				result.RowOverBackground = GetDrawable(name);
+				result.RowSelectionBackgroundWithoutFocus = GetDrawable(name);
 			}
 
 			if (source.GetStyle(RowSelectionBackgroundName, out name))

@@ -23,6 +23,7 @@ namespace Myra.Graphics2D.UI
 		private FrameInfo _frameInfo;
 
 		public static bool DrawFrames { get; set; }
+		public static bool DrawFocused { get; set; }
 
 		private bool LayoutInvalid { get; set; }
 
@@ -144,10 +145,7 @@ namespace Myra.Graphics2D.UI
 
 		public MouseButtons? MouseButtonsDown
 		{
-			get
-			{
-				return _mouseButtonsDown;
-			}
+			get { return _mouseButtonsDown; }
 		}
 
 		[JsonIgnore]
@@ -188,10 +186,7 @@ namespace Myra.Graphics2D.UI
 		[JsonIgnore]
 		public Point LocationInParent
 		{
-			get
-			{
-				return _locationInParent;
-			}
+			get { return _locationInParent; }
 		}
 
 		[JsonIgnore]
@@ -232,22 +227,19 @@ namespace Myra.Graphics2D.UI
 			{
 				var clientBounds = Bounds;
 
-				if (_frameInfo != null)
+				clientBounds.X += _frameInfo.Left;
+				clientBounds.Y += _frameInfo.Top;
+
+				clientBounds.Width -= _frameInfo.Width;
+				if (clientBounds.Width < 0)
 				{
-					clientBounds.X += _frameInfo.Left;
-					clientBounds.Y += _frameInfo.Top;
+					clientBounds.Width = 0;
+				}
 
-					clientBounds.Width -= _frameInfo.Width;
-					if (clientBounds.Width < 0)
-					{
-						clientBounds.Width = 0;
-					}
-
-					clientBounds.Height -= _frameInfo.Height;
-					if (clientBounds.Height < 0)
-					{
-						clientBounds.Height = 0;
-					}
+				clientBounds.Height -= _frameInfo.Height;
+				if (clientBounds.Height < 0)
+				{
+					clientBounds.Height = 0;
 				}
 
 				return clientBounds;
@@ -255,16 +247,19 @@ namespace Myra.Graphics2D.UI
 
 		}
 
-		[JsonIgnore]
-		public Point GridPosition;
+		[JsonIgnore] public Point GridPosition;
 
 		public virtual bool CanFocus
 		{
-			get
-			{
-				return false;
-			}
+			get { return false; }
 		}
+
+		public virtual bool AcceptsTab
+		{
+			get { return false; }
+		}
+
+		public bool IsFocused { get; internal set; }
 
 		public event EventHandler VisibleChanged;
 		public event EventHandler MeasureChanged;
@@ -277,7 +272,7 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseDown;
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseUp;
 
-		public event EventHandler<GenericEventArgs<float>>  MouseWheelChanged;
+		public event EventHandler<GenericEventArgs<float>> MouseWheelChanged;
 
 		public event EventHandler<GenericEventArgs<char>> KeyPressed;
 		public event EventHandler<GenericEventArgs<Keys>> KeyUp;
@@ -325,6 +320,11 @@ namespace Myra.Graphics2D.UI
 			{
 				batch.DrawRect(Color.LightGreen, bounds);
 			}
+
+			if (DrawFocused && IsFocused)
+			{
+				batch.DrawRect(Color.Red, bounds);
+			}
 		}
 
 		public virtual void InternalRender(SpriteBatch batch)
@@ -353,11 +353,8 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			if (_frameInfo != null)
-			{
-				result.X += _frameInfo.Width;
-				result.Y += _frameInfo.Height;
-			}
+			result.X += _frameInfo.Width;
+			result.Y += _frameInfo.Height;
 
 			return result;
 		}
@@ -386,10 +383,6 @@ namespace Myra.Graphics2D.UI
 			Arrange();
 
 			LayoutInvalid = false;
-		}
-
-		public virtual void OnCharDown(char c)
-		{
 		}
 
 		public virtual void OnDesktopChanged()
@@ -530,7 +523,7 @@ namespace Myra.Graphics2D.UI
 			var ev = MouseDown;
 			if (ev != null)
 			{
-				ev (this, new GenericEventArgs<MouseButtons>(mb));
+				ev(this, new GenericEventArgs<MouseButtons>(mb));
 			}
 		}
 
@@ -551,15 +544,6 @@ namespace Myra.Graphics2D.UI
 			if (ev != null)
 			{
 				ev(this, new GenericEventArgs<float>(delta));
-			}
-		}
-
-		public virtual void OnKeyPressed(char k)
-		{
-			var ev = KeyPressed;
-			if (ev != null)
-			{
-				ev(this, new GenericEventArgs<char>(k));
 			}
 		}
 

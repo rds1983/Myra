@@ -2,8 +2,8 @@
 {
 	public class TreeStyle : WidgetStyle
 	{
-		public Drawable RowOverBackground { get; set; }
 		public Drawable RowSelectionBackground { get; set; }
+		public Drawable RowSelectionBackgroundWithoutFocus { get; set; }
 
 		public ButtonStyle MarkStyle { get; set; }
 		public TextBlockStyle LabelStyle { get; set; }

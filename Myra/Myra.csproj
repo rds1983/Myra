@@ -99,6 +99,7 @@
     <Compile Include="Resources.cs" />
     <Compile Include="Utility\Collections.cs" />
     <Compile Include="Utility\GraphicsExtension.cs" />
+    <Compile Include="Utility\Input.cs" />
     <Compile Include="Utility\Mathematics.cs" />
     <Compile Include="Utility\Serialization.cs" />
     <Compile Include="Graphics2D\UI\SingleItemContainer.cs" />
