@@ -303,11 +303,26 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void Render(SpriteBatch batch)
 		{
+			var bounds = Bounds;
+
+			if (bounds.IsEmpty)
+			{
+				return;
+			}
+
+			var oldScissorRectangle = batch.GraphicsDevice.ScissorRectangle;
+			var newScissorRectangle = Rectangle.Intersect(oldScissorRectangle, Bounds);
+
+			if (newScissorRectangle.IsEmpty)
+			{
+				return;
+			}
+
+			batch.GraphicsDevice.ScissorRectangle = newScissorRectangle;
+
 			UpdateLayout();
 
-			var bounds = Bounds;
 			// Background
-
 			var background = GetCurrentBackground();
 			if (background != null)
 			{
@@ -325,6 +340,8 @@ namespace Myra.Graphics2D.UI
 			{
 				batch.DrawRect(Color.Red, bounds);
 			}
+
+			batch.GraphicsDevice.ScissorRectangle = oldScissorRectangle;
 		}
 
 		public virtual void InternalRender(SpriteBatch batch)

@@ -1,4 +1,5 @@
 ﻿using System;
+using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
@@ -6,6 +7,18 @@ namespace Myra.Graphics2D.UI
 	public class ButtonBase<T> : SingleItemContainer<T> where T : Widget
 	{
 		private bool _isPressed;
+
+		public HorizontalAlignment ContentHorizontalAlignment
+		{
+			get { return Widget.HorizontalAlignment; }
+			set { Widget.HorizontalAlignment = value; }
+		}
+
+		public VerticalAlignment ContentVerticalAlignment
+		{
+			get { return Widget.VerticalAlignment; }
+			set { Widget.VerticalAlignment = value; }
+		}
 
 		public Drawable PressedBackground { get; set; }
 		public bool Toggleable { get; set; }

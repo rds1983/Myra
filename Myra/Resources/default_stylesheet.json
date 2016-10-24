@@ -24,12 +24,6 @@
         "verticalScrollKnob": "scroll-knob-vertical"
     },
     "button": {
-        "padding": {
-            "left": 5.0,
-            "right": 5.0,
-            "top": 5.0,
-            "bottom": 5.0
-        },
         "background": "button",
         "pressedBackground": "button-down",
         "overBackground": "button-down",

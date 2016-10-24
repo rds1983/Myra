@@ -61,37 +61,36 @@ namespace Myra.Graphics2D
 		{
 			get
 			{
-				if (_uiDefault == null)
+				if (_uiDefault != null) return _uiDefault;
+
+				Texture2D texture;
+				using (var stream = Resources.OpenDefaultUiSkinBitmapStream())
 				{
-					Texture2D texture;
-					using (var stream = Resources.OpenDefaultUiSkinBitmapStream())
-					{
-						texture = Texture2D.FromStream(MyraEnvironment.GraphicsDevice, stream);
-					}
-
-					texture.Disposing += (sender, args) =>
-					{
-						_uiDefault = null;
-					};
-
-					if (!MyraEnvironment.IsWindowsDX)
-					{
-						// Manually premultiply alpha
-						var data = new Color[texture.Width*texture.Height];
-						texture.GetData(data);
-
-						for (var i = 0; i < data.Length; ++i)
-						{
-							data[i].R = ApplyAlpha(data[i].R, data[i].A);
-							data[i].G = ApplyAlpha(data[i].G, data[i].A);
-							data[i].B = ApplyAlpha(data[i].B, data[i].A);
-						}
-
-						texture.SetData(data);
-					}
-
-					_uiDefault = LoadLibGDX(Resources.DefaultUISkinAtlas, s => texture, new[] {"default", "font-small"});
+					texture = Texture2D.FromStream(MyraEnvironment.GraphicsDevice, stream);
 				}
+
+				texture.Disposing += (sender, args) =>
+				{
+					_uiDefault = null;
+				};
+
+				if (!MyraEnvironment.IsWindowsDX)
+				{
+					// Manually premultiply alpha
+					var data = new Color[texture.Width*texture.Height];
+					texture.GetData(data);
+
+					for (var i = 0; i < data.Length; ++i)
+					{
+						data[i].R = ApplyAlpha(data[i].R, data[i].A);
+						data[i].G = ApplyAlpha(data[i].G, data[i].A);
+						data[i].B = ApplyAlpha(data[i].B, data[i].A);
+					}
+
+					texture.SetData(data);
+				}
+
+				_uiDefault = LoadLibGDX(Resources.DefaultUISkinAtlas, s => texture, new[] {"default", "font-small"});
 
 				return _uiDefault;
 			}

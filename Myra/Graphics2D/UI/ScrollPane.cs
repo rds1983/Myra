@@ -48,6 +48,15 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
+		private void UpdateWidgetLocation()
+		{
+
+			if (Widget != null)
+			{
+				Widget.Location = Location - _origin;
+			}
+		}
+
 		public override void OnMouseMoved(Point position)
 		{
 			base.OnMouseMoved(position);
@@ -100,11 +109,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			_origin = origin;
-
-			if (Widget != null)
-			{
-				Widget.Location = Location - _origin;
-			}
+			UpdateWidgetLocation();
 		}
 
 		public override void OnMouseUp(MouseButtons mb)
@@ -252,7 +257,7 @@ namespace Myra.Graphics2D.UI
 					mw = 1;
 				}
 
-				_horizontalScrollbarThumb = new Rectangle(bounds.Left,
+				_horizontalScrollbarThumb = new Rectangle(bounds.Left + _scrollPosition.X,
 					bounds.Bottom - HorizontalScrollBackground.Size.Y,
 					Math.Max(HorizontalScrollKnob.Size.X, bw*bw/mw),
 					HorizontalScrollKnob.Size.Y);
@@ -273,7 +278,7 @@ namespace Myra.Graphics2D.UI
 
 				_verticalScrollbarThumb = new Rectangle(
 					bounds.Left + bounds.Width - VerticalScrollBackground.Size.X,
-					bounds.Top,
+					bounds.Top + _scrollPosition.Y,
 					VerticalScrollKnob.Size.X,
 					Math.Max(VerticalScrollKnob.Size.Y, bh*bh/mh));
 
@@ -295,6 +300,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			Widget.LayoutChild(bounds);
+			UpdateWidgetLocation();
 		}
 	}
 }

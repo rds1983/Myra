@@ -12,7 +12,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class Desktop
 	{
-		private SpriteBatch _batch;
+		private SpriteBatch _spriteBatch;
 		private bool _layoutDirty = true;
 		private Rectangle _bounds;
 		private bool _widgetsDirty = true;
@@ -90,6 +90,11 @@ namespace Myra.Graphics2D.UI
 					SetFocus(_focusedWidget, true);
 				}
 			}
+		}
+
+		public SpriteBatch SpriteBatch
+		{
+			get { return _spriteBatch; }
 		}
 
 		public Desktop()
@@ -171,25 +176,38 @@ namespace Myra.Graphics2D.UI
 
 		public void Render(GraphicsDevice device)
 		{
+			if (Bounds.IsEmpty)
+			{
+				return;
+			}
+
 			UpdateInput();
 			UpdateLayout();
 
-			if (_batch == null)
+			if (_spriteBatch == null)
 			{
-				_batch = new SpriteBatch(device);
+				_spriteBatch = new SpriteBatch(device);
 			}
 
-			_batch.BeginUI();
+			var oldScissorRectangle = _spriteBatch.GraphicsDevice.ScissorRectangle;
+
+			_spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, new RasterizerState
+			{
+				ScissorTestEnable = true
+			});
+
+			_spriteBatch.GraphicsDevice.ScissorRectangle = Bounds;
 
 			foreach (var widget in WidgetsCopy)
 			{
 				if (widget.Visible)
 				{
-					widget.Render(_batch);
+					widget.Render(_spriteBatch);
 				}
 			}
 
-			_batch.End();
+			_spriteBatch.End();
+			_spriteBatch.GraphicsDevice.ScissorRectangle = oldScissorRectangle;
 		}
 
 		public void InvalidateLayout()

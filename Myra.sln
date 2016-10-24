@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.DesktopGLLaunc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.WindowsDXLauncher", "Myra.Samples.WindowsDXLauncher\Myra.Samples.WindowsDXLauncher.csproj", "{3A1E3F11-15BA-4E98-8706-BAE0A676A514}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Editor", "Myra.Editor\Myra.Editor.csproj", "{F18BD428-25F7-4183-BEB7-7C96F21AE2D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.UIEditor", "Myra.UIEditor\Myra.UIEditor.csproj", "{3B7E30AA-A659-4A13-9223-B9E0442E5B55}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Package|Any CPU = Debug Package|Any CPU
@@ -53,6 +57,22 @@ Global
 		{3A1E3F11-15BA-4E98-8706-BAE0A676A514}.Release Package|Any CPU.Build.0 = Release|Any CPU
 		{3A1E3F11-15BA-4E98-8706-BAE0A676A514}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A1E3F11-15BA-4E98-8706-BAE0A676A514}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F18BD428-25F7-4183-BEB7-7C96F21AE2D1}.Debug Package|Any CPU.ActiveCfg = Debug|Any CPU
+		{F18BD428-25F7-4183-BEB7-7C96F21AE2D1}.Debug Package|Any CPU.Build.0 = Debug|Any CPU
+		{F18BD428-25F7-4183-BEB7-7C96F21AE2D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F18BD428-25F7-4183-BEB7-7C96F21AE2D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F18BD428-25F7-4183-BEB7-7C96F21AE2D1}.Release Package|Any CPU.ActiveCfg = Release|Any CPU
+		{F18BD428-25F7-4183-BEB7-7C96F21AE2D1}.Release Package|Any CPU.Build.0 = Release|Any CPU
+		{F18BD428-25F7-4183-BEB7-7C96F21AE2D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F18BD428-25F7-4183-BEB7-7C96F21AE2D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B7E30AA-A659-4A13-9223-B9E0442E5B55}.Debug Package|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B7E30AA-A659-4A13-9223-B9E0442E5B55}.Debug Package|Any CPU.Build.0 = Debug|Any CPU
+		{3B7E30AA-A659-4A13-9223-B9E0442E5B55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B7E30AA-A659-4A13-9223-B9E0442E5B55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B7E30AA-A659-4A13-9223-B9E0442E5B55}.Release Package|Any CPU.ActiveCfg = Release|Any CPU
+		{3B7E30AA-A659-4A13-9223-B9E0442E5B55}.Release Package|Any CPU.Build.0 = Release|Any CPU
+		{3B7E30AA-A659-4A13-9223-B9E0442E5B55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B7E30AA-A659-4A13-9223-B9E0442E5B55}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

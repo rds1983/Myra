@@ -98,6 +98,7 @@
     <Compile Include="Graphics2D\UI\TreeNode.cs" />
     <Compile Include="Resources.cs" />
     <Compile Include="Utility\Collections.cs" />
+    <Compile Include="Utility\FPSCounter.cs" />
     <Compile Include="Utility\GraphicsExtension.cs" />
     <Compile Include="Utility\Input.cs" />
     <Compile Include="Utility\Mathematics.cs" />

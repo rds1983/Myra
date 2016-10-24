@@ -91,9 +91,7 @@ namespace Myra.Graphics2D.UI
 				// Render if.Visible
 				if (childBounds.Intersects(bounds))
 				{
-					batch.PushClip(childBounds);
 					child.Render(batch);
-					batch.PopClip();
 				}
 			}
 		}

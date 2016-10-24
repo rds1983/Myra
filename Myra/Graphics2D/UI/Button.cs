@@ -6,6 +6,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class Button : ButtonBase<Grid>
 	{
+		private Drawable _drawable, _pressedDrawable;
 		private readonly Image _image;
 		private readonly TextBlock _textBlock;
 
@@ -27,8 +28,55 @@ namespace Myra.Graphics2D.UI
 			set { _textBlock.TextColor = value; }
 		}
 
-		public Drawable Image { get; set; }
-		public Drawable PressedImage { get; set; }
+		public Drawable Image
+		{
+			get
+			{
+				return _drawable;
+			}
+
+			set
+			{
+				if (value == _drawable)
+				{
+					return;
+				}
+
+				_drawable = value;
+				UpdateDrawable();
+			}
+		}
+
+		public Drawable PressedImage
+		{
+			get
+			{
+				return _pressedDrawable;
+			}
+
+			set
+			{
+				if (value == _pressedDrawable)
+				{
+					return;
+				}
+
+				_pressedDrawable = value;
+				UpdateDrawable();
+			}
+		}
+
+		public int? ImageWidthHint
+		{
+			get { return _image.WidthHint; }
+			set { _image.WidthHint = value; }
+		}
+
+		public int? ImageHeightHint
+		{
+			get { return _image.HeightHint; }
+			set { _image.HeightHint = value; }
+		}
 
 		public bool ImageVisible
 		{
@@ -40,6 +88,9 @@ namespace Myra.Graphics2D.UI
 		public Button(ButtonStyle style)
 		{
 			Widget = new Grid();
+
+			Widget.ColumnsProportions.Add(new Grid.Proportion());
+			Widget.ColumnsProportions.Add(new Grid.Proportion());
 
 			_image = new Image();
 			Widget.Children.Add(_image);
@@ -103,7 +154,13 @@ namespace Myra.Graphics2D.UI
 
 		private void UpdateDrawable()
 		{
-			_image.Drawable = IsPressed ? PressedImage : Image;
+			var image = Image;
+			if (IsPressed && PressedImage != null)
+			{
+				image = PressedImage;
+			}
+
+			_image.Drawable = image;
 		}
 
 		protected override void FireUp()

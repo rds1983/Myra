@@ -18,5 +18,13 @@ namespace Myra.Graphics2D
 
 			TextureRegion.Draw(batch, dest, Color);
 		}
+
+		public static Sprite CreateSolidColorRect(Color color)
+		{
+			return new Sprite(SpriteBatchExtensions.WhiteRegion)
+			{
+				Color = color
+			};
+		}
 	}
 }
