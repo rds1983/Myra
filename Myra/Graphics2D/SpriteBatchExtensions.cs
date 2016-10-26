@@ -8,6 +8,11 @@ namespace Myra.Graphics2D
 		private static Texture2D _white;
 		private static TextureRegion _whiteRegion;
 
+		private static RasterizerState _uiRasterizerState = new RasterizerState
+		{
+			ScissorTestEnable = true
+		};
+
 		public static Texture2D White
 		{
 			get
@@ -43,6 +48,17 @@ namespace Myra.Graphics2D
 		public static void FillSolidRect(this SpriteBatch batch, Color color, Rectangle rect)
 		{
 			batch.Draw(White, rect, color);
+		}
+
+		internal static void BeginUI(this SpriteBatch batch)
+		{
+			batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, _uiRasterizerState);
+		}
+
+		internal static void FlushUI(this SpriteBatch batch)
+		{
+			batch.End();
+			batch.BeginUI();
 		}
 	}
 }

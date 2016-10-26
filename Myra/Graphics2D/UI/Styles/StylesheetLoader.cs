@@ -15,6 +15,9 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string ScrollAreaName = "scrollArea";
 		public const string ButtonName = "button";
 		public const string CheckBoxName = "checkBox";
+		public const string ComboBoxName = "comboBox";
+		public const string ComboBoxItemName = "comboBoxItem";
+		public const string SelectedBackgroundName = "selectedBackground";
 		public const string TreeName = "tree";
 		public const string SplitPaneName = "splitPane";
 		public const string HorizontalSplitPaneName = "horizontalSplitPane";
@@ -66,6 +69,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string RowSelectionBackgroundWithoutFocusName = "rowSelectionBackgroundWithoutFocus";
 		public const string MenuSeparatorName = "separator";
 		public const string ThicknessName = "thickness";
+		public const string ItemsContainerName = "itemsContainer";
 
 		private readonly Dictionary<string, Color> _colors = new Dictionary<string, Color>();
 		private readonly JObject _root;
@@ -335,6 +339,33 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		private void LoadComboBoxItemStyleFromSource(JObject source, ComboBoxItemStyle result)
+		{
+			LoadButtonStyleFromSource(source, result);
+
+			string name;
+			if (source.GetStyle(SelectedBackgroundName, out name))
+			{
+				result.SelectedBackground = GetDrawable(name);
+			}
+		}
+
+		private void LoadComboBoxStyleFromSource(JObject source, ComboBoxStyle result)
+		{
+			LoadButtonStyleFromSource(source, result);
+
+			JObject subStyle;
+			if (source.GetStyle(ItemsContainerName, out subStyle))
+			{
+				LoadWidgetStyleFromSource(subStyle, result.ItemsContainerStyle);
+			}
+
+			if (source.GetStyle(ComboBoxItemName, out subStyle))
+			{
+				LoadComboBoxItemStyleFromSource(subStyle, result.ComboBoxItemStyle);
+			}
+		}
+
 		private void LoadMenuItemStyleFromSource(JObject source, MenuItemStyle result)
 		{
 			LoadButtonStyleFromSource(source, result);
@@ -464,6 +495,7 @@ namespace Myra.Graphics2D.UI.Styles
 			FillStyles(ScrollAreaName, result.ScrollAreaStyle, LoadScrollAreaStyleFromSource);
 			FillStyles(ButtonName, result.ButtonStyle, LoadButtonStyleFromSource);
 			FillStyles(CheckBoxName, result.CheckBoxStyle, LoadButtonStyleFromSource);
+			FillStyles(ComboBoxName, result.ComboBoxStyle, LoadComboBoxStyleFromSource);
 			FillStyles(TreeName, result.TreeStyle, LoadTreeStyleFromSource);
 			FillStyles(HorizontalSplitPaneName, result.HorizontalSplitPaneStyle, LoadSplitPaneStyleFromSource);
 			FillStyles(VerticalSplitPaneName, result.VerticalSplitPaneStyle, LoadSplitPaneStyleFromSource);

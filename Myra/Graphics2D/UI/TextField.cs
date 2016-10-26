@@ -321,6 +321,11 @@ namespace Myra.Graphics2D.UI
 
 		protected override Point InternalMeasure(Point availableSize)
 		{
+			if (Font == null)
+			{
+				return Point.Zero;
+			}
+
 			var width = availableSize.X;
 			if (WidthHint != null && WidthHint.Value < width)
 			{
@@ -347,6 +352,11 @@ namespace Myra.Graphics2D.UI
 				{
 					result.Y += (strings.Length - 1)*_formattedText.VerticalSpacing;
 				}
+			}
+
+			if (result.Y < Font.LineHeight)
+			{
+				result.Y = Font.LineHeight;
 			}
 
 			return result;

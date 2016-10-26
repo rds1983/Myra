@@ -2,6 +2,7 @@
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Myra.Graphics2D.UI;
 using Myra.Utility;
 
 namespace Myra.Graphics2D.Text

@@ -43,6 +43,23 @@
             "pressedImage": "vis-check-tick"
         }
     },
+    "comboBox": {
+        "background": "default-select",
+        "label": {
+            "font": "default-font",
+            "textColor": "white"
+        },
+        "itemsContainer": {
+            "background": "select-box-list-bg"
+        },
+        "comboBoxItem": {
+            "selectedBackground": "button-down",
+            "label": {
+                "font": "default-font",
+                "textColor": "white"
+            }
+        }
+    },
     "tree": {
         "rowSelectionBackground": "tree-selection",
         "rowSelectionBackgroundWithoutFocus": "tree-over",
@@ -127,6 +144,12 @@
         }
     },
     "window": {
+        "padding": {
+            "top": 5.0,
+            "bottom": 5.0,
+            "left": 5.0,
+            "right": 5.0
+        },
         "background": "window",
         "titleFont": "default-font",
         "titleTextColor": "white"

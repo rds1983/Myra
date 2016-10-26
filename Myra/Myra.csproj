@@ -56,6 +56,7 @@
     <Compile Include="Cyotek.Drawing.BitmapFont\Kerning.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\Padding.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\Page.cs" />
+    <Compile Include="Edit\HiddenInEditorAttribute.cs" />
     <Compile Include="Graphics2D\SpriteBatchExtensions.cs" />
     <Compile Include="Graphics2D\Drawable.cs" />
     <Compile Include="Graphics2D\ImageDrawable.cs" />
@@ -65,7 +66,6 @@
     <Compile Include="Graphics2D\Sprite.cs" />
     <Compile Include="Graphics2D\SpriteSheet.cs" />
     <Compile Include="Graphics2D\TextureRegion.cs" />
-    <Compile Include="Graphics2D\Text\Alignments.cs" />
     <Compile Include="Graphics2D\Text\BitmapFont.cs" />
     <Compile Include="Graphics2D\Pixmaps\PixmapAlpha8.cs" />
     <Compile Include="Graphics2D\Pixmaps\PixmapColor.cs" />
@@ -76,6 +76,7 @@
     <Compile Include="Graphics2D\Text\GlyphRender.cs" />
     <Compile Include="Graphics2D\Text\GlyphRun.cs" />
     <Compile Include="Graphics2D\UI\CheckBox.cs" />
+    <Compile Include="Graphics2D\UI\ComboBox.cs" />
     <Compile Include="Graphics2D\UI\FrameInfo.cs" />
     <Compile Include="Graphics2D\UI\ButtonBase.cs" />
     <Compile Include="Graphics2D\UI\Image.cs" />
@@ -91,6 +92,8 @@
     <Compile Include="Graphics2D\UI\RenderUtils.cs" />
     <Compile Include="Graphics2D\UI\ScrollPane.cs" />
     <Compile Include="Graphics2D\UI\Styles\ButtonBaseStyle.cs" />
+    <Compile Include="Graphics2D\UI\Styles\ComboBoxItemStyle.cs" />
+    <Compile Include="Graphics2D\UI\Styles\ComboBoxStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\ImageStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\MenuSeparatorStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\PressableImageStyle.cs" />

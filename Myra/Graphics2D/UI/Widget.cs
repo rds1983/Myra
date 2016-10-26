@@ -2,7 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Myra.Graphics2D.Text;
+using Myra.Edit;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using Newtonsoft.Json;
@@ -19,17 +19,20 @@ namespace Myra.Graphics2D.UI
 		private Rectangle _bounds;
 		private Desktop _desktop;
 		private bool _visible;
-		private int? _xHint, _yHint, _widthHint, _heightHint;
+		private int _xHint, _yHint;
+		private int? _widthHint, _heightHint;
 		private FrameInfo _frameInfo;
 
 		public static bool DrawFrames { get; set; }
 		public static bool DrawFocused { get; set; }
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		private bool LayoutInvalid { get; set; }
 
 		public string Id { get; set; }
 
-		public int? XHint
+		public int XHint
 		{
 			get { return _xHint; }
 
@@ -45,7 +48,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public int? YHint
+		public int YHint
 		{
 			get { return _yHint; }
 
@@ -113,7 +116,9 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public HorizontalAlignment HorizontalAlignment { get; set; }
+		
 		public VerticalAlignment VerticalAlignment { get; set; }
+		
 		public bool Enabled { get; set; }
 
 		public bool Visible
@@ -137,17 +142,30 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public Drawable Background { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
 		public Drawable OverBackground { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
 		public Drawable DisabledBackground { get; set; }
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public bool IsMouseOver { get; private set; }
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public MouseButtons? MouseButtonsDown
 		{
 			get { return _mouseButtonsDown; }
 		}
 
+		[HiddenInEditor]
 		[JsonIgnore]
 		public Desktop Desktop
 		{
@@ -155,17 +173,26 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
+				if (value == _desktop)
+				{
+					return;
+				}
+
+				OnDesktopChanging();
 				_desktop = value;
 				OnDesktopChanged();
 			}
 		}
 
+		[HiddenInEditor]
 		[JsonIgnore]
 		public Container Parent { get; internal set; }
 
+		[HiddenInEditor]
 		[JsonIgnore]
 		public object Tag { get; set; }
 
+		[HiddenInEditor]
 		[JsonIgnore]
 		internal Point Size
 		{
@@ -183,12 +210,14 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[HiddenInEditor]
 		[JsonIgnore]
 		public Point LocationInParent
 		{
 			get { return _locationInParent; }
 		}
 
+		[HiddenInEditor]
 		[JsonIgnore]
 		public Point Location
 		{
@@ -208,6 +237,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[HiddenInEditor]
 		[JsonIgnore]
 		public Rectangle Bounds
 		{
@@ -220,6 +250,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[HiddenInEditor]
 		[JsonIgnore]
 		public Rectangle ClientBounds
 		{
@@ -247,18 +278,26 @@ namespace Myra.Graphics2D.UI
 
 		}
 
-		[JsonIgnore] public Point GridPosition;
+		[HiddenInEditor]
+		[JsonIgnore]
+		public Point GridPosition;
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public virtual bool CanFocus
 		{
 			get { return false; }
 		}
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public virtual bool AcceptsTab
 		{
 			get { return false; }
 		}
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public bool IsFocused { get; internal set; }
 
 		public event EventHandler VisibleChanged;
@@ -318,6 +357,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
+			batch.FlushUI();
 			batch.GraphicsDevice.ScissorRectangle = newScissorRectangle;
 
 			UpdateLayout();
@@ -341,6 +381,7 @@ namespace Myra.Graphics2D.UI
 				batch.DrawRect(Color.Red, bounds);
 			}
 
+			batch.FlushUI();
 			batch.GraphicsDevice.ScissorRectangle = oldScissorRectangle;
 		}
 
@@ -400,6 +441,10 @@ namespace Myra.Graphics2D.UI
 			Arrange();
 
 			LayoutInvalid = false;
+		}
+
+		public virtual void OnDesktopChanging()
+		{
 		}
 
 		public virtual void OnDesktopChanged()

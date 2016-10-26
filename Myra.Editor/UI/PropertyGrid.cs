@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.Remoting.Channels;
 using Microsoft.Xna.Framework;
+using Myra.Edit;
 using Myra.Editor.Utils;
 using Myra.Graphics2D;
 using Myra.Graphics2D.Text;
@@ -65,14 +67,17 @@ namespace Myra.Editor.UI
 				return;
 			}
 
-			var properties = _object.GetType().GetProperties();
+			var properties = (from p in _object.GetType().GetProperties() orderby p.Name select p).ToArray();
 
 			var y = 0;
 			for (var i = 0; i < properties.Length; ++i)
 			{
 				var property = properties[i];
 
-				if (!property.GetGetMethod().IsPublic)
+				if (property.GetGetMethod() == null ||
+				    !property.GetGetMethod().IsPublic ||
+				    property.GetSetMethod() == null ||
+				    !property.GetSetMethod().IsPublic)
 				{
 					continue;
 				}
@@ -83,18 +88,14 @@ namespace Myra.Editor.UI
 					continue;
 				}
 
-				var value = property.GetValue(_object, new object[0]);
-				var nameLabel = new TextBlock
+				var hiddenAttr = property.FindAttribute<HiddenInEditorAttribute>();
+				if (hiddenAttr != null)
 				{
-					Text = property.Name,
-					GridPosition =
-					{
-						Y = y
-					}
-				};
-				Widget.Children.Add(nameLabel);
+					continue;
+				}
 
-				Widget valueWidget;
+				var value = property.GetValue(_object, new object[0]);
+				Widget valueWidget = null;
 
 				var propertyType = property.PropertyType;
 				if (propertyType == typeof (bool))
@@ -172,6 +173,44 @@ namespace Myra.Editor.UI
 
 					valueWidget = grid;
 				}
+				else if (propertyType.IsAssignableFrom(typeof (Drawable)))
+				{
+				}
+				else if (propertyType == typeof (Rectangle))
+				{
+					// Rectangle
+				}
+				else if (propertyType == typeof (Point))
+				{
+					// Point
+				}
+				else if (propertyType == typeof (FrameInfo))
+				{
+					// Frame Info
+				}
+				else if (propertyType.IsEnum)
+				{
+					var values = Enum.GetValues(propertyType);
+
+					var cb = new ComboBox();
+					foreach (var v in values)
+					{
+						var item = cb.AddItem(v.ToString());
+						item.Tag = v;
+					}
+
+					cb.SelectedIndex = Array.IndexOf(values, value);
+					cb.SelectedIndexChanged += (sender, args) =>
+					{
+						if (cb.SelectedIndex != -1)
+						{
+							property.SetValue(_object, cb.SelectedIndex);
+							FireChanged();
+						}
+					};
+
+					valueWidget = cb;
+				}
 				else
 				{
 					var tf = new TextField
@@ -187,6 +226,21 @@ namespace Myra.Editor.UI
 
 					valueWidget = tf;
 				}
+
+				if (valueWidget == null)
+				{
+					continue;
+				}
+
+				var nameLabel = new TextBlock
+				{
+					Text = property.Name,
+					GridPosition =
+					{
+						Y = y
+					}
+				};
+				Widget.Children.Add(nameLabel);
 
 				valueWidget.GridPosition = new Point(1, y);
 				valueWidget.HorizontalAlignment = HorizontalAlignment.Stretch;

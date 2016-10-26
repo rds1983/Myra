@@ -1,13 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
+using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
 {
-	public class Window: SingleItemContainer<Grid>
+	public class Window : SingleItemContainer<Grid>
 	{
 		private Point? _startPos;
 		private readonly Grid _titleGrid;
+		private readonly Grid _contentGrid;
 		private readonly TextBlock _titleLabel;
 		private Widget _widget;
 
@@ -38,10 +40,12 @@ namespace Myra.Graphics2D.UI
 
 		public Grid TitleGrid
 		{
-			get
-			{
-				return _titleGrid;
-			}
+			get { return _titleGrid; }
+		}
+
+		public Grid ContentGrid
+		{
+			get { return _contentGrid; }
 		}
 
 		public new Widget Widget
@@ -72,17 +76,43 @@ namespace Myra.Graphics2D.UI
 
 		public Window(WindowStyle style)
 		{
-			Grid = new Grid();
+			HorizontalAlignment = HorizontalAlignment.Left;
+			VerticalAlignment = VerticalAlignment.Top;
+
+			Grid = new Grid
+			{
+				RowSpacing = 8
+			};
 
 			Grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-			Grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part, 1.0f));
+			Grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
 
-			_titleGrid = new Grid();
+			_titleGrid = new Grid
+			{
+				ColumnSpacing = 8
+			};
+
+			_titleGrid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill));
+			_titleGrid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
 
 			_titleLabel = new TextBlock();
 			_titleGrid.Children.Add(_titleLabel);
 
+			var titleQuit = new Button
+			{
+				Text = "x",
+				GridPosition = {X = 1}
+			};
+
+			_titleGrid.Children.Add(titleQuit);
+
 			Grid.Children.Add(_titleGrid);
+
+			_contentGrid = new Grid
+			{
+				GridPosition = {Y = 1}
+			};
+			Grid.Children.Add(_contentGrid);
 
 			if (style != null)
 			{
@@ -90,65 +120,109 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public Window(): this(Stylesheet.Current.WindowStyle)
+		public Window() : this(Stylesheet.Current.WindowStyle)
 		{
 		}
 
-		public override void OnMouseMoved(Point position)
+		public override void OnDesktopChanging()
 		{
-			base.OnMouseMoved(position);
+			base.OnDesktopChanging();
+
+			if (Desktop != null)
+			{
+				Desktop.MouseMoved -= DesktopOnMouseMoved;
+			}
+		}
+
+		public override void OnDesktopChanged()
+		{
+			base.OnDesktopChanged();
+
+			if (Desktop != null)
+			{
+				Desktop.MouseMoved += DesktopOnMouseMoved;
+
+				XHint = (Desktop.Bounds.Width - Bounds.Width)/2;
+				YHint = (Desktop.Bounds.Height - Bounds.Height)/2;
+			}
+		}
+
+		private void DesktopOnMouseMoved(object sender, GenericEventArgs<Point> genericEventArgs)
+		{
 
 			if (_startPos == null)
 			{
 				return;
 			}
 
-			var newPos = new Point(position.X - _startPos.Value.X,
+			var position = genericEventArgs.Data;
+
+			var delta = new Point(position.X - _startPos.Value.X,
 				position.Y - _startPos.Value.Y);
 
-			if (newPos.X < 0)
-			{
-				newPos.X = 0;
-			}
-
-			var right = newPos.X + Bounds.Width;
+			var right = delta.X + Bounds.Width;
 			if (Parent != null)
 			{
 				if (right > Parent.Bounds.Right)
 				{
-					newPos.X = Parent.Bounds.Right - Bounds.Width;
+					delta.X = Parent.Bounds.Right - Bounds.Width;
 				}
-			} else if (Desktop != null)
+			}
+			else if (Desktop != null)
 			{
 				if (right > Desktop.Bounds.Right)
 				{
-					newPos.X = Desktop.Bounds.Right - Bounds.Width;
+					delta.X = Desktop.Bounds.Right - Bounds.Width;
 				}
 			}
 
-			if (newPos.Y < 0)
-			{
-				newPos.Y = 0;
-			}
-
-			var bottom = newPos.Y + Bounds.Height;
+			var bottom = delta.Y + Bounds.Height;
 			if (Parent != null)
 			{
 				if (bottom > Parent.Bounds.Bottom)
 				{
-					newPos.Y = Parent.Bounds.Bottom - Bounds.Height;
+					delta.Y = Parent.Bounds.Bottom - Bounds.Height;
 				}
 			}
 			else if (Desktop != null)
 			{
 				if (bottom > Desktop.Bounds.Bottom)
 				{
-					newPos.Y = Desktop.Bounds.Bottom - Bounds.Height;
+					delta.Y = Desktop.Bounds.Bottom - Bounds.Height;
 				}
 			}
 
-			XHint = newPos.X;
-			YHint = newPos.Y;
+			XHint += delta.X;
+
+			if (XHint < 0)
+			{
+				XHint = 0;
+			}
+
+			if (Desktop != null)
+			{
+				if (XHint + Bounds.Width > Desktop.Bounds.Right)
+				{
+					XHint = Desktop.Bounds.Right - Bounds.Width;
+				}
+			}
+
+			YHint += delta.Y;
+
+			if (YHint < 0)
+			{
+				YHint = 0;
+			}
+
+			if (Desktop != null)
+			{
+				if (YHint + Bounds.Height > Desktop.Bounds.Bottom)
+				{
+					YHint = Desktop.Bounds.Bottom - Bounds.Height;
+				}
+			}
+
+			_startPos = position;
 		}
 
 		public override void OnMouseUp(MouseButtons mb)
@@ -165,8 +239,6 @@ namespace Myra.Graphics2D.UI
 			var mousePos = Desktop.MousePosition;
 			if (_titleGrid.Bounds.Contains(mousePos))
 			{
-				mousePos.X -= _titleGrid.Bounds.X;
-				mousePos.Y -= _titleGrid.Bounds.Y;
 				_startPos = mousePos;
 			}
 		}
@@ -174,6 +246,57 @@ namespace Myra.Graphics2D.UI
 		public void ApplyWindowStyle(WindowStyle style)
 		{
 			ApplyWidgetStyle(style);
+		}
+
+		public void ShowModal(Desktop desktop)
+		{
+			desktop.ModalWidget = this;
+		}
+
+		public static Window CreateMessageBox(string title, string message)
+		{
+			var w = new Window
+			{
+				Title = "Quit",
+				WidthHint = 200,
+			};
+
+			var messageLabel = new TextBlock
+			{
+				Text = message
+			};
+
+			w.ContentGrid.RowsProportions.Add(new Grid.Proportion());
+			w.ContentGrid.RowsProportions.Add(new Grid.Proportion());
+
+			w.ContentGrid.Children.Add(messageLabel);
+
+			var buttonsGrid = new Grid
+			{
+				ColumnSpacing = 8,
+				HorizontalAlignment = HorizontalAlignment.Right,
+				GridPosition = {Y = 1}
+			};
+
+			buttonsGrid.ColumnsProportions.Add(new Grid.Proportion());
+			buttonsGrid.ColumnsProportions.Add(new Grid.Proportion());
+
+			var okButton = new Button
+			{
+				Text = "Ok"
+			};
+			buttonsGrid.Children.Add(okButton);
+
+			var cancelButton = new Button
+			{
+				Text = "Cancel",
+				GridPosition = {X = 1}
+			};
+			buttonsGrid.Children.Add(cancelButton);
+
+			w.ContentGrid.Children.Add(buttonsGrid);
+
+			return w;
 		}
 	}
 }

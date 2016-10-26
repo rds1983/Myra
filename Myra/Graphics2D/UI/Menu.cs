@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI

@@ -1,4 +1,6 @@
 ﻿using System;
+using Myra.Edit;
+using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
@@ -54,13 +56,32 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public Drawable BorderDrawable { get; set; }
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public int Left { get; private set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
 		public int Right { get; private set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
 		public int Top { get; private set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
 		public int Bottom { get; private set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
 		public int Width { get; private set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
 		public int Height { get; private set; }
 
 		public event EventHandler SizeChanged;

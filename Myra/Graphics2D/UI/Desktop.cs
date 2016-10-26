@@ -5,7 +5,6 @@ using System.Collections.Specialized;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Myra.Graphics2D.Text;
 using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
@@ -13,6 +12,7 @@ namespace Myra.Graphics2D.UI
 	public class Desktop
 	{
 		private SpriteBatch _spriteBatch;
+
 		private bool _layoutDirty = true;
 		private Rectangle _bounds;
 		private bool _widgetsDirty = true;
@@ -22,6 +22,8 @@ namespace Myra.Graphics2D.UI
 		private readonly List<Widget> _focusableWidgets = new List<Widget>();
 		private readonly List<Widget> _focusedWidgets = new List<Widget>();
 		private int? _focusedWidgetIndex;
+		private Widget _modalWidget;
+
 
 		public Point MousePosition { get; private set; }
 		public float MouseWheel { get; private set; }
@@ -65,7 +67,30 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public Menu ContextMenu { get; private set; }
+		public Widget ContextMenu { get; private set; }
+
+		public Widget ModalWidget
+		{
+			get
+			{
+				return _modalWidget;
+			}
+
+			set
+			{
+				if (_modalWidget == value)
+				{
+					return;
+				}
+
+				if (!_widgets.Contains(value))
+				{
+					_widgets.Add(value);
+				}
+
+				_modalWidget = value;
+			}
+		}
 
 		public Widget FocusedWidget
 		{
@@ -97,20 +122,30 @@ namespace Myra.Graphics2D.UI
 			get { return _spriteBatch; }
 		}
 
+		public event EventHandler<GenericEventArgs<Point>> MouseMoved;
+		public event EventHandler<GenericEventArgs<MouseButtons>> MouseDown;
+		public event EventHandler<GenericEventArgs<MouseButtons>> MouseUp;
+
+		public event EventHandler<GenericEventArgs<float>> MouseWheelChanged;
+
+		public event EventHandler<GenericEventArgs<char>> KeyPressed;
+		public event EventHandler<GenericEventArgs<Keys>> KeyUp;
+		public event EventHandler<GenericEventArgs<Keys>> KeyDown;
+
 		public Desktop()
 		{
 			_widgets.CollectionChanged += WidgetsOnCollectionChanged;
 		}
 
-		private void InputOnMouseDown(object sender, GenericEventArgs<MouseButtons> genericEventArgs)
+		private void InputOnMouseDown()
 		{
-/*			if (ContextMenu != null && !ContextMenu.Bounds.Contains(InputAPI.MousePosition))
+			if (ContextMenu != null && !ContextMenu.Bounds.Contains(MousePosition))
 			{
 				HideContextMenu();
-			}*/
+			}
 		}
 
-		public void ShowContextMenu(Menu menu, Point position)
+		public void ShowContextMenu(Widget menu, Point position)
 		{
 			if (menu == null)
 			{
@@ -191,10 +226,7 @@ namespace Myra.Graphics2D.UI
 
 			var oldScissorRectangle = _spriteBatch.GraphicsDevice.ScissorRectangle;
 
-			_spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, new RasterizerState
-			{
-				ScissorTestEnable = true
-			});
+			_spriteBatch.BeginUI();
 
 			_spriteBatch.GraphicsDevice.ScissorRectangle = Bounds;
 
@@ -256,10 +288,23 @@ namespace Myra.Graphics2D.UI
 		{
 			if (buttonState == ButtonState.Pressed && lastState == ButtonState.Released)
 			{
+				var ev = MouseDown;
+				if (ev != null)
+				{
+					ev(this, new GenericEventArgs<MouseButtons>(buttons));
+				}
+
+				InputOnMouseDown();
 				WidgetsCopy.HandleMouseDown(buttons);
 			}
 			else if (buttonState == ButtonState.Released && lastState == ButtonState.Pressed)
 			{
+				var ev = MouseUp;
+				if (ev != null)
+				{
+					ev(this, new GenericEventArgs<MouseButtons>(buttons));
+				}
+
 				WidgetsCopy.HandleMouseUp(buttons);
 			}
 		}
@@ -274,6 +319,12 @@ namespace Myra.Graphics2D.UI
 
 			if (MouseState.X != lastState.X || MouseState.Y != lastState.Y)
 			{
+				var ev = MouseMoved;
+				if (ev != null)
+				{
+					ev(this, new GenericEventArgs<Point>(MousePosition));
+				}
+
 				WidgetsCopy.HandleMouseMovement(MousePosition);
 			}
 
@@ -290,6 +341,12 @@ namespace Myra.Graphics2D.UI
 				var key = pressedKeys[i];
 				if (!lastKeyboardState.IsKeyDown(key))
 				{
+					var ev = KeyDown;
+					if (ev != null)
+					{
+						ev(this, new GenericEventArgs<Keys>(key));
+					}
+
 					var acceptsTab = false;
 					foreach (var w in _focusedWidgets)
 					{

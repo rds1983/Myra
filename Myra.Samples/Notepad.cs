@@ -3,13 +3,9 @@ using System.IO;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI;
-using Myra.Utility;
-using HorizontalAlignment = Myra.Graphics2D.Text.HorizontalAlignment;
 using Menu = Myra.Graphics2D.UI.Menu;
 using MenuItem = Myra.Graphics2D.UI.MenuItem;
-using MouseButtons = Myra.Graphics2D.UI.MouseButtons;
 using Orientation = Myra.Graphics2D.UI.Orientation;
 
 namespace Myra.Samples
@@ -149,7 +145,7 @@ namespace Myra.Samples
 				VerticalSpacing = 0,
 				TextColor = Color.White,
 				Wrap = true,
-				HorizontalAlignment = HorizontalAlignment.Stretch,
+				HorizontalAlignment = Graphics2D.UI.HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch
 			};
 

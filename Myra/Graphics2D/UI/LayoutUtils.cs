@@ -71,8 +71,7 @@ namespace Myra.Graphics2D.UI
 			var controlBounds = Align(containerBounds.Size, size, control.HorizontalAlignment, control.VerticalAlignment);
 			controlBounds.Offset(containerBounds.Location);
 
-			var hintOffset = new Vector2(control.XHint ?? 0,
-				control.YHint ?? 0);
+			var hintOffset = new Vector2(control.XHint, control.YHint);
 			controlBounds.Offset(hintOffset);
 
 			control.Bounds = controlBounds;

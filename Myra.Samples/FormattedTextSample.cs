@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.Text;
+using Myra.Graphics2D.UI;
 
 namespace Myra.Samples
 {

@@ -2,7 +2,6 @@
 using System.IO;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI;
 using Myra.UIEditor.UI;
@@ -10,7 +9,6 @@ using Myra.UIEditor.Utils;
 using Myra.Utility;
 using NLog;
 using Color = Microsoft.Xna.Framework.Color;
-using HorizontalAlignment = Myra.Graphics2D.Text.HorizontalAlignment;
 using Menu = Myra.Graphics2D.UI.Menu;
 using MenuItem = Myra.Graphics2D.UI.MenuItem;
 using Orientation = Myra.Graphics2D.UI.Orientation;
@@ -28,7 +26,6 @@ namespace Myra.UIEditor
 
 		private readonly GraphicsDeviceManager _graphicsDeviceManager;
 		private readonly State _state;
-		private SpriteBatch _batch;
 		private Desktop _desktop;
 		private SplitPane _topSplitPane;
 		private SplitPane _rightSplitPane;
@@ -133,8 +130,6 @@ namespace Myra.UIEditor
 		{
 			base.LoadContent();
 
-			_batch = new SpriteBatch(GraphicsDevice);
-
 			BuildUI();
 
 			if (_state == null || string.IsNullOrEmpty(_state.EditedFile))
@@ -205,6 +200,19 @@ namespace Myra.UIEditor
 
 			menuBar.AddMenuItem(fileMenu);
 
+			var controlsMenu = new MenuItem
+			{
+				Text = "Controls"
+			};
+
+			var addTextBlockItem = new MenuItem
+			{
+				Text = "Add Text Block"
+			};
+
+			controlsMenu.AddMenuItem(addTextBlockItem);
+			menuBar.AddMenuItem(controlsMenu);
+
 			var helpMenu = new MenuItem
 			{
 				Text = "Help"
@@ -222,7 +230,7 @@ namespace Myra.UIEditor
 			_topSplitPane = new SplitPane(Orientation.Horizontal)
 			{
 				Id = "topSplitPane",
-				HorizontalAlignment = HorizontalAlignment.Stretch,
+				HorizontalAlignment = Graphics2D.UI.HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
 				GridPosition = {Y = 1}
 			};
@@ -238,6 +246,7 @@ namespace Myra.UIEditor
 			_rightSplitPane.Widgets.Add(_explorer);
 
 			_propertyGrid = new PropertyGrid();
+			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
 			_propertyGrid.ColorChangeHandler += ColorChangeHandler;
 
 			_rightSplitPane.Widgets.Add(_propertyGrid);
@@ -302,11 +311,16 @@ namespace Myra.UIEditor
 			};
 			_statisticsGrid.Children.Add(_drawCallsLabel);
 
-			_statisticsGrid.HorizontalAlignment = HorizontalAlignment.Left;
-			_statisticsGrid.VerticalAlignment = VerticalAlignment.Bottom;
+			_statisticsGrid.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Left;
+			_statisticsGrid.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Bottom;
 			_statisticsGrid.XHint = 10;
 			_statisticsGrid.YHint = -10;
 			_desktop.Widgets.Add(_statisticsGrid);
+		}
+
+		private void PropertyGridOnPropertyChanged(object sender, EventArgs eventArgs)
+		{
+			IsDirty = true;
 		}
 
 		private Color? ColorChangeHandler(Color? color)
@@ -343,7 +357,10 @@ namespace Myra.UIEditor
 
 		private void QuitItemOnDown(object sender, EventArgs eventArgs)
 		{
-			Exit();
+			// Exit();
+			var mb = Myra.Graphics2D.UI.Window.CreateMessageBox("Quit", "Are you sure?");
+
+			mb.ShowModal(_desktop);
 		}
 
 		private void AboutItemOnClicked(object sender, EventArgs eventArgs)
@@ -461,7 +478,7 @@ namespace Myra.UIEditor
 			}
 
 			var data = Serialization.Save(_project);
-			File.WriteAllText(_filePath, data);
+			File.WriteAllText(filePath, data);
 
 			FilePath = filePath;
 			IsDirty = false;
@@ -485,7 +502,7 @@ namespace Myra.UIEditor
 
 		private void UpdateTitle()
 		{
-			var title = string.IsNullOrEmpty(_filePath) ? "Hebron Studio" : _filePath;
+			var title = string.IsNullOrEmpty(_filePath) ? "Myra UI Editor" : _filePath;
 
 			if (_isDirty)
 			{

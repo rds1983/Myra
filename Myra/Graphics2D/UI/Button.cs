@@ -92,7 +92,12 @@ namespace Myra.Graphics2D.UI
 			Widget.ColumnsProportions.Add(new Grid.Proportion());
 			Widget.ColumnsProportions.Add(new Grid.Proportion());
 
-			_image = new Image();
+			_image = new Image
+			{
+				HorizontalAlignment = HorizontalAlignment.Center,
+				VerticalAlignment = VerticalAlignment.Center
+			};
+
 			Widget.Children.Add(_image);
 
 			_textBlock = new TextBlock {GridPosition = {X = 1}};
