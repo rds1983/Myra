@@ -15,8 +15,10 @@ namespace Myra.UIEditor
 		{
 			try
 			{
-				var studio = new Studio();
-				studio.Run();
+				using (var studio = new Studio())
+				{
+					studio.Run();
+				}
 			}
 			catch (Exception ex)
 			{

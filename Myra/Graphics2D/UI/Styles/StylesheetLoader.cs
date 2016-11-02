@@ -52,8 +52,8 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string SplitHorizontalHandleOverName = "horizontalHandleOver";
 		public const string SplitVerticalHandleName = "verticalHandle";
 		public const string SplitVerticalHandleOverName = "verticalHandleOver";
-		public const string TitleFontName = "titleFont";
-		public const string TitleTextColorName = "titleTextColor";
+		public const string TitleStyleName = "title";
+		public const string CloseButtonStyleName = "closeButton";
 		public const string CursorName = "cursor";
 		public const string IconWidthName = "iconWidth";
 		public const string ShortcutWidthName = "shortcutWidth";
@@ -456,15 +456,15 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			LoadWidgetStyleFromSource(source, result);
 
-			string name;
-			if (source.GetStyle(TitleFontName, out name))
+			JObject obj;
+			if (source.GetStyle(TitleStyleName, out obj))
 			{
-				result.TitleFont = GetFont(name);
+				LoadTextBlockStyleFromSource(obj, result.TitleStyle);
 			}
 
-			if (source.GetStyle(TitleTextColorName, out name))
+			if (source.GetStyle(CloseButtonStyleName, out obj))
 			{
-				result.TitleTextColor = GetColor(name);
+				LoadButtonStyleFromSource(obj, result.CloseButtonStyle);
 			}
 		}
 

@@ -311,8 +311,8 @@ namespace Myra.UIEditor
 			};
 			_statisticsGrid.Children.Add(_drawCallsLabel);
 
-			_statisticsGrid.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Left;
-			_statisticsGrid.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Bottom;
+			_statisticsGrid.HorizontalAlignment = Graphics2D.UI.HorizontalAlignment.Left;
+			_statisticsGrid.VerticalAlignment = VerticalAlignment.Bottom;
 			_statisticsGrid.XHint = 10;
 			_statisticsGrid.YHint = -10;
 			_desktop.Widgets.Add(_statisticsGrid);
@@ -357,8 +357,15 @@ namespace Myra.UIEditor
 
 		private void QuitItemOnDown(object sender, EventArgs eventArgs)
 		{
-			// Exit();
-			var mb = Myra.Graphics2D.UI.Window.CreateMessageBox("Quit", "Are you sure?");
+			var mb = Graphics2D.UI.Window.CreateMessageBox("Quit", "Are you sure?");
+
+			mb.Closed += (o, args) =>
+			{
+				if (mb.ModalResult == (int)Graphics2D.UI.Window.DefaultModalResult.Ok)
+				{
+					Exit();
+				}
+			};
 
 			mb.ShowModal(_desktop);
 		}

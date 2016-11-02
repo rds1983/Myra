@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using NLog;
@@ -63,6 +64,11 @@ namespace Myra.UIEditor
 
 		public override string ToString()
 		{
+			var colors = string.Empty;
+			if (CustomColors != null)
+			{
+				colors = string.Join(", ", from c in CustomColors select System.Drawing.Color.FromArgb(c).ToString());
+			}
 			return string.Format("Size = {0}\n" +
 			                     "TopSplitter = {1:0.##}\n" +
 			                     "RightSplitter= {2:0.##}\n" +
@@ -72,7 +78,7 @@ namespace Myra.UIEditor
 				TopSplitterPosition,
 				RightSplitterPosition,
 				EditedFile,
-				CustomColors);
+				colors);
 		}
 	}
 }

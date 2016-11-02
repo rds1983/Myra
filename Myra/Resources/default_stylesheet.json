@@ -144,14 +144,29 @@
         }
     },
     "window": {
+        "background": "window",
         "padding": {
             "top": 5.0,
             "bottom": 5.0,
             "left": 5.0,
             "right": 5.0
         },
-        "background": "window",
-        "titleFont": "default-font",
-        "titleTextColor": "white"
+        "title": {
+            "font": "default-font",
+            "textColor": "white"
+        },
+        "closeButton": {
+            "overBackground": "button-over",
+            "pressedBackground": "button-red",
+           "padding": {
+                "top": 5.0,
+                "bottom": 5.0,
+                "left": 5.0,
+                "right": 5.0
+            },
+            "image": {
+                "image": "icon-close"
+            }
+        }
     }
 }

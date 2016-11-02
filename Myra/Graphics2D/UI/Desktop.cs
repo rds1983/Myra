@@ -83,12 +83,17 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
-				if (!_widgets.Contains(value))
+				if (_modalWidget != null)
 				{
-					_widgets.Add(value);
+					_widgets.Remove(_modalWidget);
 				}
 
 				_modalWidget = value;
+
+				if (value != null && !_widgets.Contains(value))
+				{
+					_widgets.Add(value);
+				}
 			}
 		}
 
