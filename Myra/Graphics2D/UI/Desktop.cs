@@ -24,7 +24,6 @@ namespace Myra.Graphics2D.UI
 		private int? _focusedWidgetIndex;
 		private Widget _modalWidget;
 
-
 		public Point MousePosition { get; private set; }
 		public float MouseWheel { get; private set; }
 		public MouseState MouseState { get; private set; }

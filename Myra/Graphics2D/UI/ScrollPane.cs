@@ -44,7 +44,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ScrollPane() : this(Stylesheet.Current.ScrollAreaStyle)
+		public ScrollPane() : this(DefaultAssets.UIStylesheet.ScrollAreaStyle)
 		{
 		}
 

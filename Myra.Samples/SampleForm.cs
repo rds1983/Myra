@@ -35,12 +35,16 @@ namespace Myra.Samples
 
 		private void _buttonRun_Click(object sender, EventArgs e)
 		{
+			_listBoxSamples.Enabled = false;
+
 			var sample = SampleGame.AllSampleTypes[_listBoxSamples.SelectedIndex];
 
 			if (Launcher != null)
 			{
 				Launcher(sample);
 			}
+
+			_listBoxSamples.Enabled = true;
 		}
 	}
 }

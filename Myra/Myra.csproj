@@ -99,7 +99,8 @@
     <Compile Include="Graphics2D\UI\Styles\PressableImageStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\SplitPaneStyle.cs" />
     <Compile Include="Graphics2D\UI\TreeNode.cs" />
-    <Compile Include="Resources.cs" />
+    <Compile Include="Resources\Resources.cs" />
+    <Compile Include="DefaultAssets.cs" />
     <Compile Include="Utility\Collections.cs" />
     <Compile Include="Utility\FPSCounter.cs" />
     <Compile Include="Utility\GraphicsExtension.cs" />

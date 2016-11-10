@@ -49,8 +49,8 @@ namespace Myra.Graphics2D.UI
 
 		public SplitPane(Orientation orientation) : this(orientation,
 			orientation == Orientation.Horizontal
-				? Stylesheet.Current.HorizontalSplitPaneStyle
-				: Stylesheet.Current.VerticalSplitPaneStyle)
+				? DefaultAssets.UIStylesheet.HorizontalSplitPaneStyle
+				: DefaultAssets.UIStylesheet.VerticalSplitPaneStyle)
 		{
 		}
 

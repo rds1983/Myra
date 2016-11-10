@@ -106,7 +106,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ComboBox() : this(Stylesheet.Current.ComboBoxStyle)
+		public ComboBox() : this(DefaultAssets.UIStylesheet.ComboBoxStyle)
 		{
 		}
 

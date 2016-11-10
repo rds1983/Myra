@@ -21,7 +21,7 @@ namespace Myra.Graphics2D
 
 		public static Sprite CreateSolidColorRect(Color color)
 		{
-			return new Sprite(SpriteBatchExtensions.WhiteRegion)
+			return new Sprite(DefaultAssets.WhiteRegion)
 			{
 				Color = color
 			};

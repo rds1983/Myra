@@ -1,60 +1,12 @@
 ﻿using System;
 using Myra.Graphics2D.Text;
+using Myra.Resources;
 using Newtonsoft.Json.Linq;
 
 namespace Myra.Graphics2D.UI.Styles
 {
 	public class Stylesheet
 	{
-		private static Stylesheet _current;
-
-		public static Stylesheet Current
-		{
-			get
-			{
-				if (_current != null)
-				{
-					return _current;
-				}
-
-				// Create default
-				_current = CreateFromSource(Resources.DefaultStyleSheet,
-					s =>
-					{
-						switch (s)
-						{
-							case "default-font":
-								return BitmapFont.Default;
-							case "default-font-small":
-								return BitmapFont.DefaultSmall;
-							default:
-								throw new Exception(string.Format("Could not find default font '{0}'", s));
-						}
-					},
-					s =>
-					{
-						ImageDrawable result;
-						if (!SpriteSheet.UIDefault.Drawables.TryGetValue(s, out result))
-						{
-							throw new Exception(string.Format("Could not find default drawable '{0}'", s));
-						}
-
-						return result;
-					});
-
-				return _current;
-			}
-			set
-			{
-				if (value == null)
-				{
-					throw new ArgumentNullException("value");
-				}
-
-				_current = value;
-			}
-		}
-
 		public TextBlockStyle TextBlockStyle { get; private set; }
 		public TextFieldStyle TextFieldStyle { get; private set; }
 		public ButtonStyle ButtonStyle { get; private set; }

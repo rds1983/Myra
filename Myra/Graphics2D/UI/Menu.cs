@@ -35,8 +35,8 @@ namespace Myra.Graphics2D.UI
 			: this(
 				orientation,
 				orientation == Orientation.Horizontal
-					? Stylesheet.Current.HorizontalMenuStyle
-					: Stylesheet.Current.VerticalMenuStyle)
+					? DefaultAssets.UIStylesheet.HorizontalMenuStyle
+					: DefaultAssets.UIStylesheet.VerticalMenuStyle)
 		{
 		}
 

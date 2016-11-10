@@ -11,37 +11,8 @@ namespace Myra.Graphics2D.Text
 	{
 		public static bool DrawFames { get; set; }
 
-		private static BitmapFont _default;
-		private static BitmapFont _defaultSmall;
-
 		private readonly Texture2D[] _pages;
 		private readonly Dictionary<char, Glyph> _glyphs;
-
-		public static BitmapFont Default
-		{
-			get
-			{
-				var textureRegion = SpriteSheet.UIDefault.Drawables["default"].TextureRegion;
-
-				return _default ??
-				       (_default =
-					       CreateFromFNT(new StringReader(Resources.DefaultFont), textureRegion,
-						       MyraEnvironment.GraphicsDevice));
-			}
-		}
-
-		public static BitmapFont DefaultSmall
-		{
-			get
-			{
-				var textureRegion = SpriteSheet.UIDefault.Drawables["font-small"].TextureRegion;
-
-				return _defaultSmall ??
-				       (_defaultSmall =
-					       CreateFromFNT(new StringReader(Resources.DefaultFontSmall), textureRegion,
-						       MyraEnvironment.GraphicsDevice));
-			}
-		}
 
 		public Dictionary<char, Glyph> Glyphs
 		{

@@ -17,7 +17,7 @@ namespace Myra.Samples
 			base.LoadContent();
 
 			_batch = new SpriteBatch(GraphicsDevice);
-			_font = BitmapFont.Default;
+			_font = DefaultAssets.Font;
 
 			_formattedText = new FormattedText
 			{

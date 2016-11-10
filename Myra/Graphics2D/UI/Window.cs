@@ -104,7 +104,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public Window() : this(Stylesheet.Current.WindowStyle)
+		public Window() : this(DefaultAssets.UIStylesheet.WindowStyle)
 		{
 		}
 

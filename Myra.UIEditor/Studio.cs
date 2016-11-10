@@ -283,14 +283,14 @@ namespace Myra.UIEditor
 			_gcMemoryLabel = new TextBlock
 			{
 				Text = "GC Memory: ",
-				Font = BitmapFont.DefaultSmall
+				Font = DefaultAssets.FontSmall
 			};
 			_statisticsGrid.Children.Add(_gcMemoryLabel);
 
 			_fpsLabel = new TextBlock
 			{
 				Text = "FPS: ",
-				Font = BitmapFont.DefaultSmall,
+				Font = DefaultAssets.FontSmall,
 				GridPosition = new Point(0, 1)
 			};
 			_statisticsGrid.Children.Add(_fpsLabel);
@@ -298,7 +298,7 @@ namespace Myra.UIEditor
 			_widgetsCountLabel = new TextBlock
 			{
 				Text = "Total Widgets: ",
-				Font = BitmapFont.DefaultSmall,
+				Font = DefaultAssets.FontSmall,
 				GridPosition = new Point(0, 2)
 			};
 			_statisticsGrid.Children.Add(_widgetsCountLabel);
@@ -306,7 +306,7 @@ namespace Myra.UIEditor
 			_drawCallsLabel = new TextBlock
 			{
 				Text = "Draw Calls: ",
-				Font = BitmapFont.DefaultSmall,
+				Font = DefaultAssets.FontSmall,
 				GridPosition = new Point(0, 3)
 			};
 			_statisticsGrid.Children.Add(_drawCallsLabel);

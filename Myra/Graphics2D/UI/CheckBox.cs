@@ -9,7 +9,7 @@ namespace Myra.Graphics2D.UI
 			Toggleable = true;
 		}
 
-		public CheckBox() : this(Stylesheet.Current.CheckBoxStyle)
+		public CheckBox() : this(DefaultAssets.UIStylesheet.CheckBoxStyle)
 		{
 		}
 	}

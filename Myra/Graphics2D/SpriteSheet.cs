@@ -54,67 +54,7 @@ namespace Myra.Graphics2D
 
 		private static readonly Dictionary<string, TextureAddressMode> _gdxIdsToTextureWraps =
 			new Dictionary<string, TextureAddressMode>();
-		private static SpriteSheet _uiDefault;
 		private readonly Dictionary<string, ImageDrawable> _drawables;
-
-		public static SpriteSheet UIDefault
-		{
-			get
-			{
-				if (_uiDefault != null) return _uiDefault;
-
-				Texture2D texture;
-				using (var stream = Resources.OpenDefaultUiSkinBitmapStream())
-				{
-					texture = Texture2D.FromStream(MyraEnvironment.GraphicsDevice, stream);
-				}
-
-				texture.Disposing += (sender, args) =>
-				{
-					_uiDefault = null;
-				};
-
-				if (!MyraEnvironment.IsWindowsDX)
-				{
-					// Manually premultiply alpha
-					var data = new Color[texture.Width*texture.Height];
-					texture.GetData(data);
-
-					for (var i = 0; i < data.Length; ++i)
-					{
-						data[i].R = ApplyAlpha(data[i].R, data[i].A);
-						data[i].G = ApplyAlpha(data[i].G, data[i].A);
-						data[i].B = ApplyAlpha(data[i].B, data[i].A);
-					}
-
-					texture.SetData(data);
-				}
-
-				_uiDefault = LoadLibGDX(Resources.DefaultUISkinAtlas, s => texture, new[] {"default", "font-small"});
-
-				return _uiDefault;
-			}
-		}
-
-		private static byte ApplyAlpha(byte color, byte alpha)
-		{
-			var fc = color/255.0f;
-			var fa = alpha/255.0f;
-
-			var fr = (int)(255.0f * fc * fa);
-
-			if (fr < 0)
-			{
-				fr = 0;
-			}
-
-			if (fr > 255)
-			{
-				fr = 255;
-			}
-
-			return (byte) fr;
-		}
 
 		public Dictionary<string, ImageDrawable> Drawables
 		{
