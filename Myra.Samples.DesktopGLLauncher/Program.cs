@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace Myra.Samples.DesktopGLLauncher
 {
@@ -10,13 +11,14 @@ namespace Myra.Samples.DesktopGLLauncher
 		[STAThread]
 		static void Main()
 		{
-			SampleGame sample;
+			Game sample;
 			using (var form = new SampleForm())
 			{
 				form.Launcher += sampleType =>
 				{
-					using (sample = (SampleGame) Activator.CreateInstance(sampleType))
+					using (sample = (Game) Activator.CreateInstance(sampleType))
 					{
+						sample.Window.AllowUserResizing = true;
 						sample.Run();
 					}
 				};

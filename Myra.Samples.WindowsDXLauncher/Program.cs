@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace Myra.Samples.WindowsDXLauncher
 {
@@ -11,13 +12,14 @@ namespace Myra.Samples.WindowsDXLauncher
 		static void Main()
 		{
 			MyraEnvironment.IsWindowsDX = true;
-			SampleGame sample;
+			Game sample;
 			using (var form = new SampleForm())
 			{
 				form.Launcher += sampleType =>
 				{
-					using (sample = (SampleGame)Activator.CreateInstance(sampleType))
+					using (sample = (Game)Activator.CreateInstance(sampleType))
 					{
+						sample.Window.AllowUserResizing = true;
 						sample.Run();
 					}
 				};

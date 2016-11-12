@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
+using Myra.Utility;
 
 namespace Myra
 {
@@ -29,8 +30,7 @@ namespace Myra
 				}
 
 				var textureRegion = UISpritesheet.Drawables["default"].TextureRegion;
-				_font = BitmapFont.CreateFromFNT(new StringReader(Resources.Resources.DefaultFont), textureRegion,
-							MyraEnvironment.GraphicsDevice);
+				_font = BitmapFont.CreateFromFNT(new StringReader(Resources.Resources.DefaultFont), textureRegion);
 				return _font;
 			}
 		}
@@ -46,8 +46,7 @@ namespace Myra
 
 				var textureRegion = UISpritesheet.Drawables["font-small"].TextureRegion;
 
-				_fontSmall = BitmapFont.CreateFromFNT(new StringReader(Resources.Resources.DefaultFontSmall), textureRegion,
-					MyraEnvironment.GraphicsDevice);
+				_fontSmall = BitmapFont.CreateFromFNT(new StringReader(Resources.Resources.DefaultFontSmall), textureRegion);
 
 				return _fontSmall;
 			}
@@ -62,28 +61,7 @@ namespace Myra
 				Texture2D texture;
 				using (var stream = Resources.Resources.OpenDefaultUiSkinBitmapStream())
 				{
-					texture = Texture2D.FromStream(MyraEnvironment.GraphicsDevice, stream);
-				}
-
-				texture.Disposing += (sender, args) =>
-				{
-					_uiSpritesheet = null;
-				};
-
-				if (!MyraEnvironment.IsWindowsDX)
-				{
-					// Manually premultiply alpha
-					var data = new Color[texture.Width * texture.Height];
-					texture.GetData(data);
-
-					for (var i = 0; i < data.Length; ++i)
-					{
-						data[i].R = ApplyAlpha(data[i].R, data[i].A);
-						data[i].G = ApplyAlpha(data[i].G, data[i].A);
-						data[i].B = ApplyAlpha(data[i].B, data[i].A);
-					}
-
-					texture.SetData(data);
+					texture = GraphicsExtension.PremultipliedTextureFromStream(stream);
 				}
 
 				_uiSpritesheet = SpriteSheet.LoadLibGDX(Resources.Resources.DefaultUISkinAtlas, s => texture, new[] { "default", "font-small" });
@@ -173,26 +151,6 @@ namespace Myra
 				};
 				return _uiRasterizerState;
 			}
-		}
-
-		private static byte ApplyAlpha(byte color, byte alpha)
-		{
-			var fc = color / 255.0f;
-			var fa = alpha / 255.0f;
-
-			var fr = (int)(255.0f * fc * fa);
-
-			if (fr < 0)
-			{
-				fr = 0;
-			}
-
-			if (fr > 255)
-			{
-				fr = 255;
-			}
-
-			return (byte)fr;
 		}
 
 		internal static void Dispose()

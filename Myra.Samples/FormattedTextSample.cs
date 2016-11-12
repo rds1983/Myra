@@ -28,8 +28,6 @@ namespace Myra.Samples
 				HorizontalAlignment = HorizontalAlignment.Right,
 				Wrap = true
 			};
-
-			GraphicsDevice.BlendState = BlendState.Additive;
 		}
 
 		protected override void Draw(GameTime gameTime)
@@ -37,7 +35,7 @@ namespace Myra.Samples
 			var device = GraphicsDevice;
 			device.Clear(Color.Black);
 
-			_batch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
+			_batch.Begin();
 
 			_formattedText.Draw(_batch, new Point(0, ++_y), Color.LightBlue);
 

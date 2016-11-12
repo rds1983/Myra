@@ -14,6 +14,7 @@ namespace Myra.Samples
 		{
 			AllSampleTypes = new[]
 			{
+				typeof (HelloWorldSample),
 				typeof (FormattedTextSample),
 				typeof (SplitPaneSample),
 				typeof (ScrollPaneSample),
@@ -32,8 +33,6 @@ namespace Myra.Samples
 			base.LoadContent();
 
 			MyraEnvironment.Game = this;
-
-			Window.AllowUserResizing = true;
 		}
 	}
 }

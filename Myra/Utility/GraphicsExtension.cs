@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Reflection;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Myra.Utility
 {
@@ -26,6 +28,49 @@ namespace Myra.Utility
 				var value = (Color) c.GetValue(null, null);
 				_colors[c.Name.ToLower()] = value;
 			}
+		}
+
+		private static byte ApplyAlpha(byte color, byte alpha)
+		{
+			var fc = color / 255.0f;
+			var fa = alpha / 255.0f;
+
+			var fr = (int)(255.0f * fc * fa);
+
+			if (fr < 0)
+			{
+				fr = 0;
+			}
+
+			if (fr > 255)
+			{
+				fr = 255;
+			}
+
+			return (byte)fr;
+		}
+
+		public static Texture2D PremultipliedTextureFromStream(Stream stream)
+		{
+			var texture = Texture2D.FromStream(MyraEnvironment.GraphicsDevice, stream);
+
+			if (!MyraEnvironment.IsWindowsDX)
+			{
+				// Manually premultiply alpha
+				var data = new Color[texture.Width * texture.Height];
+				texture.GetData(data);
+
+				for (var i = 0; i < data.Length; ++i)
+				{
+					data[i].R = ApplyAlpha(data[i].R, data[i].A);
+					data[i].G = ApplyAlpha(data[i].G, data[i].A);
+					data[i].B = ApplyAlpha(data[i].B, data[i].A);
+				}
+
+				texture.SetData(data);
+			}
+
+			return texture;
 		}
 
 		public static string ToHexString(this Color c)

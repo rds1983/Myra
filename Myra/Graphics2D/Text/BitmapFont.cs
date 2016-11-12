@@ -42,7 +42,7 @@ namespace Myra.Graphics2D.Text
 			_pages = pages.ToArray();
 		}
 
-		public static BitmapFont CreateFromFNT(StringReader reader, TextureRegion textureRegion, GraphicsDevice device)
+		public static BitmapFont CreateFromFNT(TextReader reader, TextureRegion textureRegion)
 		{
 			var data = new Cyotek.Drawing.BitmapFont.BitmapFont();
 			data.LoadText(reader);
