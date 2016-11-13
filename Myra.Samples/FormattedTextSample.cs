@@ -1,32 +1,37 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.Text;
-using Myra.Graphics2D.UI;
 
 namespace Myra.Samples
 {
-	public class FormattedTextSample : SampleGame
+	public class FormattedTextSample : Game
 	{
+		private readonly GraphicsDeviceManager graphics;
+
 		private SpriteBatch _batch;
-		private BitmapFont _font;
 		private FormattedText _formattedText;
-		private int _y;
+
+		public FormattedTextSample()
+		{
+			graphics = new GraphicsDeviceManager(this);
+			IsMouseVisible = true;
+		}
 
 		protected override void LoadContent()
 		{
 			base.LoadContent();
 
+			MyraEnvironment.Game = this;
+			// MyraEnvironment.IsWindowsDX = true;	Uncomment this line if MonoGame for Windows DirectX is used
+
 			_batch = new SpriteBatch(GraphicsDevice);
-			_font = DefaultAssets.Font;
 
 			_formattedText = new FormattedText
 			{
-				Font = _font,
+				Font = DefaultAssets.Font,
 				Text =
 					"Lorem ipsum [Green]dolor sit amet, [Red]consectetur adipisicing elit, sed do eiusmod [#AAAAAAAA]tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. [white]Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum!",
-				Size = new Point(500, 500),
-				HorizontalAlignment = HorizontalAlignment.Right,
-				Wrap = true
+				Width = 500
 			};
 		}
 
@@ -37,12 +42,7 @@ namespace Myra.Samples
 
 			_batch.Begin();
 
-			_formattedText.Draw(_batch, new Point(0, ++_y), Color.LightBlue);
-
-			if (_y >= 300)
-			{
-				_y = 0;
-			}
+			_formattedText.Draw(_batch, Point.Zero, Color.LightBlue);
 
 			_batch.End();
 		}

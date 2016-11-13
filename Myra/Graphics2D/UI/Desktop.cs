@@ -213,7 +213,7 @@ namespace Myra.Graphics2D.UI
 			InvalidateLayout();
 		}
 
-		public void Render(GraphicsDevice device)
+		public void Render()
 		{
 			if (Bounds.IsEmpty)
 			{
@@ -225,7 +225,7 @@ namespace Myra.Graphics2D.UI
 
 			if (_spriteBatch == null)
 			{
-				_spriteBatch = new SpriteBatch(device);
+				_spriteBatch = new SpriteBatch(MyraEnvironment.GraphicsDevice);
 			}
 
 			var oldScissorRectangle = _spriteBatch.GraphicsDevice.ScissorRectangle;

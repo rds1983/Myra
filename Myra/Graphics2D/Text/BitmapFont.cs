@@ -109,6 +109,7 @@ namespace Myra.Graphics2D.Text
 				glyph.Region.Draw(batch, dest, color);
 
 				pos.X += glyph.XAdvance;
+
 				if (i < text.Length - 1)
 				{
 					pos.X += glyph.GetKerning(text[i + 1]);
@@ -138,6 +139,7 @@ namespace Myra.Graphics2D.Text
 				}
 
 				result.X += glyph.XAdvance;
+
 				if (i < text.Length - 1)
 				{
 					result.X += glyph.GetKerning(text[i + 1]);

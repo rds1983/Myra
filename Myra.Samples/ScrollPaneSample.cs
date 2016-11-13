@@ -30,7 +30,7 @@ namespace Myra.Samples
 
 			var root = new Grid
 			{
-				WidthHint = 300,
+				WidthHint = 200,
 				HeightHint = 200,
 				HorizontalAlignment = HorizontalAlignment.Left,
 				VerticalAlignment = VerticalAlignment.Top
@@ -47,7 +47,7 @@ namespace Myra.Samples
 			GraphicsDevice.Clear(Color.Black);
 
 			_host.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight);
-			_host.Render(GraphicsDevice);
+			_host.Render();
 		}
 	}
 }

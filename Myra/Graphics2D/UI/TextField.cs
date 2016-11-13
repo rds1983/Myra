@@ -15,6 +15,7 @@ namespace Myra.Graphics2D.UI
 		private bool _cursorOn = true;
 		private readonly FormattedText _formattedText = new FormattedText();
 		private int? _cursorIndex;
+		private bool _wrap = true;
 
 		public int VerticalSpacing
 		{
@@ -61,11 +62,16 @@ namespace Myra.Graphics2D.UI
 
 		public bool Wrap
 		{
-			get { return _formattedText.Wrap; }
+			get { return _wrap; }
 
 			set
 			{
-				_formattedText.Wrap = value;
+				if (value == _wrap)
+				{
+					return;
+				}
+
+				_wrap = value;
 				FireMeasureChanged();
 			}
 		}
@@ -335,23 +341,9 @@ namespace Myra.Graphics2D.UI
 			var result = Point.Zero;
 			if (Font != null)
 			{
-				_formattedText.Size = new Point(width, _formattedText.Size.Y);
+				_formattedText.Width = _wrap ? width : default(int?);
 
-				var strings = _formattedText.Strings;
-				foreach (var si in strings)
-				{
-					if (si.Bounds.Width > result.X)
-					{
-						result.X = si.Bounds.Width;
-					}
-
-					result.Y += si.Bounds.Height;
-				}
-
-				if (strings.Length > 1)
-				{
-					result.Y += (strings.Length - 1)*_formattedText.VerticalSpacing;
-				}
+				result = _formattedText.Size;
 			}
 
 			if (result.Y < Font.LineHeight)
@@ -366,7 +358,7 @@ namespace Myra.Graphics2D.UI
 		{
 			base.Arrange();
 
-			_formattedText.Size = new Point(ClientBounds.Width, _formattedText.Size.Y);
+			_formattedText.Width = _wrap ? ClientBounds.Width : default(int?);
 		}
 
 		public void ApplyTextFieldStyle(TextFieldStyle style)

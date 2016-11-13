@@ -18,7 +18,7 @@ namespace Myra.Graphics2D.Text
 			}
 		}
 
-		public Rectangle Bounds;
+		public Point Size;
 
 		public Rectangle? RenderedBounds { get; private set; }
 
@@ -39,13 +39,13 @@ namespace Myra.Graphics2D.Text
 
 		public GlyphRun(int initialLineHeight)
 		{
-			Bounds.Height = initialLineHeight;
+			Size.Y = initialLineHeight;
 		}
 
 		public void Clear()
 		{
 			_glyphRenders.Clear();
-			Bounds = Rectangle.Empty;
+			Size = Point.Zero;
 			_posX = 0;
 			_text = string.Empty;
 		}
@@ -74,11 +74,12 @@ namespace Myra.Graphics2D.Text
 					glyph.Region.Bounds.Width, 
 					glyph.Region.Bounds.Height);
 
-				Bounds = Rectangle.Union(Bounds, dest);
-
 				render = new GlyphRender(ci, this, glyph, color, dest);
 
 				_posX += glyph.XAdvance;
+
+				Size.X = _posX;
+				Size.Y = glyph.Offset.Y + glyph.Region.Bounds.Height;
 			}
 			else
 			{
@@ -106,9 +107,7 @@ namespace Myra.Graphics2D.Text
 
 		public void Draw(SpriteBatch batch, Point pos, Color color)
 		{
-			var bounds = Bounds;
-			bounds.Offset(pos);
-			RenderedBounds = bounds;
+			RenderedBounds = new Rectangle(pos.X, pos.Y, Size.X, Size.Y);
 
 			foreach (var gr in _glyphRenders)
 			{
@@ -117,7 +116,7 @@ namespace Myra.Graphics2D.Text
 
 			if (BitmapFont.DrawFames)
 			{
-				batch.DrawRect(Color.Blue, bounds);
+				batch.DrawRect(Color.Blue, RenderedBounds.Value);
 			}
 		}
 	}

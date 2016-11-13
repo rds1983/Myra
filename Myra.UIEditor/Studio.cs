@@ -427,7 +427,7 @@ namespace Myra.UIEditor
 			_desktop.Bounds = new Rectangle(0, 0,
 				GraphicsDevice.PresentationParameters.BackBufferWidth,
 				GraphicsDevice.PresentationParameters.BackBufferHeight);
-			_desktop.Render(GraphicsDevice);
+			_desktop.Render();
 
 			_drawCallsLabel.Text = string.Format("Draw Calls: {0}", GraphicsDevice.Metrics.DrawCount);
 		}

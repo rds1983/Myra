@@ -2,7 +2,6 @@
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Graphics2D.UI;
 using Myra.Utility;
 
 namespace Myra.Graphics2D.Text
@@ -11,7 +10,7 @@ namespace Myra.Graphics2D.Text
 	{
 		public struct Options
 		{
-			public bool Wrap;
+			public int? Width;
 			public bool Color;
 		}
 
@@ -78,7 +77,7 @@ namespace Myra.Graphics2D.Text
 				_fullString.Clear();
 			}
 
-			public GlyphRun[] Format(BitmapFont font, string text, int width, Options options)
+			public GlyphRun[] Format(BitmapFont font, string text, Options options)
 			{
 				if (string.IsNullOrEmpty(text))
 				{
@@ -182,10 +181,10 @@ namespace Myra.Graphics2D.Text
 						case LexemeType.Word:
 							_fullString.Append(li.text);
 
-							if (options.Wrap)
+							if (options.Width.HasValue)
 							{
 								var sz = font.Measure(_fullString.ToString());
-								if (sz.X <= width)
+								if (sz.X <= options.Width.Value)
 								{
 									_lastRun.Append(font, li.chars, _currentColor);
 								}
@@ -223,12 +222,9 @@ namespace Myra.Graphics2D.Text
 		private BitmapFont _font;
 		private string _text = "";
 		private int _verticalSpacing;
-		private HorizontalAlignment _horizontalAlignment = HorizontalAlignment.Left;
-		private VerticalAlignment _verticalAlignment = VerticalAlignment.Top;
-		private Point _size = new Point(10000, 0);
+		private int? _width;
 		private GlyphRun[] _strings;
-		private int _totalHeight;
-		private bool _wrap;
+		private Point _size;
 		private bool _colored = true;
 		private bool _dirty = true;
 
@@ -278,63 +274,17 @@ namespace Myra.Graphics2D.Text
 			}
 		}
 
-		public HorizontalAlignment HorizontalAlignment
+		public int? Width
 		{
-			get { return _horizontalAlignment; }
+			get { return _width; }
 			set
 			{
-				if (value == _horizontalAlignment)
+				if (value == _width)
 				{
 					return;
 				}
 
-				_horizontalAlignment = value;
-				InvalidateLayout();
-			}
-		}
-
-		public VerticalAlignment VerticalAlignment
-		{
-			get { return _verticalAlignment; }
-			set
-			{
-				if (value == _verticalAlignment)
-				{
-					return;
-				}
-
-				_verticalAlignment = value;
-				InvalidateLayout();
-			}
-		}
-
-		public Point Size
-		{
-			get { return _size; }
-			set
-			{
-				if (value == _size)
-				{
-					return;
-				}
-
-				_size = value;
-				InvalidateLayout();
-			}
-		}
-
-		public bool Wrap
-		{
-			get { return _wrap; }
-
-			set
-			{
-				if (value == _wrap)
-				{
-					return;
-				}
-
-				_wrap = value;
+				_width = value;
 				InvalidateLayout();
 			}
 		}
@@ -363,12 +313,12 @@ namespace Myra.Graphics2D.Text
 			}
 		}
 
-		public int TotalHeight
+		public Point Size
 		{
 			get
 			{
 				Update();
-				return _totalHeight;
+				return _size;
 			}
 		}
 
@@ -384,48 +334,28 @@ namespace Myra.Graphics2D.Text
 			var options = new Options
 			{
 				Color = _colored,
-				Wrap = _wrap
+				Width = _width
 			};
 
-			_strings = parser.Format(_font, _text, _size.X, options);
+			_strings = parser.Format(_font, _text, options);
 
-			// Calculate total height
-			_totalHeight = 0;
+			// Calculate size
+			_size = Point.Zero;
 			for (var i = 0; i < _strings.Length; ++i)
 			{
 				var si = _strings[i];
 
-				_totalHeight += si.Bounds.Height;
+				if (si.Size.X > _size.X)
+				{
+					_size.X = si.Size.X;
+				}
+
+				_size.Y += si.Size.Y;
 
 				if (i < _strings.Length - 1)
 				{
-					_totalHeight += _verticalSpacing;
+					_size.Y += _verticalSpacing;
 				}
-			}
-
-			// Apply alignments
-			var offset = Point.Zero;
-			if (VerticalAlignment == VerticalAlignment.Center)
-			{
-				offset.Y = (_size.Y - _totalHeight)/2;
-			}
-			else if (VerticalAlignment == VerticalAlignment.Bottom)
-			{
-				offset.Y = _size.Y - _totalHeight;
-			}
-
-			foreach (var si in _strings)
-			{
-				if (_horizontalAlignment == HorizontalAlignment.Center)
-				{
-					offset.X = (_size.X - si.Bounds.Width)/2;
-				}
-				else if (_horizontalAlignment == HorizontalAlignment.Right)
-				{
-					offset.X = _size.X - si.Bounds.Width;
-				}
-
-				si.Bounds.Location += offset;
 			}
 
 			_dirty = false;
@@ -446,15 +376,13 @@ namespace Myra.Graphics2D.Text
 			{
 				si.ResetDraw();
 
-				if (y + si.Bounds.Y >= bounds.Top && y < bounds.Bottom)
+				if (y >= bounds.Top && y < bounds.Bottom)
 				{
-					var x = bounds.Left + si.Bounds.Left;
-
-					si.Draw(batch, new Point(x, y), textColor);
+					si.Draw(batch, new Point(bounds.Left, y), textColor);
 				}
 
-				y += si.Bounds.Height;
-				y += VerticalSpacing;
+				y += si.Size.Y;
+				y += _verticalSpacing;
 			}
 		}
 

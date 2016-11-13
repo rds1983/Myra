@@ -272,7 +272,7 @@ namespace Myra.Samples
 			GraphicsDevice.Clear(Color.Black);
 
 			_host.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight);
-			_host.Render(GraphicsDevice);
+			_host.Render();
 		}
 	}
 }
