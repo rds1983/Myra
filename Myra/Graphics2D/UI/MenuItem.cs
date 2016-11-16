@@ -56,6 +56,7 @@ namespace Myra.Graphics2D.UI
 			{
 				GridPosition = {X = 1}
 			};
+
 			Widget.Children.Add(_textBlock);
 		}
 

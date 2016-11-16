@@ -99,10 +99,6 @@ namespace Myra.Graphics2D.UI
 				_formattedText.Width = _wrap ? width : default(int?);
 
 				result = _formattedText.Size;
-				if (result.X == 56)
-				{
-					var k = 5;
-				}
 			}
 
 			if (result.Y < Font.LineHeight)

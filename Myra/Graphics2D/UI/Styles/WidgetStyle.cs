@@ -5,6 +5,6 @@
 		public Drawable Background { get; set; }
 		public Drawable OverBackground { get; set; }
 		public Drawable DisabledBackground { get; set; }
-		public FrameInfo FrameInfo;
+		public PaddingInfo Padding;
 	}
 }

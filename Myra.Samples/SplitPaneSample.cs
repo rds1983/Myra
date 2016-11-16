@@ -43,10 +43,7 @@ namespace Myra.Samples
 			var buttonReset = new Button
 			{
 				Text = "Reset",
-				GridPosition =
-				{
-					X = 1
-				}
+				GridPosition = {X = 1}
 			};
 
 			buttonReset.Down += (sender, args) =>
@@ -60,10 +57,7 @@ namespace Myra.Samples
 
 			_splitPane = new SplitPane(Orientation.Horizontal)
 			{
-				GridPosition =
-				{
-					Y = 1
-				}
+				GridPosition = {Y = 1}
 			};
 
 			_splitPane.ProportionsChanged += SplitPaneOnProportionsChanged;

@@ -82,7 +82,7 @@ namespace Myra.Graphics2D.UI
 				HorizontalAlignment = HorizontalAlignment.Center,
 				VerticalAlignment = VerticalAlignment.Center,
 			};
-			
+
 			_mark.Down += MarkOnDown;
 			_mark.Up += MarkOnUp;
 
@@ -92,10 +92,7 @@ namespace Myra.Graphics2D.UI
 			{
 				HorizontalAlignment = HorizontalAlignment.Left,
 				VerticalAlignment = VerticalAlignment.Top,
-				GridPosition =
-				{
-					X = 1
-				}
+				GridPosition = {X = 1}
 			};
 
 			Widget.Children.Add(_label);
@@ -103,12 +100,12 @@ namespace Myra.Graphics2D.UI
 			// Second is yet another grid holding child nodes
 			_childNodesGrid = new Grid
 			{
+				Visible = false,
 				GridPosition =
 				{
 					X = 1,
 					Y = 1
-				},
-				Visible = false
+				}
 			};
 
 			Widget.Children.Add(_childNodesGrid);
@@ -149,7 +146,7 @@ namespace Myra.Graphics2D.UI
 			var result = new TreeNode(TreeStyle, _topTree ?? (Tree) this)
 			{
 				Text = text,
-				GridPosition = {Y = _childNodesGrid.Children.Count},
+				GridPosition = {Y = _childNodesGrid.Children.Count}
 			};
 
 			_childNodesGrid.Children.Add(result);

@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Graphics2D.Text;
 using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
@@ -175,6 +173,9 @@ namespace Myra.Graphics2D.UI
 		public float? TotalRowProportionPart { get; set; }
 		public float? TotalColProportionPart { get; set; }
 
+		public bool SkipEmptyRows { get; set; }
+		public bool SkipEmptyColumns { get; set; }
+
 		static Grid()
 		{
 			DrawLinesColor = Color.Red;
@@ -189,6 +190,8 @@ namespace Myra.Graphics2D.UI
 
 			_columnsProportions.CollectionChanged += OnProportionsChanged;
 			_rowsProportions.CollectionChanged += OnProportionsChanged;
+
+			SkipEmptyColumns = SkipEmptyRows = true;
 		}
 
 		public int GetColumnWidth(int index)
@@ -328,14 +331,14 @@ namespace Myra.Graphics2D.UI
 					visibleWidgets.Add(child);
 
 					var gridPosition = GetActualGridPosition(child);
-					if (gridPosition.X + 1 > columns)
+					if (gridPosition.X + child.GridSpan.X > columns)
 					{
-						columns = gridPosition.X + 1;
+						columns = gridPosition.X + child.GridSpan.X;
 					}
 
-					if (gridPosition.Y + 1 > rows)
+					if (gridPosition.Y + child.GridSpan.Y > rows)
 					{
-						rows = gridPosition.Y + 1;
+						rows = gridPosition.Y + child.GridSpan.Y;
 					}
 				}
 			}
@@ -389,11 +392,20 @@ namespace Myra.Graphics2D.UI
 						}
 
 						var measuredSize = Point.Zero;
-
 						if (rowProportion.Type != ProportionType.Dots ||
 						    colProportion.Type != ProportionType.Dots)
 						{
 							measuredSize = widget.Measure(availableSize);
+						}
+
+						if (widget.GridSpan.X != 1)
+						{
+							measuredSize.X = 0;
+						}
+
+						if (widget.GridSpan.Y != 1)
+						{
+							measuredSize.Y = 0;
 						}
 
 						var size = new Point(rowProportion.Type != ProportionType.Dots ? measuredSize.X : (int)rowProportion.Value,
@@ -412,14 +424,34 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			var result = new Point
-			{
-				X = (from w in colsWidths select w).Sum(),
-				Y = (from h in rowsHeights select h).Sum()
-			};
+			var result = Point.Zero;
 
-			result.X += (colsWidths.Count - 1)*_columnSpacing;
-			result.Y += (rowsHeights.Count - 1)*_rowSpacing;
+			for(var i = 0; i < colsWidths.Count; ++i)
+			{
+				var w = colsWidths[i];
+				result.X += w;
+
+				if (i < colsWidths.Count - 1 &&
+				    (!SkipEmptyColumns ||
+				     w > 0))
+				{
+					result.X += _columnSpacing;
+				}
+			}
+
+			for (var i = 0; i < rowsHeights.Count; ++i)
+			{
+				var h = rowsHeights[i];
+				result.Y += h;
+
+				if (i < rowsHeights.Count - 1 &&
+					(!SkipEmptyRows ||
+					 h > 0))
+				{
+					result.Y += _rowSpacing;
+				}
+			}
+
 
 			return result;
 		}
@@ -549,9 +581,14 @@ namespace Myra.Graphics2D.UI
 			for (var i = 0; i < _colWidths.Count; ++i)
 			{
 				_cellLocationsX.Add(p.X);
-				p.X += _colWidths[i];
 
-				p.X += _columnSpacing;
+				var w = _colWidths[i];
+				p.X += w;
+
+				if (!SkipEmptyColumns || w > 0)
+				{
+					p.X += _columnSpacing;
+				}
 
 				_actualSize.X += _colWidths[i];
 			}
@@ -561,8 +598,14 @@ namespace Myra.Graphics2D.UI
 			{
 				_cellLocationsY.Add(p.Y);
 				_cellLocationsY[i] = p.Y;
-				p.Y += _rowHeights[i];
-				p.Y += _rowSpacing;
+
+				var h = _rowHeights[i];
+				p.Y += h;
+
+				if (!SkipEmptyRows || h > 0)
+				{
+					p.Y += _rowSpacing;
+				}
 
 				_actualSize.Y += _rowHeights[i];
 			}
@@ -574,7 +617,19 @@ namespace Myra.Graphics2D.UI
 				col = gridPosition.X;
 				row = gridPosition.Y;
 
-				control.LayoutChild(new Rectangle(_cellLocationsX[col], _cellLocationsY[row], _colWidths[col], _rowHeights[row]));
+				var cellSize = Point.Zero;
+
+				for (var i = col; i < col + control.GridSpan.X; ++i)
+				{
+					cellSize.X += _colWidths[i];
+				}
+
+				for (var i = row; i < row + control.GridSpan.Y; ++i)
+				{
+					cellSize.Y += _rowHeights[i];
+				}
+
+				control.LayoutChild(new Rectangle(_cellLocationsX[col], _cellLocationsY[row], cellSize.X, cellSize.Y));
 
 /*				if (col + 1 < _colWidths.Count)
 				{

@@ -1,19 +1,100 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.Remoting.Channels;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Myra.Edit;
 using Myra.Editor.Utils;
 using Myra.Graphics2D;
-using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI;
+using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Editor.UI
 {
 	public class PropertyGrid : ScrollPane<Grid>
 	{
+		private abstract class Record
+		{
+			public bool HasSetter { get; set; }
+
+			public abstract string Name { get; }
+			public abstract Type Type { get; }
+
+			public abstract object GetValue(object obj);
+			public abstract void SetValue(object obj, object value);
+		}
+
+		private class PropertyRecord: Record
+		{
+			private readonly PropertyInfo _propertyInfo;
+
+			public override string Name
+			{
+				get { return _propertyInfo.Name; }
+			}
+
+			public override Type Type
+			{
+				get
+				{
+					return _propertyInfo.PropertyType; 
+				}
+			}
+
+			public PropertyRecord(PropertyInfo propertyInfo)
+			{
+				_propertyInfo = propertyInfo;
+			}
+
+			public override object GetValue(object obj)
+			{
+				return _propertyInfo.GetValue(obj, new object[0]);
+			}
+
+			public override void SetValue(object obj, object value)
+			{
+				_propertyInfo.SetValue(obj, value);
+			}
+		}
+
+		private class FieldRecord : Record
+		{
+			private readonly FieldInfo _fieldInfo;
+
+			public override string Name
+			{
+				get { return _fieldInfo.Name; }
+			}
+
+			public override Type Type
+			{
+				get
+				{
+					return _fieldInfo.FieldType;
+				}
+			}
+
+			public FieldRecord(FieldInfo fieldInfo)
+			{
+				_fieldInfo = fieldInfo;
+			}
+
+			public override object GetValue(object obj)
+			{
+				return _fieldInfo.GetValue(obj);
+			}
+
+			public override void SetValue(object obj, object value)
+			{
+				_fieldInfo.SetValue(obj, value);
+			}
+		}
+
+		private readonly List<Record> _records = new List<Record>();
+
+		public TreeStyle PropertyGridStyle { get; private set; }
+
 		private object _object;
 
 		public object Object
@@ -36,16 +117,27 @@ namespace Myra.Editor.UI
 
 		public event EventHandler PropertyChanged;
 
-		public PropertyGrid()
+		public PropertyGrid(TreeStyle style)
 		{
 			Widget = new Grid
 			{
-				ColumnSpacing = 5,
-				RowSpacing = 5,
+				ColumnSpacing = 4,
+				RowSpacing = 4,
 			};
 
 			Widget.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
+			Widget.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
 			Widget.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill));
+
+			if (style != null)
+			{
+				ApplyPropertyGridStyle(style);
+			}
+		}
+
+		public PropertyGrid() : this(DefaultAssets.UIStylesheet.TreeStyle)
+		{
+		
 		}
 
 		private void FireChanged()
@@ -61,26 +153,25 @@ namespace Myra.Editor.UI
 		{
 			Widget.RowsProportions.Clear();
 			Widget.Children.Clear();
+			_records.Clear();
 
 			if (_object == null)
 			{
 				return;
 			}
 
-			var properties = (from p in _object.GetType().GetProperties() orderby p.Name select p).ToArray();
-
-			var y = 0;
-			for (var i = 0; i < properties.Length; ++i)
+			var properties = from p in _object.GetType().GetProperties() select p;
+			foreach(var property in properties)
 			{
-				var property = properties[i];
-
 				if (property.GetGetMethod() == null ||
 				    !property.GetGetMethod().IsPublic ||
-				    property.GetSetMethod() == null ||
-				    !property.GetSetMethod().IsPublic)
+				    property.GetGetMethod().IsStatic)
 				{
 					continue;
 				}
+
+				var hasSetter = property.GetSetMethod() == null ||
+				                !property.GetSetMethod().IsPublic;
 
 				var browsableAttr = property.FindAttribute<BrowsableAttribute>();
 				if (browsableAttr != null && !browsableAttr.Browsable)
@@ -94,10 +185,36 @@ namespace Myra.Editor.UI
 					continue;
 				}
 
-				var value = property.GetValue(_object, new object[0]);
+				_records.Add(new PropertyRecord(property)
+				{
+					HasSetter = hasSetter
+				});
+			}
+
+			var fields = from f in _object.GetType().GetFields() select f;
+			foreach (var field in fields)
+			{
+				if (!field.IsPublic)
+				{
+					continue;
+				}
+
+				_records.Add(new FieldRecord(field)
+				{
+					HasSetter = true
+				});
+			}
+
+			var y = 0;
+			for(var i = 0; i < _records.Count; ++i)
+			{
+				var property = _records[i];
+				var value = property.GetValue(_object);
 				Widget valueWidget = null;
 
-				var propertyType = property.PropertyType;
+				var oldY = y;
+
+				var propertyType = property.Type;
 				if (propertyType == typeof (bool))
 				{
 					var isChecked = (bool) value;
@@ -106,17 +223,25 @@ namespace Myra.Editor.UI
 						IsPressed = isChecked
 					};
 
-					cb.Down += (sender, args) =>
+					if (property.HasSetter)
 					{
-						property.SetValue(_object, true);
-						FireChanged();
-					};
 
-					cb.Up += (sender, args) =>
+						cb.Down += (sender, args) =>
+						{
+							property.SetValue(_object, true);
+							FireChanged();
+						};
+
+						cb.Up += (sender, args) =>
+						{
+							property.SetValue(_object, false);
+							FireChanged();
+						};
+					}
+					else
 					{
-						property.SetValue(_object, false);
-						FireChanged();
-					};
+						cb.Enabled = false;
+					}
 
 					valueWidget = cb;
 
@@ -137,9 +262,9 @@ namespace Myra.Editor.UI
 					var image = new Image
 					{
 						Drawable = sprite,
+						VerticalAlignment = VerticalAlignment.Center,
 						WidthHint = 32,
-						HeightHint = 16,
-						VerticalAlignment = VerticalAlignment.Center
+						HeightHint = 16
 					};
 
 					grid.Children.Add(image);
@@ -148,45 +273,38 @@ namespace Myra.Editor.UI
 					{
 						Text = "Change...",
 						ContentHorizontalAlignment = HorizontalAlignment.Center,
-						GridPosition = {X = 1},
+						Tag = value,
 						HorizontalAlignment = HorizontalAlignment.Stretch,
-						Tag = value
+						GridPosition = {X = 1}
 					};
 
-					button.Down += (sender, args) =>
-					{
-						var h = ColorChangeHandler;
-						if (h != null)
-						{
-							var newColor = h(sprite.Color);
+					grid.Children.Add(button);
 
-							if (newColor.HasValue)
+					if (property.HasSetter)
+					{
+						button.Down += (sender, args) =>
+						{
+							var h = ColorChangeHandler;
+							if (h != null)
 							{
+								var newColor = h(sprite.Color);
+								if (!newColor.HasValue) return;
+
 								sprite.Color = newColor.Value;
 								property.SetValue(_object, newColor.Value);
 								FireChanged();
 							}
-						}
-					};
-
-					grid.Children.Add(button);
+						};
+					}
+					else
+					{
+						button.Enabled = false;
+					}
 
 					valueWidget = grid;
 				}
 				else if (propertyType.IsAssignableFrom(typeof (Drawable)))
 				{
-				}
-				else if (propertyType == typeof (Rectangle))
-				{
-					// Rectangle
-				}
-				else if (propertyType == typeof (Point))
-				{
-					// Point
-				}
-				else if (propertyType == typeof (FrameInfo))
-				{
-					// Frame Info
 				}
 				else if (propertyType.IsEnum)
 				{
@@ -200,31 +318,101 @@ namespace Myra.Editor.UI
 					}
 
 					cb.SelectedIndex = Array.IndexOf(values, value);
-					cb.SelectedIndexChanged += (sender, args) =>
+
+					if (property.HasSetter)
 					{
-						if (cb.SelectedIndex != -1)
+						cb.SelectedIndexChanged += (sender, args) =>
 						{
-							property.SetValue(_object, cb.SelectedIndex);
-							FireChanged();
-						}
-					};
+							if (cb.SelectedIndex != -1)
+							{
+								property.SetValue(_object, cb.SelectedIndex);
+								FireChanged();
+							}
+						};
+					}
+					else
+					{
+						cb.Enabled = false;
+					}
 
 					valueWidget = cb;
 				}
-				else
+				else if (propertyType == typeof (string) || propertyType.IsPrimitive)
 				{
 					var tf = new TextField
 					{
 						Text = value != null ? value.ToString() : string.Empty
 					};
 
-					tf.TextChanged += (sender, args) =>
+					if (property.HasSetter)
 					{
-						property.SetValue(_object, tf.Text);
-						FireChanged();
-					};
+						tf.TextChanged += (sender, args) =>
+						{
+							property.SetValue(_object, tf.Text);
+							FireChanged();
+						};
+					}
+					else
+					{
+						tf.Enabled = false;
+					}
 
 					valueWidget = tf;
+				}
+				else
+				{
+					// Subgrid
+					if (value != null)
+					{
+						var subGrid = new PropertyGrid(PropertyGridStyle)
+						{
+							Object = value,
+							Visible = false,
+							HorizontalAlignment = HorizontalAlignment.Stretch,
+							GridPosition =
+							{
+								X = 1,
+								Y = y + 1
+							},
+							GridSpan = {X = 2}
+						};
+
+
+						Widget.Children.Add(subGrid);
+
+						// Mark
+						var mark = new Button(null)
+						{
+							Toggleable = true,
+							HorizontalAlignment = HorizontalAlignment.Center,
+							VerticalAlignment = VerticalAlignment.Center,
+							GridPosition = {Y = y}
+						};
+
+						mark.ApplyButtonStyle(PropertyGridStyle.MarkStyle);
+						Widget.Children.Add(mark);
+
+						mark.Down += (sender, args) =>
+						{
+							subGrid.Visible = true;
+						};
+
+						mark.Up += (sender, args) =>
+						{
+							subGrid.Visible = false;
+						};
+
+						var rp = new Grid.Proportion(Grid.ProportionType.Auto);
+						Widget.RowsProportions.Add(rp);
+						
+						++y;
+					}
+
+					var tb = new TextBlock();
+					tb.ApplyTextBlockStyle(PropertyGridStyle.LabelStyle);
+					tb.Text = value != null ? value.ToString() : "null";
+
+					valueWidget = tb;
 				}
 
 				if (valueWidget == null)
@@ -235,14 +423,17 @@ namespace Myra.Editor.UI
 				var nameLabel = new TextBlock
 				{
 					Text = property.Name,
+					VerticalAlignment = VerticalAlignment.Center,
 					GridPosition =
 					{
-						Y = y
+						X = 1,
+						Y = oldY
 					}
 				};
+
 				Widget.Children.Add(nameLabel);
 
-				valueWidget.GridPosition = new Point(1, y);
+				valueWidget.GridPosition = new Point(2, oldY);
 				valueWidget.HorizontalAlignment = HorizontalAlignment.Stretch;
 				valueWidget.VerticalAlignment = VerticalAlignment.Center;
 
@@ -253,6 +444,17 @@ namespace Myra.Editor.UI
 
 				++y;
 			}
+		}
+
+		private void MarkOnDown(object sender, EventArgs eventArgs)
+		{
+		}
+
+		public void ApplyPropertyGridStyle(TreeStyle style)
+		{
+			ApplyWidgetStyle(style);
+
+			PropertyGridStyle = style;
 		}
 	}
 }

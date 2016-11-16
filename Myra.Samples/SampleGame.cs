@@ -16,6 +16,7 @@ namespace Myra.Samples
 			{
 				typeof (HelloWorldSample),
 				typeof (FormattedTextSample),
+				typeof (TextBlocksSample),
 				typeof (SplitPaneSample),
 				typeof (ScrollPaneSample),
 				typeof (Notepad)

@@ -2,7 +2,6 @@
 using System.IO;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
-using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI;
 using Myra.UIEditor.UI;
 using Myra.UIEditor.Utils;
@@ -291,24 +290,27 @@ namespace Myra.UIEditor
 			{
 				Text = "FPS: ",
 				Font = DefaultAssets.FontSmall,
-				GridPosition = new Point(0, 1)
+				GridPosition = new Point(0, 1),
 			};
+
 			_statisticsGrid.Children.Add(_fpsLabel);
 
 			_widgetsCountLabel = new TextBlock
 			{
 				Text = "Total Widgets: ",
 				Font = DefaultAssets.FontSmall,
-				GridPosition = new Point(0, 2)
+				GridPosition = new Point(0, 2),
 			};
+
 			_statisticsGrid.Children.Add(_widgetsCountLabel);
 
 			_drawCallsLabel = new TextBlock
 			{
 				Text = "Draw Calls: ",
 				Font = DefaultAssets.FontSmall,
-				GridPosition = new Point(0, 3)
+				GridPosition = new Point(0, 3),
 			};
+
 			_statisticsGrid.Children.Add(_drawCallsLabel);
 
 			_statisticsGrid.HorizontalAlignment = Graphics2D.UI.HorizontalAlignment.Left;
@@ -420,7 +422,7 @@ namespace Myra.UIEditor
 			_fpsCounter.Update();
 			_gcMemoryLabel.Text = string.Format("GC Memory: {0} kb", GC.GetTotalMemory(false) / 1024);
 			_fpsLabel.Text = string.Format("FPS: {0:0.##}", _fpsCounter.FPS);
-			_widgetsCountLabel.Text = string.Format("Total Widgets: {0}", _desktop.CalculateTotalWidgets());
+			_widgetsCountLabel.Text = string.Format("Visible Widgets: {0}", _desktop.CalculateTotalWidgets(true));
 
 			GraphicsDevice.Clear(Color.Black);
 

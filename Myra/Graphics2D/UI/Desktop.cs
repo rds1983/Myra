@@ -271,17 +271,22 @@ namespace Myra.Graphics2D.UI
 			_layoutDirty = false;
 		}
 
-		public int CalculateTotalWidgets()
+		public int CalculateTotalWidgets(bool visibleOnly)
 		{
 			var result = 0;
 			foreach (var w in _widgets)
 			{
+				if (visibleOnly && !w.Visible)
+				{
+					continue;
+				}
+
 				++result;
 
 				var asContainer = w as Container;
 				if (asContainer != null)
 				{
-					result += asContainer.CalculateTotalChildCount();
+					result += asContainer.CalculateTotalChildCount(visibleOnly);
 				}
 			}
 

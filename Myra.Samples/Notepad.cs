@@ -2,8 +2,8 @@
 using System.IO;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.UI;
+using HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment;
 using Menu = Myra.Graphics2D.UI.Menu;
 using MenuItem = Myra.Graphics2D.UI.MenuItem;
 using Orientation = Myra.Graphics2D.UI.Orientation;
@@ -14,7 +14,6 @@ namespace Myra.Samples
 	{
 		private string _filePath;
 		private bool _dirty = true;
-		private SpriteBatch _batch;
 		private Desktop _host;
 		private TextField _textField;
 
@@ -62,8 +61,6 @@ namespace Myra.Samples
 			base.LoadContent();
 
 			UpdateTitle();
-
-			_batch = new SpriteBatch(GraphicsDevice);
 
 			_host = new Desktop();
 
@@ -141,11 +138,12 @@ namespace Myra.Samples
 
 			_textField = new TextField
 			{
-				Text = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum!",
+				Text =
+					"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum!",
 				VerticalSpacing = 0,
 				TextColor = Color.White,
 				Wrap = true,
-				HorizontalAlignment = Graphics2D.UI.HorizontalAlignment.Stretch,
+				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch
 			};
 
@@ -154,10 +152,7 @@ namespace Myra.Samples
 			var pane = new ScrollPane<TextField>
 			{
 				Widget = _textField,
-				GridPosition =
-				{
-					Y = 1
-				}
+				GridPosition = {Y = 1}
 			};
 
 			root.Children.Add(pane);

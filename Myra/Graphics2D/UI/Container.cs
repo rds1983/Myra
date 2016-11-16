@@ -119,16 +119,21 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public int CalculateTotalChildCount()
+		public int CalculateTotalChildCount(bool visibleOnly)
 		{
 			var result = ChildCount;
 
 			foreach (var child in Items)
 			{
+				if (visibleOnly && !child.Visible)
+				{
+					continue;
+				}
+
 				var asCont = child as Container;
 				if (asCont != null)
 				{
-					result += asCont.CalculateTotalChildCount();
+					result += asCont.CalculateTotalChildCount(visibleOnly);
 				}
 			}
 

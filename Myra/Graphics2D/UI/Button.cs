@@ -140,13 +140,13 @@ namespace Myra.Graphics2D.UI
 
 				if (imageStyle.PressedImage != null)
 				{
-					if (_image.WidthHint == null || 
+					if (_image.WidthHint == null ||
 						imageStyle.PressedImage.Size.X > _image.WidthHint.Value)
 					{
 						_image.WidthHint = imageStyle.PressedImage.Size.X;
 					}
 
-					if (_image.HeightHint == null || 
+					if (_image.HeightHint == null ||
 						imageStyle.PressedImage.Size.Y > _image.HeightHint.Value)
 					{
 						_image.HeightHint = imageStyle.PressedImage.Size.Y;

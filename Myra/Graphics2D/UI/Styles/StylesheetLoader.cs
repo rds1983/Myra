@@ -35,8 +35,6 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string FocusedBackgroundName = "disabledBackground";
 		public const string PressedBackgroundName = "pressedBackground";
 		public const string PaddingName = "padding";
-		public const string BorderName = "border";
-		public const string MarginName = "margin";
 		public const string FontName = "font";
 		public const string MessageFontName = "font";
 		public const string TextColorName = "textColor";
@@ -188,17 +186,7 @@ namespace Myra.Graphics2D.UI.Styles
 			JObject padding;
 			if (source.GetStyle(PaddingName, out padding))
 			{
-				result.FrameInfo.Padding = GetPaddingInfo(padding);
-			}
-
-			if (source.GetStyle(BorderName, out padding))
-			{
-				result.FrameInfo.Border = GetPaddingInfo(padding);
-			}
-
-			if (source.GetStyle(MarginName, out padding))
-			{
-				result.FrameInfo.Margin = GetPaddingInfo(padding);
+				result.Padding = GetPaddingInfo(padding);
 			}
 		}
 

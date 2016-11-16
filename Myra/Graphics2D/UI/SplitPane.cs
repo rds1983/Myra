@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Microsoft.Xna.Framework;
-using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
@@ -224,13 +223,13 @@ namespace Myra.Graphics2D.UI
 					if (_orientation == Orientation.Horizontal)
 					{
 						_handlesSize += handleSize;
-						handle.GridPosition.X = i*2 - 1;
+						handle.GridPosition.X = i * 2 - 1;
 						Widget.ColumnsProportions.Add(proportion);
 					}
 					else
 					{
 						_handlesSize += handleSize;
-						handle.GridPosition.Y = i*2 - 1;
+						handle.GridPosition.Y = i * 2 - 1;
 						Widget.RowsProportions.Add(proportion);
 					}
 
@@ -238,25 +237,19 @@ namespace Myra.Graphics2D.UI
 					_handles.Add(handle);
 				}
 
-				if (i < _widgets.Count - 1)
-				{
-					proportion = new Grid.Proportion(Grid.ProportionType.Part, 1.0f);
-				}
-				else
-				{
-					// Last widget should fill remaining space
-					proportion = new Grid.Proportion(Grid.ProportionType.Fill, 1.0f);
-				}
+				proportion = i < _widgets.Count - 1
+					? new Grid.Proportion(Grid.ProportionType.Part, 1.0f)
+					: new Grid.Proportion(Grid.ProportionType.Fill, 1.0f);
 
 				// Set grid coord and add widget itself
 				if (_orientation == Orientation.Horizontal)
 				{
-					w.GridPosition.X = i*2;
+					w.GridPosition.X = i * 2;
 					Widget.ColumnsProportions.Add(proportion);
 				}
 				else
 				{
-					w.GridPosition.Y = i*2;
+					w.GridPosition.Y = i * 2;
 					Widget.RowsProportions.Add(proportion);
 				}
 

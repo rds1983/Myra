@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using Myra.Graphics2D.Text;
 
 namespace Myra.Graphics2D.UI
 {
@@ -48,7 +47,7 @@ namespace Myra.Graphics2D.UI
 			Point size;
 
 			if (control.HorizontalAlignment != HorizontalAlignment.Stretch ||
-			    control.VerticalAlignment != VerticalAlignment.Stretch)
+				control.VerticalAlignment != VerticalAlignment.Stretch)
 			{
 				size = control.Measure(containerBounds.Size);
 			}

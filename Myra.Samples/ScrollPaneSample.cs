@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI;
 
 namespace Myra.Samples
@@ -30,14 +29,13 @@ namespace Myra.Samples
 
 			var root = new Grid
 			{
-				WidthHint = 200,
-				HeightHint = 200,
 				HorizontalAlignment = HorizontalAlignment.Left,
-				VerticalAlignment = VerticalAlignment.Top
+				VerticalAlignment = VerticalAlignment.Top,
+				WidthHint = 200,
+				HeightHint = 200
 			};
 
 			root.Children.Add(pane);
-
 			_host.Widgets.Add(root);
 		}
 

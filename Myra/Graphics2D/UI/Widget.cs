@@ -13,15 +13,16 @@ namespace Myra.Graphics2D.UI
 	{
 		public const string DefaultStyleName = "default";
 
+		private int _xHint, _yHint;
+		private int? _widthHint, _heightHint;
+
 		private Point _locationInParent;
 		private MouseButtons? _mouseButtonsDown;
 
 		private Rectangle _bounds;
 		private Desktop _desktop;
 		private bool _visible;
-		private int _xHint, _yHint;
-		private int? _widthHint, _heightHint;
-		private FrameInfo _frameInfo;
+		private PaddingInfo _padding;
 
 		public static bool DrawFrames { get; set; }
 		public static bool DrawFocused { get; set; }
@@ -94,31 +95,26 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public FrameInfo FrameInfo
-		{
-			get { return _frameInfo; }
+		public HorizontalAlignment HorizontalAlignment { get; set; }
+		public VerticalAlignment VerticalAlignment { get; set; }
 
-			set
-			{
-				if (value == _frameInfo)
+		public Point GridPosition;
+		public Point GridSpan = new Point(1, 1);
+
+		public PaddingInfo Padding
+		{
+			get { return _padding; }
+			set {
+				if (value == _padding)
 				{
 					return;
 				}
 
-				_frameInfo.SizeChanged -= FrameInfoOnSizeChanged;
-
-				_frameInfo = value;
-
-				_frameInfo.SizeChanged += FrameInfoOnSizeChanged;
-
+				_padding = value;
 				FireMeasureChanged();
 			}
 		}
 
-		public HorizontalAlignment HorizontalAlignment { get; set; }
-		
-		public VerticalAlignment VerticalAlignment { get; set; }
-		
 		public bool Enabled { get; set; }
 
 		public bool Visible
@@ -194,10 +190,17 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		internal Point Size
+		public Point LocationInParent
+		{
+			get { return _locationInParent; }
+		}
+		
+		[HiddenInEditor]
+		[JsonIgnore]
+		public Point Size
 		{
 			get { return _bounds.Size; }
-			set
+			internal set
 			{
 				if (value == _bounds.Size)
 				{
@@ -212,17 +215,10 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public Point LocationInParent
-		{
-			get { return _locationInParent; }
-		}
-
-		[HiddenInEditor]
-		[JsonIgnore]
 		public Point Location
 		{
 			get { return _bounds.Location; }
-			set
+			internal set
 			{
 				if (value == _bounds.Location)
 				{
@@ -243,7 +239,7 @@ namespace Myra.Graphics2D.UI
 		{
 			get { return _bounds; }
 
-			set
+			internal set
 			{
 				Location = value.Location;
 				Size = value.Size;
@@ -258,16 +254,16 @@ namespace Myra.Graphics2D.UI
 			{
 				var clientBounds = Bounds;
 
-				clientBounds.X += _frameInfo.Left;
-				clientBounds.Y += _frameInfo.Top;
+				clientBounds.X += _padding.Left;
+				clientBounds.Y += _padding.Top;
 
-				clientBounds.Width -= _frameInfo.Width;
+				clientBounds.Width -= _padding.Width;
 				if (clientBounds.Width < 0)
 				{
 					clientBounds.Width = 0;
 				}
 
-				clientBounds.Height -= _frameInfo.Height;
+				clientBounds.Height -= _padding.Height;
 				if (clientBounds.Height < 0)
 				{
 					clientBounds.Height = 0;
@@ -277,10 +273,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 		}
-
-		[HiddenInEditor]
-		[JsonIgnore]
-		public Point GridPosition;
 
 		[HiddenInEditor]
 		[JsonIgnore]
@@ -411,8 +403,8 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			result.X += _frameInfo.Width;
-			result.Y += _frameInfo.Height;
+			result.X += _padding.Width;
+			result.Y += _padding.Height;
 
 			return result;
 		}
@@ -538,8 +530,7 @@ namespace Myra.Graphics2D.UI
 			Background = style.Background;
 			OverBackground = style.OverBackground;
 			DisabledBackground = style.DisabledBackground;
-
-			FrameInfo = style.FrameInfo;
+			Padding = style.Padding;
 		}
 
 		private void FrameInfoOnSizeChanged(object sender, EventArgs eventArgs)

@@ -1,5 +1,4 @@
-﻿using Myra.Graphics2D.Text;
-using Myra.Graphics2D.UI.Styles;
+﻿using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
 {

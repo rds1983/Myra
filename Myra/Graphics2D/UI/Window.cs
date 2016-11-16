@@ -92,10 +92,8 @@ namespace Myra.Graphics2D.UI
 
 			Widget.Children.Add(_titleGrid);
 
-			_contentGrid = new Grid
-			{
-				GridPosition = {Y = 1}
-			};
+			_contentGrid = new Grid {GridPosition = {Y = 1}};
+
 			Widget.Children.Add(_contentGrid);
 
 			if (style != null)
@@ -135,7 +133,6 @@ namespace Myra.Graphics2D.UI
 
 		private void DesktopOnMouseMoved(object sender, GenericEventArgs<Point> genericEventArgs)
 		{
-
 			if (_startPos == null)
 			{
 				return;
@@ -177,7 +174,7 @@ namespace Myra.Graphics2D.UI
 					delta.Y = Desktop.Bounds.Bottom - Bounds.Height;
 				}
 			}
-
+			
 			XHint += delta.X;
 
 			if (XHint < 0)
