@@ -204,6 +204,11 @@ namespace Myra.Graphics2D.UI.Styles
 			{
 				result.TextColor = GetColor(name);
 			}
+
+			if (source.GetStyle(DisabledTextColorName, out name))
+			{
+				result.DisabledTextColor = GetColor(name);
+			}
 		}
 
 		private void LoadTextFieldStyleFromSource(JObject source, TextFieldStyle result)

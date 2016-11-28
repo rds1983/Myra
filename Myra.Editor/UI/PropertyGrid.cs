@@ -17,6 +17,7 @@ namespace Myra.Editor.UI
 		private abstract class Record
 		{
 			public bool HasSetter { get; set; }
+			public IItemsProvider ItemsProvider { get; set; }
 
 			public abstract string Name { get; }
 			public abstract Type Type { get; }
@@ -170,8 +171,8 @@ namespace Myra.Editor.UI
 					continue;
 				}
 
-				var hasSetter = property.GetSetMethod() == null ||
-				                !property.GetSetMethod().IsPublic;
+				var hasSetter = property.GetSetMethod() != null &&
+				                property.GetSetMethod().IsPublic;
 
 				var browsableAttr = property.FindAttribute<BrowsableAttribute>();
 				if (browsableAttr != null && !browsableAttr.Browsable)
@@ -185,10 +186,18 @@ namespace Myra.Editor.UI
 					continue;
 				}
 
-				_records.Add(new PropertyRecord(property)
+				var record = new PropertyRecord(property)
 				{
 					HasSetter = hasSetter
-				});
+				};
+
+				var selectionAttr = property.FindAttribute<SelectionAttribute>();
+				if (selectionAttr != null)
+				{
+					record.ItemsProvider = (IItemsProvider)Activator.CreateInstance(selectionAttr.ItemsProviderType);
+				}
+
+				_records.Add(record);
 			}
 
 			var fields = from f in _object.GetType().GetFields() select f;
@@ -209,13 +218,42 @@ namespace Myra.Editor.UI
 			for(var i = 0; i < _records.Count; ++i)
 			{
 				var property = _records[i];
+
 				var value = property.GetValue(_object);
 				Widget valueWidget = null;
 
 				var oldY = y;
 
 				var propertyType = property.Type;
-				if (propertyType == typeof (bool))
+
+				if (property.ItemsProvider != null)
+				{
+					var values = property.ItemsProvider.Items;
+
+					var cb = new ComboBox();
+					foreach (var v in values)
+					{
+						var item = cb.AddItem(v.ToString());
+						item.Tag = v;
+					}
+
+					cb.SelectedIndex = Array.IndexOf(values, value);
+					if (property.HasSetter)
+					{
+						cb.SelectedIndexChanged += (sender, args) =>
+						{
+							var item = cb.SelectedIndex >= 0 ? values[cb.SelectedIndex] : null;
+							property.SetValue(_object, item);
+							FireChanged();
+						};
+					}
+					else
+					{
+						cb.Enabled = false;
+					}
+
+					valueWidget = cb;
+				} else if (propertyType == typeof (bool))
 				{
 					var isChecked = (bool) value;
 					var cb = new CheckBox

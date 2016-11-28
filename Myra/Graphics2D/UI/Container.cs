@@ -14,6 +14,26 @@ namespace Myra.Graphics2D.UI
 		[JsonIgnore]
 		public abstract int ChildCount { get; }
 
+		public override bool Enabled
+		{
+			get { return base.Enabled; }
+
+			set
+			{
+				if (base.Enabled == value)
+				{
+					return;
+				}
+
+				base.Enabled = value;
+
+				foreach (var item in Items)
+				{
+					item.Enabled = value;
+				}
+			}
+		}
+
 		protected Container()
 		{
 			LocationChanged += OnLocationChanged;

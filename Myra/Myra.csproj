@@ -57,6 +57,8 @@
     <Compile Include="Cyotek.Drawing.BitmapFont\Padding.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\Page.cs" />
     <Compile Include="Edit\HiddenInEditorAttribute.cs" />
+    <Compile Include="Edit\IItemsProvider.cs" />
+    <Compile Include="Edit\SelectionAttribute.cs" />
     <Compile Include="Graphics2D\SpriteBatchExtensions.cs" />
     <Compile Include="Graphics2D\Drawable.cs" />
     <Compile Include="Graphics2D\ImageDrawable.cs" />

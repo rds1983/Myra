@@ -115,7 +115,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public bool Enabled { get; set; }
+		public virtual bool Enabled { get; set; }
 
 		public bool Visible
 		{

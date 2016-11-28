@@ -1,10 +1,11 @@
 {
     "colors": {
         "white": "#FFFFFFFF",
-        "grey": "#FFAAAAAA"
+        "grey": "#AAAAAAFF"
     },
     "textBlock": {
         "font": "default-font",
+        "disabledTextColor": "grey",
         "textColor": "white"
     },
     "textField": {
@@ -99,8 +100,6 @@
         "menuItem": {
             "pressedBackground": "button-down",
             "overBackground": "button-down",
-            "font": "default-font",
-            "textColor": "white",
             "padding": {
                 "left": 5.0,
                 "right": 5.0,
@@ -108,7 +107,8 @@
             },
             "label": {
                 "font": "default-font",
-                "textColor": "white"
+                "textColor": "white",
+                "disabledTextColor": "grey"
             }
         }
     },
@@ -125,8 +125,6 @@
         "menuItem": {
             "pressedBackground": "button-down",
             "overBackground": "button-over",
-            "font": "default-font",
-            "textColor": "white",
             "iconWidth": 22,
             "shortcutWidth": 22,
             "padding": {
@@ -135,7 +133,8 @@
             },
             "label": {
                 "font": "default-font",
-                "textColor": "white"
+                "textColor": "white",
+                "disabledTextColor": "grey"
             }
         }
     },

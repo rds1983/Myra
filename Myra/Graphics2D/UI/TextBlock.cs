@@ -58,6 +58,8 @@ namespace Myra.Graphics2D.UI
 
 		public Color TextColor { get; set; }
 
+		public Color DisabledTextColor { get; set; }
+
 		public TextBlock(TextBlockStyle style)
 		{
 			if (style != null)
@@ -77,7 +79,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			_formattedText.Draw(batch, ClientBounds, TextColor);
+			_formattedText.Draw(batch, ClientBounds, Enabled?TextColor:DisabledTextColor);
 		}
 
 		protected override Point InternalMeasure(Point availableSize)
@@ -121,6 +123,7 @@ namespace Myra.Graphics2D.UI
 			ApplyWidgetStyle(style);
 
 			TextColor = style.TextColor;
+			DisabledTextColor = style.DisabledTextColor;
 			Font = style.Font;
 		}
 	}
