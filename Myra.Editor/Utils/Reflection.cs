@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -25,6 +26,11 @@ namespace Myra.Editor.Utils
 			var result = (from T a in Attribute.GetCustomAttributes(type, typeof(T), true) select a).FirstOrDefault();
 
 			return result;
+		}
+
+		public static bool IsEnumerable(this Type type)
+		{
+			return type.IsGenericType && type.GetGenericTypeDefinition() == typeof (IEnumerable<>);
 		}
 	}
 }

@@ -85,7 +85,7 @@ namespace Myra.Graphics2D.UI
 
 			if (menuItem.IsPressed)
 			{
-				Desktop.ShowContextMenu(menuItem.SubMenu, new Point(menuItem.Bounds.X, Bounds.Bottom));
+				Desktop.ShowContextMenu(menuItem.SubMenu, new Point(menuItem.AbsoluteBounds.X, AbsoluteBounds.Bottom));
 			}
 		}
 
@@ -104,7 +104,7 @@ namespace Myra.Graphics2D.UI
 				if (menuItem != null && menuItem.SubMenu != null && menuItem.Bounds.Contains(position) &&
 				    Desktop.ContextMenu != menuItem.SubMenu)
 				{
-					Desktop.ShowContextMenu(menuItem.SubMenu, new Point(menuItem.Bounds.X, Bounds.Bottom));
+					Desktop.ShowContextMenu(menuItem.SubMenu, new Point(menuItem.AbsoluteBounds.X, AbsoluteBounds.Bottom));
 				}
 			}
 		}

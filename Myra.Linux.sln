@@ -1,0 +1,73 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra", "Myra\Myra.csproj", "{4DCBB001-9C79-4F6B-996D-D654062D93E0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E7C2030A-AF9E-41B2-BD5C-39D8F70A09A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples", "Myra.Samples\Myra.Samples.csproj", "{F897E015-14EA-4FA6-B127-263E73827996}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.DesktopGLLauncher", "Myra.Samples.DesktopGLLauncher\Myra.Samples.DesktopGLLauncher.csproj", "{27E7CA89-5B70-4554-9626-0A0A80A89F7F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Editor", "Myra.Editor\Myra.Editor.csproj", "{F18BD428-25F7-4183-BEB7-7C96F21AE2D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.UIEditor", "Myra.UIEditor\Myra.UIEditor.csproj", "{3B7E30AA-A659-4A13-9223-B9E0442E5B55}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug Package|Any CPU = Debug Package|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		Release Package|Any CPU = Release Package|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{27E7CA89-5B70-4554-9626-0A0A80A89F7F}.Debug Package|Any CPU.ActiveCfg = Debug|Any CPU
+		{27E7CA89-5B70-4554-9626-0A0A80A89F7F}.Debug Package|Any CPU.Build.0 = Debug|Any CPU
+		{27E7CA89-5B70-4554-9626-0A0A80A89F7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27E7CA89-5B70-4554-9626-0A0A80A89F7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27E7CA89-5B70-4554-9626-0A0A80A89F7F}.Release Package|Any CPU.ActiveCfg = Release|Any CPU
+		{27E7CA89-5B70-4554-9626-0A0A80A89F7F}.Release Package|Any CPU.Build.0 = Release|Any CPU
+		{27E7CA89-5B70-4554-9626-0A0A80A89F7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27E7CA89-5B70-4554-9626-0A0A80A89F7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B7E30AA-A659-4A13-9223-B9E0442E5B55}.Debug Package|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B7E30AA-A659-4A13-9223-B9E0442E5B55}.Debug Package|Any CPU.Build.0 = Debug|Any CPU
+		{3B7E30AA-A659-4A13-9223-B9E0442E5B55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B7E30AA-A659-4A13-9223-B9E0442E5B55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B7E30AA-A659-4A13-9223-B9E0442E5B55}.Release Package|Any CPU.ActiveCfg = Release|Any CPU
+		{3B7E30AA-A659-4A13-9223-B9E0442E5B55}.Release Package|Any CPU.Build.0 = Release|Any CPU
+		{3B7E30AA-A659-4A13-9223-B9E0442E5B55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B7E30AA-A659-4A13-9223-B9E0442E5B55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DCBB001-9C79-4F6B-996D-D654062D93E0}.Debug Package|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DCBB001-9C79-4F6B-996D-D654062D93E0}.Debug Package|Any CPU.Build.0 = Debug|Any CPU
+		{4DCBB001-9C79-4F6B-996D-D654062D93E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DCBB001-9C79-4F6B-996D-D654062D93E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DCBB001-9C79-4F6B-996D-D654062D93E0}.Release Package|Any CPU.ActiveCfg = Release|Any CPU
+		{4DCBB001-9C79-4F6B-996D-D654062D93E0}.Release Package|Any CPU.Build.0 = Release|Any CPU
+		{4DCBB001-9C79-4F6B-996D-D654062D93E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DCBB001-9C79-4F6B-996D-D654062D93E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F18BD428-25F7-4183-BEB7-7C96F21AE2D1}.Debug Package|Any CPU.ActiveCfg = Debug|Any CPU
+		{F18BD428-25F7-4183-BEB7-7C96F21AE2D1}.Debug Package|Any CPU.Build.0 = Debug|Any CPU
+		{F18BD428-25F7-4183-BEB7-7C96F21AE2D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F18BD428-25F7-4183-BEB7-7C96F21AE2D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F18BD428-25F7-4183-BEB7-7C96F21AE2D1}.Release Package|Any CPU.ActiveCfg = Release|Any CPU
+		{F18BD428-25F7-4183-BEB7-7C96F21AE2D1}.Release Package|Any CPU.Build.0 = Release|Any CPU
+		{F18BD428-25F7-4183-BEB7-7C96F21AE2D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F18BD428-25F7-4183-BEB7-7C96F21AE2D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F897E015-14EA-4FA6-B127-263E73827996}.Debug Package|Any CPU.ActiveCfg = Debug|Any CPU
+		{F897E015-14EA-4FA6-B127-263E73827996}.Debug Package|Any CPU.Build.0 = Debug|Any CPU
+		{F897E015-14EA-4FA6-B127-263E73827996}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F897E015-14EA-4FA6-B127-263E73827996}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F897E015-14EA-4FA6-B127-263E73827996}.Release Package|Any CPU.ActiveCfg = Release|Any CPU
+		{F897E015-14EA-4FA6-B127-263E73827996}.Release Package|Any CPU.Build.0 = Release|Any CPU
+		{F897E015-14EA-4FA6-B127-263E73827996}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F897E015-14EA-4FA6-B127-263E73827996}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Myra.UIEditor\Myra.UIEditor.csproj
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

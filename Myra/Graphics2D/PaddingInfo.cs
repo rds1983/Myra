@@ -4,6 +4,8 @@ namespace Myra.Graphics2D
 {
 	public struct PaddingInfo
 	{
+		public static readonly PaddingInfo Zero = new PaddingInfo();
+
 		public int Left, Right, Top, Bottom;
 
 		[JsonIgnore]
@@ -29,6 +31,12 @@ namespace Myra.Graphics2D
 		public static bool operator !=(PaddingInfo a, PaddingInfo b)
 		{
 			return !(a == b);
+		}
+
+		public override string ToString()
+		{
+			return string.Format("{{Left: {0}, Right: {1}, Top: {2}, Bottom: {3}}}",
+				Left, Right, Top, Bottom);
 		}
 	}
 }

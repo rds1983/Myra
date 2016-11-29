@@ -11,10 +11,13 @@ namespace Myra.Graphics2D.UI
 		private readonly Grid _childNodesGrid;
 		private readonly Button _mark;
 		private readonly TextBlock _label;
+		private bool _hasRoot = true;
 
 		public bool IsExpanded
 		{
-			get { return _childNodesGrid.Visible; }
+			get { return !HasRoot || _mark.IsPressed; }
+
+			set { _mark.IsPressed = value; }
 		}
 
 		public Button Mark
@@ -45,6 +48,11 @@ namespace Myra.Graphics2D.UI
 			set { _label.TextColor = value; }
 		}
 
+		public int ChildNodesCount
+		{
+			get { return _childNodesGrid.ChildCount; }
+		}
+
 		internal Grid ChildNodesGrid
 		{
 			get { return _childNodesGrid; }
@@ -56,6 +64,25 @@ namespace Myra.Graphics2D.UI
 
 		public TreeStyle TreeStyle { get; private set; }
 
+		public bool HasRoot
+		{
+			get
+			{
+				return _hasRoot;
+			}
+
+			set
+			{
+				if (value == _hasRoot)
+				{
+					return;
+				}
+
+				_hasRoot = value;
+				UpdateHasRoot();
+			}
+		}
+
 		public TreeNode(TreeStyle style, Tree topTree)
 		{
 			_topTree = topTree;
@@ -65,16 +92,7 @@ namespace Myra.Graphics2D.UI
 				_topTree.AllNodes.Add(this);
 			}
 
-			HorizontalAlignment = HorizontalAlignment.Stretch;
-			VerticalAlignment = VerticalAlignment.Stretch;
-
 			Widget = new Grid();
-
-			Widget.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-			Widget.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill));
-
-			Widget.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-			Widget.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
 
 			_mark = new Button(null)
 			{
@@ -92,8 +110,17 @@ namespace Myra.Graphics2D.UI
 			{
 				HorizontalAlignment = HorizontalAlignment.Left,
 				VerticalAlignment = VerticalAlignment.Top,
-				GridPosition = {X = 1}
+				GridPosition = { X = 1 }
 			};
+
+			HorizontalAlignment = HorizontalAlignment.Stretch;
+			VerticalAlignment = VerticalAlignment.Stretch;
+
+			Widget.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
+			Widget.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill));
+
+			Widget.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
+			Widget.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
 
 			Widget.Children.Add(_label);
 
@@ -116,6 +143,23 @@ namespace Myra.Graphics2D.UI
 			}
 
 			UpdateMark();
+			UpdateHasRoot();
+		}
+
+		private void UpdateHasRoot()
+		{
+			if (_hasRoot)
+			{
+				_mark.Visible = true;
+				_label.Visible = true;
+				_childNodesGrid.Visible = _mark.IsPressed;
+			}
+			else
+			{
+				_mark.Visible = false;
+				_label.Visible = false;
+				_childNodesGrid.Visible = true;
+			}
 		}
 
 		private void MarkOnDown(object sender, EventArgs eventArgs)
@@ -155,6 +199,16 @@ namespace Myra.Graphics2D.UI
 			UpdateMark();
 
 			return result;
+		}
+
+		public TreeNode GetSubNode(int index)
+		{
+			return (TreeNode) _childNodesGrid.Children[index];
+		}
+
+		public void RemoveSubNode(int index)
+		{
+			_childNodesGrid.Children.RemoveAt(index);
 		}
 
 		public void ApplyTreeNodeStyle(TreeStyle style)

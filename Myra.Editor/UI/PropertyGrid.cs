@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -203,7 +204,7 @@ namespace Myra.Editor.UI
 			var fields = from f in _object.GetType().GetFields() select f;
 			foreach (var field in fields)
 			{
-				if (!field.IsPublic)
+				if (!field.IsPublic || field.IsStatic)
 				{
 					continue;
 				}
@@ -213,6 +214,8 @@ namespace Myra.Editor.UI
 					HasSetter = true
 				});
 			}
+
+			_records.Sort((a, b) => Comparer<string>.Default.Compare(a.Name, b.Name));
 
 			var y = 0;
 			for(var i = 0; i < _records.Count; ++i)
@@ -284,7 +287,7 @@ namespace Myra.Editor.UI
 					valueWidget = cb;
 
 				}
-				else if (propertyType == typeof (Color))
+				else if (propertyType == typeof (Color) || propertyType == typeof(Drawable))
 				{
 					var grid = new Grid
 					{
@@ -292,10 +295,22 @@ namespace Myra.Editor.UI
 						HorizontalAlignment = HorizontalAlignment.Stretch
 					};
 
+					var isColor = propertyType == typeof (Color);
+
 					grid.ColumnsProportions.Add(new Grid.Proportion());
 					grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill));
 
-					var sprite = Sprite.CreateSolidColorRect((Color) value);
+					var color = Color.Transparent;
+					if (isColor)
+					{
+						color = (Color) value;
+					}
+					else if (value != null)
+					{
+						color = ((Sprite) value).Color;
+					}
+
+					var sprite = Sprite.CreateSolidColorRect(color);
 
 					var image = new Image
 					{
@@ -329,7 +344,16 @@ namespace Myra.Editor.UI
 								if (!newColor.HasValue) return;
 
 								sprite.Color = newColor.Value;
-								property.SetValue(_object, newColor.Value);
+
+								if (isColor)
+								{
+									property.SetValue(_object, newColor.Value);
+								}
+								else
+								{
+									property.SetValue(_object, sprite);
+								}
+
 								FireChanged();
 							}
 						};
@@ -396,6 +420,15 @@ namespace Myra.Editor.UI
 					}
 
 					valueWidget = tf;
+				}
+				else if (typeof (IEnumerable).IsAssignableFrom(propertyType))
+				{
+					if (value != null)
+					{
+						var items = (IEnumerable) value;
+
+						var k = 5;
+					}
 				}
 				else
 				{
@@ -482,10 +515,6 @@ namespace Myra.Editor.UI
 
 				++y;
 			}
-		}
-
-		private void MarkOnDown(object sender, EventArgs eventArgs)
-		{
 		}
 
 		public void ApplyPropertyGridStyle(TreeStyle style)

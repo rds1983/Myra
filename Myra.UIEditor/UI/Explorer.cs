@@ -4,9 +4,9 @@ namespace Myra.UIEditor.UI
 {
 	public class Explorer: Pane<Tree>
 	{
-		private Widget _project;
+		private Project _project;
 
-		public Widget Project
+		public Project Project
 		{
 			get
 			{
@@ -22,34 +22,49 @@ namespace Myra.UIEditor.UI
 
 				_project = value;
 
-				Rebuild(Widget, _project);
+				Widget.RemoveAllSubNodes();
+
+				if (_project == null)
+				{
+					return;
+				}
+
+				// Root node
+				var projectNode = Widget.AddSubNode("Project");
+				var rootNode = AddWidget(projectNode, _project.Root);
+				Rebuild(rootNode, _project.Root);
 			}
 		}
 
 		public Explorer()
 		{
-			Widget = new Tree();
+			Widget = new Tree
+			{
+				HasRoot = false
+			};
 		}
 
-		private void Rebuild(TreeNode node, Widget widget)
+		public TreeNode AddWidget(TreeNode root, Widget widget)
 		{
-			Widget.RemoveAllSubNodes();
-
-			if (_project == null)
+			if (widget == null)
 			{
-				return;
+				return null;
 			}
 
 			var id = widget.GetType().Name;
-
 			if (!string.IsNullOrEmpty(widget.Id))
 			{
 				id += " (#" + widget.Id + ")";
 			}
 
-			node.Text = id;
+			var node = root.AddSubNode(id);
 			node.Tag = widget;
 
+			return node;
+		}
+
+		private void Rebuild(TreeNode node, Widget widget)
+		{
 			var asContainer = widget as Container;
 			if (asContainer == null)
 			{
@@ -58,7 +73,7 @@ namespace Myra.UIEditor.UI
 			
 			foreach (var child in asContainer.Items)
 			{
-				var subNode = node.AddSubNode(string.Empty);
+				var subNode = AddWidget(node, child);
 				Rebuild(subNode, child);
 			}
 		}

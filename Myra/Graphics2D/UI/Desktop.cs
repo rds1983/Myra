@@ -121,11 +121,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public SpriteBatch SpriteBatch
-		{
-			get { return _spriteBatch; }
-		}
-
 		public event EventHandler<GenericEventArgs<Point>> MouseMoved;
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseDown;
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseUp;
@@ -238,7 +233,7 @@ namespace Myra.Graphics2D.UI
 			{
 				if (widget.Visible)
 				{
-					widget.Render(_spriteBatch);
+					widget.Render(_spriteBatch, Bounds.Location);
 				}
 			}
 

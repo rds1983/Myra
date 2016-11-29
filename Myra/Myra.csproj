@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
@@ -16,6 +16,8 @@
     <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <NuGetPackageImportStamp>523922a1</NuGetPackageImportStamp>
+    <ProductVersion>12.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,6 +50,7 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.ComponentModel" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cyotek.Drawing.BitmapFont\BitmapFont.cs" />
@@ -90,6 +93,7 @@
     <Compile Include="Graphics2D\UI\Menu.cs" />
     <Compile Include="Graphics2D\UI\MenuItem.cs" />
     <Compile Include="Graphics2D\UI\MenuSeparator.cs" />
+    <Compile Include="Graphics2D\UI\Project.cs" />
     <Compile Include="Graphics2D\UI\RenderUtils.cs" />
     <Compile Include="Graphics2D\UI\ScrollPane.cs" />
     <Compile Include="Graphics2D\UI\Styles\ButtonBaseStyle.cs" />

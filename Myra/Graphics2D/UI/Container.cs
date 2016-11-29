@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Myra.Edit;
 using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
@@ -9,9 +9,11 @@ namespace Myra.Graphics2D.UI
 	public abstract class Container : Widget
 	{
 		[JsonIgnore]
+		[HiddenInEditor]
 		public abstract IEnumerable<Widget> Items { get; }
 
 		[JsonIgnore]
+		[HiddenInEditor]
 		public abstract int ChildCount { get; }
 
 		public override bool Enabled
@@ -31,23 +33,6 @@ namespace Myra.Graphics2D.UI
 				{
 					item.Enabled = value;
 				}
-			}
-		}
-
-		protected Container()
-		{
-			LocationChanged += OnLocationChanged;
-		}
-
-		private void OnLocationChanged(object sender, EventArgs eventArgs)
-		{
-			// Update children locations
-			foreach (var child in Items)
-			{
-				if (!child.Visible)
-					continue;
-
-				child.Location = Location + child.LocationInParent;
 			}
 		}
 
@@ -97,22 +82,15 @@ namespace Myra.Graphics2D.UI
 			Items.HandleMouseUp(mb);
 		}
 
-		public override void InternalRender(SpriteBatch batch)
+		public override void InternalRender(SpriteBatch batch, Rectangle bounds)
 		{
-			var bounds = ClientBounds;
-
 			foreach (var child in Items)
 			{
 				if (!child.Visible)
 					continue;
 
-				var childBounds = child.Bounds;
-
-				// Render if.Visible
-				if (childBounds.Intersects(bounds))
-				{
-					child.Render(batch);
-				}
+				var absoluteLocation = bounds.Location;
+				child.Render(batch, absoluteLocation);
 			}
 		}
 

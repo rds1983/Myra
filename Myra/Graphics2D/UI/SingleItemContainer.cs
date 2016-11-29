@@ -76,7 +76,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			Widget.LayoutChild(ClientBounds);
+			Widget.LayoutChild(LayoutBounds);
 		}
 
 		protected override Point InternalMeasure(Point availableSize)

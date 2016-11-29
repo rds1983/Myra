@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using Myra.Edit;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
+using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
@@ -28,6 +30,8 @@ namespace Myra.Graphics2D.UI
 			set { _textBlock.TextColor = value; }
 		}
 
+		[JsonIgnore]
+		[HiddenInEditor]
 		public Drawable Image
 		{
 			get
@@ -47,6 +51,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[JsonIgnore]
+		[HiddenInEditor]
 		public Drawable PressedImage
 		{
 			get

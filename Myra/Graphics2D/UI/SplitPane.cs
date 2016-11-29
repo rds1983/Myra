@@ -74,7 +74,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var bounds = ClientBounds;
+			var bounds = LayoutBounds;
 			if (bounds.Width == 0)
 			{
 				return;
@@ -93,7 +93,7 @@ namespace Myra.Graphics2D.UI
 					firstWidth -= Widget.GetColumnWidth(i);
 				}
 
-				fp = (float)Widgets.Count*firstWidth/(ClientBounds.Width - _handlesSize);
+				fp = (float)Widgets.Count*firstWidth/(LayoutBounds.Width - _handlesSize);
 
 				firstProportion = Widget.ColumnsProportions[handleIndex - 1];
 				secondProportion = Widget.ColumnsProportions[handleIndex + 1];
@@ -108,7 +108,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 
-				fp = (float)Widgets.Count * firstHeight / (ClientBounds.Height - _handlesSize);
+				fp = (float)Widgets.Count * firstHeight / (LayoutBounds.Height - _handlesSize);
 
 				firstProportion = Widget.RowsProportions[handleIndex - 1];
 				secondProportion = Widget.RowsProportions[handleIndex + 1];

@@ -1,7 +1,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Myra.Edit;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
+using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
@@ -30,6 +32,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public BitmapFont Font
 		{
 			get { return _formattedText.Font; }
@@ -72,14 +76,14 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
-		public override void InternalRender(SpriteBatch batch)
+		public override void InternalRender(SpriteBatch batch, Rectangle bounds)
 		{
 			if (_formattedText.Font == null)
 			{
 				return;
 			}
 
-			_formattedText.Draw(batch, ClientBounds, Enabled?TextColor:DisabledTextColor);
+			_formattedText.Draw(batch, bounds, Enabled?TextColor:DisabledTextColor);
 		}
 
 		protected override Point InternalMeasure(Point availableSize)
@@ -115,7 +119,7 @@ namespace Myra.Graphics2D.UI
 		{
 			base.Arrange();
 
-			_formattedText.Width = _wrap ? ClientBounds.Width : default(int?);
+			_formattedText.Width = _wrap ? LayoutBounds.Width : default(int?);
 		}
 
 		public void ApplyTextBlockStyle(TextBlockStyle style)

@@ -25,7 +25,7 @@ namespace Myra.Graphics2D.UI
 		{
 			get { return _selectedRow; }
 
-			private set
+			set
 			{
 				if (value == _selectedRow)
 				{
@@ -77,7 +77,7 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
-				if (HoverRow.Mark.Bounds.Contains(Desktop.MousePosition))
+				if (HoverRow.Mark.AbsoluteBounds.Contains(Desktop.MousePosition))
 				{
 					return;
 				}
@@ -92,7 +92,7 @@ namespace Myra.Graphics2D.UI
 
 			HoverRow = null;
 
-			if (!Bounds.Contains(position))
+			if (!AbsoluteBounds.Contains(position))
 			{
 				return;
 			}
@@ -134,7 +134,7 @@ namespace Myra.Graphics2D.UI
 
 		private void UpdateRowInfos()
 		{
-			var bounds = ClientBounds;
+			var bounds = AbsoluteBounds;
 
 			foreach (var rowInfo in _allNodes)
 			{
@@ -147,7 +147,7 @@ namespace Myra.Graphics2D.UI
 			{
 				if (rowInfo.RowVisible)
 				{
-					rowInfo.RowBounds = new Rectangle(bounds.X, rowInfo.ClientBounds.Y, bounds.Width,
+					rowInfo.RowBounds = new Rectangle(bounds.X, rowInfo.AbsoluteBounds.Y, bounds.Width,
 						rowInfo.Widget.GetRowHeight(0));
 				}
 			}
@@ -167,7 +167,7 @@ namespace Myra.Graphics2D.UI
 			UpdateRowInfos();
 		}
 
-		public override void InternalRender(SpriteBatch batch)
+		public override void InternalRender(SpriteBatch batch, Rectangle bounds)
 		{
 			if (SelectedRow != null && SelectedRow.RowVisible && RowSelectionBackground != null)
 			{
@@ -181,7 +181,7 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			base.InternalRender(batch);
+			base.InternalRender(batch, bounds);
 		}
 
 		public void ApplyTreeStyle(TreeStyle style)
@@ -190,6 +190,56 @@ namespace Myra.Graphics2D.UI
 
 			RowSelectionBackground = style.RowSelectionBackground;
 			RowSelectionBackgroundWithoutFocus = style.RowSelectionBackgroundWithoutFocus;
+		}
+
+		private static bool FindPath(Stack<TreeNode> path, TreeNode node)
+		{
+			var top = path.Peek();
+
+			for (var i = 0; i < top.ChildNodesCount; ++i)
+			{
+				var child = top.GetSubNode(i);
+
+				if (child == node)
+				{
+					return true;
+				}
+
+				path.Push(child);
+
+				if (FindPath(path, node))
+				{
+					return true;
+				}
+
+				path.Pop();
+			}
+
+			return false;
+		}
+		
+
+		/// <summary>
+		/// Expands path to the node
+		/// </summary>
+		/// <param name="node"></param>
+		public void ExpandPath(TreeNode node)
+		{
+			var path = new Stack<TreeNode>();
+
+			path.Push(this);
+
+			if (!FindPath(path, node))
+			{
+				// Path not found
+				return;
+			}
+
+			while (path.Count > 0)
+			{
+				var p = path.Pop();
+				p.IsExpanded = true;
+			}
 		}
 	}
 }

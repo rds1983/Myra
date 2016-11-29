@@ -6,7 +6,7 @@ namespace Myra.Utility
 {
 	public static class Serialization
 	{
-		public static string Save(Widget widget)
+		public static string Save(Project widget)
 		{
 			var result = JsonConvert.SerializeObject(widget, Formatting.Indented,
 				new JsonSerializerSettings
@@ -19,9 +19,9 @@ namespace Myra.Utility
 		}
 
 
-		public static Widget LoadFromData(string data)
+		public static Project LoadFromData(string data)
 		{
-			var result = (Widget) JsonConvert.DeserializeObject(data, new JsonSerializerSettings
+			var result = (Project)JsonConvert.DeserializeObject(data, new JsonSerializerSettings
 			{
 				TypeNameHandling = TypeNameHandling.Objects
 			});

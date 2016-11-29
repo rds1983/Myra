@@ -17,7 +17,7 @@ using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Myra.UIEditor
 {
-	public class Studio: Game
+	public class Studio : Game
 	{
 		private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
@@ -39,8 +39,25 @@ namespace Myra.UIEditor
 		private readonly FPSCounter _fpsCounter = new FPSCounter();
 		private string _filePath;
 		private bool _isDirty;
-		private Widget _project;
+		private Project _project;
 		private int[] _customColors;
+
+		private MenuItem _addButtonItem,
+			_addCheckBoxItem,
+			_addComboBoxItem,
+			_addGridItem,
+			_addImageItem,
+			_addHorizontalMenuItem,
+			_addVerticalMenuItem,
+			_addScrollPaneItem,
+			_addHorizontalSplitPaneItem,
+			_addVerticalSplitPaneItem,
+			_addTextBlockItem,
+			_addTextFieldItem,
+			_addTreeItem,
+			_addMenuItemItem,
+			_addMenuSeparatorItem,
+			_addTreeNodeItem;
 
 		public string FilePath
 		{
@@ -74,7 +91,7 @@ namespace Myra.UIEditor
 			}
 		}
 
-		public Widget Project
+		public Project Project
 		{
 			get { return _project; }
 
@@ -92,7 +109,7 @@ namespace Myra.UIEditor
 
 				if (_project != null)
 				{
-					_projectHolder.Children.Add(_project);
+					_projectHolder.Children.Add(_project.Root);
 				}
 			}
 		}
@@ -204,12 +221,158 @@ namespace Myra.UIEditor
 				Text = "Controls"
 			};
 
-			var addTextBlockItem = new MenuItem
+			_addButtonItem = new MenuItem
 			{
-				Text = "Add Text Block"
+				Text = "Add Button"
 			};
+			_addButtonItem.Down += (s, a) =>
+			{
+				AddStandardControl<Graphics2D.UI.Button>();
+			};
+			controlsMenu.AddMenuItem(_addButtonItem);
 
-			controlsMenu.AddMenuItem(addTextBlockItem);
+			_addCheckBoxItem = new MenuItem
+			{
+				Text = "Add CheckBox"
+			};
+			_addCheckBoxItem.Down += (s, a) =>
+			{
+				AddStandardControl<Graphics2D.UI.CheckBox>();
+			};
+			controlsMenu.AddMenuItem(_addCheckBoxItem);
+
+			_addComboBoxItem = new MenuItem
+			{
+				Text = "Add ComboBox"
+			};
+			_addComboBoxItem.Down += (s, a) =>
+			{
+				AddStandardControl<Graphics2D.UI.ComboBox>();
+			};
+			controlsMenu.AddMenuItem(_addComboBoxItem);
+
+			_addGridItem = new MenuItem
+			{
+				Text = "Add Grid"
+			};
+			_addGridItem.Down += (s, a) =>
+			{
+				AddStandardControl<Grid>();
+			};
+			controlsMenu.AddMenuItem(_addGridItem);
+
+			_addImageItem = new MenuItem
+			{
+				Text = "Add Image"
+			};
+			_addImageItem.Down += (s, a) =>
+			{
+				AddStandardControl<Image>();
+			};
+			controlsMenu.AddMenuItem(_addImageItem);
+
+			_addHorizontalMenuItem = new MenuItem
+			{
+				Text = "Add Horizontal Menu"
+			};
+			_addHorizontalMenuItem.Down += (s, a) =>
+			{
+				AddStandardControl(new Menu(Orientation.Horizontal));
+			};
+			controlsMenu.AddMenuItem(_addHorizontalMenuItem);
+
+			_addVerticalMenuItem = new MenuItem
+			{
+				Text = "Add Vertical Menu"
+			};
+			_addVerticalMenuItem.Down += (s, a) =>
+			{
+				AddStandardControl(new Menu(Orientation.Vertical));
+			};
+			controlsMenu.AddMenuItem(_addVerticalMenuItem);
+
+			_addScrollPaneItem = new MenuItem
+			{
+				Text = "Add ScrollPane"
+			};
+			_addScrollPaneItem.Down += (s, a) =>
+			{
+				AddStandardControl<ScrollPane<Widget>>();
+			};
+			controlsMenu.AddMenuItem(_addScrollPaneItem);
+
+			_addHorizontalSplitPaneItem = new MenuItem
+			{
+				Text = "Add Horizontal SplitPane"
+			};
+			_addHorizontalSplitPaneItem.Down += (s, a) =>
+			{
+				AddStandardControl(new SplitPane(Orientation.Horizontal));
+			};
+			controlsMenu.AddMenuItem(_addHorizontalSplitPaneItem);
+
+			_addVerticalSplitPaneItem = new MenuItem
+			{
+				Text = "Add Vertical SplitPane"
+			};
+			_addVerticalSplitPaneItem.Down += (s, a) =>
+			{
+				AddStandardControl(new SplitPane(Orientation.Vertical));
+			};
+			controlsMenu.AddMenuItem(_addVerticalSplitPaneItem);
+
+			_addTextBlockItem = new MenuItem
+			{
+				Text = "Add TextBlock"
+			};
+			_addTextBlockItem.Down += (s, a) =>
+			{
+				AddStandardControl<TextBlock>();
+			};
+			controlsMenu.AddMenuItem(_addTextBlockItem);
+
+			_addTextFieldItem = new MenuItem
+			{
+				Text = "Add TextField"
+			};
+			_addTextFieldItem.Down += (s, a) =>
+			{
+				AddStandardControl<TextField>();
+			};
+			controlsMenu.AddMenuItem(_addTextFieldItem);
+
+			_addTreeItem = new MenuItem
+			{
+				Text = "Add Tree"
+			};
+			_addTreeItem.Down += (s, a) =>
+			{
+				AddStandardControl<Tree>();
+			};
+			controlsMenu.AddMenuItem(_addTreeItem);
+
+			controlsMenu.AddSeparator();
+
+			_addMenuItemItem = new MenuItem
+			{
+				Text = "Add Menu Item"
+			};
+			controlsMenu.AddMenuItem(_addMenuItemItem);
+
+			_addMenuSeparatorItem = new MenuItem
+			{
+				Text = "Add Menu Separator"
+			};
+			controlsMenu.AddMenuItem(_addMenuSeparatorItem);
+
+			controlsMenu.AddSeparator();
+
+			_addTreeNodeItem = new MenuItem
+			{
+				Text = "Add Tree Node"
+			};
+			controlsMenu.AddMenuItem(_addTreeNodeItem);
+
 			menuBar.AddMenuItem(controlsMenu);
 
 			var helpMenu = new MenuItem
@@ -318,6 +481,27 @@ namespace Myra.UIEditor
 			_statisticsGrid.XHint = 10;
 			_statisticsGrid.YHint = -10;
 			_desktop.Widgets.Add(_statisticsGrid);
+
+			UpdateEnabled();
+		}
+
+		private void AddStandardControl<T>(T widget) where T : Widget
+		{
+			var container = (Grid)_propertyGrid.Object;
+
+			container.Children.Add(widget);
+
+			widget.Id = "New " + typeof (T).Name;
+			var node = _explorer.AddWidget(_explorer.Widget.SelectedRow, widget);
+
+			_explorer.Widget.SelectedRow = node;
+			_explorer.Widget.ExpandPath(node);
+		}
+
+		private void AddStandardControl<T>() where T : Widget, new()
+		{
+			var control = new T();
+			AddStandardControl(control);
 		}
 
 		private void PropertyGridOnPropertyChanged(object sender, EventArgs eventArgs)
@@ -355,6 +539,8 @@ namespace Myra.UIEditor
 
 			var selectedObject = treeNode != null ? treeNode.Tag : null;
 			_propertyGrid.Object = selectedObject;
+
+			UpdateEnabled();
 		}
 
 		private void QuitItemOnDown(object sender, EventArgs eventArgs)
@@ -363,7 +549,7 @@ namespace Myra.UIEditor
 
 			mb.Closed += (o, args) =>
 			{
-				if (mb.ModalResult == (int)Graphics2D.UI.Window.DefaultModalResult.Ok)
+				if (mb.ModalResult == (int) Graphics2D.UI.Window.DefaultModalResult.Ok)
 				{
 					Exit();
 				}
@@ -420,7 +606,7 @@ namespace Myra.UIEditor
 			base.Draw(gameTime);
 
 			_fpsCounter.Update();
-			_gcMemoryLabel.Text = string.Format("GC Memory: {0} kb", GC.GetTotalMemory(false) / 1024);
+			_gcMemoryLabel.Text = string.Format("GC Memory: {0} kb", GC.GetTotalMemory(false)/1024);
 			_fpsLabel.Text = string.Format("FPS: {0:0.##}", _fpsCounter.FPS);
 			_widgetsCountLabel.Text = string.Format("Visible Widgets: {0}", _desktop.CalculateTotalWidgets(true));
 
@@ -437,7 +623,7 @@ namespace Myra.UIEditor
 		protected override void EndRun()
 		{
 			base.EndRun();
-		
+
 			var state = new State
 			{
 				Size = new Point(GraphicsDevice.PresentationParameters.BackBufferWidth,
@@ -453,10 +639,15 @@ namespace Myra.UIEditor
 
 		private void New()
 		{
-			Project = new Grid
+			var project = new Project
 			{
-				Id = "New Form"
+				Root =
+				{
+					Id = "Root"
+				}
 			};
+
+			Project = project;
 
 			FilePath = string.Empty;
 			IsDirty = false;
@@ -519,6 +710,49 @@ namespace Myra.UIEditor
 			}
 
 			Window.Title = title;
+		}
+
+		private void UpdateEnabled()
+		{
+			var enableStandard = false;
+			var enableMenuItems = false;
+			var enableTreeNode = false;
+
+			var selectedObject = _propertyGrid.Object;
+			if (selectedObject != null)
+			{
+				if (selectedObject is Grid)
+				{
+					enableStandard = true;
+				}
+				else if (selectedObject is MenuItem)
+				{
+					enableMenuItems = true;
+				}
+				else if (selectedObject is Tree)
+				{
+					enableTreeNode = true;
+				}
+			}
+
+			_addButtonItem.Enabled = enableStandard;
+			_addCheckBoxItem.Enabled = enableStandard;
+			_addComboBoxItem.Enabled = enableStandard;
+			_addGridItem.Enabled = enableStandard;
+			_addImageItem.Enabled = enableStandard;
+			_addHorizontalMenuItem.Enabled = enableStandard;
+			_addVerticalMenuItem.Enabled = enableStandard;
+			_addScrollPaneItem.Enabled = enableStandard;
+			_addHorizontalSplitPaneItem.Enabled = enableStandard;
+			_addVerticalSplitPaneItem.Enabled = enableStandard;
+			_addTextBlockItem.Enabled = enableStandard;
+			_addTextFieldItem.Enabled = enableStandard;
+			_addTreeItem.Enabled = enableStandard;
+
+			_addMenuItemItem.Enabled = enableMenuItems;
+			_addMenuSeparatorItem.Enabled = enableMenuItems;
+
+			_addTreeNodeItem.Enabled = enableTreeNode;
 		}
 	}
 }

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Myra.Edit;
 using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
@@ -125,6 +126,7 @@ namespace Myra.Graphics2D.UI
 			get { return _children.Count; }
 		}
 
+		[HiddenInEditor]
 		public IList<Widget> Children
 		{
 			get { return _children; }
@@ -224,6 +226,7 @@ namespace Myra.Graphics2D.UI
 					w.Parent = this;
 					w.MeasureChanged += ChildOnMeasureChanged;
 					w.VisibleChanged += ChildOnVisibleChanged;
+					w.LocationChanged += ChildOnLocationChanged;
 				}
 			}
 			else if (args.Action == NotifyCollectionChangedAction.Remove)
@@ -234,12 +237,25 @@ namespace Myra.Graphics2D.UI
 					w.Parent = null;
 					w.VisibleChanged -= ChildOnVisibleChanged;
 					w.MeasureChanged -= ChildOnMeasureChanged;
+					w.LocationChanged -= ChildOnLocationChanged;
 				}
 			}
 
 			FireMeasureChanged();
 
 			_childrenDirty = true;
+		}
+
+		private void ChildOnLocationChanged(object sender, EventArgs eventArgs)
+		{
+			if (_cellLocationsX.Count == 0 ||
+			    _cellLocationsY.Count == 0)
+			{
+				return;
+			}
+
+			var control = (Widget) sender;
+			LayoutControl(control);
 		}
 
 		private void ChildOnMeasureChanged(object sender, EventArgs eventArgs)
@@ -462,14 +478,13 @@ namespace Myra.Graphics2D.UI
 
 			List<Widget> visibleWidgets;
 
-			var bounds = ClientBounds;
+			var bounds = LayoutBounds;
 			LayoutProcessFixed(bounds.Size, out visibleWidgets, out _colWidths, out _rowHeights);
 
 			// Partition available space
 			int row, col;
 
 			// Dynamic widths
-
 			// First run: calculate available width
 			var availableWidth = (float)bounds.Width;
 			availableWidth -= (_colWidths.Count - 1)*_columnSpacing;
@@ -554,11 +569,10 @@ namespace Myra.Graphics2D.UI
 				for (row = 0; row < _rowHeights.Count; ++row)
 				{
 					var prop = GetRowProportion(row);
-					if (prop.Type == ProportionType.Part)
-					{
-						_rowHeights[row] = (int)(prop.Value*availableHeight/totalPart);
-						tookSpace += _rowHeights[row];
-					}
+					if (prop.Type != ProportionType.Part) continue;
+
+					_rowHeights[row] = (int)(prop.Value*availableHeight/totalPart);
+					tookSpace += _rowHeights[row];
 				}
 
 				availableHeight -= tookSpace;
@@ -613,45 +627,40 @@ namespace Myra.Graphics2D.UI
 			_gridLines.Clear();
 			foreach (var control in visibleWidgets)
 			{
-				var gridPosition = GetActualGridPosition(control);
-				col = gridPosition.X;
-				row = gridPosition.Y;
-
-				var cellSize = Point.Zero;
-
-				for (var i = col; i < col + control.GridSpan.X; ++i)
-				{
-					cellSize.X += _colWidths[i];
-				}
-
-				for (var i = row; i < row + control.GridSpan.Y; ++i)
-				{
-					cellSize.Y += _rowHeights[i];
-				}
-
-				control.LayoutChild(new Rectangle(_cellLocationsX[col], _cellLocationsY[row], cellSize.X, cellSize.Y));
-
-/*				if (col + 1 < _colWidths.Count)
-				{
-					var lineWidth = Math.Min(ColumnSpacing, GridlinesWidth);
-					_gridLines.Add(new Rectangle(p.X + (ColumnSpacing - lineWidth)/2,
-						p.Y,
-						lineWidth,
-						bounds.Y));
-				}*/
+				LayoutControl(control);
 			}
 		}
 
-		public override void InternalRender(SpriteBatch batch)
+		private void LayoutControl(Widget control)
 		{
-			base.InternalRender(batch);
+			var gridPosition = GetActualGridPosition(control);
+			var col = gridPosition.X;
+			var row = gridPosition.Y;
+
+			var cellSize = Point.Zero;
+
+			for (var i = col; i < col + control.GridSpan.X; ++i)
+			{
+				cellSize.X += _colWidths[i];
+			}
+
+			for (var i = row; i < row + control.GridSpan.Y; ++i)
+			{
+				cellSize.Y += _rowHeights[i];
+			}
+
+			control.LayoutChild(new Rectangle(_cellLocationsX[col], _cellLocationsY[row], cellSize.X, cellSize.Y));
+		}
+
+		public override void InternalRender(SpriteBatch batch, Rectangle bounds)
+		{
+			base.InternalRender(batch, bounds);
 
 			if (!DrawLines)
 			{
 				return;
 			}
 
-			var bounds = ClientBounds;
 			int i;
 			for (i = 0; i < _cellLocationsX.Count; ++i)
 			{

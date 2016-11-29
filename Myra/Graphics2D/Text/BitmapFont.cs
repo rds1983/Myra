@@ -19,7 +19,7 @@ namespace Myra.Graphics2D.Text
 			get { return _glyphs; }
 		}
 
-		public Texture[] Pages
+		public Texture2D[] Pages
 		{
 			get { return _pages; }
 		}
