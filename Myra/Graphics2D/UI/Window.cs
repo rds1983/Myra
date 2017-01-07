@@ -222,7 +222,7 @@ namespace Myra.Graphics2D.UI
 			if (Desktop != null)
 			{
 				var mousePos = Desktop.MousePosition;
-				if (_titleGrid.Bounds.Contains(mousePos))
+				if (_titleGrid.AbsoluteBounds.Contains(mousePos))
 				{
 					_startPos = mousePos;
 				}

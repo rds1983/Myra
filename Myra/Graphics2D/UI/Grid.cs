@@ -19,7 +19,7 @@ namespace Myra.Graphics2D.UI
 			Auto,
 			Part,
 			Fill,
-			Dots
+			Pixels
 		}
 
 		public class Proportion
@@ -33,6 +33,8 @@ namespace Myra.Graphics2D.UI
 			{
 				get { return _default; }
 			}
+
+			public event EventHandler Changed;
 
 			public Proportion()
 			{
@@ -76,7 +78,15 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			public event EventHandler Changed;
+			public override string ToString()
+			{
+				if (_type == ProportionType.Auto || _type == ProportionType.Fill)
+				{
+					return _type.ToString();
+				}
+
+				return string.Format("{0}: {1:0.00}", _type, _value);
+			}
 
 			private void FireChanged()
 			{
@@ -98,6 +108,8 @@ namespace Myra.Graphics2D.UI
 		private readonly List<Rectangle> _gridLines = new List<Rectangle>();
 		private readonly List<int> _cellLocationsX = new List<int>();
 		private readonly List<int> _cellLocationsY = new List<int>();
+		private readonly List<int> _gridLinesX = new List<int>();
+		private readonly List<int> _gridLinesY = new List<int>();
 		private Point _actualSize;
 
 		private List<int> _colWidths;
@@ -388,12 +400,12 @@ namespace Myra.Graphics2D.UI
 					var rowProportion = GetRowProportion(row);
 					var colProportion = GetColumnProportion(col);
 
-					if (colProportion.Type == ProportionType.Dots)
+					if (colProportion.Type == ProportionType.Pixels)
 					{
 						colsWidths[col] = (int)colProportion.Value;
 					}
 
-					if (rowProportion.Type == ProportionType.Dots)
+					if (rowProportion.Type == ProportionType.Pixels)
 					{
 						rowsHeights[row] = (int)rowProportion.Value;
 					}
@@ -408,8 +420,8 @@ namespace Myra.Graphics2D.UI
 						}
 
 						var measuredSize = Point.Zero;
-						if (rowProportion.Type != ProportionType.Dots ||
-						    colProportion.Type != ProportionType.Dots)
+						if (rowProportion.Type != ProportionType.Pixels ||
+						    colProportion.Type != ProportionType.Pixels)
 						{
 							measuredSize = widget.Measure(availableSize);
 						}
@@ -424,17 +436,14 @@ namespace Myra.Graphics2D.UI
 							measuredSize.Y = 0;
 						}
 
-						var size = new Point(rowProportion.Type != ProportionType.Dots ? measuredSize.X : (int)rowProportion.Value,
-							colProportion.Type != ProportionType.Dots ? measuredSize.Y : (int)colProportion.Value);
-
-						if (size.X > colsWidths[col])
+						if (measuredSize.X > colsWidths[col])
 						{
-							colsWidths[col] = size.X;
+							colsWidths[col] = measuredSize.X;
 						}
 
-						if (size.Y > rowsHeights[row])
+						if (measuredSize.Y > rowsHeights[row])
 						{
-							rowsHeights[row] = size.Y;
+							rowsHeights[row] = measuredSize.Y;
 						}
 					}
 				}
@@ -494,7 +503,7 @@ namespace Myra.Graphics2D.UI
 			{
 				var colWidth = _colWidths[col];
 				var prop = GetColumnProportion(col);
-				if (prop.Type == ProportionType.Auto || prop.Type == ProportionType.Dots)
+				if (prop.Type == ProportionType.Auto || prop.Type == ProportionType.Pixels)
 				{
 					// Fixed width
 					availableWidth -= colWidth;
@@ -547,7 +556,7 @@ namespace Myra.Graphics2D.UI
 			{
 				var colHeight = _rowHeights[col];
 				var prop = GetRowProportion(col);
-				if (prop.Type == ProportionType.Auto || prop.Type == ProportionType.Dots)
+				if (prop.Type == ProportionType.Auto || prop.Type == ProportionType.Pixels)
 				{
 					// Fixed height
 					availableHeight -= colHeight;
@@ -590,14 +599,19 @@ namespace Myra.Graphics2D.UI
 			}
 
 			_actualSize = Point.Zero;
+			_gridLinesX.Clear();
 			_cellLocationsX.Clear();
 			var p = bounds.Location;
 			for (var i = 0; i < _colWidths.Count; ++i)
 			{
 				_cellLocationsX.Add(p.X);
-
 				var w = _colWidths[i];
 				p.X += w;
+
+				if (i < _colWidths.Count - 1)
+				{
+					_gridLinesX.Add(p.X + _columnSpacing / 2);
+				}
 
 				if (!SkipEmptyColumns || w > 0)
 				{
@@ -607,14 +621,18 @@ namespace Myra.Graphics2D.UI
 				_actualSize.X += _colWidths[i];
 			}
 
+			_gridLinesY.Clear();
 			_cellLocationsY.Clear();
 			for (var i = 0; i < _rowHeights.Count; ++i)
 			{
 				_cellLocationsY.Add(p.Y);
-				_cellLocationsY[i] = p.Y;
-
 				var h = _rowHeights[i];
 				p.Y += h;
+
+				if (i < _rowHeights.Count - 1)
+				{
+					_gridLinesY.Add(p.Y + _rowSpacing / 2);
+				}
 
 				if (!SkipEmptyRows || h > 0)
 				{
@@ -662,16 +680,16 @@ namespace Myra.Graphics2D.UI
 			}
 
 			int i;
-			for (i = 0; i < _cellLocationsX.Count; ++i)
+			for (i = 0; i < _gridLinesX.Count; ++i)
 			{
-				batch.DrawRect(DrawLinesColor, new Rectangle(_cellLocationsX[i], bounds.Top,
-					1, bounds.Y));
+				batch.DrawRect(DrawLinesColor, new Rectangle(_gridLinesX[i], bounds.Top,
+					1, bounds.Height));
 			}
 
-			for (i = 0; i < _cellLocationsY.Count; ++i)
+			for (i = 0; i < _gridLinesY.Count; ++i)
 			{
-				batch.DrawRect(DrawLinesColor, new Rectangle(bounds.Left, _cellLocationsY[i],
-					bounds.X, 1));
+				batch.DrawRect(DrawLinesColor, new Rectangle(bounds.Left, _gridLinesY[i],
+					bounds.Width, 1));
 			}
 		}
 

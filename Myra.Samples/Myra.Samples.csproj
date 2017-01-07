@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FormattedTextSample.cs" />
+    <Compile Include="GridSample.cs" />
     <Compile Include="HelloWorldSample.cs" />
     <Compile Include="Notepad.cs" />
     <Compile Include="ScrollPaneSample.cs" />

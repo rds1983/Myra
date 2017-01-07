@@ -536,5 +536,17 @@ namespace Myra.Graphics2D.Text
 
 			return null;
 		}
+
+		public FormattedText Clone()
+		{
+			return new FormattedText
+			{
+				IsColored = IsColored,
+				Font = Font,
+				Text = Text,
+				VerticalSpacing = VerticalSpacing,
+				Width = Width
+			};
+		}
 	}
 }

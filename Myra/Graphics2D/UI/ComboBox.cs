@@ -83,6 +83,7 @@ namespace Myra.Graphics2D.UI
 				{
 					var item = (Button)_itemsContainer.Children[_selectedIndex];
 					Text = item.Text;
+					TextColor = item.TextColor;
 				}
 
 				var ev = SelectedIndexChanged;
@@ -98,7 +99,6 @@ namespace Myra.Graphics2D.UI
 		public ComboBox(ComboBoxStyle style) : base(style)
 		{
 			_itemsContainer = new Grid();
-
 
 			if (style != null)
 			{
@@ -172,6 +172,26 @@ namespace Myra.Graphics2D.UI
 			_dropDownItemStyle = style.ComboBoxItemStyle;
 
 			ApplyButtonStyle(style);
+		}
+
+		protected override Point InternalMeasure(Point availableSize)
+		{
+			// Measure by the longest string
+			var result = base.InternalMeasure(availableSize);
+
+			foreach (var item in _itemsContainer.Children)
+			{
+				var childSize = item.Measure(new Point(10000, 10000));
+				if (childSize.X > result.X)
+				{
+					result.X = childSize.X;
+				}
+			}
+
+			// Add some x space
+			result.X += 32;
+
+			return result;
 		}
 	}
 }

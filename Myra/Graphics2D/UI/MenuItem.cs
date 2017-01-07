@@ -86,13 +86,13 @@ namespace Myra.Graphics2D.UI
 
 			if (style.IconWidth.HasValue)
 			{
-				_imageProportion.Type = Grid.ProportionType.Dots;
+				_imageProportion.Type = Grid.ProportionType.Pixels;
 				_imageProportion.Value = style.IconWidth.Value;
 			}
 
 			if (style.ShortcutWidth.HasValue)
 			{
-				_shortcutProportion.Type = Grid.ProportionType.Dots;
+				_shortcutProportion.Type = Grid.ProportionType.Pixels;
 				_shortcutProportion.Value = style.ShortcutWidth.Value;
 			}
 

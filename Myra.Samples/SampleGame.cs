@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using Myra.Graphics2D.UI;
 
 namespace Myra.Samples
 {
@@ -17,6 +16,7 @@ namespace Myra.Samples
 				typeof (HelloWorldSample),
 				typeof (FormattedTextSample),
 				typeof (TextBlocksSample),
+				typeof (GridSample),
 				typeof (SplitPaneSample),
 				typeof (ScrollPaneSample),
 				typeof (Notepad)

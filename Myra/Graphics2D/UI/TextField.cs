@@ -344,9 +344,10 @@ namespace Myra.Graphics2D.UI
 			var result = Point.Zero;
 			if (Font != null)
 			{
-				_formattedText.Width = _wrap ? width : default(int?);
+				var formattedText = _formattedText.Clone();
+				formattedText.Width = _wrap ? width : default(int?);
 
-				result = _formattedText.Size;
+				result = formattedText.Size;
 			}
 
 			if (result.Y < Font.LineHeight)
