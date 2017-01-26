@@ -267,7 +267,7 @@ namespace Myra.Graphics2D.UI
 		{
 			var w = new Window
 			{
-				Title = "Quit",
+				Title = title,
 				WidthHint = 200,
 			};
 
