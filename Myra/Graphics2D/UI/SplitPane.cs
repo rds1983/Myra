@@ -268,7 +268,7 @@ namespace Myra.Graphics2D.UI
 				else
 				{
 					h.WidthHint = null;
-					h.HeightHint = _handlesSize;
+					h.HeightHint = handleSize;
 				}
 			}
 

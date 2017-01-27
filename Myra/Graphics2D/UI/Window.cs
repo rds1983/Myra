@@ -55,7 +55,7 @@ namespace Myra.Graphics2D.UI
 
 		public Window(WindowStyle style)
 		{
-			ModalResult = (int)DefaultModalResult.Cancel;
+			ModalResult = (int) DefaultModalResult.Cancel;
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
 
@@ -174,7 +174,7 @@ namespace Myra.Graphics2D.UI
 					delta.Y = Desktop.Bounds.Bottom - Bounds.Height;
 				}
 			}
-			
+
 			XHint += delta.X;
 
 			if (XHint < 0)
@@ -312,7 +312,7 @@ namespace Myra.Graphics2D.UI
 
 			cancelButton.Up += (sender, args) =>
 			{
-				w.ModalResult = (int)DefaultModalResult.Cancel;
+				w.ModalResult = (int) DefaultModalResult.Cancel;
 				w.Close();
 			};
 

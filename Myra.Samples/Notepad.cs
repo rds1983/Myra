@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using Cyotek.Drawing.BitmapFont;
 using Microsoft.Xna.Framework;
 using Myra.Graphics2D.UI;
 using HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment;
@@ -213,6 +214,8 @@ namespace Myra.Samples
 
 		private void AboutItemOnDown(object sender, EventArgs eventArgs)
 		{
+			var messageBox = Graphics2D.UI.Window.CreateMessageBox("Notepad", "Myra Notepad Sample");
+			messageBox.ShowModal(_host);
 		}
 
 		private void SaveAsItemOnDown(object sender, EventArgs eventArgs)

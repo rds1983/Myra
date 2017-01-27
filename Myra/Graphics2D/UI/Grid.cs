@@ -682,13 +682,13 @@ namespace Myra.Graphics2D.UI
 			int i;
 			for (i = 0; i < _gridLinesX.Count; ++i)
 			{
-				batch.DrawRect(DrawLinesColor, new Rectangle(_gridLinesX[i], bounds.Top,
+				batch.DrawRect(DrawLinesColor, new Rectangle(bounds.X + _gridLinesX[i], bounds.Top,
 					1, bounds.Height));
 			}
 
 			for (i = 0; i < _gridLinesY.Count; ++i)
 			{
-				batch.DrawRect(DrawLinesColor, new Rectangle(bounds.Left, _gridLinesY[i],
+				batch.DrawRect(DrawLinesColor, new Rectangle(bounds.Left, bounds.Top + _gridLinesY[i],
 					bounds.Width, 1));
 			}
 		}

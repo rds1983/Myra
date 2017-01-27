@@ -69,11 +69,7 @@ namespace Myra.Graphics2D.Text
 			GlyphRender render;
 			if (glyph != null)
 			{
-				var dest = new Rectangle(glyph.Offset.X + _posX, 
-					glyph.Offset.Y,
-					glyph.Region.Bounds.Width, 
-					glyph.Region.Bounds.Height);
-
+				var dest = new Point(glyph.Offset.X + _posX, glyph.Offset.Y);
 				render = new GlyphRender(ci, this, glyph, color, dest);
 
 				_posX += glyph.XAdvance;
@@ -83,7 +79,7 @@ namespace Myra.Graphics2D.Text
 			}
 			else
 			{
-				render = new GlyphRender(ci, this, null, null, Rectangle.Empty);
+				render = new GlyphRender(ci, this, null, null, Point.Zero);
 			}
 
 			_glyphRenders.Add(render);

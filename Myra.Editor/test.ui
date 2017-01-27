@@ -1,0 +1,99 @@
+{
+  "$id": "1",
+  "$type": "Myra.Graphics2D.UI.Project, Myra",
+  "Root": {
+    "$id": "2",
+    "$type": "Myra.Graphics2D.UI.Grid, Myra",
+    "GridPosition": {
+      "$id": "3",
+      "$type": "Microsoft.Xna.Framework.Point, MonoGame.Framework",
+      "X": 0,
+      "Y": 0
+    },
+    "GridSpan": {
+      "$id": "4",
+      "$type": "Microsoft.Xna.Framework.Point, MonoGame.Framework",
+      "X": 1,
+      "Y": 1
+    },
+    "Children": [
+      {
+        "$id": "5",
+        "$type": "Myra.Graphics2D.UI.TextBlock, Myra",
+        "GridPosition": {
+          "$id": "6",
+          "$type": "Microsoft.Xna.Framework.Point, MonoGame.Framework",
+          "X": 0,
+          "Y": 0
+        },
+        "GridSpan": {
+          "$id": "7",
+          "$type": "Microsoft.Xna.Framework.Point, MonoGame.Framework",
+          "X": 1,
+          "Y": 1
+        },
+        "VerticalSpacing": 0,
+        "Text": "Hello, World!",
+        "Wrap": true,
+        "TextColor": {
+          "$id": "8",
+          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+          "B": 128,
+          "G": 128,
+          "R": 255,
+          "A": 255
+        },
+        "DisabledTextColor": {
+          "$id": "9",
+          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+          "B": 170,
+          "G": 170,
+          "R": 170,
+          "A": 255
+        },
+        "Id": "New TextBlock",
+        "XHint": 0,
+        "YHint": 0,
+        "WidthHint": null,
+        "HeightHint": null,
+        "HorizontalAlignment": 1,
+        "VerticalAlignment": 1,
+        "Padding": {
+          "$id": "10",
+          "$type": "Myra.Graphics2D.PaddingInfo, Myra",
+          "Left": 0,
+          "Right": 0,
+          "Top": 0,
+          "Bottom": 0
+        },
+        "Enabled": true,
+        "Visible": true
+      }
+    ],
+    "ColumnSpacing": 0,
+    "RowSpacing": 0,
+    "ColumnsProportions": [],
+    "RowsProportions": [],
+    "TotalRowProportionPart": null,
+    "TotalColProportionPart": null,
+    "SkipEmptyRows": true,
+    "SkipEmptyColumns": true,
+    "Enabled": true,
+    "Id": "Root",
+    "XHint": 0,
+    "YHint": 0,
+    "WidthHint": null,
+    "HeightHint": null,
+    "HorizontalAlignment": 3,
+    "VerticalAlignment": 3,
+    "Padding": {
+      "$id": "11",
+      "$type": "Myra.Graphics2D.PaddingInfo, Myra",
+      "Left": 0,
+      "Right": 0,
+      "Top": 0,
+      "Bottom": 0
+    },
+    "Visible": true
+  }
+}

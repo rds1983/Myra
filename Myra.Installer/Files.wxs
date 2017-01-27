@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>
+		<DirectoryRef Id="INSTALLFOLDER" />
+	</Fragment>
+	<Fragment>
+		<ComponentGroup Id="Files.$(var.Configuration)">
+			<Component Id="Myra.dll" Directory="INSTALLFOLDER" Guid="{B11FA616-3D0E-4961-B984-D21848F9DBE5}">
+				<File Id="Myra.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra\bin\$(var.Configuration)\Myra.dll" />
+			</Component>
+			<Component Id="Myra.pdb" Directory="INSTALLFOLDER" Guid="{D779D429-75D6-42CA-ACDA-979533D2305C}">
+				<File Id="Myra.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra\bin\$(var.Configuration)\Myra.pdb" />
+			</Component>
+			<Component Id="Newtonsoft.Json.xml" Directory="INSTALLFOLDER" Guid="{D5566381-2689-4075-A27A-730B6F960530}">
+				<File Id="Newtonsoft.Json.xml" KeyPath="yes" Source="$(var.SolutionDir)\Myra\bin\$(var.Configuration)\Newtonsoft.Json.xml" />
+			</Component>
+			<Component Id="Newtonsoft.Json.dll" Directory="INSTALLFOLDER" Guid="{CE944C87-74EE-4837-B334-208F706AFB34}">
+				<File Id="Newtonsoft.Json.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra\bin\$(var.Configuration)\Newtonsoft.Json.dll" />
+			</Component>
+			<Component Id="Myra.Samples.dll" Directory="INSTALLFOLDER" Guid="{6D531604-C756-404D-B5EF-C89116278A22}">
+				<File Id="Myra.Samples.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\bin\$(var.Configuration)\Myra.Samples.dll" />
+			</Component>
+			<Component Id="Myra.Samples.pdb" Directory="INSTALLFOLDER" Guid="{825FA0A2-1860-42E6-80D7-9D89EB246A1B}">
+				<File Id="Myra.Samples.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\bin\$(var.Configuration)\Myra.Samples.pdb" />
+			</Component>
+			<Component Id="Myra.Samples.DesktopGLLauncher.exe" Directory="INSTALLFOLDER" Guid="{CF77EDFC-E611-48CD-AD3C-7131FD82FBD1}">
+				<File Id="Myra.Samples.DesktopGLLauncher.exe" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.DesktopGLLauncher\bin\$(var.Configuration)\Myra.Samples.DesktopGLLauncher.exe" />
+			</Component>
+			<Component Id="Myra.Samples.DesktopGLLauncher.exe.config" Directory="INSTALLFOLDER" Guid="{24B5D195-E417-4411-8FAE-D1BD08A24729}">
+				<File Id="Myra.Samples.DesktopGLLauncher.exe.config" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.DesktopGLLauncher\bin\$(var.Configuration)\Myra.Samples.DesktopGLLauncher.exe.config" />
+			</Component>
+			<Component Id="Myra.Samples.DesktopGLLauncher.pdb" Directory="INSTALLFOLDER" Guid="{F923F61B-3856-46B4-8767-A1C2C93C76FF}">
+				<File Id="Myra.Samples.DesktopGLLauncher.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.DesktopGLLauncher\bin\$(var.Configuration)\Myra.Samples.DesktopGLLauncher.pdb" />
+			</Component>
+			<Component Id="Myra.Samples.WindowsDXLauncher.exe" Directory="INSTALLFOLDER" Guid="{97DA1A4B-4641-439F-9330-6524142AB9B3}">
+				<File Id="Myra.Samples.WindowsDXLauncher.exe" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.WindowsDXLauncher\bin\$(var.Configuration)\Myra.Samples.WindowsDXLauncher.exe" />
+			</Component>
+			<Component Id="Myra.Samples.WindowsDXLauncher.exe.config" Directory="INSTALLFOLDER" Guid="{126DC062-6467-4652-B8F5-CF435E59965E}">
+				<File Id="Myra.Samples.WindowsDXLauncher.exe.config" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.WindowsDXLauncher\bin\$(var.Configuration)\Myra.Samples.WindowsDXLauncher.exe.config" />
+			</Component>
+			<Component Id="Myra.Samples.WindowsDXLauncher.pdb" Directory="INSTALLFOLDER" Guid="{10B9AB68-0073-4F47-9BA5-B2E53839E23B}">
+				<File Id="Myra.Samples.WindowsDXLauncher.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.WindowsDXLauncher\bin\$(var.Configuration)\Myra.Samples.WindowsDXLauncher.pdb" />
+			</Component>
+
+			<!-- DesktopGL -->
+			<Component Id="MonoGame.Framework.DesktopGL.dll" Directory="DesktopGL" Guid="{18D790F4-2A9E-48FF-A21D-6D280F86DD26}">
+				<File Id="MonoGame.Framework.DesktopGL.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.DesktopGL\MonoGame.Framework.dll" />
+			</Component>
+			<Component Id="NVorbis.dll" Directory="DesktopGL" Guid="{E6D13273-F7EA-431D-BCB6-302AC9914389}">
+				<File Id="NVorbis.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.DesktopGL\NVorbis.dll" />
+			</Component>
+			<Component Id="OpenTK.dll" Directory="DesktopGL" Guid="{8204B627-A354-4A6C-94F6-2448631F5FF2}">
+				<File Id="OpenTK.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.DesktopGL\OpenTK.dll" />
+			</Component>
+			<Component Id="MonoGame.Framework.DesktopGL.xml" Directory="DesktopGL" Guid="{E9499B5C-5445-4728-BB9A-3129EC3D29A3}">
+				<File Id="MonoGame.Framework.DesktopGL.xml" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.DesktopGL\MonoGame.Framework.xml" />
+			</Component>
+
+			<!-- Windows DX -->
+			<Component Id="MonoGame.Framework.WindowsDX.dll" Directory="WindowsDX" Guid="{937FF576-3549-45EF-A909-54050A0C1580}">
+				<File Id="MonoGame.Framework.WindowsDX.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.WindowsDX\MonoGame.Framework.dll" />
+			</Component>
+			<Component Id="MonoGame.Framework.WindowsDX.xml" Directory="WindowsDX" Guid="{32ED51A5-2C0A-4B41-B433-14E73027AAC3}">
+				<File Id="MonoGame.Framework.WindowsDX.xml" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.WindowsDX\MonoGame.Framework.xml" />
+			</Component>
+			<Component Id="SharpDX.dll" Directory="WindowsDX" Guid="{AACB22EF-6C3B-4420-8080-C788A21FC707}">
+				<File Id="SharpDX.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.WindowsDX\SharpDX.dll" />
+			</Component>
+			<Component Id="SharpDX.Direct2D1.dll" Directory="WindowsDX" Guid="{E7A87A33-2261-409C-8179-07E2B77DD65E}">
+				<File Id="SharpDX.Direct2D1.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.WindowsDX\SharpDX.Direct2D1.dll" />
+			</Component>
+			<Component Id="SharpDX.Direct3D11.dll" Directory="WindowsDX" Guid="{82EF03D5-B331-4F4D-A225-F340AE8499E3}">
+				<File Id="SharpDX.Direct3D11.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.WindowsDX\SharpDX.Direct3D11.dll" />
+			</Component>
+			<Component Id="SharpDX.Direct3D9.dll" Directory="WindowsDX" Guid="{FAAC9CDF-C8C2-4624-9814-303330662B3C}">
+				<File Id="SharpDX.Direct3D9.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.WindowsDX\SharpDX.Direct3D9.dll" />
+			</Component>
+			<Component Id="SharpDX.DXGI.dll" Directory="WindowsDX" Guid="{C4806C81-0548-4932-B90C-ED4A1BBF0EFD}">
+				<File Id="SharpDX.DXGI.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.WindowsDX\SharpDX.DXGI.dll" />
+			</Component>
+			<Component Id="SharpDX.MediaFoundation.dll" Directory="WindowsDX" Guid="{2A411349-04D3-4A3B-B798-FBBDF8EAF6E0}">
+				<File Id="SharpDX.MediaFoundation.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.WindowsDX\SharpDX.MediaFoundation.dll" />
+			</Component>
+			<Component Id="SharpDX.RawInput.dll" Directory="WindowsDX" Guid="{D3387392-9C8D-4646-97DB-1C5A895B7E71}">
+				<File Id="SharpDX.RawInput.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.WindowsDX\SharpDX.RawInput.dll" />
+			</Component>
+			<Component Id="SharpDX.XAudio2.dll" Directory="WindowsDX" Guid="{8A8EBBD8-1C0F-4BF3-9BCF-75A96F7CC870}">
+				<File Id="SharpDX.XAudio2.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.WindowsDX\SharpDX.XAudio2.dll" />
+			</Component>
+			<Component Id="SharpDX.XInput.dll" Directory="WindowsDX" Guid="{DE251784-E812-41E1-B910-DFE54C158ABB}">
+				<File Id="SharpDX.XInput.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.WindowsDX\SharpDX.XInput.dll" />
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>
