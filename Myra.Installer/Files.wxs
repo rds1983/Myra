@@ -23,6 +23,12 @@
 			<Component Id="Myra.Samples.pdb" Directory="INSTALLFOLDER" Guid="{825FA0A2-1860-42E6-80D7-9D89EB246A1B}">
 				<File Id="Myra.Samples.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\bin\$(var.Configuration)\Myra.Samples.pdb" />
 			</Component>
+			<Component Id="mistral.fnt" Directory="Assets" Guid="{23BE6258-270C-43B2-B5EC-CD29DEEFCF6F}">
+				<File Id="mistral.fnt" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\mistral.fnt" />
+			</Component>
+			<Component Id="mistral_0.png" Directory="Assets" Guid="{EE941869-E663-48B1-9430-A3F090308CBD}">
+				<File Id="mistral_0.png" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\mistral_0.png" />
+			</Component>
 			<Component Id="Myra.Samples.DesktopGLLauncher.exe" Directory="INSTALLFOLDER" Guid="{CF77EDFC-E611-48CD-AD3C-7131FD82FBD1}">
 				<File Id="Myra.Samples.DesktopGLLauncher.exe" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.DesktopGLLauncher\bin\$(var.Configuration)\Myra.Samples.DesktopGLLauncher.exe" />
 			</Component>

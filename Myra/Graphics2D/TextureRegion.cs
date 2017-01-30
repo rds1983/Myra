@@ -45,13 +45,9 @@ namespace Myra.Graphics2D
 		public void Draw(SpriteBatch batch, Rectangle dest, Color? color = null)
 		{
 			batch.Draw(Texture,
-				null,
 				dest,
 				Bounds,
-				null,
-				0,
-				null,
-				color);
+				color ?? Color.White);
 		}
 	}
 }

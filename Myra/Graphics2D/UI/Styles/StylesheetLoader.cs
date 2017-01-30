@@ -17,6 +17,8 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string CheckBoxName = "checkBox";
 		public const string ComboBoxName = "comboBox";
 		public const string ComboBoxItemName = "comboBoxItem";
+		public const string ListBoxName = "listBox";
+		public const string ListBoxItemName = "listBoxItem";
 		public const string SelectedBackgroundName = "selectedBackground";
 		public const string TreeName = "tree";
 		public const string SplitPaneName = "splitPane";
@@ -34,6 +36,10 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string DisabledBackgroundName = "disabledBackground";
 		public const string FocusedBackgroundName = "disabledBackground";
 		public const string PressedBackgroundName = "pressedBackground";
+		public const string OpenBackgroundName = "openBackground";
+		public const string BorderName = "border";
+		public const string OverBorderName = "overBorder";
+		public const string DisabledBorderName = "disabledBorder";
 		public const string PaddingName = "padding";
 		public const string FontName = "font";
 		public const string MessageFontName = "font";
@@ -181,6 +187,21 @@ namespace Myra.Graphics2D.UI.Styles
 			if (source.GetStyle(DisabledBackgroundName, out drawableName))
 			{
 				result.DisabledBackground = GetDrawable(drawableName);
+			}
+
+			if (source.GetStyle(BorderName, out drawableName))
+			{
+				result.Border = GetDrawable(drawableName);
+			}
+
+			if (source.GetStyle(OverBorderName, out drawableName))
+			{
+				result.OverBorder = GetDrawable(drawableName);
+			}
+
+			if (source.GetStyle(DisabledBorderName, out drawableName))
+			{
+				result.DisabledBorder = GetDrawable(drawableName);
 			}
 
 			JObject padding;
@@ -359,9 +380,26 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		private void LoadListBoxStyleFromSource(JObject source, ListBoxStyle result)
+		{
+			LoadWidgetStyleFromSource(source, result);
+
+			JObject subStyle;
+			if (source.GetStyle(ListBoxItemName, out subStyle))
+			{
+				LoadComboBoxItemStyleFromSource(subStyle, result.ListBoxItemStyle);
+			}
+		}
+
 		private void LoadMenuItemStyleFromSource(JObject source, MenuItemStyle result)
 		{
 			LoadButtonStyleFromSource(source, result);
+
+			string name;
+			if (source.GetStyle(OpenBackgroundName, out name))
+			{
+				result.OpenBackground = GetDrawable(name);
+			}
 
 			int value;
 			if (source.GetStyle(IconWidthName, out value))
@@ -489,6 +527,7 @@ namespace Myra.Graphics2D.UI.Styles
 			FillStyles(ButtonName, result.ButtonStyle, LoadButtonStyleFromSource);
 			FillStyles(CheckBoxName, result.CheckBoxStyle, LoadButtonStyleFromSource);
 			FillStyles(ComboBoxName, result.ComboBoxStyle, LoadComboBoxStyleFromSource);
+			FillStyles(ListBoxName, result.ListBoxStyle, LoadListBoxStyleFromSource);
 			FillStyles(TreeName, result.TreeStyle, LoadTreeStyleFromSource);
 			FillStyles(HorizontalSplitPaneName, result.HorizontalSplitPaneStyle, LoadSplitPaneStyleFromSource);
 			FillStyles(VerticalSplitPaneName, result.VerticalSplitPaneStyle, LoadSplitPaneStyleFromSource);

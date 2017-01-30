@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using Microsoft.Xna.Framework;
+using Myra.Edit;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
+using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
@@ -11,7 +15,15 @@ namespace Myra.Graphics2D.UI
 		private bool _isExpanded;
 		private int _selectingIndex = -1, _selectedIndex = -1;
 		private ComboBoxItemStyle _dropDownItemStyle;
+		private readonly ObservableCollection<ListItem> _items = new ObservableCollection<ListItem>();
 
+		public ObservableCollection<ListItem> Items
+		{
+			get { return _items; }
+		}
+
+		[HiddenInEditor]
+		[JsonIgnore]
 		public bool IsExpanded
 		{
 			get { return _isExpanded; }
@@ -40,6 +52,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public int SelectingIndex
 		{
 			get { return _selectingIndex; }
@@ -52,15 +66,17 @@ namespace Myra.Graphics2D.UI
 
 				if (_selectingIndex != -1 && _selectingIndex < _itemsContainer.ChildCount)
 				{
-					_itemsContainer.Children[_selectingIndex].Background = _dropDownItemStyle.Background;
+					_itemsContainer.Widgets[_selectingIndex].Background = _dropDownItemStyle.Background;
 				}
 
 				_selectingIndex = value;
 
 				if (_selectingIndex != -1 && _selectingIndex < _itemsContainer.ChildCount)
 				{
-					var item = (Button)_itemsContainer.Children[_selectingIndex];
-					item.Background = _dropDownItemStyle.SelectedBackground;
+					var widget = (Button)_itemsContainer.Widgets[_selectingIndex];
+					widget.Background = _dropDownItemStyle.SelectedBackground;
+
+					((ListItem)widget.Tag).FireSelected();
 				}
 			}
 		}
@@ -81,9 +97,9 @@ namespace Myra.Graphics2D.UI
 
 				if (_selectedIndex != -1 && _selectedIndex < _itemsContainer.ChildCount)
 				{
-					var item = (Button)_itemsContainer.Children[_selectedIndex];
-					Text = item.Text;
-					TextColor = item.TextColor;
+					var widget = (Button)_itemsContainer.Widgets[_selectedIndex];
+					Text = widget.Text;
+					TextColor = widget.TextColor;
 				}
 
 				var ev = SelectedIndexChanged;
@@ -98,53 +114,121 @@ namespace Myra.Graphics2D.UI
 
 		public ComboBox(ComboBoxStyle style) : base(style)
 		{
+			HorizontalAlignment = HorizontalAlignment.Left;
+			VerticalAlignment = VerticalAlignment.Top;
+
 			_itemsContainer = new Grid();
 
 			if (style != null)
 			{
 				ApplyComboBoxStyle(style);
 			}
+
+			_items.CollectionChanged += ItemsOnCollectionChanged;
+		}
+
+		private void ItemsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+		{
+			if (args.Action == NotifyCollectionChangedAction.Add)
+			{
+				var index = args.NewStartingIndex;
+				foreach (ListItem item in args.NewItems)
+				{
+					item.Changed += ItemOnChanged;
+					InsertItem(item, index);
+					++index;
+				}
+			}
+			else if (args.Action == NotifyCollectionChangedAction.Remove)
+			{
+				foreach (ListItem item in args.OldItems)
+				{
+					RemoveItem(item);
+				}
+			}
+		}
+
+		private void ItemOnChanged(object sender, EventArgs eventArgs)
+		{
+			var item = (ListItem) sender;
+			var widget = FindWidgetByItem(item);
+
+			widget.Text = item.Text;
+			widget.TextColor = item.Color ?? _dropDownItemStyle.LabelStyle.TextColor;
 		}
 
 		public ComboBox() : this(DefaultAssets.UIStylesheet.ComboBoxStyle)
 		{
 		}
 
-		private void AddItem(Widget item)
+		public Button FindWidgetByItem(ListItem item)
 		{
-			var pos = _itemsContainer.Children.Count;
+			foreach (var widget in _itemsContainer.Widgets)
+			{
+				if (widget.Tag == item)
+				{
+					return (Button)widget;
+				}
+			}
 
-			item.HorizontalAlignment = HorizontalAlignment.Stretch;
-			item.VerticalAlignment = VerticalAlignment.Stretch;
-			item.GridPosition.Y = pos;
-			_itemsContainer.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-
-			_itemsContainer.Children.Add(item);
+			return null;
 		}
 
-		public Button AddItem(string text)
+		private void InsertItem(ListItem item, int index)
 		{
-			var item = new Button(_dropDownItemStyle) {Text = text};
+			var button = new Button(_dropDownItemStyle)
+			{
+				Text = item.Text,
+				TextColor = item.Color ?? _dropDownItemStyle.LabelStyle.TextColor,
+				Tag = item
+			};
 
-			item.MouseEntered += ItemOnMouseEntered;
-			item.Down += ItemOnDown;
+			button.MouseEntered += ItemOnMouseEntered;
+			button.Down += ItemOnDown;
 
-			AddItem(item);
+			button.HorizontalAlignment = HorizontalAlignment.Stretch;
+			button.VerticalAlignment = VerticalAlignment.Stretch;
+			_itemsContainer.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
+			_itemsContainer.Widgets.Insert(index, button);
 
-			return item;
+			UpdateGridPositions();
+		}
+
+		private void RemoveItem(ListItem item)
+		{
+			var widget = FindWidgetByItem(item);
+
+			if (widget == null)
+			{
+				return;
+			}
+
+			var index = _itemsContainer.Widgets.IndexOf(widget);
+			_itemsContainer.RowsProportions.RemoveAt(index);
+			_itemsContainer.Widgets.RemoveAt(index);
+
+			UpdateGridPositions();
+		}
+
+		private void UpdateGridPositions()
+		{
+			for (var i = 0; i < _itemsContainer.ChildCount; ++i)
+			{
+				_itemsContainer.Widgets[i].GridPosition.Y = i;
+			}
 		}
 
 		private void ItemOnMouseEntered(object sender, GenericEventArgs<Point> genericEventArgs)
 		{
 			var item = (Button)sender;
-			var index = _itemsContainer.Children.IndexOf(item);
+			var index = _itemsContainer.Widgets.IndexOf(item);
 			SelectingIndex = index;
 		}
 
 		private void ItemOnDown(object sender, EventArgs eventArgs)
 		{
 			var item = (Button) sender;
-			var index = _itemsContainer.Children.IndexOf(item);
+			var index = _itemsContainer.Widgets.IndexOf(item);
 			SelectedIndex = index;
 
 			IsExpanded = false;
@@ -154,7 +238,7 @@ namespace Myra.Graphics2D.UI
 		{
 			base.FireDown();
 
-			if (_itemsContainer.Children.Count == 0)
+			if (_itemsContainer.Widgets.Count == 0)
 			{
 				return;
 			}
@@ -179,7 +263,7 @@ namespace Myra.Graphics2D.UI
 			// Measure by the longest string
 			var result = base.InternalMeasure(availableSize);
 
-			foreach (var item in _itemsContainer.Children)
+			foreach (var item in _itemsContainer.Widgets)
 			{
 				var childSize = item.Measure(new Point(10000, 10000));
 				if (childSize.X > result.X)

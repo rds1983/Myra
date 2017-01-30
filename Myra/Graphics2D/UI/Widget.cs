@@ -168,8 +168,13 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[HiddenInEditor]
 		[JsonIgnore]
 		public Drawable Background { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public Drawable Border { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
@@ -177,7 +182,21 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
+		public Drawable OverBorder { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
 		public Drawable DisabledBackground { get; set; }
+
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public Drawable DisabledOverBackground { get; set; }
+
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public Drawable DisabledBorder { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
@@ -221,15 +240,15 @@ namespace Myra.Graphics2D.UI
 		[JsonIgnore]
 		public Point Size
 		{
-			get { return _bounds.Size; }
+			get { return _bounds.Size(); }
 			internal set
 			{
-				if (value == _bounds.Size)
+				if (value == _bounds.Size())
 				{
 					return;
 				}
 
-				_bounds.Size = value;
+				GraphicsExtension.SetSize(ref _bounds, value);
 
 				UpdateLayoutBounds();
 				Arrange();
@@ -274,7 +293,7 @@ namespace Myra.Graphics2D.UI
 			internal set
 			{
 				Location = value.Location;
-				Size = value.Size;
+				Size = value.Size();
 			}
 		}
 
@@ -341,13 +360,37 @@ namespace Myra.Graphics2D.UI
 		public virtual Drawable GetCurrentBackground()
 		{
 			var result = Background;
+
 			if (!Enabled && DisabledBackground != null)
 			{
 				result = DisabledBackground;
 			}
 			else if (IsMouseOver && OverBackground != null)
 			{
-				result = OverBackground;
+				if (!Enabled && DisabledOverBackground != null)
+				{
+					result = DisabledOverBackground;
+				}
+				else if (Enabled && OverBackground != null)
+				{
+					result = OverBackground;
+					
+				}
+			}
+
+			return result;
+		}
+
+		public virtual Drawable GetCurrentBorder()
+		{
+			var result = Border;
+			if (!Enabled && DisabledBorder != null)
+			{
+				result = DisabledBorder;
+			}
+			else if (IsMouseOver && OverBorder != null)
+			{
+				result = OverBorder;
 			}
 
 			return result;
@@ -387,6 +430,13 @@ namespace Myra.Graphics2D.UI
 
 			var renderBounds = CalculateClientBounds(bounds);
 			InternalRender(batch, renderBounds);
+
+			// Border
+			var border = GetCurrentBorder();
+			if (border != null)
+			{
+				border.Draw(batch, bounds);
+			}
 
 			if (DrawFrames)
 			{
@@ -478,7 +528,7 @@ namespace Myra.Graphics2D.UI
 			var asContainer = this as Container;
 			if (asContainer != null)
 			{
-				foreach (var widget in asContainer.Items)
+				foreach (var widget in asContainer.Children)
 				{
 					var result = widget.FindWidgetBy(finder);
 					if (result != null)
@@ -555,6 +605,11 @@ namespace Myra.Graphics2D.UI
 			Background = style.Background;
 			OverBackground = style.OverBackground;
 			DisabledBackground = style.DisabledBackground;
+
+			Border = style.Border;
+			OverBorder = style.OverBorder;
+			DisabledBorder = style.DisabledBorder;
+
 			Padding = style.Padding;
 		}
 

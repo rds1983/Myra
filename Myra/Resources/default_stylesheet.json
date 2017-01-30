@@ -30,7 +30,8 @@
         "overBackground": "button-down",
         "label": {
             "font": "default-font",
-            "textColor": "white"
+            "textColor": "white",
+            "disabledTextColor": "grey"
         }
     },
     "checkBox": {
@@ -58,6 +59,21 @@
             "label": {
                 "font": "default-font",
                 "textColor": "white"
+            }
+        }
+    },
+    "listBox": {
+        "background": "button",
+        "listBoxItem": {
+            "selectedBackground": "list-selection",
+            "padding": {
+                "left": 5.0,
+                "right": 5.0
+            },
+            "label": {
+                "font": "default-font",
+                "textColor": "white",
+                "disabledTextColor": "grey"
             }
         }
     },
@@ -99,7 +115,7 @@
         },
         "menuItem": {
             "pressedBackground": "button-down",
-            "overBackground": "button-down",
+            "openBackground": "button-down",
             "padding": {
                 "left": 5.0,
                 "right": 5.0,
@@ -114,6 +130,7 @@
     },
     "verticalMenu": {
         "background": "button",
+        "border":  "border",
         "separator": {
             "image": "separator-menu",
             "thickness": 4,

@@ -1,13 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
-using Cyotek.Drawing.BitmapFont;
 using Microsoft.Xna.Framework;
 using Myra.Graphics2D.UI;
 using HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment;
-using Menu = Myra.Graphics2D.UI.Menu;
 using MenuItem = Myra.Graphics2D.UI.MenuItem;
-using Orientation = Myra.Graphics2D.UI.Orientation;
 
 namespace Myra.Samples
 {
@@ -69,7 +66,7 @@ namespace Myra.Samples
 			root.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
 			root.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill, 1.0f));
 
-			var menuBar = new Menu(Orientation.Horizontal);
+			var menuBar = new HorizontalMenu();
 
 			// File
 			var fileMenu = new MenuItem
@@ -82,44 +79,43 @@ namespace Myra.Samples
 			{
 				Text = "New"
 			};
-			newItem.Down += NewItemOnDown;
-			fileMenu.AddMenuItem(newItem);
+			newItem.Selected += NewItemOnDown;
+			fileMenu.Items.Add(newItem);
 
 			// File/Open
 			var openItem = new MenuItem
 			{
 				Text = "Open"
 			};
-			openItem.Down += OpenItemOnDown;
-			fileMenu.AddMenuItem(openItem);
+			openItem.Selected += OpenItemOnDown;
+			fileMenu.Items.Add(openItem);
 
 			// File/Save
 			var saveItem = new MenuItem
 			{
 				Text = "Save"
 			};
-			saveItem.Down += SaveItemOnDown;
-			fileMenu.AddMenuItem(saveItem);
+			saveItem.Selected += SaveItemOnDown;
+			fileMenu.Items.Add(saveItem);
 
 			// File/Save As...
 			var saveAsItem = new MenuItem
 			{
 				Text = "Save As..."
 			};
-			saveAsItem.Down += SaveAsItemOnDown;
-			fileMenu.AddMenuItem(saveAsItem);
-
-			fileMenu.AddSeparator();
+			saveAsItem.Selected += SaveAsItemOnDown;
+			fileMenu.Items.Add(saveAsItem);
+			fileMenu.Items.Add(new MenuSeparator());
 
 			// File/Quit
 			var quitItem = new MenuItem
 			{
 				Text = "Quit"
 			};
-			quitItem.Down += QuitItemOnDown;
-			fileMenu.AddMenuItem(quitItem);
+			quitItem.Selected += QuitItemOnDown;
+			fileMenu.Items.Add(quitItem);
 
-			menuBar.AddMenuItem(fileMenu);
+			menuBar.Items.Add(fileMenu);
 
 			var helpMenu = new MenuItem
 			{
@@ -130,12 +126,12 @@ namespace Myra.Samples
 			{
 				Text = "About"
 			};
-			aboutItem.Down += AboutItemOnDown;
-			helpMenu.AddMenuItem(aboutItem);
+			aboutItem.Selected += AboutItemOnDown;
+			helpMenu.Items.Add(aboutItem);
 
-			menuBar.AddMenuItem(helpMenu);
+			menuBar.Items.Add(helpMenu);
 
-			root.Children.Add(menuBar);
+			root.Widgets.Add(menuBar);
 
 			_textField = new TextField
 			{
@@ -156,7 +152,7 @@ namespace Myra.Samples
 				GridPosition = {Y = 1}
 			};
 
-			root.Children.Add(pane);
+			root.Widgets.Add(pane);
 
 			_host.Widgets.Add(root);
 		}
@@ -214,7 +210,7 @@ namespace Myra.Samples
 
 		private void AboutItemOnDown(object sender, EventArgs eventArgs)
 		{
-			var messageBox = Graphics2D.UI.Window.CreateMessageBox("Notepad", "Myra Notepad Sample");
+			var messageBox = Dialog.CreateMessageBox("Notepad", "Myra Notepad Sample");
 			messageBox.ShowModal(_host);
 		}
 

@@ -10,7 +10,7 @@ namespace Myra.Graphics2D.UI
 	{
 		[JsonIgnore]
 		[HiddenInEditor]
-		public abstract IEnumerable<Widget> Items { get; }
+		public abstract IEnumerable<Widget> Children { get; }
 
 		[JsonIgnore]
 		[HiddenInEditor]
@@ -29,7 +29,7 @@ namespace Myra.Graphics2D.UI
 
 				base.Enabled = value;
 
-				foreach (var item in Items)
+				foreach (var item in Children)
 				{
 					item.Enabled = value;
 				}
@@ -40,14 +40,14 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnMouseEntered(position);
 
-			Items.HandleMouseMovement(position);
+			Children.HandleMouseMovement(position);
 		}
 
 		public override void OnMouseLeft()
 		{
 			base.OnMouseLeft();
 
-			foreach (var w in Items)
+			foreach (var w in Children)
 			{
 				if (!w.Visible)
 				{
@@ -65,26 +65,26 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnMouseMoved(position);
 
-			Items.HandleMouseMovement(position);
+			Children.HandleMouseMovement(position);
 		}
 
 		public override void OnMouseDown(MouseButtons mb)
 		{
 			base.OnMouseDown(mb);
 
-			Items.HandleMouseDown(mb);
+			Children.HandleMouseDown(mb);
 		}
 
 		public override void OnMouseUp(MouseButtons mb)
 		{
 			base.OnMouseUp(mb);
 
-			Items.HandleMouseUp(mb);
+			Children.HandleMouseUp(mb);
 		}
 
 		public override void InternalRender(SpriteBatch batch, Rectangle bounds)
 		{
-			foreach (var child in Items)
+			foreach (var child in Children)
 			{
 				if (!child.Visible)
 					continue;
@@ -98,7 +98,7 @@ namespace Myra.Graphics2D.UI
 		{
 			base.UpdateLayout();
 
-			foreach (var child in Items)
+			foreach (var child in Children)
 			{
 				if (!child.Visible)
 					continue;
@@ -111,7 +111,7 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnDesktopChanged();
 
-			foreach (var child in Items)
+			foreach (var child in Children)
 			{
 				child.Desktop = Desktop;
 			}
@@ -121,7 +121,7 @@ namespace Myra.Graphics2D.UI
 		{
 			var result = ChildCount;
 
-			foreach (var child in Items)
+			foreach (var child in Children)
 			{
 				if (visibleOnly && !child.Visible)
 				{

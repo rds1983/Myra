@@ -5,7 +5,7 @@ using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
 {
-	public class TreeNode : SingleItemContainer<Grid>
+	public class TreeNode : GridBased
 	{
 		private readonly Tree _topTree;
 		private readonly Grid _childNodesGrid;
@@ -62,6 +62,8 @@ namespace Myra.Graphics2D.UI
 
 		internal bool RowVisible { get; set; }
 
+		public TreeNode ParentNode { get; internal set; }
+
 		public TreeStyle TreeStyle { get; private set; }
 
 		public bool HasRoot
@@ -92,8 +94,6 @@ namespace Myra.Graphics2D.UI
 				_topTree.AllNodes.Add(this);
 			}
 
-			Widget = new Grid();
-
 			_mark = new Button(null)
 			{
 				Toggleable = true,
@@ -104,7 +104,7 @@ namespace Myra.Graphics2D.UI
 			_mark.Down += MarkOnDown;
 			_mark.Up += MarkOnUp;
 
-			Widget.Children.Add(_mark);
+			Widgets.Add(_mark);
 
 			_label = new TextBlock(null)
 			{
@@ -116,13 +116,13 @@ namespace Myra.Graphics2D.UI
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 
-			Widget.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-			Widget.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill));
+			ColumnsProportions.Add(new Proportion(ProportionType.Auto));
+			ColumnsProportions.Add(new Proportion(ProportionType.Fill));
 
-			Widget.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-			Widget.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
+			RowsProportions.Add(new Proportion(ProportionType.Auto));
+			RowsProportions.Add(new Proportion(ProportionType.Auto));
 
-			Widget.Children.Add(_label);
+			Widgets.Add(_label);
 
 			// Second is yet another grid holding child nodes
 			_childNodesGrid = new Grid
@@ -135,7 +135,7 @@ namespace Myra.Graphics2D.UI
 				}
 			};
 
-			Widget.Children.Add(_childNodesGrid);
+			Widgets.Add(_childNodesGrid);
 
 			if (style != null)
 			{
@@ -174,12 +174,12 @@ namespace Myra.Graphics2D.UI
 
 		private void UpdateMark()
 		{
-			_mark.ImageVisible = _childNodesGrid.Children.Count > 0;
+			_mark.ImageVisible = _childNodesGrid.Widgets.Count > 0;
 		}
 
 		public virtual void RemoveAllSubNodes()
 		{
-			_childNodesGrid.Children.Clear();
+			_childNodesGrid.Widgets.Clear();
 			_childNodesGrid.RowsProportions.Clear();
 
 			UpdateMark();
@@ -190,11 +190,12 @@ namespace Myra.Graphics2D.UI
 			var result = new TreeNode(TreeStyle, _topTree ?? (Tree) this)
 			{
 				Text = text,
-				GridPosition = {Y = _childNodesGrid.Children.Count}
+				GridPosition = {Y = _childNodesGrid.Widgets.Count},
+				ParentNode = this
 			};
 
-			_childNodesGrid.Children.Add(result);
-			_childNodesGrid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
+			_childNodesGrid.Widgets.Add(result);
+			_childNodesGrid.RowsProportions.Add(new Proportion(ProportionType.Auto));
 
 			UpdateMark();
 
@@ -203,12 +204,27 @@ namespace Myra.Graphics2D.UI
 
 		public TreeNode GetSubNode(int index)
 		{
-			return (TreeNode) _childNodesGrid.Children[index];
+			return (TreeNode) _childNodesGrid.Widgets[index];
 		}
 
-		public void RemoveSubNode(int index)
+
+		public void RemoveSubNode(TreeNode subNode)
 		{
-			_childNodesGrid.Children.RemoveAt(index);
+			_childNodesGrid.Widgets.Remove(subNode);
+			if (_topTree.SelectedRow == subNode)
+			{
+				_topTree.SelectedRow = null;
+			}
+		}
+
+		public void RemoveSubNodeAt(int index)
+		{
+			var subNode = _childNodesGrid.Widgets[index];
+			_childNodesGrid.Widgets.RemoveAt(index);
+			if (_topTree.SelectedRow == subNode)
+			{
+				_topTree.SelectedRow = null;
+			}
 		}
 
 		public void ApplyTreeNodeStyle(TreeStyle style)

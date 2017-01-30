@@ -61,7 +61,7 @@ namespace Myra
 				Texture2D texture;
 				using (var stream = Resources.Resources.OpenDefaultUiSkinBitmapStream())
 				{
-					texture = GraphicsExtension.PremultipliedTextureFromStream(stream);
+					texture = GraphicsExtension.PremultipliedTextureFromPngStream(stream);
 				}
 
 				_uiSpritesheet = SpriteSheet.LoadLibGDX(Resources.Resources.DefaultUISkinAtlas, s => texture, new[] { "default", "font-small" });

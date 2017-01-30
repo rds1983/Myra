@@ -35,7 +35,7 @@ namespace Myra.Samples
 				HeightHint = 200
 			};
 
-			root.Children.Add(pane);
+			root.Widgets.Add(pane);
 			_host.Widgets.Add(root);
 		}
 

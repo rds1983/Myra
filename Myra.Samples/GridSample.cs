@@ -24,18 +24,15 @@ namespace Myra.Samples
 			base.LoadContent();
 
 			MyraEnvironment.Game = this;
-			// MyraEnvironment.IsWindowsDX = true;	Uncomment this line if MonoGame for Windows DirectX is used
 
 			// Widget.DrawFrames = true;
-			Grid.DrawLines = true;
-			Grid.DrawLinesColor = Color.Azure;
-
 			_host = new Desktop();
 
 			var grid = new Grid
 			{
 				RowSpacing = 3,
-				ColumnSpacing = 3
+				ColumnSpacing = 3,
+				DrawLines = true
 			};
 
 			grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
@@ -65,7 +62,7 @@ namespace Myra.Samples
 					}
 				};
 
-				grid.Children.Add(header);
+				grid.Widgets.Add(header);
 			}
 
 			// Combo
@@ -77,10 +74,11 @@ namespace Myra.Samples
 					Y = 1
 				}
 			};
-			combo.AddItem("Red").TextColor = Color.Red;
-			combo.AddItem("Green").TextColor = Color.Green;
-			combo.AddItem("Blue").TextColor = Color.Blue;
-			grid.Children.Add(combo);
+
+			combo.Items.Add(new ListItem("Red", Color.Red));
+			combo.Items.Add(new ListItem("Green", Color.Green));
+			combo.Items.Add(new ListItem("Blue", Color.Blue));
+			grid.Widgets.Add(combo);
 
 			// Button
 			var button = new Button
@@ -101,11 +99,11 @@ namespace Myra.Samples
 
 			button.Down += (s, a) =>
 			{
-				var messageBox = Graphics2D.UI.Window.CreateMessageBox("2C", "2 Columns Button pushed!");
+				var messageBox = Dialog.CreateMessageBox("2C", "2 Columns Button pushed!");
 				messageBox.ShowModal(_host);
 			};
 
-			grid.Children.Add(button);
+			grid.Widgets.Add(button);
 
 			// Button
 			var button2 = new Button
@@ -127,11 +125,11 @@ namespace Myra.Samples
 
 			button2.Down += (s, a) =>
 			{
-				var messageBox = Graphics2D.UI.Window.CreateMessageBox("2R", "2 Rows Button pushed!");
+				var messageBox = Dialog.CreateMessageBox("2R", "2 Rows Button pushed!");
 				messageBox.ShowModal(_host);
 			};
 
-			grid.Children.Add(button2);
+			grid.Widgets.Add(button2);
 
 			var textBlock = new TextBlock
 			{
@@ -143,7 +141,7 @@ namespace Myra.Samples
 					Y = 1
 				}
 			};
-			grid.Children.Add(textBlock);
+			grid.Widgets.Add(textBlock);
 
 			var checkBox = new CheckBox
 			{
@@ -154,7 +152,7 @@ namespace Myra.Samples
 					Y = 3
 				}
 			};
-			grid.Children.Add(checkBox);
+			grid.Widgets.Add(checkBox);
 
 			var textBlock2 = new TextBlock
 			{
@@ -165,7 +163,7 @@ namespace Myra.Samples
 					Y = 4
 				}
 			};
-			grid.Children.Add(textBlock2);
+			grid.Widgets.Add(textBlock2);
 
 			for (var i = 1; i < grid.RowsProportions.Count; ++i)
 			{
@@ -179,7 +177,7 @@ namespace Myra.Samples
 					}
 				};
 
-				grid.Children.Add(header);
+				grid.Widgets.Add(header);
 			}
 
 			_host.Widgets.Add(grid);

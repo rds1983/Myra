@@ -12,6 +12,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public ButtonStyle ButtonStyle { get; private set; }
 		public ButtonStyle CheckBoxStyle { get; private set; }
 		public ComboBoxStyle ComboBoxStyle { get; private set; }
+		public ListBoxStyle ListBoxStyle { get; set; }
 		public TreeStyle TreeStyle { get; private set; }
 		public SplitPaneStyle HorizontalSplitPaneStyle { get; private set; }
 		public SplitPaneStyle VerticalSplitPaneStyle { get; private set; }
@@ -27,6 +28,7 @@ namespace Myra.Graphics2D.UI.Styles
 			ButtonStyle = new ButtonStyle();
 			CheckBoxStyle = new ButtonStyle();
 			ComboBoxStyle = new ComboBoxStyle();
+			ListBoxStyle = new ListBoxStyle();
 			TreeStyle = new TreeStyle();
 			HorizontalSplitPaneStyle = new SplitPaneStyle();
 			VerticalSplitPaneStyle = new SplitPaneStyle();

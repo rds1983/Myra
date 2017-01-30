@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -7,8 +8,6 @@ namespace Myra
 	public static class MyraEnvironment
 	{
 		private static Game _game;
-
-		public static bool IsWindowsDX { get; set; }
 
 		public static Game Game
 		{
@@ -48,6 +47,17 @@ namespace Myra
 			get
 			{
 				return Game.GraphicsDevice;
+			}
+		}
+
+		public static string Version
+		{
+			get
+			{
+				var assembly = typeof (MyraEnvironment).GetTypeInfo().Assembly;
+				var name = new AssemblyName(assembly.FullName);
+
+				return name.Version.ToString();
 			}
 		}
 	}

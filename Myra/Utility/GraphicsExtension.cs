@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Utilities.Png;
 
 namespace Myra.Utility
 {
@@ -50,25 +51,25 @@ namespace Myra.Utility
 			return (byte)fr;
 		}
 
-		public static Texture2D PremultipliedTextureFromStream(Stream stream)
+		public static Texture2D PremultipliedTextureFromPngStream(Stream stream)
 		{
-			var texture = Texture2D.FromStream(MyraEnvironment.GraphicsDevice, stream);
+			var reader = new PngReader();
 
-			if (!MyraEnvironment.IsWindowsDX)
+			var colors = reader.Read(stream, MyraEnvironment.GraphicsDevice);
+
+			// Manually premultiply alpha
+			for (var i = 0; i < colors.Length; ++i)
 			{
-				// Manually premultiply alpha
-				var data = new Color[texture.Width * texture.Height];
-				texture.GetData(data);
+				var a = colors[i].A;
 
-				for (var i = 0; i < data.Length; ++i)
-				{
-					data[i].R = ApplyAlpha(data[i].R, data[i].A);
-					data[i].G = ApplyAlpha(data[i].G, data[i].A);
-					data[i].B = ApplyAlpha(data[i].B, data[i].A);
-				}
-
-				texture.SetData(data);
+				colors[i].R = ApplyAlpha(colors[i].R, a);
+				colors[i].G = ApplyAlpha(colors[i].G, a);
+				colors[i].B = ApplyAlpha(colors[i].B, a);
+				colors[i].A = a;
 			}
+
+			var texture = new Texture2D(MyraEnvironment.GraphicsDevice, reader.Width, reader.Height, false, SurfaceFormat.Color);
+			texture.SetData(colors);
 
 			return texture;
 		}
@@ -116,6 +117,16 @@ namespace Myra.Utility
 			}
 
 			return null;
+		}
+
+		public static Point Size(this Rectangle r)
+		{
+			return new Point(r.Width, r.Height);
+		}
+		public static void SetSize(ref Rectangle r, Point size)
+		{
+			r.Width = size.X;
+			r.Height = size.Y;
 		}
 	}
 }

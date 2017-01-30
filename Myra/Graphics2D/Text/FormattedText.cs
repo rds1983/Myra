@@ -409,17 +409,9 @@ namespace Myra.Graphics2D.Text
 
 				foreach (var gr in si.GlyphRenders)
 				{
-					if (gr.RenderedBounds.HasValue)
+					if (gr.RenderedBounds.HasValue && gr.RenderedBounds.Value.Contains(pos))
 					{
-						var glyphHitBounds = new Rectangle(gr.RenderedBounds.Value.Left,
-							si.RenderedBounds.Value.Top,
-							gr.RenderedBounds.Value.Width,
-							si.RenderedBounds.Value.Height);
-
-						if (glyphHitBounds.Contains(pos))
-						{
-							return gr;
-						}
+						return gr;
 					}
 				}
 

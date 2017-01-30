@@ -10,6 +10,7 @@ namespace Myra.Graphics2D.UI
 	{
 		private readonly List<TreeNode> _allNodes = new List<TreeNode>();
 		private TreeNode _selectedRow;
+		private bool _rowInfosDirty = true;
 
 		public Drawable RowSelectionBackgroundWithoutFocus { get; set; }
 		public Drawable RowSelectionBackground { get; set; }
@@ -118,16 +119,46 @@ namespace Myra.Graphics2D.UI
 			HoverRow = null;
 		}
 
+		private bool Iterate(TreeNode node, Func<TreeNode, bool> action)
+		{
+			if (!action(node))
+			{
+				return false;
+			}
+
+			foreach (var widget in node.ChildNodesGrid.Widgets)
+			{
+				var subNode = (TreeNode)widget;
+				if (!Iterate(subNode, action))
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		/// <summary>
+		/// Iterates through all nodes
+		/// </summary>
+		/// <param name="action">Called for each node, returning false breaks iteration</param>
+		public void Iterate(Func<TreeNode, bool> action)
+		{
+			Iterate(this, action);
+		}
+
 		private static void RecursiveUpdateRowVisibility(TreeNode tree)
 		{
+			
+
 			tree.RowVisible = true;
 
 			if (tree.IsExpanded)
 			{
-				foreach (var widget in tree.ChildNodesGrid.Children)
+				foreach (var widget in tree.ChildNodesGrid.Widgets)
 				{
-					var TreeNode = (TreeNode) widget;
-					RecursiveUpdateRowVisibility(TreeNode);
+					var treeNode = (TreeNode) widget;
+					RecursiveUpdateRowVisibility(treeNode);
 				}
 			}
 		}
@@ -148,7 +179,7 @@ namespace Myra.Graphics2D.UI
 				if (rowInfo.RowVisible)
 				{
 					rowInfo.RowBounds = new Rectangle(bounds.X, rowInfo.AbsoluteBounds.Y, bounds.Width,
-						rowInfo.Widget.GetRowHeight(0));
+						rowInfo.GetRowHeight(0));
 				}
 			}
 		}
@@ -157,18 +188,25 @@ namespace Myra.Graphics2D.UI
 		{
 			base.FireLocationChanged();
 
-			UpdateRowInfos();
+			_rowInfosDirty = true;
 		}
 
 		public override void UpdateLayout()
 		{
 			base.UpdateLayout();
 
-			UpdateRowInfos();
+			_rowInfosDirty = true;
 		}
 
 		public override void InternalRender(SpriteBatch batch, Rectangle bounds)
 		{
+			if (_rowInfosDirty)
+			{
+				UpdateRowInfos();
+				_rowInfosDirty = false;
+			}
+
+
 			if (SelectedRow != null && SelectedRow.RowVisible && RowSelectionBackground != null)
 			{
 				if (!IsFocused && RowSelectionBackgroundWithoutFocus != null)

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Myra.Edit;
+using Newtonsoft.Json;
 
 namespace Myra.Graphics2D
 {
@@ -8,12 +9,14 @@ namespace Myra.Graphics2D
 
 		public int Left, Right, Top, Bottom;
 
+		[HiddenInEditor]
 		[JsonIgnore]
 		public int Width
 		{
 			get { return Left + Right; }
 		}
 
+		[HiddenInEditor]
 		[JsonIgnore]
 		public int Height
 		{

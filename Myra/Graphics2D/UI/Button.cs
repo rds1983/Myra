@@ -104,11 +104,11 @@ namespace Myra.Graphics2D.UI
 				VerticalAlignment = VerticalAlignment.Center
 			};
 
-			Widget.Children.Add(_image);
+			Widget.Widgets.Add(_image);
 
 			_textBlock = new TextBlock {GridPosition = {X = 1}};
 
-			Widget.Children.Add(_textBlock);
+			Widget.Widgets.Add(_textBlock);
 
 			if (style != null)
 			{

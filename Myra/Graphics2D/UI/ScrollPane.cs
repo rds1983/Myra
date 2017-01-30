@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.UI.Styles;
+using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
 {
@@ -204,7 +205,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var bounds = LayoutBounds;
-			var availableSize = bounds.Size;
+			var availableSize = bounds.Size();
 			var measureSize = Widget.Measure(availableSize);
 
 			_horizontalScrollbarVisible = measureSize.X > Bounds.Width;

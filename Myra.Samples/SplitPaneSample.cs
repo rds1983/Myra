@@ -38,7 +38,7 @@ namespace Myra.Samples
 				RebuildSplitPane(_splitPane.Orientation == Orientation.Horizontal ? Orientation.Vertical : Orientation.Horizontal);
 			};
 
-			topRow.Children.Add(buttonSwitchOrientation);
+			topRow.Widgets.Add(buttonSwitchOrientation);
 
 			var buttonReset = new Button
 			{
@@ -51,9 +51,9 @@ namespace Myra.Samples
 				_splitPane.Reset();
 			};
 
-			topRow.Children.Add(buttonReset);
+			topRow.Widgets.Add(buttonReset);
 
-			_root.Children.Add(topRow);
+			_root.Widgets.Add(topRow);
 
 			RebuildSplitPane(Orientation.Horizontal);
 
@@ -64,14 +64,14 @@ namespace Myra.Samples
 		{
 			if (_splitPane != null)
 			{
-				_root.Children.Remove(_splitPane);
+				_root.Widgets.Remove(_splitPane);
 				_splitPane = null;
 			}
 
-			_splitPane = new SplitPane(orientation)
-			{
-				GridPosition = { Y = 1 }
-			};
+			_splitPane =
+				orientation == Orientation.Horizontal ? (SplitPane) new HorizontalSplitPane() : new VerticalSplitPane();
+
+			_splitPane.GridPosition.Y = 1;
 
 			_splitPane.ProportionsChanged += SplitPaneOnProportionsChanged;
 
@@ -87,7 +87,7 @@ namespace Myra.Samples
 
 			UpdateProportions();
 
-			_root.Children.Add(_splitPane);
+			_root.Widgets.Add(_splitPane);
 		}
 
 		private void SplitPaneOnProportionsChanged(object sender, EventArgs eventArgs)

@@ -1,82 +1,276 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using Microsoft.Xna.Framework;
+using Myra.Edit;
 using Myra.Graphics2D.UI.Styles;
+using Myra.Utility;
+using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
-	public class Menu : SingleItemContainer<Grid>
+	public abstract class Menu : GridBased, IMenuItemsContainer
 	{
-		private readonly Orientation _orientation;
+		private ObservableCollection<IMenuItem> _items;
 
-		public Orientation Orientation
-		{
-			get { return _orientation; }
-		}
+		[HiddenInEditor]
+		[JsonIgnore]
+		public abstract Orientation Orientation { get; }
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public MenuItemStyle MenuItemStyle { get; private set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
 		public MenuSeparatorStyle SeparatorStyle { get; private set; }
 
-		public Menu(Orientation orientation, MenuStyle style)
+		[HiddenInEditor]
+		[JsonIgnore]
+		public MenuItemButton OpenMenuItem { get; private set; }
+
+		[HiddenInEditor]
+		public ObservableCollection<IMenuItem> Items 
 		{
+			get { return _items; }
+
+			internal set
+			{
+				if (_items == value)
+				{
+					return;
+				}
+
+				if (_items != null)
+				{
+					_items.CollectionChanged -= ItemsOnCollectionChanged;
+
+					foreach (var menuItem in _items)
+					{
+						RemoveItem(menuItem);
+					}
+				}
+
+				_items = value;
+
+				if (_items != null)
+				{
+					_items.CollectionChanged += ItemsOnCollectionChanged;
+
+					foreach (var menuItem in _items)
+					{
+						AddItem(menuItem);
+					}
+				}
+			}
+		}
+
+		protected Menu(MenuStyle style)
+		{
+			OpenMenuItem = null;
+
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
-
-			Widget = new Grid();
-
-			_orientation = orientation;
 
 			if (style != null)
 			{
 				ApplyMenuStyle(style);
 			}
+
+			Items = new ObservableCollection<IMenuItem>();
 		}
 
-		public Menu(Orientation orientation)
-			: this(
-				orientation,
-				orientation == Orientation.Horizontal
-					? DefaultAssets.UIStylesheet.HorizontalMenuStyle
-					: DefaultAssets.UIStylesheet.VerticalMenuStyle)
+		private void ItemsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
 		{
-		}
-
-		private void AddItem(Widget menuItem)
-		{
-			var pos = Widget.Children.Count;
-
-			if (_orientation == Orientation.Horizontal)
+			if (args.Action == NotifyCollectionChangedAction.Add)
 			{
-				menuItem.GridPosition.X = pos;
-				Widget.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
+				var index = args.NewStartingIndex;
+				foreach (IMenuItem item in args.NewItems)
+				{
+					InsertItem(item, index);
+					++index;
+				}
+			}
+			else if (args.Action == NotifyCollectionChangedAction.Remove)
+			{
+				foreach (IMenuItem item in args.OldItems)
+				{
+					RemoveItem(item);
+				}
+			}
+		}
+
+		private void UpdateGridPositions()
+		{
+			for (var i = 0; i < Widgets.Count; ++i)
+			{
+				var widget = Widgets[i];
+				if (Orientation == Orientation.Horizontal)
+				{
+					widget.GridPosition.X = i;
+				}
+				else
+				{
+					widget.GridPosition.Y = i;
+				}
+			}
+		}
+
+		private void AddItem(Widget menuItem, int index)
+		{
+			if (Orientation == Orientation.Horizontal)
+			{
+				ColumnsProportions.Add(new Proportion(ProportionType.Auto));
 			}
 			else
 			{
 				menuItem.HorizontalAlignment = HorizontalAlignment.Stretch;
 				menuItem.VerticalAlignment = VerticalAlignment.Stretch;
-				menuItem.GridPosition.Y = pos;
-				Widget.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
+				RowsProportions.Add(new Proportion(ProportionType.Auto));
 			}
 
-			Widget.Children.Add(menuItem);
+			Widgets.Insert(index, menuItem);
+
+			UpdateGridPositions();
 		}
 
-		public void AddMenuItem(MenuItem menuItem)
+		private void MenuItemOnChanged(object sender, EventArgs eventArgs)
 		{
-			menuItem.ApplyMenuItemStyle(MenuItemStyle);
-			menuItem.Down += ButtonOnDown;
+			var menuItem = (MenuItem) sender;
 
-			AddItem(menuItem);
+			var asMenuItemButton = menuItem.Widget as MenuItemButton;
+			if (asMenuItemButton == null)
+			{
+				return;
+			}
+
+			asMenuItemButton.Text = menuItem.Text;
+			asMenuItemButton.TextColor = menuItem.Color ?? MenuItemStyle.LabelStyle.TextColor;
 		}
 
-		public void AddSeparator()
+		private void InsertItem(IMenuItem iMenuItem, int index)
 		{
-			var separator = new MenuSeparator(_orientation, SeparatorStyle);
-			AddItem(separator);
+			var menuItem = iMenuItem as MenuItem;
+			Widget widget;
+			if (menuItem != null)
+			{
+				menuItem.Changed += MenuItemOnChanged;
+				var menuItemButton = new MenuItemButton(MenuItemStyle)
+				{
+					Text = menuItem.Text,
+					Tag = menuItem
+				};
+
+				if (menuItem.Color.HasValue)
+				{
+					menuItemButton.TextColor = menuItem.Color.Value;
+				}
+
+				menuItemButton.Down += ButtonOnDown;
+				menuItemButton.Up += ButtonOnUp;
+				menuItemButton.SubMenu.Items = menuItem.Items;
+				widget = menuItemButton;
+			}
+			else
+			{
+				widget = new MenuSeparatorWidget(Orientation, SeparatorStyle);
+			}
+
+			iMenuItem.Menu = this;
+			iMenuItem.Widget = widget;
+
+			AddItem(widget, index);
+			UpdateGridPositions();
+		}
+
+		private void AddItem(IMenuItem item)
+		{
+			InsertItem(item, Widgets.Count);
+		}
+
+		private void RemoveItem(IMenuItem iMenuItem)
+		{
+			var menuItem = iMenuItem as MenuItem;
+			if (menuItem != null)
+			{
+				menuItem.Changed -= MenuItemOnChanged;
+			}
+
+			var widget = iMenuItem.Widget;
+
+			if (widget == null)
+			{
+				return;
+			}
+
+			var asMenuItemButton = widget as MenuItemButton;
+			if (asMenuItemButton != null)
+			{
+				asMenuItemButton.Down -= ButtonOnDown;
+				asMenuItemButton.Up -= ButtonOnUp;
+			}
+
+			var index = Widgets.IndexOf(widget);
+
+			if (Orientation == Orientation.Horizontal)
+			{
+				ColumnsProportions.RemoveAt(index);
+			}
+			else
+			{
+				RowsProportions.RemoveAt(index);
+			}
+
+			Widgets.RemoveAt(index);
+			UpdateGridPositions();
+		}
+
+		private void ButtonOnUp(object sender, EventArgs eventArgs)
+		{
+			if (Desktop == null)
+			{
+				return;
+			}
+
+			if (Desktop.ContextMenu == this)
+			{
+				Desktop.HideContextMenu();
+			}
+
+			var widget = (MenuItemButton) sender;
+			((MenuItem)widget.Tag).FireSelected();
+		}
+
+		private void ShowSubMenu(MenuItemButton menuItem)
+		{
+			if (menuItem == null || menuItem.SubMenu == null || menuItem.SubMenu.Items.Count == 0)
+			{
+				return;
+			}
+
+			Desktop.ShowContextMenu(menuItem.SubMenu, new Point(menuItem.AbsoluteBounds.X, AbsoluteBounds.Bottom));
+			Desktop.ContextMenuClosed += DesktopOnContextMenuClosed;
+
+			OpenMenuItem = menuItem;
+			menuItem.IsSubMenuOpen = true;
+		}
+
+		private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Widget> genericEventArgs)
+		{
+			if (Desktop != null)
+			{
+				Desktop.ContextMenuClosed -= DesktopOnContextMenuClosed;
+			}
+
+			if (OpenMenuItem == null) return;
+
+			OpenMenuItem.IsSubMenuOpen = false;
+			OpenMenuItem = null;
 		}
 
 		private void ButtonOnDown(object sender, EventArgs args)
 		{
-			var menuItem = (MenuItem) sender;
+			var menuItem = (MenuItemButton) sender;
 
 			if (menuItem.SubMenu == null)
 			{
@@ -85,7 +279,7 @@ namespace Myra.Graphics2D.UI
 
 			if (menuItem.IsPressed)
 			{
-				Desktop.ShowContextMenu(menuItem.SubMenu, new Point(menuItem.AbsoluteBounds.X, AbsoluteBounds.Bottom));
+				ShowSubMenu(menuItem);
 			}
 		}
 
@@ -98,13 +292,13 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			foreach (var widget in Widget.Children)
+			foreach (var widget in Widgets)
 			{
-				var menuItem = widget as MenuItem;
-				if (menuItem != null && menuItem.SubMenu != null && menuItem.Bounds.Contains(position) &&
+				var menuItem = widget as MenuItemButton;
+				if (menuItem != null && menuItem.SubMenu != null && menuItem.AbsoluteBounds.Contains(position) &&
 				    Desktop.ContextMenu != menuItem.SubMenu)
 				{
-					Desktop.ShowContextMenu(menuItem.SubMenu, new Point(menuItem.AbsoluteBounds.X, AbsoluteBounds.Bottom));
+					ShowSubMenu(menuItem);
 				}
 			}
 		}

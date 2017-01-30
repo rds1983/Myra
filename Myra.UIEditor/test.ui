@@ -1,0 +1,207 @@
+{
+  "$id": "1",
+  "$type": "Myra.Graphics2D.UI.Project, Myra",
+  "Root": {
+    "$id": "2",
+    "$type": "Myra.Graphics2D.UI.Grid, Myra",
+    "GridPosition": {
+      "$id": "3",
+      "$type": "Microsoft.Xna.Framework.Point, MonoGame.Framework",
+      "X": 0,
+      "Y": 0
+    },
+    "GridSpan": {
+      "$id": "4",
+      "$type": "Microsoft.Xna.Framework.Point, MonoGame.Framework",
+      "X": 1,
+      "Y": 1
+    },
+    "DrawLines": false,
+    "DrawLinesColor": {
+      "$id": "5",
+      "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+      "B": 255,
+      "G": 255,
+      "R": 255,
+      "A": 255
+    },
+    "Widgets": [
+      {
+        "$id": "6",
+        "$type": "Myra.Graphics2D.UI.HorizontalMenu, Myra",
+        "GridPosition": {
+          "$id": "7",
+          "$type": "Microsoft.Xna.Framework.Point, MonoGame.Framework",
+          "X": 0,
+          "Y": 0
+        },
+        "GridSpan": {
+          "$id": "8",
+          "$type": "Microsoft.Xna.Framework.Point, MonoGame.Framework",
+          "X": 1,
+          "Y": 1
+        },
+        "Items": [
+          {
+            "$id": "9",
+            "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+            "Items": [
+              {
+                "$id": "10",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Text": "Open",
+                "Color": null
+              },
+              {
+                "$id": "11",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Text": "Save",
+                "Color": null
+              },
+              {
+                "$id": "12",
+                "$type": "Myra.Graphics2D.UI.MenuSeparator, Myra"
+              },
+              {
+                "$id": "13",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Text": "Quit",
+                "Color": null
+              }
+            ],
+            "Text": "File",
+            "Color": null
+          },
+          {
+            "$id": "14",
+            "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+            "Items": [],
+            "Text": "Edit",
+            "Color": null
+          },
+          {
+            "$id": "15",
+            "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+            "Items": [
+              {
+                "$id": "16",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Text": "About",
+                "Color": {
+                  "$id": "17",
+                  "$type": "System.Nullable`1[[Microsoft.Xna.Framework.Color, MonoGame.Framework]], mscorlib",
+                  "B": 128,
+                  "G": 255,
+                  "R": 0,
+                  "A": 255
+                }
+              }
+            ],
+            "Text": "Help",
+            "Color": null
+          }
+        ],
+        "DrawLines": false,
+        "DrawLinesColor": {
+          "$id": "18",
+          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+          "B": 255,
+          "G": 255,
+          "R": 255,
+          "A": 255
+        },
+        "Enabled": true,
+        "Id": null,
+        "XHint": 0,
+        "YHint": 0,
+        "WidthHint": null,
+        "HeightHint": null,
+        "HorizontalAlignment": 3,
+        "VerticalAlignment": 3,
+        "Padding": {
+          "$id": "19",
+          "$type": "Myra.Graphics2D.PaddingInfo, Myra",
+          "Left": 0,
+          "Right": 0,
+          "Top": 0,
+          "Bottom": 0
+        },
+        "Visible": true
+      },
+      {
+        "$id": "20",
+        "$type": "Myra.Graphics2D.UI.HorizontalSplitPane, Myra",
+        "GridPosition": {
+          "$id": "21",
+          "$type": "Microsoft.Xna.Framework.Point, MonoGame.Framework",
+          "X": 0,
+          "Y": 1
+        },
+        "GridSpan": {
+          "$id": "22",
+          "$type": "Microsoft.Xna.Framework.Point, MonoGame.Framework",
+          "X": 1,
+          "Y": 1
+        },
+        "Widgets": [],
+        "Enabled": true,
+        "Id": null,
+        "XHint": 0,
+        "YHint": 0,
+        "WidthHint": null,
+        "HeightHint": null,
+        "HorizontalAlignment": 3,
+        "VerticalAlignment": 3,
+        "Padding": {
+          "$id": "23",
+          "$type": "Myra.Graphics2D.PaddingInfo, Myra",
+          "Left": 0,
+          "Right": 0,
+          "Top": 0,
+          "Bottom": 0
+        },
+        "Visible": true
+      }
+    ],
+    "ColumnSpacing": 0,
+    "RowSpacing": 0,
+    "ColumnsProportions": [],
+    "RowsProportions": [
+      {
+        "$id": "24",
+        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
+        "Type": 0,
+        "Value": 1.0
+      },
+      {
+        "$id": "25",
+        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
+        "Type": 2,
+        "Value": 1.0
+      }
+    ],
+    "SkipEmptyRows": true,
+    "SkipEmptyColumns": true,
+    "Enabled": true,
+    "Id": "Root",
+    "XHint": 0,
+    "YHint": 0,
+    "WidthHint": null,
+    "HeightHint": null,
+    "HorizontalAlignment": 3,
+    "VerticalAlignment": 3,
+    "Padding": {
+      "$id": "26",
+      "$type": "Myra.Graphics2D.PaddingInfo, Myra",
+      "Left": 0,
+      "Right": 0,
+      "Top": 0,
+      "Bottom": 0
+    },
+    "Visible": true
+  }
+}

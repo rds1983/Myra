@@ -22,7 +22,6 @@ namespace Myra.Samples
 			base.LoadContent();
 
 			MyraEnvironment.Game = this;
-			// MyraEnvironment.IsWindowsDX = true;	Uncomment this line if MonoGame for Windows DirectX is used
 
 			Widget.DrawFrames = true;
 

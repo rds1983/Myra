@@ -54,7 +54,7 @@ namespace Myra.Graphics2D.UI
 			FireMeasureChanged();
 		}
 
-		public override IEnumerable<Widget> Items
+		public override IEnumerable<Widget> Children
 		{
 			get
 			{

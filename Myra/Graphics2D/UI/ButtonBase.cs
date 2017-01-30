@@ -1,5 +1,7 @@
 ﻿using System;
+using Myra.Edit;
 using Myra.Graphics2D.UI.Styles;
+using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
@@ -7,21 +9,26 @@ namespace Myra.Graphics2D.UI
 	{
 		private bool _isPressed;
 
-		public HorizontalAlignment ContentHorizontalAlignment
+		public virtual HorizontalAlignment ContentHorizontalAlignment
 		{
 			get { return Widget.HorizontalAlignment; }
 			set { Widget.HorizontalAlignment = value; }
 		}
 
-		public VerticalAlignment ContentVerticalAlignment
+		public virtual VerticalAlignment ContentVerticalAlignment
 		{
 			get { return Widget.VerticalAlignment; }
 			set { Widget.VerticalAlignment = value; }
 		}
 
-		public Drawable PressedBackground { get; set; }
-		public bool Toggleable { get; set; }
+		[HiddenInEditor]
+		[JsonIgnore]
+		public virtual Drawable PressedBackground { get; set; }
 
+		public virtual bool Toggleable { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
 		public bool IsPressed
 		{
 			get

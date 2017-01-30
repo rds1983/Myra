@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -18,6 +19,7 @@ namespace Myra.Graphics2D.UI
 		private bool _widgetsDirty = true;
 		private Widget _focusedWidget;
 		private readonly List<Widget> _widgetsCopy = new List<Widget>();
+		private readonly List<Widget> _reversedWidgetsCopy = new List<Widget>();
 		protected readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
 		private readonly List<Widget> _focusableWidgets = new List<Widget>();
 		private readonly List<Widget> _focusedWidgets = new List<Widget>();
@@ -33,15 +35,17 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				if (_widgetsDirty)
-				{
-					_widgetsCopy.Clear();
-					_widgetsCopy.AddRange(_widgets);
-
-					_widgetsDirty = false;
-				}
-
+				UpdateWidgetsCopy();
 				return _widgetsCopy;
+			}
+		}
+
+		private IEnumerable<Widget> ReversedWidgetsCopy
+		{
+			get
+			{
+				UpdateWidgetsCopy();
+				return _reversedWidgetsCopy;
 			}
 		}
 
@@ -70,10 +74,7 @@ namespace Myra.Graphics2D.UI
 
 		public Widget ModalWidget
 		{
-			get
-			{
-				return _modalWidget;
-			}
+			get { return _modalWidget; }
 
 			set
 			{
@@ -131,6 +132,8 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler<GenericEventArgs<Keys>> KeyUp;
 		public event EventHandler<GenericEventArgs<Keys>> KeyDown;
 
+		public event EventHandler<GenericEventArgs<Widget>> ContextMenuClosed;
+
 		public Desktop()
 		{
 			_widgets.CollectionChanged += WidgetsOnCollectionChanged;
@@ -174,8 +177,15 @@ namespace Myra.Graphics2D.UI
 			if (ContextMenu != null)
 			{
 				_widgets.Remove(ContextMenu);
-
 				ContextMenu.Visible = false;
+
+
+				var ev = ContextMenuClosed;
+				if (ev != null)
+				{
+					ev(this, new GenericEventArgs<Widget>(ContextMenu));
+				}
+
 				ContextMenu = null;
 			}
 		}
@@ -299,7 +309,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				InputOnMouseDown();
-				WidgetsCopy.HandleMouseDown(buttons);
+				ReversedWidgetsCopy.HandleMouseDown(buttons);
 			}
 			else if (buttonState == ButtonState.Released && lastState == ButtonState.Pressed)
 			{
@@ -309,7 +319,7 @@ namespace Myra.Graphics2D.UI
 					ev(this, new GenericEventArgs<MouseButtons>(buttons));
 				}
 
-				WidgetsCopy.HandleMouseUp(buttons);
+				ReversedWidgetsCopy.HandleMouseUp(buttons);
 			}
 		}
 
@@ -318,7 +328,7 @@ namespace Myra.Graphics2D.UI
 			var lastState = MouseState;
 
 			MouseState = Mouse.GetState();
-			MousePosition = MouseState.Position;
+			MousePosition = new Point(MouseState.X, MouseState.Y);
 			MouseWheel = MouseState.ScrollWheelValue;
 
 			if (MouseState.X != lastState.X || MouseState.Y != lastState.Y)
@@ -329,7 +339,7 @@ namespace Myra.Graphics2D.UI
 					ev(this, new GenericEventArgs<Point>(MousePosition));
 				}
 
-				WidgetsCopy.HandleMouseMovement(MousePosition);
+				ReversedWidgetsCopy.HandleMouseMovement(MousePosition);
 			}
 
 			HandleButton(MouseState.LeftButton, lastState.LeftButton, MouseButtons.Left);
@@ -403,7 +413,7 @@ namespace Myra.Graphics2D.UI
 				if (w.CanFocus)
 				{
 					if (asContainer == null ||
-					    !UpdateFocusableWidgets(asContainer.Items))
+					    !UpdateFocusableWidgets(asContainer.Children))
 					{
 						w.MouseDown += FocusableWidgetOnMouseDown;
 						_focusableWidgets.Add(w);
@@ -414,7 +424,7 @@ namespace Myra.Graphics2D.UI
 				{
 					if (asContainer != null)
 					{
-						if (UpdateFocusableWidgets(asContainer.Items))
+						if (UpdateFocusableWidgets(asContainer.Children))
 						{
 							result = true;
 						}
@@ -467,6 +477,22 @@ namespace Myra.Graphics2D.UI
 			_focusableWidgets.Clear();
 
 			UpdateFocusableWidgets(_widgets);
+		}
+
+		private void UpdateWidgetsCopy()
+		{
+			if (!_widgetsDirty)
+			{
+				return;
+			}
+
+			_widgetsCopy.Clear();
+			_widgetsCopy.AddRange(_widgets);
+
+			_reversedWidgetsCopy.Clear();
+			_reversedWidgetsCopy.AddRange(_widgets.Reverse());
+
+			_widgetsDirty = false;
 		}
 	}
 }

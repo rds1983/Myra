@@ -84,11 +84,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Myra.Samples\Myra.Samples.csproj">
-      <Project>{F897E015-14EA-4FA6-B127-263E73827996}</Project>
+      <Project>{f897e015-14ea-4fa6-b127-263e73827996}</Project>
       <Name>Myra.Samples</Name>
     </ProjectReference>
     <ProjectReference Include="..\Myra\Myra.csproj">
-      <Project>{4DCBB001-9C79-4F6B-996D-D654062D93E0}</Project>
+      <Project>{4dcbb001-9c79-4f6b-996d-d654062d93e0}</Project>
       <Name>Myra</Name>
     </ProjectReference>
   </ItemGroup>

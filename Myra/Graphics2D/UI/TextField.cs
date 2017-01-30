@@ -264,7 +264,6 @@ namespace Myra.Graphics2D.UI
 
 			var mousePos = Desktop.MousePosition;
 			var glyphRender = _formattedText.Hit(mousePos);
-
 			if (glyphRender == null)
 			{
 				return;
@@ -279,7 +278,7 @@ namespace Myra.Graphics2D.UI
 
 			if (glyphRender.RenderedBounds.HasValue)
 			{
-				if (mousePos.X >= glyphRender.RenderedBounds.Value.X + glyphRender.RenderedBounds.Value.X/2)
+				if (mousePos.X >= glyphRender.RenderedBounds.Value.X + glyphRender.RenderedBounds.Value.Width/2)
 				{
 					_cursorIndex = _cursorIndex + 1;
 				}

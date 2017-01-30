@@ -51,12 +51,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\CollectionEditor.cs" />
     <Compile Include="UI\PropertyGrid.cs" />
     <Compile Include="Utils\Reflection.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Myra\Myra.csproj">
-      <Project>{4DCBB001-9C79-4F6B-996D-D654062D93E0}</Project>
+      <Project>{4dcbb001-9c79-4f6b-996d-d654062d93e0}</Project>
       <Name>Myra</Name>
     </ProjectReference>
   </ItemGroup>

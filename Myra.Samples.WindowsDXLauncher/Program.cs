@@ -11,7 +11,6 @@ namespace Myra.Samples.WindowsDXLauncher
 		[STAThread]
 		static void Main()
 		{
-			MyraEnvironment.IsWindowsDX = true;
 			Game sample;
 			using (var form = new SampleForm())
 			{

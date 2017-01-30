@@ -8,8 +8,10 @@ using Microsoft.Xna.Framework;
 using Myra.Edit;
 using Myra.Editor.Utils;
 using Myra.Graphics2D;
+using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.Styles;
+using Myra.Utility;
 
 namespace Myra.Editor.UI
 {
@@ -27,7 +29,7 @@ namespace Myra.Editor.UI
 			public abstract void SetValue(object obj, object value);
 		}
 
-		private class PropertyRecord: Record
+		private class PropertyRecord : Record
 		{
 			private readonly PropertyInfo _propertyInfo;
 
@@ -38,10 +40,7 @@ namespace Myra.Editor.UI
 
 			public override Type Type
 			{
-				get
-				{
-					return _propertyInfo.PropertyType; 
-				}
+				get { return _propertyInfo.PropertyType; }
 			}
 
 			public PropertyRecord(PropertyInfo propertyInfo)
@@ -71,10 +70,7 @@ namespace Myra.Editor.UI
 
 			public override Type Type
 			{
-				get
-				{
-					return _fieldInfo.FieldType;
-				}
+				get { return _fieldInfo.FieldType; }
 			}
 
 			public FieldRecord(FieldInfo fieldInfo)
@@ -117,7 +113,7 @@ namespace Myra.Editor.UI
 
 		public Func<Color?, Color?> ColorChangeHandler { get; set; }
 
-		public event EventHandler PropertyChanged;
+		public event EventHandler<GenericEventArgs<string>>  PropertyChanged;
 
 		public PropertyGrid(TreeStyle style)
 		{
@@ -139,22 +135,26 @@ namespace Myra.Editor.UI
 
 		public PropertyGrid() : this(DefaultAssets.UIStylesheet.TreeStyle)
 		{
-		
 		}
 
-		private void FireChanged()
+		private void FireChanged(string name)
 		{
 			var ev = PropertyChanged;
 			if (ev != null)
 			{
-				ev(this, EventArgs.Empty);
+				ev(this, new GenericEventArgs<string>(name));
 			}
+		}
+
+		private static void UpdateLabelCount(TextBlock textBlock, int count)
+		{
+			textBlock.Text = string.Format("{0} Items", count);
 		}
 
 		private void Rebuild()
 		{
 			Widget.RowsProportions.Clear();
-			Widget.Children.Clear();
+			Widget.Widgets.Clear();
 			_records.Clear();
 
 			if (_object == null)
@@ -163,7 +163,7 @@ namespace Myra.Editor.UI
 			}
 
 			var properties = from p in _object.GetType().GetProperties() select p;
-			foreach(var property in properties)
+			foreach (var property in properties)
 			{
 				if (property.GetGetMethod() == null ||
 				    !property.GetGetMethod().IsPublic ||
@@ -195,7 +195,7 @@ namespace Myra.Editor.UI
 				var selectionAttr = property.FindAttribute<SelectionAttribute>();
 				if (selectionAttr != null)
 				{
-					record.ItemsProvider = (IItemsProvider)Activator.CreateInstance(selectionAttr.ItemsProviderType);
+					record.ItemsProvider = (IItemsProvider) Activator.CreateInstance(selectionAttr.ItemsProviderType);
 				}
 
 				_records.Add(record);
@@ -218,7 +218,7 @@ namespace Myra.Editor.UI
 			_records.Sort((a, b) => Comparer<string>.Default.Compare(a.Name, b.Name));
 
 			var y = 0;
-			for(var i = 0; i < _records.Count; ++i)
+			for (var i = 0; i < _records.Count; ++i)
 			{
 				var property = _records[i];
 
@@ -236,8 +236,7 @@ namespace Myra.Editor.UI
 					var cb = new ComboBox();
 					foreach (var v in values)
 					{
-						var item = cb.AddItem(v.ToString());
-						item.Tag = v;
+						cb.Items.Add(new ListItem(v.ToString(), null, v));
 					}
 
 					cb.SelectedIndex = Array.IndexOf(values, value);
@@ -247,7 +246,7 @@ namespace Myra.Editor.UI
 						{
 							var item = cb.SelectedIndex >= 0 ? values[cb.SelectedIndex] : null;
 							property.SetValue(_object, item);
-							FireChanged();
+							FireChanged(propertyType.Name);
 						};
 					}
 					else
@@ -256,7 +255,8 @@ namespace Myra.Editor.UI
 					}
 
 					valueWidget = cb;
-				} else if (propertyType == typeof (bool))
+				}
+				else if (propertyType == typeof (bool))
 				{
 					var isChecked = (bool) value;
 					var cb = new CheckBox
@@ -270,13 +270,13 @@ namespace Myra.Editor.UI
 						cb.Down += (sender, args) =>
 						{
 							property.SetValue(_object, true);
-							FireChanged();
+							FireChanged(propertyType.Name);
 						};
 
 						cb.Up += (sender, args) =>
 						{
 							property.SetValue(_object, false);
-							FireChanged();
+							FireChanged(propertyType.Name);
 						};
 					}
 					else
@@ -287,7 +287,7 @@ namespace Myra.Editor.UI
 					valueWidget = cb;
 
 				}
-				else if (propertyType == typeof (Color) || propertyType == typeof(Drawable))
+				else if (propertyType == typeof (Color) || propertyType == typeof(Color?))
 				{
 					var grid = new Grid
 					{
@@ -307,7 +307,7 @@ namespace Myra.Editor.UI
 					}
 					else if (value != null)
 					{
-						color = ((Sprite) value).Color;
+						color = ((Color?) value).Value;
 					}
 
 					var sprite = Sprite.CreateSolidColorRect(color);
@@ -320,7 +320,7 @@ namespace Myra.Editor.UI
 						HeightHint = 16
 					};
 
-					grid.Children.Add(image);
+					grid.Widgets.Add(image);
 
 					var button = new Button
 					{
@@ -331,11 +331,11 @@ namespace Myra.Editor.UI
 						GridPosition = {X = 1}
 					};
 
-					grid.Children.Add(button);
+					grid.Widgets.Add(button);
 
 					if (property.HasSetter)
 					{
-						button.Down += (sender, args) =>
+						button.Up += (sender, args) =>
 						{
 							var h = ColorChangeHandler;
 							if (h != null)
@@ -351,10 +351,10 @@ namespace Myra.Editor.UI
 								}
 								else
 								{
-									property.SetValue(_object, sprite);
+									property.SetValue(_object, newColor);
 								}
 
-								FireChanged();
+								FireChanged(propertyType.Name);
 							}
 						};
 					}
@@ -375,8 +375,7 @@ namespace Myra.Editor.UI
 					var cb = new ComboBox();
 					foreach (var v in values)
 					{
-						var item = cb.AddItem(v.ToString());
-						item.Tag = v;
+						cb.Items.Add(new ListItem(v.ToString(), null, v));
 					}
 
 					cb.SelectedIndex = Array.IndexOf(values, value);
@@ -388,7 +387,7 @@ namespace Myra.Editor.UI
 							if (cb.SelectedIndex != -1)
 							{
 								property.SetValue(_object, cb.SelectedIndex);
-								FireChanged();
+								FireChanged(propertyType.Name);
 							}
 						};
 					}
@@ -410,8 +409,16 @@ namespace Myra.Editor.UI
 					{
 						tf.TextChanged += (sender, args) =>
 						{
-							property.SetValue(_object, tf.Text);
-							FireChanged();
+							try
+							{
+								var result = Convert.ChangeType(tf.Text, property.Type);
+								property.SetValue(_object, result);
+								FireChanged(property.Name);
+							}
+							catch (Exception)
+							{
+								// TODO: Rework this ugly type conversion solution
+							}
 						};
 					}
 					else
@@ -421,16 +428,62 @@ namespace Myra.Editor.UI
 
 					valueWidget = tf;
 				}
-				else if (typeof (IEnumerable).IsAssignableFrom(propertyType))
+				else if (typeof (IList).IsAssignableFrom(propertyType))
 				{
-					if (value != null)
+					var it = propertyType.FindGenericType(typeof (ICollection<>));
+					if (it != null)
 					{
-						var items = (IEnumerable) value;
+						var itemType = it.GenericTypeArguments[0];
+						if (value != null)
+						{
+							var items = (IList) value;
 
-						var k = 5;
+							var grid = new Grid
+							{
+								ColumnSpacing = 8,
+								HorizontalAlignment = HorizontalAlignment.Stretch
+							};
+
+							grid.ColumnsProportions.Add(new Grid.Proportion());
+							grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill));
+
+							var label = new TextBlock
+							{
+								VerticalAlignment = VerticalAlignment.Center,
+							};
+							UpdateLabelCount(label, items.Count);
+
+							grid.Widgets.Add(label);
+
+							var button = new Button
+							{
+								Text = "Change...",
+								ContentHorizontalAlignment = HorizontalAlignment.Center,
+								Tag = value,
+								HorizontalAlignment = HorizontalAlignment.Stretch,
+								GridPosition = {X = 1}
+							};
+
+							button.Up += (sender, args) =>
+							{
+								var collectionEditor = new CollectionEditor(items, itemType);
+								var dialog = Dialog.CreateMessageBox("Edit", collectionEditor);
+
+								dialog.ButtonOk.Up += (o, eventArgs) =>
+								{
+									collectionEditor.SaveChanges();
+									UpdateLabelCount(label, items.Count);
+								};
+
+								dialog.ShowModal(Desktop);
+							};
+
+							grid.Widgets.Add(button);
+							valueWidget = grid;
+						}
 					}
 				}
-				else
+				else if (!(value is BitmapFont) && !(value is Drawable))
 				{
 					// Subgrid
 					if (value != null)
@@ -448,8 +501,7 @@ namespace Myra.Editor.UI
 							GridSpan = {X = 2}
 						};
 
-
-						Widget.Children.Add(subGrid);
+						Widget.Widgets.Add(subGrid);
 
 						// Mark
 						var mark = new Button(null)
@@ -461,7 +513,7 @@ namespace Myra.Editor.UI
 						};
 
 						mark.ApplyButtonStyle(PropertyGridStyle.MarkStyle);
-						Widget.Children.Add(mark);
+						Widget.Widgets.Add(mark);
 
 						mark.Down += (sender, args) =>
 						{
@@ -475,7 +527,7 @@ namespace Myra.Editor.UI
 
 						var rp = new Grid.Proportion(Grid.ProportionType.Auto);
 						Widget.RowsProportions.Add(rp);
-						
+
 						++y;
 					}
 
@@ -502,13 +554,13 @@ namespace Myra.Editor.UI
 					}
 				};
 
-				Widget.Children.Add(nameLabel);
+				Widget.Widgets.Add(nameLabel);
 
 				valueWidget.GridPosition = new Point(2, oldY);
 				valueWidget.HorizontalAlignment = HorizontalAlignment.Stretch;
 				valueWidget.VerticalAlignment = VerticalAlignment.Center;
 
-				Widget.Children.Add(valueWidget);
+				Widget.Widgets.Add(valueWidget);
 
 				var rowProportion = new Grid.Proportion(Grid.ProportionType.Auto);
 				Widget.RowsProportions.Add(rowProportion);

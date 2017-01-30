@@ -3,36 +3,38 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Microsoft.Xna.Framework;
+using Myra.Edit;
 using Myra.Graphics2D.UI.Styles;
+using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
-	public class SplitPane : SingleItemContainer<Grid>
+	public abstract class SplitPane : SingleItemContainer<Grid>
 	{
 		private readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
 		private readonly List<Button> _handles = new List<Button>();
-		private readonly Orientation _orientation;
 		private Button _handleDown;
 		private int? _mouseCoord;
 		private int _handlesSize;
 
-		public Orientation Orientation
-		{
-			get { return _orientation; }
-		}
+		[JsonIgnore]
+		[HiddenInEditor]
+		public abstract Orientation Orientation { get; }
 
+		[HiddenInEditor]
 		public ObservableCollection<Widget> Widgets
 		{
 			get { return _widgets; }
 		}
 
+		[JsonIgnore]
+		[HiddenInEditor]
 		public ButtonStyle HandleStyle { get; private set; }
 
 		public event EventHandler ProportionsChanged;
 
-		public SplitPane(Orientation orientation, SplitPaneStyle style)
+		protected SplitPane(SplitPaneStyle style)
 		{
-			_orientation = orientation;
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 
@@ -46,13 +48,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public SplitPane(Orientation orientation) : this(orientation,
-			orientation == Orientation.Horizontal
-				? DefaultAssets.UIStylesheet.HorizontalSplitPaneStyle
-				: DefaultAssets.UIStylesheet.VerticalSplitPaneStyle)
-		{
-		}
-
 		public float GetProportion(int widgetIndex)
 		{
 			if (widgetIndex < 0 || widgetIndex >= Widgets.Count)
@@ -60,7 +55,9 @@ namespace Myra.Graphics2D.UI
 				return 0.0f;
 			}
 
-			var result = _orientation == Orientation.Horizontal ? Widget.ColumnsProportions[widgetIndex*2].Value : Widget.RowsProportions[widgetIndex*2].Value;
+			var result = Orientation == Orientation.Horizontal
+				? Widget.ColumnsProportions[widgetIndex*2].Value
+				: Widget.RowsProportions[widgetIndex*2].Value;
 
 			return result;
 		}
@@ -80,11 +77,11 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var handleIndex = Widget.Children.IndexOf(_handleDown);
+			var handleIndex = Widget.Widgets.IndexOf(_handleDown);
 			Grid.Proportion firstProportion, secondProportion;
 			float fp;
 
-			if (_orientation == Orientation.Horizontal)
+			if (Orientation == Orientation.Horizontal)
 			{
 				var firstWidth = position.X - bounds.X - _mouseCoord.Value;
 
@@ -93,7 +90,7 @@ namespace Myra.Graphics2D.UI
 					firstWidth -= Widget.GetColumnWidth(i);
 				}
 
-				fp = (float)Widgets.Count*firstWidth/(LayoutBounds.Width - _handlesSize);
+				fp = (float) Widgets.Count*firstWidth/(LayoutBounds.Width - _handlesSize);
 
 				firstProportion = Widget.ColumnsProportions[handleIndex - 1];
 				secondProportion = Widget.ColumnsProportions[handleIndex + 1];
@@ -107,8 +104,7 @@ namespace Myra.Graphics2D.UI
 					firstHeight -= Widget.GetRowHeight(i);
 				}
 
-
-				fp = (float)Widgets.Count * firstHeight / (LayoutBounds.Height - _handlesSize);
+				fp = (float) Widgets.Count*firstHeight/(LayoutBounds.Height - _handlesSize);
 
 				firstProportion = Widget.RowsProportions[handleIndex - 1];
 				secondProportion = Widget.RowsProportions[handleIndex + 1];
@@ -141,7 +137,7 @@ namespace Myra.Graphics2D.UI
 		private void HandleOnDown(object sender, EventArgs args)
 		{
 			_handleDown = (Button) sender;
-			_mouseCoord = _orientation == Orientation.Horizontal
+			_mouseCoord = Orientation == Orientation.Horizontal
 				? Desktop.MousePosition.X - _handleDown.Bounds.X
 				: Desktop.MousePosition.Y - _handleDown.Bounds.Y;
 		}
@@ -156,10 +152,10 @@ namespace Myra.Graphics2D.UI
 			out Grid.Proportion rightProportion)
 		{
 			var baseIndex = leftWidgetIndex*2;
-			leftProportion = _orientation == Orientation.Horizontal
+			leftProportion = Orientation == Orientation.Horizontal
 				? Widget.ColumnsProportions[baseIndex]
 				: Widget.RowsProportions[baseIndex];
-			rightProportion = _orientation == Orientation.Horizontal
+			rightProportion = Orientation == Orientation.Horizontal
 				? Widget.ColumnsProportions[baseIndex + 2]
 				: Widget.RowsProportions[baseIndex + 2];
 		}
@@ -190,7 +186,7 @@ namespace Myra.Graphics2D.UI
 		public void Reset()
 		{
 			// Clear
-			Widget.Children.Clear();
+			Widget.Widgets.Clear();
 			_handles.Clear();
 			_handlesSize = 0;
 
@@ -199,7 +195,7 @@ namespace Myra.Graphics2D.UI
 
 			var i = 0;
 
-			var handleSize = _orientation == Orientation.Horizontal
+			var handleSize = Orientation == Orientation.Horizontal
 				? HandleStyle.Background.Size.X
 				: HandleStyle.Background.Size.Y;
 
@@ -220,20 +216,20 @@ namespace Myra.Graphics2D.UI
 
 					proportion = new Grid.Proportion(Grid.ProportionType.Auto);
 
-					if (_orientation == Orientation.Horizontal)
+					if (Orientation == Orientation.Horizontal)
 					{
 						_handlesSize += handleSize;
-						handle.GridPosition.X = i * 2 - 1;
+						handle.GridPosition.X = i*2 - 1;
 						Widget.ColumnsProportions.Add(proportion);
 					}
 					else
 					{
 						_handlesSize += handleSize;
-						handle.GridPosition.Y = i * 2 - 1;
+						handle.GridPosition.Y = i*2 - 1;
 						Widget.RowsProportions.Add(proportion);
 					}
 
-					Widget.Children.Add(handle);
+					Widget.Widgets.Add(handle);
 					_handles.Add(handle);
 				}
 
@@ -242,25 +238,25 @@ namespace Myra.Graphics2D.UI
 					: new Grid.Proportion(Grid.ProportionType.Fill, 1.0f);
 
 				// Set grid coord and add widget itself
-				if (_orientation == Orientation.Horizontal)
+				if (Orientation == Orientation.Horizontal)
 				{
-					w.GridPosition.X = i * 2;
+					w.GridPosition.X = i*2;
 					Widget.ColumnsProportions.Add(proportion);
 				}
 				else
 				{
-					w.GridPosition.Y = i * 2;
+					w.GridPosition.Y = i*2;
 					Widget.RowsProportions.Add(proportion);
 				}
 
-				Widget.Children.Add(w);
+				Widget.Widgets.Add(w);
 
 				++i;
 			}
 
 			foreach (var h in _handles)
 			{
-				if (_orientation == Orientation.Horizontal)
+				if (Orientation == Orientation.Horizontal)
 				{
 					h.WidthHint = handleSize;
 					h.HeightHint = null;

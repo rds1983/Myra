@@ -28,9 +28,23 @@ namespace Myra.Editor.Utils
 			return result;
 		}
 
-		public static bool IsEnumerable(this Type type)
+		public static Type FindGenericType(this Type givenType, Type genericType)
 		{
-			return type.IsGenericType && type.GetGenericTypeDefinition() == typeof (IEnumerable<>);
+			var interfaceTypes = givenType.GetInterfaces();
+
+			foreach (var it in interfaceTypes)
+			{
+				if (it.IsGenericType && it.GetGenericTypeDefinition() == genericType)
+					return it;
+			}
+
+			if (givenType.IsGenericType && givenType.GetGenericTypeDefinition() == genericType)
+				return givenType;
+
+			Type baseType = givenType.BaseType;
+			if (baseType == null) return null;
+
+			return FindGenericType(baseType, genericType);
 		}
 	}
 }

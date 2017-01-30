@@ -1,17 +1,16 @@
-﻿using Myra.Graphics2D.UI;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Myra.Graphics2D.UI;
 
 namespace Myra.UIEditor.UI
 {
-	public class Explorer: Pane<Tree>
+	public class Explorer : Pane<Tree>
 	{
 		private Project _project;
 
 		public Project Project
 		{
-			get
-			{
-				return _project;
-			}
+			get { return _project; }
 
 			set
 			{
@@ -31,8 +30,23 @@ namespace Myra.UIEditor.UI
 
 				// Root node
 				var projectNode = Widget.AddSubNode("Project");
-				var rootNode = AddWidget(projectNode, _project.Root);
+				var rootNode = AddObject(projectNode, _project.Root);
 				Rebuild(rootNode, _project.Root);
+			}
+		}
+
+		public TreeNode SelectedNode
+		{
+			get { return Widget.SelectedRow; }
+		}
+
+		public object SelectedObject
+		{
+			get
+			{
+				var treeNode = SelectedNode;
+
+				return treeNode != null ? treeNode.Tag : null;
 			}
 		}
 
@@ -44,37 +58,120 @@ namespace Myra.UIEditor.UI
 			};
 		}
 
-		public TreeNode AddWidget(TreeNode root, Widget widget)
+		private TreeNode FindNodeByObject(TreeNode node, object item)
 		{
-			if (widget == null)
+			if (node.Tag == item)
+			{
+				return node;
+			}
+
+			for (var i = 0; i < node.ChildNodesCount; ++i)
+			{
+				var result = FindNodeByObject(node.GetSubNode(i), item);
+				if (result != null)
+				{
+					return result;
+				}
+			}
+
+			return null;
+		}
+
+		public TreeNode FindNodeByObject(object item)
+		{
+			return FindNodeByObject(Widget, item);
+		}
+
+		private static void SetNodeText(TreeNode node, object item)
+		{
+			var id = string.Empty;
+
+			var asMenuItem = item as MenuItem;
+			if (asMenuItem != null)
+			{
+				id = asMenuItem.Text;
+			}
+
+			var asWidget = item as Widget;
+			if (asWidget != null)
+			{
+				id = asWidget.Id;
+			}
+
+			var text = item.GetType().Name;
+
+			if (!string.IsNullOrEmpty(id))
+			{
+				text += " (#" + id + ")";
+			}
+
+			node.Text = text;
+		}
+
+		public void OnObjectIdChanged(object item)
+		{
+			// Find node
+			var node = FindNodeByObject(item);
+			if (node == null)
+			{
+				return;
+			}
+
+			SetNodeText(node, item);
+		}
+
+		public TreeNode AddObject(TreeNode root, object item)
+		{
+			if (item == null)
 			{
 				return null;
 			}
 
-			var id = widget.GetType().Name;
-			if (!string.IsNullOrEmpty(widget.Id))
-			{
-				id += " (#" + widget.Id + ")";
-			}
-
-			var node = root.AddSubNode(id);
-			node.Tag = widget;
+			var node = root.AddSubNode(string.Empty);
+			SetNodeText(node, item);
+			node.Tag = item;
 
 			return node;
 		}
 
-		private void Rebuild(TreeNode node, Widget widget)
+		private void Rebuild(TreeNode node, object item)
 		{
-			var asContainer = widget as Container;
-			if (asContainer == null)
+			var asMenu = item as IMenuItemsContainer;
+			if (asMenu != null)
 			{
-				return;
+				foreach (var subItem in asMenu.Items)
+				{
+					var subNode = AddObject(node, subItem);
+					Rebuild(subNode, subItem);
+				}
 			}
-			
-			foreach (var child in asContainer.Items)
+			else
 			{
-				var subNode = AddWidget(node, child);
-				Rebuild(subNode, child);
+				IEnumerable<Widget> widgets = null;
+				var asSplitPane = item as SplitPane;
+				if (asSplitPane != null)
+				{
+					widgets = asSplitPane.Widgets;
+				}
+				else
+				{
+					var container = item as Container;
+					if (container != null)
+					{
+						widgets = container.Children;
+					}
+				}
+
+				if (widgets == null)
+				{
+					return;
+				}
+
+				foreach (var child in widgets)
+				{
+					var subNode = AddObject(node, child);
+					Rebuild(subNode, child);
+				}
 			}
 		}
 	}

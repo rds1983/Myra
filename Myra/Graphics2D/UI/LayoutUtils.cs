@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
 {
@@ -49,11 +50,11 @@ namespace Myra.Graphics2D.UI
 			if (control.HorizontalAlignment != HorizontalAlignment.Stretch ||
 				control.VerticalAlignment != VerticalAlignment.Stretch)
 			{
-				size = control.Measure(containerBounds.Size);
+				size = control.Measure(containerBounds.Size());
 			}
 			else
 			{
-				size = containerBounds.Size;
+				size = containerBounds.Size();
 			}
 
 			if (size.X > containerBounds.Width)
@@ -67,10 +68,10 @@ namespace Myra.Graphics2D.UI
 			}
 
 			// Align
-			var controlBounds = Align(containerBounds.Size, size, control.HorizontalAlignment, control.VerticalAlignment);
+			var controlBounds = Align(containerBounds.Size(), size, control.HorizontalAlignment, control.VerticalAlignment);
 			controlBounds.Offset(containerBounds.Location);
 
-			var hintOffset = new Vector2(control.XHint, control.YHint);
+			var hintOffset = new Point(control.XHint, control.YHint);
 			controlBounds.Offset(hintOffset);
 
 			control.Bounds = controlBounds;

@@ -24,13 +24,12 @@ namespace Myra.Samples
 			base.LoadContent();
 
 			MyraEnvironment.Game = this;
-			// MyraEnvironment.IsWindowsDX = true;	Uncomment this line if MonoGame for Windows DirectX is used
 
 			_batch = new SpriteBatch(GraphicsDevice);
 
 			using (var stream = File.OpenRead("Assets/mistral_0.png"))
 			{
-				var texture = GraphicsExtension.PremultipliedTextureFromStream(stream);
+				var texture = GraphicsExtension.PremultipliedTextureFromPngStream(stream);
 				var region = new TextureRegion(texture, new Rectangle(0, 0, texture.Width, texture.Height));
 
 				using (var fontReader = File.OpenText("Assets/mistral.fnt"))

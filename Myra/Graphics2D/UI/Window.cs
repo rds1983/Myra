@@ -6,7 +6,7 @@ using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
 {
-	public class Window : SingleItemContainer<Grid>
+	public class Window : GridBased
 	{
 		public enum DefaultModalResult
 		{
@@ -49,7 +49,7 @@ namespace Myra.Graphics2D.UI
 			get { return _contentGrid; }
 		}
 
-		public int ModalResult { get; private set; }
+		public int ModalResult { get; set; }
 
 		public event EventHandler Closed;
 
@@ -59,24 +59,21 @@ namespace Myra.Graphics2D.UI
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
 
-			Widget = new Grid
-			{
-				RowSpacing = 8
-			};
+			RowSpacing = 8;
 
-			Widget.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-			Widget.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
+			RowsProportions.Add(new Proportion(ProportionType.Auto));
+			RowsProportions.Add(new Proportion(ProportionType.Auto));
 
 			_titleGrid = new Grid
 			{
 				ColumnSpacing = 8
 			};
 
-			_titleGrid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill));
-			_titleGrid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
+			_titleGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+			_titleGrid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
 
 			_titleLabel = new TextBlock();
-			_titleGrid.Children.Add(_titleLabel);
+			_titleGrid.Widgets.Add(_titleLabel);
 
 			_closeButton = new Button
 			{
@@ -88,13 +85,13 @@ namespace Myra.Graphics2D.UI
 				Close();
 			};
 
-			_titleGrid.Children.Add(_closeButton);
+			_titleGrid.Widgets.Add(_closeButton);
 
-			Widget.Children.Add(_titleGrid);
+			Widgets.Add(_titleGrid);
 
 			_contentGrid = new Grid {GridPosition = {Y = 1}};
 
-			Widget.Children.Add(_contentGrid);
+			Widgets.Add(_contentGrid);
 
 			if (style != null)
 			{
@@ -124,7 +121,7 @@ namespace Myra.Graphics2D.UI
 			{
 				Desktop.MouseMoved += DesktopOnMouseMoved;
 
-				var size = Measure(Desktop.Bounds.Size);
+				var size = Measure(Desktop.Bounds.Size());
 
 				XHint = (Desktop.Bounds.Width - size.X)/2;
 				YHint = (Desktop.Bounds.Height - size.Y)/2;
@@ -261,66 +258,6 @@ namespace Myra.Graphics2D.UI
 					ev(this, EventArgs.Empty);
 				}
 			}
-		}
-
-		public static Window CreateMessageBox(string title, string message)
-		{
-			var w = new Window
-			{
-				Title = title,
-				WidthHint = 200,
-			};
-
-			var messageLabel = new TextBlock
-			{
-				Text = message
-			};
-
-			w.ContentGrid.RowsProportions.Add(new Grid.Proportion());
-			w.ContentGrid.RowsProportions.Add(new Grid.Proportion());
-
-			w.ContentGrid.Children.Add(messageLabel);
-
-			var buttonsGrid = new Grid
-			{
-				ColumnSpacing = 8,
-				HorizontalAlignment = HorizontalAlignment.Right,
-				GridPosition = {Y = 1}
-			};
-
-			buttonsGrid.ColumnsProportions.Add(new Grid.Proportion());
-			buttonsGrid.ColumnsProportions.Add(new Grid.Proportion());
-
-			var okButton = new Button
-			{
-				Text = "Ok"
-			};
-
-			okButton.Up += (sender, args) =>
-			{
-				w.ModalResult = (int) DefaultModalResult.Ok;
-				w.Close();
-			};
-
-			buttonsGrid.Children.Add(okButton);
-
-			var cancelButton = new Button
-			{
-				Text = "Cancel",
-				GridPosition = {X = 1}
-			};
-
-			cancelButton.Up += (sender, args) =>
-			{
-				w.ModalResult = (int) DefaultModalResult.Cancel;
-				w.Close();
-			};
-
-			buttonsGrid.Children.Add(cancelButton);
-
-			w.ContentGrid.Children.Add(buttonsGrid);
-
-			return w;
 		}
 	}
 }

@@ -13,7 +13,7 @@ namespace Cyotek.Drawing.BitmapFont
 	/// <summary>
 	/// Represents the definition of a single character in a <see cref="BitmapFont"/>
 	/// </summary>
-	public struct Character
+	internal struct Character
 	{
 		#region Properties
 

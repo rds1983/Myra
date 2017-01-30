@@ -11,8 +11,8 @@ namespace Myra.Graphics2D.UI
 {
 	public class Grid : Container
 	{
-		public static bool DrawLines { get; set; }
-		public static Color DrawLinesColor { get; set; }
+		public bool DrawLines { get; set; }
+		public Color DrawLinesColor { get; set; }
 
 		public enum ProportionType
 		{
@@ -85,7 +85,13 @@ namespace Myra.Graphics2D.UI
 					return _type.ToString();
 				}
 
-				return string.Format("{0}: {1:0.00}", _type, _value);
+				if (_type == ProportionType.Part)
+				{
+					return string.Format("{0}: {1:0.00}", _type, _value);
+				}
+
+				// Pixels
+				return string.Format("{0}: {1}", _type, (int)_value);
 			}
 
 			private void FireChanged()
@@ -98,9 +104,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private bool _childrenDirty = true;
-		private readonly List<Widget> _childrenCopy = new List<Widget>();
-		protected readonly ObservableCollection<Widget> _children = new ObservableCollection<Widget>();
+		private bool _widgetsDirty = true;
+		private readonly List<Widget> _widgetsCopy = new List<Widget>();
+		protected readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
 		private int _columnSpacing;
 		private int _rowSpacing;
 		private readonly ObservableCollection<Proportion> _columnsProportions = new ObservableCollection<Proportion>();
@@ -115,36 +121,36 @@ namespace Myra.Graphics2D.UI
 		private List<int> _colWidths;
 		private List<int> _rowHeights;
 
-		public override IEnumerable<Widget> Items
+		public override IEnumerable<Widget> Children
 		{
 			get
 			{
 				// We return copy of our collection
 				// To prevent exception when someone modifies the collection during the iteration
-				if (_childrenDirty)
+				if (_widgetsDirty)
 				{
-					_childrenCopy.Clear();
-					_childrenCopy.AddRange(_children);
+					_widgetsCopy.Clear();
+					_widgetsCopy.AddRange(_widgets);
 
-					_childrenDirty = false;
+					_widgetsDirty = false;
 				}
 
-				return _childrenCopy;
+				return _widgetsCopy;
 			}
 		}
 
 		public override int ChildCount
 		{
-			get { return _children.Count; }
+			get { return _widgets.Count; }
 		}
 
 		[HiddenInEditor]
-		public IList<Widget> Children
+		public virtual IList<Widget> Widgets
 		{
-			get { return _children; }
+			get { return _widgets; }
 		}
 
-		public int ColumnSpacing
+		public virtual int ColumnSpacing
 		{
 			get { return _columnSpacing; }
 			set
@@ -159,7 +165,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public int RowSpacing
+		public virtual int RowSpacing
 		{
 			get { return _rowSpacing; }
 			set
@@ -174,30 +180,23 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ObservableCollection<Proportion> ColumnsProportions
+
+		public virtual ObservableCollection<Proportion> ColumnsProportions
 		{
 			get { return _columnsProportions; }
 		}
 
-		public ObservableCollection<Proportion> RowsProportions
+		public virtual ObservableCollection<Proportion> RowsProportions
 		{
 			get { return _rowsProportions; }
 		}
 
-		public float? TotalRowProportionPart { get; set; }
-		public float? TotalColProportionPart { get; set; }
-
-		public bool SkipEmptyRows { get; set; }
-		public bool SkipEmptyColumns { get; set; }
-
-		static Grid()
-		{
-			DrawLinesColor = Color.Red;
-		}
+		public virtual bool SkipEmptyRows { get; set; }
+		public virtual bool SkipEmptyColumns { get; set; }
 
 		public Grid()
 		{
-			_children.CollectionChanged += ChildrenOnCollectionChanged;
+			_widgets.CollectionChanged += WidgetsOnCollectionChanged;
 
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
@@ -206,6 +205,9 @@ namespace Myra.Graphics2D.UI
 			_rowsProportions.CollectionChanged += OnProportionsChanged;
 
 			SkipEmptyColumns = SkipEmptyRows = true;
+
+			DrawLines = false;
+			DrawLinesColor = Color.White;
 		}
 
 		public int GetColumnWidth(int index)
@@ -228,7 +230,7 @@ namespace Myra.Graphics2D.UI
 			return _rowHeights[index];
 		}
 
-		private void ChildrenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+		private void WidgetsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
 		{
 			if (args.Action == NotifyCollectionChangedAction.Add)
 			{
@@ -255,7 +257,7 @@ namespace Myra.Graphics2D.UI
 
 			FireMeasureChanged();
 
-			_childrenDirty = true;
+			_widgetsDirty = true;
 		}
 
 		private void ChildOnLocationChanged(object sender, EventArgs eventArgs)
@@ -352,7 +354,7 @@ namespace Myra.Graphics2D.UI
 
 			var rows = 0;
 			var columns = 0;
-			foreach (var child in Children)
+			foreach (var child in Widgets)
 			{
 				if (child.Visible)
 				{
@@ -488,7 +490,7 @@ namespace Myra.Graphics2D.UI
 			List<Widget> visibleWidgets;
 
 			var bounds = LayoutBounds;
-			LayoutProcessFixed(bounds.Size, out visibleWidgets, out _colWidths, out _rowHeights);
+			LayoutProcessFixed(bounds.Size(), out visibleWidgets, out _colWidths, out _rowHeights);
 
 			// Partition available space
 			int row, col;
@@ -512,11 +514,6 @@ namespace Myra.Graphics2D.UI
 				{
 					totalPart += prop.Value;
 				}
-			}
-
-			if (TotalColProportionPart.HasValue)
-			{
-				totalPart = TotalColProportionPart.Value;
 			}
 
 			if (!totalPart.IsZero())
@@ -565,11 +562,6 @@ namespace Myra.Graphics2D.UI
 				{
 					totalPart += prop.Value;
 				}
-			}
-
-			if (TotalRowProportionPart.HasValue)
-			{
-				totalPart = TotalRowProportionPart.Value;
 			}
 
 			if (!totalPart.IsZero())

@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Myra.Utility;
 
 namespace Myra.Graphics2D
 {
@@ -9,7 +10,7 @@ namespace Myra.Graphics2D
 		public Color Color { get; set; }
 		public Point Size
 		{
-			get { return TextureRegion.Bounds.Size; }
+			get { return TextureRegion.Bounds.Size(); }
 		}
 
 		public TextureRegion TextureRegion { get; private set; }

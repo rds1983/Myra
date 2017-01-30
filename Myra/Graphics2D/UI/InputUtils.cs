@@ -17,6 +17,7 @@ namespace Myra.Graphics2D.UI
 				if (w.IsMouseOver)
 				{
 					w.OnMouseDown(buttons);
+					break;
 				}
 			}
 		}
@@ -33,12 +34,14 @@ namespace Myra.Graphics2D.UI
 				if (w.MouseButtonsDown != null)
 				{
 					w.OnMouseUp(buttons);
+					break;
 				}
 			}
 		}
 
 		public static void HandleMouseMovement(this IEnumerable<Widget> widgets, Point mousePosition)
 		{
+			var movedHandled = false;
 			foreach (var w in widgets)
 			{
 				if (!w.Visible)
@@ -46,7 +49,7 @@ namespace Myra.Graphics2D.UI
 					continue;
 				}
 
-				if (w.AbsoluteBounds.Contains(mousePosition))
+				if (!movedHandled && w.AbsoluteBounds.Contains(mousePosition))
 				{
 					if (w.IsMouseOver)
 					{
@@ -57,6 +60,8 @@ namespace Myra.Graphics2D.UI
 					{
 						w.OnMouseEntered(mousePosition);
 					}
+
+					movedHandled = true;
 				} else if (w.IsMouseOver)
 				{
 					// Left
