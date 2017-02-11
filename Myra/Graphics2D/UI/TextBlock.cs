@@ -76,13 +76,14 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
-		public override void InternalRender(SpriteBatch batch, Rectangle bounds)
+		public override void InternalRender(SpriteBatch batch)
 		{
 			if (_formattedText.Font == null)
 			{
 				return;
 			}
 
+			var bounds = RenderBounds;
 			_formattedText.Draw(batch, bounds, Enabled?TextColor:DisabledTextColor);
 		}
 

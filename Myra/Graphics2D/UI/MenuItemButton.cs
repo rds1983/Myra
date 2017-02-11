@@ -104,7 +104,7 @@ namespace Myra.Graphics2D.UI
 
 			_textBlock = new TextBlock
 			{
-				GridPosition = {X = 1}
+				GridPositionX = 1
 			};
 
 			Widget.Widgets.Add(_textBlock);

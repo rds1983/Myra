@@ -36,6 +36,20 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public override Point AbsoluteLocation
+		{
+			get { return base.AbsoluteLocation; }
+			internal set
+			{
+				base.AbsoluteLocation = value;
+
+				foreach (var w in Children)
+				{
+					w.AbsoluteLocation = AbsoluteLocation + w.Bounds.Location;
+				}
+			}
+		}
+
 		public override void OnMouseEntered(Point position)
 		{
 			base.OnMouseEntered(position);
@@ -82,15 +96,14 @@ namespace Myra.Graphics2D.UI
 			Children.HandleMouseUp(mb);
 		}
 
-		public override void InternalRender(SpriteBatch batch, Rectangle bounds)
+		public override void InternalRender(SpriteBatch batch)
 		{
 			foreach (var child in Children)
 			{
 				if (!child.Visible)
 					continue;
 
-				var absoluteLocation = bounds.Location;
-				child.Render(batch, absoluteLocation);
+				child.Render(batch);
 			}
 		}
 

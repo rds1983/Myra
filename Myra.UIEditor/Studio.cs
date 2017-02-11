@@ -426,7 +426,7 @@ namespace Myra.UIEditor
 				Id = "topSplitPane",
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
-				GridPosition = {Y = 1}
+				GridPositionY = 1
 			};
 
 			_projectHolder = new Grid();
@@ -485,7 +485,7 @@ namespace Myra.UIEditor
 			{
 				Text = "FPS: ",
 				Font = DefaultAssets.FontSmall,
-				GridPosition = new Point(0, 1),
+				GridPositionY = 1
 			};
 
 			_statisticsGrid.Widgets.Add(_fpsLabel);
@@ -494,7 +494,7 @@ namespace Myra.UIEditor
 			{
 				Text = "Total Widgets: ",
 				Font = DefaultAssets.FontSmall,
-				GridPosition = new Point(0, 2),
+				GridPositionY = 2
 			};
 
 			_statisticsGrid.Widgets.Add(_widgetsCountLabel);
@@ -503,7 +503,7 @@ namespace Myra.UIEditor
 			{
 				Text = "Draw Calls: ",
 				Font = DefaultAssets.FontSmall,
-				GridPosition = new Point(0, 3),
+				GridPositionY = 3
 			};
 
 			_statisticsGrid.Widgets.Add(_drawCallsLabel);

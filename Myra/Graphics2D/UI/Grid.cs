@@ -329,7 +329,7 @@ namespace Myra.Graphics2D.UI
 
 		private Point GetActualGridPosition(Widget child)
 		{
-			var result = child.GridPosition;
+			var result = new Point(child.GridPositionX, child.GridPositionY);
 
 			if (result.X > ColumnsProportions.Count)
 			{
@@ -361,14 +361,14 @@ namespace Myra.Graphics2D.UI
 					visibleWidgets.Add(child);
 
 					var gridPosition = GetActualGridPosition(child);
-					if (gridPosition.X + child.GridSpan.X > columns)
+					if (gridPosition.X + child.GridSpanX > columns)
 					{
-						columns = gridPosition.X + child.GridSpan.X;
+						columns = gridPosition.X + child.GridSpanX;
 					}
 
-					if (gridPosition.Y + child.GridSpan.Y > rows)
+					if (gridPosition.Y + child.GridSpanY > rows)
 					{
-						rows = gridPosition.Y + child.GridSpan.Y;
+						rows = gridPosition.Y + child.GridSpanY;
 					}
 				}
 			}
@@ -428,12 +428,12 @@ namespace Myra.Graphics2D.UI
 							measuredSize = widget.Measure(availableSize);
 						}
 
-						if (widget.GridSpan.X != 1)
+						if (widget.GridSpanX != 1)
 						{
 							measuredSize.X = 0;
 						}
 
-						if (widget.GridSpan.Y != 1)
+						if (widget.GridSpanY != 1)
 						{
 							measuredSize.Y = 0;
 						}
@@ -485,8 +485,6 @@ namespace Myra.Graphics2D.UI
 
 		public override void Arrange()
 		{
-			base.Arrange();
-
 			List<Widget> visibleWidgets;
 
 			var bounds = LayoutBounds;
@@ -649,12 +647,12 @@ namespace Myra.Graphics2D.UI
 
 			var cellSize = Point.Zero;
 
-			for (var i = col; i < col + control.GridSpan.X; ++i)
+			for (var i = col; i < col + control.GridSpanX; ++i)
 			{
 				cellSize.X += _colWidths[i];
 			}
 
-			for (var i = row; i < row + control.GridSpan.Y; ++i)
+			for (var i = row; i < row + control.GridSpanY; ++i)
 			{
 				cellSize.Y += _rowHeights[i];
 			}
@@ -662,9 +660,9 @@ namespace Myra.Graphics2D.UI
 			control.LayoutChild(new Rectangle(_cellLocationsX[col], _cellLocationsY[row], cellSize.X, cellSize.Y));
 		}
 
-		public override void InternalRender(SpriteBatch batch, Rectangle bounds)
+		public override void InternalRender(SpriteBatch batch)
 		{
-			base.InternalRender(batch, bounds);
+			base.InternalRender(batch);
 
 			if (!DrawLines)
 			{
@@ -672,6 +670,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			int i;
+			var bounds = AbsoluteBounds;
 			for (i = 0; i < _gridLinesX.Count; ++i)
 			{
 				batch.DrawRect(DrawLinesColor, new Rectangle(bounds.X + _gridLinesX[i], bounds.Top,

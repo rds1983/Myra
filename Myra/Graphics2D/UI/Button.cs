@@ -18,6 +18,8 @@ namespace Myra.Graphics2D.UI
 			set { _textBlock.Text = value; }
 		}
 
+		[JsonIgnore]
+		[HiddenInEditor]
 		public BitmapFont Font
 		{
 			get { return _textBlock.Font; }
@@ -106,7 +108,7 @@ namespace Myra.Graphics2D.UI
 
 			Widget.Widgets.Add(_image);
 
-			_textBlock = new TextBlock {GridPosition = {X = 1}};
+			_textBlock = new TextBlock {GridPositionX = 1};
 
 			Widget.Widgets.Add(_textBlock);
 

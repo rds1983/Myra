@@ -71,7 +71,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var bounds = LayoutBounds;
+			var bounds = Bounds;
 			if (bounds.Width == 0)
 			{
 				return;
@@ -90,7 +90,7 @@ namespace Myra.Graphics2D.UI
 					firstWidth -= Widget.GetColumnWidth(i);
 				}
 
-				fp = (float) Widgets.Count*firstWidth/(LayoutBounds.Width - _handlesSize);
+				fp = (float) Widgets.Count*firstWidth/(bounds.Width - _handlesSize);
 
 				firstProportion = Widget.ColumnsProportions[handleIndex - 1];
 				secondProportion = Widget.ColumnsProportions[handleIndex + 1];
@@ -104,7 +104,7 @@ namespace Myra.Graphics2D.UI
 					firstHeight -= Widget.GetRowHeight(i);
 				}
 
-				fp = (float) Widgets.Count*firstHeight/(LayoutBounds.Height - _handlesSize);
+				fp = (float) Widgets.Count*firstHeight/(bounds.Height - _handlesSize);
 
 				firstProportion = Widget.RowsProportions[handleIndex - 1];
 				secondProportion = Widget.RowsProportions[handleIndex + 1];
@@ -219,13 +219,13 @@ namespace Myra.Graphics2D.UI
 					if (Orientation == Orientation.Horizontal)
 					{
 						_handlesSize += handleSize;
-						handle.GridPosition.X = i*2 - 1;
+						handle.GridPositionX = i*2 - 1;
 						Widget.ColumnsProportions.Add(proportion);
 					}
 					else
 					{
 						_handlesSize += handleSize;
-						handle.GridPosition.Y = i*2 - 1;
+						handle.GridPositionY = i*2 - 1;
 						Widget.RowsProportions.Add(proportion);
 					}
 
@@ -240,12 +240,12 @@ namespace Myra.Graphics2D.UI
 				// Set grid coord and add widget itself
 				if (Orientation == Orientation.Horizontal)
 				{
-					w.GridPosition.X = i*2;
+					w.GridPositionX = i*2;
 					Widget.ColumnsProportions.Add(proportion);
 				}
 				else
 				{
-					w.GridPosition.Y = i*2;
+					w.GridPositionY = i*2;
 					Widget.RowsProportions.Add(proportion);
 				}
 

@@ -107,11 +107,11 @@ namespace Myra.Graphics2D.UI
 				var widget = Widgets[i];
 				if (Orientation == Orientation.Horizontal)
 				{
-					widget.GridPosition.X = i;
+					widget.GridPositionX = i;
 				}
 				else
 				{
-					widget.GridPosition.Y = i;
+					widget.GridPositionY = i;
 				}
 			}
 		}

@@ -50,7 +50,6 @@ namespace Myra.Graphics2D.UI
 
 		private void UpdateWidgetLocation()
 		{
-
 			if (Widget != null)
 			{
 				Widget.Location = new Point(-_origin.X, -_origin.Y);
@@ -64,6 +63,7 @@ namespace Myra.Graphics2D.UI
 			if (!_startBoundsPos.HasValue) return;
 			var origin = _origin;
 
+			var bounds = LayoutBounds;
 			if (_scrollbarOrientation == Orientation.Horizontal)
 			{
 				var delta = position.X - AbsoluteBounds.X - _startBoundsPos.Value;
@@ -80,10 +80,10 @@ namespace Myra.Graphics2D.UI
 				var prop = (float)delta/_horizontalMaximum;
 
 				_scrollPosition.X = delta;
-				_horizontalScrollbarThumb.X = AbsoluteBounds.X + delta;
+				_horizontalScrollbarThumb.X = LayoutBounds.X + delta;
 
 				origin.X = (int)(prop*
-				           (Widget.Bounds.Width - Bounds.Width + (_verticalScrollbarVisible ? _verticalScrollbarThumb.Width : 0)));
+				           (Widget.Bounds.Width - bounds.Width + (_verticalScrollbarVisible ? _verticalScrollbarThumb.Width : 0)));
 			}
 			else
 			{
@@ -101,10 +101,10 @@ namespace Myra.Graphics2D.UI
 				var prop = (float)delta / _verticalMaximum;
 
 				_scrollPosition.Y = delta;
-				_verticalScrollbarThumb.Y = AbsoluteBounds.Y + delta;
+				_verticalScrollbarThumb.Y = LayoutBounds.Y + delta;
 
 				origin.Y = (int)(prop*
-				           (Widget.Bounds.Height - Bounds.Height +
+				           (Widget.Bounds.Height - bounds.Height +
 				            (_horizontalScrollbarVisible ? _horizontalScrollbarThumb.Height : 0)));
 			}
 
@@ -124,23 +124,24 @@ namespace Myra.Graphics2D.UI
 			base.OnMouseDown(mb);
 
 			var mousePosition = Desktop.MousePosition;
-			if (mb == MouseButtons.Left)
-			{
-				if (_verticalScrollbarVisible && _verticalScrollbarThumb.Contains(mousePosition))
-				{
-					_startBoundsPos = mousePosition.Y - _verticalScrollbarThumb.Y;
-					_scrollbarOrientation = Orientation.Vertical;
-				}
 
-				if (_horizontalScrollbarVisible && _horizontalScrollbarThumb.Contains(mousePosition))
-				{
-					_startBoundsPos = mousePosition.X - _horizontalScrollbarThumb.X;
-					_scrollbarOrientation = Orientation.Horizontal;
-				}
+			if (mb != MouseButtons.Left) return;
+
+			var bounds = RenderBounds;
+			if (_verticalScrollbarVisible && _verticalScrollbarThumb.Add(bounds.Location).Contains(mousePosition))
+			{
+				_startBoundsPos = mousePosition.Y - _verticalScrollbarThumb.Y - bounds.Y;
+				_scrollbarOrientation = Orientation.Vertical;
+			}
+
+			if (_horizontalScrollbarVisible && _horizontalScrollbarThumb.Add(bounds.Location).Contains(mousePosition))
+			{
+				_startBoundsPos = mousePosition.X - _horizontalScrollbarThumb.X - bounds.X;
+				_scrollbarOrientation = Orientation.Horizontal;
 			}
 		}
 
-		public override void InternalRender(SpriteBatch batch, Rectangle bounds)
+		public override void InternalRender(SpriteBatch batch)
 		{
 			if (Widget == null || !Widget.Visible)
 			{
@@ -148,18 +149,20 @@ namespace Myra.Graphics2D.UI
 			}
 
 			// Render child
-			base.InternalRender(batch, bounds);
+			base.InternalRender(batch);
+
+			var bounds = RenderBounds;
 
 			if (_horizontalScrollbarVisible)
 			{
-				HorizontalScrollBackground.Draw(batch, _horizontalScrollbarFrame);
-				HorizontalScrollKnob.Draw(batch, _horizontalScrollbarThumb);
+				HorizontalScrollBackground.Draw(batch, _horizontalScrollbarFrame.Add(bounds.Location));
+				HorizontalScrollKnob.Draw(batch, _horizontalScrollbarThumb.Add(bounds.Location));
 			}
 
 			if (_verticalScrollbarVisible)
 			{
-				VerticalScrollBackground.Draw(batch, _verticalScrollbarFrame);
-				VerticalScrollKnob.Draw(batch, _verticalScrollbarThumb);
+				VerticalScrollBackground.Draw(batch, _verticalScrollbarFrame.Add(bounds.Location));
+				VerticalScrollKnob.Draw(batch, _verticalScrollbarThumb.Add(bounds.Location));
 			}
 		}
 
@@ -208,8 +211,8 @@ namespace Myra.Graphics2D.UI
 			var availableSize = bounds.Size();
 			var measureSize = Widget.Measure(availableSize);
 
-			_horizontalScrollbarVisible = measureSize.X > Bounds.Width;
-			_verticalScrollbarVisible = measureSize.Y > Bounds.Height;
+			_horizontalScrollbarVisible = measureSize.X > bounds.Width;
+			_verticalScrollbarVisible = measureSize.Y > bounds.Height;
 			if (_horizontalScrollbarVisible || _verticalScrollbarVisible)
 			{
 				if (_horizontalScrollbarVisible)
@@ -296,11 +299,6 @@ namespace Myra.Graphics2D.UI
 
 				bounds.Width = _horizontalScrollbarVisible ? measureSize.X : availableSize.X;
 				bounds.Height = _verticalScrollbarVisible ? measureSize.Y : availableSize.Y;
-
-				_horizontalScrollbarFrame.Offset(AbsoluteLocation);
-				_horizontalScrollbarThumb.Offset(AbsoluteLocation);
-				_verticalScrollbarFrame.Offset(AbsoluteLocation);
-				_verticalScrollbarThumb.Offset(AbsoluteLocation);
 			}
 
 			Widget.LayoutChild(bounds);

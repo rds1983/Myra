@@ -149,7 +149,7 @@ namespace Myra.Samples
 			var pane = new ScrollPane<TextField>
 			{
 				Widget = _textField,
-				GridPosition = {Y = 1}
+				GridPositionY = 1
 			};
 
 			root.Widgets.Add(pane);
@@ -210,7 +210,7 @@ namespace Myra.Samples
 
 		private void AboutItemOnDown(object sender, EventArgs eventArgs)
 		{
-			var messageBox = Dialog.CreateMessageBox("Notepad", "Myra Notepad Sample");
+			var messageBox = Dialog.CreateMessageBox("Notepad", "Myra Notepad Sample " + MyraEnvironment.Version);
 			messageBox.ShowModal(_host);
 		}
 

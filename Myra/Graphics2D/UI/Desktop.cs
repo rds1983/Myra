@@ -243,7 +243,7 @@ namespace Myra.Graphics2D.UI
 			{
 				if (widget.Visible)
 				{
-					widget.Render(_spriteBatch, Bounds.Location);
+					widget.Render(_spriteBatch);
 				}
 			}
 
@@ -270,6 +270,9 @@ namespace Myra.Graphics2D.UI
 				if (widget.Visible)
 				{
 					widget.LayoutChild(_bounds);
+					
+					// Recursively update absolute positions
+					widget.AbsoluteLocation = widget.Bounds.Location;
 				}
 			}
 

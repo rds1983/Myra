@@ -55,11 +55,8 @@ namespace Myra.Samples
 				var header = new TextBlock
 				{
 					Text = grid.ColumnsProportions[i].ToString(),
-					GridPosition =
-					{
-						X = i,
-						Y = 0
-					}
+					GridPositionX = i,
+					GridPositionY = 0
 				};
 
 				grid.Widgets.Add(header);
@@ -68,11 +65,8 @@ namespace Myra.Samples
 			// Combo
 			var combo = new ComboBox
 			{
-				GridPosition =
-				{
-					X = 1,
-					Y = 1
-				}
+				GridPositionX = 1,
+				GridPositionY = 1
 			};
 
 			combo.Items.Add(new ListItem("Red", Color.Red));
@@ -83,16 +77,10 @@ namespace Myra.Samples
 			// Button
 			var button = new Button
 			{
-				GridPosition =
-				{
-					X = 2,
-					Y = 1
-				},
-				GridSpan =
-				{
-					X = 2,
-					Y = 1
-				},
+				GridPositionX = 2,
+				GridPositionY = 1,
+				GridSpanX = 2,
+				GridSpanY = 1,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				Text = "This is 2 columns button"
 			};
@@ -108,16 +96,10 @@ namespace Myra.Samples
 			// Button
 			var button2 = new Button
 			{
-				GridPosition =
-				{
-					X = 2,
-					Y = 2
-				},
-				GridSpan =
-				{
-					X = 1,
-					Y = 2
-				},
+				GridPositionX = 2,
+				GridPositionY = 2,
+				GridSpanX = 1,
+				GridSpanY = 2,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
 				Text = "This is 2 rows button"
@@ -135,33 +117,24 @@ namespace Myra.Samples
 			{
 				WidthHint = 125,
 				Text = "This is textblock which spans for several lines to demonstrate row proportion set to Auto",
-				GridPosition =
-				{
-					X = 4,
-					Y = 1
-				}
+				GridPositionX = 4,
+				GridPositionY = 1
 			};
 			grid.Widgets.Add(textBlock);
 
 			var checkBox = new CheckBox
 			{
 				Text = "This is a checkbox",
-				GridPosition =
-				{
-					X = 3,
-					Y = 3
-				}
+				GridPositionX = 3,
+				GridPositionY = 3,
 			};
 			grid.Widgets.Add(checkBox);
 
 			var textBlock2 = new TextBlock
 			{
 				Text = "This is long textblock",
-				GridPosition =
-				{
-					X = 1,
-					Y = 4
-				}
+				GridPositionX = 1,
+				GridPositionY = 4
 			};
 			grid.Widgets.Add(textBlock2);
 
@@ -170,11 +143,8 @@ namespace Myra.Samples
 				var header = new TextBlock
 				{
 					Text = grid.RowsProportions[i].ToString(),
-					GridPosition =
-					{
-						X = 0,
-						Y = i
-					}
+					GridPositionX = 0,
+					GridPositionY = i
 				};
 
 				grid.Widgets.Add(header);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Microsoft.Xna.Framework;
 using Myra.Graphics2D;
 using Myra.Graphics2D.UI;
 
@@ -13,6 +14,13 @@ namespace Myra.Editor.UI
 		private readonly PropertyGrid _propertyGrid;
 		private readonly Button _buttonDelete, _buttonMoveUp, _buttonMoveDown;
 
+		public Func<Color?, Color?> ColorChangeHandler
+		{
+			get { return _propertyGrid.ColorChangeHandler; }
+
+			set { _propertyGrid.ColorChangeHandler = value; }
+		}
+
 		public CollectionEditor(IList collection, Type type)
 		{
 			WidthHint = 400;
@@ -23,13 +31,10 @@ namespace Myra.Editor.UI
 
 			Widget = new Grid
 			{
-				Padding = new PaddingInfo
-				{
-					Left = 8,
-					Right = 8,
-					Bottom = 8,
-					Top = 8
-				},
+				PaddingLeft = 8,
+				PaddingRight = 8,
+				PaddingBottom = 8,
+				PaddingTop = 8,
 				ColumnSpacing = 8,
 				RowSpacing = 8
 			};
@@ -40,9 +45,11 @@ namespace Myra.Editor.UI
 			Widget.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill));
 			Widget.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
 
-			_listItems = new ListBox();
-			_listItems.HorizontalAlignment = HorizontalAlignment.Stretch;
-			_listItems.VerticalAlignment = VerticalAlignment.Stretch;
+			_listItems = new ListBox
+			{
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				VerticalAlignment = VerticalAlignment.Stretch
+			};
 
 			_listItems.SelectedIndexChanged += ListItemsOnSelectedIndexChanged;
 
@@ -54,14 +61,14 @@ namespace Myra.Editor.UI
 
 			Widget.Widgets.Add(_listItems);
 
-			_propertyGrid = new PropertyGrid {GridPosition = {X = 1}};
+			_propertyGrid = new PropertyGrid {GridPositionX = 1};
 			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
 
 			Widget.Widgets.Add(_propertyGrid);
 
 			var buttonsGrid = new Grid
 			{
-				GridPosition = {Y = 1},
+				GridPositionY = 1,
 				ColumnSpacing = 4
 			};
 
@@ -77,7 +84,7 @@ namespace Myra.Editor.UI
 			_buttonDelete = new Button
 			{
 				Text = "Delete",
-				GridPosition = {X = 1}
+				GridPositionX = 1
 			};
 			_buttonDelete.Up += ButtonDeleteOnUp;
 			buttonsGrid.Widgets.Add(_buttonDelete);
@@ -85,7 +92,7 @@ namespace Myra.Editor.UI
 			_buttonMoveUp = new Button
 			{
 				Text = "Up",
-				GridPosition = {X = 2}
+				GridPositionX = 2
 			};
 			_buttonMoveUp.Up += ButtonMoveUpOnUp;
 			buttonsGrid.Widgets.Add(_buttonMoveUp);
@@ -93,7 +100,7 @@ namespace Myra.Editor.UI
 			_buttonMoveDown = new Button
 			{
 				Text = "Down",
-				GridPosition = {X = 3}
+				GridPositionX = 3
 			};
 			_buttonMoveDown.Up += ButtonMoveDownOnUp;
 			buttonsGrid.Widgets.Add(_buttonMoveDown);

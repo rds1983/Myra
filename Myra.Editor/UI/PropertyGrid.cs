@@ -89,6 +89,8 @@ namespace Myra.Editor.UI
 			}
 		}
 
+		private PropertyGrid _parentGrid;
+		private Record _parentProperty;
 		private readonly List<Record> _records = new List<Record>();
 
 		public TreeStyle PropertyGridStyle { get; private set; }
@@ -328,7 +330,7 @@ namespace Myra.Editor.UI
 						ContentHorizontalAlignment = HorizontalAlignment.Center,
 						Tag = value,
 						HorizontalAlignment = HorizontalAlignment.Stretch,
-						GridPosition = {X = 1}
+						GridPositionX = 1
 					};
 
 					grid.Widgets.Add(button);
@@ -398,8 +400,9 @@ namespace Myra.Editor.UI
 
 					valueWidget = cb;
 				}
-				else if (propertyType == typeof (string) || propertyType.IsPrimitive)
+				else if (propertyType == typeof (string) || propertyType.IsPrimitive || propertyType.IsNullablePrimitive())
 				{
+
 					var tf = new TextField
 					{
 						Text = value != null ? value.ToString() : string.Empty
@@ -411,8 +414,44 @@ namespace Myra.Editor.UI
 						{
 							try
 							{
-								var result = Convert.ChangeType(tf.Text, property.Type);
+								object result;
+
+								if (propertyType.IsNullablePrimitive())
+								{
+									if (string.IsNullOrEmpty(tf.Text))
+									{
+										result = null;
+									}
+									else
+									{
+										result = Convert.ChangeType(tf.Text, property.Type.GetNullableType());
+									}
+								}
+								else
+								{
+									result = Convert.ChangeType(tf.Text, property.Type);
+								}
+
 								property.SetValue(_object, result);
+
+								if (property.Type.IsValueType)
+								{
+									var tg = this;
+									var pg = tg._parentGrid;
+									while (pg != null)
+									{
+										tg._parentProperty.SetValue(pg._object, tg._object);
+
+										if (!tg._parentProperty.Type.IsValueType)
+										{
+											break;
+										}
+
+										tg = pg;
+										pg = tg._parentGrid;
+									}
+								}
+
 								FireChanged(property.Name);
 							}
 							catch (Exception)
@@ -461,12 +500,16 @@ namespace Myra.Editor.UI
 								ContentHorizontalAlignment = HorizontalAlignment.Center,
 								Tag = value,
 								HorizontalAlignment = HorizontalAlignment.Stretch,
-								GridPosition = {X = 1}
+								GridPositionX = 1
 							};
 
 							button.Up += (sender, args) =>
 							{
-								var collectionEditor = new CollectionEditor(items, itemType);
+								var collectionEditor = new CollectionEditor(items, itemType)
+								{
+									ColorChangeHandler = ColorChangeHandler
+								};
+
 								var dialog = Dialog.CreateMessageBox("Edit", collectionEditor);
 
 								dialog.ButtonOk.Up += (o, eventArgs) =>
@@ -493,12 +536,12 @@ namespace Myra.Editor.UI
 							Object = value,
 							Visible = false,
 							HorizontalAlignment = HorizontalAlignment.Stretch,
-							GridPosition =
-							{
-								X = 1,
-								Y = y + 1
-							},
-							GridSpan = {X = 2}
+							GridPositionX = 1,
+							GridPositionY =  y + 1,
+							GridSpanX = 2,
+							ColorChangeHandler = ColorChangeHandler,
+							_parentGrid = this,
+							_parentProperty = property
 						};
 
 						Widget.Widgets.Add(subGrid);
@@ -509,7 +552,7 @@ namespace Myra.Editor.UI
 							Toggleable = true,
 							HorizontalAlignment = HorizontalAlignment.Center,
 							VerticalAlignment = VerticalAlignment.Center,
-							GridPosition = {Y = y}
+							GridPositionY = y
 						};
 
 						mark.ApplyButtonStyle(PropertyGridStyle.MarkStyle);
@@ -547,16 +590,14 @@ namespace Myra.Editor.UI
 				{
 					Text = property.Name,
 					VerticalAlignment = VerticalAlignment.Center,
-					GridPosition =
-					{
-						X = 1,
-						Y = oldY
-					}
+					GridPositionX = 1,
+					GridPositionY =  oldY
 				};
 
 				Widget.Widgets.Add(nameLabel);
 
-				valueWidget.GridPosition = new Point(2, oldY);
+				valueWidget.GridPositionX = 2;
+				valueWidget.GridPositionY = oldY;
 				valueWidget.HorizontalAlignment = HorizontalAlignment.Stretch;
 				valueWidget.VerticalAlignment = VerticalAlignment.Center;
 

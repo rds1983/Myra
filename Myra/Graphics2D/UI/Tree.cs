@@ -198,7 +198,7 @@ namespace Myra.Graphics2D.UI
 			_rowInfosDirty = true;
 		}
 
-		public override void InternalRender(SpriteBatch batch, Rectangle bounds)
+		public override void InternalRender(SpriteBatch batch)
 		{
 			if (_rowInfosDirty)
 			{
@@ -219,7 +219,7 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			base.InternalRender(batch, bounds);
+			base.InternalRender(batch);
 		}
 
 		public void ApplyTreeStyle(TreeStyle style)

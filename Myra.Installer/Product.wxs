@@ -89,10 +89,15 @@
 									WorkingDirectory="INSTALLFOLDER"/>
 						<Shortcut Id="DXSamplesLauncherShortcut"
 									Name="WindowsDX Samples Launcher"
-									Description="UI Editor"
+									Description="WindowsDX Samples Launcher"
 									Target="[INSTALLFOLDER]Myra.Samples.WindowsDXLauncher.exe"
 									WorkingDirectory="INSTALLFOLDER"/>
-						<RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
+            <Shortcut Id="UIEditorShortcut"
+									Name="UI Editor"
+									Description="UI Editor"
+									Target="[INSTALLFOLDER]Myra.UIEditor.exe"
+									WorkingDirectory="INSTALLFOLDER"/>
+            <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
 						<RegistryValue Root="HKCU" Key="Software\$(var.Manufacturer)\$(var.ProductName)" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
 					</Component>
 				</Directory>

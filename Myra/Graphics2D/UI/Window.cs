@@ -77,7 +77,7 @@ namespace Myra.Graphics2D.UI
 
 			_closeButton = new Button
 			{
-				GridPosition = {X = 1}
+				GridPositionX = 1
 			};
 
 			_closeButton.Up += (sender, args) =>
@@ -89,7 +89,7 @@ namespace Myra.Graphics2D.UI
 
 			Widgets.Add(_titleGrid);
 
-			_contentGrid = new Grid {GridPosition = {Y = 1}};
+			_contentGrid = new Grid {GridPositionY = 1};
 
 			Widgets.Add(_contentGrid);
 

@@ -17,11 +17,23 @@
 			<Component Id="Newtonsoft.Json.dll" Directory="INSTALLFOLDER" Guid="{CE944C87-74EE-4837-B334-208F706AFB34}">
 				<File Id="Newtonsoft.Json.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra\bin\$(var.Configuration)\Newtonsoft.Json.dll" />
 			</Component>
+			<Component Id="NLog.xml" Directory="INSTALLFOLDER" Guid="{BDC0A973-DB3A-404D-8778-6FC808052667}">
+				<File Id="NLog.xml" KeyPath="yes" Source="$(var.SolutionDir)\Myra.UIEditor\bin\$(var.Configuration)\NLog.xml" />
+			</Component>
+			<Component Id="NLog.dll" Directory="INSTALLFOLDER" Guid="{455055AD-3AF9-42CF-83FE-D5A31686969E}">
+				<File Id="NLog.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.UIEditor\bin\$(var.Configuration)\NLog.dll" />
+			</Component>
 			<Component Id="Myra.Samples.dll" Directory="INSTALLFOLDER" Guid="{6D531604-C756-404D-B5EF-C89116278A22}">
 				<File Id="Myra.Samples.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\bin\$(var.Configuration)\Myra.Samples.dll" />
 			</Component>
 			<Component Id="Myra.Samples.pdb" Directory="INSTALLFOLDER" Guid="{825FA0A2-1860-42E6-80D7-9D89EB246A1B}">
 				<File Id="Myra.Samples.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\bin\$(var.Configuration)\Myra.Samples.pdb" />
+			</Component>
+			<Component Id="Myra.Editor.dll" Directory="INSTALLFOLDER" Guid="{74048486-4D31-4DEF-BFC0-BC7399890C2F}">
+				<File Id="Myra.Editor.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Editor\bin\$(var.Configuration)\Myra.Editor.dll" />
+			</Component>
+			<Component Id="Myra.Editor.pdb" Directory="INSTALLFOLDER" Guid="{A768D170-6B84-4491-B6E4-8C944246E0D3}">
+				<File Id="Myra.Editor.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Editor\bin\$(var.Configuration)\Myra.Editor.pdb" />
 			</Component>
 			<Component Id="mistral.fnt" Directory="Assets" Guid="{23BE6258-270C-43B2-B5EC-CD29DEEFCF6F}">
 				<File Id="mistral.fnt" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\mistral.fnt" />
@@ -37,6 +49,15 @@
 			</Component>
 			<Component Id="Myra.Samples.DesktopGLLauncher.pdb" Directory="INSTALLFOLDER" Guid="{F923F61B-3856-46B4-8767-A1C2C93C76FF}">
 				<File Id="Myra.Samples.DesktopGLLauncher.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.DesktopGLLauncher\bin\$(var.Configuration)\Myra.Samples.DesktopGLLauncher.pdb" />
+			</Component>
+			<Component Id="Myra.UIEditor.exe" Directory="INSTALLFOLDER" Guid="{5FFE16B8-B547-477C-8A56-843C8DC4EB59}">
+				<File Id="Myra.UIEditor.exe" KeyPath="yes" Source="$(var.SolutionDir)\Myra.UIEditor\bin\$(var.Configuration)\Myra.UIEditor.exe" />
+			</Component>
+			<Component Id="Myra.UIEditor.exe.config" Directory="INSTALLFOLDER" Guid="{702804D6-04A3-4D16-BC90-DBB1AFB0E50B}">
+				<File Id="Myra.UIEditor.exe.config" KeyPath="yes" Source="$(var.SolutionDir)\Myra.UIEditor\bin\$(var.Configuration)\Myra.UIEditor.exe.config" />
+			</Component>
+			<Component Id="Myra.UIEditor.pdb" Directory="INSTALLFOLDER" Guid="{7C5D1411-392A-49E0-B522-6287777A5037}">
+				<File Id="Myra.UIEditor.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.UIEditor\bin\$(var.Configuration)\Myra.UIEditor.pdb" />
 			</Component>
 			<Component Id="Myra.Samples.WindowsDXLauncher.exe" Directory="INSTALLFOLDER" Guid="{97DA1A4B-4641-439F-9330-6524142AB9B3}">
 				<File Id="Myra.Samples.WindowsDXLauncher.exe" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.WindowsDXLauncher\bin\$(var.Configuration)\Myra.Samples.WindowsDXLauncher.exe" />

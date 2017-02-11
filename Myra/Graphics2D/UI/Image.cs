@@ -36,12 +36,13 @@ namespace Myra.Graphics2D.UI
 			return Drawable.Size;
 		}
 
-		public override void InternalRender(SpriteBatch batch, Rectangle bounds)
+		public override void InternalRender(SpriteBatch batch)
 		{
-			base.InternalRender(batch, bounds);
+			base.InternalRender(batch);
 
 			if (Drawable != null)
 			{
+				var bounds = AbsoluteBounds;
 				Drawable.Draw(batch, bounds);
 			}
 		}

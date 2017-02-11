@@ -81,6 +81,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public int SelectedIndex
 		{
 			get { return _selectedIndex; }
@@ -134,7 +136,6 @@ namespace Myra.Graphics2D.UI
 				var index = args.NewStartingIndex;
 				foreach (ListItem item in args.NewItems)
 				{
-					item.Changed += ItemOnChanged;
 					InsertItem(item, index);
 					++index;
 				}
@@ -176,6 +177,8 @@ namespace Myra.Graphics2D.UI
 
 		private void InsertItem(ListItem item, int index)
 		{
+			item.Changed += ItemOnChanged;
+
 			var button = new Button(_dropDownItemStyle)
 			{
 				Text = item.Text,
@@ -196,6 +199,8 @@ namespace Myra.Graphics2D.UI
 
 		private void RemoveItem(ListItem item)
 		{
+			item.Changed -= ItemOnChanged;
+
 			var widget = FindWidgetByItem(item);
 
 			if (widget == null)
@@ -214,7 +219,7 @@ namespace Myra.Graphics2D.UI
 		{
 			for (var i = 0; i < _itemsContainer.ChildCount; ++i)
 			{
-				_itemsContainer.Widgets[i].GridPosition.Y = i;
+				_itemsContainer.Widgets[i].GridPositionY = i;
 			}
 		}
 

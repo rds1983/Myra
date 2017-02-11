@@ -89,7 +89,7 @@ namespace Myra.Graphics2D.UI
 
 		public ListBox(ListBoxStyle style)
 		{
-			HorizontalAlignment = HorizontalAlignment.Left;
+			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Top;
 
 			if (style != null)
@@ -108,22 +108,46 @@ namespace Myra.Graphics2D.UI
 
 		private void ItemsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
 		{
-			if (args.Action == NotifyCollectionChangedAction.Add)
+			switch (args.Action)
 			{
-				var index = args.NewStartingIndex;
-				foreach (ListItem item in args.NewItems)
+				case NotifyCollectionChangedAction.Add:
 				{
-					InsertItem(item, index);
-					++index;
+					var index = args.NewStartingIndex;
+					foreach (ListItem item in args.NewItems)
+					{
+						InsertItem(item, index);
+						++index;
+					}
+					break;
+				}
+
+				case NotifyCollectionChangedAction.Remove:
+				{
+					foreach (ListItem item in args.OldItems)
+					{
+						RemoveItem(item);
+					}
+					break;
+				}
+
+				case NotifyCollectionChangedAction.Reset:
+				{
+					while (Widgets.Count > 0)
+					{
+						RemoveItem((ListItem)(Widgets[0].Tag));
+					}
+					break;
 				}
 			}
-			else if (args.Action == NotifyCollectionChangedAction.Remove)
-			{
-				foreach (ListItem item in args.OldItems)
-				{
-					RemoveItem(item);
-				}
-			}
+		}
+
+		private void ItemOnChanged(object sender, EventArgs eventArgs)
+		{
+			var item = (ListItem)sender;
+
+			var button = (Button)item.Widget;
+			button.Text = item.Text;
+			button.TextColor = item.Color ?? ListBoxItemStyle.LabelStyle.TextColor;
 		}
 
 		private void UpdateGridPositions()
@@ -131,12 +155,14 @@ namespace Myra.Graphics2D.UI
 			for (var i = 0; i < Items.Count; ++i)
 			{
 				var widget = Widgets[i];
-				widget.GridPosition.Y = i;
+				widget.GridPositionY = i;
 			}
 		}
 
 		private void InsertItem(ListItem item, int index)
 		{
+			item.Changed += ItemOnChanged;
+
 			var widget = new Button(ListBoxItemStyle)
 			{
 				Text = item.Text,
@@ -158,6 +184,8 @@ namespace Myra.Graphics2D.UI
 
 		private void RemoveItem(ListItem item)
 		{
+			item.Changed -= ItemOnChanged;
+
 			var index = Widgets.IndexOf(item.Widget);
 			RowsProportions.RemoveAt(index);
 			Widgets.RemoveAt(index);

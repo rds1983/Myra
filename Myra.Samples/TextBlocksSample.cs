@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Myra.Graphics2D;
 using Myra.Graphics2D.UI;
 using HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment;
 
@@ -23,8 +22,6 @@ namespace Myra.Samples
 
 			MyraEnvironment.Game = this;
 
-			Widget.DrawFrames = true;
-
 			_host = new Desktop();
 
 			var textBlock1 = new TextBlock
@@ -42,13 +39,10 @@ namespace Myra.Samples
 				HorizontalAlignment = HorizontalAlignment.Center,
 				VerticalAlignment = VerticalAlignment.Center,
 				Font = DefaultAssets.FontSmall,
-				Padding = new PaddingInfo
-				{
-					Left = 16,
-					Right = 8,
-					Top = 16,
-					Bottom = 8
-				},
+				PaddingLeft = 16,
+				PaddingRight = 8,
+				PaddingTop = 16,
+				PaddingBottom = 8
 			};
 
 			var textBlock3 = new TextBlock

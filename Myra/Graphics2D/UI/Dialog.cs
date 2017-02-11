@@ -21,7 +21,7 @@
 			{
 				ColumnSpacing = 8,
 				HorizontalAlignment = HorizontalAlignment.Right,
-				GridPosition = { Y = 1 }
+				GridPositionY = 1
 			};
 
 			buttonsGrid.ColumnsProportions.Add(new Grid.Proportion());
@@ -43,7 +43,7 @@
 			var cancelButton = new Button
 			{
 				Text = "Cancel",
-				GridPosition = { X = 1 }
+				GridPositionX = 1
 			};
 
 			cancelButton.Up += (sender, args) =>

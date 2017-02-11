@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Myra.Graphics2D.UI;
 
 namespace Myra.Samples
@@ -6,6 +7,7 @@ namespace Myra.Samples
 	public class ScrollPaneSample: SampleGame
 	{
 		private Desktop _host;
+		private Window _window;
 
 		protected override void LoadContent()
 		{
@@ -25,18 +27,30 @@ namespace Myra.Samples
 			var pane = new ScrollPane<TextBlock>
 			{
 				Widget = label,
-			};
-
-			var root = new Grid
-			{
-				HorizontalAlignment = HorizontalAlignment.Left,
-				VerticalAlignment = VerticalAlignment.Top,
 				WidthHint = 200,
 				HeightHint = 200
 			};
 
-			root.Widgets.Add(pane);
-			_host.Widgets.Add(root);
+			var button = new Button
+			{
+				Text = "Show Window"
+			};
+
+			button.Up += ButtonOnUp;
+
+			_host.Widgets.Add(button);
+
+			_window = new Window
+			{
+				Title = "Text"
+			};
+
+			_window.ContentGrid.Widgets.Add(pane);
+		}
+
+		private void ButtonOnUp(object sender, EventArgs eventArgs)
+		{
+			_window.ShowModal(_host);
 		}
 
 		protected override void Draw(GameTime gameTime)

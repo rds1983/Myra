@@ -62,6 +62,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public BitmapFont MessageFont { get; set; }
 
 		public bool Wrap
@@ -85,11 +87,33 @@ namespace Myra.Graphics2D.UI
 		public Color FocusedTextColor { get; set; }
 		public Color MessageTextColor { get; set; }
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public Drawable FocusedBackground { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
 		public Drawable Cursor { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
 		public Drawable Selection { get; set; }
 
 		public int BlinkIntervalInMs { get; set; }
+
+		public override bool IsFocused
+		{
+			get { return base.IsFocused; }
+			internal set
+			{
+				base.IsFocused = value;
+
+				if (base.IsFocused)
+				{
+					_cursorIndex = string.IsNullOrEmpty(Text) ? 0 : Text.Length;
+				}
+			}
+		}
 
 		public override bool CanFocus
 		{
@@ -247,6 +271,11 @@ namespace Myra.Graphics2D.UI
 					break;
 
 				default:
+					if (Desktop == null)
+					{
+						break;
+					}
+
 					var ch =
 						k.ToChar(Desktop.KeyboardState.IsKeyDown(Keys.LeftShift) || Desktop.KeyboardState.IsKeyDown(Keys.RightShift));
 
@@ -285,13 +314,14 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void InternalRender(SpriteBatch batch, Rectangle bounds)
+		public override void InternalRender(SpriteBatch batch)
 		{
 			if (_formattedText.Font == null)
 			{
 				return;
 			}
 
+			var bounds = RenderBounds;
 			_formattedText.Draw(batch, bounds, TextColor);
 
 			if (!IsFocused)

@@ -4,18 +4,6 @@
   "Root": {
     "$id": "2",
     "$type": "Myra.Graphics2D.UI.Grid, Myra",
-    "GridPosition": {
-      "$id": "3",
-      "$type": "Microsoft.Xna.Framework.Point, MonoGame.Framework",
-      "X": 0,
-      "Y": 0
-    },
-    "GridSpan": {
-      "$id": "4",
-      "$type": "Microsoft.Xna.Framework.Point, MonoGame.Framework",
-      "X": 1,
-      "Y": 1
-    },
     "DrawLines": false,
     "DrawLinesColor": {
       "$id": "5",
@@ -29,18 +17,6 @@
       {
         "$id": "6",
         "$type": "Myra.Graphics2D.UI.HorizontalMenu, Myra",
-        "GridPosition": {
-          "$id": "7",
-          "$type": "Microsoft.Xna.Framework.Point, MonoGame.Framework",
-          "X": 0,
-          "Y": 0
-        },
-        "GridSpan": {
-          "$id": "8",
-          "$type": "Microsoft.Xna.Framework.Point, MonoGame.Framework",
-          "X": 1,
-          "Y": 1
-        },
         "Items": [
           {
             "$id": "9",
@@ -135,18 +111,6 @@
       {
         "$id": "20",
         "$type": "Myra.Graphics2D.UI.HorizontalSplitPane, Myra",
-        "GridPosition": {
-          "$id": "21",
-          "$type": "Microsoft.Xna.Framework.Point, MonoGame.Framework",
-          "X": 0,
-          "Y": 1
-        },
-        "GridSpan": {
-          "$id": "22",
-          "$type": "Microsoft.Xna.Framework.Point, MonoGame.Framework",
-          "X": 1,
-          "Y": 1
-        },
         "Widgets": [],
         "Enabled": true,
         "Id": null,

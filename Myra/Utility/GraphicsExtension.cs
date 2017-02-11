@@ -128,5 +128,10 @@ namespace Myra.Utility
 			r.Width = size.X;
 			r.Height = size.Y;
 		}
+
+		public static Rectangle Add(this Rectangle r, Point p)
+		{
+			return new Rectangle(r.X + p.X, r.Y + p.Y, r.Width, r.Height);
+		}
 	}
 }

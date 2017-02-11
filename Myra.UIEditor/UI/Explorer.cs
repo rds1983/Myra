@@ -153,7 +153,7 @@ namespace Myra.UIEditor.UI
 				{
 					widgets = asSplitPane.Widgets;
 				}
-				else
+				else if (!(item is ListBox) && !(item is ComboBox))
 				{
 					var container = item as Container;
 					if (container != null)

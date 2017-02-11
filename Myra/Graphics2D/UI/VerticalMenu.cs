@@ -11,6 +11,8 @@ namespace Myra.Graphics2D.UI
 
 		public VerticalMenu(MenuStyle style) : base(style)
 		{
+			HorizontalAlignment = HorizontalAlignment.Left;
+			VerticalAlignment = VerticalAlignment.Stretch;
 		}
 
 		public VerticalMenu()
