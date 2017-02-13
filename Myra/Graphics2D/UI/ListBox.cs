@@ -19,7 +19,7 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public ComboBoxItemStyle ListBoxItemStyle { get; set; }
+		public ListItemStyle ListBoxItemStyle { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
@@ -139,6 +139,8 @@ namespace Myra.Graphics2D.UI
 					break;
 				}
 			}
+
+			FireMeasureChanged();
 		}
 
 		private void ItemOnChanged(object sender, EventArgs eventArgs)
@@ -148,6 +150,8 @@ namespace Myra.Graphics2D.UI
 			var button = (Button)item.Widget;
 			button.Text = item.Text;
 			button.TextColor = item.Color ?? ListBoxItemStyle.LabelStyle.TextColor;
+
+			FireMeasureChanged();
 		}
 
 		private void UpdateGridPositions()
@@ -166,7 +170,7 @@ namespace Myra.Graphics2D.UI
 			var widget = new Button(ListBoxItemStyle)
 			{
 				Text = item.Text,
-
+				TextColor = item.Color ?? ListBoxItemStyle.LabelStyle.TextColor,
 				Tag = item,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
@@ -190,6 +194,11 @@ namespace Myra.Graphics2D.UI
 			RowsProportions.RemoveAt(index);
 			Widgets.RemoveAt(index);
 
+			if (SelectedItem == item)
+			{
+				SelectedItem = null;
+			}
+
 			UpdateGridPositions();
 		}
 
@@ -204,7 +213,7 @@ namespace Myra.Graphics2D.UI
 		{
 			ApplyWidgetStyle(style);
 
-			ListBoxItemStyle = style.ListBoxItemStyle;
+			ListBoxItemStyle = style.ListItemStyle;
 		}
 	}
 }

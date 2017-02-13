@@ -19,6 +19,7 @@ namespace Myra.Graphics2D.UI
 		private int _cursorIndex;
 		private bool _wrap = true;
 
+		[EditCategory("Appearance")]
 		public int VerticalSpacing
 		{
 			get { return _formattedText.VerticalSpacing; }
@@ -29,6 +30,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[EditCategory("Appearance")]
 		public string Text
 		{
 			get { return _formattedText.Text; }
@@ -52,6 +54,7 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
+		[EditCategory("Appearance")]
 		public BitmapFont Font
 		{
 			get { return _formattedText.Font; }
@@ -64,8 +67,10 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
+		[EditCategory("Appearance")]
 		public BitmapFont MessageFont { get; set; }
 
+		[EditCategory("Appearance")]
 		public bool Wrap
 		{
 			get { return _wrap; }
@@ -82,23 +87,34 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[EditCategory("Appearance")]
 		public Color TextColor { get; set; }
+
+		[EditCategory("Appearance")]
 		public Color DisabledTextColor { get; set; }
+
+		[EditCategory("Appearance")]
 		public Color FocusedTextColor { get; set; }
+
+		[EditCategory("Appearance")]
 		public Color MessageTextColor { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
+		[EditCategory("Appearance")]
 		public Drawable FocusedBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
+		[EditCategory("Appearance")]
 		public Drawable Cursor { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
+		[EditCategory("Appearance")]
 		public Drawable Selection { get; set; }
 
+		[EditCategory("Behavior")]
 		public int BlinkIntervalInMs { get; set; }
 
 		public override bool IsFocused
@@ -115,16 +131,11 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override bool CanFocus
-		{
-			get { return true; }
-		}
-
-
 		public event EventHandler TextChanged;
 
 		public TextField(TextFieldStyle style)
 		{
+			CanFocus = true;
 			_formattedText.IsColored = false;
 
 			if (style != null)

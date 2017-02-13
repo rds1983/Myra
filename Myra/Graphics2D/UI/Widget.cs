@@ -18,9 +18,11 @@ namespace Myra.Graphics2D.UI
 		private int _gridPositionX, _gridPositionY, _gridSpanX = 1, _gridSpanY = 1;
 		private HorizontalAlignment _horizontalAlignment;
 		private VerticalAlignment _verticalAlignment;
+		protected bool _layoutDirty = true;
 
 		private MouseButtons? _mouseButtonsDown;
 
+		private Rectangle _containerBounds;
 		private Rectangle _bounds;
 		private Desktop _desktop;
 		private bool _visible;
@@ -30,10 +32,9 @@ namespace Myra.Graphics2D.UI
 		public static bool DrawFrames { get; set; }
 		public static bool DrawFocused { get; set; }
 
-		private bool LayoutInvalid { get; set; }
-
 		public string Id { get; set; }
 
+		[EditCategory("Layout")]
 		public int XHint
 		{
 			get { return _xHint; }
@@ -46,10 +47,11 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_xHint = value;
-				FireMeasureChanged();
+				InvalidateLayout();
 			}
 		}
 
+		[EditCategory("Layout")]
 		public int YHint
 		{
 			get { return _yHint; }
@@ -62,10 +64,11 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_yHint = value;
-				FireMeasureChanged();
+				InvalidateLayout();
 			}
 		}
 
+		[EditCategory("Layout")]
 		public int? WidthHint
 		{
 			get { return _widthHint; }
@@ -81,6 +84,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[EditCategory("Layout")]
 		public int? HeightHint
 		{
 			get { return _heightHint; }
@@ -96,6 +100,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[EditCategory("Layout")]
 		public int PaddingLeft
 		{
 			get { return _paddingLeft; }
@@ -112,6 +117,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[EditCategory("Layout")]
 		public int PaddingRight
 		{
 			get { return _paddingRight; }
@@ -128,6 +134,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[EditCategory("Layout")]
 		public int PaddingTop
 		{
 			get { return _paddingTop; }
@@ -144,6 +151,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[EditCategory("Layout")]
 		public int PaddingBottom
 		{
 			get { return _paddingBottom; }
@@ -160,6 +168,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[EditCategory("Layout")]
 		public HorizontalAlignment HorizontalAlignment
 		{
 			get { return _horizontalAlignment; }
@@ -172,10 +181,11 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_horizontalAlignment = value;
-				FireLocationChanged();
+				FireMeasureChanged();
 			}
 		}
 
+		[EditCategory("Layout")]
 		public VerticalAlignment VerticalAlignment
 		{
 			get { return _verticalAlignment; }
@@ -188,10 +198,11 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_verticalAlignment = value;
-				FireLocationChanged();
+				FireMeasureChanged();
 			}
 		}
 
+		[EditCategory("Layout")]
 		public int GridPositionX
 		{
 			get { return _gridPositionX; }
@@ -208,6 +219,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[EditCategory("Layout")]
 		public int GridPositionY
 		{
 			get { return _gridPositionY; }
@@ -224,6 +236,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[EditCategory("Layout")]
 		public int GridSpanX
 		{
 			get { return _gridSpanX; }
@@ -240,6 +253,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[EditCategory("Layout")]
 		public int GridSpanY
 		{
 			get { return _gridSpanY; }
@@ -256,8 +270,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[EditCategory("Behavior")]
 		public virtual bool Enabled { get; set; }
 
+		[EditCategory("Behavior")]
 		public bool Visible
 		{
 			get { return _visible; }
@@ -281,33 +297,41 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
+		[EditCategory("Appearance")]
 		public Drawable Background { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
+		[EditCategory("Appearance")]
 		public Drawable Border { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
+		[EditCategory("Appearance")]
 		public Drawable OverBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
+		[EditCategory("Appearance")]
 		public Drawable OverBorder { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
+		[EditCategory("Appearance")]
 		public Drawable DisabledBackground { get; set; }
 
-
 		[HiddenInEditor]
 		[JsonIgnore]
+		[EditCategory("Appearance")]
 		public Drawable DisabledOverBackground { get; set; }
 
-
 		[HiddenInEditor]
 		[JsonIgnore]
+		[EditCategory("Appearance")]
 		public Drawable DisabledBorder { get; set; }
+
+		[EditCategory("Appearance")]
+		public bool ClipToBounds { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
@@ -352,7 +376,7 @@ namespace Myra.Graphics2D.UI
 		public Point Size
 		{
 			get { return _bounds.Size(); }
-			internal set
+			private set
 			{
 				if (value == _bounds.Size())
 				{
@@ -360,9 +384,6 @@ namespace Myra.Graphics2D.UI
 				}
 
 				GraphicsExtension.SetSize(ref _bounds, value);
-
-				Arrange();
-				FireSizeChanged();
 			}
 		}
 
@@ -375,7 +396,7 @@ namespace Myra.Graphics2D.UI
 		public Point Location
 		{
 			get { return _bounds.Location; }
-			internal set
+			private set
 			{
 				if (value == _bounds.Location)
 				{
@@ -384,7 +405,10 @@ namespace Myra.Graphics2D.UI
 
 				_bounds.Location = value;
 
-				FireLocationChanged();
+				if (Parent != null)
+				{
+					AbsoluteLocation = Parent.AbsoluteLocation + Location;
+				}
 			}
 		}
 
@@ -439,12 +463,8 @@ namespace Myra.Graphics2D.UI
 			get { return _paddingTop + _paddingBottom; }
 		}
 
-		[HiddenInEditor]
-		[JsonIgnore]
-		public virtual bool CanFocus
-		{
-			get { return false; }
-		}
+		[EditCategory("Behavior")]
+		public bool CanFocus { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
@@ -459,8 +479,6 @@ namespace Myra.Graphics2D.UI
 
 		public event EventHandler VisibleChanged;
 		public event EventHandler MeasureChanged;
-		public event EventHandler LocationChanged;
-		public event EventHandler SizeChanged;
 
 		public event EventHandler MouseLeft;
 		public event EventHandler<GenericEventArgs<Point>> MouseEntered;
@@ -476,8 +494,6 @@ namespace Myra.Graphics2D.UI
 
 		public Widget()
 		{
-			InvalidateLayout();
-
 			Visible = true;
 			Enabled = true;
 		}
@@ -531,15 +547,19 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var oldScissorRectangle = batch.GraphicsDevice.ScissorRectangle;
-			var newScissorRectangle = Rectangle.Intersect(oldScissorRectangle, bounds);
-
-			if (newScissorRectangle.IsEmpty)
+			if (ClipToBounds)
 			{
-				return;
-			}
+				oldScissorRectangle = batch.GraphicsDevice.ScissorRectangle;
+				var newScissorRectangle = Rectangle.Intersect(oldScissorRectangle, bounds);
 
-			batch.FlushUI();
-			batch.GraphicsDevice.ScissorRectangle = newScissorRectangle;
+				if (newScissorRectangle.IsEmpty)
+				{
+					return;
+				}
+
+				batch.FlushUI();
+				batch.GraphicsDevice.ScissorRectangle = newScissorRectangle;
+			}
 
 			UpdateLayout();
 
@@ -569,8 +589,11 @@ namespace Myra.Graphics2D.UI
 				batch.DrawRect(Color.Red, bounds);
 			}
 
-			batch.FlushUI();
-			batch.GraphicsDevice.ScissorRectangle = oldScissorRectangle;
+			if (ClipToBounds)
+			{
+				batch.FlushUI();
+				batch.GraphicsDevice.ScissorRectangle = oldScissorRectangle;
+			}
 		}
 
 		public virtual void InternalRender(SpriteBatch batch)
@@ -614,21 +637,62 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
-		public void InvalidateLayout()
+		internal virtual void Layout(Rectangle containerBounds)
 		{
-			LayoutInvalid = true;
-		}
-
-		public virtual void UpdateLayout()
-		{
-			if (!LayoutInvalid)
+			if (_containerBounds == containerBounds)
 			{
 				return;
 			}
 
+			_containerBounds = containerBounds;
+			InvalidateLayout();
+			UpdateLayout();
+		}
+
+		public virtual void InvalidateLayout()
+		{
+			_layoutDirty = true;
+		}
+
+		public virtual void UpdateLayout()
+		{
+			if (!_layoutDirty)
+			{
+				return;
+			}
+
+			Point size;
+			if (HorizontalAlignment != HorizontalAlignment.Stretch ||
+			    VerticalAlignment != VerticalAlignment.Stretch)
+			{
+				size = Measure(_containerBounds.Size());
+			}
+			else
+			{
+				size = _containerBounds.Size();
+			}
+
+			if (size.X > _containerBounds.Width)
+			{
+				size.X = _containerBounds.Width;
+			}
+
+			if (size.Y > _containerBounds.Height)
+			{
+				size.Y = _containerBounds.Height;
+			}
+
+			// Align
+			var controlBounds = LayoutUtils.Align(_containerBounds.Size(), size, HorizontalAlignment, VerticalAlignment);
+			controlBounds.Offset(_containerBounds.Location);
+
+			controlBounds.Offset(XHint, YHint);
+
+			Bounds = controlBounds;
+
 			Arrange();
 
-			LayoutInvalid = false;
+			_layoutDirty = false;
 		}
 
 		public virtual void OnDesktopChanging()
@@ -688,31 +752,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			return result;
-		}
-
-		public virtual void FireLocationChanged()
-		{
-			if (Parent != null)
-			{
-				AbsoluteLocation = Parent.AbsoluteLocation + Location;
-			}
-
-			var ev = LocationChanged;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
-		}
-
-		public void FireSizeChanged()
-		{
-			InvalidateLayout();
-
-			var ev = SizeChanged;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
 		}
 
 		public virtual void FireMeasureChanged()

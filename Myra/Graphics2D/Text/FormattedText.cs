@@ -190,7 +190,10 @@ namespace Myra.Graphics2D.Text
 								}
 								else
 								{
-									StoreRun();
+									if (_lastRun.Count > 0)
+									{
+										StoreRun();
+									}
 
 									if (li.type == LexemeType.Word)
 									{
@@ -378,7 +381,7 @@ namespace Myra.Graphics2D.Text
 
 				if (y >= bounds.Top && y < bounds.Bottom)
 				{
-					si.Draw(batch, new Point(bounds.Left, y), textColor);
+					si.Draw(batch, new Point(bounds.Left, y), bounds.Width, textColor);
 				}
 
 				y += si.Size.Y;

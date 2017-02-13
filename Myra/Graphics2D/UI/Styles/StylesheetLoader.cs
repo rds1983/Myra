@@ -74,6 +74,9 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string MenuSeparatorName = "separator";
 		public const string ThicknessName = "thickness";
 		public const string ItemsContainerName = "itemsContainer";
+		public const string HorizontalSliderName = "horizontalSlider";
+		public const string VerticalSliderName = "verticalSlider";
+		public const string KnobName = "knob";
 
 		private readonly Dictionary<string, Color> _colors = new Dictionary<string, Color>();
 		private readonly JObject _root;
@@ -353,7 +356,19 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadComboBoxItemStyleFromSource(JObject source, ComboBoxItemStyle result)
+
+		private void LoadSliderStyleFromSource(JObject source, SliderStyle result)
+		{
+			LoadWidgetStyleFromSource(source, result);
+
+			JObject knobStyle;
+			if (source.GetStyle(KnobName, out knobStyle))
+			{
+				LoadButtonStyleFromSource(knobStyle, result.KnobStyle);
+			}
+		}
+
+		private void LoadComboBoxItemStyleFromSource(JObject source, ListItemStyle result)
 		{
 			LoadButtonStyleFromSource(source, result);
 
@@ -376,7 +391,7 @@ namespace Myra.Graphics2D.UI.Styles
 
 			if (source.GetStyle(ComboBoxItemName, out subStyle))
 			{
-				LoadComboBoxItemStyleFromSource(subStyle, result.ComboBoxItemStyle);
+				LoadComboBoxItemStyleFromSource(subStyle, result.ListItemStyle);
 			}
 		}
 
@@ -387,7 +402,7 @@ namespace Myra.Graphics2D.UI.Styles
 			JObject subStyle;
 			if (source.GetStyle(ListBoxItemName, out subStyle))
 			{
-				LoadComboBoxItemStyleFromSource(subStyle, result.ListBoxItemStyle);
+				LoadComboBoxItemStyleFromSource(subStyle, result.ListItemStyle);
 			}
 		}
 
@@ -476,11 +491,6 @@ namespace Myra.Graphics2D.UI.Styles
 			{
 				LoadButtonStyleFromSource(obj, result.MarkStyle);
 			}
-
-			if (source.GetStyle(LabelStyleName, out obj))
-			{
-				LoadTextBlockStyleFromSource(obj, result.LabelStyle);
-			}
 		}
 
 		private void LoadWindowStyleFromSource(JObject source, WindowStyle result)
@@ -526,6 +536,8 @@ namespace Myra.Graphics2D.UI.Styles
 			FillStyles(ScrollAreaName, result.ScrollAreaStyle, LoadScrollAreaStyleFromSource);
 			FillStyles(ButtonName, result.ButtonStyle, LoadButtonStyleFromSource);
 			FillStyles(CheckBoxName, result.CheckBoxStyle, LoadButtonStyleFromSource);
+			FillStyles(HorizontalSliderName, result.HorizontalSliderStyle, LoadSliderStyleFromSource);
+			FillStyles(VerticalSliderName, result.VerticalSliderStyle, LoadSliderStyleFromSource);
 			FillStyles(ComboBoxName, result.ComboBoxStyle, LoadComboBoxStyleFromSource);
 			FillStyles(ListBoxName, result.ListBoxStyle, LoadListBoxStyleFromSource);
 			FillStyles(TreeName, result.TreeStyle, LoadTreeStyleFromSource);

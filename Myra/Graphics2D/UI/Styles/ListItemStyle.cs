@@ -1,6 +1,6 @@
 ﻿namespace Myra.Graphics2D.UI.Styles
 {
-	public class ComboBoxItemStyle: ButtonStyle
+	public class ListItemStyle: ButtonStyle
 	{
 		public Drawable SelectedBackground { get; set; }
 	}

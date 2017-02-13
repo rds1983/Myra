@@ -208,7 +208,8 @@ namespace Myra.Graphics2D.UI
 					var handle = new Button(HandleStyle)
 					{
 						HorizontalAlignment = HorizontalAlignment.Stretch,
-						VerticalAlignment = VerticalAlignment.Stretch
+						VerticalAlignment = VerticalAlignment.Stretch,
+						CanFocus = false
 					};
 
 					handle.Down += HandleOnDown;

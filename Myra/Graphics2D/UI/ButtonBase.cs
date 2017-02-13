@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework.Input;
 using Myra.Edit;
 using Myra.Graphics2D.UI.Styles;
 using Newtonsoft.Json;
@@ -9,12 +10,14 @@ namespace Myra.Graphics2D.UI
 	{
 		private bool _isPressed;
 
+		[EditCategory("Appearance")]
 		public virtual HorizontalAlignment ContentHorizontalAlignment
 		{
 			get { return Widget.HorizontalAlignment; }
 			set { Widget.HorizontalAlignment = value; }
 		}
 
+		[EditCategory("Appearance")]
 		public virtual VerticalAlignment ContentVerticalAlignment
 		{
 			get { return Widget.VerticalAlignment; }
@@ -23,8 +26,10 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
+		[EditCategory("Appearance")]
 		public virtual Drawable PressedBackground { get; set; }
 
+		[EditCategory("Behavior")]
 		public virtual bool Toggleable { get; set; }
 
 		[HiddenInEditor]
@@ -64,6 +69,9 @@ namespace Myra.Graphics2D.UI
 			Toggleable = false;
 		}
 
+		public void Press()
+		{ }
+
 		public override void OnMouseUp(MouseButtons mb)
 		{
 			if (!Enabled)
@@ -97,6 +105,25 @@ namespace Myra.Graphics2D.UI
 			else
 			{
 				IsPressed = !IsPressed;
+			}
+		}
+
+		public override void OnKeyDown(Keys k)
+		{
+			base.OnKeyDown(k);
+
+			if (k == Keys.Space)
+			{
+				if (!Toggleable)
+				{
+					// Emulate click
+					IsPressed = true;
+					IsPressed = false;
+				}
+				else
+				{
+					IsPressed = !IsPressed;
+				}
 			}
 		}
 

@@ -13,10 +13,12 @@ namespace Myra.Graphics2D.UI
 			public bool Toggleable { get; set; }
 		}
 
+		[HiddenInEditor]
+		[JsonIgnore]
+		[EditCategory("Behavior")]
 		public override bool Toggleable
 		{
 			get { return base.Toggleable; }
-
 			set { base.Toggleable = value; }
 		}
 

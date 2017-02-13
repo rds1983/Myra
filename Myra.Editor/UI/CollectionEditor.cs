@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using Microsoft.Xna.Framework;
-using Myra.Graphics2D;
 using Myra.Graphics2D.UI;
 
 namespace Myra.Editor.UI
@@ -173,7 +172,15 @@ namespace Myra.Editor.UI
 
 		private void ListItemsOnSelectedIndexChanged(object sender, EventArgs eventArgs)
 		{
-			_propertyGrid.Object = _listItems.SelectedItem.Tag;
+			if (_listItems.SelectedItem != null)
+			{
+				_propertyGrid.Object = _listItems.SelectedItem.Tag;
+			}
+			else
+			{
+				_propertyGrid.Object = null;
+			}
+
 			UpdateButtonsEnabled();
 		}
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Myra.Edit;
 using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
@@ -9,6 +10,7 @@ namespace Myra.Graphics2D.UI
 	{
 		private T _widget;
 
+		[HiddenInEditor]
 		[JsonIgnore]
 		public T Widget
 		{
@@ -76,7 +78,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			Widget.LayoutChild(LayoutBounds);
+			Widget.Layout(LayoutBounds);
 		}
 
 		protected override Point InternalMeasure(Point availableSize)

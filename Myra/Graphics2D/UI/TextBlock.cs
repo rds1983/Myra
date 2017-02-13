@@ -12,6 +12,7 @@ namespace Myra.Graphics2D.UI
 		private readonly FormattedText _formattedText = new FormattedText();
 		private bool _wrap = true;
 
+		[EditCategory("Appearance")]
 		public int VerticalSpacing
 		{
 			get { return _formattedText.VerticalSpacing; }
@@ -22,6 +23,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[EditCategory("Appearance")]
 		public string Text
 		{
 			get { return _formattedText.Text; }
@@ -34,6 +36,7 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
+		[EditCategory("Appearance")]
 		public BitmapFont Font
 		{
 			get { return _formattedText.Font; }
@@ -44,6 +47,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[EditCategory("Appearance")]
 		public bool Wrap
 		{
 			get { return _wrap; }
@@ -60,8 +64,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[EditCategory("Appearance")]
 		public Color TextColor { get; set; }
 
+		[EditCategory("Appearance")]
 		public Color DisabledTextColor { get; set; }
 
 		public TextBlock(TextBlockStyle style)

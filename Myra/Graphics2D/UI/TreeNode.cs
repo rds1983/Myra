@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
 
@@ -10,8 +11,8 @@ namespace Myra.Graphics2D.UI
 		private readonly Tree _topTree;
 		private readonly Grid _childNodesGrid;
 		private readonly Button _mark;
-		private readonly TextBlock _label;
 		private bool _hasRoot = true;
+		private readonly Proportion _firstPropotion;
 
 		public bool IsExpanded
 		{
@@ -25,27 +26,22 @@ namespace Myra.Graphics2D.UI
 			get { return _mark; }
 		}
 
-		public TextBlock Label
-		{
-			get { return _label; }
-		}
-
 		public string Text
 		{
-			get { return _label.Text; }
-			set { _label.Text = value; }
+			get { return _mark.Text; }
+			set { _mark.Text = value; }
 		}
 
 		public BitmapFont Font
 		{
-			get { return _label.Font; }
-			set { _label.Font = value; }
+			get { return _mark.Font; }
+			set { _mark.Font = value; }
 		}
 
 		public Color TextColor
 		{
-			get { return _label.TextColor; }
-			set { _label.TextColor = value; }
+			get { return _mark.TextColor; }
+			set { _mark.TextColor = value; }
 		}
 
 		public int ChildNodesCount
@@ -89,6 +85,9 @@ namespace Myra.Graphics2D.UI
 		{
 			_topTree = topTree;
 
+			ColumnSpacing = 2;
+			RowSpacing = 2;
+
 			if (_topTree != null)
 			{
 				_topTree.AllNodes.Add(this);
@@ -97,8 +96,9 @@ namespace Myra.Graphics2D.UI
 			_mark = new Button(null)
 			{
 				Toggleable = true,
-				HorizontalAlignment = HorizontalAlignment.Center,
+				HorizontalAlignment = HorizontalAlignment.Left,
 				VerticalAlignment = VerticalAlignment.Center,
+				GridSpanX = 2
 			};
 
 			_mark.Down += MarkOnDown;
@@ -106,23 +106,15 @@ namespace Myra.Graphics2D.UI
 
 			Widgets.Add(_mark);
 
-			_label = new TextBlock(null)
-			{
-				HorizontalAlignment = HorizontalAlignment.Left,
-				VerticalAlignment = VerticalAlignment.Top,
-				GridPositionX = 1
-			};
-
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 
-			ColumnsProportions.Add(new Proportion(ProportionType.Auto));
+			_firstPropotion = new Proportion(ProportionType.Pixels, 16);
+			ColumnsProportions.Add(_firstPropotion);
 			ColumnsProportions.Add(new Proportion(ProportionType.Fill));
 
 			RowsProportions.Add(new Proportion(ProportionType.Auto));
 			RowsProportions.Add(new Proportion(ProportionType.Auto));
-
-			Widgets.Add(_label);
 
 			// Second is yet another grid holding child nodes
 			_childNodesGrid = new Grid
@@ -147,14 +139,14 @@ namespace Myra.Graphics2D.UI
 		{
 			if (_hasRoot)
 			{
+				_firstPropotion.Type = ProportionType.Pixels;
 				_mark.Visible = true;
-				_label.Visible = true;
 				_childNodesGrid.Visible = _mark.IsPressed;
 			}
 			else
 			{
+				_firstPropotion.Type = ProportionType.Auto;
 				_mark.Visible = false;
-				_label.Visible = false;
 				_childNodesGrid.Visible = true;
 			}
 		}
@@ -231,11 +223,17 @@ namespace Myra.Graphics2D.UI
 			if (style.MarkStyle != null)
 			{
 				_mark.ApplyButtonStyle(style.MarkStyle);
-			}
 
-			if (style.LabelStyle != null)
-			{
-				_label.ApplyTextBlockStyle(style.LabelStyle);
+				var imageStyle = style.MarkStyle.ImageStyle;
+				if (imageStyle.Image != null)
+				{
+					_firstPropotion.Value = imageStyle.Image.Size.X;
+				}
+
+				if (imageStyle.PressedImage != null && imageStyle.PressedImage.Size.X > _firstPropotion.Value)
+				{
+					_firstPropotion.Value = imageStyle.PressedImage.Size.X;
+				}
 			}
 
 			TreeStyle = style;

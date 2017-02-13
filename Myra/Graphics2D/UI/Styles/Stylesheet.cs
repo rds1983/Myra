@@ -1,6 +1,5 @@
 ﻿using System;
 using Myra.Graphics2D.Text;
-using Myra.Resources;
 using Newtonsoft.Json.Linq;
 
 namespace Myra.Graphics2D.UI.Styles
@@ -11,6 +10,8 @@ namespace Myra.Graphics2D.UI.Styles
 		public TextFieldStyle TextFieldStyle { get; private set; }
 		public ButtonStyle ButtonStyle { get; private set; }
 		public ButtonStyle CheckBoxStyle { get; private set; }
+		public SliderStyle HorizontalSliderStyle { get; private set; }
+		public SliderStyle VerticalSliderStyle { get; private set; }
 		public ComboBoxStyle ComboBoxStyle { get; private set; }
 		public ListBoxStyle ListBoxStyle { get; set; }
 		public TreeStyle TreeStyle { get; private set; }
@@ -27,6 +28,8 @@ namespace Myra.Graphics2D.UI.Styles
 			TextFieldStyle = new TextFieldStyle();
 			ButtonStyle = new ButtonStyle();
 			CheckBoxStyle = new ButtonStyle();
+			HorizontalSliderStyle = new SliderStyle();
+			VerticalSliderStyle = new SliderStyle();
 			ComboBoxStyle = new ComboBoxStyle();
 			ListBoxStyle = new ListBoxStyle();
 			TreeStyle = new TreeStyle();

@@ -3,12 +3,12 @@
 	public class ComboBoxStyle: ButtonStyle
 	{
 		public WidgetStyle ItemsContainerStyle { get; set; }
-		public ComboBoxItemStyle ComboBoxItemStyle { get; set; }
+		public ListItemStyle ListItemStyle { get; set; }
 
 		public ComboBoxStyle()
 		{
 			ItemsContainerStyle = new WidgetStyle();
-			ComboBoxItemStyle = new ComboBoxItemStyle();
+			ListItemStyle = new ListItemStyle();
 		}
 	}
 }

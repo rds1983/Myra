@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Myra.Graphics2D.UI;
 
 namespace Myra.UIEditor.UI
@@ -155,7 +154,7 @@ namespace Myra.UIEditor.UI
 				}
 				else if (!(item is ListBox) && !(item is ComboBox))
 				{
-					var container = item as Container;
+					var container = item as Grid;
 					if (container != null)
 					{
 						widgets = container.Children;

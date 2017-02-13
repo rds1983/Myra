@@ -26,13 +26,10 @@ namespace Myra.Graphics2D.UI
 		public Drawable VerticalScrollBackground { get; set; }
 		public Drawable VerticalScrollKnob { get; set; }
 
-		public override bool CanFocus
-		{
-			get { return true; }
-		}
-
 		public ScrollPane(ScrollAreaStyle style)
 		{
+			ClipToBounds = true;
+			CanFocus = true;
 			_horizontalScrollbarVisible = _verticalScrollbarVisible = false;
 
 			HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -50,10 +47,10 @@ namespace Myra.Graphics2D.UI
 
 		private void UpdateWidgetLocation()
 		{
-			if (Widget != null)
-			{
-				Widget.Location = new Point(-_origin.X, -_origin.Y);
-			}
+			if (Widget == null) return;
+
+			Widget.XHint = -_origin.X;
+			Widget.YHint = -_origin.Y;
 		}
 
 		public override void OnMouseMoved(Point position)
@@ -301,7 +298,7 @@ namespace Myra.Graphics2D.UI
 				bounds.Height = _verticalScrollbarVisible ? measureSize.Y : availableSize.Y;
 			}
 
-			Widget.LayoutChild(bounds);
+			Widget.Layout(bounds);
 			UpdateWidgetLocation();
 		}
 	}

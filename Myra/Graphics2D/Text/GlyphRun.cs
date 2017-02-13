@@ -74,7 +74,7 @@ namespace Myra.Graphics2D.Text
 
 				_posX += glyph.XAdvance;
 
-				Size.X = _posX;
+				Size.X = render.Bounds.Right;
 				Size.Y = glyph.Offset.Y + glyph.Region.Bounds.Height;
 			}
 			else
@@ -101,14 +101,30 @@ namespace Myra.Graphics2D.Text
 			RenderedBounds = null;
 		}
 
-		public void Draw(SpriteBatch batch, Point pos, Color color)
+		public void Draw(SpriteBatch batch, Point pos, int totalWidth, Color color, bool drawPartialLastSymbol = false)
 		{
-			RenderedBounds = new Rectangle(pos.X, pos.Y, Size.X, Size.Y);
-
+			var width = 0;
+			var bounds = new Rectangle(pos.X, pos.Y, totalWidth, Size.Y);
 			foreach (var gr in _glyphRenders)
 			{
-				gr.Draw(batch, pos, color);
+				var glyphBounds = gr.Bounds;
+				glyphBounds.Offset(pos);
+				if (glyphBounds.Left > bounds.Right)
+				{
+					// Completely out
+					break;
+				}
+
+				if (glyphBounds.Right > bounds.Right && !drawPartialLastSymbol)
+				{
+					break;
+				}
+
+				gr.Draw(batch, bounds.Location, color);
+				width = glyphBounds.Right - bounds.X;
 			}
+
+			RenderedBounds = new Rectangle(bounds.X, bounds.Y, width, Size.Y);
 
 			if (BitmapFont.DrawFames)
 			{

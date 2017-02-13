@@ -43,15 +43,11 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override bool CanFocus
-		{
-			get { return true; }
-		}
-
 		public event EventHandler SelectionChanged;
 
 		public Tree(TreeStyle style) : base(style, null)
 		{
+			CanFocus = true;
 			if (style != null)
 			{
 				ApplyTreeStyle(style);
@@ -74,11 +70,6 @@ namespace Myra.Graphics2D.UI
 			if (HoverRow != null)
 			{
 				if (!HoverRow.RowVisible)
-				{
-					return;
-				}
-
-				if (HoverRow.Mark.AbsoluteBounds.Contains(Desktop.MousePosition))
 				{
 					return;
 				}
@@ -184,17 +175,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void FireLocationChanged()
-		{
-			base.FireLocationChanged();
-
-			_rowInfosDirty = true;
-		}
-
 		public override void UpdateLayout()
 		{
 			base.UpdateLayout();
-
 			_rowInfosDirty = true;
 		}
 

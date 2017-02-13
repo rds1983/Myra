@@ -12,21 +12,15 @@ namespace Myra.Graphics2D.UI
 		private readonly Image _image;
 		private readonly TextBlock _textBlock;
 
-		public string Text
+		[EditCategory("Appearance")]
+		public virtual string Text
 		{
 			get { return _textBlock.Text; }
 			set { _textBlock.Text = value; }
 		}
 
-		[JsonIgnore]
-		[HiddenInEditor]
-		public BitmapFont Font
-		{
-			get { return _textBlock.Font; }
-			set { _textBlock.Font = value; }
-		}
-
-		public Color TextColor
+		[EditCategory("Appearance")]
+		public virtual Color TextColor
 		{
 			get { return _textBlock.TextColor; }
 			set { _textBlock.TextColor = value; }
@@ -34,6 +28,16 @@ namespace Myra.Graphics2D.UI
 
 		[JsonIgnore]
 		[HiddenInEditor]
+		[EditCategory("Appearance")]
+		public BitmapFont Font
+		{
+			get { return _textBlock.Font; }
+			set { _textBlock.Font = value; }
+		}
+
+		[JsonIgnore]
+		[HiddenInEditor]
+		[EditCategory("Appearance")]
 		public Drawable Image
 		{
 			get
@@ -55,6 +59,7 @@ namespace Myra.Graphics2D.UI
 
 		[JsonIgnore]
 		[HiddenInEditor]
+		[EditCategory("Appearance")]
 		public Drawable PressedImage
 		{
 			get
@@ -74,19 +79,22 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public int? ImageWidthHint
+		[EditCategory("Appearance")]
+		public virtual int? ImageWidthHint
 		{
 			get { return _image.WidthHint; }
 			set { _image.WidthHint = value; }
 		}
 
-		public int? ImageHeightHint
+		[EditCategory("Appearance")]
+		public virtual int? ImageHeightHint
 		{
 			get { return _image.HeightHint; }
 			set { _image.HeightHint = value; }
 		}
 
-		public bool ImageVisible
+		[EditCategory("Appearance")]
+		public virtual bool ImageVisible
 		{
 			get { return _image.Visible; }
 
@@ -108,7 +116,10 @@ namespace Myra.Graphics2D.UI
 
 			Widget.Widgets.Add(_image);
 
-			_textBlock = new TextBlock {GridPositionX = 1};
+			_textBlock = new TextBlock
+			{
+				GridPositionX = 1
+			};
 
 			Widget.Widgets.Add(_textBlock);
 

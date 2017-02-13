@@ -279,7 +279,14 @@ namespace Myra.Graphics2D.UI
 
 			if (menuItem.IsPressed)
 			{
-				ShowSubMenu(menuItem);
+				if (OpenMenuItem == null)
+				{
+					ShowSubMenu(menuItem);
+				}
+				else
+				{
+					Desktop.HideContextMenu();
+				}
 			}
 		}
 

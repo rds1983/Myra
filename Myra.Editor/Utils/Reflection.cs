@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -7,6 +6,13 @@ namespace Myra.Editor.Utils
 {
 	public static class Reflection
 	{
+		public static T FindAttribute<T>(this FieldInfo property) where T : Attribute
+		{
+			var result = (from T a in Attribute.GetCustomAttributes(property, typeof(T), true) select a).FirstOrDefault();
+
+			return result;
+		}
+
 		public static T FindAttribute<T>(this PropertyInfo property) where T : Attribute
 		{
 			var result = (from T a in Attribute.GetCustomAttributes(property, typeof(T), true) select a).FirstOrDefault();

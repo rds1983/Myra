@@ -45,6 +45,28 @@
             "pressedImage": "vis-check-tick"
         }
     },
+    "horizontalSlider": {
+        "background": "slider",
+        "knob": {
+            "image": {
+                "image": "slider-knob",
+                "overImage": "slider-knob-over",
+                "pressedImage": "slider-knob-down",
+                "disabledImage": "slider-knob-disabled"
+            }
+        }
+    },
+    "verticalSlider": {
+        "background": "slider-vertical",
+        "knob": {
+            "image": {
+                "image": "slider-knob",
+                "overImage": "slider-knob-over",
+                "pressedImage": "slider-knob-down",
+                "disabledImage": "slider-knob-disabled"
+            }
+        }
+    },
     "comboBox": {
         "background": "default-select",
         "label": {
@@ -81,13 +103,17 @@
         "rowSelectionBackground": "tree-selection",
         "rowSelectionBackgroundWithoutFocus": "tree-over",
         "mark": {
-            "padding": {
-                "left": 2.0,
-                "right": 2.0
-            },
             "image": {
                 "image": "tree-plus",
                 "pressedImage": "tree-minus"
+            },
+            "label": {
+                "padding": {
+                    "left": 2.0
+                },
+                "font": "default-font",
+                "textColor": "white",
+                "disabledTextColor": "grey"
             }
         },
         "label": {

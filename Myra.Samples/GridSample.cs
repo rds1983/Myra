@@ -110,8 +110,30 @@ namespace Myra.Samples
 				var messageBox = Dialog.CreateMessageBox("2R", "2 Rows Button pushed!");
 				messageBox.ShowModal(_host);
 			};
-
 			grid.Widgets.Add(button2);
+
+			// Horizontal slider
+			var hslider = new HorizontalSlider
+			{
+				GridPositionX = 3,
+				GridPositionY = 2
+			};
+			grid.Widgets.Add(hslider);
+
+			// Horizontal slider value
+			var hsliderValue = new TextBlock
+			{
+				GridPositionX = 4,
+				GridPositionY = 2,
+				Text = "HSlider Value: 0"
+			};
+
+			hslider.ValueChanged += (sender, args) =>
+			{
+				hsliderValue.Text = string.Format("HSlider Value: {0:0.00}", hslider.Value);
+			};
+
+			grid.Widgets.Add(hsliderValue);
 
 			var textBlock = new TextBlock
 			{
@@ -129,6 +151,41 @@ namespace Myra.Samples
 				GridPositionY = 3,
 			};
 			grid.Widgets.Add(checkBox);
+
+			// List box
+			var list = new ListBox
+			{
+				GridPositionX = 3,
+				GridPositionY = 4
+			};
+
+			list.Items.Add(new ListItem("Red", Color.Red));
+			list.Items.Add(new ListItem("Green", Color.Green));
+			list.Items.Add(new ListItem("Blue", Color.Blue));
+			grid.Widgets.Add(list);
+
+			// Vertical slider
+			var vslider = new VerticalSlider
+			{
+				GridPositionX = 4,
+				GridPositionY = 4
+			};
+			grid.Widgets.Add(vslider);
+
+			// Vertical slider value
+			var vsliderValue = new TextBlock
+			{
+				GridPositionX = 5,
+				GridPositionY = 4,
+				Text = "VSlider Value: 0"
+			};
+
+			vslider.ValueChanged += (sender, args) =>
+			{
+				vsliderValue.Text = string.Format("VSlider Value: {0:0.00}", vslider.Value);
+			};
+
+			grid.Widgets.Add(vsliderValue);
 
 			var textBlock2 = new TextBlock
 			{

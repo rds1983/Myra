@@ -11,7 +11,13 @@ namespace Myra.Graphics2D.Text
 		public Glyph Glyph { get; private set; }
 		public Color? Color { get; private set; }
 		public Point Location { get; private set; }
+		public Rectangle Bounds { get; private set; }
 		public Rectangle? RenderedBounds { get; private set; }
+
+		public int XAdvance
+		{
+			get { return Glyph != null ? Glyph.XAdvance : 0; }
+		}
 
 		public GlyphRender(CharInfo charInfo, GlyphRun run, Glyph glyph, Color? color, Point location)
 		{
@@ -25,6 +31,10 @@ namespace Myra.Graphics2D.Text
 			Glyph = glyph;
 			Color = color;
 			Location = location;
+
+			Bounds = new Rectangle(Location.X, Location.Y,
+				Glyph != null ? Glyph.Region.Bounds.Width : 0,
+				Glyph != null ? Glyph.Region.Bounds.Height : 0);
 		}
 
 		public void ResetDraw()
@@ -34,19 +44,15 @@ namespace Myra.Graphics2D.Text
 
 		public void Draw(SpriteBatch batch, Point pos, Color color)
 		{
-			var bounds = new Rectangle(Location.X, Location.Y,
-				Glyph != null ? Glyph.Region.Bounds.Width : 0,
-				Glyph != null ? Glyph.Region.Bounds.Height : 0);
+			var bounds = Bounds;
 			bounds.Offset(pos);
-
-			RenderedBounds = new Rectangle(bounds.X, bounds.Y,
-				Glyph != null ? Glyph.XAdvance : 0,
-				bounds.Height);
 
 			if (Glyph == null)
 			{
 				return;
 			}
+
+			RenderedBounds = bounds;
 
 			var glyphColor = Color ?? color;
 

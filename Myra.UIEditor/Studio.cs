@@ -49,6 +49,8 @@ namespace Myra.UIEditor
 
 		private MenuItem _addButtonItem,
 			_addCheckBoxItem,
+			_addHorizontalSliderItem,
+			_addVerticalSliderItem,
 			_addComboBoxItem,
 			_addListBoxItem,
 			_addGridItem,
@@ -248,6 +250,26 @@ namespace Myra.UIEditor
 				AddStandardControl<CheckBox>();
 			};
 			controlsMenu.Items.Add(_addCheckBoxItem);
+
+			_addHorizontalSliderItem = new MenuItem
+			{
+				Text = "Add Horizontal Slider"
+			};
+			_addHorizontalSliderItem.Selected += (s, a) =>
+			{
+				AddStandardControl<HorizontalSlider>();
+			};
+			controlsMenu.Items.Add(_addHorizontalSliderItem);
+
+			_addVerticalSliderItem = new MenuItem
+			{
+				Text = "Add Vertical Slider"
+			};
+			_addVerticalSliderItem.Selected += (s, a) =>
+			{
+				AddStandardControl<VerticalSlider>();
+			};
+			controlsMenu.Items.Add(_addVerticalSliderItem);
 
 			_addComboBoxItem = new MenuItem
 			{
@@ -841,6 +863,8 @@ namespace Myra.UIEditor
 
 			_addButtonItem.Enabled = enableStandard;
 			_addCheckBoxItem.Enabled = enableStandard;
+			_addHorizontalSliderItem.Enabled = enableStandard;
+			_addVerticalSliderItem.Enabled = enableStandard;
 			_addComboBoxItem.Enabled = enableStandard;
 			_addListBoxItem.Enabled = enableStandard;
 			_addGridItem.Enabled = enableStandard;

@@ -62,6 +62,7 @@
     <Compile Include="FormattedTextSample.cs" />
     <Compile Include="GridSample.cs" />
     <Compile Include="HelloWorldSample.cs" />
+    <Compile Include="LoadUISample.cs" />
     <Compile Include="Notepad.cs" />
     <Compile Include="ScrollPaneSample.cs" />
     <Compile Include="SampleForm.cs">
@@ -96,6 +97,11 @@
       <Project>{4dcbb001-9c79-4f6b-996d-d654062d93e0}</Project>
       <Name>Myra</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\awesomeGame.ui">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

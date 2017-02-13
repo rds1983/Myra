@@ -19,6 +19,7 @@ namespace Myra.Samples
 				typeof (GridSample),
 				typeof (SplitPaneSample),
 				typeof (ScrollPaneSample),
+				typeof (LoadUISample),
 				typeof (Notepad)
 			};
 		}

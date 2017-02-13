@@ -107,19 +107,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void UpdateLayout()
-		{
-			base.UpdateLayout();
-
-			foreach (var child in Children)
-			{
-				if (!child.Visible)
-					continue;
-
-				child.UpdateLayout();
-			}
-		}
-
 		public override void OnDesktopChanged()
 		{
 			base.OnDesktopChanged();

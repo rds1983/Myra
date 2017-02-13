@@ -2,11 +2,11 @@
 {
 	public class ListBoxStyle: WidgetStyle
 	{
-		public ComboBoxItemStyle ListBoxItemStyle { get; set; }
+		public ListItemStyle ListItemStyle { get; set; }
 
 		public ListBoxStyle()
 		{
-			ListBoxItemStyle = new ComboBoxItemStyle();
+			ListItemStyle = new ListItemStyle();
 		}
 	}
 }

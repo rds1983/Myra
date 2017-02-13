@@ -12,8 +12,8 @@
 				Title = title
 			};
 
-			w.ContentGrid.RowsProportions.Add(new Grid.Proportion());
-			w.ContentGrid.RowsProportions.Add(new Grid.Proportion());
+			w.ContentGrid.RowsProportions.Add(new Proportion());
+			w.ContentGrid.RowsProportions.Add(new Proportion());
 
 			w.ContentGrid.Widgets.Add(content);
 
@@ -24,8 +24,8 @@
 				GridPositionY = 1
 			};
 
-			buttonsGrid.ColumnsProportions.Add(new Grid.Proportion());
-			buttonsGrid.ColumnsProportions.Add(new Grid.Proportion());
+			buttonsGrid.ColumnsProportions.Add(new Proportion());
+			buttonsGrid.ColumnsProportions.Add(new Proportion());
 
 			w.ButtonOk = new Button
 			{
