@@ -19,15 +19,19 @@
         "messageTextColor": "grey"
     },
     "scrollArea": {
-        "horizontalScroll": "scroll-horizontal",
-        "horizontalScrollKnob": "scroll-knob-horizontal",
-        "verticalScroll": "scroll",
-        "verticalScrollKnob": "scroll-knob-vertical"
+        "background": "default-rect",
+        "horizontalScroll": "default-scroll",
+        "horizontalScrollKnob": "default-round-large",
+        "verticalScroll": "default-scroll",
+        "verticalScrollKnob": "default-round-large"
     },
     "button": {
-        "background": "button",
-        "pressedBackground": "button-down",
-        "overBackground": "button-down",
+        "padding": {
+            "left": 5.0,
+            "right": 5.0
+        },
+        "background": "default-round",
+        "pressedBackground": "default-round-down",
         "label": {
             "font": "default-font",
             "textColor": "white",
@@ -40,30 +44,23 @@
             "textColor": "white"
         },
         "image": {
-            "background": "vis-check",
-            "overBackground": "vis-check-over",
-            "pressedImage": "vis-check-tick"
+            "image": "check-off",
+            "pressedImage": "check-on"
         }
     },
     "horizontalSlider": {
-        "background": "slider",
+        "background": "default-slider",
         "knob": {
             "image": {
-                "image": "slider-knob",
-                "overImage": "slider-knob-over",
-                "pressedImage": "slider-knob-down",
-                "disabledImage": "slider-knob-disabled"
+                "image": "default-slider-knob"
             }
         }
     },
     "verticalSlider": {
-        "background": "slider-vertical",
+        "background": "default-slider",
         "knob": {
             "image": {
-                "image": "slider-knob",
-                "overImage": "slider-knob-over",
-                "pressedImage": "slider-knob-down",
-                "disabledImage": "slider-knob-disabled"
+                "image": "default-slider-knob"
             }
         }
     },
@@ -74,10 +71,10 @@
             "textColor": "white"
         },
         "itemsContainer": {
-            "background": "select-box-list-bg"
+            "background": "default-rect"
         },
         "comboBoxItem": {
-            "selectedBackground": "button-down",
+            "selectedBackground": "default-select-selection",
             "label": {
                 "font": "default-font",
                 "textColor": "white"
@@ -85,9 +82,9 @@
         }
     },
     "listBox": {
-        "background": "button",
+        "background": "default-rect",
         "listBoxItem": {
-            "selectedBackground": "list-selection",
+            "selectedBackground": "default-select-selection",
             "padding": {
                 "left": 5.0,
                 "right": 5.0
@@ -100,8 +97,7 @@
         }
     },
     "tree": {
-        "rowSelectionBackground": "tree-selection",
-        "rowSelectionBackgroundWithoutFocus": "tree-over",
+        "rowSelectionBackground": "default-select-selection",
         "mark": {
             "image": {
                 "image": "tree-plus",
@@ -116,25 +112,23 @@
     },
     "horizontalSplitPane": {
         "handle": {
-            "background": "splitpane",
-            "overBackground": "splitpane-over"
+            "background": "default-splitpane"
         }
     },
     "verticalSplitPane": {
         "handle": {
-            "background": "splitpane-vertical",
-            "overBackground": "splitpane-vertical-over"
+            "background": "default-splitpane-vertical"
         }
     },
     "horizontalMenu": {
-        "background": "button",
+        "background": "default-round",
         "separator": {
-            "image": "separator",
+            "image": "default-round",
             "thickness": 3
         },
         "menuItem": {
-            "pressedBackground": "button-down",
-            "openBackground": "button-down",
+            "pressedBackground": "default-round-down",
+            "openBackground": "default-round-down",
             "padding": {
                 "left": 5.0,
                 "right": 5.0,
@@ -148,10 +142,9 @@
         }
     },
     "verticalMenu": {
-        "background": "button",
-        "border":  "border",
+        "background": "default-round",
         "separator": {
-            "image": "separator-menu",
+            "image": "default-round",
             "thickness": 4,
             "padding": {
                 "top": 2.0,
@@ -159,8 +152,7 @@
             }
         },
         "menuItem": {
-            "pressedBackground": "button-down",
-            "overBackground": "button-over",
+            "pressedBackground": "default-round-down",
             "iconWidth": 22,
             "shortcutWidth": 22,
             "padding": {
@@ -175,28 +167,19 @@
         }
     },
     "window": {
-        "background": "window",
-        "padding": {
-            "top": 5.0,
-            "bottom": 5.0,
-            "left": 5.0,
-            "right": 5.0
-        },
+        "background": "default-window",
         "title": {
+            "padding": {
+                "left": 5.0,
+                "right": 5.0
+            },
             "font": "default-font",
             "textColor": "white"
         },
         "closeButton": {
-           "overBackground": "button-over",
-           "pressedBackground": "button-red",
-           "padding": {
-                "top": 5.0,
-                "bottom": 5.0,
-                "left": 5.0,
-                "right": 5.0
-            },
             "image": {
-                "image": "icon-close"
+                "image": "default-round",
+                "pressedImage": "default-round-down"
             }
         }
     }

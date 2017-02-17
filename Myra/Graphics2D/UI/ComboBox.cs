@@ -70,7 +70,7 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (value < 0 && value >= Items.Count)
+				if (value < 0 || value >= Items.Count)
 				{
 					SelectingItem = null;
 					return;
@@ -127,7 +127,7 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (value < 0 && value >= Items.Count)
+				if (value < 0 || value >= Items.Count)
 				{
 					SelectedItem = null;
 					return;
@@ -290,7 +290,7 @@ namespace Myra.Graphics2D.UI
 					}
 			}
 
-			FireMeasureChanged();
+			InvalidateMeasure();
 		}
 
 		private void ItemOnChanged(object sender, EventArgs eventArgs)
@@ -307,7 +307,7 @@ namespace Myra.Graphics2D.UI
 				TextColor = widget.TextColor;
 			}
 
-			FireMeasureChanged();
+			InvalidateMeasure();
 		}
 
 		public ComboBox() : this(DefaultAssets.UIStylesheet.ComboBoxStyle)

@@ -19,7 +19,7 @@ namespace Myra.Graphics2D.UI
 			set
 			{
 				_formattedText.VerticalSpacing = value;
-				FireMeasureChanged();
+				InvalidateMeasure();
 			}
 		}
 
@@ -30,7 +30,7 @@ namespace Myra.Graphics2D.UI
 			set
 			{
 				_formattedText.Text = value;
-				FireMeasureChanged();
+				InvalidateMeasure();
 			}
 		}
 
@@ -43,7 +43,7 @@ namespace Myra.Graphics2D.UI
 			set
 			{
 				_formattedText.Font = value;
-				FireMeasureChanged();
+				InvalidateMeasure();
 			}
 		}
 
@@ -60,7 +60,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_wrap = value;
-				FireMeasureChanged();
+				InvalidateMeasure();
 			}
 		}
 

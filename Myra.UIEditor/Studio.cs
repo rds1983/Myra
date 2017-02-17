@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
+using Myra.Editor.Plugin;
 using Myra.Graphics2D.UI;
 using Myra.UIEditor.UI;
 using Myra.UIEditor.Utils;
@@ -155,6 +157,9 @@ namespace Myra.UIEditor
 		{
 			base.LoadContent();
 
+			MyraEnvironment.Game = this;
+
+			ProcessPlugin();
 			BuildUI();
 
 			if (_state == null || string.IsNullOrEmpty(_state.EditedFile))
@@ -167,6 +172,49 @@ namespace Myra.UIEditor
 			}
 		}
 
+		private void ProcessPlugin()
+		{
+			var pluginPath = Configuration.PluginPath;
+			if (string.IsNullOrEmpty(pluginPath))
+			{
+				_logger.Info("Plugin path is not set");
+				return;
+			}
+
+			if (!Path.IsPathRooted(pluginPath))
+			{
+				// Add folder path
+				var path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+
+				pluginPath = Path.Combine(path, pluginPath);
+			}
+
+			try
+			{
+				var pluginAssembly = Assembly.LoadFile(pluginPath);
+
+				// Find implementation of IUIEditorPlugin
+				foreach (var c in pluginAssembly.GetExportedTypes())
+				{
+					if (typeof (IUIEditorPlugin).IsAssignableFrom(c))
+					{
+						// Found
+						// Instantiate
+						var plugin = (IUIEditorPlugin) Activator.CreateInstance(c);
+
+						// Call on load
+						plugin.OnLoad();
+
+						break;
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				_logger.Error(ex);
+			}
+		}
+
 		private void BuildUI()
 		{
 #if DEBUG
@@ -174,8 +222,6 @@ namespace Myra.UIEditor
 //			Widget.DrawFrames = true;
 			Widget.DrawFocused = true;
 #endif
-
-			MyraEnvironment.Game = this;
 
 			_desktop = new Desktop();
 
@@ -461,11 +507,15 @@ namespace Myra.UIEditor
 			_explorer.Widget.SelectionChanged += WidgetOnSelectionChanged;
 			_rightSplitPane.Widgets.Add(_explorer);
 
+			var propertyGridPane = new ScrollPane<PropertyGrid>();
+
 			_propertyGrid = new PropertyGrid();
 			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
 			_propertyGrid.ColorChangeHandler += ColorChangeHandler;
 
-			_rightSplitPane.Widgets.Add(_propertyGrid);
+			propertyGridPane.Widget = _propertyGrid;
+
+			_rightSplitPane.Widgets.Add(propertyGridPane);
 
 			var root = new Grid();
 

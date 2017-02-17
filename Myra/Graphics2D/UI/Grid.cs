@@ -115,8 +115,11 @@ namespace Myra.Graphics2D.UI
 		private readonly List<int> _gridLinesY = new List<int>();
 		private Point _actualSize;
 
-		private List<int> _colWidths;
-		private List<int> _rowHeights;
+		private readonly List<int> _measureColWidths = new List<int>();
+		private readonly List<int> _measureRowHeights = new List<int>();
+		private readonly List<Widget> _visibleWidgets = new List<Widget>();
+		private readonly List<int> _colWidths = new List<int>();
+		private readonly List<int> _rowHeights = new List<int>();
 
 		[EditCategory("Behavior")]
 		public bool DrawLines { get; set; }
@@ -165,7 +168,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_columnSpacing = value;
-				FireMeasureChanged();
+				InvalidateMeasure();
 			}
 		}
 
@@ -181,7 +184,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_rowSpacing = value;
-				FireMeasureChanged();
+				InvalidateMeasure();
 			}
 		}
 
@@ -197,12 +200,6 @@ namespace Myra.Graphics2D.UI
 			get { return _rowsProportions; }
 		}
 
-		[EditCategory("Grid")]
-		public virtual bool SkipEmptyRows { get; set; }
-
-		[EditCategory("Grid")]
-		public virtual bool SkipEmptyColumns { get; set; }
-
 		public Grid()
 		{
 			_widgets.CollectionChanged += WidgetsOnCollectionChanged;
@@ -212,8 +209,6 @@ namespace Myra.Graphics2D.UI
 
 			_columnsProportions.CollectionChanged += OnProportionsChanged;
 			_rowsProportions.CollectionChanged += OnProportionsChanged;
-
-			SkipEmptyColumns = SkipEmptyRows = true;
 
 			DrawLines = false;
 			DrawLinesColor = Color.White;
@@ -262,19 +257,19 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			FireMeasureChanged();
+			InvalidateMeasure();
 
 			_widgetsDirty = true;
 		}
 
 		private void ChildOnMeasureChanged(object sender, EventArgs eventArgs)
 		{
-			FireMeasureChanged();
+			InvalidateMeasure();
 		}
 
 		private void ChildOnVisibleChanged(object sender, EventArgs eventArgs)
 		{
-			FireMeasureChanged();
+			InvalidateMeasure();
 		}
 
 		private void OnProportionsChanged(object sender, NotifyCollectionChangedEventArgs args)
@@ -294,12 +289,12 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			FireMeasureChanged();
+			InvalidateMeasure();
 		}
 
 		private void OnProportionsChanged(object sender, EventArgs args)
 		{
-			FireMeasureChanged();
+			InvalidateMeasure();
 		}
 
 		public Proportion GetColumnProportion(int col)
@@ -339,21 +334,17 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		private Point LayoutProcessFixed(Point availableSize, out List<Widget> visibleWidgets,
-			out List<int> colsWidths,
-			out List<int> rowsHeights)
+		private Point LayoutProcessFixed(Point availableSize)
 		{
-			visibleWidgets = new List<Widget>();
-			colsWidths = new List<int>();
-			rowsHeights = new List<int>();
-
 			var rows = 0;
 			var columns = 0;
+			
+			_visibleWidgets.Clear();
 			foreach (var child in Widgets)
 			{
 				if (child.Visible)
 				{
-					visibleWidgets.Add(child);
+					_visibleWidgets.Add(child);
 
 					var gridPosition = GetActualGridPosition(child);
 					if (gridPosition.X + child.GridSpanX > columns)
@@ -378,18 +369,21 @@ namespace Myra.Graphics2D.UI
 				rows = RowsProportions.Count;
 			}
 
-			colsWidths.Clear();
+			_measureColWidths.Clear();
 			int i;
 			for (i = 0; i < columns; ++i)
 			{
-				colsWidths.Add(0);
+				_measureColWidths.Add(0);
 			}
 
-			rowsHeights.Clear();
+			_measureRowHeights.Clear();
 			for (i = 0; i < rows; ++i)
 			{
-				rowsHeights.Add(0);
+				_measureRowHeights.Add(0);
 			}
+
+			availableSize.X -= (_measureColWidths.Count - 1)*_columnSpacing;
+			availableSize.Y -= (_measureRowHeights.Count - 1)*_rowSpacing;
 
 			for (var row = 0; row < rows; ++row)
 			{
@@ -400,15 +394,15 @@ namespace Myra.Graphics2D.UI
 
 					if (colProportion.Type == ProportionType.Pixels)
 					{
-						colsWidths[col] = (int)colProportion.Value;
+						_measureColWidths[col] = (int) colProportion.Value;
 					}
 
 					if (rowProportion.Type == ProportionType.Pixels)
 					{
-						rowsHeights[row] = (int)rowProportion.Value;
+						_measureRowHeights[row] = (int) rowProportion.Value;
 					}
 
-					foreach (var widget in visibleWidgets)
+					foreach (var widget in _visibleWidgets)
 					{
 						var gridPosition = GetActualGridPosition(widget);
 						if (gridPosition.X != col ||
@@ -434,14 +428,14 @@ namespace Myra.Graphics2D.UI
 							measuredSize.Y = 0;
 						}
 
-						if (measuredSize.X > colsWidths[col])
+						if (measuredSize.X > _measureColWidths[col])
 						{
-							colsWidths[col] = measuredSize.X;
+							_measureColWidths[col] = measuredSize.X;
 						}
 
-						if (measuredSize.Y > rowsHeights[row])
+						if (measuredSize.Y > _measureRowHeights[row])
 						{
-							rowsHeights[row] = measuredSize.Y;
+							_measureRowHeights[row] = measuredSize.Y;
 						}
 					}
 				}
@@ -449,49 +443,54 @@ namespace Myra.Graphics2D.UI
 
 			var result = Point.Zero;
 
-			for(i = 0; i < colsWidths.Count; ++i)
+			for (i = 0; i < _measureColWidths.Count; ++i)
 			{
-				var w = colsWidths[i];
+				var w = _measureColWidths[i];
 
-				if (result.X + w > availableSize.X)
+/*				if (result.X + w > availableSize.X)
 				{
 					colsWidths[i] = availableSize.X - result.X;
 					result.X += colsWidths[i];
 					break;
-				}
+				}*/
 
 				result.X += w;
-				if (i < colsWidths.Count - 1 &&
-				    (!SkipEmptyColumns ||
-				     w > 0))
+				if (i < _measureColWidths.Count - 1 && w > 0)
 				{
 					result.X += _columnSpacing;
 				}
 			}
 
-			for (i = 0; i < rowsHeights.Count; ++i)
+			for (i = 0; i < _measureRowHeights.Count; ++i)
 			{
-				var h = rowsHeights[i];
+				var h = _measureRowHeights[i];
 				result.Y += h;
 
-				if (i < rowsHeights.Count - 1 &&
-					(!SkipEmptyRows ||
-					 h > 0))
+				if (i < _measureRowHeights.Count - 1 && h > 0)
 				{
 					result.Y += _rowSpacing;
 				}
 			}
-
 
 			return result;
 		}
 
 		public override void Arrange()
 		{
-			List<Widget> visibleWidgets;
-
 			var bounds = LayoutBounds;
-			LayoutProcessFixed(bounds.Size(), out visibleWidgets, out _colWidths, out _rowHeights);
+			LayoutProcessFixed(bounds.Size());
+
+			_colWidths.Clear();
+			for (var i = 0; i < _measureColWidths.Count; ++i)
+			{
+				_colWidths.Add(_measureColWidths[i]);
+			}
+
+			_rowHeights.Clear();
+			for (var i = 0; i < _measureRowHeights.Count; ++i)
+			{
+				_rowHeights.Add(_measureRowHeights[i]);
+			}
 
 			// Partition available space
 			int row, col;
@@ -606,7 +605,7 @@ namespace Myra.Graphics2D.UI
 					_gridLinesX.Add(p.X + _columnSpacing / 2);
 				}
 
-				if (!SkipEmptyColumns || w > 0)
+				if (w > 0)
 				{
 					p.X += _columnSpacing;
 				}
@@ -627,7 +626,7 @@ namespace Myra.Graphics2D.UI
 					_gridLinesY.Add(p.Y + _rowSpacing / 2);
 				}
 
-				if (!SkipEmptyRows || h > 0)
+				if (h > 0)
 				{
 					p.Y += _rowSpacing;
 				}
@@ -636,7 +635,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			_gridLines.Clear();
-			foreach (var control in visibleWidgets)
+			foreach (var control in _visibleWidgets)
 			{
 				LayoutControl(control);
 			}
@@ -689,13 +688,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override Point InternalMeasure(Point availableSize)
 		{
-			List<Widget> visibleWidgets;
-			List<int> colsWidths;
-			List<int> rowsHeights;
-
-			var result = LayoutProcessFixed(availableSize, out visibleWidgets, out colsWidths, out rowsHeights);
-
-			return result;
+			return LayoutProcessFixed(availableSize);
 		}
 	}
 }

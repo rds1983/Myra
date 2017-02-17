@@ -219,7 +219,7 @@ default-select-selection
   index: -1
 font-small
   rotate: false
-  xy: 1, 10
+  xy: 1, 9
   size: 254, 105
   orig: 256, 128
   offset: 0, 22

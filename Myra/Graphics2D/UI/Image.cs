@@ -22,7 +22,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_drawable = value;
-				FireMeasureChanged();
+				InvalidateMeasure();
 			}
 		}
 

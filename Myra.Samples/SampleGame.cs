@@ -17,6 +17,7 @@ namespace Myra.Samples
 				typeof (FormattedTextSample),
 				typeof (TextBlocksSample),
 				typeof (GridSample),
+				typeof (CustomUIStylesheetSample),
 				typeof (SplitPaneSample),
 				typeof (ScrollPaneSample),
 				typeof (LoadUISample),

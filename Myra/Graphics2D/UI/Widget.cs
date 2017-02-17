@@ -19,7 +19,12 @@ namespace Myra.Graphics2D.UI
 		private int _gridPositionX, _gridPositionY, _gridSpanX = 1, _gridSpanY = 1;
 		private HorizontalAlignment _horizontalAlignment;
 		private VerticalAlignment _verticalAlignment;
-		protected bool _layoutDirty = true;
+		private bool _layoutDirty = true;
+		private bool _arrangeDirty = true;
+		private bool _measureDirty = true;
+
+		private Point _lastMeasureSize;
+		private Point _lastMeasureAvailableSize;
 
 		private MouseButtons? _mouseButtonsDown;
 
@@ -50,7 +55,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_xHint = value;
-				InvalidateLayout();
+				InvalidateLayout(false);
 			}
 		}
 
@@ -67,7 +72,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_yHint = value;
-				InvalidateLayout();
+				InvalidateLayout(false);
 			}
 		}
 
@@ -83,7 +88,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_widthHint = value;
-				FireMeasureChanged();
+				InvalidateMeasure();
 			}
 		}
 
@@ -99,7 +104,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_heightHint = value;
-				FireMeasureChanged();
+				InvalidateMeasure();
 			}
 		}
 
@@ -116,7 +121,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_paddingLeft = value;
-				FireMeasureChanged();
+				InvalidateMeasure();
 			}
 		}
 
@@ -133,7 +138,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_paddingRight = value;
-				FireMeasureChanged();
+				InvalidateMeasure();
 			}
 		}
 
@@ -150,7 +155,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_paddingTop = value;
-				FireMeasureChanged();
+				InvalidateMeasure();
 			}
 		}
 
@@ -167,7 +172,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_paddingBottom = value;
-				FireMeasureChanged();
+				InvalidateMeasure();
 			}
 		}
 
@@ -184,7 +189,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_horizontalAlignment = value;
-				FireMeasureChanged();
+				InvalidateMeasure();
 			}
 		}
 
@@ -201,7 +206,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_verticalAlignment = value;
-				FireMeasureChanged();
+				InvalidateMeasure();
 			}
 		}
 
@@ -218,7 +223,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_gridPositionX = value;
-				FireMeasureChanged();
+				InvalidateMeasure();
 			}
 		}
 
@@ -235,7 +240,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_gridPositionY = value;
-				FireMeasureChanged();
+				InvalidateMeasure();
 			}
 		}
 
@@ -252,7 +257,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_gridSpanX = value;
-				FireMeasureChanged();
+				InvalidateMeasure();
 			}
 		}
 
@@ -269,7 +274,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_gridSpanY = value;
-				FireMeasureChanged();
+				InvalidateMeasure();
 			}
 		}
 
@@ -411,6 +416,10 @@ namespace Myra.Graphics2D.UI
 				if (Parent != null)
 				{
 					AbsoluteLocation = Parent.AbsoluteLocation + Location;
+				}
+				else
+				{
+					AbsoluteLocation = Location;
 				}
 			}
 		}
@@ -606,6 +615,11 @@ namespace Myra.Graphics2D.UI
 
 		public Point Measure(Point availableSize)
 		{
+			if (!_measureDirty && _lastMeasureAvailableSize == availableSize)
+			{
+				return _lastMeasureSize;
+			}
+
 			Point result;
 
 			if (WidthHint.HasValue && HeightHint.HasValue)
@@ -629,6 +643,10 @@ namespace Myra.Graphics2D.UI
 			result.X += PaddingWidth;
 			result.Y += PaddingHeight;
 
+			_lastMeasureSize = result;
+			_lastMeasureAvailableSize = availableSize;
+			_measureDirty = false;
+
 			return result;
 		}
 
@@ -641,7 +659,7 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
-		internal virtual void Layout(Rectangle containerBounds)
+		internal void Layout(Rectangle containerBounds)
 		{
 			if (_containerBounds == containerBounds)
 			{
@@ -653,8 +671,12 @@ namespace Myra.Graphics2D.UI
 			UpdateLayout();
 		}
 
-		public virtual void InvalidateLayout()
+		public void InvalidateLayout(bool invalidateArrange = true)
 		{
+			if (invalidateArrange)
+			{
+				_arrangeDirty = true;
+			}
 			_layoutDirty = true;
 		}
 
@@ -694,7 +716,11 @@ namespace Myra.Graphics2D.UI
 
 			Bounds = controlBounds;
 
-			Arrange();
+			if (_arrangeDirty)
+			{
+				Arrange();
+				_arrangeDirty = false;
+			}
 
 			_layoutDirty = false;
 		}
@@ -758,8 +784,10 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public virtual void FireMeasureChanged()
+		public virtual void InvalidateMeasure()
 		{
+			_measureDirty = true;
+
 			InvalidateLayout();
 
 			var ev = MeasureChanged;

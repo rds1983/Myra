@@ -88,7 +88,7 @@ namespace Myra.UIEditor.UI
 			var asMenuItem = item as MenuItem;
 			if (asMenuItem != null)
 			{
-				id = asMenuItem.Text;
+				id = asMenuItem.Id;
 			}
 
 			var asWidget = item as Widget;

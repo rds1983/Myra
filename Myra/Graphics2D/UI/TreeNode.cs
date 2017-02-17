@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
@@ -14,7 +13,6 @@ namespace Myra.Graphics2D.UI
 		private readonly Button _mark;
 		private readonly TextBlock _label;
 		private bool _hasRoot = true;
-		private readonly Proportion _firstPropotion;
 
 		public bool IsExpanded
 		{
@@ -109,7 +107,8 @@ namespace Myra.Graphics2D.UI
 
 			_label = new TextBlock
 			{
-				GridPositionX = 1
+				GridPositionX = 1,
+				Wrap = false
 			};
 
 			_label.DoubleClick += LabelOnDoubleClick;
@@ -119,8 +118,7 @@ namespace Myra.Graphics2D.UI
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 
-			_firstPropotion = new Proportion(ProportionType.Pixels, 16);
-			ColumnsProportions.Add(_firstPropotion);
+			ColumnsProportions.Add(new Proportion(ProportionType.Auto));
 			ColumnsProportions.Add(new Proportion(ProportionType.Fill));
 
 			RowsProportions.Add(new Proportion(ProportionType.Auto));
@@ -154,14 +152,12 @@ namespace Myra.Graphics2D.UI
 		{
 			if (_hasRoot)
 			{
-				_firstPropotion.Type = ProportionType.Pixels;
 				_mark.Visible = true;
 				_label.Visible = true;
 				_childNodesGrid.Visible = _mark.IsPressed;
 			}
 			else
 			{
-				_firstPropotion.Type = ProportionType.Auto;
 				_mark.Visible = false;
 				_label.Visible = false;
 				_childNodesGrid.Visible = true;
@@ -240,18 +236,6 @@ namespace Myra.Graphics2D.UI
 			if (style.MarkStyle != null)
 			{
 				_mark.ApplyButtonStyle(style.MarkStyle);
-
-				var imageStyle = style.MarkStyle.ImageStyle;
-				if (imageStyle.Image != null)
-				{
-					_firstPropotion.Value = imageStyle.Image.Size.X;
-				}
-
-				if (imageStyle.PressedImage != null && imageStyle.PressedImage.Size.X > _firstPropotion.Value)
-				{
-					_firstPropotion.Value = imageStyle.PressedImage.Size.X;
-				}
-
 				_label.ApplyTextBlockStyle(style.MarkStyle.LabelStyle);
 			}
 

@@ -1,22 +1,22 @@
 <?xml version="1.0"?>
 <package >
 	<metadata>
-		<id>Myra</id>
+		<id>Myra.Editor</id>
 		<version>0.3.9.62</version>
-		<title>Myra</title>
+		<title>Myra.Editor</title>
 		<authors>MyraTeam</authors>
 		<owners>MyraTeam</owners>
 		<licenseUrl>https://en.wikipedia.org/wiki/MIT_License</licenseUrl>
 		<projectUrl>https://github.com/rds1983/Myra</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<description>UI Library for MonoGame</description>
+		<description>Myra Additional Widgets for Making Custom Editor</description>
 		<copyright>Copyright 2017</copyright>
 		<tags>gamedev monogame</tags>
 		<dependencies>
-			<dependency id="Newtonsoft.Json" version="9.0" />
+			<dependency id="Myra" version="0.3.9.62" />
 		</dependencies>
 	</metadata>
 	<files>
-		<file src="bin\Release\Myra.dll" target="lib\net45\Myra.dll"/>
+		<file src="bin\Release\Myra.Editor.dll" target="lib\net45\Myra.Editor.dll"/>
 	</files>
 </package>

@@ -100,6 +100,31 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Recursively search for the menu item by id
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns>null if not found</returns>
+		public MenuItem FindMenuItemById(string id)
+		{
+			foreach (var item in _items)
+			{
+				var asMenuItem = item as MenuItem;
+				if (asMenuItem == null)
+				{
+					continue;
+				}
+
+				var result = asMenuItem.FindMenuItemById(id);
+				if (result != null)
+				{
+					return result;
+				}
+			}
+
+			return null;
+		}
+
 		private void UpdateGridPositions()
 		{
 			for (var i = 0; i < Widgets.Count; ++i)

@@ -38,7 +38,7 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (value < 0 && value >= Items.Count)
+				if (value < 0 || value >= Items.Count)
 				{
 					SelectedItem = null;
 					return;
@@ -141,7 +141,7 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			FireMeasureChanged();
+			InvalidateMeasure();
 		}
 
 		private void ItemOnChanged(object sender, EventArgs eventArgs)
@@ -152,7 +152,7 @@ namespace Myra.Graphics2D.UI
 			button.Text = item.Text;
 			button.TextColor = item.Color ?? ListBoxItemStyle.LabelStyle.TextColor;
 
-			FireMeasureChanged();
+			InvalidateMeasure();
 		}
 
 		private void UpdateGridPositions()

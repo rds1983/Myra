@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -42,10 +41,10 @@ namespace Myra.Graphics2D.Text
 			_pages = pages.ToArray();
 		}
 
-		public static BitmapFont CreateFromFNT(TextReader reader, TextureRegion textureRegion)
+		public static BitmapFont CreateFromFNT(string text, TextureRegion textureRegion)
 		{
 			var data = new Cyotek.Drawing.BitmapFont.BitmapFont();
-			data.LoadText(reader);
+			data.LoadText(text);
 
 			var glyphs = new Dictionary<char, Glyph>();
 

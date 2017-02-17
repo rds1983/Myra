@@ -77,7 +77,7 @@ namespace Myra.Graphics2D.UI
 			return Text;
 		}
 
-		private void FireChanged()
+		protected void FireChanged()
 		{
 			var ev = Changed;
 			if (ev != null)

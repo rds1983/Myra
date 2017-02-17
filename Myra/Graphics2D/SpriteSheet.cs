@@ -54,6 +54,7 @@ namespace Myra.Graphics2D
 
 		private static readonly Dictionary<string, TextureAddressMode> _gdxIdsToTextureWraps =
 			new Dictionary<string, TextureAddressMode>();
+
 		private readonly Dictionary<string, ImageDrawable> _drawables;
 
 		public Dictionary<string, ImageDrawable> Drawables
@@ -93,18 +94,8 @@ namespace Myra.Graphics2D
 			throw new Exception("Not supported!");
 		}
 
-		public static SpriteSheet LoadLibGDX(string data, Func<string, Texture2D> textureCreator, string[] fontNames = null)
+		public static SpriteSheet LoadLibGDX(string data, Func<string, Texture2D> textureCreator)
 		{
-			var fontNamesHash = new HashSet<string>();
-
-			if (fontNames != null)
-			{
-				foreach (var name in fontNames)
-				{
-					fontNamesHash.Add(name);
-				}
-			}
-
 			var mode = Mode.PageHeader;
 
 			PageData pageData = null;
@@ -142,7 +133,7 @@ namespace Myra.Graphics2D
 
 					if (!s.Contains(":"))
 					{
-						spriteData = new SpriteData()
+						spriteData = new SpriteData
 						{
 							PageData = pageData,
 							Name = s
@@ -243,30 +234,6 @@ namespace Myra.Graphics2D
 				var texture = textureCreator(sd.Value.PageData.FileName);
 
 				var bounds = sd.Value.SourceRectangle;
-
-				if (fontNamesHash.Contains(sd.Key))
-				{
-					// For fonts apply weird offset calculation
-					// See original libGDX's BitmapFont.setGlyphRegion for more info
-
-					var offset = new Point
-					{
-						X = sd.Value.Offset.X,
-						Y = sd.Value.OriginalSize.Y - sd.Value.SourceRectangle.Height - sd.Value.Offset.Y
-					};
-
-					bounds.X -= offset.X;
-					if (bounds.X < 0)
-					{
-						bounds.X = 0;
-					}
-
-					bounds.Y -= offset.Y;
-					if (bounds.Y < 0)
-					{
-						bounds.Y = 0;
-					}
-				}
 
 				ImageDrawable drawable;
 				if (!sd.Value.Split.HasValue)

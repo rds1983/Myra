@@ -48,12 +48,12 @@ namespace Myra.Graphics2D.UI
 
 		private void ChildOnVisibleChanged(object sender, EventArgs eventArgs)
 		{
-			FireMeasureChanged();
+			InvalidateMeasure();
 		}
 
 		private void ChildOnMeasureChanged(object sender, EventArgs eventArgs)
 		{
-			FireMeasureChanged();
+			InvalidateMeasure();
 		}
 
 		public override IEnumerable<Widget> Children

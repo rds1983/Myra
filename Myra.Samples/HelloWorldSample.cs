@@ -7,7 +7,7 @@ using Myra.Utility;
 
 namespace Myra.Samples
 {
-	public class HelloWorldSample: Game
+	public class HelloWorldSample : Game
 	{
 		private readonly GraphicsDeviceManager graphics;
 		private SpriteBatch _batch;
@@ -32,10 +32,8 @@ namespace Myra.Samples
 				var texture = GraphicsExtension.PremultipliedTextureFromPngStream(stream);
 				var region = new TextureRegion(texture, new Rectangle(0, 0, texture.Width, texture.Height));
 
-				using (var fontReader = File.OpenText("Assets/mistral.fnt"))
-				{
-					_font = BitmapFont.CreateFromFNT(fontReader, region);
-				}
+				var fontData = File.ReadAllText("Assets/mistral.fnt");
+				_font = BitmapFont.CreateFromFNT(fontData, region);
 			}
 		}
 

@@ -23,22 +23,6 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public override bool SkipEmptyColumns
-		{
-			get { return base.SkipEmptyColumns; }
-			set { base.SkipEmptyColumns = value; }
-		}
-
-		[HiddenInEditor]
-		[JsonIgnore]
-		public override bool SkipEmptyRows
-		{
-			get { return base.SkipEmptyRows; }
-			set { base.SkipEmptyRows = value; }
-		}
-
-		[HiddenInEditor]
-		[JsonIgnore]
 		public override IList<Widget> Widgets
 		{
 			get { return base.Widgets; }

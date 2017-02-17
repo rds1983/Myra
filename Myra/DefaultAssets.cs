@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D;
@@ -30,7 +29,7 @@ namespace Myra
 				}
 
 				var textureRegion = UISpritesheet.Drawables["default"].TextureRegion;
-				_font = BitmapFont.CreateFromFNT(new StringReader(Resources.Resources.DefaultFont), textureRegion);
+				_font = BitmapFont.CreateFromFNT(Resources.Resources.DefaultFont, textureRegion);
 				return _font;
 			}
 		}
@@ -46,7 +45,7 @@ namespace Myra
 
 				var textureRegion = UISpritesheet.Drawables["font-small"].TextureRegion;
 
-				_fontSmall = BitmapFont.CreateFromFNT(new StringReader(Resources.Resources.DefaultFontSmall), textureRegion);
+				_fontSmall = BitmapFont.CreateFromFNT(Resources.Resources.DefaultFontSmall, textureRegion);
 
 				return _fontSmall;
 			}
@@ -64,7 +63,7 @@ namespace Myra
 					texture = GraphicsExtension.PremultipliedTextureFromPngStream(stream);
 				}
 
-				_uiSpritesheet = SpriteSheet.LoadLibGDX(Resources.Resources.DefaultUISkinAtlas, s => texture, new[] { "default", "font-small" });
+				_uiSpritesheet = SpriteSheet.LoadLibGDX(Resources.Resources.DefaultUISkinAtlas, s => texture);
 
 				return _uiSpritesheet;
 			}
