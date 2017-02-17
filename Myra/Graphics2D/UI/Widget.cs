@@ -12,6 +12,7 @@ namespace Myra.Graphics2D.UI
 	public class Widget
 	{
 		public const string DefaultStyleName = "default";
+		public const int DoubleClickIntervalInMs = 500;
 
 		private int _xHint, _yHint;
 		private int? _widthHint, _heightHint;
@@ -28,6 +29,8 @@ namespace Myra.Graphics2D.UI
 		private bool _visible;
 
 		private int _paddingLeft, _paddingRight, _paddingTop, _paddingBottom;
+
+		private DateTime _lastDown;
 
 		public static bool DrawFrames { get; set; }
 		public static bool DrawFocused { get; set; }
@@ -485,6 +488,7 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler<GenericEventArgs<Point>> MouseMoved;
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseDown;
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseUp;
+		public event EventHandler<GenericEventArgs<MouseButtons>> DoubleClick;
 
 		public event EventHandler<GenericEventArgs<float>> MouseWheelChanged;
 
@@ -820,6 +824,22 @@ namespace Myra.Graphics2D.UI
 			if (ev != null)
 			{
 				ev(this, new GenericEventArgs<MouseButtons>(mb));
+			}
+
+			if ((DateTime.Now - _lastDown).TotalMilliseconds < DoubleClickIntervalInMs)
+			{
+				// Double click
+				var ev2 = DoubleClick;
+				if (ev2 != null)
+				{
+					ev2(this, new GenericEventArgs<MouseButtons>(mb));
+				}
+
+				_lastDown = DateTime.MinValue;
+			}
+			else
+			{
+				_lastDown = DateTime.Now;
 			}
 		}
 

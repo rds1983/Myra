@@ -139,8 +139,6 @@ namespace Myra.Graphics2D.Text
 					continue;
 				}
 
-				result.X = posX + glyph.Region.Bounds.Width + glyph.Offset.X;
-
 				posX += glyph.XAdvance;
 
 				if (i < text.Length - 1)
@@ -148,6 +146,8 @@ namespace Myra.Graphics2D.Text
 					posX += glyph.GetKerning(text[i + 1]);
 				}
 			}
+
+			result.X = posX;
 
 			return result;
 		}

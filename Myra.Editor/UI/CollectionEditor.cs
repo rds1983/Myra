@@ -22,7 +22,7 @@ namespace Myra.Editor.UI
 
 		public CollectionEditor(IList collection, Type type)
 		{
-			WidthHint = 400;
+			WidthHint = 500;
 			HeightHint = 400;
 
 			_collection = collection;

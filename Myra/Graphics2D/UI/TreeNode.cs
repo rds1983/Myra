@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
+using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
 {
@@ -11,6 +12,7 @@ namespace Myra.Graphics2D.UI
 		private readonly Tree _topTree;
 		private readonly Grid _childNodesGrid;
 		private readonly Button _mark;
+		private readonly TextBlock _label;
 		private bool _hasRoot = true;
 		private readonly Proportion _firstPropotion;
 
@@ -28,20 +30,20 @@ namespace Myra.Graphics2D.UI
 
 		public string Text
 		{
-			get { return _mark.Text; }
-			set { _mark.Text = value; }
+			get { return _label.Text; }
+			set { _label.Text = value; }
 		}
 
 		public BitmapFont Font
 		{
-			get { return _mark.Font; }
-			set { _mark.Font = value; }
+			get { return _label.Font; }
+			set { _label.Font = value; }
 		}
 
 		public Color TextColor
 		{
-			get { return _mark.TextColor; }
-			set { _mark.TextColor = value; }
+			get { return _label.TextColor; }
+			set { _label.TextColor = value; }
 		}
 
 		public int ChildNodesCount
@@ -98,13 +100,21 @@ namespace Myra.Graphics2D.UI
 				Toggleable = true,
 				HorizontalAlignment = HorizontalAlignment.Left,
 				VerticalAlignment = VerticalAlignment.Center,
-				GridSpanX = 2
 			};
 
 			_mark.Down += MarkOnDown;
 			_mark.Up += MarkOnUp;
 
 			Widgets.Add(_mark);
+
+			_label = new TextBlock
+			{
+				GridPositionX = 1
+			};
+
+			_label.DoubleClick += LabelOnDoubleClick;
+
+			Widgets.Add(_label);
 
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
@@ -135,18 +145,25 @@ namespace Myra.Graphics2D.UI
 			UpdateHasRoot();
 		}
 
+		private void LabelOnDoubleClick(object sender, GenericEventArgs<MouseButtons> genericEventArgs)
+		{
+			_mark.IsPressed = !_mark.IsPressed;
+		}
+
 		private void UpdateHasRoot()
 		{
 			if (_hasRoot)
 			{
 				_firstPropotion.Type = ProportionType.Pixels;
 				_mark.Visible = true;
+				_label.Visible = true;
 				_childNodesGrid.Visible = _mark.IsPressed;
 			}
 			else
 			{
 				_firstPropotion.Type = ProportionType.Auto;
 				_mark.Visible = false;
+				_label.Visible = false;
 				_childNodesGrid.Visible = true;
 			}
 		}
@@ -234,6 +251,8 @@ namespace Myra.Graphics2D.UI
 				{
 					_firstPropotion.Value = imageStyle.PressedImage.Size.X;
 				}
+
+				_label.ApplyTextBlockStyle(style.MarkStyle.LabelStyle);
 			}
 
 			TreeStyle = style;

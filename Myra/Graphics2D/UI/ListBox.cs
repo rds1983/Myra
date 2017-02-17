@@ -12,6 +12,7 @@ namespace Myra.Graphics2D.UI
 		private ListItem _selectedItem;
 		private readonly ObservableCollection<ListItem> _items = new ObservableCollection<ListItem>();
 
+		[EditCategory("Data")]
 		public ObservableCollection<ListItem> Items
 		{
 			get { return _items; }

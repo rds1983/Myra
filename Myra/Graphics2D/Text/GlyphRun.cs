@@ -69,17 +69,17 @@ namespace Myra.Graphics2D.Text
 			GlyphRender render;
 			if (glyph != null)
 			{
-				var dest = new Point(glyph.Offset.X + _posX, glyph.Offset.Y);
-				render = new GlyphRender(ci, this, glyph, color, dest);
+				var dest = new Point(_posX, 0);
+				render = new GlyphRender(font, ci, this, glyph, color, dest);
 
 				_posX += glyph.XAdvance;
 
-				Size.X = render.Bounds.Right;
+				Size.X = _posX;
 				Size.Y = glyph.Offset.Y + glyph.Region.Bounds.Height;
 			}
 			else
 			{
-				render = new GlyphRender(ci, this, null, null, Point.Zero);
+				render = new GlyphRender(font, ci, this, null, null, Point.Zero);
 			}
 
 			_glyphRenders.Add(render);
@@ -103,28 +103,28 @@ namespace Myra.Graphics2D.Text
 
 		public void Draw(SpriteBatch batch, Point pos, int totalWidth, Color color, bool drawPartialLastSymbol = false)
 		{
-			var width = 0;
-			var bounds = new Rectangle(pos.X, pos.Y, totalWidth, Size.Y);
+			var right = pos.X + totalWidth;
+			var x = pos.X;
 			foreach (var gr in _glyphRenders)
 			{
-				var glyphBounds = gr.Bounds;
-				glyphBounds.Offset(pos);
-				if (glyphBounds.Left > bounds.Right)
+				x = gr.Location.X + pos.X;
+
+				if (x > right)
 				{
 					// Completely out
 					break;
 				}
 
-				if (glyphBounds.Right > bounds.Right && !drawPartialLastSymbol)
+				if (x + gr.XAdvance > right && !drawPartialLastSymbol)
 				{
 					break;
 				}
 
-				gr.Draw(batch, bounds.Location, color);
-				width = glyphBounds.Right - bounds.X;
+				gr.Draw(batch, pos, color);
+				x += gr.XAdvance;
 			}
-
-			RenderedBounds = new Rectangle(bounds.X, bounds.Y, width, Size.Y);
+				
+			RenderedBounds = new Rectangle(pos.X, pos.Y, x - pos.X, Size.Y);
 
 			if (BitmapFont.DrawFames)
 			{

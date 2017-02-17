@@ -6,12 +6,12 @@ namespace Myra.Graphics2D.Text
 {
 	public class GlyphRender
 	{
+		public BitmapFont Font { get; private set; }
 		public CharInfo CharInfo { get; private set; }
 		public GlyphRun Run { get; private set; }
 		public Glyph Glyph { get; private set; }
 		public Color? Color { get; private set; }
 		public Point Location { get; private set; }
-		public Rectangle Bounds { get; private set; }
 		public Rectangle? RenderedBounds { get; private set; }
 
 		public int XAdvance
@@ -19,22 +19,24 @@ namespace Myra.Graphics2D.Text
 			get { return Glyph != null ? Glyph.XAdvance : 0; }
 		}
 
-		public GlyphRender(CharInfo charInfo, GlyphRun run, Glyph glyph, Color? color, Point location)
+		public GlyphRender(BitmapFont font, CharInfo charInfo, GlyphRun run, Glyph glyph, Color? color, Point location)
 		{
+			if (font == null)
+			{
+				throw new ArgumentNullException("font");
+			}
+
 			if (run == null)
 			{
 				throw new ArgumentNullException("run");
 			}
 
+			Font = font;
 			CharInfo = charInfo;
 			Run = run;
 			Glyph = glyph;
 			Color = color;
 			Location = location;
-
-			Bounds = new Rectangle(Location.X, Location.Y,
-				Glyph != null ? Glyph.Region.Bounds.Width : 0,
-				Glyph != null ? Glyph.Region.Bounds.Height : 0);
 		}
 
 		public void ResetDraw()
@@ -44,24 +46,37 @@ namespace Myra.Graphics2D.Text
 
 		public void Draw(SpriteBatch batch, Point pos, Color color)
 		{
-			var bounds = Bounds;
-			bounds.Offset(pos);
-
-			if (Glyph == null)
+			if (Glyph == null || Glyph.Region == null)
 			{
 				return;
 			}
 
-			RenderedBounds = bounds;
+			var bounds = new Rectangle(Location.X + Glyph.Offset.X, 
+				Location.Y + Glyph.Offset.Y,
+				Glyph.Region.Bounds.Width,
+				Glyph.Region.Bounds.Height);
+
+			bounds.Offset(pos);
 
 			var glyphColor = Color ?? color;
-
 			Glyph.Region.Draw(batch, bounds, glyphColor);
 
 			if (BitmapFont.DrawFames)
 			{
-				batch.DrawRect(Microsoft.Xna.Framework.Color.YellowGreen, RenderedBounds.Value);
+				batch.DrawRect(Microsoft.Xna.Framework.Color.YellowGreen, bounds);
 			}
+
+			if (bounds.Width == 0 || bounds.Height == 0)
+			{
+				bounds.X = Location.X;
+				bounds.Y = Location.Y;
+				bounds.Width = XAdvance;
+				bounds.Height = Font.LineHeight;
+				bounds.Offset(pos);
+			}
+
+			RenderedBounds = bounds;
+
 		}
 	}
 }

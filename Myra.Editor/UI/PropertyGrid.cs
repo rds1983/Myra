@@ -126,7 +126,7 @@ namespace Myra.Editor.UI
 		{
 			Widget = new Grid
 			{
-				ColumnSpacing = 4,
+				ColumnSpacing = 8,
 				RowSpacing = 8
 			};
 
