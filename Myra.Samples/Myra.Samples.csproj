@@ -79,18 +79,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Assets\default.fnt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <EmbeddedResource Include="Resources\default.fnt" />
     <None Include="Assets\mistral.fnt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\uiskin.atlas">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\uiskin.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <EmbeddedResource Include="Resources\uiskin.atlas" />
+    <EmbeddedResource Include="Resources\uiskin.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SampleForm.resx">
@@ -114,9 +108,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\uiskin.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <EmbeddedResource Include="Resources\uiskin.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

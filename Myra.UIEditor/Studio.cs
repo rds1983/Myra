@@ -189,6 +189,8 @@ namespace Myra.UIEditor
 				pluginPath = Path.Combine(path, pluginPath);
 			}
 
+			_logger.Info("Trying to load plugin: " + pluginPath);
+
 			try
 			{
 				var pluginAssembly = Assembly.LoadFile(pluginPath);

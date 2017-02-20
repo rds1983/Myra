@@ -30,8 +30,6 @@ namespace Myra.UIEditor
 
 		public void Save()
 		{
-			_logger.Info("Saving state: {0}", ToString());
-
 			using (var stream = new StreamWriter(StateFilePath, false))
 			{
 				var serializer = new XmlSerializer(typeof (State));
@@ -41,11 +39,11 @@ namespace Myra.UIEditor
 
 		public static State Load()
 		{
-			_logger.Info("Restoring state.");
+			_logger.Info("Restoring state from file {0}", StateFilePath);
 
 			if (!File.Exists(StateFilePath))
 			{
-				_logger.Info("State file '{0}' doesnt exit.", StateFilePath);
+				_logger.Info("State file doesnt exit.");
 
 				return null;
 			}

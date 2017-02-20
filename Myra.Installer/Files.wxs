@@ -17,6 +17,9 @@
 			<Component Id="Newtonsoft.Json.dll" Directory="INSTALLFOLDER" Guid="{CE944C87-74EE-4837-B334-208F706AFB34}">
 				<File Id="Newtonsoft.Json.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra\bin\$(var.Configuration)\Newtonsoft.Json.dll" />
 			</Component>
+			<Component Id="NLog.config" Directory="INSTALLFOLDER" Guid="{2B48E43F-6F42-4C3B-A905-E976C964E5DC}">
+				<File Id="NLog.config" KeyPath="yes" Source="$(var.SolutionDir)\Myra.UIEditor\bin\$(var.Configuration)\NLog.config" />
+			</Component>
 			<Component Id="NLog.xml" Directory="INSTALLFOLDER" Guid="{BDC0A973-DB3A-404D-8778-6FC808052667}">
 				<File Id="NLog.xml" KeyPath="yes" Source="$(var.SolutionDir)\Myra.UIEditor\bin\$(var.Configuration)\NLog.xml" />
 			</Component>
@@ -34,6 +37,18 @@
 			</Component>
 			<Component Id="Myra.Editor.pdb" Directory="INSTALLFOLDER" Guid="{A768D170-6B84-4491-B6E4-8C944246E0D3}">
 				<File Id="Myra.Editor.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Editor\bin\$(var.Configuration)\Myra.Editor.pdb" />
+			</Component>
+			<Component Id="Myra.UIEditor.Plugin.LibGDX.dll" Directory="INSTALLFOLDER" Guid="{319F31AB-B965-415E-9263-DCA4B7DB13FF}">
+				<File Id="Myra.UIEditor.Plugin.LibGDX.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.UIEditor.Plugin.LibGDX\bin\$(var.Configuration)\Myra.UIEditor.Plugin.LibGDX.dll" />
+			</Component>
+			<Component Id="Myra.UIEditor.Plugin.LibGDX.pdb" Directory="INSTALLFOLDER" Guid="{EF3197D5-785F-469C-AC3F-2E0800D7FC17}">
+				<File Id="Myra.UIEditor.Plugin.LibGDX.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.UIEditor.Plugin.LibGDX\bin\$(var.Configuration)\Myra.UIEditor.Plugin.LibGDX.pdb" />
+			</Component>
+			<Component Id="Myra.UIEditor.Plugin.YellowMenuButtons.dll" Directory="INSTALLFOLDER" Guid="{47CF9259-D0F4-46B9-9304-B1DC55FE4416}">
+				<File Id="Myra.UIEditor.Plugin.YellowMenuButtons.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.UIEditor.Plugin.YellowMenuButtons\bin\$(var.Configuration)\Myra.UIEditor.Plugin.YellowMenuButtons.dll" />
+			</Component>
+			<Component Id="Myra.UIEditor.Plugin.YellowMenuButtons.pdb" Directory="INSTALLFOLDER" Guid="{FCFC84E7-E3E7-4630-AD20-5C30EB4BDE12}">
+				<File Id="Myra.UIEditor.Plugin.YellowMenuButtons.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.UIEditor.Plugin.YellowMenuButtons\bin\$(var.Configuration)\Myra.UIEditor.Plugin.YellowMenuButtons.pdb" />
 			</Component>
 			<Component Id="mistral.fnt" Directory="Assets" Guid="{23BE6258-270C-43B2-B5EC-CD29DEEFCF6F}">
 				<File Id="mistral.fnt" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\mistral.fnt" />

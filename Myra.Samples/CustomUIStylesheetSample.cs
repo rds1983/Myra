@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Utilities.Png;
@@ -28,6 +29,35 @@ namespace Myra.Samples
 			IsMouseVisible = true;
 		}
 
+		private const string Prefix = "Myra.Samples.Resources.";
+
+		private static string GetStringResource(string name)
+		{
+			var assembly = typeof(CustomUIStylesheetSample).GetTypeInfo().Assembly;
+
+			// Once you figure out the name, pass it in as the argument here.
+			string s;
+			using (var stream = assembly.GetManifestResourceStream(Prefix + name))
+			{
+				using (var reader = new StreamReader(stream))
+				{
+					s = reader.ReadToEnd();
+				}
+			}
+
+			return s;
+		}
+
+		private static Stream GetBinaryResourceStream(string name)
+		{
+			var assembly = typeof(CustomUIStylesheetSample).GetTypeInfo().Assembly;
+
+			// Once you figure out the name, pass it in as the argument here.
+			var stream = assembly.GetManifestResourceStream(Prefix + name);
+
+			return stream;
+		}
+
 		protected override void LoadContent()
 		{
 			base.LoadContent();
@@ -40,27 +70,27 @@ namespace Myra.Samples
 				var pngReader = new PngReader();
 
 				Texture2D underlyingImage;
-				using (var stream = File.OpenRead("Assets/uiskin.png"))
+				using (var stream = GetBinaryResourceStream("uiskin.png"))
 				{
-					underlyingImage = pngReader.Read(stream, GraphicsDevice);
+					underlyingImage = pngReader.Read(stream, MyraEnvironment.GraphicsDevice);
 				}
 
 				// Making it alpha-premultiplied
 				underlyingImage.PremultiplyAlpha();
 
 				// Second step - load sprite sheet
-				var data = File.ReadAllText("Assets/uiskin.atlas");
+				var data = GetStringResource("uiskin.atlas");
 				var spriteSheet = SpriteSheet.LoadLibGDX(data, s => underlyingImage);
 
 				// Retrieve sprite with font
 				var fontSprite = spriteSheet.Drawables["default"];
 
 				// Third step - create bitmap font(s)
-				data = File.ReadAllText("Assets/default.fnt");
+				data = GetStringResource("default.fnt");
 				var font = BitmapFont.CreateFromFNT(data, fontSprite.TextureRegion);
 
 				// Final step - load UI style sheet
-				data = File.ReadAllText("Assets/uiskin.json");
+				data = GetStringResource("uiskin.json");
 				var stylesheet = Stylesheet.CreateFromSource(data, s => font, s =>
 				{
 					ImageDrawable result;
