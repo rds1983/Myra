@@ -71,6 +71,7 @@
             "textColor": "white"
         },
         "itemsContainer": {
+            "background": "default-rect"
         },
         "comboBoxItem": {
             "selectedBackground": "default-select-selection",
@@ -167,6 +168,10 @@
     },
     "window": {
         "background": "default-window",
+        "padding": {
+            "left": 2.0,
+            "right": 2.0
+        },
         "title": {
            "font": "default-font",
             "textColor": "white"

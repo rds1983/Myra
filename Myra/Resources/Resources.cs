@@ -55,7 +55,7 @@ namespace Myra.Resources
 				return;
 			}
 
-			var assembly = typeof(Resources).GetTypeInfo().Assembly;
+			var assembly = typeof (Resources).GetTypeInfo().Assembly;
 
 			// Once you figure out the name, pass it in as the argument here.
 			using (var stream = assembly.GetManifestResourceStream(path))
@@ -67,12 +67,12 @@ namespace Myra.Resources
 			}
 		}
 
-		public static Stream OpenDefaultUiSkinBitmapStream()
+		internal static Stream GetBinaryResourceStream(string name)
 		{
-			var assembly = typeof(Resources).GetTypeInfo().Assembly;
+			var assembly = typeof (Resources).GetTypeInfo().Assembly;
 
 			// Once you figure out the name, pass it in as the argument here.
-			var stream = assembly.GetManifestResourceStream(Prefix + "default_uiskin.png");
+			var stream = assembly.GetManifestResourceStream(Prefix + name);
 
 			return stream;
 		}

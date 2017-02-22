@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Myra.Graphics;
 using Myra.Graphics2D;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
@@ -18,6 +19,7 @@ namespace Myra
 		private static SpriteSheet _uiSpritesheet;
 		private static Stylesheet _uiStylesheet;
 		private static RasterizerState _uiRasterizerState;
+		private static AssetsContentManager _assetsContentManager;
 
 		public static BitmapFont Font
 		{
@@ -58,7 +60,7 @@ namespace Myra
 				if (_uiSpritesheet != null) return _uiSpritesheet;
 
 				Texture2D texture;
-				using (var stream = Resources.Resources.OpenDefaultUiSkinBitmapStream())
+				using (var stream = Resources.Resources.GetBinaryResourceStream("default_uiskin.png"))
 				{
 					texture = GraphicsExtension.PremultipliedTextureFromPngStream(stream);
 				}
@@ -123,7 +125,7 @@ namespace Myra
 				if (_white == null)
 				{
 					_white = new Texture2D(MyraEnvironment.Game.GraphicsDevice, 1, 1);
-					_white.SetData(new[] { Color.White });
+					_white.SetData(new[] {Color.White});
 				}
 
 				return _white;
@@ -149,6 +151,21 @@ namespace Myra
 					ScissorTestEnable = true
 				};
 				return _uiRasterizerState;
+			}
+		}
+
+		public static MultiCompileEffect DefaultEffect
+		{
+			get
+			{
+				if (_assetsContentManager == null)
+				{
+					_assetsContentManager = new AssetsContentManager(MyraEnvironment.Game.Services);
+				}
+
+				return _assetsContentManager.Load<MultiCompileEffect>("DefaultEffect." +
+				                                                      (MyraEnvironment.IsOpenGL ? "OpenGL" : "DirectX")
+				                                                      + ".xnb");
 			}
 		}
 

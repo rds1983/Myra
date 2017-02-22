@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,6 +9,7 @@ namespace Myra
 	public static class MyraEnvironment
 	{
 		private static Game _game;
+		private static bool? _isOpenGL;
 
 		public static Game Game
 		{
@@ -58,6 +60,19 @@ namespace Myra
 				var name = new AssemblyName(assembly.FullName);
 
 				return name.Version.ToString();
+			}
+		}
+
+		public static bool IsOpenGL
+		{
+			get
+			{
+				if (_isOpenGL == null)
+				{
+					_isOpenGL = (from f in typeof (GraphicsDevice).GetRuntimeFields() where f.Name == "glFramebuffer" select f).FirstOrDefault() != null;
+				}
+
+				return _isOpenGL.Value;
 			}
 		}
 	}

@@ -42,6 +42,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Myra-Dependencies\MonoGame.Framework.DesktopGL\MonoGame.Framework.dll</HintPath>
     </Reference>
+    <Reference Include="Sichem.Framework">
+      <HintPath>..\Myra-Dependencies\StbSharp\Sichem.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="StbSharp">
+      <HintPath>..\Myra-Dependencies\StbSharp\StbSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -59,12 +65,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Primitives3DSample.cs" />
     <Compile Include="CustomUIStylesheetSample.cs" />
     <Compile Include="FormattedTextSample.cs" />
     <Compile Include="GridSample.cs" />
     <Compile Include="HelloWorldSample.cs" />
     <Compile Include="LoadUISample.cs" />
     <Compile Include="Notepad.cs" />
+    <Compile Include="SampleAssets.cs" />
     <Compile Include="ScrollPaneSample.cs" />
     <Compile Include="SampleForm.cs">
       <SubType>Form</SubType>
@@ -109,6 +117,16 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\uiskin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\chair.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\vase.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

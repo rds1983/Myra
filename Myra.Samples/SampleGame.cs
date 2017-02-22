@@ -21,7 +21,8 @@ namespace Myra.Samples
 				typeof (SplitPaneSample),
 				typeof (ScrollPaneSample),
 				typeof (LoadUISample),
-				typeof (Notepad)
+				typeof (Notepad),
+				typeof (Primitives3DSample)
 			};
 		}
 
