@@ -83,7 +83,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleGame.cs" />
     <Compile Include="SplitPaneSample.cs" />
+    <Compile Include="TerrainSample.cs" />
     <Compile Include="TextBlocksSample.cs" />
+    <Compile Include="Utility\HeightMapGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

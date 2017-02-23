@@ -1,35 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Myra.Graphics2D.UI;
 using Myra.Graphics3D;
-using Myra.Graphics3D.Materials;
+using Myra.Graphics3D.Terrain;
 using Myra.Graphics3D.Utils;
+using Myra.Samples.Utility;
 using Myra.Utility;
 using DirectionalLight = Myra.Graphics3D.Environment.DirectionalLight;
 
 namespace Myra.Samples
 {
-	public class Primitives3DSample : Game
+	public class TerrainSample: Game
 	{
-		private class ModelInfo
-		{
-			public ModelObject ModelObject;
-			public Vector3 Rotation;
-		}
-
 		private readonly GraphicsDeviceManager graphics;
 		private Scene _scene;
+		private TerrainObject _terrain;
 		private readonly Camera _camera;
 		private readonly CameraInputController _cameraController;
-		private readonly List<ModelInfo> _modelInstances = new List<ModelInfo>();
 		private readonly DirectionalLight[] _lights;
 		private Desktop _desktop;
 		private Grid _statisticsGrid;
 		private CheckBox _lightsOn;
+		private CheckBox _drawNormals;
 		private TextBlock _gcMemoryLabel;
 		private TextBlock _processMemoryLabel;
 		private TextBlock _fpsLabel;
@@ -40,9 +34,9 @@ namespace Myra.Samples
 		private TextBlock _vertexShaderCountLabel;
 		private TextBlock _pixelShaderCountLabel;
 		private readonly FPSCounter _fpsCounter = new FPSCounter();
-		private readonly Random _random = new Random();
+		float _sunAngle = (float)Math.PI * 3 / 2;
 
-		public Primitives3DSample()
+		public TerrainSample()
 		{
 			graphics = new GraphicsDeviceManager(this);
 
@@ -50,7 +44,7 @@ namespace Myra.Samples
 
 			_camera = new PerspectiveCamera
 			{
-				Position = new Vector3(0, 80, 80)
+				Position = new Vector3(0, 300, 80)
 			};
 
 			_cameraController = new CameraInputController(_camera);
@@ -61,11 +55,6 @@ namespace Myra.Samples
 				{
 					Color = Color.White,
 					Direction = new Vector3(0, -1, 0)
-				},
-				new DirectionalLight
-				{
-					Color = Color.White,
-					Direction = new Vector3(1, 1, -1)
 				}
 			};
 		}
@@ -91,6 +80,7 @@ namespace Myra.Samples
 			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
 			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
 			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
+			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
 
 			_lightsOn = new CheckBox
 			{
@@ -99,11 +89,20 @@ namespace Myra.Samples
 			};
 			_statisticsGrid.Widgets.Add(_lightsOn);
 
+
+			_drawNormals = new CheckBox
+			{
+				IsPressed = false,
+				Text = "Draw Normals",
+				GridPositionY = 1
+			};
+			_statisticsGrid.Widgets.Add(_drawNormals);
+
 			_gcMemoryLabel = new TextBlock
 			{
 				Text = "GC Memory: ",
 				Font = DefaultAssets.FontSmall,
-				GridPositionY = 1
+				GridPositionY = 2
 			};
 			_statisticsGrid.Widgets.Add(_gcMemoryLabel);
 
@@ -111,7 +110,7 @@ namespace Myra.Samples
 			{
 				Text = "Process Memory: ",
 				Font = DefaultAssets.FontSmall,
-				GridPositionY = 2
+				GridPositionY = 3
 			};
 			_statisticsGrid.Widgets.Add(_processMemoryLabel);
 
@@ -119,7 +118,7 @@ namespace Myra.Samples
 			{
 				Text = "FPS: ",
 				Font = DefaultAssets.FontSmall,
-				GridPositionY = 3
+				GridPositionY = 4
 			};
 
 			_statisticsGrid.Widgets.Add(_fpsLabel);
@@ -128,7 +127,7 @@ namespace Myra.Samples
 			{
 				Text = "Draw Calls: ",
 				Font = DefaultAssets.FontSmall,
-				GridPositionY = 4
+				GridPositionY = 5
 			};
 
 			_statisticsGrid.Widgets.Add(_drawCallsLabel);
@@ -137,7 +136,7 @@ namespace Myra.Samples
 			{
 				Text = "Models Count: ",
 				Font = DefaultAssets.FontSmall,
-				GridPositionY = 5
+				GridPositionY = 6
 			};
 
 			_statisticsGrid.Widgets.Add(_modelsCountLabel);
@@ -146,7 +145,7 @@ namespace Myra.Samples
 			{
 				Text = "Draw Calls: ",
 				Font = DefaultAssets.FontSmall,
-				GridPositionY = 6
+				GridPositionY = 7
 			};
 
 			_statisticsGrid.Widgets.Add(_primitiveCountLabel);
@@ -155,7 +154,7 @@ namespace Myra.Samples
 			{
 				Text = "Draw Calls: ",
 				Font = DefaultAssets.FontSmall,
-				GridPositionY = 7
+				GridPositionY = 8
 			};
 
 			_statisticsGrid.Widgets.Add(_textureCountLabel);
@@ -164,7 +163,7 @@ namespace Myra.Samples
 			{
 				Text = "Draw Calls: ",
 				Font = DefaultAssets.FontSmall,
-				GridPositionY = 8
+				GridPositionY = 9
 			};
 
 			_statisticsGrid.Widgets.Add(_vertexShaderCountLabel);
@@ -173,7 +172,7 @@ namespace Myra.Samples
 			{
 				Text = "Draw Calls: ",
 				Font = DefaultAssets.FontSmall,
-				GridPositionY = 9
+				GridPositionY = 10
 			};
 
 			_statisticsGrid.Widgets.Add(_pixelShaderCountLabel);
@@ -185,91 +184,25 @@ namespace Myra.Samples
 			_desktop.Widgets.Add(_statisticsGrid);
 
 			// Init 3d stuff
-			var gridModel = PrimitivesFactory.CreateXZGrid(new Vector2(100, 100));
+			var generator = new HeightMapGenerator(2048, 2048, 0, 500);
 
-			var grid = new ModelObject(gridModel)
+			var heightMap = generator.Generate();
+
+			_terrain = new TerrainObject
 			{
-				Material = new BaseMaterial
-				{
-					DiffuseColor = Color.Gray
-				}
+				HeightMap = heightMap,
+				BlockWidth = 4,
+				BlockHeight = 4
 			};
 
-			_modelInstances.Add(new ModelInfo
-			{
-				ModelObject = grid,
-				Rotation = new Vector3(0, 0, 0)
-			});
+			_terrain.Init();
 
-			for (var i = 0; i < 500; ++i)
-			{
-				var sr = _random.Next(1, 7);
-				var trx = _random.Next(-50, 50);
-				var trs = _random.Next(-50, 50);
-				var trz = _random.Next(-50, 50);
+			_terrain.AddTextureLayer(SampleAssets.SampleTexture2);
 
-				Mesh mesh;
-				switch (_random.Next(0, 4))
-				{
-					case 0:
-						mesh = PrimitivesFactory.CreateCube();
-						break;
-					case 1:
-						mesh = PrimitivesFactory.CreateCylinder();
-						break;
-					case 2:
-						mesh = PrimitivesFactory.CreateSphere();
-						break;
-					default:
-						mesh = PrimitivesFactory.CreateTorus();
-						break;
-				}
-
-				Texture2D texture = null;
-				var r = _random.Next(0, 6);
-				if (r >= 1 && r <= 3)
-				{
-					texture = SampleAssets.SampleTexture1;
-				}
-				else if (r > 3)
-				{
-					texture = SampleAssets.SampleTexture2;
-				}
-
-				var instance = new ModelObject(mesh)
-				{
-					Scale = new Vector3(sr, sr, sr),
-					Translate = new Vector3(trx, trs, trz),
-					Material = new BaseMaterial
-					{
-						DiffuseColor = Color.FromNonPremultiplied(_random.Next(0, 255), _random.Next(0, 255), _random.Next(0, 255), 255),
-						Texture = texture,
-						HasLight = true
-					}
-				};
-
-				var info = new ModelInfo
-				{
-					ModelObject = instance,
-					Rotation = new Vector3(GenRotation(), GenRotation(), GenRotation())
-				};
-
-				_modelInstances.Add(info);
-			}
-
-			// Add everything to scene
 			_scene = new Scene();
-			foreach (var info in _modelInstances)
-			{
-				_scene.Items.Add(info.ModelObject);
-			}
+			_scene.Items.Add(_terrain);
 
 			GC.Collect();
-		}
-
-		private float GenRotation()
-		{
-			return _random.Next(-1, 2);
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -293,13 +226,16 @@ namespace Myra.Samples
 
 			_cameraController.Update();
 
-			// Rotate models
-			foreach (var info in _modelInstances)
+			var s = (float)Math.Sin(_sunAngle);
+			var c = (float)Math.Cos(_sunAngle);
+
+			_lights[0].Direction = new Vector3(c, s, 0);
+
+			_sunAngle += 0.0025f;
+
+			if (_sunAngle > (float) Math.PI*2)
 			{
-				var model = info.ModelObject;
-				model.RotationX += info.Rotation.X;
-				model.RotationY += info.Rotation.Y;
-				model.RotationZ += info.Rotation.Z;
+				_sunAngle -= (float) Math.PI*2;
 			}
 
 			base.Update(gameTime);
@@ -321,6 +257,7 @@ namespace Myra.Samples
 				graphics.ApplyChanges();
 			}
 
+			_terrain.DrawNormals = _drawNormals.IsPressed;
 			_scene.Render(_camera, _lightsOn.IsPressed ? _lights : null);
 
 			_desktop.Bounds = new Rectangle(0, 0,
@@ -340,5 +277,6 @@ namespace Myra.Samples
 			_vertexShaderCountLabel.Text = string.Format("Vertex Shader Count: {0}", GraphicsDevice.Metrics.VertexShaderCount);
 			_pixelShaderCountLabel.Text = string.Format("Pixel Shader Count: {0}", GraphicsDevice.Metrics.PixelShaderCount);
 		}
+
 	}
 }

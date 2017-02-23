@@ -11,6 +11,7 @@ namespace Myra.Graphics3D
 		private float _yawAngle, _pitchAngle;
 		private Vector3 _up, _right, _direction;
 		private Matrix _view;
+		private Matrix _viewProjection;
 		private bool _dirty = true;
 
 		public Vector3 Position
@@ -100,6 +101,17 @@ namespace Myra.Graphics3D
 
 		[JsonIgnore]
 		[HiddenInEditor]
+		public Matrix ViewProjection
+		{
+			get
+			{
+				Update();
+				return _viewProjection;
+			}
+		}
+
+		[JsonIgnore]
+		[HiddenInEditor]
 		public float Aspect
 		{
 			get { return Viewport.X/Viewport.Y; }
@@ -135,6 +147,8 @@ namespace Myra.Graphics3D
 			_right.Normalize();
 
 			_view = Matrix.CreateLookAt(Position, Position + _direction, _up);
+
+			_viewProjection = _view*Projection;
 
 			_dirty = false;
 		}

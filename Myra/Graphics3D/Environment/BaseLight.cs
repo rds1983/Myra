@@ -2,7 +2,7 @@
 
 namespace Myra.Graphics3D.Environment
 {
-	public abstract class BaseLight: ItemWithId
+	public abstract class BaseLight
 	{
 		public Color Color { get; set; }
 

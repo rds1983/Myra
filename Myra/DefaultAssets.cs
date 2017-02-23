@@ -12,6 +12,7 @@ namespace Myra
 	public static class DefaultAssets
 	{
 		private static Texture2D _white;
+		private static Texture2D _transparent;
 		private static TextureRegion _whiteRegion;
 
 		private static BitmapFont _font;
@@ -132,6 +133,21 @@ namespace Myra
 			}
 		}
 
+		public static Texture2D Transparent
+		{
+			get
+			{
+				if (_white == null)
+				{
+					_white = new Texture2D(MyraEnvironment.Game.GraphicsDevice, 1, 1);
+					_white.SetData(new[] { Color.Transparent });
+				}
+
+				return _white;
+			}
+		}
+
+
 		public static TextureRegion WhiteRegion
 		{
 			get { return _whiteRegion ?? (_whiteRegion = new TextureRegion(White, new Rectangle(0, 0, 1, 1))); }
@@ -166,6 +182,21 @@ namespace Myra
 				return _assetsContentManager.Load<MultiCompileEffect>("DefaultEffect." +
 				                                                      (MyraEnvironment.IsOpenGL ? "OpenGL" : "DirectX")
 				                                                      + ".xnb");
+			}
+		}
+
+		public static MultiCompileEffect TerrainEffect
+		{
+			get
+			{
+				if (_assetsContentManager == null)
+				{
+					_assetsContentManager = new AssetsContentManager(MyraEnvironment.Game.Services);
+				}
+
+				return _assetsContentManager.Load<MultiCompileEffect>("TerrainEffect." +
+																	  (MyraEnvironment.IsOpenGL ? "OpenGL" : "DirectX")
+																	  + ".xnb");
 			}
 		}
 

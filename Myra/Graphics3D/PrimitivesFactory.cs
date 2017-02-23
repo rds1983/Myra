@@ -75,22 +75,22 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Myra.Graphics3D.Modeling
+namespace Myra.Graphics3D
 {
 	public static class PrimitivesFactory
 	{
-		private static Model CreateMesh<T>(GraphicsDevice device, T[] vertices, int[] indices,
-			PrimitiveType primitiveType = PrimitiveType.TriangleList) where T : struct, IVertexType
+		private static Mesh CreateMesh(VertexPositionNormalTexture[] vertices, int[] indices,
+			PrimitiveType primitiveType = PrimitiveType.TriangleList)
 		{
-			var result = new Model();
-			result.Init(device, vertices, indices, primitiveType);
+			var result = new Mesh();
+			result.Init(vertices, indices, primitiveType);
 
 			return result;
 		}
 
 		#region Cube
 
-		public static Model CreateCube(GraphicsDevice device, float size = 1.0f)
+		public static Mesh CreateCube(float size = 1.0f)
 		{
 			var faceNormals = new[]
 			{
@@ -152,14 +152,14 @@ namespace Myra.Graphics3D.Modeling
 					textureCoordinates[3]);
 			}
 
-			return CreateMesh(device, vertices, indices);
+			return CreateMesh(vertices, indices);
 		}
 
 		#endregion
 
 		#region Cylinder
 
-		public static Model CreateCylinder(GraphicsDevice device, float height = 1.0f, float diameter = 1.0f,
+		public static Mesh CreateCylinder(float height = 1.0f, float diameter = 1.0f,
 			int tessellation = 32)
 		{
 			if (tessellation < 3)
@@ -200,7 +200,7 @@ namespace Myra.Graphics3D.Modeling
 			CreateCylinderCap(vertices, indices, tessellation, height, radius, false);
 
 			// Create flat triangle fan caps to seal the top and bottom.
-			return CreateMesh(device, vertices.ToArray(), indices.ToArray());
+			return CreateMesh(vertices.ToArray(), indices.ToArray());
 		}
 
 		// Helper computes a point on a unit circle, aligned to the x/z plane and centered on the origin.
@@ -266,7 +266,7 @@ namespace Myra.Graphics3D.Modeling
 
 		#region Sphere
 
-		public static Model CreateSphere(GraphicsDevice device, float diameter = 1.0f, int tessellation = 16)
+		public static Mesh CreateSphere(float diameter = 1.0f, int tessellation = 16)
 		{
 			if (tessellation < 3) throw new ArgumentOutOfRangeException("tessellation", "Must be >= 3");
 
@@ -328,14 +328,14 @@ namespace Myra.Graphics3D.Modeling
 				}
 			}
 
-			return CreateMesh(device, vertices, indices);
+			return CreateMesh(vertices, indices);
 		}
 
 		#endregion
 
 		#region Torus
 
-		public static Model CreateTorus(GraphicsDevice device, float diameter = 1.0f, float thickness = 0.33333f,
+		public static Mesh CreateTorus(float diameter = 1.0f, float thickness = 0.33333f,
 			int tessellation = 32)
 		{
 			var vertices = new List<VertexPositionNormalTexture>();
@@ -389,14 +389,14 @@ namespace Myra.Graphics3D.Modeling
 				}
 			}
 
-			return CreateMesh(device, vertices.ToArray(), indices.ToArray());
+			return CreateMesh(vertices.ToArray(), indices.ToArray());
 		}
 
 		#endregion
 
 		#region XZ Grid
 
-		public static Model CreateXZGrid(GraphicsDevice device, Vector2 size)
+		public static Mesh CreateXZGrid(Vector2 size)
 		{
 			var vertices = new List<VertexPositionNormalTexture>();
 			var indices = new List<int>();
@@ -427,7 +427,7 @@ namespace Myra.Graphics3D.Modeling
 				indices.Add(index++);
 			}
 
-			return CreateMesh(device, vertices.ToArray(), indices.ToArray(), PrimitiveType.LineList);
+			return CreateMesh(vertices.ToArray(), indices.ToArray(), PrimitiveType.LineList);
 		}
 
 		#endregion

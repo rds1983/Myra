@@ -126,14 +126,19 @@
     <Compile Include="Graphics3D\Camera.cs" />
     <Compile Include="Graphics3D\Environment\BaseLight.cs" />
     <Compile Include="Graphics3D\Environment\DirectionalLight.cs" />
-    <Compile Include="Graphics3D\ItemWithId.cs" />
     <Compile Include="Graphics3D\Materials\BaseMaterial.cs" />
-    <Compile Include="Graphics3D\Modeling\Model.cs" />
-    <Compile Include="Graphics3D\Modeling\ModelInstance.cs" />
-    <Compile Include="Graphics3D\Modeling\PrimitivesFactory.cs" />
+    <Compile Include="Graphics3D\BaseObject.cs" />
+    <Compile Include="Graphics3D\Mesh.cs" />
+    <Compile Include="Graphics3D\ModelObject.cs" />
+    <Compile Include="Graphics3D\PrimitivesFactory.cs" />
     <Compile Include="Graphics3D\OrthographicCamera.cs" />
     <Compile Include="Graphics3D\PerspectiveCamera.cs" />
-    <Compile Include="Graphics3D\Rendering\ModelBatch.cs" />
+    <Compile Include="Graphics3D\RenderContext.cs" />
+    <Compile Include="Graphics3D\Scene.cs" />
+    <Compile Include="Graphics3D\Terrain\HeightMap.cs" />
+    <Compile Include="Graphics3D\Terrain\QuadTreeNode.cs" />
+    <Compile Include="Graphics3D\Terrain\TerrainObject.cs" />
+    <Compile Include="Graphics3D\Terrain\TerrainTile.cs" />
     <Compile Include="Graphics3D\Utils\CameraInputController.cs" />
     <Compile Include="Graphics\MultiCompileEffect.cs" />
     <Compile Include="Resources\Resources.cs" />
@@ -189,7 +194,14 @@
       <Link>Resources\DefaultEffect.OpenGL.xnb</Link>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="..\Myra.Content\bin\TerrainEffect.DirectX.xnb">
+      <Link>Resources\TerrainEffect.DirectX.xnb</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Myra.Content\bin\TerrainEffect.OpenGL.xnb">
+      <Link>Resources\TerrainEffect.OpenGL.xnb</Link>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
