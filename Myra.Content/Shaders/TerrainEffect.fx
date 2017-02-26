@@ -1,8 +1,5 @@
 #include "Macros.fxh"
 
-#pragma shader_feature TEXTURE
-#pragma shader_feature LIGHTNING
-
 #ifdef TEXTURE
 
 DECLARE_TEXTURE(_textureLayer0, 0);

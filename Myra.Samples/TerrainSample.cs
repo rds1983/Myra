@@ -184,7 +184,7 @@ namespace Myra.Samples
 			_desktop.Widgets.Add(_statisticsGrid);
 
 			// Init 3d stuff
-			var generator = new HeightMapGenerator(2048, 2048, 0, 500);
+			var generator = new HeightMapGenerator(2048, 2048, 0, 300);
 
 			var heightMap = generator.Generate();
 
