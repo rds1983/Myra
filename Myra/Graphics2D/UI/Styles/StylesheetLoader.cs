@@ -15,6 +15,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string ScrollAreaName = "scrollArea";
 		public const string ButtonName = "button";
 		public const string CheckBoxName = "checkBox";
+		public const string SpinButtonName = "spinButton";
 		public const string ComboBoxName = "comboBox";
 		public const string ComboBoxItemName = "comboBoxItem";
 		public const string ListBoxName = "listBox";
@@ -31,6 +32,8 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string RightName = "right";
 		public const string TopName = "top";
 		public const string BottomName = "bottom";
+		public const string WidthHintName = "widthHint";
+		public const string HeightHintName = "heightHint";
 		public const string BackgroundName = "background";
 		public const string OverBackgroundName = "overBackground";
 		public const string DisabledBackgroundName = "disabledBackground";
@@ -58,12 +61,15 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string SplitVerticalHandleOverName = "verticalHandleOver";
 		public const string TitleStyleName = "title";
 		public const string CloseButtonStyleName = "closeButton";
+		public const string UpButtonStyleName = "upButton";
+		public const string DownButtonStyleName = "downButton";
 		public const string CursorName = "cursor";
 		public const string IconWidthName = "iconWidth";
 		public const string ShortcutWidthName = "shortcutWidth";
 		public const string SpacingName = "spacing";
 		public const string LabelStyleName = "label";
 		public const string ImageStyleName = "image";
+		public const string TextFieldStyleName = "textField";
 		public const string MenuItemName = "menuItem";
 		public const string HandleName = "handle";
 		public const string MarkName = "mark";
@@ -176,6 +182,18 @@ namespace Myra.Graphics2D.UI.Styles
 
 		private void LoadWidgetStyleFromSource(JObject source, WidgetStyle result)
 		{
+
+			int i;
+			if (source.GetStyle(WidthHintName, out i))
+			{
+				result.WidthHint = i;
+			}
+
+			if (source.GetStyle(HeightHintName, out i))
+			{
+				result.HeightHint = i;
+			}
+
 			string drawableName;
 			if (source.GetStyle(BackgroundName, out drawableName))
 			{
@@ -356,6 +374,26 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		private void LoadSpinButtonStyleFromSource(JObject source, SpinButtonStyle result)
+		{
+			LoadWidgetStyleFromSource(source, result);
+
+			JObject style;
+			if (source.GetStyle(TextFieldStyleName, out style))
+			{
+				LoadTextFieldStyleFromSource(style, result.TextFieldStyle);
+			}
+
+			if (source.GetStyle(UpButtonStyleName, out style))
+			{
+				LoadButtonStyleFromSource(style, result.UpButtonStyle);
+			}
+
+			if (source.GetStyle(DownButtonStyleName, out style))
+			{
+				LoadButtonStyleFromSource(style, result.DownButtonStyle);
+			}
+		}
 
 		private void LoadSliderStyleFromSource(JObject source, SliderStyle result)
 		{
@@ -536,6 +574,7 @@ namespace Myra.Graphics2D.UI.Styles
 			FillStyles(ScrollAreaName, result.ScrollAreaStyle, LoadScrollAreaStyleFromSource);
 			FillStyles(ButtonName, result.ButtonStyle, LoadButtonStyleFromSource);
 			FillStyles(CheckBoxName, result.CheckBoxStyle, LoadButtonStyleFromSource);
+			FillStyles(SpinButtonName, result.SpinButtonStyle, LoadSpinButtonStyleFromSource);
 			FillStyles(HorizontalSliderName, result.HorizontalSliderStyle, LoadSliderStyleFromSource);
 			FillStyles(VerticalSliderName, result.VerticalSliderStyle, LoadSliderStyleFromSource);
 			FillStyles(ComboBoxName, result.ComboBoxStyle, LoadComboBoxStyleFromSource);

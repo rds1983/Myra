@@ -12,6 +12,7 @@ namespace Myra.Samples
 		private readonly GraphicsDeviceManager graphics;
 
 		private Desktop _host;
+		private Window _window;
 
 		public GridSample()
 		{
@@ -40,6 +41,7 @@ namespace Myra.Samples
 			grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part, 1.0f));
 			grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part, 2.0f));
 			grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Pixels, 150.0f));
+			grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
 			grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill));
 
 			grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
@@ -47,6 +49,7 @@ namespace Myra.Samples
 			grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part, 1.0f));
 			grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part, 1.0f));
 			grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Pixels, 200.0f));
+			grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
 			grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill));
 
 			// Create headers
@@ -112,6 +115,42 @@ namespace Myra.Samples
 			};
 			grid.Widgets.Add(button2);
 
+			var label = new TextBlock
+			{
+				Text =
+					"Lorem ipsum [Green]dolor sit amet, [Red]consectetur adipisicing elit, sed do eiusmod [#AAAAAAAA]tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. [white]Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum!",
+				VerticalSpacing = 0,
+				TextColor = Color.AntiqueWhite,
+				Wrap = true
+			};
+
+			var pane = new ScrollPane<TextBlock>
+			{
+				Widget = label,
+				WidthHint = 200,
+				HeightHint = 200
+			};
+
+			_window = new Window
+			{
+				Title = "Text"
+			};
+
+			_window.ContentGrid.Widgets.Add(pane);
+
+			var button3 = new Button
+			{
+				Text = "Show Window",
+				GridPositionX = 4,
+				GridPositionY = 3
+			};
+			grid.Widgets.Add(button3);
+
+			button3.Up += (sender, args) =>
+			{
+				_window.ShowModal(_host);
+			};
+
 			// Horizontal slider
 			var hslider = new HorizontalSlider
 			{
@@ -152,10 +191,28 @@ namespace Myra.Samples
 			};
 			grid.Widgets.Add(checkBox);
 
+			// Spin buttons
+			var spinButton = new SpinButton
+			{
+				GridPositionX = 5,
+				GridPositionY = 1,
+				WidthHint = 100
+			};
+			grid.Widgets.Add(spinButton);
+
+			var spinButton2 = new SpinButton
+			{
+				GridPositionX = 5,
+				GridPositionY = 2,
+				WidthHint = 100,
+				Integer = true
+			};
+			grid.Widgets.Add(spinButton2);
+
 			// List box
 			var list = new ListBox
 			{
-				GridPositionX = 3,
+				GridPositionX = 5,
 				GridPositionY = 4
 			};
 
@@ -167,7 +224,7 @@ namespace Myra.Samples
 			// Vertical slider
 			var vslider = new VerticalSlider
 			{
-				GridPositionX = 4,
+				GridPositionX = 2,
 				GridPositionY = 4
 			};
 			grid.Widgets.Add(vslider);
@@ -175,7 +232,7 @@ namespace Myra.Samples
 			// Vertical slider value
 			var vsliderValue = new TextBlock
 			{
-				GridPositionX = 5,
+				GridPositionX = 4,
 				GridPositionY = 4,
 				Text = "VSlider Value: 0"
 			};
@@ -187,6 +244,21 @@ namespace Myra.Samples
 
 			grid.Widgets.Add(vsliderValue);
 
+			var tree = new Tree
+			{
+				HasRoot = false,
+				GridPositionX = 3,
+				GridPositionY = 4
+			};
+			var node1 = tree.AddSubNode("node1");
+			var node2 = node1.AddSubNode("node2");
+			var node3 = node2.AddSubNode("node3");
+			node3.AddSubNode("node4");
+			node3.AddSubNode("node5");
+			node2.AddSubNode("node6");
+
+			grid.Widgets.Add(tree);
+
 			var textBlock2 = new TextBlock
 			{
 				Text = "This is long textblock",
@@ -194,6 +266,40 @@ namespace Myra.Samples
 				GridPositionY = 4
 			};
 			grid.Widgets.Add(textBlock2);
+
+			var hsplitPane = new HorizontalSplitPane
+			{
+				GridPositionX = 1,
+				GridPositionY = 5
+			};
+			var hsplitPaneLabel1 = new TextBlock
+			{
+				Text = "Left"
+			};
+			hsplitPane.Widgets.Add(hsplitPaneLabel1);
+			var hsplitPaneLabel2 = new TextBlock
+			{
+				Text = "Right"
+			};
+			hsplitPane.Widgets.Add(hsplitPaneLabel2);
+			grid.Widgets.Add(hsplitPane);
+
+			var vsplitPane = new VerticalSplitPane
+			{
+				GridPositionX = 6,
+				GridPositionY = 4
+			};
+			var vsplitPaneLabel1 = new TextBlock
+			{
+				Text = "Top"
+			};
+			vsplitPane.Widgets.Add(vsplitPaneLabel1);
+			var vsplitPaneLabel2 = new TextBlock
+			{
+				Text = "Bottom"
+			};
+			vsplitPane.Widgets.Add(vsplitPaneLabel2);
+			grid.Widgets.Add(vsplitPane);
 
 			for (var i = 1; i < grid.RowsProportions.Count; ++i)
 			{
@@ -213,6 +319,15 @@ namespace Myra.Samples
 		protected override void Draw(GameTime gameTime)
 		{
 			base.Draw(gameTime);
+
+			if (graphics.PreferredBackBufferWidth != Window.ClientBounds.Width ||
+				graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
+			{
+				graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
+				graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
+				graphics.ApplyChanges();
+			}
+
 			GraphicsDevice.Clear(Color.Black);
 
 			_host.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight);

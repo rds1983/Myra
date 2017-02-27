@@ -309,17 +309,17 @@ namespace Myra.Samples
 		{
 			base.Draw(gameTime);
 
-			var device = GraphicsDevice;
-
-			device.Clear(Color.Black);
-
 			if (graphics.PreferredBackBufferWidth != Window.ClientBounds.Width ||
-			    graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
+				graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
 			{
 				graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
 				graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
 				graphics.ApplyChanges();
 			}
+
+			var device = GraphicsDevice;
+
+			device.Clear(Color.Black);
 
 			_scene.Render(_camera, _lightsOn.IsPressed ? _lights : null);
 

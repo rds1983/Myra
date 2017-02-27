@@ -41,6 +41,14 @@ namespace Myra.Samples
 		{
 			base.Draw(gameTime);
 
+			if (graphics.PreferredBackBufferWidth != Window.ClientBounds.Width ||
+				graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
+			{
+				graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
+				graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
+				graphics.ApplyChanges();
+			}
+
 			var device = GraphicsDevice;
 			device.Clear(Color.Black);
 

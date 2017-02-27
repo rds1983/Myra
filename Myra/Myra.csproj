@@ -109,6 +109,7 @@
     <Compile Include="Graphics2D\UI\Project.cs" />
     <Compile Include="Graphics2D\UI\RenderUtils.cs" />
     <Compile Include="Graphics2D\UI\ScrollPane.cs" />
+    <Compile Include="Graphics2D\UI\SpinButton.cs" />
     <Compile Include="Graphics2D\UI\Styles\ButtonBaseStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\ListItemStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\ComboBoxStyle.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Graphics2D\UI\Styles\PressableImageStyle.cs" />
     <Compile Include="Graphics2D\UI\Slider.cs" />
     <Compile Include="Graphics2D\UI\Styles\SliderStyle.cs" />
+    <Compile Include="Graphics2D\UI\Styles\SpinButtonStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\SplitPaneStyle.cs" />
     <Compile Include="Graphics2D\UI\TreeNode.cs" />
     <Compile Include="Graphics2D\UI\VerticalMenu.cs" />

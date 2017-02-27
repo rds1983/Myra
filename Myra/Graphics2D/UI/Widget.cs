@@ -799,6 +799,9 @@ namespace Myra.Graphics2D.UI
 
 		public void ApplyWidgetStyle(WidgetStyle style)
 		{
+			WidthHint = style.WidthHint;
+			HeightHint = style.HeightHint;
+
 			Background = style.Background;
 			OverBackground = style.OverBackground;
 			DisabledBackground = style.DisabledBackground;

@@ -62,6 +62,7 @@ namespace Myra.Samples
 		protected override void Draw(GameTime gameTime)
 		{
 			base.Draw(gameTime);
+
 			GraphicsDevice.Clear(Color.Black);
 
 			_host.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight);

@@ -16,17 +16,7 @@ namespace Myra.Content.Pipeline
 	[ContentProcessor(DisplayName = "MultiCompileEffect - MonoGame")]
 	public class MultiCompileEffectProcessor : ContentProcessor<EffectContent, MultiCompileEffectContent>
 	{
-		private interface INode
-		{
-			int VariantsCount { get; }
-			bool HasValues { get; }
-
-			void Reset();
-			void GetCurrentVariant(List<string> result);
-			void Move();
-		}
-
-		private class VariantSetNode : INode
+		private class VariantSetNode
 		{
 			private readonly List<VariantsNode> _sets = new List<VariantsNode>();
 			private int _variantsCount;
@@ -104,9 +94,8 @@ namespace Myra.Content.Pipeline
 			{
 				for (var i = 0; i < array.Count; ++i)
 				{
-					var variants = (JObject)array[i];
 					var node = new VariantsNode();
-					node.Parse(variants);
+					node.Parse(array[i]);
 					_sets.Add(node);
 				}
 
@@ -130,7 +119,7 @@ namespace Myra.Content.Pipeline
 			}
 		}
 
-		private class VariantsNode : INode
+		private class VariantsNode
 		{
 			private readonly Dictionary<string, VariantNode> _variants = new Dictionary<string, VariantNode>();
 			private int _variantsCount;
@@ -195,17 +184,36 @@ namespace Myra.Content.Pipeline
 				}
 			}
 
-			public void Parse(JObject variants)
+			public void Parse(JToken variants)
 			{
-				foreach (var v in variants)
+				var asArray = variants as JArray;
+				if (asArray != null)
 				{
-					var parts = (from p in v.Key.Split(';') select p.Trim()).ToArray();
-
-					foreach (var p in parts)
+					foreach (var v in asArray)
 					{
-						var subNode = new VariantNode();
-						subNode.Parse((JArray) v.Value);
-						_variants[p] = subNode;
+						var parts = (from p in v.ToString().Split(';') select p.Trim()).ToArray();
+
+						foreach (var p in parts)
+						{
+							var subNode = new VariantNode();
+							_variants[p] = subNode;
+						}
+					}
+				}
+
+				var asObject = variants as JObject;
+				if (asObject != null)
+				{
+					foreach (var v in asObject)
+					{
+						var parts = (from p in v.Key.Split(';') select p.Trim()).ToArray();
+
+						foreach (var p in parts)
+						{
+							var subNode = new VariantNode();
+							subNode.Parse((JArray) v.Value);
+							_variants[p] = subNode;
+						}
 					}
 				}
 
@@ -218,7 +226,7 @@ namespace Myra.Content.Pipeline
 			}
 		}
 
-		private class VariantNode : INode
+		private class VariantNode
 		{
 			private int _index;
 			private VariantSetNode _dependendVariants;

@@ -12,7 +12,7 @@ using DirectionalLight = Myra.Graphics3D.Environment.DirectionalLight;
 
 namespace Myra.Samples
 {
-	public class TerrainSample: Game
+	public class TerrainSample : Game
 	{
 		private readonly GraphicsDeviceManager graphics;
 		private Scene _scene;
@@ -34,7 +34,7 @@ namespace Myra.Samples
 		private TextBlock _vertexShaderCountLabel;
 		private TextBlock _pixelShaderCountLabel;
 		private readonly FPSCounter _fpsCounter = new FPSCounter();
-		float _sunAngle = (float)Math.PI * 3 / 2;
+		float _sunAngle = (float) Math.PI*3/2;
 
 		public TerrainSample()
 		{
@@ -226,8 +226,8 @@ namespace Myra.Samples
 
 			_cameraController.Update();
 
-			var s = (float)Math.Sin(_sunAngle);
-			var c = (float)Math.Cos(_sunAngle);
+			var s = (float) Math.Sin(_sunAngle);
+			var c = (float) Math.Cos(_sunAngle);
 
 			_lights[0].Direction = new Vector3(c, s, 0);
 
@@ -245,10 +245,6 @@ namespace Myra.Samples
 		{
 			base.Draw(gameTime);
 
-			var device = GraphicsDevice;
-
-			device.Clear(Color.Black);
-
 			if (graphics.PreferredBackBufferWidth != Window.ClientBounds.Width ||
 			    graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
 			{
@@ -256,6 +252,10 @@ namespace Myra.Samples
 				graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
 				graphics.ApplyChanges();
 			}
+
+			var device = GraphicsDevice;
+
+			device.Clear(Color.Black);
 
 			_terrain.DrawNormals = _drawNormals.IsPressed;
 			_scene.Render(_camera, _lightsOn.IsPressed ? _lights : null);

@@ -1,8 +1,4 @@
 [
-	{
-		";LIGHTNING": []
-	},
-	{
-		";TEXTURE": []
-	}
+	["", "LIGHTNING"],
+	["", "TEXTURE"]
 ]

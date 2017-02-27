@@ -2,6 +2,9 @@
 {
 	public class WidgetStyle
 	{
+		public int? WidthHint { get; set; }
+		public int? HeightHint { get; set; }
+
 		public Drawable Background { get; set; }
 		public Drawable OverBackground { get; set; }
 		public Drawable DisabledBackground { get; set; }

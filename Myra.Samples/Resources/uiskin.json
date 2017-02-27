@@ -44,8 +44,34 @@
             "textColor": "white"
         },
         "image": {
-            "image":  "check-off",
+            "image": "check-off",
             "pressedImage": "check-on"
+        }
+    },
+    "spinButton": {
+        "background": "textfield",
+        "upButton": {
+            "background": "default-round",
+            "pressedBackground": "default-round-down",
+            "image": {
+                "image": "tree-plus"
+            }
+        },
+        "downButton": { 
+            "background": "default-round",
+            "pressedBackground": "default-round-down",
+            "image": {
+                "image": "tree-minus"
+            }
+        },
+        "textField": {
+            "font": "default-font",
+            "textColor": "white",
+            "disabledTextColor": "grey",
+            "selection": "selection",
+            "cursor": "cursor",
+            "messageFont": "default-font",
+            "messageTextColor": "grey"
         }
     },
     "horizontalSlider": {

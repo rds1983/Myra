@@ -45,6 +45,38 @@
             "pressedImage": "vis-check-tick"
         }
     },
+    "spinButton": {
+        "background": "textfield",
+        "upButton": {
+            "background": "button",
+            "pressedBackground": "button-down",
+            "overBackground": "button-down",
+            "widthHint": 12,
+            "heightHint":  12,
+            "image": {
+                "image": "select-up"
+            }
+        },
+        "downButton": { 
+            "background": "button",
+            "pressedBackground": "button-down",
+            "overBackground": "button-down",
+            "widthHint": 12,
+            "heightHint":  12,
+            "image": {
+                "image": "select-down"
+            }
+        },
+        "textField": {
+            "font": "default-font",
+            "textColor": "white",
+            "disabledTextColor": "grey",
+            "selection": "selection",
+            "cursor": "cursor",
+            "messageFont": "default-font",
+            "messageTextColor": "grey"
+        }
+    },
     "horizontalSlider": {
         "background": "slider",
         "knob": {

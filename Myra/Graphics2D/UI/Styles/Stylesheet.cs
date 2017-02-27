@@ -10,6 +10,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public TextFieldStyle TextFieldStyle { get; private set; }
 		public ButtonStyle ButtonStyle { get; private set; }
 		public ButtonStyle CheckBoxStyle { get; private set; }
+		public SpinButtonStyle SpinButtonStyle { get; private set; }
 		public SliderStyle HorizontalSliderStyle { get; private set; }
 		public SliderStyle VerticalSliderStyle { get; private set; }
 		public ComboBoxStyle ComboBoxStyle { get; private set; }
@@ -28,6 +29,7 @@ namespace Myra.Graphics2D.UI.Styles
 			TextFieldStyle = new TextFieldStyle();
 			ButtonStyle = new ButtonStyle();
 			CheckBoxStyle = new ButtonStyle();
+			SpinButtonStyle = new SpinButtonStyle();
 			HorizontalSliderStyle = new SliderStyle();
 			VerticalSliderStyle = new SliderStyle();
 			ComboBoxStyle = new ComboBoxStyle();

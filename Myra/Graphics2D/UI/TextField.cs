@@ -131,6 +131,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public Func<string, bool> InputFilter { get; set; }
+
 		public event EventHandler TextChanged;
 
 		public TextField(TextFieldStyle style)
@@ -152,12 +154,22 @@ namespace Myra.Graphics2D.UI
 
 		private void ProcessChar(char ch)
 		{
+			EnsureIndexInRange();
+
 			var sb = new StringBuilder();
 			sb.Append(Text.Substring(0, _cursorIndex));
 			sb.Append(ch);
 			sb.Append(Text.Substring(_cursorIndex));
 
-			Text = sb.ToString();
+			// Filter check
+			var nextText = sb.ToString();
+			var f = InputFilter;
+			if (f != null && !f(nextText))
+			{
+				return;
+			}
+
+			Text = nextText;
 
 			_cursorIndex++;
 		}
@@ -170,7 +182,9 @@ namespace Myra.Graphics2D.UI
 			{
 				case Keys.Back:
 				{
+					EnsureIndexInRange();
 					var sb = new StringBuilder();
+
 					if (_cursorIndex > 0)
 					{
 						sb.Append(Text.Substring(0, _cursorIndex - 1));
@@ -188,9 +202,16 @@ namespace Myra.Graphics2D.UI
 
 				case Keys.Delete:
 				{
+
+					EnsureIndexInRange();
+
 					var sb = new StringBuilder();
 					sb.Append(Text.Substring(0, _cursorIndex));
-					sb.Append(Text.Substring(_cursorIndex + 1));
+
+					if (_cursorIndex + 1 < Text.Length)
+					{
+						sb.Append(Text.Substring(_cursorIndex + 1));
+					}
 
 					Text = sb.ToString();
 				}
@@ -420,6 +441,26 @@ namespace Myra.Graphics2D.UI
 
 			Font = style.Font;
 			MessageFont = style.MessageFont;
+		}
+
+		public void EnsureIndexInRange()
+		{
+			if (_cursorIndex < 0)
+			{
+				_cursorIndex = 0;
+			}
+
+			if (Text != null)
+			{
+				if (_cursorIndex > Text.Length)
+				{
+					_cursorIndex = Text.Length;
+				}
+			}
+			else
+			{
+				_cursorIndex = 0;
+			}
 		}
 	}
 }

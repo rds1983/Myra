@@ -513,6 +513,11 @@ namespace Myra.Graphics2D.Text
 
 		public GlyphRender GetGlyphRenderByIndex(int charIndex)
 		{
+			if (charIndex >= Text.Length)
+			{
+				charIndex = Text.Length - 1;
+			}
+
 			var strings = Strings;
 
 			var i = 0;

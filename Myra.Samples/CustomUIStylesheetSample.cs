@@ -275,6 +275,24 @@ namespace Myra.Samples
 			};
 			grid.Widgets.Add(checkBox);
 
+			// Spin buttons
+			var spinButton = new SpinButton
+			{
+				GridPositionX = 5,
+				GridPositionY = 1,
+				WidthHint = 100
+			};
+			grid.Widgets.Add(spinButton);
+
+			var spinButton2 = new SpinButton
+			{
+				GridPositionX = 5,
+				GridPositionY = 2,
+				WidthHint = 100,
+				Integer = true
+			};
+			grid.Widgets.Add(spinButton2);
+
 			// List box
 			var list = new ListBox
 			{
@@ -385,6 +403,15 @@ namespace Myra.Samples
 		protected override void Draw(GameTime gameTime)
 		{
 			base.Draw(gameTime);
+
+			if (graphics.PreferredBackBufferWidth != Window.ClientBounds.Width ||
+				graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
+			{
+				graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
+				graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
+				graphics.ApplyChanges();
+			}
+
 			GraphicsDevice.Clear(Color.Black);
 
 			_host.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight);
