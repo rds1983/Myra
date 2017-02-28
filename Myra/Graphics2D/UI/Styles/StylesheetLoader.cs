@@ -74,6 +74,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string HandleName = "handle";
 		public const string MarkName = "mark";
 		public const string ImageName = "image";
+		public const string OverImageName = "overImage";
 		public const string PressedImageName = "pressedImage";
 		public const string RowSelectionBackgroundName = "rowSelectionBackground";
 		public const string RowSelectionBackgroundWithoutFocusName = "rowSelectionBackgroundWithoutFocus";
@@ -83,6 +84,9 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string HorizontalSliderName = "horizontalSlider";
 		public const string VerticalSliderName = "verticalSlider";
 		public const string KnobName = "knob";
+		public const string HorizontalProgressBarName = "horizontalProgressBar";
+		public const string VerticalProgressBarName = "verticalProgressBar";
+		public const string FilledName = "filled";
 
 		private readonly Dictionary<string, Color> _colors = new Dictionary<string, Color>();
 		private readonly JObject _root;
@@ -339,6 +343,11 @@ namespace Myra.Graphics2D.UI.Styles
 			{
 				result.Image = GetDrawable(name);
 			}
+
+			if (source.GetStyle(OverImageName, out name))
+			{
+				result.OverImage = GetDrawable(name);
+			}
 		}
 
 		private void LoadPressableImageStyleFromSource(JObject source, PressableImageStyle result)
@@ -403,6 +412,17 @@ namespace Myra.Graphics2D.UI.Styles
 			if (source.GetStyle(KnobName, out knobStyle))
 			{
 				LoadButtonStyleFromSource(knobStyle, result.KnobStyle);
+			}
+		}
+
+		private void LoadProgressBarStyleFromSource(JObject source, ProgressBarStyle result)
+		{
+			LoadWidgetStyleFromSource(source, result);
+
+			string style;
+			if (source.GetStyle(FilledName, out style))
+			{
+				result.Filled = GetDrawable(style);
 			}
 		}
 
@@ -577,6 +597,8 @@ namespace Myra.Graphics2D.UI.Styles
 			FillStyles(SpinButtonName, result.SpinButtonStyle, LoadSpinButtonStyleFromSource);
 			FillStyles(HorizontalSliderName, result.HorizontalSliderStyle, LoadSliderStyleFromSource);
 			FillStyles(VerticalSliderName, result.VerticalSliderStyle, LoadSliderStyleFromSource);
+			FillStyles(HorizontalProgressBarName, result.HorizontalProgressBarStyle, LoadProgressBarStyleFromSource);
+			FillStyles(VerticalProgressBarName, result.VerticalProgressBarStyle, LoadProgressBarStyleFromSource);
 			FillStyles(ComboBoxName, result.ComboBoxStyle, LoadComboBoxStyleFromSource);
 			FillStyles(ListBoxName, result.ListBoxStyle, LoadListBoxStyleFromSource);
 			FillStyles(TreeName, result.TreeStyle, LoadTreeStyleFromSource);

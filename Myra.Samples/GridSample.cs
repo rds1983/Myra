@@ -13,6 +13,8 @@ namespace Myra.Samples
 
 		private Desktop _host;
 		private Window _window;
+		private HorizontalProgressBar _horizontalProgressBar;
+		private VerticalProgressBar _verticalProgressBar;
 
 		public GridSample()
 		{
@@ -209,6 +211,23 @@ namespace Myra.Samples
 			};
 			grid.Widgets.Add(spinButton2);
 
+			// Progress bars
+			_horizontalProgressBar = new HorizontalProgressBar
+			{
+				GridPositionX = 5,
+				GridPositionY = 3,
+				WidthHint = 100
+			};
+			grid.Widgets.Add(_horizontalProgressBar);
+
+			_verticalProgressBar = new VerticalProgressBar
+			{
+				GridPositionX = 6,
+				GridPositionY = 1,
+				HeightHint = 100
+			};
+			grid.Widgets.Add(_verticalProgressBar);
+
 			// List box
 			var list = new ListBox
 			{
@@ -314,6 +333,23 @@ namespace Myra.Samples
 			}
 
 			_host.Widgets.Add(grid);
+		}
+
+		protected override void Update(GameTime gameTime)
+		{
+			base.Update(gameTime);
+
+			_horizontalProgressBar.Value += 0.5f;
+			if (_horizontalProgressBar.Value > _horizontalProgressBar.Maximum)
+			{
+				_horizontalProgressBar.Value = _horizontalProgressBar.Minimum;
+			}
+			
+			_verticalProgressBar.Value += 0.5f;
+			if (_verticalProgressBar.Value > _verticalProgressBar.Maximum)
+			{
+				_verticalProgressBar.Value = _verticalProgressBar.Minimum;
+			}
 		}
 
 		protected override void Draw(GameTime gameTime)

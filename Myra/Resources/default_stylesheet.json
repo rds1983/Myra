@@ -99,6 +99,14 @@
             }
         }
     },
+    "horizontalProgressBar": {
+        "background": "progressbar",
+        "filled": "progressbar-filled"
+    },
+    "verticalProgressBar": {
+        "background": "progressbar-vertical",
+        "filled":  "progressbar-filled-vertical"
+    },
     "comboBox": {
         "background": "default-select",
         "label": {

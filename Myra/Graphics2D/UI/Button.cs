@@ -8,7 +8,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class Button : ButtonBase<Grid>
 	{
-		private Drawable _drawable, _pressedDrawable;
+		private Drawable _drawable, _overDrawable, _pressedDrawable;
 		private readonly Image _image;
 		private readonly TextBlock _textBlock;
 
@@ -53,6 +53,28 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_drawable = value;
+				UpdateDrawable();
+			}
+		}
+
+		[JsonIgnore]
+		[HiddenInEditor]
+		[EditCategory("Appearance")]
+		public Drawable OverImage
+		{
+			get
+			{
+				return _overDrawable;
+			}
+
+			set
+			{
+				if (value == _drawable)
+				{
+					return;
+				}
+
+				_overDrawable = value;
 				UpdateDrawable();
 			}
 		}
@@ -149,37 +171,12 @@ namespace Myra.Graphics2D.UI
 				_image.ApplyWidgetStyle(imageStyle);
 
 				Image = imageStyle.Image;
+				OverImage = imageStyle.OverImage;
 				PressedImage = imageStyle.PressedImage;
 
-				if (Image != null)
-				{
-					if (_image.WidthHint == null || 
-						imageStyle.Image.Size.X > _image.WidthHint.Value)
-					{
-						_image.WidthHint = imageStyle.Image.Size.X;
-					}
-
-					if (_image.HeightHint == null ||
-						imageStyle.Image.Size.Y > _image.HeightHint.Value)
-					{
-						_image.HeightHint = imageStyle.Image.Size.Y;
-					}
-				}
-
-				if (imageStyle.PressedImage != null)
-				{
-					if (_image.WidthHint == null ||
-						imageStyle.PressedImage.Size.X > _image.WidthHint.Value)
-					{
-						_image.WidthHint = imageStyle.PressedImage.Size.X;
-					}
-
-					if (_image.HeightHint == null ||
-						imageStyle.PressedImage.Size.Y > _image.HeightHint.Value)
-					{
-						_image.HeightHint = imageStyle.PressedImage.Size.Y;
-					}
-				}
+				_image.UpdateImageSize(imageStyle.Image);
+				_image.UpdateImageSize(imageStyle.OverImage);
+				_image.UpdateImageSize(imageStyle.PressedImage);
 			}
 
 			UpdateDrawable();
@@ -192,8 +189,26 @@ namespace Myra.Graphics2D.UI
 			{
 				image = PressedImage;
 			}
+			else if (IsMouseOver && OverImage != null)
+			{
+				image = OverImage;
+			}
 
 			_image.Drawable = image;
+		}
+
+		public override void OnMouseEntered(Point position)
+		{
+			base.OnMouseEntered(position);
+
+			UpdateDrawable();
+		}
+
+		public override void OnMouseLeft()
+		{
+			base.OnMouseLeft();
+
+			UpdateDrawable();
 		}
 
 		protected override void FireUp()

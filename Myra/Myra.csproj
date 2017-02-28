@@ -64,6 +64,7 @@
     <Compile Include="Edit\HiddenInEditorAttribute.cs" />
     <Compile Include="Edit\IItemsProvider.cs" />
     <Compile Include="Edit\SelectionAttribute.cs" />
+    <Compile Include="Graphics2D\UI\HorizontalProgressBar.cs" />
     <Compile Include="Graphics2D\UI\GridBased.cs" />
     <Compile Include="Graphics2D\UI\HorizontalSlider.cs" />
     <Compile Include="Graphics2D\UI\HorizontalSplitPane.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Graphics2D\UI\MenuItemButton.cs" />
     <Compile Include="Graphics2D\UI\MenuSeparator.cs" />
     <Compile Include="Graphics2D\UI\MenuSeparatorWidget.cs" />
+    <Compile Include="Graphics2D\UI\ProgressBar.cs" />
     <Compile Include="Graphics2D\UI\Project.cs" />
     <Compile Include="Graphics2D\UI\RenderUtils.cs" />
     <Compile Include="Graphics2D\UI\ScrollPane.cs" />
@@ -118,11 +120,13 @@
     <Compile Include="Graphics2D\UI\Styles\MenuSeparatorStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\PressableImageStyle.cs" />
     <Compile Include="Graphics2D\UI\Slider.cs" />
+    <Compile Include="Graphics2D\UI\Styles\ProgressBarStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\SliderStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\SpinButtonStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\SplitPaneStyle.cs" />
     <Compile Include="Graphics2D\UI\TreeNode.cs" />
     <Compile Include="Graphics2D\UI\VerticalMenu.cs" />
+    <Compile Include="Graphics2D\UI\VerticalProgressBar.cs" />
     <Compile Include="Graphics2D\UI\VerticalSlider.cs" />
     <Compile Include="Graphics2D\UI\VerticalSplitPane.cs" />
     <Compile Include="Graphics3D\Camera.cs" />

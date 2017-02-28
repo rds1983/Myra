@@ -13,6 +13,8 @@ namespace Myra.Graphics2D.UI.Styles
 		public SpinButtonStyle SpinButtonStyle { get; private set; }
 		public SliderStyle HorizontalSliderStyle { get; private set; }
 		public SliderStyle VerticalSliderStyle { get; private set; }
+		public ProgressBarStyle HorizontalProgressBarStyle { get; private set; }
+		public ProgressBarStyle VerticalProgressBarStyle { get; private set; }
 		public ComboBoxStyle ComboBoxStyle { get; private set; }
 		public ListBoxStyle ListBoxStyle { get; set; }
 		public TreeStyle TreeStyle { get; private set; }
@@ -32,6 +34,8 @@ namespace Myra.Graphics2D.UI.Styles
 			SpinButtonStyle = new SpinButtonStyle();
 			HorizontalSliderStyle = new SliderStyle();
 			VerticalSliderStyle = new SliderStyle();
+			HorizontalProgressBarStyle = new ProgressBarStyle();
+			VerticalProgressBarStyle = new ProgressBarStyle();
 			ComboBoxStyle = new ComboBoxStyle();
 			ListBoxStyle = new ListBoxStyle();
 			TreeStyle = new TreeStyle();

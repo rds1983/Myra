@@ -46,5 +46,24 @@ namespace Myra.Graphics2D.UI
 				Drawable.Draw(batch, bounds);
 			}
 		}
+
+
+		public void UpdateImageSize(Drawable drawable)
+		{
+			if (drawable == null)
+			{
+				return;
+			}
+
+			if (WidthHint == null || drawable.Size.X > WidthHint.Value)
+			{
+				WidthHint = drawable.Size.X;
+			}
+
+			if (HeightHint == null || drawable.Size.Y > HeightHint.Value)
+			{
+				HeightHint = drawable.Size.Y;
+			}
+		}
 	}
 }
