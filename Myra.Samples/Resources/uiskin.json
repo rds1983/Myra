@@ -38,6 +38,14 @@
             "disabledTextColor": "grey"
         }
     },
+    "imageButton": {
+        "padding": {
+            "left": 5.0,
+            "right": 5.0
+        },
+        "background": "default-round",
+        "pressedBackground": "default-round-down"
+    },
     "checkBox": {
         "label": {
             "font": "default-font",
@@ -57,7 +65,7 @@
                 "image": "tree-plus"
             }
         },
-        "downButton": { 
+        "downButton": {
             "background": "default-round",
             "pressedBackground": "default-round-down",
             "image": {
@@ -89,6 +97,14 @@
                 "image": "default-slider-knob"
             }
         }
+    },
+    "horizontalProgressBar": {
+        "background": "default-round",
+        "filled": "default-round-down"
+    },
+    "verticalProgressBar": {
+        "background": "default-round",
+        "filled": "default-round-down"
     },
     "comboBox": {
         "background": "default-select",
@@ -199,13 +215,17 @@
             "right": 2.0
         },
         "title": {
-           "font": "default-font",
+            "padding": {
+                "left": 5.0,
+                "right": 5.0
+            },
+            "font": "default-font",
             "textColor": "white"
         },
         "closeButton": {
             "image": {
                 "image": "default-round",
-                "pressedImage":  "default-round-down"
+                "pressedImage": "default-round-down"
             }
         }
     }

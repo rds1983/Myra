@@ -15,6 +15,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string ScrollAreaName = "scrollArea";
 		public const string ButtonName = "button";
 		public const string CheckBoxName = "checkBox";
+		public const string ImageButtonName = "imageButton";
 		public const string SpinButtonName = "spinButton";
 		public const string ComboBoxName = "comboBox";
 		public const string ComboBoxItemName = "comboBoxItem";
@@ -361,7 +362,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadButtonStyleFromSource(JObject source, ButtonStyle result)
+		private void LoadButtonBaseStyleFromSource(JObject source, ButtonBaseStyle result)
 		{
 			LoadWidgetStyleFromSource(source, result);
 
@@ -370,6 +371,11 @@ namespace Myra.Graphics2D.UI.Styles
 			{
 				result.PressedBackground = GetDrawable(name);
 			}
+		}
+
+		private void LoadButtonStyleFromSource(JObject source, ButtonStyle result)
+		{
+			LoadButtonBaseStyleFromSource(source, result);
 
 			JObject labelStyle;
 			if (source.GetStyle(LabelStyleName, out labelStyle))
@@ -380,6 +386,18 @@ namespace Myra.Graphics2D.UI.Styles
 			if (source.GetStyle(ImageStyleName, out labelStyle))
 			{
 				LoadPressableImageStyleFromSource(labelStyle, result.ImageStyle);
+			}
+		}
+
+
+		private void LoadImageButtonStyleFromSource(JObject source, ImageButtonStyle result)
+		{
+			LoadButtonBaseStyleFromSource(source, result);
+
+			JObject style;
+			if (source.GetStyle(ImageStyleName, out style))
+			{
+				LoadPressableImageStyleFromSource(style, result.ImageStyle);
 			}
 		}
 
@@ -509,7 +527,7 @@ namespace Myra.Graphics2D.UI.Styles
 			JObject handle;
 			if (source.GetStyle(HandleName, out handle))
 			{
-				LoadButtonStyleFromSource(handle, result.HandleStyle);
+				LoadImageButtonStyleFromSource(handle, result.HandleStyle);
 			}
 		}
 
@@ -547,7 +565,12 @@ namespace Myra.Graphics2D.UI.Styles
 			JObject obj;
 			if (source.GetStyle(MarkName, out obj))
 			{
-				LoadButtonStyleFromSource(obj, result.MarkStyle);
+				LoadImageButtonStyleFromSource(obj, result.MarkStyle);
+
+				if (obj.GetStyle(LabelStyleName, out obj))
+				{
+					LoadTextBlockStyleFromSource(obj, result.LabelStyle);
+				}
 			}
 		}
 
@@ -563,7 +586,7 @@ namespace Myra.Graphics2D.UI.Styles
 
 			if (source.GetStyle(CloseButtonStyleName, out obj))
 			{
-				LoadButtonStyleFromSource(obj, result.CloseButtonStyle);
+				LoadImageButtonStyleFromSource(obj, result.CloseButtonStyle);
 			}
 		}
 
@@ -594,6 +617,7 @@ namespace Myra.Graphics2D.UI.Styles
 			FillStyles(ScrollAreaName, result.ScrollAreaStyle, LoadScrollAreaStyleFromSource);
 			FillStyles(ButtonName, result.ButtonStyle, LoadButtonStyleFromSource);
 			FillStyles(CheckBoxName, result.CheckBoxStyle, LoadButtonStyleFromSource);
+			FillStyles(ImageButtonName, result.ImageButtonStyle, LoadImageButtonStyleFromSource);
 			FillStyles(SpinButtonName, result.SpinButtonStyle, LoadSpinButtonStyleFromSource);
 			FillStyles(HorizontalSliderName, result.HorizontalSliderStyle, LoadSliderStyleFromSource);
 			FillStyles(VerticalSliderName, result.VerticalSliderStyle, LoadSliderStyleFromSource);

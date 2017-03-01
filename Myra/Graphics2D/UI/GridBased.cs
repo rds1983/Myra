@@ -45,5 +45,21 @@ namespace Myra.Graphics2D.UI
 
 			set { base.ColumnSpacing = value; }
 		}
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public override float? TotalColumnsPart
+		{
+			get { return base.TotalColumnsPart; }
+			set { base.TotalColumnsPart = value; }
+		}
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public override float? TotalRowsPart
+		{
+			get { return base.TotalRowsPart; }
+			set { base.TotalRowsPart = value; }
+		}
 	}
 }

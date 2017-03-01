@@ -12,8 +12,8 @@ namespace Myra.Graphics2D.UI
 	public abstract class SplitPane : SingleItemContainer<Grid>
 	{
 		private readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
-		private readonly List<Button> _handles = new List<Button>();
-		private Button _handleDown;
+		private readonly List<ImageButton> _handles = new List<ImageButton>();
+		private ImageButton _handleDown;
 		private int? _mouseCoord;
 		private int _handlesSize;
 
@@ -29,7 +29,7 @@ namespace Myra.Graphics2D.UI
 
 		[JsonIgnore]
 		[HiddenInEditor]
-		public ButtonStyle HandleStyle { get; private set; }
+		public ImageButtonStyle HandleStyle { get; private set; }
 
 		public event EventHandler ProportionsChanged;
 
@@ -136,7 +136,7 @@ namespace Myra.Graphics2D.UI
 
 		private void HandleOnDown(object sender, EventArgs args)
 		{
-			_handleDown = (Button) sender;
+			_handleDown = (ImageButton)sender;
 			_mouseCoord = Orientation == Orientation.Horizontal
 				? Desktop.MousePosition.X - _handleDown.AbsoluteBounds.X
 				: Desktop.MousePosition.Y - _handleDown.AbsoluteBounds.Y;
@@ -205,7 +205,7 @@ namespace Myra.Graphics2D.UI
 				if (i > 0)
 				{
 					// Add splitter
-					var handle = new Button(HandleStyle)
+					var handle = new ImageButton(HandleStyle)
 					{
 						HorizontalAlignment = HorizontalAlignment.Stretch,
 						VerticalAlignment = VerticalAlignment.Stretch,

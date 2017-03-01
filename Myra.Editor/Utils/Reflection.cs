@@ -64,5 +64,41 @@ namespace Myra.Editor.Utils
 		{
 			return type.GetGenericArguments()[0];
 		}
+
+		public static bool IsNumericInteger(this Type t)
+		{
+			switch (Type.GetTypeCode(t))
+			{
+				case TypeCode.Byte:
+				case TypeCode.SByte:
+				case TypeCode.UInt16:
+				case TypeCode.UInt32:
+				case TypeCode.UInt64:
+				case TypeCode.Int16:
+				case TypeCode.Int32:
+				case TypeCode.Int64:
+					return true;
+				default:
+					return false;
+			}
+		}
+
+		public static bool IsNumericType(this Type t)
+		{
+			if (IsNumericInteger(t))
+			{
+				return true;
+			}
+
+			switch (Type.GetTypeCode(t))
+			{
+				case TypeCode.Decimal:
+				case TypeCode.Double:
+				case TypeCode.Single:
+					return true;
+				default:
+					return false;
+			}
+		}
 	}
 }

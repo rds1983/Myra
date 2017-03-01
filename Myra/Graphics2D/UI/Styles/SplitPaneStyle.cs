@@ -2,11 +2,11 @@
 {
 	public class SplitPaneStyle: WidgetStyle
 	{
-		public ButtonStyle HandleStyle { get; set; }
+		public ImageButtonStyle HandleStyle { get; set; }
 
 		public SplitPaneStyle()
 		{
-			HandleStyle = new ButtonStyle();
+			HandleStyle = new ImageButtonStyle();
 		}
 	}
 }

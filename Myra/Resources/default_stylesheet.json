@@ -34,6 +34,11 @@
             "disabledTextColor": "grey"
         }
     },
+    "imageButton": {
+        "background": "button",
+        "pressedBackground": "button-down",
+        "overBackground": "button-down"
+    },
     "checkBox": {
         "label": {
             "font": "default-font",

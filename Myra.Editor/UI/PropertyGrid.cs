@@ -187,7 +187,7 @@ namespace Myra.Editor.UI
 			};
 
 			// Mark
-			var mark = new Button(PropertyGridStyle.MarkStyle)
+			var mark = new ImageButton(PropertyGridStyle.MarkStyle)
 			{
 				Toggleable = true
 			};
@@ -204,7 +204,7 @@ namespace Myra.Editor.UI
 				propertyGrid.Visible = false;
 			};
 
-			var label = new TextBlock(PropertyGridStyle.MarkStyle.LabelStyle)
+			var label = new TextBlock(PropertyGridStyle.LabelStyle)
 			{
 				Text = header,
 				GridPositionX = 1
@@ -406,9 +406,76 @@ namespace Myra.Editor.UI
 
 					valueWidget = cb;
 				}
+				else if (propertyType.IsNumericType() || 
+					(propertyType.IsNullablePrimitive() && propertyType.GetNullableType().IsNumericType()))
+				{
+					var numericType = propertyType;
+					if (propertyType.IsNullablePrimitive())
+					{
+						numericType = propertyType.GetNullableType();
+					}
+
+					var spinButton = new SpinButton
+					{
+						Integer = numericType.IsNumericInteger(),
+						Nullable = propertyType.IsNullablePrimitive(),
+						Value = value != null ? (float)Convert.ChangeType(value, typeof (float)) : default(float?)
+					};
+
+					if (record.HasSetter)
+					{
+						spinButton.ValueChanged += (sender, args) =>
+						{
+							try
+							{
+								object result;
+
+								if (spinButton.Value != null)
+								{
+									result = Convert.ChangeType(spinButton.Value.Value, numericType);
+								}
+								else
+								{
+									result = null;
+								}
+
+								record.SetValue(_object, result);
+
+								if (record.Type.IsValueType)
+								{
+									var tg = this;
+									var pg = tg._parentGrid;
+									while (pg != null && tg._parentProperty != null)
+									{
+										tg._parentProperty.SetValue(pg._object, tg._object);
+
+										if (!tg._parentProperty.Type.IsValueType)
+										{
+											break;
+										}
+
+										tg = pg;
+										pg = tg._parentGrid;
+									}
+								}
+
+								FireChanged(record.Name);
+							}
+							catch (Exception)
+							{
+								// TODO: Rework this ugly type conversion solution
+							}
+						};
+					}
+					else
+					{
+						spinButton.Enabled = false;
+					}
+
+					valueWidget = spinButton;
+				}
 				else if (propertyType == typeof(string) || propertyType.IsPrimitive || propertyType.IsNullablePrimitive())
 				{
-
 					var tf = new TextField
 					{
 						Text = value != null ? value.ToString() : string.Empty
@@ -444,7 +511,7 @@ namespace Myra.Editor.UI
 								{
 									var tg = this;
 									var pg = tg._parentGrid;
-									while (pg != null)
+									while (pg != null && tg._parentProperty != null)
 									{
 										tg._parentProperty.SetValue(pg._object, tg._object);
 
@@ -552,7 +619,7 @@ namespace Myra.Editor.UI
 					}
 
 					var tb = new TextBlock();
-					tb.ApplyTextBlockStyle(PropertyGridStyle.MarkStyle.LabelStyle);
+					tb.ApplyTextBlockStyle(PropertyGridStyle.LabelStyle);
 					tb.Text = "null";
 
 					valueWidget = tb;

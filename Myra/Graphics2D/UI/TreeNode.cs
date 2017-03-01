@@ -10,7 +10,7 @@ namespace Myra.Graphics2D.UI
 	{
 		private readonly Tree _topTree;
 		private readonly Grid _childNodesGrid;
-		private readonly Button _mark;
+		private readonly ImageButton _mark;
 		private readonly TextBlock _label;
 		private bool _hasRoot = true;
 
@@ -21,7 +21,7 @@ namespace Myra.Graphics2D.UI
 			set { _mark.IsPressed = value; }
 		}
 
-		public Button Mark
+		public ImageButton Mark
 		{
 			get { return _mark; }
 		}
@@ -93,7 +93,7 @@ namespace Myra.Graphics2D.UI
 				_topTree.AllNodes.Add(this);
 			}
 
-			_mark = new Button(null)
+			_mark = new ImageButton(null)
 			{
 				Toggleable = true,
 				HorizontalAlignment = HorizontalAlignment.Left,
@@ -235,8 +235,8 @@ namespace Myra.Graphics2D.UI
 
 			if (style.MarkStyle != null)
 			{
-				_mark.ApplyButtonStyle(style.MarkStyle);
-				_label.ApplyTextBlockStyle(style.MarkStyle.LabelStyle);
+				_mark.ApplyImageButtonStyle(style.MarkStyle);
+				_label.ApplyTextBlockStyle(style.LabelStyle);
 			}
 
 			TreeStyle = style;

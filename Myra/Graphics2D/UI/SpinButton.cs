@@ -9,7 +9,50 @@ namespace Myra.Graphics2D.UI
 		private readonly Button _upButton;
 		private readonly Button _downButton;
 
+		public bool Nullable { get; set; }
+
+		public float? Maximum { get; set; }
+
+		public float? Minimum { get; set; }
+
+		public float? Value
+		{
+			get
+			{
+				float result;
+				if (float.TryParse(_textField.Text, out result))
+				{
+					return result;
+				}
+
+				return null;
+			}
+
+			set
+			{
+				if (value == null && !Nullable)
+				{
+					throw new Exception("value can't be null when Nullable is false");
+				}
+
+				if (value.HasValue && Minimum.HasValue && value.Value < Minimum.Value)
+				{
+					throw new Exception("Value can't be lower than Minimum");
+				}
+
+				if (value.HasValue && Maximum.HasValue && value.Value > Maximum.Value)
+				{
+					throw new Exception("Value can't be higher than Maximum");
+				}
+
+
+				_textField.Text = value.HasValue ? value.Value.ToString() : string.Empty;
+			}
+		}
+
 		public bool Integer { get; set; }
+
+		public event EventHandler ValueChanged;
 
 		public SpinButton(SpinButtonStyle style)
 		{
@@ -30,6 +73,7 @@ namespace Myra.Graphics2D.UI
 				InputFilter = InputFilter
 			};
 
+			_textField.TextChanged += TextFieldOnTextChanged;
 
 			Widgets.Add(_textField);
 
@@ -57,10 +101,31 @@ namespace Myra.Graphics2D.UI
 			{
 				ApplySpinButtonStyle(style);
 			}
+
+			Value = 0;
+		}
+
+		public SpinButton()
+			: this(DefaultAssets.UIStylesheet.SpinButtonStyle)
+		{
+		}
+
+		private void TextFieldOnTextChanged(object sender, EventArgs eventArgs)
+		{
+			var ev = ValueChanged;
+			if (ev != null)
+			{
+				ev(this, EventArgs.Empty);
+			}
 		}
 
 		private bool InputFilter(string s)
 		{
+			if (Nullable && string.IsNullOrEmpty(s))
+			{
+				return true;
+			}
+
 			if (Integer)
 			{
 				int i;
@@ -69,6 +134,21 @@ namespace Myra.Graphics2D.UI
 
 			float f;
 			return float.TryParse(s, out f);
+		}
+
+		private bool InRange(float value)
+		{
+			if (Minimum.HasValue && value < Minimum.Value)
+			{
+				return false;
+			}
+
+			if (Maximum.HasValue && value > Maximum.Value)
+			{
+				return false;
+			}
+
+			return true;
 		}
 
 		private void UpButtonOnUp(object sender, EventArgs eventArgs)
@@ -80,7 +160,10 @@ namespace Myra.Graphics2D.UI
 			}
 
 			++value;
-			_textField.Text = value.ToString();
+			if (InRange(value))
+			{
+				Value = value;
+			}
 		}
 		
 		private void DownButtonOnUp(object sender, EventArgs eventArgs)
@@ -92,11 +175,10 @@ namespace Myra.Graphics2D.UI
 			}
 
 			--value;
-			_textField.Text = value.ToString();
-		}
-
-		public SpinButton() : this(DefaultAssets.UIStylesheet.SpinButtonStyle)
-		{
+			if (InRange(value))
+			{
+				Value = value;
+			}
 		}
 
 		public void ApplySpinButtonStyle(SpinButtonStyle style)

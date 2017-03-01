@@ -34,22 +34,7 @@ namespace Myra.Graphics2D.UI
 		public string Text
 		{
 			get { return _formattedText.Text; }
-			set
-			{
-				if (value == _formattedText.Text)
-				{
-					return;
-				}
-
-				_formattedText.Text = value;
-				InvalidateMeasure();
-
-				var ev = TextChanged;
-				if (ev != null)
-				{
-					ev(this, EventArgs.Empty);
-				}
-			}
+			set { SetText(value); }
 		}
 
 		[HiddenInEditor]
@@ -152,6 +137,32 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
+		private bool SetText(string value)
+		{
+			if (value == _formattedText.Text)
+			{
+				return false;
+			}
+
+			// Filter check
+			var f = InputFilter;
+			if (f != null && !f(value))
+			{
+				return false;
+			}
+
+			_formattedText.Text = value;
+			InvalidateMeasure();
+
+			var ev = TextChanged;
+			if (ev != null)
+			{
+				ev(this, EventArgs.Empty);
+			}
+
+			return true;
+		}
+
 		private void ProcessChar(char ch)
 		{
 			EnsureIndexInRange();
@@ -161,17 +172,11 @@ namespace Myra.Graphics2D.UI
 			sb.Append(ch);
 			sb.Append(Text.Substring(_cursorIndex));
 
-			// Filter check
 			var nextText = sb.ToString();
-			var f = InputFilter;
-			if (f != null && !f(nextText))
+			if (SetText(nextText))
 			{
-				return;
+				_cursorIndex++;
 			}
-
-			Text = nextText;
-
-			_cursorIndex++;
 		}
 
 		public override void OnKeyDown(Keys k)
@@ -191,9 +196,7 @@ namespace Myra.Graphics2D.UI
 					}
 					sb.Append(Text.Substring(_cursorIndex));
 
-					Text = sb.ToString();
-
-					if (_cursorIndex > 0)
+					if (SetText(sb.ToString()) && _cursorIndex > 0)
 					{
 						--_cursorIndex;
 					}
@@ -296,9 +299,10 @@ namespace Myra.Graphics2D.UI
 					sb.Append('\n');
 					sb.Append(Text.Substring(_cursorIndex));
 
-					Text = sb.ToString();
-
-					++_cursorIndex;
+					if (SetText(sb.ToString()))
+					{
+						++_cursorIndex;
+					}
 				}
 					break;
 

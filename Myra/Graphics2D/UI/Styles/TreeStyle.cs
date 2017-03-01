@@ -5,11 +5,14 @@
 		public Drawable RowSelectionBackground { get; set; }
 		public Drawable RowSelectionBackgroundWithoutFocus { get; set; }
 
-		public ButtonStyle MarkStyle { get; set; }
+		public ImageButtonStyle MarkStyle { get; set; }
+
+		public TextBlockStyle LabelStyle { get; set; }
 
 		public TreeStyle()
 		{
-			MarkStyle = new ButtonStyle();
+			MarkStyle = new ImageButtonStyle();
+			LabelStyle = new TextBlockStyle();
 		}
 	}
 }

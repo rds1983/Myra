@@ -301,5 +301,11 @@ namespace Myra.Graphics2D.UI
 			Widget.Layout(bounds);
 			UpdateWidgetLocation();
 		}
+
+		public void ResetScroll()
+		{
+			_origin = Point.Zero;
+			UpdateWidgetLocation();
+		}
 	}
 }

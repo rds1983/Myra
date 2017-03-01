@@ -108,6 +108,7 @@ namespace Myra.Graphics2D.UI
 		private int _rowSpacing;
 		private readonly ObservableCollection<Proportion> _columnsProportions = new ObservableCollection<Proportion>();
 		private readonly ObservableCollection<Proportion> _rowsProportions = new ObservableCollection<Proportion>();
+		private float? _totalColumnsPart, _totalRowsPart;
 		private readonly List<Rectangle> _gridLines = new List<Rectangle>();
 		private readonly List<int> _cellLocationsX = new List<int>();
 		private readonly List<int> _cellLocationsY = new List<int>();
@@ -198,6 +199,47 @@ namespace Myra.Graphics2D.UI
 		public virtual ObservableCollection<Proportion> RowsProportions
 		{
 			get { return _rowsProportions; }
+		}
+
+		[EditCategory("Grid")]
+		public virtual float? TotalRowsPart
+		{
+			get
+			{
+				return _totalRowsPart;
+			}
+
+			set
+			{
+				if (value == _totalRowsPart)
+				{
+					return;
+				}
+
+				_totalRowsPart = value;
+				InvalidateLayout();
+			}
+		}
+
+		[EditCategory("Grid")]
+		public virtual float? TotalColumnsPart
+		{
+			get
+			{
+				return _totalColumnsPart;
+			}
+
+			set
+			{
+				if (value == _totalColumnsPart)
+				{
+					return;
+				}
+
+				_totalColumnsPart = value;
+				InvalidateLayout();
+			}
+
 		}
 
 		public Grid()
@@ -516,6 +558,11 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
+			if (TotalColumnsPart.HasValue)
+			{
+				totalPart = TotalColumnsPart.Value;
+			}
+
 			if (!totalPart.IsZero())
 			{
 				// Second run update dynamic widths
@@ -562,6 +609,11 @@ namespace Myra.Graphics2D.UI
 				{
 					totalPart += prop.Value;
 				}
+			}
+
+			if (TotalRowsPart.HasValue)
+			{
+				totalPart = TotalRowsPart.Value;
 			}
 
 			if (!totalPart.IsZero())

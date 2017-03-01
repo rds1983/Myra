@@ -38,6 +38,14 @@
             "disabledTextColor": "grey"
         }
     },
+    "imageButton": {
+        "padding": {
+            "left": 5.0,
+            "right": 5.0
+        },
+        "background": "default-round",
+        "pressedBackground": "default-round-down"
+    },
     "checkBox": {
         "label": {
             "font": "default-font",
@@ -46,6 +54,32 @@
         "image": {
             "image": "check-off",
             "pressedImage": "check-on"
+        }
+    },
+    "spinButton": {
+        "background": "textfield",
+        "upButton": {
+            "background": "default-round",
+            "pressedBackground": "default-round-down",
+            "image": {
+                "image": "tree-plus"
+            }
+        },
+        "downButton": { 
+            "background": "default-round",
+            "pressedBackground": "default-round-down",
+            "image": {
+                "image": "tree-minus"
+            }
+        },
+        "textField": {
+            "font": "default-font",
+            "textColor": "white",
+            "disabledTextColor": "grey",
+            "selection": "selection",
+            "cursor": "cursor",
+            "messageFont": "default-font",
+            "messageTextColor": "grey"
         }
     },
     "horizontalSlider": {
@@ -63,6 +97,14 @@
                 "image": "default-slider-knob"
             }
         }
+    },
+    "horizontalProgressBar": {
+        "background": "default-round",
+        "filled": "default-round-down"
+    },
+    "verticalProgressBar": {
+        "background": "default-round",
+        "filled": "default-round-down"
     },
     "comboBox": {
         "background": "default-select",
@@ -168,18 +210,22 @@
     },
     "window": {
         "background": "default-window",
+        "padding": {
+            "left": 2.0,
+            "right": 2.0
+        },
         "title": {
             "padding": {
                 "left": 5.0,
                 "right": 5.0
             },
-            "font": "default-font",
-            "textColor": "white"
+           "font": "default-font",
+           "textColor": "white"
         },
         "closeButton": {
             "image": {
                 "image": "default-round",
-                "pressedImage": "default-round-down"
+                "pressedImage":  "default-round-down"
             }
         }
     }

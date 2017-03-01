@@ -21,8 +21,7 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Behavior")]
 		public float Maximum { get; set; }
 
-		[HiddenInEditor]
-		[JsonIgnore]
+		[EditCategory("Behavior")]
 		public float Value
 		{
 			get { return _value; }
@@ -70,11 +69,9 @@ namespace Myra.Graphics2D.UI
 				if (Orientation == Orientation.Horizontal)
 				{
 					ColumnsProportions[0].Value = value;
-					ColumnsProportions[1].Value = 1 - value;
 				}
 				else
 				{
-					RowsProportions[0].Value = 1 - value;
 					RowsProportions[1].Value = value;
 				}
 
@@ -98,12 +95,14 @@ namespace Myra.Graphics2D.UI
 			if (Orientation == Orientation.Horizontal)
 			{
 				ColumnsProportions.Add(new Proportion(ProportionType.Part, 0));
-				ColumnsProportions.Add(new Proportion(ProportionType.Part, 1.0f));
+				ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+				TotalColumnsPart = 1.0f;
 			}
 			else
 			{
+				RowsProportions.Add(new Proportion(ProportionType.Fill));
 				RowsProportions.Add(new Proportion(ProportionType.Part, 0));
-				RowsProportions.Add(new Proportion(ProportionType.Part, 1.0f));
+				TotalRowsPart = 1.0f;
 
 				_filledImage.GridPositionY = 1;
 			}
@@ -122,12 +121,10 @@ namespace Myra.Graphics2D.UI
 		{
 			ApplyWidgetStyle(style);
 
-			if (style.Filled != null)
-			{
-				_filledImage.Drawable = style.Filled;
-				_filledImage.UpdateImageSize(style.Filled);
-			}
-		}
+			if (style.Filled == null) return;
 
+			_filledImage.Drawable = style.Filled;
+			_filledImage.UpdateImageSize(style.Filled);
+		}
 	}
 }

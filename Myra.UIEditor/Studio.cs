@@ -42,6 +42,7 @@ namespace Myra.UIEditor
 		private TextBlock _drawCallsLabel;
 		private Grid _projectHolder;
 		private Explorer _explorer;
+		private ScrollPane<PropertyGrid> _propertyGridPane; 
 		private PropertyGrid _propertyGrid;
 		private readonly FPSCounter _fpsCounter = new FPSCounter();
 		private string _filePath;
@@ -51,6 +52,7 @@ namespace Myra.UIEditor
 
 		private MenuItem _addButtonItem,
 			_addCheckBoxItem,
+			_addImageButtonItem,
 			_addHorizontalSliderItem,
 			_addVerticalSliderItem,
 			_addComboBoxItem,
@@ -62,8 +64,11 @@ namespace Myra.UIEditor
 			_addScrollPaneItem,
 			_addHorizontalSplitPaneItem,
 			_addVerticalSplitPaneItem,
+			_addHorizontalProgressBarItem,
+			_addVerticalProgressBarItem,
 			_addTextBlockItem,
 			_addTextFieldItem,
+			_addSpinButtonItem,
 			_addTreeItem,
 			_addMenuItemItem,
 			_addMenuSeparatorItem,
@@ -299,6 +304,16 @@ namespace Myra.UIEditor
 			};
 			controlsMenu.Items.Add(_addCheckBoxItem);
 
+			_addImageButtonItem = new MenuItem
+			{
+				Text = "Add ImageButton"
+			};
+			_addImageButtonItem.Selected += (s, a) =>
+			{
+				AddStandardControl<ImageButton>();
+			};
+			controlsMenu.Items.Add(_addImageButtonItem);
+
 			_addHorizontalSliderItem = new MenuItem
 			{
 				Text = "Add Horizontal Slider"
@@ -318,6 +333,26 @@ namespace Myra.UIEditor
 				AddStandardControl<VerticalSlider>();
 			};
 			controlsMenu.Items.Add(_addVerticalSliderItem);
+
+			_addHorizontalProgressBarItem = new MenuItem
+			{
+				Text = "Add Horizontal ProgressBar"
+			};
+			_addHorizontalProgressBarItem.Selected += (s, a) =>
+			{
+				AddStandardControl<HorizontalProgressBar>();
+			};
+			controlsMenu.Items.Add(_addHorizontalProgressBarItem);
+
+			_addVerticalProgressBarItem = new MenuItem
+			{
+				Text = "Add Vertical ProgressBar"
+			};
+			_addVerticalProgressBarItem.Selected += (s, a) =>
+			{
+				AddStandardControl<VerticalProgressBar>();
+			};
+			controlsMenu.Items.Add(_addVerticalProgressBarItem);
 
 			_addComboBoxItem = new MenuItem
 			{
@@ -429,6 +464,16 @@ namespace Myra.UIEditor
 			};
 			controlsMenu.Items.Add(_addTextFieldItem);
 
+			_addSpinButtonItem = new MenuItem
+			{
+				Text = "Add SpinButton"
+			};
+			_addSpinButtonItem.Selected += (s, a) =>
+			{
+				AddStandardControl<SpinButton>();
+			};
+			controlsMenu.Items.Add(_addSpinButtonItem);
+
 			_addTreeItem = new MenuItem
 			{
 				Text = "Add Tree"
@@ -509,15 +554,15 @@ namespace Myra.UIEditor
 			_explorer.Widget.SelectionChanged += WidgetOnSelectionChanged;
 			_rightSplitPane.Widgets.Add(_explorer);
 
-			var propertyGridPane = new ScrollPane<PropertyGrid>();
+			_propertyGridPane = new ScrollPane<PropertyGrid>();
 
 			_propertyGrid = new PropertyGrid();
 			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
 			_propertyGrid.ColorChangeHandler += ColorChangeHandler;
 
-			propertyGridPane.Widget = _propertyGrid;
+			_propertyGridPane.Widget = _propertyGrid;
 
-			_rightSplitPane.Widgets.Add(propertyGridPane);
+			_rightSplitPane.Widgets.Add(_propertyGridPane);
 
 			var root = new Grid();
 
@@ -714,6 +759,7 @@ namespace Myra.UIEditor
 		private void WidgetOnSelectionChanged(object sender, EventArgs eventArgs)
 		{
 			_propertyGrid.Object = _explorer.SelectedObject;
+			_propertyGridPane.ResetScroll();
 
 			UpdateEnabled();
 		}
@@ -915,8 +961,11 @@ namespace Myra.UIEditor
 
 			_addButtonItem.Enabled = enableStandard;
 			_addCheckBoxItem.Enabled = enableStandard;
+			_addImageButtonItem.Enabled = enableStandard;
 			_addHorizontalSliderItem.Enabled = enableStandard;
 			_addVerticalSliderItem.Enabled = enableStandard;
+			_addHorizontalProgressBarItem.Enabled = enableStandard;
+			_addVerticalProgressBarItem.Enabled = enableStandard;
 			_addComboBoxItem.Enabled = enableStandard;
 			_addListBoxItem.Enabled = enableStandard;
 			_addGridItem.Enabled = enableStandard;
@@ -928,6 +977,7 @@ namespace Myra.UIEditor
 			_addVerticalSplitPaneItem.Enabled = enableStandard;
 			_addTextBlockItem.Enabled = enableStandard;
 			_addTextFieldItem.Enabled = enableStandard;
+			_addSpinButtonItem.Enabled = enableStandard;
 			_addTreeItem.Enabled = enableStandard;
 
 			_addMenuItemItem.Enabled = enableMenuItems;

@@ -554,7 +554,7 @@ namespace Myra.Graphics2D.UI
 		{
 			var bounds = AbsoluteBounds;
 
-			if (bounds.IsEmpty)
+			if (bounds.Width == 0 || bounds.Height == 0)
 			{
 				return;
 			}

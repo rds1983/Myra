@@ -18,7 +18,7 @@ namespace Myra.Graphics2D.UI
 		private readonly Grid _titleGrid;
 		private readonly Grid _contentGrid;
 		private readonly TextBlock _titleLabel;
-		private readonly Button _closeButton;
+		private readonly ImageButton _closeButton;
 
 		public string Title
 		{
@@ -75,7 +75,7 @@ namespace Myra.Graphics2D.UI
 			_titleLabel = new TextBlock();
 			_titleGrid.Widgets.Add(_titleLabel);
 
-			_closeButton = new Button
+			_closeButton = new ImageButton
 			{
 				GridPositionX = 1
 			};
@@ -237,7 +237,7 @@ namespace Myra.Graphics2D.UI
 
 			if (style.CloseButtonStyle != null)
 			{
-				_closeButton.ApplyButtonStyle(style.CloseButtonStyle);
+				_closeButton.ApplyImageButtonStyle(style.CloseButtonStyle);
 			}
 		}
 
