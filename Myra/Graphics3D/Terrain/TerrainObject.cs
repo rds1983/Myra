@@ -4,12 +4,23 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Edit;
 using Myra.Graphics;
+using Myra.Utility;
 using Newtonsoft.Json;
 
 namespace Myra.Graphics3D.Terrain
 {
 	public class TerrainObject : BaseObject
 	{
+		public const int TileSize = 256;
+
+		private bool _ready;
+
+		private HeightMap _heightMap;
+		private int _blockWidth = 4;
+		private int _blockHeight = 4;
+		private int _width;
+		private int _height;
+
 		private readonly MultiCompileEffect _effect;
 		private readonly List<TerrainTile> _visibleTiles = new List<TerrainTile>();
 		private readonly List<Texture2D> _textureLayers = new List<Texture2D>();
@@ -17,11 +28,149 @@ namespace Myra.Graphics3D.Terrain
 		internal QuadTreeNode TopNode { get; set; }
 		internal int[] _blockIndexes;
 
-		public HeightMap HeightMap { get; set; }
-		public float BlockWidth { get; set; }
-		public float BlockHeight { get; set; }
-		public float Width { get; private set; }
-		public float Height { get; private set; }
+		public HeightMap HeightMap
+		{
+			get
+			{
+				return _heightMap;
+			}
+
+			set
+			{
+				if (value == _heightMap)
+				{
+					return;
+				}
+
+				if (value == null)
+				{
+					throw new ArgumentNullException("value");
+				}
+
+				_heightMap = value;
+
+				if (Width == 0)
+				{
+					Width = HeightMap.Columns - 1;
+				}
+
+				if (Height == 0)
+				{
+					Height = HeightMap.Rows - 1;
+				}
+
+				Invalidate();
+			}
+		}
+
+		public int BlockWidth
+		{
+			get
+			{
+				return _blockWidth;
+			}
+
+			set
+			{
+				if (value == _blockWidth)
+				{
+					return;
+				}
+
+				if (value < 1)
+				{
+					throw new ArgumentOutOfRangeException("value");
+				}
+
+				_blockWidth = value;
+				Invalidate();
+			}
+		}
+
+
+		public int BlockHeight
+		{
+			get
+			{
+				return _blockHeight;
+			}
+
+			set
+			{
+				if (value == _blockHeight)
+				{
+					return;
+				}
+
+				if (value < 1)
+				{
+					throw new ArgumentOutOfRangeException("value");
+				}
+
+				_blockHeight = value;
+				Invalidate();
+			}
+		}
+
+		public int Width
+		{
+			get
+			{
+				return _width;
+			}
+
+			set
+			{
+				if (value == _width)
+				{
+					return;
+				}
+
+				if (value < 1)
+				{
+					throw new ArgumentOutOfRangeException("value");
+				}
+
+				_width = value;
+				Invalidate();
+			}
+		}
+
+
+		public int Height
+		{
+			get
+			{
+				return _height;
+			}
+
+			set
+			{
+				if (value == _height)
+				{
+					return;
+				}
+
+				if (value < 1)
+				{
+					throw new ArgumentOutOfRangeException("value");
+				}
+
+				_height = value;
+				Invalidate();
+			}
+		}
+
+		public bool Ready
+		{
+			get
+			{
+				return _ready;
+			}
+		}
+
+		private int _tilesProcessed;
+		private int _tilesCount;
 
 		public bool DrawNormals { get; set; }
 
@@ -43,10 +192,17 @@ namespace Myra.Graphics3D.Terrain
 			get { return TopNode.BoundingBox; }
 		}
 
+		public Action<ProgressInfo> ProgressReporter { get; set; }
+
 		public TerrainObject()
 		{
 			_effect = DefaultAssets.TerrainEffect;
 			Color = Color.White;
+		}
+
+		public void Invalidate()
+		{
+			_ready = false;
 		}
 
 		public Effect GetEffect(bool hasLight, bool hasTexture)
@@ -66,19 +222,64 @@ namespace Myra.Graphics3D.Terrain
 			return _effect.GetEffect(defines.ToArray());
 		}
 
-		public void Init()
+		internal void TileProcessed()
 		{
-			Width = (HeightMap.Columns - 1);
-			Height = (HeightMap.Rows - 1);
+			++_tilesProcessed;
 
-			// building quad tree
-			TopNode = new QuadTreeNode(this, new Rectangle(-(int) Width/2, -(int) Height/2, (int) Width, (int) Height));
+			if (_tilesCount == 0)
+			{
+				return;
+			}
+
+			var a = ProgressReporter;
+			if (a != null)
+			{
+				a(new ProgressInfo
+				{
+					Finished = false,
+					Progress = (float) _tilesProcessed/_tilesCount
+				});
+			}
+		}
+
+		public void Update()
+		{
+			if (_ready)
+			{
+				return;
+			}
+
+			// Calculate number of tiles
+			var tilesX = Width/TileSize;
+			if (Width%TileSize > 0)
+			{
+				++tilesX;
+			}
+
+			var tilesY = Height/TileSize;
+			if (Height%TileSize > 0)
+			{
+				++tilesY;
+			}
+
+			_tilesCount = tilesX*tilesY;
+			_tilesProcessed = 0;
+
+			// Building quad tree
+			TopNode = new QuadTreeNode(this, new Rectangle(-Width/2, -Height/2, Width, Height));
 			TopNode.Build();
 
-			// Terrain effect
-//			m_terrainEffect->init(device);
+			var a = ProgressReporter;
+			if (a != null)
+			{
+				a(new ProgressInfo
+				{
+					Finished = true,
+					Progress = 1.0f
+				});
+			}
 
-//			m_terrainEffect->SetScale(m_textureScale);
+			_ready = true;
 		}
 
 		public float GetHeightAt(float x, float z)
@@ -183,6 +384,11 @@ namespace Myra.Graphics3D.Terrain
 
 		public override void Render(RenderContext context)
 		{
+			if (!_ready)
+			{
+				throw new Exception("Terrain is not ready. Call the Update method and make sure it finishes execution.");
+			}
+
 			// Build list of visible tiles
 			_visibleTiles.Clear();
 
@@ -208,7 +414,7 @@ namespace Myra.Graphics3D.Terrain
 
 			if (_textureLayers.Count > 0)
 			{
-				effect.Parameters["_scale"].SetValue(BlockWidth);
+				effect.Parameters["_scale"].SetValue((float)BlockWidth);
 
 				int i;
 				for (i = 0; i < _textureLayers.Count; ++i)
@@ -246,6 +452,7 @@ namespace Myra.Graphics3D.Terrain
 			}
 
 			if (!DrawNormals) return;
+
 			foreach (var tile in _visibleTiles)
 			{
 				var mesh = tile.NormalsMesh;

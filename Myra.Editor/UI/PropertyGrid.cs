@@ -189,7 +189,9 @@ namespace Myra.Editor.UI
 			// Mark
 			var mark = new ImageButton(PropertyGridStyle.MarkStyle)
 			{
-				Toggleable = true
+				Toggleable = true,
+				HorizontalAlignment = HorizontalAlignment.Left,
+				VerticalAlignment = VerticalAlignment.Center
 			};
 
 			subGrid.Widgets.Add(mark);

@@ -6,8 +6,6 @@ namespace Myra.Graphics3D.Terrain
 {
 	internal class QuadTreeNode
 	{
-		private const int MinimumSize = 256;
-
 		private const int TopLeft = 0;
 		private const int TopRight = 1;
 		private const int BottomLeft = 2;
@@ -34,7 +32,7 @@ namespace Myra.Graphics3D.Terrain
 
 		public void Build()
 		{
-			if (Bounds.Width > MinimumSize)
+			if (Bounds.Width > TerrainObject.TileSize)
 			{
 				// Not leaf
 				var width = Bounds.Width/2;
@@ -60,6 +58,7 @@ namespace Myra.Graphics3D.Terrain
 			{
 				Leaf = new TerrainTile(_terrain, Bounds);
 				Leaf.Build();
+				_terrain.TileProcessed();
 				BoundingBox = Leaf.BoundingBox;
 			}
 		}

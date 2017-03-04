@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Myra.Graphics2D.UI;
@@ -21,6 +22,9 @@ namespace Myra.Samples
 		private readonly CameraInputController _cameraController;
 		private readonly DirectionalLight[] _lights;
 		private Desktop _desktop;
+		private Grid _progressGrid;
+		private HorizontalProgressBar _progressBar;
+		private TextBlock _progressText;
 		private Grid _statisticsGrid;
 		private CheckBox _lightsOn;
 		private CheckBox _drawNormals;
@@ -181,28 +185,82 @@ namespace Myra.Samples
 			_statisticsGrid.VerticalAlignment = VerticalAlignment.Bottom;
 			_statisticsGrid.XHint = 10;
 			_statisticsGrid.YHint = -10;
-			_desktop.Widgets.Add(_statisticsGrid);
 
-			// Init 3d stuff
-			var generator = new HeightMapGenerator(2048, 2048, 0, 300);
-
-			var heightMap = generator.Generate();
-
-			_terrain = new TerrainObject
+			_progressGrid = new Grid
 			{
-				HeightMap = heightMap,
-				BlockWidth = 4,
-				BlockHeight = 4
+				ColumnSpacing = 8,
+				HorizontalAlignment = HorizontalAlignment.Center,
+				VerticalAlignment = VerticalAlignment.Center
 			};
+			_progressGrid.ColumnsProportions.Add(new Grid.Proportion());
+			_progressGrid.ColumnsProportions.Add(new Grid.Proportion());
 
-			_terrain.Init();
+			_progressText = new TextBlock
+			{
+				Text = "Generating Height Map:"
+			};
+			_progressGrid.Widgets.Add(_progressText);
 
-			_terrain.AddTextureLayer(SampleAssets.SampleTexture2);
+			_progressBar = new HorizontalProgressBar
+			{
+				WidthHint = 200,
+				GridPositionX = 1,
+				VerticalAlignment = VerticalAlignment.Center
+			};
+			_progressGrid.Widgets.Add(_progressBar);
+
+			_desktop.Widgets.Add(_progressGrid);
+
+			_terrain = new TerrainObject();
 
 			_scene = new Scene();
 			_scene.Items.Add(_terrain);
 
+			ThreadPool.QueueUserWorkItem(TerrainBuilder);
+		}
+
+		private void TerrainBuilder(object state)
+		{
+			// Init 3d stuff
+			var generator = new HeightMapGenerator(2048, 2048, 0, 300)
+			{
+				ProgressReporter = HeightMapProgressReporter
+			};
+
+			var heightMap = generator.Generate();
+
+			_terrain.ProgressReporter = TerrainProgressReporter;
+			_terrain.HeightMap = heightMap;
+			_terrain.AddTextureLayer(SampleAssets.SampleTexture2);
+
+			_terrain.Update();
+
 			GC.Collect();
+		}
+
+		private void HeightMapProgressReporter(ProgressInfo f)
+		{
+			if (!f.Finished)
+			{
+				_progressBar.Value = _progressBar.Minimum + (_progressBar.Maximum - _progressBar.Minimum)*f.Progress;
+			}
+			else
+			{
+				_progressText.Text = "Building Terrain:";
+			}
+		}
+
+		private void TerrainProgressReporter(ProgressInfo f)
+		{
+			if (!f.Finished)
+			{
+				_progressBar.Value = _progressBar.Minimum + (_progressBar.Maximum - _progressBar.Minimum)*f.Progress;
+			}
+			else
+			{
+				_desktop.Widgets.Remove(_progressGrid);
+				_desktop.Widgets.Add(_statisticsGrid);
+			}
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -210,6 +268,11 @@ namespace Myra.Samples
 			var keyboardState = Keyboard.GetState();
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || keyboardState.IsKeyDown(Keys.Escape))
 				Exit();
+
+			if (!_terrain.Ready)
+			{
+				return;
+			}
 
 			// Manage camera input controller
 			_cameraController.SetControlKeyState(CameraInputController.ControlKeys.Left, keyboardState.IsKeyDown(Keys.A));
@@ -257,8 +320,11 @@ namespace Myra.Samples
 
 			device.Clear(Color.Black);
 
-			_terrain.DrawNormals = _drawNormals.IsPressed;
-			_scene.Render(_camera, _lightsOn.IsPressed ? _lights : null);
+			if (_terrain.Ready)
+			{
+				_terrain.DrawNormals = _drawNormals.IsPressed;
+				_scene.Render(_camera, _lightsOn.IsPressed ? _lights : null);
+			}
 
 			_desktop.Bounds = new Rectangle(0, 0,
 				GraphicsDevice.PresentationParameters.BackBufferWidth,

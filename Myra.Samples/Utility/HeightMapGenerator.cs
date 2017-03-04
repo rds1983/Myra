@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using Myra.Graphics3D.Terrain;
+using Myra.Utility;
 
 namespace Myra.Samples.Utility
 {
@@ -12,6 +13,10 @@ namespace Myra.Samples.Utility
 		private readonly int _columns, _rows;
 		private readonly float _minimumDepth, _maximumDepth;
 		private readonly Random _random = new Random();
+
+		private int _stepsCount, _currentStep;
+
+		public Action<ProgressInfo> ProgressReporter;
 
 		/// <summary>
 		/// Constructor
@@ -131,6 +136,21 @@ namespace Myra.Samples.Utility
 					rects.Enqueue(new Rectangle(rect.X + halfWidth, rect.Y + halfHeight, rect.Width - halfWidth,
 						rect.Height - halfHeight));
 				}
+				else
+				{
+					++_currentStep;
+					if (_stepsCount <= 0) continue;
+
+					var a = ProgressReporter;
+					if (a != null)
+					{
+						a(new ProgressInfo
+						{
+							Finished = false,
+							Progress = (float) _currentStep/_stepsCount
+						});
+					}
+				}
 			}
 		}
 
@@ -143,6 +163,8 @@ namespace Myra.Samples.Utility
 			heightMap[0, heightMap.Rows - 1] = 0;
 			heightMap[heightMap.Columns - 1, heightMap.Rows - 1] = 0;
 
+			_stepsCount = heightMap.Columns*heightMap.Rows;
+
 			DiamondSquare(heightMap);
 
 			// Apply heights
@@ -153,6 +175,16 @@ namespace Myra.Samples.Utility
 					var h = heightMap[x, y];
 					heightMap[x, y] = _minimumDepth + h*(_maximumDepth - _minimumDepth);
 				}
+			}
+
+			var a = ProgressReporter;
+			if (a != null)
+			{
+				a(new ProgressInfo
+				{
+					Finished = true,
+					Progress = 1.0f
+				});
 			}
 
 			return heightMap;

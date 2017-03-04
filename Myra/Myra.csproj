@@ -144,6 +144,7 @@
     <Compile Include="Graphics3D\RenderContext.cs" />
     <Compile Include="Graphics3D\Scene.cs" />
     <Compile Include="Graphics3D\Terrain\HeightMap.cs" />
+    <Compile Include="Utility\ProgressInfo.cs" />
     <Compile Include="Graphics3D\Terrain\QuadTreeNode.cs" />
     <Compile Include="Graphics3D\Terrain\TerrainObject.cs" />
     <Compile Include="Graphics3D\Terrain\TerrainTile.cs" />

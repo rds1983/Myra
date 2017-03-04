@@ -97,7 +97,7 @@ namespace Myra.Graphics2D.UI
 			{
 				Toggleable = true,
 				HorizontalAlignment = HorizontalAlignment.Left,
-				VerticalAlignment = VerticalAlignment.Center,
+				VerticalAlignment = VerticalAlignment.Center
 			};
 
 			_mark.Down += MarkOnDown;
