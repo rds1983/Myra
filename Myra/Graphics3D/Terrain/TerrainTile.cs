@@ -8,7 +8,6 @@ namespace Myra.Graphics3D.Terrain
 	internal class TerrainTile
 	{
 		private readonly TerrainObject _terrain;
-		private VertexPositionNormalTexture[] _vertexes;
 		private Mesh _normalsMesh;
 
 		public Rectangle Bounds { get; private set; }
@@ -19,33 +18,9 @@ namespace Myra.Graphics3D.Terrain
 		{
 			get
 			{
-				if (_normalsMesh != null)
-				{
-					return _normalsMesh;
-				}
-
-				_normalsMesh = new Mesh();
-
-				var vertexes = new List<VertexPositionNormalTexture>();
-				var indices = new List<int>();
-				var i = 0;
-				foreach (var v in _vertexes)
-				{
-					vertexes.Add(v);
-
-					var v2 = new VertexPositionNormalTexture(v.Position + v.Normal * 4, v.Normal, v.TextureCoordinate);
-					vertexes.Add(v2);
-
-					indices.Add(i++);
-					indices.Add(i++);
-				}
-
-				_normalsMesh.Init(vertexes.ToArray(), indices.ToArray(), PrimitiveType.LineList);
-
 				return _normalsMesh;
 			}
 		}
-
 
 		public TerrainTile(TerrainObject terrain, Rectangle bounds)
 		{
@@ -135,8 +110,12 @@ namespace Myra.Graphics3D.Terrain
 			VertexBuffer = new VertexBuffer(MyraEnvironment.GraphicsDevice, VertexPositionNormalTexture.VertexDeclaration,
 				vertexes.Count,
 				BufferUsage.WriteOnly);
-			_vertexes = vertexes.ToArray();
-			VertexBuffer.SetData(_vertexes);
+
+			var vertexesArray = vertexes.ToArray();
+			VertexBuffer.SetData(vertexesArray);
+
+			_normalsMesh = BaseObject.CreateNormalsVesh(vertexesArray, 4.0f);
+
 			BoundingBox = new BoundingBox(new Vector3(Bounds.X, MinHeight, Bounds.Y),
 				new Vector3(Bounds.Right, MaxHeight, Bounds.Bottom));
 		}

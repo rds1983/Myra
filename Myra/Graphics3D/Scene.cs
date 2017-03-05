@@ -17,10 +17,11 @@ namespace Myra.Graphics3D
 
 		public int ModelsRendered { get; private set; }
 
-		public void Render(Camera camera, DirectionalLight[] lights)
+		public void Render(Camera camera, DirectionalLight[] lights, RenderFlags flags = RenderFlags.None)
 		{
 			_context.Camera = camera;
 			_context.Lights = lights;
+			_context.Flags = flags;
 
 			var _device = MyraEnvironment.GraphicsDevice;
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Edit;
@@ -16,7 +15,10 @@ namespace Myra.Graphics3D
 
 		private BasicEffect _basicEffect;
 
+		private readonly VertexPositionNormalTexture[] _vertices;
+		private Vector3 _scale = new Vector3(1, 1, 1);
 		private readonly Mesh _mesh;
+		private Mesh _normalsMesh;
 
 		public Mesh Mesh
 		{
@@ -27,7 +29,24 @@ namespace Myra.Graphics3D
 		public float RotationY { get; set; }
 		public float RotationZ { get; set; }
 
-		public Vector3 Scale { get; set; }
+		public Vector3 Scale
+		{
+			get
+			{
+				return _scale;
+			}
+
+			set
+			{
+				if (value == _scale)
+				{
+					return;
+				}
+
+				_scale = value;
+				_normalsMesh = null;
+			}
+		}
 		public Vector3 Translate { get; set; }
 
 		[HiddenInEditor]
@@ -44,6 +63,20 @@ namespace Myra.Graphics3D
 			}
 		}
 
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public Matrix TransformWithoutScale
+		{
+			get
+			{
+				return Matrix.CreateRotationY(MathHelper.ToRadians(RotationX)) *
+					   Matrix.CreateRotationX(MathHelper.ToRadians(RotationY)) *
+					   Matrix.CreateRotationZ(MathHelper.ToRadians(RotationZ)) *
+					   Matrix.CreateTranslation(Translate);
+			}
+		}
+
 		[HiddenInEditor]
 		public BaseMaterial Material { get; set; }
 
@@ -56,16 +89,12 @@ namespace Myra.Graphics3D
 			}
 		}
 
-		public ModelObject(Mesh mesh)
+		public ModelObject(VertexPositionNormalTexture[] vertices, int[] indices,
+			PrimitiveType primitiveType = PrimitiveType.TriangleList)
 		{
-			if (mesh == null)
-			{
-				throw new ArgumentNullException("mesh");
-			}
-
-			_mesh = mesh;
+			_vertices = vertices;
+			_mesh = new Mesh(vertices, indices, primitiveType);
 			_effect = DefaultAssets.DefaultEffect;
-			Scale = new Vector3(1, 1, 1);
 		}
 
 		public Effect GetEffect(bool hasLight, bool hasTexture)
@@ -141,6 +170,11 @@ namespace Myra.Graphics3D
 						device.DrawIndexedPrimitives(mesh.PrimitiveType, 0, 0, 0, 0, mesh.PrimitiveCount);
 					}
 				}
+
+				if (context.Lights.Length > 1)
+				{
+					device.BlendState = BlendState.AlphaBlend;
+				}
 			}
 			else
 			{
@@ -150,6 +184,36 @@ namespace Myra.Graphics3D
 
 					device.DrawIndexedPrimitives(mesh.PrimitiveType, 0, 0, 0, 0, mesh.PrimitiveCount);
 				}
+			}
+
+			if ((context.Flags & RenderFlags.DrawNormals) == RenderFlags.None) return;
+
+			if (_normalsMesh == null)
+			{
+				// Apply scale
+				var scaledVertices = new VertexPositionNormalTexture[_vertices.Length];
+				for (var i = 0; i < scaledVertices.Length; ++i)
+				{
+					scaledVertices[i] = new VertexPositionNormalTexture(_vertices[i].Position*Scale, _vertices[i].Normal, _vertices[i].TextureCoordinate);
+				}
+
+				_normalsMesh = CreateNormalsVesh(scaledVertices, 1.0f);
+			}
+
+			device.SetVertexBuffer(_normalsMesh.VertexBuffer);
+			device.Indices = _normalsMesh.IndexBuffer;
+
+			effect = DefaultAssets.DefaultEffect.GetDefaultEffect();
+
+			worldViewProj = TransformWithoutScale*viewProjection;
+			effect.Parameters["_worldViewProj"].SetValue(worldViewProj);
+			effect.Parameters["_diffuseColor"].SetValue(NormalsColor);
+
+			foreach (var pass in effect.CurrentTechnique.Passes)
+			{
+				pass.Apply();
+
+				device.DrawIndexedPrimitives(_normalsMesh.PrimitiveType, 0, 0, 0, 0, _normalsMesh.PrimitiveCount);
 			}
 		}
 

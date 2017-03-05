@@ -142,6 +142,7 @@
     <Compile Include="Graphics3D\OrthographicCamera.cs" />
     <Compile Include="Graphics3D\PerspectiveCamera.cs" />
     <Compile Include="Graphics3D\RenderContext.cs" />
+    <Compile Include="Graphics3D\RenderFlags.cs" />
     <Compile Include="Graphics3D\Scene.cs" />
     <Compile Include="Graphics3D\Terrain\HeightMap.cs" />
     <Compile Include="Utility\ProgressInfo.cs" />

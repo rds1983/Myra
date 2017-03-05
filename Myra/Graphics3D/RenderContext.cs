@@ -23,5 +23,7 @@ namespace Myra.Graphics3D
 				_camera = value;
 			}
 		}
+
+		public RenderFlags Flags { get; set; }
 	}
 }

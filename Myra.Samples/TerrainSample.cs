@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -25,20 +24,8 @@ namespace Myra.Samples
 		private Grid _progressGrid;
 		private HorizontalProgressBar _progressBar;
 		private TextBlock _progressText;
-		private Grid _statisticsGrid;
-		private CheckBox _lightsOn;
-		private CheckBox _drawNormals;
-		private TextBlock _gcMemoryLabel;
-		private TextBlock _processMemoryLabel;
-		private TextBlock _fpsLabel;
-		private TextBlock _drawCallsLabel;
-		private TextBlock _modelsCountLabel;
-		private TextBlock _primitiveCountLabel;
-		private TextBlock _textureCountLabel;
-		private TextBlock _vertexShaderCountLabel;
-		private TextBlock _pixelShaderCountLabel;
-		private readonly FPSCounter _fpsCounter = new FPSCounter();
-		float _sunAngle = (float) Math.PI*3/2;
+		private StatisticsGrid3d _statisticsGrid;
+		private float _sunAngle = (float) Math.PI*3/2;
 
 		public TerrainSample()
 		{
@@ -72,119 +59,7 @@ namespace Myra.Samples
 			// Init 2d stuff
 			_desktop = new Desktop();
 
-			_statisticsGrid = new Grid();
-
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-
-			_lightsOn = new CheckBox
-			{
-				IsPressed = true,
-				Text = "Lights On"
-			};
-			_statisticsGrid.Widgets.Add(_lightsOn);
-
-
-			_drawNormals = new CheckBox
-			{
-				IsPressed = false,
-				Text = "Draw Normals",
-				GridPositionY = 1
-			};
-			_statisticsGrid.Widgets.Add(_drawNormals);
-
-			_gcMemoryLabel = new TextBlock
-			{
-				Text = "GC Memory: ",
-				Font = DefaultAssets.FontSmall,
-				GridPositionY = 2
-			};
-			_statisticsGrid.Widgets.Add(_gcMemoryLabel);
-
-			_processMemoryLabel = new TextBlock
-			{
-				Text = "Process Memory: ",
-				Font = DefaultAssets.FontSmall,
-				GridPositionY = 3
-			};
-			_statisticsGrid.Widgets.Add(_processMemoryLabel);
-
-			_fpsLabel = new TextBlock
-			{
-				Text = "FPS: ",
-				Font = DefaultAssets.FontSmall,
-				GridPositionY = 4
-			};
-
-			_statisticsGrid.Widgets.Add(_fpsLabel);
-
-			_drawCallsLabel = new TextBlock
-			{
-				Text = "Draw Calls: ",
-				Font = DefaultAssets.FontSmall,
-				GridPositionY = 5
-			};
-
-			_statisticsGrid.Widgets.Add(_drawCallsLabel);
-
-			_modelsCountLabel = new TextBlock
-			{
-				Text = "Models Count: ",
-				Font = DefaultAssets.FontSmall,
-				GridPositionY = 6
-			};
-
-			_statisticsGrid.Widgets.Add(_modelsCountLabel);
-
-			_primitiveCountLabel = new TextBlock
-			{
-				Text = "Draw Calls: ",
-				Font = DefaultAssets.FontSmall,
-				GridPositionY = 7
-			};
-
-			_statisticsGrid.Widgets.Add(_primitiveCountLabel);
-
-			_textureCountLabel = new TextBlock
-			{
-				Text = "Draw Calls: ",
-				Font = DefaultAssets.FontSmall,
-				GridPositionY = 8
-			};
-
-			_statisticsGrid.Widgets.Add(_textureCountLabel);
-
-			_vertexShaderCountLabel = new TextBlock
-			{
-				Text = "Draw Calls: ",
-				Font = DefaultAssets.FontSmall,
-				GridPositionY = 9
-			};
-
-			_statisticsGrid.Widgets.Add(_vertexShaderCountLabel);
-
-			_pixelShaderCountLabel = new TextBlock
-			{
-				Text = "Draw Calls: ",
-				Font = DefaultAssets.FontSmall,
-				GridPositionY = 10
-			};
-
-			_statisticsGrid.Widgets.Add(_pixelShaderCountLabel);
-
-			_statisticsGrid.HorizontalAlignment = HorizontalAlignment.Left;
-			_statisticsGrid.VerticalAlignment = VerticalAlignment.Bottom;
-			_statisticsGrid.XHint = 10;
-			_statisticsGrid.YHint = -10;
+			_statisticsGrid = new StatisticsGrid3d();
 
 			_progressGrid = new Grid
 			{
@@ -322,8 +197,7 @@ namespace Myra.Samples
 
 			if (_terrain.Ready)
 			{
-				_terrain.DrawNormals = _drawNormals.IsPressed;
-				_scene.Render(_camera, _lightsOn.IsPressed ? _lights : null);
+				_scene.Render(_camera, _statisticsGrid.IsLightningOn ? _lights : null, _statisticsGrid.RenderFlags);
 			}
 
 			_desktop.Bounds = new Rectangle(0, 0,
@@ -331,18 +205,7 @@ namespace Myra.Samples
 				GraphicsDevice.PresentationParameters.BackBufferHeight);
 			_desktop.Render();
 
-			_fpsCounter.Update();
-			_gcMemoryLabel.Text = string.Format("GC Memory: {0} kb", GC.GetTotalMemory(false)/1024);
-			_processMemoryLabel.Text = string.Format("Process Memory: {0} kb",
-				Process.GetCurrentProcess().PrivateMemorySize64/1024);
-			_fpsLabel.Text = string.Format("FPS: {0:0.##}", _fpsCounter.FPS);
-			_drawCallsLabel.Text = string.Format("Draw Calls: {0}", GraphicsDevice.Metrics.DrawCount);
-			_modelsCountLabel.Text = string.Format("Models Count: {0}", _scene.ModelsRendered);
-			_primitiveCountLabel.Text = string.Format("Primitive Count: {0}", GraphicsDevice.Metrics.PrimitiveCount);
-			_textureCountLabel.Text = string.Format("Texture Count: {0}", GraphicsDevice.Metrics.TextureCount);
-			_vertexShaderCountLabel.Text = string.Format("Vertex Shader Count: {0}", GraphicsDevice.Metrics.VertexShaderCount);
-			_pixelShaderCountLabel.Text = string.Format("Pixel Shader Count: {0}", GraphicsDevice.Metrics.PixelShaderCount);
+			_statisticsGrid.Update(GraphicsDevice, _scene);
 		}
-
 	}
 }

@@ -86,6 +86,7 @@
     <Compile Include="TerrainSample.cs" />
     <Compile Include="TextBlocksSample.cs" />
     <Compile Include="Utility\HeightMapGenerator.cs" />
+    <Compile Include="Utility\StatisticsGrid3d.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

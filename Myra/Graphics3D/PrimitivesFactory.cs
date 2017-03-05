@@ -79,18 +79,9 @@ namespace Myra.Graphics3D
 {
 	public static class PrimitivesFactory
 	{
-		private static Mesh CreateMesh(VertexPositionNormalTexture[] vertices, int[] indices,
-			PrimitiveType primitiveType = PrimitiveType.TriangleList)
-		{
-			var result = new Mesh();
-			result.Init(vertices, indices, primitiveType);
-
-			return result;
-		}
-
 		#region Cube
 
-		public static Mesh CreateCube(float size = 1.0f)
+		public static ModelObject CreateCube(float size = 1.0f)
 		{
 			var faceNormals = new[]
 			{
@@ -152,14 +143,14 @@ namespace Myra.Graphics3D
 					textureCoordinates[3]);
 			}
 
-			return CreateMesh(vertices, indices);
+			return new ModelObject(vertices, indices);
 		}
 
 		#endregion
 
 		#region Cylinder
 
-		public static Mesh CreateCylinder(float height = 1.0f, float diameter = 1.0f,
+		public static ModelObject CreateCylinder(float height = 1.0f, float diameter = 1.0f,
 			int tessellation = 32)
 		{
 			if (tessellation < 3)
@@ -200,7 +191,7 @@ namespace Myra.Graphics3D
 			CreateCylinderCap(vertices, indices, tessellation, height, radius, false);
 
 			// Create flat triangle fan caps to seal the top and bottom.
-			return CreateMesh(vertices.ToArray(), indices.ToArray());
+			return new ModelObject(vertices.ToArray(), indices.ToArray());
 		}
 
 		// Helper computes a point on a unit circle, aligned to the x/z plane and centered on the origin.
@@ -266,7 +257,7 @@ namespace Myra.Graphics3D
 
 		#region Sphere
 
-		public static Mesh CreateSphere(float diameter = 1.0f, int tessellation = 16)
+		public static ModelObject CreateSphere(float diameter = 1.0f, int tessellation = 16)
 		{
 			if (tessellation < 3) throw new ArgumentOutOfRangeException("tessellation", "Must be >= 3");
 
@@ -328,14 +319,14 @@ namespace Myra.Graphics3D
 				}
 			}
 
-			return CreateMesh(vertices, indices);
+			return new ModelObject(vertices, indices);
 		}
 
 		#endregion
 
 		#region Torus
 
-		public static Mesh CreateTorus(float diameter = 1.0f, float thickness = 0.33333f,
+		public static ModelObject CreateTorus(float diameter = 1.0f, float thickness = 0.33333f,
 			int tessellation = 32)
 		{
 			var vertices = new List<VertexPositionNormalTexture>();
@@ -389,14 +380,14 @@ namespace Myra.Graphics3D
 				}
 			}
 
-			return CreateMesh(vertices.ToArray(), indices.ToArray());
+			return new ModelObject(vertices.ToArray(), indices.ToArray());
 		}
 
 		#endregion
 
 		#region XZ Grid
 
-		public static Mesh CreateXZGrid(Vector2 size)
+		public static ModelObject CreateXZGrid(Vector2 size)
 		{
 			var vertices = new List<VertexPositionNormalTexture>();
 			var indices = new List<int>();
@@ -427,7 +418,7 @@ namespace Myra.Graphics3D
 				indices.Add(index++);
 			}
 
-			return CreateMesh(vertices.ToArray(), indices.ToArray(), PrimitiveType.LineList);
+			return new ModelObject(vertices.ToArray(), indices.ToArray(), PrimitiveType.LineList);
 		}
 
 		#endregion

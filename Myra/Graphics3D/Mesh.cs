@@ -35,8 +35,13 @@ namespace Myra.Graphics3D
 		[JsonIgnore]
 		public Vector3 MaximumBound { get; private set; }
 
-		public void Init(VertexPositionNormalTexture[] vertices, int[] indices, PrimitiveType primitiveType)
+		public Mesh(VertexPositionNormalTexture[] vertices, int[] indices, PrimitiveType primitiveType)
 		{
+			for (var i = 0; i < vertices.Length; ++i)
+			{
+				vertices[i].Normal.Normalize();
+			}
+
 			VertexBuffer = new VertexBuffer(MyraEnvironment.GraphicsDevice, VertexPositionNormalTexture.VertexDeclaration, vertices.Length,
 				BufferUsage.WriteOnly);
 			VertexBuffer.SetData(vertices);

@@ -172,8 +172,6 @@ namespace Myra.Graphics3D.Terrain
 		private int _tilesProcessed;
 		private int _tilesCount;
 
-		public bool DrawNormals { get; set; }
-
 		[HiddenInEditor]
 		[JsonIgnore]
 		public IndexBuffer IndexBuffer { get; internal set; }
@@ -451,7 +449,7 @@ namespace Myra.Graphics3D.Terrain
 				}
 			}
 
-			if (!DrawNormals) return;
+			if ((context.Flags & RenderFlags.DrawNormals) == RenderFlags.None) return;
 
 			foreach (var tile in _visibleTiles)
 			{
@@ -462,7 +460,7 @@ namespace Myra.Graphics3D.Terrain
 				var basicEffect = DefaultAssets.DefaultEffect.GetDefaultEffect();
 
 				basicEffect.Parameters["_worldViewProj"].SetValue(worldViewProj);
-				basicEffect.Parameters["_diffuseColor"].SetValue(Color.Coral.ToVector4());
+				basicEffect.Parameters["_diffuseColor"].SetValue(NormalsColor);
 
 				basicEffect.Techniques[0].Passes[0].Apply();
 

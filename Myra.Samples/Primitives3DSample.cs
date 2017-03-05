@@ -8,6 +8,7 @@ using Myra.Graphics2D.UI;
 using Myra.Graphics3D;
 using Myra.Graphics3D.Materials;
 using Myra.Graphics3D.Utils;
+using Myra.Samples.Utility;
 using Myra.Utility;
 using DirectionalLight = Myra.Graphics3D.Environment.DirectionalLight;
 
@@ -28,18 +29,7 @@ namespace Myra.Samples
 		private readonly List<ModelInfo> _modelInstances = new List<ModelInfo>();
 		private readonly DirectionalLight[] _lights;
 		private Desktop _desktop;
-		private Grid _statisticsGrid;
-		private CheckBox _lightsOn;
-		private TextBlock _gcMemoryLabel;
-		private TextBlock _processMemoryLabel;
-		private TextBlock _fpsLabel;
-		private TextBlock _drawCallsLabel;
-		private TextBlock _modelsCountLabel;
-		private TextBlock _primitiveCountLabel;
-		private TextBlock _textureCountLabel;
-		private TextBlock _vertexShaderCountLabel;
-		private TextBlock _pixelShaderCountLabel;
-		private readonly FPSCounter _fpsCounter = new FPSCounter();
+		private StatisticsGrid3d _statisticsGrid;
 		private readonly Random _random = new Random();
 
 		public Primitives3DSample()
@@ -79,120 +69,14 @@ namespace Myra.Samples
 			// Init 2d stuff
 			_desktop = new Desktop();
 
-			_statisticsGrid = new Grid();
-
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-
-			_lightsOn = new CheckBox
-			{
-				IsPressed = true,
-				Text = "Lights On"
-			};
-			_statisticsGrid.Widgets.Add(_lightsOn);
-
-			_gcMemoryLabel = new TextBlock
-			{
-				Text = "GC Memory: ",
-				Font = DefaultAssets.FontSmall,
-				GridPositionY = 1
-			};
-			_statisticsGrid.Widgets.Add(_gcMemoryLabel);
-
-			_processMemoryLabel = new TextBlock
-			{
-				Text = "Process Memory: ",
-				Font = DefaultAssets.FontSmall,
-				GridPositionY = 2
-			};
-			_statisticsGrid.Widgets.Add(_processMemoryLabel);
-
-			_fpsLabel = new TextBlock
-			{
-				Text = "FPS: ",
-				Font = DefaultAssets.FontSmall,
-				GridPositionY = 3
-			};
-
-			_statisticsGrid.Widgets.Add(_fpsLabel);
-
-			_drawCallsLabel = new TextBlock
-			{
-				Text = "Draw Calls: ",
-				Font = DefaultAssets.FontSmall,
-				GridPositionY = 4
-			};
-
-			_statisticsGrid.Widgets.Add(_drawCallsLabel);
-
-			_modelsCountLabel = new TextBlock
-			{
-				Text = "Models Count: ",
-				Font = DefaultAssets.FontSmall,
-				GridPositionY = 5
-			};
-
-			_statisticsGrid.Widgets.Add(_modelsCountLabel);
-
-			_primitiveCountLabel = new TextBlock
-			{
-				Text = "Draw Calls: ",
-				Font = DefaultAssets.FontSmall,
-				GridPositionY = 6
-			};
-
-			_statisticsGrid.Widgets.Add(_primitiveCountLabel);
-
-			_textureCountLabel = new TextBlock
-			{
-				Text = "Draw Calls: ",
-				Font = DefaultAssets.FontSmall,
-				GridPositionY = 7
-			};
-
-			_statisticsGrid.Widgets.Add(_textureCountLabel);
-
-			_vertexShaderCountLabel = new TextBlock
-			{
-				Text = "Draw Calls: ",
-				Font = DefaultAssets.FontSmall,
-				GridPositionY = 8
-			};
-
-			_statisticsGrid.Widgets.Add(_vertexShaderCountLabel);
-
-			_pixelShaderCountLabel = new TextBlock
-			{
-				Text = "Draw Calls: ",
-				Font = DefaultAssets.FontSmall,
-				GridPositionY = 9
-			};
-
-			_statisticsGrid.Widgets.Add(_pixelShaderCountLabel);
-
-			_statisticsGrid.HorizontalAlignment = HorizontalAlignment.Left;
-			_statisticsGrid.VerticalAlignment = VerticalAlignment.Bottom;
-			_statisticsGrid.XHint = 10;
-			_statisticsGrid.YHint = -10;
+			_statisticsGrid = new StatisticsGrid3d();
 			_desktop.Widgets.Add(_statisticsGrid);
 
 			// Init 3d stuff
-			var gridModel = PrimitivesFactory.CreateXZGrid(new Vector2(100, 100));
-
-			var grid = new ModelObject(gridModel)
+			var grid = PrimitivesFactory.CreateXZGrid(new Vector2(100, 100));
+			grid.Material = new BaseMaterial
 			{
-				Material = new BaseMaterial
-				{
-					DiffuseColor = Color.Gray
-				}
+				DiffuseColor = Color.Gray
 			};
 
 			_modelInstances.Add(new ModelInfo
@@ -208,20 +92,20 @@ namespace Myra.Samples
 				var trs = _random.Next(-50, 50);
 				var trz = _random.Next(-50, 50);
 
-				Mesh mesh;
+				ModelObject instance;
 				switch (_random.Next(0, 4))
 				{
 					case 0:
-						mesh = PrimitivesFactory.CreateCube();
+						instance = PrimitivesFactory.CreateCube();
 						break;
 					case 1:
-						mesh = PrimitivesFactory.CreateCylinder();
+						instance = PrimitivesFactory.CreateCylinder();
 						break;
 					case 2:
-						mesh = PrimitivesFactory.CreateSphere();
+						instance = PrimitivesFactory.CreateSphere();
 						break;
 					default:
-						mesh = PrimitivesFactory.CreateTorus();
+						instance = PrimitivesFactory.CreateTorus();
 						break;
 				}
 
@@ -236,16 +120,13 @@ namespace Myra.Samples
 					texture = SampleAssets.SampleTexture2;
 				}
 
-				var instance = new ModelObject(mesh)
+				instance.Scale = new Vector3(sr, sr, sr);
+				instance.Translate = new Vector3(trx, trs, trz);
+				instance.Material = new BaseMaterial
 				{
-					Scale = new Vector3(sr, sr, sr),
-					Translate = new Vector3(trx, trs, trz),
-					Material = new BaseMaterial
-					{
-						DiffuseColor = Color.FromNonPremultiplied(_random.Next(0, 255), _random.Next(0, 255), _random.Next(0, 255), 255),
-						Texture = texture,
-						HasLight = true
-					}
+					DiffuseColor = Color.FromNonPremultiplied(_random.Next(0, 255), _random.Next(0, 255), _random.Next(0, 255), 255),
+					Texture = texture,
+					HasLight = true
 				};
 
 				var info = new ModelInfo
@@ -321,24 +202,14 @@ namespace Myra.Samples
 
 			device.Clear(Color.Black);
 
-			_scene.Render(_camera, _lightsOn.IsPressed ? _lights : null);
+			_scene.Render(_camera, _statisticsGrid.IsLightningOn ? _lights : null, _statisticsGrid.RenderFlags);
 
 			_desktop.Bounds = new Rectangle(0, 0,
 				GraphicsDevice.PresentationParameters.BackBufferWidth,
 				GraphicsDevice.PresentationParameters.BackBufferHeight);
 			_desktop.Render();
 
-			_fpsCounter.Update();
-			_gcMemoryLabel.Text = string.Format("GC Memory: {0} kb", GC.GetTotalMemory(false)/1024);
-			_processMemoryLabel.Text = string.Format("Process Memory: {0} kb",
-				Process.GetCurrentProcess().PrivateMemorySize64/1024);
-			_fpsLabel.Text = string.Format("FPS: {0:0.##}", _fpsCounter.FPS);
-			_drawCallsLabel.Text = string.Format("Draw Calls: {0}", GraphicsDevice.Metrics.DrawCount);
-			_modelsCountLabel.Text = string.Format("Models Count: {0}", _scene.ModelsRendered);
-			_primitiveCountLabel.Text = string.Format("Primitive Count: {0}", GraphicsDevice.Metrics.PrimitiveCount);
-			_textureCountLabel.Text = string.Format("Texture Count: {0}", GraphicsDevice.Metrics.TextureCount);
-			_vertexShaderCountLabel.Text = string.Format("Vertex Shader Count: {0}", GraphicsDevice.Metrics.VertexShaderCount);
-			_pixelShaderCountLabel.Text = string.Format("Pixel Shader Count: {0}", GraphicsDevice.Metrics.PixelShaderCount);
+			_statisticsGrid.Update(GraphicsDevice, _scene);
 		}
 	}
 }
