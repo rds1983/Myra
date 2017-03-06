@@ -30,10 +30,7 @@ namespace Myra.Graphics3D.Terrain
 
 		public HeightMap HeightMap
 		{
-			get
-			{
-				return _heightMap;
-			}
+			get { return _heightMap; }
 
 			set
 			{
@@ -65,10 +62,7 @@ namespace Myra.Graphics3D.Terrain
 
 		public int BlockWidth
 		{
-			get
-			{
-				return _blockWidth;
-			}
+			get { return _blockWidth; }
 
 			set
 			{
@@ -90,10 +84,7 @@ namespace Myra.Graphics3D.Terrain
 
 		public int BlockHeight
 		{
-			get
-			{
-				return _blockHeight;
-			}
+			get { return _blockHeight; }
 
 			set
 			{
@@ -114,10 +105,7 @@ namespace Myra.Graphics3D.Terrain
 
 		public int Width
 		{
-			get
-			{
-				return _width;
-			}
+			get { return _width; }
 
 			set
 			{
@@ -139,10 +127,7 @@ namespace Myra.Graphics3D.Terrain
 
 		public int Height
 		{
-			get
-			{
-				return _height;
-			}
+			get { return _height; }
 
 			set
 			{
@@ -163,10 +148,7 @@ namespace Myra.Graphics3D.Terrain
 
 		public bool Ready
 		{
-			get
-			{
-				return _ready;
-			}
+			get { return _ready; }
 		}
 
 		private int _tilesProcessed;
@@ -412,7 +394,7 @@ namespace Myra.Graphics3D.Terrain
 
 			if (_textureLayers.Count > 0)
 			{
-				effect.Parameters["_scale"].SetValue((float)BlockWidth);
+				effect.Parameters["_scale"].SetValue((float) BlockWidth);
 
 				int i;
 				for (i = 0; i < _textureLayers.Count; ++i)
@@ -449,23 +431,56 @@ namespace Myra.Graphics3D.Terrain
 				}
 			}
 
-			if ((context.Flags & RenderFlags.DrawNormals) == RenderFlags.None) return;
 
-			foreach (var tile in _visibleTiles)
+			if ((context.Flags & RenderFlags.DrawNormals) == RenderFlags.None &&
+			    (context.Flags & RenderFlags.DrawBoundingBoxes) == RenderFlags.None) return;
+
+			var basicEffect = DefaultAssets.DefaultEffect.GetDefaultEffect();
+
+			basicEffect.Parameters["_worldViewProj"].SetValue(worldViewProj);
+
+			if ((context.Flags & RenderFlags.DrawNormals) == RenderFlags.DrawNormals)
 			{
-				var mesh = tile.NormalsMesh;
-				device.SetVertexBuffer(mesh.VertexBuffer);
-				device.Indices = mesh.IndexBuffer;
-
-				var basicEffect = DefaultAssets.DefaultEffect.GetDefaultEffect();
-
-				basicEffect.Parameters["_worldViewProj"].SetValue(worldViewProj);
 				basicEffect.Parameters["_diffuseColor"].SetValue(NormalsColor);
 
-				basicEffect.Techniques[0].Passes[0].Apply();
+				foreach (var t in basicEffect.Techniques)
+				{
+					foreach (var p in t.Passes)
+					{
+						p.Apply();
+						foreach (var tile in _visibleTiles)
+						{
+							var mesh = tile.NormalsMesh;
+							device.SetVertexBuffer(mesh.VertexBuffer);
+							device.Indices = mesh.IndexBuffer;
 
-				device.DrawIndexedPrimitives(mesh.PrimitiveType, 0, 0, 0, 0, mesh.PrimitiveCount);
+							device.DrawIndexedPrimitives(mesh.PrimitiveType, 0, 0, 0, 0, mesh.PrimitiveCount);
+						}
+					}
+				}
 			}
+
+			if ((context.Flags & RenderFlags.DrawBoundingBoxes) == RenderFlags.DrawBoundingBoxes)
+			{
+				basicEffect.Parameters["_diffuseColor"].SetValue(BoundingBoxesColor);
+
+				foreach (var t in basicEffect.Techniques)
+				{
+					foreach (var p in t.Passes)
+					{
+						p.Apply();
+						foreach (var tile in _visibleTiles)
+						{
+							var mesh = tile.BoundingBoxMesh;
+							device.SetVertexBuffer(mesh.VertexBuffer);
+							device.Indices = mesh.IndexBuffer;
+
+							device.DrawIndexedPrimitives(mesh.PrimitiveType, 0, 0, 0, 0, mesh.PrimitiveCount);
+						}
+					}
+				}
+			}
+
 		}
 	}
 }

@@ -8,19 +8,13 @@ namespace Myra.Graphics3D.Terrain
 	internal class TerrainTile
 	{
 		private readonly TerrainObject _terrain;
-		private Mesh _normalsMesh;
 
 		public Rectangle Bounds { get; private set; }
 		public VertexBuffer VertexBuffer { get; private set; }
 		public BoundingBox BoundingBox { get; private set; }
 
-		public Mesh NormalsMesh
-		{
-			get
-			{
-				return _normalsMesh;
-			}
-		}
+		public Mesh NormalsMesh { get; private set; }
+		public Mesh BoundingBoxMesh { get; private set; }
 
 		public TerrainTile(TerrainObject terrain, Rectangle bounds)
 		{
@@ -114,10 +108,11 @@ namespace Myra.Graphics3D.Terrain
 			var vertexesArray = vertexes.ToArray();
 			VertexBuffer.SetData(vertexesArray);
 
-			_normalsMesh = BaseObject.CreateNormalsVesh(vertexesArray, 4.0f);
+			NormalsMesh = BaseObject.CreateNormalsMesh(vertexesArray);
 
 			BoundingBox = new BoundingBox(new Vector3(Bounds.X, MinHeight, Bounds.Y),
 				new Vector3(Bounds.Right, MaxHeight, Bounds.Bottom));
+			BoundingBoxMesh = BaseObject.CreateBoundingBoxMesh(BoundingBox);
 		}
 	}
 }

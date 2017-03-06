@@ -9,7 +9,6 @@ using Myra.Graphics3D;
 using Myra.Graphics3D.Materials;
 using Myra.Graphics3D.Utils;
 using Myra.Samples.Utility;
-using Myra.Utility;
 using DirectionalLight = Myra.Graphics3D.Environment.DirectionalLight;
 
 namespace Myra.Samples
@@ -19,7 +18,7 @@ namespace Myra.Samples
 		private class ModelInfo
 		{
 			public ModelObject ModelObject;
-			public Vector3 Rotation;
+			public Vector3 Rotate;
 		}
 
 		private readonly GraphicsDeviceManager graphics;
@@ -82,7 +81,7 @@ namespace Myra.Samples
 			_modelInstances.Add(new ModelInfo
 			{
 				ModelObject = grid,
-				Rotation = new Vector3(0, 0, 0)
+				Rotate = new Vector3(0, 0, 0)
 			});
 
 			for (var i = 0; i < 500; ++i)
@@ -132,7 +131,7 @@ namespace Myra.Samples
 				var info = new ModelInfo
 				{
 					ModelObject = instance,
-					Rotation = new Vector3(GenRotation(), GenRotation(), GenRotation())
+					Rotate = new Vector3(GenRotation(), GenRotation(), GenRotation())
 				};
 
 				_modelInstances.Add(info);
@@ -178,9 +177,7 @@ namespace Myra.Samples
 			foreach (var info in _modelInstances)
 			{
 				var model = info.ModelObject;
-				model.RotationX += info.Rotation.X;
-				model.RotationY += info.Rotation.Y;
-				model.RotationZ += info.Rotation.Z;
+				model.Rotate += info.Rotate;
 			}
 
 			base.Update(gameTime);

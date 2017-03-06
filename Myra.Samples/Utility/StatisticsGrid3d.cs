@@ -11,8 +11,9 @@ namespace Myra.Samples.Utility
 	{
 		private readonly FPSCounter _fpsCounter = new FPSCounter();
 
-		private readonly CheckBox _lightsOn;
+		private readonly CheckBox _lightningOn;
 		private readonly CheckBox _drawNormals;
+		private readonly CheckBox _drawBoundingBoxes;
 		private readonly TextBlock _gcMemoryLabel;
 		private readonly TextBlock _processMemoryLabel;
 		private readonly TextBlock _fpsLabel;
@@ -25,7 +26,7 @@ namespace Myra.Samples.Utility
 
 		public bool IsLightningOn
 		{
-			get { return _lightsOn.IsPressed; }
+			get { return _lightningOn.IsPressed; }
 		}
 
 		public RenderFlags RenderFlags
@@ -37,6 +38,11 @@ namespace Myra.Samples.Utility
 				if (_drawNormals.IsPressed)
 				{
 					result |= RenderFlags.DrawNormals;
+				}
+
+				if (_drawBoundingBoxes.IsPressed)
+				{
+					result |= RenderFlags.DrawBoundingBoxes;
 				}
 
 				return result;
@@ -61,13 +67,14 @@ namespace Myra.Samples.Utility
 			RowsProportions.Add(new Proportion());
 			RowsProportions.Add(new Proportion());
 			RowsProportions.Add(new Proportion());
+			RowsProportions.Add(new Proportion());
 
-			_lightsOn = new CheckBox
+			_lightningOn = new CheckBox
 			{
 				IsPressed = true,
 				Text = "Lighting On"
 			};
-			Widgets.Add(_lightsOn);
+			Widgets.Add(_lightningOn);
 
 			_drawNormals = new CheckBox
 			{
@@ -77,11 +84,19 @@ namespace Myra.Samples.Utility
 			};
 			Widgets.Add(_drawNormals);
 
+			_drawBoundingBoxes = new CheckBox
+			{
+				IsPressed = false,
+				Text = "Draw Bounding Boxes",
+				GridPositionY = 2
+			};
+			Widgets.Add(_drawBoundingBoxes);
+
 			_gcMemoryLabel = new TextBlock
 			{
 				Text = "GC Memory: ",
 				Font = DefaultAssets.FontSmall,
-				GridPositionY = 2
+				GridPositionY = 3
 			};
 			Widgets.Add(_gcMemoryLabel);
 
@@ -89,7 +104,7 @@ namespace Myra.Samples.Utility
 			{
 				Text = "Process Memory: ",
 				Font = DefaultAssets.FontSmall,
-				GridPositionY = 3
+				GridPositionY = 4
 			};
 			Widgets.Add(_processMemoryLabel);
 
@@ -97,7 +112,7 @@ namespace Myra.Samples.Utility
 			{
 				Text = "FPS: ",
 				Font = DefaultAssets.FontSmall,
-				GridPositionY = 4
+				GridPositionY = 5
 			};
 
 			Widgets.Add(_fpsLabel);
@@ -106,7 +121,7 @@ namespace Myra.Samples.Utility
 			{
 				Text = "Draw Calls: ",
 				Font = DefaultAssets.FontSmall,
-				GridPositionY = 5
+				GridPositionY = 6
 			};
 
 			Widgets.Add(_drawCallsLabel);
@@ -115,7 +130,7 @@ namespace Myra.Samples.Utility
 			{
 				Text = "Models Count: ",
 				Font = DefaultAssets.FontSmall,
-				GridPositionY = 6
+				GridPositionY = 7
 			};
 
 			Widgets.Add(_modelsCountLabel);
@@ -124,7 +139,7 @@ namespace Myra.Samples.Utility
 			{
 				Text = "Draw Calls: ",
 				Font = DefaultAssets.FontSmall,
-				GridPositionY = 7
+				GridPositionY = 8
 			};
 
 			Widgets.Add(_primitiveCountLabel);
@@ -133,7 +148,7 @@ namespace Myra.Samples.Utility
 			{
 				Text = "Draw Calls: ",
 				Font = DefaultAssets.FontSmall,
-				GridPositionY = 8
+				GridPositionY = 9
 			};
 
 			Widgets.Add(_textureCountLabel);
@@ -142,7 +157,7 @@ namespace Myra.Samples.Utility
 			{
 				Text = "Draw Calls: ",
 				Font = DefaultAssets.FontSmall,
-				GridPositionY = 9
+				GridPositionY = 10
 			};
 
 			Widgets.Add(_vertexShaderCountLabel);
@@ -151,7 +166,7 @@ namespace Myra.Samples.Utility
 			{
 				Text = "Draw Calls: ",
 				Font = DefaultAssets.FontSmall,
-				GridPositionY = 10
+				GridPositionY = 11
 			};
 
 			Widgets.Add(_pixelShaderCountLabel);

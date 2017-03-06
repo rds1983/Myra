@@ -17,17 +17,19 @@ namespace Myra.Graphics3D
 
 		private readonly VertexPositionNormalTexture[] _vertices;
 		private Vector3 _scale = new Vector3(1, 1, 1);
+		private Vector3 _translate;
+		private Vector3 _rotate;
 		private readonly Mesh _mesh;
 		private Mesh _normalsMesh;
+		private Mesh _boundingBoxMesh;
+		private bool _transformDirty = true;
+		private Matrix _transform, _transformWithoutScale;
+		private BoundingBox _boundingBox;
 
 		public Mesh Mesh
 		{
 			get { return _mesh; }
 		}
-
-		public float RotationX { get; set; }
-		public float RotationY { get; set; }
-		public float RotationZ { get; set; }
 
 		public Vector3 Scale
 		{
@@ -45,9 +47,47 @@ namespace Myra.Graphics3D
 
 				_scale = value;
 				_normalsMesh = null;
+				InvalidateTransform();
 			}
 		}
-		public Vector3 Translate { get; set; }
+
+		public Vector3 Translate
+		{
+			get
+			{
+				return _translate;
+			}
+
+			set
+			{
+				if (value == _translate)
+				{
+					return;
+				}
+
+				_translate = value;
+				InvalidateTransform();
+			}
+		}
+
+		public Vector3 Rotate
+		{
+			get
+			{
+				return _rotate;
+			}
+
+			set
+			{
+				if (value == _rotate)
+				{
+					return;
+				}
+
+				_rotate = value;
+				InvalidateTransform();
+			}
+		}
 
 		[HiddenInEditor]
 		[JsonIgnore]
@@ -55,11 +95,8 @@ namespace Myra.Graphics3D
 		{
 			get
 			{
-				return Matrix.CreateRotationY(MathHelper.ToRadians(RotationX))*
-				       Matrix.CreateRotationX(MathHelper.ToRadians(RotationY))*
-				       Matrix.CreateRotationZ(MathHelper.ToRadians(RotationZ))*
-				       Matrix.CreateScale(Scale)*
-				       Matrix.CreateTranslation(Translate);
+				Update();
+				return _transform;
 			}
 		}
 
@@ -70,10 +107,8 @@ namespace Myra.Graphics3D
 		{
 			get
 			{
-				return Matrix.CreateRotationY(MathHelper.ToRadians(RotationX)) *
-					   Matrix.CreateRotationX(MathHelper.ToRadians(RotationY)) *
-					   Matrix.CreateRotationZ(MathHelper.ToRadians(RotationZ)) *
-					   Matrix.CreateTranslation(Translate);
+				Update();
+				return _transformWithoutScale;
 			}
 		}
 
@@ -95,6 +130,35 @@ namespace Myra.Graphics3D
 			_vertices = vertices;
 			_mesh = new Mesh(vertices, indices, primitiveType);
 			_effect = DefaultAssets.DefaultEffect;
+		}
+
+		private void Update()
+		{
+			if (!_transformDirty)
+			{
+				return;
+			}
+
+			_transform = Matrix.CreateRotationY(MathHelper.ToRadians(Rotate.X))*
+			             Matrix.CreateRotationX(MathHelper.ToRadians(Rotate.Y))*
+			             Matrix.CreateRotationZ(MathHelper.ToRadians(Rotate.Z))*
+			             Matrix.CreateScale(Scale)*
+			             Matrix.CreateTranslation(Translate);
+
+			_transformWithoutScale = Matrix.CreateRotationY(MathHelper.ToRadians(Rotate.X))*
+			                         Matrix.CreateRotationX(MathHelper.ToRadians(Rotate.Y))*
+			                         Matrix.CreateRotationZ(MathHelper.ToRadians(Rotate.Z))*
+			                         Matrix.CreateTranslation(Translate);
+
+			_boundingBox = new BoundingBox(Vector3.Transform(Mesh.MinimumBound, _transform),
+					Vector3.Transform(Mesh.MaximumBound, _transform));
+
+			_transformDirty = false;
+		}
+
+		private void InvalidateTransform()
+		{
+			_transformDirty = true;
 		}
 
 		public Effect GetEffect(bool hasLight, bool hasTexture)
@@ -186,34 +250,61 @@ namespace Myra.Graphics3D
 				}
 			}
 
-			if ((context.Flags & RenderFlags.DrawNormals) == RenderFlags.None) return;
-
-			if (_normalsMesh == null)
-			{
-				// Apply scale
-				var scaledVertices = new VertexPositionNormalTexture[_vertices.Length];
-				for (var i = 0; i < scaledVertices.Length; ++i)
-				{
-					scaledVertices[i] = new VertexPositionNormalTexture(_vertices[i].Position*Scale, _vertices[i].Normal, _vertices[i].TextureCoordinate);
-				}
-
-				_normalsMesh = CreateNormalsVesh(scaledVertices, 1.0f);
-			}
-
-			device.SetVertexBuffer(_normalsMesh.VertexBuffer);
-			device.Indices = _normalsMesh.IndexBuffer;
+			if ((context.Flags & RenderFlags.DrawNormals) == RenderFlags.None &&
+			    (context.Flags & RenderFlags.DrawBoundingBoxes) == RenderFlags.None) return;
 
 			effect = DefaultAssets.DefaultEffect.GetDefaultEffect();
 
-			worldViewProj = TransformWithoutScale*viewProjection;
-			effect.Parameters["_worldViewProj"].SetValue(worldViewProj);
-			effect.Parameters["_diffuseColor"].SetValue(NormalsColor);
-
-			foreach (var pass in effect.CurrentTechnique.Passes)
+			if ((context.Flags & RenderFlags.DrawNormals) == RenderFlags.DrawNormals)
 			{
-				pass.Apply();
+				if (_normalsMesh == null)
+				{
+					// Apply scale
+					var scaledVertices = new VertexPositionNormalTexture[_vertices.Length];
+					for (var i = 0; i < scaledVertices.Length; ++i)
+					{
+						scaledVertices[i] = new VertexPositionNormalTexture(_vertices[i].Position*Scale, _vertices[i].Normal,
+							_vertices[i].TextureCoordinate);
+					}
 
-				device.DrawIndexedPrimitives(_normalsMesh.PrimitiveType, 0, 0, 0, 0, _normalsMesh.PrimitiveCount);
+					_normalsMesh = CreateNormalsMesh(scaledVertices, 1.0f);
+				}
+
+				device.SetVertexBuffer(_normalsMesh.VertexBuffer);
+				device.Indices = _normalsMesh.IndexBuffer;
+
+				worldViewProj = TransformWithoutScale*viewProjection;
+				effect.Parameters["_worldViewProj"].SetValue(worldViewProj);
+				effect.Parameters["_diffuseColor"].SetValue(NormalsColor);
+
+				foreach (var pass in effect.CurrentTechnique.Passes)
+				{
+					pass.Apply();
+
+					device.DrawIndexedPrimitives(_normalsMesh.PrimitiveType, 0, 0, 0, 0, _normalsMesh.PrimitiveCount);
+				}
+			}
+
+			if ((context.Flags & RenderFlags.DrawBoundingBoxes) == RenderFlags.DrawBoundingBoxes)
+			{
+				if (_boundingBoxMesh == null)
+				{
+					_boundingBoxMesh = CreateBoundingBoxMesh(new BoundingBox(Mesh.MinimumBound, Mesh.MaximumBound));
+				}
+
+				device.SetVertexBuffer(_boundingBoxMesh.VertexBuffer);
+				device.Indices = _boundingBoxMesh.IndexBuffer;
+
+				worldViewProj = Transform*viewProjection;
+				effect.Parameters["_worldViewProj"].SetValue(worldViewProj);
+				effect.Parameters["_diffuseColor"].SetValue(BoundingBoxesColor);
+
+				foreach (var pass in effect.CurrentTechnique.Passes)
+				{
+					pass.Apply();
+
+					device.DrawIndexedPrimitives(_boundingBoxMesh.PrimitiveType, 0, 0, 0, 0, _boundingBoxMesh.PrimitiveCount);
+				}
 			}
 		}
 
