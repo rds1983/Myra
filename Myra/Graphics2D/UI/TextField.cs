@@ -124,6 +124,9 @@ namespace Myra.Graphics2D.UI
 
 		public TextField(TextFieldStyle style)
 		{
+			HorizontalAlignment = HorizontalAlignment.Stretch;
+			VerticalAlignment = VerticalAlignment.Top;
+
 			CanFocus = true;
 			_formattedText.IsColored = false;
 

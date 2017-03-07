@@ -11,6 +11,12 @@
 			<Component Id="Myra.pdb" Directory="INSTALLFOLDER" Guid="{D779D429-75D6-42CA-ACDA-979533D2305C}">
 				<File Id="Myra.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra\bin\$(var.Configuration)\Myra.pdb" />
 			</Component>
+			<Component Id="Myra.Content.Pipeline.dll" Directory="INSTALLFOLDER" Guid="{F3EF5437-F9B4-413B-8C64-1D6D10F17BEB}">
+				<File Id="Myra.Content.Pipeline.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Content.Pipeline\bin\$(var.Configuration)\Myra.Content.Pipeline.dll" />
+			</Component>
+			<Component Id="Myra.Content.Pipeline.pdb" Directory="INSTALLFOLDER" Guid="{41005146-9C8E-46DD-8BCA-06C80257BBCE}">
+				<File Id="Myra.Content.Pipeline.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Content.Pipeline\bin\$(var.Configuration)\Myra.Content.Pipeline.pdb" />
+			</Component>
 			<Component Id="Newtonsoft.Json.xml" Directory="INSTALLFOLDER" Guid="{D5566381-2689-4075-A27A-730B6F960530}">
 				<File Id="Newtonsoft.Json.xml" KeyPath="yes" Source="$(var.SolutionDir)\Myra\bin\$(var.Configuration)\Newtonsoft.Json.xml" />
 			</Component>
@@ -25,6 +31,12 @@
 			</Component>
 			<Component Id="NLog.dll" Directory="INSTALLFOLDER" Guid="{455055AD-3AF9-42CF-83FE-D5A31686969E}">
 				<File Id="NLog.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.UIEditor\bin\$(var.Configuration)\NLog.dll" />
+			</Component>
+			<Component Id="StbSharp.dll" Directory="INSTALLFOLDER" Guid="{9C1BA6B6-0C75-4924-B446-D59C33C54DA2}">
+				<File Id="StbSharp.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\bin\$(var.Configuration)\StbSharp.dll" />
+			</Component>
+			<Component Id="Sichem.Framework.dll" Directory="INSTALLFOLDER" Guid="{0901EB7C-F910-4F9B-A8C9-47918E511946}">
+				<File Id="Sichem.Framework.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\bin\$(var.Configuration)\Sichem.Framework.dll" />
 			</Component>
 			<Component Id="Myra.Samples.dll" Directory="INSTALLFOLDER" Guid="{6D531604-C756-404D-B5EF-C89116278A22}">
 				<File Id="Myra.Samples.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\bin\$(var.Configuration)\Myra.Samples.dll" />
@@ -50,11 +62,23 @@
 			<Component Id="Myra.UIEditor.Plugin.YellowMenuButtons.pdb" Directory="INSTALLFOLDER" Guid="{FCFC84E7-E3E7-4630-AD20-5C30EB4BDE12}">
 				<File Id="Myra.UIEditor.Plugin.YellowMenuButtons.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.UIEditor.Plugin.YellowMenuButtons\bin\$(var.Configuration)\Myra.UIEditor.Plugin.YellowMenuButtons.pdb" />
 			</Component>
+			<Component Id="awesomeGame.ui" Directory="Assets" Guid="{B9252A98-E68C-4008-91BB-02E8FAD98733}">
+				<File Id="awesomeGame.ui" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\awesomeGame.ui" />
+			</Component>
+			<Component Id="chair.png" Directory="Assets" Guid="{4BC94BB2-96C4-43E7-986C-80F8D4D03DEF}">
+				<File Id="chair.png" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\chair.png" />
+			</Component>
 			<Component Id="mistral.fnt" Directory="Assets" Guid="{23BE6258-270C-43B2-B5EC-CD29DEEFCF6F}">
 				<File Id="mistral.fnt" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\mistral.fnt" />
 			</Component>
 			<Component Id="mistral_0.png" Directory="Assets" Guid="{EE941869-E663-48B1-9430-A3F090308CBD}">
 				<File Id="mistral_0.png" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\mistral_0.png" />
+			</Component>
+			<Component Id="notepad.ui" Directory="Assets" Guid="{557437A1-6952-4F5D-ABA6-FB7F5F57E15B}">
+				<File Id="notepad.ui" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\notepad.ui" />
+			</Component>
+			<Component Id="vase.png" Directory="Assets" Guid="{138F790D-6DEE-4455-A9CA-6C476D9DB722}">
+				<File Id="vase.png" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\vase.png" />
 			</Component>
 			<Component Id="Myra.Samples.DesktopGLLauncher.exe" Directory="INSTALLFOLDER" Guid="{CF77EDFC-E611-48CD-AD3C-7131FD82FBD1}">
 				<File Id="Myra.Samples.DesktopGLLauncher.exe" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.DesktopGLLauncher\bin\$(var.Configuration)\Myra.Samples.DesktopGLLauncher.exe" />

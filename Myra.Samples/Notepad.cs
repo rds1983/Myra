@@ -3,8 +3,8 @@ using System.IO;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Myra.Graphics2D.UI;
-using HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment;
-using MenuItem = Myra.Graphics2D.UI.MenuItem;
+using Myra.Utility;
+using Menu = Myra.Graphics2D.UI.Menu;
 
 namespace Myra.Samples
 {
@@ -72,99 +72,40 @@ namespace Myra.Samples
 
 			_host = new Desktop();
 
-			var root = new Grid();
-			root.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-			root.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill, 1.0f));
+			var data = File.ReadAllText("Assets/notepad.ui");
+			var ui = Serialization.LoadFromData(data);
 
-			var menuBar = new HorizontalMenu();
-
-			// File
-			var fileMenu = new MenuItem
-			{
-				Text = "File"
-			};
-
-			// File/New
-			var newItem = new MenuItem
-			{
-				Text = "New"
-			};
+			var mainMenu = (Menu) ui.Root.FindWidgetById("mainMenu");
+			var newItem = mainMenu.FindMenuItemById("menuItemNew");
 			newItem.Selected += NewItemOnDown;
-			fileMenu.Items.Add(newItem);
 
 			// File/Open
-			var openItem = new MenuItem
-			{
-				Text = "Open"
-			};
+			var openItem = mainMenu.FindMenuItemById("menuItemOpen");
 			openItem.Selected += OpenItemOnDown;
-			fileMenu.Items.Add(openItem);
 
 			// File/Save
-			var saveItem = new MenuItem
-			{
-				Text = "Save"
-			};
+			var saveItem = mainMenu.FindMenuItemById("menuItemSave");
 			saveItem.Selected += SaveItemOnDown;
-			fileMenu.Items.Add(saveItem);
 
 			// File/Save As...
-			var saveAsItem = new MenuItem
-			{
-				Text = "Save As..."
-			};
+			var saveAsItem = mainMenu.FindMenuItemById("menuItemSaveAs");
 			saveAsItem.Selected += SaveAsItemOnDown;
-			fileMenu.Items.Add(saveAsItem);
-			fileMenu.Items.Add(new MenuSeparator());
 
 			// File/Quit
-			var quitItem = new MenuItem
-			{
-				Text = "Quit"
-			};
+			var quitItem = mainMenu.FindMenuItemById("menuItemQuit");
 			quitItem.Selected += QuitItemOnDown;
-			fileMenu.Items.Add(quitItem);
 
-			menuBar.Items.Add(fileMenu);
-
-			var helpMenu = new MenuItem
-			{
-				Text = "Help"
-			};
-
-			var aboutItem = new MenuItem
-			{
-				Text = "About"
-			};
+			var aboutItem = mainMenu.FindMenuItemById("menuItemAbout");
 			aboutItem.Selected += AboutItemOnDown;
-			helpMenu.Items.Add(aboutItem);
 
-			menuBar.Items.Add(helpMenu);
+			_textField = (TextField)ui.Root.FindWidgetById("textArea");
 
-			root.Widgets.Add(menuBar);
-
-			_textField = new TextField
-			{
-				Text =
-					"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum!",
-				VerticalSpacing = 0,
-				TextColor = Color.White,
-				Wrap = true,
-				HorizontalAlignment = HorizontalAlignment.Stretch,
-				VerticalAlignment = VerticalAlignment.Stretch
-			};
+			_textField.Text =
+				"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum!";
 
 			_textField.TextChanged += TextFieldOnTextChanged;
 
-			var pane = new ScrollPane<TextField>
-			{
-				Widget = _textField,
-				GridPositionY = 1
-			};
-
-			root.Widgets.Add(pane);
-
-			_host.Widgets.Add(root);
+			_host.Widgets.Add(ui.Root);
 		}
 
 		private void UpdateTitle()

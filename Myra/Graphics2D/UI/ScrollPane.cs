@@ -45,6 +45,16 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Appearance")]
 		public Drawable VerticalScrollKnob { get; set; }
 
+		/// <summary>
+		/// Same as Widget. Used by the JSON serializer.
+		/// </summary>
+		[HiddenInEditor]
+		public T Child
+		{
+			get { return Widget; }
+			set { Widget = value; }
+		}
+
 		public ScrollPane(ScrollAreaStyle style)
 		{
 			ClipToBounds = true;

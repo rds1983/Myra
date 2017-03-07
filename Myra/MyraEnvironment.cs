@@ -11,6 +11,8 @@ namespace Myra
 		private static Game _game;
 		private static bool? _isOpenGL;
 
+		public static event EventHandler GameDisposed;
+
 		public static Game Game
 		{
 			get
@@ -42,6 +44,12 @@ namespace Myra
 		private static void GameOnDisposed(object sender, EventArgs eventArgs)
 		{
 			DefaultAssets.Dispose();
+
+			var ev = GameDisposed;
+			if (ev != null)
+			{
+				ev(null, EventArgs.Empty);
+			}
 		}
 
 		public static GraphicsDevice GraphicsDevice

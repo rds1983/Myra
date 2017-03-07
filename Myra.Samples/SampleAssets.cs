@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Utility;
 using StbSharp;
 
 namespace Myra.Samples
@@ -8,6 +7,14 @@ namespace Myra.Samples
 	public static class SampleAssets
 	{
 		private static Texture2D _sampleTexture1, _sampleTexture2;
+
+		static SampleAssets()
+		{
+			MyraEnvironment.GameDisposed += (sender, args) =>
+			{
+				Dispose();
+			};
+		}
 
 		public static Texture2D SampleTexture1
 		{
@@ -32,6 +39,21 @@ namespace Myra.Samples
 			return result;
 
 			// return GraphicsExtension.PremultipliedTextureFromPngStream(File.OpenRead(path));
+		}
+
+		internal static void Dispose()
+		{
+			if (_sampleTexture1 != null)
+			{
+				_sampleTexture1.Dispose();
+				_sampleTexture1 = null;
+			}
+
+			if (_sampleTexture2 != null)
+			{
+				_sampleTexture2.Dispose();
+				_sampleTexture2 = null;
+			}
 		}
 	}
 }

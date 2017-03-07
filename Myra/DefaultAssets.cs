@@ -219,6 +219,12 @@ namespace Myra
 				_uiRasterizerState.Dispose();
 				_uiRasterizerState = null;
 			}
+
+			if (_assetsContentManager != null)
+			{
+				_assetsContentManager.Dispose();
+				_assetsContentManager = null;
+			}
 		}
 	}
 }

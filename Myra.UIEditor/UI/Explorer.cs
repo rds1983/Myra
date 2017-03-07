@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
 using Myra.Graphics2D.UI;
+using ComboBox = Myra.Graphics2D.UI.ComboBox;
+using ListBox = Myra.Graphics2D.UI.ListBox;
+using MenuItem = Myra.Graphics2D.UI.MenuItem;
+using TreeNode = Myra.Graphics2D.UI.TreeNode;
 
 namespace Myra.UIEditor.UI
 {
@@ -152,18 +156,17 @@ namespace Myra.UIEditor.UI
 			else
 			{
 				IEnumerable<Widget> widgets = null;
-				var asSplitPane = item as SplitPane;
-				if (asSplitPane != null)
+				if (item is SplitPane)
 				{
-					widgets = asSplitPane.Widgets;
+					widgets = ((SplitPane) item).Widgets;
 				}
-				else if (!(item is ListBox) && !(item is ComboBox))
+				else if (item is Grid && !(item is ListBox) && !(item is ComboBox))
 				{
 					var container = item as Grid;
-					if (container != null)
-					{
-						widgets = container.Children;
-					}
+					widgets = container.Children;
+				} else if (item is ScrollPane<Widget>)
+				{
+					widgets = ((ScrollPane<Widget>) item).Children;
 				}
 
 				if (widgets == null)
