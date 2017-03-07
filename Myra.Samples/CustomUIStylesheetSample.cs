@@ -282,7 +282,8 @@ namespace Myra.Samples
 			{
 				GridPositionX = 5,
 				GridPositionY = 1,
-				WidthHint = 100
+				WidthHint = 100,
+				Nullable = true
 			};
 			grid.Widgets.Add(spinButton);
 

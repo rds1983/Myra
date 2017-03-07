@@ -1,8 +1,10 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Myra.Edit;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
+using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
@@ -16,14 +18,31 @@ namespace Myra.Graphics2D.UI
 		private int? _startBoundsPos;
 		private int _horizontalMaximum, _verticalMaximum;
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public Point ScrollPosition
 		{
 			get { return _scrollPosition; }
 		}
 
+		[HiddenInEditor]
+		[JsonIgnore]
+		[EditCategory("Appearance")]
 		public Drawable HorizontalScrollBackground { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		[EditCategory("Appearance")]
 		public Drawable HorizontalScrollKnob { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		[EditCategory("Appearance")]
 		public Drawable VerticalScrollBackground { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		[EditCategory("Appearance")]
 		public Drawable VerticalScrollKnob { get; set; }
 
 		public ScrollPane(ScrollAreaStyle style)
@@ -175,6 +194,11 @@ namespace Myra.Graphics2D.UI
 
 		protected override Point InternalMeasure(Point availableSize)
 		{
+			if (Widget == null)
+			{
+				return Point.Zero;
+			}
+
 			var measureSize = Widget.Measure(availableSize);
 
 			var horizontalScrollbarVisible = measureSize.X > availableSize.X;

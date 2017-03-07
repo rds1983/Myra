@@ -98,6 +98,11 @@ namespace Myra.UIEditor.UI
 			}
 
 			var text = item.GetType().Name;
+			var i = text.IndexOf("`");
+			if (i >= 0)
+			{
+				text = text.Remove(i);
+			}
 
 			if (!string.IsNullOrEmpty(id))
 			{

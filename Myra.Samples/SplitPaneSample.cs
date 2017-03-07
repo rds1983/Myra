@@ -5,20 +5,29 @@ using Myra.Graphics2D.UI;
 
 namespace Myra.Samples
 {
-	public class SplitPaneSample : SampleGame
+	public class SplitPaneSample : Game
 	{
+		private readonly GraphicsDeviceManager graphics;
+
 		private const int Labels = 5;
 
 		private Desktop _host;
 		private Grid _root;
 		private SplitPane _splitPane;
 
+		public SplitPaneSample()
+		{
+			graphics = new GraphicsDeviceManager(this);
+			IsMouseVisible = true;
+		}
+
 		protected override void LoadContent()
 		{
 			base.LoadContent();
 
-			_host = new Desktop();
+			MyraEnvironment.Game = this;
 
+			_host = new Desktop();
 			_root = new Grid();
 
 			// Top row is buttons
@@ -108,6 +117,15 @@ namespace Myra.Samples
 		protected override void Draw(GameTime gameTime)
 		{
 			base.Draw(gameTime);
+
+			if (graphics.PreferredBackBufferWidth != Window.ClientBounds.Width ||
+			    graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
+			{
+				graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
+				graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
+				graphics.ApplyChanges();
+			}
+
 			GraphicsDevice.Clear(Color.Black);
 
 			_host.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth,

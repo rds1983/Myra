@@ -4,14 +4,24 @@ using Myra.Graphics2D.UI;
 
 namespace Myra.Samples
 {
-	public class ScrollPaneSample: SampleGame
+	public class ScrollPaneSample: Game
 	{
+		private readonly GraphicsDeviceManager graphics;
+
 		private Desktop _host;
 		private Window _window;
+
+		public ScrollPaneSample()
+		{
+			graphics = new GraphicsDeviceManager(this);
+			IsMouseVisible = true;
+		}
 
 		protected override void LoadContent()
 		{
 			base.LoadContent();
+
+			MyraEnvironment.Game = this;
 
 			_host = new Desktop();
 
@@ -56,6 +66,14 @@ namespace Myra.Samples
 		protected override void Draw(GameTime gameTime)
 		{
 			base.Draw(gameTime);
+
+			if (graphics.PreferredBackBufferWidth != Window.ClientBounds.Width ||
+				graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
+			{
+				graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
+				graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
+				graphics.ApplyChanges();
+			}
 
 			GraphicsDevice.Clear(Color.Black);
 

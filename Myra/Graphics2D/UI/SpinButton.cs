@@ -19,6 +19,11 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
+				if (string.IsNullOrEmpty(_textField.Text))
+				{
+					return Nullable ? default(float?) : 0.0f;
+				}
+
 				float result;
 				if (float.TryParse(_textField.Text, out result))
 				{
@@ -47,6 +52,20 @@ namespace Myra.Graphics2D.UI
 
 
 				_textField.Text = value.HasValue ? value.Value.ToString() : string.Empty;
+			}
+		}
+
+		public override bool IsFocused
+		{
+			get { return base.IsFocused; }
+			internal set
+			{
+				base.IsFocused = value;
+
+				if (!value && string.IsNullOrEmpty(_textField.Text) && !Nullable)
+				{
+					_textField.Text = "0";
+				}
 			}
 		}
 
@@ -121,7 +140,7 @@ namespace Myra.Graphics2D.UI
 
 		private bool InputFilter(string s)
 		{
-			if (Nullable && string.IsNullOrEmpty(s))
+			if (string.IsNullOrEmpty(s))
 			{
 				return true;
 			}
@@ -156,7 +175,7 @@ namespace Myra.Graphics2D.UI
 			float value;
 			if (!float.TryParse(_textField.Text, out value))
 			{
-				return;
+				value = 0;
 			}
 
 			++value;
@@ -171,7 +190,7 @@ namespace Myra.Graphics2D.UI
 			float value;
 			if (!float.TryParse(_textField.Text, out value))
 			{
-				return;
+				value = 0;
 			}
 
 			--value;

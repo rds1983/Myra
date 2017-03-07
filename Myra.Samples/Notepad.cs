@@ -8,8 +8,10 @@ using MenuItem = Myra.Graphics2D.UI.MenuItem;
 
 namespace Myra.Samples
 {
-	public class Notepad: SampleGame
+	public class Notepad: Game
 	{
+		private readonly GraphicsDeviceManager graphics;
+
 		private string _filePath;
 		private bool _dirty = true;
 		private Desktop _host;
@@ -54,9 +56,17 @@ namespace Myra.Samples
 			}
 		}
 
+		public Notepad()
+		{
+			graphics = new GraphicsDeviceManager(this);
+			IsMouseVisible = true;
+		}
+
 		protected override void LoadContent()
 		{
 			base.LoadContent();
+
+			MyraEnvironment.Game = this;
 
 			UpdateTitle();
 
@@ -263,6 +273,15 @@ namespace Myra.Samples
 		protected override void Draw(GameTime gameTime)
 		{
 			base.Draw(gameTime);
+
+			if (graphics.PreferredBackBufferWidth != Window.ClientBounds.Width ||
+				graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
+			{
+				graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
+				graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
+				graphics.ApplyChanges();
+			}
+
 			GraphicsDevice.Clear(Color.Black);
 
 			_host.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight);

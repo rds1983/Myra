@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
@@ -69,10 +68,10 @@ namespace Myra.UIEditor
 			_addTextBlockItem,
 			_addTextFieldItem,
 			_addSpinButtonItem,
-			_addTreeItem,
+//			_addTreeItem,
 			_addMenuItemItem,
 			_addMenuSeparatorItem,
-			_addTreeNodeItem,
+//			_addTreeNodeItem,
 			_deleteItem;
 
 		public string FilePath
@@ -474,7 +473,7 @@ namespace Myra.UIEditor
 			};
 			controlsMenu.Items.Add(_addSpinButtonItem);
 
-			_addTreeItem = new MenuItem
+/*			_addTreeItem = new MenuItem
 			{
 				Text = "Add Tree"
 			};
@@ -482,7 +481,7 @@ namespace Myra.UIEditor
 			{
 				AddStandardControl<Tree>();
 			};
-			controlsMenu.Items.Add(_addTreeItem);
+			controlsMenu.Items.Add(_addTreeItem);*/
 			controlsMenu.Items.Add(new MenuSeparator());
 
 			_addMenuItemItem = new MenuItem
@@ -506,12 +505,12 @@ namespace Myra.UIEditor
 			controlsMenu.Items.Add(_addMenuSeparatorItem);
 			controlsMenu.Items.Add(new MenuSeparator());
 
-			_addTreeNodeItem = new MenuItem
+/*			_addTreeNodeItem = new MenuItem
 			{
 				Text = "Add Tree Node"
 			};
 			controlsMenu.Items.Add(_addTreeNodeItem);
-			controlsMenu.Items.Add(new MenuSeparator());
+			controlsMenu.Items.Add(new MenuSeparator());*/
 
 			_deleteItem = new MenuItem
 			{
@@ -649,14 +648,17 @@ namespace Myra.UIEditor
 				var asWidget = _propertyGrid.Object as Widget;
 				if (asWidget != null)
 				{
-					var asSplitPane = _explorer.SelectedNode.ParentNode.Tag as SplitPane;
-					if (asSplitPane != null)
+					var container = _explorer.SelectedNode.ParentNode.Tag;
+					if (container is SplitPane)
 					{
-						asSplitPane.Widgets.Remove(asWidget);
+						((SplitPane)container).Widgets.Remove(asWidget);
 					}
-					else
+					else if (container is Grid)
 					{
-						((Grid) asWidget.Parent).Widgets.Remove(asWidget);
+						((Grid)container).Widgets.Remove(asWidget);
+					} else if (container is ScrollPane<Widget>)
+					{
+						((ScrollPane<Widget>) container).Widget = null;
 					}
 				}
 			}
@@ -700,18 +702,17 @@ namespace Myra.UIEditor
 
 		private void AddStandardControl<T>(T widget) where T : Widget
 		{
-			IList<Widget> container;
-			var asGrid = _propertyGrid.Object as Grid;
-			if (asGrid != null)
+			if (_propertyGrid.Object is Grid)
 			{
-				container = asGrid.Widgets;
+				((Grid) _propertyGrid.Object).Widgets.Add(widget);
 			}
-			else
+			else if (_propertyGrid.Object is SplitPane)
 			{
-				container = ((SplitPane) _propertyGrid.Object).Widgets;
+				((SplitPane) _propertyGrid.Object).Widgets.Add(widget);
+			} else if (_propertyGrid.Object is ScrollPane<Widget>)
+			{
+				((ScrollPane<Widget>) _propertyGrid.Object).Widget = widget;
 			}
-
-			container.Add(widget);
 
 			OnObjectAdded(widget);
 		}
@@ -957,6 +958,10 @@ namespace Myra.UIEditor
 				{
 					enableStandard = true;
 				}
+				else if (selectedObject is ScrollPane<Widget> && ((ScrollPane<Widget>) selectedObject).Widget == null)
+				{
+					enableStandard = true;
+				} 
 			}
 
 			_addButtonItem.Enabled = enableStandard;
@@ -978,12 +983,12 @@ namespace Myra.UIEditor
 			_addTextBlockItem.Enabled = enableStandard;
 			_addTextFieldItem.Enabled = enableStandard;
 			_addSpinButtonItem.Enabled = enableStandard;
-			_addTreeItem.Enabled = enableStandard;
+//			_addTreeItem.Enabled = enableStandard;
 
 			_addMenuItemItem.Enabled = enableMenuItems;
 			_addMenuSeparatorItem.Enabled = enableMenuItems;
 
-			_addTreeNodeItem.Enabled = enableTreeNode;
+//			_addTreeNodeItem.Enabled = enableTreeNode;
 
 			if (selectedObject is IMenuItem ||
 				selectedObject is Widget)

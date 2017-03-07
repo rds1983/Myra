@@ -116,6 +116,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public Func<string, bool> InputFilter { get; set; }
 
 		public event EventHandler TextChanged;

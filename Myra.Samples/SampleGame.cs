@@ -1,12 +1,9 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
 
 namespace Myra.Samples
 {
-	public class SampleGame : Game
+	public class SampleGame
 	{
-		private readonly GraphicsDeviceManager graphics;
-
 		public static readonly Type[] AllSampleTypes;
 
 		static SampleGame()
@@ -25,19 +22,6 @@ namespace Myra.Samples
 				typeof (Primitives3DSample),
 				typeof (TerrainSample)
 			};
-		}
-
-		public SampleGame()
-		{
-			graphics = new GraphicsDeviceManager(this);
-			IsMouseVisible = true;
-		}
-
-		protected override void LoadContent()
-		{
-			base.LoadContent();
-
-			MyraEnvironment.Game = this;
 		}
 	}
 }
