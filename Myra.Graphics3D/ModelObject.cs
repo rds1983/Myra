@@ -129,7 +129,7 @@ namespace Myra.Graphics3D
 		{
 			_vertices = vertices;
 			_mesh = new Mesh(vertices, indices, primitiveType);
-			_effect = DefaultAssets.DefaultEffect;
+			_effect = Graphics3DAssets.DefaultEffect;
 		}
 
 		private void Update()
@@ -253,7 +253,7 @@ namespace Myra.Graphics3D
 			if ((context.Flags & RenderFlags.DrawNormals) == RenderFlags.None &&
 			    (context.Flags & RenderFlags.DrawBoundingBoxes) == RenderFlags.None) return;
 
-			effect = DefaultAssets.DefaultEffect.GetDefaultEffect();
+			effect = Graphics3DAssets.DefaultEffect.GetDefaultEffect();
 
 			if ((context.Flags & RenderFlags.DrawNormals) == RenderFlags.DrawNormals)
 			{

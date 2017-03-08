@@ -12,7 +12,6 @@ namespace Myra
 	public static class DefaultAssets
 	{
 		private static Texture2D _white;
-		private static Texture2D _transparent;
 		private static TextureRegion _whiteRegion;
 
 		private static BitmapFont _font;
@@ -20,7 +19,6 @@ namespace Myra
 		private static SpriteSheet _uiSpritesheet;
 		private static Stylesheet _uiStylesheet;
 		private static RasterizerState _uiRasterizerState;
-		private static AssetsContentManager _assetsContentManager;
 
 		public static BitmapFont Font
 		{
@@ -170,36 +168,6 @@ namespace Myra
 			}
 		}
 
-		public static MultiCompileEffect DefaultEffect
-		{
-			get
-			{
-				if (_assetsContentManager == null)
-				{
-					_assetsContentManager = new AssetsContentManager(MyraEnvironment.Game.Services);
-				}
-
-				return _assetsContentManager.Load<MultiCompileEffect>("DefaultEffect." +
-				                                                      (MyraEnvironment.IsOpenGL ? "OpenGL" : "DirectX")
-				                                                      + ".xnb");
-			}
-		}
-
-		public static MultiCompileEffect TerrainEffect
-		{
-			get
-			{
-				if (_assetsContentManager == null)
-				{
-					_assetsContentManager = new AssetsContentManager(MyraEnvironment.Game.Services);
-				}
-
-				return _assetsContentManager.Load<MultiCompileEffect>("TerrainEffect." +
-																	  (MyraEnvironment.IsOpenGL ? "OpenGL" : "DirectX")
-																	  + ".xnb");
-			}
-		}
-
 		internal static void Dispose()
 		{
 			_font = null;
@@ -218,12 +186,6 @@ namespace Myra
 			{
 				_uiRasterizerState.Dispose();
 				_uiRasterizerState = null;
-			}
-
-			if (_assetsContentManager != null)
-			{
-				_assetsContentManager.Dispose();
-				_assetsContentManager = null;
 			}
 		}
 	}

@@ -52,7 +52,6 @@
     <Reference Include="System.ComponentModel" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssetsContentManager.cs" />
     <Compile Include="Content\MultiCompileEffectReader.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\BitmapFont.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\BitmapFontLoader.cs" />
@@ -131,25 +130,7 @@
     <Compile Include="Graphics2D\UI\VerticalProgressBar.cs" />
     <Compile Include="Graphics2D\UI\VerticalSlider.cs" />
     <Compile Include="Graphics2D\UI\VerticalSplitPane.cs" />
-    <Compile Include="Graphics3D\Camera.cs" />
-    <Compile Include="Graphics3D\Environment\BaseLight.cs" />
-    <Compile Include="Graphics3D\Environment\DirectionalLight.cs" />
-    <Compile Include="Graphics3D\Materials\BaseMaterial.cs" />
-    <Compile Include="Graphics3D\BaseObject.cs" />
-    <Compile Include="Graphics3D\Mesh.cs" />
-    <Compile Include="Graphics3D\ModelObject.cs" />
-    <Compile Include="Graphics3D\PrimitivesFactory.cs" />
-    <Compile Include="Graphics3D\OrthographicCamera.cs" />
-    <Compile Include="Graphics3D\PerspectiveCamera.cs" />
-    <Compile Include="Graphics3D\RenderContext.cs" />
-    <Compile Include="Graphics3D\RenderFlags.cs" />
-    <Compile Include="Graphics3D\Scene.cs" />
-    <Compile Include="Graphics3D\Terrain\HeightMap.cs" />
     <Compile Include="Utility\ProgressInfo.cs" />
-    <Compile Include="Graphics3D\Terrain\QuadTreeNode.cs" />
-    <Compile Include="Graphics3D\Terrain\TerrainObject.cs" />
-    <Compile Include="Graphics3D\Terrain\TerrainTile.cs" />
-    <Compile Include="Graphics3D\Utils\CameraInputController.cs" />
     <Compile Include="Graphics\MultiCompileEffect.cs" />
     <Compile Include="Resources\Resources.cs" />
     <Compile Include="DefaultAssets.cs" />
@@ -195,22 +176,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\default_uiskin.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="..\Myra.Content\bin\DefaultEffect.DirectX.xnb">
-      <Link>Resources\DefaultEffect.DirectX.xnb</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Myra.Content\bin\DefaultEffect.OpenGL.xnb">
-      <Link>Resources\DefaultEffect.OpenGL.xnb</Link>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="..\Myra.Content\bin\TerrainEffect.DirectX.xnb">
-      <Link>Resources\TerrainEffect.DirectX.xnb</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Myra.Content\bin\TerrainEffect.OpenGL.xnb">
-      <Link>Resources\TerrainEffect.OpenGL.xnb</Link>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

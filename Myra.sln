@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.UIEditor.Plugin.LibGDX
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Content.Pipeline", "Myra.Content.Pipeline\Myra.Content.Pipeline.csproj", "{841F4244-A069-438A-ABE1-F7D93E269CDB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Graphics3D", "Myra.Graphics3D\Myra.Graphics3D.csproj", "{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Package|Any CPU = Debug Package|Any CPU
@@ -247,6 +249,26 @@ Global
 		{841F4244-A069-438A-ABE1-F7D93E269CDB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{841F4244-A069-438A-ABE1-F7D93E269CDB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{841F4244-A069-438A-ABE1-F7D93E269CDB}.Release|x86.ActiveCfg = Release|Any CPU
+		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Debug Package|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Debug Package|Any CPU.Build.0 = Debug|Any CPU
+		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Debug Package|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Debug Package|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Debug Package|x86.ActiveCfg = Debug|Any CPU
+		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Release Package|Any CPU.ActiveCfg = Release|Any CPU
+		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Release Package|Any CPU.Build.0 = Release|Any CPU
+		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Release Package|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Release Package|Mixed Platforms.Build.0 = Release|Any CPU
+		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Release Package|x86.ActiveCfg = Release|Any CPU
+		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -176,7 +176,7 @@ namespace Myra.Graphics3D.Terrain
 
 		public TerrainObject()
 		{
-			_effect = DefaultAssets.TerrainEffect;
+			_effect = Graphics3DAssets.TerrainEffect;
 			Color = Color.White;
 		}
 
@@ -435,7 +435,7 @@ namespace Myra.Graphics3D.Terrain
 			if ((context.Flags & RenderFlags.DrawNormals) == RenderFlags.None &&
 			    (context.Flags & RenderFlags.DrawBoundingBoxes) == RenderFlags.None) return;
 
-			var basicEffect = DefaultAssets.DefaultEffect.GetDefaultEffect();
+			var basicEffect = Graphics3DAssets.DefaultEffect.GetDefaultEffect();
 
 			basicEffect.Parameters["_worldViewProj"].SetValue(worldViewProj);
 

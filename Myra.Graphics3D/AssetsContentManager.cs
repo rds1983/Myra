@@ -2,7 +2,7 @@
 using System.IO;
 using Microsoft.Xna.Framework.Content;
 
-namespace Myra
+namespace Myra.Graphics3D
 {
 	internal class AssetsContentManager : ContentManager
 	{

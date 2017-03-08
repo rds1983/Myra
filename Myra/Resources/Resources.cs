@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Myra.Resources
 {
-	public static class Resources
+	internal static class Resources
 	{
 		private const string Prefix = "Myra.Resources.";
 
