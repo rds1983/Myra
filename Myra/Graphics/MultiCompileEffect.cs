@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Resources;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Myra.Graphics

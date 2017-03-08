@@ -11,6 +11,12 @@
 			<Component Id="Myra.pdb" Directory="INSTALLFOLDER" Guid="{D779D429-75D6-42CA-ACDA-979533D2305C}">
 				<File Id="Myra.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra\bin\$(var.Configuration)\Myra.pdb" />
 			</Component>
+			<Component Id="Myra.Graphics3D.dll" Directory="INSTALLFOLDER" Guid="{83A8364E-E861-4559-98A5-20E367F29A75}">
+				<File Id="Myra.Graphics3D.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Graphics3D\bin\$(var.Configuration)\Myra.Graphics3D.dll" />
+			</Component>
+			<Component Id="Myra.Graphics3D.pdb" Directory="INSTALLFOLDER" Guid="{58963FD7-13D0-432B-AA4E-266FCFF0324D}">
+				<File Id="Myra.Graphics3D.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Graphics3D\bin\$(var.Configuration)\Myra.Graphics3D.pdb" />
+			</Component>
 			<Component Id="Myra.Content.Pipeline.dll" Directory="INSTALLFOLDER" Guid="{F3EF5437-F9B4-413B-8C64-1D6D10F17BEB}">
 				<File Id="Myra.Content.Pipeline.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Content.Pipeline\bin\$(var.Configuration)\Myra.Content.Pipeline.dll" />
 			</Component>
