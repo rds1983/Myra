@@ -1,5 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Myra.Samples.Graphics3D;
+using Myra.Samples.WinForms;
 
 namespace Myra.Samples.DesktopGLLauncher
 {
@@ -14,6 +16,16 @@ namespace Myra.Samples.DesktopGLLauncher
 			Game sample;
 			using (var form = new SampleForm())
 			{
+				foreach (var t in Samples2D.AllSampleTypes)
+				{
+					form.AddSampleType(t);
+				}
+
+				foreach (var t in Samples3D.AllSampleTypes)
+				{
+					form.AddSampleType(t);
+				}
+
 				form.Launcher += sampleType =>
 				{
 					using (sample = (Game) Activator.CreateInstance(sampleType))

@@ -58,12 +58,14 @@
     <Reference Include="System.ComponentModel" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Content\MultiCompileEffectReader.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\BitmapFont.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\BitmapFontLoader.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\Character.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\Kerning.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\Padding.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\Page.cs" />
+    <Compile Include="Edit\EditCategoryAttribute.cs" />
     <Compile Include="Edit\HiddenInEditorAttribute.cs" />
     <Compile Include="Edit\IItemsProvider.cs" />
     <Compile Include="Edit\SelectionAttribute.cs" />
@@ -91,7 +93,11 @@
     <Compile Include="Graphics2D\UI\Dialog.cs" />
     <Compile Include="Graphics2D\UI\GridBased.cs" />
     <Compile Include="Graphics2D\UI\HorizontalMenu.cs" />
+    <Compile Include="Graphics2D\UI\HorizontalProgressBar.cs" />
+    <Compile Include="Graphics2D\UI\HorizontalSlider.cs" />
+    <Compile Include="Graphics2D\UI\HorizontalSplitPane.cs" />
     <Compile Include="Graphics2D\UI\Image.cs" />
+    <Compile Include="Graphics2D\UI\ImageButton.cs" />
     <Compile Include="Graphics2D\UI\IMenuItem.cs" />
     <Compile Include="Graphics2D\UI\IMenuItemsContainer.cs" />
     <Compile Include="Graphics2D\UI\InputUtils.cs" />
@@ -107,19 +113,30 @@
     <Compile Include="Graphics2D\UI\MenuItemButton.cs" />
     <Compile Include="Graphics2D\UI\MenuSeparator.cs" />
     <Compile Include="Graphics2D\UI\MenuSeparatorWidget.cs" />
+    <Compile Include="Graphics2D\UI\ProgressBar.cs" />
     <Compile Include="Graphics2D\UI\Project.cs" />
     <Compile Include="Graphics2D\UI\RenderUtils.cs" />
     <Compile Include="Graphics2D\UI\ScrollPane.cs" />
+    <Compile Include="Graphics2D\UI\Slider.cs" />
+    <Compile Include="Graphics2D\UI\SpinButton.cs" />
     <Compile Include="Graphics2D\UI\Styles\ButtonBaseStyle.cs" />
-    <Compile Include="Graphics2D\UI\Styles\ComboBoxItemStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\ComboBoxStyle.cs" />
+    <Compile Include="Graphics2D\UI\Styles\ImageButtonStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\ImageStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\ListBoxStyle.cs" />
+    <Compile Include="Graphics2D\UI\Styles\ListItemStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\MenuSeparatorStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\PressableImageStyle.cs" />
+    <Compile Include="Graphics2D\UI\Styles\ProgressBarStyle.cs" />
+    <Compile Include="Graphics2D\UI\Styles\SliderStyle.cs" />
+    <Compile Include="Graphics2D\UI\Styles\SpinButtonStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\SplitPaneStyle.cs" />
     <Compile Include="Graphics2D\UI\TreeNode.cs" />
     <Compile Include="Graphics2D\UI\VerticalMenu.cs" />
+    <Compile Include="Graphics2D\UI\VerticalProgressBar.cs" />
+    <Compile Include="Graphics2D\UI\VerticalSlider.cs" />
+    <Compile Include="Graphics2D\UI\VerticalSplitPane.cs" />
+    <Compile Include="Graphics\MultiCompileEffect.cs" />
     <Compile Include="Resources\Resources.cs" />
     <Compile Include="DefaultAssets.cs" />
     <Compile Include="Utility\Collections.cs" />
@@ -129,6 +146,7 @@
     <Compile Include="Utility\Mathematics.cs" />
     <Compile Include="Utility\PngCommon.cs" />
     <Compile Include="Utility\PngReader.cs" />
+    <Compile Include="Utility\ProgressInfo.cs" />
     <Compile Include="Utility\Serialization.cs" />
     <Compile Include="Graphics2D\UI\SingleItemContainer.cs" />
     <Compile Include="Graphics2D\UI\Styles\MenuItemStyle.cs" />

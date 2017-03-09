@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Myra.Graphics2D.UI;
 using Myra.Utility;
@@ -55,6 +54,9 @@ namespace Myra.Samples
 				UpdateTitle();
 			}
 		}
+
+		public Func<string> OpenFileHandler { get; set; }
+		public Func<string> SaveFileHandler { get; set; }
 
 		public Notepad()
 		{
@@ -137,18 +139,19 @@ namespace Myra.Samples
 		{
 			if (string.IsNullOrEmpty(FilePath) || setFileName)
 			{
-				using (var dlg = new SaveFileDialog())
+				var h = SaveFileHandler;
+				if (h == null)
 				{
-					dlg.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
-					if (dlg.ShowDialog() == DialogResult.OK)
-					{
-						FilePath = dlg.FileName;
-					}
-					else
-					{
-						return;
-					}
+					return;
 				}
+
+				var f = h();
+				if (string.IsNullOrEmpty(f))
+				{
+					return;
+				}
+
+				FilePath = f;
 			}
 
 			using (var writer = new StreamWriter(_filePath))
@@ -177,18 +180,16 @@ namespace Myra.Samples
 
 		private void OpenItemOnDown(object sender, EventArgs eventArgs)
 		{
-			string filePath;
-			using (var dlg = new OpenFileDialog())
+			var h = OpenFileHandler;
+			if (h == null)
 			{
-				dlg.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
-				if (dlg.ShowDialog() == DialogResult.OK)
-				{
-					filePath = dlg.FileName;
-				}
-				else
-				{
-					return;
-				}
+				return;
+			}
+
+			var filePath = h();
+			if (string.IsNullOrEmpty(filePath))
+			{
+				return;
 			}
 
 			using (var reader = new StreamReader(filePath))

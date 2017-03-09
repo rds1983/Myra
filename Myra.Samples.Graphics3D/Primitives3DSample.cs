@@ -1,33 +1,36 @@
 ﻿using System;
-using System.Threading;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Myra.Graphics2D.UI;
 using Myra.Graphics3D;
-using Myra.Graphics3D.Terrain;
+using Myra.Graphics3D.Materials;
 using Myra.Graphics3D.Utils;
-using Myra.Samples.Utility;
-using Myra.Utility;
+using Myra.Samples.Graphics3D.Utility;
 using DirectionalLight = Myra.Graphics3D.Environment.DirectionalLight;
 
-namespace Myra.Samples
+namespace Myra.Samples.Graphics3D
 {
-	public class TerrainSample : Game
+	public class Primitives3DSample : Game
 	{
+		private class ModelInfo
+		{
+			public ModelObject ModelObject;
+			public Vector3 Rotate;
+		}
+
 		private readonly GraphicsDeviceManager graphics;
 		private Scene _scene;
-		private TerrainObject _terrain;
 		private readonly Camera _camera;
 		private readonly CameraInputController _cameraController;
+		private readonly List<ModelInfo> _modelInstances = new List<ModelInfo>();
 		private readonly DirectionalLight[] _lights;
 		private Desktop _desktop;
-		private Grid _progressGrid;
-		private HorizontalProgressBar _progressBar;
-		private TextBlock _progressText;
 		private StatisticsGrid3d _statisticsGrid;
-		private float _sunAngle = (float) Math.PI*3/2;
+		private readonly Random _random = new Random();
 
-		public TerrainSample()
+		public Primitives3DSample()
 		{
 			graphics = new GraphicsDeviceManager(this);
 
@@ -35,7 +38,7 @@ namespace Myra.Samples
 
 			_camera = new PerspectiveCamera
 			{
-				Position = new Vector3(0, 300, 80)
+				Position = new Vector3(0, 80, 80)
 			};
 
 			_cameraController = new CameraInputController(_camera);
@@ -46,6 +49,11 @@ namespace Myra.Samples
 				{
 					Color = Color.White,
 					Direction = new Vector3(0, -1, 0)
+				},
+				new DirectionalLight
+				{
+					Color = Color.White,
+					Direction = new Vector3(1, 1, -1)
 				}
 			};
 		}
@@ -60,82 +68,87 @@ namespace Myra.Samples
 			_desktop = new Desktop();
 
 			_statisticsGrid = new StatisticsGrid3d();
+			_desktop.Widgets.Add(_statisticsGrid);
 
-			_progressGrid = new Grid
-			{
-				ColumnSpacing = 8,
-				HorizontalAlignment = HorizontalAlignment.Center,
-				VerticalAlignment = VerticalAlignment.Center
-			};
-			_progressGrid.ColumnsProportions.Add(new Grid.Proportion());
-			_progressGrid.ColumnsProportions.Add(new Grid.Proportion());
-
-			_progressText = new TextBlock
-			{
-				Text = "Generating Height Map:"
-			};
-			_progressGrid.Widgets.Add(_progressText);
-
-			_progressBar = new HorizontalProgressBar
-			{
-				WidthHint = 200,
-				GridPositionX = 1,
-				VerticalAlignment = VerticalAlignment.Center
-			};
-			_progressGrid.Widgets.Add(_progressBar);
-
-			_desktop.Widgets.Add(_progressGrid);
-
-			_terrain = new TerrainObject();
-
-			_scene = new Scene();
-			_scene.Items.Add(_terrain);
-
-			ThreadPool.QueueUserWorkItem(TerrainBuilder);
-		}
-
-		private void TerrainBuilder(object state)
-		{
 			// Init 3d stuff
-			var generator = new HeightMapGenerator(2048, 2048, 0, 300)
+			var grid = PrimitivesFactory.CreateXZGrid(new Vector2(100, 100));
+			grid.Material = new BaseMaterial
 			{
-				ProgressReporter = HeightMapProgressReporter
+				DiffuseColor = Color.Gray
 			};
 
-			var heightMap = generator.Generate();
+			_modelInstances.Add(new ModelInfo
+			{
+				ModelObject = grid,
+				Rotate = new Vector3(0, 0, 0)
+			});
 
-			_terrain.ProgressReporter = TerrainProgressReporter;
-			_terrain.HeightMap = heightMap;
-			_terrain.AddTextureLayer(SampleAssets.SampleTexture2);
+			for (var i = 0; i < 500; ++i)
+			{
+				var sr = _random.Next(1, 7);
+				var trx = _random.Next(-50, 50);
+				var trs = _random.Next(-50, 50);
+				var trz = _random.Next(-50, 50);
 
-			_terrain.Update();
+				ModelObject instance;
+				switch (_random.Next(0, 4))
+				{
+					case 0:
+						instance = PrimitivesFactory.CreateCube();
+						break;
+					case 1:
+						instance = PrimitivesFactory.CreateCylinder();
+						break;
+					case 2:
+						instance = PrimitivesFactory.CreateSphere();
+						break;
+					default:
+						instance = PrimitivesFactory.CreateTorus();
+						break;
+				}
+
+				Texture2D texture = null;
+				var r = _random.Next(0, 6);
+				if (r >= 1 && r <= 3)
+				{
+					texture = Samples3DAssets.SampleTexture1;
+				}
+				else if (r > 3)
+				{
+					texture = Samples3DAssets.SampleTexture2;
+				}
+
+				instance.Scale = new Vector3(sr, sr, sr);
+				instance.Translate = new Vector3(trx, trs, trz);
+				instance.Material = new BaseMaterial
+				{
+					DiffuseColor = Color.FromNonPremultiplied(_random.Next(0, 255), _random.Next(0, 255), _random.Next(0, 255), 255),
+					Texture = texture,
+					HasLight = true
+				};
+
+				var info = new ModelInfo
+				{
+					ModelObject = instance,
+					Rotate = new Vector3(GenRotation(), GenRotation(), GenRotation())
+				};
+
+				_modelInstances.Add(info);
+			}
+
+			// Add everything to scene
+			_scene = new Scene();
+			foreach (var info in _modelInstances)
+			{
+				_scene.Items.Add(info.ModelObject);
+			}
 
 			GC.Collect();
 		}
 
-		private void HeightMapProgressReporter(ProgressInfo f)
+		private float GenRotation()
 		{
-			if (!f.Finished)
-			{
-				_progressBar.Value = _progressBar.Minimum + (_progressBar.Maximum - _progressBar.Minimum)*f.Progress;
-			}
-			else
-			{
-				_progressText.Text = "Building Terrain:";
-			}
-		}
-
-		private void TerrainProgressReporter(ProgressInfo f)
-		{
-			if (!f.Finished)
-			{
-				_progressBar.Value = _progressBar.Minimum + (_progressBar.Maximum - _progressBar.Minimum)*f.Progress;
-			}
-			else
-			{
-				_desktop.Widgets.Remove(_progressGrid);
-				_desktop.Widgets.Add(_statisticsGrid);
-			}
+			return _random.Next(-1, 2);
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -143,11 +156,6 @@ namespace Myra.Samples
 			var keyboardState = Keyboard.GetState();
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || keyboardState.IsKeyDown(Keys.Escape))
 				Exit();
-
-			if (!_terrain.Ready)
-			{
-				return;
-			}
 
 			// Manage camera input controller
 			_cameraController.SetControlKeyState(CameraInputController.ControlKeys.Left, keyboardState.IsKeyDown(Keys.A));
@@ -164,16 +172,11 @@ namespace Myra.Samples
 
 			_cameraController.Update();
 
-			var s = (float) Math.Sin(_sunAngle);
-			var c = (float) Math.Cos(_sunAngle);
-
-			_lights[0].Direction = new Vector3(c, s, 0);
-
-			_sunAngle += 0.0025f;
-
-			if (_sunAngle > (float) Math.PI*2)
+			// Rotate models
+			foreach (var info in _modelInstances)
 			{
-				_sunAngle -= (float) Math.PI*2;
+				var model = info.ModelObject;
+				model.Rotate += info.Rotate;
 			}
 
 			base.Update(gameTime);
@@ -184,7 +187,7 @@ namespace Myra.Samples
 			base.Draw(gameTime);
 
 			if (graphics.PreferredBackBufferWidth != Window.ClientBounds.Width ||
-			    graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
+				graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
 			{
 				graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
 				graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
@@ -195,10 +198,7 @@ namespace Myra.Samples
 
 			device.Clear(Color.Black);
 
-			if (_terrain.Ready)
-			{
-				_scene.Render(_camera, _statisticsGrid.IsLightningOn ? _lights : null, _statisticsGrid.RenderFlags);
-			}
+			_scene.Render(_camera, _statisticsGrid.IsLightningOn ? _lights : null, _statisticsGrid.RenderFlags);
 
 			_desktop.Bounds = new Rectangle(0, 0,
 				GraphicsDevice.PresentationParameters.BackBufferWidth,

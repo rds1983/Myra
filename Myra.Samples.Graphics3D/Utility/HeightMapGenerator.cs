@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+using Microsoft.Xna.Framework;
 using Myra.Graphics3D.Terrain;
 using Myra.Utility;
 
-namespace Myra.Samples.Utility
+namespace Myra.Samples.Graphics3D.Utility
 {
 	public class HeightMapGenerator
 	{

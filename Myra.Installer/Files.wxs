@@ -50,6 +50,18 @@
 			<Component Id="Myra.Samples.pdb" Directory="INSTALLFOLDER" Guid="{825FA0A2-1860-42E6-80D7-9D89EB246A1B}">
 				<File Id="Myra.Samples.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\bin\$(var.Configuration)\Myra.Samples.pdb" />
 			</Component>
+			<Component Id="Myra.Samples.Graphics3D.dll" Directory="INSTALLFOLDER" Guid="{35B6B2C2-E62C-43BF-B73A-85F69CEAC0CA}">
+				<File Id="Myra.Samples.Graphics3D.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.Graphics3D\bin\$(var.Configuration)\Myra.Samples.Graphics3D.dll" />
+			</Component>
+			<Component Id="Myra.Samples.Graphics3D.pdb" Directory="INSTALLFOLDER" Guid="{C27EAD02-EC35-4E03-8AC9-7AADB0E9BEF0}">
+				<File Id="Myra.Samples.Graphics3D.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.Graphics3D\bin\$(var.Configuration)\Myra.Samples.Graphics3D.pdb" />
+			</Component>
+			<Component Id="Myra.Samples.WinForms.dll" Directory="INSTALLFOLDER" Guid="{91BFCEBA-3364-423B-9352-7DA3E3E9DE08}">
+				<File Id="Myra.Samples.WinForms.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.WinForms\bin\$(var.Configuration)\Myra.Samples.WinForms.dll" />
+			</Component>
+			<Component Id="Myra.Samples.WinForms.pdb" Directory="INSTALLFOLDER" Guid="{61DA766B-4B31-4FD3-9D96-9FE4BF821CA3}">
+				<File Id="Myra.Samples.WinForms.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.WinForms\bin\$(var.Configuration)\Myra.Samples.WinForms.pdb" />
+			</Component>
 			<Component Id="Myra.Editor.dll" Directory="INSTALLFOLDER" Guid="{74048486-4D31-4DEF-BFC0-BC7399890C2F}">
 				<File Id="Myra.Editor.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Editor\bin\$(var.Configuration)\Myra.Editor.dll" />
 			</Component>
@@ -71,9 +83,6 @@
 			<Component Id="awesomeGame.ui" Directory="Assets" Guid="{B9252A98-E68C-4008-91BB-02E8FAD98733}">
 				<File Id="awesomeGame.ui" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\awesomeGame.ui" />
 			</Component>
-			<Component Id="chair.png" Directory="Assets" Guid="{4BC94BB2-96C4-43E7-986C-80F8D4D03DEF}">
-				<File Id="chair.png" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\chair.png" />
-			</Component>
 			<Component Id="mistral.fnt" Directory="Assets" Guid="{23BE6258-270C-43B2-B5EC-CD29DEEFCF6F}">
 				<File Id="mistral.fnt" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\mistral.fnt" />
 			</Component>
@@ -82,9 +91,6 @@
 			</Component>
 			<Component Id="notepad.ui" Directory="Assets" Guid="{557437A1-6952-4F5D-ABA6-FB7F5F57E15B}">
 				<File Id="notepad.ui" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\notepad.ui" />
-			</Component>
-			<Component Id="vase.png" Directory="Assets" Guid="{138F790D-6DEE-4455-A9CA-6C476D9DB722}">
-				<File Id="vase.png" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\vase.png" />
 			</Component>
 			<Component Id="Myra.Samples.DesktopGLLauncher.exe" Directory="INSTALLFOLDER" Guid="{CF77EDFC-E611-48CD-AD3C-7131FD82FBD1}">
 				<File Id="Myra.Samples.DesktopGLLauncher.exe" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.DesktopGLLauncher\bin\$(var.Configuration)\Myra.Samples.DesktopGLLauncher.exe" />
@@ -118,22 +124,10 @@
 			<Component Id="MonoGame.Framework.DesktopGL.dll" Directory="DesktopGL" Guid="{18D790F4-2A9E-48FF-A21D-6D280F86DD26}">
 				<File Id="MonoGame.Framework.DesktopGL.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.DesktopGL\MonoGame.Framework.dll" />
 			</Component>
-			<Component Id="NVorbis.dll" Directory="DesktopGL" Guid="{E6D13273-F7EA-431D-BCB6-302AC9914389}">
-				<File Id="NVorbis.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.DesktopGL\NVorbis.dll" />
-			</Component>
-			<Component Id="OpenTK.dll" Directory="DesktopGL" Guid="{8204B627-A354-4A6C-94F6-2448631F5FF2}">
-				<File Id="OpenTK.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.DesktopGL\OpenTK.dll" />
-			</Component>
-			<Component Id="MonoGame.Framework.DesktopGL.xml" Directory="DesktopGL" Guid="{E9499B5C-5445-4728-BB9A-3129EC3D29A3}">
-				<File Id="MonoGame.Framework.DesktopGL.xml" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.DesktopGL\MonoGame.Framework.xml" />
-			</Component>
 
-			<!-- Windows DX -->
+	<!-- Windows DX -->
 			<Component Id="MonoGame.Framework.WindowsDX.dll" Directory="WindowsDX" Guid="{937FF576-3549-45EF-A909-54050A0C1580}">
 				<File Id="MonoGame.Framework.WindowsDX.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.WindowsDX\MonoGame.Framework.dll" />
-			</Component>
-			<Component Id="MonoGame.Framework.WindowsDX.xml" Directory="WindowsDX" Guid="{32ED51A5-2C0A-4B41-B433-14E73027AAC3}">
-				<File Id="MonoGame.Framework.WindowsDX.xml" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.WindowsDX\MonoGame.Framework.xml" />
 			</Component>
 			<Component Id="SharpDX.dll" Directory="WindowsDX" Guid="{AACB22EF-6C3B-4420-8080-C788A21FC707}">
 				<File Id="SharpDX.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.WindowsDX\SharpDX.dll" />

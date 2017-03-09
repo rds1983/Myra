@@ -55,6 +55,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Myra.Samples.WinForms\Myra.Samples.WinForms.csproj">
+      <Project>{b8fd2926-1544-4870-a5d4-3b5f5ffb370e}</Project>
+      <Name>Myra.Samples.WinForms</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Myra.Samples\Myra.Samples.FNA.csproj">
       <Project>{f897e015-14ea-4fa6-b127-263e73827996}</Project>
       <Name>Myra.Samples.FNA</Name>

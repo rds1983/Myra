@@ -1,19 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace Myra.Samples
+namespace Myra.Samples.WinForms
 {
 	public delegate void SampleLauncher(Type sampleType);
 
 	public partial class SampleForm : Form
 	{
+		private readonly List<Type> _sampleTypes = new List<Type>();
+
 		public SampleLauncher Launcher;
 
 		public SampleForm()
 		{
 			InitializeComponent();
+		}
 
-			foreach (var s in SampleGame.AllSampleTypes)
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+
+			foreach (var s in _sampleTypes)
 			{
 				_listBoxSamples.Items.Add(s.Name);
 			}
@@ -21,6 +29,16 @@ namespace Myra.Samples
 			_listBoxSamples.SelectedIndex = 3;
 
 			UpdateEnabled();
+		}
+
+		public void AddSampleType(Type type)
+		{
+			if (_sampleTypes.Contains(type))
+			{
+				return;
+			}
+
+			_sampleTypes.Add(type);
 		}
 
 		private void UpdateEnabled()
@@ -37,7 +55,7 @@ namespace Myra.Samples
 		{
 			_listBoxSamples.Enabled = false;
 
-			var sample = SampleGame.AllSampleTypes[_listBoxSamples.SelectedIndex];
+			var sample = _sampleTypes[_listBoxSamples.SelectedIndex];
 
 			if (Launcher != null)
 			{

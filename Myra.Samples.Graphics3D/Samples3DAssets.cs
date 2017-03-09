@@ -2,13 +2,13 @@
 using Microsoft.Xna.Framework.Graphics;
 using StbSharp;
 
-namespace Myra.Samples
+namespace Myra.Samples.Graphics3D
 {
-	public static class SampleAssets
+	internal class Samples3DAssets
 	{
 		private static Texture2D _sampleTexture1, _sampleTexture2;
 
-		static SampleAssets()
+		static Samples3DAssets()
 		{
 			MyraEnvironment.GameDisposed += (sender, args) =>
 			{
@@ -18,17 +18,26 @@ namespace Myra.Samples
 
 		public static Texture2D SampleTexture1
 		{
-			get { return _sampleTexture1 ?? (_sampleTexture1 = Texture2DFromFile("Assets/chair.png")); }
+			get { return _sampleTexture1 ?? (_sampleTexture1 = Texture2DFromResources("chair.png")); }
 		}
 
 		public static Texture2D SampleTexture2
 		{
-			get { return _sampleTexture2 ?? (_sampleTexture2 = Texture2DFromFile("Assets/vase.png")); }
+			get { return _sampleTexture2 ?? (_sampleTexture2 = Texture2DFromResources("vase.png")); }
 		}
 
-		private static Texture2D Texture2DFromFile(string path)
+		private static Texture2D Texture2DFromResources(string path)
 		{
-			var buffer = File.ReadAllBytes(path);
+			byte[] buffer;
+			using (var ms = new MemoryStream())
+			{
+				using (var stream = Resources.Resources.GetBinaryResourceStream(path))
+				{
+					stream.CopyTo(ms);
+				}
+
+				buffer = ms.ToArray();
+			}
 
 			int x, y, comp;
 			var data = Image.stbi_load_from_memory(buffer, out x, out y, out comp, Image.STBI_rgb_alpha);

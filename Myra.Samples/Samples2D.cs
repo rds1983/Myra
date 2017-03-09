@@ -2,11 +2,11 @@
 
 namespace Myra.Samples
 {
-	public class SampleGame
+	public static class Samples2D
 	{
 		public static readonly Type[] AllSampleTypes;
 
-		static SampleGame()
+		static Samples2D()
 		{
 			AllSampleTypes = new[]
 			{
@@ -18,9 +18,7 @@ namespace Myra.Samples
 				typeof (SplitPaneSample),
 				typeof (ScrollPaneSample),
 				typeof (LoadUISample),
-				typeof (Notepad),
-				typeof (Primitives3DSample),
-				typeof (TerrainSample)
+				typeof (Notepad)
 			};
 		}
 	}

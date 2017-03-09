@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Myra.Samples.WinForms;
 
 namespace Myra.Samples.FNALauncher
 {
@@ -14,6 +15,11 @@ namespace Myra.Samples.FNALauncher
 			Game sample;
 			using (var form = new SampleForm())
 			{
+				foreach (var t in Samples2D.AllSampleTypes)
+				{
+					form.AddSampleType(t);
+				}
+
 				form.Launcher += sampleType =>
 				{
 					var result = Activator.CreateInstance(sampleType);
