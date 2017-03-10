@@ -71,7 +71,6 @@
       <Name>Myra</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="..\Myra.Content\bin\DefaultEffect.DirectX.xnb">
       <Link>Resources\DefaultEffect.DirectX.xnb</Link>

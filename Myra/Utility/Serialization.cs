@@ -23,7 +23,10 @@ namespace Myra.Utility
 		{
 			var result = (Project)JsonConvert.DeserializeObject(data, new JsonSerializerSettings
 			{
-				TypeNameHandling = TypeNameHandling.Objects
+				TypeNameHandling = TypeNameHandling.Objects,
+#if FNA
+				Binder = new FNASerializationBinder()
+#endif
 			});
 
 			return result;

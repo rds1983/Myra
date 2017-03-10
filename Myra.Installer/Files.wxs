@@ -124,6 +124,36 @@
 			<Component Id="MonoGame.Framework.DesktopGL.dll" Directory="DesktopGL" Guid="{18D790F4-2A9E-48FF-A21D-6D280F86DD26}">
 				<File Id="MonoGame.Framework.DesktopGL.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.DesktopGL\MonoGame.Framework.dll" />
 			</Component>
+			<Component Id="SDL2_Linux_64" Directory="DesktopGLx64" Guid="{E6B51B67-18FA-4768-9EDE-039DE91E1291}">
+				<File Id="SDL2_Linux_64" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.DesktopGL\x64\libSDL2-2.0.so.0" />
+			</Component>
+			<Component Id="OpenAL_Linux_64" Directory="DesktopGLx64" Guid="{FB634071-AFD3-432D-8963-451640FE2121}">
+				<File Id="OpenAL_Linux_64" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.DesktopGL\x64\libopenal.so.1" />
+			</Component>
+			<Component Id="SDL2_Windows_64" Directory="DesktopGLx64" Guid="{E275BA53-DD42-4D5C-A5F4-7ABDC7FAB998}">
+				<File Id="SDL2_Windows_64" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.DesktopGL\x64\SDL2.dll" />
+			</Component>
+			<Component Id="OpenAL_Windows_64" Directory="DesktopGLx64" Guid="{E29493E1-2255-425A-B333-649B45EC6E2D}">
+				<File Id="OpenAL_Windows_64" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.DesktopGL\x64\soft_oal.dll" />
+			</Component>
+			<Component Id="SDL2_Linux_86" Directory="DesktopGLx86" Guid="{A423A037-FBC6-47C5-9885-A522403D03A3}">
+				<File Id="SDL2_Linux_86" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.DesktopGL\x86\libSDL2-2.0.so.0" />
+			</Component>
+			<Component Id="OpenAL_Linux_86" Directory="DesktopGLx86" Guid="{7B669B24-72E4-4A41-9F51-4C659D43A48A}">
+				<File Id="OpenAL_Linux_86" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.DesktopGL\x86\libopenal.so.1" />
+			</Component>
+			<Component Id="SDL2_Windows_86" Directory="DesktopGLx86" Guid="{B5E45BF9-9B23-4EF2-B588-88F08274C93F}">
+				<File Id="SDL2_Windows_86" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.DesktopGL\x86\SDL2.dll" />
+			</Component>
+			<Component Id="OpenAL_Windows_86" Directory="DesktopGLx86" Guid="{CA828D33-4CAE-4142-91EC-9D5A9FA2AA9E}">
+				<File Id="OpenAL_Windows_86" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.DesktopGL\x86\soft_oal.dll" />
+			</Component>
+			<Component Id="SDL2_MacOSX" Directory="DesktopGL" Guid="{626C8240-0EC0-4BB1-9977-1DD51E7481C6}">
+				<File Id="SDL2_MacOSX" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.DesktopGL\libSDL2-2.0.0.dylib" />
+			</Component>
+			<Component Id="OpenAL_MacOSX" Directory="DesktopGL" Guid="{BF393456-0FB2-48DA-9F93-991804973E39}">
+				<File Id="OpenAL_MacOSX" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.DesktopGL\libopenal.1.dylib" />
+			</Component>
 
 	<!-- Windows DX -->
 			<Component Id="MonoGame.Framework.WindowsDX.dll" Directory="WindowsDX" Guid="{937FF576-3549-45EF-A909-54050A0C1580}">

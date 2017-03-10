@@ -84,16 +84,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Myra.Graphics3D\Myra.Graphics3D.csproj">
-      <Project>{f2efef7d-80f3-4fe5-97be-9bf702dcb5e2}</Project>
-      <Name>Myra.Graphics3D</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Myra\Myra.csproj">
-      <Project>{4dcbb001-9c79-4f6b-996d-d654062d93e0}</Project>
-      <Name>Myra</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Assets\awesomeGame.ui">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -105,6 +95,12 @@
     <None Include="Assets\notepad.ui">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Myra\Myra.csproj">
+      <Project>{4dcbb001-9c79-4f6b-996d-d654062d93e0}</Project>
+      <Name>Myra</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

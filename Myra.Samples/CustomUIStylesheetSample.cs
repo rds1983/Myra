@@ -3,7 +3,6 @@ using System.IO;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Utilities.Png;
 using Myra.Graphics2D;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI;
@@ -69,16 +68,11 @@ namespace Myra.Samples
 			try
 			{
 				// First step - load underlying image(s)
-				var pngReader = new PngReader();
-
 				Texture2D underlyingImage;
 				using (var stream = GetBinaryResourceStream("uiskin.png"))
 				{
-					underlyingImage = pngReader.Read(stream, MyraEnvironment.GraphicsDevice);
+					underlyingImage = GraphicsExtension.PremultipliedTextureFromPngStream(stream);
 				}
-
-				// Making it alpha-premultiplied
-				underlyingImage.PremultiplyAlpha();
 
 				// Second step - load sprite sheet
 				var data = GetStringResource("uiskin.atlas");

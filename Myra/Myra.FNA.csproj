@@ -23,7 +23,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;FNA</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -32,7 +32,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;FNA</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -140,6 +140,7 @@
     <Compile Include="Resources\Resources.cs" />
     <Compile Include="DefaultAssets.cs" />
     <Compile Include="Utility\Collections.cs" />
+    <Compile Include="Utility\FNASerializationBinder.cs" />
     <Compile Include="Utility\FPSCounter.cs" />
     <Compile Include="Utility\GraphicsExtension.cs" />
     <Compile Include="Utility\Input.cs" />
@@ -174,6 +175,34 @@
     <Compile Include="Utility\ZlibStream.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Myra-Dependencies\FNA\libmojoshader.dylib">
+      <Link>libmojoshader.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Myra-Dependencies\FNA\libmojoshader.so">
+      <Link>libmojoshader.so</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Myra-Dependencies\FNA\libopenal.1.dylib">
+      <Link>libopenal.1.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Myra-Dependencies\FNA\libopenal.so.1">
+      <Link>libopenal.so.1</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Myra-Dependencies\FNA\SDL2.dll">
+      <Link>SDL2.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Myra-Dependencies\FNA\soft_oal.dll">
+      <Link>soft_oal.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Myra-Dependencies\FNA\MojoShader.dll">
+      <Link>MojoShader.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Cyotek.Drawing.BitmapFont\LICENSE.txt" />
     <EmbeddedResource Include="Resources\default_font.fnt" />
     <EmbeddedResource Include="Resources\default_stylesheet.json" />
@@ -182,6 +211,20 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\default_uiskin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Myra-Dependencies\FNA\FNA.dll.config">
+      <Link>FNA.dll.config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Myra-Dependencies\FNA\libSDL2-2.0.0.dylib">
+      <Link>libSDL2-2.0.0.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Myra-Dependencies\FNA\libSDL2-2.0.so.0">
+      <Link>libSDL2-2.0.so.0</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
