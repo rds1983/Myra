@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <package >
 	<metadata>
-		<id>Myra</id>
+		<id>Myra.FNA</id>
 		<version>$version$</version>
-		<title>Myra</title>
+		<title>Myra.FNA</title>
 		<authors>MyraTeam</authors>
 		<owners>MyraTeam</owners>
 		<licenseUrl>https://en.wikipedia.org/wiki/MIT_License</licenseUrl>
 		<projectUrl>https://github.com/rds1983/Myra</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<description>UI Library for MonoGame</description>
+		<description>UI Library for FNA</description>
 		<copyright>Copyright 2017</copyright>
 		<tags>gamedev monogame ui</tags>
 		<dependencies>
@@ -17,6 +17,6 @@
 		</dependencies>
 	</metadata>
 	<files>
-		<file src="bin\Release\Myra.dll" target="lib\net45\Myra.dll"/>
+		<file src="bin\Release\Myra.FNA.dll" target="lib\net45\Myra.FNA.dll"/>
 	</files>
 </package>

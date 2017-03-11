@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>Myra.Editor</id>
-		<version>0.4.0.0</version>
+		<version>$version$</version>
 		<title>Myra.Editor</title>
 		<authors>MyraTeam</authors>
 		<owners>MyraTeam</owners>

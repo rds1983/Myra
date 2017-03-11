@@ -80,18 +80,6 @@
 			<Component Id="Myra.UIEditor.Plugin.YellowMenuButtons.pdb" Directory="INSTALLFOLDER" Guid="{FCFC84E7-E3E7-4630-AD20-5C30EB4BDE12}">
 				<File Id="Myra.UIEditor.Plugin.YellowMenuButtons.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.UIEditor.Plugin.YellowMenuButtons\bin\$(var.Configuration)\Myra.UIEditor.Plugin.YellowMenuButtons.pdb" />
 			</Component>
-			<Component Id="awesomeGame.ui" Directory="Assets" Guid="{B9252A98-E68C-4008-91BB-02E8FAD98733}">
-				<File Id="awesomeGame.ui" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\awesomeGame.ui" />
-			</Component>
-			<Component Id="mistral.fnt" Directory="Assets" Guid="{23BE6258-270C-43B2-B5EC-CD29DEEFCF6F}">
-				<File Id="mistral.fnt" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\mistral.fnt" />
-			</Component>
-			<Component Id="mistral_0.png" Directory="Assets" Guid="{EE941869-E663-48B1-9430-A3F090308CBD}">
-				<File Id="mistral_0.png" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\mistral_0.png" />
-			</Component>
-			<Component Id="notepad.ui" Directory="Assets" Guid="{557437A1-6952-4F5D-ABA6-FB7F5F57E15B}">
-				<File Id="notepad.ui" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\notepad.ui" />
-			</Component>
 			<Component Id="Myra.Samples.DesktopGLLauncher.exe" Directory="INSTALLFOLDER" Guid="{CF77EDFC-E611-48CD-AD3C-7131FD82FBD1}">
 				<File Id="Myra.Samples.DesktopGLLauncher.exe" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.DesktopGLLauncher\bin\$(var.Configuration)\Myra.Samples.DesktopGLLauncher.exe" />
 			</Component>
@@ -128,7 +116,21 @@
 			<Component Id="Myra.UIEditor.pdb" Directory="INSTALLFOLDER" Guid="{7C5D1411-392A-49E0-B522-6287777A5037}">
 				<File Id="Myra.UIEditor.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.UIEditor\bin\$(var.Configuration)\Myra.UIEditor.pdb" />
 			</Component>
-			
+
+			<!-- Sample Assets -->
+			<Component Id="awesomeGame.ui" Directory="Assets" Guid="{B9252A98-E68C-4008-91BB-02E8FAD98733}">
+				<File Id="awesomeGame.ui" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\awesomeGame.ui" />
+			</Component>
+			<Component Id="mistral.fnt" Directory="Assets" Guid="{23BE6258-270C-43B2-B5EC-CD29DEEFCF6F}">
+				<File Id="mistral.fnt" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\mistral.fnt" />
+			</Component>
+			<Component Id="mistral_0.png" Directory="Assets" Guid="{EE941869-E663-48B1-9430-A3F090308CBD}">
+				<File Id="mistral_0.png" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\mistral_0.png" />
+			</Component>
+			<Component Id="notepad.ui" Directory="Assets" Guid="{557437A1-6952-4F5D-ABA6-FB7F5F57E15B}">
+				<File Id="notepad.ui" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\notepad.ui" />
+			</Component>
+
 			<!-- FNA -->
 			<Component Id="FNA.dll" Directory="FNA" Guid="{B7788A0D-FC2F-4C04-832A-B09ABAA91989}">
 				<File Id="FNA.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\FNA\FNA.dll" />
