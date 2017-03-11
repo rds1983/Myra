@@ -80,6 +80,7 @@
 						<Directory Id="DesktopGLx86" Name="x86"/>
 					</Directory>
 					<Directory Id="WindowsDX" Name="WindowsDX"/>
+					<Directory Id="FNA" Name="FNA"/>
 				</Directory>
 			</Directory>
 			<Directory Id="ProgramMenuFolder">
