@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using Myra.Samples.Graphics3D;
 using Myra.Samples.WinForms;
 
 namespace Myra.Samples.WindowsDXLauncher
@@ -17,11 +16,6 @@ namespace Myra.Samples.WindowsDXLauncher
 			using (var form = new SampleForm())
 			{
 				foreach (var t in Samples2D.AllSampleTypes)
-				{
-					form.AddSampleType(t);
-				}
-
-				foreach (var t in Samples3D.AllSampleTypes)
 				{
 					form.AddSampleType(t);
 				}

@@ -17,12 +17,6 @@
 			<Component Id="Myra.FNA.pdb" Directory="INSTALLFOLDER" Guid="{2E06FCC7-9712-4E13-A764-40AC950CF005}">
 				<File Id="Myra.FNA.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra\bin\$(var.Configuration)\Myra.FNA.pdb" />
 			</Component>
-			<Component Id="Myra.Graphics3D.dll" Directory="INSTALLFOLDER" Guid="{83A8364E-E861-4559-98A5-20E367F29A75}">
-				<File Id="Myra.Graphics3D.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Graphics3D\bin\$(var.Configuration)\Myra.Graphics3D.dll" />
-			</Component>
-			<Component Id="Myra.Graphics3D.pdb" Directory="INSTALLFOLDER" Guid="{58963FD7-13D0-432B-AA4E-266FCFF0324D}">
-				<File Id="Myra.Graphics3D.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Graphics3D\bin\$(var.Configuration)\Myra.Graphics3D.pdb" />
-			</Component>
 			<Component Id="Myra.Content.Pipeline.dll" Directory="INSTALLFOLDER" Guid="{F3EF5437-F9B4-413B-8C64-1D6D10F17BEB}">
 				<File Id="Myra.Content.Pipeline.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Content.Pipeline\bin\$(var.Configuration)\Myra.Content.Pipeline.dll" />
 			</Component>
@@ -61,12 +55,6 @@
 			</Component>
 			<Component Id="Myra.Samples.FNA.pdb" Directory="INSTALLFOLDER" Guid="{FD38E949-4A23-42D2-B5FB-C755BBB57214}">
 				<File Id="Myra.Samples.FNA.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\bin\$(var.Configuration)\Myra.Samples.FNA.pdb" />
-			</Component>
-			<Component Id="Myra.Samples.Graphics3D.dll" Directory="INSTALLFOLDER" Guid="{35B6B2C2-E62C-43BF-B73A-85F69CEAC0CA}">
-				<File Id="Myra.Samples.Graphics3D.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.Graphics3D\bin\$(var.Configuration)\Myra.Samples.Graphics3D.dll" />
-			</Component>
-			<Component Id="Myra.Samples.Graphics3D.pdb" Directory="INSTALLFOLDER" Guid="{C27EAD02-EC35-4E03-8AC9-7AADB0E9BEF0}">
-				<File Id="Myra.Samples.Graphics3D.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.Graphics3D\bin\$(var.Configuration)\Myra.Samples.Graphics3D.pdb" />
 			</Component>
 			<Component Id="Myra.Samples.WinForms.dll" Directory="INSTALLFOLDER" Guid="{91BFCEBA-3364-423B-9352-7DA3E3E9DE08}">
 				<File Id="Myra.Samples.WinForms.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.WinForms\bin\$(var.Configuration)\Myra.Samples.WinForms.dll" />
@@ -214,7 +202,7 @@
 				<File Id="OpenAL_MacOSX" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.DesktopGL\libopenal.1.dylib" />
 			</Component>
 
-	<!-- Windows DX -->
+			<!-- Windows DX -->
 			<Component Id="MonoGame.Framework.WindowsDX.dll" Directory="WindowsDX" Guid="{937FF576-3549-45EF-A909-54050A0C1580}">
 				<File Id="MonoGame.Framework.WindowsDX.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\MonoGame.Framework.WindowsDX\MonoGame.Framework.dll" />
 			</Component>
