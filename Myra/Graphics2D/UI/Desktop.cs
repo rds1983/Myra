@@ -391,6 +391,20 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
+			var lastPressedKeys = lastKeyboardState.GetPressedKeys();
+			for (var i = 0; i < lastPressedKeys.Length; ++i)
+			{
+				var key = lastPressedKeys[i];
+				if (!KeyboardState.IsKeyDown(key))
+				{
+					// Key had been released
+					foreach (var w in _focusedWidgets)
+					{
+						w.OnKeyUp(key);
+					}
+				}
+			}
+
 /*			if (!MouseWheel.EpsilonEquals(lastState.ScrollWheelValue))
 			{
 				var ev = MouseWheelChanged;

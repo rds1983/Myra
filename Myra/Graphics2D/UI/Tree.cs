@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
@@ -43,6 +44,11 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public override bool AcceptsTab
+		{
+			get { return true; }
+		}
+
 		public event EventHandler SelectionChanged;
 
 		public Tree(TreeStyle style) : base(style, null)
@@ -56,6 +62,82 @@ namespace Myra.Graphics2D.UI
 
 		public Tree() : this(DefaultAssets.UIStylesheet.TreeStyle)
 		{
+		}
+
+		public override void OnKeyDown(Keys k)
+		{
+			base.OnKeyDown(k);
+
+			if (SelectedRow == null)
+			{
+				return;
+			}
+
+			int index = 0;
+			IList<Widget> parentWidgets = null;
+			if (SelectedRow.ParentNode != null && SelectedRow.ParentNode.HasRoot)
+			{
+				parentWidgets = SelectedRow.ParentNode.ChildNodesGrid.Widgets;
+				index = parentWidgets.IndexOf(SelectedRow);
+				if (index == -1)
+				{
+					return;
+				}
+			}
+
+			switch (k)
+			{
+				case Keys.Enter:
+					SelectedRow.IsExpanded = !SelectedRow.IsExpanded;
+					break;
+				case Keys.Up:
+				{
+					if (parentWidgets != null)
+					{
+						if (index == 0)
+						{
+							SelectedRow = SelectedRow.ParentNode;
+						}
+						else if (index > 0)
+						{
+							var previousRow = (TreeNode)parentWidgets[index - 1];
+							if (!previousRow.IsExpanded || previousRow.ChildNodesCount == 0)
+							{
+								SelectedRow = previousRow;
+							}
+							else
+							{
+								SelectedRow = (TreeNode)previousRow.ChildNodesGrid.Widgets[previousRow.ChildNodesCount - 1];
+							}
+						}
+					}
+				}
+					break;
+				case Keys.Down:
+				{
+					if (SelectedRow.IsExpanded && SelectedRow.ChildNodesCount > 0)
+					{
+						SelectedRow = (TreeNode) SelectedRow.ChildNodesGrid.Widgets[0];
+					}
+					else if (parentWidgets != null && index + 1 < parentWidgets.Count)
+					{
+						SelectedRow = (TreeNode) parentWidgets[index + 1];
+					}
+					else if (parentWidgets != null && index + 1 >= parentWidgets.Count)
+					{
+						var parentOfParent = SelectedRow.ParentNode.ParentNode;
+						if (parentOfParent != null)
+						{
+							var parentIndex = parentOfParent.ChildNodesGrid.Widgets.IndexOf(SelectedRow.ParentNode);
+							if (parentIndex + 1 < parentOfParent.ChildNodesCount)
+							{
+								SelectedRow = (TreeNode) parentOfParent.ChildNodesGrid.Widgets[parentIndex + 1];
+							}
+						}
+					}
+				}
+					break;
+			}
 		}
 
 		public override void OnMouseDown(MouseButtons mb)
@@ -119,7 +201,7 @@ namespace Myra.Graphics2D.UI
 
 			foreach (var widget in node.ChildNodesGrid.Widgets)
 			{
-				var subNode = (TreeNode)widget;
+				var subNode = (TreeNode) widget;
 				if (!Iterate(subNode, action))
 				{
 					return false;
@@ -140,8 +222,6 @@ namespace Myra.Graphics2D.UI
 
 		private static void RecursiveUpdateRowVisibility(TreeNode tree)
 		{
-			
-
 			tree.RowVisible = true;
 
 			if (tree.IsExpanded)
@@ -238,7 +318,7 @@ namespace Myra.Graphics2D.UI
 
 			return false;
 		}
-		
+
 
 		/// <summary>
 		/// Expands path to the node
