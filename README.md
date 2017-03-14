@@ -15,10 +15,10 @@ Formatted text with coloring & wrapping:
 ![](https://raw.githubusercontent.com/rds1983/Myra/master/Screenshots/FormattedTextSample.png)
 
 Grid container:
-![](https://raw.githubusercontent.com/rds1983/Myra/master/Screenshots/GridSample.png)
+![](https://raw.githubusercontent.com/rds1983/Myra/master/Screenshots/GridSample_14_03_2017.png)
 
 UI Editor:
-![](https://raw.githubusercontent.com/rds1983/Myra/master/Screenshots/UIEditor_12_02_2017.png)
+![](https://raw.githubusercontent.com/rds1983/Myra/master/Screenshots/UIEditor_14_03_2017.png)
 
 ### License
 [https://opensource.org/licenses/MIT] (https://opensource.org/licenses/MIT)
