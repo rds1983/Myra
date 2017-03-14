@@ -12,9 +12,6 @@
 		<description>Myra Additional Widgets for Making Custom Editor</description>
 		<copyright>Copyright 2017</copyright>
 		<tags>gamedev monogame</tags>
-		<dependencies>
-			<dependency id="Myra" version="0.4.0.0" />
-		</dependencies>
 	</metadata>
 	<files>
 		<file src="bin\Release\Myra.Editor.dll" target="lib\net45\Myra.Editor.dll"/>
