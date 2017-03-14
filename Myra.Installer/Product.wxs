@@ -86,6 +86,11 @@
 			<Directory Id="ProgramMenuFolder">
 				<Directory Id="ApplicationProgramsFolder" Name="$(var.ProductName)">
 					<Component Id="Shortcuts" Guid="30BD4ACB-AA2A-4048-ACCE-BE7D2D63C510">
+						<Shortcut Id="FNASamplesLauncherShortcut"
+									Name="FNA Samples Launcher"
+									Description="FNA Samples Launcher"
+									Target="[INSTALLFOLDER]Myra.Samples.FNALauncher.exe"
+									WorkingDirectory="INSTALLFOLDER"/>
 						<Shortcut Id="GLSamplesLauncherShortcut"
 									Name="DesktopGL Samples Launcher"
 									Description="DesktopGL Samples Launcher"
@@ -96,12 +101,12 @@
 									Description="WindowsDX Samples Launcher"
 									Target="[INSTALLFOLDER]Myra.Samples.WindowsDXLauncher.exe"
 									WorkingDirectory="INSTALLFOLDER"/>
-            <Shortcut Id="UIEditorShortcut"
+						<Shortcut Id="UIEditorShortcut"
 									Name="UI Editor"
 									Description="UI Editor"
 									Target="[INSTALLFOLDER]Myra.UIEditor.exe"
 									WorkingDirectory="INSTALLFOLDER"/>
-            <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
+						<RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
 						<RegistryValue Root="HKCU" Key="Software\$(var.Manufacturer)\$(var.ProductName)" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
 					</Component>
 				</Directory>
