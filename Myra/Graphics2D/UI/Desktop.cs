@@ -27,7 +27,7 @@ namespace Myra.Graphics2D.UI
 		private Widget _modalWidget;
 
 		public Point MousePosition { get; private set; }
-		public float MouseWheel { get; private set; }
+		public int MouseWheel { get; private set; }
 		public MouseState MouseState { get; private set; }
 		public KeyboardState KeyboardState { get; private set; }
 
@@ -405,14 +405,20 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-/*			if (!MouseWheel.EpsilonEquals(lastState.ScrollWheelValue))
+			if (MouseWheel != lastState.ScrollWheelValue)
 			{
+				var delta = MouseWheel - lastState.ScrollWheelValue;
 				var ev = MouseWheelChanged;
 				if (ev != null)
 				{
-					ev(null, EventArgs.Empty);
+					ev(null, new GenericEventArgs<float>(delta));
 				}
-			}*/
+
+				foreach (var w in _focusedWidgets)
+				{
+					w.OnMouseWheel(delta);
+				}
+			}
 		}
 
 		private bool UpdateFocusableWidgets(IEnumerable<Widget> widgets)
@@ -426,25 +432,19 @@ namespace Myra.Graphics2D.UI
 					continue;
 				}
 
-				var asContainer = w as Container;
 				if (w.CanFocus)
 				{
-					if (asContainer == null ||
-					    !UpdateFocusableWidgets(asContainer.Children))
-					{
-						w.MouseDown += FocusableWidgetOnMouseDown;
-						_focusableWidgets.Add(w);
-						result = true;
-					}
+					w.MouseDown += FocusableWidgetOnMouseDown;
+					_focusableWidgets.Add(w);
+					result = true;
 				}
-				else
+
+				var asContainer = w as Container;
+				if (asContainer != null)
 				{
-					if (asContainer != null)
+					if (UpdateFocusableWidgets(asContainer.Children))
 					{
-						if (UpdateFocusableWidgets(asContainer.Children))
-						{
-							result = true;
-						}
+						result = true;
 					}
 				}
 			}

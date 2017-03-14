@@ -82,60 +82,77 @@ namespace Myra.Graphics2D.UI
 			Widget.YHint = -_origin.Y;
 		}
 
-		public override void OnMouseMoved(Point position)
+		private void MoveThumb(int delta)
 		{
-			base.OnMouseMoved(position);
-
-			if (!_startBoundsPos.HasValue) return;
 			var origin = _origin;
 
 			var bounds = LayoutBounds;
 			if (_scrollbarOrientation == Orientation.Horizontal)
 			{
-				var delta = position.X - AbsoluteBounds.X - _startBoundsPos.Value;
-				if (delta < 0)
+				var newPos = delta + _scrollPosition.X;
+				if (newPos < 0)
 				{
-					delta = 0;
+					newPos = 0;
 				}
 
-				if (delta > _horizontalMaximum)
+				if (newPos > _horizontalMaximum)
 				{
-					delta = _horizontalMaximum;
+					newPos = _horizontalMaximum;
 				}
 
-				var prop = (float)delta/_horizontalMaximum;
+				var prop = (float)newPos / _horizontalMaximum;
 
-				_scrollPosition.X = delta;
-				_horizontalScrollbarThumb.X = LayoutBounds.X + delta;
+				_scrollPosition.X = newPos;
+				_horizontalScrollbarThumb.X = LayoutBounds.X + newPos;
 
-				origin.X = (int)(prop*
-				           (Widget.Bounds.Width - bounds.Width + (_verticalScrollbarVisible ? _verticalScrollbarThumb.Width : 0)));
+				origin.X = (int)(prop *
+						   (Widget.Bounds.Width - bounds.Width + (_verticalScrollbarVisible ? _verticalScrollbarThumb.Width : 0)));
 			}
 			else
 			{
-				var delta = position.Y - AbsoluteBounds.Y - _startBoundsPos.Value;
-				if (delta < 0)
+				var newPos = delta + _scrollPosition.Y;
+
+				if (newPos < 0)
 				{
-					delta = 0;
+					newPos = 0;
 				}
 
-				if (delta > _verticalMaximum)
+				if (newPos > _verticalMaximum)
 				{
-					delta = _verticalMaximum;
+					newPos = _verticalMaximum;
 				}
 
-				var prop = (float)delta / _verticalMaximum;
+				var prop = (float)newPos / _verticalMaximum;
 
-				_scrollPosition.Y = delta;
-				_verticalScrollbarThumb.Y = LayoutBounds.Y + delta;
+				_scrollPosition.Y = newPos;
+				_verticalScrollbarThumb.Y = LayoutBounds.Y + newPos;
 
-				origin.Y = (int)(prop*
-				           (Widget.Bounds.Height - bounds.Height +
-				            (_horizontalScrollbarVisible ? _horizontalScrollbarThumb.Height : 0)));
+				origin.Y = (int)(prop *
+						   (Widget.Bounds.Height - bounds.Height +
+							(_horizontalScrollbarVisible ? _horizontalScrollbarThumb.Height : 0)));
 			}
 
 			_origin = origin;
 			UpdateWidgetLocation();
+		}
+
+		public override void OnMouseMoved(Point position)
+		{
+			base.OnMouseMoved(position);
+
+			if (!_startBoundsPos.HasValue) return;
+
+			int delta;
+			if (_scrollbarOrientation == Orientation.Horizontal)
+			{
+				delta = position.X - AbsoluteBounds.X - _startBoundsPos.Value - _scrollPosition.X;
+			}
+			else
+			{
+				delta = position.Y - AbsoluteBounds.Y - _startBoundsPos.Value - _scrollPosition.Y;
+			}
+
+			MoveThumb(delta);
 		}
 
 		public override void OnMouseUp(MouseButtons mb)
@@ -164,6 +181,27 @@ namespace Myra.Graphics2D.UI
 			{
 				_startBoundsPos = mousePosition.X - _horizontalScrollbarThumb.X - bounds.X;
 				_scrollbarOrientation = Orientation.Horizontal;
+			}
+		}
+
+		public override void OnMouseWheel(float delta)
+		{
+			base.OnMouseWheel(delta);
+
+			if (!_verticalScrollbarVisible)
+			{
+				return;
+			}
+
+			if (delta < 0)
+			{
+				_scrollbarOrientation = Orientation.Vertical;
+				MoveThumb(10);
+			}
+			else if (delta > 0)
+			{
+				_scrollbarOrientation = Orientation.Vertical;
+				MoveThumb(-10);
 			}
 		}
 
