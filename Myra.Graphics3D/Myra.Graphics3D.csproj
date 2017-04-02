@@ -61,6 +61,9 @@
     <Reference Include="MonoGame.Framework">
       <HintPath>..\Myra-Dependencies\MonoGame.Framework.Portable\MonoGame.Framework.dll</HintPath>
     </Reference>
+    <Reference Include="MonoGame.MultiCompileEffects">
+      <HintPath>..\Myra-Dependencies\MonoGame.MultiCompileEffects\MonoGame.MultiCompileEffects.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Myra-Dependencies\Newtonsoft.Json\Newtonsoft.Json.dll</HintPath>
     </Reference>

@@ -49,7 +49,7 @@ namespace Myra.Samples
 			var device = GraphicsDevice;
 			device.Clear(Color.Black);
 
-			_batch.Begin();
+			_batch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
 
 			_formattedText.Draw(_batch, Point.Zero, Color.LightBlue);
 

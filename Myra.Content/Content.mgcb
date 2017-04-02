@@ -10,7 +10,7 @@
 
 #-------------------------------- References --------------------------------#
 
-/reference:D:\Projects\Hebron\Myra\Myra.Content.Pipeline\bin\Debug\Myra.Content.Pipeline.dll
+/reference:D:\Projects\Hebron\Myra\Myra-Dependencies\MonoGame.MultiCompileEffects\MonoGame.MultiCompileEffects.Content.Pipeline.dll
 
 #---------------------------------- Content ---------------------------------#
 

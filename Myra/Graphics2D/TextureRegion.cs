@@ -19,6 +19,14 @@ namespace Myra.Graphics2D
 			get { return _bounds; }
 		}
 
+		/// <summary>
+		/// Covers the whole texture
+		/// </summary>
+		/// <param name="texture"></param>
+		public TextureRegion(Texture2D texture) : this(texture, new Rectangle(0, 0, texture.Width, texture.Height))
+		{
+		}
+
 		public TextureRegion(Texture2D texture, Rectangle bounds)
 		{
 			if (texture == null)

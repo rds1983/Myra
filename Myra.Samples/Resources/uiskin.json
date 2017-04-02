@@ -3,6 +3,10 @@
         "white": "#FFFFFFFF",
         "grey": "#AAAAAAFF"
     },
+    "fonts": {
+        "default-font": "default.fnt"
+    },
+    "spriteSheet": "uiskin.atlas",
     "textBlock": {
         "font": "default-font",
         "disabledTextColor": "grey",

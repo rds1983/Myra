@@ -1,16 +1,24 @@
 ﻿using System;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Graphics;
+using Myra.Assets;
 using Myra.Graphics2D;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
-using Myra.Utility;
 
 namespace Myra
 {
 	public static class DefaultAssets
 	{
+		private const string DefaultFontName = "default_font.fnt";
+		private const string DefaultSmallFontName = "default_font_small.fnt";
+		private const string DefaultStylesheetName = "default_stylesheet.json";
+		private const string DefaultSpritesheetName = "default_uiskin.atlas";
+
+		private static readonly AssetManager _defaultAssetManager =
+			new AssetManager(new ResourceAssetResolver(typeof (DefaultAssets).GetTypeInfo().Assembly, "Myra.Resources."));
+
 		private static Texture2D _white;
 		private static TextureRegion _whiteRegion;
 
@@ -29,8 +37,8 @@ namespace Myra
 					return _font;
 				}
 
-				var textureRegion = UISpritesheet.Drawables["default"].TextureRegion;
-				_font = BitmapFont.CreateFromFNT(Resources.Resources.DefaultFont, textureRegion);
+				_font = _defaultAssetManager.Load<BitmapFont>(DefaultFontName);
+
 				return _font;
 			}
 		}
@@ -44,9 +52,7 @@ namespace Myra
 					return _fontSmall;
 				}
 
-				var textureRegion = UISpritesheet.Drawables["font-small"].TextureRegion;
-
-				_fontSmall = BitmapFont.CreateFromFNT(Resources.Resources.DefaultFontSmall, textureRegion);
+				_fontSmall = _defaultAssetManager.Load<BitmapFont>(DefaultSmallFontName);
 
 				return _fontSmall;
 			}
@@ -58,13 +64,7 @@ namespace Myra
 			{
 				if (_uiSpritesheet != null) return _uiSpritesheet;
 
-				Texture2D texture;
-				using (var stream = Resources.Resources.GetBinaryResourceStream("default_uiskin.png"))
-				{
-					texture = GraphicsExtension.PremultipliedTextureFromPngStream(stream);
-				}
-
-				_uiSpritesheet = SpriteSheet.LoadLibGDX(Resources.Resources.DefaultUISkinAtlas, s => texture);
+				_uiSpritesheet = _defaultAssetManager.Load<SpriteSheet>(DefaultSpritesheetName);
 
 				return _uiSpritesheet;
 			}
@@ -79,30 +79,7 @@ namespace Myra
 					return _uiStylesheet;
 				}
 
-				// Create default
-				_uiStylesheet = Stylesheet.CreateFromSource(Resources.Resources.DefaultStyleSheet,
-					s =>
-					{
-						switch (s)
-						{
-							case "default-font":
-								return Font;
-							case "default-font-small":
-								return FontSmall;
-							default:
-								throw new Exception(string.Format("Could not find default font '{0}'", s));
-						}
-					},
-					s =>
-					{
-						ImageDrawable result;
-						if (!UISpritesheet.Drawables.TryGetValue(s, out result))
-						{
-							throw new Exception(string.Format("Could not find default drawable '{0}'", s));
-						}
-
-						return result;
-					});
+				_uiStylesheet = _defaultAssetManager.Load<Stylesheet>(DefaultStylesheetName);
 
 				return _uiStylesheet;
 			}
@@ -170,6 +147,7 @@ namespace Myra
 
 		internal static void Dispose()
 		{
+			_defaultAssetManager.ClearCache();
 			_font = null;
 			_fontSmall = null;
 			_uiSpritesheet = null;

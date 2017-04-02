@@ -21,8 +21,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.UIEditor.Plugin.Yellow
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.UIEditor.Plugin.LibGDX", "Myra.UIEditor.Plugin.LibGDX\Myra.UIEditor.Plugin.LibGDX.csproj", "{DB171BE4-D9C3-45F1-8108-84992EF8391F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Content.Pipeline", "Myra.Content.Pipeline\Myra.Content.Pipeline.csproj", "{841F4244-A069-438A-ABE1-F7D93E269CDB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Graphics3D", "Myra.Graphics3D\Myra.Graphics3D.csproj", "{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.Graphics3D", "Myra.Samples.Graphics3D\Myra.Samples.Graphics3D.csproj", "{4DF783E4-5CA5-425A-A5D3-F65CCE432F22}"
@@ -67,10 +65,6 @@ Global
 		{DB171BE4-D9C3-45F1-8108-84992EF8391F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB171BE4-D9C3-45F1-8108-84992EF8391F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB171BE4-D9C3-45F1-8108-84992EF8391F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{841F4244-A069-438A-ABE1-F7D93E269CDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{841F4244-A069-438A-ABE1-F7D93E269CDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{841F4244-A069-438A-ABE1-F7D93E269CDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{841F4244-A069-438A-ABE1-F7D93E269CDB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -1,8 +1,7 @@
 ﻿using System;
-using System.IO;
 using Microsoft.Xna.Framework;
+using Myra.Assets;
 using Myra.Graphics2D.UI;
-using Myra.Utility;
 
 namespace Myra.Samples
 {
@@ -10,6 +9,7 @@ namespace Myra.Samples
 	{
 		private readonly GraphicsDeviceManager graphics;
 
+		private readonly AssetManager _assetManager = new AssetManager(new FileSystemAssetResolver("Assets"));
 		private Desktop _host;
 		private ListBox _mainMenuList;
 
@@ -29,8 +29,7 @@ namespace Myra.Samples
 			_host = new Desktop();
 
 			// Load UI
-			var data = File.ReadAllText("Assets/awesomeGame.ui");
-			var ui = Serialization.LoadFromData(data);
+			var ui = _assetManager.Load<Project>("awesomeGame.ui");
 
 			// Obtain reference to the "#listBoxMenu"
 			_mainMenuList = (ListBox) ui.Root.FindWidgetById("mainMenu");

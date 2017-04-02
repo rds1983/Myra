@@ -1,5 +1,5 @@
 ﻿using System;
-using Myra.Graphics;
+using MonoGame.MultiCompileEffects;
 
 namespace Myra.Graphics3D
 {

@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Myra.Graphics2D.Text
 {
-	public class BitmapFont
+	public partial class BitmapFont
 	{
 		public static bool DrawFames { get; set; }
 
-		private readonly Texture2D[] _pages;
+		private readonly TextureRegion[] _pages;
 		private readonly Dictionary<char, Glyph> _glyphs;
 
 		public Dictionary<char, Glyph> Glyphs
@@ -18,14 +17,14 @@ namespace Myra.Graphics2D.Text
 			get { return _glyphs; }
 		}
 
-		public Texture2D[] Pages
+		public TextureRegion[] Pages
 		{
 			get { return _pages; }
 		}
 
 		public int LineHeight { get; private set; }
 
-		public BitmapFont(Dictionary<char, Glyph> glyphs, IEnumerable<Texture2D> pages)
+		public BitmapFont(Dictionary<char, Glyph> glyphs, TextureRegion[] pages, int lineHeight)
 		{
 			if (glyphs == null)
 			{
@@ -37,55 +36,14 @@ namespace Myra.Graphics2D.Text
 				throw new ArgumentNullException("pages");
 			}
 
+			if (lineHeight <= 0)
+			{
+				throw new ArgumentOutOfRangeException("lineHeight");
+			}
+
 			_glyphs = glyphs;
-			_pages = pages.ToArray();
-		}
-
-		public static BitmapFont CreateFromFNT(string text, TextureRegion textureRegion)
-		{
-			var data = new Cyotek.Drawing.BitmapFont.BitmapFont();
-			data.LoadText(text);
-
-			var glyphs = new Dictionary<char, Glyph>();
-
-			foreach (var pair in data.Characters)
-			{
-				var character = pair.Value;
-
-				var bounds = character.Bounds;
-
-				var region = new TextureRegion(textureRegion, bounds);
-				var glyph = new Glyph
-				{
-					Id = character.Char,
-					Region = region,
-					Offset = character.Offset,
-					XAdvance = character.XAdvance
-				};
-
-				glyphs[glyph.Id] = glyph;
-			}
-
-			// Process kernings
-			foreach (var pair in data.Kernings)
-			{
-				var kerning = pair.Key;
-
-				Glyph glyph;
-				if (!glyphs.TryGetValue(kerning.FirstCharacter, out glyph))
-				{
-					continue;
-				}
-
-				glyph.Kerning[kerning.SecondCharacter] = kerning.Amount;
-			}
-
-			var result = new BitmapFont(glyphs, new[] {textureRegion.Texture})
-			{
-				LineHeight = data.LineHeight
-			};
-
-			return result;
+			_pages = pages;
+			LineHeight = lineHeight;
 		}
 
 		public void Draw(SpriteBatch batch, string text, Point pos, Color color)
@@ -102,7 +60,7 @@ namespace Myra.Graphics2D.Text
 
 				var dest = new Rectangle(pos.X + glyph.Offset.X,
 					pos.Y + glyph.Offset.Y,
-					glyph.Region.Bounds.Width, 
+					glyph.Region.Bounds.Width,
 					glyph.Region.Bounds.Height);
 
 				glyph.Region.Draw(batch, dest, color);

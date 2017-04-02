@@ -3,6 +3,10 @@
         "white": "#FFFFFFFF",
         "grey": "#AAAAAAFF"
     },
+    "fonts": {
+        "default-font": "default.fnt"
+    },
+    "spriteSheet": "uiskin.atlas",
     "textBlock": {
         "font": "default-font",
         "disabledTextColor": "grey",
@@ -65,7 +69,7 @@
                 "image": "tree-plus"
             }
         },
-        "downButton": { 
+        "downButton": {
             "background": "default-round",
             "pressedBackground": "default-round-down",
             "image": {
@@ -219,13 +223,13 @@
                 "left": 5.0,
                 "right": 5.0
             },
-           "font": "default-font",
-           "textColor": "white"
+            "font": "default-font",
+            "textColor": "white"
         },
         "closeButton": {
             "image": {
                 "image": "default-round",
-                "pressedImage":  "default-round-down"
+                "pressedImage": "default-round-down"
             }
         }
     }

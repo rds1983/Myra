@@ -49,14 +49,12 @@ namespace Myra.Graphics2D.UI.Styles
 			WindowStyle = new WindowStyle();
 		}
 
-		public static Stylesheet CreateFromSource(string source,
-			Func<string, BitmapFont> fontGetter,
-			Func<string, Drawable> drawableGetter)
+		public static Stylesheet CreateFromSource(string s, Func<string, BitmapFont> fontGetter, SpriteSheet spriteSheet)
 		{
-			var root = JObject.Parse(source);
-			var loader = new StylesheetLoader(root, fontGetter, drawableGetter);
+			var root = JObject.Parse(s);
 
-			return loader.CreateWidgetStyleFromSource();
+			var loader = new StylesheetLoader(root, fontGetter, spriteSheet);
+			return loader.Load();
 		}
 	}
 }

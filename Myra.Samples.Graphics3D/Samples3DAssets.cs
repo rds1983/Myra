@@ -39,11 +39,10 @@ namespace Myra.Samples.Graphics3D
 				buffer = ms.ToArray();
 			}
 
-			int x, y, comp;
-			var data = Image.stbi_load_from_memory(buffer, out x, out y, out comp, Image.STBI_rgb_alpha);
+			var image = Stb.LoadFromMemory(buffer, Stb.STBI_rgb_alpha);
 
-			var result = new Texture2D(MyraEnvironment.GraphicsDevice, x, y);
-			result.SetData(data);
+			var result = new Texture2D(MyraEnvironment.GraphicsDevice, image.Width, image.Height);
+			result.SetData(image.Data);
 
 			return result;
 

@@ -1,13 +1,9 @@
 ﻿using System;
-using System.IO;
 using System.Reflection;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Myra.Graphics2D;
-using Myra.Graphics2D.Text;
+using Myra.Assets;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.Styles;
-using Myra.Utility;
 using Button = Myra.Graphics2D.UI.Button;
 using CheckBox = Myra.Graphics2D.UI.CheckBox;
 using ComboBox = Myra.Graphics2D.UI.ComboBox;
@@ -18,6 +14,7 @@ namespace Myra.Samples
 	public class CustomUIStylesheetSample : Game
 	{
 		private readonly GraphicsDeviceManager graphics;
+		private readonly AssetManager _assetManager = new AssetManager(new ResourceAssetResolver(typeof(CustomUIStylesheetSample).GetTypeInfo().Assembly, "Myra.Samples.Resources."));
 
 		private Desktop _host;
 		private Window _window;
@@ -30,35 +27,6 @@ namespace Myra.Samples
 			IsMouseVisible = true;
 		}
 
-		private const string Prefix = "Myra.Samples.Resources.";
-
-		private static string GetStringResource(string name)
-		{
-			var assembly = typeof(CustomUIStylesheetSample).GetTypeInfo().Assembly;
-
-			// Once you figure out the name, pass it in as the argument here.
-			string s;
-			using (var stream = assembly.GetManifestResourceStream(Prefix + name))
-			{
-				using (var reader = new StreamReader(stream))
-				{
-					s = reader.ReadToEnd();
-				}
-			}
-
-			return s;
-		}
-
-		private static Stream GetBinaryResourceStream(string name)
-		{
-			var assembly = typeof(CustomUIStylesheetSample).GetTypeInfo().Assembly;
-
-			// Once you figure out the name, pass it in as the argument here.
-			var stream = assembly.GetManifestResourceStream(Prefix + name);
-
-			return stream;
-		}
-
 		protected override void LoadContent()
 		{
 			base.LoadContent();
@@ -67,37 +35,9 @@ namespace Myra.Samples
 
 			try
 			{
-				// First step - load underlying image(s)
-				Texture2D underlyingImage;
-				using (var stream = GetBinaryResourceStream("uiskin.png"))
-				{
-					underlyingImage = GraphicsExtension.PremultipliedTextureFromPngStream(stream);
-				}
-
-				// Second step - load sprite sheet
-				var data = GetStringResource("uiskin.atlas");
-				var spriteSheet = SpriteSheet.LoadLibGDX(data, s => underlyingImage);
-
-				// Retrieve sprite with font
-				var fontSprite = spriteSheet.Drawables["default"];
-
-				// Third step - create bitmap font(s)
-				data = GetStringResource("default.fnt");
-				var font = BitmapFont.CreateFromFNT(data, fontSprite.TextureRegion);
-
-				// Final step - load UI style sheet
-				data = GetStringResource("uiskin.json");
-				var stylesheet = Stylesheet.CreateFromSource(data, s => font, s =>
-				{
-					ImageDrawable result;
-					if (!spriteSheet.Drawables.TryGetValue(s, out result))
-					{
-						throw new Exception(string.Format("Could not find default drawable '{0}'", s));
-					}
-
-					return result;
-				});
-
+				// Load UI style sheet
+				var stylesheet = _assetManager.Load<Stylesheet>("uiskin.json");
+				
 				// Set new style sheet as default
 				DefaultAssets.UIStylesheet = stylesheet;
 			}

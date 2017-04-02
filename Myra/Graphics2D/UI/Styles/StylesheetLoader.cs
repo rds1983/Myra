@@ -92,30 +92,30 @@ namespace Myra.Graphics2D.UI.Styles
 		private readonly Dictionary<string, Color> _colors = new Dictionary<string, Color>();
 		private readonly JObject _root;
 		private readonly Func<string, BitmapFont> _fontGetter;
-		private readonly Func<string, Drawable> _drawableGetter;
+		private readonly SpriteSheet _spriteSheet;
 
 		public StylesheetLoader(JObject root,
 			Func<string, BitmapFont> fontGetter,
-			Func<string, Drawable> drawableGetter)
+			SpriteSheet spriteSheet)
 		{
 			if (root == null)
 			{
 				throw new ArgumentNullException("root");
 			}
 
+			if (spriteSheet == null)
+			{
+				throw new ArgumentNullException("spriteSheet");
+			}
+
 			_root = root;
 			_fontGetter = fontGetter;
-			_drawableGetter = drawableGetter;
+			_spriteSheet = spriteSheet;
 		}
 
 		private Drawable GetDrawable(string id)
 		{
-			if (_drawableGetter == null || string.IsNullOrEmpty(id))
-			{
-				return null;
-			}
-
-			return _drawableGetter(id);
+			return _spriteSheet.EnsureDrawable(id);
 		}
 
 		private BitmapFont GetFont(string id)
@@ -603,7 +603,7 @@ namespace Myra.Graphics2D.UI.Styles
 			fillAction(source, result);
 		}
 
-		public Stylesheet CreateWidgetStyleFromSource()
+		public Stylesheet Load()
 		{
 			var result = new Stylesheet();
 

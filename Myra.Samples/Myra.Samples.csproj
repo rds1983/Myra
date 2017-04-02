@@ -92,9 +92,7 @@
     <EmbeddedResource Include="Resources\uiskin.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\notepad.ui">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <EmbeddedResource Include="Resources\notepad.ui" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Myra\Myra.csproj">
