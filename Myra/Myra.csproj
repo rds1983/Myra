@@ -64,7 +64,7 @@
     <Compile Include="Assets\ResourceAssetResolver.cs" />
     <Compile Include="Assets\SpritesheetLoader.cs" />
     <Compile Include="Assets\Texture2DLoader.cs" />
-    <Compile Include="Assets\FileSystemAssetResolver.cs" />
+    <Compile Include="Assets\FileAssetResolver.cs" />
     <Compile Include="Assets\UILoader.cs" />
     <Compile Include="Assets\UIStylesheetLoader.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\BitmapFont.cs" />

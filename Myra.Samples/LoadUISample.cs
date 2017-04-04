@@ -9,7 +9,7 @@ namespace Myra.Samples
 	{
 		private readonly GraphicsDeviceManager graphics;
 
-		private readonly AssetManager _assetManager = new AssetManager(new FileSystemAssetResolver("Assets"));
+		private readonly AssetManager _assetManager = new AssetManager(new FileAssetResolver("Assets"));
 		private Desktop _host;
 		private ListBox _mainMenuList;
 

@@ -9,7 +9,7 @@ namespace Myra.Samples
 	{
 		private readonly GraphicsDeviceManager graphics;
 		private SpriteBatch _batch;
-		private readonly AssetManager _assetManager = new AssetManager(new FileSystemAssetResolver("Assets"));
+		private readonly AssetManager _assetManager = new AssetManager(new FileAssetResolver("Assets"));
 		private BitmapFont _font;
 
 		public CustomFontSample()

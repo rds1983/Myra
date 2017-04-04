@@ -3,11 +3,11 @@ using Microsoft.Xna.Framework;
 
 namespace Myra.Assets
 {
-	public class FileSystemAssetResolver: IAssetResolver
+	public class FileAssetResolver: IAssetResolver
 	{
 		public string BaseFolder { get; set; }
 
-		public FileSystemAssetResolver(string baseFolder)
+		public FileAssetResolver(string baseFolder)
 		{
 			BaseFolder = baseFolder;
 		}
