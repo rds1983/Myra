@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Include>
 	<?define ProductName="Myra SDK" ?>
-	<?define ProductVersion="0.4.0.0" ?>
+	<?define ProductVersion="0.4.5.0" ?>
 	<?define ProductCode="BBE3504C-F6F1-4FE4-8AA1-DA9BE24CF33C"?>
 	<?define UpgradeCode="DB3034DC-0C8B-4A26-8312-6F228F338994"?>
 	<?define Manufacturer="MyraTeam"?>

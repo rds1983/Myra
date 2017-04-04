@@ -14,9 +14,10 @@
 		<tags>gamedev monogame ui</tags>
 		<dependencies>
 			<dependency id="Newtonsoft.Json" version="9.0" />
+			<dependency id="StbSharp" version="0.4.0.20" />
 		</dependencies>
 	</metadata>
 	<files>
-		<file src="bin\Release\Myra.dll" target="lib\net45\Myra.dll"/>
+		<file src="bin\Release\Myra.dll" target="lib\portable-net45+win+wp81+MonoAndroid10+MonoTouch10\Myra.dll"/>
 	</files>
 </package>
