@@ -13,9 +13,9 @@ namespace Myra.Assets
 		private const string FontsName = "fonts";
 		private const string SpritesheetName = "spriteSheet";
 
-		public Stylesheet Load(AssetManager assetManager, string path)
+		public Stylesheet Load(AssetManager assetManager, string assetName)
 		{
-			var text = assetManager.ReadAsText(path);
+			var text = assetManager.ReadAsText(assetName);
 
 			var root = JObject.Parse(text);
 			var fontsMap = new Dictionary<string, BitmapFont>();

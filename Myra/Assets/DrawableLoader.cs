@@ -5,12 +5,12 @@ namespace Myra.Assets
 {
 	public class DrawableLoader : IAssetLoader<TextureRegion>
 	{
-		public TextureRegion Load(AssetManager assetManager, string fn)
+		public TextureRegion Load(AssetManager assetManager, string assetName)
 		{
-			if (fn.Contains(":"))
+			if (assetName.Contains(":"))
 			{
 				// Means page is sprite in the spritesheet
-				var parts = fn.Split(':');
+				var parts = assetName.Split(':');
 
 				var spriteSheet = assetManager.Load<SpriteSheet>(parts[0]);
 				var drawable = spriteSheet.EnsureDrawable(parts[1]);
@@ -18,7 +18,7 @@ namespace Myra.Assets
 				return drawable.TextureRegion;
 			}
 
-			return new TextureRegion(assetManager.Load<Texture2D>(fn));
+			return new TextureRegion(assetManager.Load<Texture2D>(assetName));
 		}
 	}
 }

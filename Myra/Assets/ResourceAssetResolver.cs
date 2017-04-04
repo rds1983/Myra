@@ -31,10 +31,10 @@ namespace Myra.Assets
 			Prefix = prefix;
 		}
 
-		public Stream Open(string path)
+		public Stream Open(string assetName)
 		{
 			// Once you figure out the name, pass it in as the argument here.
-			var stream = Assembly.GetManifestResourceStream(Prefix + path);
+			var stream = Assembly.GetManifestResourceStream(Prefix + assetName);
 
 			return stream;
 		}

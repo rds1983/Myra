@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="Assets\AssetManager.cs" />
     <Compile Include="Assets\BitmapFontLoader.cs" />
+    <Compile Include="Assets\ContentLoader.cs" />
     <Compile Include="Assets\DrawableLoader.cs" />
     <Compile Include="Assets\IAssetLoader.cs" />
     <Compile Include="Assets\IAssetResolver.cs" />

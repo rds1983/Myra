@@ -12,14 +12,14 @@ namespace Myra.Assets
 			BaseFolder = baseFolder;
 		}
 
-		public Stream Open(string path)
+		public Stream Open(string assetName)
 		{
 			if (!string.IsNullOrEmpty(BaseFolder))
 			{
-				path = Path.Combine(BaseFolder, path);
+				assetName = Path.Combine(BaseFolder, assetName);
 			}
 
-			return TitleContainer.OpenStream(path);
+			return TitleContainer.OpenStream(assetName);
 		}
 	}
 }

@@ -25,12 +25,12 @@ namespace Myra.Assets
 			return (byte) fr;
 		}
 
-		public Texture2D Load(AssetManager assetManager, string path)
+		public Texture2D Load(AssetManager assetManager, string assetName)
 		{
 			Image image;
 			var reader = new ImageReader();
 
-			using (var stream = assetManager.Open(path))
+			using (var stream = assetManager.Open(assetName))
 			{
 				image = reader.Read(stream, Stb.STBI_rgb_alpha);
 			}

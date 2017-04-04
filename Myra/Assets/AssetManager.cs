@@ -26,6 +26,11 @@ namespace Myra.Assets
 			}
 		}
 
+		public Dictionary<Type, object> Loaders
+		{
+			get { return _loaders; }
+		}
+
 		public AssetManager(IAssetResolver assetResolver)
 		{
 			AssetResolver = assetResolver;
@@ -34,17 +39,17 @@ namespace Myra.Assets
 
 		private void RegisterDefaultLoaders()
 		{
-			RegisterAssetLoader(new Texture2DLoader());
-			RegisterAssetLoader(new DrawableLoader());
-			RegisterAssetLoader(new BitmapFontLoader());
-			RegisterAssetLoader(new SpritesheetLoader());
-			RegisterAssetLoader(new UILoader());
-			RegisterAssetLoader(new UIStylesheetLoader());
+			SetAssetLoader(new Texture2DLoader());
+			SetAssetLoader(new DrawableLoader());
+			SetAssetLoader(new BitmapFontLoader());
+			SetAssetLoader(new SpritesheetLoader());
+			SetAssetLoader(new UILoader());
+			SetAssetLoader(new UIStylesheetLoader());
 		}
 
-		public void RegisterAssetLoader<T>(IAssetLoader<T> loader)
+		public void SetAssetLoader<T>(IAssetLoader<T> loader)
 		{
-			_loaders.Add(typeof (T), loader);
+			_loaders[typeof (T)] = loader;
 		}
 
 		public void ClearCache()

@@ -60,7 +60,7 @@
     <Compile Include="CustomUIStylesheetSample.cs" />
     <Compile Include="FormattedTextSample.cs" />
     <Compile Include="GridSample.cs" />
-    <Compile Include="HelloWorldSample.cs" />
+    <Compile Include="CustomFontSample.cs" />
     <Compile Include="LoadUISample.cs" />
     <Compile Include="Notepad.cs" />
     <Compile Include="ScrollPaneSample.cs" />

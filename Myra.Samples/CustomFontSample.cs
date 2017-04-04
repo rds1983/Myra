@@ -5,14 +5,14 @@ using Myra.Graphics2D.Text;
 
 namespace Myra.Samples
 {
-	public class HelloWorldSample : Game
+	public class CustomFontSample : Game
 	{
 		private readonly GraphicsDeviceManager graphics;
 		private SpriteBatch _batch;
 		private readonly AssetManager _assetManager = new AssetManager(new FileSystemAssetResolver("Assets"));
 		private BitmapFont _font;
 
-		public HelloWorldSample()
+		public CustomFontSample()
 		{
 			graphics = new GraphicsDeviceManager(this);
 			IsMouseVisible = true;

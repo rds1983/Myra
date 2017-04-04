@@ -10,7 +10,7 @@ namespace Myra.Samples
 		{
 			AllSampleTypes = new[]
 			{
-				typeof (HelloWorldSample),
+				typeof (CustomFontSample),
 				typeof (FormattedTextSample),
 				typeof (TextBlocksSample),
 				typeof (GridSample),
