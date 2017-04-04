@@ -10,6 +10,8 @@ build_script:
 - cmd: >-
     git submodule update --init --recursive
 
+    cd Source
+
     msbuild Myra.sln /p:Configuration=Release /t:rebuild
 
     msbuild Myra.FNA.sln /p:Configuration=Release /t:rebuild
@@ -34,16 +36,16 @@ build_script:
     
     7z a Myra.%APPVEYOR_BUILD_VERSION%.zip Myra.%APPVEYOR_BUILD_VERSION%
 artifacts:
-  - path: Myra.$(appveyor_build_version).nupkg
+  - path: Source/Myra.$(appveyor_build_version).nupkg
     name: Myra.nupkg
 
-  - path: Myra.FNA.$(appveyor_build_version).nupkg
+  - path: Source/Myra.FNA.$(appveyor_build_version).nupkg
     name: Myra.FNA.nupkg
 
-  - path: Myra.Editor.$(appveyor_build_version).nupkg
+  - path: Source/Myra.Editor.$(appveyor_build_version).nupkg
     name: Myra.Editor.nupkg
 
-  - path: Myra.$(appveyor_build_version).zip
+  - path: Source/Myra.$(appveyor_build_version).zip
     name: ZipPackage
 
   - path: Myra.Installer/bin/Release/Myra.$(appveyor_build_version).msi
