@@ -58,6 +58,18 @@
     <Reference Include="System.ComponentModel" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\AssetManager.cs" />
+    <Compile Include="Assets\BitmapFontLoader.cs" />
+    <Compile Include="Assets\ContentLoader.cs" />
+    <Compile Include="Assets\DrawableLoader.cs" />
+    <Compile Include="Assets\FileAssetResolver.cs" />
+    <Compile Include="Assets\IAssetLoader.cs" />
+    <Compile Include="Assets\IAssetResolver.cs" />
+    <Compile Include="Assets\ResourceAssetResolver.cs" />
+    <Compile Include="Assets\SpritesheetLoader.cs" />
+    <Compile Include="Assets\Texture2DLoader.cs" />
+    <Compile Include="Assets\UILoader.cs" />
+    <Compile Include="Assets\UIStylesheetLoader.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\BitmapFont.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\BitmapFontLoader.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\Character.cs" />
@@ -76,11 +88,13 @@
     <Compile Include="Graphics2D\PaddingInfo.cs" />
     <Compile Include="Graphics2D\Sprite.cs" />
     <Compile Include="Graphics2D\SpriteSheet.cs" />
+    <Compile Include="Graphics2D\SpriteSheet.GDX.cs" />
     <Compile Include="Graphics2D\TextureRegion.cs" />
     <Compile Include="Graphics2D\Text\BitmapFont.cs" />
     <Compile Include="Graphics2D\Pixmaps\PixmapAlpha8.cs" />
     <Compile Include="Graphics2D\Pixmaps\PixmapColor.cs" />
     <Compile Include="Graphics2D\Pixmaps\PixmapT.cs" />
+    <Compile Include="Graphics2D\Text\BitmapFont.FNT.cs" />
     <Compile Include="Graphics2D\Text\CharInfo.cs" />
     <Compile Include="Graphics2D\Text\Glyph.cs" />
     <Compile Include="Graphics2D\Text\FormattedText.cs" />
@@ -135,7 +149,6 @@
     <Compile Include="Graphics2D\UI\VerticalProgressBar.cs" />
     <Compile Include="Graphics2D\UI\VerticalSlider.cs" />
     <Compile Include="Graphics2D\UI\VerticalSplitPane.cs" />
-    <Compile Include="Resources\Resources.cs" />
     <Compile Include="DefaultAssets.cs" />
     <Compile Include="Utility\Collections.cs" />
     <Compile Include="Utility\FNASerializationBinder.cs" />
@@ -203,6 +216,7 @@
     <EmbeddedResource Include="Resources\default_stylesheet.json" />
     <EmbeddedResource Include="Resources\default_uiskin.atlas" />
     <EmbeddedResource Include="Resources\default_font_small.fnt" />
+    <EmbeddedResource Include="Resources\default_uiskin.png.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\default_uiskin.png" />

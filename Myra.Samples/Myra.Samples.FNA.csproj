@@ -52,10 +52,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomFontSample.cs" />
     <Compile Include="CustomUIStylesheetSample.cs" />
     <Compile Include="FormattedTextSample.cs" />
     <Compile Include="GridSample.cs" />
-    <Compile Include="HelloWorldSample.cs" />
     <Compile Include="LoadUISample.cs" />
     <Compile Include="Notepad.cs" />
     <Compile Include="Samples2D.cs" />
@@ -72,6 +72,7 @@
     <EmbeddedResource Include="Resources\default.fnt" />
     <EmbeddedResource Include="Resources\uiskin.atlas" />
     <EmbeddedResource Include="Resources\uiskin.json" />
+    <EmbeddedResource Include="Resources\uiskin.png.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\mistral_0.png">
@@ -88,12 +89,12 @@
     <None Include="Assets\awesomeGame.ui">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\notepad.ui">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\uiskin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\notepad.ui" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
