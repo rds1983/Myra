@@ -1,4 +1,4 @@
-default_uiskin.png
+default_uiskin.png.json
 size: 512,256
 format: RGBA8888
 filter: Nearest,Nearest

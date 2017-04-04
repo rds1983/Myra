@@ -8,7 +8,7 @@ namespace Myra.Assets
 		public BitmapFont Load(AssetManager assetManager, string assetName)
 		{
 			var text = assetManager.ReadAsText(assetName);
-			var result = BitmapFont.LoadFromFnt(text, s => assetManager.Load<TextureRegion>(s));
+			var result = BitmapFont.LoadFromFnt(text, assetManager.Load<TextureRegion>);
 
 			return result;
 		}

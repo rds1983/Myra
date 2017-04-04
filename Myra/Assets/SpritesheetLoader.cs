@@ -9,7 +9,7 @@ namespace Myra.Assets
 		{
 			var text = assetManager.ReadAsText(assetName);
 
-			return SpriteSheet.LoadGDX(text, s => assetManager.Load<Texture2D>(s));
+			return SpriteSheet.LoadGDX(text, assetManager.Load<Texture2D>);
 		}
 	}
 }

@@ -1,10 +1,18 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using System;
+using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using StbSharp;
 
 namespace Myra.Assets
 {
 	internal class Texture2DLoader : IAssetLoader<Texture2D>
 	{
+		internal class Texture2DLoadingParameters
+		{
+			public string image { get; set; }
+			public bool premultiplyAlpha { get; set; }
+		}
+
 		private static byte ApplyAlpha(byte color, byte alpha)
 		{
 			var fc = color/255.0f;
@@ -27,6 +35,16 @@ namespace Myra.Assets
 
 		public Texture2D Load(AssetManager assetManager, string assetName)
 		{
+			var premultiplyAlpha = false;
+
+			if (assetName.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+			{
+				var text = assetManager.ReadAsText(assetName);
+				var parameters = JsonConvert.DeserializeObject<Texture2DLoadingParameters>(text);
+				assetName = parameters.image;
+				premultiplyAlpha = parameters.premultiplyAlpha;
+			}
+
 			Image image;
 			var reader = new ImageReader();
 
@@ -35,11 +53,11 @@ namespace Myra.Assets
 				image = reader.Read(stream, Stb.STBI_rgb_alpha);
 			}
 
-/*			var data = image.Data;
 			if (premultiplyAlpha)
 			{
 				// Premultiply alpha
-				for (var i = 0; i < image.Width*image.Height; ++i)
+				var data = image.Data;
+				for (var i = 0; i < image.Width * image.Height; ++i)
 				{
 					var a = data[i*4 + 3];
 
@@ -47,7 +65,7 @@ namespace Myra.Assets
 					data[i*4 + 1] = ApplyAlpha(data[i*4 + 1], a);
 					data[i*4 + 2] = ApplyAlpha(data[i*4 + 2], a);
 				}
-			}*/
+			}
 
 			var texture = new Texture2D(MyraEnvironment.GraphicsDevice, image.Width, image.Height, false, SurfaceFormat.Color);
 			texture.SetData(image.Data);

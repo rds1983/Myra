@@ -20,7 +20,7 @@ namespace Myra.Graphics2D
 
 		internal static void BeginUI(this SpriteBatch batch)
 		{
-			batch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, null, DefaultAssets.UIRasterizerState);
+			batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, DefaultAssets.UIRasterizerState);
 		}
 
 		internal static void FlushUI(this SpriteBatch batch)

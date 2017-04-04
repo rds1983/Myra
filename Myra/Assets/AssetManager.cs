@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 
 namespace Myra.Assets
 {
@@ -93,7 +92,7 @@ namespace Myra.Assets
 			return result;
 		}
 
-		public T Load<T>(string name, object parameters = null)
+		public T Load<T>(string name)
 		{
 			object cached;
 			if (_cache.TryGetValue(name, out cached))
@@ -109,21 +108,8 @@ namespace Myra.Assets
 			}
 
 			var loader = (IAssetLoader<T>) loaderBase;
-
 			var result = loader.Load(this, name);
 			_cache[name] = result;
-
-			return result;
-		}
-
-		private static Func<string, Stream> CreateResourceAssetOpener(Assembly assembly, string prefix)
-		{
-			var result = new Func<string, Stream>(path =>
-			{
-				var stream = assembly.GetManifestResourceStream(prefix + path);
-
-				return stream;
-			});
 
 			return result;
 		}
