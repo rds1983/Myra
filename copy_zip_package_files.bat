@@ -16,8 +16,6 @@ copy "Myra\bin\%CONFIGURATION%\Myra.dll" ZipPackage /Y
 copy "Myra\bin\%CONFIGURATION%\Myra.pdb" ZipPackage /Y
 copy "Myra\bin\%CONFIGURATION%\Myra.FNA.dll" ZipPackage /Y
 copy "Myra\bin\%CONFIGURATION%\Myra.FNA.pdb" ZipPackage /Y
-copy "Myra.Content.Pipeline\bin\%CONFIGURATION%\Myra.Content.Pipeline.dll" ZipPackage /Y
-copy "Myra.Content.Pipeline\bin\%CONFIGURATION%\Myra.Content.Pipeline.pdb" ZipPackage /Y
 copy "Myra\bin\%CONFIGURATION%\Newtonsoft.Json.dll" ZipPackage /Y
 copy "Myra\bin\%CONFIGURATION%\Newtonsoft.Json.xml" ZipPackage /Y
 copy "Myra.UIEditor\bin\%CONFIGURATION%\NLog.dll" ZipPackage /Y
@@ -50,7 +48,6 @@ copy "Myra.UIEditor\bin\%CONFIGURATION%\Myra.UIEditor.pdb" ZipPackage /Y
 copy "Myra.Samples\Assets\awesomeGame.ui" "ZipPackage\Assets" /Y
 copy "Myra.Samples\Assets\mistral.fnt" "ZipPackage\Assets" /Y
 copy "Myra.Samples\Assets\mistral_0.png" "ZipPackage\Assets" /Y
-copy "Myra.Samples\Assets\notepad.ui" "ZipPackage\Assets" /Y
 
 copy "Myra-Dependencies\FNA\FNA.dll" "ZipPackage\FNA" /Y
 copy "Myra-Dependencies\FNA\FNA.dll.config" "ZipPackage\FNA" /Y
