@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Myra.Assets;
+using Myra.Attributes;
 
 namespace Myra.Graphics2D
 {
+	[AssetLoader(typeof(SpritesheetLoader))]
 	public partial class SpriteSheet
 	{
 		private readonly Dictionary<string, ImageDrawable> _drawables;

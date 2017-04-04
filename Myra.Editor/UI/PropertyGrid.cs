@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
-using Myra.Edit;
+using Myra.Attributes;
 using Myra.Editor.Utils;
 using Myra.Graphics2D;
 using Myra.Graphics2D.Text;

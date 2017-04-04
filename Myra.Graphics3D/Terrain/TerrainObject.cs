@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.MultiCompileEffects;
-using Myra.Edit;
+using Myra.Attributes;
 using Myra.Utility;
 using Newtonsoft.Json;
 

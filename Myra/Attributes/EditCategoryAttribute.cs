@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Myra.Edit
+namespace Myra.Attributes
 {
 	public class EditCategoryAttribute: Attribute
 	{

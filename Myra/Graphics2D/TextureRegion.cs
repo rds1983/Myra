@@ -1,9 +1,12 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Myra.Assets;
+using Myra.Attributes;
 
 namespace Myra.Graphics2D
 {
+	[AssetLoader(typeof(DrawableLoader))]
 	public class TextureRegion
 	{
 		private readonly Texture2D _texture;

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Edit;
+using Myra.Attributes;
 using Myra.Graphics3D.Materials;
 using Newtonsoft.Json;
 

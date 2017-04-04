@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Edit;
+using Myra.Attributes;
 using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI

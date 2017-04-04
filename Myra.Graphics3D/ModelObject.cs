@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.MultiCompileEffects;
-using Myra.Edit;
+using Myra.Attributes;
 using Myra.Graphics3D.Materials;
 using Newtonsoft.Json;
 using DirectionalLight = Myra.Graphics3D.Environment.DirectionalLight;

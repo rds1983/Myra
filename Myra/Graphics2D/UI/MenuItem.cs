@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
-using Myra.Edit;
+using Myra.Attributes;
 using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI

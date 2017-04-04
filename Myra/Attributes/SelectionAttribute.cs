@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Myra.Edit
+namespace Myra.Attributes
 {
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
 	public class SelectionAttribute: Attribute

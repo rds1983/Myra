@@ -1,9 +1,12 @@
 ﻿using System;
+using Myra.Assets;
+using Myra.Attributes;
 using Myra.Graphics2D.Text;
 using Newtonsoft.Json.Linq;
 
 namespace Myra.Graphics2D.UI.Styles
 {
+	[AssetLoader(typeof(UIStylesheetLoader))]
 	public class Stylesheet
 	{
 		public TextBlockStyle TextBlockStyle { get; private set; }

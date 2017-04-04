@@ -1,4 +1,4 @@
-﻿namespace Myra.Edit
+﻿namespace Myra.Attributes
 {
 	public interface IItemsProvider
 	{

@@ -3,7 +3,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Myra.Edit;
+using Myra.Attributes;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;

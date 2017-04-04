@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Myra.Assets;
+using Myra.Attributes;
 
 namespace Myra.Graphics2D.Text
 {
+	[AssetLoader(typeof(BitmapFontLoader))]
 	public partial class BitmapFont
 	{
 		public static bool DrawFames { get; set; }

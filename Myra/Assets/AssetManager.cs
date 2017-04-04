@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Myra.Attributes;
+using Myra.Utility;
 
 namespace Myra.Assets
 {
@@ -39,11 +41,6 @@ namespace Myra.Assets
 		private void RegisterDefaultLoaders()
 		{
 			SetAssetLoader(new Texture2DLoader());
-			SetAssetLoader(new DrawableLoader());
-			SetAssetLoader(new BitmapFontLoader());
-			SetAssetLoader(new SpritesheetLoader());
-			SetAssetLoader(new UILoader());
-			SetAssetLoader(new UIStylesheetLoader());
 		}
 
 		public void SetAssetLoader<T>(IAssetLoader<T> loader)
@@ -102,9 +99,20 @@ namespace Myra.Assets
 
 			var type = typeof (T);
 			object loaderBase;
-			if (!_loaders.TryGetValue(typeof (T), out loaderBase))
+			if (!_loaders.TryGetValue(type, out loaderBase))
 			{
-				throw new Exception(string.Format("Unable to resolve AssetLoader for type {0}", type.Name));
+				// Try determine it using AssetLoader attribute
+				var attr = type.FindAttribute<AssetLoaderAttribute>();
+				if (attr == null)
+				{
+					throw new Exception(string.Format("Unable to resolve AssetLoader for type {0}", type.Name));
+				}
+
+				// Create loader
+				loaderBase = Activator.CreateInstance(attr.AssetLoaderType);
+
+				// Save in the _loaders
+				_loaders[type] = loaderBase;
 			}
 
 			var loader = (IAssetLoader<T>) loaderBase;

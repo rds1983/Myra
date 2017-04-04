@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Edit;
+using Myra.Attributes;
 using Myra.Utility;
 
 namespace Myra.Graphics2D.UI

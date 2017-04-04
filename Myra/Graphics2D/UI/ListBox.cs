@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using Myra.Edit;
+using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Newtonsoft.Json;
 
