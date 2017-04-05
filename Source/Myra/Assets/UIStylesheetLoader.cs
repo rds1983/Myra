@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Myra.Graphics2D;
-using Myra.Graphics2D.Text;
+using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using Newtonsoft.Json.Linq;
@@ -38,7 +38,7 @@ namespace Myra.Assets
 				throw new Exception("UI Stylesheet lacks sprite sheet.");
 			}
 
-			var spriteSheet = assetManager.Load<SpriteSheet>(spriteSheetName);
+			var spriteSheet = assetManager.Load<TextureAtlas>(spriteSheetName);
 
 			return Stylesheet.CreateFromSource(text, s =>
 			{

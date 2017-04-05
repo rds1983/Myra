@@ -1,5 +1,6 @@
-﻿using Myra.Graphics2D;
-using Myra.Graphics2D.Text;
+﻿using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.TextureAtlases;
+using BitmapFontExtensions = Myra.Graphics2D.Text.BitmapFontExtensions;
 
 namespace Myra.Assets
 {
@@ -8,7 +9,7 @@ namespace Myra.Assets
 		public BitmapFont Load(AssetManager assetManager, string assetName)
 		{
 			var text = assetManager.ReadAsText(assetName);
-			var result = BitmapFont.LoadFromFnt(text, assetManager.Load<TextureRegion>);
+			var result = BitmapFontExtensions.LoadFromFnt(assetName, text, assetManager.Load<TextureRegion2D>);
 
 			return result;
 		}

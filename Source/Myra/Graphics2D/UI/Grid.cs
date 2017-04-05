@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using Myra.Attributes;
 using Myra.Utility;
 
@@ -727,14 +728,14 @@ namespace Myra.Graphics2D.UI
 			var bounds = AbsoluteBounds;
 			for (i = 0; i < _gridLinesX.Count; ++i)
 			{
-				batch.DrawRect(DrawLinesColor, new Rectangle(bounds.X + _gridLinesX[i], bounds.Top,
-					1, bounds.Height));
+				var x = bounds.X + _gridLinesX[i];
+				batch.DrawLine(x, bounds.Top, x, bounds.Bottom, DrawLinesColor);
 			}
 
 			for (i = 0; i < _gridLinesY.Count; ++i)
 			{
-				batch.DrawRect(DrawLinesColor, new Rectangle(bounds.Left, bounds.Top + _gridLinesY[i],
-					bounds.Width, 1));
+				var y = bounds.Top + _gridLinesY[i];
+				batch.DrawLine(bounds.Left, y, bounds.Right, y, DrawLinesColor);
 			}
 		}
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
@@ -13,8 +14,8 @@ namespace Myra.Graphics2D.UI
 		private TreeNode _selectedRow;
 		private bool _rowInfosDirty = true;
 
-		public Drawable RowSelectionBackgroundWithoutFocus { get; set; }
-		public Drawable RowSelectionBackground { get; set; }
+		public TextureRegion2D RowSelectionBackgroundWithoutFocus { get; set; }
+		public TextureRegion2D RowSelectionBackground { get; set; }
 
 		public List<TreeNode> AllNodes
 		{
@@ -274,11 +275,11 @@ namespace Myra.Graphics2D.UI
 			{
 				if (!IsFocused && RowSelectionBackgroundWithoutFocus != null)
 				{
-					RowSelectionBackgroundWithoutFocus.Draw(batch, SelectedRow.RowBounds);
+					batch.Draw(RowSelectionBackgroundWithoutFocus, SelectedRow.RowBounds);
 				}
 				else
 				{
-					RowSelectionBackground.Draw(batch, SelectedRow.RowBounds);
+					batch.Draw(RowSelectionBackground, SelectedRow.RowBounds);
 				}
 			}
 

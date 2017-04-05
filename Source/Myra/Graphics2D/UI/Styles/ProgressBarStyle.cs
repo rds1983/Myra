@@ -1,7 +1,9 @@
-﻿namespace Myra.Graphics2D.UI.Styles
+﻿using MonoGame.Extended.TextureAtlases;
+
+namespace Myra.Graphics2D.UI.Styles
 {
 	public class ProgressBarStyle: WidgetStyle
 	{
-		public Drawable Filled { get; set; }
+		public TextureRegion2D Filled { get; set; }
 	}
 }

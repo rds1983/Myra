@@ -1,7 +1,9 @@
-﻿namespace Myra.Graphics2D.UI.Styles
+﻿using MonoGame.Extended.TextureAtlases;
+
+namespace Myra.Graphics2D.UI.Styles
 {
 	public class ListItemStyle: ButtonStyle
 	{
-		public Drawable SelectedBackground { get; set; }
+		public TextureRegion2D SelectedBackground { get; set; }
 	}
 }

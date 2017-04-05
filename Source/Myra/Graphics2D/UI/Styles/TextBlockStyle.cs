@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using Myra.Graphics2D.Text;
+using MonoGame.Extended.BitmapFonts;
 
 namespace Myra.Graphics2D.UI.Styles
 {

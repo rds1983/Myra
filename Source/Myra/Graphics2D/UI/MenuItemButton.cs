@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
+using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.TextureAtlases;
 using Myra.Attributes;
-using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
 using Newtonsoft.Json;
 
@@ -37,15 +38,15 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public Drawable Drawable
+		public TextureRegion2D TextureRegion2D
 		{
-			get { return _image.Drawable; }
-			set { _image.Drawable = value; }
+			get { return _image.TextureRegion2D; }
+			set { _image.TextureRegion2D = value; }
 		}
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public Drawable OpenBackground { get; set; }
+		public TextureRegion2D OpenBackground { get; set; }
 
 		[HiddenInEditor]
 		public Menu SubMenu
@@ -115,7 +116,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override Drawable GetCurrentBackground()
+		public override TextureRegion2D GetCurrentBackground()
 		{
 			if (IsSubMenuOpen && OpenBackground != null)
 			{

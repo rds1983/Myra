@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.TextureAtlases;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Newtonsoft.Json;
@@ -27,7 +28,7 @@ namespace Myra.Graphics2D.UI
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public virtual Drawable PressedBackground { get; set; }
+		public virtual TextureRegion2D PressedBackground { get; set; }
 
 		[EditCategory("Behavior")]
 		public virtual bool Toggleable { get; set; }
@@ -145,7 +146,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override Drawable GetCurrentBackground()
+		public override TextureRegion2D GetCurrentBackground()
 		{
 			var isOver = IsMouseOver;
 

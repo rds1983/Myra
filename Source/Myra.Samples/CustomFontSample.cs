@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.BitmapFonts;
 using Myra.Assets;
-using Myra.Graphics2D.Text;
 
 namespace Myra.Samples
 {
@@ -45,7 +45,7 @@ namespace Myra.Samples
 
 			_batch.Begin();
 
-			_font.Draw(_batch, "Hello, World!", Point.Zero, Color.Green);
+			_batch.DrawString(_font, "Hello, World!", Vector2.Zero, Color.Green);
 
 			_batch.End();
 		}

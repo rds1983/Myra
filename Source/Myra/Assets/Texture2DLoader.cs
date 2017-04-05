@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
+using Myra.Graphics2D.StbSharp;
 using Newtonsoft.Json;
-using StbSharp;
 
 namespace Myra.Assets
 {
@@ -45,19 +45,20 @@ namespace Myra.Assets
 				premultiplyAlpha = parameters.premultiplyAlpha;
 			}
 
-			Image image;
 			var reader = new ImageReader();
 
+			int x, y;
+			byte[] data;
 			using (var stream = assetManager.Open(assetName))
 			{
-				image = reader.Read(stream, Stb.STBI_rgb_alpha);
+				int comp;
+				data = reader.Read(stream, out x, out y, out comp, Stb.STBI_rgb_alpha);
 			}
 
 			if (premultiplyAlpha)
 			{
 				// Premultiply alpha
-				var data = image.Data;
-				for (var i = 0; i < image.Width * image.Height; ++i)
+				for (var i = 0; i < x*y; ++i)
 				{
 					var a = data[i*4 + 3];
 
@@ -67,8 +68,8 @@ namespace Myra.Assets
 				}
 			}
 
-			var texture = new Texture2D(MyraEnvironment.GraphicsDevice, image.Width, image.Height, false, SurfaceFormat.Color);
-			texture.SetData(image.Data);
+			var texture = new Texture2D(MyraEnvironment.GraphicsDevice, x, y, false, SurfaceFormat.Color);
+			texture.SetData(data);
 
 			return texture;
 		}

@@ -41,6 +41,9 @@ namespace Myra.Assets
 		private void RegisterDefaultLoaders()
 		{
 			SetAssetLoader(new Texture2DLoader());
+			SetAssetLoader(new BitmapFontLoader());
+			SetAssetLoader(new TextureRegion2DLoader());
+			SetAssetLoader(new TextureAtlasLoader());
 		}
 
 		public void SetAssetLoader<T>(IAssetLoader<T> loader)

@@ -1,24 +1,26 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using Myra.Graphics2D;
+using MonoGame.Extended.TextureAtlases;
 
 namespace Myra.Assets
 {
-	public class DrawableLoader : IAssetLoader<TextureRegion>
+	public class TextureRegion2DLoader : IAssetLoader<TextureRegion2D>
 	{
-		public TextureRegion Load(AssetManager assetManager, string assetName)
+		public TextureRegion2D Load(AssetManager assetManager, string assetName)
 		{
 			if (assetName.Contains(":"))
 			{
 				// Means page is sprite in the spritesheet
 				var parts = assetName.Split(':');
 
-				var spriteSheet = assetManager.Load<SpriteSheet>(parts[0]);
-				var drawable = spriteSheet.EnsureDrawable(parts[1]);
+				var spriteSheet = assetManager.Load<TextureAtlas>(parts[0]);
 
-				return drawable.TextureRegion;
+
+				var image = spriteSheet.GetRegion(parts[1]);
+
+				return image;
 			}
 
-			return new TextureRegion(assetManager.Load<Texture2D>(assetName));
+			return new TextureRegion2D(assetManager.Load<Texture2D>(assetName));
 		}
 	}
 }

@@ -1,4 +1,4 @@
-version: 0.4.5.{build}
+version: 0.4.6.{build}
 configuration: Release
 assembly_info:
   patch: true
@@ -14,19 +14,15 @@ build_script:
 
     msbuild Myra.sln /p:Configuration=Release /t:rebuild
 
-    msbuild Myra.FNA.sln /p:Configuration=Release /t:rebuild
-
     msbuild Myra.Installer.sln /p:Configuration=Release /t:rebuild
 
-    set "INSTALLER_PATH=C:\projects\myra\Myra.Installer\bin\Release\Myra.%APPVEYOR_BUILD_VERSION%.msi"
+    set "INSTALLER_PATH=C:\projects\myra\Source\Myra.Installer\bin\Release\Myra.%APPVEYOR_BUILD_VERSION%.msi"
 
     echo "%INSTALLER_PATH%"
 
-    copy "C:\projects\myra\Myra.Installer\bin\Release\Myra.Installer.msi" "%INSTALLER_PATH%"
+    copy "C:\projects\myra\Source\Myra.Installer\bin\Release\Myra.Installer.msi" "%INSTALLER_PATH%"
 
     nuget pack Myra\Myra.nuspec -Version %APPVEYOR_BUILD_VERSION%
-
-    nuget pack Myra\Myra.FNA.nuspec -Version %APPVEYOR_BUILD_VERSION%
 
     nuget pack Myra.Editor\Myra.Editor.nuspec -Version %APPVEYOR_BUILD_VERSION%
 
@@ -39,16 +35,13 @@ artifacts:
   - path: Source/Myra.$(appveyor_build_version).nupkg
     name: Myra.nupkg
 
-  - path: Source/Myra.FNA.$(appveyor_build_version).nupkg
-    name: Myra.FNA.nupkg
-
   - path: Source/Myra.Editor.$(appveyor_build_version).nupkg
     name: Myra.Editor.nupkg
 
   - path: Source/Myra.$(appveyor_build_version).zip
     name: ZipPackage
 
-  - path: Myra.Installer/bin/Release/Myra.$(appveyor_build_version).msi
+  - path: Source/Myra.Installer/bin/Release/Myra.$(appveyor_build_version).msi
     name: MsiPackage
 deploy:
   - provider: GitHub
