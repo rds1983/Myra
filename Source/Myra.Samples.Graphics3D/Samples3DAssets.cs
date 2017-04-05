@@ -1,12 +1,15 @@
-﻿using System.IO;
+﻿using System.Reflection;
 using Microsoft.Xna.Framework.Graphics;
-using StbSharp;
+using Myra.Assets;
 
 namespace Myra.Samples.Graphics3D
 {
 	internal class Samples3DAssets
 	{
 		private static Texture2D _sampleTexture1, _sampleTexture2;
+		private static readonly AssetManager _defaultAssetManager =
+	new AssetManager(new ResourceAssetResolver(typeof(DefaultAssets).GetTypeInfo().Assembly, "Myra.Samples.Graphics3D."));
+
 
 		static Samples3DAssets()
 		{
@@ -18,39 +21,18 @@ namespace Myra.Samples.Graphics3D
 
 		public static Texture2D SampleTexture1
 		{
-			get { return _sampleTexture1 ?? (_sampleTexture1 = Texture2DFromResources("chair.png")); }
+			get { return _sampleTexture1 ?? (_sampleTexture1 = _defaultAssetManager.Load<Texture2D>("chair.png")); }
 		}
 
 		public static Texture2D SampleTexture2
 		{
-			get { return _sampleTexture2 ?? (_sampleTexture2 = Texture2DFromResources("vase.png")); }
-		}
-
-		private static Texture2D Texture2DFromResources(string path)
-		{
-			byte[] buffer;
-			using (var ms = new MemoryStream())
-			{
-				using (var stream = Resources.Resources.GetBinaryResourceStream(path))
-				{
-					stream.CopyTo(ms);
-				}
-
-				buffer = ms.ToArray();
-			}
-
-			var image = Stb.LoadFromMemory(buffer, Stb.STBI_rgb_alpha);
-
-			var result = new Texture2D(MyraEnvironment.GraphicsDevice, image.Width, image.Height);
-			result.SetData(image.Data);
-
-			return result;
-
-			// return GraphicsExtension.PremultipliedTextureFromPngStream(File.OpenRead(path));
+			get { return _sampleTexture2 ?? (_sampleTexture2 = _defaultAssetManager.Load<Texture2D>("vase.png")); }
 		}
 
 		internal static void Dispose()
 		{
+			_defaultAssetManager.ClearCache();
+
 			if (_sampleTexture1 != null)
 			{
 				_sampleTexture1.Dispose();

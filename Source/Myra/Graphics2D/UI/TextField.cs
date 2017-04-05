@@ -3,6 +3,8 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.TextureAtlases;
 using Myra.Attributes;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
@@ -87,17 +89,17 @@ namespace Myra.Graphics2D.UI
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable FocusedBackground { get; set; }
+		public TextureRegion2D FocusedBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable Cursor { get; set; }
+		public TextureRegion2D Cursor { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable Selection { get; set; }
+		public TextureRegion2D Selection { get; set; }
 
 		[EditCategory("Behavior")]
 		public int BlinkIntervalInMs { get; set; }
@@ -391,9 +393,9 @@ namespace Myra.Graphics2D.UI
 					y = glyphRender.Run.RenderedBounds.Value.Top;
 				}
 
-				Cursor.Draw(batch, new Rectangle(x,
+				batch.Draw(Cursor, new Rectangle(x,
 					y,
-					Cursor.Size.X,
+					(int)Cursor.Size.Width,
 					_formattedText.Font.LineHeight));
 			}
 		}

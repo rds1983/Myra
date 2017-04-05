@@ -2,9 +2,9 @@
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.TextureAtlases;
 using Myra.Assets;
-using Myra.Graphics2D;
-using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
 
 namespace Myra
@@ -19,12 +19,9 @@ namespace Myra
 		private static readonly AssetManager _defaultAssetManager =
 			new AssetManager(new ResourceAssetResolver(typeof (DefaultAssets).GetTypeInfo().Assembly, "Myra.Resources."));
 
-		private static Texture2D _white;
-		private static TextureRegion _whiteRegion;
-
 		private static BitmapFont _font;
 		private static BitmapFont _fontSmall;
-		private static SpriteSheet _uiSpritesheet;
+		private static TextureAtlas _uiSpritesheet;
 		private static Stylesheet _uiStylesheet;
 		private static RasterizerState _uiRasterizerState;
 
@@ -58,13 +55,13 @@ namespace Myra
 			}
 		}
 
-		public static SpriteSheet UISpritesheet
+		public static TextureAtlas UISpritesheet
 		{
 			get
 			{
 				if (_uiSpritesheet != null) return _uiSpritesheet;
 
-				_uiSpritesheet = _defaultAssetManager.Load<SpriteSheet>(DefaultSpritesheetName);
+				_uiSpritesheet = _defaultAssetManager.Load<TextureAtlas>(DefaultSpritesheetName);
 
 				return _uiSpritesheet;
 			}
@@ -94,40 +91,6 @@ namespace Myra
 			}
 		}
 
-		public static Texture2D White
-		{
-			get
-			{
-				if (_white == null)
-				{
-					_white = new Texture2D(MyraEnvironment.Game.GraphicsDevice, 1, 1);
-					_white.SetData(new[] {Color.White});
-				}
-
-				return _white;
-			}
-		}
-
-		public static Texture2D Transparent
-		{
-			get
-			{
-				if (_white == null)
-				{
-					_white = new Texture2D(MyraEnvironment.Game.GraphicsDevice, 1, 1);
-					_white.SetData(new[] { Color.Transparent });
-				}
-
-				return _white;
-			}
-		}
-
-
-		public static TextureRegion WhiteRegion
-		{
-			get { return _whiteRegion ?? (_whiteRegion = new TextureRegion(White, new Rectangle(0, 0, 1, 1))); }
-		}
-
 		public static RasterizerState UIRasterizerState
 		{
 			get
@@ -152,13 +115,6 @@ namespace Myra
 			_fontSmall = null;
 			_uiSpritesheet = null;
 			_uiStylesheet = null;
-			_whiteRegion = null;
-
-			if (_white != null)
-			{
-				_white.Dispose();
-				_white = null;
-			}
 
 			if (_uiRasterizerState != null)
 			{

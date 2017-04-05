@@ -1,8 +1,10 @@
-﻿namespace Myra.Graphics2D.UI.Styles
+﻿using MonoGame.Extended.TextureAtlases;
+
+namespace Myra.Graphics2D.UI.Styles
 {
 	public class ImageStyle: WidgetStyle
 	{
-		public Drawable Image { get; set; }
-		public Drawable OverImage { get; set; }
+		public TextureRegion2D Image { get; set; }
+		public TextureRegion2D OverImage { get; set; }
 	}
 }

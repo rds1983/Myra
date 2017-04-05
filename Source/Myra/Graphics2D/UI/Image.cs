@@ -1,68 +1,69 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.TextureAtlases;
 
 namespace Myra.Graphics2D.UI
 {
 	public class Image: Widget
 	{
-		private Drawable _drawable;
+		private TextureRegion2D _TextureRegion2D;
 
-		public Drawable Drawable
+		public TextureRegion2D TextureRegion2D
 		{
 			get
 			{
-				return _drawable;
+				return _TextureRegion2D;
 			}
 
 			set
 			{
-				if (value == _drawable)
+				if (value == _TextureRegion2D)
 				{
 					return;
 				}
 
-				_drawable = value;
+				_TextureRegion2D = value;
 				InvalidateMeasure();
 			}
 		}
 
 		protected override Point InternalMeasure(Point availableSize)
 		{
-			if (Drawable == null)
+			if (TextureRegion2D == null)
 			{
 				return Point.Zero;
 			}
 
-			return Drawable.Size;
+			return new Point((int)TextureRegion2D.Size.Width, (int)TextureRegion2D.Size.Height);
 		}
 
 		public override void InternalRender(SpriteBatch batch)
 		{
 			base.InternalRender(batch);
 
-			if (Drawable != null)
+			if (TextureRegion2D != null)
 			{
 				var bounds = AbsoluteBounds;
-				Drawable.Draw(batch, bounds);
+				batch.Draw(TextureRegion2D, bounds);
 			}
 		}
 
 
-		public void UpdateImageSize(Drawable drawable)
+		public void UpdateImageSize(TextureRegion2D image)
 		{
-			if (drawable == null)
+			if (image == null)
 			{
 				return;
 			}
 
-			if (WidthHint == null || drawable.Size.X > WidthHint.Value)
+			if (WidthHint == null || image.Size.Width > WidthHint.Value)
 			{
-				WidthHint = drawable.Size.X;
+				WidthHint = (int)image.Size.Width;
 			}
 
-			if (HeightHint == null || drawable.Size.Y > HeightHint.Value)
+			if (HeightHint == null || image.Size.Height > HeightHint.Value)
 			{
-				HeightHint = drawable.Size.Y;
+				HeightHint = (int)image.Size.Height;
 			}
 		}
 	}

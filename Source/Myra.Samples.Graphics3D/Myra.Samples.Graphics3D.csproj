@@ -61,14 +61,11 @@
     <EmbeddedResource Include="Resources\vase.png" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="MonoGame.Extended">
+      <HintPath>..\Myra-Dependencies\MonoGame.Extended\MonoGame.Extended.dll</HintPath>
+    </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>..\Myra-Dependencies\MonoGame.Framework.Portable\MonoGame.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Sichem.Framework">
-      <HintPath>..\Myra-Dependencies\StbSharp\Sichem.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="StbSharp">
-      <HintPath>..\Myra-Dependencies\StbSharp\StbSharp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

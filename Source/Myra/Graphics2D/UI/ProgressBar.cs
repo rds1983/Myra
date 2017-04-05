@@ -123,7 +123,7 @@ namespace Myra.Graphics2D.UI
 
 			if (style.Filled == null) return;
 
-			_filledImage.Drawable = style.Filled;
+			_filledImage.TextureRegion2D = style.Filled;
 			_filledImage.UpdateImageSize(style.Filled);
 		}
 	}

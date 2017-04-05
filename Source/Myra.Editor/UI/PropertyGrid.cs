@@ -5,6 +5,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.Sprites;
+using MonoGame.Extended.TextureAtlases;
 using Myra.Attributes;
 using Myra.Editor.Utils;
 using Myra.Graphics2D;
@@ -326,11 +329,11 @@ namespace Myra.Editor.UI
 						color = ((Color?) value).Value;
 					}
 
-					var sprite = Sprite.CreateSolidColorRect(color);
+//					var sprite = Sprite.CreateSolidColorRect(color);
 
 					var image = new Image
 					{
-						Drawable = sprite,
+//						Drawable = sprite,
 						VerticalAlignment = VerticalAlignment.Center,
 						WidthHint = 32,
 						HeightHint = 16
@@ -356,7 +359,7 @@ namespace Myra.Editor.UI
 							var h = ColorChangeHandler;
 							if (h != null)
 							{
-								var newColor = h(sprite.Color);
+/*								var newColor = h(sprite.Color);
 								if (!newColor.HasValue) return;
 
 								sprite.Color = newColor.Value;
@@ -368,7 +371,7 @@ namespace Myra.Editor.UI
 								else
 								{
 									record.SetValue(_object, newColor);
-								}
+								}*/
 
 								FireChanged(propertyType.Name);
 							}
@@ -381,7 +384,7 @@ namespace Myra.Editor.UI
 
 					valueWidget = subGrid;
 				}
-				else if (propertyType.IsAssignableFrom(typeof (Drawable)))
+				else if (propertyType.IsAssignableFrom(typeof (TextureRegion2D)))
 				{
 				}
 				else if (propertyType.IsEnum)
@@ -607,7 +610,7 @@ namespace Myra.Editor.UI
 						}
 					}
 				}
-				else if (!(value is BitmapFont) && !(value is Drawable))
+				else if (!(value is BitmapFont) && !(value is TextureRegion2D))
 				{
 					// Subgrid
 					if (value != null)

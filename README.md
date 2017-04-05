@@ -1,15 +1,13 @@
 ## Overview
-Myra is 2D Graphics Library for the [MonoGame](http://www.monogame.net/)/[FNA](http://fna-xna.github.io/).  
+Myra is UI Library build on top of [MonoGame](http://www.monogame.net/) and [MonoGame.Extended](https://github.com/craftworkgames/MonoGame.Extended).  
 It has following functionality:
 * **[Asset Management](https://github.com/rds1983/Myra/wiki/Asset-Management).** Myra uses it's own system of the asset management, which is fundamentally different from MonoGame Content Pipeline. The difference is Myra's asset management doesnt have any sort of pipeline, but loads raw assets.
-* **Sprite Sheets.** That could be loaded from LibGDX .atlas format.
-* **Bitmap Fonts.** Myra has it's own text renderer that allows text wrapping and coloring. Fonts could be loaded from AngelCode's BMFont ASCII .fnt format. [Cyotek.Drawing.Bitmap](https://github.com/cyotek/Cyotek.Drawing.BitmapFont) library is used for that.
 * **UI Widgets.** Button, CheckBox, ComboBox, Grid, Image, Menu, ProgressBar, ScrollPane, SplitPane(with arbitrary number of splitters), Slider, TextBlock, TextField, SpinButton, Tree and Window.
 * **UI Skinning.** The awesome default skin had been borrowed from the [VisUI](https://github.com/kotcrab/vis-editor/wiki/VisUI) project. The default skin could be replaced with a custom skin loaded from the JSON.
 * **Standalone UI Editor.** [Myra's binary distribution](https://github.com/rds1983/Myra/releases) contains standalone UI Editor application.
 
 ## Quick Start
-1. The easiest way of adding Myra to the MonoGame project is through Nuget: `install-package Myra` (or `install-package Myra.FNA` for the FNA project). Alternative way is to download the latest binary release: https://github.com/rds1983/Myra/releases, install it and reference Myra.dll manually.
+1. The easiest way of adding Myra to the MonoGame project is through Nuget: `install-package Myra`. Alternative way is to download the latest binary release: https://github.com/rds1983/Myra/releases, install it and reference Myra.dll manually.
 2. Add following field in the Game class:
   ```c#
   private Desktop _host;
@@ -87,9 +85,6 @@ It has following functionality:
 It would result in following screenshot(assuming the background is black):
 ![](https://raw.githubusercontent.com/rds1983/Myra/master/Screenshots/QuickStart.png)
   
-## Documentation
-[https://github.com/rds1983/Myra/wiki](https://github.com/rds1983/Myra/wiki)
-
 ## More Screenshots
 [Sample](https://github.com/rds1983/Myra/blob/master/Myra.Samples/GridSample.cs) demonstrating all widgets:
 ![](https://raw.githubusercontent.com/rds1983/Myra/master/Screenshots/GridSample_14_03_2017.png)

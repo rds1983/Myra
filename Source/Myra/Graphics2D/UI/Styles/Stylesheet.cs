@@ -1,4 +1,6 @@
 ﻿using System;
+using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.TextureAtlases;
 using Myra.Assets;
 using Myra.Attributes;
 using Myra.Graphics2D.Text;
@@ -52,7 +54,7 @@ namespace Myra.Graphics2D.UI.Styles
 			WindowStyle = new WindowStyle();
 		}
 
-		public static Stylesheet CreateFromSource(string s, Func<string, BitmapFont> fontGetter, SpriteSheet spriteSheet)
+		public static Stylesheet CreateFromSource(string s, Func<string, BitmapFont> fontGetter, TextureAtlas spriteSheet)
 		{
 			var root = JObject.Parse(s);
 

@@ -1,14 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
+using MonoGame.Extended.BitmapFonts;
 
 namespace Myra.Graphics2D.Text
 {
 	public class GlyphRun
 	{
-		private int _posX;
 		private readonly List<GlyphRender> _glyphRenders = new List<GlyphRender>();
 		private string _text;
+		private readonly BitmapFont _bitmapFont;
+		private bool _dirty = true;
+		private Point _size;
 
 		public string Text
 		{
@@ -18,7 +23,15 @@ namespace Myra.Graphics2D.Text
 			}
 		}
 
-		public Point Size;
+		public Point Size
+		{
+			get
+			{
+				Update();
+
+				return _size;
+			}
+		}
 
 		public Rectangle? RenderedBounds { get; private set; }
 
@@ -37,62 +50,42 @@ namespace Myra.Graphics2D.Text
 			get { return _glyphRenders; }
 		}
 
-		public GlyphRun(int initialLineHeight)
+		public BitmapFont BitmapFont
 		{
-			Size.Y = initialLineHeight;
+			get { return _bitmapFont; }
+		}
+
+		public GlyphRun(BitmapFont font)
+		{
+			if (font == null)
+			{
+				throw new ArgumentNullException("font");
+			}
+
+			_bitmapFont = font;
 		}
 
 		public void Clear()
 		{
 			_glyphRenders.Clear();
-			Size = Point.Zero;
-			_posX = 0;
+			_size = Point.Zero;
 			_text = string.Empty;
 		}
 
-		public void Append(BitmapFont font, CharInfo ci, Color? color)
+		public void Append(CharInfo ci, Color? color)
 		{
-			Glyph glyph;
-			font.Glyphs.TryGetValue(ci.Value, out glyph);
-
-			// Add kerning
-			if (Count > 0)
-			{
-				var lastRender = _glyphRenders[Count - 1];
-
-				if (lastRender.Glyph != null)
-				{
-					_posX += lastRender.Glyph.GetKerning(ci.Value);
-				}
-			}
-
-			GlyphRender render;
-			if (glyph != null)
-			{
-				var dest = new Point(_posX, 0);
-				render = new GlyphRender(font, ci, this, glyph, color, dest);
-
-				_posX += glyph.XAdvance;
-
-				Size.X = _posX;
-				Size.Y = glyph.Offset.Y + glyph.Region.Bounds.Height;
-			}
-			else
-			{
-				render = new GlyphRender(font, ci, this, null, null, Point.Zero);
-			}
-
+			var render = new GlyphRender(ci, this, color);
 			_glyphRenders.Add(render);
 
-
+			_dirty = true;
 			_text += ci.Value;
 		}
 
-		public void Append(BitmapFont font, IEnumerable<CharInfo> charInfos, Color? color)
+		public void Append(IEnumerable<CharInfo> charInfos, Color? color)
 		{
 			foreach (var ci in charInfos)
 			{
-				Append(font, ci, color);
+				Append(ci, color);
 			}
 		}
 
@@ -101,34 +94,51 @@ namespace Myra.Graphics2D.Text
 			RenderedBounds = null;
 		}
 
+		private void Update()
+		{
+			if (!_dirty)
+			{
+				return;
+			}
+
+			var glyphs = _bitmapFont.GetGlyphs(_text, Vector2.Zero);
+			for (var i = 0; i < glyphs.Length; ++i)
+			{
+				_glyphRenders[i].Glyph = glyphs[i];
+			}
+
+			var sz = _bitmapFont.MeasureString(_text);
+			_size = new Point((int)sz.Width, (int)sz.Height);
+
+			_dirty = false;
+		}
+
 		public void Draw(SpriteBatch batch, Point pos, int totalWidth, Color color, bool drawPartialLastSymbol = false)
 		{
+			Update();
 			var right = pos.X + totalWidth;
 			var x = pos.X;
 			foreach (var gr in _glyphRenders)
 			{
-				x = gr.Location.X + pos.X;
-
 				if (x > right)
 				{
 					// Completely out
 					break;
 				}
 
-				if (x + gr.XAdvance > right && !drawPartialLastSymbol)
+				if (x + gr.Width > right && !drawPartialLastSymbol)
 				{
 					break;
 				}
 
-				gr.Draw(batch, pos, color);
+				gr.Draw(batch, new Point(x, pos.Y), color);
 				x += gr.XAdvance;
 			}
 				
 			RenderedBounds = new Rectangle(pos.X, pos.Y, x - pos.X, Size.Y);
-
-			if (BitmapFont.DrawFames)
+//			if (BitmapFont.DrawFames)
 			{
-				batch.DrawRect(Color.Blue, RenderedBounds.Value);
+//				batch.DrawRectangle(RenderedBounds.Value, Color.Blue);
 			}
 		}
 	}

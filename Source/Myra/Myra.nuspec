@@ -14,7 +14,7 @@
 		<tags>gamedev monogame ui</tags>
 		<dependencies>
 			<dependency id="Newtonsoft.Json" version="9.0" />
-			<dependency id="StbSharp" version="0.4.0.20" />
+			<dependency id="MonoGame.Extended" version="0.6.377" />
 		</dependencies>
 	</metadata>
 	<files>

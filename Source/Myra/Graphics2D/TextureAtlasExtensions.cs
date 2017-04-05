@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
+using MonoGame.Extended.TextureAtlases;
+using Myra.Utility;
 
 namespace Myra.Graphics2D
 {
-	partial class SpriteSheet
+	public static class TextureAtlasExtensions
 	{
 		private enum GDXMode
 		{
@@ -35,7 +38,7 @@ namespace Myra.Graphics2D
 			public string Name { get; set; }
 			public Rectangle SourceRectangle;
 			public bool IsRotated { get; set; }
-			public NinePatchInfo? Split;
+			public Thickness? Split;
 			public Point OriginalSize;
 			public Point Offset;
 		}
@@ -54,7 +57,7 @@ namespace Myra.Graphics2D
 		private static readonly Dictionary<string, TextureAddressMode> _gdxIdsToTextureWraps =
 			new Dictionary<string, TextureAddressMode>();
 
-		static SpriteSheet()
+		static TextureAtlasExtensions()
 		{
 			_gdxIdsToTextureWraps["MirroredRepeat"] = TextureAddressMode.Mirror;
 			_gdxIdsToTextureWraps["ClampToEdge"] = TextureAddressMode.Clamp;
@@ -76,7 +79,7 @@ namespace Myra.Graphics2D
 			throw new Exception("Not supported!");
 		}
 
-		public static SpriteSheet LoadGDX(string data, Func<string, Texture2D> textureLoader)
+		public static TextureAtlas LoadGDX(string name, string data, Func<string, Texture2D> textureLoader)
 		{
 			var mode = GDXMode.PageHeader;
 
@@ -197,7 +200,7 @@ namespace Myra.Graphics2D
 							break;
 						case "split":
 							parts = value.Split(',');
-							var split = new NinePatchInfo
+							var split = new Thickness
 							{
 								Left = int.Parse(parts[0].Trim()),
 								Right = int.Parse(parts[1].Trim()),
@@ -211,28 +214,28 @@ namespace Myra.Graphics2D
 				}
 			}
 
-			var drawables = new Dictionary<string, ImageDrawable>();
+			var result = new TextureAtlas(name, pageData.Texture);
 
 			foreach (var sd in spriteDatas)
 			{
-				var texture = sd.Value.PageData.Texture;
 				var bounds = sd.Value.SourceRectangle;
 
-				ImageDrawable drawable;
 				if (!sd.Value.Split.HasValue)
 				{
-					drawable = new Sprite(new TextureRegion(texture, bounds));
+					result.CreateRegion(sd.Key, bounds.X, bounds.Y, bounds.Width, bounds.Height);
 				}
 				else
 				{
-					drawable = new NinePatchSprite(new TextureRegion(texture, bounds), sd.Value.Split.Value);
+					result.CreateNinePatchRegion(sd.Key, bounds.X, bounds.Y, bounds.Width, bounds.Height, sd.Value.Split.Value);
 				}
-
-				drawables[sd.Key] = drawable;
 			}
 
-			return new SpriteSheet(drawables);
+			return result;
 		}
 
+		public static void Draw(this SpriteBatch spriteBatch, TextureRegion2D textureRegion, Rectangle destinationRectangle)
+		{
+			spriteBatch.Draw(textureRegion, destinationRectangle, Color.White);
+		}
 	}
 }

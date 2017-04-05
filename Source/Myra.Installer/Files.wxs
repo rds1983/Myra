@@ -11,12 +11,6 @@
 			<Component Id="Myra.pdb" Directory="INSTALLFOLDER" Guid="{D779D429-75D6-42CA-ACDA-979533D2305C}">
 				<File Id="Myra.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra\bin\$(var.Configuration)\Myra.pdb" />
 			</Component>
-			<Component Id="Myra.FNA.dll" Directory="INSTALLFOLDER" Guid="{E34B02C7-3076-48C8-A115-F6D58DDA2E9E}">
-				<File Id="Myra.FNA.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra\bin\$(var.Configuration)\Myra.FNA.dll" />
-			</Component>
-			<Component Id="Myra.FNA.pdb" Directory="INSTALLFOLDER" Guid="{2E06FCC7-9712-4E13-A764-40AC950CF005}">
-				<File Id="Myra.FNA.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra\bin\$(var.Configuration)\Myra.FNA.pdb" />
-			</Component>
 			<Component Id="Newtonsoft.Json.xml" Directory="INSTALLFOLDER" Guid="{D5566381-2689-4075-A27A-730B6F960530}">
 				<File Id="Newtonsoft.Json.xml" KeyPath="yes" Source="$(var.SolutionDir)\Myra\bin\$(var.Configuration)\Newtonsoft.Json.xml" />
 			</Component>
@@ -32,23 +26,11 @@
 			<Component Id="NLog.dll" Directory="INSTALLFOLDER" Guid="{455055AD-3AF9-42CF-83FE-D5A31686969E}">
 				<File Id="NLog.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.UIEditor\bin\$(var.Configuration)\NLog.dll" />
 			</Component>
-			<Component Id="StbSharp.dll" Directory="INSTALLFOLDER" Guid="{9C1BA6B6-0C75-4924-B446-D59C33C54DA2}">
-				<File Id="StbSharp.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra\bin\$(var.Configuration)\StbSharp.dll" />
-			</Component>
-			<Component Id="Sichem.Framework.dll" Directory="INSTALLFOLDER" Guid="{0901EB7C-F910-4F9B-A8C9-47918E511946}">
-				<File Id="Sichem.Framework.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra\bin\$(var.Configuration)\Sichem.Framework.dll" />
-			</Component>
 			<Component Id="Myra.Samples.dll" Directory="INSTALLFOLDER" Guid="{6D531604-C756-404D-B5EF-C89116278A22}">
 				<File Id="Myra.Samples.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\bin\$(var.Configuration)\Myra.Samples.dll" />
 			</Component>
 			<Component Id="Myra.Samples.pdb" Directory="INSTALLFOLDER" Guid="{825FA0A2-1860-42E6-80D7-9D89EB246A1B}">
 				<File Id="Myra.Samples.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\bin\$(var.Configuration)\Myra.Samples.pdb" />
-			</Component>
-			<Component Id="Myra.Samples.FNA.dll" Directory="INSTALLFOLDER" Guid="{CFF79F7B-3517-4CD9-B826-1DE66B13385D}">
-				<File Id="Myra.Samples.FNA.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\bin\$(var.Configuration)\Myra.Samples.FNA.dll" />
-			</Component>
-			<Component Id="Myra.Samples.FNA.pdb" Directory="INSTALLFOLDER" Guid="{FD38E949-4A23-42D2-B5FB-C755BBB57214}">
-				<File Id="Myra.Samples.FNA.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\bin\$(var.Configuration)\Myra.Samples.FNA.pdb" />
 			</Component>
 			<Component Id="Myra.Samples.WinForms.dll" Directory="INSTALLFOLDER" Guid="{91BFCEBA-3364-423B-9352-7DA3E3E9DE08}">
 				<File Id="Myra.Samples.WinForms.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.WinForms\bin\$(var.Configuration)\Myra.Samples.WinForms.dll" />
@@ -92,15 +74,6 @@
 			<Component Id="Myra.Samples.WindowsDXLauncher.pdb" Directory="INSTALLFOLDER" Guid="{10B9AB68-0073-4F47-9BA5-B2E53839E23B}">
 				<File Id="Myra.Samples.WindowsDXLauncher.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.WindowsDXLauncher\bin\$(var.Configuration)\Myra.Samples.WindowsDXLauncher.pdb" />
 			</Component>
-			<Component Id="Myra.Samples.FNALauncher.exe" Directory="INSTALLFOLDER" Guid="{517F8881-659E-4A21-A84E-0AD7614BA481}">
-				<File Id="Myra.Samples.FNALauncher.exe" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.FNALauncher\bin\$(var.Configuration)\Myra.Samples.FNALauncher.exe" />
-			</Component>
-			<Component Id="Myra.Samples.FNALauncher.exe.config" Directory="INSTALLFOLDER" Guid="{A9366C03-D4D1-46E1-8EDE-4F0DCAD533EA}">
-				<File Id="Myra.Samples.FNALauncher.exe.config" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.FNALauncher\bin\$(var.Configuration)\Myra.Samples.FNALauncher.exe.config" />
-			</Component>
-			<Component Id="Myra.Samples.FNALauncher.pdb" Directory="INSTALLFOLDER" Guid="{FE754762-A08A-43A1-A262-4401F94079FA}">
-				<File Id="Myra.Samples.FNALauncher.pdb" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples.FNALauncher\bin\$(var.Configuration)\Myra.Samples.FNALauncher.pdb" />
-			</Component>
 			<Component Id="Myra.UIEditor.exe" Directory="INSTALLFOLDER" Guid="{5FFE16B8-B547-477C-8A56-843C8DC4EB59}">
 				<File Id="Myra.UIEditor.exe" KeyPath="yes" Source="$(var.SolutionDir)\Myra.UIEditor\bin\$(var.Configuration)\Myra.UIEditor.exe" />
 			</Component>
@@ -120,41 +93,6 @@
 			</Component>
 			<Component Id="mistral_0.png" Directory="Assets" Guid="{EE941869-E663-48B1-9430-A3F090308CBD}">
 				<File Id="mistral_0.png" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\mistral_0.png" />
-			</Component>
-
-			<!-- FNA -->
-			<Component Id="FNA.dll" Directory="FNA" Guid="{B7788A0D-FC2F-4C04-832A-B09ABAA91989}">
-				<File Id="FNA.dll" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\FNA\FNA.dll" />
-			</Component>
-			<Component Id="FNA.dll.config" Directory="FNA" Guid="{17A875C0-BD47-408C-A5A3-0C876528D9E1}">
-				<File Id="FNA.dll.config" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\FNA\FNA.dll.config" />
-			</Component>
-			<Component Id="FNA_SDL2_Linux" Directory="FNA" Guid="{34BDF3FA-FAD8-486E-A758-59DBB9E3519D}">
-				<File Id="FNA_SDL2_Linux" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\FNA\libSDL2-2.0.so.0" />
-			</Component>
-			<Component Id="FNA_OpenAL_Linux" Directory="FNA" Guid="{830BFAE0-B2F8-498C-86FD-0EFDB8368DEA}">
-				<File Id="FNA_OpenAL_Linux" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\FNA\libopenal.so.1" />
-			</Component>
-			<Component Id="FNA_MojoShader_Linux" Directory="FNA" Guid="{E14951F0-933D-4B4E-9118-DD5573341854}">
-				<File Id="FNA_MojoShader_Linux" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\FNA\libmojoshader.so" />
-			</Component>
-			<Component Id="FNA_SDL2_Windows" Directory="FNA" Guid="{B2072DC9-EF9B-4617-94D7-E335A644C308}">
-				<File Id="FNA_SDL2_Windows" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\FNA\SDL2.dll" />
-			</Component>
-			<Component Id="FNA_OpenAL_Windows" Directory="FNA" Guid="{6962AE15-D405-4C89-980D-369EB4F7B417}">
-				<File Id="FNA_OpenAL_Windows" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\FNA\soft_oal.dll" />
-			</Component>
-			<Component Id="FNA_MojoShader_Windows" Directory="FNA" Guid="{D8DFB503-84BC-4447-9AD3-3893817F327D}">
-				<File Id="FNA_MojoShader_Windows" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\FNA\MojoShader.dll" />
-			</Component>
-			<Component Id="FNA_SDL2_MacOSX" Directory="FNA" Guid="{73457241-8A58-4CBF-9C84-E2A0B1C032D7}">
-				<File Id="FNA_SDL2_MacOSX" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\FNA\libSDL2-2.0.0.dylib" />
-			</Component>
-			<Component Id="FNA_OpenAL_MacOSX" Directory="FNA" Guid="{98658F64-2C98-4D2C-A1AF-018D02E7005D}">
-				<File Id="FNA_OpenAL_MacOSX" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\FNA\libopenal.1.dylib" />
-			</Component>
-			<Component Id="FNA_MojoShader_MacOSX" Directory="FNA" Guid="{DADCDAB2-A1E7-4EDA-A564-2456D003AAAD}">
-				<File Id="FNA_MojoShader_MacOSX" KeyPath="yes" Source="$(var.SolutionDir)\Myra-Dependencies\FNA\libmojoshader.dylib" />
 			</Component>
 
 			<!-- DesktopGL -->

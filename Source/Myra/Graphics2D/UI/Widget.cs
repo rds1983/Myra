@@ -2,6 +2,8 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
+using MonoGame.Extended.TextureAtlases;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
@@ -306,37 +308,37 @@ namespace Myra.Graphics2D.UI
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable Background { get; set; }
+		public TextureRegion2D Background { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable Border { get; set; }
+		public TextureRegion2D Border { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable OverBackground { get; set; }
+		public TextureRegion2D OverBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable OverBorder { get; set; }
+		public TextureRegion2D OverBorder { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable DisabledBackground { get; set; }
+		public TextureRegion2D DisabledBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable DisabledOverBackground { get; set; }
+		public TextureRegion2D DisabledOverBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable DisabledBorder { get; set; }
+		public TextureRegion2D DisabledBorder { get; set; }
 
 		[EditCategory("Appearance")]
 		public bool ClipToBounds { get; set; }
@@ -511,7 +513,7 @@ namespace Myra.Graphics2D.UI
 			Enabled = true;
 		}
 
-		public virtual Drawable GetCurrentBackground()
+		public virtual TextureRegion2D GetCurrentBackground()
 		{
 			var result = Background;
 
@@ -535,7 +537,7 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public virtual Drawable GetCurrentBorder()
+		public virtual TextureRegion2D GetCurrentBorder()
 		{
 			var result = Border;
 			if (!Enabled && DisabledBorder != null)
@@ -580,7 +582,7 @@ namespace Myra.Graphics2D.UI
 			var background = GetCurrentBackground();
 			if (background != null)
 			{
-				background.Draw(batch, bounds);
+				batch.Draw(background, bounds);
 			}
 
 			InternalRender(batch);
@@ -589,17 +591,17 @@ namespace Myra.Graphics2D.UI
 			var border = GetCurrentBorder();
 			if (border != null)
 			{
-				border.Draw(batch, bounds);
+				batch.Draw(border, bounds);
 			}
 
 			if (DrawFrames)
 			{
-				batch.DrawRect(Color.LightGreen, bounds);
+				batch.DrawRectangle(bounds, Color.LightGreen);
 			}
 
 			if (DrawFocused && IsFocused)
 			{
-				batch.DrawRect(Color.Red, bounds);
+				batch.DrawRectangle(bounds, Color.Red);
 			}
 
 			if (ClipToBounds)
