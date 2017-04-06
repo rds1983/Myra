@@ -1,6 +1,7 @@
-﻿using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.BitmapFonts;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using MonoGame.Extended.TextureAtlases;
 
@@ -17,8 +18,9 @@ namespace Myra.Graphics2D.Text
 			var pageRegions = new TextureRegion2D[data.Pages.Length];
 			for (var i = 0; i < data.Pages.Length; ++i)
 			{
+			    var path = Path.GetDirectoryName(name);
 				var fn = data.Pages[i].FileName;
-				var region = textureLoader(fn);
+				var region = textureLoader(Path.Combine(path, fn));
 				if (region == null)
 				{
 					throw new Exception(string.Format("Unable to resolve texture {0}", fn));
