@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
@@ -15,6 +16,7 @@ namespace Myra.Assets
 
 		public Stylesheet Load(AssetManager assetManager, string assetName)
 		{
+		    var path = Path.GetDirectoryName(assetName);
 			var text = assetManager.ReadAsText(assetName);
 
 			var root = JObject.Parse(text);
@@ -27,7 +29,7 @@ namespace Myra.Assets
 				{
 					// Parse it
 					var stringValue = props.Value.ToString();
-					var font = assetManager.Load<BitmapFont>(stringValue);
+					var font = assetManager.Load<BitmapFont>(Path.Combine(path,stringValue));
 					fontsMap.Add(props.Name, font);
 				}
 			}
@@ -38,7 +40,7 @@ namespace Myra.Assets
 				throw new Exception("UI Stylesheet lacks sprite sheet.");
 			}
 
-			var spriteSheet = assetManager.Load<TextureAtlas>(spriteSheetName);
+			var spriteSheet = assetManager.Load<TextureAtlas>(Path.Combine(path, spriteSheetName));
 
 			return Stylesheet.CreateFromSource(text, s =>
 			{

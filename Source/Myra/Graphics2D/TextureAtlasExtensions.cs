@@ -107,7 +107,8 @@ namespace Myra.Graphics2D
 
 					if (pageData == null)
 					{
-						var texture = textureLoader(s);
+						var path = Path.GetDirectoryName(name);
+						var texture = textureLoader(Path.Combine(path, s));
 						if (texture == null)
 						{
 							throw new Exception(string.Format("Unable to resolve texture {0}", s));
