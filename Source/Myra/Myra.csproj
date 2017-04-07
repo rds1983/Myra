@@ -51,6 +51,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\AssetLoaderContext.cs" />
     <Compile Include="Assets\AssetManager.cs" />
     <Compile Include="Assets\BitmapFontLoader.cs" />
     <Compile Include="Assets\ContentLoader.cs" />

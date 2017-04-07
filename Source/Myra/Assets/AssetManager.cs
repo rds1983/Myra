@@ -62,7 +62,7 @@ namespace Myra.Assets
 		/// </summary>
 		/// <param name="path"></param>
 		/// <returns></returns>
-		public Stream Open(string path)
+		internal Stream Open(string path)
 		{
 			var stream = _assetResolver.Open(path);
 			if (stream == null)
@@ -73,29 +73,10 @@ namespace Myra.Assets
 			return stream;
 		}
 
-		/// <summary>
-		/// Reads specified asset to string
-		/// </summary>
-		/// <param name="path"></param>
-		/// <returns></returns>
-		public string ReadAsText(string path)
-		{
-			string result;
-			using (var input = Open(path))
-			{
-				using (var textReader = new StreamReader(input))
-				{
-					result = textReader.ReadToEnd();
-				}
-			}
-
-			return result;
-		}
-
-		public T Load<T>(string name)
+		public T Load<T>(string assetName)
 		{
 			object cached;
-			if (_cache.TryGetValue(name, out cached))
+			if (_cache.TryGetValue(assetName, out cached))
 			{
 				return (T) cached;
 			}
@@ -119,8 +100,21 @@ namespace Myra.Assets
 			}
 
 			var loader = (IAssetLoader<T>) loaderBase;
-			var result = loader.Load(this, name);
-			_cache[name] = result;
+
+			var baseFolder = string.Empty;
+			var assetFileName = assetName;
+
+			assetName = assetName.Replace('\\', '/');
+			var separatorIndex = assetName.IndexOf('/');
+			if (separatorIndex != -1)
+			{
+				baseFolder = assetName.Substring(0, separatorIndex);
+				assetFileName = assetName.Substring(separatorIndex + 1);
+			}
+
+			var context = new AssetLoaderContext(this, baseFolder);
+			var result = loader.Load(context, assetFileName);
+			_cache[assetName] = result;
 
 			return result;
 		}

@@ -6,10 +6,10 @@ namespace Myra.Assets
 {
 	public class BitmapFontLoader : IAssetLoader<BitmapFont>
 	{
-		public BitmapFont Load(AssetManager assetManager, string assetName)
+		public BitmapFont Load(AssetLoaderContext context, string assetName)
 		{
-			var text = assetManager.ReadAsText(assetName);
-			var result = BitmapFontExtensions.LoadFromFnt(assetName, text, assetManager.Load<TextureRegion2D>);
+			var text = context.ReadAsText(assetName);
+			var result = BitmapFontExtensions.LoadFromFnt(assetName, text, context.Load<TextureRegion2D>);
 
 			return result;
 		}

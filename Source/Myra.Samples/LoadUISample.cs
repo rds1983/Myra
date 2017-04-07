@@ -29,7 +29,7 @@ namespace Myra.Samples
 			_host = new Desktop();
 
 			// Load UI
-			var ui = _assetManager.Load<Project>("awesomeGame.ui");
+			var ui = _assetManager.Load<Project>("UI/awesomeGame.ui");
 
 			// Obtain reference to the "#listBoxMenu"
 			_mainMenuList = (ListBox) ui.Root.FindWidgetById("mainMenu");

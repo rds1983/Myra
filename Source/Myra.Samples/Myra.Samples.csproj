@@ -75,7 +75,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <EmbeddedResource Include="Resources\default.fnt" />
-    <None Include="Assets\mistral.fnt">
+    <None Include="Assets\Fonts\mistral.fnt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <EmbeddedResource Include="Resources\uiskin.atlas" />
@@ -83,12 +83,12 @@
     <EmbeddedResource Include="Resources\uiskin.png.json" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\mistral_0.png">
+    <None Include="Assets\Fonts\mistral_0.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\awesomeGame.ui">
+    <None Include="Assets\UI\awesomeGame.ui">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

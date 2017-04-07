@@ -5,9 +5,9 @@ namespace Myra.Assets
 {
 	public class UILoader: IAssetLoader<Project>
 	{
-		public Project Load(AssetManager assetManager, string assetName)
+		public Project Load(AssetLoaderContext context, string assetName)
 		{
-			var text = assetManager.ReadAsText(assetName);
+			var text = context.ReadAsText(assetName);
 
 			var result = Serialization.LoadFromData(text);
 			return result;

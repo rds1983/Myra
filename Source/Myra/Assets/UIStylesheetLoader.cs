@@ -13,9 +13,9 @@ namespace Myra.Assets
 		private const string FontsName = "fonts";
 		private const string SpritesheetName = "spriteSheet";
 
-		public Stylesheet Load(AssetManager assetManager, string assetName)
+		public Stylesheet Load(AssetLoaderContext context, string assetName)
 		{
-			var text = assetManager.ReadAsText(assetName);
+			var text = context.ReadAsText(assetName);
 
 			var root = JObject.Parse(text);
 			var fontsMap = new Dictionary<string, BitmapFont>();
@@ -27,7 +27,7 @@ namespace Myra.Assets
 				{
 					// Parse it
 					var stringValue = props.Value.ToString();
-					var font = assetManager.Load<BitmapFont>(stringValue);
+					var font = context.Load<BitmapFont>(stringValue);
 					fontsMap.Add(props.Name, font);
 				}
 			}
@@ -38,7 +38,7 @@ namespace Myra.Assets
 				throw new Exception("UI Stylesheet lacks sprite sheet.");
 			}
 
-			var spriteSheet = assetManager.Load<TextureAtlas>(spriteSheetName);
+			var spriteSheet = context.Load<TextureAtlas>(spriteSheetName);
 
 			return Stylesheet.CreateFromSource(text, s =>
 			{

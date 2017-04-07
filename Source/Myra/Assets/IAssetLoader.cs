@@ -2,6 +2,6 @@
 {
 	public interface IAssetLoader<out T>
 	{
-		T Load(AssetManager assetManager, string assetName);
+		T Load(AssetLoaderContext context, string assetName);
 	}
 }

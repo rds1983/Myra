@@ -25,7 +25,7 @@ namespace Myra.Samples
 			MyraEnvironment.Game = this;
 
 			_batch = new SpriteBatch(GraphicsDevice);
-			_font = _assetManager.Load<BitmapFont>("mistral.fnt");
+			_font = _assetManager.Load<BitmapFont>("Fonts/mistral.fnt");
 		}
 
 		protected override void Draw(GameTime gameTime)

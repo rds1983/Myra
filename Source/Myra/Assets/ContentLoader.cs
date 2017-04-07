@@ -31,7 +31,7 @@ namespace Myra.Assets
 		}
 
 
-		public T Load(AssetManager assetManager, string assetName)
+		public T Load(AssetLoaderContext context, string assetName)
 		{
 			return _contentManager.Load<T>(assetName);
 		}

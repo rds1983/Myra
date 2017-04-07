@@ -6,11 +6,11 @@ namespace Myra.Assets
 {
 	public class TextureAtlasLoader : IAssetLoader<TextureAtlas>
 	{
-		public TextureAtlas Load(AssetManager assetManager, string assetName)
+		public TextureAtlas Load(AssetLoaderContext context, string assetName)
 		{
-			var text = assetManager.ReadAsText(assetName);
+			var text = context.ReadAsText(assetName);
 
-			return TextureAtlasExtensions.LoadGDX(assetName, text, assetManager.Load<Texture2D>);
+			return TextureAtlasExtensions.LoadGDX(assetName, text, context.Load<Texture2D>);
 		}
 	}
 }

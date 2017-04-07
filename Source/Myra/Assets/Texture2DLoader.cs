@@ -33,13 +33,13 @@ namespace Myra.Assets
 			return (byte) fr;
 		}
 
-		public Texture2D Load(AssetManager assetManager, string assetName)
+		public Texture2D Load(AssetLoaderContext context, string assetName)
 		{
 			var premultiplyAlpha = false;
 
 			if (assetName.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
 			{
-				var text = assetManager.ReadAsText(assetName);
+				var text = context.ReadAsText(assetName);
 				var parameters = JsonConvert.DeserializeObject<Texture2DLoadingParameters>(text);
 				assetName = parameters.image;
 				premultiplyAlpha = parameters.premultiplyAlpha;
@@ -49,7 +49,7 @@ namespace Myra.Assets
 
 			int x, y;
 			byte[] data;
-			using (var stream = assetManager.Open(assetName))
+			using (var stream = context.Open(assetName))
 			{
 				int comp;
 				data = reader.Read(stream, out x, out y, out comp, Stb.STBI_rgb_alpha);
