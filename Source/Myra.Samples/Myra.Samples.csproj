@@ -38,7 +38,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MonoGame.Extended">
+    <Reference Include="MonoGame.Extended, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Myra-Dependencies\MonoGame.Extended\MonoGame.Extended.dll</HintPath>
     </Reference>
     <Reference Include="MonoGame.Framework, Version=3.5.1.1679, Culture=neutral, processorArchitecture=MSIL">
@@ -71,6 +72,7 @@
     <Compile Include="Samples2D.cs" />
     <Compile Include="SplitPaneSample.cs" />
     <Compile Include="TextBlocksSample.cs" />
+    <Compile Include="TiledSample.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -80,7 +82,6 @@
     </None>
     <EmbeddedResource Include="Resources\uiskin.atlas" />
     <EmbeddedResource Include="Resources\uiskin.json" />
-    <EmbeddedResource Include="Resources\uiskin.png.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Fonts\mistral_0.png">
@@ -88,6 +89,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Tiled\desert.tmx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Tiled\orthogonal-outside.tmx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Tiled\perspective_walls.tmx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Tiled\sewers.tmx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Assets\UI\awesomeGame.ui">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -96,13 +109,41 @@
     <EmbeddedResource Include="Resources\uiskin.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\notepad.ui" />
+    <None Include="Assets\UI\notepad.ui">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Myra\Myra.csproj">
       <Project>{4dcbb001-9c79-4f6b-996d-d654062d93e0}</Project>
       <Name>Myra</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Tiled\perspective_walls.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Tiled\perspective_walls.tsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Tiled\desert.tsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Tiled\tmw_desert_spacing.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Tiled\sewer_tileset.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Tiled\buch-outdoor.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

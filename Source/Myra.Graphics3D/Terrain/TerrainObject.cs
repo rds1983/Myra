@@ -402,12 +402,12 @@ namespace Myra.Graphics3D.Terrain
 					effect.Parameters["_textureLayer" + i].SetValue(_textureLayers[i]);
 				}
 
-/*				for (; i <= 4; ++i)
+				for (; i <= 4; ++i)
 				{
-					effect.Parameters["_textureLayer" + i].SetValue(DefaultAssets.White);
+					effect.Parameters["_textureLayer" + i].SetValue(Graphics3DAssets.Transparent);
 				}
 
-				effect.Parameters["_textureBlendMap"].SetValue(Blend ?? DefaultAssets.White);*/
+				effect.Parameters["_textureBlendMap"].SetValue(Blend ?? Graphics3DAssets.Transparent);
 
 				for (i = 0; i <= 5; ++i)
 				{

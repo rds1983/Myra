@@ -47,7 +47,6 @@
   <ItemGroup>
     <Compile Include="Primitives3DSample.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources\Resources.cs" />
     <Compile Include="Samples3D.cs" />
     <Compile Include="Samples3DAssets.cs" />
     <Compile Include="TerrainSample.cs" />

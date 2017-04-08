@@ -9,7 +9,7 @@ namespace Myra.Samples.Graphics3D
 		private static Texture2D _sampleTexture1, _sampleTexture2;
 
 		private static readonly AssetManager _defaultAssetManager =
-			new AssetManager(new ResourceAssetResolver(typeof (DefaultAssets).GetTypeInfo().Assembly, "Myra.Samples.Graphics3D."));
+			new AssetManager(new ResourceAssetResolver(typeof(Samples3DAssets).GetTypeInfo().Assembly, "Myra.Samples.Graphics3D.Resources."));
 
 		static Samples3DAssets()
 		{

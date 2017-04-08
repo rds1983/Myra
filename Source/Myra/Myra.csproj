@@ -55,13 +55,15 @@
     <Compile Include="Assets\AssetManager.cs" />
     <Compile Include="Assets\BitmapFontLoader.cs" />
     <Compile Include="Assets\ContentLoader.cs" />
-    <Compile Include="Assets\DrawableLoader.cs" />
+    <Compile Include="Assets\TextureRegion2DLoader.cs" />
     <Compile Include="Assets\IAssetLoader.cs" />
     <Compile Include="Assets\IAssetResolver.cs" />
     <Compile Include="Assets\ResourceAssetResolver.cs" />
     <Compile Include="Assets\TextureAtlasLoader.cs" />
     <Compile Include="Assets\Texture2DLoader.cs" />
     <Compile Include="Assets\FileAssetResolver.cs" />
+    <Compile Include="Assets\TmxMapLoader.cs" />
+    <Compile Include="Assets\TmxTilesetLoader.cs" />
     <Compile Include="Assets\UILoader.cs" />
     <Compile Include="Assets\UIStylesheetLoader.cs" />
     <Compile Include="Attributes\AssetLoaderAttribute.cs" />
@@ -82,6 +84,12 @@
     <Compile Include="Graphics2D\StbSharp\Stb.Image.Generated.cs" />
     <Compile Include="Graphics2D\TextureAtlasExtensions.cs" />
     <Compile Include="Graphics2D\Text\BitmapFontExtensions.cs" />
+    <Compile Include="Graphics2D\Tiled\ImageLayer.cs" />
+    <Compile Include="Graphics2D\Tiled\Layer.cs" />
+    <Compile Include="Graphics2D\Tiled\Map.cs" />
+    <Compile Include="Graphics2D\Tiled\ObjectGroup.cs" />
+    <Compile Include="Graphics2D\Tiled\TiledCore.cs" />
+    <Compile Include="Graphics2D\Tiled\Tileset.cs" />
     <Compile Include="Graphics2D\UI\HorizontalProgressBar.cs" />
     <Compile Include="Graphics2D\UI\GridBased.cs" />
     <Compile Include="Graphics2D\UI\HorizontalSlider.cs" />
@@ -136,12 +144,11 @@
     <Compile Include="Graphics2D\UI\VerticalProgressBar.cs" />
     <Compile Include="Graphics2D\UI\VerticalSlider.cs" />
     <Compile Include="Graphics2D\UI\VerticalSplitPane.cs" />
+    <Compile Include="Utility\Input.cs" />
     <Compile Include="Utility\ProgressInfo.cs" />
     <Compile Include="DefaultAssets.cs" />
     <Compile Include="Utility\Collections.cs" />
-    <Compile Include="Utility\FPSCounter.cs" />
     <Compile Include="Utility\GraphicsExtension.cs" />
-    <Compile Include="Utility\Input.cs" />
     <Compile Include="Utility\Mathematics.cs" />
     <Compile Include="Utility\Reflection.cs" />
     <Compile Include="Utility\Serialization.cs" />
@@ -170,7 +177,6 @@
     <Compile Include="Utility\TextureAtlasExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Cyotek.Drawing.BitmapFont\LICENSE.txt" />
     <EmbeddedResource Include="Resources\default_font.fnt" />
     <EmbeddedResource Include="Resources\default_stylesheet.json" />
     <EmbeddedResource Include="Resources\default_uiskin.atlas" />
@@ -178,9 +184,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\default_uiskin.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\default_uiskin.png.json" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

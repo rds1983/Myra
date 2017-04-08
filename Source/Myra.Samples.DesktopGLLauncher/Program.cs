@@ -20,6 +20,11 @@ namespace Myra.Samples.DesktopGLLauncher
 					form.AddSampleType(t);
 				}
 
+				/*foreach (var t in Samples3D.AllSampleTypes)
+				{
+					form.AddSampleType(t);
+				}*/
+
 				form.Launcher += sampleType =>
 				{
 					using (sample = (Game) Activator.CreateInstance(sampleType))

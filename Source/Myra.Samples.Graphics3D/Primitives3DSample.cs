@@ -153,6 +153,8 @@ namespace Myra.Samples.Graphics3D
 
 		protected override void Update(GameTime gameTime)
 		{
+			_statisticsGrid.Update(gameTime);
+
 			var keyboardState = Keyboard.GetState();
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || keyboardState.IsKeyDown(Keys.Escape))
 				Exit();
@@ -205,7 +207,7 @@ namespace Myra.Samples.Graphics3D
 				GraphicsDevice.PresentationParameters.BackBufferHeight);
 			_desktop.Render();
 
-			_statisticsGrid.Update(GraphicsDevice, _scene);
+			_statisticsGrid.Draw(gameTime, GraphicsDevice, _scene);
 		}
 	}
 }

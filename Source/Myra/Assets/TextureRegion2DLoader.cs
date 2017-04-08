@@ -14,7 +14,6 @@ namespace Myra.Assets
 
 				var spriteSheet = context.Load<TextureAtlas>(parts[0]);
 
-
 				var image = spriteSheet.GetRegion(parts[1]);
 
 				return image;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
 using Microsoft.Xna.Framework;
 using Myra.Assets;
 using Myra.Graphics2D.UI;
@@ -12,7 +11,7 @@ namespace Myra.Samples
 	{
 		private readonly GraphicsDeviceManager graphics;
 
-		private readonly AssetManager _assetManager = new AssetManager(new ResourceAssetResolver(typeof(CustomUIStylesheetSample).GetTypeInfo().Assembly, "Myra.Samples.Resources."));
+		private readonly AssetManager _assetManager = new AssetManager(new FileAssetResolver("Assets"));
 		private string _filePath;
 		private bool _dirty = true;
 		private Desktop _host;
@@ -77,7 +76,7 @@ namespace Myra.Samples
 			_host = new Desktop();
 
 			// Load UI
-			var ui = _assetManager.Load<Project>("notepad.ui");
+			var ui = _assetManager.Load<Project>("UI/notepad.ui");
 
 			var mainMenu = (Menu) ui.Root.FindWidgetById("mainMenu");
 			var newItem = mainMenu.FindMenuItemById("menuItemNew");

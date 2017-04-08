@@ -1,14 +1,15 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using Myra.Graphics2D.UI;
 using Myra.Graphics3D;
-using Myra.Utility;
 
 namespace Myra.Samples.Graphics3D.Utility
 {
 	public class StatisticsGrid3d : GridBased
 	{
-		private readonly FPSCounter _fpsCounter = new FPSCounter();
+		private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
 
 		private readonly CheckBox _lightningOn;
 		private readonly CheckBox _drawNormals;
@@ -161,18 +162,24 @@ namespace Myra.Samples.Graphics3D.Utility
 			Widgets.Add(_pixelShaderCountLabel);
 		}
 
-		public void Update(GraphicsDevice device, Scene scene)
+		public void Update(GameTime gameTime)
 		{
-			_fpsCounter.Update();
+			_fpsCounter.Update(gameTime);
+		}
+
+		public void Draw(GameTime gameTime, GraphicsDevice device, Scene scene)
+		{
+			_fpsCounter.Draw(gameTime);
 
 			_gcMemoryLabel.Text = string.Format("GC Memory: {0} kb", GC.GetTotalMemory(false) / 1024);
-			_fpsLabel.Text = string.Format("FPS: {0:0.##}", _fpsCounter.FPS);
+			_fpsLabel.Text = string.Format("FPS: {0}", _fpsCounter.FramesPerSecond);
 			_drawCallsLabel.Text = string.Format("Draw Calls: {0}", device.Metrics.DrawCount);
 			_modelsCountLabel.Text = string.Format("Models Count: {0}", scene.ModelsRendered);
 			_primitiveCountLabel.Text = string.Format("Primitive Count: {0}", device.Metrics.PrimitiveCount);
 			_textureCountLabel.Text = string.Format("Texture Count: {0}", device.Metrics.TextureCount);
 			_vertexShaderCountLabel.Text = string.Format("Vertex Shader Count: {0}", device.Metrics.VertexShaderCount);
-			_pixelShaderCountLabel.Text = string.Format("Pixel Shader Count: {0}", device.Metrics.PixelShaderCount);			
+			_pixelShaderCountLabel.Text = string.Format("Pixel Shader Count: {0}", device.Metrics.PixelShaderCount);
 		}
+
 	}
 }
