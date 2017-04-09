@@ -1,11 +1,12 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.Tiled;
+using Myra.Graphics2D.Tiles;
 
 namespace Myra.Assets
 {
-	public class TmxMapLoader: IAssetLoader<TmxMap>
+	public class TileModelLoader: IAssetLoader<TileMap>
 	{
-		public TmxMap Load(AssetLoaderContext context, string assetName)
+		public TileMap Load(AssetLoaderContext context, string assetName)
 		{
 			TmxMap result;
 			using (var stream = context.Open(assetName))
@@ -13,7 +14,7 @@ namespace Myra.Assets
 				result = new TmxMap(stream, context.Load<TmxTileset>, context.Load<Texture2D>);
 			}
 
-			return result;
+			return result.CreateTileModel();
 		}
 	}
 }

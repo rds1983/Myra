@@ -62,7 +62,7 @@
     <Compile Include="Assets\TextureAtlasLoader.cs" />
     <Compile Include="Assets\Texture2DLoader.cs" />
     <Compile Include="Assets\FileAssetResolver.cs" />
-    <Compile Include="Assets\TmxMapLoader.cs" />
+    <Compile Include="Assets\TileModelLoader.cs" />
     <Compile Include="Assets\TmxTilesetLoader.cs" />
     <Compile Include="Assets\UILoader.cs" />
     <Compile Include="Assets\UIStylesheetLoader.cs" />
@@ -90,6 +90,10 @@
     <Compile Include="Graphics2D\Tiled\ObjectGroup.cs" />
     <Compile Include="Graphics2D\Tiled\TiledCore.cs" />
     <Compile Include="Graphics2D\Tiled\Tileset.cs" />
+    <Compile Include="Graphics2D\Tiles\SimpleTileRenderer.cs" />
+    <Compile Include="Graphics2D\Tiles\Tile.cs" />
+    <Compile Include="Graphics2D\Tiles\TileLayer.cs" />
+    <Compile Include="Graphics2D\Tiles\TileMap.cs" />
     <Compile Include="Graphics2D\UI\HorizontalProgressBar.cs" />
     <Compile Include="Graphics2D\UI\GridBased.cs" />
     <Compile Include="Graphics2D\UI\HorizontalSlider.cs" />

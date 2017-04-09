@@ -8,12 +8,11 @@ using System.IO;
 using System.Xml.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Assets;
-using Myra.Attributes;
+using MonoGame.Extended.TextureAtlases;
+using Myra.Graphics2D.Tiles;
 
 namespace Myra.Graphics2D.Tiled
 {
-	[AssetLoader(typeof (TmxMapLoader))]
 	public class TmxMap
 	{
 		public string Version { get; private set; }
@@ -155,34 +154,48 @@ namespace Myra.Graphics2D.Tiled
 			return result;
 		}
 
-		public void Render(SpriteBatch batch)
+		public TileMap CreateTileModel()
 		{
 			if (Orientation != OrientationType.Orthogonal)
 			{
 				throw new Exception("Only orthogonal maps could be rendered");
 			}
 
+			var result = new TileMap();
 			if (Tilesets.Count <= 0)
 			{
-				return;
+				return result;
 			}
 
-			var viewPortRect = new Rectangle(batch.GraphicsDevice.Viewport.X,
-				batch.GraphicsDevice.Viewport.Y,
-				batch.GraphicsDevice.Viewport.Width,
-				batch.GraphicsDevice.Viewport.Height);
-
-			foreach (var layer in Layers)
+			foreach (var sourceLayer in Layers)
 			{
-				for (var i = 0; i < layer.Tiles.Count; ++i)
+				var offsetX = 0;
+				if (sourceLayer.OffsetX.HasValue)
 				{
-					var tile = layer.Tiles[i];
-					if (tile.Gid <= 0)
+					offsetX = -(int)(sourceLayer.OffsetX.Value*TileWidth);
+				}
+
+				var offsetY = 0;
+				if (sourceLayer.OffsetY.HasValue)
+				{
+					offsetY = -(int)(sourceLayer.OffsetY.Value * TileHeight);
+				}
+
+				var layer = new TileLayer(new Point(sourceLayer.Width, sourceLayer.Height), new Point(TileWidth, TileHeight))
+				{
+					Offset = new Point(offsetX, offsetY),
+					Opacity = sourceLayer.Opacity
+				};
+
+				for (var i = 0; i < sourceLayer.Tiles.Count; ++i)
+				{
+					var sourceTile = sourceLayer.Tiles[i];
+					if (sourceTile.Gid <= 0)
 					{
 						continue;
 					}
 
-					var gid = tile.Gid;
+					var gid = sourceTile.Gid;
 
 					TmxTileset tileset = null;
 					foreach (var ts in Tilesets)
@@ -200,41 +213,35 @@ namespace Myra.Graphics2D.Tiled
 						continue;
 					}
 
-					var x = tile.X * TileWidth + tileset.TileOffset.X;
-					if (layer.OffsetX.HasValue)
-					{
-						x -= (int)layer.OffsetX.Value * TileWidth;
-					}
-
-					var y = tile.Y * TileHeight + tileset.TileOffset.Y;
-					if (layer.OffsetY.HasValue)
-					{
-						y -= (int)layer.OffsetY.Value * TileHeight;
-					}
-
-					var destRect = new Rectangle(x, y, tileset.TileWidth, tileset.TileHeight);
-					if (!destRect.Intersects(viewPortRect))
-					{
-						continue;
-					}
-
-					var col = gid%tileset.TilesPerRow;
-					var row = gid/tileset.TilesPerRow;
-					var sourceX = col*tileset.TileWidth;
-					sourceX += col*tileset.Spacing;
+					var col = gid % tileset.TilesPerRow;
+					var row = gid / tileset.TilesPerRow;
+					var sourceX = col * tileset.TileWidth;
+					sourceX += col * tileset.Spacing;
 					sourceX += tileset.Margin;
 
-					var sourceY = row*tileset.TileHeight;
-					sourceY += row*tileset.Spacing;
+					var sourceY = row * tileset.TileHeight;
+					sourceY += row * tileset.Spacing;
 					sourceY += tileset.Margin;
 
-					var sourceRect = new Rectangle(sourceX, sourceY, 
-						tileset.TileWidth - tileset.Margin, 
+					var sourceRect = new Rectangle(sourceX, sourceY,
+						tileset.TileWidth - tileset.Margin,
 						tileset.TileHeight - tileset.Margin);
 
-					batch.Draw(tileset.Image.Texture, destRect, sourceRect, Color.White * layer.Opacity);
+					var tile = new Tile
+					{
+						Region = new TextureRegion2D(tileset.Image.Texture, sourceRect),
+						Size = new Point(tileset.TileWidth, tileset.TileHeight),
+						Offset = new Point(tileset.TileOffset.X, tileset.TileOffset.Y)
+					};
+
+					var tiles = layer.GetTilesAt(sourceTile.X, sourceTile.Y);
+					tiles.Add(tile);
 				}
+
+				result.Layers.Add(layer);
 			}
+
+			return result;
 		}
 	}
 
