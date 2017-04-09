@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Utility;
+using Myra.Graphics2D;
 using Newtonsoft.Json;
 
 namespace Myra.Assets
@@ -25,13 +25,18 @@ namespace Myra.Assets
 				premultiplyAlpha = parameters.premultiplyAlpha;
 			}
 
-			Texture2D texture;
+			RawImage rawImage;
 			using (var stream = context.Open(assetName))
 			{
-				texture = GraphicsExtension.FromStream(stream, premultiplyAlpha);
+				rawImage = RawImage.FromStream(stream);
 			}
 
-			return texture;
+			if (premultiplyAlpha)
+			{
+				rawImage.Process(true, null);
+			}
+
+			return rawImage.CreateTexture2D();
 		}
 	}
 }

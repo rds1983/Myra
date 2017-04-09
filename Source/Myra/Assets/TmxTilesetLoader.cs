@@ -1,5 +1,6 @@
 ﻿using System.Xml.Linq;
 using Microsoft.Xna.Framework.Graphics;
+using Myra.Graphics2D;
 using Myra.Graphics2D.Tiled;
 
 namespace Myra.Assets
@@ -10,7 +11,7 @@ namespace Myra.Assets
 		{
 			var text = context.ReadAsText(assetName);
 			var xDocument = XDocument.Parse(text);
-			var result = new TmxTileset(xDocument, context.Load<Texture2D>);
+			var result = new TmxTileset(xDocument, context.Load<RawImage>);
 
 			return result;
 		}

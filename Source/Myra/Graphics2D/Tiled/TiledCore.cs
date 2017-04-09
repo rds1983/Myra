@@ -12,7 +12,6 @@ using System.Linq;
 using System.Xml.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Utility;
 
 namespace Myra.Graphics2D.Tiled
 {
@@ -93,7 +92,7 @@ namespace Myra.Graphics2D.Tiled
 		public int? Height { get; private set; }
 		public Texture2D Texture { get; set; }
 
-		public TmxImage(XElement xImage, Func<string, Texture2D> textureLoader)
+		public TmxImage(XElement xImage, Func<string, RawImage> imageLoader)
 		{
 			if (xImage == null) return;
 
@@ -120,11 +119,13 @@ namespace Myra.Graphics2D.Tiled
 			Width = (int?) xImage.Attribute("width");
 			Height = (int?) xImage.Attribute("height");
 
-			Texture = !string.IsNullOrEmpty(Source)
-				? textureLoader(Source)
-				: GraphicsExtension.FromStream(Data);
+			var rawImage  = !string.IsNullOrEmpty(Source)
+				? imageLoader(Source)
+				: RawImage.FromStream(Data);
 
-			Texture.Process(true, Trans != null ? new Color(Trans.R, Trans.G, Trans.B, 0) : default(Color?));
+			rawImage.Process(true, Trans != null ? new Color(Trans.R, Trans.G, Trans.B, 0) : default(Color?));
+
+			Texture = rawImage.CreateTexture2D();
 			if (Width == null)
 			{
 				Width = Texture.Width;

@@ -55,6 +55,7 @@
     <Compile Include="Assets\AssetManager.cs" />
     <Compile Include="Assets\BitmapFontLoader.cs" />
     <Compile Include="Assets\ContentLoader.cs" />
+    <Compile Include="Assets\RawImageLoader.cs" />
     <Compile Include="Assets\TextureRegion2DLoader.cs" />
     <Compile Include="Assets\IAssetLoader.cs" />
     <Compile Include="Assets\IAssetResolver.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Attributes\HiddenInEditorAttribute.cs" />
     <Compile Include="Attributes\IItemsProvider.cs" />
     <Compile Include="Attributes\SelectionAttribute.cs" />
+    <Compile Include="Graphics2D\RawImage.cs" />
     <Compile Include="Graphics2D\StbSharp\ImageReader.cs" />
     <Compile Include="Graphics2D\StbSharp\Operations.cs" />
     <Compile Include="Graphics2D\StbSharp\PinnedArray.cs" />

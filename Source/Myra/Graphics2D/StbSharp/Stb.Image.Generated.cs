@@ -2,11 +2,10 @@
 
 using System;
 using System.Runtime.InteropServices;
-using Myra.Graphics2D.StbSharp;
 
 namespace Myra.Graphics2D.StbSharp
 {
-	internal unsafe partial class Stb
+	unsafe partial class Stb
 	{
 		public class stbi__context
 		{
@@ -160,6 +159,8 @@ namespace Myra.Graphics2D.StbSharp
 			STBI__F_none, STBI__F_sub, STBI__F_none, STBI__F_avg_first,
 			STBI__F_paeth_first
 		};
+
+		public static byte[] png_sig = { 137, 80, 78, 71, 13, 10, 26, 10 };
 
 		public static byte[] stbi__depth_scale_table = {0, 0xff, 0x55, 0, 0x11, 0, 0, 0, 0x01};
 		public static int stbi__unpremultiply_on_load = (int) (0);
@@ -2303,16 +2304,6 @@ namespace Myra.Graphics2D.StbSharp
 
 		public static int stbi__check_png_header(stbi__context s)
 		{
-			byte* png_sig = stackalloc byte[8];
-			png_sig[0] = (byte) (137);
-			png_sig[1] = (byte) (80);
-			png_sig[2] = (byte) (78);
-			png_sig[3] = (byte) (71);
-			png_sig[4] = (byte) (13);
-			png_sig[5] = (byte) (10);
-			png_sig[6] = (byte) (26);
-			png_sig[7] = (byte) (10);
-
 			int i;
 			for (i = (int) (0); (i) < (8); ++i)
 			{

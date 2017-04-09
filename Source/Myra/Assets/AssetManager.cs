@@ -75,13 +75,16 @@ namespace Myra.Assets
 
 		public T Load<T>(string assetName)
 		{
+			var type = typeof(T);
+			assetName = assetName.Replace('\\', '/');
+			MyraEnvironment.LogInfo("Querying asset '{0}' of type '{1}'", assetName, type);
+
 			object cached;
 			if (_cache.TryGetValue(assetName, out cached))
 			{
 				return (T) cached;
 			}
 
-			var type = typeof (T);
 			object loaderBase;
 			if (!_loaders.TryGetValue(type, out loaderBase))
 			{
@@ -104,13 +107,14 @@ namespace Myra.Assets
 			var baseFolder = string.Empty;
 			var assetFileName = assetName;
 
-			assetName = assetName.Replace('\\', '/');
 			var separatorIndex = assetName.IndexOf('/');
 			if (separatorIndex != -1)
 			{
 				baseFolder = assetName.Substring(0, separatorIndex);
 				assetFileName = assetName.Substring(separatorIndex + 1);
 			}
+
+			MyraEnvironment.LogInfo("Loading asset '{0}' of type '{1}'", assetName, type);
 
 			var context = new AssetLoaderContext(this, baseFolder);
 			var result = loader.Load(context, assetFileName);

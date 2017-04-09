@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Myra.Graphics2D;
 using Myra.Graphics2D.Tiled;
 
 namespace Myra.Assets
@@ -10,7 +10,7 @@ namespace Myra.Assets
 			TmxMap result;
 			using (var stream = context.Open(assetName))
 			{
-				result = new TmxMap(stream, context.Load<TmxTileset>, context.Load<Texture2D>);
+				result = new TmxMap(stream, context.Load<TmxTileset>, context.Load<RawImage>);
 			}
 
 			return result;

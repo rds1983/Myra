@@ -4,7 +4,6 @@
 
 using System;
 using System.Xml.Linq;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Myra.Graphics2D.Tiled
 {
@@ -24,7 +23,7 @@ namespace Myra.Graphics2D.Tiled
 		public TmxImage Image { get; private set; }
 		public PropertyDict Properties { get; private set; }
 
-		public TmxImageLayer(XElement xImageLayer, Func<string, Texture2D> textureLoader)
+		public TmxImageLayer(XElement xImageLayer, Func<string, RawImage> imageLoader)
 		{
 			Name = (string) xImageLayer.Attribute("name");
 			Width = (int?) xImageLayer.Attribute("width");
@@ -33,7 +32,7 @@ namespace Myra.Graphics2D.Tiled
 			Opacity = (double?) xImageLayer.Attribute("opacity") ?? 1.0;
 			OffsetX = (double?) xImageLayer.Attribute("offsetx") ?? 0.0;
 			OffsetY = (double?) xImageLayer.Attribute("offsety") ?? 0.0;
-			Image = new TmxImage(xImageLayer.Element("image"), textureLoader);
+			Image = new TmxImage(xImageLayer.Element("image"), imageLoader);
 			Properties = new PropertyDict(xImageLayer.Element("properties"));
 		}
 	}

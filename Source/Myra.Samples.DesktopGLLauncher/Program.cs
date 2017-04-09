@@ -12,6 +12,8 @@ namespace Myra.Samples.DesktopGLLauncher
 		[STAThread]
 		static void Main()
 		{
+			MyraEnvironment.InfoLogHandler = InfoLogHandler;
+
 			Game sample;
 			using (var form = new SampleForm())
 			{
@@ -36,6 +38,11 @@ namespace Myra.Samples.DesktopGLLauncher
 
 				form.ShowDialog();
 			}
+		}
+
+		private static void InfoLogHandler(string message)
+		{
+			Console.WriteLine(message);
 		}
 	}
 }

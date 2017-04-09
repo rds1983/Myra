@@ -35,13 +35,13 @@ namespace Myra.Graphics2D.Tiled
 		public TmxImage Image { get; private set; }
 		public TmxList<TmxTerrain> Terrains { get; private set; }
 
-		public TmxTileset(XContainer xDoc, Func<string, Texture2D> textureLoader) :
-			this(xDoc.Element("tileset"), textureLoader)
+		public TmxTileset(XContainer xDoc, Func<string, RawImage> imageLoader) :
+			this(xDoc.Element("tileset"), imageLoader)
 		{
 		}
 
 		// TMX tileset element constructor
-		public TmxTileset(XElement xTileset, Func<string, Texture2D> textureLoader)
+		public TmxTileset(XElement xTileset, Func<string, RawImage> imageLoader)
 		{
 			Name = (string) xTileset.Attribute("name");
 			TileWidth = (int) xTileset.Attribute("tilewidth");
@@ -52,7 +52,7 @@ namespace Myra.Graphics2D.Tiled
 			TileCount = (int?) xTileset.Attribute("tilecount");
 			TileOffset = new TmxTileOffset(xTileset.Element("tileoffset"));
 
-			Image = new TmxImage(xTileset.Element("image"), textureLoader);
+			Image = new TmxImage(xTileset.Element("image"), imageLoader);
 
 			Terrains = new TmxList<TmxTerrain>();
 			var xTerrainType = xTileset.Element("terraintypes");
@@ -65,7 +65,7 @@ namespace Myra.Graphics2D.Tiled
 			Tiles = new Dictionary<int, TmxTilesetTile>();
 			foreach (var xTile in xTileset.Elements("tile"))
 			{
-				var tile = new TmxTilesetTile(xTile, Terrains, textureLoader);
+				var tile = new TmxTilesetTile(xTile, Terrains, imageLoader);
 				Tiles[tile.Id] = tile;
 			}
 
@@ -145,7 +145,7 @@ namespace Myra.Graphics2D.Tiled
 			get { return TerrainEdges[3]; }
 		}
 
-		public TmxTilesetTile(XElement xTile, TmxList<TmxTerrain> Terrains, Func<string, Texture2D> textureLoader)
+		public TmxTilesetTile(XElement xTile, TmxList<TmxTerrain> Terrains, Func<string, RawImage> imageLoader)
 		{
 			Id = (int) xTile.Attribute("id");
 
@@ -163,7 +163,7 @@ namespace Myra.Graphics2D.Tiled
 			}
 
 			Probability = (double?) xTile.Attribute("probability") ?? 1.0;
-			Image = new TmxImage(xTile.Element("image"), textureLoader);
+			Image = new TmxImage(xTile.Element("image"), imageLoader);
 
 			ObjectGroups = new TmxList<TmxObjectGroup>();
 			foreach (var e in xTile.Elements("objectgroup"))

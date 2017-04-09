@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
-using Microsoft.Xna.Framework.Graphics;
 using Myra.Assets;
 using Myra.Attributes;
 
@@ -34,12 +33,12 @@ namespace Myra.Graphics2D.Tiled
 		public TmxList<TmxImageLayer> ImageLayers { get; private set; }
 		public PropertyDict Properties { get; private set; }
 
-		public TmxMap(Stream inputStream, Func<string, TmxTileset> tilesetLoader, Func<string, Texture2D> textureLoader)
+		public TmxMap(Stream inputStream, Func<string, TmxTileset> tilesetLoader, Func<string, RawImage> imageLoader)
 		{
-			Load(XDocument.Load(inputStream), tilesetLoader, textureLoader);
+			Load(XDocument.Load(inputStream), tilesetLoader, imageLoader);
 		}
 
-		private void Load(XDocument xDoc, Func<string, TmxTileset> tilesetLoader, Func<string, Texture2D> textureLoader)
+		private void Load(XDocument xDoc, Func<string, TmxTileset> tilesetLoader, Func<string, RawImage> imageLoader)
 		{
 			var xMap = xDoc.Element("map");
 			Version = (string) xMap.Attribute("version");
@@ -113,7 +112,7 @@ namespace Myra.Graphics2D.Tiled
 			foreach (var e in xMap.Elements("tileset"))
 			{
 				var source = (string)e.Attribute("source");
-				var tileset = source != null ? tilesetLoader(source) : new TmxTileset(e, textureLoader);
+				var tileset = source != null ? tilesetLoader(source) : new TmxTileset(e, imageLoader);
 
 				var xFirstGid = e.Attribute("firstgid");
 				if (xFirstGid != null)
@@ -134,7 +133,7 @@ namespace Myra.Graphics2D.Tiled
 
 			ImageLayers = new TmxList<TmxImageLayer>();
 			foreach (var e in xMap.Elements("imagelayer"))
-				ImageLayers.Add(new TmxImageLayer(e, textureLoader));
+				ImageLayers.Add(new TmxImageLayer(e, imageLoader));
 
 			Update();
 		}
