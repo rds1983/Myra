@@ -6,13 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.TextureAtlases;
-using Myra.Graphics2D.Tiles;
+using Myra.Assets;
+using Myra.Attributes;
 
 namespace Myra.Graphics2D.Tiled
 {
+	[AssetLoader(typeof(TmxMapLoader))]
 	public class TmxMap
 	{
 		public string Version { get; private set; }
@@ -135,113 +135,16 @@ namespace Myra.Graphics2D.Tiled
 			ImageLayers = new TmxList<TmxImageLayer>();
 			foreach (var e in xMap.Elements("imagelayer"))
 				ImageLayers.Add(new TmxImageLayer(e, textureLoader));
+
+			Update();
 		}
 
-		public TmxTilesetTile FindTilesetTile(int gid, out TmxTileset tileset)
+		public void Update()
 		{
-			tileset = null;
-
-			TmxTilesetTile result = null;
-			foreach (var ts in Tilesets)
+			foreach (var layer in Layers)
 			{
-				if (ts.Tiles.TryGetValue(gid, out result))
-				{
-					tileset = ts;
-					break;
-				}
+				layer.Update(this);
 			}
-
-			return result;
-		}
-
-		public TileMap CreateTileModel()
-		{
-			if (Orientation != OrientationType.Orthogonal)
-			{
-				throw new Exception("Only orthogonal maps could be rendered");
-			}
-
-			var result = new TileMap();
-			if (Tilesets.Count <= 0)
-			{
-				return result;
-			}
-
-			foreach (var sourceLayer in Layers)
-			{
-				var offsetX = 0;
-				if (sourceLayer.OffsetX.HasValue)
-				{
-					offsetX = -(int)(sourceLayer.OffsetX.Value*TileWidth);
-				}
-
-				var offsetY = 0;
-				if (sourceLayer.OffsetY.HasValue)
-				{
-					offsetY = -(int)(sourceLayer.OffsetY.Value * TileHeight);
-				}
-
-				var layer = new TileLayer(new Point(sourceLayer.Width, sourceLayer.Height), new Point(TileWidth, TileHeight))
-				{
-					Offset = new Point(offsetX, offsetY),
-					Opacity = sourceLayer.Opacity
-				};
-
-				for (var i = 0; i < sourceLayer.Tiles.Count; ++i)
-				{
-					var sourceTile = sourceLayer.Tiles[i];
-					if (sourceTile.Gid <= 0)
-					{
-						continue;
-					}
-
-					var gid = sourceTile.Gid;
-
-					TmxTileset tileset = null;
-					foreach (var ts in Tilesets)
-					{
-						if (gid < ts.FirstGid + ts.TotalTiles)
-						{
-							gid -= ts.FirstGid;
-							tileset = ts;
-							break;
-						}
-					}
-
-					if (tileset == null)
-					{
-						continue;
-					}
-
-					var col = gid % tileset.TilesPerRow;
-					var row = gid / tileset.TilesPerRow;
-					var sourceX = col * tileset.TileWidth;
-					sourceX += col * tileset.Spacing;
-					sourceX += tileset.Margin;
-
-					var sourceY = row * tileset.TileHeight;
-					sourceY += row * tileset.Spacing;
-					sourceY += tileset.Margin;
-
-					var sourceRect = new Rectangle(sourceX, sourceY,
-						tileset.TileWidth - tileset.Margin,
-						tileset.TileHeight - tileset.Margin);
-
-					var tile = new Tile
-					{
-						Region = new TextureRegion2D(tileset.Image.Texture, sourceRect),
-						Size = new Point(tileset.TileWidth, tileset.TileHeight),
-						Offset = new Point(tileset.TileOffset.X, tileset.TileOffset.Y)
-					};
-
-					var tiles = layer.GetTilesAt(sourceTile.X, sourceTile.Y);
-					tiles.Add(tile);
-				}
-
-				result.Layers.Add(layer);
-			}
-
-			return result;
 		}
 	}
 

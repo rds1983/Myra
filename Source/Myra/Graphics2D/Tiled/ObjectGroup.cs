@@ -99,9 +99,7 @@ namespace Myra.Graphics2D.Tiled
 
 			if (xGid != null)
 			{
-				Tile = new TmxLayerTile((uint) xGid,
-					Convert.ToInt32(Math.Round(X)),
-					Convert.ToInt32(Math.Round(X)));
+				Tile = new TmxLayerTile((uint) xGid);
 				ObjectType = TmxObjectType.Tile;
 			}
 			else if (xEllipse != null)

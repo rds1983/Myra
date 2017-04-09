@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using Myra.Assets;
-using Myra.Graphics2D.Tiles;
+using Myra.Graphics2D.Tiled;
 using Myra.Graphics2D.UI;
 
 namespace Myra.Samples
@@ -11,12 +11,12 @@ namespace Myra.Samples
 	{
 		private readonly GraphicsDeviceManager graphics;
 		private readonly AssetManager _assetManager = new AssetManager(new FileAssetResolver("Assets"));
-		private TileMap _tiledMap;
+		private TmxMap _tiledMap;
 		private SpriteBatch _batch;
 		private TextBlock _drawCallsText;
 		private TextBlock _fpsText;
 		private Desktop _host;
-		private readonly SimpleTileRenderer _tileRenderer = new SimpleTileRenderer();
+		private readonly SimpleTiledRenderer _tiledRenderer = new SimpleTiledRenderer();
 		private readonly FramesPerSecondCounter _counter = new FramesPerSecondCounter();
 
 		public TiledSample()
@@ -52,7 +52,7 @@ namespace Myra.Samples
 
 			combo.SelectedIndexChanged += (s, a) =>
 			{
-				_tiledMap = _assetManager.Load<TileMap>("Tiled/" + combo.SelectedItem.Text);
+				_tiledMap = _assetManager.Load<TmxMap>("Tiled/" + combo.SelectedItem.Text);
 			};
 
 			combo.SelectedIndex = 3;
@@ -101,7 +101,7 @@ namespace Myra.Samples
 			device.Clear(Color.Black);
 
 			_batch.Begin();
-			_tileRenderer.Render(_batch, _tiledMap);
+			_tiledRenderer.Render(_batch, _tiledMap);
 			_batch.End();
 
 			_counter.Draw(gameTime);
