@@ -554,8 +554,9 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void Render(SpriteBatch batch)
 		{
-			var bounds = AbsoluteBounds;
+			UpdateLayout();
 
+			var bounds = AbsoluteBounds;
 			if (bounds.Width == 0 || bounds.Height == 0)
 			{
 				return;
@@ -575,8 +576,6 @@ namespace Myra.Graphics2D.UI
 				batch.FlushUI();
 				batch.GraphicsDevice.ScissorRectangle = newScissorRectangle;
 			}
-
-			UpdateLayout();
 
 			// Background
 			var background = GetCurrentBackground();
