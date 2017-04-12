@@ -2,9 +2,9 @@
 Myra is UI Library build on top of [MonoGame](http://www.monogame.net/) and [MonoGame.Extended](https://github.com/craftworkgames/MonoGame.Extended).  
 It has following functionality:
 * **[Asset Management](https://github.com/rds1983/Myra/wiki/Asset-Management).** Myra uses it's own system of the asset management, which is fundamentally different from MonoGame Content Pipeline. The difference is Myra's asset management doesnt have any sort of pipeline, but loads raw assets.
-* **UI Widgets.** Button, CheckBox, ComboBox, Grid, Image, Menu, ProgressBar, ScrollPane, SplitPane(with arbitrary number of splitters), Slider, TextBlock, TextField, SpinButton, Tree and Window. Almost all of it are demonstrated on the following screenshot: ![](/Screenshots/GridSample_14_03_2017.png)
+* **UI Widgets.** Button, CheckBox, ComboBox, Grid, Image, Menu, ProgressBar, ScrollPane, SplitPane(with arbitrary number of splitters), Slider, TextBlock, TextField, SpinButton, Tree and Window. Almost all of it are demonstrated on the following screenshot: ![](/Screenshots/GridSample.png)
 * **UI Skinning.** The awesome default skin had been borrowed from the [VisUI](https://github.com/kotcrab/vis-editor/wiki/VisUI) project. The default skin could be replaced with a custom skin loaded from the JSON.
-* **[UI Editor](https://github.com/rds1983/Myra/wiki/Using-UI-Editor).** [Myra's binary distribution](https://github.com/rds1983/Myra/releases) contains standalone UI Editor application: ![](/Screenshots/UIEditor_14_03_2017.png)
+* **[UI Editor](https://github.com/rds1983/Myra/wiki/Using-UI-Editor).** [Myra's binary distribution](https://github.com/rds1983/Myra/releases) contains standalone UI Editor application: ![](/Screenshots/UIEditor.png)
 * **[Tiled](http://www.mapeditor.org/) Support.** 
 
 ## Quick Start
