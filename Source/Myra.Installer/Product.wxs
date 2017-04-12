@@ -74,7 +74,11 @@
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFilesFolder">
 				<Directory Id="INSTALLFOLDER" Name="Myra SDK">
-					<Directory Id="Assets" Name="Assets"/>
+					<Directory Id="Assets" Name="Assets">
+						<Directory Id="AssetsFonts" Name="Fonts"/>
+						<Directory Id="AssetsTiled" Name="Tiled"/>
+						<Directory Id="AssetsUI" Name="UI"/>
+					</Directory>
 					<Directory Id="DesktopGL" Name="DesktopGL">
 						<Directory Id="DesktopGLx64" Name="x64"/>
 						<Directory Id="DesktopGLx86" Name="x86"/>

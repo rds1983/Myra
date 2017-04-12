@@ -88,14 +88,47 @@
 			</Component>
 
 			<!-- Sample Assets -->
-			<Component Id="awesomeGame.ui" Directory="Assets" Guid="{B9252A98-E68C-4008-91BB-02E8FAD98733}">
-				<File Id="awesomeGame.ui" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\awesomeGame.ui" />
+			<Component Id="mistral.fnt" Directory="AssetsFonts" Guid="{23BE6258-270C-43B2-B5EC-CD29DEEFCF6F}">
+				<File Id="mistral.fnt" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\Fonts\mistral.fnt" />
 			</Component>
-			<Component Id="mistral.fnt" Directory="Assets" Guid="{23BE6258-270C-43B2-B5EC-CD29DEEFCF6F}">
-				<File Id="mistral.fnt" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\mistral.fnt" />
+			<Component Id="mistral_0.png" Directory="AssetsFonts" Guid="{EE941869-E663-48B1-9430-A3F090308CBD}">
+				<File Id="mistral_0.png" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\Fonts\mistral_0.png" />
 			</Component>
-			<Component Id="mistral_0.png" Directory="Assets" Guid="{EE941869-E663-48B1-9430-A3F090308CBD}">
-				<File Id="mistral_0.png" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\mistral_0.png" />
+			<Component Id="buch_outdoor.png" Directory="AssetsTiled" Guid="{16B8CCEF-0321-4B56-8218-F88910581DDF}">
+				<File Id="buch_outdoor.png" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\Tiled\buch-outdoor.png" />
+			</Component>
+			<Component Id="perspective_walls.png" Directory="AssetsTiled" Guid="{2D2E1625-4F9C-482B-97A2-2B1822DC347A}">
+				<File Id="perspective_walls.png" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\Tiled\perspective_walls.png" />
+			</Component>
+			<Component Id="sewer_tileset.png" Directory="AssetsTiled" Guid="{E8E5B94A-30B7-4180-979F-7864450CA39A}">
+				<File Id="sewer_tileset.png" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\Tiled\sewer_tileset.png" />
+			</Component>
+			<Component Id="tmw_desert_spacing.png" Directory="AssetsTiled" Guid="{75C1644D-E9F9-44DA-ADAF-E1A64621A563}">
+				<File Id="tmw_desert_spacing.png" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\Tiled\tmw_desert_spacing.png" />
+			</Component>
+			<Component Id="desert.tmx" Directory="AssetsTiled" Guid="{AFBD137F-3AA8-4CC3-BBA4-8720472BB1C3}">
+				<File Id="desert.tmx" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\Tiled\desert.tmx" />
+			</Component>
+			<Component Id="orthogonal_outside.tmx" Directory="AssetsTiled" Guid="{3F040AAA-AC55-4F48-81B9-1FD370D721A9}">
+				<File Id="orthogonal_outside.tmx" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\Tiled\orthogonal-outside.tmx" />
+			</Component>
+			<Component Id="perspective_walls.tmx" Directory="AssetsTiled" Guid="{912AA440-9A01-4227-8067-19E69D744932}">
+				<File Id="perspective_walls.tmx" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\Tiled\perspective_walls.tmx" />
+			</Component>
+			<Component Id="sewers.tmx" Directory="AssetsTiled" Guid="{554C09B6-E47D-4F03-AB5A-5F8FB9643B25}">
+				<File Id="sewers.tmx" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\Tiled\sewers.tmx" />
+			</Component>
+			<Component Id="desert.tsx" Directory="AssetsTiled" Guid="{EB78E40E-DE56-4A1A-8E25-3C7AAFB0BA2A}">
+				<File Id="desert.tsx" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\Tiled\desert.tsx" />
+			</Component>
+			<Component Id="perspective_walls.tsx" Directory="AssetsTiled" Guid="{B7CC7E7A-64E0-440F-B34E-A17E1A73A3E3}">
+				<File Id="perspective_walls.tsx" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\Tiled\perspective_walls.tsx" />
+			</Component>
+			<Component Id="awesomeGame.ui" Directory="AssetsUI" Guid="{BD20B7C3-B285-46E7-975C-975D66730D6D}">
+				<File Id="awesomeGame.ui" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\UI\awesomeGame.ui" />
+			</Component>
+			<Component Id="notepad.ui" Directory="AssetsUI" Guid="{58BAA4FB-298C-433A-BD12-DCDD62167BE5}">
+				<File Id="notepad.ui" KeyPath="yes" Source="$(var.SolutionDir)\Myra.Samples\Assets\UI\notepad.ui" />
 			</Component>
 
 			<!-- DesktopGL -->

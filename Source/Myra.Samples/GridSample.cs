@@ -35,7 +35,7 @@ namespace Myra.Samples
 			{
 				RowSpacing = 3,
 				ColumnSpacing = 3,
-				DrawLines = true
+//				DrawLines = true
 			};
 
 			grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
