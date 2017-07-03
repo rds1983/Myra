@@ -13,7 +13,7 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
-		public HorizontalSplitPane() : this(DefaultAssets.UIStylesheet.HorizontalSplitPaneStyle)
+		public HorizontalSplitPane() : this(Stylesheet.Current.HorizontalSplitPaneStyle)
 		{
 		}
 	}

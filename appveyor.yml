@@ -1,4 +1,4 @@
-version: 0.4.7.{build}
+version: 0.5.0.{build}
 configuration: Release
 assembly_info:
   patch: true
@@ -11,20 +11,16 @@ build_script:
     git submodule update --init --recursive
 
     cd Source
+    
+    start /wait Myra-Dependencies\MonoGameSetup.exe /S /v/qn
 
     msbuild Myra.sln /p:Configuration=Release /t:rebuild
 
-    msbuild Myra.Installer.sln /p:Configuration=Release /t:rebuild
-
-    set "INSTALLER_PATH=C:\projects\myra\Source\Myra.Installer\bin\Release\Myra.%APPVEYOR_BUILD_VERSION%.msi"
-
-    echo "%INSTALLER_PATH%"
-
-    copy "C:\projects\myra\Source\Myra.Installer\bin\Release\Myra.Installer.msi" "%INSTALLER_PATH%"
-
     nuget pack Myra\Myra.nuspec -Version %APPVEYOR_BUILD_VERSION%
-
+    
     nuget pack Myra.Editor\Myra.Editor.nuspec -Version %APPVEYOR_BUILD_VERSION%
+    
+    nuget pack Myra.Content.Pipeline\Myra.Content.Pipeline.nuspec -Version %APPVEYOR_BUILD_VERSION%
 
     copy_zip_package_files.bat
     
@@ -38,11 +34,11 @@ artifacts:
   - path: Source/Myra.Editor.$(appveyor_build_version).nupkg
     name: Myra.Editor.nupkg
 
+  - path: Source/Myra.Content.Pipeline.$(appveyor_build_version).nupkg
+    name: Myra.Content.Pipeline.nupkg
+
   - path: Source/Myra.$(appveyor_build_version).zip
     name: ZipPackage
-
-  - path: Source/Myra.Installer/bin/Release/Myra.$(appveyor_build_version).msi
-    name: MsiPackage
 deploy:
   - provider: GitHub
     release: $(appveyor_build_version)
@@ -56,4 +52,4 @@ deploy:
   - provider: NuGet
     api_key:
       secure: o02Abc+1Pg/C7FVPnbCA9i4RIakmOUcKjMBBCHDCbEhS69b+N05mV0xBe0ne2/Y4
-    artifact: /.*\.nupkg/
+    artifact: /.*\.nupkg/	

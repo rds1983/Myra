@@ -2,13 +2,10 @@
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Assets;
-using Myra.Attributes;
 using Myra.Graphics2D.StbSharp;
 
 namespace Myra.Graphics2D
 {
-	[AssetLoader(typeof(RawImageLoader))]
 	public class RawImage
 	{
 		private readonly byte[] _data;

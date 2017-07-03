@@ -15,7 +15,7 @@ namespace Myra.Graphics2D.UI
 			VerticalAlignment = VerticalAlignment.Top;
 		}
 
-		public HorizontalSlider() : this(DefaultAssets.UIStylesheet.HorizontalSliderStyle)
+		public HorizontalSlider() : this(Stylesheet.Current.HorizontalSliderStyle)
 		{
 		}
 	}

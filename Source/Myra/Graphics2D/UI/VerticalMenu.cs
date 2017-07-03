@@ -16,7 +16,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public VerticalMenu()
-			: base(DefaultAssets.UIStylesheet.VerticalMenuStyle)
+			: base(Stylesheet.Current.VerticalMenuStyle)
 		{
 		}
 	}

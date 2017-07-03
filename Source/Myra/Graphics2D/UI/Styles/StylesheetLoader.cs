@@ -92,41 +92,46 @@ namespace Myra.Graphics2D.UI.Styles
 
 		private readonly Dictionary<string, Color> _colors = new Dictionary<string, Color>();
 		private readonly JObject _root;
-		private readonly Func<string, BitmapFont> _fontGetter;
-		private readonly TextureAtlas _textureAtlas;
+		private readonly Func<string, BitmapFont> _fontLoader;
+		private readonly Func<string, TextureRegion2D> _textureLoader;
 
 		public StylesheetLoader(JObject root,
-			Func<string, BitmapFont> fontGetter,
-			TextureAtlas textureAtlas)
+			Func<string, TextureRegion2D> textureLoader,
+			Func<string, BitmapFont> fontLoader)
 		{
 			if (root == null)
 			{
 				throw new ArgumentNullException("root");
 			}
 
-			if (textureAtlas == null)
+			if (textureLoader == null)
 			{
-				throw new ArgumentNullException("textureAtlas");
+				throw new ArgumentNullException("textureLoader");
+			}
+
+			if (fontLoader == null)
+			{
+				throw new ArgumentNullException("fontLoader");
 			}
 
 			_root = root;
-			_fontGetter = fontGetter;
-			_textureAtlas = textureAtlas;
+			_fontLoader = fontLoader;
+			_textureLoader = textureLoader;
 		}
 
 		private TextureRegion2D GetTextureRegion2D(string id)
 		{
-			return _textureAtlas.GetRegion(id);
+			return _textureLoader(id);
 		}
 
 		private BitmapFont GetFont(string id)
 		{
-			if (_fontGetter == null || string.IsNullOrEmpty(id))
+			if (_fontLoader == null || string.IsNullOrEmpty(id))
 			{
 				return null;
 			}
 
-			return _fontGetter(id);
+			return _fontLoader(id);
 		}
 
 		private void ParseColors(JObject colors)

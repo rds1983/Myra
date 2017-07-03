@@ -16,9 +16,9 @@ namespace Myra.Graphics2D.UI
 
 		private Point? _startPos;
 		private readonly Grid _titleGrid;
-		private readonly Grid _contentGrid;
 		private readonly TextBlock _titleLabel;
 		private readonly ImageButton _closeButton;
+		private Grid _contentGrid;
 
 		public string Title
 		{
@@ -44,9 +44,52 @@ namespace Myra.Graphics2D.UI
 			get { return _titleGrid; }
 		}
 
+		[Obsolete("Obsolete. Use Content property.")]
 		public Grid ContentGrid
 		{
-			get { return _contentGrid; }
+			get
+			{
+				if (_contentGrid == null)
+				{
+					_contentGrid = new Grid();
+					Content = _contentGrid;
+				}
+
+				return _contentGrid;
+			}
+		}
+
+		public Widget Content
+		{
+			get
+			{
+				if (Widgets.Count >= 2)
+				{
+					return Widgets[1];
+				}
+
+				return null;
+			}
+
+			set
+			{
+				if (value == Content)
+				{
+					return;
+				}
+
+				// Remove existing
+				if (Content != null)
+				{
+					Widgets.Remove(Content);
+				}
+
+				if (value != null)
+				{
+					value.GridPositionY = 1;
+					Widgets.Add(value);
+				}
+			}
 		}
 
 		public int ModalResult { get; set; }
@@ -89,17 +132,13 @@ namespace Myra.Graphics2D.UI
 
 			Widgets.Add(_titleGrid);
 
-			_contentGrid = new Grid {GridPositionY = 1};
-
-			Widgets.Add(_contentGrid);
-
 			if (style != null)
 			{
 				ApplyWindowStyle(style);
 			}
 		}
 
-		public Window() : this(DefaultAssets.UIStylesheet.WindowStyle)
+		public Window() : this(Stylesheet.Current.WindowStyle)
 		{
 		}
 
@@ -121,7 +160,7 @@ namespace Myra.Graphics2D.UI
 			{
 				Desktop.MouseMoved += DesktopOnMouseMoved;
 
-				var size = Measure(Desktop.Bounds.Size());
+				var size = Measure(Desktop.Bounds.Size);
 
 				XHint = (Desktop.Bounds.Width - size.X)/2;
 				YHint = (Desktop.Bounds.Height - size.Y)/2;

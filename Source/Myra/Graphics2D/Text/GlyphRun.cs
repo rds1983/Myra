@@ -102,9 +102,11 @@ namespace Myra.Graphics2D.Text
 			}
 
 			var glyphs = _bitmapFont.GetGlyphs(_text, Vector2.Zero);
-			for (var i = 0; i < glyphs.Length; ++i)
+			var i = 0;
+			foreach(var glyph in glyphs)
 			{
-				_glyphRenders[i].Glyph = glyphs[i];
+				_glyphRenders[i].Glyph = glyph;
+				++i;
 			}
 
 			var sz = _bitmapFont.MeasureString(_text);

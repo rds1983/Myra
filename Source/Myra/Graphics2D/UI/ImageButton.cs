@@ -112,7 +112,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ImageButton() : this(DefaultAssets.UIStylesheet.ImageButtonStyle)
+		public ImageButton() : this(Stylesheet.Current.ImageButtonStyle)
 		{
 		}
 

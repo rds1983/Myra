@@ -152,7 +152,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public Button() : this(DefaultAssets.UIStylesheet.ButtonStyle)
+		public Button() : this(Stylesheet.Current.ButtonStyle)
 		{
 		}
 

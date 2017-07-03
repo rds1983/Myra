@@ -14,7 +14,7 @@
 		<tags>gamedev monogame ui</tags>
 		<dependencies>
 			<dependency id="Newtonsoft.Json" version="9.0" />
-			<dependency id="MonoGame.Extended" version="0.6.377" />
+			<dependency id="MonoGame.Extended" version="0.6.568" />
 		</dependencies>
 	</metadata>
 	<files>

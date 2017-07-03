@@ -310,7 +310,7 @@ namespace Myra.Graphics2D.UI
 			InvalidateMeasure();
 		}
 
-		public ComboBox() : this(DefaultAssets.UIStylesheet.ComboBoxStyle)
+		public ComboBox() : this(Stylesheet.Current.ComboBoxStyle)
 		{
 		}
 

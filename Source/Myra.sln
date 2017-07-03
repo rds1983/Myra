@@ -7,25 +7,34 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra", "Myra\Myra.csproj", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E7C2030A-AF9E-41B2-BD5C-39D8F70A09A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples", "Myra.Samples\Myra.Samples.csproj", "{F897E015-14EA-4FA6-B127-263E73827996}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.DesktopGLLauncher", "Myra.Samples.DesktopGLLauncher\Myra.Samples.DesktopGLLauncher.csproj", "{27E7CA89-5B70-4554-9626-0A0A80A89F7F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.WindowsDXLauncher", "Myra.Samples.WindowsDXLauncher\Myra.Samples.WindowsDXLauncher.csproj", "{3A1E3F11-15BA-4E98-8706-BAE0A676A514}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Editor", "Myra.Editor\Myra.Editor.csproj", "{F18BD428-25F7-4183-BEB7-7C96F21AE2D1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.UIEditor", "Myra.UIEditor\Myra.UIEditor.csproj", "{3B7E30AA-A659-4A13-9223-B9E0442E5B55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.UIEditor.Plugin.YellowMenuButtons", "Myra.UIEditor.Plugin.YellowMenuButtons\Myra.UIEditor.Plugin.YellowMenuButtons.csproj", "{74E297C2-1081-4C9A-9311-EAAF4746A413}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Content.Pipeline", "Myra.Content.Pipeline\Myra.Content.Pipeline.csproj", "{3F0389B0-4359-4D23-B62B-6E7BDF1004DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.UIEditor.Plugin.LibGDX", "Myra.UIEditor.Plugin.LibGDX\Myra.UIEditor.Plugin.LibGDX.csproj", "{DB171BE4-D9C3-45F1-8108-84992EF8391F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{EAB0AA24-7185-4897-A866-AE87AF3F2E0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Graphics3D", "Myra.Graphics3D\Myra.Graphics3D.csproj", "{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.CustomUIStylesheetSample", "Samples\Myra.Samples.CustomUIStylesheetSample\Myra.Samples.CustomUIStylesheetSample.csproj", "{8385D5C0-C8D8-4242-940A-2BD071EDC5B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.Graphics3D", "Myra.Samples.Graphics3D\Myra.Samples.Graphics3D.csproj", "{4DF783E4-5CA5-425A-A5D3-F65CCE432F22}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.FormattedTextSample", "Samples\Myra.Samples.FormattedTextSample\Myra.Samples.FormattedTextSample.csproj", "{0E2EBFD7-4398-48CE-AC1A-9DF116CE2587}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.WinForms", "Myra.Samples.WinForms\Myra.Samples.WinForms.csproj", "{B8FD2926-1544-4870-A5D4-3B5F5FFB370E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.GridSample", "Samples\Myra.Samples.GridSample\Myra.Samples.GridSample.csproj", "{E96FADDC-29FA-49F7-920D-4AD9F5FBD705}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.NotepadSample", "Samples\Myra.Samples.NotepadSample\Myra.Samples.NotepadSample.csproj", "{AD459A6F-2075-4728-A57B-9FC08DFF2062}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.SplitPaneSample", "Samples\Myra.Samples.SplitPaneSample\Myra.Samples.SplitPaneSample.csproj", "{15129613-1D63-4709-8B71-70E73BAB9C0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.TextBlocksSample", "Samples\Myra.Samples.TextBlocksSample\Myra.Samples.TextBlocksSample.csproj", "{EE49A6D2-4ADB-4FB4-9CCE-78F42EAAEFB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.UIEditor.Plugin.LibGDX", "Samples\Myra.UIEditor.Plugin.LibGDX\Myra.UIEditor.Plugin.LibGDX.csproj", "{DB171BE4-D9C3-45F1-8108-84992EF8391F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8385D5C0-C8D8-4242-940A-2BD071EDC5B1} = {8385D5C0-C8D8-4242-940A-2BD071EDC5B1}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.UIEditor.Plugin.YellowMenuButtons", "Samples\Myra.UIEditor.Plugin.YellowMenuButtons\Myra.UIEditor.Plugin.YellowMenuButtons.csproj", "{74E297C2-1081-4C9A-9311-EAAF4746A413}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.CustomUIStylesheetWindowsDX", "Samples\Myra.Samples.CustomUIStylesheetWindowsDX\Myra.Samples.CustomUIStylesheetWindowsDX.csproj", "{79441052-8F88-4578-8A94-0CC87B0EFE5C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,18 +46,6 @@ Global
 		{4DCBB001-9C79-4F6B-996D-D654062D93E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DCBB001-9C79-4F6B-996D-D654062D93E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DCBB001-9C79-4F6B-996D-D654062D93E0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F897E015-14EA-4FA6-B127-263E73827996}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F897E015-14EA-4FA6-B127-263E73827996}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F897E015-14EA-4FA6-B127-263E73827996}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F897E015-14EA-4FA6-B127-263E73827996}.Release|Any CPU.Build.0 = Release|Any CPU
-		{27E7CA89-5B70-4554-9626-0A0A80A89F7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{27E7CA89-5B70-4554-9626-0A0A80A89F7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{27E7CA89-5B70-4554-9626-0A0A80A89F7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{27E7CA89-5B70-4554-9626-0A0A80A89F7F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3A1E3F11-15BA-4E98-8706-BAE0A676A514}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A1E3F11-15BA-4E98-8706-BAE0A676A514}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3A1E3F11-15BA-4E98-8706-BAE0A676A514}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3A1E3F11-15BA-4E98-8706-BAE0A676A514}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F18BD428-25F7-4183-BEB7-7C96F21AE2D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F18BD428-25F7-4183-BEB7-7C96F21AE2D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F18BD428-25F7-4183-BEB7-7C96F21AE2D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -57,28 +54,62 @@ Global
 		{3B7E30AA-A659-4A13-9223-B9E0442E5B55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B7E30AA-A659-4A13-9223-B9E0442E5B55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B7E30AA-A659-4A13-9223-B9E0442E5B55}.Release|Any CPU.Build.0 = Release|Any CPU
-		{74E297C2-1081-4C9A-9311-EAAF4746A413}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{74E297C2-1081-4C9A-9311-EAAF4746A413}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{74E297C2-1081-4C9A-9311-EAAF4746A413}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{74E297C2-1081-4C9A-9311-EAAF4746A413}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F0389B0-4359-4D23-B62B-6E7BDF1004DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F0389B0-4359-4D23-B62B-6E7BDF1004DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F0389B0-4359-4D23-B62B-6E7BDF1004DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F0389B0-4359-4D23-B62B-6E7BDF1004DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8385D5C0-C8D8-4242-940A-2BD071EDC5B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8385D5C0-C8D8-4242-940A-2BD071EDC5B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8385D5C0-C8D8-4242-940A-2BD071EDC5B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8385D5C0-C8D8-4242-940A-2BD071EDC5B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E2EBFD7-4398-48CE-AC1A-9DF116CE2587}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E2EBFD7-4398-48CE-AC1A-9DF116CE2587}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E2EBFD7-4398-48CE-AC1A-9DF116CE2587}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E2EBFD7-4398-48CE-AC1A-9DF116CE2587}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E96FADDC-29FA-49F7-920D-4AD9F5FBD705}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E96FADDC-29FA-49F7-920D-4AD9F5FBD705}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E96FADDC-29FA-49F7-920D-4AD9F5FBD705}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E96FADDC-29FA-49F7-920D-4AD9F5FBD705}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD459A6F-2075-4728-A57B-9FC08DFF2062}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD459A6F-2075-4728-A57B-9FC08DFF2062}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD459A6F-2075-4728-A57B-9FC08DFF2062}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD459A6F-2075-4728-A57B-9FC08DFF2062}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15129613-1D63-4709-8B71-70E73BAB9C0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15129613-1D63-4709-8B71-70E73BAB9C0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15129613-1D63-4709-8B71-70E73BAB9C0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15129613-1D63-4709-8B71-70E73BAB9C0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE49A6D2-4ADB-4FB4-9CCE-78F42EAAEFB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE49A6D2-4ADB-4FB4-9CCE-78F42EAAEFB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE49A6D2-4ADB-4FB4-9CCE-78F42EAAEFB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE49A6D2-4ADB-4FB4-9CCE-78F42EAAEFB4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DB171BE4-D9C3-45F1-8108-84992EF8391F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DB171BE4-D9C3-45F1-8108-84992EF8391F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB171BE4-D9C3-45F1-8108-84992EF8391F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB171BE4-D9C3-45F1-8108-84992EF8391F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F2EFEF7D-80F3-4FE5-97BE-9BF702DCB5E2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4DF783E4-5CA5-425A-A5D3-F65CCE432F22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4DF783E4-5CA5-425A-A5D3-F65CCE432F22}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4DF783E4-5CA5-425A-A5D3-F65CCE432F22}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4DF783E4-5CA5-425A-A5D3-F65CCE432F22}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B8FD2926-1544-4870-A5D4-3B5F5FFB370E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B8FD2926-1544-4870-A5D4-3B5F5FFB370E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B8FD2926-1544-4870-A5D4-3B5F5FFB370E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B8FD2926-1544-4870-A5D4-3B5F5FFB370E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74E297C2-1081-4C9A-9311-EAAF4746A413}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74E297C2-1081-4C9A-9311-EAAF4746A413}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74E297C2-1081-4C9A-9311-EAAF4746A413}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74E297C2-1081-4C9A-9311-EAAF4746A413}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79441052-8F88-4578-8A94-0CC87B0EFE5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79441052-8F88-4578-8A94-0CC87B0EFE5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79441052-8F88-4578-8A94-0CC87B0EFE5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79441052-8F88-4578-8A94-0CC87B0EFE5C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8385D5C0-C8D8-4242-940A-2BD071EDC5B1} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{0E2EBFD7-4398-48CE-AC1A-9DF116CE2587} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{E96FADDC-29FA-49F7-920D-4AD9F5FBD705} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{AD459A6F-2075-4728-A57B-9FC08DFF2062} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{15129613-1D63-4709-8B71-70E73BAB9C0B} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{EE49A6D2-4ADB-4FB4-9CCE-78F42EAAEFB4} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{DB171BE4-D9C3-45F1-8108-84992EF8391F} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{74E297C2-1081-4C9A-9311-EAAF4746A413} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{79441052-8F88-4578-8A94-0CC87B0EFE5C} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Myra.UIEditor\Myra.UIEditor.csproj
 	EndGlobalSection
 EndGlobal

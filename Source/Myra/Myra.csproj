@@ -51,48 +51,29 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\AssetLoaderContext.cs" />
-    <Compile Include="Assets\AssetManager.cs" />
-    <Compile Include="Assets\BitmapFontLoader.cs" />
-    <Compile Include="Assets\ContentLoader.cs" />
-    <Compile Include="Assets\RawImageLoader.cs" />
-    <Compile Include="Assets\TextureRegion2DLoader.cs" />
-    <Compile Include="Assets\IAssetLoader.cs" />
-    <Compile Include="Assets\IAssetResolver.cs" />
-    <Compile Include="Assets\ResourceAssetResolver.cs" />
-    <Compile Include="Assets\TextureAtlasLoader.cs" />
-    <Compile Include="Assets\Texture2DLoader.cs" />
-    <Compile Include="Assets\FileAssetResolver.cs" />
-    <Compile Include="Assets\TmxMapLoader.cs" />
-    <Compile Include="Assets\TmxTilesetLoader.cs" />
-    <Compile Include="Assets\UILoader.cs" />
-    <Compile Include="Assets\UIStylesheetLoader.cs" />
-    <Compile Include="Attributes\AssetLoaderAttribute.cs" />
+    <Compile Include="Attributes\EditCategoryAttribute.cs" />
+    <Compile Include="Attributes\HiddenInEditorAttribute.cs" />
+    <Compile Include="Attributes\IItemsProvider.cs" />
+    <Compile Include="Attributes\SelectionAttribute.cs" />
+    <Compile Include="Content\BitmapFonts\BitmapFontReader.cs" />
+    <Compile Include="Content\Stylesheets\StylesheetReader.cs" />
+    <Compile Include="Content\TextureAtlases\TextureAtlasContent.cs" />
+    <Compile Include="Content\TextureAtlases\TextureAtlasContentLoader.cs" />
+    <Compile Include="Content\TextureAtlases\TextureAtlasReader.cs" />
+    <Compile Include="Content\TextureAtlases\TextureAtlasRegionContent.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\BitmapFont.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\BitmapFontLoader.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\Character.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\Kerning.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\Padding.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\Page.cs" />
-    <Compile Include="Attributes\EditCategoryAttribute.cs" />
-    <Compile Include="Attributes\HiddenInEditorAttribute.cs" />
-    <Compile Include="Attributes\IItemsProvider.cs" />
-    <Compile Include="Attributes\SelectionAttribute.cs" />
     <Compile Include="Graphics2D\RawImage.cs" />
     <Compile Include="Graphics2D\StbSharp\ImageReader.cs" />
     <Compile Include="Graphics2D\StbSharp\Operations.cs" />
     <Compile Include="Graphics2D\StbSharp\PinnedArray.cs" />
     <Compile Include="Graphics2D\StbSharp\Stb.Image.cs" />
     <Compile Include="Graphics2D\StbSharp\Stb.Image.Generated.cs" />
-    <Compile Include="Graphics2D\TextureAtlasExtensions.cs" />
-    <Compile Include="Graphics2D\Text\BitmapFontExtensions.cs" />
-    <Compile Include="Graphics2D\Tiled\ImageLayer.cs" />
-    <Compile Include="Graphics2D\Tiled\Layer.cs" />
-    <Compile Include="Graphics2D\Tiled\Map.cs" />
-    <Compile Include="Graphics2D\Tiled\ObjectGroup.cs" />
-    <Compile Include="Graphics2D\Tiled\TiledCore.cs" />
-    <Compile Include="Graphics2D\Tiled\Tileset.cs" />
-    <Compile Include="Graphics2D\Tiled\SimpleTiledRenderer.cs" />
+    <Compile Include="Graphics2D\Text\BitmapFontHelper.cs" />
     <Compile Include="Graphics2D\UI\HorizontalProgressBar.cs" />
     <Compile Include="Graphics2D\UI\GridBased.cs" />
     <Compile Include="Graphics2D\UI\HorizontalSlider.cs" />
@@ -154,6 +135,7 @@
     <Compile Include="Utility\GraphicsExtension.cs" />
     <Compile Include="Utility\Mathematics.cs" />
     <Compile Include="Utility\Reflection.cs" />
+    <Compile Include="Utility\ResourceAssetResolver.cs" />
     <Compile Include="Utility\Serialization.cs" />
     <Compile Include="Graphics2D\UI\SingleItemContainer.cs" />
     <Compile Include="Graphics2D\UI\Styles\MenuItemStyle.cs" />
@@ -177,15 +159,12 @@
     <Compile Include="MyraEnvironment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\GenericEventArgs.cs" />
-    <Compile Include="Utility\TextureAtlasExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\default_font.fnt" />
+    <EmbeddedResource Include="Resources\default_font_small.fnt" />
     <EmbeddedResource Include="Resources\default_stylesheet.json" />
     <EmbeddedResource Include="Resources\default_uiskin.atlas" />
-    <EmbeddedResource Include="Resources\default_font_small.fnt" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\default_uiskin.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

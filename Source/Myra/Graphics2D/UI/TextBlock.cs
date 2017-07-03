@@ -79,7 +79,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public TextBlock() : this(DefaultAssets.UIStylesheet.TextBlockStyle)
+		public TextBlock() : this(Stylesheet.Current.TextBlockStyle)
 		{
 		}
 

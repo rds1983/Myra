@@ -61,7 +61,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public Tree() : this(DefaultAssets.UIStylesheet.TreeStyle)
+		public Tree() : this(Stylesheet.Current.TreeStyle)
 		{
 		}
 

@@ -1,10 +1,12 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.TextureAtlases;
-using Myra.Assets;
+using Myra.Content.TextureAtlases;
+using Myra.Graphics2D;
+using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
+using Myra.Utility;
 
 namespace Myra
 {
@@ -15,13 +17,15 @@ namespace Myra
 		private const string DefaultStylesheetName = "default_stylesheet.json";
 		private const string DefaultSpritesheetName = "default_uiskin.atlas";
 
-		private static readonly AssetManager _defaultAssetManager =
-			new AssetManager(new ResourceAssetResolver(typeof (DefaultAssets).GetTypeInfo().Assembly, "Myra.Resources."));
+		private static readonly ResourceAssetResolver _assetResolver = new ResourceAssetResolver(
+			typeof(DefaultAssets).GetTypeInfo().Assembly,
+			"Myra.Resources.");
 
 		private static BitmapFont _font;
 		private static BitmapFont _fontSmall;
 		private static TextureAtlas _uiSpritesheet;
 		private static Stylesheet _uiStylesheet;
+		private static Texture2D _uiBitmap;
 		private static RasterizerState _uiRasterizerState;
 
 		public static BitmapFont Font
@@ -33,7 +37,9 @@ namespace Myra
 					return _font;
 				}
 
-				_font = _defaultAssetManager.Load<BitmapFont>(DefaultFontName);
+				_font = BitmapFontHelper.LoadFromFnt(DefaultFontName,
+					_assetResolver.ReadAsString(DefaultFontName),
+					s => UISpritesheet.GetRegion("default"));
 
 				return _font;
 			}
@@ -48,7 +54,9 @@ namespace Myra
 					return _fontSmall;
 				}
 
-				_fontSmall = _defaultAssetManager.Load<BitmapFont>(DefaultSmallFontName);
+				_fontSmall = BitmapFontHelper.LoadFromFnt(DefaultSmallFontName,
+					_assetResolver.ReadAsString(DefaultSmallFontName),
+					s => UISpritesheet.GetRegion("font-small"));
 
 				return _fontSmall;
 			}
@@ -60,8 +68,11 @@ namespace Myra
 			{
 				if (_uiSpritesheet != null) return _uiSpritesheet;
 
-				_uiSpritesheet = _defaultAssetManager.Load<TextureAtlas>(DefaultSpritesheetName);
+				var content =
+					TextureAtlasContentLoader.Load(_assetResolver.ReadAsString(DefaultSpritesheetName));
 
+				_uiSpritesheet = content.Create(UiBitmap);
+				
 				return _uiSpritesheet;
 			}
 		}
@@ -75,18 +86,28 @@ namespace Myra
 					return _uiStylesheet;
 				}
 
-				_uiStylesheet = _defaultAssetManager.Load<Stylesheet>(DefaultStylesheetName);
+				_uiStylesheet = Stylesheet.CreateFromSource(_assetResolver.ReadAsString(DefaultStylesheetName),
+					s => string.IsNullOrEmpty(s) ? null : UISpritesheet.GetRegion(s),
+					f => f == "default-font" ? Font : FontSmall);
 
 				return _uiStylesheet;
 			}
-			set
+		}
+
+		public static Texture2D UiBitmap
+		{
+			get
 			{
-				if (value == null)
+				if (_uiBitmap != null)
 				{
-					throw new ArgumentNullException("value");
+					return _uiBitmap;
 				}
 
-				_uiStylesheet = value;
+				var rawImage = RawImage.FromStream(_assetResolver.Open("default_uiskin.png"));
+				rawImage.Process(true);
+				_uiBitmap = rawImage.CreateTexture2D();
+
+				return _uiBitmap;
 			}
 		}
 
@@ -108,12 +129,18 @@ namespace Myra
 		}
 
 		internal static void Dispose()
-		{
-			_defaultAssetManager.ClearCache();
+		{	
 			_font = null;
 			_fontSmall = null;
 			_uiSpritesheet = null;
 			_uiStylesheet = null;
+			Stylesheet.Current = null;
+		
+			if (_uiBitmap != null)
+			{
+				_uiBitmap.Dispose();
+				_uiBitmap = null;
+			}		
 
 			if (_uiRasterizerState != null)
 			{

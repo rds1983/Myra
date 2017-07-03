@@ -910,7 +910,7 @@ namespace Myra.UIEditor
 				return;
 			}
 
-			var data = Serialization.Save(_project);
+		    var data = _project.Save();
 			File.WriteAllText(filePath, data);
 
 			FilePath = filePath;
@@ -922,7 +922,7 @@ namespace Myra.UIEditor
 			try
 			{
 				var data = File.ReadAllText(filePath);
-				var project = Serialization.LoadFromData(data);
+				var project = Project.LoadFromData(data);
 				Project = project;
 				FilePath = filePath;
 				IsDirty = false;

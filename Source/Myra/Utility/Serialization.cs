@@ -1,34 +1,9 @@
-﻿using Myra.Graphics2D.UI;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 
 namespace Myra.Utility
 {
 	public static class Serialization
 	{
-		public static string Save(Project widget)
-		{
-			var result = JsonConvert.SerializeObject(widget, Formatting.Indented,
-				new JsonSerializerSettings
-				{
-					PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-					TypeNameHandling = TypeNameHandling.Objects
-				});
-
-			return result;
-		}
-
-
-		public static Project LoadFromData(string data)
-		{
-			var result = (Project)JsonConvert.DeserializeObject(data, new JsonSerializerSettings
-			{
-				TypeNameHandling = TypeNameHandling.Objects
-			});
-
-			return result;
-		}
-
 		public static bool GetStyle(this JObject styles, string name, out string result)
 		{
 			result = null;

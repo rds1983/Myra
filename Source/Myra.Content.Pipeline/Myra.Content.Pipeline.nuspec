@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+	<metadata>
+		<id>Myra.Content.Pipeline</id>
+		<version>$version$</version>
+		<title>Myra.Content.Pipeline</title>
+		<authors>MyraTeam</authors>
+		<owners>MyraTeam</owners>
+		<licenseUrl>https://en.wikipedia.org/wiki/MIT_License</licenseUrl>
+		<projectUrl>https://github.com/rds1983/Myra</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>Myra.Content.Pipeline</description>
+		<copyright>Copyright 2017</copyright>
+		<tags>gamedev monogame</tags>
+	</metadata>
+	<files>
+		<file src="bin\Release\Myra.Content.Pipeline.dll" target="lib\net45\Myra.Content.Pipeline.dll"/>
+	</files>
+</package>

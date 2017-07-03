@@ -12,10 +12,12 @@
 				Title = title
 			};
 
-			w.ContentGrid.RowsProportions.Add(new Proportion());
-			w.ContentGrid.RowsProportions.Add(new Proportion());
+			var contentGrid = new Grid();
 
-			w.ContentGrid.Widgets.Add(content);
+			contentGrid.RowsProportions.Add(new Proportion());
+			contentGrid.RowsProportions.Add(new Proportion());
+
+			contentGrid.Widgets.Add(content);
 
 			var buttonsGrid = new Grid
 			{
@@ -54,7 +56,9 @@
 
 			buttonsGrid.Widgets.Add(cancelButton);
 
-			w.ContentGrid.Widgets.Add(buttonsGrid);
+			contentGrid.Widgets.Add(buttonsGrid);
+
+			w.Content = contentGrid;
 
 			return w;
 		}

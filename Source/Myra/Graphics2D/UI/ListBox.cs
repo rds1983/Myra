@@ -103,7 +103,7 @@ namespace Myra.Graphics2D.UI
 
 		public ListBox()
 			: this(
-				DefaultAssets.UIStylesheet.ListBoxStyle)
+				Stylesheet.Current.ListBoxStyle)
 		{
 		}
 

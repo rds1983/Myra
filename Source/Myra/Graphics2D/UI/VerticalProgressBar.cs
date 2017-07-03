@@ -17,7 +17,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public VerticalProgressBar()
-			: this(DefaultAssets.UIStylesheet.VerticalProgressBarStyle)
+			: this(Stylesheet.Current.VerticalProgressBarStyle)
 		{
 		}
 	}

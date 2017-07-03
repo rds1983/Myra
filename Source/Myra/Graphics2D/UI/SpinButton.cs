@@ -125,7 +125,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public SpinButton()
-			: this(DefaultAssets.UIStylesheet.SpinButtonStyle)
+			: this(Stylesheet.Current.SpinButtonStyle)
 		{
 		}
 

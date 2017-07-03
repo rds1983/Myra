@@ -1,16 +1,29 @@
 ﻿using System;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.TextureAtlases;
-using Myra.Assets;
-using Myra.Attributes;
-using Myra.Graphics2D.Text;
 using Newtonsoft.Json.Linq;
 
 namespace Myra.Graphics2D.UI.Styles
 {
-	[AssetLoader(typeof(UIStylesheetLoader))]
 	public class Stylesheet
 	{
+		private static Stylesheet _current;
+		
+		public static Stylesheet Current
+		{
+			get
+			{
+				if (_current == null)
+				{
+					_current = DefaultAssets.UIStylesheet;
+				}
+
+				return _current;
+			}
+
+			set { _current = value; }
+		}
+
 		public TextBlockStyle TextBlockStyle { get; private set; }
 		public TextFieldStyle TextFieldStyle { get; private set; }
 		public ButtonStyle ButtonStyle { get; private set; }
@@ -30,7 +43,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public MenuStyle HorizontalMenuStyle { get; private set; }
 		public MenuStyle VerticalMenuStyle { get; private set; }
 		public WindowStyle WindowStyle { get; private set; }
-
+		
 		public Stylesheet()
 		{
 			TextBlockStyle = new TextBlockStyle();
@@ -54,12 +67,15 @@ namespace Myra.Graphics2D.UI.Styles
 			WindowStyle = new WindowStyle();
 		}
 
-		public static Stylesheet CreateFromSource(string s, Func<string, BitmapFont> fontGetter, TextureAtlas spriteSheet)
+		public static Stylesheet CreateFromSource(string s,
+			Func<string, TextureRegion2D> textureGetter,
+			Func<string, BitmapFont> fontGetter)
 		{
 			var root = JObject.Parse(s);
 
-			var loader = new StylesheetLoader(root, fontGetter, spriteSheet);
+			var loader = new StylesheetLoader(root, textureGetter, fontGetter);
 			return loader.Load();
 		}
+		
 	}
 }

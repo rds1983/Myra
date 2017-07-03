@@ -17,7 +17,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public VerticalSlider()
-			: this(DefaultAssets.UIStylesheet.VerticalSliderStyle)
+			: this(Stylesheet.Current.VerticalSliderStyle)
 		{
 		}
 	}

@@ -211,7 +211,7 @@ namespace Myra.Editor.UI
 			}
 		}
 
-		public PropertyGrid(string category) : this(DefaultAssets.UIStylesheet.TreeStyle, category)
+		public PropertyGrid(string category) : this(Stylesheet.Current.TreeStyle, category)
 		{
 		}
 

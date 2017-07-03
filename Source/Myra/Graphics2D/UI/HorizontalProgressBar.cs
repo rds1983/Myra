@@ -16,7 +16,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public HorizontalProgressBar()
-			: this(DefaultAssets.UIStylesheet.HorizontalProgressBarStyle)
+			: this(Stylesheet.Current.HorizontalProgressBarStyle)
 		{
 		}
 	}
