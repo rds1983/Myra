@@ -514,7 +514,7 @@ namespace Myra.Graphics2D.Text
 
 		public GlyphRender GetGlyphRenderByIndex(int charIndex)
 		{
-			if (charIndex >= Text.Length)
+			if (Text != null && charIndex >= Text.Length)
 			{
 				charIndex = Text.Length - 1;
 			}

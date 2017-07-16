@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.Styles;
@@ -11,8 +10,7 @@ namespace Myra.Samples.CustomUIStylesheetSample
     /// </summary>
     public class CustomUIStylesheetGame : Game
     {
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+        private readonly GraphicsDeviceManager _graphics;
         private Stylesheet _stylesheet;
         private Desktop _host;
         private Window _window;
@@ -48,9 +46,6 @@ namespace Myra.Samples.CustomUIStylesheetSample
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-
             // TODO: use this.Content to load your game content here
             MyraEnvironment.Game = this;
 
@@ -65,7 +60,7 @@ namespace Myra.Samples.CustomUIStylesheetSample
             {
                 RowSpacing = 3,
                 ColumnSpacing = 3,
-//				DrawLines = true
+//    			DrawLines = true
             };
 
             grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));

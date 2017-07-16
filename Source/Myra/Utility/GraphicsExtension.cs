@@ -7,7 +7,13 @@ namespace Myra.Utility
 {
 	public static class GraphicsExtension
 	{
-		private static readonly Dictionary<string, Color> _colors = new Dictionary<string, Color>();
+		private class ColorInfo
+		{
+			public Color Color { get; set; }
+			public string Name { get; set; }
+		}
+
+		private static readonly Dictionary<string, ColorInfo> _colors = new Dictionary<string, ColorInfo>();
 
 		static GraphicsExtension()
 		{
@@ -24,7 +30,11 @@ namespace Myra.Utility
 				}
 
 				var value = (Color) c.GetValue(null, null);
-				_colors[c.Name.ToLower()] = value;
+				_colors[c.Name.ToLower()] = new ColorInfo
+				{
+					Color = value,
+					Name = c.Name
+				};
 			}
 		}
 
@@ -35,6 +45,19 @@ namespace Myra.Utility
 				c.G.ToString("X2"),
 				c.B.ToString("X2"),
 				c.A.ToString("X2"));
+		}
+
+		public static string GetColorName(this Color color)
+		{
+			foreach (var c in _colors)
+			{
+				if (c.Value.Color == color)
+				{
+					return c.Value.Name;
+				}
+			}
+
+			return null;
 		}
 
 		public static Color? FromName(this string name)
@@ -63,10 +86,10 @@ namespace Myra.Utility
 			}
 			else
 			{
-				Color result;
+				ColorInfo result;
 				if (_colors.TryGetValue(name.ToLower(), out result))
 				{
-					return result;
+					return result.Color;
 				}
 			}
 

@@ -3,5 +3,6 @@
 	public interface IUIEditorPlugin
 	{
 		void OnLoad();
+		void FillCustomWidgetTypes(WidgetTypesSet widgetTypes);
 	}
 }

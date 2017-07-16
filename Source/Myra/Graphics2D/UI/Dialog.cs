@@ -2,22 +2,50 @@
 {
 	public class Dialog: Window
 	{
+		private readonly Grid _dialogContent;
+
 		public Button ButtonOk { get; set; }
 		public Button ButtonCancel { get; set; }
 
-		public static Dialog CreateMessageBox(string title, Widget content)
+		public override Widget Content
 		{
-			var w = new Dialog
+			get
 			{
-				Title = title
-			};
+				if (_dialogContent.Widgets.Count >= 2)
+				{
+					return _dialogContent.Widgets[1];
+				}
 
-			var contentGrid = new Grid();
+				return null;
+			}
 
-			contentGrid.RowsProportions.Add(new Proportion());
-			contentGrid.RowsProportions.Add(new Proportion());
+			set
+			{
+				if (value == Content)
+				{
+					return;
+				}
 
-			contentGrid.Widgets.Add(content);
+				// Remove existing
+				if (Content != null)
+				{
+					_dialogContent.Widgets.Remove(Content);
+				}
+
+				if (value != null)
+				{
+					value.GridPositionY = 0;
+					_dialogContent.Widgets.Add(value);
+				}
+			}
+		}
+
+		public Dialog()
+		{
+			_dialogContent = new Grid {RowSpacing = 8};
+
+			_dialogContent.RowsProportions.Add(new Proportion());
+			_dialogContent.RowsProportions.Add(new Proportion());
 
 			var buttonsGrid = new Grid
 			{
@@ -29,18 +57,18 @@
 			buttonsGrid.ColumnsProportions.Add(new Proportion());
 			buttonsGrid.ColumnsProportions.Add(new Proportion());
 
-			w.ButtonOk = new Button
+			ButtonOk = new Button
 			{
 				Text = "Ok"
 			};
 
-			w.ButtonOk.Up += (sender, args) =>
+			ButtonOk.Up += (sender, args) =>
 			{
-				w.ModalResult = (int)DefaultModalResult.Ok;
-				w.Close();
+				ModalResult = (int)DefaultModalResult.Ok;
+				Close();
 			};
 
-			buttonsGrid.Widgets.Add(w.ButtonOk);
+			buttonsGrid.Widgets.Add(ButtonOk);
 
 			var cancelButton = new Button
 			{
@@ -50,15 +78,24 @@
 
 			cancelButton.Up += (sender, args) =>
 			{
-				w.ModalResult = (int)DefaultModalResult.Cancel;
-				w.Close();
+				ModalResult = (int)DefaultModalResult.Cancel;
+				Close();
 			};
 
 			buttonsGrid.Widgets.Add(cancelButton);
 
-			contentGrid.Widgets.Add(buttonsGrid);
+			_dialogContent.Widgets.Add(buttonsGrid);
 
-			w.Content = contentGrid;
+			base.Content = _dialogContent;
+		}
+
+		public static Dialog CreateMessageBox(string title, Widget content)
+		{
+			var w = new Dialog
+			{
+				Title = title,
+				Content = content
+			};
 
 			return w;
 		}

@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Attributes\EditCategoryAttribute.cs" />
     <Compile Include="Attributes\HiddenInEditorAttribute.cs" />
+    <Compile Include="Attributes\IgnoreChildrenAttribute.cs" />
     <Compile Include="Attributes\IItemsProvider.cs" />
     <Compile Include="Attributes\SelectionAttribute.cs" />
     <Compile Include="Content\BitmapFonts\BitmapFontReader.cs" />

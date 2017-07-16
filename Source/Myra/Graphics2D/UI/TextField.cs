@@ -175,9 +175,12 @@ namespace Myra.Graphics2D.UI
 			EnsureIndexInRange();
 
 			var sb = new StringBuilder();
-			sb.Append(Text.Substring(0, _cursorIndex));
+
+			var text = Text ?? "";
+
+			sb.Append(text.Substring(0, _cursorIndex));
 			sb.Append(ch);
-			sb.Append(Text.Substring(_cursorIndex));
+			sb.Append(text.Substring(_cursorIndex));
 
 			var nextText = sb.ToString();
 			if (SetText(nextText))

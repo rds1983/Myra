@@ -59,7 +59,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public Widget Content
+		public virtual Widget Content
 		{
 			get
 			{

@@ -3,8 +3,22 @@ using Newtonsoft.Json.Linq;
 
 namespace Myra.Graphics2D.UI
 {
+	public class ExportOptions
+	{
+		public string Namespace { get; set; }
+		public string Class { get; set; }
+		public string OutputPath { get; set; }
+	}
+
 	public class Project
 	{
+		private readonly ExportOptions _exportOptions = new ExportOptions();
+
+		public ExportOptions ExportOptions
+		{
+			get { return _exportOptions; }
+		}
+
 		public Grid Root { get; set; }
 
 		public Project()

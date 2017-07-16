@@ -4,9 +4,9 @@ using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.UIEditor.Plugin.YellowMenuButtons
 {
-	public class Plugin: IUIEditorPlugin
+	public class Plugin: UIEditorPlugin
 	{
-		public void OnLoad()
+		public override void OnLoad()
 		{
 			var result = Stylesheet.Current;
 

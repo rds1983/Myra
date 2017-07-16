@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
@@ -26,9 +27,10 @@ namespace Myra.UIEditor
 {
 	public class Studio : Game
 	{
-		private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
-
 		private const string PathFilter = "Myra UIEditor Projects (*.ui)|*.ui";
+
+		private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private static Studio _instance;
 
 		private readonly GraphicsDeviceManager _graphicsDeviceManager;
 		private readonly State _state;
@@ -74,6 +76,17 @@ namespace Myra.UIEditor
 			_addMenuSeparatorItem,
 //			_addTreeNodeItem,
 			_deleteItem;
+
+		private Type[] _customWidgetTypes;
+		private MenuItem[] _customWidgetMenuItems;
+		
+		public static Studio Instance
+		{
+			get
+			{
+				return _instance;
+			}
+		}
 
 		public string FilePath
 		{
@@ -132,6 +145,8 @@ namespace Myra.UIEditor
 
 		public Studio()
 		{
+			_instance = this;
+
 			// Restore state
 			_state = State.Load();
 
@@ -211,7 +226,11 @@ namespace Myra.UIEditor
 
 						// Call on load
 						plugin.OnLoad();
+						
+						var customWidgets = new WidgetTypesSet();
+						plugin.FillCustomWidgetTypes(customWidgets);
 
+						_customWidgetTypes = customWidgets.Types;
 						break;
 					}
 				}
@@ -267,6 +286,14 @@ namespace Myra.UIEditor
 			saveAsItem.Selected += SaveAsItemOnClicked;
 
 			fileMenu.Items.Add(saveAsItem);
+			
+			var exportCSItem = new MenuItem
+			{
+				Text = "Export to C#..."
+			};
+			exportCSItem.Selected += ExportCsItemOnSelected;
+
+			fileMenu.Items.Add(exportCSItem);	
 			fileMenu.Items.Add(new MenuSeparator());
 
 			var quitItem = new MenuItem
@@ -504,8 +531,34 @@ namespace Myra.UIEditor
 				AddMenuItem(new MenuSeparator());
 			};
 			controlsMenu.Items.Add(_addMenuSeparatorItem);
-			controlsMenu.Items.Add(new MenuSeparator());
+			
+			if (_customWidgetTypes != null && _customWidgetTypes.Length > 0)
+			{
+				controlsMenu.Items.Add(new MenuSeparator());
 
+				var customMenuWidgets = new List<MenuItem>();
+				foreach (var type in _customWidgetTypes)
+				{
+					var item = new MenuItem
+					{
+						Text = "Add " + type.Name
+					};
+								
+					item.Selected += (s, a) =>
+					{
+						AddStandardControl(type);
+					};
+					
+					controlsMenu.Items.Add(item);
+					
+					customMenuWidgets.Add(item);
+				}
+
+				_customWidgetMenuItems = customMenuWidgets.ToArray();
+			}
+
+			controlsMenu.Items.Add(new MenuSeparator());
+		
 /*			_addTreeNodeItem = new MenuItem
 			{
 				Text = "Add Tree Node"
@@ -636,6 +689,12 @@ namespace Myra.UIEditor
 			UpdateEnabled();
 		}
 
+		private void ExportCsItemOnSelected(object sender1, EventArgs eventArgs)
+		{
+			var dlg = new ExportOptionsDialog();
+			dlg.ShowModal(_desktop);
+		}
+
 		private void DeleteItemOnSelected(object sender, EventArgs eventArgs)
 		{
 			// Remove from model
@@ -720,7 +779,12 @@ namespace Myra.UIEditor
 
 		private void AddStandardControl<T>() where T : Widget, new()
 		{
-			var control = new T();
+			AddStandardControl(typeof(T));
+		}
+		
+		private void AddStandardControl(Type t)
+		{
+			var control = (Widget)Activator.CreateInstance(t);
 			AddStandardControl(control);
 		}
 
@@ -993,6 +1057,11 @@ namespace Myra.UIEditor
 			_addTextFieldItem.Enabled = enableStandard;
 			_addSpinButtonItem.Enabled = enableStandard;
 //			_addTreeItem.Enabled = enableStandard;
+
+			foreach (var item in _customWidgetMenuItems)
+			{
+				item.Enabled = enableStandard;
+			}
 
 			_addMenuItemItem.Enabled = enableMenuItems;
 			_addMenuSeparatorItem.Enabled = enableMenuItems;
