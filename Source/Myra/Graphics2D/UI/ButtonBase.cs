@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
-	[IgnoreChildren]
 	public class ButtonBase<T> : SingleItemContainer<T> where T : Widget
 	{
 		private bool _isPressed;

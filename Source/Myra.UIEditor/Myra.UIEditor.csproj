@@ -37,6 +37,9 @@
     <Reference Include="MonoGame.Extended">
       <HintPath>..\Myra-Dependencies\MonoGame.Extended\MonoGame.Extended.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>..\Myra-Dependencies\Newtonsoft.Json\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NLog">
       <HintPath>..\Myra-Dependencies\NLog\NLog.dll</HintPath>
     </Reference>
@@ -127,6 +130,7 @@
     </Compile>
     <None Include="Resources\ExportCSDesigner.cstemplate" />
     <None Include="Resources\ExportCSMain.cstemplate" />
+    <None Include="UI\exportOptions.ui" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -169,9 +173,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\exportOptions.ui" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

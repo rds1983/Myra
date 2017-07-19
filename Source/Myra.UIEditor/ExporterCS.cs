@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Microsoft.Xna.Framework;
-using Myra.Attributes;
+using Myra.Editor.Utils;
 using Myra.Graphics2D.UI;
 using Myra.Utility;
-using Container = Myra.Graphics2D.UI.Container;
+using Newtonsoft.Json;
 
 namespace Myra.UIEditor
 {
@@ -31,15 +31,24 @@ namespace Myra.UIEditor
 			_project = project;
 		}
 
-		public void ExportMain()
-		{
+		public string ExportMain()
+		{	
+			var path = Path.Combine(_project.ExportOptions.OutputPath, _project.ExportOptions.Class + ".cs");
+			if (File.Exists(path))
+			{
+				// Do not overwrite main
+				return string.Empty;
+			}
+			
 			var template = Resources.ExportCSMain;
 
 			template = template.Replace("$namespace$", _project.ExportOptions.Namespace);
 			template = template.Replace("$class$", _project.ExportOptions.Class);
+			template = template.Replace("$generationDate$", DateTime.Now.ToString());
 
-			var path = Path.Combine(_project.ExportOptions.OutputPath, _project.ExportOptions.Class + ".cs");
 			File.WriteAllText(path, template);
+
+			return path;
 		}
 
 		private static string LowercaseFirstLetter(string s)
@@ -49,18 +58,64 @@ namespace Myra.UIEditor
 				return s;
 			}
 
-			return Char.ToLowerInvariant(s[0]) + s.Substring(1);
+			return char.ToLowerInvariant(s[0]) + s.Substring(1);
 		}
 
-		public string ExportDesignerRecursive(Widget w)
+		public string ExportDesignerRecursive(IItemWithId w)
 		{
+			var properties = BuildProperties(w.GetType());
+			var simpleProperties = new List<PropertyInfo>();
+			
+			// Build subitems data
+			var subItems = new List<string>();
+			foreach (var property in properties)
+			{
+				var value = property.GetValue(w);
+				if (value == null)
+				{
+					simpleProperties.Add(property);				
+					continue;
+				}
+
+				if (value is IItemWithId)
+				{
+					var subItemId = ExportDesignerRecursive((IItemWithId) value);
+					var subItemCode = string.Format(".{0} = {1}", property.Name, subItemId);
+					subItems.Add(subItemCode);
+				}
+				else
+				{
+
+					var type = value.GetType();
+					var asList = value as IList;
+
+					if (asList != null && type.IsGenericType &&
+					    typeof(IItemWithId).IsAssignableFrom(type.GetGenericArguments()[0]))
+					{
+						foreach (var comp in asList)
+						{
+							var subItemId = ExportDesignerRecursive((IItemWithId) comp);
+							var subItemCode = string.Format("{0}.Add({1})", property.Name, subItemId);
+							subItems.Add(subItemCode);
+						}
+					}
+					else
+					{
+						simpleProperties.Add(property);
+					}
+				}
+			}
+			
+			// Write code of this item
 			if (!isFirst)
 			{
 				sbBuild.Append("\n\n\t\t\t");
 			}
 
+			isFirst = false;		
+			
 			string id;
-			var typeName = w.GetType().Name;
+			var typeName = w.GetType().GetFriendlyName();
 			if (_project.Root == w)
 			{
 				id = string.Empty;
@@ -70,8 +125,9 @@ namespace Myra.UIEditor
 				id = w.Id;
 				if (string.IsNullOrEmpty(id))
 				{
+					var onlyTypeName = LowercaseFirstLetter(w.GetType().GetOnlyTypeName());
 					int count;
-					if (!ids.TryGetValue(typeName, out count))
+					if (!ids.TryGetValue(onlyTypeName, out count))
 					{
 						count = 1;
 					}
@@ -79,9 +135,9 @@ namespace Myra.UIEditor
 					{
 						++count;
 					}
-					ids[typeName] = count;
+					ids[onlyTypeName] = count;
 
-					id = LowercaseFirstLetter(typeName) + count;
+					id = onlyTypeName + count;
 
 					sbBuild.Append("var " + id);
 				}
@@ -91,14 +147,12 @@ namespace Myra.UIEditor
 				}
 			}
 
+			var idPrefix = string.IsNullOrEmpty(id) ? string.Empty : id + ".";					
 			if (!string.IsNullOrEmpty(id))
 			{
 				sbBuild.Append(" = new " + typeName + "();");
 			}
-
-			var idPrefix = string.IsNullOrEmpty(id) ? string.Empty : id + ".";
-			sbBuild.Append(BuildPropertiesCode(w, idPrefix));
-
+			
 			if (!string.IsNullOrEmpty(w.Id) && _project.Root != w)
 			{
 				if (!isFirst)
@@ -106,25 +160,25 @@ namespace Myra.UIEditor
 					sbFields.Append("\n\t\t");
 				}
 				sbFields.Append("public " + w.GetType().Name + " " + w.Id + ";");
-			}
+			}			
 
-			isFirst = false;
-
-			var asContainer = w as Container;
-			if (asContainer != null && asContainer.GetType().FindAttribute<IgnoreChildrenAttribute>() == null)
+			foreach (var property in simpleProperties)
 			{
-				foreach (var widget in asContainer.Children)
-				{
-					var childId = ExportDesignerRecursive(widget);
-
-					sbBuild.Append("\n\t\t\t" + idPrefix + "Widgets.Add(" + childId + ");");
-				}
+				sbBuild.Append(BuildPropertyCode(property, w, idPrefix));			
 			}
 
+			foreach (var subItem in subItems)
+			{
+				sbBuild.Append("\n\t\t\t");
+				sbBuild.Append(idPrefix);
+				sbBuild.Append(subItem);
+				sbBuild.Append(";");
+			}
+			
 			return id;
 		}
 
-		public void ExportDesigner()
+		public string ExportDesigner()
 		{
 			var template = Resources.ExportCSDesigner;
 
@@ -145,53 +199,57 @@ namespace Myra.UIEditor
 
 			var path = Path.Combine(_project.ExportOptions.OutputPath, _project.ExportOptions.Class + ".Generated.cs");
 			File.WriteAllText(path, template);
+
+			return path;
 		}
-
-		private static string BuildPropertiesCode(Widget w, string idPrefix)
+		
+		private static List<PropertyInfo> BuildProperties(Type type)
 		{
-			var sb = new StringBuilder();
-
-			var properties = from p in w.GetType().GetProperties() select p;
+			var result = new List<PropertyInfo>();
+			var properties = from p in type.GetProperties() select p;
 			foreach (var property in properties)
 			{
 				if (property.GetGetMethod() == null ||
-					!property.GetGetMethod().IsPublic ||
-					property.GetGetMethod().IsStatic)
+				    !property.GetGetMethod().IsPublic ||
+				    property.GetGetMethod().IsStatic)
 				{
 					continue;
 				}
 
-				var browsableAttr = property.FindAttribute<BrowsableAttribute>();
-				if (browsableAttr != null && !browsableAttr.Browsable)
+				var attr = property.FindAttribute<JsonIgnoreAttribute>();
+				if (attr != null)
 				{
 					continue;
 				}
+				
+				result.Add(property);
+			}
 
-				var hiddenAttr = property.FindAttribute<HiddenInEditorAttribute>();
-				if (hiddenAttr != null)
-				{
-					continue;
-				}
+			return result;
+		}
 
-				var value = property.GetValue(w);
+		private static string BuildPropertyCode(PropertyInfo property, object o, string idPrefix)
+		{
+			var sb = new StringBuilder();
 
-				var asList = value as IList;
-				if (asList == null)
+			var value = property.GetValue(o);
+
+			var asList = value as IList;
+			if (asList == null)
+			{
+				sb.Append("\n\t\t\t" + idPrefix + property.Name);
+				sb.Append(" = ");
+				sb.Append(BuildValue(value));
+				sb.Append(";");
+			}
+			else
+			{
+				foreach (var comp in asList)
 				{
 					sb.Append("\n\t\t\t" + idPrefix + property.Name);
-					sb.Append(" = ");
-					sb.Append(BuildValue(value));
-					sb.Append(";");
-				}
-				else
-				{
-					foreach (var comp in asList)
-					{
-						sb.Append("\n\t\t\t" + idPrefix + property.Name);
-						sb.Append(".Add(");
-						sb.Append(BuildValue(comp));
-						sb.Append(");");
-					}
+					sb.Append(".Add(");
+					sb.Append(BuildValue(comp));
+					sb.Append(");");
 				}
 			}
 
@@ -245,23 +303,18 @@ namespace Myra.UIEditor
 			foreach (var property in properties)
 			{
 				if (property.GetGetMethod() == null ||
+				    property.GetSetMethod() == null ||
 					!property.GetGetMethod().IsPublic ||
 					property.GetGetMethod().IsStatic)
 				{
 					continue;
 				}
-
-				var browsableAttr = property.FindAttribute<BrowsableAttribute>();
-				if (browsableAttr != null && !browsableAttr.Browsable)
+				
+				var attr = property.FindAttribute<JsonIgnoreAttribute>();
+				if (attr != null)
 				{
 					continue;
-				}
-
-				var hiddenAttr = property.FindAttribute<HiddenInEditorAttribute>();
-				if (hiddenAttr != null)
-				{
-					continue;
-				}
+				}			
 
 				var subValue = property.GetValue(value);
 
@@ -276,7 +329,7 @@ namespace Myra.UIEditor
 			return sb.ToString();
 		}
 
-		public void Export()
+		public string[] Export()
 		{
 			if (string.IsNullOrEmpty(_project.ExportOptions.Namespace))
 			{
@@ -293,8 +346,21 @@ namespace Myra.UIEditor
 				throw new Exception("Output path could not be empty.");
 			}
 
-			ExportMain();
-			ExportDesigner();
+			var result = new List<string>();
+
+			var path = ExportMain();
+			if (!string.IsNullOrEmpty(path))
+			{
+				result.Add(path);
+			}
+
+			path = ExportDesigner();
+			if (!string.IsNullOrEmpty(path))
+			{
+				result.Add(path);
+			}
+
+			return result.ToArray();
 		}
 	}
 }

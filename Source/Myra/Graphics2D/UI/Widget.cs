@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
-	public class Widget
+	public class Widget: IItemWithId
 	{
 		public const string DefaultStyleName = "default";
 		public const int DoubleClickIntervalInMs = 500;

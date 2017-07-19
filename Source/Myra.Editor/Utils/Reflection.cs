@@ -4,6 +4,58 @@ namespace Myra.Editor.Utils
 {
 	public static class Reflection
 	{
+		public static string GetOnlyTypeName(this Type type)
+		{
+			var result = type.Name;
+			if (type.IsGenericType)
+			{
+				int iBacktick = result.IndexOf('`');
+				if (iBacktick > 0)
+				{
+					result = result.Remove(iBacktick);
+				}
+			}
+
+			return result;		
+		}
+		
+		public static string GetFriendlyName(this Type type)
+		{
+			string friendlyName = type.Name;
+			if (type.IsGenericType)
+			{
+				int iBacktick = friendlyName.IndexOf('`');
+				if (iBacktick > 0)
+				{
+					friendlyName = friendlyName.Remove(iBacktick);
+				}
+				friendlyName += "<";
+				Type[] typeParameters = type.GetGenericArguments();
+				for (int i = 0; i < typeParameters.Length; ++i)
+				{
+					string typeParamName = typeParameters[i].Name;
+					friendlyName += (i == 0 ? typeParamName : "," + typeParamName);
+				}
+				friendlyName += ">";
+			}
+
+			return friendlyName;
+		}
+
+		public static bool IsSubclassOfRawGeneric(this Type toCheck, Type generic)
+		{
+			while (toCheck != null && toCheck != typeof(object))
+			{
+				var cur = toCheck.IsGenericType ? toCheck.GetGenericTypeDefinition() : toCheck;
+				if (generic == cur)
+				{
+					return true;
+				}
+				toCheck = toCheck.BaseType;
+			}
+			return false;
+		}
+
 		public static Type FindGenericType(this Type givenType, Type genericType)
 		{
 			var interfaceTypes = givenType.GetInterfaces();

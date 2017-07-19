@@ -1,6 +1,6 @@
 ﻿namespace Myra.Graphics2D.UI
 {
-	public interface IMenuItem
+	public interface IMenuItem: IItemWithId
 	{
 		Menu Menu { get; set; }
 

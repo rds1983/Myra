@@ -5,6 +5,8 @@ namespace Myra.Graphics2D.UI
 {
 	public class MenuSeparator: IMenuItem
 	{
+		public string Id { get; set; }
+		
 		[HiddenInEditor]
 		[JsonIgnore]
 		public Menu Menu { get; set; }

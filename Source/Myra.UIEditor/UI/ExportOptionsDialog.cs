@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Myra.Graphics2D.UI;
 using NLog;
@@ -46,7 +47,13 @@ namespace Myra.UIEditor.UI
 				Studio.Instance.IsDirty = true;
 
 				var export = new ExporterCS(Studio.Instance.Project);
-				export.Export();
+
+				var strings = new List<string>();
+				strings.Add("Success. Following files had been written:");
+				strings.AddRange(export.Export());
+
+				var dlg = CreateMessageBox("Export To C#", string.Join("\n", strings));
+				dlg.ShowModal(Desktop);
 			}
 			catch (Exception ex)
 			{

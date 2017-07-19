@@ -1058,9 +1058,12 @@ namespace Myra.UIEditor
 			_addSpinButtonItem.Enabled = enableStandard;
 //			_addTreeItem.Enabled = enableStandard;
 
-			foreach (var item in _customWidgetMenuItems)
+			if (_customWidgetMenuItems != null)
 			{
-				item.Enabled = enableStandard;
+				foreach (var item in _customWidgetMenuItems)
+				{
+					item.Enabled = enableStandard;
+				}
 			}
 
 			_addMenuItemItem.Enabled = enableMenuItems;
