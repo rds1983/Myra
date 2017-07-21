@@ -175,7 +175,6 @@ namespace Myra.Graphics2D.Text
 					switch (li.type)
 					{
 						case LexemeType.LineBreak:
-							_lastRun.Append(li.chars, _currentColor);
 							StoreRun();
 							break;
 						case LexemeType.Space:
