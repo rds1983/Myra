@@ -5,10 +5,27 @@ using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ListItem
+	public class ListItem: IItemWithId
 	{
+		private string _id;
 		private string _text;
 		private Color? _color;
+
+		public string Id
+		{
+			get { return _id; }
+
+			set
+			{
+				if (value == _id)
+				{
+					return;
+				}
+
+				_id = value;
+				FireChanged();
+			}
+		}
 
 		public string Text
 		{
@@ -74,7 +91,7 @@ namespace Myra.Graphics2D.UI
 
 		public override string ToString()
 		{
-			return Text;
+			return Id;
 		}
 
 		protected void FireChanged()

@@ -7,24 +7,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class MenuItem : ListItem, IMenuItemsContainer, IMenuItem
 	{
-		private string _id;
 		private readonly ObservableCollection<IMenuItem> _items = new ObservableCollection<IMenuItem>();
-
-		public string Id
-		{
-			get { return _id; }
-
-			set
-			{
-				if (value == _id)
-				{
-					return;
-				}
-
-				_id = value;
-				FireChanged();
-			}
-		}
 
 		[HiddenInEditor]
 		[JsonIgnore]

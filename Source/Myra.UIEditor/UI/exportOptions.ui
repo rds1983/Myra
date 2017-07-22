@@ -5,7 +5,7 @@
     "$type": "Myra.Graphics2D.UI.ExportOptions, Myra",
     "Namespace": "Myra.UIEditor.UI",
     "Class": "ExportOptionsWidget",
-    "OutputPath": "/home/rds/Projects/Myra/Source/Myra.UIEditor/UI"
+    "OutputPath": "D:\\Projects\\Myra\\Source\\Myra.UIEditor\\UI"
   },
   "Root": {
     "$id": "2",
@@ -410,7 +410,7 @@
     "Id": "Root",
     "XHint": 0,
     "YHint": 0,
-    "WidthHint": null,
+    "WidthHint": 800,
     "HeightHint": null,
     "PaddingLeft": 0,
     "PaddingRight": 0,
