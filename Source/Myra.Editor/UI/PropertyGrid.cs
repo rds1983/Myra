@@ -326,11 +326,10 @@ namespace Myra.Editor.UI
 						color = ((Color?) value).Value;
 					}
 
-//					var sprite = Sprite.CreateSolidColorRect(color);
-
 					var image = new Image
 					{
-//						Drawable = sprite,
+						TextureRegion2D = DefaultAssets.WhiteRegion,
+						Color = color,
 						VerticalAlignment = VerticalAlignment.Center,
 						WidthHint = 32,
 						HeightHint = 16
@@ -356,10 +355,10 @@ namespace Myra.Editor.UI
 							var h = ColorChangeHandler;
 							if (h != null)
 							{
-/*								var newColor = h(sprite.Color);
+								var newColor = h(image.Color);
 								if (!newColor.HasValue) return;
 
-								sprite.Color = newColor.Value;
+								image.Color = newColor.Value;
 
 								if (isColor)
 								{
@@ -368,7 +367,7 @@ namespace Myra.Editor.UI
 								else
 								{
 									record.SetValue(_object, newColor);
-								}*/
+								}
 
 								FireChanged(propertyType.Name);
 							}

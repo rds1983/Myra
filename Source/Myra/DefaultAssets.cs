@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.TextureAtlases;
@@ -27,6 +28,35 @@ namespace Myra
 		private static Stylesheet _uiStylesheet;
 		private static Texture2D _uiBitmap;
 		private static RasterizerState _uiRasterizerState;
+		private static Texture2D _white;
+		private static TextureRegion2D _whiteRegion;
+
+		public static Texture2D White
+		{
+			get
+			{
+				if (_white == null)
+				{
+					_white = new Texture2D(MyraEnvironment.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+					_white.SetData(new[] {Color.White});
+				}
+
+				return _white;
+			}
+		}
+
+		public static TextureRegion2D WhiteRegion
+		{
+			get
+			{
+				if (_whiteRegion == null)
+				{
+					_whiteRegion = new TextureRegion2D(White);
+				}
+
+				return _whiteRegion;
+			}
+		}
 
 		public static BitmapFont Font
 		{
@@ -135,6 +165,13 @@ namespace Myra
 			_uiSpritesheet = null;
 			_uiStylesheet = null;
 			Stylesheet.Current = null;
+
+			_whiteRegion = null;
+			if (_white != null)
+			{
+				_white.Dispose();
+				_white = null;
+			}
 		
 			if (_uiBitmap != null)
 			{

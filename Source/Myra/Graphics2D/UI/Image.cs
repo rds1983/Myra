@@ -27,6 +27,13 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public Color Color { get; set; }
+
+		public Image()
+		{
+			Color = Color.White;
+		}
+
 		protected override Point InternalMeasure(Point availableSize)
 		{
 			if (TextureRegion2D == null)
@@ -44,10 +51,9 @@ namespace Myra.Graphics2D.UI
 			if (TextureRegion2D != null)
 			{
 				var bounds = AbsoluteBounds;
-				batch.Draw(TextureRegion2D, bounds);
+				batch.Draw(TextureRegion2D, bounds, Color);
 			}
 		}
-
 
 		public void UpdateImageSize(TextureRegion2D image)
 		{
