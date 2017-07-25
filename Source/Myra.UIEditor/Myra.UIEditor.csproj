@@ -144,14 +144,6 @@
       <Project>{4dcbb001-9c79-4f6b-996d-d654062d93e0}</Project>
       <Name>Myra</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Samples\Myra.UIEditor.Plugin.LibGDX\Myra.UIEditor.Plugin.LibGDX.csproj">
-      <Project>{db171be4-d9c3-45f1-8108-84992ef8391f}</Project>
-      <Name>Myra.UIEditor.Plugin.LibGDX</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Samples\Myra.UIEditor.Plugin.YellowMenuButtons\Myra.UIEditor.Plugin.YellowMenuButtons.csproj">
-      <Project>{74e297c2-1081-4c9a-9311-eaaf4746a413}</Project>
-      <Name>Myra.UIEditor.Plugin.YellowMenuButtons</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Myra-Dependencies\MonoGame.Framework.DesktopGL\x64\SDL2.dll">
