@@ -13,6 +13,11 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
+		public VerticalSplitPane(string style)
+			: this(Stylesheet.Current.VerticalSplitPaneVariants[style])
+		{
+		}
+
 		public VerticalSplitPane() : this(Stylesheet.Current.VerticalSplitPaneStyle)
 		{
 		}

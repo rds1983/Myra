@@ -12,5 +12,17 @@
 			DownButtonStyle = new ButtonStyle();
 			TextFieldStyle = new TextFieldStyle();
 		}
+
+		public SpinButtonStyle(SpinButtonStyle style) : base(style)
+		{
+			UpButtonStyle = new ButtonStyle(style.UpButtonStyle);
+			DownButtonStyle = new ButtonStyle(style.DownButtonStyle);
+			TextFieldStyle = new TextFieldStyle(style.TextFieldStyle);
+		}
+
+		public override WidgetStyle Clone()
+		{
+			return new SpinButtonStyle(this);
+		}
 	}
 }

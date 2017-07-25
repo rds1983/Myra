@@ -138,6 +138,11 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public Window(string style)
+			: this(Stylesheet.Current.WindowVariants[style])
+		{
+		}
+
 		public Window() : this(Stylesheet.Current.WindowStyle)
 		{
 		}

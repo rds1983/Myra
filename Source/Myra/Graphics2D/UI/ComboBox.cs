@@ -256,6 +256,14 @@ namespace Myra.Graphics2D.UI
 			_items.CollectionChanged += ItemsOnCollectionChanged;
 		}
 
+		public ComboBox(string style): this(Stylesheet.Current.ComboBoxVariants[style])
+		{
+		}
+
+		public ComboBox() : this(Stylesheet.Current.ComboBoxStyle)
+		{
+		}
+
 		private void ItemsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
 		{
 			switch (args.Action)
@@ -295,7 +303,7 @@ namespace Myra.Graphics2D.UI
 
 		private void ItemOnChanged(object sender, EventArgs eventArgs)
 		{
-			var item = (ListItem) sender;
+			var item = (ListItem)sender;
 			var widget = (Button)item.Widget;
 
 			widget.Text = item.Text;
@@ -308,10 +316,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			InvalidateMeasure();
-		}
-
-		public ComboBox() : this(Stylesheet.Current.ComboBoxStyle)
-		{
 		}
 
 		private void InsertItem(ListItem item, int index)

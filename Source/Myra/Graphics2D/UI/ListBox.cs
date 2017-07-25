@@ -101,6 +101,11 @@ namespace Myra.Graphics2D.UI
 			_items.CollectionChanged += ItemsOnCollectionChanged;
 		}
 
+		public ListBox(string style)
+			: this(Stylesheet.Current.ListBoxVariants[style])
+		{
+		}
+
 		public ListBox()
 			: this(
 				Stylesheet.Current.ListBoxStyle)

@@ -8,5 +8,15 @@
 		{
 			KnobStyle = new ButtonStyle();
 		}
+
+		public SliderStyle(SliderStyle style) : base(style)
+		{
+			KnobStyle = new ButtonStyle(style.KnobStyle);
+		}
+
+		public override WidgetStyle Clone()
+		{
+			return new SliderStyle(this);
+		}
 	}
 }

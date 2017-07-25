@@ -10,5 +10,16 @@
 			ItemsContainerStyle = new WidgetStyle();
 			ListItemStyle = new ListItemStyle();
 		}
+
+		public ComboBoxStyle(ComboBoxStyle style): base(style)
+		{
+			ItemsContainerStyle = new WidgetStyle(style.ItemsContainerStyle);
+			ListItemStyle = new ListItemStyle(style.ListItemStyle);
+		}
+
+		public override WidgetStyle Clone()
+		{
+			return new ComboBoxStyle(this);
+		}
 	}
 }

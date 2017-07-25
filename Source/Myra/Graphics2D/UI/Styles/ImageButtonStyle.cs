@@ -8,5 +8,15 @@
 		{
 			ImageStyle = new PressableImageStyle();
 		}
+
+		public ImageButtonStyle(ImageButtonStyle style): base(style)
+		{
+			ImageStyle = new PressableImageStyle(style.ImageStyle);
+		}
+
+		public override WidgetStyle Clone()
+		{
+			return new ImageButtonStyle(this);
+		}
 	}
 }

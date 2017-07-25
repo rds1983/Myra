@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
-	public class CheckBox: Button
+	public class CheckBox : Button
 	{
 		internal class CheckBoxMetadata
 		{
@@ -25,6 +25,10 @@ namespace Myra.Graphics2D.UI
 		public CheckBox(ButtonStyle bs) : base(bs)
 		{
 			Toggleable = true;
+		}
+
+		public CheckBox(string style) : this(Stylesheet.Current.CheckBoxVariants[style])
+		{
 		}
 
 		public CheckBox() : this(Stylesheet.Current.CheckBoxStyle)

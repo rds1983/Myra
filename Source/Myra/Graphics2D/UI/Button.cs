@@ -9,7 +9,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class Button : ButtonBase<Grid>
 	{
-		private TextureRegion2D _TextureRegion2D, _overTextureRegion2D, _pressedTextureRegion2D;
+		private TextureRegion2D _textureRegion2D, _overTextureRegion2D, _pressedTextureRegion2D;
 		private readonly Image _image;
 		private readonly TextBlock _textBlock;
 
@@ -43,17 +43,17 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return _TextureRegion2D;
+				return _textureRegion2D;
 			}
 
 			set
 			{
-				if (value == _TextureRegion2D)
+				if (value == _textureRegion2D)
 				{
 					return;
 				}
 
-				_TextureRegion2D = value;
+				_textureRegion2D = value;
 				UpdateTextureRegion2D();
 			}
 		}
@@ -70,7 +70,7 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (value == _TextureRegion2D)
+				if (value == _textureRegion2D)
 				{
 					return;
 				}
@@ -150,6 +150,10 @@ namespace Myra.Graphics2D.UI
 			{
 				ApplyButtonStyle(style);
 			}
+		}
+
+		public Button(string style): this(Stylesheet.Current.ButtonVariants[style])
+		{
 		}
 
 		public Button() : this(Stylesheet.Current.ButtonStyle)

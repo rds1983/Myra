@@ -10,5 +10,16 @@
 			LabelStyle = new TextBlockStyle();
 			ImageStyle = new PressableImageStyle();
 		}
+
+		public ButtonStyle(ButtonStyle style) : base(style)
+		{
+			LabelStyle = new TextBlockStyle(style.LabelStyle);
+			ImageStyle = new PressableImageStyle(style.ImageStyle);
+		}
+
+		public override WidgetStyle Clone()
+		{
+			return new ButtonStyle(this);
+		}
 	}
 }

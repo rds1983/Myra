@@ -89,6 +89,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string HorizontalProgressBarName = "horizontalProgressBar";
 		public const string VerticalProgressBarName = "verticalProgressBar";
 		public const string FilledName = "filled";
+		public const string VariantsName = "variants";
 
 		private readonly Dictionary<string, Color> _colors = new Dictionary<string, Color>();
 		private readonly JObject _root;
@@ -598,7 +599,8 @@ namespace Myra.Graphics2D.UI.Styles
 
 		private void FillStyles<T>(string key,
 			T result,
-			Action<JObject, T> fillAction) where T : new()
+			Dictionary<string, T> variantsDict,
+			Action<JObject, T> fillAction) where T : WidgetStyle, new()
 		{
 			JObject source;
 			if (!_root.GetStyle(key, out source) || source == null)
@@ -607,6 +609,19 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 
 			fillAction(source, result);
+
+			JObject variants;
+			if (!source.GetStyle(VariantsName, out variants) || variants == null)
+			{
+				return;
+			}
+
+			foreach (var pair in variants)
+			{
+				var variant = (T) result.Clone();
+				fillAction((JObject)pair.Value, variant);
+				variantsDict[pair.Key] = variant;
+			}
 		}
 
 		public Stylesheet Load()
@@ -618,25 +633,25 @@ namespace Myra.Graphics2D.UI.Styles
 			{
 				ParseColors(colors);
 			}
-			FillStyles(TextBlockName, result.TextBlockStyle, LoadTextBlockStyleFromSource);
-			FillStyles(TextFieldName, result.TextFieldStyle, LoadTextFieldStyleFromSource);
-			FillStyles(ScrollAreaName, result.ScrollAreaStyle, LoadScrollAreaStyleFromSource);
-			FillStyles(ButtonName, result.ButtonStyle, LoadButtonStyleFromSource);
-			FillStyles(CheckBoxName, result.CheckBoxStyle, LoadButtonStyleFromSource);
-			FillStyles(ImageButtonName, result.ImageButtonStyle, LoadImageButtonStyleFromSource);
-			FillStyles(SpinButtonName, result.SpinButtonStyle, LoadSpinButtonStyleFromSource);
-			FillStyles(HorizontalSliderName, result.HorizontalSliderStyle, LoadSliderStyleFromSource);
-			FillStyles(VerticalSliderName, result.VerticalSliderStyle, LoadSliderStyleFromSource);
-			FillStyles(HorizontalProgressBarName, result.HorizontalProgressBarStyle, LoadProgressBarStyleFromSource);
-			FillStyles(VerticalProgressBarName, result.VerticalProgressBarStyle, LoadProgressBarStyleFromSource);
-			FillStyles(ComboBoxName, result.ComboBoxStyle, LoadComboBoxStyleFromSource);
-			FillStyles(ListBoxName, result.ListBoxStyle, LoadListBoxStyleFromSource);
-			FillStyles(TreeName, result.TreeStyle, LoadTreeStyleFromSource);
-			FillStyles(HorizontalSplitPaneName, result.HorizontalSplitPaneStyle, LoadSplitPaneStyleFromSource);
-			FillStyles(VerticalSplitPaneName, result.VerticalSplitPaneStyle, LoadSplitPaneStyleFromSource);
-			FillStyles(HorizontalMenuName, result.HorizontalMenuStyle, LoadMenuStyleFromSource);
-			FillStyles(VerticalMenuName, result.VerticalMenuStyle, LoadMenuStyleFromSource);
-			FillStyles(WindowName, result.WindowStyle, LoadWindowStyleFromSource);
+			FillStyles(TextBlockName, result.TextBlockStyle, result.TextBlockVariants, LoadTextBlockStyleFromSource);
+			FillStyles(TextFieldName, result.TextFieldStyle, result.TextFieldVariants, LoadTextFieldStyleFromSource);
+			FillStyles(ScrollAreaName, result.ScrollAreaStyle, result.ScrollAreaVariants, LoadScrollAreaStyleFromSource);
+			FillStyles(ButtonName, result.ButtonStyle, result.ButtonVariants, LoadButtonStyleFromSource);
+			FillStyles(CheckBoxName, result.CheckBoxStyle, result.CheckBoxVariants, LoadButtonStyleFromSource);
+			FillStyles(ImageButtonName, result.ImageButtonStyle, result.ImageButtonVariants, LoadImageButtonStyleFromSource);
+			FillStyles(SpinButtonName, result.SpinButtonStyle, result.SpinButtonVariants, LoadSpinButtonStyleFromSource);
+			FillStyles(HorizontalSliderName, result.HorizontalSliderStyle, result.HorizontalSliderVariants, LoadSliderStyleFromSource);
+			FillStyles(VerticalSliderName, result.VerticalSliderStyle, result.VerticalSliderVariants, LoadSliderStyleFromSource);
+			FillStyles(HorizontalProgressBarName, result.HorizontalProgressBarStyle, result.HorizontalProgressBarVariants, LoadProgressBarStyleFromSource);
+			FillStyles(VerticalProgressBarName, result.VerticalProgressBarStyle, result.VerticalProgressBarVariants, LoadProgressBarStyleFromSource);
+			FillStyles(ComboBoxName, result.ComboBoxStyle, result.ComboBoxVariants, LoadComboBoxStyleFromSource);
+			FillStyles(ListBoxName, result.ListBoxStyle, result.ListBoxVariants, LoadListBoxStyleFromSource);
+			FillStyles(TreeName, result.TreeStyle, result.TreeVariants, LoadTreeStyleFromSource);
+			FillStyles(HorizontalSplitPaneName, result.HorizontalSplitPaneStyle, result.HorizontalSplitPaneVariants, LoadSplitPaneStyleFromSource);
+			FillStyles(VerticalSplitPaneName, result.VerticalSplitPaneStyle, result.VerticalSplitPaneVariants, LoadSplitPaneStyleFromSource);
+			FillStyles(HorizontalMenuName, result.HorizontalMenuStyle, result.HorizontalMenuVariants, LoadMenuStyleFromSource);
+			FillStyles(VerticalMenuName, result.VerticalMenuStyle, result.VerticalMenuVariants, LoadMenuStyleFromSource);
+			FillStyles(WindowName, result.WindowStyle, result.WindowVariants, LoadWindowStyleFromSource);
 
 			return result;
 		}

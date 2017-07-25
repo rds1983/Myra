@@ -16,6 +16,11 @@ namespace Myra.Graphics2D.UI
 			VerticalAlignment = VerticalAlignment.Top;
 		}
 
+		public VerticalProgressBar(string style)
+			: this(Stylesheet.Current.VerticalProgressBarVariants[style])
+		{
+		}
+
 		public VerticalProgressBar()
 			: this(Stylesheet.Current.VerticalProgressBarStyle)
 		{

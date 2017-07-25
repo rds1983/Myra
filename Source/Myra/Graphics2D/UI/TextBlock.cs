@@ -79,6 +79,11 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public TextBlock(string style)
+			: this(Stylesheet.Current.TextBlockVariants[style])
+		{
+		}
+
 		public TextBlock() : this(Stylesheet.Current.TextBlockStyle)
 		{
 		}

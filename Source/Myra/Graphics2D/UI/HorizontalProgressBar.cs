@@ -15,6 +15,11 @@ namespace Myra.Graphics2D.UI
 			VerticalAlignment = VerticalAlignment.Top;
 		}
 
+		public HorizontalProgressBar(string style)
+			: this(Stylesheet.Current.HorizontalProgressBarVariants[style])
+		{
+		}
+
 		public HorizontalProgressBar()
 			: this(Stylesheet.Current.HorizontalProgressBarStyle)
 		{

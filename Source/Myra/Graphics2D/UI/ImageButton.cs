@@ -8,7 +8,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class ImageButton: ButtonBase<Image>
 	{
-		private TextureRegion2D _TextureRegion2D, _overTextureRegion2D, _pressedTextureRegion2D;
+		private TextureRegion2D _textureRegion2D, _overTextureRegion2D, _pressedTextureRegion2D;
 
 		[JsonIgnore]
 		[HiddenInEditor]
@@ -17,17 +17,17 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return _TextureRegion2D;
+				return _textureRegion2D;
 			}
 
 			set
 			{
-				if (value == _TextureRegion2D)
+				if (value == _textureRegion2D)
 				{
 					return;
 				}
 
-				_TextureRegion2D = value;
+				_textureRegion2D = value;
 				UpdateTextureRegion2D();
 			}
 		}
@@ -44,7 +44,7 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (value == _TextureRegion2D)
+				if (value == _textureRegion2D)
 				{
 					return;
 				}
@@ -110,6 +110,11 @@ namespace Myra.Graphics2D.UI
 			{
 				ApplyImageButtonStyle(style);
 			}
+		}
+
+		public ImageButton(string style)
+			: this(Stylesheet.Current.ImageButtonVariants[style])
+		{
 		}
 
 		public ImageButton() : this(Stylesheet.Current.ImageButtonStyle)

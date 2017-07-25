@@ -15,6 +15,10 @@ namespace Myra.Graphics2D.UI
 			VerticalAlignment = VerticalAlignment.Top;
 		}
 
+		public HorizontalMenu(string style): this(Stylesheet.Current.HorizontalMenuVariants[style])
+		{
+		}
+
 		public HorizontalMenu() : base(Stylesheet.Current.HorizontalMenuStyle)
 		{
 		}

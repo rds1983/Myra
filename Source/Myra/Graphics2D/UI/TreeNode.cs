@@ -93,7 +93,7 @@ namespace Myra.Graphics2D.UI
 				_topTree.AllNodes.Add(this);
 			}
 
-			_mark = new ImageButton(null)
+			_mark = new ImageButton((ImageButtonStyle)null)
 			{
 				Toggleable = true,
 				HorizontalAlignment = HorizontalAlignment.Left,

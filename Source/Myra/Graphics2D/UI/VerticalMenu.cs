@@ -15,6 +15,11 @@ namespace Myra.Graphics2D.UI
 			VerticalAlignment = VerticalAlignment.Stretch;
 		}
 
+		public VerticalMenu(string style)
+			: this(Stylesheet.Current.VerticalMenuVariants[style])
+		{
+		}
+
 		public VerticalMenu()
 			: base(Stylesheet.Current.VerticalMenuStyle)
 		{

@@ -8,5 +8,15 @@
 		{
 			ListItemStyle = new ListItemStyle();
 		}
+
+		public ListBoxStyle(ListBoxStyle style) : base(style)
+		{
+			ListItemStyle = new ListItemStyle(style.ListItemStyle);
+		}
+
+		public override WidgetStyle Clone()
+		{
+			return new ListBoxStyle(this);
+		}
 	}
 }

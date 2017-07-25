@@ -16,6 +16,11 @@ namespace Myra.Graphics2D.UI
 			VerticalAlignment = VerticalAlignment.Stretch;
 		}
 
+		public VerticalSlider(string style)
+			: this(Stylesheet.Current.VerticalSliderVariants[style])
+		{
+		}
+
 		public VerticalSlider()
 			: this(Stylesheet.Current.VerticalSliderStyle)
 		{

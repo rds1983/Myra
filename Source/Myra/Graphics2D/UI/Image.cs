@@ -6,23 +6,23 @@ namespace Myra.Graphics2D.UI
 {
 	public class Image: Widget
 	{
-		private TextureRegion2D _TextureRegion2D;
+		private TextureRegion2D _textureRegion2D;
 
 		public TextureRegion2D TextureRegion2D
 		{
 			get
 			{
-				return _TextureRegion2D;
+				return _textureRegion2D;
 			}
 
 			set
 			{
-				if (value == _TextureRegion2D)
+				if (value == _textureRegion2D)
 				{
 					return;
 				}
 
-				_TextureRegion2D = value;
+				_textureRegion2D = value;
 				InvalidateMeasure();
 			}
 		}

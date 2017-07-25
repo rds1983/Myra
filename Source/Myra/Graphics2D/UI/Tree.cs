@@ -61,6 +61,11 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public Tree(string style)
+			: this(Stylesheet.Current.TreeVariants[style])
+		{
+		}
+
 		public Tree() : this(Stylesheet.Current.TreeStyle)
 		{
 		}

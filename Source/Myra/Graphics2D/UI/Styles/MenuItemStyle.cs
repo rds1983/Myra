@@ -8,5 +8,22 @@ namespace Myra.Graphics2D.UI.Styles
 
 		public int? IconWidth { get; set; }
 		public int? ShortcutWidth { get; set; }
+
+		public MenuItemStyle()
+		{
+		}
+
+		public MenuItemStyle(MenuItemStyle style) : base(style)
+		{
+			OpenBackground = style.OpenBackground;
+
+			IconWidth = style.IconWidth;
+			ShortcutWidth = style.ShortcutWidth;
+		}
+
+		public override WidgetStyle Clone()
+		{
+			return new MenuItemStyle(this);
+		}
 	}
 }

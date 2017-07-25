@@ -124,6 +124,11 @@ namespace Myra.Graphics2D.UI
 			Value = 0;
 		}
 
+		public SpinButton(string style)
+			: this(Stylesheet.Current.SpinButtonVariants[style])
+		{
+		}
+
 		public SpinButton()
 			: this(Stylesheet.Current.SpinButtonStyle)
 		{

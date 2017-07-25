@@ -37,6 +37,13 @@
             "font": "default-font",
             "textColor": "white",
             "disabledTextColor": "grey"
+        },
+        "variants": {
+            "blue": { 
+                "background": "button-blue",
+                "pressedBackground": "button-blue-down",
+                "overBackground": "button-blue-down"
+            }
         }
     },
     "imageButton": {
@@ -62,17 +69,17 @@
             "pressedBackground": "button-down",
             "overBackground": "button-down",
             "widthHint": 12,
-            "heightHint":  12,
+            "heightHint": 12,
             "image": {
                 "image": "select-up"
             }
         },
-        "downButton": { 
+        "downButton": {
             "background": "button",
             "pressedBackground": "button-down",
             "overBackground": "button-down",
             "widthHint": 12,
-            "heightHint":  12,
+            "heightHint": 12,
             "image": {
                 "image": "select-down"
             }
@@ -115,7 +122,7 @@
     },
     "verticalProgressBar": {
         "background": "progressbar-vertical",
-        "filled":  "progressbar-filled-vertical"
+        "filled": "progressbar-filled-vertical"
     },
     "comboBox": {
         "background": "default-select",
@@ -199,7 +206,7 @@
     },
     "verticalMenu": {
         "background": "button",
-        "border":  "border",
+        "border": "border",
         "separator": {
             "image": "separator-menu",
             "thickness": 4,
