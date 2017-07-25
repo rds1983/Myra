@@ -80,7 +80,7 @@ namespace Myra.UIEditor
 				if (value is IItemWithId)
 				{
 					var subItemId = ExportDesignerRecursive((IItemWithId) value);
-					var subItemCode = string.Format(".{0} = {1}", property.Name, subItemId);
+					var subItemCode = string.Format("{0} = {1}", property.Name, subItemId);
 					subItems.Add(subItemCode);
 				}
 				else
