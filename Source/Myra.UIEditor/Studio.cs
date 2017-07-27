@@ -44,7 +44,7 @@ namespace Myra.UIEditor
 		private TextBlock _drawCallsLabel;
 		private Grid _projectHolder;
 		private Explorer _explorer;
-		private ScrollPane<PropertyGrid> _propertyGridPane; 
+		private ScrollPane _propertyGridPane; 
 		private PropertyGrid _propertyGrid;
 		private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
 		private string _filePath;
@@ -447,7 +447,7 @@ namespace Myra.UIEditor
 			};
 			_addScrollPaneItem.Selected += (s, a) =>
 			{
-				AddStandardControl<ScrollPane<Widget>>();
+				AddStandardControl<ScrollPane>();
 			};
 			controlsMenu.Items.Add(_addScrollPaneItem);
 
@@ -604,10 +604,10 @@ namespace Myra.UIEditor
 			_rightSplitPane = new VerticalSplitPane();
 
 			_explorer = new Explorer();
-			_explorer.Widget.SelectionChanged += WidgetOnSelectionChanged;
+			_explorer.Tree.SelectionChanged += WidgetOnSelectionChanged;
 			_rightSplitPane.Widgets.Add(_explorer);
 
-			_propertyGridPane = new ScrollPane<PropertyGrid>();
+			_propertyGridPane = new ScrollPane();
 
 			_propertyGrid = new PropertyGrid();
 			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
@@ -716,9 +716,9 @@ namespace Myra.UIEditor
 					else if (container is Grid)
 					{
 						((Grid)container).Widgets.Remove(asWidget);
-					} else if (container is ScrollPane<Widget>)
+					} else if (container is ScrollPane)
 					{
-						((ScrollPane<Widget>) container).Widget = null;
+						((ScrollPane) container).Widget = null;
 					}
 				}
 			}
@@ -754,10 +754,10 @@ namespace Myra.UIEditor
 
 		private void OnObjectAdded(object widget)
 		{
-			var node = _explorer.AddObject(_explorer.Widget.SelectedRow, widget);
+			var node = _explorer.AddObject(_explorer.Tree.SelectedRow, widget);
 
-			_explorer.Widget.SelectedRow = node;
-			_explorer.Widget.ExpandPath(node);
+			_explorer.Tree.SelectedRow = node;
+			_explorer.Tree.ExpandPath(node);
 		}
 
 		private void AddStandardControl<T>(T widget) where T : Widget
@@ -769,9 +769,9 @@ namespace Myra.UIEditor
 			else if (_propertyGrid.Object is SplitPane)
 			{
 				((SplitPane) _propertyGrid.Object).Widgets.Add(widget);
-			} else if (_propertyGrid.Object is ScrollPane<Widget>)
+			} else if (_propertyGrid.Object is ScrollPane)
 			{
-				((ScrollPane<Widget>) _propertyGrid.Object).Widget = widget;
+				((ScrollPane) _propertyGrid.Object).Widget = widget;
 			}
 
 			OnObjectAdded(widget);
@@ -792,7 +792,7 @@ namespace Myra.UIEditor
 		{
 			if (eventArgs.Data == "Id" || eventArgs.Data == "Text")
 			{
-				_explorer.OnObjectIdChanged(_explorer.Widget.SelectedRow.Tag);
+				_explorer.OnObjectIdChanged(_explorer.Tree.SelectedRow.Tag);
 			}
 
 			IsDirty = true;
@@ -1031,7 +1031,7 @@ namespace Myra.UIEditor
 				{
 					enableStandard = true;
 				}
-				else if (selectedObject is ScrollPane<Widget> && ((ScrollPane<Widget>) selectedObject).Widget == null)
+				else if (selectedObject is ScrollPane && ((ScrollPane) selectedObject).Widget == null)
 				{
 					enableStandard = true;
 				} 

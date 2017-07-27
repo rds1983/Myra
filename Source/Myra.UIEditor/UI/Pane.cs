@@ -2,7 +2,7 @@
 
 namespace Myra.UIEditor.UI
 {
-	public class Pane<T>: ScrollPane<T> where T: Widget
+	public class Pane: ScrollPane
 	{
 	}
 }

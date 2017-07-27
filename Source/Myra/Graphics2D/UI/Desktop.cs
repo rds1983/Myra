@@ -462,7 +462,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void SetFocus(Widget w, bool focused)
+		public void SetFocus(Widget w, bool focused)
 		{
 			_focusedWidgets.Clear();
 

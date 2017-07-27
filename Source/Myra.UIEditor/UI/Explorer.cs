@@ -7,10 +7,15 @@ using TreeNode = Myra.Graphics2D.UI.TreeNode;
 
 namespace Myra.UIEditor.UI
 {
-	public class Explorer : Pane<Tree>
+	public class Explorer : Pane
 	{
 		private Project _project;
 
+		public Tree Tree
+		{
+			get { return (Tree) Widget; }
+		}
+		
 		public Project Project
 		{
 			get { return _project; }
@@ -24,7 +29,7 @@ namespace Myra.UIEditor.UI
 
 				_project = value;
 
-				Widget.RemoveAllSubNodes();
+				Tree.RemoveAllSubNodes();
 
 				if (_project == null)
 				{
@@ -32,7 +37,7 @@ namespace Myra.UIEditor.UI
 				}
 
 				// Root node
-				var projectNode = Widget.AddSubNode("Project");
+				var projectNode = Tree.AddSubNode("Project");
 				var rootNode = AddObject(projectNode, _project.Root);
 				Rebuild(rootNode, _project.Root);
 			}
@@ -40,7 +45,7 @@ namespace Myra.UIEditor.UI
 
 		public TreeNode SelectedNode
 		{
-			get { return Widget.SelectedRow; }
+			get { return Tree.SelectedRow; }
 		}
 
 		public object SelectedObject
@@ -82,7 +87,7 @@ namespace Myra.UIEditor.UI
 
 		public TreeNode FindNodeByObject(object item)
 		{
-			return FindNodeByObject(Widget, item);
+			return FindNodeByObject(Tree, item);
 		}
 
 		private static void SetNodeText(TreeNode node, object item)
@@ -164,9 +169,9 @@ namespace Myra.UIEditor.UI
 				{
 					var container = item as Grid;
 					widgets = container.Children;
-				} else if (item is ScrollPane<Widget>)
+				} else if (item is ScrollPane)
 				{
-					widgets = ((ScrollPane<Widget>) item).Children;
+					widgets = ((ScrollPane) item).Children;
 				}
 
 				if (widgets == null)

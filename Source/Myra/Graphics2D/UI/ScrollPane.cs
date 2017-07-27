@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ScrollPane<T> : SingleItemContainer<T> where T : Widget
+	public class ScrollPane : SingleItemContainer<Widget>
 	{
 		private Orientation _scrollbarOrientation;
 		private bool _horizontalScrollbarVisible, _verticalScrollbarVisible;
@@ -50,7 +50,7 @@ namespace Myra.Graphics2D.UI
 		/// Same as Widget. Used by the JSON serializer.
 		/// </summary>
 		[HiddenInEditor]
-		public T Child
+		public Widget Child
 		{
 			get { return Widget; }
 			set { Widget = value; }
