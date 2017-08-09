@@ -76,11 +76,6 @@ namespace Myra.Graphics2D.UI
 
 		public override void OnMouseUp(MouseButtons mb)
 		{
-			if (!Enabled)
-			{
-				return;
-			}
-
 			base.OnMouseUp(mb);
 
 			if (!Toggleable)
@@ -150,19 +145,25 @@ namespace Myra.Graphics2D.UI
 		public override TextureRegion2D GetCurrentBackground()
 		{
 			var isOver = IsMouseOver;
-
 			var result = Background;
-			if (!Enabled && DisabledBackground != null)
+
+			if (Enabled)
 			{
-				result = DisabledBackground;
+				if (IsPressed && PressedBackground != null)
+				{
+					result = PressedBackground;
+				}
+				else if (isOver && OverBackground != null)
+				{
+					result = OverBackground;
+				}
 			}
-			else if (IsPressed && PressedBackground != null)
+			else
 			{
-				result = PressedBackground;
-			}
-			else if (isOver && OverBackground != null)
-			{
-				result = OverBackground;
+				if (DisabledBackground != null)
+				{
+					result = DisabledBackground;
+				}
 			}
 
 			return result;

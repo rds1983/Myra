@@ -54,6 +54,48 @@ namespace Myra.Utility
 
 			return true;
 		}
+		
+		public static bool GetStyle(this JObject styles, string name, out bool result)
+		{
+			result = false;
+
+			string s;
+			if (!GetStyle(styles, name, out s))
+			{
+				return false;
+			}
+
+			bool i;
+			if (!bool.TryParse(s, out i))
+			{
+				return false;
+			}
+
+			result = i;
+
+			return true;
+		}
+				
+		public static bool GetStyle(this JObject styles, string name, out char result)
+		{
+			result = '\0';
+
+			string s;
+			if (!GetStyle(styles, name, out s))
+			{
+				return false;
+			}
+
+			char i;
+			if (!char.TryParse(s, out i))
+			{
+				return false;
+			}
+
+			result = i;
+
+			return true;
+		}
 
 		public static bool GetStyle(this JObject styles, string name, out float result)
 		{

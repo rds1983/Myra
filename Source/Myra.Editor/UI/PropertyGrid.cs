@@ -111,7 +111,7 @@ namespace Myra.Editor.UI
 				RowsProportions.Add(new Proportion(ProportionType.Auto));
 				RowsProportions.Add(new Proportion(ProportionType.Auto));
 
-				var propertyGrid = new PropertyGrid(parent.PropertyGridStyle, category)
+				var propertyGrid = new PropertyGrid(parent.PropertyGridStyle, category, parentProperty)
 				{
 					Object = value,
 					Visible = false,
@@ -119,8 +119,7 @@ namespace Myra.Editor.UI
 					GridPositionX = 1,
 					GridPositionY = 1,
 					ColorChangeHandler = parent.ColorChangeHandler,
-					_parentGrid = parent,
-					_parentProperty = parentProperty
+					_parentGrid = parent
 				};
 
 				// Mark
@@ -193,8 +192,9 @@ namespace Myra.Editor.UI
 
 		public event EventHandler<GenericEventArgs<string>> PropertyChanged;
 
-		public PropertyGrid(TreeStyle style, string category)
+		private PropertyGrid(TreeStyle style, string category, Record parentProperty)
 		{
+			_parentProperty = parentProperty;
 			ColumnSpacing = 8;
 			RowSpacing = 8;
 			ColumnsProportions.Add(new Proportion(ProportionType.Pixels, 100));
@@ -207,6 +207,11 @@ namespace Myra.Editor.UI
 				ApplyPropertyGridStyle(style);
 			}
 		}
+		
+		public PropertyGrid(TreeStyle style, string category): this(style, category, null)
+		{
+		}
+		
 
 		public PropertyGrid(string category) : this(Stylesheet.Current.TreeStyle, category)
 		{
@@ -236,6 +241,12 @@ namespace Myra.Editor.UI
 			{
 				var record = records[i];
 
+				var hasSetter = record.HasSetter;
+				if (_parentProperty != null && !_parentProperty.HasSetter)
+				{
+					hasSetter = false;
+				}
+
 				var value = record.GetValue(_object);
 				Widget valueWidget = null;
 
@@ -256,7 +267,7 @@ namespace Myra.Editor.UI
 
 
 					cb.SelectedIndex = Array.IndexOf(values, value);
-					if (record.HasSetter)
+					if (hasSetter)
 					{
 						cb.SelectedIndexChanged += (sender, args) =>
 						{
@@ -280,7 +291,7 @@ namespace Myra.Editor.UI
 						IsPressed = isChecked
 					};
 
-					if (record.HasSetter)
+					if (hasSetter)
 					{
 
 						cb.Down += (sender, args) =>
@@ -348,7 +359,7 @@ namespace Myra.Editor.UI
 
 					subGrid.Widgets.Add(button);
 
-					if (record.HasSetter)
+					if (hasSetter)
 					{
 						button.Up += (sender, args) =>
 						{
@@ -395,7 +406,7 @@ namespace Myra.Editor.UI
 
 					cb.SelectedIndex = Array.IndexOf(values, value);
 
-					if (record.HasSetter)
+					if (hasSetter)
 					{
 						cb.SelectedIndexChanged += (sender, args) =>
 						{
@@ -429,7 +440,7 @@ namespace Myra.Editor.UI
 						Value = value != null ? (float) Convert.ChangeType(value, typeof (float)) : default(float?)
 					};
 
-					if (record.HasSetter)
+					if (hasSetter)
 					{
 						spinButton.ValueChanged += (sender, args) =>
 						{
@@ -488,7 +499,7 @@ namespace Myra.Editor.UI
 						Text = value != null ? value.ToString() : string.Empty
 					};
 
-					if (record.HasSetter)
+					if (hasSetter)
 					{
 						tf.TextChanged += (sender, args) =>
 						{
@@ -697,6 +708,12 @@ namespace Myra.Editor.UI
 				{
 					continue;
 				}
+				
+				var readOnlyAttr = property.FindAttribute<ReadOnlyAttribute>();
+				if (readOnlyAttr != null && readOnlyAttr.IsReadOnly)
+				{
+					hasSetter = false;
+				}
 
 				var record = new PropertyRecord(property)
 				{
@@ -725,9 +742,18 @@ namespace Myra.Editor.UI
 
 				var categoryAttr = field.FindAttribute<EditCategoryAttribute>();
 
+
+				var hasSetter = true;
+				var readOnlyAttr = field.FindAttribute<ReadOnlyAttribute>();
+				if (readOnlyAttr != null && readOnlyAttr.IsReadOnly)
+				{
+					hasSetter = false;
+				}
+
+
 				var record = new FieldRecord(field)
 				{
-					HasSetter = true,
+					HasSetter = hasSetter,
 					Category = categoryAttr != null ? categoryAttr.Name : DefaultCategoryName
 				};
 

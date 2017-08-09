@@ -177,6 +177,11 @@ namespace Myra.Graphics2D.UI
 
 		private void ProcessChar(char ch)
 		{
+			if (!Enabled)
+			{
+				return;
+			}
+			
 			EnsureIndexInRange();
 
 			var sb = new StringBuilder();
@@ -197,11 +202,16 @@ namespace Myra.Graphics2D.UI
 		public override void OnKeyDown(Keys k)
 		{
 			base.OnKeyDown(k);
-
+			
 			switch (k)
 			{
 				case Keys.Back:
 				{
+					if (!Enabled)
+					{
+						break;
+					}
+					
 					EnsureIndexInRange();
 					var sb = new StringBuilder();
 
@@ -220,7 +230,11 @@ namespace Myra.Graphics2D.UI
 
 				case Keys.Delete:
 				{
-
+					if (!Enabled)
+					{
+						break;
+					}
+					
 					EnsureIndexInRange();
 
 					var sb = new StringBuilder();
@@ -308,7 +322,12 @@ namespace Myra.Graphics2D.UI
 
 				case Keys.Enter:
 				{
-					// Insert line break
+					if (!Enabled)
+					{
+						break;
+					}
+					
+					// Insert line break				
 					var sb = new StringBuilder();
 					sb.Append(Text.Substring(0, _cursorIndex));
 					sb.Append('\n');
