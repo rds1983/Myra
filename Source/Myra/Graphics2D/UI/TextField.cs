@@ -461,7 +461,7 @@ namespace Myra.Graphics2D.UI
 		{
 			base.Arrange();
 
-			_formattedText.Width = _wrap ? LayoutBounds.Width : default(int?);
+			_formattedText.Width = _wrap ? Bounds.Width : default(int?);
 		}
 
 		public void ApplyTextFieldStyle(TextFieldStyle style)

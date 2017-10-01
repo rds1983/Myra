@@ -520,7 +520,7 @@ namespace Myra.Graphics2D.UI
 
 		public override void Arrange()
 		{
-			var bounds = LayoutBounds;
+			var bounds = RenderBounds;
 			LayoutProcessFixed(bounds.Size());
 
 			_colWidths.Clear();
@@ -725,7 +725,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			int i;
-			var bounds = AbsoluteBounds;
+			var bounds = RenderBounds;
 			for (i = 0; i < _gridLinesX.Count; ++i)
 			{
 				var x = bounds.X + _gridLinesX[i];

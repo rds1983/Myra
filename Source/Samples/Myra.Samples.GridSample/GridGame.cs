@@ -124,7 +124,7 @@ namespace Myra.Samples.GridSample
                 Wrap = true
             };
 
-            var pane = new ScrollPane<TextBlock>
+            var pane = new ScrollPane
             {
                 Widget = label,
                 WidthHint = 200,

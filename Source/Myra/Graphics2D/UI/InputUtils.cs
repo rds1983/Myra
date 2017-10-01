@@ -49,7 +49,7 @@ namespace Myra.Graphics2D.UI
 					continue;
 				}
 
-				if (!movedHandled && w.AbsoluteBounds.Contains(mousePosition))
+				if (!movedHandled && w.Bounds.Contains(mousePosition))
 				{
 					if (w.IsMouseOver)
 					{

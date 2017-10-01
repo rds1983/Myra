@@ -49,7 +49,7 @@ namespace Myra.Graphics2D.UI
 				{
 					_itemsContainer.WidthHint = Bounds.Width;
 
-					Desktop.ShowContextMenu(_itemsContainer, new Point(AbsoluteBounds.X, AbsoluteBounds.Bottom));
+					Desktop.ShowContextMenu(_itemsContainer, new Point(Bounds.X, Bounds.Bottom));
 				}
 			}
 		}

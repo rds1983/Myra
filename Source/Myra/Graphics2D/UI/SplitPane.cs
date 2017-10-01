@@ -138,8 +138,8 @@ namespace Myra.Graphics2D.UI
 		{
 			_handleDown = (ImageButton)sender;
 			_mouseCoord = Orientation == Orientation.Horizontal
-				? Desktop.MousePosition.X - _handleDown.AbsoluteBounds.X
-				: Desktop.MousePosition.Y - _handleDown.AbsoluteBounds.Y;
+				? Desktop.MousePosition.X - _handleDown.Bounds.X
+				: Desktop.MousePosition.Y - _handleDown.Bounds.Y;
 		}
 
 		private void WidgetsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)

@@ -172,7 +172,7 @@ namespace Myra.Graphics2D.UI
 
 			HoverRow = null;
 
-			if (!AbsoluteBounds.Contains(position))
+			if (!Bounds.Contains(position))
 			{
 				return;
 			}
@@ -242,7 +242,7 @@ namespace Myra.Graphics2D.UI
 
 		private void UpdateRowInfos()
 		{
-			var bounds = AbsoluteBounds;
+			var bounds = Bounds;
 
 			foreach (var rowInfo in _allNodes)
 			{
@@ -255,7 +255,7 @@ namespace Myra.Graphics2D.UI
 			{
 				if (rowInfo.RowVisible)
 				{
-					rowInfo.RowBounds = new Rectangle(bounds.X, rowInfo.AbsoluteBounds.Y, bounds.Width,
+					rowInfo.RowBounds = new Rectangle(bounds.X, rowInfo.Bounds.Y, bounds.Width,
 						rowInfo.GetRowHeight(0));
 				}
 			}

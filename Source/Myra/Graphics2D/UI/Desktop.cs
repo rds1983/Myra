@@ -270,9 +270,6 @@ namespace Myra.Graphics2D.UI
 				if (widget.Visible)
 				{
 					widget.Layout(_bounds);
-					
-					// Recursively update absolute positions
-					widget.AbsoluteLocation = widget.Bounds.Location;
 				}
 			}
 

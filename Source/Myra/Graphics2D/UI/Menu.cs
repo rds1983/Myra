@@ -273,7 +273,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			Desktop.ShowContextMenu(menuItem.SubMenu, new Point(menuItem.AbsoluteBounds.X, AbsoluteBounds.Bottom));
+			Desktop.ShowContextMenu(menuItem.SubMenu, new Point(menuItem.Bounds.X, Bounds.Bottom));
 			Desktop.ContextMenuClosed += DesktopOnContextMenuClosed;
 
 			OpenMenuItem = menuItem;
@@ -327,7 +327,7 @@ namespace Myra.Graphics2D.UI
 			foreach (var widget in Widgets)
 			{
 				var menuItem = widget as MenuItemButton;
-				if (menuItem != null && menuItem.SubMenu != null && menuItem.AbsoluteBounds.Contains(position) &&
+				if (menuItem != null && menuItem.SubMenu != null && menuItem.Bounds.Contains(position) &&
 				    Desktop.ContextMenu != menuItem.SubMenu)
 				{
 					ShowSubMenu(menuItem);

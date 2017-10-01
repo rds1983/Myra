@@ -11,8 +11,15 @@ using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
-	public class Widget: IItemWithId
+	public class Widget : IItemWithId
 	{
+		internal enum LayoutState
+		{
+			Normal,
+			LocationInvalid,
+			Invalid
+		}
+
 		public const string DefaultStyleName = "default";
 		public const int DoubleClickIntervalInMs = 500;
 
@@ -21,12 +28,12 @@ namespace Myra.Graphics2D.UI
 		private int _gridPositionX, _gridPositionY, _gridSpanX = 1, _gridSpanY = 1;
 		private HorizontalAlignment _horizontalAlignment;
 		private VerticalAlignment _verticalAlignment;
-		private bool _layoutDirty = true;
-		private bool _arrangeDirty = true;
+		private LayoutState _layoutState = LayoutState.Invalid;
 		private bool _measureDirty = true;
 
 		private Point _lastMeasureSize;
 		private Point _lastMeasureAvailableSize;
+		private Point _relativeLocation;
 
 		private MouseButtons? _mouseButtonsDown;
 
@@ -57,7 +64,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_xHint = value;
-				InvalidateLayout(false);
+				_layoutState = LayoutState.LocationInvalid;
 			}
 		}
 
@@ -74,7 +81,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_yHint = value;
-				InvalidateLayout(false);
+				_layoutState = LayoutState.LocationInvalid;
 			}
 		}
 
@@ -383,74 +390,11 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public Point Size
-		{
-			get { return _bounds.Size(); }
-			private set
-			{
-				if (value == _bounds.Size())
-				{
-					return;
-				}
-
-				GraphicsExtension.SetSize(ref _bounds, value);
-			}
-		}
-
-		[HiddenInEditor]
-		[JsonIgnore]
-		public virtual Point AbsoluteLocation { get; internal set; }
-
-		[HiddenInEditor]
-		[JsonIgnore]
-		public Point Location
-		{
-			get { return _bounds.Location; }
-			private set
-			{
-				if (value == _bounds.Location)
-				{
-					return;
-				}
-
-				_bounds.Location = value;
-
-				if (Parent != null)
-				{
-					AbsoluteLocation = Parent.AbsoluteLocation + Location;
-				}
-				else
-				{
-					AbsoluteLocation = Location;
-				}
-			}
-		}
-
-		[HiddenInEditor]
-		[JsonIgnore]
 		public Rectangle Bounds
 		{
-			get { return _bounds; }
-
-			internal set
-			{
-				Location = value.Location;
-				Size = value.Size();
+			get {
+				return _bounds;
 			}
-		}
-
-		[HiddenInEditor]
-		[JsonIgnore]
-		public Rectangle AbsoluteBounds
-		{
-			get { return new Rectangle(AbsoluteLocation.X, AbsoluteLocation.Y, _bounds.Width, _bounds.Height); }
-		}
-
-		[HiddenInEditor]
-		[JsonIgnore]
-		public Rectangle LayoutBounds
-		{
-			get { return CalculateClientBounds(new Rectangle(0, 0, _bounds.Width, _bounds.Height)); }
 		}
 
 		[HiddenInEditor]
@@ -459,7 +403,7 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return CalculateClientBounds(AbsoluteBounds);
+				return CalculateClientBounds(Bounds);
 			}
 		}
 
@@ -530,7 +474,7 @@ namespace Myra.Graphics2D.UI
 				else if (Enabled && OverBackground != null)
 				{
 					result = OverBackground;
-					
+
 				}
 			}
 
@@ -556,7 +500,7 @@ namespace Myra.Graphics2D.UI
 		{
 			UpdateLayout();
 
-			var bounds = AbsoluteBounds;
+			var bounds = Bounds;
 			if (bounds.Width == 0 || bounds.Height == 0)
 			{
 				return;
@@ -672,58 +616,65 @@ namespace Myra.Graphics2D.UI
 			UpdateLayout();
 		}
 
-		public void InvalidateLayout(bool invalidateArrange = true)
+		public void InvalidateLayout()
 		{
-			if (invalidateArrange)
-			{
-				_arrangeDirty = true;
-			}
-			_layoutDirty = true;
+			_layoutState = LayoutState.Invalid;
+		}
+
+		internal virtual void MoveChildren(Point delta)
+		{
+			_bounds.Location += delta;
 		}
 
 		public virtual void UpdateLayout()
 		{
-			if (!_layoutDirty)
+			if (_layoutState == LayoutState.Normal)
 			{
 				return;
 			}
 
-			Point size;
-			if (HorizontalAlignment != HorizontalAlignment.Stretch ||
-			    VerticalAlignment != VerticalAlignment.Stretch)
+			if (_layoutState == LayoutState.Invalid)
 			{
-				size = Measure(_containerBounds.Size());
+				// Full rearrange
+				Point size;
+				if (HorizontalAlignment != HorizontalAlignment.Stretch ||
+					VerticalAlignment != VerticalAlignment.Stretch)
+				{
+					size = Measure(_containerBounds.Size());
+				}
+				else
+				{
+					size = _containerBounds.Size();
+				}
+
+				if (size.X > _containerBounds.Width)
+				{
+					size.X = _containerBounds.Width;
+				}
+
+				if (size.Y > _containerBounds.Height)
+				{
+					size.Y = _containerBounds.Height;
+				}
+
+				// Align
+				var controlBounds = LayoutUtils.Align(_containerBounds.Size(), size, HorizontalAlignment, VerticalAlignment);
+				controlBounds.Offset(_containerBounds.Location);
+
+				controlBounds.Offset(XHint, YHint);
+
+				_bounds = controlBounds;
+
+				Arrange();
 			}
 			else
 			{
-				size = _containerBounds.Size();
+				// Only location
+				MoveChildren(new Point(XHint - _relativeLocation.X, YHint - _relativeLocation.Y));
 			}
 
-			if (size.X > _containerBounds.Width)
-			{
-				size.X = _containerBounds.Width;
-			}
-
-			if (size.Y > _containerBounds.Height)
-			{
-				size.Y = _containerBounds.Height;
-			}
-
-			// Align
-			var controlBounds = LayoutUtils.Align(_containerBounds.Size(), size, HorizontalAlignment, VerticalAlignment);
-			controlBounds.Offset(_containerBounds.Location);
-
-			controlBounds.Offset(XHint, YHint);
-
-			Bounds = controlBounds;
-
-			if (_arrangeDirty)
-			{
-				Arrange();
-				_arrangeDirty = false;
-			}
-
-			_layoutDirty = false;
+				_relativeLocation = new Point(XHint, YHint);
+			_layoutState = LayoutState.Normal;
 		}
 
 		public virtual void OnDesktopChanging()

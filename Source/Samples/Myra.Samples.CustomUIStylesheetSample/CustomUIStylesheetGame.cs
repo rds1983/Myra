@@ -151,7 +151,7 @@ namespace Myra.Samples.CustomUIStylesheetSample
                 Wrap = true
             };
 
-            var pane = new ScrollPane<TextBlock>
+            var pane = new ScrollPane
             {
                 Widget = label,
                 WidthHint = 200,

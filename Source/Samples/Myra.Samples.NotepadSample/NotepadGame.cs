@@ -68,39 +68,39 @@ namespace Myra.Samples.NotepadSample
 
             // Load UI
 
-            var ui = Project.LoadFromData(Resources.notepad);
+            var ui = new Notepad();
 
-			var mainMenu = (Menu) ui.Root.FindWidgetById("mainMenu");
-			var newItem = mainMenu.FindMenuItemById("menuItemNew");
+			var mainMenu = ui.mainMenu;
+			var newItem = ui.menuItemNew;
 			newItem.Selected += NewItemOnDown;
 
 			// File/Open
-			var openItem = mainMenu.FindMenuItemById("menuItemOpen");
+			var openItem = ui.menuItemOpen;
 			openItem.Selected += OpenItemOnDown;
 
 			// File/Save
-			var saveItem = mainMenu.FindMenuItemById("menuItemSave");
+			var saveItem = ui.menuItemSave;
 			saveItem.Selected += SaveItemOnDown;
 
 			// File/Save As...
-			var saveAsItem = mainMenu.FindMenuItemById("menuItemSaveAs");
+			var saveAsItem = ui.menuItemSaveAs;
 			saveAsItem.Selected += SaveAsItemOnDown;
 
 			// File/Quit
-			var quitItem = mainMenu.FindMenuItemById("menuItemQuit");
+			var quitItem = ui.menuItemQuit;
 			quitItem.Selected += QuitItemOnDown;
 
-			var aboutItem = mainMenu.FindMenuItemById("menuItemAbout");
+			var aboutItem = ui.menuItemAbout;
 			aboutItem.Selected += AboutItemOnDown;
 
-			_textField = (TextField)ui.Root.FindWidgetById("textArea");
+			_textField = ui.textArea;
 
 			_textField.Text =
 				"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum!";
 
 			_textField.TextChanged += TextFieldOnTextChanged;
 
-			_host.Widgets.Add(ui.Root);
+			_host.Widgets.Add(ui);
         }
 
         private void UpdateTitle()

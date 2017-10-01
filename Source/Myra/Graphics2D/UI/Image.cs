@@ -50,7 +50,7 @@ namespace Myra.Graphics2D.UI
 
 			if (TextureRegion2D != null)
 			{
-				var bounds = AbsoluteBounds;
+				var bounds = RenderBounds;
 				batch.Draw(TextureRegion2D, bounds, Color);
 			}
 		}

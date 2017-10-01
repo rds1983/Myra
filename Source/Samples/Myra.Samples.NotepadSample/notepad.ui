@@ -1,6 +1,12 @@
 {
   "$id": "1",
   "$type": "Myra.Graphics2D.UI.Project, Myra",
+  "ExportOptions": {
+    "$type": "Myra.Graphics2D.UI.ExportOptions, Myra",
+    "Namespace": "Myra.Samples.NotepadSample",
+    "Class": "Notepad",
+    "OutputPath": "/home/rds/Projects/Hebron/Myra/Source/Samples/Myra.Samples.NotepadSample"
+  },
   "Root": {
     "$id": "2",
     "$type": "Myra.Graphics2D.UI.Grid, Myra",
@@ -21,70 +27,71 @@
           {
             "$id": "5",
             "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
-            "Id": "menuItemFile",
             "Items": [
               {
                 "$id": "6",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
-                "Id": "menuItemNew",
                 "Items": [],
+                "Id": "menuItemNew",
                 "Text": "New",
                 "Color": null
               },
               {
                 "$id": "7",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
-                "Id": "menuItemOpen",
                 "Items": [],
+                "Id": "menuItemOpen",
                 "Text": "Open...",
                 "Color": null
               },
               {
                 "$id": "8",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
-                "Id": "menuItemSave",
                 "Items": [],
+                "Id": "menuItemSave",
                 "Text": "Save",
                 "Color": null
               },
               {
                 "$id": "9",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
-                "Id": "menuItemSaveAs",
                 "Items": [],
+                "Id": "menuItemSaveAs",
                 "Text": "Save As...",
                 "Color": null
               },
               {
                 "$id": "10",
-                "$type": "Myra.Graphics2D.UI.MenuSeparator, Myra"
+                "$type": "Myra.Graphics2D.UI.MenuSeparator, Myra",
+                "Id": null
               },
               {
                 "$id": "11",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
-                "Id": "menuItemQuit",
                 "Items": [],
+                "Id": "menuItemQuit",
                 "Text": "Quit",
                 "Color": null
               }
             ],
+            "Id": "menuItemFile",
             "Text": "File",
             "Color": null
           },
           {
             "$id": "12",
             "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
-            "Id": "menuItemHelp",
             "Items": [
               {
                 "$id": "13",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
-                "Id": "menuItemAbout",
                 "Items": [],
+                "Id": "menuItemAbout",
                 "Text": "About",
                 "Color": null
               }
             ],
+            "Id": "menuItemHelp",
             "Text": "Help",
             "Color": null
           }
@@ -120,7 +127,7 @@
       },
       {
         "$id": "15",
-        "$type": "Myra.Graphics2D.UI.ScrollPane`1[[Myra.Graphics2D.UI.Widget, Myra]], Myra",
+        "$type": "Myra.Graphics2D.UI.ScrollPane, Myra",
         "Child": {
           "$id": "16",
           "$type": "Myra.Graphics2D.UI.TextField, Myra",
