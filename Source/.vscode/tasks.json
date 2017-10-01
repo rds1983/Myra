@@ -1,0 +1,63 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "taskName": "build",
+            "type": "process",
+            "command": "xbuild",
+            "args": [
+                "Myra.Linux.sln",
+                "/t:build",
+                "/p:Configuration=Debug"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$go"
+            ]
+        },
+        {
+            "taskName": "clean",
+            "type": "process",
+            "command": "xbuild",
+            "args": [
+                "Myra.Linux.sln",
+                "/t:clean",
+                "/p:Configuration=Debug"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$go"
+            ]
+        },
+        {
+            "taskName": "buildRelease",
+            "type": "process",
+            "command": "xbuild",
+            "args": [
+                "Myra.Linux.sln",
+                "/t:build",
+                "/p:Configuration=Release"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$go"
+            ]
+        },
+        {
+            "taskName": "cleanRelease",
+            "type": "process",
+            "command": "xbuild",
+            "args": [
+                "Myra.Linux.sln",
+                "/t:clean",
+                "/p:Configuration=Release"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$go"
+            ]
+        }        
+    ]
+}

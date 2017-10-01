@@ -1,0 +1,78 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [       
+    {
+        "name": "FormattedTextSample",
+        "type": "mono",
+        "request": "launch",
+        "preLaunchTask": "build",           
+        "program": "${workspaceRoot}/Samples/Myra.Samples.FormattedTextSample/bin/Debug/Myra.Samples.FormattedTextSample.exe",
+        "args": [],
+        "cwd": "${workspaceRoot}/Samples/Myra.Samples.FormattedTextSample/bin/Debug/",
+        "console": "internalConsole"
+    },
+    {
+        "name": "TextBlocksSample",
+        "type": "mono",
+        "request": "launch",
+        "preLaunchTask": "build",           
+        "program": "${workspaceRoot}/Samples/Myra.Samples.TextBlocksSample/bin/Debug/Myra.Samples.TextBlocksSample.exe",
+        "args": [],
+        "cwd": "${workspaceRoot}/Samples/Myra.Samples.TextBlocksSample/bin/Debug/",
+        "console": "internalConsole"
+    },
+    {
+        "name": "SplitPaneSample",
+        "type": "mono",
+        "request": "launch",
+        "preLaunchTask": "build",           
+        "program": "${workspaceRoot}/Samples/Myra.Samples.SplitPaneSample/bin/Debug/Myra.Samples.SplitPaneSample.exe",
+        "args": [],
+        "cwd": "${workspaceRoot}/Samples/Myra.Samples.SplitPaneSample/bin/Debug/",
+        "console": "internalConsole"
+    },
+    {
+        "name": "GridSample",
+        "type": "mono",
+        "request": "launch",
+        "preLaunchTask": "build",           
+        "program": "${workspaceRoot}/Samples/Myra.Samples.GridSample/bin/Debug/Myra.Samples.GridSample.exe",
+        "args": [],
+        "cwd": "${workspaceRoot}/Samples/Myra.Samples.GridSample/bin/Debug/",
+        "console": "internalConsole"
+    },
+    {
+        "name": "NotepadSample",
+        "type": "mono",
+        "request": "launch",
+        "preLaunchTask": "build",           
+        "program": "${workspaceRoot}/Samples/Myra.Samples.NotepadSample/bin/Debug/Myra.Samples.NotepadSample.exe",
+        "args": [],
+        "cwd": "${workspaceRoot}/Samples/Myra.Samples.NotepadSample/bin/Debug/",
+        "console": "internalConsole"
+    },
+    {
+        "name": "CustomUIStylesheetSample",
+        "type": "mono",
+        "request": "launch",
+        "preLaunchTask": "build",           
+        "program": "${workspaceRoot}/Samples/Myra.Samples.CustomUIStylesheetSample/bin/Debug/Myra.Samples.CustomUIStylesheetSample.exe",
+        "args": [],
+        "cwd": "${workspaceRoot}/Samples/Myra.Samples.CustomUIStylesheetSample/bin/Debug/",
+        "console": "internalConsole"
+    },
+    {
+        "name": "UI Editor",
+        "type": "mono",
+        "request": "launch",
+        "preLaunchTask": "build",           
+        "program": "${workspaceRoot}/Myra.UIEditor/bin/Debug/Myra.UIEditor.exe",
+        "args": [],
+        "cwd": "${workspaceRoot}/Myra.UIEditor/bin/Debug/",
+        "console": "internalConsole"
+    }    
+    ]
+}
