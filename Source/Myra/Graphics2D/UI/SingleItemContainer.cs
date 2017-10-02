@@ -78,7 +78,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			Widget.Layout(RenderBounds);
+			Widget.Layout(ActualBounds);
 		}
 
 		protected override Point InternalMeasure(Point availableSize)

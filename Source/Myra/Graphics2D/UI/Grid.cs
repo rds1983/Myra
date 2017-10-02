@@ -520,7 +520,7 @@ namespace Myra.Graphics2D.UI
 
 		public override void Arrange()
 		{
-			var bounds = RenderBounds;
+			var bounds = ActualBounds;
 			LayoutProcessFixed(bounds.Size());
 
 			_colWidths.Clear();
@@ -715,9 +715,9 @@ namespace Myra.Graphics2D.UI
 			control.Layout(new Rectangle(_cellLocationsX[col], _cellLocationsY[row], cellSize.X, cellSize.Y));
 		}
 
-		public override void InternalRender(SpriteBatch batch)
+		public override void InternalRender(RenderContext context)
 		{
-			base.InternalRender(batch);
+			base.InternalRender(context);
 
 			if (!DrawLines)
 			{
@@ -725,17 +725,17 @@ namespace Myra.Graphics2D.UI
 			}
 
 			int i;
-			var bounds = RenderBounds;
+			var bounds = ActualBounds;
 			for (i = 0; i < _gridLinesX.Count; ++i)
 			{
 				var x = bounds.X + _gridLinesX[i];
-				batch.DrawLine(x, bounds.Top, x, bounds.Bottom, DrawLinesColor);
+				context.Batch.DrawLine(x, bounds.Top, x, bounds.Bottom, DrawLinesColor);
 			}
 
 			for (i = 0; i < _gridLinesY.Count; ++i)
 			{
 				var y = bounds.Top + _gridLinesY[i];
-				batch.DrawLine(bounds.Left, y, bounds.Right, y, DrawLinesColor);
+				context.Batch.DrawLine(bounds.Left, y, bounds.Right, y, DrawLinesColor);
 			}
 		}
 

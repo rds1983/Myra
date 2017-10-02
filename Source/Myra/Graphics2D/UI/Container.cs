@@ -95,7 +95,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void InternalRender(SpriteBatch batch)
+		public override void InternalRender(RenderContext batch)
 		{
 			foreach (var child in Children)
 			{

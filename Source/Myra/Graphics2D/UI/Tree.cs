@@ -267,7 +267,7 @@ namespace Myra.Graphics2D.UI
 			_rowInfosDirty = true;
 		}
 
-		public override void InternalRender(SpriteBatch batch)
+		public override void InternalRender(RenderContext context)
 		{
 			if (_rowInfosDirty)
 			{
@@ -280,15 +280,15 @@ namespace Myra.Graphics2D.UI
 			{
 				if (!IsFocused && RowSelectionBackgroundWithoutFocus != null)
 				{
-					batch.Draw(RowSelectionBackgroundWithoutFocus, SelectedRow.RowBounds);
+					context.Batch.Draw(RowSelectionBackgroundWithoutFocus, SelectedRow.RowBounds);
 				}
 				else
 				{
-					batch.Draw(RowSelectionBackground, SelectedRow.RowBounds);
+					context.Batch.Draw(RowSelectionBackground, SelectedRow.RowBounds);
 				}
 			}
 
-			base.InternalRender(batch);
+			base.InternalRender(context);
 		}
 
 		public void ApplyTreeStyle(TreeStyle style)

@@ -181,7 +181,7 @@ namespace Myra.Graphics2D.UI
 			{
 				return;
 			}
-			
+
 			EnsureIndexInRange();
 
 			var sb = new StringBuilder();
@@ -202,51 +202,51 @@ namespace Myra.Graphics2D.UI
 		public override void OnKeyDown(Keys k)
 		{
 			base.OnKeyDown(k);
-			
+
 			switch (k)
 			{
 				case Keys.Back:
-				{
-					if (!Enabled)
 					{
-						break;
-					}
-					
-					EnsureIndexInRange();
-					var sb = new StringBuilder();
+						if (!Enabled)
+						{
+							break;
+						}
 
-					if (_cursorIndex > 0)
-					{
-						sb.Append(Text.Substring(0, _cursorIndex - 1));
-					}
-					sb.Append(Text.Substring(_cursorIndex));
+						EnsureIndexInRange();
+						var sb = new StringBuilder();
 
-					if (SetText(sb.ToString()) && _cursorIndex > 0)
-					{
-						--_cursorIndex;
+						if (_cursorIndex > 0)
+						{
+							sb.Append(Text.Substring(0, _cursorIndex - 1));
+						}
+						sb.Append(Text.Substring(_cursorIndex));
+
+						if (SetText(sb.ToString()) && _cursorIndex > 0)
+						{
+							--_cursorIndex;
+						}
 					}
-				}
 					break;
 
 				case Keys.Delete:
-				{
-					if (!Enabled)
 					{
-						break;
+						if (!Enabled)
+						{
+							break;
+						}
+
+						EnsureIndexInRange();
+
+						var sb = new StringBuilder();
+						sb.Append(Text.Substring(0, _cursorIndex));
+
+						if (_cursorIndex + 1 < Text.Length)
+						{
+							sb.Append(Text.Substring(_cursorIndex + 1));
+						}
+
+						Text = sb.ToString();
 					}
-					
-					EnsureIndexInRange();
-
-					var sb = new StringBuilder();
-					sb.Append(Text.Substring(0, _cursorIndex));
-
-					if (_cursorIndex + 1 < Text.Length)
-					{
-						sb.Append(Text.Substring(_cursorIndex + 1));
-					}
-
-					Text = sb.ToString();
-				}
 					break;
 
 				case Keys.Left:
@@ -264,56 +264,56 @@ namespace Myra.Graphics2D.UI
 					break;
 
 				case Keys.Up:
-				{
-					int lineIndex, glyphIndex;
-					if (!_formattedText.GetPositionByCharIndex(_cursorIndex, out lineIndex, out glyphIndex))
 					{
-						break;
+						int lineIndex, glyphIndex;
+						if (!_formattedText.GetPositionByCharIndex(_cursorIndex, out lineIndex, out glyphIndex))
+						{
+							break;
+						}
+
+						if (lineIndex <= 0)
+						{
+							break;
+						}
+
+						// Move up
+						--lineIndex;
+
+						if (glyphIndex >= _formattedText.Strings[lineIndex].Count)
+						{
+							glyphIndex = _formattedText.Strings[lineIndex].Count - 1;
+						}
+
+						var pos = _formattedText.GetCharIndexByPosition(lineIndex, glyphIndex);
+						_cursorIndex = pos ?? 0;
 					}
-
-					if (lineIndex <= 0)
-					{
-						break;
-					}
-
-					// Move up
-					--lineIndex;
-
-					if (glyphIndex >= _formattedText.Strings[lineIndex].Count)
-					{
-						glyphIndex = _formattedText.Strings[lineIndex].Count - 1;
-					}
-
-					var pos = _formattedText.GetCharIndexByPosition(lineIndex, glyphIndex);
-					_cursorIndex = pos ?? 0;
-				}
 					break;
 
 				case Keys.Down:
-				{
-					int lineIndex, glyphIndex;
-					if (!_formattedText.GetPositionByCharIndex(_cursorIndex, out lineIndex, out glyphIndex))
 					{
-						break;
+						int lineIndex, glyphIndex;
+						if (!_formattedText.GetPositionByCharIndex(_cursorIndex, out lineIndex, out glyphIndex))
+						{
+							break;
+						}
+
+						if (lineIndex >= _formattedText.Strings.Length - 1)
+						{
+							break;
+						}
+
+
+						// Move down
+						++lineIndex;
+
+						if (glyphIndex >= _formattedText.Strings[lineIndex].Count)
+						{
+							glyphIndex = _formattedText.Strings[lineIndex].Count - 1;
+						}
+
+						var pos = _formattedText.GetCharIndexByPosition(lineIndex, glyphIndex);
+						_cursorIndex = pos ?? 0;
 					}
-
-					if (lineIndex >= _formattedText.Strings.Length - 1)
-					{
-						break;
-					}
-
-
-					// Move down
-					++lineIndex;
-
-					if (glyphIndex >= _formattedText.Strings[lineIndex].Count)
-					{
-						glyphIndex = _formattedText.Strings[lineIndex].Count - 1;
-					}
-
-					var pos = _formattedText.GetCharIndexByPosition(lineIndex, glyphIndex);
-					_cursorIndex = pos ?? 0;
-				}
 					break;
 
 				case Keys.Home:
@@ -321,23 +321,23 @@ namespace Myra.Graphics2D.UI
 					break;
 
 				case Keys.Enter:
-				{
-					if (!Enabled)
 					{
-						break;
-					}
-					
-					// Insert line break				
-					var sb = new StringBuilder();
-					sb.Append(Text.Substring(0, _cursorIndex));
-					sb.Append('\n');
-					sb.Append(Text.Substring(_cursorIndex));
+						if (!Enabled)
+						{
+							break;
+						}
 
-					if (SetText(sb.ToString()))
-					{
-						++_cursorIndex;
+						// Insert line break				
+						var sb = new StringBuilder();
+						sb.Append(Text.Substring(0, _cursorIndex));
+						sb.Append('\n');
+						sb.Append(Text.Substring(_cursorIndex));
+
+						if (SetText(sb.ToString()))
+						{
+							++_cursorIndex;
+						}
 					}
-				}
 					break;
 
 				default:
@@ -377,22 +377,22 @@ namespace Myra.Graphics2D.UI
 
 			if (glyphRender.RenderedBounds.HasValue)
 			{
-				if (mousePos.X >= glyphRender.RenderedBounds.Value.X + glyphRender.RenderedBounds.Value.Width/2)
+				if (mousePos.X >= glyphRender.RenderedBounds.Value.X + glyphRender.RenderedBounds.Value.Width / 2)
 				{
 					_cursorIndex = _cursorIndex + 1;
 				}
 			}
 		}
 
-		public override void InternalRender(SpriteBatch batch)
+		public override void InternalRender(RenderContext context)
 		{
 			if (_formattedText.Font == null)
 			{
 				return;
 			}
 
-			var bounds = RenderBounds;
-			_formattedText.Draw(batch, bounds, TextColor);
+			var bounds = ActualBounds;
+			_formattedText.Draw(context.Batch, bounds, TextColor);
 
 			if (!IsFocused)
 			{
@@ -412,15 +412,15 @@ namespace Myra.Graphics2D.UI
 				var x = bounds.X;
 				var y = bounds.Y;
 				var glyphRender = _formattedText.GetGlyphRenderByIndex(_cursorIndex - 1);
-				if (glyphRender != null && 
-					glyphRender.RenderedBounds.HasValue && 
+				if (glyphRender != null &&
+					glyphRender.RenderedBounds.HasValue &&
 					glyphRender.Run.RenderedBounds.HasValue)
 				{
 					x = glyphRender.RenderedBounds.Value.Right;
 					y = glyphRender.Run.RenderedBounds.Value.Top;
 				}
 
-				batch.Draw(Cursor, new Rectangle(x,
+				context.Batch.Draw(Cursor, new Rectangle(x,
 					y,
 					(int)Cursor.Size.Width,
 					_formattedText.Font.LineHeight));

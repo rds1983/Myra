@@ -223,7 +223,7 @@ namespace Myra.Graphics2D.Text
 		}
 
 		private BitmapFont _font;
-		private string _text = "";
+		private string _text = string.Empty;
 		private int _verticalSpacing;
 		private int? _width;
 		private GlyphRun[] _strings;

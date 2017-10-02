@@ -107,6 +107,7 @@
     <Compile Include="Graphics2D\UI\MenuSeparatorWidget.cs" />
     <Compile Include="Graphics2D\UI\ProgressBar.cs" />
     <Compile Include="Graphics2D\UI\Project.cs" />
+    <Compile Include="Graphics2D\UI\RenderContext.cs" />
     <Compile Include="Graphics2D\UI\ScrollPane.cs" />
     <Compile Include="Graphics2D\UI\SpinButton.cs" />
     <Compile Include="Graphics2D\UI\Styles\ButtonBaseStyle.cs" />

@@ -33,12 +33,13 @@ namespace Myra.Graphics2D.UI
 
 		private Point _lastMeasureSize;
 		private Point _lastMeasureAvailableSize;
-		private Point _relativeLocation;
+		private Point _lastLocationHint;
 
 		private MouseButtons? _mouseButtonsDown;
 
 		private Rectangle _containerBounds;
 		private Rectangle _bounds;
+		private Rectangle _actualBounds;
 		private Desktop _desktop;
 		private bool _visible;
 
@@ -64,7 +65,10 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_xHint = value;
-				_layoutState = LayoutState.LocationInvalid;
+				if (_layoutState == LayoutState.Normal)
+				{
+					_layoutState = LayoutState.LocationInvalid;
+				}
 			}
 		}
 
@@ -392,18 +396,20 @@ namespace Myra.Graphics2D.UI
 		[JsonIgnore]
 		public Rectangle Bounds
 		{
-			get {
+			get
+			{
 				return _bounds;
 			}
 		}
 
+
 		[HiddenInEditor]
 		[JsonIgnore]
-		public Rectangle RenderBounds
+		public Rectangle ActualBounds
 		{
 			get
 			{
-				return CalculateClientBounds(Bounds);
+				return _actualBounds;
 			}
 		}
 
@@ -496,21 +502,27 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public virtual void Render(SpriteBatch batch)
+		public virtual void Render(RenderContext context)
 		{
-			UpdateLayout();
-
-			var bounds = Bounds;
-			if (bounds.Width == 0 || bounds.Height == 0)
+			if (!Visible)
 			{
 				return;
 			}
 
+			UpdateLayout();
+
+			var view = Rectangle.Intersect(context.View, Bounds);
+			if (view.Width == 0 || view.Height == 0)
+			{
+				return;
+			}
+
+			var batch = context.Batch;
 			var oldScissorRectangle = batch.GraphicsDevice.ScissorRectangle;
 			if (ClipToBounds)
 			{
 				oldScissorRectangle = batch.GraphicsDevice.ScissorRectangle;
-				var newScissorRectangle = Rectangle.Intersect(oldScissorRectangle, bounds);
+				var newScissorRectangle = Rectangle.Intersect(oldScissorRectangle, view);
 
 				if (newScissorRectangle.IsEmpty)
 				{
@@ -525,26 +537,29 @@ namespace Myra.Graphics2D.UI
 			var background = GetCurrentBackground();
 			if (background != null)
 			{
-				batch.Draw(background, bounds);
+				batch.Draw(background, Bounds);
 			}
 
-			InternalRender(batch);
+			var oldView = context.View;
+			context.View = view;
+			InternalRender(context);
+			context.View = oldView;
 
 			// Border
 			var border = GetCurrentBorder();
 			if (border != null)
 			{
-				batch.Draw(border, bounds);
+				batch.Draw(border, Bounds);
 			}
 
 			if (DrawFrames)
 			{
-				batch.DrawRectangle(bounds, Color.LightGreen);
+				batch.DrawRectangle(Bounds, Color.LightGreen);
 			}
 
 			if (DrawFocused && IsFocused)
 			{
-				batch.DrawRectangle(bounds, Color.Red);
+				batch.DrawRectangle(Bounds, Color.Red);
 			}
 
 			if (ClipToBounds)
@@ -554,7 +569,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public virtual void InternalRender(SpriteBatch batch)
+		public virtual void InternalRender(RenderContext context)
 		{
 		}
 
@@ -624,6 +639,7 @@ namespace Myra.Graphics2D.UI
 		internal virtual void MoveChildren(Point delta)
 		{
 			_bounds.Location += delta;
+			_actualBounds.Location += delta;
 		}
 
 		public virtual void UpdateLayout()
@@ -664,16 +680,17 @@ namespace Myra.Graphics2D.UI
 				controlBounds.Offset(XHint, YHint);
 
 				_bounds = controlBounds;
+				_actualBounds = CalculateClientBounds(controlBounds);
 
 				Arrange();
 			}
 			else
 			{
 				// Only location
-				MoveChildren(new Point(XHint - _relativeLocation.X, YHint - _relativeLocation.Y));
+				MoveChildren(new Point(XHint - _lastLocationHint.X, YHint - _lastLocationHint.Y));
 			}
 
-				_relativeLocation = new Point(XHint, YHint);
+			_lastLocationHint = new Point(XHint, YHint);
 			_layoutState = LayoutState.Normal;
 		}
 
@@ -684,7 +701,6 @@ namespace Myra.Graphics2D.UI
 		public virtual void OnDesktopChanged()
 		{
 		}
-
 		private Widget FindWidgetBy(Func<Widget, bool> finder)
 		{
 			if (finder(this))

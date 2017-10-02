@@ -88,15 +88,15 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
-		public override void InternalRender(SpriteBatch batch)
+		public override void InternalRender(RenderContext context)
 		{
 			if (_formattedText.Font == null)
 			{
 				return;
 			}
 
-			var bounds = RenderBounds;
-			_formattedText.Draw(batch, bounds, Enabled?TextColor:DisabledTextColor);
+			var bounds = ActualBounds;
+			_formattedText.Draw(context.Batch, bounds, Enabled?TextColor:DisabledTextColor);
 		}
 
 		protected override Point InternalMeasure(Point availableSize)

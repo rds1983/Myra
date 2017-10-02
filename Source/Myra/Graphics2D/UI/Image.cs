@@ -44,14 +44,14 @@ namespace Myra.Graphics2D.UI
 			return new Point((int)TextureRegion2D.Size.Width, (int)TextureRegion2D.Size.Height);
 		}
 
-		public override void InternalRender(SpriteBatch batch)
+		public override void InternalRender(RenderContext context)
 		{
-			base.InternalRender(batch);
+			base.InternalRender(context);
 
 			if (TextureRegion2D != null)
 			{
-				var bounds = RenderBounds;
-				batch.Draw(TextureRegion2D, bounds, Color);
+				var bounds = ActualBounds;
+				context.Batch.Draw(TextureRegion2D, bounds, Color);
 			}
 		}
 

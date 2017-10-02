@@ -21,12 +21,12 @@ namespace Myra.UIEditor.Plugin.LibGDX
             return new Point(100, 100);
         }
 
-        public override void InternalRender(SpriteBatch batch)
+        public override void InternalRender(RenderContext context)
         {
-            base.InternalRender(batch);
+            base.InternalRender(context);
 
-            var bounds = RenderBounds;
-            batch.FillRectangle(bounds.X, bounds.Y, bounds.Width, bounds.Height, Color);
+            var bounds = ActualBounds;
+            context.Batch.FillRectangle(bounds.X, bounds.Y, bounds.Width, bounds.Height, Color);
         }
     }
 }
