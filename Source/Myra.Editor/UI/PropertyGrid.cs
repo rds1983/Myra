@@ -271,7 +271,7 @@ namespace Myra.Editor.UI
 					{
 						cb.SelectedIndexChanged += (sender, args) =>
 						{
-							var item = cb.SelectedIndex >= 0 ? values[cb.SelectedIndex] : null;
+							var item = cb.SelectedItem != null ? values[cb.SelectedIndex] : null;
 							record.SetValue(_object, item);
 							FireChanged(propertyType.Name);
 						};

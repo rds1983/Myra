@@ -11,12 +11,11 @@ namespace Myra.Graphics2D.UI
 {
 	public class ComboBox : Button
 	{
-		private ListItem _selectingItem, _selectedItem;
-
 		private readonly Grid _itemsContainer;
 		private bool _isExpanded;
 		private ListItemStyle _dropDownItemStyle;
 		private readonly ObservableCollection<ListItem> _items = new ObservableCollection<ListItem>();
+		private int _selectingIndex = -1, _selectedIndex = -1;
 
 		[EditCategory("Data")]
 		public ObservableCollection<ListItem> Items
@@ -60,23 +59,34 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				if (_selectedItem == null)
-				{
-					return -1;
-				}
-
-				return _items.IndexOf(_selectingItem);
+				return _selectingIndex;
 			}
 
 			set
 			{
-				if (value < 0 || value >= Items.Count)
+				if (value == _selectingIndex)
 				{
-					SelectingItem = null;
 					return;
 				}
 
-				SelectingItem = Items[value];
+				var item = SelectingItem;
+				if (item != null && item.Widget != null)
+				{
+					item.Widget.Background = _dropDownItemStyle.Background;
+				}
+
+				_selectingIndex = value;
+
+				item = SelectingItem;
+				if (item != null)
+				{
+					if (item.Widget != null)
+					{
+						item.Widget.Background = _dropDownItemStyle.SelectedBackground;
+					}
+
+					item.FireSelected();
+				}
 			}
 		}
 
@@ -84,56 +94,56 @@ namespace Myra.Graphics2D.UI
 		[JsonIgnore]
 		public ListItem SelectingItem
 		{
-			get { return _selectingItem; }
+			get { return _selectingIndex >= 0 && _selectingIndex < Items.Count ? Items[_selectingIndex] : null; }
 			set
 			{
-				if (value == _selectingItem)
+				if (value == SelectingItem)
 				{
 					return;
 				}
 
-				if (_selectingItem != null && _selectingItem.Widget != null)
+				if (value == null)
 				{
-					_selectingItem.Widget.Background = _dropDownItemStyle.Background;
+					SelectingIndex = -1;
 				}
-
-				_selectingItem = value;
-
-				if (_selectingItem != null)
+				else
 				{
-					if (_selectingItem.Widget != null)
+					var index = Items.IndexOf(value);
+					if (index < 0)
 					{
-						_selectingItem.Widget.Background = _dropDownItemStyle.SelectedBackground;
+						throw new ArgumentException("item is not in the list");
 					}
 
-					_selectingItem.FireSelected();
+					SelectingIndex = index;
 				}
 			}
 		}
 
-		[HiddenInEditor]
-		[JsonIgnore]
+		[EditCategory("Data")]
 		public int SelectedIndex
 		{
 			get
 			{
-				if (_selectedItem == null)
-				{
-					return -1;
-				}
-
-				return _items.IndexOf(_selectedItem);
+				return _selectedIndex;
 			}
 
 			set
 			{
-				if (value < 0 || value >= Items.Count)
+				if (value == _selectedIndex)
 				{
-					SelectedItem = null;
 					return;
 				}
 
-				SelectedItem = Items[value];
+				SelectingIndex = value;
+				_selectedIndex = value;
+
+				UpdateSelectedItem();
+
+				var ev = SelectedIndexChanged;
+				if (ev != null)
+				{
+					ev(this, EventArgs.Empty);
+				}
 			}
 		}
 
@@ -141,32 +151,27 @@ namespace Myra.Graphics2D.UI
 		[JsonIgnore]
 		public ListItem SelectedItem
 		{
-			get { return _selectedItem; }
-
+			get { return _selectedIndex >= 0 && _selectedIndex < Items.Count ? Items[_selectedIndex] : null; }
 			set
 			{
-				if (value == _selectedItem)
+				if (value == SelectedItem)
 				{
 					return;
 				}
 
-				SelectingItem = value;
-				_selectedItem = value;
-
-				if (_selectedItem != null)
+				if (value == null)
 				{
-					Text = _selectedItem.Text;
-					TextColor = _selectedItem.Color ?? _dropDownItemStyle.LabelStyle.TextColor;
+					SelectedIndex = -1;
 				}
 				else
 				{
-					Text = string.Empty;
-				}
+					var index = Items.IndexOf(value);
+					if (index < 0)
+					{
+						throw new ArgumentException("item is not in the list");
+					}
 
-				var ev = SelectedIndexChanged;
-				if (ev != null)
-				{
-					ev(this, EventArgs.Empty);
+					SelectedIndex = index;
 				}
 			}
 		}
@@ -256,7 +261,7 @@ namespace Myra.Graphics2D.UI
 			_items.CollectionChanged += ItemsOnCollectionChanged;
 		}
 
-		public ComboBox(string style): this(Stylesheet.Current.ComboBoxVariants[style])
+		public ComboBox(string style) : this(Stylesheet.Current.ComboBoxVariants[style])
 		{
 		}
 
@@ -339,6 +344,7 @@ namespace Myra.Graphics2D.UI
 			_itemsContainer.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
 			_itemsContainer.Widgets.Insert(index, button);
 
+			UpdateSelectedItem();
 			UpdateGridPositions();
 		}
 
@@ -355,6 +361,7 @@ namespace Myra.Graphics2D.UI
 				SelectedItem = null;
 			}
 
+			UpdateSelectedItem();
 			UpdateGridPositions();
 		}
 
@@ -369,15 +376,29 @@ namespace Myra.Graphics2D.UI
 		private void ItemOnMouseEntered(object sender, GenericEventArgs<Point> genericEventArgs)
 		{
 			var widget = (Widget)sender;
-			SelectingItem = (ListItem) widget.Tag;
+			SelectingItem = (ListItem)widget.Tag;
 		}
 
 		private void ItemOnDown(object sender, EventArgs eventArgs)
 		{
-			var widget = (Button) sender;
-			SelectedItem = (ListItem) widget.Tag;
+			var widget = (Button)sender;
+			SelectedItem = (ListItem)widget.Tag;
 
 			IsExpanded = false;
+		}
+
+		private void UpdateSelectedItem()
+		{
+			var item = SelectedItem;
+			if (item != null)
+			{
+				Text = item.Text;
+				TextColor = item.Color ?? _dropDownItemStyle.LabelStyle.TextColor;
+			}
+			else
+			{
+				Text = string.Empty;
+			}
 		}
 
 		protected override void FireDown()

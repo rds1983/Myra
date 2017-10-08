@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Text;
 using Microsoft.Xna.Framework;
 using Myra.Attributes;
 using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ListItem: IItemWithId
+	public class ListItem : IItemWithId
 	{
 		private string _id;
 		private string _text;
@@ -91,7 +92,21 @@ namespace Myra.Graphics2D.UI
 
 		public override string ToString()
 		{
-			return Id;
+			var sb = new StringBuilder();
+
+			if (!string.IsNullOrEmpty(Text))
+			{
+				sb.Append(Text);
+				sb.Append(" ");
+			}
+
+			if (!string.IsNullOrEmpty(Id))
+			{
+				sb.Append("(#");
+				sb.Append(Id);
+				sb.Append(")");
+			}
+			return sb.ToString();
 		}
 
 		protected void FireChanged()

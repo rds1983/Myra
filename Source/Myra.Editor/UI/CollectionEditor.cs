@@ -111,19 +111,7 @@ namespace Myra.Editor.UI
 
 		private string BuildItemText(object item)
 		{
-			var asItemWithId = item as IItemWithId;
-			if (asItemWithId != null)
-			{
-				return "#" + asItemWithId.Id;
-			}
-
-			var result = item.ToString();
-			if (string.IsNullOrEmpty(result))
-			{
-				result = item.GetType().ToString();
-			}
-
-			return result;
+			return item.ToString();
 		}
 
 		private void UpdateButtonsEnabled()
