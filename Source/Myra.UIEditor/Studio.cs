@@ -42,9 +42,9 @@ namespace Myra.UIEditor
 		private TextBlock _fpsLabel;
 		private TextBlock _widgetsCountLabel;
 		private TextBlock _drawCallsLabel;
-		private Grid _projectHolder;
+		private Graphics2D.UI.Panel _projectHolder;
 		private Explorer _explorer;
-		private ScrollPane _propertyGridPane; 
+		private ScrollPane _propertyGridPane;
 		private PropertyGrid _propertyGrid;
 		private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
 		private string _filePath;
@@ -59,6 +59,7 @@ namespace Myra.UIEditor
 			_addVerticalSliderItem,
 			_addComboBoxItem,
 			_addListBoxItem,
+			_addPanelItem,
 			_addGridItem,
 			_addImageItem,
 			_addHorizontalMenuItem,
@@ -71,15 +72,15 @@ namespace Myra.UIEditor
 			_addTextBlockItem,
 			_addTextFieldItem,
 			_addSpinButtonItem,
-//			_addTreeItem,
+			//			_addTreeItem,
 			_addMenuItemItem,
 			_addMenuSeparatorItem,
-//			_addTreeNodeItem,
+			//			_addTreeNodeItem,
 			_deleteItem;
 
 		private Type[] _customWidgetTypes;
 		private MenuItem[] _customWidgetMenuItems;
-		
+
 		public static Studio Instance
 		{
 			get
@@ -192,6 +193,30 @@ namespace Myra.UIEditor
 			}
 		}
 
+		public void ClosingFunction(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			if (_isDirty)
+			{
+				OnExiting();
+				e.Cancel = true;
+			}
+		}
+
+		public void OnExiting()
+		{
+			var mb = Dialog.CreateMessageBox("Quit", "There are unsaved changes. Do you want to exit without saving?");
+
+			mb.Closed += (o, args) =>
+			{
+				if (mb.ModalResult == (int)Graphics2D.UI.Window.DefaultModalResult.Ok)
+				{
+					Exit();
+				}
+			};
+
+			mb.ShowModal(_desktop);
+		}
+
 		private void ProcessPlugin()
 		{
 			var pluginPath = Configuration.PluginPath;
@@ -218,15 +243,15 @@ namespace Myra.UIEditor
 				// Find implementation of IUIEditorPlugin
 				foreach (var c in pluginAssembly.GetExportedTypes())
 				{
-					if (typeof (IUIEditorPlugin).IsAssignableFrom(c))
+					if (typeof(IUIEditorPlugin).IsAssignableFrom(c))
 					{
 						// Found
 						// Instantiate
-						var plugin = (IUIEditorPlugin) Activator.CreateInstance(c);
+						var plugin = (IUIEditorPlugin)Activator.CreateInstance(c);
 
 						// Call on load
 						plugin.OnLoad();
-						
+
 						var customWidgets = new WidgetTypesSet();
 						plugin.FillCustomWidgetTypes(customWidgets);
 
@@ -244,8 +269,8 @@ namespace Myra.UIEditor
 		private void BuildUI()
 		{
 #if DEBUG
-//			BitmapFont.DrawFames = true;
-//			Widget.DrawFrames = true;
+			//			BitmapFont.DrawFames = true;
+			//			Widget.DrawFrames = true;
 			Widget.DrawFocused = true;
 #endif
 
@@ -286,14 +311,14 @@ namespace Myra.UIEditor
 			saveAsItem.Selected += SaveAsItemOnClicked;
 
 			fileMenu.Items.Add(saveAsItem);
-			
+
 			var exportCSItem = new MenuItem
 			{
 				Text = "Export to C#..."
 			};
 			exportCSItem.Selected += ExportCsItemOnSelected;
 
-			fileMenu.Items.Add(exportCSItem);	
+			fileMenu.Items.Add(exportCSItem);
 			fileMenu.Items.Add(new MenuSeparator());
 
 			var quitItem = new MenuItem
@@ -401,6 +426,16 @@ namespace Myra.UIEditor
 			};
 			controlsMenu.Items.Add(_addListBoxItem);
 
+			_addPanelItem = new MenuItem
+			{
+				Text = "Add Panel"
+			};
+			_addPanelItem.Selected += (s, a) =>
+			{
+				AddStandardControl<Myra.Graphics2D.UI.Panel>();
+			};
+			controlsMenu.Items.Add(_addPanelItem);
+
 			_addGridItem = new MenuItem
 			{
 				Text = "Add Grid"
@@ -501,15 +536,15 @@ namespace Myra.UIEditor
 			};
 			controlsMenu.Items.Add(_addSpinButtonItem);
 
-/*			_addTreeItem = new MenuItem
-			{
-				Text = "Add Tree"
-			};
-			_addTreeItem.Selected += (s, a) =>
-			{
-				AddStandardControl<Tree>();
-			};
-			controlsMenu.Items.Add(_addTreeItem);*/
+			/*			_addTreeItem = new MenuItem
+						{
+							Text = "Add Tree"
+						};
+						_addTreeItem.Selected += (s, a) =>
+						{
+							AddStandardControl<Tree>();
+						};
+						controlsMenu.Items.Add(_addTreeItem);*/
 			controlsMenu.Items.Add(new MenuSeparator());
 
 			_addMenuItemItem = new MenuItem
@@ -531,7 +566,7 @@ namespace Myra.UIEditor
 				AddMenuItem(new MenuSeparator());
 			};
 			controlsMenu.Items.Add(_addMenuSeparatorItem);
-			
+
 			if (_customWidgetTypes != null && _customWidgetTypes.Length > 0)
 			{
 				controlsMenu.Items.Add(new MenuSeparator());
@@ -543,14 +578,14 @@ namespace Myra.UIEditor
 					{
 						Text = "Add " + type.Name
 					};
-								
+
 					item.Selected += (s, a) =>
 					{
 						AddStandardControl(type);
 					};
-					
+
 					controlsMenu.Items.Add(item);
-					
+
 					customMenuWidgets.Add(item);
 				}
 
@@ -558,13 +593,13 @@ namespace Myra.UIEditor
 			}
 
 			controlsMenu.Items.Add(new MenuSeparator());
-		
-/*			_addTreeNodeItem = new MenuItem
-			{
-				Text = "Add Tree Node"
-			};
-			controlsMenu.Items.Add(_addTreeNodeItem);
-			controlsMenu.Items.Add(new MenuSeparator());*/
+
+			/*			_addTreeNodeItem = new MenuItem
+						{
+							Text = "Add Tree Node"
+						};
+						controlsMenu.Items.Add(_addTreeNodeItem);
+						controlsMenu.Items.Add(new MenuSeparator());*/
 
 			_deleteItem = new MenuItem
 			{
@@ -597,7 +632,7 @@ namespace Myra.UIEditor
 				GridPositionY = 1
 			};
 
-			_projectHolder = new Grid();
+			_projectHolder = new Graphics2D.UI.Panel();
 
 			_topSplitPane.Widgets.Add(_projectHolder);
 
@@ -713,12 +748,13 @@ namespace Myra.UIEditor
 					{
 						((SplitPane)container).Widgets.Remove(asWidget);
 					}
-					else if (container is Grid)
+					else if (container is MultipleItemsContainer)
 					{
-						((Grid)container).Widgets.Remove(asWidget);
-					} else if (container is ScrollPane)
+						((MultipleItemsContainer)container).Widgets.Remove(asWidget);
+					}
+					else if (container is ScrollPane)
 					{
-						((ScrollPane) container).Widget = null;
+						((ScrollPane)container).Widget = null;
 					}
 				}
 			}
@@ -742,11 +778,11 @@ namespace Myra.UIEditor
 
 			if (_propertyGrid.Object is Menu)
 			{
-				((Menu) _propertyGrid.Object).Items.Add(iMenuItem);
+				((Menu)_propertyGrid.Object).Items.Add(iMenuItem);
 			}
 			else if (_propertyGrid.Object is MenuItem)
 			{
-				((MenuItem) _propertyGrid.Object).Items.Add(iMenuItem);
+				((MenuItem)_propertyGrid.Object).Items.Add(iMenuItem);
 			}
 
 			OnObjectAdded(iMenuItem);
@@ -762,16 +798,17 @@ namespace Myra.UIEditor
 
 		private void AddStandardControl<T>(T widget) where T : Widget
 		{
-			if (_propertyGrid.Object is Grid)
+			if (_propertyGrid.Object is MultipleItemsContainer)
 			{
-				((Grid) _propertyGrid.Object).Widgets.Add(widget);
+				((MultipleItemsContainer)_propertyGrid.Object).Widgets.Add(widget);
 			}
 			else if (_propertyGrid.Object is SplitPane)
 			{
-				((SplitPane) _propertyGrid.Object).Widgets.Add(widget);
-			} else if (_propertyGrid.Object is ScrollPane)
+				((SplitPane)_propertyGrid.Object).Widgets.Add(widget);
+			}
+			else if (_propertyGrid.Object is ScrollPane)
 			{
-				((ScrollPane) _propertyGrid.Object).Widget = widget;
+				((ScrollPane)_propertyGrid.Object).Widget = widget;
 			}
 
 			OnObjectAdded(widget);
@@ -781,7 +818,7 @@ namespace Myra.UIEditor
 		{
 			AddStandardControl(typeof(T));
 		}
-		
+
 		private void AddStandardControl(Type t)
 		{
 			var control = (Widget)Activator.CreateInstance(t);
@@ -836,7 +873,7 @@ namespace Myra.UIEditor
 
 			mb.Closed += (o, args) =>
 			{
-				if (mb.ModalResult == (int) Graphics2D.UI.Window.DefaultModalResult.Ok)
+				if (mb.ModalResult == (int)Graphics2D.UI.Window.DefaultModalResult.Ok)
 				{
 					Exit();
 				}
@@ -901,7 +938,7 @@ namespace Myra.UIEditor
 		{
 			base.Draw(gameTime);
 
-			_gcMemoryLabel.Text = string.Format("GC Memory: {0} kb", GC.GetTotalMemory(false)/1024);
+			_gcMemoryLabel.Text = string.Format("GC Memory: {0} kb", GC.GetTotalMemory(false) / 1024);
 			_fpsLabel.Text = string.Format("FPS: {0}", _fpsCounter.FramesPerSecond);
 			_widgetsCountLabel.Text = string.Format("Visible Widgets: {0}", _desktop.CalculateTotalWidgets(true));
 
@@ -974,7 +1011,7 @@ namespace Myra.UIEditor
 				return;
 			}
 
-		    var data = _project.Save();
+			var data = _project.Save();
 			File.WriteAllText(filePath, data);
 
 			FilePath = filePath;
@@ -1018,7 +1055,7 @@ namespace Myra.UIEditor
 			var selectedObject = _propertyGrid.Object;
 			if (selectedObject != null)
 			{
-				if (selectedObject is Menu || 
+				if (selectedObject is Menu ||
 					selectedObject is MenuItem)
 				{
 					enableMenuItems = true;
@@ -1027,14 +1064,14 @@ namespace Myra.UIEditor
 				{
 					enableTreeNode = true;
 				}
-				else if (selectedObject is Grid || selectedObject is SplitPane)
+				else if (selectedObject is MultipleItemsContainer || selectedObject is SplitPane)
 				{
 					enableStandard = true;
 				}
-				else if (selectedObject is ScrollPane && ((ScrollPane) selectedObject).Widget == null)
+				else if (selectedObject is ScrollPane && ((ScrollPane)selectedObject).Widget == null)
 				{
 					enableStandard = true;
-				} 
+				}
 			}
 
 			_addButtonItem.Enabled = enableStandard;
@@ -1046,6 +1083,7 @@ namespace Myra.UIEditor
 			_addVerticalProgressBarItem.Enabled = enableStandard;
 			_addComboBoxItem.Enabled = enableStandard;
 			_addListBoxItem.Enabled = enableStandard;
+			_addPanelItem.Enabled = enableStandard;
 			_addGridItem.Enabled = enableStandard;
 			_addImageItem.Enabled = enableStandard;
 			_addHorizontalMenuItem.Enabled = enableStandard;
@@ -1056,7 +1094,7 @@ namespace Myra.UIEditor
 			_addTextBlockItem.Enabled = enableStandard;
 			_addTextFieldItem.Enabled = enableStandard;
 			_addSpinButtonItem.Enabled = enableStandard;
-//			_addTreeItem.Enabled = enableStandard;
+			//			_addTreeItem.Enabled = enableStandard;
 
 			if (_customWidgetMenuItems != null)
 			{
@@ -1069,7 +1107,7 @@ namespace Myra.UIEditor
 			_addMenuItemItem.Enabled = enableMenuItems;
 			_addMenuSeparatorItem.Enabled = enableMenuItems;
 
-//			_addTreeNodeItem.Enabled = enableTreeNode;
+			//			_addTreeNodeItem.Enabled = enableTreeNode;
 
 			if (selectedObject is IMenuItem ||
 				selectedObject is Widget)

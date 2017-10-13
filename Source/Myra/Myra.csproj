@@ -13,8 +13,6 @@
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
     <NuGetPackageImportStamp>523922a1</NuGetPackageImportStamp>
-    <ProductVersion>12.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -105,6 +103,8 @@
     <Compile Include="Graphics2D\UI\MenuItemButton.cs" />
     <Compile Include="Graphics2D\UI\MenuSeparator.cs" />
     <Compile Include="Graphics2D\UI\MenuSeparatorWidget.cs" />
+    <Compile Include="Graphics2D\UI\MultipleItemsContainer.cs" />
+    <Compile Include="Graphics2D\UI\Panel.cs" />
     <Compile Include="Graphics2D\UI\ProgressBar.cs" />
     <Compile Include="Graphics2D\UI\Project.cs" />
     <Compile Include="Graphics2D\UI\RenderContext.cs" />
@@ -167,8 +167,8 @@
     <EmbeddedResource Include="Resources\default_uiskin.atlas" />
     <EmbeddedResource Include="Resources\default_uiskin.png" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />  
-    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

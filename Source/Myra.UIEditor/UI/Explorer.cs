@@ -165,9 +165,9 @@ namespace Myra.UIEditor.UI
 				{
 					widgets = ((SplitPane) item).Widgets;
 				}
-				else if (item is Grid && !(item is ListBox) && !(item is ComboBox))
+				else if (item is MultipleItemsContainer && !(item is ListBox) && !(item is ComboBox))
 				{
-					var container = item as Grid;
+					var container = item as MultipleItemsContainer;
 					widgets = container.Children;
 				} else if (item is ScrollPane)
 				{
