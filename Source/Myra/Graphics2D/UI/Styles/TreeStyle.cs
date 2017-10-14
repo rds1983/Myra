@@ -6,6 +6,7 @@ namespace Myra.Graphics2D.UI.Styles
 	{
 		public TextureRegion2D RowSelectionBackground { get; set; }
 		public TextureRegion2D RowSelectionBackgroundWithoutFocus { get; set; }
+		public TextureRegion2D RowHoverBackground { get; set; }
 
 		public ImageButtonStyle MarkStyle { get; set; }
 		public TextBlockStyle LabelStyle { get; set; }
@@ -20,6 +21,7 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			RowSelectionBackground = style.RowSelectionBackground;
 			RowSelectionBackgroundWithoutFocus = style.RowSelectionBackgroundWithoutFocus;
+			RowHoverBackground = style.RowHoverBackground;
 
 			MarkStyle = new ImageButtonStyle(style.MarkStyle);
 			LabelStyle = new TextBlockStyle(style.LabelStyle);

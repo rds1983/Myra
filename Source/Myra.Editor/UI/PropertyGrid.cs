@@ -95,23 +95,39 @@ namespace Myra.Editor.UI
 		private class SubGrid : GridBased
 		{
 			private readonly ImageButton _mark;
+			private readonly PropertyGrid _propertyGrid;
 
 			public ImageButton Mark
 			{
 				get { return _mark; }
 			}
 
+			public PropertyGrid PropertyGrid
+			{
+				get { return _propertyGrid; }
+			}
+
+			public Rectangle HeaderBounds
+			{
+				get
+				{
+					var headerBounds = new Rectangle(ActualBounds.X, ActualBounds.Y, ActualBounds.Width, GetRowHeight(0));
+
+					return headerBounds;
+				}
+			}
+
 			public SubGrid(PropertyGrid parent, object value, string header, string category, Record parentProperty)
 			{
-				ColumnSpacing = 2;
-				RowSpacing = 2;
+				ColumnSpacing = 4;
+				RowSpacing = 4;
 
 				ColumnsProportions.Add(new Proportion(ProportionType.Auto));
 				ColumnsProportions.Add(new Proportion(ProportionType.Fill));
 				RowsProportions.Add(new Proportion(ProportionType.Auto));
 				RowsProportions.Add(new Proportion(ProportionType.Auto));
 
-				var propertyGrid = new PropertyGrid(parent.PropertyGridStyle, category, parentProperty)
+				_propertyGrid = new PropertyGrid(parent.PropertyGridStyle, category, parentProperty)
 				{
 					Object = value,
 					Visible = false,
@@ -134,13 +150,13 @@ namespace Myra.Editor.UI
 
 				_mark.Down += (sender, args) =>
 				{
-					propertyGrid.Visible = true;
+					_propertyGrid.Visible = true;
 					parent._expandedCategories.Add(category);
 				};
 
 				_mark.Up += (sender, args) =>
 				{
-					propertyGrid.Visible = false;
+					_propertyGrid.Visible = false;
 					parent._expandedCategories.Remove(category);
 				};
 
@@ -150,14 +166,33 @@ namespace Myra.Editor.UI
 					GridPositionX = 1
 				};
 
-				label.DoubleClick += (sender, args) =>
-				{
-					_mark.IsPressed = !_mark.IsPressed;
-				};
-
 				Widgets.Add(label);
+				Widgets.Add(_propertyGrid);
+			}
 
-				Widgets.Add(propertyGrid);
+			public override void OnMouseDown(MouseButtons mb)
+			{
+				var mousePosition = Desktop.MousePosition;
+				if (mb != MouseButtons.Left && HeaderBounds.Contains(mousePosition) && !_mark.Bounds.Contains(mousePosition))
+				{
+					return;
+				}
+
+				_mark.IsPressed = !_mark.IsPressed;
+			}
+
+			public override void InternalRender(RenderContext context)
+			{
+				if (_propertyGrid.PropertyGridStyle.RowSelectionBackground != null)
+				{
+					var headerBounds = HeaderBounds;
+					if (headerBounds.Contains(Desktop.MousePosition))
+					{
+						context.Batch.Draw(_propertyGrid.PropertyGridStyle.RowSelectionBackground, headerBounds, Color.White);
+					}
+				}
+
+				base.InternalRender(context);
 			}
 		}
 
@@ -207,11 +242,11 @@ namespace Myra.Editor.UI
 				ApplyPropertyGridStyle(style);
 			}
 		}
-		
-		public PropertyGrid(TreeStyle style, string category): this(style, category, null)
+
+		public PropertyGrid(TreeStyle style, string category) : this(style, category, null)
 		{
 		}
-		
+
 
 		public PropertyGrid(string category) : this(Stylesheet.Current.TreeStyle, category)
 		{
@@ -283,9 +318,9 @@ namespace Myra.Editor.UI
 
 					valueWidget = cb;
 				}
-				else if (propertyType == typeof (bool))
+				else if (propertyType == typeof(bool))
 				{
-					var isChecked = (bool) value;
+					var isChecked = (bool)value;
 					var cb = new CheckBox
 					{
 						IsPressed = isChecked
@@ -314,7 +349,7 @@ namespace Myra.Editor.UI
 					valueWidget = cb;
 
 				}
-				else if (propertyType == typeof (Color) || propertyType == typeof (Color?))
+				else if (propertyType == typeof(Color) || propertyType == typeof(Color?))
 				{
 					var subGrid = new Grid
 					{
@@ -322,7 +357,7 @@ namespace Myra.Editor.UI
 						HorizontalAlignment = HorizontalAlignment.Stretch
 					};
 
-					var isColor = propertyType == typeof (Color);
+					var isColor = propertyType == typeof(Color);
 
 					subGrid.ColumnsProportions.Add(new Proportion());
 					subGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
@@ -330,11 +365,11 @@ namespace Myra.Editor.UI
 					var color = Color.Transparent;
 					if (isColor)
 					{
-						color = (Color) value;
+						color = (Color)value;
 					}
 					else if (value != null)
 					{
-						color = ((Color?) value).Value;
+						color = ((Color?)value).Value;
 					}
 
 					var image = new Image
@@ -391,7 +426,7 @@ namespace Myra.Editor.UI
 
 					valueWidget = subGrid;
 				}
-				else if (propertyType.IsAssignableFrom(typeof (TextureRegion2D)))
+				else if (propertyType.IsAssignableFrom(typeof(TextureRegion2D)))
 				{
 				}
 				else if (propertyType.IsEnum)
@@ -425,7 +460,7 @@ namespace Myra.Editor.UI
 					valueWidget = cb;
 				}
 				else if (propertyType.IsNumericType() ||
-				         (propertyType.IsNullablePrimitive() && propertyType.GetNullableType().IsNumericType()))
+						 (propertyType.IsNullablePrimitive() && propertyType.GetNullableType().IsNumericType()))
 				{
 					var numericType = propertyType;
 					if (propertyType.IsNullablePrimitive())
@@ -437,7 +472,7 @@ namespace Myra.Editor.UI
 					{
 						Integer = numericType.IsNumericInteger(),
 						Nullable = propertyType.IsNullablePrimitive(),
-						Value = value != null ? (float) Convert.ChangeType(value, typeof (float)) : default(float?)
+						Value = value != null ? (float)Convert.ChangeType(value, typeof(float)) : default(float?)
 					};
 
 					if (hasSetter)
@@ -492,7 +527,7 @@ namespace Myra.Editor.UI
 
 					valueWidget = spinButton;
 				}
-				else if (propertyType == typeof (string) || propertyType.IsPrimitive || propertyType.IsNullablePrimitive())
+				else if (propertyType == typeof(string) || propertyType.IsPrimitive || propertyType.IsNullablePrimitive())
 				{
 					var tf = new TextField
 					{
@@ -558,15 +593,15 @@ namespace Myra.Editor.UI
 
 					valueWidget = tf;
 				}
-				else if (typeof (IList).IsAssignableFrom(propertyType))
+				else if (typeof(IList).IsAssignableFrom(propertyType))
 				{
-					var it = propertyType.FindGenericType(typeof (ICollection<>));
+					var it = propertyType.FindGenericType(typeof(ICollection<>));
 					if (it != null)
 					{
 						var itemType = it.GenericTypeArguments[0];
 						if (value != null)
 						{
-							var items = (IList) value;
+							var items = (IList)value;
 
 							var subGrid = new Grid
 							{
@@ -688,14 +723,14 @@ namespace Myra.Editor.UI
 			foreach (var property in properties)
 			{
 				if (property.GetGetMethod() == null ||
-				    !property.GetGetMethod().IsPublic ||
-				    property.GetGetMethod().IsStatic)
+					!property.GetGetMethod().IsPublic ||
+					property.GetGetMethod().IsStatic)
 				{
 					continue;
 				}
 
 				var hasSetter = property.GetSetMethod() != null &&
-				                property.GetSetMethod().IsPublic;
+								property.GetSetMethod().IsPublic;
 
 				var browsableAttr = property.FindAttribute<BrowsableAttribute>();
 				if (browsableAttr != null && !browsableAttr.Browsable)
@@ -708,7 +743,7 @@ namespace Myra.Editor.UI
 				{
 					continue;
 				}
-				
+
 				var readOnlyAttr = property.FindAttribute<ReadOnlyAttribute>();
 				if (readOnlyAttr != null && readOnlyAttr.IsReadOnly)
 				{
@@ -723,7 +758,7 @@ namespace Myra.Editor.UI
 				var selectionAttr = property.FindAttribute<SelectionAttribute>();
 				if (selectionAttr != null)
 				{
-					record.ItemsProvider = (IItemsProvider) Activator.CreateInstance(selectionAttr.ItemsProviderType);
+					record.ItemsProvider = (IItemsProvider)Activator.CreateInstance(selectionAttr.ItemsProviderType);
 				}
 
 				var categoryAttr = property.FindAttribute<EditCategoryAttribute>();

@@ -10,10 +10,12 @@ namespace Myra.Graphics2D.UI.Styles
 		public TextureRegion2D Background { get; set; }
 		public TextureRegion2D OverBackground { get; set; }
 		public TextureRegion2D DisabledBackground { get; set; }
+		public TextureRegion2D FocusedBackground { get; set; }
 
 		public TextureRegion2D Border { get; set; }
 		public TextureRegion2D OverBorder { get; set; }
 		public TextureRegion2D DisabledBorder { get; set; }
+		public TextureRegion2D FocusedBorder { get; set; }
 
 		public PaddingInfo Padding;
 
@@ -28,9 +30,11 @@ namespace Myra.Graphics2D.UI.Styles
 			Background = style.Background;
 			OverBackground = style.OverBackground;
 			DisabledBackground = style.DisabledBackground;
+			FocusedBackground = style.FocusedBackground;
 			Border = style.Border;
 			OverBorder = style.OverBorder;
 			DisabledBorder = style.DisabledBorder;
+			FocusedBorder = style.FocusedBorder;
 			Padding = style.Padding;
 		}
 

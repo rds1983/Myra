@@ -111,8 +111,6 @@ namespace Myra.Graphics2D.UI
 				Wrap = false
 			};
 
-			_label.DoubleClick += LabelOnDoubleClick;
-
 			Widgets.Add(_label);
 
 			HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -141,11 +139,6 @@ namespace Myra.Graphics2D.UI
 
 			UpdateMark();
 			UpdateHasRoot();
-		}
-
-		private void LabelOnDoubleClick(object sender, GenericEventArgs<MouseButtons> genericEventArgs)
-		{
-			_mark.IsPressed = !_mark.IsPressed;
 		}
 
 		private void UpdateHasRoot()

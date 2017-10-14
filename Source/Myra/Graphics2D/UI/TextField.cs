@@ -89,11 +89,6 @@ namespace Myra.Graphics2D.UI
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public TextureRegion2D FocusedBackground { get; set; }
-
-		[HiddenInEditor]
-		[JsonIgnore]
-		[EditCategory("Appearance")]
 		public TextureRegion2D Cursor { get; set; }
 
 		[HiddenInEditor]
@@ -470,10 +465,8 @@ namespace Myra.Graphics2D.UI
 
 			TextColor = style.TextColor;
 			DisabledTextColor = style.DisabledTextColor;
-			FocusedBackground = style.FocusedBackground;
 			MessageTextColor = style.MessageTextColor;
 
-			FocusedBackground = style.FocusedBackground;
 			Cursor = style.Cursor;
 			Selection = style.Selection;
 

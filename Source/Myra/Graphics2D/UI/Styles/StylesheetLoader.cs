@@ -39,12 +39,13 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string BackgroundName = "background";
 		public const string OverBackgroundName = "overBackground";
 		public const string DisabledBackgroundName = "disabledBackground";
-		public const string FocusedBackgroundName = "disabledBackground";
+		public const string FocusedBackgroundName = "focusedBackground";
 		public const string PressedBackgroundName = "pressedBackground";
 		public const string OpenBackgroundName = "openBackground";
 		public const string BorderName = "border";
 		public const string OverBorderName = "overBorder";
 		public const string DisabledBorderName = "disabledBorder";
+		public const string FocusedBorderName = "focusedBorder";
 		public const string PaddingName = "padding";
 		public const string FontName = "font";
 		public const string MessageFontName = "font";
@@ -80,6 +81,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string PressedImageName = "pressedImage";
 		public const string RowSelectionBackgroundName = "rowSelectionBackground";
 		public const string RowSelectionBackgroundWithoutFocusName = "rowSelectionBackgroundWithoutFocus";
+		public const string RowHoverBackgroundName = "rowHoverBackground";
 		public const string MenuSeparatorName = "separator";
 		public const string ThicknessName = "thickness";
 		public const string ItemsContainerName = "itemsContainer";
@@ -206,35 +208,45 @@ namespace Myra.Graphics2D.UI.Styles
 				result.HeightHint = i;
 			}
 
-			string TextureRegion2DName;
-			if (source.GetStyle(BackgroundName, out TextureRegion2DName))
+			string name;
+			if (source.GetStyle(BackgroundName, out name))
 			{
-				result.Background = GetTextureRegion2D(TextureRegion2DName);
+				result.Background = GetTextureRegion2D(name);
 			}
 
-			if (source.GetStyle(OverBackgroundName, out TextureRegion2DName))
+			if (source.GetStyle(OverBackgroundName, out name))
 			{
-				result.OverBackground = GetTextureRegion2D(TextureRegion2DName);
+				result.OverBackground = GetTextureRegion2D(name);
 			}
 
-			if (source.GetStyle(DisabledBackgroundName, out TextureRegion2DName))
+			if (source.GetStyle(DisabledBackgroundName, out name))
 			{
-				result.DisabledBackground = GetTextureRegion2D(TextureRegion2DName);
+				result.DisabledBackground = GetTextureRegion2D(name);
 			}
 
-			if (source.GetStyle(BorderName, out TextureRegion2DName))
+			if (source.GetStyle(FocusedBackgroundName, out name))
 			{
-				result.Border = GetTextureRegion2D(TextureRegion2DName);
+				result.FocusedBackground = GetTextureRegion2D(name);
 			}
 
-			if (source.GetStyle(OverBorderName, out TextureRegion2DName))
+			if (source.GetStyle(BorderName, out name))
 			{
-				result.OverBorder = GetTextureRegion2D(TextureRegion2DName);
+				result.Border = GetTextureRegion2D(name);
 			}
 
-			if (source.GetStyle(DisabledBorderName, out TextureRegion2DName))
+			if (source.GetStyle(OverBorderName, out name))
 			{
-				result.DisabledBorder = GetTextureRegion2D(TextureRegion2DName);
+				result.OverBorder = GetTextureRegion2D(name);
+			}
+
+			if (source.GetStyle(DisabledBorderName, out name))
+			{
+				result.DisabledBorder = GetTextureRegion2D(name);
+			}
+
+			if (source.GetStyle(FocusedBorderName, out name))
+			{
+				result.FocusedBorder = GetTextureRegion2D(name);
 			}
 
 			JObject padding;
@@ -284,7 +296,7 @@ namespace Myra.Graphics2D.UI.Styles
 			{
 				result.FocusedTextColor = GetColor(name);
 			}
-			
+
 			if (source.GetStyle(MessageTextColorName, out name))
 			{
 				result.MessageTextColor = GetColor(name);
@@ -298,11 +310,6 @@ namespace Myra.Graphics2D.UI.Styles
 			if (source.GetStyle(MessageFontName, out name))
 			{
 				result.MessageFont = GetFont(name);
-			}
-
-			if (source.GetStyle(FocusedBackgroundName, out name))
-			{
-				result.FocusedBackground = GetTextureRegion2D(name);
 			}
 
 			if (source.GetStyle(CursorName, out name))
@@ -569,6 +576,11 @@ namespace Myra.Graphics2D.UI.Styles
 				result.RowSelectionBackground = GetTextureRegion2D(name);
 			}
 
+			if (source.GetStyle(RowHoverBackgroundName, out name))
+			{
+				result.RowHoverBackground = GetTextureRegion2D(name);
+			}
+
 			JObject obj;
 			if (source.GetStyle(MarkName, out obj))
 			{
@@ -618,7 +630,7 @@ namespace Myra.Graphics2D.UI.Styles
 
 			foreach (var pair in variants)
 			{
-				var variant = (T) result.Clone();
+				var variant = (T)result.Clone();
 				fillAction((JObject)pair.Value, variant);
 				variantsDict[pair.Key] = variant;
 			}

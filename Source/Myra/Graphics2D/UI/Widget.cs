@@ -344,12 +344,22 @@ namespace Myra.Graphics2D.UI
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
+		public TextureRegion2D FocusedBackground { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		[EditCategory("Appearance")]
 		public TextureRegion2D DisabledOverBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
 		public TextureRegion2D DisabledBorder { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		[EditCategory("Appearance")]
+		public TextureRegion2D FocusedBorder { get; set; }
 
 		[EditCategory("Appearance")]
 		public bool ClipToBounds { get; set; }
@@ -471,6 +481,10 @@ namespace Myra.Graphics2D.UI
 			{
 				result = DisabledBackground;
 			}
+			else if (Enabled && IsFocused && FocusedBackground != null)
+			{
+				result = FocusedBackground;
+			}
 			else if (IsMouseOver && OverBackground != null)
 			{
 				if (!Enabled && DisabledOverBackground != null)
@@ -480,7 +494,6 @@ namespace Myra.Graphics2D.UI
 				else if (Enabled && OverBackground != null)
 				{
 					result = OverBackground;
-
 				}
 			}
 
@@ -493,6 +506,10 @@ namespace Myra.Graphics2D.UI
 			if (!Enabled && DisabledBorder != null)
 			{
 				result = DisabledBorder;
+			}
+			else if (Enabled && IsFocused && FocusedBorder != null)
+			{
+				result = FocusedBorder;
 			}
 			else if (IsMouseOver && OverBorder != null)
 			{
@@ -773,10 +790,12 @@ namespace Myra.Graphics2D.UI
 			Background = style.Background;
 			OverBackground = style.OverBackground;
 			DisabledBackground = style.DisabledBackground;
+			FocusedBackground = style.FocusedBackground;
 
 			Border = style.Border;
 			OverBorder = style.OverBorder;
 			DisabledBorder = style.DisabledBorder;
+			FocusedBorder = style.FocusedBorder;
 
 			PaddingLeft = style.Padding.Left;
 			PaddingRight = style.Padding.Right;

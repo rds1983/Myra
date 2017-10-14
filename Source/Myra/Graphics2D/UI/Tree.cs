@@ -16,6 +16,7 @@ namespace Myra.Graphics2D.UI
 
 		public TextureRegion2D RowSelectionBackgroundWithoutFocus { get; set; }
 		public TextureRegion2D RowSelectionBackground { get; set; }
+		public TextureRegion2D RowHoverBackground { get; set; }
 
 		public List<TreeNode> AllNodes
 		{
@@ -97,51 +98,51 @@ namespace Myra.Graphics2D.UI
 					SelectedRow.IsExpanded = !SelectedRow.IsExpanded;
 					break;
 				case Keys.Up:
-				{
-					if (parentWidgets != null)
 					{
-						if (index == 0)
+						if (parentWidgets != null)
 						{
-							SelectedRow = SelectedRow.ParentNode;
-						}
-						else if (index > 0)
-						{
-							var previousRow = (TreeNode)parentWidgets[index - 1];
-							if (!previousRow.IsExpanded || previousRow.ChildNodesCount == 0)
+							if (index == 0)
 							{
-								SelectedRow = previousRow;
+								SelectedRow = SelectedRow.ParentNode;
 							}
-							else
+							else if (index > 0)
 							{
-								SelectedRow = (TreeNode)previousRow.ChildNodesGrid.Widgets[previousRow.ChildNodesCount - 1];
+								var previousRow = (TreeNode)parentWidgets[index - 1];
+								if (!previousRow.IsExpanded || previousRow.ChildNodesCount == 0)
+								{
+									SelectedRow = previousRow;
+								}
+								else
+								{
+									SelectedRow = (TreeNode)previousRow.ChildNodesGrid.Widgets[previousRow.ChildNodesCount - 1];
+								}
 							}
 						}
 					}
-				}
 					break;
 				case Keys.Down:
-				{
-					if (SelectedRow.IsExpanded && SelectedRow.ChildNodesCount > 0)
 					{
-						SelectedRow = (TreeNode) SelectedRow.ChildNodesGrid.Widgets[0];
-					}
-					else if (parentWidgets != null && index + 1 < parentWidgets.Count)
-					{
-						SelectedRow = (TreeNode) parentWidgets[index + 1];
-					}
-					else if (parentWidgets != null && index + 1 >= parentWidgets.Count)
-					{
-						var parentOfParent = SelectedRow.ParentNode.ParentNode;
-						if (parentOfParent != null)
+						if (SelectedRow.IsExpanded && SelectedRow.ChildNodesCount > 0)
 						{
-							var parentIndex = parentOfParent.ChildNodesGrid.Widgets.IndexOf(SelectedRow.ParentNode);
-							if (parentIndex + 1 < parentOfParent.ChildNodesCount)
+							SelectedRow = (TreeNode)SelectedRow.ChildNodesGrid.Widgets[0];
+						}
+						else if (parentWidgets != null && index + 1 < parentWidgets.Count)
+						{
+							SelectedRow = (TreeNode)parentWidgets[index + 1];
+						}
+						else if (parentWidgets != null && index + 1 >= parentWidgets.Count)
+						{
+							var parentOfParent = SelectedRow.ParentNode.ParentNode;
+							if (parentOfParent != null)
 							{
-								SelectedRow = (TreeNode) parentOfParent.ChildNodesGrid.Widgets[parentIndex + 1];
+								var parentIndex = parentOfParent.ChildNodesGrid.Widgets.IndexOf(SelectedRow.ParentNode);
+								if (parentIndex + 1 < parentOfParent.ChildNodesCount)
+								{
+									SelectedRow = (TreeNode)parentOfParent.ChildNodesGrid.Widgets[parentIndex + 1];
+								}
 							}
 						}
 					}
-				}
 					break;
 			}
 		}
@@ -160,6 +161,11 @@ namespace Myra.Graphics2D.UI
 				if (!HoverRow.RowVisible)
 				{
 					return;
+				}
+
+				if (HoverRow.Mark.Visible && !HoverRow.Mark.Bounds.Contains(Desktop.MousePosition))
+				{
+					HoverRow.Mark.IsPressed = !HoverRow.Mark.IsPressed;
 				}
 
 				SelectedRow = HoverRow;
@@ -207,7 +213,7 @@ namespace Myra.Graphics2D.UI
 
 			foreach (var widget in node.ChildNodesGrid.Widgets)
 			{
-				var subNode = (TreeNode) widget;
+				var subNode = (TreeNode)widget;
 				if (!Iterate(subNode, action))
 				{
 					return false;
@@ -234,7 +240,7 @@ namespace Myra.Graphics2D.UI
 			{
 				foreach (var widget in tree.ChildNodesGrid.Widgets)
 				{
-					var treeNode = (TreeNode) widget;
+					var treeNode = (TreeNode)widget;
 					RecursiveUpdateRowVisibility(treeNode);
 				}
 			}
@@ -275,6 +281,10 @@ namespace Myra.Graphics2D.UI
 				_rowInfosDirty = false;
 			}
 
+			if (HoverRow != null && HoverRow != SelectedRow && RowHoverBackground != null)
+			{
+				context.Batch.Draw(RowHoverBackground, HoverRow.RowBounds);
+			}
 
 			if (SelectedRow != null && SelectedRow.RowVisible && RowSelectionBackground != null)
 			{
@@ -297,6 +307,7 @@ namespace Myra.Graphics2D.UI
 
 			RowSelectionBackground = style.RowSelectionBackground;
 			RowSelectionBackgroundWithoutFocus = style.RowSelectionBackgroundWithoutFocus;
+			RowHoverBackground = style.RowHoverBackground;
 		}
 
 		private static bool FindPath(Stack<TreeNode> path, TreeNode node)
