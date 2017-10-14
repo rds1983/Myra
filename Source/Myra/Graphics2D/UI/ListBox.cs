@@ -20,7 +20,7 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public ListItemStyle ListBoxItemStyle { get; set; }
+		public ButtonStyle ListBoxItemStyle { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
@@ -63,18 +63,14 @@ namespace Myra.Graphics2D.UI
 
 				if (_selectedItem != null && ListBoxItemStyle != null)
 				{
-					_selectedItem.Widget.Background = ListBoxItemStyle.Background;
+					((Button)_selectedItem.Widget).IsPressed = false;
 				}
 
 				_selectedItem = value;
 
 				if (_selectedItem != null)
 				{
-					if (ListBoxItemStyle != null)
-					{
-						_selectedItem.Widget.Background = ListBoxItemStyle.SelectedBackground;
-					}
-
+					((Button)_selectedItem.Widget).IsPressed = true;
 					_selectedItem.FireSelected();
 				}
 
@@ -180,6 +176,7 @@ namespace Myra.Graphics2D.UI
 				Tag = item,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
+				Toggleable = true
 			};
 
 			widget.Down += ButtonOnDown;

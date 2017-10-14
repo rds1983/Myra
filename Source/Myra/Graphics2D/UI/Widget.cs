@@ -324,17 +324,7 @@ namespace Myra.Graphics2D.UI
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public TextureRegion2D Border { get; set; }
-
-		[HiddenInEditor]
-		[JsonIgnore]
-		[EditCategory("Appearance")]
 		public TextureRegion2D OverBackground { get; set; }
-
-		[HiddenInEditor]
-		[JsonIgnore]
-		[EditCategory("Appearance")]
-		public TextureRegion2D OverBorder { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
@@ -350,6 +340,21 @@ namespace Myra.Graphics2D.UI
 		[JsonIgnore]
 		[EditCategory("Appearance")]
 		public TextureRegion2D DisabledOverBackground { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		[EditCategory("Appearance")]
+		public TextureRegion2D OverrideBackground { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		[EditCategory("Appearance")]
+		public TextureRegion2D Border { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		[EditCategory("Appearance")]
+		public TextureRegion2D OverBorder { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]

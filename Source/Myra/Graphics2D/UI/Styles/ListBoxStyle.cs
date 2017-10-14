@@ -2,16 +2,16 @@
 {
 	public class ListBoxStyle: WidgetStyle
 	{
-		public ListItemStyle ListItemStyle { get; set; }
+		public ButtonStyle ListItemStyle { get; set; }
 
 		public ListBoxStyle()
 		{
-			ListItemStyle = new ListItemStyle();
+			ListItemStyle = new ButtonStyle();
 		}
 
 		public ListBoxStyle(ListBoxStyle style) : base(style)
 		{
-			ListItemStyle = new ListItemStyle(style.ListItemStyle);
+			ListItemStyle = new ButtonStyle(style.ListItemStyle);
 		}
 
 		public override WidgetStyle Clone()

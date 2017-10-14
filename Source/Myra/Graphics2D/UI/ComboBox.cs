@@ -13,7 +13,7 @@ namespace Myra.Graphics2D.UI
 	{
 		private readonly Grid _itemsContainer;
 		private bool _isExpanded;
-		private ListItemStyle _dropDownItemStyle;
+		private ButtonStyle _dropDownItemStyle;
 		private readonly ObservableCollection<ListItem> _items = new ObservableCollection<ListItem>();
 		private int _selectingIndex = -1, _selectedIndex = -1;
 
@@ -69,24 +69,7 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
-				var item = SelectingItem;
-				if (item != null && item.Widget != null)
-				{
-					item.Widget.Background = _dropDownItemStyle.Background;
-				}
-
 				_selectingIndex = value;
-
-				item = SelectingItem;
-				if (item != null)
-				{
-					if (item.Widget != null)
-					{
-						item.Widget.Background = _dropDownItemStyle.SelectedBackground;
-					}
-
-					item.FireSelected();
-				}
 			}
 		}
 
@@ -134,8 +117,21 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
+				var item = SelectedItem;
+				if (item != null && item.Widget != null)
+				{
+					((Button)item.Widget).IsPressed = false;
+				}
+
 				SelectingIndex = value;
 				_selectedIndex = value;
+
+				item = SelectedItem;
+
+				if (item != null && item.Widget != null)
+				{
+					((Button)item.Widget).IsPressed = true;
+				}
 
 				UpdateSelectedItem();
 
@@ -331,6 +327,7 @@ namespace Myra.Graphics2D.UI
 			{
 				Text = item.Text,
 				TextColor = item.Color ?? _dropDownItemStyle.LabelStyle.TextColor,
+				Toggleable = true,
 				Tag = item
 			};
 

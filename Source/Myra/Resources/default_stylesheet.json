@@ -135,7 +135,8 @@
             "background": "select-box-list-bg"
         },
         "comboBoxItem": {
-            "selectedBackground": "button-down",
+            "overBackground": "button-over",
+            "pressedBackground": "button-down",
             "label": {
                 "font": "default-font",
                 "textColor": "white"
@@ -145,7 +146,8 @@
     "listBox": {
         "background": "button",
         "listBoxItem": {
-            "selectedBackground": "list-selection",
+            "overBackground": "button-over",
+            "pressedBackground": "list-selection",
             "padding": {
                 "left": 5.0,
                 "right": 5.0

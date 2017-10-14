@@ -172,8 +172,10 @@ namespace Myra.Editor.UI
 
 			public override void OnMouseDown(MouseButtons mb)
 			{
+				base.OnMouseDown(mb);
+
 				var mousePosition = Desktop.MousePosition;
-				if (mb != MouseButtons.Left && HeaderBounds.Contains(mousePosition) && !_mark.Bounds.Contains(mousePosition))
+				if (mb != MouseButtons.Left || !HeaderBounds.Contains(mousePosition) || _mark.Bounds.Contains(mousePosition))
 				{
 					return;
 				}

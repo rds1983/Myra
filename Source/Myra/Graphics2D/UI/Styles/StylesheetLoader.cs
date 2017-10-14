@@ -22,7 +22,6 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string ComboBoxItemName = "comboBoxItem";
 		public const string ListBoxName = "listBox";
 		public const string ListBoxItemName = "listBoxItem";
-		public const string SelectedBackgroundName = "selectedBackground";
 		public const string TreeName = "tree";
 		public const string SplitPaneName = "splitPane";
 		public const string HorizontalSplitPaneName = "horizontalSplitPane";
@@ -458,17 +457,6 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadComboBoxItemStyleFromSource(JObject source, ListItemStyle result)
-		{
-			LoadButtonStyleFromSource(source, result);
-
-			string name;
-			if (source.GetStyle(SelectedBackgroundName, out name))
-			{
-				result.SelectedBackground = GetTextureRegion2D(name);
-			}
-		}
-
 		private void LoadComboBoxStyleFromSource(JObject source, ComboBoxStyle result)
 		{
 			LoadButtonStyleFromSource(source, result);
@@ -481,7 +469,7 @@ namespace Myra.Graphics2D.UI.Styles
 
 			if (source.GetStyle(ComboBoxItemName, out subStyle))
 			{
-				LoadComboBoxItemStyleFromSource(subStyle, result.ListItemStyle);
+				LoadButtonStyleFromSource(subStyle, result.ListItemStyle);
 			}
 		}
 
@@ -492,7 +480,7 @@ namespace Myra.Graphics2D.UI.Styles
 			JObject subStyle;
 			if (source.GetStyle(ListBoxItemName, out subStyle))
 			{
-				LoadComboBoxItemStyleFromSource(subStyle, result.ListItemStyle);
+				LoadButtonStyleFromSource(subStyle, result.ListItemStyle);
 			}
 		}
 
