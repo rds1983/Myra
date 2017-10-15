@@ -105,7 +105,8 @@ namespace Myra.Graphics2D.UI
 
 			_textBlock = new TextBlock
 			{
-				GridPositionX = 1
+				GridPositionX = 1,
+				IsMenuText = true
 			};
 
 			Widget.Widgets.Add(_textBlock);

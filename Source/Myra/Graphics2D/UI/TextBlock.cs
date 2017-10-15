@@ -71,6 +71,21 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Appearance")]
 		public Color DisabledTextColor { get; set; }
 
+		[HiddenInEditor]
+		[JsonIgnore]
+		public bool IsMenuText
+		{
+			get
+			{
+				return _formattedText.IsMenuText;
+			}
+
+			set
+			{
+				_formattedText.IsMenuText = value;
+			}
+		}
+
 		public TextBlock(TextBlockStyle style)
 		{
 			if (style != null)
@@ -96,7 +111,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var bounds = ActualBounds;
-			_formattedText.Draw(context.Batch, bounds, Enabled?TextColor:DisabledTextColor);
+			_formattedText.Draw(context.Batch, bounds, Enabled ? TextColor : DisabledTextColor);
 		}
 
 		protected override Point InternalMeasure(Point availableSize)

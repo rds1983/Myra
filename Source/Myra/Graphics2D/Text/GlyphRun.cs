@@ -55,6 +55,8 @@ namespace Myra.Graphics2D.Text
 			get { return _bitmapFont; }
 		}
 
+		public int? UnderscoreIndex { get; set; }
+
 		public GlyphRun(BitmapFont font)
 		{
 			if (font == null)
@@ -103,7 +105,7 @@ namespace Myra.Graphics2D.Text
 
 			var glyphs = _bitmapFont.GetGlyphs(_text, Vector2.Zero);
 			var i = 0;
-			foreach(var glyph in glyphs)
+			foreach (var glyph in glyphs)
 			{
 				_glyphRenders[i].Glyph = glyph;
 				++i;
@@ -120,6 +122,8 @@ namespace Myra.Graphics2D.Text
 			Update();
 			var right = pos.X + totalWidth;
 			var x = pos.X;
+
+			var index = 0;
 			foreach (var gr in _glyphRenders)
 			{
 				if (x > right)
@@ -134,13 +138,21 @@ namespace Myra.Graphics2D.Text
 				}
 
 				gr.Draw(batch, new Point(x, pos.Y), color);
+
+				if (index == UnderscoreIndex)
+				{
+					// Draw underscore
+					batch.DrawRectangle(new RectangleF(x, pos.Y + gr.Height, gr.Width - 1, 1), color);
+				}
+
 				x += gr.XAdvance;
+				++index;
 			}
-				
+
 			RenderedBounds = new Rectangle(pos.X, pos.Y, x - pos.X, Size.Y);
-//			if (BitmapFont.DrawFames)
+			//			if (BitmapFont.DrawFames)
 			{
-//				batch.DrawRectangle(RenderedBounds.Value, Color.Blue);
+				//				batch.DrawRectangle(RenderedBounds.Value, Color.Blue);
 			}
 		}
 	}

@@ -24,6 +24,11 @@ namespace Myra.Graphics2D.Text
 			get { return Glyph.FontRegion != null ? Glyph.FontRegion.Width + Glyph.FontRegion.XOffset : 0; }
 		}
 
+		public int Height
+		{
+			get { return Glyph.FontRegion != null ? Glyph.FontRegion.Height + Glyph.FontRegion.YOffset : 0; }
+		}
+
 		public GlyphRender(CharInfo charInfo, GlyphRun run, Color? color)
 		{
 			if (run == null)

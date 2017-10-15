@@ -13,6 +13,7 @@ namespace Myra.Graphics2D.Text
 		{
 			public int? Width;
 			public bool Color;
+			public bool IsMenuText;
 		}
 
 		private class TextParser
@@ -37,6 +38,7 @@ namespace Myra.Graphics2D.Text
 				public LexemeType type = LexemeType.Word;
 				public readonly List<CharInfo> chars = new List<CharInfo>();
 				public Color color;
+				public int? UnderscoreIndex;
 
 				public void AppendChar(char c, int originalIndex)
 				{
@@ -44,8 +46,7 @@ namespace Myra.Graphics2D.Text
 					{
 						Value = c,
 						OriginalIndex = originalIndex
-					}
-						);
+					});
 
 					text.Append(c);
 				}
@@ -118,7 +119,8 @@ namespace Myra.Graphics2D.Text
 							StoreLexeme();
 							_lexeme.type = LexemeType.Space;
 							_lexeme.AppendChar(c, pos);
-						} else if (c == ' ')
+						}
+						else if (c == ' ')
 						{
 							_lexeme.AppendChar(c, pos);
 						}
@@ -130,7 +132,14 @@ namespace Myra.Graphics2D.Text
 								_lexeme.type = LexemeType.Word;
 							}
 
-							_lexeme.AppendChar(c, pos);
+							if (options.IsMenuText && c == '&')
+							{
+								_lexeme.UnderscoreIndex = _lexeme.chars.Count;
+							}
+							else
+							{
+								_lexeme.AppendChar(c, pos);
+							}
 
 							if (options.Color && c == '[')
 							{
@@ -181,6 +190,11 @@ namespace Myra.Graphics2D.Text
 						case LexemeType.Word:
 							_fullString.Append(li.text);
 
+							if (li.UnderscoreIndex != null)
+							{
+								_lastRun.UnderscoreIndex = _lastRun.Count + li.UnderscoreIndex;
+							}
+
 							if (options.Width.HasValue)
 							{
 								var sz = font.MeasureString(_fullString.ToString());
@@ -229,6 +243,7 @@ namespace Myra.Graphics2D.Text
 		private GlyphRun[] _strings;
 		private Point _size;
 		private bool _colored = true;
+		private bool _isMenuText = false;
 		private bool _dirty = true;
 
 		public BitmapFont Font
@@ -307,6 +322,25 @@ namespace Myra.Graphics2D.Text
 			}
 		}
 
+		public bool IsMenuText
+		{
+			get
+			{
+				return _isMenuText;
+			}
+
+			set
+			{
+				if (value == _isMenuText)
+				{
+					return;
+				}
+
+				_isMenuText = value;
+				InvalidateLayout();
+			}
+		}
+
 		public GlyphRun[] Strings
 		{
 			get
@@ -337,7 +371,8 @@ namespace Myra.Graphics2D.Text
 			var options = new Options
 			{
 				Color = _colored,
-				Width = _width
+				Width = _width,
+				IsMenuText = _isMenuText
 			};
 
 			_strings = parser.Format(_font, _text, options);
@@ -419,8 +454,8 @@ namespace Myra.Graphics2D.Text
 				}
 
 				if (pos.Y >= si.RenderedBounds.Value.Top &&
-				    pos.Y < si.RenderedBounds.Value.Bottom &&
-				    si.GlyphRenders.Count > 0)
+					pos.Y < si.RenderedBounds.Value.Bottom &&
+					si.GlyphRenders.Count > 0)
 				{
 					// If position fits into the entire line, use the last glyph as result
 					return si.GlyphRenders[si.GlyphRenders.Count - 1];
