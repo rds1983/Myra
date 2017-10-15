@@ -852,6 +852,7 @@ namespace Myra.Graphics2D.UI
 			if ((DateTime.Now - _lastDown).TotalMilliseconds < DoubleClickIntervalInMs)
 			{
 				// Double click
+				OnDoubleClick(mb);
 				var ev2 = DoubleClick;
 				if (ev2 != null)
 				{
@@ -864,6 +865,11 @@ namespace Myra.Graphics2D.UI
 			{
 				_lastDown = DateTime.Now;
 			}
+		}
+
+		public virtual void OnDoubleClick(MouseButtons mb)
+		{
+
 		}
 
 		public virtual void OnMouseUp(MouseButtons mb)

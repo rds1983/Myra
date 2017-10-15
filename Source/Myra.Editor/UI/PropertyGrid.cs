@@ -170,9 +170,9 @@ namespace Myra.Editor.UI
 				Widgets.Add(_propertyGrid);
 			}
 
-			public override void OnMouseDown(MouseButtons mb)
+			public override void OnDoubleClick(MouseButtons mb)
 			{
-				base.OnMouseDown(mb);
+				base.OnDoubleClick(mb);
 
 				var mousePosition = Desktop.MousePosition;
 				if (mb != MouseButtons.Left || !HeaderBounds.Contains(mousePosition) || _mark.Bounds.Contains(mousePosition))
@@ -185,12 +185,12 @@ namespace Myra.Editor.UI
 
 			public override void InternalRender(RenderContext context)
 			{
-				if (_propertyGrid.PropertyGridStyle.RowSelectionBackground != null)
+				if (_propertyGrid.PropertyGridStyle.RowHoverBackground != null)
 				{
 					var headerBounds = HeaderBounds;
 					if (headerBounds.Contains(Desktop.MousePosition))
 					{
-						context.Batch.Draw(_propertyGrid.PropertyGridStyle.RowSelectionBackground, headerBounds, Color.White);
+						context.Batch.Draw(_propertyGrid.PropertyGridStyle.RowHoverBackground, headerBounds, Color.White);
 					}
 				}
 
@@ -248,7 +248,6 @@ namespace Myra.Editor.UI
 		public PropertyGrid(TreeStyle style, string category) : this(style, category, null)
 		{
 		}
-
 
 		public PropertyGrid(string category) : this(Stylesheet.Current.TreeStyle, category)
 		{

@@ -10,6 +10,7 @@ namespace Myra.Graphics2D.UI
 	{
 		private bool _widgetsDirty = true;
 		private readonly List<Widget> _widgetsCopy = new List<Widget>();
+		private readonly List<Widget> _reverseWidgetsCopy = new List<Widget>();
 		protected readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
 
 		public override IEnumerable<Widget> Children
@@ -18,15 +19,19 @@ namespace Myra.Graphics2D.UI
 			{
 				// We return copy of our collection
 				// To prevent exception when someone modifies the collection during the iteration
-				if (_widgetsDirty)
-				{
-					_widgetsCopy.Clear();
-					_widgetsCopy.AddRange(_widgets);
-
-					_widgetsDirty = false;
-				}
+				UpdateWidgets();
 
 				return _widgetsCopy;
+			}
+		}
+
+		public override IEnumerable<Widget> ReverseChildren
+		{
+			get
+			{
+				UpdateWidgets();
+
+				return _reverseWidgetsCopy;
 			}
 		}
 
@@ -47,6 +52,21 @@ namespace Myra.Graphics2D.UI
 
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
+		}
+
+		private void UpdateWidgets()
+		{
+			if (_widgetsDirty)
+			{
+				_widgetsCopy.Clear();
+				_widgetsCopy.AddRange(_widgets);
+
+				_reverseWidgetsCopy.Clear();
+				_reverseWidgetsCopy.AddRange(_widgets);
+				_reverseWidgetsCopy.Reverse();
+
+				_widgetsDirty = false;
+			}
 		}
 
 		private void WidgetsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)

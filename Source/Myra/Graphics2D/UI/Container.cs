@@ -14,6 +14,10 @@ namespace Myra.Graphics2D.UI
 
 		[JsonIgnore]
 		[HiddenInEditor]
+		public abstract IEnumerable<Widget> ReverseChildren { get; }
+
+		[JsonIgnore]
+		[HiddenInEditor]
 		public abstract int ChildCount { get; }
 
 		public override bool Enabled
@@ -65,21 +69,21 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnMouseMoved(position);
 
-			Children.HandleMouseMovement(position);
+			ReverseChildren.HandleMouseMovement(position);
 		}
 
 		public override void OnMouseDown(MouseButtons mb)
 		{
 			base.OnMouseDown(mb);
 
-			Children.HandleMouseDown(mb);
+			ReverseChildren.HandleMouseDown(mb);
 		}
 
 		public override void OnMouseUp(MouseButtons mb)
 		{
 			base.OnMouseUp(mb);
 
-			Children.HandleMouseUp(mb);
+			ReverseChildren.HandleMouseUp(mb);
 		}
 
 		internal override void MoveChildren(Point delta)

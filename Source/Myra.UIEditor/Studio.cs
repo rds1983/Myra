@@ -35,49 +35,20 @@ namespace Myra.UIEditor
 		private readonly GraphicsDeviceManager _graphicsDeviceManager;
 		private readonly State _state;
 		private Desktop _desktop;
-		private SplitPane _topSplitPane;
-		private SplitPane _rightSplitPane;
+		private StudioWidget _ui;
+		private MenuItem _deleteItem;
+		private Explorer _explorer;
+		private PropertyGrid _propertyGrid;
 		private Grid _statisticsGrid;
 		private TextBlock _gcMemoryLabel;
 		private TextBlock _fpsLabel;
 		private TextBlock _widgetsCountLabel;
 		private TextBlock _drawCallsLabel;
-		private Graphics2D.UI.Panel _projectHolder;
-		private Explorer _explorer;
-		private ScrollPane _propertyGridPane;
-		private PropertyGrid _propertyGrid;
 		private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
 		private string _filePath;
 		private bool _isDirty;
 		private Project _project;
 		private int[] _customColors;
-
-		private MenuItem _addButtonItem,
-			_addCheckBoxItem,
-			_addImageButtonItem,
-			_addHorizontalSliderItem,
-			_addVerticalSliderItem,
-			_addComboBoxItem,
-			_addListBoxItem,
-			_addPanelItem,
-			_addGridItem,
-			_addImageItem,
-			_addHorizontalMenuItem,
-			_addVerticalMenuItem,
-			_addScrollPaneItem,
-			_addHorizontalSplitPaneItem,
-			_addVerticalSplitPaneItem,
-			_addHorizontalProgressBarItem,
-			_addVerticalProgressBarItem,
-			_addTextBlockItem,
-			_addTextFieldItem,
-			_addSpinButtonItem,
-			//			_addTreeItem,
-			_addMenuItemItem,
-			_addMenuSeparatorItem,
-			//			_addTreeNodeItem,
-			_deleteItem;
-
 		private Type[] _customWidgetTypes;
 		private MenuItem[] _customWidgetMenuItems;
 
@@ -135,11 +106,11 @@ namespace Myra.UIEditor
 				_project = value;
 				_explorer.Project = _project;
 
-				_projectHolder.Widgets.Clear();
+				_ui._projectHolder.Widgets.Clear();
 
 				if (_project != null)
 				{
-					_projectHolder.Widgets.Add(_project.Root);
+					_ui._projectHolder.Widgets.Add(_project.Root);
 				}
 			}
 		}
@@ -276,300 +247,107 @@ namespace Myra.UIEditor
 
 			_desktop = new Desktop();
 
-			var menuBar = new HorizontalMenu();
+			_ui = new StudioWidget();
 
-			var fileMenu = new MenuItem
-			{
-				Text = "File"
-			};
+			_ui._menuFileNew.Selected += NewItemOnClicked;
+			_ui._menuFileOpen.Selected += OpenItemOnClicked;
+			_ui._menuFileSave.Selected += SaveItemOnClicked;
+			_ui._menuFileSaveAs.Selected += SaveAsItemOnClicked;
+			_ui._menuFileExportToCS.Selected += ExportCsItemOnSelected;
+			_ui._menuFileQuit.Selected += QuitItemOnDown;
 
-			var newItem = new MenuItem
-			{
-				Text = "New"
-			};
-			newItem.Selected += NewItemOnClicked;
-			fileMenu.Items.Add(newItem);
-
-			var openItem = new MenuItem
-			{
-				Text = "Open.."
-			};
-			openItem.Selected += OpenItemOnClicked;
-			fileMenu.Items.Add(openItem);
-
-			var saveItem = new MenuItem
-			{
-				Text = "Save"
-			};
-			saveItem.Selected += SaveItemOnClicked;
-			fileMenu.Items.Add(saveItem);
-
-			var saveAsItem = new MenuItem
-			{
-				Text = "Save As..."
-			};
-			saveAsItem.Selected += SaveAsItemOnClicked;
-
-			fileMenu.Items.Add(saveAsItem);
-
-			var exportCSItem = new MenuItem
-			{
-				Text = "Export to C#..."
-			};
-			exportCSItem.Selected += ExportCsItemOnSelected;
-
-			fileMenu.Items.Add(exportCSItem);
-			fileMenu.Items.Add(new MenuSeparator());
-
-			var quitItem = new MenuItem
-			{
-				Text = "Quit"
-			};
-			quitItem.Selected += QuitItemOnDown;
-			fileMenu.Items.Add(quitItem);
-
-			menuBar.Items.Add(fileMenu);
-
-			var controlsMenu = new MenuItem
-			{
-				Text = "Controls"
-			};
-
-			_addButtonItem = new MenuItem
-			{
-				Text = "Add Button"
-			};
-
-			_addButtonItem.Selected += (s, a) =>
+			_ui._menuControlsAddButton.Selected += (s, a) =>
 			{
 				AddStandardControl<Button>();
 			};
-			controlsMenu.Items.Add(_addButtonItem);
-
-			_addCheckBoxItem = new MenuItem
-			{
-				Text = "Add CheckBox"
-			};
-			_addCheckBoxItem.Selected += (s, a) =>
+			_ui._menuControlsAddCheckBox.Selected += (s, a) =>
 			{
 				AddStandardControl<CheckBox>();
 			};
-			controlsMenu.Items.Add(_addCheckBoxItem);
-
-			_addImageButtonItem = new MenuItem
-			{
-				Text = "Add ImageButton"
-			};
-			_addImageButtonItem.Selected += (s, a) =>
+			_ui._menuControlsAddImageButton.Selected += (s, a) =>
 			{
 				AddStandardControl<ImageButton>();
 			};
-			controlsMenu.Items.Add(_addImageButtonItem);
-
-			_addHorizontalSliderItem = new MenuItem
-			{
-				Text = "Add Horizontal Slider"
-			};
-			_addHorizontalSliderItem.Selected += (s, a) =>
+			_ui._menuControlsAddHorizontalSlider.Selected += (s, a) =>
 			{
 				AddStandardControl<HorizontalSlider>();
 			};
-			controlsMenu.Items.Add(_addHorizontalSliderItem);
-
-			_addVerticalSliderItem = new MenuItem
-			{
-				Text = "Add Vertical Slider"
-			};
-			_addVerticalSliderItem.Selected += (s, a) =>
+			_ui._menuControlsAddVerticalSlider.Selected += (s, a) =>
 			{
 				AddStandardControl<VerticalSlider>();
 			};
-			controlsMenu.Items.Add(_addVerticalSliderItem);
-
-			_addHorizontalProgressBarItem = new MenuItem
-			{
-				Text = "Add Horizontal ProgressBar"
-			};
-			_addHorizontalProgressBarItem.Selected += (s, a) =>
+			_ui._menuControlsAddHorizontalProgressBar.Selected += (s, a) =>
 			{
 				AddStandardControl<HorizontalProgressBar>();
 			};
-			controlsMenu.Items.Add(_addHorizontalProgressBarItem);
-
-			_addVerticalProgressBarItem = new MenuItem
-			{
-				Text = "Add Vertical ProgressBar"
-			};
-			_addVerticalProgressBarItem.Selected += (s, a) =>
+			_ui._menuControlsAddVerticalProgressBar.Selected += (s, a) =>
 			{
 				AddStandardControl<VerticalProgressBar>();
 			};
-			controlsMenu.Items.Add(_addVerticalProgressBarItem);
-
-			_addComboBoxItem = new MenuItem
-			{
-				Text = "Add ComboBox"
-			};
-			_addComboBoxItem.Selected += (s, a) =>
+			_ui._menuControlsAddComboBox.Selected += (s, a) =>
 			{
 				AddStandardControl<ComboBox>();
 			};
-			controlsMenu.Items.Add(_addComboBoxItem);
-
-			_addListBoxItem = new MenuItem
-			{
-				Text = "Add ListBox"
-			};
-			_addListBoxItem.Selected += (s, a) =>
+			_ui._menuControlsAddListBox.Selected += (s, a) =>
 			{
 				AddStandardControl<ListBox>();
 			};
-			controlsMenu.Items.Add(_addListBoxItem);
-
-			_addPanelItem = new MenuItem
-			{
-				Text = "Add Panel"
-			};
-			_addPanelItem.Selected += (s, a) =>
+			_ui._menuControlsAddPanel.Selected += (s, a) =>
 			{
 				AddStandardControl<Myra.Graphics2D.UI.Panel>();
 			};
-			controlsMenu.Items.Add(_addPanelItem);
-
-			_addGridItem = new MenuItem
-			{
-				Text = "Add Grid"
-			};
-			_addGridItem.Selected += (s, a) =>
+			_ui._menuControlsAddGrid.Selected += (s, a) =>
 			{
 				AddStandardControl<Grid>();
 			};
-			controlsMenu.Items.Add(_addGridItem);
-
-			_addImageItem = new MenuItem
-			{
-				Text = "Add Image"
-			};
-			_addImageItem.Selected += (s, a) =>
+			_ui._menuControlsAddImage.Selected += (s, a) =>
 			{
 				AddStandardControl<Image>();
 			};
-			controlsMenu.Items.Add(_addImageItem);
-
-			_addHorizontalMenuItem = new MenuItem
-			{
-				Text = "Add Horizontal Menu"
-			};
-			_addHorizontalMenuItem.Selected += (s, a) =>
+			_ui._menuControlsAddHorizontalMenu.Selected += (s, a) =>
 			{
 				AddStandardControl(new HorizontalMenu());
 			};
-			controlsMenu.Items.Add(_addHorizontalMenuItem);
-
-			_addVerticalMenuItem = new MenuItem
-			{
-				Text = "Add Vertical Menu"
-			};
-			_addVerticalMenuItem.Selected += (s, a) =>
+			_ui._menuControlsAddVerticalMenu.Selected += (s, a) =>
 			{
 				AddStandardControl(new VerticalMenu());
 			};
-			controlsMenu.Items.Add(_addVerticalMenuItem);
-
-			_addScrollPaneItem = new MenuItem
-			{
-				Text = "Add ScrollPane"
-			};
-			_addScrollPaneItem.Selected += (s, a) =>
+			_ui._menuControlsAddScrollPane.Selected += (s, a) =>
 			{
 				AddStandardControl<ScrollPane>();
 			};
-			controlsMenu.Items.Add(_addScrollPaneItem);
-
-			_addHorizontalSplitPaneItem = new MenuItem
-			{
-				Text = "Add Horizontal SplitPane"
-			};
-			_addHorizontalSplitPaneItem.Selected += (s, a) =>
+			_ui._menuControlsAddHorizontalSplitPane.Selected += (s, a) =>
 			{
 				AddStandardControl(new HorizontalSplitPane());
 			};
-			controlsMenu.Items.Add(_addHorizontalSplitPaneItem);
-
-			_addVerticalSplitPaneItem = new MenuItem
-			{
-				Text = "Add Vertical SplitPane"
-			};
-			_addVerticalSplitPaneItem.Selected += (s, a) =>
+			_ui._menuControlsAddVerticalSplitPane.Selected += (s, a) =>
 			{
 				AddStandardControl(new VerticalSplitPane());
 			};
-			controlsMenu.Items.Add(_addVerticalSplitPaneItem);
-
-			_addTextBlockItem = new MenuItem
-			{
-				Text = "Add TextBlock"
-			};
-			_addTextBlockItem.Selected += (s, a) =>
+			_ui._menuControlsAddTextBlock.Selected += (s, a) =>
 			{
 				AddStandardControl<TextBlock>();
 			};
-			controlsMenu.Items.Add(_addTextBlockItem);
-
-			_addTextFieldItem = new MenuItem
-			{
-				Text = "Add TextField"
-			};
-			_addTextFieldItem.Selected += (s, a) =>
+			_ui._menuControlsAddTextField.Selected += (s, a) =>
 			{
 				AddStandardControl<TextField>();
 			};
-			controlsMenu.Items.Add(_addTextFieldItem);
-
-			_addSpinButtonItem = new MenuItem
-			{
-				Text = "Add SpinButton"
-			};
-			_addSpinButtonItem.Selected += (s, a) =>
+			_ui._menuControlsAddSpinButton.Selected += (s, a) =>
 			{
 				AddStandardControl<SpinButton>();
 			};
-			controlsMenu.Items.Add(_addSpinButtonItem);
-
-			/*			_addTreeItem = new MenuItem
-						{
-							Text = "Add Tree"
-						};
-						_addTreeItem.Selected += (s, a) =>
-						{
-							AddStandardControl<Tree>();
-						};
-						controlsMenu.Items.Add(_addTreeItem);*/
-			controlsMenu.Items.Add(new MenuSeparator());
-
-			_addMenuItemItem = new MenuItem
-			{
-				Text = "Add Menu Item"
-			};
-			_addMenuItemItem.Selected += (s, a) =>
+			_ui._menuControlsAddMenuItem.Selected += (s, a) =>
 			{
 				AddMenuItem(new MenuItem());
 			};
-			controlsMenu.Items.Add(_addMenuItemItem);
-
-			_addMenuSeparatorItem = new MenuItem
-			{
-				Text = "Add Menu Separator"
-			};
-			_addMenuSeparatorItem.Selected += (s, a) =>
+			_ui._menuControlsAddMenuSeparator.Selected += (s, a) =>
 			{
 				AddMenuItem(new MenuSeparator());
 			};
-			controlsMenu.Items.Add(_addMenuSeparatorItem);
 
 			if (_customWidgetTypes != null && _customWidgetTypes.Length > 0)
 			{
-				controlsMenu.Items.Add(new MenuSeparator());
+				_ui._menuControls.Items.Add(new MenuSeparator());
 
 				var customMenuWidgets = new List<MenuItem>();
 				foreach (var type in _customWidgetTypes)
@@ -584,7 +362,7 @@ namespace Myra.UIEditor
 						AddStandardControl(type);
 					};
 
-					controlsMenu.Items.Add(item);
+					_ui._menuControls.Items.Add(item);
 
 					customMenuWidgets.Add(item);
 				}
@@ -592,14 +370,7 @@ namespace Myra.UIEditor
 				_customWidgetMenuItems = customMenuWidgets.ToArray();
 			}
 
-			controlsMenu.Items.Add(new MenuSeparator());
-
-			/*			_addTreeNodeItem = new MenuItem
-						{
-							Text = "Add Tree Node"
-						};
-						controlsMenu.Items.Add(_addTreeNodeItem);
-						controlsMenu.Items.Add(new MenuSeparator());*/
+			_ui._menuControls.Items.Add(new MenuSeparator());
 
 			_deleteItem = new MenuItem
 			{
@@ -607,73 +378,24 @@ namespace Myra.UIEditor
 			};
 			_deleteItem.Selected += DeleteItemOnSelected;
 
-			controlsMenu.Items.Add(_deleteItem);
+			_ui._menuControls.Items.Add(_deleteItem);
 
-			menuBar.Items.Add(controlsMenu);
-
-			var helpMenu = new MenuItem
-			{
-				Text = "Help"
-			};
-
-			var aboutItem = new MenuItem
-			{
-				Text = "About"
-			};
-			aboutItem.Selected += AboutItemOnClicked;
-			helpMenu.Items.Add(aboutItem);
-			menuBar.Items.Add(helpMenu);
-
-			_topSplitPane = new HorizontalSplitPane
-			{
-				Id = "topSplitPane",
-				HorizontalAlignment = HorizontalAlignment.Stretch,
-				VerticalAlignment = VerticalAlignment.Stretch,
-				GridPositionY = 1
-			};
-
-			_projectHolder = new Graphics2D.UI.Panel();
-
-			_topSplitPane.Widgets.Add(_projectHolder);
-
-			_rightSplitPane = new VerticalSplitPane();
+			_ui._menuHelpAbout.Selected += AboutItemOnClicked;
 
 			_explorer = new Explorer();
 			_explorer.Tree.SelectionChanged += WidgetOnSelectionChanged;
-			_rightSplitPane.Widgets.Add(_explorer);
-
-			_propertyGridPane = new ScrollPane();
+			_ui._explorerHolder.Widgets.Add(_explorer);
 
 			_propertyGrid = new PropertyGrid();
 			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
 			_propertyGrid.ColorChangeHandler += ColorChangeHandler;
 
-			_propertyGridPane.Widget = _propertyGrid;
+			_ui._propertyGridPane.Widget = _propertyGrid;
 
-			_rightSplitPane.Widgets.Add(_propertyGridPane);
+			_ui._topSplitPane.SetSplitterPosition(0, _state != null ? _state.TopSplitterPosition : 0.75f);
+			_ui._rightSplitPane.SetSplitterPosition(0, _state != null ? _state.RightSplitterPosition : 0.5f);
 
-			var root = new Grid();
-
-			root.RowsProportions.Add(new Grid.Proportion
-			{
-				Type = Grid.ProportionType.Auto
-			});
-
-			root.RowsProportions.Add(new Grid.Proportion
-			{
-				Type = Grid.ProportionType.Part,
-				Value = 1.0f
-			});
-
-			_topSplitPane.Widgets.Add(_rightSplitPane);
-
-			root.Widgets.Add(menuBar);
-			root.Widgets.Add(_topSplitPane);
-
-			_desktop.Widgets.Add(root);
-
-			_topSplitPane.SetSplitterPosition(0, _state != null ? _state.TopSplitterPosition : 0.75f);
-			_rightSplitPane.SetSplitterPosition(0, _state != null ? _state.RightSplitterPosition : 0.5f);
+			_desktop.Widgets.Add(_ui);
 
 			_statisticsGrid = new Grid();
 
@@ -862,7 +584,7 @@ namespace Myra.UIEditor
 		private void WidgetOnSelectionChanged(object sender, EventArgs eventArgs)
 		{
 			_propertyGrid.Object = _explorer.SelectedObject;
-			_propertyGridPane.ResetScroll();
+			_ui._propertyGridPane.ResetScroll();
 
 			UpdateEnabled();
 		}
@@ -962,8 +684,8 @@ namespace Myra.UIEditor
 			{
 				Size = new Point(GraphicsDevice.PresentationParameters.BackBufferWidth,
 					GraphicsDevice.PresentationParameters.BackBufferHeight),
-				TopSplitterPosition = _topSplitPane.GetSplitterPosition(0),
-				RightSplitterPosition = _rightSplitPane.GetSplitterPosition(0),
+				TopSplitterPosition = _ui._topSplitPane.GetSplitterPosition(0),
+				RightSplitterPosition = _ui._rightSplitPane.GetSplitterPosition(0),
 				EditedFile = FilePath,
 				CustomColors = _customColors
 			};
@@ -1074,27 +796,26 @@ namespace Myra.UIEditor
 				}
 			}
 
-			_addButtonItem.Enabled = enableStandard;
-			_addCheckBoxItem.Enabled = enableStandard;
-			_addImageButtonItem.Enabled = enableStandard;
-			_addHorizontalSliderItem.Enabled = enableStandard;
-			_addVerticalSliderItem.Enabled = enableStandard;
-			_addHorizontalProgressBarItem.Enabled = enableStandard;
-			_addVerticalProgressBarItem.Enabled = enableStandard;
-			_addComboBoxItem.Enabled = enableStandard;
-			_addListBoxItem.Enabled = enableStandard;
-			_addPanelItem.Enabled = enableStandard;
-			_addGridItem.Enabled = enableStandard;
-			_addImageItem.Enabled = enableStandard;
-			_addHorizontalMenuItem.Enabled = enableStandard;
-			_addVerticalMenuItem.Enabled = enableStandard;
-			_addScrollPaneItem.Enabled = enableStandard;
-			_addHorizontalSplitPaneItem.Enabled = enableStandard;
-			_addVerticalSplitPaneItem.Enabled = enableStandard;
-			_addTextBlockItem.Enabled = enableStandard;
-			_addTextFieldItem.Enabled = enableStandard;
-			_addSpinButtonItem.Enabled = enableStandard;
-			//			_addTreeItem.Enabled = enableStandard;
+			_ui._menuControlsAddButton.Enabled = enableStandard;
+			_ui._menuControlsAddCheckBox.Enabled = enableStandard;
+			_ui._menuControlsAddImageButton.Enabled = enableStandard;
+			_ui._menuControlsAddHorizontalSlider.Enabled = enableStandard;
+			_ui._menuControlsAddVerticalSlider.Enabled = enableStandard;
+			_ui._menuControlsAddHorizontalProgressBar.Enabled = enableStandard;
+			_ui._menuControlsAddVerticalProgressBar.Enabled = enableStandard;
+			_ui._menuControlsAddComboBox.Enabled = enableStandard;
+			_ui._menuControlsAddListBox.Enabled = enableStandard;
+			_ui._menuControlsAddPanel.Enabled = enableStandard;
+			_ui._menuControlsAddGrid.Enabled = enableStandard;
+			_ui._menuControlsAddImage.Enabled = enableStandard;
+			_ui._menuControlsAddHorizontalMenu.Enabled = enableStandard;
+			_ui._menuControlsAddVerticalMenu.Enabled = enableStandard;
+			_ui._menuControlsAddScrollPane.Enabled = enableStandard;
+			_ui._menuControlsAddHorizontalSplitPane.Enabled = enableStandard;
+			_ui._menuControlsAddVerticalSplitPane.Enabled = enableStandard;
+			_ui._menuControlsAddTextBlock.Enabled = enableStandard;
+			_ui._menuControlsAddTextField.Enabled = enableStandard;
+			_ui._menuControlsAddSpinButton.Enabled = enableStandard;
 
 			if (_customWidgetMenuItems != null)
 			{
@@ -1104,10 +825,8 @@ namespace Myra.UIEditor
 				}
 			}
 
-			_addMenuItemItem.Enabled = enableMenuItems;
-			_addMenuSeparatorItem.Enabled = enableMenuItems;
-
-			//			_addTreeNodeItem.Enabled = enableTreeNode;
+			_ui._menuControlsAddMenuItem.Enabled = enableMenuItems;
+			_ui._menuControlsAddMenuSeparator.Enabled = enableMenuItems;
 
 			if (selectedObject is IMenuItem ||
 				selectedObject is Widget)

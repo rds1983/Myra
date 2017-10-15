@@ -194,6 +194,7 @@
             "thickness": 3
         },
         "menuItem": {
+            "overBackground": "button-over",           
             "pressedBackground": "button-down",
             "openBackground": "button-down",
             "padding": {

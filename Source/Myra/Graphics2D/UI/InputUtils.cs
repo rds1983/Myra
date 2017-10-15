@@ -17,11 +17,7 @@ namespace Myra.Graphics2D.UI
 				if (w.IsMouseOver)
 				{
 					w.OnMouseDown(buttons);
-
-					if (w.CanFocus)
-					{
-						break;
-					}
+					break;
 				}
 			}
 		}
@@ -38,11 +34,7 @@ namespace Myra.Graphics2D.UI
 				if (w.MouseButtonsDown != null)
 				{
 					w.OnMouseUp(buttons);
-
-					if (w.CanFocus)
-					{
-						break;
-					}
+					break;
 				}
 			}
 		}
@@ -69,10 +61,7 @@ namespace Myra.Graphics2D.UI
 						w.OnMouseEntered(mousePosition);
 					}
 
-					if (w.CanFocus)
-					{
-						movedHandled = true;
-					}
+					movedHandled = true;
 				}
 				else if (w.IsMouseOver)
 				{

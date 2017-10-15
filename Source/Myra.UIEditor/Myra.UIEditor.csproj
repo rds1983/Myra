@@ -74,6 +74,8 @@
     <Compile Include="UI\ExportOptionsWidget.cs" />
     <Compile Include="UI\ExportOptionsWidget.Generated.cs" />
     <Compile Include="UI\Pane.cs" />
+    <Compile Include="UI\StudioWidget.cs" />
+    <Compile Include="UI\StudioWidget.Generated.cs" />
     <Compile Include="Utils\GraphicsExtensions.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -131,6 +133,7 @@
     <None Include="Resources\ExportCSDesigner.cstemplate" />
     <None Include="Resources\ExportCSMain.cstemplate" />
     <None Include="UI\exportOptions.ui" />
+    <None Include="UI\studio.ui" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

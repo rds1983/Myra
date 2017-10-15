@@ -163,12 +163,30 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
+				SelectedRow = HoverRow;
+			}
+		}
+
+		public override void OnDoubleClick(MouseButtons mb)
+		{
+			base.OnDoubleClick(mb);
+
+			if (mb != MouseButtons.Left)
+			{
+				return;
+			}
+
+			if (HoverRow != null)
+			{
+				if (!HoverRow.RowVisible)
+				{
+					return;
+				}
+
 				if (HoverRow.Mark.Visible && !HoverRow.Mark.Bounds.Contains(Desktop.MousePosition))
 				{
 					HoverRow.Mark.IsPressed = !HoverRow.Mark.IsPressed;
 				}
-
-				SelectedRow = HoverRow;
 			}
 		}
 

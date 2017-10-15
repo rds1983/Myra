@@ -1,0 +1,488 @@
+{
+  "$id": "1",
+  "$type": "Myra.Graphics2D.UI.Project, Myra",
+  "ExportOptions": {
+    "$type": "Myra.Graphics2D.UI.ExportOptions, Myra",
+    "Namespace": "Myra.UIEditor.UI",
+    "Class": "StudioWidget",
+    "OutputPath": "/home/rds/Projects/Hebron/Myra/Source/Myra.UIEditor/UI"
+  },
+  "Root": {
+    "$id": "2",
+    "$type": "Myra.Graphics2D.UI.Grid, Myra",
+    "DrawLines": false,
+    "DrawLinesColor": {
+      "$id": "3",
+      "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+      "B": 255,
+      "G": 255,
+      "R": 255,
+      "A": 255
+    },
+    "ColumnSpacing": 0,
+    "RowSpacing": 0,
+    "ColumnsProportions": [],
+    "RowsProportions": [
+      {
+        "$id": "4",
+        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
+        "Type": 0,
+        "Value": 1.0
+      },
+      {
+        "$id": "5",
+        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
+        "Type": 2,
+        "Value": 1.0
+      }
+    ],
+    "TotalRowsPart": null,
+    "TotalColumnsPart": null,
+    "Widgets": [
+      {
+        "$id": "6",
+        "$type": "Myra.Graphics2D.UI.HorizontalMenu, Myra",
+        "Items": [
+          {
+            "$id": "7",
+            "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+            "Items": [
+              {
+                "$id": "8",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuFileNew",
+                "Text": "&New",
+                "Color": null
+              },
+              {
+                "$id": "9",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuFileOpen",
+                "Text": "&Open",
+                "Color": null
+              },
+              {
+                "$id": "10",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuFileSave",
+                "Text": "&Save",
+                "Color": null
+              },
+              {
+                "$id": "11",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuFileSaveAs",
+                "Text": "Save &As...",
+                "Color": null
+              },
+              {
+                "$id": "12",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuFileExportToCS",
+                "Text": "&Export To C#...",
+                "Color": null
+              },
+              {
+                "$id": "13",
+                "$type": "Myra.Graphics2D.UI.MenuSeparator, Myra",
+                "Id": null
+              },
+              {
+                "$id": "14",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuFileQuit",
+                "Text": "&Quit",
+                "Color": null
+              }
+            ],
+            "Id": "",
+            "Text": "&File",
+            "Color": null
+          },
+          {
+            "$id": "15",
+            "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+            "Items": [
+              {
+                "$id": "16",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuControlsAddButton",
+                "Text": "Add Button",
+                "Color": null
+              },
+              {
+                "$id": "17",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuControlsAddCheckBox",
+                "Text": "Add CheckBox",
+                "Color": null
+              },
+              {
+                "$id": "18",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuControlsAddImageButton",
+                "Text": "Add ImageButton",
+                "Color": null
+              },
+              {
+                "$id": "19",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuControlsAddHorizontalSlider",
+                "Text": "Add HorizontalSlider",
+                "Color": null
+              },
+              {
+                "$id": "20",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuControlsAddVerticalSlider",
+                "Text": "Add VerticalSlider",
+                "Color": null
+              },
+              {
+                "$id": "21",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuControlsAddHorizontalProgressBar",
+                "Text": "Add Horizontal ProgressBar",
+                "Color": null
+              },
+              {
+                "$id": "22",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuControlsAddVerticalProgressBar",
+                "Text": "Add Vertical ProgressBar",
+                "Color": null
+              },
+              {
+                "$id": "23",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuControlsAddComboBox",
+                "Text": "Add ComboBox",
+                "Color": null
+              },
+              {
+                "$id": "24",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuControlsAddListBox",
+                "Text": "Add ListBox",
+                "Color": null
+              },
+              {
+                "$id": "25",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuControlsAddPanel",
+                "Text": "Add Panel",
+                "Color": null
+              },
+              {
+                "$id": "26",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuControlsAddGrid",
+                "Text": "Add Grid",
+                "Color": null
+              },
+              {
+                "$id": "27",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuControlsAddImage",
+                "Text": "Add Image",
+                "Color": null
+              },
+              {
+                "$id": "28",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuControlsAddHorizontalMenu",
+                "Text": "Add HorizontalMenu",
+                "Color": null
+              },
+              {
+                "$id": "29",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuControlsAddVerticalMenu",
+                "Text": "Add Vertical Menu",
+                "Color": null
+              },
+              {
+                "$id": "30",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuControlsAddScrollPane",
+                "Text": "Add ScrollPane",
+                "Color": null
+              },
+              {
+                "$id": "31",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuControlsAddHorizontalSplitPane",
+                "Text": "Add Horizontal SplitPane",
+                "Color": null
+              },
+              {
+                "$id": "32",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuControlsAddVerticalSplitPane",
+                "Text": "Add Vertical SplitPane",
+                "Color": null
+              },
+              {
+                "$id": "33",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuControlsAddTextBlock",
+                "Text": "Add TextBlock",
+                "Color": null
+              },
+              {
+                "$id": "34",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuControlsAddTextField",
+                "Text": "Add TextField",
+                "Color": null
+              },
+              {
+                "$id": "35",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuControlsAddSpinButton",
+                "Text": "Add SpinButton",
+                "Color": null
+              },
+              {
+                "$id": "36",
+                "$type": "Myra.Graphics2D.UI.MenuSeparator, Myra",
+                "Id": null
+              },
+              {
+                "$id": "37",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuControlsAddMenuItem",
+                "Text": "Add Menu Item",
+                "Color": null
+              },
+              {
+                "$id": "38",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuControlsAddMenuSeparator",
+                "Text": "Add Menu Separator",
+                "Color": null
+              }
+            ],
+            "Id": "_menuControls",
+            "Text": "&Controls",
+            "Color": null
+          },
+          {
+            "$id": "39",
+            "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+            "Items": [
+              {
+                "$id": "40",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuHelpAbout",
+                "Text": "&About",
+                "Color": null
+              }
+            ],
+            "Id": "",
+            "Text": "&Help",
+            "Color": null
+          }
+        ],
+        "DrawLines": false,
+        "DrawLinesColor": {
+          "$id": "41",
+          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+          "B": 255,
+          "G": 255,
+          "R": 255,
+          "A": 255
+        },
+        "Enabled": true,
+        "Id": "",
+        "XHint": 0,
+        "YHint": 0,
+        "WidthHint": null,
+        "HeightHint": null,
+        "PaddingLeft": 0,
+        "PaddingRight": 0,
+        "PaddingTop": 0,
+        "PaddingBottom": 0,
+        "HorizontalAlignment": 3,
+        "VerticalAlignment": 3,
+        "GridPositionX": 0,
+        "GridPositionY": 0,
+        "GridSpanX": 1,
+        "GridSpanY": 1,
+        "Visible": true,
+        "ClipToBounds": false,
+        "CanFocus": false
+      },
+      {
+        "$id": "42",
+        "$type": "Myra.Graphics2D.UI.HorizontalSplitPane, Myra",
+        "Widgets": [
+          {
+            "$id": "43",
+            "$type": "Myra.Graphics2D.UI.Panel, Myra",
+            "Widgets": [],
+            "Enabled": true,
+            "Id": "_projectHolder",
+            "XHint": 0,
+            "YHint": 0,
+            "WidthHint": null,
+            "HeightHint": null,
+            "PaddingLeft": 0,
+            "PaddingRight": 0,
+            "PaddingTop": 0,
+            "PaddingBottom": 0,
+            "HorizontalAlignment": 3,
+            "VerticalAlignment": 3,
+            "GridPositionX": 0,
+            "GridPositionY": 0,
+            "GridSpanX": 1,
+            "GridSpanY": 1,
+            "Visible": true,
+            "ClipToBounds": false,
+            "CanFocus": false
+          },
+          {
+            "$id": "44",
+            "$type": "Myra.Graphics2D.UI.VerticalSplitPane, Myra",
+            "Widgets": [
+              {
+                "$id": "45",
+                "$type": "Myra.Graphics2D.UI.Panel, Myra",
+                "Widgets": [],
+                "Enabled": true,
+                "Id": "_explorerHolder",
+                "XHint": 0,
+                "YHint": 0,
+                "WidthHint": null,
+                "HeightHint": null,
+                "PaddingLeft": 0,
+                "PaddingRight": 0,
+                "PaddingTop": 0,
+                "PaddingBottom": 0,
+                "HorizontalAlignment": 3,
+                "VerticalAlignment": 3,
+                "GridPositionX": 0,
+                "GridPositionY": 0,
+                "GridSpanX": 1,
+                "GridSpanY": 1,
+                "Visible": true,
+                "ClipToBounds": false,
+                "CanFocus": false
+              },
+              {
+                "$id": "46",
+                "$type": "Myra.Graphics2D.UI.ScrollPane, Myra",
+                "Child": null,
+                "Enabled": true,
+                "Id": "_propertyGridPane",
+                "XHint": 0,
+                "YHint": 0,
+                "WidthHint": null,
+                "HeightHint": null,
+                "PaddingLeft": 0,
+                "PaddingRight": 0,
+                "PaddingTop": 0,
+                "PaddingBottom": 0,
+                "HorizontalAlignment": 3,
+                "VerticalAlignment": 3,
+                "GridPositionX": 0,
+                "GridPositionY": 2,
+                "GridSpanX": 1,
+                "GridSpanY": 1,
+                "Visible": true,
+                "ClipToBounds": true,
+                "CanFocus": true
+              }
+            ],
+            "Enabled": true,
+            "Id": "_rightSplitPane",
+            "XHint": 0,
+            "YHint": 0,
+            "WidthHint": null,
+            "HeightHint": null,
+            "PaddingLeft": 0,
+            "PaddingRight": 0,
+            "PaddingTop": 0,
+            "PaddingBottom": 0,
+            "HorizontalAlignment": 3,
+            "VerticalAlignment": 3,
+            "GridPositionX": 2,
+            "GridPositionY": 0,
+            "GridSpanX": 1,
+            "GridSpanY": 1,
+            "Visible": true,
+            "ClipToBounds": false,
+            "CanFocus": false
+          }
+        ],
+        "Enabled": true,
+        "Id": "_topSplitPane",
+        "XHint": 0,
+        "YHint": 0,
+        "WidthHint": null,
+        "HeightHint": null,
+        "PaddingLeft": 0,
+        "PaddingRight": 0,
+        "PaddingTop": 0,
+        "PaddingBottom": 0,
+        "HorizontalAlignment": 3,
+        "VerticalAlignment": 3,
+        "GridPositionX": 0,
+        "GridPositionY": 1,
+        "GridSpanX": 1,
+        "GridSpanY": 1,
+        "Visible": true,
+        "ClipToBounds": false,
+        "CanFocus": false
+      }
+    ],
+    "Enabled": true,
+    "Id": "Root",
+    "XHint": 0,
+    "YHint": 0,
+    "WidthHint": null,
+    "HeightHint": null,
+    "PaddingLeft": 0,
+    "PaddingRight": 0,
+    "PaddingTop": 0,
+    "PaddingBottom": 0,
+    "HorizontalAlignment": 3,
+    "VerticalAlignment": 3,
+    "GridPositionX": 0,
+    "GridPositionY": 0,
+    "GridSpanX": 1,
+    "GridSpanY": 1,
+    "Visible": true,
+    "ClipToBounds": false,
+    "CanFocus": false
+  }
+}

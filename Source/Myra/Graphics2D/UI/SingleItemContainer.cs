@@ -29,7 +29,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_widget = value;
-				
+
 				if (_widget != null)
 				{
 					_widget.Parent = this;
@@ -57,6 +57,19 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public override IEnumerable<Widget> Children
+		{
+			get
+			{
+				if (Widget == null)
+				{
+					yield break;
+				}
+
+				yield return Widget;
+			}
+		}
+
+		public override IEnumerable<Widget> ReverseChildren
 		{
 			get
 			{
