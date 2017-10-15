@@ -86,6 +86,16 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[HiddenInEditor]
+		[JsonIgnore]
+		internal char? UnderscoreChar
+		{
+			get
+			{
+				return _formattedText.UnderscoreChar;
+			}
+		}
+
 		public TextBlock(TextBlockStyle style)
 		{
 			if (style != null)

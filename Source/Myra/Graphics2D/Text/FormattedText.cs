@@ -245,6 +245,7 @@ namespace Myra.Graphics2D.Text
 		private bool _colored = true;
 		private bool _isMenuText = false;
 		private bool _dirty = true;
+		private char? _underscoreChar;
 
 		public BitmapFont Font
 		{
@@ -341,6 +342,14 @@ namespace Myra.Graphics2D.Text
 			}
 		}
 
+		public char? UnderscoreChar
+		{
+			get
+			{
+				return _underscoreChar;
+			}
+		}
+
 		public GlyphRun[] Strings
 		{
 			get
@@ -379,6 +388,7 @@ namespace Myra.Graphics2D.Text
 
 			// Calculate size
 			_size = Point.Zero;
+			_underscoreChar = null;
 			for (var i = 0; i < _strings.Length; ++i)
 			{
 				var si = _strings[i];
@@ -393,6 +403,11 @@ namespace Myra.Graphics2D.Text
 				if (i < _strings.Length - 1)
 				{
 					_size.Y += _verticalSpacing;
+				}
+
+				if (_underscoreChar == null && si.UnderscoreIndex.HasValue && si.UnderscoreIndex.Value < si.Text.Length)
+				{
+					_underscoreChar = char.ToLower(si.Text[si.UnderscoreIndex.Value]);
 				}
 			}
 

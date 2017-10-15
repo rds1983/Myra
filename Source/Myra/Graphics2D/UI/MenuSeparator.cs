@@ -3,10 +3,10 @@ using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
-	public class MenuSeparator: IMenuItem
+	public class MenuSeparator : IMenuItem
 	{
 		public string Id { get; set; }
-		
+
 		[HiddenInEditor]
 		[JsonIgnore]
 		public Menu Menu { get; set; }
@@ -14,5 +14,9 @@ namespace Myra.Graphics2D.UI
 		[HiddenInEditor]
 		[JsonIgnore]
 		public Widget Widget { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public char? UnderscoreChar { get { return null; } }
 	}
 }

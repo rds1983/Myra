@@ -226,7 +226,6 @@ namespace Myra.UIEditor.UI
 			horizontalMenu1.GridSpanY = 1;
 			horizontalMenu1.Visible = true;
 			horizontalMenu1.ClipToBounds = false;
-			horizontalMenu1.CanFocus = false;
 			horizontalMenu1.Items.Add(menuItem1);
 			horizontalMenu1.Items.Add(_menuControls);
 			horizontalMenu1.Items.Add(menuItem2);

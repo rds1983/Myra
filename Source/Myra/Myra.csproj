@@ -83,6 +83,7 @@
     <Compile Include="Graphics2D\Text\CharInfo.cs" />
     <Compile Include="Graphics2D\Text\FormattedText.cs" />
     <Compile Include="Graphics2D\Text\GlyphRender.cs" />
+    <Compile Include="Graphics2D\Text\GlyphRenderOptions.cs" />
     <Compile Include="Graphics2D\Text\GlyphRun.cs" />
     <Compile Include="Graphics2D\UI\CheckBox.cs" />
     <Compile Include="Graphics2D\UI\ComboBox.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Graphics2D\UI\Container.cs" />
     <Compile Include="Graphics2D\UI\Enums.cs" />
     <Compile Include="Graphics2D\UI\Grid.cs" />
+    <Compile Include="Graphics2D\UI\ContextMenuClosingEventArgs.cs" />
     <Compile Include="Graphics2D\UI\Desktop.cs" />
     <Compile Include="Graphics2D\UI\ListBox.cs" />
     <Compile Include="Graphics2D\UI\Menu.cs" />

@@ -6,6 +6,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Myra.Graphics2D.Text;
 using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
@@ -25,11 +26,43 @@ namespace Myra.Graphics2D.UI
 		private readonly List<Widget> _focusedWidgets = new List<Widget>();
 		private int? _focusedWidgetIndex;
 		private Widget _modalWidget;
+		private HorizontalMenu _menuBar;
+		private readonly Dictionary<char, IMenuItem> _menuBarKeysToItems = new Dictionary<char, IMenuItem>();
 
 		public Point MousePosition { get; private set; }
 		public int MouseWheel { get; private set; }
 		public MouseState MouseState { get; private set; }
 		public KeyboardState KeyboardState { get; private set; }
+		public HorizontalMenu MenuBar
+		{
+			get
+			{
+				return _menuBar;
+			}
+
+			set
+			{
+				if (_menuBar == value)
+				{
+					return;
+				}
+
+				_menuBarKeysToItems.Clear();
+
+				_menuBar = value;
+
+				if (_menuBar != null)
+				{
+					foreach (var item in _menuBar.Items)
+					{
+						if (item.UnderscoreChar.HasValue)
+						{
+							_menuBarKeysToItems[char.ToLower(item.UnderscoreChar.Value)] = item;
+						}
+					}
+				}
+			}
+		}
 
 		private IEnumerable<Widget> WidgetsCopy
 		{
@@ -132,6 +165,7 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler<GenericEventArgs<Keys>> KeyUp;
 		public event EventHandler<GenericEventArgs<Keys>> KeyDown;
 
+		public event EventHandler<ContextMenuClosingEventArgs> ContextMenuClosing;
 		public event EventHandler<GenericEventArgs<Widget>> ContextMenuClosed;
 
 		public Desktop()
@@ -143,6 +177,18 @@ namespace Myra.Graphics2D.UI
 		{
 			if (ContextMenu != null && !ContextMenu.Bounds.Contains(MousePosition))
 			{
+				var ev = ContextMenuClosing;
+				if (ev != null)
+				{
+					var args = new ContextMenuClosingEventArgs(ContextMenu);
+					ev(this, args);
+
+					if (args.Cancel)
+					{
+						return;
+					}
+				}
+
 				HideContextMenu();
 			}
 		}
@@ -169,25 +215,27 @@ namespace Myra.Graphics2D.UI
 				ContextMenu.Visible = true;
 
 				_widgets.Add(ContextMenu);
+				FocusedWidget = ContextMenu;
 			}
 		}
 
 		public void HideContextMenu()
 		{
-			if (ContextMenu != null)
+			if (ContextMenu == null)
 			{
-				_widgets.Remove(ContextMenu);
-				ContextMenu.Visible = false;
-
-
-				var ev = ContextMenuClosed;
-				if (ev != null)
-				{
-					ev(this, new GenericEventArgs<Widget>(ContextMenu));
-				}
-
-				ContextMenu = null;
+				return;
 			}
+
+			_widgets.Remove(ContextMenu);
+			ContextMenu.Visible = false;
+
+			var ev = ContextMenuClosed;
+			if (ev != null)
+			{
+				ev(this, new GenericEventArgs<Widget>(ContextMenu));
+			}
+
+			ContextMenu = null;
 		}
 
 		private void WidgetsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
@@ -355,6 +403,11 @@ namespace Myra.Graphics2D.UI
 			KeyboardState = Keyboard.GetState();
 
 			var pressedKeys = KeyboardState.GetPressedKeys();
+
+			GlyphRenderOptions.DrawUnderscores = ContextMenu is Menu ||
+												KeyboardState.IsKeyDown(Keys.LeftAlt) ||
+												KeyboardState.IsKeyDown(Keys.RightAlt);
+
 			for (var i = 0; i < pressedKeys.Length; ++i)
 			{
 				var key = pressedKeys[i];
@@ -389,6 +442,23 @@ namespace Myra.Graphics2D.UI
 						}
 
 						FocusedWidget = _focusableWidgets[newIndex];
+					}
+					else if (key == Keys.Escape && ContextMenu != null)
+					{
+						HideContextMenu();
+					}
+
+					if (MenuBar != null && GlyphRenderOptions.DrawUnderscores)
+					{
+						var ch = key.ToChar(false);
+						if (ch.HasValue)
+						{
+							IMenuItem menuItem;
+							if (_menuBarKeysToItems.TryGetValue(ch.Value, out menuItem))
+							{
+								MenuBar.Select(menuItem);
+							}
+						}
 					}
 				}
 			}
@@ -441,6 +511,11 @@ namespace Myra.Graphics2D.UI
 					result = true;
 				}
 
+				if (MenuBar == null && w is HorizontalMenu)
+				{
+					MenuBar = (HorizontalMenu)w;
+				}
+
 				var asContainer = w as Container;
 				if (asContainer != null)
 				{
@@ -456,7 +531,7 @@ namespace Myra.Graphics2D.UI
 
 		private void FocusableWidgetOnMouseDown(object sender, GenericEventArgs<MouseButtons> genericEventArgs)
 		{
-			var widget = (Widget) sender;
+			var widget = (Widget)sender;
 
 			if (!widget.IsFocused)
 			{
@@ -464,7 +539,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public void SetFocus(Widget w, bool focused)
+		private void SetFocus(Widget w, bool focused)
 		{
 			_focusedWidgets.Clear();
 
@@ -488,6 +563,8 @@ namespace Myra.Graphics2D.UI
 
 		private void UpdateFocusableWidgets()
 		{
+			MenuBar = null;
+
 			foreach (var w in _focusableWidgets)
 			{
 				w.MouseDown -= FocusableWidgetOnMouseDown;

@@ -36,6 +36,14 @@ namespace Myra.Graphics2D.UI
 			set { _textBlock.TextColor = value; }
 		}
 
+		internal char? UnderscoreChar
+		{
+			get
+			{
+				return _textBlock.UnderscoreChar;
+			}
+		}
+
 		[HiddenInEditor]
 		[JsonIgnore]
 		public TextureRegion2D TextureRegion2D

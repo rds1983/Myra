@@ -117,7 +117,7 @@ namespace Myra.Graphics2D.Text
 			_dirty = false;
 		}
 
-		public void Draw(SpriteBatch batch, Point pos, int totalWidth, Color color, bool drawPartialLastSymbol = false)
+		public void Draw(SpriteBatch batch, Point pos, int totalWidth, Color color)
 		{
 			Update();
 			var right = pos.X + totalWidth;
@@ -132,14 +132,14 @@ namespace Myra.Graphics2D.Text
 					break;
 				}
 
-				if (x + gr.Width > right && !drawPartialLastSymbol)
+				if (x + gr.Width > right && !GlyphRenderOptions.DrawPartialLastSymbol)
 				{
 					break;
 				}
 
 				gr.Draw(batch, new Point(x, pos.Y), color);
 
-				if (index == UnderscoreIndex)
+				if (GlyphRenderOptions.DrawUnderscores && index == UnderscoreIndex)
 				{
 					// Draw underscore
 					batch.DrawRectangle(new RectangleF(x, pos.Y + gr.Height, gr.Width - 1, 1), color);

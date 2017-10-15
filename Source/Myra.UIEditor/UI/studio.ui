@@ -340,7 +340,6 @@
         "GridSpanY": 1,
         "Visible": true,
         "ClipToBounds": false,
-        "CanFocus": false
       },
       {
         "$id": "42",

@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Myra.Attributes;
+using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using Newtonsoft.Json;
@@ -25,12 +28,14 @@ namespace Myra.Graphics2D.UI
 		[JsonIgnore]
 		public MenuSeparatorStyle SeparatorStyle { get; private set; }
 
+		private MenuItemButton ParentMenuItemButton { get; set; }
+
 		[HiddenInEditor]
 		[JsonIgnore]
 		public MenuItemButton OpenMenuItem { get; private set; }
 
 		[HiddenInEditor]
-		public ObservableCollection<IMenuItem> Items 
+		public ObservableCollection<IMenuItem> Items
 		{
 			get { return _items; }
 
@@ -67,6 +72,7 @@ namespace Myra.Graphics2D.UI
 
 		protected Menu(MenuStyle style)
 		{
+			CanFocus = true;
 			OpenMenuItem = null;
 
 			HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -161,7 +167,7 @@ namespace Myra.Graphics2D.UI
 
 		private void MenuItemOnChanged(object sender, EventArgs eventArgs)
 		{
-			var menuItem = (MenuItem) sender;
+			var menuItem = (MenuItem)sender;
 
 			var asMenuItemButton = menuItem.Widget as MenuItemButton;
 			if (asMenuItemButton == null)
@@ -194,6 +200,8 @@ namespace Myra.Graphics2D.UI
 				menuItemButton.Down += ButtonOnDown;
 				menuItemButton.Up += ButtonOnUp;
 				menuItemButton.SubMenu.Items = menuItem.Items;
+				menuItemButton.Toggleable = menuItem.Items.Count > 0;
+
 				widget = menuItemButton;
 			}
 			else
@@ -257,13 +265,18 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			if (Desktop.ContextMenu == this)
-			{
-				Desktop.HideContextMenu();
-			}
+			Desktop.HideContextMenu();
 
-			var widget = (MenuItemButton) sender;
-			((MenuItem)widget.Tag).FireSelected();
+			var menuItem = (MenuItemButton)sender;
+			if (menuItem.SubMenu == null || menuItem.SubMenu.Items.Count == 0)
+			{
+				((MenuItem)menuItem.Tag).FireSelected();
+			}
+			else
+			{
+				menuItem.IsSubMenuOpen = false;
+				OpenMenuItem = null;
+			}
 		}
 
 		private void ShowSubMenu(MenuItemButton menuItem)
@@ -280,46 +293,61 @@ namespace Myra.Graphics2D.UI
 			menuItem.IsSubMenuOpen = true;
 		}
 
-		private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Widget> genericEventArgs)
+		public override void OnDesktopChanging()
 		{
-			if (Desktop != null)
-			{
-				Desktop.ContextMenuClosed -= DesktopOnContextMenuClosed;
-			}
-
-			if (OpenMenuItem == null) return;
-
-			OpenMenuItem.IsSubMenuOpen = false;
-			OpenMenuItem = null;
-		}
-
-		private void ButtonOnDown(object sender, EventArgs args)
-		{
-			var menuItem = (MenuItemButton) sender;
-
-			if (menuItem.SubMenu == null)
+			if (Desktop == null)
 			{
 				return;
 			}
 
-			if (menuItem.IsPressed)
+			Desktop.ContextMenuClosing -= DesktopOnContextMenuClosing;
+			Desktop.ContextMenuClosed -= DesktopOnContextMenuClosed;
+		}
+
+		public override void OnDesktopChanged()
+		{
+			if (Desktop == null)
 			{
-				if (OpenMenuItem == null)
-				{
-					ShowSubMenu(menuItem);
-				}
-				else
-				{
-					Desktop.HideContextMenu();
-				}
+				return;
 			}
+
+			Desktop.ContextMenuClosing += DesktopOnContextMenuClosing;
+			Desktop.ContextMenuClosed += DesktopOnContextMenuClosed;
+		}
+
+		private void DesktopOnContextMenuClosing(object sender, ContextMenuClosingEventArgs args)
+		{
+			// Prevent closing/opening of the context menu
+			if (OpenMenuItem != null && OpenMenuItem.Bounds.Contains(Desktop.MousePosition))
+			{
+				args.Cancel = true;
+			}
+		}
+
+		private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Widget> genericEventArgs)
+		{
+			if (OpenMenuItem == null) return;
+
+			OpenMenuItem.IsPressed = false;
+		}
+
+		private void ButtonOnDown(object sender, EventArgs args)
+		{
+			var menuItem = (MenuItemButton)sender;
+
+			if (menuItem.SubMenu == null || menuItem.SubMenu.Items.Count == 0)
+			{
+				return;
+			}
+
+			ShowSubMenu(menuItem);
 		}
 
 		public override void OnMouseMoved(Point position)
 		{
 			base.OnMouseMoved(position);
 
-			if (Desktop == null || Desktop.ContextMenu == null)
+			if (Desktop == null || OpenMenuItem == null)
 			{
 				return;
 			}
@@ -328,10 +356,56 @@ namespace Myra.Graphics2D.UI
 			{
 				var menuItem = widget as MenuItemButton;
 				if (menuItem != null && menuItem.SubMenu != null && menuItem.Bounds.Contains(position) &&
-				    Desktop.ContextMenu != menuItem.SubMenu)
+					OpenMenuItem != menuItem)
 				{
-					ShowSubMenu(menuItem);
+					Select((MenuItem)widget.Tag);
 				}
+			}
+		}
+
+		public override void OnKeyDown(Keys k)
+		{
+			if (!GlyphRenderOptions.DrawUnderscores)
+			{
+				return;
+			}
+
+			var ch = k.ToChar(false);
+			if (ch == null)
+			{
+				return;
+			}
+
+			foreach (var w in Widgets)
+			{
+				var button = w as MenuItemButton;
+				if (button == null)
+				{
+					continue;
+				}
+				
+
+				if (button.UnderscoreChar == ch)
+				{
+					Desktop.HideContextMenu();
+					MenuItem menuItem = (MenuItem)button.Tag;
+					menuItem.FireSelected();
+					break;
+				}
+			}
+		}
+
+		public void Select(IMenuItem menuItem)
+		{
+			if (OpenMenuItem != null)
+			{
+				OpenMenuItem.IsPressed = false;
+			}
+
+			var asButton = menuItem.Widget as MenuItemButton;
+			if (asButton != null)
+			{
+				asButton.IsPressed = true;
 			}
 		}
 

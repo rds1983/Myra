@@ -28,7 +28,18 @@ namespace Myra.Graphics2D.UI
 			set { Widget.Enabled = value; }
 		}
 
-		public MenuItem(string id, string text, Color? color, object tag): base(text, color, tag)
+		[HiddenInEditor]
+		[JsonIgnore]
+		public char? UnderscoreChar
+		{
+			get
+			{
+				var button = (MenuItemButton)Widget;
+				return button.UnderscoreChar;
+			}
+		}
+
+		public MenuItem(string id, string text, Color? color, object tag) : base(text, color, tag)
 		{
 			Id = id;
 		}
@@ -45,7 +56,7 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
-		public MenuItem(): this(string.Empty)
+		public MenuItem() : this(string.Empty)
 		{
 		}
 
@@ -73,6 +84,5 @@ namespace Myra.Graphics2D.UI
 
 			return null;
 		}
-
 	}
 }
