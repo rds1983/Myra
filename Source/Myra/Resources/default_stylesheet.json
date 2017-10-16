@@ -196,7 +196,6 @@
         "menuItem": {
             "overBackground": "button-over",           
             "pressedBackground": "button-down",
-            "openBackground": "button-down",
             "padding": {
                 "left": 5.0,
                 "right": 5.0,

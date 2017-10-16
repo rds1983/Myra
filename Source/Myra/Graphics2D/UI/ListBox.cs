@@ -61,7 +61,7 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
-				if (_selectedItem != null && ListBoxItemStyle != null)
+				if (_selectedItem != null)
 				{
 					((Button)_selectedItem.Widget).IsPressed = false;
 				}

@@ -72,11 +72,18 @@ namespace Myra.Graphics2D.UI
 
 		public void Press()
 		{
+			OnMouseDown(MouseButtons.Left);
+			OnMouseUp(MouseButtons.Left);
 		}
 
 		public override void OnMouseUp(MouseButtons mb)
 		{
 			base.OnMouseUp(mb);
+
+			if (!Enabled)
+			{
+				return;
+			}
 
 			if (!Toggleable)
 			{
@@ -86,14 +93,12 @@ namespace Myra.Graphics2D.UI
 
 		public override void OnMouseDown(MouseButtons mb)
 		{
+			base.OnMouseDown(mb);
+
 			if (!Enabled)
 			{
 				return;
 			}
-
-			base.OnMouseDown(mb);
-
-			if (!IsMouseOver) return;
 
 			if (!Toggleable)
 			{

@@ -57,15 +57,21 @@ namespace Myra.Graphics2D.UI
 		public TextureRegion2D OpenBackground { get; set; }
 
 		[HiddenInEditor]
+		[JsonIgnore]
 		public Menu SubMenu
 		{
 			get { return _subMenu; }
 		}
 
-
 		[HiddenInEditor]
 		[JsonIgnore]
-		public bool IsSubMenuOpen { get; internal set; }
+		public bool CanOpen
+		{
+			get
+			{
+				return _subMenu != null && SubMenu.Items != null && SubMenu.Items.Count > 0;
+			}
+		}
 
 		[HiddenInEditor]
 		[JsonIgnore]
@@ -97,8 +103,6 @@ namespace Myra.Graphics2D.UI
 
 		internal MenuItemButton(MenuItemStyle style)
 		{
-			IsSubMenuOpen = false;
-
 			Widget = new Grid();
 
 			_imageProportion = new Grid.Proportion();
@@ -125,21 +129,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override TextureRegion2D GetCurrentBackground()
-		{
-			if (IsSubMenuOpen && OpenBackground != null)
-			{
-				return OpenBackground;
-			}
-
-			return base.GetCurrentBackground();
-		}
-
 		public void ApplyMenuItemStyle(MenuItemStyle style)
 		{
 			ApplyButtonBaseStyle(style);
-
-			OpenBackground = style.OpenBackground;
 
 			if (style.IconWidth.HasValue)
 			{

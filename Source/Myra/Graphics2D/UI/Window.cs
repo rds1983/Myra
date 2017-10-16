@@ -101,6 +101,7 @@ namespace Myra.Graphics2D.UI
 			ModalResult = (int) DefaultModalResult.Cancel;
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
+			CanFocus = true;
 
 			RowSpacing = 8;
 

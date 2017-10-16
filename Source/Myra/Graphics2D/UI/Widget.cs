@@ -46,6 +46,8 @@ namespace Myra.Graphics2D.UI
 		private int _paddingLeft, _paddingRight, _paddingTop, _paddingBottom;
 
 		private DateTime _lastDown;
+		private bool _enabled;
+		private bool _canFocus;
 
 		public static bool DrawFrames { get; set; }
 		public static bool DrawFocused { get; set; }
@@ -292,7 +294,29 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Behavior")]
-		public virtual bool Enabled { get; set; }
+		public virtual bool Enabled
+		{
+			get
+			{
+				return _enabled;
+			}
+
+			set
+			{
+				if (value == _enabled)
+				{
+					return;
+				}
+
+				_enabled = value;
+
+				var ev = EnabledChanged;
+				if (ev != null)
+				{
+					ev(this, EventArgs.Empty);
+				}
+			}
+		}
 
 		[EditCategory("Behavior")]
 		public bool Visible
@@ -371,7 +395,7 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public bool IsMouseOver { get; private set; }
+		public bool IsMouseOver { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
@@ -394,7 +418,19 @@ namespace Myra.Graphics2D.UI
 				}
 
 				OnDesktopChanging();
+
+				if (CanFocus && _desktop != null)
+				{
+					_desktop.RemoveFocusableWidget(this);
+				}
+
 				_desktop = value;
+
+				if (CanFocus && _desktop != null)
+				{
+					_desktop.AddFocusableWidget(this);
+				}
+
 				OnDesktopChanged();
 			}
 		}
@@ -443,13 +479,35 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Behavior")]
-		public bool CanFocus { get; set; }
-
-		[HiddenInEditor]
-		[JsonIgnore]
-		public virtual bool AcceptsTab
+		public bool CanFocus
 		{
-			get { return false; }
+			get
+			{
+				return _canFocus;
+			}
+
+			set
+			{
+				if (_canFocus == value)
+				{
+					return;
+				}
+
+				// If old value was true, remove from focusable widgets
+				if (_canFocus && Desktop != null)
+				{
+					Desktop.RemoveFocusableWidget(this);
+				}
+
+				_canFocus = value;
+
+				// If new value is true, add to focusable widgets
+				if (_canFocus && Desktop != null)
+				{
+					Desktop.AddFocusableWidget(this);
+				}
+
+			}
 		}
 
 		[HiddenInEditor]
@@ -458,6 +516,7 @@ namespace Myra.Graphics2D.UI
 
 		public event EventHandler VisibleChanged;
 		public event EventHandler MeasureChanged;
+		public event EventHandler EnabledChanged;
 
 		public event EventHandler MouseLeft;
 		public event EventHandler<GenericEventArgs<Point>> MouseEntered;
@@ -928,6 +987,19 @@ namespace Myra.Graphics2D.UI
 			}
 
 			return clientBounds;
+		}
+
+		internal void IterateFocusable(Action<Widget> action)
+		{
+			Widget w = this;
+			while (w != null)
+			{
+				if (w.CanFocus)
+				{
+					action(w);
+				}
+				w = w.Parent;
+			}
 		}
 	}
 }

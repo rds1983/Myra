@@ -1,4 +1,7 @@
-﻿using Myra.Graphics2D.UI.Styles;
+﻿using Microsoft.Xna.Framework.Input;
+using Myra.Attributes;
+using Myra.Graphics2D.UI.Styles;
+using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
@@ -23,6 +26,21 @@ namespace Myra.Graphics2D.UI
 		public VerticalMenu()
 			: base(Stylesheet.Current.VerticalMenuStyle)
 		{
+		}
+
+		public override void OnKeyDown(Keys k)
+		{
+			base.OnKeyDown(k);
+
+			switch (k)
+			{
+				case Keys.Up:
+					MoveSelection(-1);
+					break;
+				case Keys.Down:
+					MoveSelection(1);
+					break;
+			}
 		}
 	}
 }

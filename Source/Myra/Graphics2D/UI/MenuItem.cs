@@ -23,7 +23,7 @@ namespace Myra.Graphics2D.UI
 		[JsonIgnore]
 		public bool Enabled
 		{
-			get { return Widget.Enabled; }
+			get { return Widget != null && Widget.Enabled; }
 
 			set { Widget.Enabled = value; }
 		}

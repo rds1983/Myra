@@ -40,7 +40,6 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string DisabledBackgroundName = "disabledBackground";
 		public const string FocusedBackgroundName = "focusedBackground";
 		public const string PressedBackgroundName = "pressedBackground";
-		public const string OpenBackgroundName = "openBackground";
 		public const string BorderName = "border";
 		public const string OverBorderName = "overBorder";
 		public const string DisabledBorderName = "disabledBorder";
@@ -487,12 +486,6 @@ namespace Myra.Graphics2D.UI.Styles
 		private void LoadMenuItemStyleFromSource(JObject source, MenuItemStyle result)
 		{
 			LoadButtonStyleFromSource(source, result);
-
-			string name;
-			if (source.GetStyle(OpenBackgroundName, out name))
-			{
-				result.OpenBackground = GetTextureRegion2D(name);
-			}
 
 			int value;
 			if (source.GetStyle(IconWidthName, out value))

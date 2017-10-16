@@ -4,8 +4,6 @@ namespace Myra.Graphics2D.UI.Styles
 {
 	public class MenuItemStyle: ButtonStyle
 	{
-		public TextureRegion2D OpenBackground { get; set; }
-
 		public int? IconWidth { get; set; }
 		public int? ShortcutWidth { get; set; }
 
@@ -15,8 +13,6 @@ namespace Myra.Graphics2D.UI.Styles
 
 		public MenuItemStyle(MenuItemStyle style) : base(style)
 		{
-			OpenBackground = style.OpenBackground;
-
 			IconWidth = style.IconWidth;
 			ShortcutWidth = style.ShortcutWidth;
 		}

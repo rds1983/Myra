@@ -23,11 +23,9 @@ namespace Myra.Graphics2D.UI
 		private readonly List<Widget> _reversedWidgetsCopy = new List<Widget>();
 		protected readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
 		private readonly List<Widget> _focusableWidgets = new List<Widget>();
-		private readonly List<Widget> _focusedWidgets = new List<Widget>();
 		private int? _focusedWidgetIndex;
 		private Widget _modalWidget;
 		private HorizontalMenu _menuBar;
-		private readonly Dictionary<char, IMenuItem> _menuBarKeysToItems = new Dictionary<char, IMenuItem>();
 
 		public Point MousePosition { get; private set; }
 		public int MouseWheel { get; private set; }
@@ -47,20 +45,7 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
-				_menuBarKeysToItems.Clear();
-
 				_menuBar = value;
-
-				if (_menuBar != null)
-				{
-					foreach (var item in _menuBar.Items)
-					{
-						if (item.UnderscoreChar.HasValue)
-						{
-							_menuBarKeysToItems[char.ToLower(item.UnderscoreChar.Value)] = item;
-						}
-					}
-				}
 			}
 		}
 
@@ -126,6 +111,7 @@ namespace Myra.Graphics2D.UI
 				if (value != null && !_widgets.Contains(value))
 				{
 					_widgets.Add(value);
+					FocusedWidget = value;
 				}
 			}
 		}
@@ -143,14 +129,16 @@ namespace Myra.Graphics2D.UI
 
 				if (_focusedWidget != null)
 				{
-					SetFocus(_focusedWidget, false);
+					_focusedWidget.IterateFocusable(w => w.IsFocused = false);
+					_focusedWidgetIndex = null;
 				}
 
 				_focusedWidget = value;
 
 				if (_focusedWidget != null)
 				{
-					SetFocus(_focusedWidget, true);
+					_focusedWidget.IterateFocusable(w => w.IsFocused = true);
+					_focusedWidgetIndex = _focusableWidgets.IndexOf(_focusedWidget);
 				}
 			}
 		}
@@ -215,7 +203,6 @@ namespace Myra.Graphics2D.UI
 				ContextMenu.Visible = true;
 
 				_widgets.Add(ContextMenu);
-				FocusedWidget = ContextMenu;
 			}
 		}
 
@@ -316,7 +303,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			UpdateFocusableWidgets();
+			ProcessWidgets();
 
 			foreach (var widget in WidgetsCopy)
 			{
@@ -404,7 +391,7 @@ namespace Myra.Graphics2D.UI
 
 			var pressedKeys = KeyboardState.GetPressedKeys();
 
-			GlyphRenderOptions.DrawUnderscores = ContextMenu is Menu ||
+			GlyphRenderOptions.DrawUnderscores = (MenuBar != null && MenuBar.OpenMenuItem != null) ||
 												KeyboardState.IsKeyDown(Keys.LeftAlt) ||
 												KeyboardState.IsKeyDown(Keys.RightAlt);
 
@@ -419,46 +406,19 @@ namespace Myra.Graphics2D.UI
 						ev(this, new GenericEventArgs<Keys>(key));
 					}
 
-					var acceptsTab = false;
-					foreach (var w in _focusedWidgets)
+					if (_focusedWidget != null)
 					{
-						if (key != Keys.Tab || w.AcceptsTab)
-						{
-							w.OnKeyDown(key);
-
-							if (w.AcceptsTab)
-							{
-								acceptsTab = true;
-							}
-						}
+						_focusedWidget.IterateFocusable(w => w.OnKeyDown(key));
 					}
 
-					if (key == Keys.Tab && !acceptsTab && _focusableWidgets.Count > 0)
-					{
-						var newIndex = _focusedWidgetIndex + 1 ?? 0;
-						if (newIndex >= _focusableWidgets.Count)
-						{
-							newIndex = 0;
-						}
-
-						FocusedWidget = _focusableWidgets[newIndex];
-					}
-					else if (key == Keys.Escape && ContextMenu != null)
+					if (key == Keys.Escape && ContextMenu != null)
 					{
 						HideContextMenu();
 					}
 
 					if (MenuBar != null && GlyphRenderOptions.DrawUnderscores)
 					{
-						var ch = key.ToChar(false);
-						if (ch.HasValue)
-						{
-							IMenuItem menuItem;
-							if (_menuBarKeysToItems.TryGetValue(ch.Value, out menuItem))
-							{
-								MenuBar.Select(menuItem);
-							}
-						}
+						MenuBar.OnKeyDown(key);
 					}
 				}
 			}
@@ -467,13 +427,10 @@ namespace Myra.Graphics2D.UI
 			for (var i = 0; i < lastPressedKeys.Length; ++i)
 			{
 				var key = lastPressedKeys[i];
-				if (!KeyboardState.IsKeyDown(key))
+				if (!KeyboardState.IsKeyDown(key) && _focusedWidget != null)
 				{
 					// Key had been released
-					foreach (var w in _focusedWidgets)
-					{
-						w.OnKeyUp(key);
-					}
+					_focusedWidget.IterateFocusable(w => w.OnKeyUp(key));
 				}
 			}
 
@@ -486,17 +443,27 @@ namespace Myra.Graphics2D.UI
 					ev(null, new GenericEventArgs<float>(delta));
 				}
 
-				foreach (var w in _focusedWidgets)
+				if (_focusedWidget != null)
 				{
-					w.OnMouseWheel(delta);
+					_focusedWidget.IterateFocusable(w => w.OnMouseWheel(delta));
 				}
 			}
 		}
 
-		private bool UpdateFocusableWidgets(IEnumerable<Widget> widgets)
+		internal void AddFocusableWidget(Widget w)
 		{
-			var result = false;
+			w.MouseDown += FocusableWidgetOnMouseDown;
+			_focusableWidgets.Add(w);
+		}
 
+		internal void RemoveFocusableWidget(Widget w)
+		{
+			w.MouseDown -= FocusableWidgetOnMouseDown;
+			_focusableWidgets.Remove(w);
+		}
+
+		private void ProcessWidgets(IEnumerable<Widget> widgets)
+		{
 			foreach (var w in widgets)
 			{
 				if (!w.Visible)
@@ -504,12 +471,6 @@ namespace Myra.Graphics2D.UI
 					continue;
 				}
 
-				if (w.CanFocus)
-				{
-					w.MouseDown += FocusableWidgetOnMouseDown;
-					_focusableWidgets.Add(w);
-					result = true;
-				}
 
 				if (MenuBar == null && w is HorizontalMenu)
 				{
@@ -519,14 +480,16 @@ namespace Myra.Graphics2D.UI
 				var asContainer = w as Container;
 				if (asContainer != null)
 				{
-					if (UpdateFocusableWidgets(asContainer.Children))
-					{
-						result = true;
-					}
+					ProcessWidgets(asContainer.Children);
 				}
 			}
+		}
 
-			return result;
+		private void ProcessWidgets()
+		{
+			MenuBar = null;
+
+			ProcessWidgets(_widgets);
 		}
 
 		private void FocusableWidgetOnMouseDown(object sender, GenericEventArgs<MouseButtons> genericEventArgs)
@@ -537,42 +500,6 @@ namespace Myra.Graphics2D.UI
 			{
 				FocusedWidget = widget;
 			}
-		}
-
-		private void SetFocus(Widget w, bool focused)
-		{
-			_focusedWidgets.Clear();
-
-			_focusedWidgetIndex = _focusableWidgets.IndexOf(w);
-
-			while (w != null)
-			{
-				if (!focused || w.CanFocus)
-				{
-					w.IsFocused = focused;
-
-					if (focused)
-					{
-						_focusedWidgets.Add(w);
-					}
-				}
-
-				w = w.Parent;
-			}
-		}
-
-		private void UpdateFocusableWidgets()
-		{
-			MenuBar = null;
-
-			foreach (var w in _focusableWidgets)
-			{
-				w.MouseDown -= FocusableWidgetOnMouseDown;
-			}
-
-			_focusableWidgets.Clear();
-
-			UpdateFocusableWidgets(_widgets);
 		}
 
 		private void UpdateWidgetsCopy()

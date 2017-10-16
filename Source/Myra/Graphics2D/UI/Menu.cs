@@ -35,6 +35,16 @@ namespace Myra.Graphics2D.UI
 		public MenuItemButton OpenMenuItem { get; private set; }
 
 		[HiddenInEditor]
+		[JsonIgnore]
+		public bool IsOpen
+		{
+			get
+			{
+				return OpenMenuItem != null;
+			}
+		}
+
+		[HiddenInEditor]
 		public ObservableCollection<IMenuItem> Items
 		{
 			get { return _items; }
@@ -72,7 +82,6 @@ namespace Myra.Graphics2D.UI
 
 		protected Menu(MenuStyle style)
 		{
-			CanFocus = true;
 			OpenMenuItem = null;
 
 			HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -199,6 +208,8 @@ namespace Myra.Graphics2D.UI
 
 				menuItemButton.Down += ButtonOnDown;
 				menuItemButton.Up += ButtonOnUp;
+				menuItemButton.MouseEntered += MouseOnEntered;
+				menuItemButton.MouseLeft += MouseOnLeft;
 				menuItemButton.SubMenu.Items = menuItem.Items;
 				menuItemButton.Toggleable = menuItem.Items.Count > 0;
 
@@ -230,7 +241,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var widget = iMenuItem.Widget;
-
 			if (widget == null)
 			{
 				return;
@@ -241,10 +251,11 @@ namespace Myra.Graphics2D.UI
 			{
 				asMenuItemButton.Down -= ButtonOnDown;
 				asMenuItemButton.Up -= ButtonOnUp;
+				asMenuItemButton.MouseEntered -= MouseOnEntered;
+				asMenuItemButton.MouseLeft -= MouseOnLeft;
 			}
 
 			var index = Widgets.IndexOf(widget);
-
 			if (Orientation == Orientation.Horizontal)
 			{
 				ColumnsProportions.RemoveAt(index);
@@ -258,30 +269,19 @@ namespace Myra.Graphics2D.UI
 			UpdateGridPositions();
 		}
 
-		private void ButtonOnUp(object sender, EventArgs eventArgs)
+		public void Close()
 		{
-			if (Desktop == null)
-			{
-				return;
-			}
-
 			Desktop.HideContextMenu();
-
-			var menuItem = (MenuItemButton)sender;
-			if (menuItem.SubMenu == null || menuItem.SubMenu.Items.Count == 0)
-			{
-				((MenuItem)menuItem.Tag).FireSelected();
-			}
-			else
-			{
-				menuItem.IsSubMenuOpen = false;
-				OpenMenuItem = null;
-			}
 		}
 
 		private void ShowSubMenu(MenuItemButton menuItem)
 		{
-			if (menuItem == null || menuItem.SubMenu == null || menuItem.SubMenu.Items.Count == 0)
+			if (OpenMenuItem != null)
+			{
+				OpenMenuItem.IsPressed = false;
+			}
+
+			if (menuItem == null || !menuItem.CanOpen)
 			{
 				return;
 			}
@@ -290,7 +290,6 @@ namespace Myra.Graphics2D.UI
 			Desktop.ContextMenuClosed += DesktopOnContextMenuClosed;
 
 			OpenMenuItem = menuItem;
-			menuItem.IsSubMenuOpen = true;
 		}
 
 		public override void OnDesktopChanging()
@@ -331,36 +330,98 @@ namespace Myra.Graphics2D.UI
 			OpenMenuItem.IsPressed = false;
 		}
 
-		private void ButtonOnDown(object sender, EventArgs args)
+		private void MouseOnEntered(object sender, EventArgs eventArgs)
 		{
-			var menuItem = (MenuItemButton)sender;
-
-			if (menuItem.SubMenu == null || menuItem.SubMenu.Items.Count == 0)
+			if (!IsOpen)
 			{
 				return;
 			}
 
-			ShowSubMenu(menuItem);
+			var menuItemButton = (MenuItemButton)sender;
+			if (menuItemButton.CanOpen && OpenMenuItem != menuItemButton)
+			{
+				menuItemButton.IsPressed = true;
+			}
 		}
 
-		public override void OnMouseMoved(Point position)
+		private void MouseOnLeft(object sender, EventArgs eventArgs)
 		{
-			base.OnMouseMoved(position);
+		}
 
-			if (Desktop == null || OpenMenuItem == null)
+		private void ButtonOnDown(object sender, EventArgs eventArgs)
+		{
+			if (Desktop == null)
 			{
 				return;
 			}
 
-			foreach (var widget in Widgets)
+			var menuItemButton = (MenuItemButton)sender;
+			if (menuItemButton.CanOpen)
 			{
-				var menuItem = widget as MenuItemButton;
-				if (menuItem != null && menuItem.SubMenu != null && menuItem.Bounds.Contains(position) &&
-					OpenMenuItem != menuItem)
+				ShowSubMenu(menuItemButton);
+			}
+		}
+
+		private void ButtonOnUp(object sender, EventArgs eventArgs)
+		{
+			if (Desktop == null)
+			{
+				return;
+			}
+
+			Close();
+
+			var menuItem = (MenuItemButton)sender;
+			if (!menuItem.CanOpen)
+			{
+				((MenuItem)menuItem.Tag).FireSelected();
+			}
+			else
+			{
+				OpenMenuItem = null;
+			}
+		}
+
+		private void Click(MenuItemButton menuItemButton)
+		{
+			if (Desktop == null)
+			{
+				return;
+			}
+
+			var menuItem = (MenuItem)menuItemButton.Tag;
+			if (!menuItemButton.CanOpen)
+			{
+				Close();
+				menuItem.FireSelected();
+			}
+			else
+			{
+				menuItemButton.IsPressed = true;
+			}
+		}
+
+		private int GetSelectedIndex()
+		{
+			int selectedIndex = -1;
+
+			if (OpenMenuItem != null)
+			{
+				selectedIndex = Widgets.IndexOf(OpenMenuItem);
+			}
+			else
+			{
+				for (var i = 0; i < Widgets.Count; ++i)
 				{
-					Select((MenuItem)widget.Tag);
+					if (Widgets[i].IsMouseOver)
+					{
+						selectedIndex = i;
+						break;
+					}
 				}
 			}
+
+			return selectedIndex;
 		}
 
 		public override void OnKeyDown(Keys k)
@@ -370,12 +431,21 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var ch = k.ToChar(false);
-			if (ch == null)
+			if (k == Keys.Enter || k == Keys.Space)
 			{
-				return;
+				int selectedIndex = GetSelectedIndex();
+				if (selectedIndex != -1)
+				{
+					var button = Widgets[selectedIndex] as MenuItemButton;
+					if (button != null && !button.CanOpen)
+					{
+						Click(button);
+						return;
+					}
+				}
 			}
 
+			var ch = k.ToChar(false);
 			foreach (var w in Widgets)
 			{
 				var button = w as MenuItemButton;
@@ -383,29 +453,89 @@ namespace Myra.Graphics2D.UI
 				{
 					continue;
 				}
-				
 
-				if (button.UnderscoreChar == ch)
+				if (ch != null && button.UnderscoreChar == ch)
 				{
-					Desktop.HideContextMenu();
-					MenuItem menuItem = (MenuItem)button.Tag;
-					menuItem.FireSelected();
-					break;
+					Click(button);
+					return;
 				}
+			}
+
+
+
+			if (OpenMenuItem != null)
+			{
+				OpenMenuItem.SubMenu.OnKeyDown(k);
 			}
 		}
 
-		public void Select(IMenuItem menuItem)
+		public void MoveSelection(int delta)
 		{
-			if (OpenMenuItem != null)
+			if (Widgets.Count == 0)
 			{
-				OpenMenuItem.IsPressed = false;
+				return;
 			}
 
-			var asButton = menuItem.Widget as MenuItemButton;
-			if (asButton != null)
+			// First step - determine index of currently selected item
+			int selectedIndex = GetSelectedIndex();
+			var oldIndex = selectedIndex;
+
+			var iterations = 0;
+			while (true)
 			{
-				asButton.IsPressed = true;
+				if (iterations > Widgets.Count)
+				{
+					return;
+				}
+
+				selectedIndex += delta;
+
+				if (selectedIndex < 0)
+				{
+					selectedIndex = Widgets.Count - 1;
+				}
+
+				if (selectedIndex >= Widgets.Count)
+				{
+					selectedIndex = 0;
+				}
+
+				if (Widgets[selectedIndex] is MenuItemButton)
+				{
+					break;
+				}
+
+
+				++iterations;
+			}
+
+			if (selectedIndex < 0 || selectedIndex >= Widgets.Count || selectedIndex == oldIndex)
+			{
+				return;
+			}
+
+			MenuItemButton menuItemButton;
+			if (oldIndex != -1)
+			{
+				menuItemButton = Widgets[oldIndex] as MenuItemButton;
+				if (menuItemButton != null)
+				{
+					menuItemButton.IsMouseOver = false;
+					menuItemButton.IsPressed = false;
+				}
+			}
+
+			menuItemButton = Widgets[selectedIndex] as MenuItemButton;
+			if (menuItemButton != null)
+			{
+				if (!menuItemButton.CanOpen)
+				{
+					menuItemButton.IsMouseOver = true;
+				}
+				else
+				{
+					menuItemButton.IsPressed = true;
+				}
 			}
 		}
 

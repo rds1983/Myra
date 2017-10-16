@@ -46,11 +46,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override bool AcceptsTab
-		{
-			get { return true; }
-		}
-
 		public event EventHandler SelectionChanged;
 
 		public Tree(TreeStyle style) : base(style, null)

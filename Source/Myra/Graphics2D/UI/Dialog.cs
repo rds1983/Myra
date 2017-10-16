@@ -1,11 +1,13 @@
-﻿namespace Myra.Graphics2D.UI
+﻿using Microsoft.Xna.Framework.Input;
+
+namespace Myra.Graphics2D.UI
 {
-	public class Dialog: Window
+	public class Dialog : Window
 	{
 		private readonly Grid _dialogContent;
 
-		public Button ButtonOk { get; set; }
-		public Button ButtonCancel { get; set; }
+		public Button ButtonOk { get; private set; }
+		public Button ButtonCancel { get; private set; }
 
 		public override Widget Content
 		{
@@ -42,7 +44,7 @@
 
 		public Dialog()
 		{
-			_dialogContent = new Grid {RowSpacing = 8};
+			_dialogContent = new Grid { RowSpacing = 8 };
 
 			_dialogContent.RowsProportions.Add(new Proportion());
 			_dialogContent.RowsProportions.Add(new Proportion());
@@ -70,23 +72,38 @@
 
 			buttonsGrid.Widgets.Add(ButtonOk);
 
-			var cancelButton = new Button
+			ButtonCancel = new Button
 			{
 				Text = "Cancel",
 				GridPositionX = 1
 			};
 
-			cancelButton.Up += (sender, args) =>
+			ButtonCancel.Up += (sender, args) =>
 			{
 				ModalResult = (int)DefaultModalResult.Cancel;
 				Close();
 			};
 
-			buttonsGrid.Widgets.Add(cancelButton);
+			buttonsGrid.Widgets.Add(ButtonCancel);
 
 			_dialogContent.Widgets.Add(buttonsGrid);
 
 			base.Content = _dialogContent;
+		}
+
+		public override void OnKeyDown(Keys k)
+		{
+			base.OnKeyDown(k);
+
+			switch(k)
+			{
+				case Keys.Escape:
+					ButtonCancel.Press();
+					break;
+				case Keys.Enter:
+					ButtonOk.Press();
+					break;
+			}
 		}
 
 		public static Dialog CreateMessageBox(string title, Widget content)
