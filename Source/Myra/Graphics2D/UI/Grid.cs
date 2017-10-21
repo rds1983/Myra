@@ -653,13 +653,13 @@ namespace Myra.Graphics2D.UI
 			var bounds = ActualBounds;
 			for (i = 0; i < _gridLinesX.Count; ++i)
 			{
-				var x = bounds.X + _gridLinesX[i];
+				var x = _gridLinesX[i];
 				context.Batch.DrawLine(x, bounds.Top, x, bounds.Bottom, DrawLinesColor);
 			}
 
 			for (i = 0; i < _gridLinesY.Count; ++i)
 			{
-				var y = bounds.Top + _gridLinesY[i];
+				var y = _gridLinesY[i];
 				context.Batch.DrawLine(bounds.Left, y, bounds.Right, y, DrawLinesColor);
 			}
 		}

@@ -134,7 +134,6 @@ namespace Myra
 				}
 
 				var rawImage = RawImage.FromStream(_assetResolver.Open("default_uiskin.png"));
-				rawImage.Process(true);
 				_uiBitmap = rawImage.CreateTexture2D();
 
 				return _uiBitmap;

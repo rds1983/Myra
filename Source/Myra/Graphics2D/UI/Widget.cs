@@ -87,7 +87,10 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_yHint = value;
-				_layoutState = LayoutState.LocationInvalid;
+				if (_layoutState == LayoutState.Normal)
+				{
+					_layoutState = LayoutState.LocationInvalid;
+				}
 			}
 		}
 
@@ -700,7 +703,7 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
-		internal void Layout(Rectangle containerBounds)
+		public void Layout(Rectangle containerBounds)
 		{
 			if (_containerBounds == containerBounds)
 			{
