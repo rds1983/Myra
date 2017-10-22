@@ -426,7 +426,7 @@ namespace Myra.Graphics2D.UI
 
 		public override void OnKeyDown(Keys k)
 		{
-			if (!GlyphRenderOptions.DrawUnderscores)
+			if (!MyraEnvironment.ShowUnderscores)
 			{
 				return;
 			}

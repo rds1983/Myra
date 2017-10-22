@@ -11,8 +11,6 @@
     <AssemblyName>Myra.UIEditor</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ProductVersion>12.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -73,6 +71,9 @@
     <Compile Include="UI\ExportOptionsDialog.cs" />
     <Compile Include="UI\ExportOptionsWidget.cs" />
     <Compile Include="UI\ExportOptionsWidget.Generated.cs" />
+    <Compile Include="UI\OptionsDialog.cs" />
+    <Compile Include="UI\OptionsWidget.cs" />
+    <Compile Include="UI\OptionsWidget.Generated.cs" />
     <Compile Include="UI\Pane.cs" />
     <Compile Include="UI\StudioWidget.cs" />
     <Compile Include="UI\StudioWidget.Generated.cs" />
@@ -139,13 +140,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Myra.Editor\Myra.Editor.csproj">
-      <Project>{f18bd428-25f7-4183-beb7-7c96f21ae2d1}</Project>
-      <Name>Myra.Editor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Myra\Myra.csproj">
-      <Project>{4dcbb001-9c79-4f6b-996d-d654062d93e0}</Project>
+      <Project>{4DCBB001-9C79-4F6B-996D-D654062D93E0}</Project>
       <Name>Myra</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Myra.Editor\Myra.Editor.csproj">
+      <Project>{F18BD428-25F7-4183-BEB7-7C96F21AE2D1}</Project>
+      <Name>Myra.Editor</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

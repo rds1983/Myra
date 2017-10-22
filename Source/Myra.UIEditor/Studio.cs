@@ -115,6 +115,19 @@ namespace Myra.UIEditor
 			}
 		}
 
+		public bool ShowDebugInfo
+		{
+			get
+			{
+				return _statisticsGrid.Visible;
+			}
+
+			set
+			{
+				_statisticsGrid.Visible = value;
+			}
+		}
+
 		public Studio()
 		{
 			_instance = this;
@@ -239,12 +252,6 @@ namespace Myra.UIEditor
 
 		private void BuildUI()
 		{
-#if DEBUG
-			//			BitmapFont.DrawFames = true;
-			//			Widget.DrawFrames = true;
-			Widget.DrawFocused = true;
-#endif
-
 			_desktop = new Desktop();
 
 			_ui = new StudioWidget();
@@ -254,6 +261,7 @@ namespace Myra.UIEditor
 			_ui._menuFileSave.Selected += SaveItemOnClicked;
 			_ui._menuFileSaveAs.Selected += SaveAsItemOnClicked;
 			_ui._menuFileExportToCS.Selected += ExportCsItemOnSelected;
+			_ui._menuFileOptions.Selected += OptionsItemOnSelected;
 			_ui._menuFileQuit.Selected += QuitItemOnDown;
 
 			_ui._menuControlsAddButton.Selected += (s, a) =>
@@ -397,7 +405,10 @@ namespace Myra.UIEditor
 
 			_desktop.Widgets.Add(_ui);
 
-			_statisticsGrid = new Grid();
+			_statisticsGrid = new Grid
+			{
+				Visible = false
+			};
 
 			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
 			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
@@ -444,6 +455,12 @@ namespace Myra.UIEditor
 			_desktop.Widgets.Add(_statisticsGrid);
 
 			UpdateEnabled();
+		}
+
+		private void OptionsItemOnSelected(object sender1, EventArgs eventArgs)
+		{
+			var dlg = new OptionsDialog();
+			dlg.ShowModal(_desktop);
 		}
 
 		private void ExportCsItemOnSelected(object sender1, EventArgs eventArgs)
@@ -752,6 +769,8 @@ namespace Myra.UIEditor
 			}
 			catch (Exception ex)
 			{
+				var dialog = Dialog.CreateMessageBox("Error", ex.Message);
+				dialog.ShowModal(_desktop);
 				_logger.Error(ex);
 			}
 		}

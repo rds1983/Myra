@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.TextureAtlases;
 
@@ -63,14 +64,18 @@ namespace Myra.Graphics2D.Text
 			var bounds = new Rectangle((int)v.X, (int)v.Y, region.Width, region.Height);
 			if (bounds.Width == 0 || bounds.Height == 0)
 			{
-				bounds.X = (int)v.X;
-				bounds.Y = (int)v.Y;
+				bounds.X = pos.X;
+				bounds.Y = pos.Y;
 				bounds.Width = XAdvance;
 				bounds.Height = Run.BitmapFont.LineHeight;
-				bounds.Offset(pos);
 			}
 
 			RenderedBounds = bounds;
+
+			if (MyraEnvironment.DrawTextGlyphsFrames)
+			{
+				batch.DrawRectangle(bounds.ToRectangleF(), Microsoft.Xna.Framework.Color.White);
+			}
 		}
 	}
 }

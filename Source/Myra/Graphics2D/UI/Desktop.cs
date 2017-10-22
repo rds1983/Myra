@@ -391,7 +391,7 @@ namespace Myra.Graphics2D.UI
 
 			var pressedKeys = KeyboardState.GetPressedKeys();
 
-			GlyphRenderOptions.DrawUnderscores = (MenuBar != null && MenuBar.OpenMenuItem != null) ||
+			MyraEnvironment.ShowUnderscores = (MenuBar != null && MenuBar.OpenMenuItem != null) ||
 												KeyboardState.IsKeyDown(Keys.LeftAlt) ||
 												KeyboardState.IsKeyDown(Keys.RightAlt);
 
@@ -416,7 +416,7 @@ namespace Myra.Graphics2D.UI
 						HideContextMenu();
 					}
 
-					if (MenuBar != null && GlyphRenderOptions.DrawUnderscores)
+					if (MenuBar != null && MyraEnvironment.ShowUnderscores)
 					{
 						MenuBar.OnKeyDown(key);
 					}

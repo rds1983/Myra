@@ -49,9 +49,6 @@ namespace Myra.Graphics2D.UI
 		private bool _enabled;
 		private bool _canFocus;
 
-		public static bool DrawFrames { get; set; }
-		public static bool DrawFocused { get; set; }
-
 		public string Id { get; set; }
 
 		[EditCategory("Layout")]
@@ -603,7 +600,7 @@ namespace Myra.Graphics2D.UI
 
 			var batch = context.Batch;
 			var oldScissorRectangle = batch.GraphicsDevice.ScissorRectangle;
-			if (ClipToBounds)
+			if (ClipToBounds && !MyraEnvironment.DisableClipping)
 			{
 				oldScissorRectangle = batch.GraphicsDevice.ScissorRectangle;
 				var newScissorRectangle = Rectangle.Intersect(oldScissorRectangle, view);
@@ -636,17 +633,17 @@ namespace Myra.Graphics2D.UI
 				batch.Draw(border, Bounds);
 			}
 
-			if (DrawFrames)
+			if (MyraEnvironment.DrawWidgetsFrames)
 			{
 				batch.DrawRectangle(Bounds, Color.LightGreen);
 			}
 
-			if (DrawFocused && IsFocused)
+			if (MyraEnvironment.DrawFocusedWidgetFrame && IsFocused)
 			{
 				batch.DrawRectangle(Bounds, Color.Red);
 			}
 
-			if (ClipToBounds)
+			if (ClipToBounds && !MyraEnvironment.DisableClipping)
 			{
 				batch.FlushUI();
 				batch.GraphicsDevice.ScissorRectangle = oldScissorRectangle;

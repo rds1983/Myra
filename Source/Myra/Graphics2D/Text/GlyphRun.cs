@@ -132,14 +132,14 @@ namespace Myra.Graphics2D.Text
 					break;
 				}
 
-				if (x + gr.Width > right && !GlyphRenderOptions.DrawPartialLastSymbol)
+				if (x + gr.Width > right && !MyraEnvironment.DrawPartialLastSymbol)
 				{
 					break;
 				}
 
 				gr.Draw(batch, new Point(x, pos.Y), color);
 
-				if (GlyphRenderOptions.DrawUnderscores && index == UnderscoreIndex)
+				if (MyraEnvironment.ShowUnderscores && index == UnderscoreIndex)
 				{
 					// Draw underscore
 					batch.DrawRectangle(new RectangleF(x, pos.Y + gr.Height, gr.Width - 1, 1), color);

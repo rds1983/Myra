@@ -5,7 +5,7 @@
     "$type": "Myra.Graphics2D.UI.ExportOptions, Myra",
     "Namespace": "Myra.UIEditor.UI",
     "Class": "StudioWidget",
-    "OutputPath": "/home/rds/Projects/Hebron/Myra/Source/Myra.UIEditor/UI"
+    "OutputPath": "/home/rds/Projects/Wanderers/Myra/Source/Myra.UIEditor/UI"
   },
   "Root": {
     "$id": "2",
@@ -96,6 +96,19 @@
                 "$id": "14",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
+                "Id": "_menuFileOptions",
+                "Text": "O&ptions",
+                "Color": null
+              },
+              {
+                "$id": "15",
+                "$type": "Myra.Graphics2D.UI.MenuSeparator, Myra",
+                "Id": null
+              },
+              {
+                "$id": "16",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
                 "Id": "_menuFileQuit",
                 "Text": "&Quit",
                 "Color": null
@@ -106,11 +119,11 @@
             "Color": null
           },
           {
-            "$id": "15",
+            "$id": "17",
             "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
             "Items": [
               {
-                "$id": "16",
+                "$id": "18",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddButton",
@@ -118,7 +131,7 @@
                 "Color": null
               },
               {
-                "$id": "17",
+                "$id": "19",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddCheckBox",
@@ -126,7 +139,7 @@
                 "Color": null
               },
               {
-                "$id": "18",
+                "$id": "20",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddImageButton",
@@ -134,7 +147,7 @@
                 "Color": null
               },
               {
-                "$id": "19",
+                "$id": "21",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddHorizontalSlider",
@@ -142,7 +155,7 @@
                 "Color": null
               },
               {
-                "$id": "20",
+                "$id": "22",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddVerticalSlider",
@@ -150,7 +163,7 @@
                 "Color": null
               },
               {
-                "$id": "21",
+                "$id": "23",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddHorizontalProgressBar",
@@ -158,7 +171,7 @@
                 "Color": null
               },
               {
-                "$id": "22",
+                "$id": "24",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddVerticalProgressBar",
@@ -166,7 +179,7 @@
                 "Color": null
               },
               {
-                "$id": "23",
+                "$id": "25",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddComboBox",
@@ -174,7 +187,7 @@
                 "Color": null
               },
               {
-                "$id": "24",
+                "$id": "26",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddListBox",
@@ -182,7 +195,7 @@
                 "Color": null
               },
               {
-                "$id": "25",
+                "$id": "27",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddPanel",
@@ -190,7 +203,7 @@
                 "Color": null
               },
               {
-                "$id": "26",
+                "$id": "28",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddGrid",
@@ -198,7 +211,7 @@
                 "Color": null
               },
               {
-                "$id": "27",
+                "$id": "29",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddImage",
@@ -206,7 +219,7 @@
                 "Color": null
               },
               {
-                "$id": "28",
+                "$id": "30",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddHorizontalMenu",
@@ -214,7 +227,7 @@
                 "Color": null
               },
               {
-                "$id": "29",
+                "$id": "31",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddVerticalMenu",
@@ -222,7 +235,7 @@
                 "Color": null
               },
               {
-                "$id": "30",
+                "$id": "32",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddScrollPane",
@@ -230,7 +243,7 @@
                 "Color": null
               },
               {
-                "$id": "31",
+                "$id": "33",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddHorizontalSplitPane",
@@ -238,7 +251,7 @@
                 "Color": null
               },
               {
-                "$id": "32",
+                "$id": "34",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddVerticalSplitPane",
@@ -246,7 +259,7 @@
                 "Color": null
               },
               {
-                "$id": "33",
+                "$id": "35",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddTextBlock",
@@ -254,7 +267,7 @@
                 "Color": null
               },
               {
-                "$id": "34",
+                "$id": "36",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddTextField",
@@ -262,7 +275,7 @@
                 "Color": null
               },
               {
-                "$id": "35",
+                "$id": "37",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddSpinButton",
@@ -270,12 +283,12 @@
                 "Color": null
               },
               {
-                "$id": "36",
+                "$id": "38",
                 "$type": "Myra.Graphics2D.UI.MenuSeparator, Myra",
                 "Id": null
               },
               {
-                "$id": "37",
+                "$id": "39",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddMenuItem",
@@ -283,7 +296,7 @@
                 "Color": null
               },
               {
-                "$id": "38",
+                "$id": "40",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddMenuSeparator",
@@ -296,11 +309,11 @@
             "Color": null
           },
           {
-            "$id": "39",
+            "$id": "41",
             "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
             "Items": [
               {
-                "$id": "40",
+                "$id": "42",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuHelpAbout",
@@ -315,7 +328,7 @@
         ],
         "DrawLines": false,
         "DrawLinesColor": {
-          "$id": "41",
+          "$id": "43",
           "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
           "B": 255,
           "G": 255,
@@ -340,13 +353,14 @@
         "GridSpanY": 1,
         "Visible": true,
         "ClipToBounds": false,
+        "CanFocus": false
       },
       {
-        "$id": "42",
+        "$id": "44",
         "$type": "Myra.Graphics2D.UI.HorizontalSplitPane, Myra",
         "Widgets": [
           {
-            "$id": "43",
+            "$id": "45",
             "$type": "Myra.Graphics2D.UI.Panel, Myra",
             "Widgets": [],
             "Enabled": true,
@@ -370,11 +384,11 @@
             "CanFocus": false
           },
           {
-            "$id": "44",
+            "$id": "46",
             "$type": "Myra.Graphics2D.UI.VerticalSplitPane, Myra",
             "Widgets": [
               {
-                "$id": "45",
+                "$id": "47",
                 "$type": "Myra.Graphics2D.UI.Panel, Myra",
                 "Widgets": [],
                 "Enabled": true,
@@ -398,7 +412,7 @@
                 "CanFocus": false
               },
               {
-                "$id": "46",
+                "$id": "48",
                 "$type": "Myra.Graphics2D.UI.ScrollPane, Myra",
                 "Child": null,
                 "Enabled": true,
