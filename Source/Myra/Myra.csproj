@@ -87,6 +87,9 @@
     <Compile Include="Graphics2D\UI\CheckBox.cs" />
     <Compile Include="Graphics2D\UI\ComboBox.cs" />
     <Compile Include="Graphics2D\UI\ButtonBase.cs" />
+    <Compile Include="Graphics2D\UI\DebugOptionsDialog.cs" />
+    <Compile Include="Graphics2D\UI\DebugOptionsWidget.cs" />
+    <Compile Include="Graphics2D\UI\DebugOptionsWidget.Generated.cs" />    
     <Compile Include="Graphics2D\UI\Dialog.cs" />
     <Compile Include="Graphics2D\UI\HorizontalMenu.cs" />
     <Compile Include="Graphics2D\UI\Image.cs" />

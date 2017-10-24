@@ -261,7 +261,7 @@ namespace Myra.UIEditor
 			_ui._menuFileSave.Selected += SaveItemOnClicked;
 			_ui._menuFileSaveAs.Selected += SaveAsItemOnClicked;
 			_ui._menuFileExportToCS.Selected += ExportCsItemOnSelected;
-			_ui._menuFileOptions.Selected += OptionsItemOnSelected;
+			_ui._menuFileDebugOptions.Selected += DebugOptionsItemOnSelected;
 			_ui._menuFileQuit.Selected += QuitItemOnDown;
 
 			_ui._menuControlsAddButton.Selected += (s, a) =>
@@ -457,9 +457,14 @@ namespace Myra.UIEditor
 			UpdateEnabled();
 		}
 
-		private void OptionsItemOnSelected(object sender1, EventArgs eventArgs)
+		private void DebugOptionsItemOnSelected(object sender1, EventArgs eventArgs)
 		{
-			var dlg = new OptionsDialog();
+			var dlg = new DebugOptionsDialog();
+
+			dlg.AddOption("Show debug info",
+						() => { ShowDebugInfo = true; },
+						() => { ShowDebugInfo = false; });
+
 			dlg.ShowModal(_desktop);
 		}
 

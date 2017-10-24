@@ -96,8 +96,8 @@
                 "$id": "14",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
-                "Id": "_menuFileOptions",
-                "Text": "O&ptions",
+                "Id": "_menuFileDebugOptions",
+                "Text": "&UI Debug Options",
                 "Color": null
               },
               {

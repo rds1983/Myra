@@ -71,9 +71,6 @@
     <Compile Include="UI\ExportOptionsDialog.cs" />
     <Compile Include="UI\ExportOptionsWidget.cs" />
     <Compile Include="UI\ExportOptionsWidget.Generated.cs" />
-    <Compile Include="UI\OptionsDialog.cs" />
-    <Compile Include="UI\OptionsWidget.cs" />
-    <Compile Include="UI\OptionsWidget.Generated.cs" />
     <Compile Include="UI\Pane.cs" />
     <Compile Include="UI\StudioWidget.cs" />
     <Compile Include="UI\StudioWidget.Generated.cs" />

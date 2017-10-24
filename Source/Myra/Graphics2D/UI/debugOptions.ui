@@ -3,9 +3,9 @@
   "$type": "Myra.Graphics2D.UI.Project, Myra",
   "ExportOptions": {
     "$type": "Myra.Graphics2D.UI.ExportOptions, Myra",
-    "Namespace": "\tMyra.UIEditor.UI",
-    "Class": "OptionsWidget",
-    "OutputPath": "/home/rds/Projects/Wanderers/Myra/Source/Myra.UIEditor/UI"
+    "Namespace": "Myra.Graphics2D.UI",
+    "Class": "DebugOptionsWidget",
+    "OutputPath": "/home/rds/Projects/Myra/Sources/Myra/Graphics2D/UI"
   },
   "Root": {
     "$id": "2",
@@ -13,7 +13,7 @@
     "DrawLines": false,
     "DrawLinesColor": {
       "$id": "3",
-      "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+      "$type": "Myra.Graphics.Color, Myra",
       "B": 255,
       "G": 255,
       "R": 255,
@@ -46,24 +46,18 @@
         "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
         "Type": 0,
         "Value": 1.0
-      },
-      {
-        "$id": "8",
-        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
-        "Type": 0,
-        "Value": 1.0
       }
     ],
     "TotalRowsPart": null,
     "TotalColumnsPart": null,
     "Widgets": [
       {
-        "$id": "9",
+        "$id": "8",
         "$type": "Myra.Graphics2D.UI.CheckBox, Myra",
         "Text": "Draw green frame around every widget",
         "TextColor": {
-          "$id": "10",
-          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+          "$id": "9",
+          "$type": "Myra.Graphics.Color, Myra",
           "B": 255,
           "G": 255,
           "R": 255,
@@ -95,12 +89,12 @@
         "CanFocus": false
       },
       {
-        "$id": "11",
+        "$id": "10",
         "$type": "Myra.Graphics2D.UI.CheckBox, Myra",
         "Text": "Draw red frame around the focused widget",
         "TextColor": {
-          "$id": "12",
-          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+          "$id": "11",
+          "$type": "Myra.Graphics.Color, Myra",
           "B": 255,
           "G": 255,
           "R": 255,
@@ -132,12 +126,12 @@
         "CanFocus": false
       },
       {
-        "$id": "13",
+        "$id": "12",
         "$type": "Myra.Graphics2D.UI.CheckBox, Myra",
         "Text": "Draw white frame around every letter glyph",
         "TextColor": {
-          "$id": "14",
-          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+          "$id": "13",
+          "$type": "Myra.Graphics.Color, Myra",
           "B": 255,
           "G": 255,
           "R": 255,
@@ -169,49 +163,12 @@
         "CanFocus": false
       },
       {
-        "$id": "15",
-        "$type": "Myra.Graphics2D.UI.CheckBox, Myra",
-        "Text": "Show debugging info",
-        "TextColor": {
-          "$id": "16",
-          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-          "B": 255,
-          "G": 255,
-          "R": 255,
-          "A": 255
-        },
-        "ImageWidthHint": 10,
-        "ImageHeightHint": 10,
-        "ImageVisible": true,
-        "ContentHorizontalAlignment": 3,
-        "ContentVerticalAlignment": 3,
-        "Enabled": true,
-        "Id": "_checkBoxShowDebugInfo",
-        "XHint": 0,
-        "YHint": 0,
-        "WidthHint": null,
-        "HeightHint": null,
-        "PaddingLeft": 0,
-        "PaddingRight": 0,
-        "PaddingTop": 0,
-        "PaddingBottom": 0,
-        "HorizontalAlignment": 0,
-        "VerticalAlignment": 0,
-        "GridPositionX": 0,
-        "GridPositionY": 3,
-        "GridSpanX": 1,
-        "GridSpanY": 1,
-        "Visible": true,
-        "ClipToBounds": false,
-        "CanFocus": false
-      },
-      {
-        "$id": "17",
+        "$id": "14",
         "$type": "Myra.Graphics2D.UI.CheckBox, Myra",
         "Text": "Disable clipping",
         "TextColor": {
-          "$id": "18",
-          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+          "$id": "15",
+          "$type": "Myra.Graphics.Color, Myra",
           "B": 255,
           "G": 255,
           "R": 255,
@@ -235,7 +192,7 @@
         "HorizontalAlignment": 0,
         "VerticalAlignment": 0,
         "GridPositionX": 0,
-        "GridPositionY": 4,
+        "GridPositionY": 3,
         "GridSpanX": 1,
         "GridSpanY": 1,
         "Visible": true,
