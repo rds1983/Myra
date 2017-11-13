@@ -1,12 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended;
-using Myra.Attributes;
-using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
 {

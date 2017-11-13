@@ -243,7 +243,7 @@ namespace Myra.Graphics2D.Text
 		private GlyphRun[] _strings;
 		private Point _size;
 		private bool _colored = true;
-		private bool _isMenuText = false;
+		private bool _isMenuText;
 		private bool _dirty = true;
 		private char? _underscoreChar;
 

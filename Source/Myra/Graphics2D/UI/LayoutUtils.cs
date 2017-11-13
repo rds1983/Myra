@@ -43,21 +43,21 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		internal static void UpdateImageSize(this Image image, TextureRegion2D TextureRegion2D)
+		internal static void UpdateImageSize(this Image image, TextureRegion2D textureRegion2D)
 		{
-			if (TextureRegion2D == null)
+			if (textureRegion2D == null)
 			{
 				return;
 			}
 
-			if (image.WidthHint == null || TextureRegion2D.Size.Width > image.WidthHint.Value)
+			if (image.WidthHint == null || textureRegion2D.Size.Width > image.WidthHint.Value)
 			{
-				image.WidthHint = (int)TextureRegion2D.Size.Width;
+				image.WidthHint = (int)textureRegion2D.Size.Width;
 			}
 
-			if (image.HeightHint == null || TextureRegion2D.Size.Height > image.HeightHint.Value)
+			if (image.HeightHint == null || textureRegion2D.Size.Height > image.HeightHint.Value)
 			{
-				image.HeightHint = (int)TextureRegion2D.Size.Height;
+				image.HeightHint = (int)textureRegion2D.Size.Height;
 			}
 		}
 	}

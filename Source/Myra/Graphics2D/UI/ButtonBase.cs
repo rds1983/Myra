@@ -80,11 +80,6 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnMouseUp(mb);
 
-			if (!Enabled)
-			{
-				return;
-			}
-
 			if (!Toggleable)
 			{
 				IsPressed = false;

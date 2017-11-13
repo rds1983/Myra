@@ -6,7 +6,6 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Myra.Graphics2D.Text;
 using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
@@ -23,7 +22,6 @@ namespace Myra.Graphics2D.UI
 		private readonly List<Widget> _reversedWidgetsCopy = new List<Widget>();
 		protected readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
 		private readonly List<Widget> _focusableWidgets = new List<Widget>();
-		private int? _focusedWidgetIndex;
 		private Widget _modalWidget;
 		private HorizontalMenu _menuBar;
 
@@ -40,11 +38,6 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (_menuBar == value)
-				{
-					return;
-				}
-
 				_menuBar = value;
 			}
 		}
@@ -130,7 +123,6 @@ namespace Myra.Graphics2D.UI
 				if (_focusedWidget != null)
 				{
 					_focusedWidget.IterateFocusable(w => w.IsFocused = false);
-					_focusedWidgetIndex = null;
 				}
 
 				_focusedWidget = value;
@@ -138,7 +130,6 @@ namespace Myra.Graphics2D.UI
 				if (_focusedWidget != null)
 				{
 					_focusedWidget.IterateFocusable(w => w.IsFocused = true);
-					_focusedWidgetIndex = _focusableWidgets.IndexOf(_focusedWidget);
 				}
 			}
 		}
@@ -149,8 +140,6 @@ namespace Myra.Graphics2D.UI
 
 		public event EventHandler<GenericEventArgs<float>> MouseWheelChanged;
 
-		public event EventHandler<GenericEventArgs<char>> KeyPressed;
-		public event EventHandler<GenericEventArgs<Keys>> KeyUp;
 		public event EventHandler<GenericEventArgs<Keys>> KeyDown;
 
 		public event EventHandler<ContextMenuClosingEventArgs> ContextMenuClosing;
@@ -265,10 +254,10 @@ namespace Myra.Graphics2D.UI
 
 			if (_renderContext == null)
 			{
-				var _spriteBatch = new SpriteBatch(MyraEnvironment.GraphicsDevice);
+				var spriteBatch = new SpriteBatch(MyraEnvironment.GraphicsDevice);
 				_renderContext = new RenderContext
 				{
-					Batch = _spriteBatch
+					Batch = spriteBatch
 				};
 			}
 
@@ -406,19 +395,21 @@ namespace Myra.Graphics2D.UI
 						ev(this, new GenericEventArgs<Keys>(key));
 					}
 
-					if (_focusedWidget != null)
+					if (MenuBar != null && MyraEnvironment.ShowUnderscores)
 					{
-						_focusedWidget.IterateFocusable(w => w.OnKeyDown(key));
+						MenuBar.OnKeyDown(key);
+					}
+					else
+					{
+						if (_focusedWidget != null)
+						{
+							_focusedWidget.IterateFocusable(w => w.OnKeyDown(key));
+						}
 					}
 
 					if (key == Keys.Escape && ContextMenu != null)
 					{
 						HideContextMenu();
-					}
-
-					if (MenuBar != null && MyraEnvironment.ShowUnderscores)
-					{
-						MenuBar.OnKeyDown(key);
 					}
 				}
 			}

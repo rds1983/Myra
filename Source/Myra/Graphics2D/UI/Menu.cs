@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Myra.Attributes;
-using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using Newtonsoft.Json;
@@ -27,8 +25,6 @@ namespace Myra.Graphics2D.UI
 		[HiddenInEditor]
 		[JsonIgnore]
 		public MenuSeparatorStyle SeparatorStyle { get; private set; }
-
-		private MenuItemButton ParentMenuItemButton { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]

@@ -1,5 +1,4 @@
 using System;
-using Myra.Graphics2D.UI;
 
 namespace Myra.Graphics2D.UI
 {
@@ -71,7 +70,7 @@ namespace Myra.Graphics2D.UI
 
 			_optionsWidget.RowsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Auto
+				Type = ProportionType.Auto
 			});
 
 			_optionsWidget.Widgets.Add(optionsCheckBox);

@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.TextureAtlases;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
@@ -196,7 +195,6 @@ namespace Myra.Graphics2D.UI
 
 			if (mb != MouseButtons.Left) return;
 
-			var bounds = ActualBounds;
 			if (_verticalScrollbarVisible && _verticalScrollbarThumb.Contains(mousePosition))
 			{
 				_startBoundsPos = mousePosition.Y;
@@ -240,8 +238,6 @@ namespace Myra.Graphics2D.UI
 
 			// Render child
 			base.InternalRender(context);
-
-			var bounds = ActualBounds;
 
 			if (_horizontalScrollbarVisible)
 			{

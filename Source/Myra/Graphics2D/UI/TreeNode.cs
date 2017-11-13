@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.BitmapFonts;
 using Myra.Graphics2D.UI.Styles;
-using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
 {
