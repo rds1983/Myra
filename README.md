@@ -88,5 +88,5 @@ It would result in following screenshot(assuming the background is black):
 * [MonoGame](http://www.monogame.net/)
 * [MonoGame.Extended](https://github.com/craftworkgames/MonoGame.Extended)
 * [VisUI](https://github.com/kotcrab/vis-editor/wiki/VisUI)
-* [LibGDX] (http://libgdx.badlogicgames.com/)
+* [LibGDX](http://libgdx.badlogicgames.com/)
 * [Cyotek.Drawing.BitmapFont](https://github.com/cyotek/Cyotek.Drawing.BitmapFont)
