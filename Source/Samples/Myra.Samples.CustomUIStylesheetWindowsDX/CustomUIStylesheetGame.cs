@@ -6,422 +6,424 @@ using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Samples.CustomUIStylesheetSample
 {
-    /// <summary>
-    /// This is the main type for your game.
-    /// </summary>
-    public class CustomUIStylesheetGame : Game
-    {
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
-        private Stylesheet _stylesheet;
-        private Desktop _host;
-        private Window _window;
-        private HorizontalProgressBar _horizontalProgressBar;
-        private VerticalProgressBar _verticalProgressBar;
+	/// <summary>
+	/// This is the main type for your game.
+	/// </summary>
+	public class CustomUIStylesheetGame : Game
+	{
+		private GraphicsDeviceManager _graphics;
+		private SpriteBatch _spriteBatch;
+		private Stylesheet _stylesheet;
+		private Desktop _host;
+		private Window _window;
+		private HorizontalProgressBar _horizontalProgressBar;
+		private VerticalProgressBar _verticalProgressBar;
 
-        
-        public CustomUIStylesheetGame()
-        {
-            _graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
 
-	        IsMouseVisible = true;
-            Window.AllowUserResizing = true;
-        }
+		public CustomUIStylesheetGame()
+		{
+			_graphics = new GraphicsDeviceManager(this);
+			Content.RootDirectory = "Content";
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
-        protected override void Initialize()
-        {
-            // TODO: Add your initialization logic here
+			IsMouseVisible = true;
+			Window.AllowUserResizing = true;
+		}
 
-            base.Initialize();
-        }
+		/// <summary>
+		/// Allows the game to perform any initialization it needs to before starting to run.
+		/// This is where it can query for any required services and load any non-graphic
+		/// related content.  Calling base.Initialize will enumerate through any components
+		/// and initialize them as well.
+		/// </summary>
+		protected override void Initialize()
+		{
+			// TODO: Add your initialization logic here
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
-        protected override void LoadContent()
-        {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+			base.Initialize();
+		}
 
-            // TODO: use this.Content to load your game content here
-            MyraEnvironment.Game = this;
+		/// <summary>
+		/// LoadContent will be called once per game and is the place to load
+		/// all of your content.
+		/// </summary>
+		protected override void LoadContent()
+		{
+			// Create a new SpriteBatch, which can be used to draw textures.
+			_spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _stylesheet = Content.Load<Stylesheet>("ui_stylesheet");
-            Stylesheet.Current = _stylesheet;
-           
-            
-            // Widget.DrawFrames = true;
-            _host = new Desktop();
+			// TODO: use this.Content to load your game content here
+			MyraEnvironment.Game = this;
 
-            var grid = new Grid
-            {
-                RowSpacing = 3,
-                ColumnSpacing = 3,
+			_stylesheet = Content.Load<Stylesheet>("ui_stylesheet");
+			Stylesheet.Current = _stylesheet;
+
+
+			// Widget.DrawFrames = true;
+			_host = new Desktop();
+
+			var grid = new Grid
+			{
+				RowSpacing = 3,
+				ColumnSpacing = 3,
 //				DrawLines = true
-            };
+			};
 
-            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part, 1.0f));
-            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part, 2.0f));
-            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Pixels, 150.0f));
-            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-            grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill));
+			grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
+			grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
+			grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part, 1.0f));
+			grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part, 2.0f));
+			grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Pixels, 150.0f));
+			grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
+			grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill));
 
-            grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-            grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-            grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part, 1.0f));
-            grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part, 1.0f));
-            grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Pixels, 200.0f));
-            grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-            grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill));
+			grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
+			grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
+			grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part, 1.0f));
+			grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part, 1.0f));
+			grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Pixels, 200.0f));
+			grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
+			grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill));
 
-            // Create headers
-            for (var i = 1; i < grid.ColumnsProportions.Count; ++i)
-            {
-                var header = new TextBlock
-                {
-                    Text = grid.ColumnsProportions[i].ToString(),
-                    GridPositionX = i,
-                    GridPositionY = 0
-                };
+			// Create headers
+			for (var i = 1; i < grid.ColumnsProportions.Count; ++i)
+			{
+				var header = new TextBlock
+				{
+					Text = grid.ColumnsProportions[i].ToString(),
+					GridPositionX = i,
+					GridPositionY = 0
+				};
 
-                grid.Widgets.Add(header);
-            }
+				grid.Widgets.Add(header);
+			}
 
-            // Combo
-            var combo = new ComboBox
-            {
-                GridPositionX = 1,
-                GridPositionY = 1
-            };
+			// Combo
+			var combo = new ComboBox
+			{
+				GridPositionX = 1,
+				GridPositionY = 1
+			};
 
-            combo.Items.Add(new ListItem("Red", Color.Red));
-            combo.Items.Add(new ListItem("Green", Color.Green));
-            combo.Items.Add(new ListItem("Blue", Color.Blue));
-            grid.Widgets.Add(combo);
+			combo.Items.Add(new ListItem("Red", Color.Red));
+			combo.Items.Add(new ListItem("Green", Color.Green));
+			combo.Items.Add(new ListItem("Blue", Color.Blue));
+			grid.Widgets.Add(combo);
 
-            // Button
-            var button = new Button
-            {
-                GridPositionX = 2,
-                GridPositionY = 1,
-                GridSpanX = 2,
-                GridSpanY = 1,
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                Text = "This is 2 columns button"
-            };
+			// Button
+			var button = new Button
+			{
+				GridPositionX = 2,
+				GridPositionY = 1,
+				GridSpanX = 2,
+				GridSpanY = 1,
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				Text = "This is 2 columns button"
+			};
 
-            button.Down += (s, a) =>
-            {
-                var messageBox = Dialog.CreateMessageBox("2C", "2 Columns Button pushed!");
-                messageBox.ShowModal(_host);
-            };
+			button.Down += (s, a) =>
+			{
+				var messageBox = Dialog.CreateMessageBox("2C", "2 Columns Button pushed!");
+				messageBox.ShowModal(_host);
+			};
 
-            grid.Widgets.Add(button);
+			grid.Widgets.Add(button);
 
-            // Button
-            var button2 = new Button
-            {
-                GridPositionX = 2,
-                GridPositionY = 2,
-                GridSpanX = 1,
-                GridSpanY = 2,
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch,
-                Text = "This is 2 rows button"
-            };
+			// Button
+			var button2 = new Button
+			{
+				GridPositionX = 2,
+				GridPositionY = 2,
+				GridSpanX = 1,
+				GridSpanY = 2,
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				VerticalAlignment = VerticalAlignment.Stretch,
+				Text = "This is 2 rows button"
+			};
 
-            button2.Down += (s, a) =>
-            {
-                var messageBox = Dialog.CreateMessageBox("2R", "2 Rows Button pushed!");
-                messageBox.ShowModal(_host);
-            };
-            grid.Widgets.Add(button2);
+			button2.Down += (s, a) =>
+			{
+				var messageBox = Dialog.CreateMessageBox("2R", "2 Rows Button pushed!");
+				messageBox.ShowModal(_host);
+			};
+			grid.Widgets.Add(button2);
 
-            var label = new TextBlock
-            {
-                Text =
-                    "Lorem ipsum [Green]dolor sit amet, [Red]consectetur adipisicing elit, sed do eiusmod [#AAAAAAAA]tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. [white]Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum!",
-                VerticalSpacing = 0,
-                TextColor = Color.AntiqueWhite,
-                Wrap = true
-            };
+			var label = new TextBlock
+			{
+				Text =
+					"Lorem ipsum [Green]dolor sit amet, [Red]consectetur adipisicing elit, sed do eiusmod [#AAAAAAAA]tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. [white]Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum!",
+				VerticalSpacing = 0,
+				TextColor = Color.AntiqueWhite,
+				Wrap = true
+			};
 
-            var pane = new ScrollPane<TextBlock>
-            {
-                Widget = label,
-                WidthHint = 200,
-                HeightHint = 200
-            };
+			var pane = new ScrollPane
+			{
+				Widget = label,
+				WidthHint = 200,
+				HeightHint = 200
+			};
 
-            _window = new Window
-            {
-                Title = "Text",
-            };
+			_window = new Window
+			{
+				Title = "Text",
+			};
 
 			_window.ContentGrid.Widgets.Add(pane);
 
-            var button3 = new Button
-            {
-                Text = "Show Window",
-                GridPositionX =4,
-                GridPositionY = 3
-            };
-            grid.Widgets.Add(button3);
+			var button3 = new Button
+			{
+				Text = "Show Window",
+				GridPositionX = 4,
+				GridPositionY = 3
+			};
+			grid.Widgets.Add(button3);
 
-            button3.Up += (sender, args) =>
-            {
-                _window.ShowModal(_host);
-            };
+			button3.Up += (sender, args) =>
+			{
+				_window.ShowModal(_host);
+			};
 
-            // Horizontal slider
-            var hslider = new HorizontalSlider
-            {
-                GridPositionX = 3,
-                GridPositionY = 2
-            };
-            grid.Widgets.Add(hslider);
+			// Horizontal slider
+			var hslider = new HorizontalSlider
+			{
+				GridPositionX = 3,
+				GridPositionY = 2
+			};
+			grid.Widgets.Add(hslider);
 
-            // Horizontal slider value
-            var hsliderValue = new TextBlock
-            {
-                GridPositionX = 4,
-                GridPositionY = 2,
-                Text = "HSlider Value: 0"
-            };
+			// Horizontal slider value
+			var hsliderValue = new TextBlock
+			{
+				GridPositionX = 4,
+				GridPositionY = 2,
+				Text = "HSlider Value: 0"
+			};
 
-            hslider.ValueChanged += (sender, args) =>
-            {
-                hsliderValue.Text = string.Format("HSlider Value: {0:0.00}", hslider.Value);
-            };
+			hslider.ValueChanged += (sender, args) =>
+			{
+				hsliderValue.Text = string.Format("HSlider Value: {0:0.00}", hslider.Value);
+			};
 
-            grid.Widgets.Add(hsliderValue);
+			grid.Widgets.Add(hsliderValue);
 
-            var textBlock = new TextBlock
-            {
-                WidthHint = 125,
-                Text = "This is textblock which spans for several lines to demonstrate row proportion set to Auto",
-                GridPositionX = 4,
-                GridPositionY = 1
-            };
-            grid.Widgets.Add(textBlock);
+			var textBlock = new TextBlock
+			{
+				WidthHint = 125,
+				Text = "This is textblock which spans for several lines to demonstrate row proportion set to Auto",
+				GridPositionX = 4,
+				GridPositionY = 1
+			};
+			grid.Widgets.Add(textBlock);
 
-            var checkBox = new CheckBox
-            {
-                Text = "This is a checkbox",
-                GridPositionX = 3,
-                GridPositionY = 3,
-            };
-            grid.Widgets.Add(checkBox);
+			var checkBox = new CheckBox
+			{
+				Text = "This is a checkbox",
+				GridPositionX = 3,
+				GridPositionY = 3,
+			};
+			grid.Widgets.Add(checkBox);
 
-            // Spin buttons
-            var spinButton = new SpinButton
-            {
-                GridPositionX = 5,
-                GridPositionY = 1,
-                WidthHint = 100,
-                Nullable = true
-            };
-            grid.Widgets.Add(spinButton);
+			// Spin buttons
+			var spinButton = new SpinButton
+			{
+				GridPositionX = 5,
+				GridPositionY = 1,
+				WidthHint = 100,
+				Nullable = true
+			};
+			grid.Widgets.Add(spinButton);
 
-            var spinButton2 = new SpinButton
-            {
-                GridPositionX = 5,
-                GridPositionY = 2,
-                WidthHint = 100,
-                Integer = true
-            };
-            grid.Widgets.Add(spinButton2);
+			var spinButton2 = new SpinButton
+			{
+				GridPositionX = 5,
+				GridPositionY = 2,
+				WidthHint = 100,
+				Integer = true
+			};
+			grid.Widgets.Add(spinButton2);
 
 
-            // Progress bars
-            _horizontalProgressBar = new HorizontalProgressBar
-            {
-                GridPositionX = 5,
-                GridPositionY = 3,
-                WidthHint = 100
-            };
-            grid.Widgets.Add(_horizontalProgressBar);
+			// Progress bars
+			_horizontalProgressBar = new HorizontalProgressBar
+			{
+				GridPositionX = 5,
+				GridPositionY = 3,
+				WidthHint = 100
+			};
+			grid.Widgets.Add(_horizontalProgressBar);
 
-            _verticalProgressBar = new VerticalProgressBar
-            {
-                GridPositionX = 6,
-                GridPositionY = 1,
-                HeightHint = 100
-            };
-            grid.Widgets.Add(_verticalProgressBar);
+			_verticalProgressBar = new VerticalProgressBar
+			{
+				GridPositionX = 6,
+				GridPositionY = 1,
+				HeightHint = 100
+			};
+			grid.Widgets.Add(_verticalProgressBar);
 
-            // List box
-            var list = new ListBox
-            {
-                GridPositionX = 5,
-                GridPositionY = 4
-            };
+			// List box
+			var list = new ListBox
+			{
+				GridPositionX = 5,
+				GridPositionY = 4
+			};
 
-            list.Items.Add(new ListItem("Red", Color.Red));
-            list.Items.Add(new ListItem("Green", Color.Green));
-            list.Items.Add(new ListItem("Blue", Color.Blue));
-            grid.Widgets.Add(list);
+			list.Items.Add(new ListItem("Red", Color.Red));
+			list.Items.Add(new ListItem("Green", Color.Green));
+			list.Items.Add(new ListItem("Blue", Color.Blue));
+			grid.Widgets.Add(list);
 
-            // Vertical slider
-            var vslider = new VerticalSlider
-            {
-                GridPositionX = 2,
-                GridPositionY = 4
-            };
-            grid.Widgets.Add(vslider);
+			// Vertical slider
+			var vslider = new VerticalSlider
+			{
+				GridPositionX = 2,
+				GridPositionY = 4
+			};
+			grid.Widgets.Add(vslider);
 
-            // Vertical slider value
-            var vsliderValue = new TextBlock
-            {
-                GridPositionX = 4,
-                GridPositionY = 4,
-                Text = "VSlider Value: 0"
-            };
+			// Vertical slider value
+			var vsliderValue = new TextBlock
+			{
+				GridPositionX = 4,
+				GridPositionY = 4,
+				Text = "VSlider Value: 0"
+			};
 
-            vslider.ValueChanged += (sender, args) =>
-            {
-                vsliderValue.Text = string.Format("VSlider Value: {0:0.00}", vslider.Value);
-            };
+			vslider.ValueChanged += (sender, args) =>
+			{
+				vsliderValue.Text = string.Format("VSlider Value: {0:0.00}", vslider.Value);
+			};
 
-            grid.Widgets.Add(vsliderValue);
+			grid.Widgets.Add(vsliderValue);
 
-            var tree = new Tree
-            {
-                HasRoot = false,
-                GridPositionX = 3,
-                GridPositionY = 4
-            };
-            var node1 = tree.AddSubNode("node1");
-            var node2 = node1.AddSubNode("node2");
-            var node3 = node2.AddSubNode("node3");
-            node3.AddSubNode("node4");
-            node3.AddSubNode("node5");
-            node2.AddSubNode("node6");
+			var tree = new Tree
+			{
+				HasRoot = false,
+				GridPositionX = 3,
+				GridPositionY = 4
+			};
+			var node1 = tree.AddSubNode("node1");
+			var node2 = node1.AddSubNode("node2");
+			var node3 = node2.AddSubNode("node3");
+			node3.AddSubNode("node4");
+			node3.AddSubNode("node5");
+			node2.AddSubNode("node6");
 
-            grid.Widgets.Add(tree);
+			grid.Widgets.Add(tree);
 
-            var textBlock2 = new TextBlock
-            {
-                Text = "This is long textblock",
-                GridPositionX = 1,
-                GridPositionY = 4
-            };
-            grid.Widgets.Add(textBlock2);
+			var textBlock2 = new TextBlock
+			{
+				Text = "This is long textblock",
+				GridPositionX = 1,
+				GridPositionY = 4
+			};
+			grid.Widgets.Add(textBlock2);
 
-            var hsplitPane = new HorizontalSplitPane
-            {
-                GridPositionX = 1,
-                GridPositionY = 5
-            };
-            var hsplitPaneLabel1 = new TextBlock
-            {
-                Text = "Left"
-            };
-            hsplitPane.Widgets.Add(hsplitPaneLabel1);
-            var hsplitPaneLabel2 = new TextBlock
-            {
-                Text = "Right"
-            };
-            hsplitPane.Widgets.Add(hsplitPaneLabel2);
-            grid.Widgets.Add(hsplitPane);
+			var hsplitPane = new HorizontalSplitPane
+			{
+				GridPositionX = 1,
+				GridPositionY = 5
+			};
+			var hsplitPaneLabel1 = new TextBlock
+			{
+				Text = "Left"
+			};
+			hsplitPane.Widgets.Add(hsplitPaneLabel1);
+			var hsplitPaneLabel2 = new TextBlock
+			{
+				Text = "Right"
+			};
+			hsplitPane.Widgets.Add(hsplitPaneLabel2);
+			grid.Widgets.Add(hsplitPane);
 
-            var vsplitPane = new VerticalSplitPane
-            {
-                GridPositionX = 6,
-                GridPositionY = 4
-            };
-            var vsplitPaneLabel1 = new TextBlock
-            {
-                Text = "Top"
-            };
-            vsplitPane.Widgets.Add(vsplitPaneLabel1);
-            var vsplitPaneLabel2 = new TextBlock
-            {
-                Text = "Bottom"
-            };
-            vsplitPane.Widgets.Add(vsplitPaneLabel2);
-            grid.Widgets.Add(vsplitPane);
+			var vsplitPane = new VerticalSplitPane
+			{
+				GridPositionX = 6,
+				GridPositionY = 4
+			};
+			var vsplitPaneLabel1 = new TextBlock
+			{
+				Text = "Top"
+			};
+			vsplitPane.Widgets.Add(vsplitPaneLabel1);
+			var vsplitPaneLabel2 = new TextBlock
+			{
+				Text = "Bottom"
+			};
+			vsplitPane.Widgets.Add(vsplitPaneLabel2);
+			grid.Widgets.Add(vsplitPane);
 
-            for (var i = 1; i < grid.RowsProportions.Count; ++i)
-            {
-                var header = new TextBlock
-                {
-                    Text = grid.RowsProportions[i].ToString(),
-                    GridPositionX = 0,
-                    GridPositionY = i
-                };
+			for (var i = 1; i < grid.RowsProportions.Count; ++i)
+			{
+				var header = new TextBlock
+				{
+					Text = grid.RowsProportions[i].ToString(),
+					GridPositionX = 0,
+					GridPositionY = i
+				};
 
-                grid.Widgets.Add(header);
-            }
+				grid.Widgets.Add(header);
+			}
 
-            _host.Widgets.Add(grid);
-        }
+			_host.Widgets.Add(grid);
+		}
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// game-specific content.
-        /// </summary>
-        protected override void UnloadContent()
-        {
-            // TODO: Unload any non ContentManager content here
-        }
+		/// <summary>
+		/// UnloadContent will be called once per game and is the place to unload
+		/// game-specific content.
+		/// </summary>
+		protected override void UnloadContent()
+		{
+			// TODO: Unload any non ContentManager content here
+		}
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Update(GameTime gameTime)
-        {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+		/// <summary>
+		/// Allows the game to run logic such as updating the world,
+		/// checking for collisions, gathering input, and playing audio.
+		/// </summary>
+		/// <param name="gameTime">Provides a snapshot of timing values.</param>
+		protected override void Update(GameTime gameTime)
+		{
+			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
+			    Keyboard.GetState().IsKeyDown(Keys.Escape))
+				Exit();
 
-            // TODO: Add your update logic here
-            base.Update(gameTime);
-            
-            _horizontalProgressBar.Value += 0.5f;
-            if (_horizontalProgressBar.Value > _horizontalProgressBar.Maximum)
-            {
-                _horizontalProgressBar.Value = _horizontalProgressBar.Minimum;
-            }
+			// TODO: Add your update logic here
+			base.Update(gameTime);
 
-            _verticalProgressBar.Value += 0.5f;
-            if (_verticalProgressBar.Value > _verticalProgressBar.Maximum)
-            {
-                _verticalProgressBar.Value = _verticalProgressBar.Minimum;
-            }
-        }
+			_horizontalProgressBar.Value += 0.5f;
+			if (_horizontalProgressBar.Value > _horizontalProgressBar.Maximum)
+			{
+				_horizontalProgressBar.Value = _horizontalProgressBar.Minimum;
+			}
 
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Draw(GameTime gameTime)
-        {
-            base.Draw(gameTime);
-            
-            if (_graphics.PreferredBackBufferWidth != Window.ClientBounds.Width ||
-                _graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
-            {
-                _graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
-                _graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
-                _graphics.ApplyChanges();
-            }
+			_verticalProgressBar.Value += 0.5f;
+			if (_verticalProgressBar.Value > _verticalProgressBar.Maximum)
+			{
+				_verticalProgressBar.Value = _verticalProgressBar.Minimum;
+			}
+		}
 
-            GraphicsDevice.Clear(Color.Black);
+		/// <summary>
+		/// This is called when the game should draw itself.
+		/// </summary>
+		/// <param name="gameTime">Provides a snapshot of timing values.</param>
+		protected override void Draw(GameTime gameTime)
+		{
+			base.Draw(gameTime);
 
-            _host.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight);
-            _host.Render();
-        }
-    }
+			if (_graphics.PreferredBackBufferWidth != Window.ClientBounds.Width ||
+			    _graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
+			{
+				_graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
+				_graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
+				_graphics.ApplyChanges();
+			}
+
+			GraphicsDevice.Clear(Color.Black);
+
+			_host.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth,
+				GraphicsDevice.PresentationParameters.BackBufferHeight);
+			_host.Render();
+		}
+	}
 }

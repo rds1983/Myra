@@ -117,7 +117,7 @@
             "background": "default-rect"
         },
         "comboBoxItem": {
-            "selectedBackground": "default-select-selection",
+            "pressedBackground": "default-select-selection",
             "label": {
                 "font": "ui_font",
                 "textColor": "white"
@@ -127,7 +127,7 @@
     "listBox": {
         "background": "default-rect",
         "listBoxItem": {
-            "selectedBackground": "default-select-selection",
+            "pressedBackground": "default-select-selection",
             "padding": {
                 "left": 5.0,
                 "right": 5.0

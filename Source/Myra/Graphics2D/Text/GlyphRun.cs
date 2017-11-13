@@ -103,16 +103,22 @@ namespace Myra.Graphics2D.Text
 				return;
 			}
 
-			var glyphs = _bitmapFont.GetGlyphs(_text, Vector2.Zero);
-			var i = 0;
-			foreach (var glyph in glyphs)
+			if (!string.IsNullOrEmpty(_text))
 			{
-				_glyphRenders[i].Glyph = glyph;
-				++i;
+				var glyphs = _bitmapFont.GetGlyphs(_text, Vector2.Zero);
+				var i = 0;
+				foreach (var glyph in glyphs)
+				{
+					_glyphRenders[i].Glyph = glyph;
+					++i;
+				}
+				var sz = _bitmapFont.MeasureString(_text);
+				_size = new Point((int)sz.Width, (int)sz.Height);
 			}
-
-			var sz = _bitmapFont.MeasureString(_text);
-			_size = new Point((int)sz.Width, (int)sz.Height);
+			else
+			{
+				_size = new Point(0, _bitmapFont.LineHeight);
+			}
 
 			_dirty = false;
 		}

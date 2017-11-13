@@ -5,7 +5,7 @@
     "$type": "Myra.Graphics2D.UI.ExportOptions, Myra",
     "Namespace": "Myra.Samples.NotepadSample",
     "Class": "Notepad",
-    "OutputPath": "/home/rds/Projects/Hebron/Myra/Source/Samples/Myra.Samples.NotepadSample"
+    "OutputPath": "D:\\Projects\\Hebron\\Myra\\Source\\Samples\\Myra.Samples.NotepadSample"
   },
   "Root": {
     "$id": "2",
@@ -19,17 +19,36 @@
       "R": 255,
       "A": 255
     },
-    "Widgets": [
+    "ColumnSpacing": 0,
+    "RowSpacing": 0,
+    "ColumnsProportions": [],
+    "RowsProportions": [
       {
         "$id": "4",
+        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
+        "Type": 0,
+        "Value": 1.0
+      },
+      {
+        "$id": "5",
+        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
+        "Type": 2,
+        "Value": 1.0
+      }
+    ],
+    "TotalRowsPart": null,
+    "TotalColumnsPart": null,
+    "Widgets": [
+      {
+        "$id": "6",
         "$type": "Myra.Graphics2D.UI.HorizontalMenu, Myra",
         "Items": [
           {
-            "$id": "5",
+            "$id": "7",
             "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
             "Items": [
               {
-                "$id": "6",
+                "$id": "8",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "menuItemNew",
@@ -37,7 +56,7 @@
                 "Color": null
               },
               {
-                "$id": "7",
+                "$id": "9",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "menuItemOpen",
@@ -45,7 +64,7 @@
                 "Color": null
               },
               {
-                "$id": "8",
+                "$id": "10",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "menuItemSave",
@@ -53,7 +72,7 @@
                 "Color": null
               },
               {
-                "$id": "9",
+                "$id": "11",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "menuItemSaveAs",
@@ -61,12 +80,12 @@
                 "Color": null
               },
               {
-                "$id": "10",
+                "$id": "12",
                 "$type": "Myra.Graphics2D.UI.MenuSeparator, Myra",
                 "Id": null
               },
               {
-                "$id": "11",
+                "$id": "13",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "menuItemQuit",
@@ -79,11 +98,11 @@
             "Color": null
           },
           {
-            "$id": "12",
+            "$id": "14",
             "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
             "Items": [
               {
-                "$id": "13",
+                "$id": "15",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "menuItemAbout",
@@ -98,7 +117,7 @@
         ],
         "DrawLines": false,
         "DrawLinesColor": {
-          "$id": "14",
+          "$id": "16",
           "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
           "B": 255,
           "G": 255,
@@ -126,16 +145,16 @@
         "CanFocus": false
       },
       {
-        "$id": "15",
+        "$id": "17",
         "$type": "Myra.Graphics2D.UI.ScrollPane, Myra",
         "Child": {
-          "$id": "16",
+          "$id": "18",
           "$type": "Myra.Graphics2D.UI.TextField, Myra",
           "VerticalSpacing": 0,
           "Text": "",
           "Wrap": true,
           "TextColor": {
-            "$id": "17",
+            "$id": "19",
             "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
             "B": 255,
             "G": 255,
@@ -143,22 +162,6 @@
             "A": 255
           },
           "DisabledTextColor": {
-            "$id": "18",
-            "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-            "B": 170,
-            "G": 170,
-            "R": 170,
-            "A": 255
-          },
-          "FocusedTextColor": {
-            "$id": "19",
-            "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-            "B": 0,
-            "G": 0,
-            "R": 0,
-            "A": 0
-          },
-          "MessageTextColor": {
             "$id": "20",
             "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
             "B": 170,
@@ -166,7 +169,24 @@
             "R": 170,
             "A": 255
           },
+          "FocusedTextColor": {
+            "$id": "21",
+            "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+            "B": 0,
+            "G": 0,
+            "R": 0,
+            "A": 0
+          },
+          "MessageTextColor": {
+            "$id": "22",
+            "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+            "B": 170,
+            "G": 170,
+            "R": 170,
+            "A": 255
+          },
           "BlinkIntervalInMs": 450,
+          "Multiline": true,
           "Id": "textArea",
           "XHint": 0,
           "YHint": 0,
@@ -208,25 +228,6 @@
         "CanFocus": true
       }
     ],
-    "ColumnSpacing": 0,
-    "RowSpacing": 0,
-    "ColumnsProportions": [],
-    "RowsProportions": [
-      {
-        "$id": "21",
-        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
-        "Type": 0,
-        "Value": 1.0
-      },
-      {
-        "$id": "22",
-        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
-        "Type": 2,
-        "Value": 1.0
-      }
-    ],
-    "TotalRowsPart": null,
-    "TotalColumnsPart": null,
     "Enabled": true,
     "Id": "Root",
     "XHint": 0,
