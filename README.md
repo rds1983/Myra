@@ -1,7 +1,7 @@
 ## Overview
 Myra is UI Library build on top of [MonoGame](http://www.monogame.net/) and [MonoGame.Extended](https://github.com/craftworkgames/MonoGame.Extended).  
 It has following functionality:
-* **UI Widgets.** Button, CheckBox, ComboBox, Grid, Image, Menu, ProgressBar, ScrollPane, SplitPane(with arbitrary number of splitters), Slider, TextBlock, TextField, SpinButton, Tree and Window. Almost all of it are demonstrated on the following screenshot: ![](/Screenshots/GridSample.png)
+* **UI Widgets.** Button, CheckBox, ComboBox, Grid, Image, Menu, ProgressBar, ScrollPane, SplitPane(with arbitrary number of splitters), Slider, TextBlock, TextField, SpinButton, Tree and Window. All of it are demonstrated here: ![](/Screenshots/AllWidgetSample.gif)
 * **UI Skinning.** The awesome default skin had been borrowed from the [VisUI](https://github.com/kotcrab/vis-editor/wiki/VisUI) project. The default skin could be replaced with a custom skin loaded from the JSON.
 * **[UI Editor](https://github.com/rds1983/Myra/wiki/Using-UI-Editor).** [Myra's binary distribution](https://github.com/rds1983/Myra/releases) contains standalone UI Editor application: ![](/Screenshots/UIEditor.png)
 
