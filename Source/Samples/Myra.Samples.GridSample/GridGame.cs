@@ -191,14 +191,13 @@ namespace Myra.Samples.GridSample
             grid.Widgets.Add(checkBox);
 
             // Spin buttons
-            var spinButton = new SpinButton
+            var textField = new TextField
             {
                 GridPositionX = 5,
                 GridPositionY = 1,
-                WidthHint = 100,
-                Nullable = true
+                WidthHint = 100
             };
-            grid.Widgets.Add(spinButton);
+            grid.Widgets.Add(textField);
 
             var spinButton2 = new SpinButton
             {

@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.UI;
-using Myra.Graphics2D.UI.Styles;
 
-namespace Myra.Samples.CustomUIStylesheetSample
+namespace Myra.Samples.AllWidgetsSample
 {
-	public class CustomUIStylesheetGame : Game
+	public class AllWidgetsGame : Game
 	{
 		private readonly GraphicsDeviceManager _graphics;
 
@@ -12,15 +12,13 @@ namespace Myra.Samples.CustomUIStylesheetSample
 		private Window _window;
 		private AllWidgets _allWidgets;
 
-		public CustomUIStylesheetGame()
+		public AllWidgetsGame()
 		{
 			_graphics = new GraphicsDeviceManager(this)
 			{
 				PreferredBackBufferWidth = 1200,
 				PreferredBackBufferHeight = 800
 			};
-
-			Content.RootDirectory = "Content";
 
 			IsMouseVisible = true;
 			Window.AllowUserResizing = true;
@@ -31,9 +29,6 @@ namespace Myra.Samples.CustomUIStylesheetSample
 			base.LoadContent();
 
 			MyraEnvironment.Game = this;
-
-			var stylesheet = Content.Load<Stylesheet>("ui_stylesheet");
-			Stylesheet.Current = stylesheet;
 
 			// Widget.DrawFrames = true;
 			_host = new Desktop();

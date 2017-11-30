@@ -20,6 +20,7 @@ copy "Myra\bin\%CONFIGURATION%\Newtonsoft.Json.xml" ZipPackage /Y
 copy "Myra.UIEditor\bin\%CONFIGURATION%\NLog.dll" ZipPackage /Y
 copy "Myra.UIEditor\bin\%CONFIGURATION%\NLog.xml" ZipPackage /Y
 copy "Myra.UIEditor\bin\%CONFIGURATION%\NLog.config" ZipPackage /Y
+copy "Samples\Myra.Samples.AllWidgetsSample\bin\%CONFIGURATION%\Myra.Samples.AllWidgetsSample.exe" ZipPackage /Y
 copy "Samples\Myra.Samples.CustomUIStylesheetSample\bin\%CONFIGURATION%\Myra.Samples.CustomUIStylesheetSample.exe" ZipPackage /Y
 copy "Samples\Myra.Samples.FormattedTextSample\bin\%CONFIGURATION%\Myra.Samples.FormattedTextSample.exe" ZipPackage /Y
 copy "Samples\Myra.Samples.GridSample\bin\%CONFIGURATION%\Myra.Samples.GridSample.exe" ZipPackage /Y

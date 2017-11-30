@@ -42,6 +42,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AllWidgets.cs" />
+    <Compile Include="AllWidgets.Generated.cs" />
     <Compile Include="CustomUIStylesheetGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
