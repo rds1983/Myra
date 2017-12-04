@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended;
 using MonoGame.Extended.TextureAtlases;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
@@ -14,7 +15,7 @@ namespace Myra.Graphics2D.UI
 		private bool _horizontalScrollbarVisible, _verticalScrollbarVisible;
 		private Rectangle _horizontalScrollbarFrame, _horizontalScrollbarThumb;
 		private Rectangle _verticalScrollbarFrame, _verticalScrollbarThumb;
-		private Point _scrollPosition, _origin;
+		private Point _scrollPosition;
 		private int? _startBoundsPos;
 		private int _horizontalMaximum, _verticalMaximum;
 
@@ -44,6 +45,18 @@ namespace Myra.Graphics2D.UI
 		[JsonIgnore]
 		[EditCategory("Appearance")]
 		public TextureRegion2D VerticalScrollKnob { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public override Widget Widget
+		{
+			get { return base.Widget; }
+			set
+			{
+				base.Widget = value;
+				ResetScroll();
+			}
+		}
 
 		/// <summary>
 		/// Same as Widget. Used by the JSON serializer.
@@ -83,15 +96,33 @@ namespace Myra.Graphics2D.UI
 		{
 			if (Widget == null) return;
 
-			Widget.XHint = -_origin.X;
-			Widget.YHint = -_origin.Y;
+			var prop = Point2.Zero;
+
+			if (_horizontalMaximum > 0)
+			{
+				prop.X = (float)_scrollPosition.X/_horizontalMaximum;
+			}
+
+			if (_verticalMaximum != 0)
+			{
+				prop.Y = (float) _scrollPosition.Y/_verticalMaximum;
+			}
+
+			var bounds = ActualBounds;
+			var origin = new Point((int)(prop.X *
+			                       (Widget.Bounds.Width - bounds.Width +
+			                        (_verticalScrollbarVisible ? _verticalScrollbarThumb.Width : 0))),
+									(int)(prop.Y *
+									(Widget.Bounds.Height - bounds.Height +
+									 (_horizontalScrollbarVisible ? _horizontalScrollbarThumb.Height : 0)))
+								   );
+
+			Widget.XHint = -origin.X;
+			Widget.YHint = -origin.Y;
 		}
 
 		private void MoveThumb(int delta)
 		{
-			var origin = _origin;
-
-			var bounds = ActualBounds;
 			if (_scrollbarOrientation == Orientation.Horizontal)
 			{
 				var newPos = delta + _scrollPosition.X;
@@ -105,14 +136,7 @@ namespace Myra.Graphics2D.UI
 					newPos = _horizontalMaximum;
 				}
 
-				var prop = (float) newPos/_horizontalMaximum;
-
 				_scrollPosition.X = newPos;
-				_horizontalScrollbarThumb.X = bounds.X + newPos;
-
-				origin.X = (int) (prop*
-				                  (Widget.Bounds.Width - bounds.Width +
-				                   (_verticalScrollbarVisible ? _verticalScrollbarThumb.Width : 0)));
 			}
 			else
 			{
@@ -128,17 +152,9 @@ namespace Myra.Graphics2D.UI
 					newPos = _verticalMaximum;
 				}
 
-				var prop = (float) newPos/_verticalMaximum;
-
 				_scrollPosition.Y = newPos;
-				_verticalScrollbarThumb.Y = bounds.Y + newPos;
-
-				origin.Y = (int) (prop*
-				                  (Widget.Bounds.Height - bounds.Height +
-				                   (_horizontalScrollbarVisible ? _horizontalScrollbarThumb.Height : 0)));
 			}
 
-			_origin = origin;
 			UpdateWidgetLocation();
 		}
 
@@ -195,13 +211,17 @@ namespace Myra.Graphics2D.UI
 
 			if (mb != MouseButtons.Left) return;
 
-			if (_verticalScrollbarVisible && _verticalScrollbarThumb.Contains(mousePosition))
+			var r = _verticalScrollbarThumb;
+			r.Y += _scrollPosition.Y;
+			if (_verticalScrollbarVisible && r.Contains(mousePosition))
 			{
 				_startBoundsPos = mousePosition.Y;
 				_scrollbarOrientation = Orientation.Vertical;
 			}
 
-			if (_horizontalScrollbarVisible && _horizontalScrollbarThumb.Contains(mousePosition))
+			r = _horizontalScrollbarThumb;
+			r.X += _scrollPosition.X;
+			if (_horizontalScrollbarVisible && r.Contains(mousePosition))
 			{
 				_startBoundsPos = mousePosition.X;
 				_scrollbarOrientation = Orientation.Horizontal;
@@ -242,13 +262,19 @@ namespace Myra.Graphics2D.UI
 			if (_horizontalScrollbarVisible)
 			{
 				context.Batch.Draw(HorizontalScrollBackground, _horizontalScrollbarFrame);
-				context.Batch.Draw(HorizontalScrollKnob, _horizontalScrollbarThumb);
+
+				var r = _horizontalScrollbarThumb;
+				r.X += _scrollPosition.X;
+				context.Batch.Draw(HorizontalScrollKnob, r);
 			}
 
 			if (_verticalScrollbarVisible)
 			{
 				context.Batch.Draw(VerticalScrollBackground, _verticalScrollbarFrame);
-				context.Batch.Draw(VerticalScrollKnob, _verticalScrollbarThumb);
+
+				var r = _verticalScrollbarThumb;
+				r.Y += _scrollPosition.Y;
+				context.Batch.Draw(VerticalScrollKnob, r);
 			}
 		}
 
@@ -313,10 +339,6 @@ namespace Myra.Graphics2D.UI
 						availableSize.Y = 0;
 					}
 				}
-				else
-				{
-					_origin.X = 0;
-				}
 
 				if (_verticalScrollbarVisible)
 				{
@@ -326,10 +348,6 @@ namespace Myra.Graphics2D.UI
 					{
 						availableSize.X = 0;
 					}
-				}
-				else
-				{
-					_origin.Y = 0;
 				}
 
 				// Remeasure with scrollbars
@@ -348,7 +366,7 @@ namespace Myra.Graphics2D.UI
 					mw = 1;
 				}
 
-				_horizontalScrollbarThumb = new Rectangle(bounds.Left + _scrollPosition.X,
+				_horizontalScrollbarThumb = new Rectangle(bounds.Left,
 					bounds.Bottom - (int) HorizontalScrollBackground.Size.Height,
 					Math.Max((int) HorizontalScrollKnob.Size.Width, bw*bw/mw),
 					(int) HorizontalScrollKnob.Size.Height);
@@ -369,7 +387,7 @@ namespace Myra.Graphics2D.UI
 
 				_verticalScrollbarThumb = new Rectangle(
 					bounds.Left + bounds.Width - (int) VerticalScrollBackground.Size.Width,
-					bounds.Top + _scrollPosition.Y,
+					bounds.Top,
 					(int) VerticalScrollKnob.Size.Width,
 					Math.Max((int) VerticalScrollKnob.Size.Height, bh*bh/mh));
 
@@ -388,15 +406,26 @@ namespace Myra.Graphics2D.UI
 
 				bounds.Width = _horizontalScrollbarVisible ? measureSize.X : availableSize.X;
 				bounds.Height = _verticalScrollbarVisible ? measureSize.Y : availableSize.Y;
+
+				if (_scrollPosition.X > _horizontalMaximum)
+				{
+					_scrollPosition.X = _horizontalMaximum;
+				}
+
+				if (_scrollPosition.Y > _verticalMaximum)
+				{
+					_scrollPosition.Y = _verticalMaximum;
+				}
 			}
 
 			Widget.Layout(bounds);
+
 			UpdateWidgetLocation();
 		}
 
 		public void ResetScroll()
 		{
-			_origin = Point.Zero;
+			_scrollPosition = Point.Zero;
 			UpdateWidgetLocation();
 		}
 	}

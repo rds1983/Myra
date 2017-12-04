@@ -12,7 +12,7 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public T Widget
+		public virtual T Widget
 		{
 			get { return _widget; }
 			set

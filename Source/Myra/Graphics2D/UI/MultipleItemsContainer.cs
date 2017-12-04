@@ -99,7 +99,11 @@ namespace Myra.Graphics2D.UI
 
 		private void ChildOnMeasureChanged(object sender, EventArgs eventArgs)
 		{
-			InvalidateMeasure();
+			var widget = (Widget) sender;
+			if (widget.Visible)
+			{
+				InvalidateMeasure();
+			}
 		}
 
 		private void ChildOnVisibleChanged(object sender, EventArgs eventArgs)

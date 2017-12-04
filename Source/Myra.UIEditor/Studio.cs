@@ -606,7 +606,6 @@ namespace Myra.UIEditor
 		private void WidgetOnSelectionChanged(object sender, EventArgs eventArgs)
 		{
 			_propertyGrid.Object = _explorer.SelectedObject;
-			_ui._propertyGridPane.ResetScroll();
 
 			UpdateEnabled();
 		}

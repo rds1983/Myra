@@ -13,7 +13,7 @@ namespace Myra.Graphics2D.UI
 		public VerticalMenu(MenuStyle style) : base(style)
 		{
 			HorizontalAlignment = HorizontalAlignment.Left;
-			VerticalAlignment = VerticalAlignment.Stretch;
+			VerticalAlignment = VerticalAlignment.Top;
 		}
 
 		public VerticalMenu(string style)
@@ -22,7 +22,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public VerticalMenu()
-			: base(Stylesheet.Current.VerticalMenuStyle)
+			: this(Stylesheet.Current.VerticalMenuStyle)
 		{
 		}
 

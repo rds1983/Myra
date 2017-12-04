@@ -452,7 +452,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-
 		[HiddenInEditor]
 		[JsonIgnore]
 		public Rectangle ActualBounds
@@ -460,6 +459,16 @@ namespace Myra.Graphics2D.UI
 			get
 			{
 				return _actualBounds;
+			}
+		}
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public Rectangle ContainerBounds
+		{
+			get
+			{
+				return _containerBounds;
 			}
 		}
 
@@ -719,6 +728,7 @@ namespace Myra.Graphics2D.UI
 		{
 			_bounds.Location += delta;
 			_actualBounds.Location += delta;
+			_containerBounds.Location += delta;
 		}
 
 		public virtual void UpdateLayout()
