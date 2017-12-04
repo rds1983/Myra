@@ -3,7 +3,7 @@ Myra is UI Library build on top of [MonoGame](http://www.monogame.net/) and [Mon
 It has following functionality:
 * **UI Widgets.** Button, CheckBox, ComboBox, Grid, Image, Menu, ProgressBar, ScrollPane, SplitPane(with arbitrary number of splitters), Slider, TextBlock, TextField, SpinButton, Tree and Window. All of it are demonstrated here: ![](/Screenshots/AllWidgetsSample.gif)
 * **UI Skinning.** The awesome default skin had been borrowed from the [VisUI](https://github.com/kotcrab/vis-editor/wiki/VisUI) project. The default skin could be replaced with a custom skin loaded from the JSON.
-* **[UI Editor](https://github.com/rds1983/Myra/wiki/Using-UI-Editor).** [Myra's binary distribution](https://github.com/rds1983/Myra/releases) contains standalone UI Editor application: ![](/Screenshots/UIEditor.png)
+* **[UI Editor](https://github.com/rds1983/Myra/wiki/Using-UI-Editor).** [Myra's binary distribution](https://github.com/rds1983/Myra/releases) contains standalone UI Editor application: ![](/Screenshots/UIEditor.gif)
 
 ## Quick Start
 1. The easiest way of adding Myra to the MonoGame project is through Nuget: `install-package Myra`. Alternative way is to download the latest binary release: https://github.com/rds1983/Myra/releases, install it and reference Myra.dll manually.
