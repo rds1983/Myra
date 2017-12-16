@@ -759,7 +759,7 @@ namespace Myra.Editor.UI
 				var selectionAttr = property.FindAttribute<SelectionAttribute>();
 				if (selectionAttr != null)
 				{
-					record.ItemsProvider = (IItemsProvider)Activator.CreateInstance(selectionAttr.ItemsProviderType);
+					record.ItemsProvider = (IItemsProvider)Activator.CreateInstance(selectionAttr.ItemsProviderType, _object);
 				}
 
 				var categoryAttr = property.FindAttribute<EditCategoryAttribute>();

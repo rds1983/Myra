@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Newtonsoft.Json;
@@ -98,7 +99,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public ListBox(string style)
-			: this(Stylesheet.Current.ListBoxVariants[style])
+			: this(Stylesheet.Current.ListBoxStyles[style])
 		{
 		}
 
@@ -217,6 +218,16 @@ namespace Myra.Graphics2D.UI
 			ApplyWidgetStyle(style);
 
 			ListBoxItemStyle = style.ListItemStyle;
+		}
+
+		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		{
+			ApplyListBoxStyle(stylesheet.ListBoxStyles[name]);
+		}
+
+		internal override string[] GetStyleNames(Stylesheet stylesheet)
+		{
+			return stylesheet.ListBoxStyles.Keys.ToArray();
 		}
 	}
 }

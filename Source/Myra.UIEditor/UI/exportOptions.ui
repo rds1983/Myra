@@ -5,12 +5,11 @@
     "$type": "Myra.Graphics2D.UI.ExportOptions, Myra",
     "Namespace": "Myra.UIEditor.UI",
     "Class": "ExportOptionsWidget",
-    "OutputPath": "D:\\Projects\\Myra\\Source\\Myra.UIEditor\\UI"
+    "OutputPath": "D:\\Projects\\Hebron\\Myra\\Source\\Myra.UIEditor\\UI"
   },
   "Root": {
     "$id": "2",
     "$type": "Myra.Graphics2D.UI.Grid, Myra",
-    "DrawLines": false,
     "DrawLinesColor": {
       "$id": "3",
       "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
@@ -19,15 +18,44 @@
       "R": 255,
       "A": 255
     },
-    "Widgets": [
+    "ColumnSpacing": 8,
+    "RowSpacing": 8,
+    "ColumnsProportions": [
       {
         "$id": "4",
+        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra"
+      },
+      {
+        "$id": "5",
+        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
+        "Type": 2
+      },
+      {
+        "$id": "6",
+        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra"
+      }
+    ],
+    "RowsProportions": [
+      {
+        "$id": "7",
+        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra"
+      },
+      {
+        "$id": "8",
+        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra"
+      },
+      {
+        "$id": "9",
+        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra"
+      }
+    ],
+    "Widgets": [
+      {
+        "$id": "10",
         "$type": "Myra.Graphics2D.UI.TextBlock, Myra",
-        "VerticalSpacing": 0,
         "Text": "Class Name:",
-        "Wrap": true,
         "TextColor": {
-          "$id": "5",
+          "$id": "11",
           "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
           "B": 255,
           "G": 255,
@@ -35,7 +63,7 @@
           "A": 255
         },
         "DisabledTextColor": {
-          "$id": "6",
+          "$id": "12",
           "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
           "B": 170,
           "G": 170,
@@ -43,33 +71,14 @@
           "A": 255
         },
         "Id": "",
-        "XHint": 0,
-        "YHint": 0,
-        "WidthHint": null,
-        "HeightHint": null,
-        "PaddingLeft": 0,
-        "PaddingRight": 0,
-        "PaddingTop": 0,
-        "PaddingBottom": 0,
-        "HorizontalAlignment": 0,
-        "VerticalAlignment": 0,
-        "GridPositionX": 0,
-        "GridPositionY": 1,
-        "GridSpanX": 1,
-        "GridSpanY": 1,
-        "Enabled": true,
-        "Visible": true,
-        "ClipToBounds": false,
-        "CanFocus": false
+        "GridPositionY": 1
       },
       {
-        "$id": "7",
+        "$id": "13",
         "$type": "Myra.Graphics2D.UI.TextField, Myra",
-        "VerticalSpacing": 0,
         "Text": "",
-        "Wrap": true,
         "TextColor": {
-          "$id": "8",
+          "$id": "14",
           "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
           "B": 255,
           "G": 255,
@@ -77,123 +86,40 @@
           "A": 255
         },
         "DisabledTextColor": {
-          "$id": "9",
+          "$id": "15",
           "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
           "B": 170,
           "G": 170,
           "R": 170,
           "A": 255
-        },
-        "FocusedTextColor": {
-          "$id": "10",
-          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-          "B": 0,
-          "G": 0,
-          "R": 0,
-          "A": 0
         },
         "MessageTextColor": {
-          "$id": "11",
+          "$id": "16",
           "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
           "B": 170,
           "G": 170,
           "R": 170,
           "A": 255
         },
-        "BlinkIntervalInMs": 450,
         "Id": "_textClassName",
-        "XHint": 0,
-        "YHint": 0,
-        "WidthHint": null,
-        "HeightHint": null,
-        "PaddingLeft": 0,
-        "PaddingRight": 0,
-        "PaddingTop": 0,
-        "PaddingBottom": 0,
         "HorizontalAlignment": 3,
-        "VerticalAlignment": 0,
         "GridPositionX": 1,
         "GridPositionY": 1,
-        "GridSpanX": 1,
-        "GridSpanY": 1,
-        "Enabled": true,
-        "Visible": true,
-        "ClipToBounds": false,
         "CanFocus": true
       },
       {
-        "$id": "12",
+        "$id": "17",
         "$type": "Myra.Graphics2D.UI.TextBlock, Myra",
-        "VerticalSpacing": 0,
         "Text": "Output Path:",
-        "Wrap": true,
         "TextColor": {
-          "$id": "13",
-          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-          "B": 255,
-          "G": 255,
-          "R": 255,
-          "A": 255
-        },
-        "DisabledTextColor": {
-          "$id": "14",
-          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-          "B": 170,
-          "G": 170,
-          "R": 170,
-          "A": 255
-        },
-        "Id": null,
-        "XHint": 0,
-        "YHint": 0,
-        "WidthHint": null,
-        "HeightHint": null,
-        "PaddingLeft": 0,
-        "PaddingRight": 0,
-        "PaddingTop": 0,
-        "PaddingBottom": 0,
-        "HorizontalAlignment": 0,
-        "VerticalAlignment": 0,
-        "GridPositionX": 0,
-        "GridPositionY": 2,
-        "GridSpanX": 1,
-        "GridSpanY": 1,
-        "Enabled": true,
-        "Visible": true,
-        "ClipToBounds": false,
-        "CanFocus": false
-      },
-      {
-        "$id": "15",
-        "$type": "Myra.Graphics2D.UI.TextField, Myra",
-        "VerticalSpacing": 0,
-        "Text": "",
-        "Wrap": true,
-        "TextColor": {
-          "$id": "16",
-          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-          "B": 255,
-          "G": 255,
-          "R": 255,
-          "A": 255
-        },
-        "DisabledTextColor": {
-          "$id": "17",
-          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-          "B": 170,
-          "G": 170,
-          "R": 170,
-          "A": 255
-        },
-        "FocusedTextColor": {
           "$id": "18",
           "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-          "B": 0,
-          "G": 0,
-          "R": 0,
-          "A": 0
+          "B": 255,
+          "G": 255,
+          "R": 255,
+          "A": 255
         },
-        "MessageTextColor": {
+        "DisabledTextColor": {
           "$id": "19",
           "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
           "B": 170,
@@ -201,31 +127,12 @@
           "R": 170,
           "A": 255
         },
-        "BlinkIntervalInMs": 450,
-        "Id": "_textOutputPath",
-        "XHint": 0,
-        "YHint": 0,
-        "WidthHint": null,
-        "HeightHint": null,
-        "PaddingLeft": 0,
-        "PaddingRight": 0,
-        "PaddingTop": 0,
-        "PaddingBottom": 0,
-        "HorizontalAlignment": 3,
-        "VerticalAlignment": 0,
-        "GridPositionX": 1,
-        "GridPositionY": 2,
-        "GridSpanX": 1,
-        "GridSpanY": 1,
-        "Enabled": true,
-        "Visible": true,
-        "ClipToBounds": false,
-        "CanFocus": true
+        "GridPositionY": 2
       },
       {
         "$id": "20",
-        "$type": "Myra.Graphics2D.UI.Button, Myra",
-        "Text": "Change...",
+        "$type": "Myra.Graphics2D.UI.TextField, Myra",
+        "Text": "",
         "TextColor": {
           "$id": "21",
           "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
@@ -234,196 +141,104 @@
           "R": 255,
           "A": 255
         },
-        "ImageWidthHint": null,
-        "ImageHeightHint": null,
-        "ImageVisible": true,
-        "ContentHorizontalAlignment": 3,
-        "ContentVerticalAlignment": 3,
-        "Toggleable": false,
-        "Enabled": true,
-        "Id": "_buttonChangeOutputPath",
-        "XHint": 0,
-        "YHint": 0,
-        "WidthHint": null,
-        "HeightHint": null,
-        "PaddingLeft": 0,
-        "PaddingRight": 0,
-        "PaddingTop": 0,
-        "PaddingBottom": 0,
-        "HorizontalAlignment": 0,
-        "VerticalAlignment": 0,
-        "GridPositionX": 2,
-        "GridPositionY": 2,
-        "GridSpanX": 1,
-        "GridSpanY": 1,
-        "Visible": true,
-        "ClipToBounds": false,
-        "CanFocus": false
-      },
-      {
-        "$id": "22",
-        "$type": "Myra.Graphics2D.UI.TextBlock, Myra",
-        "VerticalSpacing": 0,
-        "Text": "Namespace:",
-        "Wrap": true,
-        "TextColor": {
-          "$id": "23",
-          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-          "B": 255,
-          "G": 255,
-          "R": 255,
-          "A": 255
-        },
         "DisabledTextColor": {
-          "$id": "24",
+          "$id": "22",
           "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
           "B": 170,
           "G": 170,
           "R": 170,
           "A": 255
-        },
-        "Id": null,
-        "XHint": 0,
-        "YHint": 0,
-        "WidthHint": null,
-        "HeightHint": null,
-        "PaddingLeft": 0,
-        "PaddingRight": 0,
-        "PaddingTop": 0,
-        "PaddingBottom": 0,
-        "HorizontalAlignment": 0,
-        "VerticalAlignment": 0,
-        "GridPositionX": 0,
-        "GridPositionY": 0,
-        "GridSpanX": 1,
-        "GridSpanY": 1,
-        "Enabled": true,
-        "Visible": true,
-        "ClipToBounds": false,
-        "CanFocus": false
-      },
-      {
-        "$id": "25",
-        "$type": "Myra.Graphics2D.UI.TextField, Myra",
-        "VerticalSpacing": 0,
-        "Text": "",
-        "Wrap": true,
-        "TextColor": {
-          "$id": "26",
-          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-          "B": 255,
-          "G": 255,
-          "R": 255,
-          "A": 255
-        },
-        "DisabledTextColor": {
-          "$id": "27",
-          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-          "B": 170,
-          "G": 170,
-          "R": 170,
-          "A": 255
-        },
-        "FocusedTextColor": {
-          "$id": "28",
-          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-          "B": 0,
-          "G": 0,
-          "R": 0,
-          "A": 0
         },
         "MessageTextColor": {
-          "$id": "29",
+          "$id": "23",
           "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
           "B": 170,
           "G": 170,
           "R": 170,
           "A": 255
         },
-        "BlinkIntervalInMs": 450,
-        "Id": "_textNamespace",
-        "XHint": 0,
-        "YHint": 0,
-        "WidthHint": null,
-        "HeightHint": null,
-        "PaddingLeft": 0,
-        "PaddingRight": 0,
-        "PaddingTop": 0,
-        "PaddingBottom": 0,
+        "Id": "_textOutputPath",
         "HorizontalAlignment": 3,
-        "VerticalAlignment": 0,
         "GridPositionX": 1,
-        "GridPositionY": 0,
-        "GridSpanX": 1,
-        "GridSpanY": 1,
-        "Enabled": true,
-        "Visible": true,
-        "ClipToBounds": false,
+        "GridPositionY": 2,
+        "CanFocus": true
+      },
+      {
+        "$id": "24",
+        "$type": "Myra.Graphics2D.UI.Button, Myra",
+        "Text": "Change...",
+        "TextColor": {
+          "$id": "25",
+          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+          "B": 255,
+          "G": 255,
+          "R": 255,
+          "A": 255
+        },
+        "ContentHorizontalAlignment": 3,
+        "ContentVerticalAlignment": 3,
+        "Id": "_buttonChangeOutputPath",
+        "GridPositionX": 2,
+        "GridPositionY": 2
+      },
+      {
+        "$id": "26",
+        "$type": "Myra.Graphics2D.UI.TextBlock, Myra",
+        "Text": "Namespace:",
+        "TextColor": {
+          "$id": "27",
+          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+          "B": 255,
+          "G": 255,
+          "R": 255,
+          "A": 255
+        },
+        "DisabledTextColor": {
+          "$id": "28",
+          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+          "B": 170,
+          "G": 170,
+          "R": 170,
+          "A": 255
+        }
+      },
+      {
+        "$id": "29",
+        "$type": "Myra.Graphics2D.UI.TextField, Myra",
+        "Text": "",
+        "TextColor": {
+          "$id": "30",
+          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+          "B": 255,
+          "G": 255,
+          "R": 255,
+          "A": 255
+        },
+        "DisabledTextColor": {
+          "$id": "31",
+          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+          "B": 170,
+          "G": 170,
+          "R": 170,
+          "A": 255
+        },
+        "MessageTextColor": {
+          "$id": "32",
+          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+          "B": 170,
+          "G": 170,
+          "R": 170,
+          "A": 255
+        },
+        "Id": "_textNamespace",
+        "HorizontalAlignment": 3,
+        "GridPositionX": 1,
         "CanFocus": true
       }
     ],
-    "ColumnSpacing": 8,
-    "RowSpacing": 8,
-    "ColumnsProportions": [
-      {
-        "$id": "30",
-        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
-        "Type": 0,
-        "Value": 1.0
-      },
-      {
-        "$id": "31",
-        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
-        "Type": 2,
-        "Value": 1.0
-      },
-      {
-        "$id": "32",
-        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
-        "Type": 0,
-        "Value": 1.0
-      }
-    ],
-    "RowsProportions": [
-      {
-        "$id": "33",
-        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
-        "Type": 0,
-        "Value": 1.0
-      },
-      {
-        "$id": "34",
-        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
-        "Type": 0,
-        "Value": 1.0
-      },
-      {
-        "$id": "35",
-        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
-        "Type": 0,
-        "Value": 1.0
-      }
-    ],
-    "TotalRowsPart": null,
-    "TotalColumnsPart": null,
-    "Enabled": true,
     "Id": "Root",
-    "XHint": 0,
-    "YHint": 0,
     "WidthHint": 800,
-    "HeightHint": null,
-    "PaddingLeft": 0,
-    "PaddingRight": 0,
-    "PaddingTop": 0,
-    "PaddingBottom": 0,
     "HorizontalAlignment": 3,
-    "VerticalAlignment": 3,
-    "GridPositionX": 0,
-    "GridPositionY": 0,
-    "GridSpanX": 1,
-    "GridSpanY": 1,
-    "Visible": true,
-    "ClipToBounds": false,
-    "CanFocus": false
+    "VerticalAlignment": 3
   }
 }

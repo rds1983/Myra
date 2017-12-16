@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -16,7 +17,7 @@ namespace Myra.UIEditor
 	public class ExporterCS
 	{
 		private readonly Project _project;
-		private readonly Dictionary<string, int> ids = new Dictionary<string, int>(); 
+		private readonly Dictionary<string, int> ids = new Dictionary<string, int>();
 		private readonly StringBuilder sbFields = new StringBuilder();
 		private readonly StringBuilder sbBuild = new StringBuilder();
 		private bool isFirst = true;
@@ -32,14 +33,14 @@ namespace Myra.UIEditor
 		}
 
 		public string ExportMain()
-		{	
+		{
 			var path = Path.Combine(_project.ExportOptions.OutputPath, _project.ExportOptions.Class + ".cs");
 			if (File.Exists(path))
 			{
 				// Do not overwrite main
 				return string.Empty;
 			}
-			
+
 			var template = Resources.ExportCSMain;
 
 			template = template.Replace("$namespace$", _project.ExportOptions.Namespace);
@@ -65,15 +66,24 @@ namespace Myra.UIEditor
 		{
 			var properties = BuildProperties(w.GetType());
 			var simpleProperties = new List<PropertyInfo>();
-			
+
 			// Build subitems data
 			var subItems = new List<string>();
+			string styleName = string.Empty;
 			foreach (var property in properties)
 			{
 				var value = property.GetValue(w);
+
+				if (property.Name == "StyleName")
+				{
+					// Special case
+					styleName = (string) value;
+					continue;
+				}
+
 				if (value == null)
 				{
-					simpleProperties.Add(property);				
+					simpleProperties.Add(property);
 					continue;
 				}
 
@@ -90,7 +100,7 @@ namespace Myra.UIEditor
 					var asList = value as IList;
 
 					if (asList != null && type.IsGenericType &&
-					    typeof(IItemWithId).IsAssignableFrom(type.GetGenericArguments()[0]))
+					    typeof (IItemWithId).IsAssignableFrom(type.GetGenericArguments()[0]))
 					{
 						foreach (var comp in asList)
 						{
@@ -105,15 +115,15 @@ namespace Myra.UIEditor
 					}
 				}
 			}
-			
+
 			// Write code of this item
 			if (!isFirst)
 			{
 				sbBuild.Append("\n\n\t\t\t");
 			}
 
-			isFirst = false;		
-			
+			isFirst = false;
+
 			string id;
 			var typeName = w.GetType().GetFriendlyName();
 			if (_project.Root == w)
@@ -147,12 +157,13 @@ namespace Myra.UIEditor
 				}
 			}
 
-			var idPrefix = string.IsNullOrEmpty(id) ? string.Empty : id + ".";					
+			var idPrefix = string.IsNullOrEmpty(id) ? string.Empty : id + ".";
 			if (!string.IsNullOrEmpty(id))
 			{
-				sbBuild.Append(" = new " + typeName + "();");
+				sbBuild.Append(" = new " + typeName + "(" +
+				               (string.IsNullOrEmpty(styleName) ? string.Empty : ("\"" + styleName + "\"")) + ");");
 			}
-			
+
 			if (!string.IsNullOrEmpty(w.Id) && _project.Root != w)
 			{
 				if (!isFirst)
@@ -160,11 +171,21 @@ namespace Myra.UIEditor
 					sbFields.Append("\n\t\t");
 				}
 				sbFields.Append("public " + w.GetType().Name + " " + w.Id + ";");
-			}			
+			}
 
 			foreach (var property in simpleProperties)
 			{
-				sbBuild.Append(BuildPropertyCode(property, w, idPrefix));			
+				var value = property.GetValue(w);
+				var defaultValue = GetDefaultValue(property.PropertyType);
+				var defaultAttribute = property.FindAttribute<DefaultValueAttribute>();
+				if ((defaultAttribute != null && Equals(value, defaultAttribute.Value)) ||
+				    (defaultAttribute == null && Equals(value, defaultValue)))
+				{
+					// Skip default
+					continue;
+				}
+
+				sbBuild.Append(BuildPropertyCode(property, w, idPrefix));
 			}
 
 			foreach (var subItem in subItems)
@@ -174,7 +195,7 @@ namespace Myra.UIEditor
 				sbBuild.Append(subItem);
 				sbBuild.Append(";");
 			}
-			
+
 			return id;
 		}
 
@@ -202,7 +223,7 @@ namespace Myra.UIEditor
 
 			return path;
 		}
-		
+
 		private static List<PropertyInfo> BuildProperties(Type type)
 		{
 			var result = new List<PropertyInfo>();
@@ -221,7 +242,7 @@ namespace Myra.UIEditor
 				{
 					continue;
 				}
-				
+
 				result.Add(property);
 			}
 
@@ -254,6 +275,16 @@ namespace Myra.UIEditor
 			}
 
 			return sb.ToString();
+		}
+
+		private static object GetDefaultValue(Type type)
+		{
+			if (type.IsValueType)
+			{
+				return Activator.CreateInstance(type);
+			}
+
+			return null;
 		}
 
 		private static string BuildValue(object value)
@@ -297,26 +328,42 @@ namespace Myra.UIEditor
 				return sb.ToString().Replace("+", ".");
 			}
 
-			sb.Append("new " + value.GetType().Name + "\n\t\t\t{");
+			sb.Append("new " + value.GetType().Name);
 
+			var isEmpty = true;
 			var properties = from p in value.GetType().GetProperties() select p;
 			foreach (var property in properties)
 			{
 				if (property.GetGetMethod() == null ||
 				    property.GetSetMethod() == null ||
-					!property.GetGetMethod().IsPublic ||
-					property.GetGetMethod().IsStatic)
+				    !property.GetGetMethod().IsPublic ||
+				    property.GetGetMethod().IsStatic)
 				{
 					continue;
 				}
-				
-				var attr = property.FindAttribute<JsonIgnoreAttribute>();
-				if (attr != null)
+
+				var jsonIgnoreAttribute = property.FindAttribute<JsonIgnoreAttribute>();
+				if (jsonIgnoreAttribute != null)
 				{
 					continue;
-				}			
+				}
 
 				var subValue = property.GetValue(value);
+
+				var defaultValue = GetDefaultValue(property.PropertyType);
+				var defaultAttribute = property.FindAttribute<DefaultValueAttribute>();
+				if ((defaultAttribute != null && Equals(subValue, defaultAttribute.Value)) ||
+				    (defaultAttribute == null && Equals(subValue, defaultValue)))
+				{
+					// Skip default
+					continue;
+				}
+
+				if (isEmpty)
+				{
+					sb.Append("\n\t\t\t{");
+					isEmpty = false;
+				}
 
 				sb.Append("\n\t\t\t\t" + property.Name);
 				sb.Append(" = ");
@@ -324,7 +371,14 @@ namespace Myra.UIEditor
 				sb.Append(",");
 			}
 
-			sb.Append("\n\t\t\t}");
+			if (!isEmpty)
+			{
+				sb.Append("\n\t\t\t}");
+			}
+			else
+			{
+				sb.Append("()");
+			}
 
 			return sb.ToString();
 		}

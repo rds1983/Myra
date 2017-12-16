@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
@@ -103,6 +105,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Data")]
+		[DefaultValue(-1)]
 		public int SelectedIndex
 		{
 			get
@@ -257,7 +260,7 @@ namespace Myra.Graphics2D.UI
 			_items.CollectionChanged += ItemsOnCollectionChanged;
 		}
 
-		public ComboBox(string style) : this(Stylesheet.Current.ComboBoxVariants[style])
+		public ComboBox(string style) : this(Stylesheet.Current.ComboBoxStyles[style])
 		{
 		}
 
@@ -440,6 +443,16 @@ namespace Myra.Graphics2D.UI
 			result.X += 32;
 
 			return result;
+		}
+
+		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		{
+			ApplyComboBoxStyle(stylesheet.ComboBoxStyles[name]);
+		}
+
+		internal override string[] GetStyleNames(Stylesheet stylesheet)
+		{
+			return stylesheet.ComboBoxStyles.Keys.ToArray();
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
@@ -19,6 +20,7 @@ namespace Myra.Graphics2D.UI
 		public float Minimum { get; set; }
 
 		[EditCategory("Behavior")]
+		[DefaultValue(100)]
 		public float Maximum { get; set; }
 
 		[HiddenInEditor]

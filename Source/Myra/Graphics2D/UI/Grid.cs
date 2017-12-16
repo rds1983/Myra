@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using Myra.Attributes;
 using Myra.Utility;
@@ -32,6 +32,35 @@ namespace Myra.Graphics2D.UI
 				get { return _default; }
 			}
 
+			[DefaultValue(ProportionType.Auto)]
+			public ProportionType Type
+			{
+				get { return _type; }
+
+				set
+				{
+					if (value == _type) return;
+					_type = value;
+					FireChanged();
+				}
+			}
+
+			[DefaultValue(1.0f)]
+			public float Value
+			{
+				get { return _value; }
+				set
+				{
+					if (value.EpsilonEquals(_value))
+					{
+						return;
+					}
+
+					_value = value;
+					FireChanged();
+				}
+			}
+
 			public event EventHandler Changed;
 
 			public Proportion()
@@ -47,33 +76,6 @@ namespace Myra.Graphics2D.UI
 				: this(type)
 			{
 				_value = value;
-			}
-
-			public ProportionType Type
-			{
-				get { return _type; }
-
-				set
-				{
-					if (value == _type) return;
-					_type = value;
-					FireChanged();
-				}
-			}
-
-			public float Value
-			{
-				get { return _value; }
-				set
-				{
-					if (value.EpsilonEquals(_value))
-					{
-						return;
-					}
-
-					_value = value;
-					FireChanged();
-				}
 			}
 
 			public override string ToString()
@@ -121,6 +123,7 @@ namespace Myra.Graphics2D.UI
 		private readonly List<int> _rowHeights = new List<int>();
 
 		[EditCategory("Behavior")]
+		[DefaultValue(false)]
 		public bool DrawLines { get; set; }
 
 		[EditCategory("Behavior")]

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -57,6 +59,7 @@ namespace Myra.Graphics2D.UI
 		public BitmapFont MessageFont { get; set; }
 
 		[EditCategory("Appearance")]
+		[DefaultValue(true)]
 		public bool Wrap
 		{
 			get { return _wrap; }
@@ -96,6 +99,7 @@ namespace Myra.Graphics2D.UI
 		public TextureRegion2D Selection { get; set; }
 
 		[EditCategory("Behavior")]
+		[DefaultValue(450)]
 		public int BlinkIntervalInMs { get; set; }
 
 		[EditCategory("Behavior")]
@@ -138,7 +142,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public TextField(string style)
-			: this(Stylesheet.Current.TextFieldVariants[style])
+			: this(Stylesheet.Current.TextFieldStyles[style])
 		{
 		}
 
@@ -504,6 +508,16 @@ namespace Myra.Graphics2D.UI
 			{
 				_cursorIndex = 0;
 			}
+		}
+
+		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		{
+			ApplyTextFieldStyle(stylesheet.TextFieldStyles[name]);
+		}
+
+		internal override string[] GetStyleNames(Stylesheet stylesheet)
+		{
+			return stylesheet.TextFieldStyles.Keys.ToArray();
 		}
 	}
 }

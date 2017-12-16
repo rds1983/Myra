@@ -321,29 +321,29 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadScrollAreaStyleFromSource(JObject source, ScrollAreaStyle result)
+		private void LoadScrollAreaStyleFromSource(JObject source, ScrollPaneStyle result)
 		{
 			LoadWidgetStyleFromSource(source, result);
 
-			string TextureRegion2DName;
-			if (source.GetStyle(HorizontalScrollName, out TextureRegion2DName))
+			string textureRegion2DName;
+			if (source.GetStyle(HorizontalScrollName, out textureRegion2DName))
 			{
-				result.HorizontalScrollBackground = GetTextureRegion2D(TextureRegion2DName);
+				result.HorizontalScrollBackground = GetTextureRegion2D(textureRegion2DName);
 			}
 
-			if (source.GetStyle(HorizontalScrollKnobName, out TextureRegion2DName))
+			if (source.GetStyle(HorizontalScrollKnobName, out textureRegion2DName))
 			{
-				result.HorizontalScrollKnob = GetTextureRegion2D(TextureRegion2DName);
+				result.HorizontalScrollKnob = GetTextureRegion2D(textureRegion2DName);
 			}
 
-			if (source.GetStyle(VerticalScrollName, out TextureRegion2DName))
+			if (source.GetStyle(VerticalScrollName, out textureRegion2DName))
 			{
-				result.VerticalScrollBackground = GetTextureRegion2D(TextureRegion2DName);
+				result.VerticalScrollBackground = GetTextureRegion2D(textureRegion2DName);
 			}
 
-			if (source.GetStyle(VerticalScrollKnobName, out TextureRegion2DName))
+			if (source.GetStyle(VerticalScrollKnobName, out textureRegion2DName))
 			{
-				result.VerticalScrollKnob = GetTextureRegion2D(TextureRegion2DName);
+				result.VerticalScrollKnob = GetTextureRegion2D(textureRegion2DName);
 			}
 		}
 
@@ -591,8 +591,7 @@ namespace Myra.Graphics2D.UI.Styles
 		}
 
 		private void FillStyles<T>(string key,
-			T result,
-			Dictionary<string, T> variantsDict,
+			Dictionary<string, T> stylesDict,
 			Action<JObject, T> fillAction) where T : WidgetStyle, new()
 		{
 			JObject source;
@@ -601,19 +600,19 @@ namespace Myra.Graphics2D.UI.Styles
 				return;
 			}
 
-			fillAction(source, result);
+			fillAction(source, stylesDict[Stylesheet.DefaultStyleName]);
 
-			JObject variants;
-			if (!source.GetStyle(VariantsName, out variants) || variants == null)
+			JObject styles;
+			if (!source.GetStyle(VariantsName, out styles) || styles == null)
 			{
 				return;
 			}
 
-			foreach (var pair in variants)
+			foreach (var pair in styles)
 			{
-				var variant = (T)result.Clone();
-				fillAction((JObject)pair.Value, variant);
-				variantsDict[pair.Key] = variant;
+				var variant = (T) stylesDict[Stylesheet.DefaultStyleName].Clone();
+				fillAction((JObject) pair.Value, variant);
+				stylesDict[pair.Key] = variant;
 			}
 		}
 
@@ -626,25 +625,25 @@ namespace Myra.Graphics2D.UI.Styles
 			{
 				ParseColors(colors);
 			}
-			FillStyles(TextBlockName, result.TextBlockStyle, result.TextBlockVariants, LoadTextBlockStyleFromSource);
-			FillStyles(TextFieldName, result.TextFieldStyle, result.TextFieldVariants, LoadTextFieldStyleFromSource);
-			FillStyles(ScrollAreaName, result.ScrollAreaStyle, result.ScrollAreaVariants, LoadScrollAreaStyleFromSource);
-			FillStyles(ButtonName, result.ButtonStyle, result.ButtonVariants, LoadButtonStyleFromSource);
-			FillStyles(CheckBoxName, result.CheckBoxStyle, result.CheckBoxVariants, LoadButtonStyleFromSource);
-			FillStyles(ImageButtonName, result.ImageButtonStyle, result.ImageButtonVariants, LoadImageButtonStyleFromSource);
-			FillStyles(SpinButtonName, result.SpinButtonStyle, result.SpinButtonVariants, LoadSpinButtonStyleFromSource);
-			FillStyles(HorizontalSliderName, result.HorizontalSliderStyle, result.HorizontalSliderVariants, LoadSliderStyleFromSource);
-			FillStyles(VerticalSliderName, result.VerticalSliderStyle, result.VerticalSliderVariants, LoadSliderStyleFromSource);
-			FillStyles(HorizontalProgressBarName, result.HorizontalProgressBarStyle, result.HorizontalProgressBarVariants, LoadProgressBarStyleFromSource);
-			FillStyles(VerticalProgressBarName, result.VerticalProgressBarStyle, result.VerticalProgressBarVariants, LoadProgressBarStyleFromSource);
-			FillStyles(ComboBoxName, result.ComboBoxStyle, result.ComboBoxVariants, LoadComboBoxStyleFromSource);
-			FillStyles(ListBoxName, result.ListBoxStyle, result.ListBoxVariants, LoadListBoxStyleFromSource);
-			FillStyles(TreeName, result.TreeStyle, result.TreeVariants, LoadTreeStyleFromSource);
-			FillStyles(HorizontalSplitPaneName, result.HorizontalSplitPaneStyle, result.HorizontalSplitPaneVariants, LoadSplitPaneStyleFromSource);
-			FillStyles(VerticalSplitPaneName, result.VerticalSplitPaneStyle, result.VerticalSplitPaneVariants, LoadSplitPaneStyleFromSource);
-			FillStyles(HorizontalMenuName, result.HorizontalMenuStyle, result.HorizontalMenuVariants, LoadMenuStyleFromSource);
-			FillStyles(VerticalMenuName, result.VerticalMenuStyle, result.VerticalMenuVariants, LoadMenuStyleFromSource);
-			FillStyles(WindowName, result.WindowStyle, result.WindowVariants, LoadWindowStyleFromSource);
+			FillStyles(TextBlockName, result.TextBlockStyles, LoadTextBlockStyleFromSource);
+			FillStyles(TextFieldName, result.TextFieldStyles, LoadTextFieldStyleFromSource);
+			FillStyles(ScrollAreaName, result.ScrollPaneStyles, LoadScrollAreaStyleFromSource);
+			FillStyles(ButtonName, result.ButtonStyles, LoadButtonStyleFromSource);
+			FillStyles(CheckBoxName, result.CheckBoxStyles, LoadButtonStyleFromSource);
+			FillStyles(ImageButtonName, result.ImageButtonStyles, LoadImageButtonStyleFromSource);
+			FillStyles(SpinButtonName, result.SpinButtonStyles, LoadSpinButtonStyleFromSource);
+			FillStyles(HorizontalSliderName, result.HorizontalSliderStyles, LoadSliderStyleFromSource);
+			FillStyles(VerticalSliderName, result.VerticalSliderStyles, LoadSliderStyleFromSource);
+			FillStyles(HorizontalProgressBarName, result.HorizontalProgressBarStyles, LoadProgressBarStyleFromSource);
+			FillStyles(VerticalProgressBarName, result.VerticalProgressBarStyles, LoadProgressBarStyleFromSource);
+			FillStyles(ComboBoxName, result.ComboBoxStyles, LoadComboBoxStyleFromSource);
+			FillStyles(ListBoxName, result.ListBoxStyles, LoadListBoxStyleFromSource);
+			FillStyles(TreeName, result.TreeStyles, LoadTreeStyleFromSource);
+			FillStyles(HorizontalSplitPaneName, result.HorizontalSplitPaneStyles, LoadSplitPaneStyleFromSource);
+			FillStyles(VerticalSplitPaneName, result.VerticalSplitPaneStyles, LoadSplitPaneStyleFromSource);
+			FillStyles(HorizontalMenuName, result.HorizontalMenuStyles, LoadMenuStyleFromSource);
+			FillStyles(VerticalMenuName, result.VerticalMenuStyles, LoadMenuStyleFromSource);
+			FillStyles(WindowName, result.WindowStyles, LoadWindowStyleFromSource);
 
 			return result;
 		}

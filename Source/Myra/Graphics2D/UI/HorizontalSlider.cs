@@ -1,4 +1,5 @@
-﻿using Myra.Graphics2D.UI.Styles;
+﻿using System.Linq;
+using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
 {
@@ -16,12 +17,22 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public HorizontalSlider(string style)
-			: this(Stylesheet.Current.HorizontalSliderVariants[style])
+			: this(Stylesheet.Current.HorizontalSliderStyles[style])
 		{
 		}
 
 		public HorizontalSlider() : this(Stylesheet.Current.HorizontalSliderStyle)
 		{
+		}
+
+		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		{
+			ApplySliderStyle(stylesheet.HorizontalSliderStyles[name]);
+		}
+
+		internal override string[] GetStyleNames(Stylesheet stylesheet)
+		{
+			return stylesheet.HorizontalSliderStyles.Keys.ToArray();
 		}
 	}
 }

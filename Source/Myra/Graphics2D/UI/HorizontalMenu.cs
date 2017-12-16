@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using System.Linq;
+using Microsoft.Xna.Framework.Input;
 using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
@@ -16,7 +17,7 @@ namespace Myra.Graphics2D.UI
 			VerticalAlignment = VerticalAlignment.Top;
 		}
 
-		public HorizontalMenu(string style) : this(Stylesheet.Current.HorizontalMenuVariants[style])
+		public HorizontalMenu(string style) : this(Stylesheet.Current.HorizontalMenuStyles[style])
 		{
 		}
 
@@ -37,6 +38,16 @@ namespace Myra.Graphics2D.UI
 					MoveSelection(1);
 					break;
 			}
+		}
+
+		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		{
+			ApplyMenuStyle(stylesheet.HorizontalMenuStyles[name]);
+		}
+
+		internal override string[] GetStyleNames(Stylesheet stylesheet)
+		{
+			return stylesheet.HorizontalMenuStyles.Keys.ToArray();
 		}
 	}
 }

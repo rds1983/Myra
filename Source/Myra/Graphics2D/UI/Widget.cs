@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -47,8 +48,25 @@ namespace Myra.Graphics2D.UI
 		private DateTime _lastDown;
 		private bool _enabled;
 		private bool _canFocus;
+		private string _styleName;
 
 		public string Id { get; set; }
+
+		[Selection(typeof(StyleNamesProvider))]
+		public string StyleName
+		{
+			get { return _styleName; }
+			set
+			{
+				if (value == _styleName)
+				{
+					return;
+				}
+
+				_styleName = value;
+				SetStyleByName(Stylesheet.Current, value);
+			}
+		}
 
 		[EditCategory("Layout")]
 		public int XHint
@@ -259,6 +277,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Layout")]
+		[DefaultValue(1)]
 		public int GridSpanX
 		{
 			get { return _gridSpanX; }
@@ -276,6 +295,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Layout")]
+		[DefaultValue(1)]
 		public int GridSpanY
 		{
 			get { return _gridSpanY; }
@@ -293,6 +313,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Behavior")]
+		[DefaultValue(true)]
 		public virtual bool Enabled
 		{
 			get
@@ -318,6 +339,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Behavior")]
+		[DefaultValue(true)]
 		public bool Visible
 		{
 			get { return _visible; }
@@ -873,6 +895,15 @@ namespace Myra.Graphics2D.UI
 			PaddingRight = style.Padding.Right;
 			PaddingTop = style.Padding.Top;
 			PaddingBottom = style.Padding.Bottom;
+		}
+
+		protected virtual void SetStyleByName(Stylesheet stylesheet, string name)
+		{
+		}
+
+		internal virtual string[] GetStyleNames(Stylesheet stylesheet)
+		{
+			return null;
 		}
 
 		public virtual void OnMouseLeft()

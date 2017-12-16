@@ -89,7 +89,7 @@
     <Compile Include="Graphics2D\UI\ButtonBase.cs" />
     <Compile Include="Graphics2D\UI\DebugOptionsDialog.cs" />
     <Compile Include="Graphics2D\UI\DebugOptionsWidget.cs" />
-    <Compile Include="Graphics2D\UI\DebugOptionsWidget.Generated.cs" />    
+    <Compile Include="Graphics2D\UI\DebugOptionsWidget.Generated.cs" />
     <Compile Include="Graphics2D\UI\Dialog.cs" />
     <Compile Include="Graphics2D\UI\HorizontalMenu.cs" />
     <Compile Include="Graphics2D\UI\Image.cs" />
@@ -126,6 +126,7 @@
     <Compile Include="Graphics2D\UI\Styles\SliderStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\SpinButtonStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\SplitPaneStyle.cs" />
+    <Compile Include="Graphics2D\UI\Styles\StyleNamesProvider.cs" />
     <Compile Include="Graphics2D\UI\TreeNode.cs" />
     <Compile Include="Graphics2D\UI\VerticalMenu.cs" />
     <Compile Include="Graphics2D\UI\VerticalProgressBar.cs" />
@@ -149,7 +150,7 @@
     <Compile Include="Graphics2D\UI\SplitPane.cs" />
     <Compile Include="Graphics2D\UI\Styles\ButtonStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\TextBlockStyle.cs" />
-    <Compile Include="Graphics2D\UI\Styles\ScrollAreaStyle.cs" />
+    <Compile Include="Graphics2D\UI\Styles\ScrollPaneStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\Stylesheet.cs" />
     <Compile Include="Graphics2D\UI\Styles\StylesheetLoader.cs" />
     <Compile Include="Graphics2D\UI\Styles\TreeStyle.cs" />

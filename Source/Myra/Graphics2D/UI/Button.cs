@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.ComponentModel;
+using System.Linq;
+using Microsoft.Xna.Framework;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.TextureAtlases;
 using Myra.Attributes;
@@ -41,10 +43,7 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Appearance")]
 		public TextureRegion2D Image
 		{
-			get
-			{
-				return _textureRegion2D;
-			}
+			get { return _textureRegion2D; }
 
 			set
 			{
@@ -63,10 +62,7 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Appearance")]
 		public TextureRegion2D OverImage
 		{
-			get
-			{
-				return _overTextureRegion2D;
-			}
+			get { return _overTextureRegion2D; }
 
 			set
 			{
@@ -85,10 +81,7 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Appearance")]
 		public TextureRegion2D PressedImage
 		{
-			get
-			{
-				return _pressedTextureRegion2D;
-			}
+			get { return _pressedTextureRegion2D; }
 
 			set
 			{
@@ -117,6 +110,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Appearance")]
+		[DefaultValue(true)]
 		public virtual bool ImageVisible
 		{
 			get { return _image.Visible; }
@@ -152,7 +146,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public Button(string style): this(Stylesheet.Current.ButtonVariants[style])
+		public Button(string style) : this(Stylesheet.Current.ButtonStyles[style])
 		{
 		}
 
@@ -229,5 +223,15 @@ namespace Myra.Graphics2D.UI
 
 			UpdateTextureRegion2D();
 		}
+
+		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		{
+			ApplyButtonStyle(stylesheet.ButtonStyles[name]);
+		}
+
+		internal override string[] GetStyleNames(Stylesheet stylesheet)
+		{
+			return stylesheet.ButtonStyles.Keys.ToArray();
+		}
 	}
-}
+}	

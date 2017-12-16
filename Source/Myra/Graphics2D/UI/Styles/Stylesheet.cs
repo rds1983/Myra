@@ -8,8 +8,10 @@ namespace Myra.Graphics2D.UI.Styles
 {
 	public class Stylesheet
 	{
+		public static readonly string DefaultStyleName = string.Empty;
+
 		private static Stylesheet _current;
-		
+
 		public static Stylesheet Current
 		{
 			get
@@ -25,139 +27,243 @@ namespace Myra.Graphics2D.UI.Styles
 			set { _current = value; }
 		}
 
-		private readonly Dictionary<string, TextBlockStyle> _textBlockVariants = new Dictionary<string,TextBlockStyle>();
-		private readonly Dictionary<string, TextFieldStyle> _textFieldVariants = new Dictionary<string, TextFieldStyle>();
-		private readonly Dictionary<string, ButtonStyle> _buttonVariants = new Dictionary<string, ButtonStyle>();
-		private readonly Dictionary<string, ButtonStyle> _checkBoxVariants = new Dictionary<string, ButtonStyle>();
-		private readonly Dictionary<string, ImageButtonStyle> _imageButtonVariants = new Dictionary<string, ImageButtonStyle>();
-		private readonly Dictionary<string, SpinButtonStyle> _spinButtonVariants = new Dictionary<string, SpinButtonStyle>();
-		private readonly Dictionary<string, SliderStyle> _horizontalSliderVariants = new Dictionary<string, SliderStyle>();
-		private readonly Dictionary<string, SliderStyle> _verticalSliderVariants = new Dictionary<string, SliderStyle>();
-		private readonly Dictionary<string, ProgressBarStyle> _horizontalProgressBarVariants = new Dictionary<string, ProgressBarStyle>();
-		private readonly Dictionary<string, ProgressBarStyle> _verticalProgressBarVariants = new Dictionary<string, ProgressBarStyle>();
-		private readonly Dictionary<string, ComboBoxStyle> _comboBoxVariants = new Dictionary<string, ComboBoxStyle>();
-		private readonly Dictionary<string, ListBoxStyle> _listBoxVariants = new Dictionary<string, ListBoxStyle>();
-		private readonly Dictionary<string, TreeStyle> _treeVariants = new Dictionary<string, TreeStyle>();
-		private readonly Dictionary<string, SplitPaneStyle> _horizontalSplitPaneVariants = new Dictionary<string, SplitPaneStyle>();
-		private readonly Dictionary<string, SplitPaneStyle> _verticalSplitPaneVariants = new Dictionary<string, SplitPaneStyle>();
-		private readonly Dictionary<string, ScrollAreaStyle> _scrollAreaVariants = new Dictionary<string, ScrollAreaStyle>();
-		private readonly Dictionary<string, MenuStyle> _horizontalMenuVariants = new Dictionary<string, MenuStyle>();
-		private readonly Dictionary<string, MenuStyle> _verticalMenuVariants = new Dictionary<string, MenuStyle>();
-		private readonly Dictionary<string, WindowStyle> _windowVariants = new Dictionary<string, WindowStyle>();
+		private readonly Dictionary<string, TextBlockStyle> _textBlockStyles = new Dictionary<string, TextBlockStyle>();
+		private readonly Dictionary<string, TextFieldStyle> _textFieldStyles = new Dictionary<string, TextFieldStyle>();
+		private readonly Dictionary<string, ButtonStyle> _buttonStyles = new Dictionary<string, ButtonStyle>();
+		private readonly Dictionary<string, ButtonStyle> _checkBoxStyles = new Dictionary<string, ButtonStyle>();
+		private readonly Dictionary<string, ImageButtonStyle> _imageButtonStyles = new Dictionary<string, ImageButtonStyle>();
+		private readonly Dictionary<string, SpinButtonStyle> _spinButtonStyles = new Dictionary<string, SpinButtonStyle>();
+		private readonly Dictionary<string, SliderStyle> _horizontalSliderStyles = new Dictionary<string, SliderStyle>();
+		private readonly Dictionary<string, SliderStyle> _verticalSliderStyles = new Dictionary<string, SliderStyle>();
 
-		public TextBlockStyle TextBlockStyle { get; private set; }
-		public TextFieldStyle TextFieldStyle { get; private set; }
-		public ButtonStyle ButtonStyle { get; private set; }
-		public ButtonStyle CheckBoxStyle { get; private set; }
-		public ImageButtonStyle ImageButtonStyle { get; private set; }
-		public SpinButtonStyle SpinButtonStyle { get; private set; }
-		public SliderStyle HorizontalSliderStyle { get; private set; }
-		public SliderStyle VerticalSliderStyle { get; private set; }
-		public ProgressBarStyle HorizontalProgressBarStyle { get; private set; }
-		public ProgressBarStyle VerticalProgressBarStyle { get; private set; }
-		public ComboBoxStyle ComboBoxStyle { get; private set; }
-		public ListBoxStyle ListBoxStyle { get; set; }
-		public TreeStyle TreeStyle { get; private set; }
-		public SplitPaneStyle HorizontalSplitPaneStyle { get; private set; }
-		public SplitPaneStyle VerticalSplitPaneStyle { get; private set; }
-		public ScrollAreaStyle ScrollAreaStyle { get; private set; }
-		public MenuStyle HorizontalMenuStyle { get; private set; }
-		public MenuStyle VerticalMenuStyle { get; private set; }
-		public WindowStyle WindowStyle { get; private set; }
+		private readonly Dictionary<string, ProgressBarStyle> _horizontalProgressBarStyles =
+			new Dictionary<string, ProgressBarStyle>();
 
-		public Dictionary<string, TextBlockStyle> TextBlockVariants
+		private readonly Dictionary<string, ProgressBarStyle> _verticalProgressBarStyles =
+			new Dictionary<string, ProgressBarStyle>();
+
+		private readonly Dictionary<string, ComboBoxStyle> _comboBoxStyles = new Dictionary<string, ComboBoxStyle>();
+		private readonly Dictionary<string, ListBoxStyle> _listBoxStyles = new Dictionary<string, ListBoxStyle>();
+		private readonly Dictionary<string, TreeStyle> _treeStyles = new Dictionary<string, TreeStyle>();
+
+		private readonly Dictionary<string, SplitPaneStyle> _horizontalSplitPaneStyles =
+			new Dictionary<string, SplitPaneStyle>();
+
+		private readonly Dictionary<string, SplitPaneStyle> _verticalSplitPaneStyles =
+			new Dictionary<string, SplitPaneStyle>();
+
+		private readonly Dictionary<string, ScrollPaneStyle> _scrollPaneStyles = new Dictionary<string, ScrollPaneStyle>();
+		private readonly Dictionary<string, MenuStyle> _horizontalMenuStyles = new Dictionary<string, MenuStyle>();
+		private readonly Dictionary<string, MenuStyle> _verticalMenuStyles = new Dictionary<string, MenuStyle>();
+		private readonly Dictionary<string, WindowStyle> _windowStyles = new Dictionary<string, WindowStyle>();
+
+		public TextBlockStyle TextBlockStyle
 		{
-			get { return _textBlockVariants; }
+			get { return _textBlockStyles[DefaultStyleName]; }
+			set { _textBlockStyles[DefaultStyleName] = value; }
 		}
 
-		public Dictionary<string, TextFieldStyle> TextFieldVariants
+		public TextFieldStyle TextFieldStyle
 		{
-			get { return _textFieldVariants; }
+			get { return _textFieldStyles[DefaultStyleName]; }
+			set { _textFieldStyles[DefaultStyleName] = value; }
 		}
 
-		public Dictionary<string, ButtonStyle> ButtonVariants
+		public ButtonStyle ButtonStyle
 		{
-			get { return _buttonVariants; }
+			get { return _buttonStyles[DefaultStyleName]; }
+			set { _buttonStyles[DefaultStyleName] = value; }
 		}
 
-		public Dictionary<string, ButtonStyle> CheckBoxVariants
+		public ButtonStyle CheckBoxStyle
 		{
-			get { return _checkBoxVariants; }
+			get { return _checkBoxStyles[DefaultStyleName]; }
+			set { _checkBoxStyles[DefaultStyleName] = value; }
 		}
 
-		public Dictionary<string, ImageButtonStyle> ImageButtonVariants
+		public ImageButtonStyle ImageButtonStyle
 		{
-			get { return _imageButtonVariants; }
+			get { return _imageButtonStyles[DefaultStyleName]; }
+			set { _imageButtonStyles[DefaultStyleName] = value; }
 		}
 
-		public Dictionary<string, SpinButtonStyle> SpinButtonVariants
+		public SpinButtonStyle SpinButtonStyle
 		{
-			get { return _spinButtonVariants; }
+			get { return _spinButtonStyles[DefaultStyleName]; }
+			set { _spinButtonStyles[DefaultStyleName] = value; }
 		}
 
-		public Dictionary<string, SliderStyle> HorizontalSliderVariants
+		public SliderStyle HorizontalSliderStyle
 		{
-			get { return _horizontalSliderVariants; }
+			get { return _horizontalSliderStyles[DefaultStyleName]; }
+			set { _horizontalSliderStyles[DefaultStyleName] = value; }
 		}
 
-		public Dictionary<string, SliderStyle> VerticalSliderVariants
+		public SliderStyle VerticalSliderStyle
 		{
-			get { return _verticalSliderVariants; }
+			get { return _verticalSliderStyles[DefaultStyleName]; }
+			set { _verticalSliderStyles[DefaultStyleName] = value; }
 		}
 
-		public Dictionary<string, ProgressBarStyle> HorizontalProgressBarVariants
+		public ProgressBarStyle HorizontalProgressBarStyle
 		{
-			get { return _horizontalProgressBarVariants; }
+			get { return _horizontalProgressBarStyles[DefaultStyleName]; }
+			set { _horizontalProgressBarStyles[DefaultStyleName] = value; }
 		}
 
-		public Dictionary<string, ProgressBarStyle> VerticalProgressBarVariants
+		public ProgressBarStyle VerticalProgressBarStyle
 		{
-			get { return _verticalProgressBarVariants; }
+			get { return _verticalProgressBarStyles[DefaultStyleName]; }
+			set { _verticalProgressBarStyles[DefaultStyleName] = value; }
 		}
 
-		public Dictionary<string, ComboBoxStyle> ComboBoxVariants
+		public ComboBoxStyle ComboBoxStyle
 		{
-			get { return _comboBoxVariants; }
+			get { return _comboBoxStyles[DefaultStyleName]; }
+			set { _comboBoxStyles[DefaultStyleName] = value; }
 		}
 
-		public Dictionary<string, ListBoxStyle> ListBoxVariants
+		public ListBoxStyle ListBoxStyle
 		{
-			get { return _listBoxVariants; }
+			get { return _listBoxStyles[DefaultStyleName]; }
+			set { _listBoxStyles[DefaultStyleName] = value; }
 		}
 
-		public Dictionary<string, TreeStyle> TreeVariants
+		public TreeStyle TreeStyle
 		{
-			get { return _treeVariants; }
+			get { return _treeStyles[DefaultStyleName]; }
+			set { _treeStyles[DefaultStyleName] = value; }
 		}
 
-		public Dictionary<string, SplitPaneStyle> HorizontalSplitPaneVariants
+		public SplitPaneStyle HorizontalSplitPaneStyle
 		{
-			get { return _horizontalSplitPaneVariants; }
+			get { return _horizontalSplitPaneStyles[DefaultStyleName]; }
+			set { _horizontalSplitPaneStyles[DefaultStyleName] = value; }
 		}
 
-		public Dictionary<string, SplitPaneStyle> VerticalSplitPaneVariants
+		public SplitPaneStyle VerticalSplitPaneStyle
 		{
-			get { return _verticalSplitPaneVariants; }
+			get { return _verticalSplitPaneStyles[DefaultStyleName]; }
+			set { _verticalSplitPaneStyles[DefaultStyleName] = value; }
 		}
 
-		public Dictionary<string, ScrollAreaStyle> ScrollAreaVariants
+		public ScrollPaneStyle ScrollPaneStyle
 		{
-			get { return _scrollAreaVariants; }
+			get { return _scrollPaneStyles[DefaultStyleName]; }
+			set { _scrollPaneStyles[DefaultStyleName] = value; }
 		}
 
-		public Dictionary<string, MenuStyle> HorizontalMenuVariants
+		public MenuStyle HorizontalMenuStyle
 		{
-			get { return _horizontalMenuVariants; }
+			get { return _horizontalMenuStyles[DefaultStyleName]; }
+			set { _horizontalMenuStyles[DefaultStyleName] = value; }
 		}
 
-		public Dictionary<string, MenuStyle> VerticalMenuVariants
+		public MenuStyle VerticalMenuStyle
 		{
-			get { return _verticalMenuVariants; }
+			get { return _verticalMenuStyles[DefaultStyleName]; }
+			set { _verticalMenuStyles[DefaultStyleName] = value; }
 		}
 
-		public Dictionary<string, WindowStyle> WindowVariants
+		public WindowStyle WindowStyle
 		{
-			get { return _windowVariants; }
+			get { return _windowStyles[DefaultStyleName]; }
+			set { _windowStyles[DefaultStyleName] = value; }
+		}
+
+		public Dictionary<string, TextBlockStyle> TextBlockStyles
+		{
+			get { return _textBlockStyles; }
+		}
+
+		public Dictionary<string, TextFieldStyle> TextFieldStyles
+		{
+			get { return _textFieldStyles; }
+		}
+
+		public Dictionary<string, ButtonStyle> ButtonStyles
+		{
+			get { return _buttonStyles; }
+		}
+
+		public Dictionary<string, ButtonStyle> CheckBoxStyles
+		{
+			get { return _checkBoxStyles; }
+		}
+
+		public Dictionary<string, ImageButtonStyle> ImageButtonStyles
+		{
+			get { return _imageButtonStyles; }
+		}
+
+		public Dictionary<string, SpinButtonStyle> SpinButtonStyles
+		{
+			get { return _spinButtonStyles; }
+		}
+
+		public Dictionary<string, SliderStyle> HorizontalSliderStyles
+		{
+			get { return _horizontalSliderStyles; }
+		}
+
+		public Dictionary<string, SliderStyle> VerticalSliderStyles
+		{
+			get { return _verticalSliderStyles; }
+		}
+
+		public Dictionary<string, ProgressBarStyle> HorizontalProgressBarStyles
+		{
+			get { return _horizontalProgressBarStyles; }
+		}
+
+		public Dictionary<string, ProgressBarStyle> VerticalProgressBarStyles
+		{
+			get { return _verticalProgressBarStyles; }
+		}
+
+		public Dictionary<string, ComboBoxStyle> ComboBoxStyles
+		{
+			get { return _comboBoxStyles; }
+		}
+
+		public Dictionary<string, ListBoxStyle> ListBoxStyles
+		{
+			get { return _listBoxStyles; }
+		}
+
+		public Dictionary<string, TreeStyle> TreeStyles
+		{
+			get { return _treeStyles; }
+		}
+
+		public Dictionary<string, SplitPaneStyle> HorizontalSplitPaneStyles
+		{
+			get { return _horizontalSplitPaneStyles; }
+		}
+
+		public Dictionary<string, SplitPaneStyle> VerticalSplitPaneStyles
+		{
+			get { return _verticalSplitPaneStyles; }
+		}
+
+		public Dictionary<string, ScrollPaneStyle> ScrollPaneStyles
+		{
+			get { return _scrollPaneStyles; }
+		}
+
+		public Dictionary<string, MenuStyle> HorizontalMenuStyles
+		{
+			get { return _horizontalMenuStyles; }
+		}
+
+		public Dictionary<string, MenuStyle> VerticalMenuStyles
+		{
+			get { return _verticalMenuStyles; }
+		}
+
+		public Dictionary<string, WindowStyle> WindowStyles
+		{
+			get { return _windowStyles; }
 		}
 
 		public Stylesheet()
@@ -177,7 +283,7 @@ namespace Myra.Graphics2D.UI.Styles
 			TreeStyle = new TreeStyle();
 			HorizontalSplitPaneStyle = new SplitPaneStyle();
 			VerticalSplitPaneStyle = new SplitPaneStyle();
-			ScrollAreaStyle = new ScrollAreaStyle();
+			ScrollPaneStyle = new ScrollPaneStyle();
 			HorizontalMenuStyle = new MenuStyle();
 			VerticalMenuStyle = new MenuStyle();
 			WindowStyle = new WindowStyle();
@@ -192,6 +298,6 @@ namespace Myra.Graphics2D.UI.Styles
 			var loader = new StylesheetLoader(root, textureGetter, fontGetter);
 			return loader.Load();
 		}
-		
+
 	}
 }

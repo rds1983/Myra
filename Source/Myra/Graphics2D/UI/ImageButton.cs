@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Linq;
+using Microsoft.Xna.Framework;
 using MonoGame.Extended.TextureAtlases;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
@@ -113,7 +114,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public ImageButton(string style)
-			: this(Stylesheet.Current.ImageButtonVariants[style])
+			: this(Stylesheet.Current.ImageButtonStyles[style])
 		{
 		}
 
@@ -186,5 +187,14 @@ namespace Myra.Graphics2D.UI
 			UpdateTextureRegion2D();
 		}
 
+		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		{
+			ApplyImageButtonStyle(stylesheet.ImageButtonStyles[name]);
+		}
+
+		internal override string[] GetStyleNames(Stylesheet stylesheet)
+		{
+			return stylesheet.ImageButtonStyles.Keys.ToArray();
+		}
 	}
 }

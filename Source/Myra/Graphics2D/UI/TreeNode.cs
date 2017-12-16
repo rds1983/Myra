@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.BitmapFonts;
 using Myra.Graphics2D.UI.Styles;
@@ -61,6 +62,7 @@ namespace Myra.Graphics2D.UI
 
 		public TreeStyle TreeStyle { get; private set; }
 
+		[DefaultValue(true)]
 		public bool HasRoot
 		{
 			get

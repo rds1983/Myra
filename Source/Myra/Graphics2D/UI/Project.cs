@@ -31,6 +31,7 @@ namespace Myra.Graphics2D.UI
 			var result = JsonConvert.SerializeObject(this, Formatting.Indented,
 				new JsonSerializerSettings
 				{
+					DefaultValueHandling = DefaultValueHandling.Ignore,
 					PreserveReferencesHandling = PreserveReferencesHandling.Objects,
 					TypeNameHandling = TypeNameHandling.Objects
 				});

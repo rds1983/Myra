@@ -1,3 +1,5 @@
+using System.ComponentModel;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.BitmapFonts;
 using Myra.Attributes;
@@ -48,6 +50,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Appearance")]
+		[DefaultValue(true)]
 		public bool Wrap
 		{
 			get { return _wrap; }
@@ -74,25 +77,16 @@ namespace Myra.Graphics2D.UI
 		[JsonIgnore]
 		public bool IsMenuText
 		{
-			get
-			{
-				return _formattedText.IsMenuText;
-			}
+			get { return _formattedText.IsMenuText; }
 
-			set
-			{
-				_formattedText.IsMenuText = value;
-			}
+			set { _formattedText.IsMenuText = value; }
 		}
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		internal char? UnderscoreChar
 		{
-			get
-			{
-				return _formattedText.UnderscoreChar;
-			}
+			get { return _formattedText.UnderscoreChar; }
 		}
 
 		public TextBlock(TextBlockStyle style)
@@ -104,7 +98,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public TextBlock(string style)
-			: this(Stylesheet.Current.TextBlockVariants[style])
+			: this(Stylesheet.Current.TextBlockStyles[style])
 		{
 		}
 
@@ -167,6 +161,16 @@ namespace Myra.Graphics2D.UI
 			TextColor = style.TextColor;
 			DisabledTextColor = style.DisabledTextColor;
 			Font = style.Font;
+		}
+
+		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		{
+			ApplyTextBlockStyle(stylesheet.TextBlockStyles[name]);
+		}
+
+		internal override string[] GetStyleNames(Stylesheet stylesheet)
+		{
+			return stylesheet.TextBlockStyles.Keys.ToArray();
 		}
 	}
 }

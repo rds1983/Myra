@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.UI;
 
 namespace Myra.Samples.AllWidgetsSample
@@ -62,11 +61,16 @@ namespace Myra.Samples.AllWidgetsSample
 				_window.ShowModal(_host);
 			};
 
+			_allWidgets._blueButton.Up += (sender, args) =>
+			{
+				_window.ShowModal(_host);
+			};
+
 			var tree = new Tree
 			{
 				HasRoot = false,
 				GridPositionX = 1,
-				GridPositionY = 8
+				GridPositionY = 9
 			};
 			var node1 = tree.AddSubNode("node1");
 			var node2 = node1.AddSubNode("node2");

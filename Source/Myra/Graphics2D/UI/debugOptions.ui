@@ -5,51 +5,38 @@
     "$type": "Myra.Graphics2D.UI.ExportOptions, Myra",
     "Namespace": "Myra.Graphics2D.UI",
     "Class": "DebugOptionsWidget",
-    "OutputPath": "/home/rds/Projects/Myra/Sources/Myra/Graphics2D/UI"
+    "OutputPath": "D:/Projects/Hebron/Myra/Sources/Myra/Graphics2D/UI"
   },
   "Root": {
     "$id": "2",
     "$type": "Myra.Graphics2D.UI.Grid, Myra",
-    "DrawLines": false,
     "DrawLinesColor": {
       "$id": "3",
-      "$type": "Myra.Graphics.Color, Myra",
+      "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
       "B": 255,
       "G": 255,
       "R": 255,
       "A": 255
     },
-    "ColumnSpacing": 0,
-    "RowSpacing": 0,
     "ColumnsProportions": [],
     "RowsProportions": [
       {
         "$id": "4",
-        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
-        "Type": 0,
-        "Value": 1.0
+        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra"
       },
       {
         "$id": "5",
-        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
-        "Type": 0,
-        "Value": 1.0
+        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra"
       },
       {
         "$id": "6",
-        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
-        "Type": 0,
-        "Value": 1.0
+        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra"
       },
       {
         "$id": "7",
-        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
-        "Type": 0,
-        "Value": 1.0
+        "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra"
       }
     ],
-    "TotalRowsPart": null,
-    "TotalColumnsPart": null,
     "Widgets": [
       {
         "$id": "8",
@@ -57,7 +44,7 @@
         "Text": "Draw green frame around every widget",
         "TextColor": {
           "$id": "9",
-          "$type": "Myra.Graphics.Color, Myra",
+          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
           "B": 255,
           "G": 255,
           "R": 255,
@@ -65,28 +52,9 @@
         },
         "ImageWidthHint": 10,
         "ImageHeightHint": 10,
-        "ImageVisible": true,
         "ContentHorizontalAlignment": 3,
         "ContentVerticalAlignment": 3,
-        "Enabled": true,
-        "Id": "_checkBoxWidgetFrames",
-        "XHint": 0,
-        "YHint": 0,
-        "WidthHint": null,
-        "HeightHint": null,
-        "PaddingLeft": 0,
-        "PaddingRight": 0,
-        "PaddingTop": 0,
-        "PaddingBottom": 0,
-        "HorizontalAlignment": 0,
-        "VerticalAlignment": 0,
-        "GridPositionX": 0,
-        "GridPositionY": 0,
-        "GridSpanX": 1,
-        "GridSpanY": 1,
-        "Visible": true,
-        "ClipToBounds": false,
-        "CanFocus": false
+        "Id": "_checkBoxWidgetFrames"
       },
       {
         "$id": "10",
@@ -94,7 +62,7 @@
         "Text": "Draw red frame around the focused widget",
         "TextColor": {
           "$id": "11",
-          "$type": "Myra.Graphics.Color, Myra",
+          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
           "B": 255,
           "G": 255,
           "R": 255,
@@ -102,28 +70,10 @@
         },
         "ImageWidthHint": 10,
         "ImageHeightHint": 10,
-        "ImageVisible": true,
         "ContentHorizontalAlignment": 3,
         "ContentVerticalAlignment": 3,
-        "Enabled": true,
         "Id": "_checkBoxFocusedWidgetFrame",
-        "XHint": 0,
-        "YHint": 0,
-        "WidthHint": null,
-        "HeightHint": null,
-        "PaddingLeft": 0,
-        "PaddingRight": 0,
-        "PaddingTop": 0,
-        "PaddingBottom": 0,
-        "HorizontalAlignment": 0,
-        "VerticalAlignment": 0,
-        "GridPositionX": 0,
-        "GridPositionY": 1,
-        "GridSpanX": 1,
-        "GridSpanY": 1,
-        "Visible": true,
-        "ClipToBounds": false,
-        "CanFocus": false
+        "GridPositionY": 1
       },
       {
         "$id": "12",
@@ -131,7 +81,7 @@
         "Text": "Draw white frame around every letter glyph",
         "TextColor": {
           "$id": "13",
-          "$type": "Myra.Graphics.Color, Myra",
+          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
           "B": 255,
           "G": 255,
           "R": 255,
@@ -139,28 +89,10 @@
         },
         "ImageWidthHint": 10,
         "ImageHeightHint": 10,
-        "ImageVisible": true,
         "ContentHorizontalAlignment": 3,
         "ContentVerticalAlignment": 3,
-        "Enabled": true,
         "Id": "_checkBoxGlyphFrames",
-        "XHint": 0,
-        "YHint": 0,
-        "WidthHint": null,
-        "HeightHint": null,
-        "PaddingLeft": 0,
-        "PaddingRight": 0,
-        "PaddingTop": 0,
-        "PaddingBottom": 0,
-        "HorizontalAlignment": 0,
-        "VerticalAlignment": 0,
-        "GridPositionX": 0,
-        "GridPositionY": 2,
-        "GridSpanX": 1,
-        "GridSpanY": 1,
-        "Visible": true,
-        "ClipToBounds": false,
-        "CanFocus": false
+        "GridPositionY": 2
       },
       {
         "$id": "14",
@@ -168,7 +100,7 @@
         "Text": "Disable clipping",
         "TextColor": {
           "$id": "15",
-          "$type": "Myra.Graphics.Color, Myra",
+          "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
           "B": 255,
           "G": 255,
           "R": 255,
@@ -176,48 +108,14 @@
         },
         "ImageWidthHint": 10,
         "ImageHeightHint": 10,
-        "ImageVisible": true,
         "ContentHorizontalAlignment": 3,
         "ContentVerticalAlignment": 3,
-        "Enabled": true,
         "Id": "_checkBoxDisableClipping",
-        "XHint": 0,
-        "YHint": 0,
-        "WidthHint": null,
-        "HeightHint": null,
-        "PaddingLeft": 0,
-        "PaddingRight": 0,
-        "PaddingTop": 0,
-        "PaddingBottom": 0,
-        "HorizontalAlignment": 0,
-        "VerticalAlignment": 0,
-        "GridPositionX": 0,
-        "GridPositionY": 3,
-        "GridSpanX": 1,
-        "GridSpanY": 1,
-        "Visible": true,
-        "ClipToBounds": false,
-        "CanFocus": false
+        "GridPositionY": 3
       }
     ],
-    "Enabled": true,
     "Id": "Root",
-    "XHint": 0,
-    "YHint": 0,
-    "WidthHint": null,
-    "HeightHint": null,
-    "PaddingLeft": 0,
-    "PaddingRight": 0,
-    "PaddingTop": 0,
-    "PaddingBottom": 0,
     "HorizontalAlignment": 3,
-    "VerticalAlignment": 3,
-    "GridPositionX": 0,
-    "GridPositionY": 0,
-    "GridSpanX": 1,
-    "GridSpanY": 1,
-    "Visible": true,
-    "ClipToBounds": false,
-    "CanFocus": false
+    "VerticalAlignment": 3
   }
 }

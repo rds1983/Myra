@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Linq;
 using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
@@ -15,6 +17,7 @@ namespace Myra.Graphics2D.UI
 
 		public float? Minimum { get; set; }
 
+		[DefaultValue(0)]
 		public float? Value
 		{
 			get
@@ -125,7 +128,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public SpinButton(string style)
-			: this(Stylesheet.Current.SpinButtonVariants[style])
+			: this(Stylesheet.Current.SpinButtonStyles[style])
 		{
 		}
 
@@ -223,6 +226,16 @@ namespace Myra.Graphics2D.UI
 			{
 				_downButton.ApplyButtonStyle(style.DownButtonStyle);
 			}
+		}
+
+		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		{
+			ApplySpinButtonStyle(stylesheet.SpinButtonStyles[name]);
+		}
+
+		internal override string[] GetStyleNames(Stylesheet stylesheet)
+		{
+			return stylesheet.SpinButtonStyles.Keys.ToArray();
 		}
 	}
 }

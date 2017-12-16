@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -19,7 +20,7 @@ namespace Myra.Graphics2D.UI
 		private Widget _focusedWidget;
 		private readonly List<Widget> _widgetsCopy = new List<Widget>();
 		private readonly List<Widget> _reversedWidgetsCopy = new List<Widget>();
-		protected readonly System.Collections.ObjectModel.ObservableCollection<Widget> _widgets = new System.Collections.ObjectModel.ObservableCollection<Widget>();
+		protected readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
 		private readonly List<Widget> _focusableWidgets = new List<Widget>();
 		private Widget _modalWidget;
 
@@ -47,7 +48,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public System.Collections.ObjectModel.ObservableCollection<Widget> Widgets
+		public ObservableCollection<Widget> Widgets
 		{
 			get { return _widgets; }
 		}

@@ -5,72 +5,71 @@ using Myra.Graphics2D.UI;
 
 namespace Myra.Samples.NotepadSample
 {
-    public class NotepadGame : Game
-    {
-        private readonly GraphicsDeviceManager graphics;
+	public class NotepadGame : Game
+	{
+		private readonly GraphicsDeviceManager graphics;
 
-        private string _filePath;
-        private bool _dirty = true;
-        private Desktop _host;
-        private TextField _textField;
+		private string _filePath;
+		private bool _dirty = true;
+		private Desktop _host;
+		private TextField _textField;
 
-        public string FilePath
-        {
-            get { return _filePath; }
+		public string FilePath
+		{
+			get { return _filePath; }
 
-            set
-            {
-                if (value == _filePath)
-                {
-                    return;
-                }
+			set
+			{
+				if (value == _filePath)
+				{
+					return;
+				}
 
-                _filePath = value;
+				_filePath = value;
 
-                UpdateTitle();
-            }
-        }
+				UpdateTitle();
+			}
+		}
 
-        public bool Dirty
-        {
-            get { return _dirty; }
+		public bool Dirty
+		{
+			get { return _dirty; }
 
-            set
-            {
-                if (value == _dirty)
-                {
-                    return;
-                }
+			set
+			{
+				if (value == _dirty)
+				{
+					return;
+				}
 
-                _dirty = value;
-                UpdateTitle();
-            }
-        }
+				_dirty = value;
+				UpdateTitle();
+			}
+		}
 
-        public Func<string> OpenFileHandler { get; set; }
-        public Func<string> SaveFileHandler { get; set; }
+		public Func<string> OpenFileHandler { get; set; }
+		public Func<string> SaveFileHandler { get; set; }
 
-        public NotepadGame()
-        {
-            graphics = new GraphicsDeviceManager(this);
-            IsMouseVisible = true;
-        }
+		public NotepadGame()
+		{
+			graphics = new GraphicsDeviceManager(this);
+			IsMouseVisible = true;
+		}
 
-        protected override void LoadContent()
-        {
-            base.LoadContent();
+		protected override void LoadContent()
+		{
+			base.LoadContent();
 
-            MyraEnvironment.Game = this;
+			MyraEnvironment.Game = this;
 
-            UpdateTitle();
+			UpdateTitle();
 
-            _host = new Desktop();
+			_host = new Desktop();
 
-            // Load UI
+			// Load UI
 
-            var ui = new Notepad();
+			var ui = new Notepad();
 
-			var mainMenu = ui.mainMenu;
 			var newItem = ui.menuItemNew;
 			newItem.Selected += NewItemOnDown;
 
@@ -101,128 +100,128 @@ namespace Myra.Samples.NotepadSample
 			_textField.TextChanged += TextFieldOnTextChanged;
 
 			_host.Widgets.Add(ui);
-        }
+		}
 
-        private void UpdateTitle()
-        {
-            Window.Title = CalculateTitle();
-        }
+		private void UpdateTitle()
+		{
+			Window.Title = CalculateTitle();
+		}
 
-        private string CalculateTitle()
-        {
-            if (string.IsNullOrEmpty(_filePath))
-            {
-                return "Notepad";
-            }
+		private string CalculateTitle()
+		{
+			if (string.IsNullOrEmpty(_filePath))
+			{
+				return "Notepad";
+			}
 
-            if (!Dirty)
-            {
-                return _filePath;
-            }
+			if (!Dirty)
+			{
+				return _filePath;
+			}
 
-            return _filePath + " *";
-        }
+			return _filePath + " *";
+		}
 
-        private void TextFieldOnTextChanged(object sender, EventArgs eventArgs)
-        {
-            Dirty = true;
-        }
+		private void TextFieldOnTextChanged(object sender, EventArgs eventArgs)
+		{
+			Dirty = true;
+		}
 
-        private void Save(bool setFileName)
-        {
-            if (string.IsNullOrEmpty(FilePath) || setFileName)
-            {
-                var h = SaveFileHandler;
-                if (h == null)
-                {
-                    return;
-                }
+		private void Save(bool setFileName)
+		{
+			if (string.IsNullOrEmpty(FilePath) || setFileName)
+			{
+				var h = SaveFileHandler;
+				if (h == null)
+				{
+					return;
+				}
 
-                var f = h();
-                if (string.IsNullOrEmpty(f))
-                {
-                    return;
-                }
+				var f = h();
+				if (string.IsNullOrEmpty(f))
+				{
+					return;
+				}
 
-                FilePath = f;
-            }
+				FilePath = f;
+			}
 
-            using (var writer = new StreamWriter(_filePath))
-            {
-                writer.Write(_textField.Text);
-            }
+			using (var writer = new StreamWriter(_filePath))
+			{
+				writer.Write(_textField.Text);
+			}
 
-            Dirty = false;
-        }
+			Dirty = false;
+		}
 
-        private void AboutItemOnDown(object sender, EventArgs eventArgs)
-        {
-            var messageBox = Dialog.CreateMessageBox("Notepad", "Myra Notepad Sample " + MyraEnvironment.Version);
-            messageBox.ShowModal(_host);
-        }
+		private void AboutItemOnDown(object sender, EventArgs eventArgs)
+		{
+			var messageBox = Dialog.CreateMessageBox("Notepad", "Myra Notepad Sample " + MyraEnvironment.Version);
+			messageBox.ShowModal(_host);
+		}
 
-        private void SaveAsItemOnDown(object sender, EventArgs eventArgs)
-        {
-            Save(true);
-        }
+		private void SaveAsItemOnDown(object sender, EventArgs eventArgs)
+		{
+			Save(true);
+		}
 
-        private void SaveItemOnDown(object sender, EventArgs eventArgs)
-        {
-            Save(false);
-        }
+		private void SaveItemOnDown(object sender, EventArgs eventArgs)
+		{
+			Save(false);
+		}
 
-        private void OpenItemOnDown(object sender, EventArgs eventArgs)
-        {
-            var h = OpenFileHandler;
-            if (h == null)
-            {
-                return;
-            }
+		private void OpenItemOnDown(object sender, EventArgs eventArgs)
+		{
+			var h = OpenFileHandler;
+			if (h == null)
+			{
+				return;
+			}
 
-            var filePath = h();
-            if (string.IsNullOrEmpty(filePath))
-            {
-                return;
-            }
+			var filePath = h();
+			if (string.IsNullOrEmpty(filePath))
+			{
+				return;
+			}
 
-            using (var reader = new StreamReader(filePath))
-            {
-                _textField.Text = reader.ReadToEnd();
-            }
+			using (var reader = new StreamReader(filePath))
+			{
+				_textField.Text = reader.ReadToEnd();
+			}
 
-            FilePath = _filePath;
-            Dirty = false;
-        }
+			FilePath = _filePath;
+			Dirty = false;
+		}
 
-        private void NewItemOnDown(object sender, EventArgs eventArgs)
-        {
-            FilePath = string.Empty;
-            _textField.Text = string.Empty;
-        }
+		private void NewItemOnDown(object sender, EventArgs eventArgs)
+		{
+			FilePath = string.Empty;
+			_textField.Text = string.Empty;
+		}
 
-        private void QuitItemOnDown(object sender, EventArgs genericEventArgs)
-        {
-            Exit();
-        }
+		private void QuitItemOnDown(object sender, EventArgs genericEventArgs)
+		{
+			Exit();
+		}
 
-        protected override void Draw(GameTime gameTime)
-        {
-            base.Draw(gameTime);
+		protected override void Draw(GameTime gameTime)
+		{
+			base.Draw(gameTime);
 
-            if (graphics.PreferredBackBufferWidth != Window.ClientBounds.Width ||
-                graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
-            {
-                graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
-                graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
-                graphics.ApplyChanges();
-            }
+			if (graphics.PreferredBackBufferWidth != Window.ClientBounds.Width ||
+			    graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
+			{
+				graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
+				graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
+				graphics.ApplyChanges();
+			}
 
-            GraphicsDevice.Clear(Color.Black);
+			GraphicsDevice.Clear(Color.Black);
 
-            _host.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth,
-                GraphicsDevice.PresentationParameters.BackBufferHeight);
-            _host.Render();
-        }
+			_host.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth,
+				GraphicsDevice.PresentationParameters.BackBufferHeight);
+			_host.Render();
+		}
 
-    }
+	}
 }

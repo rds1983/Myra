@@ -33,7 +33,7 @@
     "button": {
         "background": "button",
         "pressedBackground": "button-down",
-        "overBackground": "button-down",
+        "overBackground": "button-over",
         "label": {
             "font": "default-font",
             "textColor": "white",
@@ -68,7 +68,7 @@
         "upButton": {
             "background": "button",
             "pressedBackground": "button-down",
-            "overBackground": "button-down",
+            "overBackground": "button-over",
             "widthHint": 12,
             "heightHint": 12,
             "image": {
@@ -78,7 +78,7 @@
         "downButton": {
             "background": "button",
             "pressedBackground": "button-down",
-            "overBackground": "button-down",
+            "overBackground": "button-over",
             "widthHint": 12,
             "heightHint": 12,
             "image": {

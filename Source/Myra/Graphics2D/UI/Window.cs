@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.BitmapFonts;
 using Myra.Graphics2D.UI.Styles;
@@ -42,6 +43,11 @@ namespace Myra.Graphics2D.UI
 		public Grid TitleGrid
 		{
 			get { return _titleGrid; }
+		}
+
+		public ImageButton CloseButton
+		{
+			get { return _closeButton; }
 		}
 
 		[Obsolete("Obsolete. Use Content property.")]
@@ -140,7 +146,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public Window(string style)
-			: this(Stylesheet.Current.WindowVariants[style])
+			: this(Stylesheet.Current.WindowStyles[style])
 		{
 		}
 
@@ -303,6 +309,16 @@ namespace Myra.Graphics2D.UI
 					ev(this, EventArgs.Empty);
 				}
 			}
+		}
+
+		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		{
+			ApplyWindowStyle(stylesheet.WindowStyles[name]);
+		}
+
+		internal override string[] GetStyleNames(Stylesheet stylesheet)
+		{
+			return stylesheet.WindowStyles.Keys.ToArray();
 		}
 	}
 }

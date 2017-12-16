@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using MonoGame.Extended.TextureAtlases;
@@ -24,6 +25,17 @@ namespace Myra.Graphics2D.UI
 		public Point ScrollPosition
 		{
 			get { return _scrollPosition; }
+			set { _scrollPosition = value; }
+		}
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public Point ScrollMaximum
+		{
+			get
+			{
+				return new Point(_horizontalMaximum, _verticalMaximum);
+			}
 		}
 
 		[HiddenInEditor]
@@ -68,7 +80,7 @@ namespace Myra.Graphics2D.UI
 			set { Widget = value; }
 		}
 
-		public ScrollPane(ScrollAreaStyle style)
+		public ScrollPane(ScrollPaneStyle style)
 		{
 			ClipToBounds = true;
 			CanFocus = true;
@@ -84,11 +96,11 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public ScrollPane(string style)
-			: this(Stylesheet.Current.ScrollAreaVariants[style])
+			: this(Stylesheet.Current.ScrollPaneStyles[style])
 		{
 		}
 
-		public ScrollPane() : this(Stylesheet.Current.ScrollAreaStyle)
+		public ScrollPane() : this(Stylesheet.Current.ScrollPaneStyle)
 		{
 		}
 
@@ -278,7 +290,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public void ApplyScrollPaneStyle(ScrollAreaStyle style)
+		public void ApplyScrollPaneStyle(ScrollPaneStyle style)
 		{
 			HorizontalScrollBackground = style.HorizontalScrollBackground;
 			HorizontalScrollKnob = style.HorizontalScrollKnob;
@@ -427,6 +439,16 @@ namespace Myra.Graphics2D.UI
 		{
 			_scrollPosition = Point.Zero;
 			UpdateWidgetLocation();
+		}
+
+		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		{
+			ApplyScrollPaneStyle(stylesheet.ScrollPaneStyles[name]);
+		}
+
+		internal override string[] GetStyleNames(Stylesheet stylesheet)
+		{
+			return stylesheet.ScrollPaneStyles.Keys.ToArray();
 		}
 	}
 }
