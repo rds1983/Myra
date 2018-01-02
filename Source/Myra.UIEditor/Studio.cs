@@ -276,6 +276,10 @@ namespace Myra.UIEditor
 			{
 				AddStandardControl<ImageButton>();
 			};
+			_ui._menuControlsAddTextButton.Selected += (s, a) =>
+			{
+				AddStandardControl<TextButton>();
+			};
 			_ui._menuControlsAddHorizontalSlider.Selected += (s, a) =>
 			{
 				AddStandardControl<HorizontalSlider>();

@@ -127,6 +127,8 @@
     <Compile Include="Graphics2D\UI\Styles\SpinButtonStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\SplitPaneStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\StyleNamesProvider.cs" />
+    <Compile Include="Graphics2D\UI\Styles\TextButtonStyle.cs" />
+    <Compile Include="Graphics2D\UI\TextButton.cs" />
     <Compile Include="Graphics2D\UI\TreeNode.cs" />
     <Compile Include="Graphics2D\UI\VerticalMenu.cs" />
     <Compile Include="Graphics2D\UI\VerticalProgressBar.cs" />

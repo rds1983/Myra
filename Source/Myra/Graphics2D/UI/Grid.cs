@@ -91,7 +91,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				// Pixels
-				return string.Format("{0}: {1}", _type, (int)_value);
+				return string.Format("{0}: {1}", _type, (int) _value);
 			}
 
 			private void FireChanged()
@@ -176,10 +176,7 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Grid")]
 		public virtual float? TotalRowsPart
 		{
-			get
-			{
-				return _totalRowsPart;
-			}
+			get { return _totalRowsPart; }
 
 			set
 			{
@@ -196,10 +193,7 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Grid")]
 		public virtual float? TotalColumnsPart
 		{
-			get
-			{
-				return _totalColumnsPart;
-			}
+			get { return _totalColumnsPart; }
 
 			set
 			{
@@ -241,6 +235,38 @@ namespace Myra.Graphics2D.UI
 			}
 
 			return _rowHeights[index];
+		}
+
+		public int GetCellLocationX(int col)
+		{
+			if (col < 0 || col >= _cellLocationsX.Count)
+			{
+				return 0;
+			}
+
+			return _cellLocationsX[col];
+		}
+
+		public int GetCellLocationY(int row)
+		{
+			if (row < 0 || row >= _cellLocationsY.Count)
+			{
+				return 0;
+			}
+
+			return _cellLocationsY[row];
+		}
+
+		public Rectangle GetCellRectangle(int col, int row)
+		{
+			if (col < 0 || col >= _cellLocationsX.Count ||
+			    row < 0 || row >= _cellLocationsY.Count)
+			{
+				return Rectangle.Empty;
+			}
+
+			return new Rectangle(_cellLocationsX[col], _cellLocationsY[row],
+				_colWidths[col], _rowHeights[row]);
 		}
 
 		private void OnProportionsChanged(object sender, NotifyCollectionChangedEventArgs args)
@@ -309,7 +335,7 @@ namespace Myra.Graphics2D.UI
 		{
 			var rows = 0;
 			var columns = 0;
-			
+
 			_visibleWidgets.Clear();
 			foreach (var child in Widgets)
 			{
@@ -426,7 +452,7 @@ namespace Myra.Graphics2D.UI
 				}*/
 
 				result.X += w;
-				if (i < _measureColWidths.Count - 1 && w > 0)
+				if (i < _measureColWidths.Count - 1)
 				{
 					result.X += _columnSpacing;
 				}
@@ -437,7 +463,7 @@ namespace Myra.Graphics2D.UI
 				var h = _measureRowHeights[i];
 				result.Y += h;
 
-				if (i < _measureRowHeights.Count - 1 && h > 0)
+				if (i < _measureRowHeights.Count - 1)
 				{
 					result.Y += _rowSpacing;
 				}
@@ -468,7 +494,7 @@ namespace Myra.Graphics2D.UI
 
 			// Dynamic widths
 			// First run: calculate available width
-			var availableWidth = (float)bounds.Width;
+			var availableWidth = (float) bounds.Width;
 			availableWidth -= (_colWidths.Count - 1)*_columnSpacing;
 
 			var totalPart = 0.0f;
@@ -501,7 +527,7 @@ namespace Myra.Graphics2D.UI
 					var prop = GetColumnProportion(col);
 					if (prop.Type == ProportionType.Part)
 					{
-						_colWidths[col] = (int)(prop.Value*availableWidth/totalPart);
+						_colWidths[col] = (int) (prop.Value*availableWidth/totalPart);
 						tookSpace += _colWidths[col];
 					}
 				}
@@ -515,13 +541,13 @@ namespace Myra.Graphics2D.UI
 				var prop = GetColumnProportion(col);
 				if (prop.Type == ProportionType.Fill)
 				{
-					_colWidths[col] = (int)availableWidth;
+					_colWidths[col] = (int) availableWidth;
 					break;
 				}
 			}
 
 			// Same with row heights
-			var availableHeight = (float)bounds.Height;
+			var availableHeight = (float) bounds.Height;
 			availableHeight -= (_rowHeights.Count - 1)*_rowSpacing;
 
 			totalPart = 0.0f;
@@ -553,7 +579,7 @@ namespace Myra.Graphics2D.UI
 					var prop = GetRowProportion(row);
 					if (prop.Type != ProportionType.Part) continue;
 
-					_rowHeights[row] = (int)(prop.Value*availableHeight/totalPart);
+					_rowHeights[row] = (int) (prop.Value*availableHeight/totalPart);
 					tookSpace += _rowHeights[row];
 				}
 
@@ -566,7 +592,7 @@ namespace Myra.Graphics2D.UI
 				var prop = GetRowProportion(row);
 				if (prop.Type == ProportionType.Fill)
 				{
-					_rowHeights[row] = (int)availableHeight;
+					_rowHeights[row] = (int) availableHeight;
 					break;
 				}
 			}
@@ -583,13 +609,10 @@ namespace Myra.Graphics2D.UI
 
 				if (i < _colWidths.Count - 1)
 				{
-					_gridLinesX.Add(p.X + _columnSpacing / 2);
+					_gridLinesX.Add(p.X + _columnSpacing/2);
 				}
 
-				if (w > 0)
-				{
-					p.X += _columnSpacing;
-				}
+				p.X += _columnSpacing;
 
 				_actualSize.X += _colWidths[i];
 			}
@@ -604,13 +627,10 @@ namespace Myra.Graphics2D.UI
 
 				if (i < _rowHeights.Count - 1)
 				{
-					_gridLinesY.Add(p.Y + _rowSpacing / 2);
+					_gridLinesY.Add(p.Y + _rowSpacing/2);
 				}
 
-				if (h > 0)
-				{
-					p.Y += _rowSpacing;
-				}
+				p.Y += _rowSpacing;
 
 				_actualSize.Y += _rowHeights[i];
 			}

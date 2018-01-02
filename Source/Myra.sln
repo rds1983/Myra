@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.CustomUIStyles
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.AllWidgetsSample", "Samples\Myra.Samples.AllWidgetsSample\Myra.Samples.AllWidgetsSample.csproj", "{0F48899B-E533-423E-BAE4-FDD09A3A6698}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.TabControlSample", "Samples\Myra.Samples.TabControlSample\Myra.Samples.TabControlSample.csproj", "{46A18A74-5EB4-4B85-B1B7-279A1D8FDDA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,6 +102,10 @@ Global
 		{0F48899B-E533-423E-BAE4-FDD09A3A6698}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F48899B-E533-423E-BAE4-FDD09A3A6698}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F48899B-E533-423E-BAE4-FDD09A3A6698}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46A18A74-5EB4-4B85-B1B7-279A1D8FDDA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46A18A74-5EB4-4B85-B1B7-279A1D8FDDA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46A18A74-5EB4-4B85-B1B7-279A1D8FDDA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46A18A74-5EB4-4B85-B1B7-279A1D8FDDA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -115,6 +121,7 @@ Global
 		{74E297C2-1081-4C9A-9311-EAAF4746A413} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{79441052-8F88-4578-8A94-0CC87B0EFE5C} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{0F48899B-E533-423E-BAE4-FDD09A3A6698} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{46A18A74-5EB4-4B85-B1B7-279A1D8FDDA6} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Myra.UIEditor\Myra.UIEditor.csproj

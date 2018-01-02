@@ -33,6 +33,7 @@ namespace Myra.Graphics2D.UI.Styles
 		private readonly Dictionary<string, ButtonStyle> _checkBoxStyles = new Dictionary<string, ButtonStyle>();
 		private readonly Dictionary<string, ImageButtonStyle> _imageButtonStyles = new Dictionary<string, ImageButtonStyle>();
 		private readonly Dictionary<string, SpinButtonStyle> _spinButtonStyles = new Dictionary<string, SpinButtonStyle>();
+		private readonly Dictionary<string, TextButtonStyle> _textButtonStyles = new Dictionary<string, TextButtonStyle>();
 		private readonly Dictionary<string, SliderStyle> _horizontalSliderStyles = new Dictionary<string, SliderStyle>();
 		private readonly Dictionary<string, SliderStyle> _verticalSliderStyles = new Dictionary<string, SliderStyle>();
 
@@ -91,6 +92,13 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get { return _spinButtonStyles[DefaultStyleName]; }
 			set { _spinButtonStyles[DefaultStyleName] = value; }
+		}
+
+
+		public TextButtonStyle TextButtonStyle
+		{
+			get { return _textButtonStyles[DefaultStyleName]; }
+			set { _textButtonStyles[DefaultStyleName] = value; }
 		}
 
 		public SliderStyle HorizontalSliderStyle
@@ -201,6 +209,11 @@ namespace Myra.Graphics2D.UI.Styles
 			get { return _spinButtonStyles; }
 		}
 
+		public Dictionary<string, TextButtonStyle> TextButtonStyles
+		{
+			get { return _textButtonStyles; }
+		}
+
 		public Dictionary<string, SliderStyle> HorizontalSliderStyles
 		{
 			get { return _horizontalSliderStyles; }
@@ -274,6 +287,7 @@ namespace Myra.Graphics2D.UI.Styles
 			CheckBoxStyle = new ButtonStyle();
 			ImageButtonStyle = new ImageButtonStyle();
 			SpinButtonStyle = new SpinButtonStyle();
+			TextButtonStyle = new TextButtonStyle();
 			HorizontalSliderStyle = new SliderStyle();
 			VerticalSliderStyle = new SliderStyle();
 			HorizontalProgressBarStyle = new ProgressBarStyle();
@@ -298,6 +312,5 @@ namespace Myra.Graphics2D.UI.Styles
 			var loader = new StylesheetLoader(root, textureGetter, fontGetter);
 			return loader.Load();
 		}
-
 	}
 }

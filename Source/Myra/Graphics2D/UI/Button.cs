@@ -118,6 +118,15 @@ namespace Myra.Graphics2D.UI
 			set { _image.Visible = value; }
 		}
 
+		[EditCategory("Appearance")]
+		[DefaultValue(0)]
+		public int ImageTextSpacing
+		{
+			get { return Widget.ColumnSpacing; }
+
+			set { Widget.ColumnSpacing = value; }
+		}
+
 		public Button(ButtonStyle style)
 		{
 			Widget = new Grid();
@@ -234,4 +243,4 @@ namespace Myra.Graphics2D.UI
 			return stylesheet.ButtonStyles.Keys.ToArray();
 		}
 	}
-}	
+}

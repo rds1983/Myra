@@ -27,6 +27,7 @@ copy "Samples\Myra.Samples.GridSample\bin\%CONFIGURATION%\Myra.Samples.GridSampl
 copy "Samples\Myra.Samples.NotepadSample\bin\%CONFIGURATION%\Myra.Samples.NotepadSample.exe" ZipPackage /Y
 copy "Samples\Myra.Samples.SplitPaneSample\bin\%CONFIGURATION%\Myra.Samples.SplitPaneSample.exe" ZipPackage /Y
 copy "Samples\Myra.Samples.TextBlocksSample\bin\%CONFIGURATION%\Myra.Samples.TextBlocksSample.exe" ZipPackage /Y
+copy "Samples\Myra.Samples.TextBlocksSample\bin\%CONFIGURATION%\Myra.Samples.TabControlSample.exe" ZipPackage /Y
 copy "Samples\Myra.UIEditor.Plugin.LibGDX\bin\%CONFIGURATION%\Myra.UIEditor.Plugin.LibGDX.dll" ZipPackage /Y
 copy "Samples\Myra.UIEditor.Plugin.YellowMenuButtons\bin\%CONFIGURATION%\Myra.UIEditor.Plugin.YellowMenuButtons.dll" ZipPackage /Y
 copy "Myra.Editor\bin\%CONFIGURATION%\Myra.Editor.dll" ZipPackage /Y

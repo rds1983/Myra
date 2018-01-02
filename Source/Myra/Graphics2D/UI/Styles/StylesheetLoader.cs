@@ -18,6 +18,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string CheckBoxName = "checkBox";
 		public const string ImageButtonName = "imageButton";
 		public const string SpinButtonName = "spinButton";
+		public const string TextButtonName = "textButton";
 		public const string ComboBoxName = "comboBox";
 		public const string ComboBoxItemName = "comboBoxItem";
 		public const string ListBoxName = "listBox";
@@ -401,6 +402,16 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		private void LoadTextButtonStyleFromSource(JObject source, TextButtonStyle result)
+		{
+			LoadButtonBaseStyleFromSource(source, result);
+
+			JObject labelStyle;
+			if (source.GetStyle(LabelStyleName, out labelStyle))
+			{
+				LoadTextBlockStyleFromSource(labelStyle, result.LabelStyle);
+			}
+		}
 
 		private void LoadImageButtonStyleFromSource(JObject source, ImageButtonStyle result)
 		{
@@ -632,6 +643,7 @@ namespace Myra.Graphics2D.UI.Styles
 			FillStyles(CheckBoxName, result.CheckBoxStyles, LoadButtonStyleFromSource);
 			FillStyles(ImageButtonName, result.ImageButtonStyles, LoadImageButtonStyleFromSource);
 			FillStyles(SpinButtonName, result.SpinButtonStyles, LoadSpinButtonStyleFromSource);
+			FillStyles(TextButtonName, result.TextButtonStyles, LoadTextButtonStyleFromSource);
 			FillStyles(HorizontalSliderName, result.HorizontalSliderStyles, LoadSliderStyleFromSource);
 			FillStyles(VerticalSliderName, result.VerticalSliderStyles, LoadSliderStyleFromSource);
 			FillStyles(HorizontalProgressBarName, result.HorizontalProgressBarStyles, LoadProgressBarStyleFromSource);

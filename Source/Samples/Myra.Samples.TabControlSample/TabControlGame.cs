@@ -1,16 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 using Myra.Graphics2D.UI;
 
-namespace Myra.Samples.AllWidgetsSample
+namespace Myra.Samples.TabControlSample
 {
-	public class AllWidgetsGame : Game
+	public class TabControlGame : Game
 	{
 		private readonly GraphicsDeviceManager _graphics;
 
 		private Desktop _host;
-		private AllWidgets _allWidgets;
+		private TabControl _tabControl;
 
-		public AllWidgetsGame()
+		public TabControlGame()
 		{
 			_graphics = new GraphicsDeviceManager(this)
 			{
@@ -28,28 +28,12 @@ namespace Myra.Samples.AllWidgetsSample
 
 			MyraEnvironment.Game = this;
 
+			// Widget.DrawFrames = true;
 			_host = new Desktop();
 
-			_allWidgets = new AllWidgets();
+			_tabControl = new TabControl();
 
-			_host.Widgets.Add(_allWidgets);
-		}
-
-		protected override void Update(GameTime gameTime)
-		{
-			base.Update(gameTime);
-
-			_allWidgets._horizontalProgressBar.Value += 0.5f;
-			if (_allWidgets._horizontalProgressBar.Value > _allWidgets._horizontalProgressBar.Maximum)
-			{
-				_allWidgets._horizontalProgressBar.Value = _allWidgets._horizontalProgressBar.Minimum;
-			}
-
-			_allWidgets._verticalProgressBar.Value += 0.5f;
-			if (_allWidgets._verticalProgressBar.Value > _allWidgets._verticalProgressBar.Maximum)
-			{
-				_allWidgets._verticalProgressBar.Value = _allWidgets._verticalProgressBar.Minimum;
-			}
+			_host.Widgets.Add(_tabControl);
 		}
 
 		protected override void Draw(GameTime gameTime)

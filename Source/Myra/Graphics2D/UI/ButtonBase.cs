@@ -33,6 +33,9 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Behavior")]
 		public virtual bool Toggleable { get; set; }
 
+		[EditCategory("Behavior")]
+		public bool IgnoreMouseButton { get; set; }
+
 		[HiddenInEditor]
 		[JsonIgnore]
 		public bool IsPressed
@@ -80,6 +83,11 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnMouseUp(mb);
 
+			if (IgnoreMouseButton)
+			{
+				return;
+			}
+
 			if (!Toggleable)
 			{
 				IsPressed = false;
@@ -90,7 +98,7 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnMouseDown(mb);
 
-			if (!Enabled)
+			if (!Enabled || IgnoreMouseButton)
 			{
 				return;
 			}

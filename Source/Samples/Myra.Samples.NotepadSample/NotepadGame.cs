@@ -67,7 +67,6 @@ namespace Myra.Samples.NotepadSample
 			_host = new Desktop();
 
 			// Load UI
-
 			var ui = new Notepad();
 
 			var newItem = ui.menuItemNew;

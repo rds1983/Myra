@@ -47,6 +47,19 @@
         "background": "default-round",
         "pressedBackground": "default-round-down"
     },
+    "textButton": {
+        "padding": {
+            "left": 5.0,
+            "right": 5.0
+        },
+        "background": "default-round",
+        "pressedBackground": "default-round-down",
+        "label": {
+            "font": "ui_font",
+            "textColor": "white",
+            "disabledTextColor": "grey"
+        }
+    },
     "checkBox": {
         "label": {
             "font": "ui_font",

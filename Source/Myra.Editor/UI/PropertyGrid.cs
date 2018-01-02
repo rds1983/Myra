@@ -234,7 +234,7 @@ namespace Myra.Editor.UI
 			_parentProperty = parentProperty;
 			ColumnSpacing = 8;
 			RowSpacing = 8;
-			ColumnsProportions.Add(new Proportion(ProportionType.Pixels, 100));
+			ColumnsProportions.Add(new Proportion(ProportionType.Pixels, 150));
 			ColumnsProportions.Add(new Proportion(ProportionType.Fill));
 
 			Category = category;

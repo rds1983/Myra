@@ -52,6 +52,23 @@
         "pressedBackground": "button-down",
         "overBackground": "button-down"
     },
+    "textButton": {
+        "background": "button",
+        "pressedBackground": "button-down",
+        "overBackground": "button-over",
+        "label": {
+            "font": "default-font",
+            "textColor": "white",
+            "disabledTextColor": "grey"
+        },
+        "variants": {
+            "blue": { 
+                "background": "button-blue",
+                "pressedBackground": "button-blue-down",
+                "overBackground": "button-blue-down"
+            }
+        }
+    },
     "checkBox": {
         "label": {
             "font": "default-font",

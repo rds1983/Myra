@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Myra.Graphics2D.UI;
 
-namespace Myra.Samples.AllWidgetsSample
+namespace Myra.Samples.TabControlSample
 {
 	partial class AllWidgets
 	{
