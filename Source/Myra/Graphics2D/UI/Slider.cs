@@ -37,6 +37,23 @@ namespace Myra.Graphics2D.UI
 				var delta = Maximum - Minimum;
 				return Minimum + Hint*delta/MaxHint;
 			}
+            set
+            {
+                if (value > Maximum)
+                {
+                    //could throw error instead?
+                    Hint = MaxHint;
+                }
+
+                if (value < Minimum)
+                {
+                    //could throw error instead?
+                    Hint = 0;
+                }
+
+                Hint = (int)(MaxHint*(value/Maximum));
+
+            }
 		}
 
 		private int Hint
