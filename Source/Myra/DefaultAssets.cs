@@ -101,7 +101,7 @@ namespace Myra
 				var content =
 					TextureAtlasContentLoader.Load(_assetResolver.ReadAsString(DefaultSpritesheetName));
 
-				_uiSpritesheet = content.Create(UiBitmap);
+				_uiSpritesheet = content.Create(UIBitmap);
 				
 				return _uiSpritesheet;
 			}
@@ -124,7 +124,7 @@ namespace Myra
 			}
 		}
 
-		public static Texture2D UiBitmap
+		public static Texture2D UIBitmap
 		{
 			get
 			{
