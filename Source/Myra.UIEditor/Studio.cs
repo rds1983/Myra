@@ -108,7 +108,7 @@ namespace Myra.UIEditor
 
 				_ui._projectHolder.Widgets.Clear();
 
-				if (_project != null)
+				if (_project != null && _project.Root != null)
 				{
 					_ui._projectHolder.Widgets.Add(_project.Root);
 				}
@@ -546,17 +546,27 @@ namespace Myra.UIEditor
 
 		private void AddStandardControl<T>(T widget) where T : Widget
 		{
-			if (_propertyGrid.Object is MultipleItemsContainer)
+			var root = _explorer.SelectedObject;
+
+			if (root is MultipleItemsContainer)
 			{
-				((MultipleItemsContainer)_propertyGrid.Object).Widgets.Add(widget);
+				((MultipleItemsContainer)root).Widgets.Add(widget);
 			}
-			else if (_propertyGrid.Object is SplitPane)
+			else if (root is SplitPane)
 			{
-				((SplitPane)_propertyGrid.Object).Widgets.Add(widget);
+				((SplitPane)root).Widgets.Add(widget);
 			}
-			else if (_propertyGrid.Object is ScrollPane)
+			else if (root is ScrollPane)
 			{
-				((ScrollPane)_propertyGrid.Object).Widget = widget;
+				((ScrollPane)root).Widget = widget;
+			} else if (root is Project)
+			{
+				((Project) root).Root = widget;
+
+				if (widget != null)
+				{
+					_ui._projectHolder.Widgets.Add(widget);
+				}
 			}
 
 			OnObjectAdded(widget);
@@ -609,7 +619,7 @@ namespace Myra.UIEditor
 
 		private void WidgetOnSelectionChanged(object sender, EventArgs eventArgs)
 		{
-			_propertyGrid.Object = _explorer.SelectedObject;
+			_propertyGrid.Object = _explorer.SelectedObject is Project ? null : _explorer.SelectedObject;
 
 			UpdateEnabled();
 		}
@@ -720,13 +730,7 @@ namespace Myra.UIEditor
 
 		private void New()
 		{
-			var project = new Project
-			{
-				Root =
-				{
-					Id = "Root"
-				}
-			};
+			var project = new Project();
 
 			Project = project;
 
@@ -798,10 +802,11 @@ namespace Myra.UIEditor
 		private void UpdateEnabled()
 		{
 			var enableStandard = false;
+			var enableContainers = false;
 			var enableMenuItems = false;
 			var enableTreeNode = false;
 
-			var selectedObject = _propertyGrid.Object;
+			var selectedObject = _explorer.SelectedObject;
 			if (selectedObject != null)
 			{
 				if (selectedObject is Menu ||
@@ -821,28 +826,35 @@ namespace Myra.UIEditor
 				{
 					enableStandard = true;
 				}
+				else if (selectedObject is Project && ((Project) selectedObject).Root == null)
+				{
+					enableContainers = true;
+				}
 			}
 
 			_ui._menuControlsAddButton.Enabled = enableStandard;
 			_ui._menuControlsAddCheckBox.Enabled = enableStandard;
 			_ui._menuControlsAddImageButton.Enabled = enableStandard;
+			_ui._menuControlsAddTextButton.Enabled = enableStandard;
 			_ui._menuControlsAddHorizontalSlider.Enabled = enableStandard;
 			_ui._menuControlsAddVerticalSlider.Enabled = enableStandard;
 			_ui._menuControlsAddHorizontalProgressBar.Enabled = enableStandard;
 			_ui._menuControlsAddVerticalProgressBar.Enabled = enableStandard;
 			_ui._menuControlsAddComboBox.Enabled = enableStandard;
 			_ui._menuControlsAddListBox.Enabled = enableStandard;
-			_ui._menuControlsAddPanel.Enabled = enableStandard;
-			_ui._menuControlsAddGrid.Enabled = enableStandard;
 			_ui._menuControlsAddImage.Enabled = enableStandard;
 			_ui._menuControlsAddHorizontalMenu.Enabled = enableStandard;
 			_ui._menuControlsAddVerticalMenu.Enabled = enableStandard;
-			_ui._menuControlsAddScrollPane.Enabled = enableStandard;
-			_ui._menuControlsAddHorizontalSplitPane.Enabled = enableStandard;
-			_ui._menuControlsAddVerticalSplitPane.Enabled = enableStandard;
 			_ui._menuControlsAddTextBlock.Enabled = enableStandard;
 			_ui._menuControlsAddTextField.Enabled = enableStandard;
 			_ui._menuControlsAddSpinButton.Enabled = enableStandard;
+
+			// Containers
+			_ui._menuControlsAddPanel.Enabled = enableStandard || enableContainers;
+			_ui._menuControlsAddGrid.Enabled = enableStandard || enableContainers;
+			_ui._menuControlsAddHorizontalSplitPane.Enabled = enableStandard || enableContainers;
+			_ui._menuControlsAddVerticalSplitPane.Enabled = enableStandard || enableContainers;
+			_ui._menuControlsAddScrollPane.Enabled = enableStandard || enableContainers;
 
 			if (_customWidgetMenuItems != null)
 			{

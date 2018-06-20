@@ -19,12 +19,7 @@ namespace Myra.Graphics2D.UI
 			get { return _exportOptions; }
 		}
 
-		public Grid Root { get; set; }
-
-		public Project()
-		{
-			Root = new Grid();
-		}
+		public Widget Root { get; set; }
 
 		public string Save()
 		{

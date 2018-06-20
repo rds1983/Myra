@@ -38,8 +38,13 @@ namespace Myra.UIEditor.UI
 
 				// Root node
 				var projectNode = Tree.AddSubNode("Project");
-				var rootNode = AddObject(projectNode, _project.Root);
-				Rebuild(rootNode, _project.Root);
+				projectNode.Tag = _project;
+
+				if (_project.Root != null)
+				{
+					var rootNode = AddObject(projectNode, _project.Root);
+					Rebuild(rootNode, _project.Root);
+				}
 			}
 		}
 

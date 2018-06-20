@@ -1,4 +1,4 @@
-version: 0.5.6.{build}
+version: 0.5.7.{build}
 configuration: Release
 assembly_info:
   patch: true

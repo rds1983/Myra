@@ -359,6 +359,12 @@ namespace Myra.UIEditor
 					continue;
 				}
 
+				if (value.GetType().Name == "Color" && property.Name == "PackedValue")
+				{
+					// Skip unused properties of MG
+					continue;
+				}
+
 				if (isEmpty)
 				{
 					sb.Append("\n\t\t\t{");
