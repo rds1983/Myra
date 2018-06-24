@@ -6,19 +6,22 @@ using Myra.Graphics2D.StbSharp;
 
 namespace Myra.Graphics2D
 {
-	public class RawImage
+	/// <summary>
+	/// Utility class for loading 32-bit RGBA images in JPG, PNG, BMP, TGA, PSD and GIF formats. Also it can perform simple post-processing.
+	/// </summary>
+	public class ColorBuffer
 	{
-		private readonly byte[] _data;
+		private readonly Color[] _data;
 
 		public int Width { get; private set; }
 		public int Height { get; private set; }
 
-		public byte[] Data
+		public Color[] Data
 		{
 			get { return _data; }
 		}
 
-		public RawImage(int width, int height)
+		public ColorBuffer(int width, int height)
 		{
 			if (width <= 0)
 			{
@@ -33,10 +36,10 @@ namespace Myra.Graphics2D
 			Width = width;
 			Height = height;
 
-			_data = new byte[width*height*4];
+			_data = new Color[width * height];
 		}
 
-		public RawImage(int width, int height, byte[] data)
+		public ColorBuffer(int width, int height, Color[] data)
 		{
 			if (width <= 0)
 			{
@@ -53,10 +56,11 @@ namespace Myra.Graphics2D
 				throw new ArgumentNullException("data");
 			}
 
-			var length = width*height*4;
+			var length = width * height;
 			if (data.Length != length)
 			{
-				throw new ArgumentException(string.Format("Inconsistent data length: expected={0}, provided={1}", length, data.Length));
+				throw new ArgumentException(string.Format("Inconsistent data length: expected={0}, provided={1}", length,
+					data.Length));
 			}
 
 			Width = width;
@@ -69,7 +73,7 @@ namespace Myra.Graphics2D
 			var fc = color / 255.0f;
 			var fa = alpha / 255.0f;
 
-			var fr = (int)(255.0f * fc * fa);
+			var fr = (int) (255.0f * fc * fa);
 
 			if (fr < 0)
 			{
@@ -81,7 +85,7 @@ namespace Myra.Graphics2D
 				fr = 255;
 			}
 
-			return (byte)fr;
+			return (byte) fr;
 		}
 
 		public void Process(bool premultiplyAlpha, Color? transColor = null)
@@ -91,21 +95,21 @@ namespace Myra.Graphics2D
 			{
 				if (transColor.HasValue)
 				{
-					if (data[i * 4] == transColor.Value.R &&
-						data[i * 4 + 1] == transColor.Value.G &&
-						data[i * 4 + 2] == transColor.Value.B)
+					if (data[i].R == transColor.Value.R &&
+					    data[i].G == transColor.Value.G &&
+					    data[i].B == transColor.Value.B)
 					{
-						data[i *  4 + 3] = 0;
+						data[i].A = 0;
 					}
 				}
 
 				if (premultiplyAlpha)
 				{
-					var a = Data[i*4 + 3];
+					var a = Data[i].A;
 
-					Data[i*4] = ApplyAlpha(Data[i*4], a);
-					Data[i*4 + 1] = ApplyAlpha(Data[i*4 + 1], a);
-					Data[i*4 + 2] = ApplyAlpha(Data[i*4 + 2], a);
+					Data[i].R = ApplyAlpha(Data[i].R, a);
+					Data[i].G = ApplyAlpha(Data[i].G, a);
+					Data[i].B = ApplyAlpha(Data[i].B, a);
 				}
 			}
 		}
@@ -122,15 +126,15 @@ namespace Myra.Graphics2D
 		/// </summary>
 		/// <param name="stream"></param>
 		/// <returns></returns>
-		public static RawImage FromStream(Stream stream)
+		public static ColorBuffer FromStream(Stream stream)
 		{
 			var reader = new ImageReader();
 
 			int x, y;
 			int comp;
-			var data = reader.Read(stream, out x, out y, out comp, Stb.STBI_rgb_alpha);
+			var data = reader.Read(stream, out x, out y, out comp);
 
-			return new RawImage(x, y, data);
+			return new ColorBuffer(x, y, data);
 		}
 	}
 }

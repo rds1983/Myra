@@ -1,10 +1,10 @@
-﻿using MonoGame.Extended.TextureAtlases;
+﻿using Myra.Graphics2D.TextureAtlases;
 
 namespace Myra.Graphics2D.UI.Styles
 {
 	public class PressableImageStyle: ImageStyle
 	{
-		public TextureRegion2D PressedImage { get; set; }
+		public TextureRegion PressedImage { get; set; }
 
 		public PressableImageStyle()
 		{

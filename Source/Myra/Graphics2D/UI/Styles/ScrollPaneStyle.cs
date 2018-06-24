@@ -1,13 +1,13 @@
-﻿using MonoGame.Extended.TextureAtlases;
+﻿using Myra.Graphics2D.TextureAtlases;
 
 namespace Myra.Graphics2D.UI.Styles
 {
 	public class ScrollPaneStyle : WidgetStyle
 	{
-		public TextureRegion2D HorizontalScrollBackground { get; set; }
-		public TextureRegion2D HorizontalScrollKnob { get; set; }
-		public TextureRegion2D VerticalScrollBackground { get; set; }
-		public TextureRegion2D VerticalScrollKnob { get; set; }
+		public TextureRegion HorizontalScrollBackground { get; set; }
+		public TextureRegion HorizontalScrollKnob { get; set; }
+		public TextureRegion VerticalScrollBackground { get; set; }
+		public TextureRegion VerticalScrollKnob { get; set; }
 
 		public ScrollPaneStyle()
 		{

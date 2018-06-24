@@ -1,12 +1,12 @@
-﻿using MonoGame.Extended.TextureAtlases;
+﻿using Myra.Graphics2D.TextureAtlases;
 
 namespace Myra.Graphics2D.UI.Styles
 {
 	public class TreeStyle : WidgetStyle
 	{
-		public TextureRegion2D RowSelectionBackground { get; set; }
-		public TextureRegion2D RowSelectionBackgroundWithoutFocus { get; set; }
-		public TextureRegion2D RowHoverBackground { get; set; }
+		public TextureRegion RowSelectionBackground { get; set; }
+		public TextureRegion RowSelectionBackgroundWithoutFocus { get; set; }
+		public TextureRegion RowHoverBackground { get; set; }
 
 		public ImageButtonStyle MarkStyle { get; set; }
 		public TextBlockStyle LabelStyle { get; set; }

@@ -1,12 +1,15 @@
-﻿using MonoGame.Extended.BitmapFonts;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using MonoGame.Extended.TextureAtlases;
+using System.Linq;
+using System.Reflection;
+using Cyotek.Drawing.BitmapFont;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Myra.Graphics2D.TextureAtlases;
 
 namespace Myra.Graphics2D.Text
 {
-	public static class BitmapFontHelper
+	public static class SpriteFontHelper
 	{
 		/// <summary>
 		/// Ensures that the specified text contains valid description for BMFont
@@ -14,61 +17,42 @@ namespace Myra.Graphics2D.Text
 		/// <param name="input"></param>
 		public static void Validate(string input)
 		{
-			var data = new Cyotek.Drawing.BitmapFont.BitmapFont();
+			var data = new BitmapFont();
 			data.LoadText(input);
 		}
-		
-		public static BitmapFont LoadFromFnt(string name, string text, Func<string, TextureRegion2D> textureLoader)
+
+		public static SpriteFont LoadFromFnt(string text, TextureRegion textureRegion)
 		{
-			var data = new Cyotek.Drawing.BitmapFont.BitmapFont();
+			var data = new BitmapFont();
 			data.LoadText(text);
 
-			// Resolve pages
-			var pageRegions = new TextureRegion2D[data.Pages.Length];
-			for (var i = 0; i < data.Pages.Length; ++i)
-			{
-				var fn = data.Pages[i].FileName;
-				var region = textureLoader(fn);
-				if (region == null)
-				{
-					throw new Exception(string.Format("Unable to resolve texture {0}", fn));
-				}
+			var glyphBounds = new List<Rectangle>();
+			var cropping = new List<Rectangle>();
+			var chars = new List<char>();
+			var kerning = new List<Vector3>();
 
-				pageRegions[i] = region;
-			}
-
-			var glyphs = new List<BitmapFontRegion>();
 			foreach (var pair in data.Characters)
 			{
 				var character = pair.Value;
 
 				var bounds = character.Bounds;
 
-				var pageRegion = pageRegions[pair.Value.TexturePage];
-				bounds.Offset(pageRegion.X, pageRegion.Y);
+				bounds.Offset(textureRegion.Bounds.Location);
 
-				var region = new TextureRegion2D(pageRegion.Texture, bounds);
-				var glyph = new BitmapFontRegion(region, character.Char, character.Offset.X, character.Offset.Y, character.XAdvance);
-				glyphs.Add(glyph);
+				glyphBounds.Add(bounds);
+				cropping.Add(new Rectangle(character.Offset.X, character.Offset.Y, bounds.Width, bounds.Height));
+
+				chars.Add(pair.Key);
+
+				kerning.Add(new Vector3(0, character.Bounds.Width, character.XAdvance - character.Bounds.Width));
 			}
 
-/*			var characterMap = glyphs.ToDictionary(a => a.Character);
-
-			// Process kernings
-			foreach (var pair in data.Kernings)
+			var constructorInfo = typeof(SpriteFont).GetTypeInfo().DeclaredConstructors.First();
+			var result = (SpriteFont) constructorInfo.Invoke(new object[]
 			{
-				var kerning = pair.Key;
-
-				BitmapFontRegion glyph;
-				if (!characterMap.TryGetValue(kerning.FirstCharacter, out glyph))
-				{
-					continue;
-				}
-
-				glyph.Kernings[kerning.SecondCharacter] = kerning.Amount;
-			}*/
-
-			var result = new BitmapFont(name, glyphs, data.LineHeight);
+				textureRegion.Texture, glyphBounds, cropping,
+				chars, data.LineHeight, 0, kerning, ' '
+			});
 
 			return result;
 		}

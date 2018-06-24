@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.TextureAtlases;
+using Myra.Graphics2D.TextureAtlases;
 
 namespace Myra.Graphics2D
 {
@@ -18,9 +18,9 @@ namespace Myra.Graphics2D
 			batch.BeginUI();
 		}
 
-		public static void Draw(this SpriteBatch spriteBatch, TextureRegion2D textureRegion, Rectangle destinationRectangle)
+		public static void Draw(this SpriteBatch spriteBatch, TextureRegion textureRegion, Rectangle destinationRectangle, Color? color = null)
 		{
-			spriteBatch.Draw(textureRegion, destinationRectangle, Color.White);
+			textureRegion.Draw(spriteBatch, destinationRectangle);
 		}
 	}
 }

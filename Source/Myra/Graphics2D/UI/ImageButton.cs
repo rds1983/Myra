@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.TextureAtlases;
 using Myra.Attributes;
+using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using Newtonsoft.Json;
 
@@ -9,71 +9,71 @@ namespace Myra.Graphics2D.UI
 {
 	public class ImageButton: ButtonBase<Image>
 	{
-		private TextureRegion2D _textureRegion2D, _overTextureRegion2D, _pressedTextureRegion2D;
+		private TextureRegion _TextureRegion, _overTextureRegion, _pressedTextureRegion;
 
 		[JsonIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
-		public TextureRegion2D Image
+		public TextureRegion Image
 		{
 			get
 			{
-				return _textureRegion2D;
+				return _TextureRegion;
 			}
 
 			set
 			{
-				if (value == _textureRegion2D)
+				if (value == _TextureRegion)
 				{
 					return;
 				}
 
-				_textureRegion2D = value;
-				UpdateTextureRegion2D();
+				_TextureRegion = value;
+				UpdateTextureRegion();
 			}
 		}
 
 		[JsonIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
-		public TextureRegion2D OverImage
+		public TextureRegion OverImage
 		{
 			get
 			{
-				return _overTextureRegion2D;
+				return _overTextureRegion;
 			}
 
 			set
 			{
-				if (value == _textureRegion2D)
+				if (value == _TextureRegion)
 				{
 					return;
 				}
 
-				_overTextureRegion2D = value;
-				UpdateTextureRegion2D();
+				_overTextureRegion = value;
+				UpdateTextureRegion();
 			}
 		}
 
 		[JsonIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
-		public TextureRegion2D PressedImage
+		public TextureRegion PressedImage
 		{
 			get
 			{
-				return _pressedTextureRegion2D;
+				return _pressedTextureRegion;
 			}
 
 			set
 			{
-				if (value == _pressedTextureRegion2D)
+				if (value == _pressedTextureRegion)
 				{
 					return;
 				}
 
-				_pressedTextureRegion2D = value;
-				UpdateTextureRegion2D();
+				_pressedTextureRegion = value;
+				UpdateTextureRegion();
 			}
 		}
 
@@ -141,10 +141,10 @@ namespace Myra.Graphics2D.UI
 				Widget.UpdateImageSize(imageStyle.PressedImage);
 			}
 
-			UpdateTextureRegion2D();
+			UpdateTextureRegion();
 		}
 
-		private void UpdateTextureRegion2D()
+		private void UpdateTextureRegion()
 		{
 			var image = Image;
 			if (IsPressed && PressedImage != null)
@@ -156,35 +156,35 @@ namespace Myra.Graphics2D.UI
 				image = OverImage;
 			}
 
-			Widget.TextureRegion2D = image;
+			Widget.TextureRegion = image;
 		}
 
 		public override void OnMouseEntered(Point position)
 		{
 			base.OnMouseEntered(position);
 
-			UpdateTextureRegion2D();
+			UpdateTextureRegion();
 		}
 
 		public override void OnMouseLeft()
 		{
 			base.OnMouseLeft();
 
-			UpdateTextureRegion2D();
+			UpdateTextureRegion();
 		}
 
 		protected override void FireUp()
 		{
 			base.FireUp();
 
-			UpdateTextureRegion2D();
+			UpdateTextureRegion();
 		}
 
 		protected override void FireDown()
 		{
 			base.FireDown();
 
-			UpdateTextureRegion2D();
+			UpdateTextureRegion();
 		}
 
 		protected override void SetStyleByName(Stylesheet stylesheet, string name)

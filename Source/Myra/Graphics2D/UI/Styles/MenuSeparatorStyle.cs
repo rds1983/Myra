@@ -1,10 +1,10 @@
-﻿using MonoGame.Extended.TextureAtlases;
+﻿using Myra.Graphics2D.TextureAtlases;
 
 namespace Myra.Graphics2D.UI.Styles
 {
 	public class MenuSeparatorStyle: WidgetStyle
 	{
-		public TextureRegion2D Image { get; set; }
+		public TextureRegion Image { get; set; }
 		public int Thickness { get; set; }
 
 		public MenuSeparatorStyle()

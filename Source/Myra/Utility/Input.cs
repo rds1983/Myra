@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿// This code had been borrowed from the MonoGame.Extended project: https://github.com/craftworkgames/MonoGame.Extended
+
+using Microsoft.Xna.Framework.Input;
 
 namespace Myra.Utility
 {
@@ -6,7 +8,6 @@ namespace Myra.Utility
 	{
 		/// <summary>
 		/// Converts a key to its char representation
-		/// That code had been borrowed from the MonoGame.Extended project
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="isShiftDown"></param>

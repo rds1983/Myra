@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.TextureAtlases;
+using Microsoft.Xna.Framework.Graphics;
 using Myra.Attributes;
+using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using Newtonsoft.Json;
 
@@ -24,7 +24,7 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public BitmapFont Font
+		public SpriteFont Font
 		{
 			get { return _textBlock.Font; }
 			set { _textBlock.Font = value; }
@@ -46,15 +46,15 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public TextureRegion2D TextureRegion2D
+		public TextureRegion TextureRegion
 		{
-			get { return _image.TextureRegion2D; }
-			set { _image.TextureRegion2D = value; }
+			get { return _image.TextureRegion; }
+			set { _image.TextureRegion = value; }
 		}
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public TextureRegion2D OpenBackground { get; set; }
+		public TextureRegion OpenBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]

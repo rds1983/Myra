@@ -44,9 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="MonoGame.Extended">
-      <HintPath>..\..\Myra-Dependencies\MonoGame.Extended\MonoGame.Extended.dll</HintPath>
-    </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>..\..\Myra-Dependencies\MonoGame.Framework.DesktopGL\MonoGame.Framework.dll</HintPath>
     </Reference>

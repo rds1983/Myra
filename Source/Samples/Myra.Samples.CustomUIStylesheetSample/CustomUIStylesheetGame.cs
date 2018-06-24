@@ -1,6 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
+using Myra.Graphics2D;
+using Myra.Graphics2D.Text;
+using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.Styles;
+using Myra.Utility;
 
 namespace Myra.Samples.CustomUIStylesheetSample
 {
@@ -9,7 +13,6 @@ namespace Myra.Samples.CustomUIStylesheetSample
 		private readonly GraphicsDeviceManager _graphics;
 
 		private Desktop _host;
-		private Window _window;
 		private AllWidgets _allWidgets;
 
 		public CustomUIStylesheetGame()
@@ -32,54 +35,34 @@ namespace Myra.Samples.CustomUIStylesheetSample
 
 			MyraEnvironment.Game = this;
 
-			var stylesheet = Content.Load<Stylesheet>("ui_stylesheet");
+			// Create resource asset resolver
+			var assetResolver = new ResourceAssetResolver(GetType().Assembly, "Myra.Samples.CustomUIStylesheetSample.Resources.");
+
+			// Load image containing font & ui spritesheet
+			var colorBuffer = ColorBuffer.FromStream(assetResolver.Open("ui_stylesheet_image.png"));
+			colorBuffer.Process(true);
+
+			var texture = colorBuffer.CreateTexture2D();
+
+			// Load ui text atlas
+			var textureAtlas = TextureRegionAtlas.Load(assetResolver.ReadAsString("ui_stylesheet_atlas.atlas"), 
+				s => texture);
+
+			// Load ui font(s)
+			var font = SpriteFontHelper.LoadFromFnt(assetResolver.ReadAsString("ui_font.fnt"),
+				textureAtlas["default"]);
+
+			// Load stylesheet
+			var stylesheet = Stylesheet.CreateFromSource(assetResolver.ReadAsString("ui_stylesheet.json"),
+				s => textureAtlas[s],
+				s => font);
+
 			Stylesheet.Current = stylesheet;
 
 			// Widget.DrawFrames = true;
 			_host = new Desktop();
 
 			_allWidgets = new AllWidgets();
-
-			var label = new TextBlock
-			{
-				Text =
-					"Lorem ipsum [Green]dolor sit amet, [Red]consectetur adipisicing elit, sed do eiusmod [#AAAAAAAA]tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. [white]Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum!",
-				VerticalSpacing = 0,
-				TextColor = Color.AntiqueWhite,
-				Wrap = true
-			};
-
-			var pane = new ScrollPane
-			{
-				Widget = label,
-				WidthHint = 200,
-				HeightHint = 200
-			};
-
-			_window = new Window
-			{
-				Title = "Text",
-				Content = pane
-			};
-
-			_allWidgets._button.Up += (sender, args) =>
-			{
-				_window.ShowModal(_host);
-			};
-
-			var tree = new Tree
-			{
-				HasRoot = false,
-				GridPositionX = 1,
-				GridPositionY = 8
-			};
-			var node1 = tree.AddSubNode("node1");
-			var node2 = node1.AddSubNode("node2");
-			var node3 = node2.AddSubNode("node3");
-			node3.AddSubNode("node4");
-			node3.AddSubNode("node5");
-			node2.AddSubNode("node6");
-			_allWidgets._gridRight.Widgets.Add(tree);
 
 			_host.Widgets.Add(_allWidgets);
 		}

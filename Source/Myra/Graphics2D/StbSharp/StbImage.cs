@@ -1,9 +1,8 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
-namespace Myra.Graphics2D.StbSharp
+namespace StbSharp
 {
-	internal unsafe partial class Stb
+	public static unsafe partial class StbImage
 	{
 		public static string LastError;
 
@@ -53,16 +52,11 @@ namespace Myra.Graphics2D.StbSharp
 		public class stbi__jpeg
 		{
 			public stbi__context s;
+			public readonly stbi__huffman* huff_dc = (stbi__huffman*) stbi__malloc(4 * sizeof(stbi__huffman));
+			public readonly stbi__huffman* huff_ac = (stbi__huffman*) stbi__malloc(4 * sizeof(stbi__huffman));
+			public readonly ushort*[] dequant;
 
-			public readonly PinnedArray<stbi__huffman> huff_dc =
-				new PinnedArray<stbi__huffman>(4);
-
-			public readonly PinnedArray<stbi__huffman> huff_ac =
-				new PinnedArray<stbi__huffman>(4);
-
-			public readonly PinnedArray<byte>[] dequant;
-
-			public readonly PinnedArray<short>[] fast_ac;
+			public readonly short*[] fast_ac;
 
 // sizes for components, interleaved MCUs
 			public int img_h_max, img_v_max;
@@ -83,10 +77,12 @@ namespace Myra.Graphics2D.StbSharp
 			public int succ_high;
 			public int succ_low;
 			public int eob_run;
+			public int jfif;
+			public int app14_color_transform; // Adobe APP14 tag
 			public int rgb;
 
 			public int scan_n;
-			public PinnedArray<int> order = new PinnedArray<int>(4);
+			public int* order = (int*) stbi__malloc(4 * sizeof(int));
 			public int restart_interval, todo;
 
 // kernels
@@ -107,16 +103,16 @@ namespace Myra.Graphics2D.StbSharp
 					img_comp[i] = new img_comp();
 				}
 
-				fast_ac = new PinnedArray<short>[4];
+				fast_ac = new short *[4];
 				for (var i = 0; i < fast_ac.Length; ++i)
 				{
-					fast_ac[i] = new PinnedArray<short>(1 << STBI__ZFAST_BITS);
+					fast_ac[i] = (short*) stbi__malloc((1 << STBI__ZFAST_BITS) * sizeof(short));
 				}
 
-				dequant = new PinnedArray<byte>[4];
+				dequant = new ushort *[4];
 				for (var i = 0; i < dequant.Length; ++i)
 				{
-					dequant[i] = new PinnedArray<byte>(64);
+					dequant[i] = (ushort*) stbi__malloc(64 * sizeof(ushort));
 				}
 			}
 		};
@@ -153,9 +149,9 @@ namespace Myra.Graphics2D.StbSharp
 			public int transparent;
 			public int eflags;
 			public int delay;
-			public PinnedArray<byte> pal;
-			public PinnedArray<byte> lpal;
-			public PinnedArray<stbi__gif_lzw> codes;
+			public byte* pal;
+			public byte* lpal;
+			public stbi__gif_lzw* codes;
 			public byte* color_table;
 			public int parse;
 			public int step;
@@ -170,25 +166,20 @@ namespace Myra.Graphics2D.StbSharp
 
 			public stbi__gif()
 			{
-				codes = new PinnedArray<stbi__gif_lzw>(4096);
-				pal = new PinnedArray<byte>(256*4);
-				lpal = new PinnedArray<byte>(256*4);
+				codes = (stbi__gif_lzw*) stbi__malloc(4096 * sizeof(stbi__gif_lzw));
+				pal = (byte*) stbi__malloc(256 * 4 * sizeof(byte));
+				lpal = (byte*) stbi__malloc(256 * 4 * sizeof(byte));
 			}
 		}
 
 		private static void* stbi__malloc(int size)
 		{
-			return Operations.Malloc(size);
+			return CRuntime.malloc((ulong) size);
 		}
 
 		private static void* stbi__malloc(ulong size)
 		{
 			return stbi__malloc((int) size);
-		}
-
-		private static void* malloc(ulong size)
-		{
-			return stbi__malloc(size);
 		}
 
 		private static int stbi__err(string str)
@@ -197,66 +188,15 @@ namespace Myra.Graphics2D.StbSharp
 			return 0;
 		}
 
-		private static void memcpy(void* a, void* b, long size)
-		{
-			Operations.Memcpy(a, b, size);
-		}
-
-		private static void memcpy(void* a, void* b, ulong size)
-		{
-			memcpy(a, b, (long) size);
-		}
-
-		private static void free(void* a)
-		{
-			Operations.Free(a);
-		}
-
-		private static void memset(void* ptr, int value, long size)
-		{
-			byte* bptr = (byte*) ptr;
-			var bval = (byte) value;
-			for (long i = 0; i < size; ++i)
-			{
-				*bptr++ = bval;
-			}
-		}
-
-		private static void memset(void* ptr, int value, ulong size)
-		{
-			memset(ptr, value, (long) size);
-		}
-
-		private static uint _lrotl(uint x, int y)
-		{
-			return (x << y) | (x >> (32 - y));
-		}
-
-		private static void* realloc(void* ptr, long newSize)
-		{
-			return Operations.Realloc(ptr, newSize);
-		}
-
-		private static void* realloc(void* ptr, ulong newSize)
-		{
-			return realloc(ptr, (long) newSize);
-		}
-
-		private static int abs(int v)
-		{
-			return Math.Abs(v);
-		}
-
-		public static void stbi__gif_parse_colortable(stbi__context s, byte* pal,
-			int num_entries, int transp)
+		public static void stbi__gif_parse_colortable(stbi__context s, byte* pal, int num_entries, int transp)
 		{
 			int i;
 			for (i = 0; (i) < (num_entries); ++i)
 			{
-				pal[i*4 + 2] = stbi__get8(s);
-				pal[i*4 + 1] = stbi__get8(s);
-				pal[i*4] = stbi__get8(s);
-				pal[i*4 + 3] = (byte) (transp == i ? 0 : 255);
+				pal[i * 4 + 2] = stbi__get8(s);
+				pal[i * 4 + 1] = stbi__get8(s);
+				pal[i * 4] = stbi__get8(s);
+				pal[i * 4 + 3] = (byte) (transp == i ? 0 : 255);
 			}
 		}
 	}

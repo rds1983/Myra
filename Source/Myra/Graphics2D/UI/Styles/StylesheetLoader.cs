@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.TextureAtlases;
+using Microsoft.Xna.Framework.Graphics;
+using Myra.Graphics2D.TextureAtlases;
 using Myra.Utility;
 using Newtonsoft.Json.Linq;
 
@@ -94,12 +94,12 @@ namespace Myra.Graphics2D.UI.Styles
 
 		private readonly Dictionary<string, Color> _colors = new Dictionary<string, Color>();
 		private readonly JObject _root;
-		private readonly Func<string, BitmapFont> _fontLoader;
-		private readonly Func<string, TextureRegion2D> _textureLoader;
+		private readonly Func<string, SpriteFont> _fontLoader;
+		private readonly Func<string, TextureRegion> _textureLoader;
 
 		public StylesheetLoader(JObject root,
-			Func<string, TextureRegion2D> textureLoader,
-			Func<string, BitmapFont> fontLoader)
+			Func<string, TextureRegion> textureLoader,
+			Func<string, SpriteFont> fontLoader)
 		{
 			if (root == null)
 			{
@@ -121,12 +121,12 @@ namespace Myra.Graphics2D.UI.Styles
 			_textureLoader = textureLoader;
 		}
 
-		private TextureRegion2D GetTextureRegion2D(string id)
+		private TextureRegion GetTextureRegion(string id)
 		{
 			return _textureLoader(id);
 		}
 
-		private BitmapFont GetFont(string id)
+		private SpriteFont GetFont(string id)
 		{
 			if (_fontLoader == null || string.IsNullOrEmpty(id))
 			{
@@ -210,42 +210,42 @@ namespace Myra.Graphics2D.UI.Styles
 			string name;
 			if (source.GetStyle(BackgroundName, out name))
 			{
-				result.Background = GetTextureRegion2D(name);
+				result.Background = GetTextureRegion(name);
 			}
 
 			if (source.GetStyle(OverBackgroundName, out name))
 			{
-				result.OverBackground = GetTextureRegion2D(name);
+				result.OverBackground = GetTextureRegion(name);
 			}
 
 			if (source.GetStyle(DisabledBackgroundName, out name))
 			{
-				result.DisabledBackground = GetTextureRegion2D(name);
+				result.DisabledBackground = GetTextureRegion(name);
 			}
 
 			if (source.GetStyle(FocusedBackgroundName, out name))
 			{
-				result.FocusedBackground = GetTextureRegion2D(name);
+				result.FocusedBackground = GetTextureRegion(name);
 			}
 
 			if (source.GetStyle(BorderName, out name))
 			{
-				result.Border = GetTextureRegion2D(name);
+				result.Border = GetTextureRegion(name);
 			}
 
 			if (source.GetStyle(OverBorderName, out name))
 			{
-				result.OverBorder = GetTextureRegion2D(name);
+				result.OverBorder = GetTextureRegion(name);
 			}
 
 			if (source.GetStyle(DisabledBorderName, out name))
 			{
-				result.DisabledBorder = GetTextureRegion2D(name);
+				result.DisabledBorder = GetTextureRegion(name);
 			}
 
 			if (source.GetStyle(FocusedBorderName, out name))
 			{
-				result.FocusedBorder = GetTextureRegion2D(name);
+				result.FocusedBorder = GetTextureRegion(name);
 			}
 
 			JObject padding;
@@ -313,12 +313,12 @@ namespace Myra.Graphics2D.UI.Styles
 
 			if (source.GetStyle(CursorName, out name))
 			{
-				result.Cursor = GetTextureRegion2D(name);
+				result.Cursor = GetTextureRegion(name);
 			}
 
 			if (source.GetStyle(SelectionName, out name))
 			{
-				result.Selection = GetTextureRegion2D(name);
+				result.Selection = GetTextureRegion(name);
 			}
 		}
 
@@ -326,25 +326,25 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			LoadWidgetStyleFromSource(source, result);
 
-			string textureRegion2DName;
-			if (source.GetStyle(HorizontalScrollName, out textureRegion2DName))
+			string TextureRegionName;
+			if (source.GetStyle(HorizontalScrollName, out TextureRegionName))
 			{
-				result.HorizontalScrollBackground = GetTextureRegion2D(textureRegion2DName);
+				result.HorizontalScrollBackground = GetTextureRegion(TextureRegionName);
 			}
 
-			if (source.GetStyle(HorizontalScrollKnobName, out textureRegion2DName))
+			if (source.GetStyle(HorizontalScrollKnobName, out TextureRegionName))
 			{
-				result.HorizontalScrollKnob = GetTextureRegion2D(textureRegion2DName);
+				result.HorizontalScrollKnob = GetTextureRegion(TextureRegionName);
 			}
 
-			if (source.GetStyle(VerticalScrollName, out textureRegion2DName))
+			if (source.GetStyle(VerticalScrollName, out TextureRegionName))
 			{
-				result.VerticalScrollBackground = GetTextureRegion2D(textureRegion2DName);
+				result.VerticalScrollBackground = GetTextureRegion(TextureRegionName);
 			}
 
-			if (source.GetStyle(VerticalScrollKnobName, out textureRegion2DName))
+			if (source.GetStyle(VerticalScrollKnobName, out TextureRegionName))
 			{
-				result.VerticalScrollKnob = GetTextureRegion2D(textureRegion2DName);
+				result.VerticalScrollKnob = GetTextureRegion(TextureRegionName);
 			}
 		}
 
@@ -355,12 +355,12 @@ namespace Myra.Graphics2D.UI.Styles
 			string name;
 			if (source.GetStyle(ImageName, out name))
 			{
-				result.Image = GetTextureRegion2D(name);
+				result.Image = GetTextureRegion(name);
 			}
 
 			if (source.GetStyle(OverImageName, out name))
 			{
-				result.OverImage = GetTextureRegion2D(name);
+				result.OverImage = GetTextureRegion(name);
 			}
 		}
 
@@ -371,7 +371,7 @@ namespace Myra.Graphics2D.UI.Styles
 			string name;
 			if (source.GetStyle(PressedImageName, out name))
 			{
-				result.PressedImage = GetTextureRegion2D(name);
+				result.PressedImage = GetTextureRegion(name);
 			}
 		}
 
@@ -382,7 +382,7 @@ namespace Myra.Graphics2D.UI.Styles
 			string name;
 			if (source.GetStyle(PressedBackgroundName, out name))
 			{
-				result.PressedBackground = GetTextureRegion2D(name);
+				result.PressedBackground = GetTextureRegion(name);
 			}
 		}
 
@@ -463,7 +463,7 @@ namespace Myra.Graphics2D.UI.Styles
 			string style;
 			if (source.GetStyle(FilledName, out style))
 			{
-				result.Filled = GetTextureRegion2D(style);
+				result.Filled = GetTextureRegion(style);
 			}
 		}
 
@@ -517,7 +517,7 @@ namespace Myra.Graphics2D.UI.Styles
 			string name;
 			if (source.GetStyle(ImageName, out name))
 			{
-				result.Image = GetTextureRegion2D(name);
+				result.Image = GetTextureRegion(name);
 			}
 
 			if (source.GetStyle(ThicknessName, out name))
@@ -560,17 +560,17 @@ namespace Myra.Graphics2D.UI.Styles
 			string name;
 			if (source.GetStyle(RowSelectionBackgroundWithoutFocusName, out name))
 			{
-				result.RowSelectionBackgroundWithoutFocus = GetTextureRegion2D(name);
+				result.RowSelectionBackgroundWithoutFocus = GetTextureRegion(name);
 			}
 
 			if (source.GetStyle(RowSelectionBackgroundName, out name))
 			{
-				result.RowSelectionBackground = GetTextureRegion2D(name);
+				result.RowSelectionBackground = GetTextureRegion(name);
 			}
 
 			if (source.GetStyle(RowHoverBackgroundName, out name))
 			{
-				result.RowHoverBackground = GetTextureRegion2D(name);
+				result.RowHoverBackground = GetTextureRegion(name);
 			}
 
 			JObject obj;

@@ -1,5 +1,5 @@
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.TextureAtlases;
+using Myra.Graphics2D.TextureAtlases;
 
 namespace Myra.Graphics2D.UI
 {
@@ -43,21 +43,21 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		internal static void UpdateImageSize(this Image image, TextureRegion2D textureRegion2D)
+		internal static void UpdateImageSize(this Image image, TextureRegion TextureRegion)
 		{
-			if (textureRegion2D == null)
+			if (TextureRegion == null)
 			{
 				return;
 			}
 
-			if (image.WidthHint == null || textureRegion2D.Size.Width > image.WidthHint.Value)
+			if (image.WidthHint == null || TextureRegion.Bounds.Width > image.WidthHint.Value)
 			{
-				image.WidthHint = (int)textureRegion2D.Size.Width;
+				image.WidthHint = (int)TextureRegion.Bounds.Width;
 			}
 
-			if (image.HeightHint == null || textureRegion2D.Size.Height > image.HeightHint.Value)
+			if (image.HeightHint == null || TextureRegion.Bounds.Height > image.HeightHint.Value)
 			{
-				image.HeightHint = (int)textureRegion2D.Size.Height;
+				image.HeightHint = (int)TextureRegion.Bounds.Height;
 			}
 		}
 	}

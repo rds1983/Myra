@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -49,9 +48,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="MonoGame.Extended">
-      <HintPath>..\..\Myra-Dependencies\MonoGame.Extended\MonoGame.Extended.dll</HintPath>
-    </Reference>
     <Reference Include="MonoGame.Framework">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Myra-Dependencies\MonoGame.Framework.DesktopGL\MonoGame.Framework.dll</HintPath>
@@ -67,7 +63,6 @@
     <EmbeddedResource Include="Icon.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="..\..\Myra-Dependencies\MonoGame.Framework.DesktopGL\libopenal.1.dylib">
       <Link>libopenal.1.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -119,23 +114,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Myra.Content.Pipeline\Myra.Content.Pipeline.csproj">
-      <Project>{3f0389b0-4359-4d23-b62b-6e7bdf1004df}</Project>
-      <Name>Myra.Content.Pipeline</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Myra\Myra.csproj">
       <Project>{4dcbb001-9c79-4f6b-996d-d654062d93e0}</Project>
       <Name>Myra</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\ui_font.fnt" />
-    <Content Include="Content\ui_stylesheet_atlas.atlas" />
-    <Content Include="Content\ui_stylesheet_image.png" />
-    <Content Include="Content\ui_stylesheet.json" />
+    <EmbeddedResource Include="Resources\ui_font.fnt" />
+    <EmbeddedResource Include="Resources\ui_stylesheet_atlas.atlas" />
+    <EmbeddedResource Include="Resources\ui_stylesheet_image.png" />
+    <EmbeddedResource Include="Resources\ui_stylesheet.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

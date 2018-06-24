@@ -12,9 +12,6 @@ set "CONFIGURATION=Release"
 rem Copy output files
 copy "Myra\bin\%CONFIGURATION%\Myra.dll" ZipPackage /Y
 copy "Myra\bin\%CONFIGURATION%\Myra.pdb" ZipPackage /Y
-copy "Myra.Content.Pipeline\bin\%CONFIGURATION%\Myra.Content.Pipeline.dll" ZipPackage /Y
-copy "Myra.Content.Pipeline\bin\%CONFIGURATION%\Myra.Content.Pipeline.pdb" ZipPackage /Y
-copy "Myra\bin\%CONFIGURATION%\MonoGame.Extended.dll" ZipPackage /Y
 copy "Myra\bin\%CONFIGURATION%\Newtonsoft.Json.dll" ZipPackage /Y
 copy "Myra\bin\%CONFIGURATION%\Newtonsoft.Json.xml" ZipPackage /Y
 copy "Myra.UIEditor\bin\%CONFIGURATION%\NLog.dll" ZipPackage /Y
@@ -26,8 +23,8 @@ copy "Samples\Myra.Samples.FormattedTextSample\bin\%CONFIGURATION%\Myra.Samples.
 copy "Samples\Myra.Samples.GridSample\bin\%CONFIGURATION%\Myra.Samples.GridSample.exe" ZipPackage /Y
 copy "Samples\Myra.Samples.NotepadSample\bin\%CONFIGURATION%\Myra.Samples.NotepadSample.exe" ZipPackage /Y
 copy "Samples\Myra.Samples.SplitPaneSample\bin\%CONFIGURATION%\Myra.Samples.SplitPaneSample.exe" ZipPackage /Y
+copy "Samples\Myra.Samples.TabControlSample\bin\%CONFIGURATION%\Myra.Samples.TabControlSample.exe" ZipPackage /Y
 copy "Samples\Myra.Samples.TextBlocksSample\bin\%CONFIGURATION%\Myra.Samples.TextBlocksSample.exe" ZipPackage /Y
-copy "Samples\Myra.Samples.TextBlocksSample\bin\%CONFIGURATION%\Myra.Samples.TabControlSample.exe" ZipPackage /Y
 copy "Samples\Myra.UIEditor.Plugin.LibGDX\bin\%CONFIGURATION%\Myra.UIEditor.Plugin.LibGDX.dll" ZipPackage /Y
 copy "Samples\Myra.UIEditor.Plugin.YellowMenuButtons\bin\%CONFIGURATION%\Myra.UIEditor.Plugin.YellowMenuButtons.dll" ZipPackage /Y
 copy "Myra.Editor\bin\%CONFIGURATION%\Myra.Editor.dll" ZipPackage /Y

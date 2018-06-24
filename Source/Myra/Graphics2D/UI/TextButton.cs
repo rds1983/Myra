@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.BitmapFonts;
+using Microsoft.Xna.Framework.Graphics;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Newtonsoft.Json;
@@ -28,7 +28,7 @@ namespace Myra.Graphics2D.UI
 		[JsonIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
-		public BitmapFont Font
+		public SpriteFont Font
 		{
 			get { return _textBlock.Font; }
 			set { _textBlock.Font = value; }

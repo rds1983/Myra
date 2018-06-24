@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework;
+using StbSharp;
 
 namespace Myra.Graphics2D.StbSharp
 {
@@ -16,11 +18,11 @@ namespace Myra.Graphics2D.StbSharp
 		private Stream _stream;
 		private byte[] _buffer = new byte[1024];
 
-		private readonly Stb.stbi_io_callbacks _callbacks;
+		private readonly StbImage.stbi_io_callbacks _callbacks;
 
 		public ImageReader()
 		{
-			_callbacks = new Stb.stbi_io_callbacks
+			_callbacks = new StbImage.stbi_io_callbacks
 			{
 				read = ReadCallback,
 				skip = SkipCallback,
@@ -57,7 +59,7 @@ namespace Myra.Graphics2D.StbSharp
 			try
 			{
 				int xx, yy, ccomp;
-				var result = Stb.stbi_load_from_callbacks(_callbacks, null, &xx, &yy, &ccomp, req_comp);
+				var result = StbImage.stbi_load_from_callbacks(_callbacks, null, &xx, &yy, &ccomp, req_comp);
 
 				x = xx;
 				y = yy;
@@ -65,14 +67,57 @@ namespace Myra.Graphics2D.StbSharp
 
 				if (result == null)
 				{
-					throw new Exception(Stb.LastError);
+					throw new Exception(StbImage.LastError);
 				}
 
 				// Convert to array
 				var c = req_comp != 0 ? req_comp : comp;
 				var data = new byte[x*y*c];
 				Marshal.Copy(new IntPtr(result), data, 0, data.Length);
-				Operations.Free(result);
+
+				CRuntime.free(result);
+
+				return data;
+			}
+			finally
+			{
+				_stream = null;
+			}
+		}
+
+		public Color[] Read(Stream stream, out int x, out int y, out int comp)
+		{
+			_stream = stream;
+
+			try
+			{
+				int xx, yy, ccomp;
+				var result = StbImage.stbi_load_from_callbacks(_callbacks, null, &xx, &yy, &ccomp, StbImage.STBI_rgb_alpha);
+
+				x = xx;
+				y = yy;
+				comp = ccomp;
+
+				if (result == null)
+				{
+					throw new Exception(StbImage.LastError);
+				}
+
+				// Convert to color array
+				var data = new Color[x * y];
+				var src = result;
+				fixed (Color* dest = data)
+				{
+					for (var i = 0; i < data.Length; ++i)
+					{
+						dest[i].R = *src++;
+						dest[i].G = *src++;
+						dest[i].B = *src++;
+						dest[i].A = *src++;
+					}
+				}
+
+				CRuntime.free(result);
 
 				return data;
 			}
@@ -91,20 +136,20 @@ namespace Myra.Graphics2D.StbSharp
 				var res = new List<AnimatedGifFrame>();
 				_stream = stream;
 
-				var context = new Stb.stbi__context();
-				Stb.stbi__start_callbacks(context, _callbacks, null);
+				var context = new StbImage.stbi__context();
+				StbImage.stbi__start_callbacks(context, _callbacks, null);
 
-				if (Stb.stbi__gif_test(context) == 0)
+				if (StbImage.stbi__gif_test(context) == 0)
 				{
 					throw new Exception("Input stream is not GIF file.");
 				}
 
-				var g = new Stb.stbi__gif();
+				var g = new StbImage.stbi__gif();
 
 				do
 				{
 					int ccomp;
-					var result = Stb.stbi__gif_load_next(context, g, &ccomp, req_comp);
+					var result = StbImage.stbi__gif_load_next(context, g, &ccomp, req_comp);
 					if (result == null)
 					{
 						break;
@@ -114,7 +159,7 @@ namespace Myra.Graphics2D.StbSharp
 					var c = req_comp != 0 ? req_comp : comp;
 					var data = new byte[g.w*g.h*c];
 					Marshal.Copy(new IntPtr(result), data, 0, data.Length);
-					Operations.Free(result);
+					CRuntime.free(result);
 
 					var frame = new AnimatedGifFrame
 					{
@@ -124,7 +169,7 @@ namespace Myra.Graphics2D.StbSharp
 					res.Add(frame);
 				} while (true);
 
-				Operations.Free(g._out_);
+				CRuntime.free(g._out_);
 
 				if (res.Count > 0)
 				{

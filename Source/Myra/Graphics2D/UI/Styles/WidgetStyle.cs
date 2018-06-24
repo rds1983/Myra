@@ -1,4 +1,4 @@
-﻿using MonoGame.Extended.TextureAtlases;
+﻿using Myra.Graphics2D.TextureAtlases;
 
 namespace Myra.Graphics2D.UI.Styles
 {
@@ -7,15 +7,15 @@ namespace Myra.Graphics2D.UI.Styles
 		public int? WidthHint { get; set; }
 		public int? HeightHint { get; set; }
 
-		public TextureRegion2D Background { get; set; }
-		public TextureRegion2D OverBackground { get; set; }
-		public TextureRegion2D DisabledBackground { get; set; }
-		public TextureRegion2D FocusedBackground { get; set; }
+		public TextureRegion Background { get; set; }
+		public TextureRegion OverBackground { get; set; }
+		public TextureRegion DisabledBackground { get; set; }
+		public TextureRegion FocusedBackground { get; set; }
 
-		public TextureRegion2D Border { get; set; }
-		public TextureRegion2D OverBorder { get; set; }
-		public TextureRegion2D DisabledBorder { get; set; }
-		public TextureRegion2D FocusedBorder { get; set; }
+		public TextureRegion Border { get; set; }
+		public TextureRegion OverBorder { get; set; }
+		public TextureRegion DisabledBorder { get; set; }
+		public TextureRegion FocusedBorder { get; set; }
 
 		public PaddingInfo Padding;
 

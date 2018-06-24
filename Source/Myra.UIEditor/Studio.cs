@@ -4,7 +4,6 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended;
 using Myra.Editor.Plugin;
 using Myra.Graphics2D.UI;
 using Myra.UIEditor.UI;
@@ -44,7 +43,7 @@ namespace Myra.UIEditor
 		private TextBlock _fpsLabel;
 		private TextBlock _widgetsCountLabel;
 		private TextBlock _drawCallsLabel;
-		private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
+//		private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
 		private string _filePath;
 		private bool _isDirty;
 		private Project _project;
@@ -688,7 +687,7 @@ namespace Myra.UIEditor
 		{
 			base.Update(gameTime);
 
-			_fpsCounter.Update(gameTime);
+//			_fpsCounter.Update(gameTime);
 		}
 
 		protected override void Draw(GameTime gameTime)
@@ -696,7 +695,7 @@ namespace Myra.UIEditor
 			base.Draw(gameTime);
 
 			_gcMemoryLabel.Text = string.Format("GC Memory: {0} kb", GC.GetTotalMemory(false) / 1024);
-			_fpsLabel.Text = string.Format("FPS: {0}", _fpsCounter.FramesPerSecond);
+//			_fpsLabel.Text = string.Format("FPS: {0}", _fpsCounter.FramesPerSecond);
 			_widgetsCountLabel.Text = string.Format("Visible Widgets: {0}", _desktop.CalculateTotalWidgets(true));
 
 			GraphicsDevice.Clear(Color.Black);
@@ -708,7 +707,7 @@ namespace Myra.UIEditor
 
 			_drawCallsLabel.Text = string.Format("Draw Calls: {0}", GraphicsDevice.Metrics.DrawCount);
 
-			_fpsCounter.Draw(gameTime);
+//			_fpsCounter.Draw(gameTime);
 		}
 
 		protected override void EndRun()

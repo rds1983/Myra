@@ -1,27 +1,27 @@
 ﻿using Microsoft.Xna.Framework;
-using MonoGame.Extended.TextureAtlases;
+using Myra.Graphics2D.TextureAtlases;
 
 namespace Myra.Graphics2D.UI
 {
 	public class Image: Widget
 	{
-		private TextureRegion2D _textureRegion2D;
+		private TextureRegion _TextureRegion;
 
-		public TextureRegion2D TextureRegion2D
+		public TextureRegion TextureRegion
 		{
 			get
 			{
-				return _textureRegion2D;
+				return _TextureRegion;
 			}
 
 			set
 			{
-				if (value == _textureRegion2D)
+				if (value == _TextureRegion)
 				{
 					return;
 				}
 
-				_textureRegion2D = value;
+				_TextureRegion = value;
 				InvalidateMeasure();
 			}
 		}
@@ -35,40 +35,40 @@ namespace Myra.Graphics2D.UI
 
 		protected override Point InternalMeasure(Point availableSize)
 		{
-			if (TextureRegion2D == null)
+			if (TextureRegion == null)
 			{
 				return Point.Zero;
 			}
 
-			return new Point((int)TextureRegion2D.Size.Width, (int)TextureRegion2D.Size.Height);
+			return new Point(TextureRegion.Bounds.Width, (int)TextureRegion.Bounds.Height);
 		}
 
 		public override void InternalRender(RenderContext context)
 		{
 			base.InternalRender(context);
 
-			if (TextureRegion2D != null)
+			if (TextureRegion != null)
 			{
 				var bounds = ActualBounds;
-				context.Batch.Draw(TextureRegion2D, bounds, Color);
+				context.Batch.Draw(TextureRegion, bounds, Color);
 			}
 		}
 
-		public void UpdateImageSize(TextureRegion2D image)
+		public void UpdateImageSize(TextureRegion image)
 		{
 			if (image == null)
 			{
 				return;
 			}
 
-			if (WidthHint == null || image.Size.Width > WidthHint.Value)
+			if (WidthHint == null || image.Bounds.Width > WidthHint.Value)
 			{
-				WidthHint = (int)image.Size.Width;
+				WidthHint = (int)image.Bounds.Width;
 			}
 
-			if (HeightHint == null || image.Size.Height > HeightHint.Value)
+			if (HeightHint == null || image.Bounds.Height > HeightHint.Value)
 			{
-				HeightHint = (int)image.Size.Height;
+				HeightHint = (int)image.Bounds.Height;
 			}
 		}
 	}

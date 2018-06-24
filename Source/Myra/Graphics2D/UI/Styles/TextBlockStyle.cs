@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using MonoGame.Extended.BitmapFonts;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Myra.Graphics2D.UI.Styles
 {
@@ -7,7 +7,7 @@ namespace Myra.Graphics2D.UI.Styles
 	{
 		public Color TextColor { get; set; }
 		public Color DisabledTextColor { get; set; }
-		public BitmapFont Font { get; set; }
+		public SpriteFont Font { get; set; }
 
 		public TextBlockStyle()
 		{

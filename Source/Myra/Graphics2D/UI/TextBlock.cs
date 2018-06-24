@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.BitmapFonts;
+using Microsoft.Xna.Framework.Graphics;
 using Myra.Attributes;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
@@ -39,7 +39,7 @@ namespace Myra.Graphics2D.UI
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public BitmapFont Font
+		public SpriteFont Font
 		{
 			get { return _formattedText.Font; }
 			set
@@ -82,8 +82,6 @@ namespace Myra.Graphics2D.UI
 			set { _formattedText.IsMenuText = value; }
 		}
 
-		[HiddenInEditor]
-		[JsonIgnore]
 		internal char? UnderscoreChar
 		{
 			get { return _formattedText.UnderscoreChar; }
@@ -139,9 +137,9 @@ namespace Myra.Graphics2D.UI
 				result = formattedText.Size;
 			}
 
-			if (result.Y < Font.LineHeight)
+			if (result.Y < Font.LineSpacing)
 			{
-				result.Y = Font.LineHeight;
+				result.Y = Font.LineSpacing;
 			}
 
 			return result;

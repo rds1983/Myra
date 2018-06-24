@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.TextureAtlases;
+using Microsoft.Xna.Framework.Graphics;
+using Myra.Graphics2D.TextureAtlases;
 using Newtonsoft.Json.Linq;
 
 namespace Myra.Graphics2D.UI.Styles
@@ -304,8 +304,8 @@ namespace Myra.Graphics2D.UI.Styles
 		}
 
 		public static Stylesheet CreateFromSource(string s,
-			Func<string, TextureRegion2D> textureGetter,
-			Func<string, BitmapFont> fontGetter)
+			Func<string, TextureRegion> textureGetter,
+			Func<string, SpriteFont> fontGetter)
 		{
 			var root = JObject.Parse(s);
 

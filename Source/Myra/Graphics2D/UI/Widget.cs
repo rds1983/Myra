@@ -2,9 +2,8 @@ using System;
 using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended;
-using MonoGame.Extended.TextureAtlases;
 using Myra.Attributes;
+using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using Newtonsoft.Json;
@@ -364,52 +363,52 @@ namespace Myra.Graphics2D.UI
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public TextureRegion2D Background { get; set; }
+		public TextureRegion Background { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public TextureRegion2D OverBackground { get; set; }
+		public TextureRegion OverBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public TextureRegion2D DisabledBackground { get; set; }
+		public TextureRegion DisabledBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public TextureRegion2D FocusedBackground { get; set; }
+		public TextureRegion FocusedBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public TextureRegion2D DisabledOverBackground { get; set; }
+		public TextureRegion DisabledOverBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public TextureRegion2D OverrideBackground { get; set; }
+		public TextureRegion OverrideBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public TextureRegion2D Border { get; set; }
+		public TextureRegion Border { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public TextureRegion2D OverBorder { get; set; }
+		public TextureRegion OverBorder { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public TextureRegion2D DisabledBorder { get; set; }
+		public TextureRegion DisabledBorder { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public TextureRegion2D FocusedBorder { get; set; }
+		public TextureRegion FocusedBorder { get; set; }
 
 		[EditCategory("Appearance")]
 		public bool ClipToBounds { get; set; }
@@ -566,7 +565,7 @@ namespace Myra.Graphics2D.UI
 			Enabled = true;
 		}
 
-		public virtual TextureRegion2D GetCurrentBackground()
+		public virtual TextureRegion GetCurrentBackground()
 		{
 			var result = Background;
 
@@ -593,7 +592,7 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public virtual TextureRegion2D GetCurrentBorder()
+		public virtual TextureRegion GetCurrentBorder()
 		{
 			var result = Border;
 			if (!Enabled && DisabledBorder != null)

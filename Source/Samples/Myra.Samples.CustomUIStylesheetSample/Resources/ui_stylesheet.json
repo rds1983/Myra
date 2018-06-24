@@ -213,7 +213,9 @@
             "shortcutWidth": 22,
             "padding": {
                 "left": 5.0,
-                "right": 5.0
+                "right": 5.0,
+                "top": 2.0,
+                "bottom": 2.0
             },
             "label": {
                 "font": "ui_font",

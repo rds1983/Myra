@@ -1,6 +1,4 @@
-﻿using MonoGame.Extended.TextureAtlases;
-
-namespace Myra.Graphics2D.UI.Styles
+﻿namespace Myra.Graphics2D.UI.Styles
 {
 	public class MenuItemStyle: ButtonStyle
 	{

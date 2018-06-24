@@ -36,16 +36,13 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MonoGame.Extended">
-      <HintPath>..\..\Myra-Dependencies\MonoGame.Extended\MonoGame.Extended.dll</HintPath>
-    </Reference>
     <Reference Include="MonoGame.Framework">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Myra-Dependencies\MonoGame.Framework.DesktopGL\MonoGame.Framework.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\Myra-Dependencies\Newtonsoft.Json\Newtonsoft.Json.dll</HintPath>
-    </Reference>    
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

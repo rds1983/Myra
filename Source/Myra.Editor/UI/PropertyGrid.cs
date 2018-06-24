@@ -5,10 +5,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.TextureAtlases;
+using Microsoft.Xna.Framework.Graphics;
 using Myra.Attributes;
 using Myra.Editor.Utils;
+using Myra.Graphics2D;
+using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
@@ -375,7 +376,7 @@ namespace Myra.Editor.UI
 
 					var image = new Image
 					{
-						TextureRegion2D = DefaultAssets.WhiteRegion,
+						TextureRegion = DefaultAssets.WhiteRegion,
 						Color = color,
 						VerticalAlignment = VerticalAlignment.Center,
 						WidthHint = 32,
@@ -427,7 +428,7 @@ namespace Myra.Editor.UI
 
 					valueWidget = subGrid;
 				}
-				else if (propertyType.IsAssignableFrom(typeof(TextureRegion2D)))
+				else if (propertyType.IsAssignableFrom(typeof(TextureRegion)))
 				{
 				}
 				else if (propertyType.IsEnum)
@@ -653,7 +654,7 @@ namespace Myra.Editor.UI
 						}
 					}
 				}
-				else if (!(value is BitmapFont) && !(value is TextureRegion2D))
+				else if (!(value is SpriteFont) && !(value is TextureRegion))
 				{
 					// Subgrid
 					if (value != null)

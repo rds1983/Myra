@@ -1,10 +1,10 @@
-﻿using MonoGame.Extended.TextureAtlases;
+﻿using Myra.Graphics2D.TextureAtlases;
 
 namespace Myra.Graphics2D.UI.Styles
 {
 	public class ProgressBarStyle: WidgetStyle
 	{
-		public TextureRegion2D Filled { get; set; }
+		public TextureRegion Filled { get; set; }
 
 		public ProgressBarStyle()
 		{

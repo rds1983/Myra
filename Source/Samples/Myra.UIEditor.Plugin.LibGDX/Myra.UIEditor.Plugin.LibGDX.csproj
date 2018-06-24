@@ -33,9 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MonoGame.Extended, Version=0.6.568.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\Myra-Dependencies\MonoGame.Extended\MonoGame.Extended.dll</HintPath>
-    </Reference>
     <Reference Include="MonoGame.Framework">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Myra-Dependencies\MonoGame.Framework.Portable\MonoGame.Framework.dll</HintPath>
@@ -54,10 +51,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Myra.Content.Pipeline\Myra.Content.Pipeline.csproj">
-      <Project>{3f0389b0-4359-4d23-b62b-6e7bdf1004df}</Project>
-      <Name>Myra.Content.Pipeline</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Myra.Editor\Myra.Editor.csproj">
       <Project>{f18bd428-25f7-4183-beb7-7c96f21ae2d1}</Project>
       <Name>Myra.Editor</Name>
@@ -72,22 +65,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Myra.Samples.CustomUIStylesheetSample\Content\bin\DesktopGL\ui_font.xnb">
-      <Link>Content/ui_font.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\Myra.Samples.CustomUIStylesheetSample\Content\bin\DesktopGL\ui_stylesheet.xnb">
-      <Link>Content/ui_stylesheet.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\Myra.Samples.CustomUIStylesheetSample\Content\bin\DesktopGL\ui_stylesheet_atlas.xnb">
-      <Link>Content/ui_stylesheet_atlas.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\Myra.Samples.CustomUIStylesheetSample\Content\bin\DesktopGL\ui_stylesheet_image.xnb">
-      <Link>Content/ui_stylesheet_image.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <EmbeddedResource Include="Resources\ui_font.fnt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ui_stylesheet.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ui_stylesheet_atlas.atlas" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ui_stylesheet_image.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

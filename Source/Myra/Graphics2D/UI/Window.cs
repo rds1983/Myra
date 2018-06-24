@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.BitmapFonts;
+using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 
@@ -28,7 +28,7 @@ namespace Myra.Graphics2D.UI
 			set { _titleLabel.Text = value; }
 		}
 
-		public BitmapFont TitleFont
+		public SpriteFont TitleFont
 		{
 			get { return _titleLabel.Font; }
 			set { _titleLabel.Font = value; }

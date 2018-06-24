@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.TextureAtlases;
+using Microsoft.Xna.Framework.Graphics;
+using Myra.Graphics2D.TextureAtlases;
 
 namespace Myra.Graphics2D.UI.Styles
 {
@@ -11,12 +11,12 @@ namespace Myra.Graphics2D.UI.Styles
 		public Color FocusedTextColor { get; set; }
 		public Color MessageTextColor { get; set; }
 
-		public BitmapFont Font { get; set; }
-		public BitmapFont MessageFont { get; set; }
+		public SpriteFont Font { get; set; }
+		public SpriteFont MessageFont { get; set; }
 
-		public TextureRegion2D FocusedBackground { get; set; }
-		public TextureRegion2D Cursor { get; set; }
-		public TextureRegion2D Selection { get; set; }
+		public TextureRegion FocusedBackground { get; set; }
+		public TextureRegion Cursor { get; set; }
+		public TextureRegion Selection { get; set; }
 
 		public TextFieldStyle()
 		{
