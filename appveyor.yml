@@ -20,8 +20,6 @@ build_script:
     
     nuget pack Myra.Editor\Myra.Editor.nuspec -Version %APPVEYOR_BUILD_VERSION%
     
-    nuget pack Myra.Content.Pipeline\Myra.Content.Pipeline.nuspec -Version %APPVEYOR_BUILD_VERSION%
-
     copy_zip_package_files.bat
     
     rename "ZipPackage" "Myra.%APPVEYOR_BUILD_VERSION%"
@@ -33,9 +31,6 @@ artifacts:
 
   - path: Source/Myra.Editor.$(appveyor_build_version).nupkg
     name: Myra.Editor.nupkg
-
-  - path: Source/Myra.Content.Pipeline.$(appveyor_build_version).nupkg
-    name: Myra.Content.Pipeline.nupkg
 
   - path: Source/Myra.$(appveyor_build_version).zip
     name: ZipPackage
