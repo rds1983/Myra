@@ -1,20 +1,20 @@
 ﻿using System;
-using NLog;
+using log4net.Config;
 
 namespace Myra.UIEditor
 {
 	static class Program
 	{
-		private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
-
 		/// <summary>
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
 		static void Main()
 		{
+
 			try
 			{
+				XmlConfigurator.Configure();			
 				using (var studio = new Studio())
 				{
 					studio.Run();
@@ -22,7 +22,7 @@ namespace Myra.UIEditor
 			}
 			catch (Exception ex)
 			{
-				_logger.Error(ex);
+				Console.WriteLine(ex.ToString());
 			}
 		}
 	}

@@ -12,6 +12,8 @@ set "CONFIGURATION=Release"
 rem Copy output files
 copy "Myra\bin\%CONFIGURATION%\Myra.dll" ZipPackage /Y
 copy "Myra\bin\%CONFIGURATION%\Myra.pdb" ZipPackage /Y
+copy "Myra\bin\FNA\%CONFIGURATION%\Myra.dll" "ZipPackage\FNA\" /Y
+copy "Myra\bin\FNA\%CONFIGURATION%\Myra.pdb" "ZipPackage\FNA\" /Y
 copy "Myra\bin\%CONFIGURATION%\Newtonsoft.Json.dll" ZipPackage /Y
 copy "Myra\bin\%CONFIGURATION%\Newtonsoft.Json.xml" ZipPackage /Y
 copy "Myra.UIEditor\bin\%CONFIGURATION%\NLog.dll" ZipPackage /Y

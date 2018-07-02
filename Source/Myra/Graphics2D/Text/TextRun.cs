@@ -103,7 +103,7 @@ namespace Myra.Graphics2D.Text
 			{
 				var sz = _spriteFont.MeasureString(_text);
 				_size = new Point((int) sz.X, (int) sz.Y);
-
+#if !FNA
 				var fontGlyphs = _spriteFont.GetGlyphs();
 
 				var offset = Vector2.Zero;
@@ -137,6 +137,18 @@ namespace Myra.Graphics2D.Text
 
 					offset.X += g.Width + g.RightSideBearing;
 				}
+#else
+				var offset = Vector2.Zero;
+				for (var i = 0; i < _text.Length; ++i)
+				{
+					Vector2 v = _spriteFont.MeasureString(_text[i].ToString());
+					var result = new Rectangle((int)offset.X, (int)offset.Y, (int)v.X, (int)v.Y);
+
+					_glyphs[i].Bounds = result;
+
+					offset.X += v.X;
+				}
+#endif
 			}
 			else
 			{
@@ -150,8 +162,9 @@ namespace Myra.Graphics2D.Text
 		{
 			Update();
 
-			batch.DrawString(_spriteFont, _text, pos.ToVector2(), color);
+			batch.DrawString(_spriteFont, _text, new Vector2(pos.X, pos.Y), color);
 
+#if !FNA
 			if (MyraEnvironment.ShowUnderscores && UnderscoreIndex != null && UnderscoreIndex.Value < Count)
 			{
 				var g = _glyphs[UnderscoreIndex.Value];
@@ -161,6 +174,7 @@ namespace Myra.Graphics2D.Text
 					pos.Y + g.Bounds.Bottom, 
 					g.Bounds.Width - 1, 1), color);
 			}
+#endif
 
 			if (MyraEnvironment.DrawTextGlyphsFrames && !string.IsNullOrEmpty(_text))
 			{
@@ -198,7 +212,7 @@ namespace Myra.Graphics2D.Text
 				return null;
 			}
 
-			var r = new Rectangle(_renderedPosition.Value, Size);
+			var r = new Rectangle(_renderedPosition.Value.X, _renderedPosition.Value.Y, Size.X, Size.Y);
 			if (!r.Contains(position))
 			{
 				return null;

@@ -4,11 +4,25 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "taskName": "build",
+            "label": "UIEditor",
             "type": "process",
-            "command": "xbuild",
+            "command": "msbuild",
             "args": [
-                "Myra.Linux.sln",
+                "Myra.UIEditor/Myra.UIEditor.csproj",
+                "/t:build",
+                "/p:Configuration=Debug"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$go"
+            ]
+		},
+        {
+            "label": "Samples.AllWidgetsSample",
+            "type": "process",
+            "command": "msbuild",
+            "args": [
+                "Samples/Myra.Samples.AllWidgetsSample/Myra.Samples.AllWidgetsSample.csproj",
                 "/t:build",
                 "/p:Configuration=Debug"
             ],
@@ -18,12 +32,12 @@
             ]
         },
         {
-            "taskName": "clean",
+            "label": "Samples.CustomUIStylesheetSample",
             "type": "process",
-            "command": "xbuild",
+            "command": "msbuild",
             "args": [
-                "Myra.Linux.sln",
-                "/t:clean",
+                "Samples/Myra.Samples.CustomUIStylesheetSample/Myra.Samples.CustomUIStylesheetSample.csproj",
+                "/t:build",
                 "/p:Configuration=Debug"
             ],
             "group": "build",
@@ -32,13 +46,13 @@
             ]
         },
         {
-            "taskName": "buildRelease",
+            "label": "Samples.FormattedTextSample",
             "type": "process",
-            "command": "xbuild",
+            "command": "msbuild",
             "args": [
-                "Myra.Linux.sln",
+                "Samples/Myra.Samples.FormattedTextSample/Myra.Samples.FormattedTextSample.csproj",
                 "/t:build",
-                "/p:Configuration=Release"
+                "/p:Configuration=Debug"
             ],
             "group": "build",
             "problemMatcher": [
@@ -46,18 +60,102 @@
             ]
         },
         {
-            "taskName": "cleanRelease",
+            "label": "Samples.GridSample",
             "type": "process",
-            "command": "xbuild",
+            "command": "msbuild",
             "args": [
-                "Myra.Linux.sln",
-                "/t:clean",
-                "/p:Configuration=Release"
+                "Samples/Myra.Samples.GridSample/Myra.Samples.GridSample.csproj",
+                "/t:build",
+                "/p:Configuration=Debug"
             ],
             "group": "build",
             "problemMatcher": [
                 "$go"
             ]
-        }        
-    ]
+        },
+        {
+            "label": "Samples.NotepadSample",
+            "type": "process",
+            "command": "msbuild",
+            "args": [
+                "Samples/Myra.Samples.NotepadSample/Myra.Samples.NotepadSample.csproj",
+                "/t:build",
+                "/p:Configuration=Debug"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$go"
+            ]
+        },
+        {
+            "label": "Samples.SplitPaneSample",
+            "type": "process",
+            "command": "msbuild",
+            "args": [
+                "Samples/Myra.Samples.SplitPaneSample/Myra.Samples.SplitPaneSample.csproj",
+                "/t:build",
+                "/p:Configuration=Debug"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$go"
+            ]
+        },
+        {
+            "label": "Samples.TabControlSample",
+            "type": "process",
+            "command": "msbuild",
+            "args": [
+                "Samples/Myra.Samples.TabControlSample/Myra.Samples.TabControlSample.csproj",
+                "/t:build",
+                "/p:Configuration=Debug"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$go"
+            ]
+        },
+        {
+            "label": "Samples.TextBlocksSample",
+            "type": "process",
+            "command": "msbuild",
+            "args": [
+                "Samples/Myra.Samples.TextBlocksSample/Myra.Samples.TextBlocksSample.csproj",
+                "/t:build",
+                "/p:Configuration=Debug"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$go"
+            ]
+		},
+        {
+            "label": "Samples.AllWidgetsSample.FNA",
+            "type": "process",
+            "command": "msbuild",
+            "args": [
+                "Samples/Myra.Samples.AllWidgetsSample/Myra.Samples.AllWidgetsSample.FNA.csproj",
+                "/t:build",
+                "/p:Configuration=Debug"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$go"
+            ]
+        },		
+		{
+            "label": "UIEditor.FNA",
+            "type": "process",
+            "command": "msbuild",
+            "args": [
+                "Myra.UIEditor/Myra.UIEditor.FNA.csproj",
+                "/t:build",
+                "/p:Configuration=Debug"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$go"
+            ]
+		},
+	]
 }

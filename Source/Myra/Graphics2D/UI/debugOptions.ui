@@ -5,7 +5,7 @@
     "$type": "Myra.Graphics2D.UI.ExportOptions, Myra",
     "Namespace": "Myra.Graphics2D.UI",
     "Class": "DebugOptionsWidget",
-    "OutputPath": "D:/Projects/Hebron/Myra/Sources/Myra/Graphics2D/UI"
+    "OutputPath": "/home/rds/Projects/Myra/Source/Myra/Graphics2D/UI"
   },
   "Root": {
     "$id": "2",

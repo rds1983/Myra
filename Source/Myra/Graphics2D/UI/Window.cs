@@ -172,7 +172,7 @@ namespace Myra.Graphics2D.UI
 			{
 				Desktop.MouseMoved += DesktopOnMouseMoved;
 
-				var size = Measure(Desktop.Bounds.Size);
+				var size = Measure(Desktop.Bounds.Size());
 
 				XHint = (Desktop.Bounds.Width - size.X)/2;
 				YHint = (Desktop.Bounds.Height - size.Y)/2;

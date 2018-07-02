@@ -1,4 +1,4 @@
-version: 0.6.0.{build}
+version: 0.6.1.{build}
 configuration: Release
 assembly_info:
   patch: true
@@ -29,7 +29,10 @@ artifacts:
   - path: Source/Myra.$(appveyor_build_version).nupkg
     name: Myra.nupkg
 
-  - path: Source/Myra.Editor.$(appveyor_build_version).nupkg
+  - path: Source/Myra.FNA.$(appveyor_build_version).nupkg
+    name: Myra.FNA.nupkg
+
+    - path: Source/Myra.Editor.$(appveyor_build_version).nupkg
     name: Myra.Editor.nupkg
 
   - path: Source/Myra.$(appveyor_build_version).zip

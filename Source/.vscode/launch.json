@@ -4,75 +4,115 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [       
-    {
-        "name": "FormattedTextSample",
-        "type": "mono",
-        "request": "launch",
-        "preLaunchTask": "build",           
-        "program": "${workspaceRoot}/Samples/Myra.Samples.FormattedTextSample/bin/Debug/Myra.Samples.FormattedTextSample.exe",
-        "args": [],
-        "cwd": "${workspaceRoot}/Samples/Myra.Samples.FormattedTextSample/bin/Debug/",
-        "console": "internalConsole"
-    },
-    {
-        "name": "TextBlocksSample",
-        "type": "mono",
-        "request": "launch",
-        "preLaunchTask": "build",           
-        "program": "${workspaceRoot}/Samples/Myra.Samples.TextBlocksSample/bin/Debug/Myra.Samples.TextBlocksSample.exe",
-        "args": [],
-        "cwd": "${workspaceRoot}/Samples/Myra.Samples.TextBlocksSample/bin/Debug/",
-        "console": "internalConsole"
-    },
-    {
-        "name": "SplitPaneSample",
-        "type": "mono",
-        "request": "launch",
-        "preLaunchTask": "build",           
-        "program": "${workspaceRoot}/Samples/Myra.Samples.SplitPaneSample/bin/Debug/Myra.Samples.SplitPaneSample.exe",
-        "args": [],
-        "cwd": "${workspaceRoot}/Samples/Myra.Samples.SplitPaneSample/bin/Debug/",
-        "console": "internalConsole"
-    },
-    {
-        "name": "GridSample",
-        "type": "mono",
-        "request": "launch",
-        "preLaunchTask": "build",           
-        "program": "${workspaceRoot}/Samples/Myra.Samples.GridSample/bin/Debug/Myra.Samples.GridSample.exe",
-        "args": [],
-        "cwd": "${workspaceRoot}/Samples/Myra.Samples.GridSample/bin/Debug/",
-        "console": "internalConsole"
-    },
-    {
-        "name": "NotepadSample",
-        "type": "mono",
-        "request": "launch",
-        "preLaunchTask": "build",           
-        "program": "${workspaceRoot}/Samples/Myra.Samples.NotepadSample/bin/Debug/Myra.Samples.NotepadSample.exe",
-        "args": [],
-        "cwd": "${workspaceRoot}/Samples/Myra.Samples.NotepadSample/bin/Debug/",
-        "console": "internalConsole"
-    },
-    {
-        "name": "CustomUIStylesheetSample",
-        "type": "mono",
-        "request": "launch",
-        "preLaunchTask": "build",           
-        "program": "${workspaceRoot}/Samples/Myra.Samples.CustomUIStylesheetSample/bin/Debug/Myra.Samples.CustomUIStylesheetSample.exe",
-        "args": [],
-        "cwd": "${workspaceRoot}/Samples/Myra.Samples.CustomUIStylesheetSample/bin/Debug/",
-        "console": "internalConsole"
-    },
-    {
-        "name": "UI Editor",
-        "type": "mono",
-        "request": "launch",
-        "preLaunchTask": "build",           
-        "program": "${workspaceRoot}/Myra.UIEditor/bin/Debug/Myra.UIEditor.exe",
-        "args": [],
-        "cwd": "${workspaceRoot}/Myra.UIEditor/bin/Debug/",
-        "console": "internalConsole"
-    }    
+		{
+			"name": "UIEditor",
+			"type": "mono",
+			"request": "launch",
+			"preLaunchTask": "UIEditor",           
+			"program": "${workspaceRoot}/Myra.UIEditor/bin/Debug/Myra.UIEditor.exe",
+			"args": [],
+			"cwd": "${workspaceRoot}/Myra.UIEditor/bin/Debug/",
+			"console": "internalConsole"
+		},
+		{
+			"name": "Samples.AllWidgetsSample",
+			"type": "mono",
+			"request": "launch",
+			"preLaunchTask": "Samples.AllWidgetsSample",           
+			"program": "${workspaceRoot}/Samples/Myra.Samples.AllWidgetsSample/bin/Debug/Myra.Samples.AllWidgetsSample.exe",
+			"args": [],
+			"cwd": "${workspaceRoot}/Samples/Myra.Samples.AllWidgetsSample/bin/Debug/",
+			"console": "internalConsole"
+		},
+		{
+			"name": "Samples.CustomUIStylesheetSample",
+			"type": "mono",
+			"request": "launch",
+			"preLaunchTask": "Samples.CustomUIStylesheetSample",           
+			"program": "${workspaceRoot}/Samples/Myra.Samples.CustomUIStylesheetSample/bin/Debug/Myra.Samples.CustomUIStylesheetSample.exe",
+			"args": [],
+			"cwd": "${workspaceRoot}/Samples/Myra.Samples.CustomUIStylesheetSample/bin/Debug/",
+			"console": "internalConsole"
+		},
+		{
+			"name": "Samples.FormattedTextSample",
+			"type": "mono",
+			"request": "launch",
+			"preLaunchTask": "Samples.FormattedTextSample",           
+			"program": "${workspaceRoot}/Samples/Myra.Samples.FormattedTextSample/bin/Debug/Myra.Samples.FormattedTextSample.exe",
+			"args": [],
+			"cwd": "${workspaceRoot}/Samples/Myra.Samples.FormattedTextSample/bin/Debug/",
+			"console": "internalConsole"
+		},
+		{
+			"name": "Samples.GridSample",
+			"type": "mono",
+			"request": "launch",
+			"preLaunchTask": "Samples.GridSample",           
+			"program": "${workspaceRoot}/Samples/Myra.Samples.GridSample/bin/Debug/Myra.Samples.GridSample.exe",
+			"args": [],
+			"cwd": "${workspaceRoot}/Samples/Myra.Samples.GridSample/bin/Debug/",
+			"console": "internalConsole"
+		},
+		{
+			"name": "Samples.NotepadSample",
+			"type": "mono",
+			"request": "launch",
+			"preLaunchTask": "Samples.NotepadSample",           
+			"program": "${workspaceRoot}/Samples/Myra.Samples.NotepadSample/bin/Debug/Myra.Samples.NotepadSample.exe",
+			"args": [],
+			"cwd": "${workspaceRoot}/Samples/Myra.Samples.NotepadSample/bin/Debug/",
+			"console": "internalConsole"
+		},
+		{
+			"name": "Samples.SplitPaneSample",
+			"type": "mono",
+			"request": "launch",
+			"preLaunchTask": "Samples.SplitPaneSample",           
+			"program": "${workspaceRoot}/Samples/Myra.Samples.SplitPaneSample/bin/Debug/Myra.Samples.SplitPaneSample.exe",
+			"args": [],
+			"cwd": "${workspaceRoot}/Samples/Myra.Samples.SplitPaneSample/bin/Debug/",
+			"console": "internalConsole"
+		},
+		{
+			"name": "Samples.TabControlSample",
+			"type": "mono",
+			"request": "launch",
+			"preLaunchTask": "Samples.TabControlSample",           
+			"program": "${workspaceRoot}/Samples/Myra.Samples.TabControlSample/bin/Debug/Myra.Samples.TabControlSample.exe",
+			"args": [],
+			"cwd": "${workspaceRoot}/Samples/Myra.Samples.TabControlSample/bin/Debug/",
+			"console": "internalConsole"
+		},
+		{
+			"name": "Samples.TextBlocksSample",
+			"type": "mono",
+			"request": "launch",
+			"preLaunchTask": "Samples.TextBlocksSample",           
+			"program": "${workspaceRoot}/Samples/Myra.Samples.TextBlocksSample/bin/Debug/Myra.Samples.TextBlocksSample.exe",
+			"args": [],
+			"cwd": "${workspaceRoot}/Samples/Myra.Samples.TextBlocksSample/bin/Debug/",
+			"console": "internalConsole"
+		},
+		{
+			"name": "Samples.AllWidgetsSample.FNA",
+			"type": "mono",
+			"request": "launch",
+			"preLaunchTask": "Samples.AllWidgetsSample.FNA",           
+			"program": "${workspaceRoot}/Samples/Myra.Samples.AllWidgetsSample/bin/Debug/Myra.Samples.AllWidgetsSample.FNA.exe",
+			"args": [],
+			"cwd": "${workspaceRoot}/Samples/Myra.Samples.AllWidgetsSample/bin/Debug/",
+			"console": "internalConsole"
+		},
+		{
+			"name": "UIEditor.FNA",
+			"type": "mono",
+			"request": "launch",
+			"preLaunchTask": "UIEditor.FNA",           
+			"program": "${workspaceRoot}/Myra.UIEditor/bin/Debug/Myra.UIEditor.FNA.exe",
+			"args": [],
+			"cwd": "${workspaceRoot}/Myra.UIEditor/bin/Debug/",
+			"console": "internalConsole"
+		},
     ]
 }

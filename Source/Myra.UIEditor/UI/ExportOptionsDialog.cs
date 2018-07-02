@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using log4net;
 using Myra.Graphics2D.UI;
-using NLog;
 
 namespace Myra.UIEditor.UI
 {
 	public class ExportOptionsDialog : Dialog
 	{
-		private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private static ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private readonly ExportOptionsWidget _exportOptionsWidget = new ExportOptionsWidget();
 
 

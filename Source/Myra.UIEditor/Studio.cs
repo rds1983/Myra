@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
+using log4net;
 using Microsoft.Xna.Framework;
 using Myra.Editor.Plugin;
 using Myra.Graphics2D.UI;
 using Myra.UIEditor.UI;
 using Myra.UIEditor.Utils;
 using Myra.Utility;
-using NLog;
 using Button = Myra.Graphics2D.UI.Button;
 using CheckBox = Myra.Graphics2D.UI.CheckBox;
 using Color = Microsoft.Xna.Framework.Color;
@@ -28,7 +28,8 @@ namespace Myra.UIEditor
 	{
 		private const string PathFilter = "Myra UIEditor Projects (*.ui)|*.ui";
 
-		private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private static ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private static Studio _instance;
 
 		private readonly GraphicsDeviceManager _graphicsDeviceManager;
@@ -705,7 +706,11 @@ namespace Myra.UIEditor
 				GraphicsDevice.PresentationParameters.BackBufferHeight);
 			_desktop.Render();
 
+#if !FNA			
 			_drawCallsLabel.Text = string.Format("Draw Calls: {0}", GraphicsDevice.Metrics.DrawCount);
+#else
+			_drawCallsLabel.Text = "Draw Calls: ?";
+#endif
 
 //			_fpsCounter.Draw(gameTime);
 		}
@@ -780,7 +785,7 @@ namespace Myra.UIEditor
 			}
 			catch (Exception ex)
 			{
-				var dialog = Dialog.CreateMessageBox("Error", ex.Message);
+				var dialog = Dialog.CreateMessageBox("Error", ex.ToString());
 				dialog.ShowModal(_desktop);
 				_logger.Error(ex);
 			}

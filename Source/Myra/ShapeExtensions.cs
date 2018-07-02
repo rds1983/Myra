@@ -3,6 +3,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Myra.Utility;
 
 namespace Myra
 {
@@ -11,6 +12,11 @@ namespace Myra
 	/// </summary>
 	public static class ShapeExtensions
 	{
+		private static void Draw(this SpriteBatch spriteBatch, Texture2D texture, Vector2 offset, Color color, Vector2 scale, float rotation = 0.0f)
+		{
+			spriteBatch.Draw(texture, offset, null, color, rotation, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
+		}
+
 		/// <summary>
 		///     Draws a closed polygon from an array of points
 		/// </summary>
@@ -58,7 +64,7 @@ namespace Myra
 		/// <param name="color">The color to draw the rectangle in</param>
 		public static void FillRectangle(this SpriteBatch spriteBatch, Rectangle rectangle, Color color)
 		{
-			FillRectangle(spriteBatch, rectangle.Location.ToVector2(), rectangle.Size.ToVector2(), color);
+			FillRectangle(spriteBatch, new Vector2(rectangle.X, rectangle.Y), new Vector2(rectangle.Width, rectangle.Height), color);
 		}
 
 		/// <summary>

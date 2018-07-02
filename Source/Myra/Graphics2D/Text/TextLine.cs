@@ -105,7 +105,7 @@ namespace Myra.Graphics2D.Text
 				return null;
 			}
 
-			var r = new Rectangle(_renderedPosition.Value, Size);
+			var r = new Rectangle(_renderedPosition.Value.X, _renderedPosition.Value.Y, Size.X, Size.Y);
 			if (!r.Contains(position))
 			{
 				return null;
