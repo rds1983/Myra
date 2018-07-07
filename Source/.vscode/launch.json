@@ -99,9 +99,9 @@
 			"type": "mono",
 			"request": "launch",
 			"preLaunchTask": "Samples.AllWidgetsSample.FNA",           
-			"program": "${workspaceRoot}/Samples/Myra.Samples.AllWidgetsSample/bin/Debug/Myra.Samples.AllWidgetsSample.FNA.exe",
+			"program": "${workspaceRoot}/Samples/Myra.Samples.AllWidgetsSample/bin/FNA/Debug/Myra.Samples.AllWidgetsSample.exe",
 			"args": [],
-			"cwd": "${workspaceRoot}/Samples/Myra.Samples.AllWidgetsSample/bin/Debug/",
+			"cwd": "${workspaceRoot}/Samples/Myra.Samples.AllWidgetsSample/bin/FNA/Debug/",
 			"console": "internalConsole"
 		},
 		{
@@ -109,9 +109,9 @@
 			"type": "mono",
 			"request": "launch",
 			"preLaunchTask": "UIEditor.FNA",           
-			"program": "${workspaceRoot}/Myra.UIEditor/bin/Debug/Myra.UIEditor.FNA.exe",
+			"program": "${workspaceRoot}/Myra.UIEditor/bin/FNA/Debug/Myra.UIEditor.exe",
 			"args": [],
-			"cwd": "${workspaceRoot}/Myra.UIEditor/bin/Debug/",
+			"cwd": "${workspaceRoot}/Myra.UIEditor/bin/FNA/Debug/",
 			"console": "internalConsole"
 		},
     ]
