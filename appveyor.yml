@@ -16,6 +16,8 @@ build_script:
 
     msbuild Myra.sln /p:Configuration=Release /t:rebuild
 
+    msbuild Myra.FNA.sln /p:Configuration=Release /t:rebuild
+
     nuget pack Myra\Myra.nuspec -Version %APPVEYOR_BUILD_VERSION%
     
     nuget pack Myra.Editor\Myra.Editor.nuspec -Version %APPVEYOR_BUILD_VERSION%
