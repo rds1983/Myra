@@ -3,7 +3,7 @@ rmdir "ZipPackage" /Q /S
 
 rem Create required folders
 mkdir "ZipPackage"
-mkdir "ZipPackage\Content"
+mkdir "ZipPackage\FNA"
 mkdir "ZipPackage\x64"
 mkdir "ZipPackage\x86"
 
