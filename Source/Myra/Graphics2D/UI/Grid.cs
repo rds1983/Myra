@@ -6,6 +6,7 @@ using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using Myra.Attributes;
 using Myra.Utility;
+using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
@@ -90,7 +91,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				// Pixels
-				return string.Format("{0}: {1}", _type, (int) _value);
+				return string.Format("{0}: {1}", _type, (int)_value);
 			}
 
 			private void FireChanged()
@@ -108,7 +109,6 @@ namespace Myra.Graphics2D.UI
 		private readonly ObservableCollection<Proportion> _columnsProportions = new ObservableCollection<Proportion>();
 		private readonly ObservableCollection<Proportion> _rowsProportions = new ObservableCollection<Proportion>();
 		private float? _totalColumnsPart, _totalRowsPart;
-		private readonly List<Rectangle> _gridLines = new List<Rectangle>();
 		private readonly List<int> _cellLocationsX = new List<int>();
 		private readonly List<int> _cellLocationsY = new List<int>();
 		private readonly List<int> _gridLinesX = new List<int>();
@@ -204,7 +204,26 @@ namespace Myra.Graphics2D.UI
 				_totalColumnsPart = value;
 				InvalidateLayout();
 			}
+		}
 
+		[HiddenInEditor]
+		[JsonIgnore]
+		public List<int> GridLinesX
+		{
+			get
+			{
+				return _gridLinesX;
+			}
+		}
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public List<int> GridLinesY
+		{
+			get
+			{
+				return _gridLinesY;
+			}
 		}
 
 		public Grid()
@@ -259,7 +278,7 @@ namespace Myra.Graphics2D.UI
 		public Rectangle GetCellRectangle(int col, int row)
 		{
 			if (col < 0 || col >= _cellLocationsX.Count ||
-			    row < 0 || row >= _cellLocationsY.Count)
+				row < 0 || row >= _cellLocationsY.Count)
 			{
 				return Rectangle.Empty;
 			}
@@ -274,14 +293,14 @@ namespace Myra.Graphics2D.UI
 			{
 				foreach (var i in args.NewItems)
 				{
-					((Proportion) i).Changed += OnProportionsChanged;
+					((Proportion)i).Changed += OnProportionsChanged;
 				}
 			}
 			else if (args.Action == NotifyCollectionChangedAction.Remove)
 			{
 				foreach (var i in args.OldItems)
 				{
-					((Proportion) i).Changed -= OnProportionsChanged;
+					((Proportion)i).Changed -= OnProportionsChanged;
 				}
 			}
 
@@ -378,8 +397,8 @@ namespace Myra.Graphics2D.UI
 				_measureRowHeights.Add(0);
 			}
 
-			availableSize.X -= (_measureColWidths.Count - 1)*_columnSpacing;
-			availableSize.Y -= (_measureRowHeights.Count - 1)*_rowSpacing;
+			availableSize.X -= (_measureColWidths.Count - 1) * _columnSpacing;
+			availableSize.Y -= (_measureRowHeights.Count - 1) * _rowSpacing;
 
 			for (var row = 0; row < rows; ++row)
 			{
@@ -390,26 +409,26 @@ namespace Myra.Graphics2D.UI
 
 					if (colProportion.Type == ProportionType.Pixels)
 					{
-						_measureColWidths[col] = (int) colProportion.Value;
+						_measureColWidths[col] = (int)colProportion.Value;
 					}
 
 					if (rowProportion.Type == ProportionType.Pixels)
 					{
-						_measureRowHeights[row] = (int) rowProportion.Value;
+						_measureRowHeights[row] = (int)rowProportion.Value;
 					}
 
 					foreach (var widget in _visibleWidgets)
 					{
 						var gridPosition = GetActualGridPosition(widget);
 						if (gridPosition.X != col ||
-						    gridPosition.Y != row)
+							gridPosition.Y != row)
 						{
 							continue;
 						}
 
 						var measuredSize = Point.Zero;
 						if (rowProportion.Type != ProportionType.Pixels ||
-						    colProportion.Type != ProportionType.Pixels)
+							colProportion.Type != ProportionType.Pixels)
 						{
 							measuredSize = widget.Measure(availableSize);
 						}
@@ -443,12 +462,12 @@ namespace Myra.Graphics2D.UI
 			{
 				var w = _measureColWidths[i];
 
-/*				if (result.X + w > availableSize.X)
-				{
-					colsWidths[i] = availableSize.X - result.X;
-					result.X += colsWidths[i];
-					break;
-				}*/
+				/*				if (result.X + w > availableSize.X)
+								{
+									colsWidths[i] = availableSize.X - result.X;
+									result.X += colsWidths[i];
+									break;
+								}*/
 
 				result.X += w;
 				if (i < _measureColWidths.Count - 1)
@@ -493,8 +512,8 @@ namespace Myra.Graphics2D.UI
 
 			// Dynamic widths
 			// First run: calculate available width
-			var availableWidth = (float) bounds.Width;
-			availableWidth -= (_colWidths.Count - 1)*_columnSpacing;
+			var availableWidth = (float)bounds.Width;
+			availableWidth -= (_colWidths.Count - 1) * _columnSpacing;
 
 			var totalPart = 0.0f;
 			for (col = 0; col < _colWidths.Count; ++col)
@@ -526,7 +545,7 @@ namespace Myra.Graphics2D.UI
 					var prop = GetColumnProportion(col);
 					if (prop.Type == ProportionType.Part)
 					{
-						_colWidths[col] = (int) (prop.Value*availableWidth/totalPart);
+						_colWidths[col] = (int)(prop.Value * availableWidth / totalPart);
 						tookSpace += _colWidths[col];
 					}
 				}
@@ -540,14 +559,14 @@ namespace Myra.Graphics2D.UI
 				var prop = GetColumnProportion(col);
 				if (prop.Type == ProportionType.Fill)
 				{
-					_colWidths[col] = (int) availableWidth;
+					_colWidths[col] = (int)availableWidth;
 					break;
 				}
 			}
 
 			// Same with row heights
-			var availableHeight = (float) bounds.Height;
-			availableHeight -= (_rowHeights.Count - 1)*_rowSpacing;
+			var availableHeight = (float)bounds.Height;
+			availableHeight -= (_rowHeights.Count - 1) * _rowSpacing;
 
 			totalPart = 0.0f;
 			for (col = 0; col < _rowHeights.Count; ++col)
@@ -578,7 +597,7 @@ namespace Myra.Graphics2D.UI
 					var prop = GetRowProportion(row);
 					if (prop.Type != ProportionType.Part) continue;
 
-					_rowHeights[row] = (int) (prop.Value*availableHeight/totalPart);
+					_rowHeights[row] = (int)(prop.Value * availableHeight / totalPart);
 					tookSpace += _rowHeights[row];
 				}
 
@@ -591,7 +610,7 @@ namespace Myra.Graphics2D.UI
 				var prop = GetRowProportion(row);
 				if (prop.Type == ProportionType.Fill)
 				{
-					_rowHeights[row] = (int) availableHeight;
+					_rowHeights[row] = (int)availableHeight;
 					break;
 				}
 			}
@@ -600,6 +619,9 @@ namespace Myra.Graphics2D.UI
 			_gridLinesX.Clear();
 			_cellLocationsX.Clear();
 			var p = bounds.Location;
+
+			_gridLinesX.Add(p.X);
+
 			for (var i = 0; i < _colWidths.Count; ++i)
 			{
 				_cellLocationsX.Add(p.X);
@@ -608,7 +630,7 @@ namespace Myra.Graphics2D.UI
 
 				if (i < _colWidths.Count - 1)
 				{
-					_gridLinesX.Add(p.X + _columnSpacing/2);
+					_gridLinesX.Add(p.X + _columnSpacing / 2);
 				}
 
 				p.X += _columnSpacing;
@@ -616,8 +638,13 @@ namespace Myra.Graphics2D.UI
 				_actualSize.X += _colWidths[i];
 			}
 
+			_gridLinesX.Add(bounds.Right - 1);
+
 			_gridLinesY.Clear();
 			_cellLocationsY.Clear();
+
+			_gridLinesY.Add(p.Y);
+
 			for (var i = 0; i < _rowHeights.Count; ++i)
 			{
 				_cellLocationsY.Add(p.Y);
@@ -626,7 +653,7 @@ namespace Myra.Graphics2D.UI
 
 				if (i < _rowHeights.Count - 1)
 				{
-					_gridLinesY.Add(p.Y + _rowSpacing/2);
+					_gridLinesY.Add(p.Y + _rowSpacing / 2);
 				}
 
 				p.Y += _rowSpacing;
@@ -634,7 +661,8 @@ namespace Myra.Graphics2D.UI
 				_actualSize.Y += _rowHeights[i];
 			}
 
-			_gridLines.Clear();
+			_gridLinesY.Add(bounds.Bottom - 1);
+
 			foreach (var control in _visibleWidgets)
 			{
 				LayoutControl(control);
@@ -676,13 +704,13 @@ namespace Myra.Graphics2D.UI
 			for (i = 0; i < _gridLinesX.Count; ++i)
 			{
 				var x = _gridLinesX[i];
-				context.Batch.DrawLine(x, bounds.Top, x, bounds.Bottom, DrawLinesColor);
+				context.Batch.FillRectangle(new Rectangle(x, bounds.Top, 1, bounds.Height), DrawLinesColor);
 			}
 
 			for (i = 0; i < _gridLinesY.Count; ++i)
 			{
 				var y = _gridLinesY[i];
-				context.Batch.DrawLine(bounds.Left, y, bounds.Right, y, DrawLinesColor);
+				context.Batch.FillRectangle(new Rectangle(bounds.Left, y, bounds.Width, 1), DrawLinesColor);
 			}
 		}
 
