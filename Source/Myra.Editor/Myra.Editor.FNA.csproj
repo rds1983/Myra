@@ -50,6 +50,9 @@
     <Compile Include="Plugin\WidgetTypesSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\CollectionEditor.cs" />
+    <Compile Include="UI\File\FileDialog.cs" />
+    <Compile Include="UI\File\FileDialog.Generated.cs" />
+    <Compile Include="UI\File\FileDialogMode.cs" />
     <Compile Include="UI\PropertyGrid.cs" />
     <Compile Include="Utils\Reflection.cs" />
   </ItemGroup>
@@ -62,6 +65,12 @@
       <Project>{8ac20e4c-9aac-40a9-9c0b-5853f58b13ea}</Project>
       <Name>Myra.FNA</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FNA.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="UI\File\FileChooser.ui" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

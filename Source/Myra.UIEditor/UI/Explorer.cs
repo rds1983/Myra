@@ -13,9 +13,9 @@ namespace Myra.UIEditor.UI
 
 		public Tree Tree
 		{
-			get { return (Tree) Widget; }
+			get { return (Tree)Widget; }
 		}
-		
+
 		public Project Project
 		{
 			get { return _project; }
@@ -166,17 +166,22 @@ namespace Myra.UIEditor.UI
 			else
 			{
 				IEnumerable<Widget> widgets = null;
-				if (item is SplitPane)
+				if (item is Window)
 				{
-					widgets = ((SplitPane) item).Widgets;
+					widgets = new Widget[] { ((Window)item).Content };
+				}
+				else if (item is SplitPane)
+				{
+					widgets = ((SplitPane)item).Widgets;
 				}
 				else if (item is MultipleItemsContainer && !(item is ListBox) && !(item is ComboBox))
 				{
 					var container = item as MultipleItemsContainer;
 					widgets = container.Children;
-				} else if (item is ScrollPane)
+				}
+				else if (item is ScrollPane)
 				{
-					widgets = ((ScrollPane) item).Children;
+					widgets = ((ScrollPane)item).Children;
 				}
 
 				if (widgets == null)

@@ -2,8 +2,10 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
+using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
@@ -21,6 +23,7 @@ namespace Myra.Graphics2D.UI
 		private readonly ImageButton _closeButton;
 		private Grid _contentGrid;
 
+		[EditCategory("Appearance")]
 		public string Title
 		{
 			get { return _titleLabel.Text; }
@@ -28,28 +31,37 @@ namespace Myra.Graphics2D.UI
 			set { _titleLabel.Text = value; }
 		}
 
-		public SpriteFont TitleFont
-		{
-			get { return _titleLabel.Font; }
-			set { _titleLabel.Font = value; }
-		}
-
+		[EditCategory("Appearance")]
 		public Color TitleTextColor
 		{
 			get { return _titleLabel.TextColor; }
 			set { _titleLabel.TextColor = value; }
 		}
 
+		[HiddenInEditor]
+		[JsonIgnore]
+		public SpriteFont TitleFont
+		{
+			get { return _titleLabel.Font; }
+			set { _titleLabel.Font = value; }
+		}
+
+		[HiddenInEditor]
+		[JsonIgnore]
 		public Grid TitleGrid
 		{
 			get { return _titleGrid; }
 		}
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public ImageButton CloseButton
 		{
 			get { return _closeButton; }
 		}
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		[Obsolete("Obsolete. Use Content property.")]
 		public Grid ContentGrid
 		{
@@ -65,6 +77,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[HiddenInEditor]
 		public virtual Widget Content
 		{
 			get
@@ -98,13 +111,15 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public int ModalResult { get; set; }
 
 		public event EventHandler Closed;
 
 		public Window(WindowStyle style)
 		{
-			ModalResult = (int) DefaultModalResult.Cancel;
+			ModalResult = (int)DefaultModalResult.Cancel;
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
 			CanFocus = true;
@@ -112,7 +127,7 @@ namespace Myra.Graphics2D.UI
 			RowSpacing = 8;
 
 			RowsProportions.Add(new Proportion(ProportionType.Auto));
-			RowsProportions.Add(new Proportion(ProportionType.Auto));
+			RowsProportions.Add(new Proportion(ProportionType.Fill));
 
 			_titleGrid = new Grid
 			{
@@ -171,12 +186,23 @@ namespace Myra.Graphics2D.UI
 			if (Desktop != null)
 			{
 				Desktop.MouseMoved += DesktopOnMouseMoved;
-
-				var size = Measure(Desktop.Bounds.Size());
-
-				XHint = (Desktop.Bounds.Width - size.X)/2;
-				YHint = (Desktop.Bounds.Height - size.Y)/2;
 			}
+
+			CenterOnDesktop();
+		}
+
+		public void CenterOnDesktop()
+		{
+			if (Desktop == null)
+			{
+				return;
+			}
+
+			var size = Measure(Desktop.Bounds.Size());
+
+			XHint = (Desktop.Bounds.Width - size.X) / 2;
+			YHint = (Desktop.Bounds.Height - size.Y) / 2;
+
 		}
 
 		private void DesktopOnMouseMoved(object sender, GenericEventArgs<Point> genericEventArgs)

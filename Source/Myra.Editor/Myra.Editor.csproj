@@ -53,6 +53,9 @@
     <Compile Include="Plugin\WidgetTypesSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\CollectionEditor.cs" />
+    <Compile Include="UI\File\FileDialog.cs" />
+    <Compile Include="UI\File\FileDialog.Generated.cs" />
+    <Compile Include="UI\File\FileDialogMode.cs" />
     <Compile Include="UI\PropertyGrid.cs" />
     <Compile Include="Utils\Reflection.cs" />
   </ItemGroup>
@@ -61,6 +64,9 @@
       <Project>{4dcbb001-9c79-4f6b-996d-d654062d93e0}</Project>
       <Name>Myra</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="UI\File\FileChooser.ui" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

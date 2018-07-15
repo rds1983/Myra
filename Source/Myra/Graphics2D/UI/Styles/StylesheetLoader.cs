@@ -23,6 +23,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string ComboBoxItemName = "comboBoxItem";
 		public const string ListBoxName = "listBox";
 		public const string ListBoxItemName = "listBoxItem";
+		public const string GridName = "grid";
 		public const string TreeName = "tree";
 		public const string SplitPaneName = "splitPane";
 		public const string HorizontalSplitPaneName = "horizontalSplitPane";
@@ -81,7 +82,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string RowSelectionBackgroundName = "rowSelectionBackground";
 		public const string RowSelectionBackgroundWithoutFocusName = "rowSelectionBackgroundWithoutFocus";
 		public const string RowHoverBackgroundName = "rowHoverBackground";
-		public const string MenuSeparatorName = "separator";
+		public const string SeparatorName = "separator";
 		public const string ThicknessName = "thickness";
 		public const string ItemsContainerName = "itemsContainer";
 		public const string HorizontalSliderName = "horizontalSlider";
@@ -492,6 +493,12 @@ namespace Myra.Graphics2D.UI.Styles
 			{
 				LoadButtonStyleFromSource(subStyle, result.ListItemStyle);
 			}
+
+			if (source.GetStyle(SeparatorName, out subStyle))
+			{
+				LoadSeparatorStyleFromSource(subStyle, result.SeparatorStyle);
+			}
+
 		}
 
 		private void LoadMenuItemStyleFromSource(JObject source, MenuItemStyle result)
@@ -510,7 +517,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadMenuSeparatorStyleFromSource(JObject source, MenuSeparatorStyle result)
+		private void LoadSeparatorStyleFromSource(JObject source, SeparatorStyle result)
 		{
 			LoadWidgetStyleFromSource(source, result);
 
@@ -547,13 +554,13 @@ namespace Myra.Graphics2D.UI.Styles
 				LoadMenuItemStyleFromSource(menuItem, result.MenuItemStyle);
 			}
 
-			if (source.GetStyle(MenuSeparatorName, out menuItem))
+			if (source.GetStyle(SeparatorName, out menuItem))
 			{
-				LoadMenuSeparatorStyleFromSource(menuItem, result.SeparatorStyle);
+				LoadSeparatorStyleFromSource(menuItem, result.SeparatorStyle);
 			}
 		}
 
-		private void LoadTreeStyleFromSource(JObject source, TreeStyle result)
+		private void LoadGridStyleFromSource(JObject source, GridStyle result)
 		{
 			LoadWidgetStyleFromSource(source, result);
 
@@ -572,6 +579,11 @@ namespace Myra.Graphics2D.UI.Styles
 			{
 				result.RowHoverBackground = GetTextureRegion(name);
 			}
+		}
+
+		private void LoadTreeStyleFromSource(JObject source, TreeStyle result)
+		{
+			LoadGridStyleFromSource(source, result);
 
 			JObject obj;
 			if (source.GetStyle(MarkName, out obj))
@@ -650,6 +662,7 @@ namespace Myra.Graphics2D.UI.Styles
 			FillStyles(VerticalProgressBarName, result.VerticalProgressBarStyles, LoadProgressBarStyleFromSource);
 			FillStyles(ComboBoxName, result.ComboBoxStyles, LoadComboBoxStyleFromSource);
 			FillStyles(ListBoxName, result.ListBoxStyles, LoadListBoxStyleFromSource);
+			FillStyles(GridName, result.GridStyles, LoadGridStyleFromSource);
 			FillStyles(TreeName, result.TreeStyles, LoadTreeStyleFromSource);
 			FillStyles(HorizontalSplitPaneName, result.HorizontalSplitPaneStyles, LoadSplitPaneStyleFromSource);
 			FillStyles(VerticalSplitPaneName, result.VerticalSplitPaneStyles, LoadSplitPaneStyleFromSource);

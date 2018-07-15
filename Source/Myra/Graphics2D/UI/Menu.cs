@@ -24,7 +24,7 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public MenuSeparatorStyle SeparatorStyle { get; private set; }
+		public SeparatorStyle SeparatorStyle { get; private set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
@@ -213,7 +213,7 @@ namespace Myra.Graphics2D.UI
 			}
 			else
 			{
-				widget = new MenuSeparatorWidget(Orientation, SeparatorStyle);
+				widget = new SeparatorWidget(Orientation, SeparatorStyle);
 			}
 
 			iMenuItem.Menu = this;

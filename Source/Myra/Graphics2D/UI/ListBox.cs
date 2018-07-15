@@ -21,7 +21,7 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public ButtonStyle ListBoxItemStyle { get; set; }
+		public ListBoxStyle ListBoxStyle { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
@@ -152,7 +152,7 @@ namespace Myra.Graphics2D.UI
 
 			var button = (Button)item.Widget;
 			button.Text = item.Text;
-			button.TextColor = item.Color ?? ListBoxItemStyle.LabelStyle.TextColor;
+			button.TextColor = item.Color ?? ListBoxStyle.ListItemStyle.LabelStyle.TextColor;
 
 			InvalidateMeasure();
 		}
@@ -170,17 +170,28 @@ namespace Myra.Graphics2D.UI
 		{
 			item.Changed += ItemOnChanged;
 
-			var widget = new Button(ListBoxItemStyle)
-			{
-				Text = item.Text,
-				TextColor = item.Color ?? ListBoxItemStyle.LabelStyle.TextColor,
-				Tag = item,
-				HorizontalAlignment = HorizontalAlignment.Stretch,
-				VerticalAlignment = VerticalAlignment.Stretch,
-				Toggleable = true
-			};
+			Widget widget = null;
 
-			widget.Down += ButtonOnDown;
+			if (!item.IsSeparator)
+			{
+				widget = new Button(ListBoxStyle.ListItemStyle)
+				{
+					Text = item.Text,
+					TextColor = item.Color ?? ListBoxStyle.ListItemStyle.LabelStyle.TextColor,
+					Tag = item,
+					HorizontalAlignment = HorizontalAlignment.Stretch,
+					VerticalAlignment = VerticalAlignment.Stretch,
+					Image = item.Image,
+					ImageTextSpacing = item.ImageTextSpacing,
+					Toggleable = true
+				};
+
+				((Button)widget).Down += ButtonOnDown;
+			}
+			else
+			{
+				widget = new SeparatorWidget(Orientation.Vertical, ListBoxStyle.SeparatorStyle);
+			}
 
 			RowsProportions.Insert(index, new Proportion(ProportionType.Auto));
 			Widgets.Insert(index, widget);
@@ -217,7 +228,7 @@ namespace Myra.Graphics2D.UI
 		{
 			ApplyWidgetStyle(style);
 
-			ListBoxItemStyle = style.ListItemStyle;
+			ListBoxStyle = style;
 		}
 
 		protected override void SetStyleByName(Stylesheet stylesheet, string name)

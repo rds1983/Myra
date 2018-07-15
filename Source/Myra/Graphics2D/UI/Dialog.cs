@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Input;
+using Myra.Attributes;
+using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
@@ -6,9 +8,15 @@ namespace Myra.Graphics2D.UI
 	{
 		private readonly Grid _dialogContent;
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public Button ButtonOk { get; private set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
 		public Button ButtonCancel { get; private set; }
 
+		[HiddenInEditor]
 		public override Widget Content
 		{
 			get
@@ -46,7 +54,7 @@ namespace Myra.Graphics2D.UI
 		{
 			_dialogContent = new Grid { RowSpacing = 8 };
 
-			_dialogContent.RowsProportions.Add(new Proportion());
+			_dialogContent.RowsProportions.Add(new Proportion(ProportionType.Fill));
 			_dialogContent.RowsProportions.Add(new Proportion());
 
 			var buttonsGrid = new Grid

@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using log4net;
 using Microsoft.Xna.Framework;
 using Myra.Editor.Plugin;
+using Myra.Editor.UI.File;
 using Myra.Graphics2D.UI;
 using Myra.UIEditor.UI;
 using Myra.UIEditor.Utils;
@@ -14,6 +15,7 @@ using Button = Myra.Graphics2D.UI.Button;
 using CheckBox = Myra.Graphics2D.UI.CheckBox;
 using Color = Microsoft.Xna.Framework.Color;
 using ComboBox = Myra.Graphics2D.UI.ComboBox;
+using FileDialog = Myra.Editor.UI.File.FileDialog;
 using HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment;
 using ListBox = Myra.Graphics2D.UI.ListBox;
 using Menu = Myra.Graphics2D.UI.Menu;
@@ -26,8 +28,6 @@ namespace Myra.UIEditor
 {
 	public class Studio : Game
 	{
-		private const string PathFilter = "Myra UIEditor Projects (*.ui)|*.ui";
-
 		private static ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
 		private static Studio _instance;
@@ -44,13 +44,14 @@ namespace Myra.UIEditor
 		private TextBlock _fpsLabel;
 		private TextBlock _widgetsCountLabel;
 		private TextBlock _drawCallsLabel;
-//		private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
+		//		private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
 		private string _filePath;
 		private bool _isDirty;
 		private Project _project;
 		private int[] _customColors;
 		private Type[] _customWidgetTypes;
 		private MenuItem[] _customWidgetMenuItems;
+		private bool _isWindow = false;
 
 		public static Studio Instance
 		{
@@ -174,6 +175,11 @@ namespace Myra.UIEditor
 			else
 			{
 				Load(_state.EditedFile);
+
+				if (Project != null && Project.Root is Window)
+				{
+					_isWindow = true;
+				}
 			}
 		}
 
@@ -352,6 +358,13 @@ namespace Myra.UIEditor
 			{
 				AddMenuItem(new MenuItem());
 			};
+			_ui._menuControlsAddDialog.Selected += (s, a) =>
+			{
+				AddStandardControl<Dialog>();
+			}; _ui._menuControlsAddWindow.Selected += (s, a) =>
+			{
+				AddStandardControl<Window>();
+			};
 			_ui._menuControlsAddMenuSeparator.Selected += (s, a) =>
 			{
 				AddMenuItem(new MenuSeparator());
@@ -492,7 +505,11 @@ namespace Myra.UIEditor
 				if (asWidget != null)
 				{
 					var container = _explorer.SelectedNode.ParentNode.Tag;
-					if (container is SplitPane)
+					if (container is Window)
+					{
+						((Window)container).Content = null;
+					}
+					else if (container is SplitPane)
 					{
 						((SplitPane)container).Widgets.Remove(asWidget);
 					}
@@ -548,7 +565,10 @@ namespace Myra.UIEditor
 		{
 			var root = _explorer.SelectedObject;
 
-			if (root is MultipleItemsContainer)
+			if (root is Window)
+			{
+				((Window)root).Content = widget;
+			} else if (root is MultipleItemsContainer)
 			{
 				((MultipleItemsContainer)root).Widgets.Add(widget);
 			}
@@ -559,9 +579,10 @@ namespace Myra.UIEditor
 			else if (root is ScrollPane)
 			{
 				((ScrollPane)root).Widget = widget;
-			} else if (root is Project)
+			}
+			else if (root is Project)
 			{
-				((Project) root).Root = widget;
+				((Project)root).Root = widget;
 
 				if (widget != null)
 				{
@@ -662,33 +683,28 @@ namespace Myra.UIEditor
 
 		private void OpenItemOnClicked(object sender, EventArgs eventArgs)
 		{
-			string filePath;
-			using (var dlg = new OpenFileDialog())
+			var dlg = new FileDialog(FileDialogMode.OpenFile);
+			dlg.Filter = "*.ui";
+
+			dlg.ButtonOk.Down += (s, a) =>
 			{
-				dlg.Filter = PathFilter;
-				if (dlg.ShowDialog() == DialogResult.OK)
-				{
-					filePath = dlg.FileName;
-				}
-				else
+				var filePath = dlg.FilePath;
+				if (string.IsNullOrEmpty(filePath))
 				{
 					return;
 				}
-			}
 
-			if (string.IsNullOrEmpty(filePath))
-			{
-				return;
-			}
+				Load(filePath);
+			};
 
-			Load(filePath);
+			dlg.ShowModal(_desktop);
 		}
 
 		protected override void Update(GameTime gameTime)
 		{
 			base.Update(gameTime);
 
-//			_fpsCounter.Update(gameTime);
+			//			_fpsCounter.Update(gameTime);
 		}
 
 		protected override void Draw(GameTime gameTime)
@@ -696,7 +712,7 @@ namespace Myra.UIEditor
 			base.Draw(gameTime);
 
 			_gcMemoryLabel.Text = string.Format("GC Memory: {0} kb", GC.GetTotalMemory(false) / 1024);
-//			_fpsLabel.Text = string.Format("FPS: {0}", _fpsCounter.FramesPerSecond);
+			//			_fpsLabel.Text = string.Format("FPS: {0}", _fpsCounter.FramesPerSecond);
 			_widgetsCountLabel.Text = string.Format("Visible Widgets: {0}", _desktop.CalculateTotalWidgets(true));
 
 			GraphicsDevice.Clear(Color.Black);
@@ -706,13 +722,20 @@ namespace Myra.UIEditor
 				GraphicsDevice.PresentationParameters.BackBufferHeight);
 			_desktop.Render();
 
-#if !FNA			
+			if (_isWindow)
+			{
+				((Window)Project.Root).CenterOnDesktop();
+
+				_isWindow = false;
+			}
+
+#if !FNA
 			_drawCallsLabel.Text = string.Format("Draw Calls: {0}", GraphicsDevice.Metrics.DrawCount);
 #else
 			_drawCallsLabel.Text = "Draw Calls: ?";
 #endif
 
-//			_fpsCounter.Draw(gameTime);
+			//			_fpsCounter.Draw(gameTime);
 		}
 
 		protected override void EndRun()
@@ -742,25 +765,8 @@ namespace Myra.UIEditor
 			IsDirty = false;
 		}
 
-		private void Save(bool setFileName)
+		private void ProcessSave(string filePath)
 		{
-			var filePath = FilePath;
-			if (string.IsNullOrEmpty(FilePath) || setFileName)
-			{
-				using (var dlg = new SaveFileDialog())
-				{
-					dlg.Filter = PathFilter;
-					if (dlg.ShowDialog() == DialogResult.OK)
-					{
-						filePath = dlg.FileName;
-					}
-					else
-					{
-						return;
-					}
-				}
-			}
-
 			if (string.IsNullOrEmpty(filePath))
 			{
 				return;
@@ -771,6 +777,31 @@ namespace Myra.UIEditor
 
 			FilePath = filePath;
 			IsDirty = false;
+		}
+
+		private void Save(bool setFileName)
+		{
+			if (string.IsNullOrEmpty(FilePath) || setFileName)
+			{
+				var dlg = new FileDialog(FileDialogMode.SaveFile);
+				dlg.Filter = "*.ui";
+
+				if (!string.IsNullOrEmpty(FilePath))
+				{
+					dlg.FilePath = FilePath;
+				}
+
+				dlg.ShowModal(_desktop);
+
+				dlg.Selected += (s, a) =>
+				{
+					ProcessSave(dlg.FilePath);
+				};
+			}
+			else
+			{
+				ProcessSave(FilePath);
+			}
 		}
 
 		private void Load(string filePath)
@@ -809,6 +840,7 @@ namespace Myra.UIEditor
 			var enableContainers = false;
 			var enableMenuItems = false;
 			var enableTreeNode = false;
+			var enableWindows = false;
 
 			var selectedObject = _explorer.SelectedObject;
 			if (selectedObject != null)
@@ -830,9 +862,10 @@ namespace Myra.UIEditor
 				{
 					enableStandard = true;
 				}
-				else if (selectedObject is Project && ((Project) selectedObject).Root == null)
+				else if (selectedObject is Project && ((Project)selectedObject).Root == null)
 				{
 					enableContainers = true;
+					enableWindows = true;
 				}
 			}
 
@@ -859,6 +892,9 @@ namespace Myra.UIEditor
 			_ui._menuControlsAddHorizontalSplitPane.Enabled = enableStandard || enableContainers;
 			_ui._menuControlsAddVerticalSplitPane.Enabled = enableStandard || enableContainers;
 			_ui._menuControlsAddScrollPane.Enabled = enableStandard || enableContainers;
+
+			_ui._menuControlsAddDialog.Enabled = enableWindows;
+			_ui._menuControlsAddWindow.Enabled = enableWindows;
 
 			if (_customWidgetMenuItems != null)
 			{

@@ -1,0 +1,149 @@
+{
+  "$id": "1",
+  "$type": "Myra.Graphics2D.UI.Project, Myra",
+  "ExportOptions": {
+    "$type": "Myra.Graphics2D.UI.ExportOptions, Myra",
+    "Namespace": "Myra.Graphics2D.UI",
+    "Class": "DebugOptionsDialog",
+    "OutputPath": "/home/rds/Projects/Hebron/Myra/Source/Myra/Graphics2D/UI"
+  },
+  "Root": {
+    "$id": "2",
+    "$type": "Myra.Graphics2D.UI.Dialog, Myra",
+    "Content": {
+      "$id": "3",
+      "$type": "Myra.Graphics2D.UI.Grid, Myra",
+      "DrawLinesColor": {
+        "$id": "4",
+        "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+        "B": 255,
+        "G": 255,
+        "R": 255,
+        "A": 255
+      },
+      "ColumnsProportions": [],
+      "RowsProportions": [
+        {
+          "$id": "5",
+          "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra"
+        },
+        {
+          "$id": "6",
+          "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra"
+        },
+        {
+          "$id": "7",
+          "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra"
+        },
+        {
+          "$id": "8",
+          "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra"
+        }
+      ],
+      "Widgets": [
+        {
+          "$id": "9",
+          "$type": "Myra.Graphics2D.UI.CheckBox, Myra",
+          "Text": "Draw green frame around every widget",
+          "TextColor": {
+            "$id": "10",
+            "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+            "B": 255,
+            "G": 255,
+            "R": 255,
+            "A": 255
+          },
+          "ImageWidthHint": 10,
+          "ImageHeightHint": 10,
+          "ContentHorizontalAlignment": 3,
+          "ContentVerticalAlignment": 3,
+          "Id": "_checkBoxWidgetFrames"
+        },
+        {
+          "$id": "11",
+          "$type": "Myra.Graphics2D.UI.CheckBox, Myra",
+          "Text": "Draw red frame around the focused widget",
+          "TextColor": {
+            "$id": "12",
+            "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+            "B": 255,
+            "G": 255,
+            "R": 255,
+            "A": 255
+          },
+          "ImageWidthHint": 10,
+          "ImageHeightHint": 10,
+          "ContentHorizontalAlignment": 3,
+          "ContentVerticalAlignment": 3,
+          "Id": "_checkBoxFocusedWidgetFrame",
+          "GridPositionY": 1
+        },
+        {
+          "$id": "13",
+          "$type": "Myra.Graphics2D.UI.CheckBox, Myra",
+          "Text": "Draw white frame around every letter glyph",
+          "TextColor": {
+            "$id": "14",
+            "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+            "B": 255,
+            "G": 255,
+            "R": 255,
+            "A": 255
+          },
+          "ImageWidthHint": 10,
+          "ImageHeightHint": 10,
+          "ContentHorizontalAlignment": 3,
+          "ContentVerticalAlignment": 3,
+          "Id": "_checkBoxGlyphFrames",
+          "GridPositionY": 2
+        },
+        {
+          "$id": "15",
+          "$type": "Myra.Graphics2D.UI.CheckBox, Myra",
+          "Text": "Disable clipping",
+          "TextColor": {
+            "$id": "16",
+            "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+            "B": 255,
+            "G": 255,
+            "R": 255,
+            "A": 255
+          },
+          "ImageWidthHint": 10,
+          "ImageHeightHint": 10,
+          "ContentHorizontalAlignment": 3,
+          "ContentVerticalAlignment": 3,
+          "Id": "_checkBoxDisableClipping",
+          "GridPositionY": 3
+        }
+      ],
+      "Id": "Root",
+      "HorizontalAlignment": 3,
+      "VerticalAlignment": 3
+    },
+    "Title": "Debug Options",
+    "TitleTextColor": {
+      "$id": "17",
+      "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+      "B": 255,
+      "G": 255,
+      "R": 255,
+      "A": 255
+    },
+    "DrawLinesColor": {
+      "$id": "18",
+      "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+      "B": 255,
+      "G": 255,
+      "R": 255,
+      "A": 255
+    },
+    "XHint": 529,
+    "YHint": 344,
+    "PaddingLeft": 5,
+    "PaddingRight": 5,
+    "PaddingTop": 5,
+    "PaddingBottom": 5,
+    "CanFocus": true
+  }
+}

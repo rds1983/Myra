@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Myra.Attributes;
@@ -66,6 +67,14 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[EditCategory("Behavior")]
+		[DefaultValue(true)]
+		public bool AllowHorizontalScrolling { get; set; }
+
+		[EditCategory("Behavior")]
+		[DefaultValue(true)]
+		public bool AllowVerticalScrolling { get; set; }
+
 		/// <summary>
 		/// Same as Widget. Used by the JSON serializer.
 		/// </summary>
@@ -81,6 +90,8 @@ namespace Myra.Graphics2D.UI
 			ClipToBounds = true;
 			CanFocus = true;
 			_horizontalScrollbarVisible = _verticalScrollbarVisible = false;
+
+			AllowVerticalScrolling = AllowHorizontalScrolling = true;
 
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
@@ -108,21 +119,21 @@ namespace Myra.Graphics2D.UI
 
 			if (_horizontalMaximum > 0)
 			{
-				prop.X = (float) _scrollPosition.X / _horizontalMaximum;
+				prop.X = (float)_scrollPosition.X / _horizontalMaximum;
 			}
 
 			if (_verticalMaximum != 0)
 			{
-				prop.Y = (float) _scrollPosition.Y / _verticalMaximum;
+				prop.Y = (float)_scrollPosition.Y / _verticalMaximum;
 			}
 
 			var bounds = ActualBounds;
-			var origin = new Point((int) (prop.X *
-			                              (Widget.Bounds.Width - bounds.Width +
-			                               (_verticalScrollbarVisible ? _verticalScrollbarThumb.Width : 0))),
-				(int) (prop.Y *
-				       (Widget.Bounds.Height - bounds.Height +
-				        (_horizontalScrollbarVisible ? _horizontalScrollbarThumb.Height : 0)))
+			var origin = new Point((int)(prop.X *
+										  (Widget.Bounds.Width - bounds.Width +
+										   (_verticalScrollbarVisible ? _verticalScrollbarThumb.Width : 0))),
+				(int)(prop.Y *
+					   (Widget.Bounds.Height - bounds.Height +
+						(_horizontalScrollbarVisible ? _horizontalScrollbarThumb.Height : 0)))
 			);
 
 			Widget.XHint = -origin.X;
@@ -305,8 +316,8 @@ namespace Myra.Graphics2D.UI
 
 			var measureSize = Widget.Measure(availableSize);
 
-			var horizontalScrollbarVisible = measureSize.X > availableSize.X;
-			var verticalScrollbarVisible = measureSize.Y > availableSize.Y;
+			var horizontalScrollbarVisible = AllowHorizontalScrolling && measureSize.X > availableSize.X;
+			var verticalScrollbarVisible = AllowVerticalScrolling && measureSize.Y > availableSize.Y;
 			if (horizontalScrollbarVisible || verticalScrollbarVisible)
 			{
 				if (horizontalScrollbarVisible)
@@ -334,8 +345,8 @@ namespace Myra.Graphics2D.UI
 			var availableSize = bounds.Size();
 			var measureSize = Widget.Measure(availableSize);
 
-			_horizontalScrollbarVisible = measureSize.X > bounds.Width;
-			_verticalScrollbarVisible = measureSize.Y > bounds.Height;
+			_horizontalScrollbarVisible = AllowHorizontalScrolling && measureSize.X > bounds.Width;
+			_verticalScrollbarVisible = AllowVerticalScrolling && measureSize.Y > bounds.Height;
 			if (_horizontalScrollbarVisible || _verticalScrollbarVisible)
 			{
 				if (_horizontalScrollbarVisible)

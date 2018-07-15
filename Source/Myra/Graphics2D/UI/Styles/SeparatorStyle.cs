@@ -2,16 +2,16 @@
 
 namespace Myra.Graphics2D.UI.Styles
 {
-	public class MenuSeparatorStyle: WidgetStyle
+	public class SeparatorStyle: WidgetStyle
 	{
 		public TextureRegion Image { get; set; }
 		public int Thickness { get; set; }
 
-		public MenuSeparatorStyle()
+		public SeparatorStyle()
 		{
 		}
 
-		public MenuSeparatorStyle(MenuSeparatorStyle style): base(style)
+		public SeparatorStyle(SeparatorStyle style): base(style)
 		{
 			Image = style.Image;
 			Thickness = style.Thickness;
@@ -19,7 +19,7 @@ namespace Myra.Graphics2D.UI.Styles
 
 		public override WidgetStyle Clone()
 		{
-			return new MenuSeparatorStyle(this);
+			return new SeparatorStyle(this);
 		}
 	}
 }

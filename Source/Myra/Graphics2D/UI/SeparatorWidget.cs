@@ -2,12 +2,12 @@
 
 namespace Myra.Graphics2D.UI
 {
-	public class MenuSeparatorWidget : GridBased
+	public class SeparatorWidget : GridBased
 	{
 		private readonly Orientation _orientation;
 		private readonly Widget _image;
 
-		internal MenuSeparatorWidget(Orientation orientation, MenuSeparatorStyle style)
+		internal SeparatorWidget(Orientation orientation, SeparatorStyle style)
 		{
 			_orientation = orientation;
 			_image = new Widget();
@@ -31,7 +31,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public void ApplyMenuSeparatorStyle(MenuSeparatorStyle style)
+		public void ApplyMenuSeparatorStyle(SeparatorStyle style)
 		{
 			ApplyWidgetStyle(style);
 

@@ -2,6 +2,7 @@
 using System.Text;
 using Microsoft.Xna.Framework;
 using Myra.Attributes;
+using Myra.Graphics2D.TextureAtlases;
 using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
@@ -60,9 +61,19 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public bool IsSeparator { get; set; }
+
 		[HiddenInEditor]
 		[JsonIgnore]
 		public object Tag { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public TextureRegion Image { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public int ImageTextSpacing { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]

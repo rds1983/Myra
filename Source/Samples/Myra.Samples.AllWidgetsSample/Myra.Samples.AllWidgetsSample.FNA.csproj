@@ -108,6 +108,10 @@
       <Project>{35253ce1-c864-4cd3-8249-4d1319748e8f}</Project>
       <Name>FNA</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Myra.Editor\Myra.Editor.FNA.csproj">
+      <Project>{f18bd428-25f7-4183-beb7-7c96f21ae2d1}</Project>
+      <Name>Myra.Editor.FNA</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Myra\Myra.FNA.csproj">
       <Project>{8ac20e4c-9aac-40a9-9c0b-5853f58b13ea}</Project>
       <Name>Myra.FNA</Name>
