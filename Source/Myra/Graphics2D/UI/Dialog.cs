@@ -6,8 +6,6 @@ namespace Myra.Graphics2D.UI
 {
 	public class Dialog : Window
 	{
-		private readonly Grid _dialogContent;
-
 		[HiddenInEditor]
 		[JsonIgnore]
 		public Button ButtonOk { get; private set; }
@@ -16,52 +14,15 @@ namespace Myra.Graphics2D.UI
 		[JsonIgnore]
 		public Button ButtonCancel { get; private set; }
 
-		[HiddenInEditor]
-		public override Widget Content
-		{
-			get
-			{
-				if (_dialogContent.Widgets.Count >= 2)
-				{
-					return _dialogContent.Widgets[1];
-				}
-
-				return null;
-			}
-
-			set
-			{
-				if (value == Content)
-				{
-					return;
-				}
-
-				// Remove existing
-				if (Content != null)
-				{
-					_dialogContent.Widgets.Remove(Content);
-				}
-
-				if (value != null)
-				{
-					value.GridPositionY = 0;
-					_dialogContent.Widgets.Add(value);
-				}
-			}
-		}
-
 		public Dialog()
 		{
-			_dialogContent = new Grid { RowSpacing = 8 };
-
-			_dialogContent.RowsProportions.Add(new Proportion(ProportionType.Fill));
-			_dialogContent.RowsProportions.Add(new Proportion());
+			RowsProportions.Add(new Proportion());
 
 			var buttonsGrid = new Grid
 			{
 				ColumnSpacing = 8,
 				HorizontalAlignment = HorizontalAlignment.Right,
-				GridPositionY = 1
+				GridPositionY = 2
 			};
 
 			buttonsGrid.ColumnsProportions.Add(new Proportion());
@@ -94,9 +55,7 @@ namespace Myra.Graphics2D.UI
 
 			buttonsGrid.Widgets.Add(ButtonCancel);
 
-			_dialogContent.Widgets.Add(buttonsGrid);
-
-			base.Content = _dialogContent;
+			Widgets.Add(buttonsGrid);
 		}
 
 		public override void OnKeyDown(Keys k)

@@ -18,13 +18,18 @@ namespace Myra.Editor.UI.File
 		private readonly List<string> _paths = new List<string>();
 		private readonly FileDialogMode _mode;
 
-		internal string Folder
+		public string Folder
 		{
 			get { return _textFieldPath.Text; }
 
 			set
 			{
 				if (value == _textFieldPath.Text)
+				{
+					return;
+				}
+
+				if (!Directory.Exists(value))
 				{
 					return;
 				}
@@ -161,6 +166,8 @@ namespace Myra.Editor.UI.File
 			_gridFiles.SelectedIndexChanged += OnGridFilesSelectedIndexChanged;
 			_gridFiles.DoubleClick += OnGridFilesDoubleClick;
 
+			_buttonParent.Down += OnButtonParent;
+
 			_textFieldFileName.TextChanged += (s, a) => UpdateEnabled();
 
 			ButtonOk.Down += OnButtonOk;
@@ -179,6 +186,18 @@ namespace Myra.Editor.UI.File
 		private void UpdateEnabled()
 		{
 			ButtonOk.Enabled = !string.IsNullOrEmpty(SelectedPath);
+		}
+
+		private void OnButtonParent(object sender, EventArgs args)
+		{
+			if (string.IsNullOrEmpty(Folder))
+			{
+				return;
+			}
+
+			var parentFolder = Path.GetDirectoryName(Folder);
+
+			Folder = parentFolder;
 		}
 
 		private void OnButtonOk(object sender, EventArgs args)

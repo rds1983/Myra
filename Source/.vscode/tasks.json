@@ -157,5 +157,18 @@
                 "$go"
             ]
 		},
+		{
+            "label": "Clean All",
+            "type": "process",
+            "command": "msbuild",
+            "args": [
+                "Myra.sln",
+                "/t:clean"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$go"
+            ]
+		},		
 	]
 }

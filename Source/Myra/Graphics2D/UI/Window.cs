@@ -22,6 +22,7 @@ namespace Myra.Graphics2D.UI
 		private readonly TextBlock _titleLabel;
 		private readonly ImageButton _closeButton;
 		private Grid _contentGrid;
+		private Widget _content;
 
 		[EditCategory("Appearance")]
 		public string Title
@@ -61,33 +62,11 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
-		[Obsolete("Obsolete. Use Content property.")]
-		public Grid ContentGrid
+		public Widget Content
 		{
 			get
 			{
-				if (_contentGrid == null)
-				{
-					_contentGrid = new Grid();
-					Content = _contentGrid;
-				}
-
-				return _contentGrid;
-			}
-		}
-
-		[HiddenInEditor]
-		public virtual Widget Content
-		{
-			get
-			{
-				if (Widgets.Count >= 2)
-				{
-					return Widgets[1];
-				}
-
-				return null;
+				return _content;
 			}
 
 			set
@@ -98,9 +77,9 @@ namespace Myra.Graphics2D.UI
 				}
 
 				// Remove existing
-				if (Content != null)
+				if (_content != null)
 				{
-					Widgets.Remove(Content);
+					Widgets.Remove(_content);
 				}
 
 				if (value != null)
@@ -108,6 +87,8 @@ namespace Myra.Graphics2D.UI
 					value.GridPositionY = 1;
 					Widgets.Add(value);
 				}
+
+				_content = value;
 			}
 		}
 
@@ -320,14 +301,20 @@ namespace Myra.Graphics2D.UI
 
 		public void ShowModal(Desktop desktop)
 		{
-			desktop.ModalWidget = this;
+			desktop.Widgets.Add(this);
+			desktop.FocusedWidget = this;
 		}
 
 		public void Close()
 		{
-			if (Desktop != null && Desktop.ModalWidget == this)
+			if (Desktop != null && Desktop.Widgets.Contains(this))
 			{
-				Desktop.ModalWidget = null;
+				if (Desktop.FocusedWidget == this)
+				{
+					Desktop.FocusedWidget = null;
+				}
+
+				Desktop.Widgets.Remove(this);
 
 				var ev = Closed;
 				if (ev != null)

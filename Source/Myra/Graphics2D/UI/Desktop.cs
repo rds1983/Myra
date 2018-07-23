@@ -71,32 +71,6 @@ namespace Myra.Graphics2D.UI
 
 		public Widget ContextMenu { get; private set; }
 
-		public Widget ModalWidget
-		{
-			get { return _modalWidget; }
-
-			set
-			{
-				if (_modalWidget == value)
-				{
-					return;
-				}
-
-				if (_modalWidget != null)
-				{
-					_widgets.Remove(_modalWidget);
-				}
-
-				_modalWidget = value;
-
-				if (value != null && !_widgets.Contains(value))
-				{
-					_widgets.Add(value);
-					FocusedWidget = value;
-				}
-			}
-		}
-
 		public Widget FocusedWidget
 		{
 			get { return _focusedWidget; }

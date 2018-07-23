@@ -46,6 +46,7 @@ namespace Myra.UIEditor
 		private TextBlock _drawCallsLabel;
 		//		private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
 		private string _filePath;
+		private string _lastFolder;
 		private bool _isDirty;
 		private Project _project;
 		private int[] _customColors;
@@ -70,6 +71,13 @@ namespace Myra.UIEditor
 				if (value == _filePath)
 				{
 					return;
+				}
+
+				if (!string.IsNullOrEmpty(_filePath) &&
+					string.IsNullOrEmpty(value))
+				{
+					// Store last folder
+					_lastFolder = Path.GetDirectoryName(_filePath);
 				}
 
 				_filePath = value;
@@ -568,7 +576,8 @@ namespace Myra.UIEditor
 			if (root is Window)
 			{
 				((Window)root).Content = widget;
-			} else if (root is MultipleItemsContainer)
+			}
+			else if (root is MultipleItemsContainer)
 			{
 				((MultipleItemsContainer)root).Widgets.Add(widget);
 			}
@@ -685,6 +694,14 @@ namespace Myra.UIEditor
 		{
 			var dlg = new FileDialog(FileDialogMode.OpenFile);
 			dlg.Filter = "*.ui";
+
+			if (!string.IsNullOrEmpty(FilePath))
+			{
+				dlg.Folder = Path.GetDirectoryName(FilePath);
+			} else if (!string.IsNullOrEmpty(_lastFolder))
+			{
+				dlg.Folder = _lastFolder;
+			}
 
 			dlg.ButtonOk.Down += (s, a) =>
 			{
