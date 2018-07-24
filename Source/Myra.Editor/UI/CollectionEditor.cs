@@ -60,7 +60,7 @@ namespace Myra.Editor.UI
 
 			Widget.Widgets.Add(_listItems);
 
-			_propertyGrid = new PropertyGrid {GridPositionX = 1};
+			_propertyGrid = new PropertyGrid { GridPositionX = 1 };
 			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
 
 			Widget.Widgets.Add(_propertyGrid);
@@ -76,7 +76,7 @@ namespace Myra.Editor.UI
 			buttonsGrid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
 			buttonsGrid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
 
-			var buttonNew = new Button {Text = "New"};
+			var buttonNew = new Button { Text = "New" };
 			buttonNew.Up += ButtonNewOnUp;
 			buttonsGrid.Widgets.Add(buttonNew);
 
@@ -132,12 +132,12 @@ namespace Myra.Editor.UI
 
 		private void ButtonMoveDownOnUp(object sender, EventArgs eventArgs)
 		{
-			MoveSelectedItem(_listItems.SelectedIndex + 1);
+			MoveSelectedItem(_listItems.SelectedIndex.Value + 1);
 		}
 
 		private void ButtonMoveUpOnUp(object sender, EventArgs eventArgs)
 		{
-			MoveSelectedItem(_listItems.SelectedIndex - 1);
+			MoveSelectedItem(_listItems.SelectedIndex.Value - 1);
 		}
 
 		private void ButtonDeleteOnUp(object sender, EventArgs eventArgs)

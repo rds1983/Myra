@@ -824,9 +824,12 @@ namespace Myra.UIEditor
 
 				dlg.ShowModal(_desktop);
 
-				dlg.Selected += (s, a) =>
+				dlg.Closed += (s, a) =>
 				{
-					ProcessSave(dlg.FilePath);
+					if (dlg.ModalResult == (int)Myra.Graphics2D.UI.Window.DefaultModalResult.Ok)
+					{
+						ProcessSave(dlg.FilePath);
+					}
 				};
 			}
 			else

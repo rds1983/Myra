@@ -35,6 +35,11 @@ namespace Myra.Graphics2D.UI
 
 			ButtonOk.Up += (sender, args) =>
 			{
+				if (!CanCloseByOk())
+				{
+					return;
+				}
+
 				ModalResult = (int)DefaultModalResult.Ok;
 				Close();
 			};
@@ -71,6 +76,11 @@ namespace Myra.Graphics2D.UI
 					ButtonOk.Press();
 					break;
 			}
+		}
+
+		protected virtual bool CanCloseByOk()
+		{
+			return true;
 		}
 
 		public static Dialog CreateMessageBox(string title, Widget content)

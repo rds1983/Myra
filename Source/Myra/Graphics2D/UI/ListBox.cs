@@ -25,13 +25,13 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public int SelectedIndex
+		public new int? SelectedIndex
 		{
 			get
 			{
 				if (_selectedItem == null)
 				{
-					return -1;
+					return null;
 				}
 
 				return _items.IndexOf(_selectedItem);
@@ -39,13 +39,13 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (value < 0 || value >= Items.Count)
+				if (value == null || value.Value < 0 || value.Value >= Items.Count)
 				{
 					SelectedItem = null;
 					return;
 				}
 
-				SelectedItem = Items[value];
+				SelectedItem = Items[value.Value];
 			}
 		}
 
@@ -83,7 +83,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public event EventHandler SelectedIndexChanged;
+		public new event EventHandler SelectedIndexChanged;
 
 		public ListBox(ListBoxStyle style)
 		{
@@ -114,33 +114,33 @@ namespace Myra.Graphics2D.UI
 			switch (args.Action)
 			{
 				case NotifyCollectionChangedAction.Add:
-				{
-					var index = args.NewStartingIndex;
-					foreach (ListItem item in args.NewItems)
 					{
-						InsertItem(item, index);
-						++index;
+						var index = args.NewStartingIndex;
+						foreach (ListItem item in args.NewItems)
+						{
+							InsertItem(item, index);
+							++index;
+						}
+						break;
 					}
-					break;
-				}
 
 				case NotifyCollectionChangedAction.Remove:
-				{
-					foreach (ListItem item in args.OldItems)
 					{
-						RemoveItem(item);
+						foreach (ListItem item in args.OldItems)
+						{
+							RemoveItem(item);
+						}
+						break;
 					}
-					break;
-				}
 
 				case NotifyCollectionChangedAction.Reset:
-				{
-					while (Widgets.Count > 0)
 					{
-						RemoveItem((ListItem)(Widgets[0].Tag));
+						while (Widgets.Count > 0)
+						{
+							RemoveItem((ListItem)(Widgets[0].Tag));
+						}
+						break;
 					}
-					break;
-				}
 			}
 
 			InvalidateMeasure();
@@ -219,7 +219,7 @@ namespace Myra.Graphics2D.UI
 
 		private void ButtonOnDown(object sender, EventArgs eventArgs)
 		{
-			var item = (Button) sender;
+			var item = (Button)sender;
 			var index = Widgets.IndexOf(item);
 			SelectedIndex = index;
 		}

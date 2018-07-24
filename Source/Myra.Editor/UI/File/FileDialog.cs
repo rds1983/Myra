@@ -16,6 +16,8 @@ namespace Myra.Editor.UI.File
 		};
 
 		private readonly List<string> _paths = new List<string>();
+		private readonly List<string> _history = new List<string>();
+		private int _historyPosition = 0;
 		private readonly FileDialogMode _mode;
 		private bool _firstRender = true;
 
@@ -30,25 +32,7 @@ namespace Myra.Editor.UI.File
 					return;
 				}
 
-				if (!Directory.Exists(value))
-				{
-					return;
-				}
-
-				foreach (var item in _listBoxPlaces.Items)
-				{
-					var s = (string)item.Tag;
-
-					if (s == value)
-					{
-
-					}
-				}
-
-				// _listBoxPlaces.SelectedItem = null;
-
-				_textFieldPath.Text = value;
-				UpdateFolder();
+				SetFolder(value, true);
 			}
 		}
 
@@ -60,7 +44,7 @@ namespace Myra.Editor.UI.File
 			get; set;
 		}
 
-		internal string SelectedPath
+		internal string FileName
 		{
 			get { return _textFieldFileName.Text; }
 
@@ -74,15 +58,15 @@ namespace Myra.Editor.UI.File
 		{
 			get
 			{
-				return System.IO.Path.Combine(Folder, SelectedPath);
+				return System.IO.Path.Combine(Folder, FileName);
 			}
 
 			set
 			{
 				Folder = System.IO.Path.GetDirectoryName(value);
-				SelectedPath = System.IO.Path.GetFileName(value);
+				FileName = System.IO.Path.GetFileName(value);
 
-				if (!string.IsNullOrEmpty(SelectedPath))
+				if (!string.IsNullOrEmpty(FileName))
 				{
 					foreach (var widget in _gridFiles.Widgets)
 					{
@@ -93,7 +77,7 @@ namespace Myra.Editor.UI.File
 							continue;
 						}
 
-						if (asTextBlock.Text == SelectedPath)
+						if (asTextBlock.Text == FileName)
 						{
 							_gridFiles.SelectedIndex = asTextBlock.GridPositionY;
 							break;
@@ -102,9 +86,6 @@ namespace Myra.Editor.UI.File
 				}
 			}
 		}
-
-		public event EventHandler Selected;
-		public event EventHandler Cancelled;
 
 		public FileDialog(FileDialogMode mode)
 		{
@@ -156,11 +137,21 @@ namespace Myra.Editor.UI.File
 
 			foreach (var p in places)
 			{
+				if (!Directory.Exists(p))
+				{
+					continue;
+				}
+
 				_listBoxPlaces.Items.Add(new ListItem(Path.GetFileName(p), null, p)
 				{
 					Image = iconFolder,
 					ImageTextSpacing = ImageTextSpacing
 				});
+			}
+
+			if (_listBoxPlaces.Items.Count > 0)
+			{
+				SetFolder((string)_listBoxPlaces.Items[0].Tag, false);
 			}
 
 			_listBoxPlaces.Items.Add(new ListItem
@@ -193,7 +184,6 @@ namespace Myra.Editor.UI.File
 			}
 
 			_listBoxPlaces.SelectedIndexChanged += OnPlacesSelectedIndexChanged;
-			_listBoxPlaces.SelectedIndex = 0;
 
 			_gridFiles.SelectedIndexChanged += OnGridFilesSelectedIndexChanged;
 			_gridFiles.DoubleClick += OnGridFilesDoubleClick;
@@ -202,22 +192,15 @@ namespace Myra.Editor.UI.File
 
 			_textFieldFileName.TextChanged += (s, a) => UpdateEnabled();
 
-			ButtonOk.Down += OnButtonOk;
-			ButtonCancel.Down += (s, a) =>
-			{
-				var ev = Cancelled;
-				if (ev != null)
-				{
-					ev(this, EventArgs.Empty);
-				}
-			};
+			_buttonBack.Down += OnButtonBack;
+			_buttonForward.Down += OnButtonForward;
 
 			UpdateEnabled();
 		}
 
 		private void UpdateEnabled()
 		{
-			ButtonOk.Enabled = !string.IsNullOrEmpty(SelectedPath);
+			ButtonOk.Enabled = !string.IsNullOrEmpty(FileName);
 		}
 
 		private void OnButtonParent(object sender, EventArgs args)
@@ -232,14 +215,57 @@ namespace Myra.Editor.UI.File
 			Folder = parentFolder;
 		}
 
-		private void OnButtonOk(object sender, EventArgs args)
+		private void OnButtonBack(object sender, EventArgs args)
 		{
-			var ev = Selected;
-
-			if (ev != null)
+			if (_historyPosition <= 0)
 			{
-				ev(this, EventArgs.Empty);
+				return;
 			}
+
+			--_historyPosition;
+			if (_historyPosition >= 0 && _historyPosition < _history.Count)
+			{
+				SetFolder(_history[_historyPosition], false);
+			}
+		}
+
+		private void OnButtonForward(object sender, EventArgs args)
+		{
+			if (_historyPosition >= _history.Count - 1)
+			{
+				return;
+			}
+
+			++_historyPosition;
+			if (_historyPosition >= 0 && _historyPosition < _history.Count)
+			{
+				SetFolder(_history[_historyPosition], false);
+			}
+		}
+
+		private void SetFolder(string value, bool storeInHistory)
+		{
+			if (!Directory.Exists(value))
+			{
+				return;
+			}
+
+			_textFieldPath.Text = value;
+			UpdateFolder();
+
+			if (!storeInHistory)
+			{
+				return;
+			}
+
+			while (_history.Count > 0 && _historyPosition < _history.Count - 1)
+			{
+				_history.RemoveAt(_history.Count - 1);
+			}
+
+			_history.Add(Folder);
+
+			_historyPosition = _history.Count - 1;
 		}
 
 		private void OnGridFilesDoubleClick(object sender, EventArgs args)
@@ -248,7 +274,6 @@ namespace Myra.Editor.UI.File
 			{
 				return;
 			}
-
 
 			var path = _paths[_gridFiles.SelectedIndex.Value];
 
@@ -284,7 +309,7 @@ namespace Myra.Editor.UI.File
 
 			if (choose)
 			{
-				SelectedPath = Path.GetFileName(path);
+				FileName = Path.GetFileName(path);
 			}
 		}
 
@@ -396,6 +421,27 @@ namespace Myra.Editor.UI.File
 				Desktop.FocusedWidget = _gridFiles;
 				_firstRender = false;
 			}
+		}
+
+		protected override bool CanCloseByOk()
+		{
+			var dlg = Dialog.CreateMessageBox("Confirm Replace",
+				string.Format("File named '{0}' already exists. Do you want to replace it?", FileName));
+
+			dlg.Closed += (s, a) =>
+			{
+				if (dlg.ModalResult == (int)Window.DefaultModalResult.Cancel)
+				{
+					return;
+				}
+
+				ModalResult = (int)DefaultModalResult.Ok;
+				Close();
+			};
+
+			dlg.ShowModal(Desktop);
+
+			return false;
 		}
 	}
 }
