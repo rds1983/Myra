@@ -26,13 +26,14 @@ namespace Myra.UIEditor
 		public float TopSplitterPosition { get; set; }
 		public float RightSplitterPosition { get; set; }
 		public string EditedFile { get; set; }
+		public string LastFolder { get; set; }
 		public int[] CustomColors { get; set; }
 
 		public void Save()
 		{
 			using (var stream = new StreamWriter(StateFilePath, false))
 			{
-				var serializer = new XmlSerializer(typeof (State));
+				var serializer = new XmlSerializer(typeof(State));
 				serializer.Serialize(stream, this);
 			}
 		}
@@ -51,8 +52,8 @@ namespace Myra.UIEditor
 			State state;
 			using (var stream = new StreamReader(StateFilePath))
 			{
-				var serializer = new XmlSerializer(typeof (State));
-				state = (State) serializer.Deserialize(stream);
+				var serializer = new XmlSerializer(typeof(State));
+				state = (State)serializer.Deserialize(stream);
 			}
 
 			_logger.InfoFormat("Result: {0}", state);
@@ -68,14 +69,16 @@ namespace Myra.UIEditor
 				colors = string.Join(", ", from c in CustomColors select System.Drawing.Color.FromArgb(c).ToString());
 			}
 			return string.Format("Size = {0}\n" +
-			                     "TopSplitter = {1:0.##}\n" +
-			                     "RightSplitter= {2:0.##}\n" +
-			                     "EditedFile = {3}\n" +
-			                     "CustomColors = {4}",
+								 "TopSplitter = {1:0.##}\n" +
+								 "RightSplitter= {2:0.##}\n" +
+								 "EditedFile = {3}\n" +
+								 "LastFolder = {4}\n" +
+								 "CustomColors = {5}",
 				Size,
 				TopSplitterPosition,
 				RightSplitterPosition,
 				EditedFile,
+				LastFolder,
 				colors);
 		}
 	}

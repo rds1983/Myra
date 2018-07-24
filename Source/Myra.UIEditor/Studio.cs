@@ -73,14 +73,21 @@ namespace Myra.UIEditor
 					return;
 				}
 
-				if (!string.IsNullOrEmpty(_filePath) &&
-					string.IsNullOrEmpty(value))
+				_filePath = value;
+
+				if (!string.IsNullOrEmpty(_filePath))
 				{
 					// Store last folder
-					_lastFolder = Path.GetDirectoryName(_filePath);
+					try
+					{
+						_lastFolder = Path.GetDirectoryName(_filePath);
+					}
+					catch (Exception ex)
+					{
+						_logger.Error(ex);
+					}
 				}
 
-				_filePath = value;
 				UpdateTitle();
 			}
 		}
@@ -151,6 +158,7 @@ namespace Myra.UIEditor
 				_graphicsDeviceManager.PreferredBackBufferWidth = _state.Size.X;
 				_graphicsDeviceManager.PreferredBackBufferHeight = _state.Size.Y;
 				_customColors = _state.CustomColors;
+				_lastFolder = _state.LastFolder;
 			}
 			else
 			{
@@ -698,7 +706,8 @@ namespace Myra.UIEditor
 			if (!string.IsNullOrEmpty(FilePath))
 			{
 				dlg.Folder = Path.GetDirectoryName(FilePath);
-			} else if (!string.IsNullOrEmpty(_lastFolder))
+			}
+			else if (!string.IsNullOrEmpty(_lastFolder))
 			{
 				dlg.Folder = _lastFolder;
 			}
@@ -766,6 +775,7 @@ namespace Myra.UIEditor
 				TopSplitterPosition = _ui._topSplitPane.GetSplitterPosition(0),
 				RightSplitterPosition = _ui._rightSplitPane.GetSplitterPosition(0),
 				EditedFile = FilePath,
+				LastFolder = _lastFolder,
 				CustomColors = _customColors
 			};
 
@@ -806,6 +816,10 @@ namespace Myra.UIEditor
 				if (!string.IsNullOrEmpty(FilePath))
 				{
 					dlg.FilePath = FilePath;
+				}
+				else if (!string.IsNullOrEmpty(_lastFolder))
+				{
+					dlg.Folder = _lastFolder;
 				}
 
 				dlg.ShowModal(_desktop);

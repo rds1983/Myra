@@ -25,7 +25,11 @@ namespace Myra.Graphics2D.UI
 		public Point ScrollPosition
 		{
 			get { return _scrollPosition; }
-			set { _scrollPosition = value; }
+			set
+			{
+				_scrollPosition = value;
+				UpdateWidgetLocation();
+			}
 		}
 
 		[HiddenInEditor]

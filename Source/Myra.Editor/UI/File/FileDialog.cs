@@ -17,6 +17,7 @@ namespace Myra.Editor.UI.File
 
 		private readonly List<string> _paths = new List<string>();
 		private readonly FileDialogMode _mode;
+		private bool _firstRender = true;
 
 		public string Folder
 		{
@@ -33,6 +34,18 @@ namespace Myra.Editor.UI.File
 				{
 					return;
 				}
+
+				foreach (var item in _listBoxPlaces.Items)
+				{
+					var s = (string)item.Tag;
+
+					if (s == value)
+					{
+
+					}
+				}
+
+				// _listBoxPlaces.SelectedItem = null;
 
 				_textFieldPath.Text = value;
 				UpdateFolder();
@@ -68,6 +81,25 @@ namespace Myra.Editor.UI.File
 			{
 				Folder = System.IO.Path.GetDirectoryName(value);
 				SelectedPath = System.IO.Path.GetFileName(value);
+
+				if (!string.IsNullOrEmpty(SelectedPath))
+				{
+					foreach (var widget in _gridFiles.Widgets)
+					{
+						var asTextBlock = widget as TextBlock;
+
+						if (asTextBlock == null)
+						{
+							continue;
+						}
+
+						if (asTextBlock.Text == SelectedPath)
+						{
+							_gridFiles.SelectedIndex = asTextBlock.GridPositionY;
+							break;
+						}
+					}
+				}
 			}
 		}
 
@@ -76,6 +108,10 @@ namespace Myra.Editor.UI.File
 
 		public FileDialog(FileDialogMode mode)
 		{
+			_mode = mode;
+
+			BuildUI();
+
 			switch (mode)
 			{
 				case FileDialogMode.OpenFile:
@@ -88,10 +124,6 @@ namespace Myra.Editor.UI.File
 					Title = "Choose Folder...";
 					break;
 			}
-
-			_mode = mode;
-
-			BuildUI();
 
 			_splitPane.SetSplitterPosition(0, 0.3f);
 
@@ -225,7 +257,7 @@ namespace Myra.Editor.UI.File
 				return;
 			}
 
-			_listBoxPlaces.SelectedItem = null;
+			_listBoxPlaces.SelectedIndex = null;
 			Folder = path;
 		}
 
@@ -236,7 +268,7 @@ namespace Myra.Editor.UI.File
 				return;
 			}
 
-			_listBoxPlaces.SelectedItem = null;
+			_listBoxPlaces.SelectedIndex = null;
 
 			var path = _paths[_gridFiles.SelectedIndex.Value];
 
@@ -258,12 +290,12 @@ namespace Myra.Editor.UI.File
 
 		private void OnPlacesSelectedIndexChanged(object sender, EventArgs args)
 		{
-			if (_listBoxPlaces.SelectedItem == null)
+			if (_listBoxPlaces.SelectedIndex == null)
 			{
 				return;
 			}
 
-			var path = (string)_listBoxPlaces.Items[_listBoxPlaces.SelectedIndex].Tag;
+			var path = (string)_listBoxPlaces.Items[_listBoxPlaces.SelectedIndex.Value].Tag;
 			Folder = path;
 		}
 
@@ -352,6 +384,17 @@ namespace Myra.Editor.UI.File
 				_paths.Add(f);
 
 				++gridY;
+			}
+		}
+
+		public override void InternalRender(RenderContext context)
+		{
+			base.InternalRender(context);
+
+			if (_firstRender)
+			{
+				Desktop.FocusedWidget = _gridFiles;
+				_firstRender = false;
 			}
 		}
 	}
