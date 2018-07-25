@@ -16,9 +16,9 @@ copy "Myra\bin\FNA\%CONFIGURATION%\Myra.dll" "ZipPackage\FNA\" /Y
 copy "Myra\bin\FNA\%CONFIGURATION%\Myra.pdb" "ZipPackage\FNA\" /Y
 copy "Myra\bin\%CONFIGURATION%\Newtonsoft.Json.dll" ZipPackage /Y
 copy "Myra\bin\%CONFIGURATION%\Newtonsoft.Json.xml" ZipPackage /Y
-copy "Myra.UIEditor\bin\%CONFIGURATION%\NLog.dll" ZipPackage /Y
-copy "Myra.UIEditor\bin\%CONFIGURATION%\NLog.xml" ZipPackage /Y
-copy "Myra.UIEditor\bin\%CONFIGURATION%\NLog.config" ZipPackage /Y
+copy "Myra.UIEditor\bin\%CONFIGURATION%\log4net.dll" ZipPackage /Y
+copy "Myra.UIEditor\bin\%CONFIGURATION%\log4net.xml" ZipPackage /Y
+copy "Myra.UIEditor\bin\%CONFIGURATION%\log4net.config" ZipPackage /Y
 copy "Samples\Myra.Samples.AllWidgetsSample\bin\%CONFIGURATION%\Myra.Samples.AllWidgetsSample.exe" ZipPackage /Y
 copy "Samples\Myra.Samples.CustomUIStylesheetSample\bin\%CONFIGURATION%\Myra.Samples.CustomUIStylesheetSample.exe" ZipPackage /Y
 copy "Samples\Myra.Samples.FormattedTextSample\bin\%CONFIGURATION%\Myra.Samples.FormattedTextSample.exe" ZipPackage /Y
@@ -36,8 +36,6 @@ copy "Myra.Editor\bin\FNA\%CONFIGURATION%\Myra.Editor.pdb" "ZipPackage\FNA\" /Y
 copy "Myra.UIEditor\bin\%CONFIGURATION%\Myra.UIEditor.exe" ZipPackage /Y
 copy "Myra.UIEditor\bin\%CONFIGURATION%\Myra.UIEditor.exe.config" ZipPackage /Y
 copy "Myra.UIEditor\bin\%CONFIGURATION%\Myra.UIEditor.pdb" ZipPackage /Y
-
-copy "Samples\Myra.Samples.CustomUIStylesheetSample\Content\bin\DesktopGL\*.*" "ZipPackage\Content" /Y
 
 copy "Myra-Dependencies\MonoGame.Framework.DesktopGL\MonoGame.Framework.dll" "ZipPackage" /Y
 copy "Myra-Dependencies\MonoGame.Framework.DesktopGL\MonoGame.Framework.dll.config" "ZipPackage" /Y
