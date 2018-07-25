@@ -695,8 +695,10 @@ namespace Myra.UIEditor
 
 		private void OpenItemOnClicked(object sender, EventArgs eventArgs)
 		{
-			var dlg = new FileDialog(FileDialogMode.OpenFile);
-			dlg.Filter = "*.ui";
+			var dlg = new FileDialog(FileDialogMode.OpenFile)
+			{
+				Filter = "*.ui"
+			};
 
 			if (!string.IsNullOrEmpty(FilePath))
 			{
@@ -709,7 +711,7 @@ namespace Myra.UIEditor
 
 			dlg.Closed += (s, a) =>
 			{
-				if (dlg.ModalResult != (int)Myra.Graphics2D.UI.Window.DefaultModalResult.Ok)
+				if (dlg.ModalResult != (int)Graphics2D.UI.Window.DefaultModalResult.Ok)
 				{
 					return;
 				}
@@ -810,8 +812,10 @@ namespace Myra.UIEditor
 		{
 			if (string.IsNullOrEmpty(FilePath) || setFileName)
 			{
-				var dlg = new FileDialog(FileDialogMode.SaveFile);
-				dlg.Filter = "*.ui";
+				var dlg = new FileDialog(FileDialogMode.SaveFile)
+				{
+					Filter = "*.ui"
+				};
 
 				if (!string.IsNullOrEmpty(FilePath))
 				{
@@ -826,7 +830,7 @@ namespace Myra.UIEditor
 
 				dlg.Closed += (s, a) =>
 				{
-					if (dlg.ModalResult == (int)Myra.Graphics2D.UI.Window.DefaultModalResult.Ok)
+					if (dlg.ModalResult == (int)Graphics2D.UI.Window.DefaultModalResult.Ok)
 					{
 						ProcessSave(dlg.FilePath);
 					}

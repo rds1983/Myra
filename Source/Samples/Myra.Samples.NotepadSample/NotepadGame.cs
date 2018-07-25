@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Microsoft.Xna.Framework;
+using Myra.Editor.UI.File;
 using Myra.Graphics2D.UI;
 
 namespace Myra.Samples.NotepadSample
@@ -46,9 +47,6 @@ namespace Myra.Samples.NotepadSample
 				UpdateTitle();
 			}
 		}
-
-		public Func<string> OpenFileHandler { get; set; }
-		public Func<string> SaveFileHandler { get; set; }
 
 		public NotepadGame()
 		{
@@ -126,31 +124,47 @@ namespace Myra.Samples.NotepadSample
 			Dirty = true;
 		}
 
+		private void ProcessSave(string filePath)
+		{
+			if (string.IsNullOrEmpty(filePath))
+			{
+				return;
+			}
+
+			File.WriteAllText(filePath, _textField.Text);
+
+			FilePath = filePath;
+			Dirty = false;
+		}
+
 		private void Save(bool setFileName)
 		{
 			if (string.IsNullOrEmpty(FilePath) || setFileName)
 			{
-				var h = SaveFileHandler;
-				if (h == null)
+				var dlg = new FileDialog(FileDialogMode.SaveFile)
 				{
-					return;
+					Filter = "*.txt"
+				};
+
+				if (!string.IsNullOrEmpty(FilePath))
+				{
+					dlg.FilePath = FilePath;
 				}
 
-				var f = h();
-				if (string.IsNullOrEmpty(f))
+				dlg.Closed += (s, a) =>
 				{
-					return;
-				}
+					if (dlg.ModalResult == (int) Graphics2D.UI.Window.DefaultModalResult.Ok)
+					{
+						ProcessSave(dlg.FilePath);
+					}
+				};
 
-				FilePath = f;
+				dlg.ShowModal(_host);
 			}
-
-			using (var writer = new StreamWriter(_filePath))
+			else
 			{
-				writer.Write(_textField.Text);
+				ProcessSave(FilePath);
 			}
-
-			Dirty = false;
 		}
 
 		private void AboutItemOnDown(object sender, EventArgs eventArgs)
@@ -171,25 +185,35 @@ namespace Myra.Samples.NotepadSample
 
 		private void OpenItemOnDown(object sender, EventArgs eventArgs)
 		{
-			var h = OpenFileHandler;
-			if (h == null)
+			var dlg = new FileDialog(FileDialogMode.OpenFile)
 			{
-				return;
+				Filter = "*.txt"
+			};
+
+			if (!string.IsNullOrEmpty(FilePath))
+			{
+				dlg.FilePath = FilePath;
 			}
 
-			var filePath = h();
-			if (string.IsNullOrEmpty(filePath))
+			dlg.Closed += (s, a) =>
 			{
-				return;
-			}
+				if (dlg.ModalResult != (int) Graphics2D.UI.Window.DefaultModalResult.Ok)
+				{
+					return;
+				}
 
-			using (var reader = new StreamReader(filePath))
-			{
-				_textField.Text = reader.ReadToEnd();
-			}
+				var filePath = dlg.FilePath;
+				if (string.IsNullOrEmpty(filePath))
+				{
+					return;
+				}
 
-			FilePath = _filePath;
-			Dirty = false;
+				_textField.Text = File.ReadAllText(filePath);
+				FilePath = filePath;
+				Dirty = false;
+			};
+
+			dlg.ShowModal(_host);
 		}
 
 		private void NewItemOnDown(object sender, EventArgs eventArgs)

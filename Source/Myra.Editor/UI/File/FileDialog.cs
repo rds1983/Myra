@@ -17,7 +17,7 @@ namespace Myra.Editor.UI.File
 
 		private readonly List<string> _paths = new List<string>();
 		private readonly List<string> _history = new List<string>();
-		private int _historyPosition = 0;
+		private int _historyPosition;
 		private readonly FileDialogMode _mode;
 		private bool _firstRender = true;
 
@@ -58,13 +58,13 @@ namespace Myra.Editor.UI.File
 		{
 			get
 			{
-				return System.IO.Path.Combine(Folder, FileName);
+				return Path.Combine(Folder, FileName);
 			}
 
 			set
 			{
-				Folder = System.IO.Path.GetDirectoryName(value);
-				FileName = System.IO.Path.GetFileName(value);
+				Folder = Path.GetDirectoryName(value);
+				FileName = Path.GetFileName(value);
 
 				if (!string.IsNullOrEmpty(FileName))
 				{
@@ -87,6 +87,8 @@ namespace Myra.Editor.UI.File
 			}
 		}
 
+		public bool AutoAddFilterExtension { get; set; }
+
 		public FileDialog(FileDialogMode mode)
 		{
 			_mode = mode;
@@ -105,6 +107,8 @@ namespace Myra.Editor.UI.File
 					Title = "Choose Folder...";
 					break;
 			}
+
+			AutoAddFilterExtension = true;
 
 			if (mode == FileDialogMode.ChooseFolder)
 			{
@@ -456,21 +460,49 @@ namespace Myra.Editor.UI.File
 				return true;
 			}
 
-			var dlg = Dialog.CreateMessageBox("Confirm Replace",
-				string.Format("File named '{0}' already exists. Do you want to replace it?", FileName));
+			var fileName = FileName;
 
-			dlg.Closed += (s, a) =>
+			if (AutoAddFilterExtension && !string.IsNullOrEmpty(Filter))
 			{
-				if (dlg.ModalResult == (int)Window.DefaultModalResult.Cancel)
+				var idx = Filter.LastIndexOf('.');
+				if (idx != -1)
 				{
-					return;
+					var ext = Filter.Substring(idx);
+
+					if (!fileName.EndsWith(ext))
+					{
+						fileName += ext;
+					}
 				}
+			}
+
+			if (System.IO.File.Exists(Path.Combine(Folder, fileName)))
+			{
+				var dlg = CreateMessageBox("Confirm Replace",
+					string.Format("File named '{0}' already exists. Do you want to replace it?", fileName));
+
+				dlg.Closed += (s, a) =>
+				{
+					if (dlg.ModalResult == (int) DefaultModalResult.Cancel)
+					{
+						return;
+					}
+
+					FileName = fileName;
+
+					ModalResult = (int) DefaultModalResult.Ok;
+					Close();
+				};
+
+				dlg.ShowModal(Desktop);
+			}
+			else
+			{
+				FileName = fileName;
 
 				ModalResult = (int)DefaultModalResult.Ok;
 				Close();
-			};
-
-			dlg.ShowModal(Desktop);
+			}
 
 			return false;
 		}
