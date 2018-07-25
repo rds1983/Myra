@@ -105,6 +105,18 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Behavior")]
 		public bool Multiline { get; set; }
 
+		[EditCategory("Behavior")]
+		[DefaultValue(false)]
+		public bool Readonly { get; set; }
+
+		private bool AcceptsInput
+		{
+			get
+			{
+				return Enabled && !Readonly;
+			}
+		}
+
 		public override bool IsFocused
 		{
 			get { return base.IsFocused; }
@@ -178,7 +190,7 @@ namespace Myra.Graphics2D.UI
 
 		private void ProcessChar(char ch)
 		{
-			if (!Enabled)
+			if (!AcceptsInput)
 			{
 				return;
 			}
@@ -204,50 +216,45 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnKeyDown(k);
 
+			if (!AcceptsInput)
+			{
+				return;
+			}
+
 			switch (k)
 			{
 				case Keys.Back:
-				{
-					if (!Enabled)
 					{
-						break;
-					}
+						EnsureIndexInRange();
+						var sb = new StringBuilder();
 
-					EnsureIndexInRange();
-					var sb = new StringBuilder();
+						if (_cursorIndex > 0)
+						{
+							sb.Append(Text.Substring(0, _cursorIndex - 1));
+						}
+						sb.Append(Text.Substring(_cursorIndex));
 
-					if (_cursorIndex > 0)
-					{
-						sb.Append(Text.Substring(0, _cursorIndex - 1));
+						if (SetText(sb.ToString()) && _cursorIndex > 0)
+						{
+							--_cursorIndex;
+						}
 					}
-					sb.Append(Text.Substring(_cursorIndex));
-
-					if (SetText(sb.ToString()) && _cursorIndex > 0)
-					{
-						--_cursorIndex;
-					}
-				}
 					break;
 
 				case Keys.Delete:
-				{
-					if (!Enabled)
 					{
-						break;
+						EnsureIndexInRange();
+
+						var sb = new StringBuilder();
+						sb.Append(Text.Substring(0, _cursorIndex));
+
+						if (_cursorIndex + 1 < Text.Length)
+						{
+							sb.Append(Text.Substring(_cursorIndex + 1));
+						}
+
+						Text = sb.ToString();
 					}
-
-					EnsureIndexInRange();
-
-					var sb = new StringBuilder();
-					sb.Append(Text.Substring(0, _cursorIndex));
-
-					if (_cursorIndex + 1 < Text.Length)
-					{
-						sb.Append(Text.Substring(_cursorIndex + 1));
-					}
-
-					Text = sb.ToString();
-				}
 					break;
 
 				case Keys.Left:
@@ -264,91 +271,86 @@ namespace Myra.Graphics2D.UI
 					}
 					break;
 
-/*				case Keys.Up:
-				{
-					if (!Multiline)
-					{
-						break;
-					}
+				/*				case Keys.Up:
+								{
+									if (!Multiline)
+									{
+										break;
+									}
 
-					int lineIndex, glyphIndex;
-					if (!_formattedText.GetPositionByCharIndex(_cursorIndex, out lineIndex, out glyphIndex))
-					{
-						break;
-					}
+									int lineIndex, glyphIndex;
+									if (!_formattedText.GetPositionByCharIndex(_cursorIndex, out lineIndex, out glyphIndex))
+									{
+										break;
+									}
 
-					if (lineIndex <= 0)
-					{
-						break;
-					}
+									if (lineIndex <= 0)
+									{
+										break;
+									}
 
-					// Move up
-					--lineIndex;
+									// Move up
+									--lineIndex;
 
-					if (glyphIndex >= _formattedText.Strings[lineIndex].Count)
-					{
-						glyphIndex = _formattedText.Strings[lineIndex].Count - 1;
-					}
+									if (glyphIndex >= _formattedText.Strings[lineIndex].Count)
+									{
+										glyphIndex = _formattedText.Strings[lineIndex].Count - 1;
+									}
 
-					var pos = _formattedText.GetCharIndexByPosition(lineIndex, glyphIndex);
-					_cursorIndex = pos ?? 0;
-				}
-					break;
+									var pos = _formattedText.GetCharIndexByPosition(lineIndex, glyphIndex);
+									_cursorIndex = pos ?? 0;
+								}
+									break;
 
-				case Keys.Down:
-				{
-					if (!Multiline)
-					{
-						break;
-					}
+								case Keys.Down:
+								{
+									if (!Multiline)
+									{
+										break;
+									}
 
-					int lineIndex, glyphIndex;
-					if (!_formattedText.GetPositionByCharIndex(_cursorIndex, out lineIndex, out glyphIndex))
-					{
-						break;
-					}
+									int lineIndex, glyphIndex;
+									if (!_formattedText.GetPositionByCharIndex(_cursorIndex, out lineIndex, out glyphIndex))
+									{
+										break;
+									}
 
-					if (lineIndex >= _formattedText.Strings.Length - 1)
-					{
-						break;
-					}
+									if (lineIndex >= _formattedText.Strings.Length - 1)
+									{
+										break;
+									}
 
 
-					// Move down
-					++lineIndex;
+									// Move down
+									++lineIndex;
 
-					if (glyphIndex >= _formattedText.Strings[lineIndex].Count)
-					{
-						glyphIndex = _formattedText.Strings[lineIndex].Count - 1;
-					}
+									if (glyphIndex >= _formattedText.Strings[lineIndex].Count)
+									{
+										glyphIndex = _formattedText.Strings[lineIndex].Count - 1;
+									}
 
-					var pos = _formattedText.GetCharIndexByPosition(lineIndex, glyphIndex);
-					_cursorIndex = pos ?? 0;
-				}
-					break;*/
+									var pos = _formattedText.GetCharIndexByPosition(lineIndex, glyphIndex);
+									_cursorIndex = pos ?? 0;
+								}
+									break;*/
 
 				case Keys.Home:
 					_cursorIndex = 0;
 					break;
 
 				case Keys.Enter:
-				{
-					if (!Enabled || !Multiline)
 					{
-						break;
-					}
+						// Insert line break
+						var sb = new StringBuilder();
+						sb.Append(Text.Substring(0, _cursorIndex));
+						sb.Append('\n');
+						sb.Append(Text.Substring(_cursorIndex));
 
-					// Insert line break
-					var sb = new StringBuilder();
-					sb.Append(Text.Substring(0, _cursorIndex));
-					sb.Append('\n');
-					sb.Append(Text.Substring(_cursorIndex));
-
-					if (SetText(sb.ToString()))
-					{
-						++_cursorIndex;
+						if (SetText(sb.ToString()))
+						{
+							++_cursorIndex;
+						}
 					}
-				}
 					break;
 
 				default:
@@ -418,7 +420,7 @@ namespace Myra.Graphics2D.UI
 				var glyphRender = _formattedText.GetGlyphInfoByIndex(_cursorIndex - 1);
 				if (glyphRender != null && glyphRender.TextRun.RenderedPosition != null)
 				{
-					x = glyphRender.TextRun.RenderedPosition.Value.X  + glyphRender.Bounds.Right;
+					x = glyphRender.TextRun.RenderedPosition.Value.X + glyphRender.Bounds.Right;
 					y = glyphRender.TextRun.RenderedPosition.Value.Y;
 				}
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using log4net;
+using Myra.Editor.UI.File;
 using Myra.Graphics2D.UI;
 
 namespace Myra.UIEditor.UI
@@ -15,6 +16,8 @@ namespace Myra.UIEditor.UI
 
 		public ExportOptionsDialog()
 		{
+			Title = "Export";
+
 			Content = _exportOptionsWidget;
 
 			_exportOptionsWidget._textNamespace.Text = Studio.Instance.Project.ExportOptions.Namespace;
@@ -28,14 +31,20 @@ namespace Myra.UIEditor.UI
 
 		private void ButtonChangeOutputPathOnDown(object sender, EventArgs eventArgs)
 		{
-			using (var dlg = new FolderBrowserDialog())
+			var dlg = new Editor.UI.File.FileDialog(FileDialogMode.ChooseFolder);
+			dlg.Folder = _exportOptionsWidget._textOutputPath.Text;
+
+			dlg.Closed += (s, a) =>
 			{
-				dlg.SelectedPath = _exportOptionsWidget._textOutputPath.Text;
-				if (dlg.ShowDialog() == DialogResult.OK)
+				if (dlg.ModalResult != (int)Myra.Graphics2D.UI.Window.DefaultModalResult.Ok)
 				{
-					_exportOptionsWidget._textOutputPath.Text = dlg.SelectedPath;
+					return;
 				}
-			}
+
+				_exportOptionsWidget._textOutputPath.Text = dlg.Folder;
+			};
+
+			dlg.ShowModal(Desktop);
 		}
 
 		private void ButtonOkOnDown(object sender, EventArgs eventArgs)

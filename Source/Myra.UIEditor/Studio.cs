@@ -191,11 +191,6 @@ namespace Myra.UIEditor
 			else
 			{
 				Load(_state.EditedFile);
-
-				if (Project != null && Project.Root is Window)
-				{
-					_isWindow = true;
-				}
 			}
 		}
 
@@ -712,8 +707,13 @@ namespace Myra.UIEditor
 				dlg.Folder = _lastFolder;
 			}
 
-			dlg.ButtonOk.Down += (s, a) =>
+			dlg.Closed += (s, a) =>
 			{
+				if (dlg.ModalResult != (int)Myra.Graphics2D.UI.Window.DefaultModalResult.Ok)
+				{
+					return;
+				}
+
 				var filePath = dlg.FilePath;
 				if (string.IsNullOrEmpty(filePath))
 				{
@@ -750,7 +750,7 @@ namespace Myra.UIEditor
 
 			if (_isWindow)
 			{
-				((Window)Project.Root).CenterOnDesktop();
+				((Window)Project.Root).CenterInBounds(_ui._projectHolder.Bounds);
 
 				_isWindow = false;
 			}
@@ -847,6 +847,11 @@ namespace Myra.UIEditor
 				Project = project;
 				FilePath = filePath;
 				IsDirty = false;
+
+				if (Project != null && Project.Root is Window)
+				{
+					_isWindow = true;
+				}
 			}
 			catch (Exception ex)
 			{

@@ -106,6 +106,12 @@ namespace Myra.Editor.UI.File
 					break;
 			}
 
+			if (mode == FileDialogMode.ChooseFolder)
+			{
+				_textBlockFileName.Visible = false;
+				_textFieldFileName.Visible = false;
+			}
+
 			_splitPane.SetSplitterPosition(0, 0.3f);
 
 			_buttonBack.Background = null;
@@ -200,7 +206,21 @@ namespace Myra.Editor.UI.File
 
 		private void UpdateEnabled()
 		{
-			ButtonOk.Enabled = !string.IsNullOrEmpty(FileName);
+			var enabled = false;
+			switch (_mode)
+			{
+				case FileDialogMode.OpenFile:
+					enabled = !string.IsNullOrEmpty(FileName) && System.IO.File.Exists(FilePath);
+					break;
+				case FileDialogMode.SaveFile:
+					enabled = !string.IsNullOrEmpty(FileName);
+					break;
+				case FileDialogMode.ChooseFolder:
+					enabled = !string.IsNullOrEmpty(Folder);
+					break;
+			}
+
+			ButtonOk.Enabled = enabled;
 		}
 
 		private void OnButtonParent(object sender, EventArgs args)
@@ -252,6 +272,7 @@ namespace Myra.Editor.UI.File
 
 			_textFieldPath.Text = value;
 			UpdateFolder();
+			UpdateEnabled();
 
 			if (!storeInHistory)
 			{
@@ -374,6 +395,11 @@ namespace Myra.Editor.UI.File
 				++gridY;
 			}
 
+			if (_mode == FileDialogMode.ChooseFolder)
+			{
+				return;
+			}
+
 			IEnumerable<string> files;
 
 			if (string.IsNullOrEmpty(Filter))
@@ -425,6 +451,11 @@ namespace Myra.Editor.UI.File
 
 		protected override bool CanCloseByOk()
 		{
+			if (_mode != FileDialogMode.SaveFile)
+			{
+				return true;
+			}
+
 			var dlg = Dialog.CreateMessageBox("Confirm Replace",
 				string.Format("File named '{0}' already exists. Do you want to replace it?", FileName));
 

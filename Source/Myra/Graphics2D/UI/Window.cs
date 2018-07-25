@@ -172,6 +172,13 @@ namespace Myra.Graphics2D.UI
 			CenterOnDesktop();
 		}
 
+		public void CenterInBounds(Rectangle bounds)
+		{
+			var size = Measure(bounds.Size());
+			XHint = (bounds.Width - size.X) / 2;
+			YHint = (bounds.Height - size.Y) / 2;
+		}
+
 		public void CenterOnDesktop()
 		{
 			if (Desktop == null)
@@ -179,11 +186,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var size = Measure(Desktop.Bounds.Size());
-
-			XHint = (Desktop.Bounds.Width - size.X) / 2;
-			YHint = (Desktop.Bounds.Height - size.Y) / 2;
-
+			CenterInBounds(Desktop.Bounds);
 		}
 
 		private void DesktopOnMouseMoved(object sender, GenericEventArgs<Point> genericEventArgs)
