@@ -23,13 +23,13 @@ namespace Myra.Samples.AllWidgetsSample
 
 			_blueButton.Up += (sender, args) =>
 			{
-				var debugWindow = new DebugOptionsDialog();
+				var debugWindow = new FileDialog(FileDialogMode.SaveFile);
 				debugWindow.ShowModal(Desktop);
 			};
 
 			_textButton.Up += (sender, args) =>
 			{
-				var debugWindow = new DebugOptionsDialog();
+				var debugWindow = new FileDialog(FileDialogMode.ChooseFolder);
 				debugWindow.ShowModal(Desktop);
 			};
 

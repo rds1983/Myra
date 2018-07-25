@@ -114,6 +114,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Myra.Editor\Myra.Editor.csproj">
+      <Project>{f18bd428-25f7-4183-beb7-7c96f21ae2d1}</Project>
+      <Name>Myra.Editor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Myra\Myra.csproj">
       <Project>{4dcbb001-9c79-4f6b-996d-d654062d93e0}</Project>
       <Name>Myra</Name>

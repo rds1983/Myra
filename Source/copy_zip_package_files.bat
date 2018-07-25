@@ -31,6 +31,8 @@ copy "Samples\Myra.UIEditor.Plugin.LibGDX\bin\%CONFIGURATION%\Myra.UIEditor.Plug
 copy "Samples\Myra.UIEditor.Plugin.YellowMenuButtons\bin\%CONFIGURATION%\Myra.UIEditor.Plugin.YellowMenuButtons.dll" ZipPackage /Y
 copy "Myra.Editor\bin\%CONFIGURATION%\Myra.Editor.dll" ZipPackage /Y
 copy "Myra.Editor\bin\%CONFIGURATION%\Myra.Editor.pdb" ZipPackage /Y
+copy "Myra.Editor\bin\FNA\%CONFIGURATION%\Myra.Editor.dll" "ZipPackage\FNA\" /Y
+copy "Myra.Editor\bin\FNA\%CONFIGURATION%\Myra.Editor.pdb" "ZipPackage\FNA\" /Y
 copy "Myra.UIEditor\bin\%CONFIGURATION%\Myra.UIEditor.exe" ZipPackage /Y
 copy "Myra.UIEditor\bin\%CONFIGURATION%\Myra.UIEditor.exe.config" ZipPackage /Y
 copy "Myra.UIEditor\bin\%CONFIGURATION%\Myra.UIEditor.pdb" ZipPackage /Y

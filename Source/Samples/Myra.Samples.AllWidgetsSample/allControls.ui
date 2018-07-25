@@ -5,7 +5,7 @@
     "$type": "Myra.Graphics2D.UI.ExportOptions, Myra",
     "Namespace": "Myra.Samples.AllWidgetsSample",
     "Class": "AllWidgets",
-    "OutputPath": "D:\\Projects\\Wanderers\\Myra\\Source\\Samples\\Myra.Samples.AllWidgetsSample"
+    "OutputPath": "D:\\Projects\\Hebron\\Myra\\Source\\Samples\\Myra.Samples.AllWidgetsSample"
   },
   "Root": {
     "$id": "2",
@@ -257,7 +257,7 @@
                 {
                   "$id": "44",
                   "$type": "Myra.Graphics2D.UI.Button, Myra",
-                  "Text": "Show Window",
+                  "Text": "Open File",
                   "TextColor": {
                     "$id": "45",
                     "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
@@ -300,7 +300,7 @@
                 {
                   "$id": "49",
                   "$type": "Myra.Graphics2D.UI.Button, Myra",
-                  "Text": "Show Window",
+                  "Text": "Save File",
                   "TextColor": {
                     "$id": "50",
                     "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
@@ -345,7 +345,7 @@
                 {
                   "$id": "54",
                   "$type": "Myra.Graphics2D.UI.TextButton, Myra",
-                  "Text": "Show Window",
+                  "Text": "Choose Folder",
                   "TextColor": {
                     "$id": "55",
                     "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
