@@ -20,7 +20,7 @@ namespace Myra.Graphics2D
 
 		public static void Draw(this SpriteBatch spriteBatch, TextureRegion textureRegion, Rectangle destinationRectangle, Color? color = null)
 		{
-			textureRegion.Draw(spriteBatch, destinationRectangle);
+			textureRegion.Draw(spriteBatch, destinationRectangle, color);
 		}
 	}
 }

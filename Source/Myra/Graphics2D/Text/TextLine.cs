@@ -59,7 +59,7 @@ namespace Myra.Graphics2D.Text
 			_dirty = false;
 		}
 
-		public void Draw(SpriteBatch batch, Point pos, Color color)
+		public void Draw(SpriteBatch batch, Point pos, Color color, float opacity = 1.0f)
 		{
 			Update();
 
@@ -67,7 +67,7 @@ namespace Myra.Graphics2D.Text
 
 			foreach (var run in _textRuns)
 			{
-				run.Draw(batch, pos, run.Color ?? color);
+				run.Draw(batch, pos, run.Color ?? color, opacity);
 
 				pos.X += run.Size.X;
 			}

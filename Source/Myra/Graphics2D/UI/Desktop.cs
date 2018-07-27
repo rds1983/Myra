@@ -235,6 +235,7 @@ namespace Myra.Graphics2D.UI
 
 			_renderContext.Batch.GraphicsDevice.ScissorRectangle = Bounds;
 			_renderContext.View = Bounds;
+			_renderContext.Opacity = 1.0f;
 
 			foreach (var widget in WidgetsCopy)
 			{

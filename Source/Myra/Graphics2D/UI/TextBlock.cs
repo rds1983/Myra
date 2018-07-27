@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Myra.Attributes;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
+using Myra.Utility;
 using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
@@ -112,7 +113,9 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var bounds = ActualBounds;
-			_formattedText.Draw(context.Batch, bounds, Enabled ? TextColor : DisabledTextColor);
+
+			var color = Enabled ? TextColor : DisabledTextColor;
+			_formattedText.Draw(context.Batch, bounds, color, context.Opacity);
 		}
 
 		protected override Point InternalMeasure(Point availableSize)

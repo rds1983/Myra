@@ -43,6 +43,7 @@ namespace Myra.Graphics2D.UI
 		private bool _visible;
 
 		private int _paddingLeft, _paddingRight, _paddingTop, _paddingBottom;
+		private float _opacity = 1.0f;
 
 		private DateTime _lastDown;
 		private bool _enabled;
@@ -360,6 +361,26 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[EditCategory("Appearance")]
+		[DefaultValue(1.0f)]
+		public float Opacity
+		{
+			get
+			{
+				return _opacity;
+			}
+
+			set
+			{
+				if (value < 0 || value > 1.0f)
+				{
+					throw new ArgumentOutOfRangeException("value");
+				}
+
+				_opacity = value;
+			}
+		}
+
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
@@ -642,11 +663,15 @@ namespace Myra.Graphics2D.UI
 				batch.GraphicsDevice.ScissorRectangle = newScissorRectangle;
 			}
 
+			var oldOpacity = context.Opacity;
+
+			context.Opacity *= Opacity;
+
 			// Background
 			var background = GetCurrentBackground();
 			if (background != null)
 			{
-				batch.Draw(background, Bounds);
+				batch.Draw(background, Bounds, Color.White * context.Opacity);
 			}
 
 			var oldView = context.View;
@@ -658,7 +683,7 @@ namespace Myra.Graphics2D.UI
 			var border = GetCurrentBorder();
 			if (border != null)
 			{
-				batch.Draw(border, Bounds);
+				batch.Draw(border, Bounds, Color.White * context.Opacity);
 			}
 
 			if (MyraEnvironment.DrawWidgetsFrames)
@@ -676,6 +701,8 @@ namespace Myra.Graphics2D.UI
 				batch.FlushUI();
 				batch.GraphicsDevice.ScissorRectangle = oldScissorRectangle;
 			}
+
+			context.Opacity = oldOpacity;
 		}
 
 		public virtual void InternalRender(RenderContext context)
@@ -730,13 +757,12 @@ namespace Myra.Graphics2D.UI
 
 		public void Layout(Rectangle containerBounds)
 		{
-			if (_containerBounds == containerBounds)
+			if (_containerBounds != containerBounds)
 			{
-				return;
+				InvalidateLayout();
+				_containerBounds = containerBounds;
 			}
 
-			_containerBounds = containerBounds;
-			InvalidateLayout();
 			UpdateLayout();
 		}
 

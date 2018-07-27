@@ -28,7 +28,7 @@ namespace Myra.UIEditor
 {
 	public class Studio : Game
 	{
-		private static ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+		private static ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
 		private static Studio _instance;
 

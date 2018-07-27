@@ -158,11 +158,11 @@ namespace Myra.Graphics2D.Text
 			_dirty = false;
 		}
 
-		public void Draw(SpriteBatch batch, Point pos, Color color)
+		public void Draw(SpriteBatch batch, Point pos, Color color, float opacity = 1.0f)
 		{
 			Update();
 
-			batch.DrawString(_spriteFont, _text, new Vector2(pos.X, pos.Y), color);
+			batch.DrawString(_spriteFont, _text, new Vector2(pos.X, pos.Y), color * opacity);
 
 #if !FNA
 			if (MyraEnvironment.ShowUnderscores && UnderscoreIndex != null && UnderscoreIndex.Value < Count)

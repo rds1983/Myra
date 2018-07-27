@@ -425,7 +425,7 @@ namespace Myra.Graphics2D.Text
 			_dirty = false;
 		}
 
-		public void Draw(SpriteBatch batch, Rectangle bounds, Color textColor)
+		public void Draw(SpriteBatch batch, Rectangle bounds, Color textColor, float opacity = 1.0f)
 		{
 			var strings = Strings;
 
@@ -440,7 +440,7 @@ namespace Myra.Graphics2D.Text
 			{
 				if (y >= bounds.Top && y < bounds.Bottom)
 				{
-					si.Draw(batch, new Point(bounds.Left, y), textColor);
+					si.Draw(batch, new Point(bounds.Left, y), textColor, opacity);
 				}
 
 				y += si.Size.Y;

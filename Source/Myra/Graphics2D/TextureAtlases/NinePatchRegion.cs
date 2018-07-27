@@ -157,7 +157,8 @@ namespace Myra.Graphics2D.TextureAtlases
 					new Rectangle(dest.X + Info.Left + centerWidth,
 						y,
 						_info.Right,
-						_info.Top));
+						_info.Top),
+					c);
 			}
 
 			y += _info.Top;
@@ -187,7 +188,8 @@ namespace Myra.Graphics2D.TextureAtlases
 					new Rectangle(dest.X + Info.Left + centerWidth,
 						y,
 						_info.Right,
-						centerHeight));
+						centerHeight),
+					c);
 			}
 
 			y += centerHeight;
@@ -217,7 +219,8 @@ namespace Myra.Graphics2D.TextureAtlases
 					new Rectangle(dest.X + Info.Left + centerWidth,
 						y,
 						_info.Right,
-						_info.Bottom));
+						_info.Bottom),
+					c);
 			}
 		}
 	}
