@@ -45,6 +45,7 @@ namespace Myra.UIEditor
 
 			template = template.Replace("$namespace$", _project.ExportOptions.Namespace);
 			template = template.Replace("$class$", _project.ExportOptions.Class);
+			template = template.Replace("$parentClass$", _project.Root.GetType().Name);
 			template = template.Replace("$generationDate$", DateTime.Now.ToString());
 
 			File.WriteAllText(path, template);
@@ -328,7 +329,7 @@ namespace Myra.UIEditor
 				return sb.ToString().Replace("+", ".");
 			}
 
-			sb.Append("new " + value.GetType().Name);
+			sb.Append("new " + value.GetType().GetFriendlyName());
 
 			var isEmpty = true;
 			var properties = from p in value.GetType().GetProperties() select p;

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra", "Myra\Myra.csproj", "{4DCBB001-9C79-4F6B-996D-D654062D93E0}"
 EndProject
@@ -13,17 +13,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.UIEditor", "Myra.UIEdi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{EAB0AA24-7185-4897-A866-AE87AF3F2E0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.CustomUIStylesheetSample", "Samples\Myra.Samples.CustomUIStylesheetSample\Myra.Samples.CustomUIStylesheetSample.csproj", "{8385D5C0-C8D8-4242-940A-2BD071EDC5B1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.CustomUIStylesheet", "Samples\Myra.Samples.CustomUIStylesheet\Myra.Samples.CustomUIStylesheet.csproj", "{8385D5C0-C8D8-4242-940A-2BD071EDC5B1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.FormattedTextSample", "Samples\Myra.Samples.FormattedTextSample\Myra.Samples.FormattedTextSample.csproj", "{0E2EBFD7-4398-48CE-AC1A-9DF116CE2587}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.GridSample", "Samples\Myra.Samples.GridSample\Myra.Samples.GridSample.csproj", "{E96FADDC-29FA-49F7-920D-4AD9F5FBD705}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.GridContainer", "Samples\Myra.Samples.GridContainer\Myra.Samples.GridContainer.csproj", "{E96FADDC-29FA-49F7-920D-4AD9F5FBD705}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.NotepadSample", "Samples\Myra.Samples.NotepadSample\Myra.Samples.NotepadSample.csproj", "{AD459A6F-2075-4728-A57B-9FC08DFF2062}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.Notepad", "Samples\Myra.Samples.Notepad\Myra.Samples.Notepad.csproj", "{AD459A6F-2075-4728-A57B-9FC08DFF2062}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.SplitPaneSample", "Samples\Myra.Samples.SplitPaneSample\Myra.Samples.SplitPaneSample.csproj", "{15129613-1D63-4709-8B71-70E73BAB9C0B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.SplitPaneContainer", "Samples\Myra.Samples.SplitPaneContainer\Myra.Samples.SplitPaneContainer.csproj", "{15129613-1D63-4709-8B71-70E73BAB9C0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.TextBlocksSample", "Samples\Myra.Samples.TextBlocksSample\Myra.Samples.TextBlocksSample.csproj", "{EE49A6D2-4ADB-4FB4-9CCE-78F42EAAEFB4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.TextBlocks", "Samples\Myra.Samples.TextBlocks\Myra.Samples.TextBlocks.csproj", "{EE49A6D2-4ADB-4FB4-9CCE-78F42EAAEFB4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.UIEditor.Plugin.LibGDX", "Samples\Myra.UIEditor.Plugin.LibGDX\Myra.UIEditor.Plugin.LibGDX.csproj", "{DB171BE4-D9C3-45F1-8108-84992EF8391F}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -32,9 +32,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.UIEditor.Plugin.LibGDX
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.UIEditor.Plugin.YellowMenuButtons", "Samples\Myra.UIEditor.Plugin.YellowMenuButtons\Myra.UIEditor.Plugin.YellowMenuButtons.csproj", "{74E297C2-1081-4C9A-9311-EAAF4746A413}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.AllWidgetsSample", "Samples\Myra.Samples.AllWidgetsSample\Myra.Samples.AllWidgetsSample.csproj", "{0F48899B-E533-423E-BAE4-FDD09A3A6698}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.AllWidgets", "Samples\Myra.Samples.AllWidgets\Myra.Samples.AllWidgets.csproj", "{0F48899B-E533-423E-BAE4-FDD09A3A6698}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.TabControlSample", "Samples\Myra.Samples.TabControlSample\Myra.Samples.TabControlSample.csproj", "{46A18A74-5EB4-4B85-B1B7-279A1D8FDDA6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.TabControl", "Samples\Myra.Samples.TabControl\Myra.Samples.TabControl.csproj", "{46A18A74-5EB4-4B85-B1B7-279A1D8FDDA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.FantasyMapGenerator", "Samples\Myra.Samples.FantasyMapGenerator\Myra.Samples.FantasyMapGenerator.csproj", "{84545088-FD48-41A9-A729-CD307F60E3A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -94,6 +96,10 @@ Global
 		{46A18A74-5EB4-4B85-B1B7-279A1D8FDDA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46A18A74-5EB4-4B85-B1B7-279A1D8FDDA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46A18A74-5EB4-4B85-B1B7-279A1D8FDDA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84545088-FD48-41A9-A729-CD307F60E3A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84545088-FD48-41A9-A729-CD307F60E3A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84545088-FD48-41A9-A729-CD307F60E3A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84545088-FD48-41A9-A729-CD307F60E3A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -109,6 +115,10 @@ Global
 		{74E297C2-1081-4C9A-9311-EAAF4746A413} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{0F48899B-E533-423E-BAE4-FDD09A3A6698} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{46A18A74-5EB4-4B85-B1B7-279A1D8FDDA6} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{84545088-FD48-41A9-A729-CD307F60E3A0} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {35ACDF4E-2CE2-46B1-A19F-35DC131069A1}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Myra.UIEditor\Myra.UIEditor.csproj

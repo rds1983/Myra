@@ -22,6 +22,12 @@ namespace Myra.Editor.Utils
 		public static string GetFriendlyName(this Type type)
 		{
 			string friendlyName = type.Name;
+
+			if (type.IsNested && type.DeclaringType != null)
+			{
+				friendlyName = type.DeclaringType.GetFriendlyName() + "." + friendlyName;
+			}
+
 			if (type.IsGenericType)
 			{
 				int iBacktick = friendlyName.IndexOf('`');

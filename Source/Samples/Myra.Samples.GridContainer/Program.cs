@@ -1,10 +1,10 @@
-﻿namespace Myra.Samples.FormattedTextSample
+﻿namespace Myra.Samples.GridContainer
 {
 	internal class Program
 	{
 		public static void Main(string[] args)
 		{
-			using (var game = new FormattedTextGame())
+			using (var game = new GridGame())
 				game.Run();
 		}
 	}

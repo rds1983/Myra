@@ -340,6 +340,11 @@ namespace Myra.Graphics2D.UI
 
 				case Keys.Enter:
 					{
+						if (!Multiline)
+						{
+							break;
+						}
+
 						// Insert line break
 						var sb = new StringBuilder();
 						sb.Append(Text.Substring(0, _cursorIndex));
@@ -359,8 +364,7 @@ namespace Myra.Graphics2D.UI
 						break;
 					}
 
-					var ch =
-						k.ToChar(Desktop.KeyboardState.IsKeyDown(Keys.LeftShift) || Desktop.KeyboardState.IsKeyDown(Keys.RightShift));
+					var ch = k.ToChar(Desktop.KeyboardState.IsKeyDown(Keys.LeftShift) || Desktop.KeyboardState.IsKeyDown(Keys.RightShift));
 
 					if (ch.HasValue)
 					{

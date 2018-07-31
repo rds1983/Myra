@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.FNA", "Myra\Myra.FNA.c
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FNA", "Myra-Dependencies\FNA\FNA.csproj", "{35253CE1-C864-4CD3-8249-4D1319748E8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.AllWidgetsSample.FNA", "Samples\Myra.Samples.AllWidgetsSample\Myra.Samples.AllWidgetsSample.FNA.csproj", "{0F48899B-E533-423E-BAE4-FDD09A3A6698}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.AllWidgets.FNA", "Samples\Myra.Samples.AllWidgets\Myra.Samples.AllWidgets.FNA.csproj", "{0F48899B-E533-423E-BAE4-FDD09A3A6698}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.UIEditor.FNA", "Myra.UIEditor\Myra.UIEditor.FNA.csproj", "{3B7E30AA-A659-4A13-9223-B9E0442E5B55}"
 EndProject

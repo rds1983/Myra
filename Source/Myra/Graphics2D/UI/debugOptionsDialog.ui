@@ -10,11 +10,20 @@
   "Root": {
     "$id": "2",
     "$type": "Myra.Graphics2D.UI.Dialog, Myra",
-    "Content": {
+    "Title": "Debug Options",
+    "TitleTextColor": {
       "$id": "3",
+      "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
+      "B": 255,
+      "G": 255,
+      "R": 255,
+      "A": 255
+    },
+    "Content": {
+      "$id": "4",
       "$type": "Myra.Graphics2D.UI.Grid, Myra",
       "DrawLinesColor": {
-        "$id": "4",
+        "$id": "5",
         "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
         "B": 255,
         "G": 255,
@@ -23,10 +32,6 @@
       },
       "ColumnsProportions": [],
       "RowsProportions": [
-        {
-          "$id": "5",
-          "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra"
-        },
         {
           "$id": "6",
           "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra"
@@ -38,15 +43,19 @@
         {
           "$id": "8",
           "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra"
+        },
+        {
+          "$id": "9",
+          "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra"
         }
       ],
       "Widgets": [
         {
-          "$id": "9",
+          "$id": "10",
           "$type": "Myra.Graphics2D.UI.CheckBox, Myra",
           "Text": "Draw green frame around every widget",
           "TextColor": {
-            "$id": "10",
+            "$id": "11",
             "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
             "B": 255,
             "G": 255,
@@ -60,11 +69,11 @@
           "Id": "_checkBoxWidgetFrames"
         },
         {
-          "$id": "11",
+          "$id": "12",
           "$type": "Myra.Graphics2D.UI.CheckBox, Myra",
           "Text": "Draw red frame around the focused widget",
           "TextColor": {
-            "$id": "12",
+            "$id": "13",
             "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
             "B": 255,
             "G": 255,
@@ -79,11 +88,11 @@
           "GridPositionY": 1
         },
         {
-          "$id": "13",
+          "$id": "14",
           "$type": "Myra.Graphics2D.UI.CheckBox, Myra",
           "Text": "Draw white frame around every letter glyph",
           "TextColor": {
-            "$id": "14",
+            "$id": "15",
             "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
             "B": 255,
             "G": 255,
@@ -98,11 +107,11 @@
           "GridPositionY": 2
         },
         {
-          "$id": "15",
+          "$id": "16",
           "$type": "Myra.Graphics2D.UI.CheckBox, Myra",
           "Text": "Disable clipping",
           "TextColor": {
-            "$id": "16",
+            "$id": "17",
             "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
             "B": 255,
             "G": 255,
@@ -119,16 +128,8 @@
       ],
       "Id": "Root",
       "HorizontalAlignment": 3,
-      "VerticalAlignment": 3
-    },
-    "Title": "Debug Options",
-    "TitleTextColor": {
-      "$id": "17",
-      "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-      "B": 255,
-      "G": 255,
-      "R": 255,
-      "A": 255
+      "VerticalAlignment": 3,
+      "GridPositionY": 1
     },
     "DrawLinesColor": {
       "$id": "18",
@@ -138,8 +139,8 @@
       "R": 255,
       "A": 255
     },
-    "XHint": 529,
-    "YHint": 344,
+    "XHint": 317,
+    "YHint": 312,
     "PaddingLeft": 5,
     "PaddingRight": 5,
     "PaddingTop": 5,

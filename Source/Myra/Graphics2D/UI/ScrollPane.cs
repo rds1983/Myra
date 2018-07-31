@@ -430,9 +430,19 @@ namespace Myra.Graphics2D.UI
 				bounds.Width = _horizontalScrollbarVisible ? measureSize.X : availableSize.X;
 				bounds.Height = _verticalScrollbarVisible ? measureSize.Y : availableSize.Y;
 
+				if (_scrollPosition.X < 0)
+				{
+					_scrollPosition.X = 0;
+				}
+
 				if (_scrollPosition.X > _horizontalMaximum)
 				{
 					_scrollPosition.X = _horizontalMaximum;
+				}
+
+				if (_scrollPosition.Y < 0)
+				{
+					_scrollPosition.Y = 0;
 				}
 
 				if (_scrollPosition.Y > _verticalMaximum)
