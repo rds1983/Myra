@@ -5,7 +5,7 @@
     "$type": "Myra.Graphics2D.UI.ExportOptions, Myra",
     "Namespace": "Myra.Samples.FantasyMapGenerator.UI",
     "Class": "MainForm",
-    "OutputPath": "D:\\Projects\\FantasyMapGenerator\\FantasyMapGenerator\\UI"
+    "OutputPath": "D:\\Projects\\Hebron\\Myra\\Source\\Samples\\Myra.Samples.FantasyMapGenerator\\UI"
   },
   "Root": {
     "$id": "2",
@@ -107,19 +107,15 @@
               {
                 "$id": "21",
                 "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra"
-              },
-              {
-                "$id": "22",
-                "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra"
               }
             ],
             "Widgets": [
               {
-                "$id": "23",
+                "$id": "22",
                 "$type": "Myra.Graphics2D.UI.TextBlock, Myra",
-                "Text": "Width:",
+                "Text": "Size:",
                 "TextColor": {
-                  "$id": "24",
+                  "$id": "23",
                   "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
                   "B": 255,
                   "G": 255,
@@ -127,7 +123,7 @@
                   "A": 255
                 },
                 "DisabledTextColor": {
-                  "$id": "25",
+                  "$id": "24",
                   "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
                   "B": 170,
                   "G": 170,
@@ -137,27 +133,41 @@
                 "Id": ""
               },
               {
-                "$id": "26",
-                "$type": "Myra.Graphics2D.UI.SpinButton, Myra",
-                "Value": 800.0,
-                "DrawLinesColor": {
-                  "$id": "27",
-                  "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-                  "B": 255,
-                  "G": 255,
-                  "R": 255,
-                  "A": 255
-                },
-                "Id": "_spinWidth",
+                "$id": "25",
+                "$type": "Myra.Graphics2D.UI.ComboBox, Myra",
+                "Items": [
+                  {
+                    "$id": "26",
+                    "$type": "Myra.Graphics2D.UI.ListItem, Myra",
+                    "Text": "512x512"
+                  },
+                  {
+                    "$id": "27",
+                    "$type": "Myra.Graphics2D.UI.ListItem, Myra",
+                    "Text": "1024x1024"
+                  },
+                  {
+                    "$id": "28",
+                    "$type": "Myra.Graphics2D.UI.ListItem, Myra",
+                    "Text": "2048x2048"
+                  },
+                  {
+                    "$id": "29",
+                    "$type": "Myra.Graphics2D.UI.ListItem, Myra",
+                    "Text": "4096x4096"
+                  }
+                ],
+                "SelectedIndex": 2,
+                "Id": "_comboSize",
                 "HorizontalAlignment": 3,
                 "GridPositionX": 1
               },
               {
-                "$id": "28",
+                "$id": "30",
                 "$type": "Myra.Graphics2D.UI.TextBlock, Myra",
-                "Text": "Height",
+                "Text": "Variability:",
                 "TextColor": {
-                  "$id": "29",
+                  "$id": "31",
                   "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
                   "B": 255,
                   "G": 255,
@@ -165,60 +175,21 @@
                   "A": 255
                 },
                 "DisabledTextColor": {
-                  "$id": "30",
+                  "$id": "32",
                   "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
                   "B": 170,
                   "G": 170,
                   "R": 170,
                   "A": 255
                 },
-                "GridPositionY": 1
-              },
-              {
-                "$id": "31",
-                "$type": "Myra.Graphics2D.UI.SpinButton, Myra",
-                "Value": 600.0,
-                "DrawLinesColor": {
-                  "$id": "32",
-                  "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-                  "B": 255,
-                  "G": 255,
-                  "R": 255,
-                  "A": 255
-                },
-                "Id": "_spinHeight",
-                "HorizontalAlignment": 3,
-                "GridPositionX": 1,
                 "GridPositionY": 1
               },
               {
                 "$id": "33",
-                "$type": "Myra.Graphics2D.UI.TextBlock, Myra",
-                "Text": "Variability:",
-                "TextColor": {
-                  "$id": "34",
-                  "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-                  "B": 255,
-                  "G": 255,
-                  "R": 255,
-                  "A": 255
-                },
-                "DisabledTextColor": {
-                  "$id": "35",
-                  "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-                  "B": 170,
-                  "G": 170,
-                  "R": 170,
-                  "A": 255
-                },
-                "GridPositionY": 2
-              },
-              {
-                "$id": "36",
                 "$type": "Myra.Graphics2D.UI.SpinButton, Myra",
                 "Value": 1.0,
                 "DrawLinesColor": {
-                  "$id": "37",
+                  "$id": "34",
                   "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
                   "B": 255,
                   "G": 255,
@@ -228,14 +199,14 @@
                 "Id": "_spinVariability",
                 "HorizontalAlignment": 3,
                 "GridPositionX": 1,
-                "GridPositionY": 2
+                "GridPositionY": 1
               },
               {
-                "$id": "38",
+                "$id": "35",
                 "$type": "Myra.Graphics2D.UI.TextBlock, Myra",
                 "Text": "Water/Land(60%):",
                 "TextColor": {
-                  "$id": "39",
+                  "$id": "36",
                   "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
                   "B": 255,
                   "G": 255,
@@ -243,7 +214,7 @@
                   "A": 255
                 },
                 "DisabledTextColor": {
-                  "$id": "40",
+                  "$id": "37",
                   "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
                   "B": 170,
                   "G": 170,
@@ -251,27 +222,27 @@
                   "A": 255
                 },
                 "Id": "_textWaterLand",
-                "GridPositionY": 3
+                "GridPositionY": 2
               },
               {
-                "$id": "41",
+                "$id": "38",
                 "$type": "Myra.Graphics2D.UI.HorizontalSlider, Myra",
                 "Maximum": 100.0,
                 "Id": "_sliderWaterLand",
                 "HorizontalAlignment": 3,
                 "GridPositionX": 1,
-                "GridPositionY": 3
+                "GridPositionY": 2
               }
             ],
             "HorizontalAlignment": 3,
             "VerticalAlignment": 3
           },
           {
-            "$id": "42",
+            "$id": "39",
             "$type": "Myra.Graphics2D.UI.CheckBox, Myra",
             "Text": "Surrounded By Water",
             "TextColor": {
-              "$id": "43",
+              "$id": "40",
               "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
               "B": 255,
               "G": 255,
@@ -286,11 +257,11 @@
             "GridPositionY": 1
           },
           {
-            "$id": "44",
+            "$id": "41",
             "$type": "Myra.Graphics2D.UI.CheckBox, Myra",
             "Text": "Smooth",
             "TextColor": {
-              "$id": "45",
+              "$id": "42",
               "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
               "B": 255,
               "G": 255,
@@ -305,11 +276,11 @@
             "GridPositionY": 2
           },
           {
-            "$id": "46",
+            "$id": "43",
             "$type": "Myra.Graphics2D.UI.CheckBox, Myra",
             "Text": "Remove Small Islands",
             "TextColor": {
-              "$id": "47",
+              "$id": "44",
               "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
               "B": 255,
               "G": 255,
@@ -324,11 +295,11 @@
             "GridPositionY": 3
           },
           {
-            "$id": "48",
+            "$id": "45",
             "$type": "Myra.Graphics2D.UI.CheckBox, Myra",
             "Text": "Remove Small Lakes",
             "TextColor": {
-              "$id": "49",
+              "$id": "46",
               "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
               "B": 255,
               "G": 255,
@@ -343,11 +314,11 @@
             "GridPositionY": 4
           },
           {
-            "$id": "50",
+            "$id": "47",
             "$type": "Myra.Graphics2D.UI.TextButton, Myra",
             "Text": "Generate",
             "TextColor": {
-              "$id": "51",
+              "$id": "48",
               "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
               "B": 255,
               "G": 255,
@@ -361,10 +332,10 @@
             "GridPositionY": 5
           },
           {
-            "$id": "52",
+            "$id": "49",
             "$type": "Myra.Graphics2D.UI.Grid, Myra",
             "DrawLinesColor": {
-              "$id": "53",
+              "$id": "50",
               "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
               "B": 255,
               "G": 255,
@@ -374,28 +345,28 @@
             "ColumnSpacing": 8,
             "ColumnsProportions": [
               {
-                "$id": "54",
+                "$id": "51",
                 "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra"
               },
               {
-                "$id": "55",
+                "$id": "52",
                 "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
                 "Type": 2
               }
             ],
             "RowsProportions": [
               {
-                "$id": "56",
+                "$id": "53",
                 "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra"
               }
             ],
             "Widgets": [
               {
-                "$id": "57",
+                "$id": "54",
                 "$type": "Myra.Graphics2D.UI.TextBlock, Myra",
                 "Text": "View Mode:",
                 "TextColor": {
-                  "$id": "58",
+                  "$id": "55",
                   "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
                   "B": 255,
                   "G": 255,
@@ -403,7 +374,7 @@
                   "A": 255
                 },
                 "DisabledTextColor": {
-                  "$id": "59",
+                  "$id": "56",
                   "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
                   "B": 170,
                   "G": 170,
@@ -412,16 +383,16 @@
                 }
               },
               {
-                "$id": "60",
+                "$id": "57",
                 "$type": "Myra.Graphics2D.UI.ComboBox, Myra",
                 "Items": [
                   {
-                    "$id": "61",
+                    "$id": "58",
                     "$type": "Myra.Graphics2D.UI.ListItem, Myra",
                     "Text": "Normal"
                   },
                   {
-                    "$id": "62",
+                    "$id": "59",
                     "$type": "Myra.Graphics2D.UI.ListItem, Myra",
                     "Text": "Siluette"
                   }
@@ -437,11 +408,11 @@
             "GridPositionY": 6
           },
           {
-            "$id": "63",
+            "$id": "60",
             "$type": "Myra.Graphics2D.UI.TextButton, Myra",
             "Text": "Save As PNG...",
             "TextColor": {
-              "$id": "64",
+              "$id": "61",
               "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
               "B": 255,
               "G": 255,
@@ -459,14 +430,14 @@
         "VerticalAlignment": 3
       },
       {
-        "$id": "67",
+        "$id": "62",
         "$type": "Myra.Graphics2D.UI.Panel, Myra",
         "Widgets": [
           {
-            "$id": "65",
+            "$id": "63",
             "$type": "Myra.Graphics2D.UI.Image, Myra",
             "Color": {
-              "$id": "66",
+              "$id": "64",
               "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
               "B": 255,
               "G": 255,
@@ -474,13 +445,15 @@
               "A": 255
             },
             "Id": "_imageGenerated",
+            "HorizontalAlignment": 3,
+            "VerticalAlignment": 3
           },
           {
-            "$id": "68",
+            "$id": "65",
             "$type": "Myra.Graphics2D.UI.TextBlock, Myra",
             "Text": "Generating...",
             "TextColor": {
-              "$id": "69",
+              "$id": "66",
               "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
               "B": 255,
               "G": 255,
@@ -488,7 +461,7 @@
               "A": 255
             },
             "DisabledTextColor": {
-              "$id": "70",
+              "$id": "67",
               "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
               "B": 170,
               "G": 170,
@@ -502,7 +475,7 @@
         ],
         "HorizontalAlignment": 3,
         "VerticalAlignment": 3,
-        "GridPositionX": 4
+        "GridPositionX": 2
       }
     ],
     "Id": "_splitPane",

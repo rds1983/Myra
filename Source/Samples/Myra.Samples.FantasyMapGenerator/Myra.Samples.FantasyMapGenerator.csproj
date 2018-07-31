@@ -103,8 +103,6 @@
   <ItemGroup>
     <Compile Include="FantasyMapGeneratorGame.cs" />
     <Compile Include="Generation\Generator.cs" />
-    <Compile Include="Generation\MidPointDisplacementNoise2D.cs" />
-    <Compile Include="Generation\Noise2D.cs" />
     <Compile Include="Generation\Utils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

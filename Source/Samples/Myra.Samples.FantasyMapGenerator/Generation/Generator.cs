@@ -6,13 +6,8 @@ namespace Myra.Samples.FantasyMapGenerator.Generation
 {
 	public class Generator
 	{
-		public const int MinimumHeight = -10000;
-		public const int MaximumHeight = 10000;
 		private const int MinimumIslandSize = 1000;
 		private const int MinimumLakeSize = 300;
-		private const int ThresholdTest = 1000;
-
-		private int _landMinimum = 0;
 
 		private static readonly Point[] _deltas = new Point[]{
 			new Point(0, -1),
@@ -31,17 +26,33 @@ namespace Myra.Samples.FantasyMapGenerator.Generation
 			{0.1f, 0.1f, 0.1f}
 		};
 
-		private int _width, _height;
-		private int[,] _heightMap;
+		private int _size = 0;
+		private float _landMinimum = 0;
+		private readonly Random _random = new Random();
+		private bool[,] _isSet;
+		private float[,] _data;
+		private bool _firstDisplace = true;
+
 		private bool[,] _islandMask;
 
-		public int LandMinimum
+		public float LandMinimum
 		{
 			get
 			{
 				return _landMinimum;
 			}
 		}
+
+		public int Size
+		{
+			get
+			{
+				return _size;
+			}
+		}
+
+		public float Variability { get; set; }
+		public bool IsSurroundedByWater { get; set; }
 
 		private List<Point> Build(int x, int y, Func<Point, bool> addCondition)
 		{
@@ -57,9 +68,9 @@ namespace Myra.Samples.FantasyMapGenerator.Generation
 				Point top = toProcess.Pop();
 
 				if (top.X < 0 ||
-						top.X >= _width ||
+						top.X >= _size ||
 						top.Y < 0 ||
-						top.Y >= _height ||
+						top.Y >= _size ||
 						_islandMask[top.Y, top.X] ||
 						!addCondition(top))
 				{
@@ -81,27 +92,21 @@ namespace Myra.Samples.FantasyMapGenerator.Generation
 
 		private void ClearMask()
 		{
-			for (int y = 0; y < _height; ++y)
-			{
-				for (int x = 0; x < _width; ++x)
-				{
-					_islandMask[y, x] = false;
-				}
-			}
+			_islandMask.Fill(false);
 		}
 
-		private static float DetermineLevel(Noise2D noise, float minimumLevel, float requiredProp)
+		private float DetermineLevel(float minimumLevel, float requiredProp)
 		{
 			float result = minimumLevel + 0.05f;
 
 			while (result < 1.0f)
 			{
 				int c = 0;
-				for (int y = 0; y < ThresholdTest; ++y)
+				for (int y = 0; y < _size; ++y)
 				{
-					for (int x = 0; x < ThresholdTest; ++x)
+					for (int x = 0; x < _size; ++x)
 					{
-						float n = noise.GetValue((float)x / (ThresholdTest - 1), (float)y / (ThresholdTest - 1));
+						float n = GetData(x, y);
 
 						if (minimumLevel <= n && n < result)
 						{
@@ -110,7 +115,7 @@ namespace Myra.Samples.FantasyMapGenerator.Generation
 					}
 				}
 
-				float prop = (float)c / (ThresholdTest * ThresholdTest);
+				float prop = (float)c / (_size * _size);
 				if (prop >= requiredProp)
 				{
 					break;
@@ -122,65 +127,184 @@ namespace Myra.Samples.FantasyMapGenerator.Generation
 			return result;
 		}
 
-		private static int NoiseToHeight(float n)
+		private float Displace(float average, float d)
 		{
-			int h = MinimumHeight + (int)((MaximumHeight - MinimumHeight) * n);
+			if (IsSurroundedByWater && _firstDisplace)
+			{
+				_firstDisplace = false;
+				return 1.0f;
+			}
 
-			return h;
+			float p = (float)_random.NextDouble() - 0.5f;
+			float result = (average + d * p);
+
+			return result;
 		}
 
-		public int[,] Generate(int width, int height,
+		private float GetData(int x, int y)
+		{
+			return _data[y, x];
+		}
+
+		private void SetDataIfNotSet(int x, int y, float value)
+		{
+			if (_isSet[y, x])
+			{
+				return;
+			}
+
+			_data[y, x] = value;
+
+			_isSet[y, x] = true;
+		}
+
+		private void MiddlePointDisplacement(int left, int top, int right, int bottom, float d)
+		{
+			int localWidth = right - left + 1;
+			int localHeight = bottom - top + 1;
+
+			if (localWidth <= 2 && localHeight <= 2)
+			{
+				return;
+			}
+
+			// Retrieve corner heights
+			float heightTopLeft = GetData(left, top);
+			float heightTopRight = GetData(right, top);
+			float heightBottomLeft = GetData(left, bottom);
+			float heightBottomRight = GetData(right, bottom);
+			float average = (heightTopLeft + heightTopRight + heightBottomLeft + heightBottomRight) / 4;
+
+			// Calculate center
+			int centerX = left + localWidth / 2;
+			int centerY = top + localHeight / 2;
+
+			// Square step
+			float centerHeight = Displace(average, d);
+			SetDataIfNotSet(centerX, centerY, centerHeight);
+
+			// Diamond step
+			SetDataIfNotSet(left, centerY, (heightTopLeft + heightBottomLeft + centerHeight) / 3);
+			SetDataIfNotSet(centerX, top, (heightTopLeft + heightTopRight + centerHeight) / 3);
+			SetDataIfNotSet(right, centerY, (heightTopRight + heightBottomRight + centerHeight) / 3);
+			SetDataIfNotSet(centerX, bottom, (heightBottomLeft + heightBottomRight + centerHeight) / 3);
+
+			// Sub-recursion
+			float div = 1.0f + (10.0f - Variability) / 10.0f;
+
+			d /= div;
+
+			MiddlePointDisplacement(left, top, centerX, centerY, d);
+			MiddlePointDisplacement(centerX, top, right, centerY, d);
+			MiddlePointDisplacement(left, centerY, centerX, bottom, d);
+			MiddlePointDisplacement(centerX, centerY, right, bottom, d);
+		}
+
+		public void GenerateHeightMap()
+		{
+			// Set initial values
+			if (!IsSurroundedByWater)
+			{
+				SetDataIfNotSet(0, 0, (float)_random.NextDouble());
+				SetDataIfNotSet(Size - 1, 0, (float)_random.NextDouble());
+				SetDataIfNotSet(0, Size - 1, (float)_random.NextDouble());
+				SetDataIfNotSet(Size - 1, Size - 1, (float)_random.NextDouble());
+			}
+			else
+			{
+				SetDataIfNotSet(0, 0, 0.0f);
+				SetDataIfNotSet(Size - 1, 0, 0.0f);
+				SetDataIfNotSet(0, Size - 1, 0.0f);
+				SetDataIfNotSet(Size - 1, Size - 1, 0.0f);
+			}
+
+			// Plasma
+			MiddlePointDisplacement(0, 0, Size - 1, Size - 1, 1.0f);
+
+			// Determine min & max
+			float? min = null, max = null;
+			for (int y = 0; y < Size; ++y)
+			{
+				for (int x = 0; x < Size; ++x)
+				{
+					float v = GetData(x, y);
+
+					if (min == null || v < min)
+					{
+						min = v;
+					}
+
+					if (max == null || v > max)
+					{
+						max = v;
+					}
+				}
+			}
+
+			// Normalize
+			float delta = max.Value - min.Value;
+			for (int y = 0; y < Size; ++y)
+			{
+				for (int x = 0; x < Size; ++x)
+				{
+					float v = GetData(x, y);
+
+					v -= min.Value;
+
+					if (delta > 1.0f)
+					{
+						v /= delta;
+					}
+
+					_data[y, x] = v;
+				}
+			}
+		}
+
+		public float[,] Generate(int size,
 								int variability,
-								float waterPercent,
-								float landPercent,
+								float waterPart,
 								bool surroundedByWater,
 								bool smooth,
 								bool removeSmallIslands,
 								bool removeSmallLakes)
 		{
-			this._width = width;
-			this._height = height;
 
-			_heightMap = new int[height, width];
-			for (int y = 0; y < height; ++y)
+			_size = size;
+
+			_islandMask = new bool[size, size];
+
+			Variability = variability;
+			IsSurroundedByWater = surroundedByWater;
+
+			_data = new float[Size, Size];
+			_isSet = new bool[Size, Size];
+			_data.Fill(0.0f);
+			_isSet.Fill(false);
+
+			_firstDisplace = true;
+
+			GenerateHeightMap();
+
+			float waterLevel = DetermineLevel(0.0f, waterPart);
+			float landLevel = DetermineLevel(waterLevel, (1.0f - waterPart));
+
+			_landMinimum = waterLevel;
+
+			if (_landMinimum < 0)
 			{
-				for (var x = 0; x < width; ++x)
-				{
-					_heightMap[y, x] = MinimumHeight;
-				}
+				_landMinimum = 0;
 			}
 
-			_islandMask = new bool[height, width];
-
-			var noise = new MidPointDisplacementNoise2D();
-
-			// Generate
-			noise.Variability = variability;
-			noise.IsSurroundedByWater = surroundedByWater;
-			noise.Generate();
-
-			float waterLevel = DetermineLevel(noise, 0.0f, waterPercent);
-			float landLevel = DetermineLevel(noise, waterLevel, landPercent);
-
-			_landMinimum = NoiseToHeight(waterLevel);
-
-			if (_landMinimum < MinimumHeight + 1)
-			{
-				_landMinimum = MinimumHeight + 1;
-			}
-
-			Console.WriteLine("landMinimum = {0}", _landMinimum);
-
+			// Calculate amount of water and land tiles
 			int w = 0, l = 0;
-			for (int y = 0; y < height; ++y)
+			for (int y = 0; y < _size; ++y)
 			{
-				for (int x = 0; x < width; ++x)
+				for (int x = 0; x < _size; ++x)
 				{
-					float n = noise.GetValue((float)x / (width - 1), (float)y / (height - 1));
+					float n = GetData(x, y);
 
-					int h = NoiseToHeight(n);
-
-					if (h < _landMinimum)
+					if (n < _landMinimum)
 					{
 						++w;
 					}
@@ -188,13 +312,10 @@ namespace Myra.Samples.FantasyMapGenerator.Generation
 					{
 						++l;
 					}
-
-
-					_heightMap[y, x] = h;
 				}
 			}
 
-			int tiles = width * height;
+			int tiles = _size * _size;
 
 			Console.WriteLine("{0}% water, {1}% land",
 					w * 100 / tiles,
@@ -203,18 +324,18 @@ namespace Myra.Samples.FantasyMapGenerator.Generation
 			// Smooth
 			if (smooth)
 			{
-				var oldHeightMap = new int[height, width];
-				for (int y = 0; y < height; ++y)
+				var oldHeightMap = new float[_size, _size];
+				for (int y = 0; y < _size; ++y)
 				{
-					for (int x = 0; x < width; ++x)
+					for (int x = 0; x < _size; ++x)
 					{
-						oldHeightMap[y, x] = _heightMap[y, x];
+						oldHeightMap[y, x] = _data[y, x];
 					}
 				}
 
-				for (int y = 0; y < height; ++y)
+				for (int y = 0; y < _size; ++y)
 				{
-					for (int x = 0; x < width; ++x)
+					for (int x = 0; x < _size; ++x)
 					{
 						float newValue = 0;
 
@@ -223,9 +344,9 @@ namespace Myra.Samples.FantasyMapGenerator.Generation
 							int dx = x + _deltas[k].X;
 							int dy = y + _deltas[k].Y;
 
-							if (dx < 0 || dx >= width ||
+							if (dx < 0 || dx >= _size ||
 
-									dy < 0 || dy >= height)
+									dy < 0 || dy >= _size)
 							{
 								continue;
 							}
@@ -235,7 +356,7 @@ namespace Myra.Samples.FantasyMapGenerator.Generation
 						}
 
 						newValue += _smoothMatrix[1, 1] * oldHeightMap[y, x];
-						_heightMap[y, x] = (int)newValue;
+						_data[y, x] = newValue;
 					}
 				}
 			}
@@ -245,20 +366,20 @@ namespace Myra.Samples.FantasyMapGenerator.Generation
 				ClearMask();
 
 				// Next run remove small islands
-				for (int y = 0; y < height; ++y)
+				for (int y = 0; y < _size; ++y)
 				{
-					for (int x = 0; x < width; ++x)
+					for (int x = 0; x < _size; ++x)
 					{
-						if (!_islandMask[y, x] && _heightMap[y, x] >= _landMinimum)
+						if (!_islandMask[y, x] && _data[y, x] >= _landMinimum)
 						{
-							List<Point> island = Build(x, y, p => _heightMap[p.Y, p.X] >= _landMinimum);
+							List<Point> island = Build(x, y, p => _data[p.Y, p.X] >= _landMinimum);
 
 							if (island.Count < MinimumIslandSize)
 							{
 								// Remove small island
 								foreach (var p in island)
 								{
-									_heightMap[p.Y, p.X] = _landMinimum - 1;
+									_data[p.Y, p.X] = _landMinimum - 0.001f;
 								}
 							}
 						}
@@ -271,20 +392,20 @@ namespace Myra.Samples.FantasyMapGenerator.Generation
 				ClearMask();
 
 				// Remove small lakes
-				for (int y = 0; y < height; ++y)
+				for (int y = 0; y < _size; ++y)
 				{
-					for (int x = 0; x < width; ++x)
+					for (int x = 0; x < _size; ++x)
 					{
-						if (!_islandMask[y, x] && _heightMap[y, x] < _landMinimum)
+						if (!_islandMask[y, x] && _data[y, x] < _landMinimum)
 						{
-							List<Point> lake = Build(x, y, p => _heightMap[p.Y, p.X] < _landMinimum);
+							List<Point> lake = Build(x, y, p => _data[p.Y, p.X] < _landMinimum);
 
 							if (lake.Count < MinimumLakeSize)
 							{
 								// Remove small lake
 								foreach (var p in lake)
 								{
-									_heightMap[p.Y, p.X] = _landMinimum + 1;
+									_data[p.Y, p.X] = _landMinimum + 0.001f;
 								}
 							}
 						}
@@ -293,7 +414,7 @@ namespace Myra.Samples.FantasyMapGenerator.Generation
 				}
 			}
 
-			return _heightMap;
+			return _data;
 		}
 	}
 }

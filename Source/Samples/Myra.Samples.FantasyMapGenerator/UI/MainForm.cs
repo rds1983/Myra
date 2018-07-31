@@ -11,8 +11,8 @@ namespace Myra.Samples.FantasyMapGenerator.UI
 {
 	public partial class MainForm : HorizontalSplitPane
 	{
-		private int[,] _heightMap;
-		private int _landMinimum;
+		private float[,] _heightMap;
+		private float _landMinimum;
 		private int _generatingCounter = 0;
 		private string _lastFolder = null;
 		private DateTime _generatingStamp;
@@ -92,19 +92,15 @@ namespace Myra.Samples.FantasyMapGenerator.UI
 
 				try
 				{
+					int size = (int)(512 * Math.Pow(2, (int)_comboSize.SelectedIndex));
 
-					int width = (int)_spinWidth.Value;
-					int height = (int)_spinHeight.Value;
 					int variability = (int)_spinVariability.Value;
-					int waterPercent = (int)_sliderWaterLand.Value;
-					int landPercent = 100 - waterPercent;
 
 					var generator = new Generator();
 
-					_heightMap = generator.Generate(width, height,
+					_heightMap = generator.Generate(size,
 							variability,
-							waterPercent / 100.0f,
-							landPercent / 100.0f,
+							_sliderWaterLand.Value / 100.0f,
 							_checkSurrondedByWater.IsPressed,
 							_checkSmooth.IsPressed,
 							_checkRemoveSmalIslands.IsPressed,

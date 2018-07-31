@@ -17,9 +17,9 @@ namespace Myra.Samples.FantasyMapGenerator.UI
 		private static readonly Color SiluetteBackground = Color.White;
 		private static readonly Color SiluetteBorder = Color.Black;
 
-		private int[,] _heightMap;
+		private float[,] _heightMap;
 		private ViewMode _viewMode = ViewMode.Normal;
-		private int _landMinimum = 0;
+		private float _landMinimum = 0;
 
 		public ViewMode ViewMode
 		{
@@ -55,7 +55,7 @@ namespace Myra.Samples.FantasyMapGenerator.UI
 			}
 		}
 
-		public void SetData(int[,] heightMap, int landMinimum)
+		public void SetData(float[,] heightMap, float landMinimum)
 		{
 			if (heightMap == null)
 			{
@@ -81,13 +81,13 @@ namespace Myra.Samples.FantasyMapGenerator.UI
 			return val;
 		}
 
-		private Color ColorByHeight(int height)
+		private Color ColorByHeight(float height)
 		{
 			Color result;
 
 			if (height < _landMinimum)
 			{
-				float val = 1.0f - (height - _landMinimum) * 0.5f / (Generator.MinimumHeight - _landMinimum);
+				float val = 1.0f - (_landMinimum - height) * 0.5f / _landMinimum;
 
 				// Water
 				result = new Color((int)(30 * val), (int)(70 * val), (int)(200 * val));
@@ -95,7 +95,7 @@ namespace Myra.Samples.FantasyMapGenerator.UI
 			else
 			{
 				// Land
-				float val = 0.5f + (height - _landMinimum) * 0.5f / (Generator.MaximumHeight - _landMinimum);
+				float val = 0.5f + (height - _landMinimum) * 0.5f / (1.0f - _landMinimum);
 
 				result = new Color((int)(160 * val), (int)(255 * val), (int)(102 * val));
 			}
@@ -109,7 +109,7 @@ namespace Myra.Samples.FantasyMapGenerator.UI
 			{
 				for (int x = 0; x < Width; ++x)
 				{
-					int h = _heightMap[y, x];
+					float h = _heightMap[y, x];
 					Color c = ColorByHeight(h);
 					result[y * Width + x] = c;
 				}
@@ -138,7 +138,7 @@ namespace Myra.Samples.FantasyMapGenerator.UI
 				bool isLand = false;
 				for (int x = 0; x < Width; ++x)
 				{
-					int h = _heightMap[y, x];
+					float h = _heightMap[y, x];
 
 					bool doSet = false;
 					if (!isLand && h > _landMinimum)
@@ -165,7 +165,7 @@ namespace Myra.Samples.FantasyMapGenerator.UI
 				bool isLand = false;
 				for (int y = 0; y < Height; ++y)
 				{
-					int h = _heightMap[y, x];
+					float h = _heightMap[y, x];
 
 					bool doSet = false;
 					if (!isLand && h > _landMinimum)
