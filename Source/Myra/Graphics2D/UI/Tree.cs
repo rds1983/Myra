@@ -296,18 +296,18 @@ namespace Myra.Graphics2D.UI
 
 			if (HoverRow != null && HoverRow != SelectedRow && RowHoverBackground != null)
 			{
-				context.Batch.Draw(RowHoverBackground, HoverRow.RowBounds);
+				context.Draw(RowHoverBackground, HoverRow.RowBounds);
 			}
 
 			if (SelectedRow != null && SelectedRow.RowVisible && RowSelectionBackground != null)
 			{
 				if (!IsFocused && RowSelectionBackgroundWithoutFocus != null)
 				{
-					context.Batch.Draw(RowSelectionBackgroundWithoutFocus, SelectedRow.RowBounds);
+					context.Draw(RowSelectionBackgroundWithoutFocus, SelectedRow.RowBounds);
 				}
 				else
 				{
-					context.Batch.Draw(RowSelectionBackground, SelectedRow.RowBounds);
+					context.Draw(RowSelectionBackground, SelectedRow.RowBounds);
 				}
 			}
 

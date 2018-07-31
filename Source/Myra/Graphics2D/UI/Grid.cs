@@ -793,7 +793,7 @@ namespace Myra.Graphics2D.UI
 						bounds.Width,
 						_rowHeights[HoverIndex.Value]);
 
-					context.Batch.Draw(RowHoverBackground, rect);
+					context.Draw(RowHoverBackground, rect);
 				}
 
 				if (SelectedIndex != null && RowSelectionBackground != null)
@@ -805,11 +805,11 @@ namespace Myra.Graphics2D.UI
 
 					if (!IsFocused && RowSelectionBackgroundWithoutFocus != null)
 					{
-						context.Batch.Draw(RowSelectionBackgroundWithoutFocus, rect);
+						context.Draw(RowSelectionBackgroundWithoutFocus, rect);
 					}
 					else
 					{
-						context.Batch.Draw(RowSelectionBackground, rect);
+						context.Draw(RowSelectionBackground, rect);
 					}
 				}
 			}
@@ -825,13 +825,13 @@ namespace Myra.Graphics2D.UI
 			for (i = 0; i < _gridLinesX.Count; ++i)
 			{
 				var x = _gridLinesX[i] + bounds.Left;
-				context.Batch.FillRectangle(new Rectangle(x, bounds.Top, 1, bounds.Height), DrawLinesColor);
+				context.FillRectangle(new Rectangle(x, bounds.Top, 1, bounds.Height), DrawLinesColor);
 			}
 
 			for (i = 0; i < _gridLinesY.Count; ++i)
 			{
 				var y = _gridLinesY[i] + bounds.Top;
-				context.Batch.FillRectangle(new Rectangle(bounds.Left, y, bounds.Width, 1), DrawLinesColor);
+				context.FillRectangle(new Rectangle(bounds.Left, y, bounds.Width, 1), DrawLinesColor);
 			}
 		}
 

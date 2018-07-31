@@ -671,7 +671,7 @@ namespace Myra.Graphics2D.UI
 			var background = GetCurrentBackground();
 			if (background != null)
 			{
-				batch.Draw(background, Bounds, Color.White * context.Opacity);
+				context.Draw(background, Bounds);
 			}
 
 			var oldView = context.View;
@@ -683,7 +683,7 @@ namespace Myra.Graphics2D.UI
 			var border = GetCurrentBorder();
 			if (border != null)
 			{
-				batch.Draw(border, Bounds, Color.White * context.Opacity);
+				context.Draw(border, Bounds);
 			}
 
 			if (MyraEnvironment.DrawWidgetsFrames)

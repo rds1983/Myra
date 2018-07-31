@@ -10,6 +10,7 @@ namespace Myra.Graphics2D.UI
 {
 	public abstract class Slider : SingleItemContainer<Button>
 	{
+		private float _value;
 		private int? _mousePos;
 
 		[HiddenInEditor]
@@ -29,31 +30,26 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				if (MaxHint == 0)
+				return _value;
+			}
+			set
+			{
+				if (value > Maximum)
 				{
-					return 0;
+					//could throw error instead?
+					value = Maximum;
 				}
 
-				var delta = Maximum - Minimum;
-				return Minimum + Hint*delta/MaxHint;
+				if (value < Minimum)
+				{
+					//could throw error instead?
+					value = Minimum;
+				}
+
+				_value = value;
+
+				SyncHintWithValue();
 			}
-            set
-            {
-                if (value > Maximum)
-                {
-                    //could throw error instead?
-                    Hint = MaxHint;
-                }
-
-                if (value < Minimum)
-                {
-                    //could throw error instead?
-                    Hint = 0;
-                }
-
-                Hint = (int)(MaxHint*(value/Maximum));
-
-            }
 		}
 
 		private int Hint
@@ -110,28 +106,10 @@ namespace Myra.Graphics2D.UI
 			Maximum = 100;
 		}
 
-		public override void OnDesktopChanging()
+		public override void OnMouseMoved(Point position)
 		{
-			base.OnDesktopChanging();
+			base.OnMouseMoved(position);
 
-			if (Desktop != null)
-			{
-				Desktop.MouseMoved -= DesktopOnMouseMoved;
-			}
-		}
-
-		public override void OnDesktopChanged()
-		{
-			base.OnDesktopChanging();
-
-			if (Desktop != null)
-			{
-				Desktop.MouseMoved += DesktopOnMouseMoved;
-			}
-		}
-
-		private void DesktopOnMouseMoved(object sender, GenericEventArgs<Point> genericEventArgs)
-		{
 			if (_mousePos == null)
 			{
 				return;
@@ -160,6 +138,13 @@ namespace Myra.Graphics2D.UI
 
 			Hint = hint;
 
+			// Sync Value with Hint
+			if (MaxHint != 0)
+			{
+				var d = Maximum - Minimum;
+				_value = Minimum + Hint * d / MaxHint;
+			}
+
 			_mousePos = mousePos;
 		}
 
@@ -186,6 +171,18 @@ namespace Myra.Graphics2D.UI
 			{
 				Widget.ApplyButtonStyle(style.KnobStyle);
 			}
+		}
+
+		private void SyncHintWithValue()
+		{
+			Hint = (int)(MaxHint * (_value / Maximum));
+		}
+
+		public override void Arrange()
+		{
+			base.Arrange();
+
+			SyncHintWithValue();
 		}
 	}
 }

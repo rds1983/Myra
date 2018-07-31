@@ -402,7 +402,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var bounds = ActualBounds;
-			_formattedText.Draw(context.Batch, bounds, TextColor);
+			_formattedText.Draw(context.Batch, bounds, TextColor, context.Opacity);
 
 			if (!IsFocused)
 			{
@@ -428,7 +428,7 @@ namespace Myra.Graphics2D.UI
 					y = glyphRender.TextRun.RenderedPosition.Value.Y;
 				}
 
-				context.Batch.Draw(Cursor, new Rectangle(x,
+				context.Draw(Cursor, new Rectangle(x,
 					y,
 					Cursor.Bounds.Width,
 					_formattedText.Font.LineSpacing));
