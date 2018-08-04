@@ -139,5 +139,7 @@ namespace Myra.Graphics2D.UI
 
 			return result;
 		}
+
+		public abstract void RemoveChild(Widget widget);
 	}
 }

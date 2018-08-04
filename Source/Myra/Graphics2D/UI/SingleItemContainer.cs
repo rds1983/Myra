@@ -105,5 +105,15 @@ namespace Myra.Graphics2D.UI
 
 			return result;
 		}
+
+		public override void RemoveChild(Widget widget)
+		{
+			if (widget != Widget)
+			{
+				return;
+			}
+
+			Widget = null;
+		}
 	}
 }

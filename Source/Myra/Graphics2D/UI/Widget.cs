@@ -1065,5 +1065,25 @@ namespace Myra.Graphics2D.UI
 				w = w.Parent;
 			}
 		}
+
+		public void RemoveFromParent()
+		{
+			if (Parent == null)
+			{
+				return;
+			}
+
+			Parent.RemoveChild(this);
+		}
+
+		public void RemoveFromDesktop()
+		{
+			if (Desktop == null)
+			{
+				return;
+			}
+
+			Desktop.Widgets.Remove(this);
+		}
 	}
 }

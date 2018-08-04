@@ -110,5 +110,10 @@ namespace Myra.Graphics2D.UI
 		{
 			InvalidateMeasure();
 		}
+
+		public override void RemoveChild(Widget widget)
+		{
+			_widgets.Remove(widget);
+		}
 	}
 }
