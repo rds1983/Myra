@@ -302,7 +302,6 @@ namespace StbSharp
 
 		public static ulong strlen(sbyte* str)
 		{
-			ulong res = 0;
 			var ptr = str;
 
 			while (*ptr != '\0')

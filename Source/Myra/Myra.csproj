@@ -48,6 +48,7 @@
     <Compile Include="Attributes\HiddenInEditorAttribute.cs" />
     <Compile Include="Attributes\IItemsProvider.cs" />
     <Compile Include="Attributes\SelectionAttribute.cs" />
+    <Compile Include="Attributes\StylePropertyPathAttribute.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\BitmapFont.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\BitmapFontLoader.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\Character.cs" />

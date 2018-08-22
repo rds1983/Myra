@@ -266,7 +266,6 @@
                     "R": 255,
                     "A": 255
                   },
-                  "ImageTextSpacing": 8,
                   "ContentHorizontalAlignment": 3,
                   "ContentVerticalAlignment": 3,
                   "Id": "_button",
@@ -309,7 +308,6 @@
                     "R": 255,
                     "A": 255
                   },
-                  "ImageTextSpacing": 8,
                   "ContentHorizontalAlignment": 3,
                   "ContentVerticalAlignment": 3,
                   "Id": "_blueButton",

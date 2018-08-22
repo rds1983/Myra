@@ -1,4 +1,6 @@
 ﻿using System;
+using Myra.Attributes;
+using Myra.Graphics2D.UI.Styles;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -21,6 +23,15 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public Widget Root { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public Stylesheet Stylesheet { get; set; }
+
+		public Project()
+		{
+			Stylesheet = Stylesheet.Current;
+		}
 
 		public string Save()
 		{

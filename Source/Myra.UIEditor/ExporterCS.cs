@@ -7,8 +7,10 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Myra.Attributes;
 using Myra.Editor.Utils;
 using Myra.Graphics2D.UI;
+using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using Newtonsoft.Json;
 
@@ -61,6 +63,30 @@ namespace Myra.UIEditor
 			}
 
 			return char.ToLowerInvariant(s[0]) + s.Substring(1);
+		}
+
+		private static bool IsSkippable(object value, PropertyInfo property)
+		{
+			var defaultValue = GetDefaultValue(property.PropertyType);
+			var defaultAttribute = property.FindAttribute<DefaultValueAttribute>();
+			if ((defaultAttribute != null && Equals(value, defaultAttribute.Value)) ||
+				(defaultAttribute == null && Equals(value, defaultValue)))
+			{
+				// Skip default
+				return true;
+			}
+
+			return false;
+		}
+
+		private bool HasStylesheetValue(Widget w, PropertyInfo property, string styleName)
+		{
+			if (_project.Stylesheet == null)
+			{
+				return false;
+			}
+
+			return Serialization.HasStylesheetValue(_project.Stylesheet, w, property, styleName);
 		}
 
 		public string ExportDesignerRecursive(IItemWithId w)
@@ -177,12 +203,14 @@ namespace Myra.UIEditor
 			foreach (var property in simpleProperties)
 			{
 				var value = property.GetValue(w);
-				var defaultValue = GetDefaultValue(property.PropertyType);
-				var defaultAttribute = property.FindAttribute<DefaultValueAttribute>();
-				if ((defaultAttribute != null && Equals(value, defaultAttribute.Value)) ||
-				    (defaultAttribute == null && Equals(value, defaultValue)))
+				if (IsSkippable(value, property))
 				{
-					// Skip default
+					continue;
+				}
+
+				var asWidget = w as Widget;
+				if (asWidget != null && HasStylesheetValue(asWidget, property, styleName))
+				{
 					continue;
 				}
 
@@ -351,12 +379,8 @@ namespace Myra.UIEditor
 
 				var subValue = property.GetValue(value);
 
-				var defaultValue = GetDefaultValue(property.PropertyType);
-				var defaultAttribute = property.FindAttribute<DefaultValueAttribute>();
-				if ((defaultAttribute != null && Equals(subValue, defaultAttribute.Value)) ||
-				    (defaultAttribute == null && Equals(subValue, defaultValue)))
+				if (IsSkippable(subValue, property))
 				{
-					// Skip default
 					continue;
 				}
 

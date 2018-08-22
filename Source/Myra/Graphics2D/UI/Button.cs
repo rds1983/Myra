@@ -23,6 +23,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Appearance")]
+		[StylePropertyPath("LabelStyle.TextColor")]
 		public virtual Color TextColor
 		{
 			get { return _textBlock.TextColor; }
@@ -54,6 +55,22 @@ namespace Myra.Graphics2D.UI
 
 				_textureRegion = value;
 				UpdateTextureRegion();
+			}
+		}
+
+		[JsonIgnore]
+		[HiddenInEditor]
+		[EditCategory("Appearance")]
+		public Color ImageColor
+		{
+			get
+			{
+				return _image.Color;
+			}
+
+			set
+			{
+				_image.Color = value;
 			}
 		}
 

@@ -141,6 +141,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Layout")]
+		[StylePropertyPath("Padding.Left")]
 		public int PaddingLeft
 		{
 			get { return _paddingLeft; }
@@ -158,6 +159,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Layout")]
+		[StylePropertyPath("Padding.Right")]
 		public int PaddingRight
 		{
 			get { return _paddingRight; }
@@ -175,6 +177,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Layout")]
+		[StylePropertyPath("Padding.Top")]
 		public int PaddingTop
 		{
 			get { return _paddingTop; }
@@ -192,6 +195,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Layout")]
+		[StylePropertyPath("Padding.Bottom")]
 		public int PaddingBottom
 		{
 			get { return _paddingBottom; }

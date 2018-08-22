@@ -12,14 +12,15 @@ namespace Myra.Graphics2D.UI
 		private readonly TextBlock _textBlock;
 
 		[EditCategory("Appearance")]
-		public virtual string Text
+		public string Text
 		{
 			get { return _textBlock.Text; }
 			set { _textBlock.Text = value; }
 		}
 
 		[EditCategory("Appearance")]
-		public virtual Color TextColor
+		[StylePropertyPath("LabelStyle.TextColor")]
+		public Color TextColor
 		{
 			get { return _textBlock.TextColor; }
 			set { _textBlock.TextColor = value; }

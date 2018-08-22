@@ -17,7 +17,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public TextureRegion DisabledBorder { get; set; }
 		public TextureRegion FocusedBorder { get; set; }
 
-		public PaddingInfo Padding;
+		public PaddingInfo Padding { get; set; }
 
 		public WidgetStyle()
 		{

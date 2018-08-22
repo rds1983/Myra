@@ -21,7 +21,6 @@ namespace Myra.Graphics2D.UI
 		private readonly Grid _titleGrid;
 		private readonly TextBlock _titleLabel;
 		private readonly ImageButton _closeButton;
-		private Grid _contentGrid;
 		private Widget _content;
 
 		[EditCategory("Appearance")]

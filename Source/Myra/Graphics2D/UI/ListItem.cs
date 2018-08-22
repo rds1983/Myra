@@ -73,6 +73,10 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
+		public Color ImageColor { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
 		public int ImageTextSpacing { get; set; }
 
 		[HiddenInEditor]
@@ -84,6 +88,7 @@ namespace Myra.Graphics2D.UI
 
 		public ListItem()
 		{
+			ImageColor = Microsoft.Xna.Framework.Color.White;
 		}
 
 		public ListItem(string text, Color? color, object tag)

@@ -1,4 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Myra.Attributes;
+using Myra.Graphics2D.UI;
+using Myra.Graphics2D.UI.Styles;
+using Newtonsoft.Json.Linq;
+using System.Collections;
+using System.Reflection;
 
 namespace Myra.Utility
 {
@@ -114,6 +119,69 @@ namespace Myra.Utility
 			}
 
 			result = f;
+
+			return true;
+		}
+
+		public static bool HasStylesheetValue(Stylesheet stylesheet, Widget w, PropertyInfo property, string styleName)
+		{
+			if (string.IsNullOrEmpty(styleName))
+			{
+				styleName = Stylesheet.DefaultStyleName;
+			}
+
+			// Find styles dict of that widget
+			var stylesDictPropertyName = w.GetType().Name + "Styles";
+			var stylesDictProperty = stylesheet.GetType().GetRuntimeProperty(stylesDictPropertyName);
+			if (stylesDictProperty == null)
+			{
+				return false;
+			}
+
+			var stylesDict = (IDictionary)stylesDictProperty.GetValue(stylesheet);
+			if (stylesDict == null)
+			{
+				return false;
+			}
+
+			// Fetch style from the dict
+			var style = stylesDict[styleName];
+
+			// Now find corresponding property
+			PropertyInfo styleProperty = null;
+
+			var stylePropertyPathAttribute = property.FindAttribute<StylePropertyPathAttribute>();
+			if (stylePropertyPathAttribute != null)
+			{
+				var parts = stylePropertyPathAttribute.Name.Split('.');
+
+				for (var i = 0; i < parts.Length; ++i)
+				{
+					styleProperty = style.GetType().GetRuntimeProperty(parts[i]);
+
+					if (i < parts.Length - 1)
+					{
+						style = styleProperty.GetValue(style);
+					}
+				}
+			}
+			else
+			{
+				styleProperty = style.GetType().GetRuntimeProperty(property.Name);
+			}
+
+			if (styleProperty == null)
+			{
+				return false;
+			}
+
+			// Compare values
+			var styleValue = styleProperty.GetValue(style);
+			var value = property.GetValue(w);
+			if (!Equals(styleValue, value))
+			{
+				return false;
+			}
 
 			return true;
 		}

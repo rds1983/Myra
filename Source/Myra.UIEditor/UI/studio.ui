@@ -5,7 +5,7 @@
     "$type": "Myra.Graphics2D.UI.ExportOptions, Myra",
     "Namespace": "Myra.UIEditor.UI",
     "Class": "StudioWidget",
-    "OutputPath": "/home/rds/Projects/Hebron/Myra/Source/Myra.UIEditor/UI"
+    "OutputPath": "D:/Projects/Hebron/Myra/Source/Myra.UIEditor/UI"
   },
   "Root": {
     "$id": "2",

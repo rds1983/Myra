@@ -182,6 +182,7 @@ namespace Myra.Graphics2D.UI
 					HorizontalAlignment = HorizontalAlignment.Stretch,
 					VerticalAlignment = VerticalAlignment.Stretch,
 					Image = item.Image,
+					ImageColor = item.ImageColor,
 					ImageTextSpacing = item.ImageTextSpacing,
 					Toggleable = true
 				};

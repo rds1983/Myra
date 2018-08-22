@@ -7,7 +7,10 @@ namespace Myra.Graphics2D
 	{
 		public static readonly PaddingInfo Zero = new PaddingInfo();
 
-		public int Left, Right, Top, Bottom;
+		public int Left { get; set; }
+		public int Right { get; set; }
+		public int Top { get; set; }
+		public int Bottom { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]

@@ -21,6 +21,19 @@ namespace Myra.Graphics2D
 			get { return _data; }
 		}
 
+		public Color this[int x, int y]
+		{
+			get
+			{
+				return _data[y * Width + x];
+			}
+
+			set
+			{
+				_data[y * Width + x] = value;
+			}
+		}
+
 		public ColorBuffer(int width, int height)
 		{
 			if (width <= 0)
