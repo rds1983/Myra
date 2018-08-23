@@ -1,8 +1,7 @@
 ﻿using Myra.Attributes;
-using Myra.Graphics2D.UI;
-using Myra.Graphics2D.UI.Styles;
 using Newtonsoft.Json.Linq;
-using System.Collections;
+using System;
+using System.ComponentModel;
 using System.Reflection;
 
 namespace Myra.Utility
@@ -59,7 +58,7 @@ namespace Myra.Utility
 
 			return true;
 		}
-		
+
 		public static bool GetStyle(this JObject styles, string name, out bool result)
 		{
 			result = false;
@@ -80,7 +79,7 @@ namespace Myra.Utility
 
 			return true;
 		}
-				
+
 		public static bool GetStyle(this JObject styles, string name, out char result)
 		{
 			result = '\0';
@@ -123,67 +122,28 @@ namespace Myra.Utility
 			return true;
 		}
 
-		public static bool HasStylesheetValue(Stylesheet stylesheet, Widget w, PropertyInfo property, string styleName)
+		private static object GetDefaultValue(Type type)
 		{
-			if (string.IsNullOrEmpty(styleName))
+			if (type.GetTypeInfo().IsValueType)
 			{
-				styleName = Stylesheet.DefaultStyleName;
+				return Activator.CreateInstance(type);
 			}
 
-			// Find styles dict of that widget
-			var stylesDictPropertyName = w.GetType().Name + "Styles";
-			var stylesDictProperty = stylesheet.GetType().GetRuntimeProperty(stylesDictPropertyName);
-			if (stylesDictProperty == null)
+			return null;
+		}
+
+		public static bool HasDefaultValue(this PropertyInfo property, object value)
+		{
+			var defaultValue = GetDefaultValue(property.PropertyType);
+			var defaultAttribute = property.FindAttribute<DefaultValueAttribute>();
+			if ((defaultAttribute != null && Equals(value, defaultAttribute.Value)) ||
+				(defaultAttribute == null && Equals(value, defaultValue)))
 			{
-				return false;
+				// Skip default
+				return true;
 			}
 
-			var stylesDict = (IDictionary)stylesDictProperty.GetValue(stylesheet);
-			if (stylesDict == null)
-			{
-				return false;
-			}
-
-			// Fetch style from the dict
-			var style = stylesDict[styleName];
-
-			// Now find corresponding property
-			PropertyInfo styleProperty = null;
-
-			var stylePropertyPathAttribute = property.FindAttribute<StylePropertyPathAttribute>();
-			if (stylePropertyPathAttribute != null)
-			{
-				var parts = stylePropertyPathAttribute.Name.Split('.');
-
-				for (var i = 0; i < parts.Length; ++i)
-				{
-					styleProperty = style.GetType().GetRuntimeProperty(parts[i]);
-
-					if (i < parts.Length - 1)
-					{
-						style = styleProperty.GetValue(style);
-					}
-				}
-			}
-			else
-			{
-				styleProperty = style.GetType().GetRuntimeProperty(property.Name);
-			}
-
-			if (styleProperty == null)
-			{
-				return false;
-			}
-
-			// Compare values
-			var styleValue = styleProperty.GetValue(style);
-			var value = property.GetValue(w);
-			if (!Equals(styleValue, value))
-			{
-				return false;
-			}
-
-			return true;
+			return false;
 		}
 	}
 }

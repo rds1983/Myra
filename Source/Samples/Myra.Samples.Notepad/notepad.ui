@@ -117,34 +117,11 @@
           "$id": "18",
           "$type": "Myra.Graphics2D.UI.TextField, Myra",
           "Text": "",
-          "TextColor": {
-            "$id": "19",
-            "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-            "B": 255,
-            "G": 255,
-            "R": 255,
-            "A": 255
-          },
-          "DisabledTextColor": {
-            "$id": "20",
-            "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-            "B": 170,
-            "G": 170,
-            "R": 170,
-            "A": 255
-          },
-          "MessageTextColor": {
-            "$id": "21",
-            "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-            "B": 170,
-            "G": 170,
-            "R": 170,
-            "A": 255
-          },
           "Multiline": true,
           "Id": "textArea",
           "HorizontalAlignment": 3,
           "VerticalAlignment": 3,
+          "ClipToBounds": true,
           "CanFocus": true
         },
         "HorizontalAlignment": 3,

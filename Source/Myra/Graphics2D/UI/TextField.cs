@@ -143,6 +143,7 @@ namespace Myra.Graphics2D.UI
 			VerticalAlignment = VerticalAlignment.Top;
 
 			CanFocus = true;
+			ClipToBounds = true;
 			_formattedText.IsColored = false;
 
 			if (style != null)
