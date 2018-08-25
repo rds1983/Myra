@@ -56,6 +56,7 @@
     <Compile Include="Cyotek.Drawing.BitmapFont\Padding.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\Page.cs" />
     <Compile Include="Graphics2D\ColorBuffer.cs" />
+    <Compile Include="Graphics2D\UI\HorizontalSeparator.cs" />
     <Compile Include="Graphics2D\StbSharp\CRuntime.cs" />
     <Compile Include="Graphics2D\StbSharp\ImageReader.cs" />
     <Compile Include="Graphics2D\StbSharp\StbImage.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="Graphics2D\UI\TreeNode.cs" />
     <Compile Include="Graphics2D\UI\VerticalMenu.cs" />
     <Compile Include="Graphics2D\UI\VerticalProgressBar.cs" />
+    <Compile Include="Graphics2D\UI\VerticalSeparator.cs" />
     <Compile Include="Graphics2D\UI\VerticalSlider.cs" />
     <Compile Include="Graphics2D\UI\VerticalSplitPane.cs" />
     <Compile Include="ShapeExtensions.cs" />

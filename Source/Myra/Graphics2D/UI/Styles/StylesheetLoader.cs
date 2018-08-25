@@ -90,6 +90,8 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string KnobName = "knob";
 		public const string HorizontalProgressBarName = "horizontalProgressBar";
 		public const string VerticalProgressBarName = "verticalProgressBar";
+		public const string HorizontalSeparatorName = "horizontalSeparator";
+		public const string VerticalSeparatorName = "verticalSeparator";
 		public const string FilledName = "filled";
 		public const string VariantsName = "variants";
 
@@ -660,6 +662,8 @@ namespace Myra.Graphics2D.UI.Styles
 			FillStyles(VerticalSliderName, result.VerticalSliderStyles, LoadSliderStyleFromSource);
 			FillStyles(HorizontalProgressBarName, result.HorizontalProgressBarStyles, LoadProgressBarStyleFromSource);
 			FillStyles(VerticalProgressBarName, result.VerticalProgressBarStyles, LoadProgressBarStyleFromSource);
+			FillStyles(HorizontalSeparatorName, result.HorizontalSeparatorStyles, LoadSeparatorStyleFromSource);
+			FillStyles(VerticalSeparatorName, result.VerticalSeparatorStyles, LoadSeparatorStyleFromSource);
 			FillStyles(ComboBoxName, result.ComboBoxStyles, LoadComboBoxStyleFromSource);
 			FillStyles(ListBoxName, result.ListBoxStyles, LoadListBoxStyleFromSource);
 			FillStyles(GridName, result.GridStyles, LoadGridStyleFromSource);

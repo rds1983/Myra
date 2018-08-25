@@ -137,14 +137,14 @@
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddHorizontalSlider",
-                "Text": "Add HorizontalSlider"
+                "Text": "Add Horizontal Slider"
               },
               {
                 "$id": "23",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddVerticalSlider",
-                "Text": "Add VerticalSlider"
+                "Text": "Add Vertical Slider"
               },
               {
                 "$id": "24",
@@ -164,124 +164,138 @@
                 "$id": "26",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
+                "Id": "_menuControlsAddHorizontalSeparator",
+                "Text": "Add Horizontal Separator"
+              },
+              {
+                "$id": "27",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
+                "Id": "_menuControlsAddVerticalSeparator",
+                "Text": "Add Vertical Separator"
+              },
+              {
+                "$id": "28",
+                "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
+                "Items": [],
                 "Id": "_menuControlsAddComboBox",
                 "Text": "Add ComboBox"
               },
               {
-                "$id": "27",
+                "$id": "29",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddListBox",
                 "Text": "Add ListBox"
               },
               {
-                "$id": "28",
+                "$id": "30",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddImage",
                 "Text": "Add Image"
               },
               {
-                "$id": "29",
+                "$id": "31",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddTextBlock",
                 "Text": "Add TextBlock"
               },
               {
-                "$id": "30",
+                "$id": "32",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddTextField",
                 "Text": "Add TextField"
               },
               {
-                "$id": "31",
+                "$id": "33",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddSpinButton",
                 "Text": "Add SpinButton"
               },
               {
-                "$id": "32",
+                "$id": "34",
                 "$type": "Myra.Graphics2D.UI.MenuSeparator, Myra"
               },
               {
-                "$id": "33",
+                "$id": "35",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddPanel",
                 "Text": "Add Panel"
               },
               {
-                "$id": "34",
+                "$id": "36",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddGrid",
                 "Text": "Add Grid"
               },
               {
-                "$id": "35",
+                "$id": "37",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddScrollPane",
                 "Text": "Add ScrollPane"
               },
               {
-                "$id": "36",
+                "$id": "38",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddHorizontalSplitPane",
                 "Text": "Add Horizontal SplitPane"
               },
               {
-                "$id": "37",
+                "$id": "39",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddVerticalSplitPane",
                 "Text": "Add Vertical SplitPane"
               },
               {
-                "$id": "38",
+                "$id": "40",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddWindow",
                 "Text": "Add Window"
               },
               {
-                "$id": "39",
+                "$id": "41",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddDialog",
                 "Text": "Add Dialog"
               },
               {
-                "$id": "40",
+                "$id": "42",
                 "$type": "Myra.Graphics2D.UI.MenuSeparator, Myra"
               },
               {
-                "$id": "41",
+                "$id": "43",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddHorizontalMenu",
                 "Text": "Add HorizontalMenu"
               },
               {
-                "$id": "42",
+                "$id": "44",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddVerticalMenu",
                 "Text": "Add Vertical Menu"
               },
               {
-                "$id": "43",
+                "$id": "45",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddMenuItem",
                 "Text": "Add Menu Item"
               },
               {
-                "$id": "44",
+                "$id": "46",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuControlsAddMenuSeparator",
@@ -292,11 +306,11 @@
             "Text": "&Controls"
           },
           {
-            "$id": "45",
+            "$id": "47",
             "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
             "Items": [
               {
-                "$id": "46",
+                "$id": "48",
                 "$type": "Myra.Graphics2D.UI.MenuItem, Myra",
                 "Items": [],
                 "Id": "_menuHelpAbout",
@@ -308,7 +322,7 @@
           }
         ],
         "DrawLinesColor": {
-          "$id": "47",
+          "$id": "49",
           "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
           "B": 255,
           "G": 255,
@@ -320,11 +334,11 @@
         "VerticalAlignment": 3
       },
       {
-        "$id": "48",
+        "$id": "50",
         "$type": "Myra.Graphics2D.UI.HorizontalSplitPane, Myra",
         "Widgets": [
           {
-            "$id": "49",
+            "$id": "51",
             "$type": "Myra.Graphics2D.UI.Panel, Myra",
             "Widgets": [],
             "Id": "_projectHolder",
@@ -332,11 +346,11 @@
             "VerticalAlignment": 3
           },
           {
-            "$id": "50",
+            "$id": "52",
             "$type": "Myra.Graphics2D.UI.VerticalSplitPane, Myra",
             "Widgets": [
               {
-                "$id": "51",
+                "$id": "53",
                 "$type": "Myra.Graphics2D.UI.Panel, Myra",
                 "Widgets": [],
                 "Id": "_explorerHolder",
@@ -344,7 +358,7 @@
                 "VerticalAlignment": 3
               },
               {
-                "$id": "52",
+                "$id": "54",
                 "$type": "Myra.Graphics2D.UI.ScrollPane, Myra",
                 "Id": "_propertyGridPane",
                 "HorizontalAlignment": 3,

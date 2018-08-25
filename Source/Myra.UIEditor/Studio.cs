@@ -313,6 +313,14 @@ namespace Myra.UIEditor
 			{
 				AddStandardControl<VerticalProgressBar>();
 			};
+			_ui._menuControlsAddHorizontalSeparator.Selected += (s, a) =>
+			{
+				AddStandardControl<HorizontalSeparator>();
+			};
+			_ui._menuControlsAddVerticalSeparator.Selected += (s, a) =>
+			{
+				AddStandardControl<VerticalSeparator>();
+			};
 			_ui._menuControlsAddComboBox.Selected += (s, a) =>
 			{
 				AddStandardControl<ComboBox>();
@@ -920,6 +928,8 @@ namespace Myra.UIEditor
 			_ui._menuControlsAddVerticalSlider.Enabled = enableStandard;
 			_ui._menuControlsAddHorizontalProgressBar.Enabled = enableStandard;
 			_ui._menuControlsAddVerticalProgressBar.Enabled = enableStandard;
+			_ui._menuControlsAddHorizontalSeparator.Enabled = enableStandard;
+			_ui._menuControlsAddVerticalSeparator.Enabled = enableStandard;
 			_ui._menuControlsAddComboBox.Enabled = enableStandard;
 			_ui._menuControlsAddListBox.Enabled = enableStandard;
 			_ui._menuControlsAddImage.Enabled = enableStandard;

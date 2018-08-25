@@ -43,6 +43,12 @@ namespace Myra.Graphics2D.UI.Styles
 		private readonly Dictionary<string, ProgressBarStyle> _verticalProgressBarStyles =
 			new Dictionary<string, ProgressBarStyle>();
 
+		private readonly Dictionary<string, SeparatorStyle> _horizontalSeparatorStyles =
+	new Dictionary<string, SeparatorStyle>();
+
+		private readonly Dictionary<string, SeparatorStyle> _verticalSeparatorStyles =
+			new Dictionary<string, SeparatorStyle>();
+
 		private readonly Dictionary<string, ComboBoxStyle> _comboBoxStyles = new Dictionary<string, ComboBoxStyle>();
 		private readonly Dictionary<string, ListBoxStyle> _listBoxStyles = new Dictionary<string, ListBoxStyle>();
 		private readonly Dictionary<string, GridStyle> _gridStyles = new Dictionary<string, GridStyle>();
@@ -124,6 +130,18 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get { return _verticalProgressBarStyles[DefaultStyleName]; }
 			set { _verticalProgressBarStyles[DefaultStyleName] = value; }
+		}
+
+		public SeparatorStyle HorizontalSeparatorStyle
+		{
+			get { return _horizontalSeparatorStyles[DefaultStyleName]; }
+			set { _horizontalSeparatorStyles[DefaultStyleName] = value; }
+		}
+
+		public SeparatorStyle VerticalSeparatorStyle
+		{
+			get { return _verticalSeparatorStyles[DefaultStyleName]; }
+			set { _verticalSeparatorStyles[DefaultStyleName] = value; }
 		}
 
 		public ComboBoxStyle ComboBoxStyle
@@ -241,6 +259,16 @@ namespace Myra.Graphics2D.UI.Styles
 			get { return _verticalProgressBarStyles; }
 		}
 
+		public Dictionary<string, SeparatorStyle> HorizontalSeparatorStyles
+		{
+			get { return _horizontalSeparatorStyles; }
+		}
+
+		public Dictionary<string, SeparatorStyle> VerticalSeparatorStyles
+		{
+			get { return _verticalSeparatorStyles; }
+		}
+
 		public Dictionary<string, ComboBoxStyle> ComboBoxStyles
 		{
 			get { return _comboBoxStyles; }
@@ -304,6 +332,8 @@ namespace Myra.Graphics2D.UI.Styles
 			VerticalSliderStyle = new SliderStyle();
 			HorizontalProgressBarStyle = new ProgressBarStyle();
 			VerticalProgressBarStyle = new ProgressBarStyle();
+			HorizontalSeparatorStyle = new SeparatorStyle();
+			VerticalSeparatorStyle = new SeparatorStyle();
 			ComboBoxStyle = new ComboBoxStyle();
 			ListBoxStyle = new ListBoxStyle();
 			GridStyle = new GridStyle();

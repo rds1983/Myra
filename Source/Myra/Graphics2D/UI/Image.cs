@@ -1,27 +1,31 @@
 ﻿using Microsoft.Xna.Framework;
+using Myra.Attributes;
 using Myra.Graphics2D.TextureAtlases;
+using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
 	public class Image: Widget
 	{
-		private TextureRegion _TextureRegion;
+		private TextureRegion _textureRegion;
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public TextureRegion TextureRegion
 		{
 			get
 			{
-				return _TextureRegion;
+				return _textureRegion;
 			}
 
 			set
 			{
-				if (value == _TextureRegion)
+				if (value == _textureRegion)
 				{
 					return;
 				}
 
-				_TextureRegion = value;
+				_textureRegion = value;
 				InvalidateMeasure();
 			}
 		}

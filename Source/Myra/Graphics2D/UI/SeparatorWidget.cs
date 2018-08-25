@@ -2,28 +2,13 @@
 
 namespace Myra.Graphics2D.UI
 {
-	public class SeparatorWidget : GridBased
+	public class SeparatorWidget : Image
 	{
 		private readonly Orientation _orientation;
-		private readonly Widget _image;
 
 		internal SeparatorWidget(Orientation orientation, SeparatorStyle style)
 		{
 			_orientation = orientation;
-			_image = new Widget();
-
-			if (orientation == Orientation.Horizontal)
-			{
-				_image.HorizontalAlignment = HorizontalAlignment.Center;
-				_image.VerticalAlignment = VerticalAlignment.Stretch;
-			}
-			else
-			{
-				_image.HorizontalAlignment = HorizontalAlignment.Stretch;
-				_image.VerticalAlignment = VerticalAlignment.Center;
-			}
-
-			Widgets.Add(_image);
 
 			if (style != null)
 			{
@@ -35,16 +20,21 @@ namespace Myra.Graphics2D.UI
 		{
 			ApplyWidgetStyle(style);
 
-			_image.Background = style.Image;
+			TextureRegion = style.Image;
 
 			if (_orientation == Orientation.Horizontal)
 			{
-				_image.WidthHint = style.Thickness;
+				HeightHint = style.Thickness;
 			}
 			else
 			{
-				_image.HeightHint = style.Thickness;
+				WidthHint = style.Thickness;
 			}
+		}
+
+		public override void InternalRender(RenderContext context)
+		{
+			base.InternalRender(context);
 		}
 	}
 }

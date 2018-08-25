@@ -19,7 +19,7 @@
     "disabledTextColor": "grey",
     "selection": "selection",
     "background": "textfield",
-//        "focusedBorder": "window",
+    //        "focusedBorder": "window",
     "cursor": "cursor",
     "messageFont": "default-font",
     "messageTextColor": "grey"
@@ -216,6 +216,14 @@
       "background": "splitpane-vertical",
       "overBackground": "splitpane-vertical-over"
     }
+  },
+  "horizontalSeparator": {
+    "image": "separator-menu",
+    "thickness": 4
+  },
+  "verticalSeparator": {
+    "image": "separator",
+    "thickness": 3
   },
   "horizontalMenu": {
     "background": "button",

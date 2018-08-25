@@ -213,7 +213,13 @@ namespace Myra.Graphics2D.UI
 			}
 			else
 			{
-				widget = new SeparatorWidget(Orientation, SeparatorStyle);
+				if (Orientation == Orientation.Horizontal)
+				{
+					widget = new VerticalSeparator(SeparatorStyle);
+				} else
+				{
+					widget = new HorizontalSeparator(SeparatorStyle);
+				}
 			}
 
 			iMenuItem.Menu = this;
