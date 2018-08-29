@@ -1,14 +1,42 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.TextureAtlases;
+using System;
 
 namespace Myra.Graphics2D.UI
 {
 	public class RenderContext
 	{
+		private SpriteBatchBeginParams _spriteBatchBeginParams = new SpriteBatchBeginParams
+		{
+			SpriteSortMode = SpriteSortMode.Deferred,
+			BlendState = BlendState.AlphaBlend,
+			SamplerState = SamplerState.PointClamp,
+			DepthStencilState = null,
+			RasterizerState = DefaultAssets.UIRasterizerState
+		};
+
 		public SpriteBatch Batch { get; set; }
 		public Rectangle View { get; set; }
 		public float Opacity { get; set; }
+
+		internal SpriteBatchBeginParams SpriteBatchBeginParams
+		{
+			get
+			{
+				return _spriteBatchBeginParams;
+			}
+
+			set
+			{
+				if (value == null)
+				{
+					throw new ArgumentNullException("value");
+				}
+
+				_spriteBatchBeginParams = value;
+			}
+		}
 
 		/// <summary>
 		/// Draws texture region taking into account the context transformations
@@ -18,7 +46,7 @@ namespace Myra.Graphics2D.UI
 		/// <param name="color"></param>
 		public void Draw(TextureRegion textureRegion, Rectangle rectangle, Color color)
 		{
-			Batch.Draw(textureRegion, rectangle, color * Opacity);
+			textureRegion.Draw(Batch, rectangle, color * Opacity);
 		}
 
 		/// <summary>
@@ -29,7 +57,7 @@ namespace Myra.Graphics2D.UI
 		/// <param name="color"></param>
 		public void Draw(TextureRegion textureRegion, Vector2 pos, Color color)
 		{
-			Batch.Draw(textureRegion, pos, color * Opacity);
+			textureRegion.Draw(Batch, pos, color * Opacity);
 		}
 
 		/// <summary>
@@ -37,10 +65,9 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		/// <param name="textureRegion"></param>
 		/// <param name="rectangle"></param>
-		/// <param name="color"></param>
 		public void Draw(TextureRegion textureRegion, Rectangle rectangle)
 		{
-			Batch.Draw(textureRegion, rectangle, Color.White * Opacity);
+			textureRegion.Draw(Batch, rectangle, Color.White * Opacity);
 		}
 
 		/// <summary>
@@ -63,6 +90,28 @@ namespace Myra.Graphics2D.UI
 		public void FillRectangle(Rectangle rectangle, Color color)
 		{
 			Batch.FillRectangle(rectangle, color * Opacity);
+		}
+
+		internal void Begin()
+		{
+			Batch.Begin(SpriteBatchBeginParams.SpriteSortMode,
+				SpriteBatchBeginParams.BlendState,
+				SpriteBatchBeginParams.SamplerState,
+				SpriteBatchBeginParams.DepthStencilState,
+				SpriteBatchBeginParams.RasterizerState,
+				SpriteBatchBeginParams.Effect,
+				SpriteBatchBeginParams.TransformMatrix);
+		}
+
+		internal void End()
+		{
+			Batch.End();
+		}
+
+		internal void Flush()
+		{
+			End();
+			Begin();
 		}
 	}
 }

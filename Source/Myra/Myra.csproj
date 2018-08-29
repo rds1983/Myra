@@ -56,6 +56,7 @@
     <Compile Include="Cyotek.Drawing.BitmapFont\Padding.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\Page.cs" />
     <Compile Include="Graphics2D\ColorBuffer.cs" />
+    <Compile Include="Graphics2D\SpriteBatchBeginParams.cs" />
     <Compile Include="Graphics2D\UI\HorizontalSeparator.cs" />
     <Compile Include="Graphics2D\StbSharp\CRuntime.cs" />
     <Compile Include="Graphics2D\StbSharp\ImageReader.cs" />
@@ -76,7 +77,6 @@
     <Compile Include="Graphics2D\UI\ImageButton.cs" />
     <Compile Include="Graphics2D\UI\IMenuItemsContainer.cs" />
     <Compile Include="Graphics2D\UI\ListItem.cs" />
-    <Compile Include="Graphics2D\SpriteBatchExtensions.cs" />
     <Compile Include="Graphics2D\PaddingInfo.cs" />
     <Compile Include="Graphics2D\Text\CharInfo.cs" />
     <Compile Include="Graphics2D\Text\FormattedText.cs" />

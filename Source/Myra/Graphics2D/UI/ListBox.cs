@@ -191,7 +191,7 @@ namespace Myra.Graphics2D.UI
 			}
 			else
 			{
-				widget = new SeparatorWidget(Orientation.Vertical, ListBoxStyle.SeparatorStyle);
+				widget = new HorizontalSeparator(ListBoxStyle.SeparatorStyle);
 			}
 
 			RowsProportions.Insert(index, new Proportion(ProportionType.Auto));

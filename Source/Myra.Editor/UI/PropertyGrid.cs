@@ -191,7 +191,7 @@ namespace Myra.Editor.UI
 					var headerBounds = HeaderBounds;
 					if (headerBounds.Contains(Desktop.MousePosition))
 					{
-						context.Batch.Draw(_propertyGrid.PropertyGridStyle.RowHoverBackground, headerBounds, Color.White);
+						_propertyGrid.PropertyGridStyle.RowHoverBackground.Draw(context.Batch, headerBounds);
 					}
 				}
 

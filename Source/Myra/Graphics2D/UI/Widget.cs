@@ -663,7 +663,7 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
-				batch.FlushUI();
+				context.Flush();
 				batch.GraphicsDevice.ScissorRectangle = newScissorRectangle;
 			}
 
@@ -702,7 +702,7 @@ namespace Myra.Graphics2D.UI
 
 			if (ClipToBounds && !MyraEnvironment.DisableClipping)
 			{
-				batch.FlushUI();
+				context.Flush();
 				batch.GraphicsDevice.ScissorRectangle = oldScissorRectangle;
 			}
 

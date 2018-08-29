@@ -5,7 +5,7 @@
     "$type": "Myra.Graphics2D.UI.ExportOptions, Myra",
     "Namespace": "Myra.Editor.UI.File",
     "Class": "FileDialog",
-    "OutputPath": "/home/rds/Projects/Hebron/Myra/Source/Myra.Editor/UI/File"
+    "OutputPath": "D:/Projects/Hebron/Myra/Source/Myra.Editor/UI/File"
   },
   "Root": {
     "$id": "2",
@@ -106,39 +106,16 @@
               "$id": "17",
               "$type": "Myra.Graphics2D.UI.TextField, Myra",
               "Text": "",
-              "TextColor": {
-                "$id": "18",
-                "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-                "B": 255,
-                "G": 255,
-                "R": 255,
-                "A": 255
-              },
-              "DisabledTextColor": {
-                "$id": "19",
-                "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-                "B": 170,
-                "G": 170,
-                "R": 170,
-                "A": 255
-              },
-              "MessageTextColor": {
-                "$id": "20",
-                "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-                "B": 170,
-                "G": 170,
-                "R": 170,
-                "A": 255
-              },
               "Readonly": true,
               "Id": "_textFieldPath",
               "HorizontalAlignment": 3,
               "VerticalAlignment": 1,
               "GridPositionX": 2,
+              "ClipToBounds": true,
               "CanFocus": true
             },
             {
-              "$id": "21",
+              "$id": "18",
               "$type": "Myra.Graphics2D.UI.ImageButton, Myra",
               "ImageVisible": true,
               "ContentHorizontalAlignment": 1,
@@ -153,15 +130,15 @@
           "VerticalAlignment": 3
         },
         {
-          "$id": "22",
+          "$id": "19",
           "$type": "Myra.Graphics2D.UI.HorizontalSplitPane, Myra",
           "Widgets": [
             {
-              "$id": "23",
+              "$id": "20",
               "$type": "Myra.Graphics2D.UI.ListBox, Myra",
               "Items": [],
               "DrawLinesColor": {
-                "$id": "24",
+                "$id": "21",
                 "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
                 "B": 255,
                 "G": 255,
@@ -173,14 +150,14 @@
               "ClipToBounds": true
             },
             {
-              "$id": "25",
+              "$id": "22",
               "$type": "Myra.Graphics2D.UI.ScrollPane, Myra",
               "AllowHorizontalScrolling": false,
               "Child": {
-                "$id": "26",
+                "$id": "23",
                 "$type": "Myra.Graphics2D.UI.Grid, Myra",
                 "DrawLinesColor": {
-                  "$id": "27",
+                  "$id": "24",
                   "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
                   "B": 255,
                   "G": 255,
@@ -191,11 +168,11 @@
                 "RowSpacing": 4,
                 "ColumnsProportions": [
                   {
-                    "$id": "28",
+                    "$id": "25",
                     "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra"
                   },
                   {
-                    "$id": "29",
+                    "$id": "26",
                     "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
                     "Type": 2
                   }
@@ -222,10 +199,10 @@
           "GridPositionY": 1
         },
         {
-          "$id": "30",
+          "$id": "27",
           "$type": "Myra.Graphics2D.UI.Grid, Myra",
           "DrawLinesColor": {
-            "$id": "31",
+            "$id": "28",
             "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
             "B": 255,
             "G": 255,
@@ -235,11 +212,11 @@
           "ColumnSpacing": 4,
           "ColumnsProportions": [
             {
-              "$id": "32",
+              "$id": "29",
               "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra"
             },
             {
-              "$id": "33",
+              "$id": "30",
               "$type": "Myra.Graphics2D.UI.Grid+Proportion, Myra",
               "Type": 2
             }
@@ -247,58 +224,19 @@
           "RowsProportions": [],
           "Widgets": [
             {
-              "$id": "34",
+              "$id": "31",
               "$type": "Myra.Graphics2D.UI.TextBlock, Myra",
               "Text": "File name",
-              "TextColor": {
-                "$id": "35",
-                "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-                "B": 255,
-                "G": 255,
-                "R": 255,
-                "A": 255
-              },
-              "DisabledTextColor": {
-                "$id": "36",
-                "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-                "B": 170,
-                "G": 170,
-                "R": 170,
-                "A": 255
-              },
               "Id": "_textBlockFileName"
             },
             {
-              "$id": "37",
+              "$id": "32",
               "$type": "Myra.Graphics2D.UI.TextField, Myra",
               "Text": "",
-              "TextColor": {
-                "$id": "38",
-                "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-                "B": 255,
-                "G": 255,
-                "R": 255,
-                "A": 255
-              },
-              "DisabledTextColor": {
-                "$id": "39",
-                "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-                "B": 170,
-                "G": 170,
-                "R": 170,
-                "A": 255
-              },
-              "MessageTextColor": {
-                "$id": "40",
-                "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
-                "B": 170,
-                "G": 170,
-                "R": 170,
-                "A": 255
-              },
               "Id": "_textFieldFileName",
               "HorizontalAlignment": 3,
               "GridPositionX": 1,
+              "ClipToBounds": true,
               "CanFocus": true
             }
           ],
@@ -312,15 +250,15 @@
       "GridPositionY": 1
     },
     "DrawLinesColor": {
-      "$id": "41",
+      "$id": "33",
       "$type": "Microsoft.Xna.Framework.Color, MonoGame.Framework",
       "B": 255,
       "G": 255,
       "R": 255,
       "A": 255
     },
-    "XHint": 209,
-    "YHint": 204,
+    "XHint": 141,
+    "YHint": 183,
     "WidthHint": 600,
     "HeightHint": 400,
     "PaddingLeft": 5,

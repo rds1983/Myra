@@ -96,6 +96,34 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		private RenderContext RenderContext
+		{
+			get
+			{
+				EnsureRenderContext();
+
+				return _renderContext;
+			}
+		}
+
+		/// <summary>
+		/// Parameters passed to SpriteBatch.Begin
+		/// </summary>
+		public SpriteBatchBeginParams SpriteBatchBeginParams
+		{
+			get
+			{
+				return RenderContext.SpriteBatchBeginParams;
+			}
+
+			set
+			{
+				RenderContext.SpriteBatchBeginParams = value;
+			}
+		}
+
+		public float Opacity { get; set; }
+
 		public Func<MouseState> MouseStateGetter { get; set; }
 		public Func<KeyboardState> KeyboardStateGetter { get; set; } 
 
@@ -112,6 +140,7 @@ namespace Myra.Graphics2D.UI
 
 		public Desktop()
 		{
+			Opacity = 1.0f;
 			_widgets.CollectionChanged += WidgetsOnCollectionChanged;
 
 			MouseStateGetter = Mouse.GetState;
@@ -210,6 +239,18 @@ namespace Myra.Graphics2D.UI
 			InvalidateLayout();
 		}
 
+		private void EnsureRenderContext()
+		{
+			if (_renderContext == null)
+			{
+				var spriteBatch = new SpriteBatch(MyraEnvironment.GraphicsDevice);
+				_renderContext = new RenderContext
+				{
+					Batch = spriteBatch
+				};
+			}
+		}
+
 		public void Render()
 		{
 			if (Bounds.IsEmpty)
@@ -220,22 +261,15 @@ namespace Myra.Graphics2D.UI
 			UpdateInput();
 			UpdateLayout();
 
-			if (_renderContext == null)
-			{
-				var spriteBatch = new SpriteBatch(MyraEnvironment.GraphicsDevice);
-				_renderContext = new RenderContext
-				{
-					Batch = spriteBatch
-				};
-			}
+			EnsureRenderContext();
 
 			var oldScissorRectangle = _renderContext.Batch.GraphicsDevice.ScissorRectangle;
 
-			_renderContext.Batch.BeginUI();
+			_renderContext.Begin();
 
 			_renderContext.Batch.GraphicsDevice.ScissorRectangle = Bounds;
 			_renderContext.View = Bounds;
-			_renderContext.Opacity = 1.0f;
+			_renderContext.Opacity = Opacity;
 
 			foreach (var widget in WidgetsCopy)
 			{
@@ -245,7 +279,7 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			_renderContext.Batch.End();
+			_renderContext.End();
 			_renderContext.Batch.GraphicsDevice.ScissorRectangle = oldScissorRectangle;
 		}
 
@@ -330,6 +364,13 @@ namespace Myra.Graphics2D.UI
 
 				MouseState = MouseStateGetter();
 				MousePosition = new Point(MouseState.X, MouseState.Y);
+
+				if (SpriteBatchBeginParams.TransformMatrix != null)
+				{
+					// Apply transform
+					MousePosition = Vector2.Transform(MousePosition.ToVector2(), SpriteBatchBeginParams.InverseTransform).ToPoint();
+				}
+
 				MouseWheel = MouseState.ScrollWheelValue;
 
 				if (MouseState.X != lastState.X || MouseState.Y != lastState.Y)
