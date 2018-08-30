@@ -16,9 +16,6 @@ copy "Myra\bin\FNA\%CONFIGURATION%\Myra.dll" "ZipPackage\FNA\" /Y
 copy "Myra\bin\FNA\%CONFIGURATION%\Myra.pdb" "ZipPackage\FNA\" /Y
 copy "Myra\bin\%CONFIGURATION%\Newtonsoft.Json.dll" ZipPackage /Y
 copy "Myra\bin\%CONFIGURATION%\Newtonsoft.Json.xml" ZipPackage /Y
-copy "Myra.UIEditor\bin\%CONFIGURATION%\log4net.dll" ZipPackage /Y
-copy "Myra.UIEditor\bin\%CONFIGURATION%\log4net.xml" ZipPackage /Y
-copy "Myra.UIEditor\bin\%CONFIGURATION%\log4net.config" ZipPackage /Y
 copy "Samples\Myra.Samples.AllWidgets\bin\%CONFIGURATION%\Myra.Samples.AllWidgets.exe" ZipPackage /Y
 copy "Samples\Myra.Samples.CustomUIStylesheet\bin\%CONFIGURATION%\Myra.Samples.CustomUIStylesheet.exe" ZipPackage /Y
 copy "Samples\Myra.Samples.FormattedTextSample\bin\%CONFIGURATION%\Myra.Samples.FormattedTextSample.exe" ZipPackage /Y
