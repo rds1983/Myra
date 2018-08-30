@@ -2,15 +2,12 @@
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
-using log4net;
 using Microsoft.Xna.Framework;
 
 namespace Myra.UIEditor
 {
 	public class State
 	{
-		private static ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
 		public const string StateFileName = "Myra.UIEditor.config";
 
 		public static string StateFilePath
@@ -40,12 +37,8 @@ namespace Myra.UIEditor
 
 		public static State Load()
 		{
-			_logger.InfoFormat("Restoring state from file {0}", StateFilePath);
-
 			if (!File.Exists(StateFilePath))
 			{
-				_logger.Info("State file doesnt exit.");
-
 				return null;
 			}
 
@@ -55,8 +48,6 @@ namespace Myra.UIEditor
 				var serializer = new XmlSerializer(typeof(State));
 				state = (State)serializer.Deserialize(stream);
 			}
-
-			_logger.InfoFormat("Result: {0}", state);
 
 			return state;
 		}

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
-using log4net;
 using Microsoft.Xna.Framework;
 using Myra.Editor.Plugin;
 using Myra.Editor.UI.File;
@@ -28,8 +27,6 @@ namespace Myra.UIEditor
 {
 	public class Studio : Game
 	{
-		private static ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
 		private static Studio _instance;
 
 		private readonly GraphicsDeviceManager _graphicsDeviceManager;
@@ -84,7 +81,6 @@ namespace Myra.UIEditor
 					}
 					catch (Exception ex)
 					{
-						_logger.Error(ex);
 					}
 				}
 
@@ -223,7 +219,6 @@ namespace Myra.UIEditor
 			var pluginPath = Configuration.PluginPath;
 			if (string.IsNullOrEmpty(pluginPath))
 			{
-				_logger.Info("Plugin path is not set");
 				return;
 			}
 
@@ -234,8 +229,6 @@ namespace Myra.UIEditor
 
 				pluginPath = Path.Combine(path, pluginPath);
 			}
-
-			_logger.Info("Trying to load plugin: " + pluginPath);
 
 			try
 			{
@@ -263,7 +256,6 @@ namespace Myra.UIEditor
 			}
 			catch (Exception ex)
 			{
-				_logger.Error(ex);
 			}
 		}
 
@@ -869,7 +861,6 @@ namespace Myra.UIEditor
 			{
 				var dialog = Dialog.CreateMessageBox("Error", ex.ToString());
 				dialog.ShowModal(_desktop);
-				_logger.Error(ex);
 			}
 		}
 

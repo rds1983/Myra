@@ -94,6 +94,7 @@ namespace Myra.Graphics2D.UI
 
 		internal void Begin()
 		{
+#if !FNA
 			Batch.Begin(SpriteBatchBeginParams.SpriteSortMode,
 				SpriteBatchBeginParams.BlendState,
 				SpriteBatchBeginParams.SamplerState,
@@ -101,6 +102,15 @@ namespace Myra.Graphics2D.UI
 				SpriteBatchBeginParams.RasterizerState,
 				SpriteBatchBeginParams.Effect,
 				SpriteBatchBeginParams.TransformMatrix);
+#else
+			Batch.Begin(SpriteBatchBeginParams.SpriteSortMode,
+				SpriteBatchBeginParams.BlendState,
+				SpriteBatchBeginParams.SamplerState,
+				SpriteBatchBeginParams.DepthStencilState,
+				SpriteBatchBeginParams.RasterizerState,
+				SpriteBatchBeginParams.Effect,
+				SpriteBatchBeginParams.TransformMatrix != null ? SpriteBatchBeginParams.TransformMatrix.Value : Matrix.Identity);
+#endif
 		}
 
 		internal void End()

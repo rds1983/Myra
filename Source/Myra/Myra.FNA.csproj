@@ -43,6 +43,7 @@
     <Compile Include="Attributes\HiddenInEditorAttribute.cs" />
     <Compile Include="Attributes\IItemsProvider.cs" />
     <Compile Include="Attributes\SelectionAttribute.cs" />
+    <Compile Include="Attributes\StylePropertyPathAttribute.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\BitmapFont.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\BitmapFontLoader.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\Character.cs" />
@@ -50,6 +51,7 @@
     <Compile Include="Cyotek.Drawing.BitmapFont\Padding.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\Page.cs" />
     <Compile Include="Graphics2D\ColorBuffer.cs" />
+    <Compile Include="Graphics2D\SpriteBatchBeginParams.cs" />
     <Compile Include="Graphics2D\StbSharp\CRuntime.cs" />
     <Compile Include="Graphics2D\StbSharp\ImageReader.cs" />
     <Compile Include="Graphics2D\StbSharp\StbImage.cs" />
@@ -63,13 +65,13 @@
     <Compile Include="Graphics2D\Text\TextRun.cs" />
     <Compile Include="Graphics2D\UI\HorizontalProgressBar.cs" />
     <Compile Include="Graphics2D\UI\GridBased.cs" />
+    <Compile Include="Graphics2D\UI\HorizontalSeparator.cs" />
     <Compile Include="Graphics2D\UI\HorizontalSlider.cs" />
     <Compile Include="Graphics2D\UI\HorizontalSplitPane.cs" />
     <Compile Include="Graphics2D\UI\IItemWithId.cs" />
     <Compile Include="Graphics2D\UI\ImageButton.cs" />
     <Compile Include="Graphics2D\UI\IMenuItemsContainer.cs" />
     <Compile Include="Graphics2D\UI\ListItem.cs" />
-    <Compile Include="Graphics2D\SpriteBatchExtensions.cs" />
     <Compile Include="Graphics2D\PaddingInfo.cs" />
     <Compile Include="Graphics2D\Text\CharInfo.cs" />
     <Compile Include="Graphics2D\Text\FormattedText.cs" />
@@ -122,6 +124,7 @@
     <Compile Include="Graphics2D\UI\TreeNode.cs" />
     <Compile Include="Graphics2D\UI\VerticalMenu.cs" />
     <Compile Include="Graphics2D\UI\VerticalProgressBar.cs" />
+    <Compile Include="Graphics2D\UI\VerticalSeparator.cs" />
     <Compile Include="Graphics2D\UI\VerticalSlider.cs" />
     <Compile Include="Graphics2D\UI\VerticalSplitPane.cs" />
     <Compile Include="ShapeExtensions.cs" />

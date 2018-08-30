@@ -1,5 +1,4 @@
 ﻿using System;
-using log4net.Config;
 
 namespace Myra.UIEditor
 {
@@ -11,10 +10,8 @@ namespace Myra.UIEditor
 		[STAThread]
 		static void Main()
 		{
-
 			try
 			{
-				XmlConfigurator.Configure();			
 				using (var studio = new Studio())
 				{
 					studio.Run();

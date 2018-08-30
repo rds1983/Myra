@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using log4net;
 using Myra.Editor.UI.File;
 using Myra.Graphics2D.UI;
 
@@ -9,8 +8,6 @@ namespace Myra.UIEditor.UI
 {
 	public class ExportOptionsDialog : Dialog
 	{
-		private static ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
 		private readonly ExportOptionsWidget _exportOptionsWidget = new ExportOptionsWidget();
 
 
@@ -67,7 +64,6 @@ namespace Myra.UIEditor.UI
 			}
 			catch (Exception ex)
 			{
-				_logger.Error(ex);
 				var msg = CreateMessageBox("Error", ex.Message);
 				msg.ShowModal(Desktop);
 			}

@@ -368,7 +368,11 @@ namespace Myra.Graphics2D.UI
 				if (SpriteBatchBeginParams.TransformMatrix != null)
 				{
 					// Apply transform
-					MousePosition = Vector2.Transform(MousePosition.ToVector2(), SpriteBatchBeginParams.InverseTransform).ToPoint();
+					var t = Vector2.Transform(
+						new Vector2(MousePosition.X, MousePosition.Y),
+						SpriteBatchBeginParams.InverseTransform);
+
+					MousePosition = new Point((int)t.X, (int)t.Y);
 				}
 
 				MouseWheel = MouseState.ScrollWheelValue;
