@@ -31,10 +31,9 @@ namespace Myra.Graphics2D.Text
 			var chars = new List<char>();
 			var kerning = new List<Vector3>();
 
-			foreach (var pair in data.Characters)
+			var characters = data.Characters.Values.OrderBy(c => c.Char);
+			foreach (var character in characters)
 			{
-				var character = pair.Value;
-
 				var bounds = character.Bounds;
 
 				bounds.Offset(textureRegion.Bounds.Location);
@@ -42,7 +41,7 @@ namespace Myra.Graphics2D.Text
 				glyphBounds.Add(bounds);
 				cropping.Add(new Rectangle(character.Offset.X, character.Offset.Y, bounds.Width, bounds.Height));
 
-				chars.Add(pair.Key);
+				chars.Add(character.Char);
 
 				kerning.Add(new Vector3(0, character.Bounds.Width, character.XAdvance - character.Bounds.Width));
 			}
