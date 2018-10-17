@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using Myra.Editor.UI.File;
 using Myra.Graphics2D.UI;
 

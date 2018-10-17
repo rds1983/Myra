@@ -768,11 +768,21 @@ namespace Myra.Graphics2D.UI
 			for (var i = col; i < col + control.GridSpanX; ++i)
 			{
 				cellSize.X += _colWidths[i];
+
+				if (i < col + control.GridSpanX - 1)
+				{
+					cellSize.X += _columnSpacing;
+				}
 			}
 
 			for (var i = row; i < row + control.GridSpanY; ++i)
 			{
 				cellSize.Y += _rowHeights[i];
+
+				if (i < row + control.GridSpanY - 1)
+				{
+					cellSize.Y += _rowSpacing;
+				}
 			}
 
 			var bounds = ActualBounds;

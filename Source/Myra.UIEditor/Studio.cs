@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Myra.Editor.Plugin;
 using Myra.Editor.UI.File;
 using Myra.Graphics2D.UI;
 using Myra.UIEditor.UI;
-using Myra.UIEditor.Utils;
 using Myra.Utility;
 using Button = Myra.Graphics2D.UI.Button;
 using CheckBox = Myra.Graphics2D.UI.CheckBox;
@@ -424,7 +422,6 @@ namespace Myra.UIEditor
 
 			_propertyGrid = new PropertyGrid();
 			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
-			_propertyGrid.ColorChangeHandler += ColorChangeHandler;
 
 			_ui._propertyGridPane.Widget = _propertyGrid;
 
@@ -624,30 +621,6 @@ namespace Myra.UIEditor
 			}
 
 			IsDirty = true;
-		}
-
-		private Color? ColorChangeHandler(Color? color)
-		{
-			using (var cp = new ColorDialog())
-			{
-				cp.FullOpen = true;
-				cp.CustomColors = _customColors;
-
-				if (color.HasValue)
-				{
-					cp.Color = color.Value.ToSystemDrawing();
-				}
-
-				var res = cp.ShowDialog();
-
-				_customColors = cp.CustomColors;
-				if (res == DialogResult.OK)
-				{
-					return cp.Color.ToXna();
-				}
-			}
-
-			return null;
 		}
 
 		private void WidgetOnSelectionChanged(object sender, EventArgs eventArgs)

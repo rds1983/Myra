@@ -13,13 +13,6 @@ namespace Myra.Editor.UI
 		private readonly PropertyGrid _propertyGrid;
 		private readonly Button _buttonDelete, _buttonMoveUp, _buttonMoveDown;
 
-		public Func<Color?, Color?> ColorChangeHandler
-		{
-			get { return _propertyGrid.ColorChangeHandler; }
-
-			set { _propertyGrid.ColorChangeHandler = value; }
-		}
-
 		public CollectionEditor(IList collection, Type type)
 		{
 			WidthHint = 500;

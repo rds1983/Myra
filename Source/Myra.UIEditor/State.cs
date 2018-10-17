@@ -57,7 +57,7 @@ namespace Myra.UIEditor
 			var colors = string.Empty;
 			if (CustomColors != null)
 			{
-				colors = string.Join(", ", from c in CustomColors select System.Drawing.Color.FromArgb(c).ToString());
+//				colors = string.Join(", ", from c in CustomColors select System.Drawing.Color.FromArgb(c).ToString());
 			}
 			return string.Format("Size = {0}\n" +
 								 "TopSplitter = {1:0.##}\n" +

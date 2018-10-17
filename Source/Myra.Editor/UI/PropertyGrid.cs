@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Attributes;
 using Myra.Editor.Utils;
+using Myra.Graphics.UI.ColorPicker;
 using Myra.Graphics2D;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
@@ -135,7 +136,6 @@ namespace Myra.Editor.UI
 					HorizontalAlignment = HorizontalAlignment.Stretch,
 					GridPositionX = 1,
 					GridPositionY = 1,
-					ColorChangeHandler = parent.ColorChangeHandler,
 					_parentGrid = parent
 				};
 
@@ -225,8 +225,6 @@ namespace Myra.Editor.UI
 		}
 
 		public string Category { get; private set; }
-
-		public Func<Color?, Color?> ColorChangeHandler { get; set; }
 
 		public event EventHandler<GenericEventArgs<string>> PropertyChanged;
 
@@ -400,7 +398,20 @@ namespace Myra.Editor.UI
 					{
 						button.Up += (sender, args) =>
 						{
-							var h = ColorChangeHandler;
+							var dlg = new ColorPickerDialog()
+							{
+							};
+
+							dlg.Closed += (s, a) =>
+							{
+								if (dlg.ModalResult != (int)Graphics2D.UI.Window.DefaultModalResult.Ok)
+								{
+									return;
+								}
+							};
+
+							dlg.ShowModal(Desktop);
+/*							var h = ColorChangeHandler;
 							if (h != null)
 							{
 								var newColor = h(image.Color);
@@ -418,7 +429,7 @@ namespace Myra.Editor.UI
 								}
 
 								FireChanged(propertyType.Name);
-							}
+							}*/
 						};
 					}
 					else
@@ -633,10 +644,7 @@ namespace Myra.Editor.UI
 
 							button.Up += (sender, args) =>
 							{
-								var collectionEditor = new CollectionEditor(items, itemType)
-								{
-									ColorChangeHandler = ColorChangeHandler
-								};
+								var collectionEditor = new CollectionEditor(items, itemType);
 
 								var dialog = Dialog.CreateMessageBox("Edit", collectionEditor);
 
