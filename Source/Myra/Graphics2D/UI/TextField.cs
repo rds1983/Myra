@@ -37,7 +37,7 @@ namespace Myra.Graphics2D.UI
 		public string Text
 		{
 			get { return _formattedText.Text; }
-			set { SetText(value); }
+			set { SetText(value, false); }
 		}
 
 		[HiddenInEditor]
@@ -133,9 +133,17 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public Func<string, bool> InputFilter { get; set; }
+		public Func<string, string> InputFilter { get; set; }
 
+		/// <summary>
+		/// Fires every time when the text had been changed
+		/// </summary>
 		public event EventHandler TextChanged;
+
+		/// <summary>
+		/// Fires every time when the text had been changed by user(doesnt fire if it had been assigned through code)
+		/// </summary>
+		public event EventHandler TextChangedByUser;
 
 		public TextField(TextFieldStyle style)
 		{
@@ -163,7 +171,7 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
-		private bool SetText(string value)
+		private bool SetText(string value, bool byUser)
 		{
 			if (value == _formattedText.Text)
 			{
@@ -172,9 +180,13 @@ namespace Myra.Graphics2D.UI
 
 			// Filter check
 			var f = InputFilter;
-			if (f != null && !f(value))
+			if (f != null)
 			{
-				return false;
+				value = f(value);
+				if (value == null)
+				{
+					return false;
+				}
 			}
 
 			_formattedText.Text = value;
@@ -184,6 +196,15 @@ namespace Myra.Graphics2D.UI
 			if (ev != null)
 			{
 				ev(this, EventArgs.Empty);
+			}
+
+			if (byUser)
+			{
+				ev = TextChangedByUser;
+				if (ev != null)
+				{
+					ev(this, EventArgs.Empty);
+				}
 			}
 
 			return true;
@@ -207,7 +228,7 @@ namespace Myra.Graphics2D.UI
 			sb.Append(text.Substring(_cursorIndex));
 
 			var nextText = sb.ToString();
-			if (SetText(nextText))
+			if (SetText(nextText, true))
 			{
 				_cursorIndex++;
 			}
@@ -235,7 +256,7 @@ namespace Myra.Graphics2D.UI
 						}
 						sb.Append(Text.Substring(_cursorIndex));
 
-						if (SetText(sb.ToString()) && _cursorIndex > 0)
+						if (SetText(sb.ToString(), true) && _cursorIndex > 0)
 						{
 							--_cursorIndex;
 						}
@@ -352,7 +373,7 @@ namespace Myra.Graphics2D.UI
 						sb.Append('\n');
 						sb.Append(Text.Substring(_cursorIndex));
 
-						if (SetText(sb.ToString()))
+						if (SetText(sb.ToString(), true))
 						{
 							++_cursorIndex;
 						}

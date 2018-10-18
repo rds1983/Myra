@@ -11,6 +11,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class Window : GridBased
 	{
+		[Obsolete("Enum is obsolete and will be removed in the future version")]
 		public enum DefaultModalResult
 		{
 			Ok,
@@ -93,13 +94,17 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
+		[Obsolete("Property is obsolete and will be removed in the future version. Use Result.")]
 		public int ModalResult { get; set; }
+
+		public bool Result { get; set; }
 
 		public event EventHandler Closed;
 
 		public Window(WindowStyle style)
 		{
 			ModalResult = (int)DefaultModalResult.Cancel;
+			Result = false;
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
 			CanFocus = true;
@@ -307,7 +312,7 @@ namespace Myra.Graphics2D.UI
 			desktop.FocusedWidget = this;
 		}
 
-		public void Close()
+		public virtual void Close()
 		{
 			if (Desktop != null && Desktop.Widgets.Contains(this))
 			{

@@ -27,12 +27,14 @@ namespace Myra.UIEditor.UI
 
 		private void ButtonChangeOutputPathOnDown(object sender, EventArgs eventArgs)
 		{
-			var dlg = new Editor.UI.File.FileDialog(FileDialogMode.ChooseFolder);
-			dlg.Folder = _exportOptionsWidget._textOutputPath.Text;
+			var dlg = new FileDialog(FileDialogMode.ChooseFolder)
+			{
+				Folder = _exportOptionsWidget._textOutputPath.Text
+			};
 
 			dlg.Closed += (s, a) =>
 			{
-				if (dlg.ModalResult != (int)Myra.Graphics2D.UI.Window.DefaultModalResult.Ok)
+				if (!dlg.Result)
 				{
 					return;
 				}

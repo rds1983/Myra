@@ -8,10 +8,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Attributes;
 using Myra.Editor.Utils;
-using Myra.Graphics.UI.ColorPicker;
-using Myra.Graphics2D;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
+using Myra.Graphics2D.UI.ColorPicker;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 
@@ -186,12 +185,12 @@ namespace Myra.Editor.UI
 
 			public override void InternalRender(RenderContext context)
 			{
-				if (_propertyGrid.PropertyGridStyle.RowHoverBackground != null)
+				if (_propertyGrid.PropertyGridStyle.SelectionHoverBackground != null)
 				{
 					var headerBounds = HeaderBounds;
 					if (headerBounds.Contains(Desktop.MousePosition))
 					{
-						_propertyGrid.PropertyGridStyle.RowHoverBackground.Draw(context.Batch, headerBounds);
+						_propertyGrid.PropertyGridStyle.SelectionHoverBackground.Draw(context.Batch, headerBounds);
 					}
 				}
 
@@ -400,36 +399,23 @@ namespace Myra.Editor.UI
 						{
 							var dlg = new ColorPickerDialog()
 							{
+								Color = image.Color
 							};
 
 							dlg.Closed += (s, a) =>
 							{
-								if (dlg.ModalResult != (int)Graphics2D.UI.Window.DefaultModalResult.Ok)
+								if (!dlg.Result)
 								{
 									return;
 								}
+
+								image.Color = dlg.Color;
+								record.SetValue(_object, dlg.Color);
+
+								FireChanged(propertyType.Name);
 							};
 
 							dlg.ShowModal(Desktop);
-/*							var h = ColorChangeHandler;
-							if (h != null)
-							{
-								var newColor = h(image.Color);
-								if (!newColor.HasValue) return;
-
-								image.Color = newColor.Value;
-
-								if (isColor)
-								{
-									record.SetValue(_object, newColor.Value);
-								}
-								else
-								{
-									record.SetValue(_object, newColor);
-								}
-
-								FireChanged(propertyType.Name);
-							}*/
 						};
 					}
 					else

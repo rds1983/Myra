@@ -22,7 +22,6 @@ namespace Myra.Graphics2D.UI
 		private readonly List<Widget> _reversedWidgetsCopy = new List<Widget>();
 		protected readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
 		private readonly List<Widget> _focusableWidgets = new List<Widget>();
-		private Widget _modalWidget;
 
 		public Point MousePosition { get; private set; }
 		public int MouseWheel { get; private set; }

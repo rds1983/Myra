@@ -79,7 +79,7 @@ namespace Myra.Editor.UI.File
 
 						if (asTextBlock.Text == FileName)
 						{
-							_gridFiles.SelectedIndex = asTextBlock.GridPositionY;
+							_gridFiles.SelectedRowIndex = asTextBlock.GridPositionY;
 							break;
 						}
 					}
@@ -295,12 +295,12 @@ namespace Myra.Editor.UI.File
 
 		private void OnGridFilesDoubleClick(object sender, EventArgs args)
 		{
-			if (_gridFiles.SelectedIndex == null)
+			if (_gridFiles.SelectedRowIndex == null)
 			{
 				return;
 			}
 
-			var path = _paths[_gridFiles.SelectedIndex.Value];
+			var path = _paths[_gridFiles.SelectedRowIndex.Value];
 
 			if (!Directory.Exists(path))
 			{
@@ -313,14 +313,14 @@ namespace Myra.Editor.UI.File
 
 		private void OnGridFilesSelectedIndexChanged(object sender, EventArgs args)
 		{
-			if (_gridFiles.SelectedIndex == null)
+			if (_gridFiles.SelectedRowIndex == null)
 			{
 				return;
 			}
 
 			_listBoxPlaces.SelectedIndex = null;
 
-			var path = _paths[_gridFiles.SelectedIndex.Value];
+			var path = _paths[_gridFiles.SelectedRowIndex.Value];
 
 			if (!System.IO.File.Exists(path))
 			{
@@ -483,14 +483,14 @@ namespace Myra.Editor.UI.File
 
 				dlg.Closed += (s, a) =>
 				{
-					if (dlg.ModalResult == (int) DefaultModalResult.Cancel)
+					if (!dlg.Result)
 					{
 						return;
 					}
 
 					FileName = fileName;
 
-					ModalResult = (int) DefaultModalResult.Ok;
+					Result = true;
 					Close();
 				};
 
@@ -500,7 +500,7 @@ namespace Myra.Editor.UI.File
 			{
 				FileName = fileName;
 
-				ModalResult = (int)DefaultModalResult.Ok;
+				Result = true;
 				Close();
 			}
 

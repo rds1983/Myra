@@ -153,7 +153,7 @@ namespace Myra.Samples.Notepad
 
 				dlg.Closed += (s, a) =>
 				{
-					if (dlg.ModalResult == (int) Graphics2D.UI.Window.DefaultModalResult.Ok)
+					if (dlg.Result)
 					{
 						ProcessSave(dlg.FilePath);
 					}
@@ -197,7 +197,7 @@ namespace Myra.Samples.Notepad
 
 			dlg.Closed += (s, a) =>
 			{
-				if (dlg.ModalResult != (int) Graphics2D.UI.Window.DefaultModalResult.Ok)
+				if (!dlg.Result)
 				{
 					return;
 				}

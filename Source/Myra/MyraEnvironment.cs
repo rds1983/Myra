@@ -9,7 +9,6 @@ namespace Myra
 	public static class MyraEnvironment
 	{
 		private static Game _game;
-		private static bool? _isOpenGL;
 
 		public static event EventHandler GameDisposed;
 

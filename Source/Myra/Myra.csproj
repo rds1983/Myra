@@ -135,6 +135,7 @@
     <Compile Include="Graphics2D\UI\VerticalSlider.cs" />
     <Compile Include="Graphics2D\UI\VerticalSplitPane.cs" />
     <Compile Include="ShapeExtensions.cs" />
+    <Compile Include="Utility\ColorHSV.cs" />
     <Compile Include="Utility\Input.cs" />
     <Compile Include="Utility\ProgressInfo.cs" />
     <Compile Include="DefaultAssets.cs" />

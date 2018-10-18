@@ -185,14 +185,13 @@
     }
   },
   "grid": {
-    "rowSelectionBackground": "tree-selection",
-    "rowSelectionBackgroundWithoutFocus": "splitpane-over",
-    "rowHoverBackground": "button-over"
+    "selectionBackground": "tree-selection",
+    "selectionBackgroundWithoutFocus": "splitpane-over",
+    "selectionHoverBackground": "button-over"
   },
   "tree": {
-    "rowSelectionBackground": "tree-selection",
-    "rowSelectionBackgroundWithoutFocus": "splitpane-over",
-    "rowHoverBackground": "button-over",
+    "selectionBackground": "tree-selection",
+    "selectionHoverBackground": "button-over",
     "mark": {
       "image": {
         "image": "tree-plus",

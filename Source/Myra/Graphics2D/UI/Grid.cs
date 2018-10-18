@@ -12,6 +12,14 @@ using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
+	public enum GridSelectionMode
+	{
+		None,
+		Row,
+		Column,
+		Cell
+	}
+
 	public class Grid : MultipleItemsContainer
 	{
 		public enum ProportionType
@@ -122,8 +130,8 @@ namespace Myra.Graphics2D.UI
 		private readonly List<Widget> _visibleWidgets = new List<Widget>();
 		private readonly List<int> _colWidths = new List<int>();
 		private readonly List<int> _rowHeights = new List<int>();
-		private int? _hoverIndex = null;
-		private int? _selectedIndex = null;
+		private int? _selectedRowIndex = null;
+		private int? _selectedColumnIndex = null;
 
 		[EditCategory("Behavior")]
 		[DefaultValue(false)]
@@ -212,19 +220,15 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public TextureRegion RowSelectionBackground { get; set; }
+		public TextureRegion SelectionBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public TextureRegion RowSelectionBackgroundWithoutFocus { get; set; }
-
-		[HiddenInEditor]
-		[JsonIgnore]
-		public TextureRegion RowHoverBackground { get; set; }
+		public TextureRegion SelectionHoverBackground { get; set; }
 
 		[EditCategory("Behavior")]
-		[DefaultValue(false)]
-		public bool EnableRowSelection { get; set; }
+		[DefaultValue(GridSelectionMode.None)]
+		public GridSelectionMode GridSelectionMode { get; set; }
 
 
 		[HiddenInEditor]
@@ -249,20 +253,28 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public int? HoverIndex
+		public int? HoverRowIndex { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public int? HoverColumnIndex { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public int? SelectedRowIndex
 		{
-			get { return _hoverIndex; }
+			get { return _selectedRowIndex; }
 
 			set
 			{
-				if (value == _hoverIndex)
+				if (value == _selectedRowIndex)
 				{
 					return;
 				}
 
-				_hoverIndex = value;
+				_selectedRowIndex = value;
 
-				var ev = HoverIndexChanged;
+				var ev = SelectedIndexChanged;
 				if (ev != null)
 				{
 					ev(this, EventArgs.Empty);
@@ -272,18 +284,18 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public int? SelectedIndex
+		public int? SelectedColumnIndex
 		{
-			get { return _selectedIndex; }
+			get { return _selectedColumnIndex; }
 
 			set
 			{
-				if (value == _selectedIndex)
+				if (value == _selectedColumnIndex)
 				{
 					return;
 				}
 
-				_selectedIndex = value;
+				_selectedColumnIndex = value;
 
 				var ev = SelectedIndexChanged;
 				if (ev != null)
@@ -294,7 +306,6 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public event EventHandler SelectedIndexChanged = null;
-		public event EventHandler HoverIndexChanged = null;
 
 		public Grid(GridStyle style)
 		{
@@ -388,8 +399,8 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			HoverIndex = null;
-			SelectedIndex = null;
+			HoverRowIndex = null;
+			SelectedRowIndex = null;
 
 			InvalidateMeasure();
 		}
@@ -790,39 +801,93 @@ namespace Myra.Graphics2D.UI
 			control.Layout(new Rectangle(bounds.Left + _cellLocationsX[col], bounds.Top + _cellLocationsY[row], cellSize.X, cellSize.Y));
 		}
 
+		private void RenderSelection(RenderContext context)
+		{
+			var bounds = ActualBounds;
+
+			switch (GridSelectionMode)
+			{
+				case GridSelectionMode.None:
+					break;
+				case GridSelectionMode.Row:
+					{
+						if (HoverRowIndex != null && HoverRowIndex != SelectedRowIndex && SelectionHoverBackground != null)
+						{
+							var rect = new Rectangle(bounds.Left,
+								_cellLocationsY[HoverRowIndex.Value] + bounds.Top,
+								bounds.Width,
+								_rowHeights[HoverRowIndex.Value]);
+
+							context.Draw(SelectionHoverBackground, rect);
+						}
+
+						if (SelectedRowIndex != null && SelectionBackground != null)
+						{
+							var rect = new Rectangle(bounds.Left,
+								_cellLocationsY[SelectedRowIndex.Value] + bounds.Top,
+								bounds.Width,
+								_rowHeights[SelectedRowIndex.Value]);
+
+							context.Draw(SelectionBackground, rect);
+						}
+					}
+					break;
+				case GridSelectionMode.Column:
+					{
+						if (HoverColumnIndex != null && HoverColumnIndex != SelectedColumnIndex && SelectionHoverBackground != null)
+						{
+							var rect = new Rectangle(_cellLocationsX[HoverColumnIndex.Value] + bounds.Left,
+								bounds.Top,
+								_colWidths[HoverColumnIndex.Value],
+								bounds.Height);
+
+							context.Draw(SelectionHoverBackground, rect);
+						}
+
+						if (SelectedColumnIndex != null && SelectionBackground != null)
+						{
+							var rect = new Rectangle(_cellLocationsX[SelectedColumnIndex.Value] + bounds.Left,
+								bounds.Top,
+								_colWidths[SelectedColumnIndex.Value],
+								bounds.Height);
+
+							context.Draw(SelectionBackground, rect);
+						}
+					}
+					break;
+				case GridSelectionMode.Cell:
+					{
+						if (HoverRowIndex != null && HoverColumnIndex != null &&
+							(HoverRowIndex != SelectedRowIndex || HoverColumnIndex != SelectedColumnIndex) &&
+							SelectionHoverBackground != null)
+						{
+							var rect = new Rectangle(_cellLocationsX[HoverColumnIndex.Value] + bounds.Left,
+								_cellLocationsY[HoverRowIndex.Value] + bounds.Top,
+								_colWidths[HoverColumnIndex.Value],
+								_rowHeights[HoverRowIndex.Value]);
+
+							context.Draw(SelectionHoverBackground, rect);
+						}
+
+						if (SelectedRowIndex != null && SelectedColumnIndex != null && SelectionBackground != null)
+						{
+							var rect = new Rectangle(_cellLocationsX[SelectedColumnIndex.Value] + bounds.Left,
+								_cellLocationsY[SelectedRowIndex.Value] + bounds.Top,
+								_colWidths[SelectedColumnIndex.Value],
+								_rowHeights[SelectedRowIndex.Value]);
+
+							context.Draw(SelectionBackground, rect);
+						}
+					}
+					break;
+			}
+		}
+
 		public override void InternalRender(RenderContext context)
 		{
 			var bounds = ActualBounds;
 
-			if (EnableRowSelection)
-			{
-				if (HoverIndex != null && HoverIndex != SelectedIndex && RowHoverBackground != null)
-				{
-					var rect = new Rectangle(bounds.Left,
-						_cellLocationsY[HoverIndex.Value] + bounds.Top,
-						bounds.Width,
-						_rowHeights[HoverIndex.Value]);
-
-					context.Draw(RowHoverBackground, rect);
-				}
-
-				if (SelectedIndex != null && RowSelectionBackground != null)
-				{
-					var rect = new Rectangle(bounds.Left,
-						_cellLocationsY[SelectedIndex.Value]  + bounds.Top,
-						bounds.Width,
-						_rowHeights[SelectedIndex.Value]);
-
-					if (!IsFocused && RowSelectionBackgroundWithoutFocus != null)
-					{
-						context.Draw(RowSelectionBackgroundWithoutFocus, rect);
-					}
-					else
-					{
-						context.Draw(RowSelectionBackground, rect);
-					}
-				}
-			}
+			RenderSelection(context);
 
 			base.InternalRender(context);
 
@@ -852,27 +917,45 @@ namespace Myra.Graphics2D.UI
 
 		private void UpdateHoverPosition(Point? position)
 		{
-			if (!EnableRowSelection)
+			if (GridSelectionMode == GridSelectionMode.None)
 			{
 				return;
 			}
 
 			if (position == null)
 			{
-				HoverIndex = null;
+				HoverRowIndex = null;
+				HoverColumnIndex = null;
 				return;
 			}
 
 			var bounds = ActualBounds;
 
-			var y = position.Value.Y;
-			for (var i = 0; i < _cellLocationsY.Count; ++i)
+			if (GridSelectionMode == GridSelectionMode.Column || GridSelectionMode == GridSelectionMode.Cell)
 			{
-				var cy = _cellLocationsY[i] + bounds.Top;
-				if (y >= cy && y < cy + _rowHeights[i])
+				var x = position.Value.X;
+				for (var i = 0; i < _cellLocationsX.Count; ++i)
 				{
-					HoverIndex = i;
-					break;
+					var cx = _cellLocationsX[i] + bounds.Left;
+					if (x >= cx && x < cx + _colWidths[i])
+					{
+						HoverColumnIndex = i;
+						break;
+					}
+				}
+			}
+
+			if (GridSelectionMode == GridSelectionMode.Row || GridSelectionMode == GridSelectionMode.Cell)
+			{
+				var y = position.Value.Y;
+				for (var i = 0; i < _cellLocationsY.Count; ++i)
+				{
+					var cy = _cellLocationsY[i] + bounds.Top;
+					if (y >= cy && y < cy + _rowHeights[i])
+					{
+						HoverRowIndex = i;
+						break;
+					}
 				}
 			}
 		}
@@ -907,9 +990,14 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			if (HoverIndex != null)
+			if (HoverRowIndex != null)
 			{
-				SelectedIndex = HoverIndex;
+				SelectedRowIndex = HoverRowIndex;
+			}
+
+			if (HoverColumnIndex != null)
+			{
+				SelectedColumnIndex = HoverColumnIndex;
 			}
 		}
 
@@ -917,9 +1005,8 @@ namespace Myra.Graphics2D.UI
 		{
 			ApplyWidgetStyle(style);
 
-			RowSelectionBackground = style.RowSelectionBackground;
-			RowSelectionBackgroundWithoutFocus = style.RowSelectionBackgroundWithoutFocus;
-			RowHoverBackground = style.RowHoverBackground;
+			SelectionBackground = style.SelectionBackground;
+			SelectionHoverBackground = style.SelectionHoverBackground;
 		}
 	}
 }

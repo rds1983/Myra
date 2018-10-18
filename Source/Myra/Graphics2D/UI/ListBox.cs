@@ -25,7 +25,7 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public new int? SelectedIndex
+		public int? SelectedIndex
 		{
 			get
 			{

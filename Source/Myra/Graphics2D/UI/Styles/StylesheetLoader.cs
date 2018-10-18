@@ -79,9 +79,9 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string ImageName = "image";
 		public const string OverImageName = "overImage";
 		public const string PressedImageName = "pressedImage";
-		public const string RowSelectionBackgroundName = "rowSelectionBackground";
-		public const string RowSelectionBackgroundWithoutFocusName = "rowSelectionBackgroundWithoutFocus";
-		public const string RowHoverBackgroundName = "rowHoverBackground";
+		public const string SelectionBackgroundName = "selectionBackground";
+		public const string SelectionBackgroundWithoutFocusName = "selectionBackgroundWithoutFocus";
+		public const string SelectionHoverBackgroundName = "selectionHoverBackground";
 		public const string SeparatorName = "separator";
 		public const string ThicknessName = "thickness";
 		public const string ItemsContainerName = "itemsContainer";
@@ -567,19 +567,14 @@ namespace Myra.Graphics2D.UI.Styles
 			LoadWidgetStyleFromSource(source, result);
 
 			string name;
-			if (source.GetStyle(RowSelectionBackgroundWithoutFocusName, out name))
+			if (source.GetStyle(SelectionBackgroundName, out name))
 			{
-				result.RowSelectionBackgroundWithoutFocus = GetTextureRegion(name);
+				result.SelectionBackground = GetTextureRegion(name);
 			}
 
-			if (source.GetStyle(RowSelectionBackgroundName, out name))
+			if (source.GetStyle(SelectionHoverBackgroundName, out name))
 			{
-				result.RowSelectionBackground = GetTextureRegion(name);
-			}
-
-			if (source.GetStyle(RowHoverBackgroundName, out name))
-			{
-				result.RowHoverBackground = GetTextureRegion(name);
+				result.SelectionHoverBackground = GetTextureRegion(name);
 			}
 		}
 

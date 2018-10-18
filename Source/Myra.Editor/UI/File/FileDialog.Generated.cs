@@ -76,7 +76,7 @@ namespace Myra.Editor.UI.File
 			{
 				Type = Myra.Graphics2D.UI.Grid.ProportionType.Fill,
 			});
-			_gridFiles.EnableRowSelection = true;
+			_gridFiles.GridSelectionMode = GridSelectionMode.Row;
 			_gridFiles.Id = "_gridFiles";
 			_gridFiles.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
 			_gridFiles.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;

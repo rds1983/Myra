@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
+using Myra.Utility;
 
 namespace Myra.UIEditor
 {
@@ -24,7 +25,7 @@ namespace Myra.UIEditor
 		public float RightSplitterPosition { get; set; }
 		public string EditedFile { get; set; }
 		public string LastFolder { get; set; }
-		public int[] CustomColors { get; set; }
+		public uint[] UserColors { get; set; }
 
 		public void Save()
 		{
@@ -55,16 +56,16 @@ namespace Myra.UIEditor
 		public override string ToString()
 		{
 			var colors = string.Empty;
-			if (CustomColors != null)
+			if (UserColors != null)
 			{
-//				colors = string.Join(", ", from c in CustomColors select System.Drawing.Color.FromArgb(c).ToString());
+				colors = string.Join(", ", from c in UserColors select new Color(c).ToHexString());
 			}
 			return string.Format("Size = {0}\n" +
 								 "TopSplitter = {1:0.##}\n" +
 								 "RightSplitter= {2:0.##}\n" +
 								 "EditedFile = {3}\n" +
 								 "LastFolder = {4}\n" +
-								 "CustomColors = {5}",
+								 "UserColors = {5}",
 				Size,
 				TopSplitterPosition,
 				RightSplitterPosition,

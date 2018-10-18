@@ -2,6 +2,7 @@
 
 using Myra.Editor.UI.File;
 using Myra.Graphics2D.UI;
+using Myra.Graphics2D.UI.ColorPicker;
 
 namespace Myra.Samples.AllWidgets
 {
@@ -29,8 +30,18 @@ namespace Myra.Samples.AllWidgets
 
 			_textButton.Up += (sender, args) =>
 			{
-				var debugWindow = new FileDialog(FileDialogMode.ChooseFolder);
+				var debugWindow = new ColorPickerDialog();
 				debugWindow.ShowModal(Desktop);
+
+				debugWindow.Closed += (s, a) =>
+				{
+					if (!debugWindow.Result)
+					{
+						return;
+					}
+
+					_textButtonLabel.TextColor = debugWindow.Color;
+				};
 			};
 
 			_imageButton.Up += (sender, args) =>

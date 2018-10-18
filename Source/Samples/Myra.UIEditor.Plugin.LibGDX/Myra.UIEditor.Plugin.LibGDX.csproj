@@ -38,12 +38,7 @@
       <HintPath>..\..\Myra-Dependencies\MonoGame.Framework.Portable\MonoGame.Framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomWidget.cs" />
@@ -59,9 +54,9 @@
       <Project>{4dcbb001-9c79-4f6b-996d-d654062d93e0}</Project>
       <Name>Myra</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Myra.Samples.CustomUIStylesheetSample\Myra.Samples.CustomUIStylesheetSample.csproj">
+    <ProjectReference Include="..\Myra.Samples.CustomUIStylesheet\Myra.Samples.CustomUIStylesheet.csproj">
       <Project>{8385d5c0-c8d8-4242-940a-2bd071edc5b1}</Project>
-      <Name>Myra.Samples.CustomUIStylesheetSample</Name>
+      <Name>Myra.Samples.CustomUIStylesheet</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

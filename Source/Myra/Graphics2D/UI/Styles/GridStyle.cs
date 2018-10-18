@@ -4,9 +4,8 @@ namespace Myra.Graphics2D.UI.Styles
 {
 	public class GridStyle : WidgetStyle
 	{
-		public TextureRegion RowSelectionBackground { get; set; }
-		public TextureRegion RowSelectionBackgroundWithoutFocus { get; set; }
-		public TextureRegion RowHoverBackground { get; set; }
+		public TextureRegion SelectionBackground { get; set; }
+		public TextureRegion SelectionHoverBackground { get; set; }
 
 		public GridStyle()
 		{
@@ -14,9 +13,8 @@ namespace Myra.Graphics2D.UI.Styles
 
 		public GridStyle(GridStyle style): base(style)
 		{
-			RowSelectionBackground = style.RowSelectionBackground;
-			RowSelectionBackgroundWithoutFocus = style.RowSelectionBackgroundWithoutFocus;
-			RowHoverBackground = style.RowHoverBackground;
+			SelectionBackground = style.SelectionBackground;
+			SelectionHoverBackground = style.SelectionHoverBackground;
 		}
 
 		public override WidgetStyle Clone()

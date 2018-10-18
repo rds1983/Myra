@@ -74,7 +74,15 @@ namespace Myra.Graphics2D.UI
 
 		public bool Integer { get; set; }
 
+		/// <summary>
+		/// Fires when the value had been changed
+		/// </summary>
 		public event EventHandler ValueChanged;
+
+		/// <summary>
+		/// Fires only when the value had been changed by user(doesnt fire if it had been assigned through code)
+		/// </summary>
+		public event EventHandler ValueChangedByUser;
 
 		public SpinButton(SpinButtonStyle style)
 		{
@@ -96,6 +104,7 @@ namespace Myra.Graphics2D.UI
 			};
 
 			_textField.TextChanged += TextFieldOnTextChanged;
+			_textField.TextChangedByUser += TextFieldOnTextChangedByUser;
 
 			Widgets.Add(_textField);
 
@@ -146,21 +155,41 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private bool InputFilter(string s)
+		private void TextFieldOnTextChangedByUser(object sender, EventArgs eventArgs)
+		{
+			var ev = ValueChangedByUser;
+			if (ev != null)
+			{
+				ev(this, EventArgs.Empty);
+			}
+		}
+
+		private string InputFilter(string s)
 		{
 			if (string.IsNullOrEmpty(s))
 			{
-				return true;
+				return s;
 			}
 
 			if (Integer)
 			{
 				int i;
-				return int.TryParse(s, out i);
+				if (!int.TryParse(s, out i))
+				{
+					return null;
+				}
+
+				return s;
 			}
 
 			float f;
-			return float.TryParse(s, out f);
+
+			if (!float.TryParse(s, out f))
+			{
+				return null;
+			}
+
+			return s;
 		}
 
 		private bool InRange(float value)
@@ -189,7 +218,17 @@ namespace Myra.Graphics2D.UI
 			++value;
 			if (InRange(value))
 			{
+				var changed = Value != value;
 				Value = value;
+
+				if (changed)
+				{
+					var ev = ValueChangedByUser;
+					if (ev != null)
+					{
+						ev(this, EventArgs.Empty);
+					}
+				}
 			}
 		}
 		
@@ -204,7 +243,18 @@ namespace Myra.Graphics2D.UI
 			--value;
 			if (InRange(value))
 			{
+				var changed = Value != value;
+
 				Value = value;
+
+				if (changed)
+				{
+					var ev = ValueChangedByUser;
+					if (ev != null)
+					{
+						ev(this, EventArgs.Empty);
+					}
+				}
 			}
 		}
 

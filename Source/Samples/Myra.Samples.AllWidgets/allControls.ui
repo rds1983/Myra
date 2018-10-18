@@ -273,13 +273,13 @@
                   "$id": "45",
                   "$type": "Myra.Graphics2D.UI.TextBlock, Myra",
                   "Text": "Text Button:",
-                  "Id": "",
+                  "Id": "_textButtonLabel",
                   "GridPositionY": 2
                 },
                 {
                   "$id": "46",
                   "$type": "Myra.Graphics2D.UI.TextButton, Myra",
-                  "Text": "Choose Folder",
+                  "Text": "Choose Color",
                   "ContentHorizontalAlignment": 1,
                   "ContentVerticalAlignment": 1,
                   "Id": "_textButton",
@@ -396,6 +396,7 @@
                   "HorizontalAlignment": 3,
                   "GridPositionX": 1,
                   "GridPositionY": 7,
+                  "ClipToBounds": true,
                   "CanFocus": true
                 },
                 {

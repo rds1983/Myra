@@ -64,7 +64,7 @@ namespace Myra.Samples.FantasyMapGenerator.UI
 
 			dlg.Closed += (s, a) =>
 			{
-				if (dlg.ModalResult == (int)Window.DefaultModalResult.Ok)
+				if (dlg.Result)
 				{
 					using (var stream = File.OpenWrite(dlg.FilePath))
 					{

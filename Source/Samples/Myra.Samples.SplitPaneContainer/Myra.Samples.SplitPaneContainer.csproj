@@ -40,15 +40,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Myra-Dependencies\MonoGame.Framework.DesktopGL\MonoGame.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\Myra-Dependencies\Newtonsoft.Json\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Myra-Dependencies\MonoGame.Framework.DesktopGL\libopenal.1.dylib">

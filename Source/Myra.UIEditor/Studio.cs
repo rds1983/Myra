@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Myra.Editor.Plugin;
 using Myra.Editor.UI.File;
 using Myra.Graphics2D.UI;
+using Myra.Graphics2D.UI.ColorPicker;
 using Myra.UIEditor.UI;
 using Myra.Utility;
 using Button = Myra.Graphics2D.UI.Button;
@@ -44,7 +46,6 @@ namespace Myra.UIEditor
 		private string _lastFolder;
 		private bool _isDirty;
 		private Project _project;
-		private int[] _customColors;
 		private Type[] _customWidgetTypes;
 		private MenuItem[] _customWidgetMenuItems;
 		private bool _isWindow = false;
@@ -77,7 +78,7 @@ namespace Myra.UIEditor
 					{
 						_lastFolder = Path.GetDirectoryName(_filePath);
 					}
-					catch (Exception ex)
+					catch (Exception)
 					{
 					}
 				}
@@ -151,7 +152,15 @@ namespace Myra.UIEditor
 			{
 				_graphicsDeviceManager.PreferredBackBufferWidth = _state.Size.X;
 				_graphicsDeviceManager.PreferredBackBufferHeight = _state.Size.Y;
-				_customColors = _state.CustomColors;
+
+				if (_state.UserColors != null)
+				{
+					for(var i = 0; i < Math.Min(ColorPickerDialog.UserColors.Length, _state.UserColors.Length); ++i)
+					{
+						ColorPickerDialog.UserColors[i] = new Color(_state.UserColors[i]);
+					}
+				}
+
 				_lastFolder = _state.LastFolder;
 			}
 			else
@@ -203,7 +212,7 @@ namespace Myra.UIEditor
 
 			mb.Closed += (o, args) =>
 			{
-				if (mb.ModalResult == (int)Graphics2D.UI.Window.DefaultModalResult.Ok)
+				if (mb.Result)
 				{
 					Exit();
 				}
@@ -252,7 +261,7 @@ namespace Myra.UIEditor
 					}
 				}
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 			}
 		}
@@ -636,7 +645,7 @@ namespace Myra.UIEditor
 
 			mb.Closed += (o, args) =>
 			{
-				if (mb.ModalResult == (int)Graphics2D.UI.Window.DefaultModalResult.Ok)
+				if (mb.Result)
 				{
 					Exit();
 				}
@@ -684,7 +693,7 @@ namespace Myra.UIEditor
 
 			dlg.Closed += (s, a) =>
 			{
-				if (dlg.ModalResult != (int)Graphics2D.UI.Window.DefaultModalResult.Ok)
+				if (dlg.Result)
 				{
 					return;
 				}
@@ -751,7 +760,7 @@ namespace Myra.UIEditor
 				RightSplitterPosition = _ui._rightSplitPane.GetSplitterPosition(0),
 				EditedFile = FilePath,
 				LastFolder = _lastFolder,
-				CustomColors = _customColors
+				UserColors = (from c in ColorPickerDialog.UserColors select c.PackedValue).ToArray()
 			};
 
 			state.Save();
@@ -803,7 +812,7 @@ namespace Myra.UIEditor
 
 				dlg.Closed += (s, a) =>
 				{
-					if (dlg.ModalResult == (int)Graphics2D.UI.Window.DefaultModalResult.Ok)
+					if (dlg.Result)
 					{
 						ProcessSave(dlg.FilePath);
 					}

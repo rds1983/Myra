@@ -318,9 +318,8 @@ namespace Myra.Graphics2D.UI
 		{
 			ApplyTreeNodeStyle(style);
 
-			RowSelectionBackground = style.RowSelectionBackground;
-			RowSelectionBackgroundWithoutFocus = style.RowSelectionBackgroundWithoutFocus;
-			RowHoverBackground = style.RowHoverBackground;
+			RowSelectionBackground = style.SelectionBackground;
+			RowHoverBackground = style.SelectionHoverBackground;
 		}
 
 		private static bool FindPath(Stack<TreeNode> path, TreeNode node)

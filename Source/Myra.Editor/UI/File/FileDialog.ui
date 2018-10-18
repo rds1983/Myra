@@ -178,7 +178,7 @@
                   }
                 ],
                 "RowsProportions": [],
-                "EnableRowSelection": true,
+                "GridSelectionMode": 1,
                 "Widgets": [],
                 "Id": "_gridFiles",
                 "HorizontalAlignment": 3,

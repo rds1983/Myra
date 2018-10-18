@@ -14,7 +14,6 @@ namespace Myra.Graphics2D.UI.Styles
 		public SpriteFont Font { get; set; }
 		public SpriteFont MessageFont { get; set; }
 
-		public TextureRegion FocusedBackground { get; set; }
 		public TextureRegion Cursor { get; set; }
 		public TextureRegion Selection { get; set; }
 
@@ -32,7 +31,6 @@ namespace Myra.Graphics2D.UI.Styles
 			Font = style.Font;
 			MessageFont = style.MessageFont;
 
-			FocusedBackground = style.FocusedBackground;
 			Cursor = style.Cursor;
 			Selection = style.Selection;
 		}

@@ -46,9 +46,20 @@ namespace Myra.Graphics2D.UI
 					value = Minimum;
 				}
 
+				if (_value == value)
+				{
+					return;
+				}
+
 				_value = value;
 
 				SyncHintWithValue();
+
+				var ev = ValueChanged;
+				if (ev != null)
+				{
+					ev(this, EventArgs.Empty);
+				}
 			}
 		}
 
@@ -71,12 +82,6 @@ namespace Myra.Graphics2D.UI
 				{
 					Widget.YHint = value;
 				}
-
-				var ev = ValueChanged;
-				if (ev != null)
-				{
-					ev(this, EventArgs.Empty);
-				}
 			}
 		}
 
@@ -90,7 +95,15 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Fires when the value had been changed
+		/// </summary>
 		public event EventHandler ValueChanged;
+
+		/// <summary>
+		/// Fires only when the value had been changed by user(doesnt fire if it had been assigned through code)
+		/// </summary>
+		public event EventHandler ValueChangedByUser;
 
 		protected Slider(SliderStyle sliderStyle)
 		{
@@ -104,48 +117,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			Maximum = 100;
-		}
-
-		public override void OnMouseMoved(Point position)
-		{
-			base.OnMouseMoved(position);
-
-			if (_mousePos == null)
-			{
-				return;
-			}
-
-			var mousePos = GetMousePos();
-			var delta = mousePos - _mousePos.Value;
-
-			if (delta == 0)
-			{
-				return;
-			}
-
-			var hint = Hint;
-			hint += delta;
-
-			if (hint < 0)
-			{
-				hint = 0;
-			}
-
-			if (hint > MaxHint)
-			{
-				hint = MaxHint;
-			}
-
-			Hint = hint;
-
-			// Sync Value with Hint
-			if (MaxHint != 0)
-			{
-				var d = Maximum - Minimum;
-				_value = Minimum + Hint * d / MaxHint;
-			}
-
-			_mousePos = mousePos;
 		}
 
 		private void WidgetOnUp(object sender, EventArgs eventArgs)
@@ -183,6 +154,88 @@ namespace Myra.Graphics2D.UI
 			base.Arrange();
 
 			SyncHintWithValue();
+		}
+
+		public override void OnDesktopChanging()
+		{
+			base.OnDesktopChanging();
+
+			if (Desktop != null)
+			{
+				Desktop.MouseMoved -= DesktopMouseMoved;
+			}
+		}
+
+		public override void OnDesktopChanged()
+		{
+			base.OnDesktopChanged();
+
+			if (Desktop != null)
+			{
+				Desktop.MouseMoved += DesktopMouseMoved;
+			}
+		}
+
+		private void DesktopMouseMoved(object sender, GenericEventArgs<Point> e)
+		{
+			if (_mousePos == null)
+			{
+				return;
+			}
+
+			var mousePos = GetMousePos();
+			var delta = mousePos - _mousePos.Value;
+
+			if (delta == 0)
+			{
+				return;
+			}
+
+			var hint = Hint;
+			hint += delta;
+
+			if (hint < 0)
+			{
+				hint = 0;
+			}
+
+			if (hint > MaxHint)
+			{
+				hint = MaxHint;
+			}
+
+			var valueChanged = false;
+			// Sync Value with Hint
+			if (MaxHint != 0)
+			{
+				var d = Maximum - Minimum;
+
+				var newValue = Minimum + hint * d / MaxHint;
+				if (_value != newValue)
+				{
+					_value = newValue;
+					valueChanged = true;
+				}
+			}
+
+			Hint = hint;
+
+			if (valueChanged)
+			{
+				var ev = ValueChanged;
+				if (ev != null)
+				{
+					ev(this, EventArgs.Empty);
+				}
+
+				ev = ValueChangedByUser;
+				if (ev != null)
+				{
+					ev(this, EventArgs.Empty);
+				}
+			}
+
+			_mousePos = mousePos;
 		}
 	}
 }

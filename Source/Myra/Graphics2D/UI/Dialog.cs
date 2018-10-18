@@ -40,6 +40,7 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
+				Result = true;
 				ModalResult = (int)DefaultModalResult.Ok;
 				Close();
 			};
@@ -54,6 +55,7 @@ namespace Myra.Graphics2D.UI
 
 			ButtonCancel.Up += (sender, args) =>
 			{
+				Result = false;
 				ModalResult = (int)DefaultModalResult.Cancel;
 				Close();
 			};

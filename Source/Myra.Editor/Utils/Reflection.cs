@@ -16,9 +16,9 @@ namespace Myra.Editor.Utils
 				}
 			}
 
-			return result;		
+			return result;
 		}
-		
+
 		public static string GetFriendlyName(this Type type)
 		{
 			string friendlyName = type.Name;
@@ -83,8 +83,8 @@ namespace Myra.Editor.Utils
 
 		public static bool IsNullablePrimitive(this Type type)
 		{
-			return (type.IsGenericType && type.GetGenericTypeDefinition() == typeof (Nullable<>) &&
-			        type.GetGenericArguments()[0].IsPrimitive);
+			return (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>) &&
+					type.GetGenericArguments()[0].IsPrimitive);
 		}
 
 
