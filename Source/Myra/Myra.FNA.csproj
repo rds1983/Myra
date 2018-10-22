@@ -63,6 +63,8 @@
     <Compile Include="Graphics2D\Text\BitmapFontHelper.cs" />
     <Compile Include="Graphics2D\Text\GlyphInfo.cs" />
     <Compile Include="Graphics2D\Text\TextRun.cs" />
+    <Compile Include="Graphics2D\UI\ColorPicker\ColorPickerDialog.cs" />
+    <Compile Include="Graphics2D\UI\ColorPicker\ColorPickerDialog.Generated.cs" />
     <Compile Include="Graphics2D\UI\HorizontalProgressBar.cs" />
     <Compile Include="Graphics2D\UI\GridBased.cs" />
     <Compile Include="Graphics2D\UI\HorizontalSeparator.cs" />
@@ -128,6 +130,7 @@
     <Compile Include="Graphics2D\UI\VerticalSlider.cs" />
     <Compile Include="Graphics2D\UI\VerticalSplitPane.cs" />
     <Compile Include="ShapeExtensions.cs" />
+    <Compile Include="Utility\ColorHSV.cs" />
     <Compile Include="Utility\Input.cs" />
     <Compile Include="Utility\ProgressInfo.cs" />
     <Compile Include="DefaultAssets.cs" />
