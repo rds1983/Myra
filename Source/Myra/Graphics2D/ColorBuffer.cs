@@ -101,29 +101,16 @@ namespace Myra.Graphics2D
 			return (byte) fr;
 		}
 
-		public void Process(bool premultiplyAlpha, Color? transColor = null)
+		public void PremultiplyAlpha()
 		{
 			var data = Data;
 			for (var i = 0; i < Width * Height; ++i)
 			{
-				if (transColor.HasValue)
-				{
-					if (data[i].R == transColor.Value.R &&
-					    data[i].G == transColor.Value.G &&
-					    data[i].B == transColor.Value.B)
-					{
-						data[i].A = 0;
-					}
-				}
+				var a = Data[i].A;
 
-				if (premultiplyAlpha)
-				{
-					var a = Data[i].A;
-
-					Data[i].R = ApplyAlpha(Data[i].R, a);
-					Data[i].G = ApplyAlpha(Data[i].G, a);
-					Data[i].B = ApplyAlpha(Data[i].B, a);
-				}
+				Data[i].R = ApplyAlpha(Data[i].R, a);
+				Data[i].G = ApplyAlpha(Data[i].G, a);
+				Data[i].B = ApplyAlpha(Data[i].B, a);
 			}
 		}
 

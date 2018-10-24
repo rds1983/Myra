@@ -693,7 +693,7 @@ namespace Myra.UIEditor
 
 			dlg.Closed += (s, a) =>
 			{
-				if (dlg.Result)
+				if (!dlg.Result)
 				{
 					return;
 				}

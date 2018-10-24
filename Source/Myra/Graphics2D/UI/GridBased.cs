@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Myra.Attributes;
+using Myra.Graphics2D.UI.Styles;
 using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
@@ -60,6 +61,10 @@ namespace Myra.Graphics2D.UI
 		{
 			get { return base.TotalRowsPart; }
 			set { base.TotalRowsPart = value; }
+		}
+
+		public GridBased(GridStyle style): base(style)
+		{
 		}
 	}
 }

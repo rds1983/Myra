@@ -13,8 +13,9 @@ namespace Myra
 	{
 		private const string DefaultFontName = "default_font.fnt";
 		private const string DefaultSmallFontName = "default_font_small.fnt";
-		private const string DefaultStylesheetName = "default_stylesheet.json";
-		private const string DefaultSpritesheetName = "default_uiskin.atlas";
+		private const string DefaultStylesheetName = "default_ui_skin.json";
+		private const string DefaultAtlasName = "default_ui_skin_atlas.json";
+		private const string DefaultAtlasImageName = "default_ui_skin_atlas.png";
 
 		private static readonly ResourceAssetResolver _assetResolver = new ResourceAssetResolver(
 			typeof(DefaultAssets).GetTypeInfo().Assembly,
@@ -66,7 +67,7 @@ namespace Myra
 				}
 
 				_font = SpriteFontHelper.LoadFromFnt(_assetResolver.ReadAsString(DefaultFontName),
-					UISpritesheet.Drawables["default"]);
+					UISpritesheet.Regions["default"]);
 
 				return _font;
 			}
@@ -83,7 +84,7 @@ namespace Myra
 
 				_fontSmall = SpriteFontHelper.LoadFromFnt(
 					_assetResolver.ReadAsString(DefaultSmallFontName),
-					UISpritesheet.Drawables["font-small"]);
+					UISpritesheet.Regions["font-small"]);
 
 				return _fontSmall;
 			}
@@ -95,8 +96,8 @@ namespace Myra
 			{
 				if (_uiSpritesheet != null) return _uiSpritesheet;
 
-				_uiSpritesheet = TextureRegionAtlas.Load(_assetResolver.ReadAsString(DefaultSpritesheetName), s => UIBitmap);
-				
+				_uiSpritesheet = TextureRegionAtlas.FromJson(_assetResolver.ReadAsString(DefaultAtlasName), UIBitmap);
+
 				return _uiSpritesheet;
 			}
 		}
@@ -111,7 +112,7 @@ namespace Myra
 				}
 
 				_uiStylesheet = Stylesheet.CreateFromSource(_assetResolver.ReadAsString(DefaultStylesheetName),
-					s => string.IsNullOrEmpty(s) ? null : UISpritesheet.Drawables[s],
+					s => string.IsNullOrEmpty(s) ? null : UISpritesheet.Regions[s],
 					f => f == "default-font" ? Font : FontSmall);
 
 				return _uiStylesheet;
@@ -127,8 +128,8 @@ namespace Myra
 					return _uiBitmap;
 				}
 
-				var rawImage = ColorBuffer.FromStream(_assetResolver.Open("default_uiskin.png"));
-				rawImage.Process(true);
+				var rawImage = ColorBuffer.FromStream(_assetResolver.Open(DefaultAtlasImageName));
+				rawImage.PremultiplyAlpha();
 				_uiBitmap = rawImage.CreateTexture2D();
 
 				return _uiBitmap;

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Linq;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
@@ -17,11 +19,11 @@ namespace Myra.Graphics2D.UI
 		public string OutputPath { get; set; }
 	}
 
-	internal class ShouldSerializeContractResolver : DefaultContractResolver
+	internal class ShouldWriteContractResolver : DefaultContractResolver
 	{
 		public Project Project { get; private set; }
 
-		public ShouldSerializeContractResolver(Project project)
+		public ShouldWriteContractResolver(Project project)
 		{
 			Project = project;
 		}
@@ -72,7 +74,7 @@ namespace Myra.Graphics2D.UI
 			var result = JsonConvert.SerializeObject(this, Formatting.Indented,
 				new JsonSerializerSettings
 				{
-					ContractResolver = new ShouldSerializeContractResolver(this),
+					ContractResolver = new ShouldWriteContractResolver(this),
 					PreserveReferencesHandling = PreserveReferencesHandling.Objects,
 					TypeNameHandling = TypeNameHandling.Objects
 				});

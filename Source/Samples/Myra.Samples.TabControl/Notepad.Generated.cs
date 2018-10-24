@@ -60,22 +60,7 @@ namespace Myra.Samples.TabControl
 			textArea = new TextField();
 			textArea.Text = "";
 			textArea.TextColor = Color.White;
-			textArea.DisabledTextColor = new Color
-			{
-				B = 170,
-				G = 170,
-				R = 170,
-				A = 255,
-				PackedValue = 4289374890,
-			};
-			textArea.MessageTextColor = new Color
-			{
-				B = 170,
-				G = 170,
-				R = 170,
-				A = 255,
-				PackedValue = 4289374890,
-			};
+
 			textArea.Multiline = true;
 			textArea.Id = "textArea";
 			textArea.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;

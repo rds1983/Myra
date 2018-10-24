@@ -58,8 +58,8 @@
     <Compile Include="Graphics2D\StbSharp\StbImage.Generated.cs" />
     <Compile Include="Graphics2D\TextureAtlases\NinePatchRegion.cs" />
     <Compile Include="Graphics2D\TextureAtlases\TextureRegionAtlas.cs" />
-    <Compile Include="Graphics2D\TextureAtlases\TextureAtlas.GDX.cs" />
     <Compile Include="Graphics2D\TextureAtlases\TextureRegion.cs" />
+    <Compile Include="Graphics2D\TextureAtlases\TextureRegionAtlas.GDX.cs" />
     <Compile Include="Graphics2D\Text\BitmapFontHelper.cs" />
     <Compile Include="Graphics2D\Text\GlyphInfo.cs" />
     <Compile Include="Graphics2D\Text\TextRun.cs" />
@@ -166,15 +166,19 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\default_font.fnt" />
     <EmbeddedResource Include="Resources\default_font_small.fnt" />
-    <EmbeddedResource Include="Resources\default_stylesheet.json" />
-    <EmbeddedResource Include="Resources\default_uiskin.atlas" />
-    <EmbeddedResource Include="Resources\default_uiskin.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Myra-Dependencies\FNA\FNA.csproj">
       <Project>{35253ce1-c864-4cd3-8249-4d1319748e8f}</Project>
       <Name>FNA</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\default_ui_skin.json" />
+    <EmbeddedResource Include="Resources\default_ui_skin_atlas.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\default_ui_skin_atlas.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

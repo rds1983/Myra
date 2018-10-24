@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Myra.Attributes;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
-using Myra.Utility;
 using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
@@ -13,7 +12,7 @@ namespace Myra.Graphics2D.UI
 	public class TextBlock : Widget
 	{
 		private readonly FormattedText _formattedText = new FormattedText();
-		private bool _wrap = true;
+		private bool _wrap = false;
 
 		[EditCategory("Appearance")]
 		public int VerticalSpacing
@@ -51,7 +50,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Appearance")]
-		[DefaultValue(true)]
+		[DefaultValue(false)]
 		public bool Wrap
 		{
 			get { return _wrap; }
@@ -72,7 +71,11 @@ namespace Myra.Graphics2D.UI
 		public Color TextColor { get; set; }
 
 		[EditCategory("Appearance")]
-		public Color DisabledTextColor { get; set; }
+		public Color? DisabledTextColor { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public Color? PressedTextColor { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
@@ -87,6 +90,10 @@ namespace Myra.Graphics2D.UI
 		{
 			get { return _formattedText.UnderscoreChar; }
 		}
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public bool IsPressed { get; set; }
 
 		public TextBlock(TextBlockStyle style)
 		{
@@ -114,7 +121,15 @@ namespace Myra.Graphics2D.UI
 
 			var bounds = ActualBounds;
 
-			var color = Enabled ? TextColor : DisabledTextColor;
+			var color = TextColor;
+			if (!Enabled && DisabledTextColor != null)
+			{
+				color = DisabledTextColor.Value;
+			} else if (IsPressed && PressedTextColor != null)
+			{
+				color = PressedTextColor.Value;
+			}
+
 			_formattedText.Draw(context.Batch, bounds, color, context.Opacity);
 		}
 
@@ -161,6 +176,7 @@ namespace Myra.Graphics2D.UI
 
 			TextColor = style.TextColor;
 			DisabledTextColor = style.DisabledTextColor;
+			PressedTextColor = style.PressedTextColor;
 			Font = style.Font;
 		}
 

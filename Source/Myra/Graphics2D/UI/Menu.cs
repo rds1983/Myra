@@ -76,7 +76,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		protected Menu(MenuStyle style)
+		protected Menu(MenuStyle style): base(style)
 		{
 			OpenMenuItem = null;
 

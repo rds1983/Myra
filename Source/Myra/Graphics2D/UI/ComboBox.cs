@@ -250,7 +250,7 @@ namespace Myra.Graphics2D.UI
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
 
-			_itemsContainer = new Grid();
+			_itemsContainer = new Grid((GridStyle)null);
 
 			if (style != null)
 			{

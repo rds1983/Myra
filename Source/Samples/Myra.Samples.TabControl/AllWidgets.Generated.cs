@@ -87,14 +87,6 @@ namespace Myra.Samples.TabControl
 			var textBlock1 = new TextBlock();
 			textBlock1.Text = "Button:";
 			textBlock1.TextColor = Color.White;
-			textBlock1.DisabledTextColor = new Color
-			{
-				B = 170,
-				G = 170,
-				R = 170,
-				A = 255,
-				PackedValue = 4289374890,
-			};
 			textBlock1.Id = "";
 
 			_button = new Button();
@@ -111,14 +103,6 @@ namespace Myra.Samples.TabControl
 			var textBlock2 = new TextBlock();
 			textBlock2.Text = "Blue Button:";
 			textBlock2.TextColor = Color.White;
-			textBlock2.DisabledTextColor = new Color
-			{
-				B = 170,
-				G = 170,
-				R = 170,
-				A = 255,
-				PackedValue = 4289374890,
-			};
 			textBlock2.Id = "";
 			textBlock2.GridPositionY = 1;
 
@@ -137,14 +121,6 @@ namespace Myra.Samples.TabControl
 			var textBlock3 = new TextBlock();
 			textBlock3.Text = "Text Button:";
 			textBlock3.TextColor = Color.White;
-			textBlock3.DisabledTextColor = new Color
-			{
-				B = 170,
-				G = 170,
-				R = 170,
-				A = 255,
-				PackedValue = 4289374890,
-			};
 			textBlock3.Id = "";
 			textBlock3.GridPositionY = 2;
 
@@ -162,14 +138,6 @@ namespace Myra.Samples.TabControl
 			var textBlock4 = new TextBlock();
 			textBlock4.Text = "Image Button:";
 			textBlock4.TextColor = Color.White;
-			textBlock4.DisabledTextColor = new Color
-			{
-				B = 170,
-				G = 170,
-				R = 170,
-				A = 255,
-				PackedValue = 4289374890,
-			};
 			textBlock4.Id = "";
 			textBlock4.GridPositionY = 3;
 
@@ -196,14 +164,6 @@ namespace Myra.Samples.TabControl
 			var textBlock5 = new TextBlock();
 			textBlock5.Text = "Horizontal Slider:";
 			textBlock5.TextColor = Color.White;
-			textBlock5.DisabledTextColor = new Color
-			{
-				B = 170,
-				G = 170,
-				R = 170,
-				A = 255,
-				PackedValue = 4289374890,
-			};
 			textBlock5.Id = "";
 			textBlock5.GridPositionY = 5;
 
@@ -216,14 +176,6 @@ namespace Myra.Samples.TabControl
 			var textBlock6 = new TextBlock();
 			textBlock6.Text = "Combo Box:";
 			textBlock6.TextColor = Color.White;
-			textBlock6.DisabledTextColor = new Color
-			{
-				B = 170,
-				G = 170,
-				R = 170,
-				A = 255,
-				PackedValue = 4289374890,
-			};
 			textBlock6.GridPositionY = 6;
 
 			var listItem1 = new ListItem();
@@ -237,13 +189,6 @@ namespace Myra.Samples.TabControl
 
 			var listItem3 = new ListItem();
 			listItem3.Text = "Blue";
-			listItem3.Color = new Color
-			{
-				B = 255,
-				G = 128,
-				A = 255,
-				PackedValue = 4294934528,
-			};
 
 			var comboBox1 = new ComboBox();
 			comboBox1.WidthHint = 200;
@@ -256,35 +201,11 @@ namespace Myra.Samples.TabControl
 			var textBlock7 = new TextBlock();
 			textBlock7.Text = "Text Field:";
 			textBlock7.TextColor = Color.White;
-			textBlock7.DisabledTextColor = new Color
-			{
-				B = 170,
-				G = 170,
-				R = 170,
-				A = 255,
-				PackedValue = 4289374890,
-			};
 			textBlock7.GridPositionY = 7;
 
 			var textField1 = new TextField();
 			textField1.Text = "";
 			textField1.TextColor = Color.White;
-			textField1.DisabledTextColor = new Color
-			{
-				B = 170,
-				G = 170,
-				R = 170,
-				A = 255,
-				PackedValue = 4289374890,
-			};
-			textField1.MessageTextColor = new Color
-			{
-				B = 170,
-				G = 170,
-				R = 170,
-				A = 255,
-				PackedValue = 4289374890,
-			};
 			textField1.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
 			textField1.GridPositionX = 1;
 			textField1.GridPositionY = 7;
@@ -293,14 +214,6 @@ namespace Myra.Samples.TabControl
 			var textBlock8 = new TextBlock();
 			textBlock8.Text = "Spin Button:";
 			textBlock8.TextColor = Color.White;
-			textBlock8.DisabledTextColor = new Color
-			{
-				B = 170,
-				G = 170,
-				R = 170,
-				A = 255,
-				PackedValue = 4289374890,
-			};
 			textBlock8.GridPositionY = 8;
 
 			var spinButton1 = new SpinButton();
@@ -313,14 +226,6 @@ namespace Myra.Samples.TabControl
 			var textBlock9 = new TextBlock();
 			textBlock9.Text = "List Box:";
 			textBlock9.TextColor = Color.White;
-			textBlock9.DisabledTextColor = new Color
-			{
-				B = 170,
-				G = 170,
-				R = 170,
-				A = 255,
-				PackedValue = 4289374890,
-			};
 			textBlock9.GridPositionY = 9;
 
 			var listItem4 = new ListItem();
@@ -348,14 +253,6 @@ namespace Myra.Samples.TabControl
 			var textBlock10 = new TextBlock();
 			textBlock10.Text = "Vertical Menu:";
 			textBlock10.TextColor = Color.White;
-			textBlock10.DisabledTextColor = new Color
-			{
-				B = 170,
-				G = 170,
-				R = 170,
-				A = 255,
-				PackedValue = 4289374890,
-			};
 			textBlock10.GridPositionY = 10;
 
 			var menuItem4 = new MenuItem();
@@ -382,14 +279,6 @@ namespace Myra.Samples.TabControl
 			var textBlock11 = new TextBlock();
 			textBlock11.Text = "Tree";
 			textBlock11.TextColor = Color.White;
-			textBlock11.DisabledTextColor = new Color
-			{
-				B = 170,
-				G = 170,
-				R = 170,
-				A = 255,
-				PackedValue = 4289374890,
-			};
 			textBlock11.GridPositionY = 11;
 
 			_gridRight = new Grid();
@@ -449,14 +338,6 @@ namespace Myra.Samples.TabControl
 			var textBlock12 = new TextBlock();
 			textBlock12.Text = "Vertical Slider:";
 			textBlock12.TextColor = Color.White;
-			textBlock12.DisabledTextColor = new Color
-			{
-				B = 170,
-				G = 170,
-				R = 170,
-				A = 255,
-				PackedValue = 4289374890,
-			};
 
 			var verticalSlider1 = new VerticalSlider();
 			verticalSlider1.Maximum = 100;
@@ -484,14 +365,6 @@ namespace Myra.Samples.TabControl
 			var textBlock13 = new TextBlock();
 			textBlock13.Text = "Progress Bars:";
 			textBlock13.TextColor = Color.White;
-			textBlock13.DisabledTextColor = new Color
-			{
-				B = 170,
-				G = 170,
-				R = 170,
-				A = 255,
-				PackedValue = 4289374890,
-			};
 
 			_horizontalProgressBar = new HorizontalProgressBar();
 			_horizontalProgressBar.Maximum = 100;

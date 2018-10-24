@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using Myra.Graphics2D.TextureAtlases;
 
 namespace Myra.Graphics2D.UI
 {
@@ -17,7 +16,7 @@ namespace Myra.Graphics2D.UI
 			switch (horizontalAlignment)
 			{
 				case HorizontalAlignment.Center:
-					result.X = (containerSize.X - controlSize.X)/2;
+					result.X = (containerSize.X - controlSize.X) / 2;
 					break;
 				case HorizontalAlignment.Right:
 					result.X = containerSize.X - controlSize.X;
@@ -30,7 +29,7 @@ namespace Myra.Graphics2D.UI
 			switch (verticalAlignment)
 			{
 				case VerticalAlignment.Center:
-					result.Y = (containerSize.Y - controlSize.Y)/2;
+					result.Y = (containerSize.Y - controlSize.Y) / 2;
 					break;
 				case VerticalAlignment.Bottom:
 					result.Y = containerSize.Y - controlSize.Y;
@@ -41,24 +40,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			return result;
-		}
-
-		internal static void UpdateImageSize(this Image image, TextureRegion TextureRegion)
-		{
-			if (TextureRegion == null)
-			{
-				return;
-			}
-
-			if (image.WidthHint == null || TextureRegion.Bounds.Width > image.WidthHint.Value)
-			{
-				image.WidthHint = (int)TextureRegion.Bounds.Width;
-			}
-
-			if (image.HeightHint == null || TextureRegion.Bounds.Height > image.HeightHint.Value)
-			{
-				image.HeightHint = (int)TextureRegion.Bounds.Height;
-			}
 		}
 	}
 }

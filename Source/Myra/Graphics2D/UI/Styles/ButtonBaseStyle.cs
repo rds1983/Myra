@@ -1,10 +1,8 @@
-﻿using Myra.Graphics2D.TextureAtlases;
-
-namespace Myra.Graphics2D.UI.Styles
+﻿namespace Myra.Graphics2D.UI.Styles
 {
 	public class ButtonBaseStyle: WidgetStyle
 	{
-		public TextureRegion PressedBackground { get; set; }
+		public Drawable PressedBackground { get; set; }
 
 		public ButtonBaseStyle()
 		{

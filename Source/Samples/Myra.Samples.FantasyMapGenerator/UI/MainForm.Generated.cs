@@ -195,7 +195,6 @@ namespace Myra.Samples.FantasyMapGenerator.UI
 			grid3.Widgets.Add(_buttonSaveAsPng);
 
 			_imageGenerated = new Image();
-			_imageGenerated.Color = Color.White;
 			_imageGenerated.Id = "_imageGenerated";
 			_imageGenerated.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
 			_imageGenerated.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;

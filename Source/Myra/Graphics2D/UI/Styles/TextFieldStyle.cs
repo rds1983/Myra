@@ -1,21 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Graphics2D.TextureAtlases;
 
 namespace Myra.Graphics2D.UI.Styles
 {
 	public class TextFieldStyle: WidgetStyle
 	{
 		public Color TextColor { get; set; }
-		public Color DisabledTextColor { get; set; }
-		public Color FocusedTextColor { get; set; }
-		public Color MessageTextColor { get; set; }
+		public Color? DisabledTextColor { get; set; }
+		public Color? FocusedTextColor { get; set; }
 
 		public SpriteFont Font { get; set; }
 		public SpriteFont MessageFont { get; set; }
 
-		public TextureRegion Cursor { get; set; }
-		public TextureRegion Selection { get; set; }
+		public Drawable Cursor { get; set; }
+		public Drawable Selection { get; set; }
 
 		public TextFieldStyle()
 		{
@@ -26,7 +24,6 @@ namespace Myra.Graphics2D.UI.Styles
 			TextColor = style.TextColor;
 			DisabledTextColor = style.DisabledTextColor;
 			FocusedTextColor = style.FocusedTextColor;
-			MessageTextColor = style.MessageTextColor;
 
 			Font = style.Font;
 			MessageFont = style.MessageFont;

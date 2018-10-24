@@ -1,78 +1,87 @@
 ﻿using Microsoft.Xna.Framework;
 using Myra.Attributes;
-using Myra.Graphics2D.TextureAtlases;
 using Newtonsoft.Json;
+using System;
 
 namespace Myra.Graphics2D.UI
 {
-	public class Image: Widget
+	public class Image : Widget
 	{
-		private TextureRegion _textureRegion;
+		private Drawable _drawable;
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public TextureRegion TextureRegion
+		public Drawable Drawable
 		{
 			get
 			{
-				return _textureRegion;
+				return _drawable;
 			}
 
 			set
 			{
-				if (value == _textureRegion)
+				if (value == _drawable)
 				{
 					return;
 				}
 
-				_textureRegion = value;
+				_drawable = value;
 				InvalidateMeasure();
 			}
 		}
 
-		public Color Color { get; set; }
-
-		public Image()
+		[HiddenInEditor]
+		[JsonIgnore]
+		[Obsolete("Property is obsolete and will be removed in future. Use Drawable.Color")]
+		public Color Color
 		{
-			Color = Color.White;
+			get
+			{
+				return _drawable.Color;
+			}
+
+			set
+			{
+				_drawable.Color = value;
+			}
 		}
 
 		protected override Point InternalMeasure(Point availableSize)
 		{
-			if (TextureRegion == null)
+			if (Drawable == null)
 			{
 				return Point.Zero;
 			}
 
-			return new Point(TextureRegion.Bounds.Width, (int)TextureRegion.Bounds.Height);
+			return Drawable.Size;
 		}
 
 		public override void InternalRender(RenderContext context)
 		{
 			base.InternalRender(context);
 
-			if (TextureRegion != null)
+			if (Drawable != null)
 			{
 				var bounds = ActualBounds;
-				context.Draw(TextureRegion, bounds, Color);
+				context.Draw(Drawable, bounds);
 			}
 		}
 
-		public void UpdateImageSize(TextureRegion image)
+		public void UpdateImageSize(Drawable image)
 		{
 			if (image == null)
 			{
 				return;
 			}
 
-			if (WidthHint == null || image.Bounds.Width > WidthHint.Value)
+			if (WidthHint == null || image.Size.X > WidthHint.Value)
 			{
-				WidthHint = (int)image.Bounds.Width;
+				WidthHint = image.Size.X;
 			}
 
-			if (HeightHint == null || image.Bounds.Height > HeightHint.Value)
+			if (HeightHint == null || image.Size.Y > HeightHint.Value)
 			{
-				HeightHint = (int)image.Bounds.Height;
+				HeightHint = image.Size.Y;
 			}
 		}
 	}

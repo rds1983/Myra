@@ -76,7 +76,7 @@ namespace Myra.Graphics2D.TextureAtlases
 			throw new Exception("Not supported!");
 		}
 
-		public static TextureRegionAtlas Load(string data, Func<string, Texture2D> textureLoader)
+		public static TextureRegionAtlas FromGDX(string data, Func<string, Texture2D> textureLoader)
 		{
 			var mode = GDXMode.PageHeader;
 

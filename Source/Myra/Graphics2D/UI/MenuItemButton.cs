@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Attributes;
-using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using Newtonsoft.Json;
 
@@ -46,15 +45,15 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public TextureRegion TextureRegion
+		public Drawable TextureRegion
 		{
-			get { return _image.TextureRegion; }
-			set { _image.TextureRegion = value; }
+			get { return _image.Drawable; }
+			set { _image.Drawable = value; }
 		}
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public TextureRegion OpenBackground { get; set; }
+		public Drawable OpenBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
@@ -103,7 +102,7 @@ namespace Myra.Graphics2D.UI
 
 		internal MenuItemButton(MenuItemStyle style)
 		{
-			Widget = new Grid();
+			Widget = new Grid((GridStyle)null);
 
 			_imageProportion = new Grid.Proportion();
 			Widget.ColumnsProportions.Add(_imageProportion);
@@ -122,6 +121,10 @@ namespace Myra.Graphics2D.UI
 			};
 
 			Widget.Widgets.Add(_textBlock);
+
+			PaddingLeft = 5;
+			PaddingRight = 5;
+			PaddingBottom = 2;
 
 			if (style != null)
 			{
@@ -149,6 +152,18 @@ namespace Myra.Graphics2D.UI
 			{
 				_textBlock.ApplyTextBlockStyle(style.LabelStyle);
 			}
+		}
+
+		protected override void FireDown()
+		{
+			base.FireDown();
+			_textBlock.IsPressed = IsPressed;
+		}
+
+		protected override void FireUp()
+		{
+			base.FireUp();
+			_textBlock.IsPressed = IsPressed;
 		}
 	}
 }

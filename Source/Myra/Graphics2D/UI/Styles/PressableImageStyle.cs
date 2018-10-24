@@ -1,10 +1,8 @@
-﻿using Myra.Graphics2D.TextureAtlases;
-
-namespace Myra.Graphics2D.UI.Styles
+﻿namespace Myra.Graphics2D.UI.Styles
 {
 	public class PressableImageStyle: ImageStyle
 	{
-		public TextureRegion PressedImage { get; set; }
+		public Drawable PressedImage { get; set; }
 
 		public PressableImageStyle()
 		{

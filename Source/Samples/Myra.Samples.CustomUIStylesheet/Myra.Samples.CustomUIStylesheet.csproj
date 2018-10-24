@@ -88,6 +88,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="app.manifest" />
+    <EmbeddedResource Include="Resources\ui_stylesheet_atlas.json" />
+    <EmbeddedResource Include="Resources\commodore-64.fnt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Myra-Dependencies\MonoGame.Framework.DesktopGL\x64\SDL2.dll">
@@ -120,10 +122,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\ui_font.fnt" />
-    <EmbeddedResource Include="Resources\ui_stylesheet_atlas.atlas" />
-    <EmbeddedResource Include="Resources\ui_stylesheet_image.png" />
     <EmbeddedResource Include="Resources\ui_stylesheet.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ui_stylesheet_atlas.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

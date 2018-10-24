@@ -1,22 +1,22 @@
 ﻿namespace Myra.Graphics2D.UI.Styles
 {
-	public class SpinButtonStyle: WidgetStyle
+	public class SpinButtonStyle: GridStyle
 	{
-		public ButtonStyle UpButtonStyle { get; set; }
-		public ButtonStyle DownButtonStyle { get; set; }
+		public ImageButtonStyle UpButtonStyle { get; set; }
+		public ImageButtonStyle DownButtonStyle { get; set; }
 		public TextFieldStyle TextFieldStyle { get; set; }
 
 		public SpinButtonStyle()
 		{
-			UpButtonStyle = new ButtonStyle();
-			DownButtonStyle = new ButtonStyle();
+			UpButtonStyle = new ImageButtonStyle();
+			DownButtonStyle = new ImageButtonStyle();
 			TextFieldStyle = new TextFieldStyle();
 		}
 
 		public SpinButtonStyle(SpinButtonStyle style) : base(style)
 		{
-			UpButtonStyle = new ButtonStyle(style.UpButtonStyle);
-			DownButtonStyle = new ButtonStyle(style.DownButtonStyle);
+			UpButtonStyle = new ImageButtonStyle(style.UpButtonStyle);
+			DownButtonStyle = new ImageButtonStyle(style.DownButtonStyle);
 			TextFieldStyle = new TextFieldStyle(style.TextFieldStyle);
 		}
 

@@ -1,6 +1,6 @@
 ﻿namespace Myra.Graphics2D.UI.Styles
 {
-	public class WindowStyle : WidgetStyle
+	public class WindowStyle : GridStyle
 	{
 		public TextBlockStyle TitleStyle { get; set; }
 		public ImageButtonStyle CloseButtonStyle { get; set; }

@@ -82,7 +82,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public TreeNode(TreeStyle style, Tree topTree)
+		public TreeNode(TreeStyle style, Tree topTree): base(style)
 		{
 			_topTree = topTree;
 
@@ -108,8 +108,7 @@ namespace Myra.Graphics2D.UI
 
 			_label = new TextBlock
 			{
-				GridPositionX = 1,
-				Wrap = false
+				GridPositionX = 1
 			};
 
 			Widgets.Add(_label);
@@ -124,7 +123,7 @@ namespace Myra.Graphics2D.UI
 			RowsProportions.Add(new Proportion(ProportionType.Auto));
 
 			// Second is yet another grid holding child nodes
-			_childNodesGrid = new Grid
+			_childNodesGrid = new Grid((GridStyle)null)
 			{
 				Visible = false,
 				GridPositionX = 1,
@@ -202,7 +201,6 @@ namespace Myra.Graphics2D.UI
 		{
 			return (TreeNode) _childNodesGrid.Widgets[index];
 		}
-
 
 		public void RemoveSubNode(TreeNode subNode)
 		{

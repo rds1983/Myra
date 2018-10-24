@@ -10,7 +10,9 @@ namespace Myra.Graphics2D.UI.Styles
 {
 	internal class StylesheetLoader
 	{
+		public const string TypeName = "type";
 		public const string ColorsName = "colors";
+		public const string DrawablesName = "drawables";
 		public const string TextBlockName = "textBlock";
 		public const string TextFieldName = "textField";
 		public const string ScrollAreaName = "scrollArea";
@@ -33,6 +35,8 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string WindowName = "window";
 		public const string LeftName = "left";
 		public const string RightName = "right";
+		public const string WidthName = "width";
+		public const string HeightName = "height";
 		public const string TopName = "top";
 		public const string BottomName = "bottom";
 		public const string WidthHintName = "widthHint";
@@ -46,13 +50,14 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string OverBorderName = "overBorder";
 		public const string DisabledBorderName = "disabledBorder";
 		public const string FocusedBorderName = "focusedBorder";
+		public const string BoundsName = "bounds";
 		public const string PaddingName = "padding";
 		public const string FontName = "font";
 		public const string MessageFontName = "font";
 		public const string TextColorName = "textColor";
 		public const string DisabledTextColorName = "disabledTextColor";
 		public const string FocusedTextColorName = "focusedTextColor";
-		public const string MessageTextColorName = "messageTextColor";
+		public const string PressedTextColorName = "pressedTextColor";
 		public const string HorizontalScrollName = "horizontalScroll";
 		public const string HorizontalScrollKnobName = "horizontalScrollKnob";
 		public const string VerticalScrollName = "verticalScroll";
@@ -96,6 +101,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string VariantsName = "variants";
 
 		private readonly Dictionary<string, Color> _colors = new Dictionary<string, Color>();
+		private readonly Dictionary<string, Tuple<string, Color>> _drawables = new Dictionary<string, Tuple<string, Color>>();
 		private readonly JObject _root;
 		private readonly Func<string, SpriteFont> _fontLoader;
 		private readonly Func<string, TextureRegion> _textureLoader;
@@ -124,9 +130,34 @@ namespace Myra.Graphics2D.UI.Styles
 			_textureLoader = textureLoader;
 		}
 
-		private TextureRegion GetTextureRegion(string id)
+		private Drawable GetDrawable(string id)
 		{
-			return _textureLoader(id);
+			Tuple<string, Color> drawableFromTable;
+			if (_drawables.TryGetValue(id, out drawableFromTable))
+			{
+				return new Drawable(_textureLoader(drawableFromTable.Item1))
+				{
+					Color = drawableFromTable.Item2
+				};
+			}
+
+
+			return new Drawable(_textureLoader(id));
+		}
+
+		private void ParseDrawables(JObject drawables)
+		{
+			_drawables.Clear();
+
+			foreach (var props in drawables.Properties())
+			{
+				// Parse it
+				var name = props.Value["name"].ToString();
+				var color = props.Value["color"].ToString();
+
+				var drawableEntry = new Tuple<string, Color>(name, GetColor(color));
+				_drawables.Add(props.Name, drawableEntry);
+			}
 		}
 
 		private SpriteFont GetFont(string id)
@@ -163,6 +194,12 @@ namespace Myra.Graphics2D.UI.Styles
 			if (_colors.TryGetValue(color, out result))
 			{
 				return result;
+			}
+
+			var fromName = color.FromName();
+			if (fromName != null)
+			{
+				return fromName.Value;
 			}
 
 			// Not found
@@ -213,48 +250,67 @@ namespace Myra.Graphics2D.UI.Styles
 			string name;
 			if (source.GetStyle(BackgroundName, out name))
 			{
-				result.Background = GetTextureRegion(name);
+				result.Background = GetDrawable(name);
 			}
 
 			if (source.GetStyle(OverBackgroundName, out name))
 			{
-				result.OverBackground = GetTextureRegion(name);
+				result.OverBackground = GetDrawable(name);
 			}
 
 			if (source.GetStyle(DisabledBackgroundName, out name))
 			{
-				result.DisabledBackground = GetTextureRegion(name);
+				result.DisabledBackground = GetDrawable(name);
 			}
 
 			if (source.GetStyle(FocusedBackgroundName, out name))
 			{
-				result.FocusedBackground = GetTextureRegion(name);
+				result.FocusedBackground = GetDrawable(name);
 			}
 
 			if (source.GetStyle(BorderName, out name))
 			{
-				result.Border = GetTextureRegion(name);
+				result.Border = GetDrawable(name);
 			}
 
 			if (source.GetStyle(OverBorderName, out name))
 			{
-				result.OverBorder = GetTextureRegion(name);
+				result.OverBorder = GetDrawable(name);
 			}
 
 			if (source.GetStyle(DisabledBorderName, out name))
 			{
-				result.DisabledBorder = GetTextureRegion(name);
+				result.DisabledBorder = GetDrawable(name);
 			}
 
 			if (source.GetStyle(FocusedBorderName, out name))
 			{
-				result.FocusedBorder = GetTextureRegion(name);
+				result.FocusedBorder = GetDrawable(name);
 			}
 
 			JObject padding;
 			if (source.GetStyle(PaddingName, out padding))
 			{
-				result.Padding = GetPaddingInfo(padding);
+				int value;
+				if (padding.GetStyle(LeftName, out value))
+				{
+					result.PaddingLeft = value;
+				}
+
+				if (padding.GetStyle(RightName, out value))
+				{
+					result.PaddingRight = value;
+				}
+
+				if (padding.GetStyle(TopName, out value))
+				{
+					result.PaddingTop = value;
+				}
+
+				if (padding.GetStyle(BottomName, out value))
+				{
+					result.PaddingBottom = value;
+				}
 			}
 		}
 
@@ -276,6 +332,11 @@ namespace Myra.Graphics2D.UI.Styles
 			if (source.GetStyle(DisabledTextColorName, out name))
 			{
 				result.DisabledTextColor = GetColor(name);
+			}
+
+			if (source.GetStyle(PressedTextColorName, out name))
+			{
+				result.PressedTextColor = GetColor(name);
 			}
 		}
 
@@ -299,11 +360,6 @@ namespace Myra.Graphics2D.UI.Styles
 				result.FocusedTextColor = GetColor(name);
 			}
 
-			if (source.GetStyle(MessageTextColorName, out name))
-			{
-				result.MessageTextColor = GetColor(name);
-			}
-
 			if (source.GetStyle(FontName, out name))
 			{
 				result.Font = GetFont(name);
@@ -316,12 +372,12 @@ namespace Myra.Graphics2D.UI.Styles
 
 			if (source.GetStyle(CursorName, out name))
 			{
-				result.Cursor = GetTextureRegion(name);
+				result.Cursor = GetDrawable(name);
 			}
 
 			if (source.GetStyle(SelectionName, out name))
 			{
-				result.Selection = GetTextureRegion(name);
+				result.Selection = GetDrawable(name);
 			}
 		}
 
@@ -332,22 +388,22 @@ namespace Myra.Graphics2D.UI.Styles
 			string TextureRegionName;
 			if (source.GetStyle(HorizontalScrollName, out TextureRegionName))
 			{
-				result.HorizontalScrollBackground = GetTextureRegion(TextureRegionName);
+				result.HorizontalScrollBackground = GetDrawable(TextureRegionName);
 			}
 
 			if (source.GetStyle(HorizontalScrollKnobName, out TextureRegionName))
 			{
-				result.HorizontalScrollKnob = GetTextureRegion(TextureRegionName);
+				result.HorizontalScrollKnob = GetDrawable(TextureRegionName);
 			}
 
 			if (source.GetStyle(VerticalScrollName, out TextureRegionName))
 			{
-				result.VerticalScrollBackground = GetTextureRegion(TextureRegionName);
+				result.VerticalScrollBackground = GetDrawable(TextureRegionName);
 			}
 
 			if (source.GetStyle(VerticalScrollKnobName, out TextureRegionName))
 			{
-				result.VerticalScrollKnob = GetTextureRegion(TextureRegionName);
+				result.VerticalScrollKnob = GetDrawable(TextureRegionName);
 			}
 		}
 
@@ -358,12 +414,12 @@ namespace Myra.Graphics2D.UI.Styles
 			string name;
 			if (source.GetStyle(ImageName, out name))
 			{
-				result.Image = GetTextureRegion(name);
+				result.Image = GetDrawable(name);
 			}
 
 			if (source.GetStyle(OverImageName, out name))
 			{
-				result.OverImage = GetTextureRegion(name);
+				result.OverImage = GetDrawable(name);
 			}
 		}
 
@@ -374,7 +430,7 @@ namespace Myra.Graphics2D.UI.Styles
 			string name;
 			if (source.GetStyle(PressedImageName, out name))
 			{
-				result.PressedImage = GetTextureRegion(name);
+				result.PressedImage = GetDrawable(name);
 			}
 		}
 
@@ -385,7 +441,7 @@ namespace Myra.Graphics2D.UI.Styles
 			string name;
 			if (source.GetStyle(PressedBackgroundName, out name))
 			{
-				result.PressedBackground = GetTextureRegion(name);
+				result.PressedBackground = GetDrawable(name);
 			}
 		}
 
@@ -439,12 +495,12 @@ namespace Myra.Graphics2D.UI.Styles
 
 			if (source.GetStyle(UpButtonStyleName, out style))
 			{
-				LoadButtonStyleFromSource(style, result.UpButtonStyle);
+				LoadImageButtonStyleFromSource(style, result.UpButtonStyle);
 			}
 
 			if (source.GetStyle(DownButtonStyleName, out style))
 			{
-				LoadButtonStyleFromSource(style, result.DownButtonStyle);
+				LoadImageButtonStyleFromSource(style, result.DownButtonStyle);
 			}
 		}
 
@@ -455,7 +511,7 @@ namespace Myra.Graphics2D.UI.Styles
 			JObject knobStyle;
 			if (source.GetStyle(KnobName, out knobStyle))
 			{
-				LoadButtonStyleFromSource(knobStyle, result.KnobStyle);
+				LoadImageButtonStyleFromSource(knobStyle, result.KnobStyle);
 			}
 		}
 
@@ -466,7 +522,7 @@ namespace Myra.Graphics2D.UI.Styles
 			string style;
 			if (source.GetStyle(FilledName, out style))
 			{
-				result.Filled = GetTextureRegion(style);
+				result.Filled = GetDrawable(style);
 			}
 		}
 
@@ -526,7 +582,7 @@ namespace Myra.Graphics2D.UI.Styles
 			string name;
 			if (source.GetStyle(ImageName, out name))
 			{
-				result.Image = GetTextureRegion(name);
+				result.Image = GetDrawable(name);
 			}
 
 			if (source.GetStyle(ThicknessName, out name))
@@ -569,12 +625,12 @@ namespace Myra.Graphics2D.UI.Styles
 			string name;
 			if (source.GetStyle(SelectionBackgroundName, out name))
 			{
-				result.SelectionBackground = GetTextureRegion(name);
+				result.SelectionBackground = GetDrawable(name);
 			}
 
 			if (source.GetStyle(SelectionHoverBackgroundName, out name))
 			{
-				result.SelectionHoverBackground = GetTextureRegion(name);
+				result.SelectionHoverBackground = GetDrawable(name);
 			}
 		}
 
@@ -645,6 +701,13 @@ namespace Myra.Graphics2D.UI.Styles
 			{
 				ParseColors(colors);
 			}
+
+			JObject drawables;
+			if (_root.GetStyle(DrawablesName, out drawables))
+			{
+				ParseDrawables(drawables);
+			}
+
 			FillStyles(TextBlockName, result.TextBlockStyles, LoadTextBlockStyleFromSource);
 			FillStyles(TextFieldName, result.TextFieldStyles, LoadTextFieldStyleFromSource);
 			FillStyles(ScrollAreaName, result.ScrollPaneStyles, LoadScrollAreaStyleFromSource);

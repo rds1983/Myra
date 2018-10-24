@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.Xna.Framework;
 using Myra.Attributes;
-using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using Newtonsoft.Json;
 
@@ -9,26 +8,26 @@ namespace Myra.Graphics2D.UI
 {
 	public class ImageButton: ButtonBase<Image>
 	{
-		private TextureRegion _textureRegion, _overTextureRegion, _pressedTextureRegion;
+		private Drawable _image, _overImage, _pressedImage;
 
 		[JsonIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
-		public TextureRegion Image
+		public Drawable Image
 		{
 			get
 			{
-				return _textureRegion;
+				return _image;
 			}
 
 			set
 			{
-				if (value == _textureRegion)
+				if (value == _image)
 				{
 					return;
 				}
 
-				_textureRegion = value;
+				_image = value;
 				UpdateTextureRegion();
 			}
 		}
@@ -36,21 +35,21 @@ namespace Myra.Graphics2D.UI
 		[JsonIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
-		public TextureRegion OverImage
+		public Drawable OverImage
 		{
 			get
 			{
-				return _overTextureRegion;
+				return _overImage;
 			}
 
 			set
 			{
-				if (value == _textureRegion)
+				if (value == _image)
 				{
 					return;
 				}
 
-				_overTextureRegion = value;
+				_overImage = value;
 				UpdateTextureRegion();
 			}
 		}
@@ -58,21 +57,21 @@ namespace Myra.Graphics2D.UI
 		[JsonIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
-		public TextureRegion PressedImage
+		public Drawable PressedImage
 		{
 			get
 			{
-				return _pressedTextureRegion;
+				return _pressedImage;
 			}
 
 			set
 			{
-				if (value == _pressedTextureRegion)
+				if (value == _pressedImage)
 				{
 					return;
 				}
 
-				_pressedTextureRegion = value;
+				_pressedImage = value;
 				UpdateTextureRegion();
 			}
 		}
@@ -156,7 +155,7 @@ namespace Myra.Graphics2D.UI
 				image = OverImage;
 			}
 
-			Widget.TextureRegion = image;
+			Widget.Drawable = image;
 		}
 
 		public override void OnMouseEntered(Point position)

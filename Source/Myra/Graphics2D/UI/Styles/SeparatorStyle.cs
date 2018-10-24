@@ -1,10 +1,8 @@
-﻿using Myra.Graphics2D.TextureAtlases;
-
-namespace Myra.Graphics2D.UI.Styles
+﻿namespace Myra.Graphics2D.UI.Styles
 {
 	public class SeparatorStyle: WidgetStyle
 	{
-		public TextureRegion Image { get; set; }
+		public Drawable Image { get; set; }
 		public int Thickness { get; set; }
 
 		public SeparatorStyle()

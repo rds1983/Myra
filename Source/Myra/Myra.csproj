@@ -56,6 +56,7 @@
     <Compile Include="Cyotek.Drawing.BitmapFont\Padding.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\Page.cs" />
     <Compile Include="Graphics2D\ColorBuffer.cs" />
+    <Compile Include="Graphics2D\Drawable.cs" />
     <Compile Include="Graphics2D\SpriteBatchBeginParams.cs" />
     <Compile Include="Graphics2D\UI\ColorPicker\ColorPickerDialog.cs" />
     <Compile Include="Graphics2D\UI\ColorPicker\ColorPickerDialog.Generated.cs" />
@@ -66,7 +67,7 @@
     <Compile Include="Graphics2D\StbSharp\StbImage.Generated.cs" />
     <Compile Include="Graphics2D\TextureAtlases\NinePatchRegion.cs" />
     <Compile Include="Graphics2D\TextureAtlases\TextureRegionAtlas.cs" />
-    <Compile Include="Graphics2D\TextureAtlases\TextureAtlas.GDX.cs" />
+    <Compile Include="Graphics2D\TextureAtlases\TextureRegionAtlas.GDX.cs" />
     <Compile Include="Graphics2D\TextureAtlases\TextureRegion.cs" />
     <Compile Include="Graphics2D\Text\BitmapFontHelper.cs" />
     <Compile Include="Graphics2D\Text\GlyphInfo.cs" />
@@ -171,9 +172,13 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\default_font.fnt" />
     <EmbeddedResource Include="Resources\default_font_small.fnt" />
-    <EmbeddedResource Include="Resources\default_stylesheet.json" />
-    <EmbeddedResource Include="Resources\default_uiskin.atlas" />
-    <EmbeddedResource Include="Resources\default_uiskin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\default_ui_skin.json" />
+    <EmbeddedResource Include="Resources\default_ui_skin_atlas.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\default_ui_skin_atlas.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

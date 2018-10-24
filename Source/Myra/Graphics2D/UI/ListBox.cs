@@ -85,7 +85,7 @@ namespace Myra.Graphics2D.UI
 
 		public new event EventHandler SelectedIndexChanged;
 
-		public ListBox(ListBoxStyle style)
+		public ListBox(ListBoxStyle style) : base(style)
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Top;
@@ -182,7 +182,6 @@ namespace Myra.Graphics2D.UI
 					HorizontalAlignment = HorizontalAlignment.Stretch,
 					VerticalAlignment = VerticalAlignment.Stretch,
 					Image = item.Image,
-					ImageColor = item.ImageColor,
 					ImageTextSpacing = item.ImageTextSpacing,
 					Toggleable = true
 				};
@@ -227,7 +226,7 @@ namespace Myra.Graphics2D.UI
 
 		public void ApplyListBoxStyle(ListBoxStyle style)
 		{
-			ApplyWidgetStyle(style);
+			ApplyGridStyle(style);
 
 			ListBoxStyle = style;
 		}

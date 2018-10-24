@@ -64,10 +64,6 @@ namespace Myra.Graphics2D.UI
 			DrawLinesColor = Color.White;
 			XHint = 285;
 			YHint = 312;
-			PaddingLeft = 5;
-			PaddingRight = 5;
-			PaddingTop = 5;
-			PaddingBottom = 5;
 			CanFocus = true;
 			Content = Root;
 		}

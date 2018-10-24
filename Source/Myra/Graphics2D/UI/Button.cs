@@ -3,7 +3,6 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Attributes;
-using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using Newtonsoft.Json;
 
@@ -11,7 +10,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class Button : ButtonBase<Grid>
 	{
-		private TextureRegion _textureRegion, _overTextureRegion, _pressedTextureRegion;
+		private Drawable _textureRegion, _overTextureRegion, _pressedTextureRegion;
 		private readonly Image _image;
 		private readonly TextBlock _textBlock;
 
@@ -42,7 +41,7 @@ namespace Myra.Graphics2D.UI
 		[JsonIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
-		public TextureRegion Image
+		public Drawable Image
 		{
 			get { return _textureRegion; }
 
@@ -54,30 +53,14 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_textureRegion = value;
-				UpdateTextureRegion();
+				UpdateDrawable();
 			}
 		}
 
 		[JsonIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
-		public Color ImageColor
-		{
-			get
-			{
-				return _image.Color;
-			}
-
-			set
-			{
-				_image.Color = value;
-			}
-		}
-
-		[JsonIgnore]
-		[HiddenInEditor]
-		[EditCategory("Appearance")]
-		public TextureRegion OverImage
+		public Drawable OverImage
 		{
 			get { return _overTextureRegion; }
 
@@ -89,14 +72,14 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_overTextureRegion = value;
-				UpdateTextureRegion();
+				UpdateDrawable();
 			}
 		}
 
 		[JsonIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
-		public TextureRegion PressedImage
+		public Drawable PressedImage
 		{
 			get { return _pressedTextureRegion; }
 
@@ -108,7 +91,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_pressedTextureRegion = value;
-				UpdateTextureRegion();
+				UpdateDrawable();
 			}
 		}
 
@@ -146,7 +129,7 @@ namespace Myra.Graphics2D.UI
 
 		public Button(ButtonStyle style)
 		{
-			Widget = new Grid();
+			Widget = new Grid((GridStyle)null);
 
 			Widget.ColumnsProportions.Add(new Grid.Proportion());
 			Widget.ColumnsProportions.Add(new Grid.Proportion());
@@ -161,8 +144,7 @@ namespace Myra.Graphics2D.UI
 
 			_textBlock = new TextBlock
 			{
-				GridPositionX = 1,
-				Wrap = false
+				GridPositionX = 1
 			};
 
 			Widget.Widgets.Add(_textBlock);
@@ -205,10 +187,10 @@ namespace Myra.Graphics2D.UI
 				_image.UpdateImageSize(imageStyle.PressedImage);
 			}
 
-			UpdateTextureRegion();
+			UpdateDrawable();
 		}
 
-		private void UpdateTextureRegion()
+		private void UpdateDrawable()
 		{
 			var image = Image;
 			if (IsPressed && PressedImage != null)
@@ -220,35 +202,39 @@ namespace Myra.Graphics2D.UI
 				image = OverImage;
 			}
 
-			_image.TextureRegion = image;
+			_image.Drawable = image;
 		}
 
 		public override void OnMouseEntered(Point position)
 		{
 			base.OnMouseEntered(position);
 
-			UpdateTextureRegion();
+			UpdateDrawable();
 		}
 
 		public override void OnMouseLeft()
 		{
 			base.OnMouseLeft();
 
-			UpdateTextureRegion();
+			UpdateDrawable();
 		}
 
 		protected override void FireUp()
 		{
 			base.FireUp();
 
-			UpdateTextureRegion();
+			UpdateDrawable();
+
+			_textBlock.IsPressed = IsPressed;
 		}
 
 		protected override void FireDown()
 		{
 			base.FireDown();
 
-			UpdateTextureRegion();
+			UpdateDrawable();
+
+			_textBlock.IsPressed = IsPressed;
 		}
 
 		protected override void SetStyleByName(Stylesheet stylesheet, string name)

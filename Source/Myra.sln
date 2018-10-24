@@ -38,6 +38,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.TabControl", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.FantasyMapGenerator", "Samples\Myra.Samples.FantasyMapGenerator\Myra.Samples.FantasyMapGenerator.csproj", "{84545088-FD48-41A9-A729-CD307F60E3A0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{FF0B45E8-FBCB-4CAE-B734-241328333287}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Tools.ToMyraAtlasConverter", "Tools\ToMyraAtlasConverter\Myra.Tools.ToMyraAtlasConverter.csproj", "{E787D9B1-DCC5-4255-9D63-546BED3E6E0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Tools.ToMyraStylesheetConverter", "Tools\ToMyraStylesheetConverter\Myra.Tools.ToMyraStylesheetConverter.csproj", "{44921511-A30C-4FC7-8FE2-B7F2644E33EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,6 +106,14 @@ Global
 		{84545088-FD48-41A9-A729-CD307F60E3A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84545088-FD48-41A9-A729-CD307F60E3A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84545088-FD48-41A9-A729-CD307F60E3A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E787D9B1-DCC5-4255-9D63-546BED3E6E0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E787D9B1-DCC5-4255-9D63-546BED3E6E0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E787D9B1-DCC5-4255-9D63-546BED3E6E0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E787D9B1-DCC5-4255-9D63-546BED3E6E0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44921511-A30C-4FC7-8FE2-B7F2644E33EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44921511-A30C-4FC7-8FE2-B7F2644E33EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44921511-A30C-4FC7-8FE2-B7F2644E33EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44921511-A30C-4FC7-8FE2-B7F2644E33EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -116,6 +130,8 @@ Global
 		{0F48899B-E533-423E-BAE4-FDD09A3A6698} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{46A18A74-5EB4-4B85-B1B7-279A1D8FDDA6} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{84545088-FD48-41A9-A729-CD307F60E3A0} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{E787D9B1-DCC5-4255-9D63-546BED3E6E0E} = {FF0B45E8-FBCB-4CAE-B734-241328333287}
+		{44921511-A30C-4FC7-8FE2-B7F2644E33EB} = {FF0B45E8-FBCB-4CAE-B734-241328333287}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35ACDF4E-2CE2-46B1-A19F-35DC131069A1}

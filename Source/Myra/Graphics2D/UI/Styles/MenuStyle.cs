@@ -1,6 +1,6 @@
 ﻿namespace Myra.Graphics2D.UI.Styles
 {
-	public class MenuStyle: WidgetStyle
+	public class MenuStyle: GridStyle
 	{
 		public MenuItemStyle MenuItemStyle { get; set; }
 		public SeparatorStyle SeparatorStyle { get; set; }

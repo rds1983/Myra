@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using Myra.Attributes;
+using Myra.Graphics2D.UI.Styles;
 using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
@@ -18,7 +19,7 @@ namespace Myra.Graphics2D.UI
 		{
 			RowsProportions.Add(new Proportion());
 
-			var buttonsGrid = new Grid
+			var buttonsGrid = new Grid((GridStyle)null)
 			{
 				ColumnSpacing = 8,
 				HorizontalAlignment = HorizontalAlignment.Right,

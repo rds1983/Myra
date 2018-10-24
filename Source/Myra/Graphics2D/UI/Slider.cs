@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
-	public abstract class Slider : SingleItemContainer<Button>
+	public abstract class Slider : SingleItemContainer<ImageButton>
 	{
 		private float _value;
 		private int? _mousePos;
@@ -107,7 +107,7 @@ namespace Myra.Graphics2D.UI
 
 		protected Slider(SliderStyle sliderStyle)
 		{
-			Widget = new Button();
+			Widget = new ImageButton((ImageButtonStyle)null);
 
 			Widget.Down += WidgetOnDown;
 			Widget.Up += WidgetOnUp;
@@ -140,7 +140,7 @@ namespace Myra.Graphics2D.UI
 
 			if (style.KnobStyle != null)
 			{
-				Widget.ApplyButtonStyle(style.KnobStyle);
+				Widget.ApplyImageButtonStyle(style.KnobStyle);
 			}
 		}
 

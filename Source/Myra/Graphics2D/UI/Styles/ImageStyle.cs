@@ -1,11 +1,9 @@
-﻿using Myra.Graphics2D.TextureAtlases;
-
-namespace Myra.Graphics2D.UI.Styles
+﻿namespace Myra.Graphics2D.UI.Styles
 {
 	public class ImageStyle: WidgetStyle
 	{
-		public TextureRegion Image { get; set; }
-		public TextureRegion OverImage { get; set; }
+		public Drawable Image { get; set; }
+		public Drawable OverImage { get; set; }
 
 		public ImageStyle()
 		{

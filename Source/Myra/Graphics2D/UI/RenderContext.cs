@@ -41,44 +41,21 @@ namespace Myra.Graphics2D.UI
 		/// <summary>
 		/// Draws texture region taking into account the context transformations
 		/// </summary>
-		/// <param name="textureRegion"></param>
+		/// <param name="drawable"></param>
 		/// <param name="rectangle"></param>
-		/// <param name="color"></param>
-		public void Draw(TextureRegion textureRegion, Rectangle rectangle, Color color)
+		public void Draw(Drawable drawable, Rectangle rectangle)
 		{
-			textureRegion.Draw(Batch, rectangle, color * Opacity);
+			drawable.Draw(Batch, rectangle, Opacity);
 		}
 
 		/// <summary>
 		/// Draws texture region taking into account the context transformations
 		/// </summary>
-		/// <param name="textureRegion"></param>
+		/// <param name="drawable"></param>
 		/// <param name="pos"></param>
-		/// <param name="color"></param>
-		public void Draw(TextureRegion textureRegion, Vector2 pos, Color color)
+		public void Draw(Drawable drawable, Vector2 pos)
 		{
-			textureRegion.Draw(Batch, pos, color * Opacity);
-		}
-
-		/// <summary>
-		/// Draws texture region taking into account the context transformations
-		/// </summary>
-		/// <param name="textureRegion"></param>
-		/// <param name="rectangle"></param>
-		public void Draw(TextureRegion textureRegion, Rectangle rectangle)
-		{
-			textureRegion.Draw(Batch, rectangle, Color.White * Opacity);
-		}
-
-		/// <summary>
-		/// Draws a hollow rectangle taking into account the context transformations
-		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
-		/// <param name="rectangle">The rectangle to draw</param>
-		/// <param name="color">The color to draw the rectangle in</param>
-		public void DrawRectangle(Rectangle rectangle, Color color)
-		{
-			Batch.DrawRectangle(rectangle, color * Opacity);
+			drawable.Draw(Batch, pos, Opacity);
 		}
 
 		/// <summary>

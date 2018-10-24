@@ -16,12 +16,12 @@ namespace Myra.UIEditor.Plugin.LibGDX
 
 			// Load image containing font & ui spritesheet
 			var colorBuffer = ColorBuffer.FromStream(assetResolver.Open("ui_stylesheet_image.png"));
-			colorBuffer.Process(true);
+			colorBuffer.PremultiplyAlpha();
 
 			var texture = colorBuffer.CreateTexture2D();
 
 			// Load ui text atlas
-			var textureAtlas = TextureRegionAtlas.Load(assetResolver.ReadAsString("ui_stylesheet_atlas.atlas"),
+			var textureAtlas = TextureRegionAtlas.FromGDX(assetResolver.ReadAsString("ui_stylesheet_atlas.atlas"),
 				s => texture);
 
 			// Load ui font(s)

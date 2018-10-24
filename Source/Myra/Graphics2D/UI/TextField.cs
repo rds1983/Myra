@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Myra.Attributes;
 using Myra.Graphics2D.Text;
-using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using Newtonsoft.Json;
@@ -56,6 +55,7 @@ namespace Myra.Graphics2D.UI
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
+		[Obsolete]
 		public SpriteFont MessageFont { get; set; }
 
 		[EditCategory("Appearance")]
@@ -80,23 +80,24 @@ namespace Myra.Graphics2D.UI
 		public Color TextColor { get; set; }
 
 		[EditCategory("Appearance")]
-		public Color DisabledTextColor { get; set; }
+		public Color? DisabledTextColor { get; set; }
 
 		[EditCategory("Appearance")]
-		public Color FocusedTextColor { get; set; }
+		public Color? FocusedTextColor { get; set; }
 
 		[EditCategory("Appearance")]
-		public Color MessageTextColor { get; set; }
-
-		[HiddenInEditor]
-		[JsonIgnore]
-		[EditCategory("Appearance")]
-		public TextureRegion Cursor { get; set; }
+		[Obsolete]
+		public Color? MessageTextColor { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public TextureRegion Selection { get; set; }
+		public Drawable Cursor { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		[EditCategory("Appearance")]
+		public Drawable Selection { get; set; }
 
 		[EditCategory("Behavior")]
 		[DefaultValue(450)]
@@ -424,7 +425,19 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var bounds = ActualBounds;
-			_formattedText.Draw(context.Batch, bounds, TextColor, context.Opacity);
+
+			var textColor = TextColor;
+			if (!Enabled && DisabledTextColor != null)
+			{
+				textColor = DisabledTextColor.Value;
+			} else if (IsFocused && FocusedTextColor != null)
+			{
+				textColor = FocusedTextColor.Value;
+			}
+
+			var centeredBounds = LayoutUtils.Align(bounds.Size, _formattedText.Size, HorizontalAlignment.Left, VerticalAlignment.Center);
+			centeredBounds.Offset(bounds.Location);
+			_formattedText.Draw(context.Batch, centeredBounds, textColor, context.Opacity);
 
 			if (!IsFocused)
 			{
@@ -452,7 +465,7 @@ namespace Myra.Graphics2D.UI
 
 				context.Draw(Cursor, new Rectangle(x,
 					y,
-					Cursor.Bounds.Width,
+					Cursor.Size.X,
 					_formattedText.Font.LineSpacing));
 			}
 		}
@@ -500,7 +513,7 @@ namespace Myra.Graphics2D.UI
 
 			TextColor = style.TextColor;
 			DisabledTextColor = style.DisabledTextColor;
-			MessageTextColor = style.MessageTextColor;
+			FocusedTextColor = style.FocusedTextColor;
 
 			Cursor = style.Cursor;
 			Selection = style.Selection;

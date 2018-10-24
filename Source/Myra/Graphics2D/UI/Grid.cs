@@ -5,7 +5,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using Myra.Attributes;
-using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using Newtonsoft.Json;
@@ -220,11 +219,11 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public TextureRegion SelectionBackground { get; set; }
+		public Drawable SelectionBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public TextureRegion SelectionHoverBackground { get; set; }
+		public Drawable SelectionHoverBackground { get; set; }
 
 		[EditCategory("Behavior")]
 		[DefaultValue(GridSelectionMode.None)]

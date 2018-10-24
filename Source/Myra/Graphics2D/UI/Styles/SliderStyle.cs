@@ -2,16 +2,16 @@
 {
 	public class SliderStyle: WidgetStyle
 	{
-		public ButtonStyle KnobStyle { get; set; }
+		public ImageButtonStyle KnobStyle { get; set; }
 
 		public SliderStyle()
 		{
-			KnobStyle = new ButtonStyle();
+			KnobStyle = new ImageButtonStyle();
 		}
 
 		public SliderStyle(SliderStyle style) : base(style)
 		{
-			KnobStyle = new ButtonStyle(style.KnobStyle);
+			KnobStyle = new ImageButtonStyle(style.KnobStyle);
 		}
 
 		public override WidgetStyle Clone()

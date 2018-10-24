@@ -356,7 +356,6 @@ namespace Myra.Graphics2D.UI
 
 		public void UpdateInput()
 		{
-
 			if (MouseStateGetter != null)
 			{
 				var lastState = MouseState;

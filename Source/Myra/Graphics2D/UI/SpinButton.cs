@@ -8,8 +8,8 @@ namespace Myra.Graphics2D.UI
 	public class SpinButton: GridBased
 	{
 		private readonly TextField _textField;
-		private readonly Button _upButton;
-		private readonly Button _downButton;
+		private readonly ImageButton _upButton;
+		private readonly ImageButton _downButton;
 
 		public bool Nullable { get; set; }
 
@@ -84,7 +84,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		public event EventHandler ValueChangedByUser;
 
-		public SpinButton(SpinButtonStyle style)
+		public SpinButton(SpinButtonStyle style): base(style)
 		{
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
@@ -99,7 +99,7 @@ namespace Myra.Graphics2D.UI
 			{
 				GridSpanY = 2,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
-				VerticalAlignment = VerticalAlignment.Center,
+				VerticalAlignment = VerticalAlignment.Stretch,
 				InputFilter = InputFilter
 			};
 
@@ -108,7 +108,7 @@ namespace Myra.Graphics2D.UI
 
 			Widgets.Add(_textField);
 
-			_upButton = new Button
+			_upButton = new ImageButton
 			{
 				GridPositionX = 1,
 				ContentVerticalAlignment = VerticalAlignment.Center,
@@ -118,7 +118,7 @@ namespace Myra.Graphics2D.UI
 
 			Widgets.Add(_upButton);
 
-			_downButton = new Button
+			_downButton = new ImageButton
 			{
 				GridPositionX = 1,
 				GridPositionY = 1,
@@ -269,12 +269,12 @@ namespace Myra.Graphics2D.UI
 
 			if (style.UpButtonStyle != null)
 			{
-				_upButton.ApplyButtonStyle(style.UpButtonStyle);
+				_upButton.ApplyImageButtonStyle(style.UpButtonStyle);
 			}
 
 			if (style.DownButtonStyle != null)
 			{
-				_downButton.ApplyButtonStyle(style.DownButtonStyle);
+				_downButton.ApplyImageButtonStyle(style.DownButtonStyle);
 			}
 		}
 

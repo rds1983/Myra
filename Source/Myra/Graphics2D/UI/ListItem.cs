@@ -2,7 +2,6 @@
 using System.Text;
 using Microsoft.Xna.Framework;
 using Myra.Attributes;
-using Myra.Graphics2D.TextureAtlases;
 using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
@@ -69,11 +68,7 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public TextureRegion Image { get; set; }
-
-		[HiddenInEditor]
-		[JsonIgnore]
-		public Color ImageColor { get; set; }
+		public Drawable Image { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
@@ -88,7 +83,6 @@ namespace Myra.Graphics2D.UI
 
 		public ListItem()
 		{
-			ImageColor = Microsoft.Xna.Framework.Color.White;
 		}
 
 		public ListItem(string text, Color? color, object tag)

@@ -9,14 +9,12 @@ namespace Myra.Graphics2D.UI.ColorPicker
 		private void BuildUI()
 		{
 			_imageColor = new Image();
-			_imageColor.Color = Color.White;
 			_imageColor.Id = "_imageColor";
 			_imageColor.HeightHint = 50;
 			_imageColor.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
 			_imageColor.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;
 
 			var horizontalSeparator1 = new HorizontalSeparator();
-			horizontalSeparator1.Color = Color.White;
 			horizontalSeparator1.HeightHint = 4;
 			horizontalSeparator1.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
 			horizontalSeparator1.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
@@ -147,7 +145,6 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			grid1.Widgets.Add(_sliderA);
 
 			var verticalSeparator1 = new VerticalSeparator();
-			verticalSeparator1.Color = Color.White;
 			verticalSeparator1.WidthHint = 3;
 			verticalSeparator1.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
 			verticalSeparator1.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;
@@ -289,7 +286,6 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			grid3.Widgets.Add(grid2);
 
 			var horizontalSeparator2 = new HorizontalSeparator();
-			horizontalSeparator2.Color = Color.White;
 			horizontalSeparator2.HeightHint = 4;
 			horizontalSeparator2.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
 			horizontalSeparator2.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
@@ -357,7 +353,6 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			grid4.Widgets.Add(_buttonSaveColor);
 
 			var horizontalSeparator3 = new HorizontalSeparator();
-			horizontalSeparator3.Color = Color.White;
 			horizontalSeparator3.HeightHint = 4;
 			horizontalSeparator3.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
 			horizontalSeparator3.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
@@ -393,10 +388,6 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			XHint = 216;
 			YHint = 220;
 			WidthHint = 450;
-			PaddingLeft = 5;
-			PaddingRight = 5;
-			PaddingTop = 5;
-			PaddingBottom = 5;
 			CanFocus = true;
 			Content = grid5;
 		}

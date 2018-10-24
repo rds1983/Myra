@@ -1,13 +1,11 @@
-﻿using Myra.Graphics2D.TextureAtlases;
-
-namespace Myra.Graphics2D.UI.Styles
+﻿namespace Myra.Graphics2D.UI.Styles
 {
 	public class ScrollPaneStyle : WidgetStyle
 	{
-		public TextureRegion HorizontalScrollBackground { get; set; }
-		public TextureRegion HorizontalScrollKnob { get; set; }
-		public TextureRegion VerticalScrollBackground { get; set; }
-		public TextureRegion VerticalScrollKnob { get; set; }
+		public Drawable HorizontalScrollBackground { get; set; }
+		public Drawable HorizontalScrollKnob { get; set; }
+		public Drawable VerticalScrollBackground { get; set; }
+		public Drawable VerticalScrollKnob { get; set; }
 
 		public ScrollPaneStyle()
 		{

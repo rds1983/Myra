@@ -1,11 +1,9 @@
-﻿using Myra.Graphics2D.TextureAtlases;
-
-namespace Myra.Graphics2D.UI.Styles
+﻿namespace Myra.Graphics2D.UI.Styles
 {
 	public class GridStyle : WidgetStyle
 	{
-		public TextureRegion SelectionBackground { get; set; }
-		public TextureRegion SelectionHoverBackground { get; set; }
+		public Drawable SelectionBackground { get; set; }
+		public Drawable SelectionHoverBackground { get; set; }
 
 		public GridStyle()
 		{
