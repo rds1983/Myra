@@ -19,7 +19,7 @@ namespace Myra.Graphics2D.UI
 		private bool _cursorOn = true;
 		private readonly FormattedText _formattedText = new FormattedText();
 		private int _cursorIndex;
-		private bool _wrap = true;
+		private bool _wrap = false;
 
 		[EditCategory("Appearance")]
 		public int VerticalSpacing
@@ -59,7 +59,7 @@ namespace Myra.Graphics2D.UI
 		public SpriteFont MessageFont { get; set; }
 
 		[EditCategory("Appearance")]
-		[DefaultValue(true)]
+		[DefaultValue(false)]
 		public bool Wrap
 		{
 			get { return _wrap; }
