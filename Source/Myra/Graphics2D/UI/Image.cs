@@ -7,67 +7,81 @@ namespace Myra.Graphics2D.UI
 {
 	public class Image : Widget
 	{
-		private Drawable _drawable;
+		private IRenderable _image;
+		private Color _color = Color.White;
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public Drawable Drawable
+		public IRenderable Renderable
 		{
 			get
 			{
-				return _drawable;
+				return _image;
 			}
 
 			set
 			{
-				if (value == _drawable)
+				if (value == _image)
 				{
 					return;
 				}
 
-				_drawable = value;
+				_image = value;
 				InvalidateMeasure();
 			}
 		}
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		[Obsolete("Property is obsolete and will be removed in future. Use Drawable.Color")]
-		public Color Color
+		[Obsolete("Use Renderable")]
+		public IRenderable TextureRegion
 		{
 			get
 			{
-				return _drawable.Color;
+				return Renderable;
 			}
 
 			set
 			{
-				_drawable.Color = value;
+				Renderable = value;
+			}
+		}
+
+		public Color Color
+		{
+			get
+			{
+				return _color;
+			}
+
+			set
+			{
+				_color = value;
 			}
 		}
 
 		protected override Point InternalMeasure(Point availableSize)
 		{
-			if (Drawable == null)
+			if (Renderable == null)
 			{
 				return Point.Zero;
 			}
 
-			return Drawable.Size;
+			return Renderable.Size;
 		}
 
 		public override void InternalRender(RenderContext context)
 		{
 			base.InternalRender(context);
 
-			if (Drawable != null)
+			if (Renderable != null)
 			{
 				var bounds = ActualBounds;
-				context.Draw(Drawable, bounds);
+				context.Draw(Renderable, bounds, Color);
 			}
 		}
 
-		public void UpdateImageSize(Drawable image)
+		public void UpdateImageSize(IRenderable image)
 		{
 			if (image == null)
 			{

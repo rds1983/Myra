@@ -7,6 +7,7 @@ namespace Myra.Graphics2D.UI.Styles
 	{
 		public Color TextColor { get; set; }
 		public Color? DisabledTextColor { get; set; }
+		public Color? OverTextColor { get; set; }
 		public Color? PressedTextColor { get; set; }
 		public SpriteFont Font { get; set; }
 
@@ -18,6 +19,7 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			TextColor = style.TextColor;
 			DisabledTextColor = style.DisabledTextColor;
+			OverTextColor = style.OverTextColor;
 			PressedTextColor = style.PressedTextColor;
 			Font = style.Font;
 		}

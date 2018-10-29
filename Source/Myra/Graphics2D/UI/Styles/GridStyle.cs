@@ -2,8 +2,8 @@
 {
 	public class GridStyle : WidgetStyle
 	{
-		public Drawable SelectionBackground { get; set; }
-		public Drawable SelectionHoverBackground { get; set; }
+		public IRenderable SelectionBackground { get; set; }
+		public IRenderable SelectionHoverBackground { get; set; }
 
 		public GridStyle()
 		{

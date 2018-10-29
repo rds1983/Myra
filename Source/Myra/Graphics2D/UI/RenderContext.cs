@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Graphics2D.TextureAtlases;
 using System;
 
 namespace Myra.Graphics2D.UI
@@ -41,21 +40,13 @@ namespace Myra.Graphics2D.UI
 		/// <summary>
 		/// Draws texture region taking into account the context transformations
 		/// </summary>
-		/// <param name="drawable"></param>
+		/// <param name="renderable"></param>
 		/// <param name="rectangle"></param>
-		public void Draw(Drawable drawable, Rectangle rectangle)
+		/// <param name="color"></param>
+		public void Draw(IRenderable renderable, Rectangle rectangle, Color? color = null)
 		{
-			drawable.Draw(Batch, rectangle, Opacity);
-		}
-
-		/// <summary>
-		/// Draws texture region taking into account the context transformations
-		/// </summary>
-		/// <param name="drawable"></param>
-		/// <param name="pos"></param>
-		public void Draw(Drawable drawable, Vector2 pos)
-		{
-			drawable.Draw(Batch, pos, Opacity);
+			var c = color != null ? color.Value : Color.White;
+			renderable.Draw(Batch, rectangle, c * Opacity);
 		}
 
 		/// <summary>

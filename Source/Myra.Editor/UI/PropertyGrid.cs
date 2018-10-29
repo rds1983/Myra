@@ -118,7 +118,7 @@ namespace Myra.Editor.UI
 				}
 			}
 
-			public SubGrid(PropertyGrid parent, object value, string header, string category, Record parentProperty): base(null)
+			public SubGrid(PropertyGrid parent, object value, string header, string category, Record parentProperty) : base(null)
 			{
 				ColumnSpacing = 4;
 				RowSpacing = 4;
@@ -190,7 +190,7 @@ namespace Myra.Editor.UI
 					var headerBounds = HeaderBounds;
 					if (headerBounds.Contains(Desktop.MousePosition))
 					{
-						_propertyGrid.PropertyGridStyle.SelectionHoverBackground.Draw(context.Batch, headerBounds);
+						context.Draw(_propertyGrid.PropertyGridStyle.SelectionHoverBackground, headerBounds);
 					}
 				}
 
@@ -373,7 +373,7 @@ namespace Myra.Editor.UI
 
 					var image = new Image
 					{
-						Drawable = new Drawable(DefaultAssets.WhiteRegion),
+						Renderable = DefaultAssets.WhiteRegion,
 						VerticalAlignment = VerticalAlignment.Center,
 						WidthHint = 32,
 						HeightHint = 16
@@ -398,7 +398,7 @@ namespace Myra.Editor.UI
 						{
 							var dlg = new ColorPickerDialog()
 							{
-								Color = image.Drawable.Color
+								Color = image.Color
 							};
 
 							dlg.Closed += (s, a) =>
@@ -408,7 +408,7 @@ namespace Myra.Editor.UI
 									return;
 								}
 
-								image.Drawable.Color = dlg.Color;
+								image.Color = dlg.Color;
 								record.SetValue(_object, dlg.Color);
 
 								FireChanged(propertyType.Name);
@@ -424,7 +424,7 @@ namespace Myra.Editor.UI
 
 					valueWidget = subGrid;
 				}
-				else if (propertyType.IsAssignableFrom(typeof(Drawable)))
+				else if (propertyType.IsAssignableFrom(typeof(IRenderable)))
 				{
 				}
 				else if (propertyType.IsEnum)
@@ -647,7 +647,7 @@ namespace Myra.Editor.UI
 						}
 					}
 				}
-				else if (!(value is SpriteFont) && !(value is Drawable))
+				else if (!(value is SpriteFont) && !(value is IRenderable))
 				{
 					// Subgrid
 					if (value != null)

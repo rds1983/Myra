@@ -56,7 +56,8 @@
     <Compile Include="Cyotek.Drawing.BitmapFont\Padding.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\Page.cs" />
     <Compile Include="Graphics2D\ColorBuffer.cs" />
-    <Compile Include="Graphics2D\Drawable.cs" />
+    <Compile Include="Graphics2D\TextureAtlases\ColoredRegion.cs" />
+    <Compile Include="Graphics2D\ISprite.cs" />
     <Compile Include="Graphics2D\SpriteBatchBeginParams.cs" />
     <Compile Include="Graphics2D\UI\ColorPicker\ColorPickerDialog.cs" />
     <Compile Include="Graphics2D\UI\ColorPicker\ColorPickerDialog.Generated.cs" />

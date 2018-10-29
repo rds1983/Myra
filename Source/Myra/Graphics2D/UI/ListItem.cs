@@ -68,7 +68,7 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public Drawable Image { get; set; }
+		public IRenderable Image { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]

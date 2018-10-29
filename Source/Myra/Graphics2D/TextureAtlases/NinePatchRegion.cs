@@ -123,9 +123,8 @@ namespace Myra.Graphics2D.TextureAtlases
 			}
 		}
 
-		public override void Draw(SpriteBatch batch, Rectangle dest, Color? color = null)
+		public override void Draw(SpriteBatch batch, Rectangle dest, Color color)
 		{
-			var c = color ?? Color.White;
 			var y = dest.Y;
 
 			var centerWidth = dest.Width - _info.Left - _info.Right;
@@ -138,7 +137,7 @@ namespace Myra.Graphics2D.TextureAtlases
 						y,
 						_info.Left,
 						_info.Top),
-					c);
+					color);
 			}
 
 			if (_topCenter != null)
@@ -148,7 +147,7 @@ namespace Myra.Graphics2D.TextureAtlases
 						y,
 						centerWidth,
 						_info.Top),
-					c);
+					color);
 			}
 
 			if (_topRight != null)
@@ -158,7 +157,7 @@ namespace Myra.Graphics2D.TextureAtlases
 						y,
 						_info.Right,
 						_info.Top),
-					c);
+					color);
 			}
 
 			y += _info.Top;
@@ -169,7 +168,7 @@ namespace Myra.Graphics2D.TextureAtlases
 						y,
 						_info.Left,
 						centerHeight),
-					c);
+					color);
 			}
 
 			if (_center != null)
@@ -179,7 +178,7 @@ namespace Myra.Graphics2D.TextureAtlases
 						y,
 						centerWidth,
 						centerHeight),
-					c);
+					color);
 			}
 
 			if (_centerRight != null)
@@ -189,7 +188,7 @@ namespace Myra.Graphics2D.TextureAtlases
 						y,
 						_info.Right,
 						centerHeight),
-					c);
+					color);
 			}
 
 			y += centerHeight;
@@ -200,7 +199,7 @@ namespace Myra.Graphics2D.TextureAtlases
 						y,
 						_info.Left,
 						_info.Bottom),
-					c);
+					color);
 			}
 
 			if (_bottomCenter != null)
@@ -210,7 +209,7 @@ namespace Myra.Graphics2D.TextureAtlases
 						y,
 						centerWidth,
 						_info.Bottom),
-					c);
+					color);
 			}
 
 			if (_bottomRight != null)
@@ -220,7 +219,7 @@ namespace Myra.Graphics2D.TextureAtlases
 						y,
 						_info.Right,
 						_info.Bottom),
-					c);
+					color);
 			}
 		}
 	}

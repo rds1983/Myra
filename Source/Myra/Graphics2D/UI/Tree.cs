@@ -13,9 +13,9 @@ namespace Myra.Graphics2D.UI
 		private TreeNode _selectedRow;
 		private bool _rowInfosDirty = true;
 
-		public Drawable RowSelectionBackgroundWithoutFocus { get; set; }
-		public Drawable RowSelectionBackground { get; set; }
-		public Drawable RowHoverBackground { get; set; }
+		public IRenderable RowSelectionBackgroundWithoutFocus { get; set; }
+		public IRenderable RowSelectionBackground { get; set; }
+		public IRenderable RowHoverBackground { get; set; }
 
 		public List<TreeNode> AllNodes
 		{

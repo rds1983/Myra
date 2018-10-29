@@ -41,22 +41,22 @@ namespace Myra.Graphics2D.UI
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable HorizontalScrollBackground { get; set; }
+		public IRenderable HorizontalScrollBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable HorizontalScrollKnob { get; set; }
+		public IRenderable HorizontalScrollKnob { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable VerticalScrollBackground { get; set; }
+		public IRenderable VerticalScrollBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable VerticalScrollKnob { get; set; }
+		public IRenderable VerticalScrollKnob { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]

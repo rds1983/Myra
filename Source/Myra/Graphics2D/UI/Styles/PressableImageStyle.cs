@@ -2,7 +2,7 @@
 {
 	public class PressableImageStyle: ImageStyle
 	{
-		public Drawable PressedImage { get; set; }
+		public IRenderable PressedImage { get; set; }
 
 		public PressableImageStyle()
 		{

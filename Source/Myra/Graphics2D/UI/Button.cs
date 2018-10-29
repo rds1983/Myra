@@ -10,7 +10,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class Button : ButtonBase<Grid>
 	{
-		private Drawable _textureRegion, _overTextureRegion, _pressedTextureRegion;
+		private IRenderable _textureRegion, _overTextureRegion, _pressedTextureRegion;
 		private readonly Image _image;
 		private readonly TextBlock _textBlock;
 
@@ -41,7 +41,7 @@ namespace Myra.Graphics2D.UI
 		[JsonIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
-		public Drawable Image
+		public IRenderable Image
 		{
 			get { return _textureRegion; }
 
@@ -53,14 +53,14 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_textureRegion = value;
-				UpdateDrawable();
+				UpdateRenderable();
 			}
 		}
 
 		[JsonIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
-		public Drawable OverImage
+		public IRenderable OverImage
 		{
 			get { return _overTextureRegion; }
 
@@ -72,14 +72,14 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_overTextureRegion = value;
-				UpdateDrawable();
+				UpdateRenderable();
 			}
 		}
 
 		[JsonIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
-		public Drawable PressedImage
+		public IRenderable PressedImage
 		{
 			get { return _pressedTextureRegion; }
 
@@ -91,7 +91,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_pressedTextureRegion = value;
-				UpdateDrawable();
+				UpdateRenderable();
 			}
 		}
 
@@ -187,10 +187,10 @@ namespace Myra.Graphics2D.UI
 				_image.UpdateImageSize(imageStyle.PressedImage);
 			}
 
-			UpdateDrawable();
+			UpdateRenderable();
 		}
 
-		private void UpdateDrawable()
+		private void UpdateRenderable()
 		{
 			var image = Image;
 			if (IsPressed && PressedImage != null)
@@ -202,28 +202,28 @@ namespace Myra.Graphics2D.UI
 				image = OverImage;
 			}
 
-			_image.Drawable = image;
+			_image.Renderable = image;
 		}
 
 		public override void OnMouseEntered(Point position)
 		{
 			base.OnMouseEntered(position);
 
-			UpdateDrawable();
+			UpdateRenderable();
 		}
 
 		public override void OnMouseLeft()
 		{
 			base.OnMouseLeft();
 
-			UpdateDrawable();
+			UpdateRenderable();
 		}
 
 		protected override void FireUp()
 		{
 			base.FireUp();
 
-			UpdateDrawable();
+			UpdateRenderable();
 
 			_textBlock.IsPressed = IsPressed;
 		}
@@ -232,7 +232,7 @@ namespace Myra.Graphics2D.UI
 		{
 			base.FireDown();
 
-			UpdateDrawable();
+			UpdateRenderable();
 
 			_textBlock.IsPressed = IsPressed;
 		}

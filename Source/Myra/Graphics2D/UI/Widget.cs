@@ -383,52 +383,52 @@ namespace Myra.Graphics2D.UI
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable Background { get; set; }
+		public IRenderable Background { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable OverBackground { get; set; }
+		public IRenderable OverBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable DisabledBackground { get; set; }
+		public IRenderable DisabledBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable FocusedBackground { get; set; }
+		public IRenderable FocusedBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable DisabledOverBackground { get; set; }
+		public IRenderable DisabledOverBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable OverrideBackground { get; set; }
+		public IRenderable OverrideBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable Border { get; set; }
+		public IRenderable Border { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable OverBorder { get; set; }
+		public IRenderable OverBorder { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable DisabledBorder { get; set; }
+		public IRenderable DisabledBorder { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable FocusedBorder { get; set; }
+		public IRenderable FocusedBorder { get; set; }
 
 		[EditCategory("Appearance")]
 		public bool ClipToBounds { get; set; }
@@ -585,7 +585,7 @@ namespace Myra.Graphics2D.UI
 			Enabled = true;
 		}
 
-		public virtual Drawable GetCurrentBackground()
+		public virtual IRenderable GetCurrentBackground()
 		{
 			var result = Background;
 
@@ -612,7 +612,7 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public virtual Drawable GetCurrentBorder()
+		public virtual IRenderable GetCurrentBorder()
 		{
 			var result = Border;
 			if (!Enabled && DisabledBorder != null)

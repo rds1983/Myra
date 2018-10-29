@@ -97,10 +97,12 @@
 			"background": "blue"
 		},
 		"comboBoxItem": {
+			"overBackground": "white",
 			"pressedBackground": "button-down",
 			"label": {
 				"font": "commodore-64",
 				"textColor": "white",
+				"overTextColor": "blue",
 				"pressedTextColor": "blue"
 			},
 			"padding": {

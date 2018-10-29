@@ -219,11 +219,11 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public Drawable SelectionBackground { get; set; }
+		public IRenderable SelectionBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public Drawable SelectionHoverBackground { get; set; }
+		public IRenderable SelectionHoverBackground { get; set; }
 
 		[EditCategory("Behavior")]
 		[DefaultValue(GridSelectionMode.None)]

@@ -1,0 +1,61 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+
+namespace Myra.Graphics2D.TextureAtlases
+{
+	public class ColoredRegion: IRenderable
+	{
+		private Color _color = Color.White;
+
+		public TextureRegion TextureRegion { get; set; }
+
+		public Point Size
+		{
+			get
+			{
+				return TextureRegion.Bounds.Size;
+			}
+		}
+
+		public Color Color
+		{
+			get
+			{
+				return _color;
+			}
+
+			set
+			{
+				_color = value;
+			}
+		}
+
+		public ColoredRegion(TextureRegion textureRegion, Color color)
+		{
+			if (textureRegion == null)
+			{
+				throw new ArgumentNullException("textureRegion");
+			}
+
+			TextureRegion = textureRegion;
+			Color = color;
+		}
+
+		public void Draw(SpriteBatch batch, Rectangle dest, Color color)
+		{
+			if (color == Color.White)
+			{
+				TextureRegion.Draw(batch, dest, Color);
+			} else
+			{
+				var c = new Color((int)(Color.R * color.R / 255.0f),
+					(int)(Color.G * color.G / 255.0f),
+					(int)(Color.B * color.B / 255.0f),
+					(int)(Color.A * color.A / 255.0f));
+
+				TextureRegion.Draw(batch, dest, c);
+			}
+		}
+	}
+}

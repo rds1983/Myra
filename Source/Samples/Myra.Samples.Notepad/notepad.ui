@@ -3,9 +3,9 @@
   "$type": "Myra.Graphics2D.UI.Project, Myra",
   "ExportOptions": {
     "$type": "Myra.Graphics2D.UI.ExportOptions, Myra",
-    "Namespace": "Myra.Samples.NotepadSample",
+    "Namespace": "Myra.Samples.Notepad",
     "Class": "Notepad",
-    "OutputPath": "D:\\Projects\\Hebron\\Myra\\Source\\Samples\\Myra.Samples.NotepadSample"
+    "OutputPath": "D:\\Projects\\Hebron\\Myra\\Source\\Samples\\Myra.Samples.Notepad"
   },
   "Root": {
     "$id": "2",
@@ -117,6 +117,7 @@
           "$id": "18",
           "$type": "Myra.Graphics2D.UI.TextField, Myra",
           "Text": "",
+          "Wrap": true,
           "Multiline": true,
           "Id": "textArea",
           "HorizontalAlignment": 3,

@@ -5,15 +5,15 @@
 		public int? WidthHint { get; set; }
 		public int? HeightHint { get; set; }
 
-		public Drawable Background { get; set; }
-		public Drawable OverBackground { get; set; }
-		public Drawable DisabledBackground { get; set; }
-		public Drawable FocusedBackground { get; set; }
+		public IRenderable Background { get; set; }
+		public IRenderable OverBackground { get; set; }
+		public IRenderable DisabledBackground { get; set; }
+		public IRenderable FocusedBackground { get; set; }
 
-		public Drawable Border { get; set; }
-		public Drawable OverBorder { get; set; }
-		public Drawable DisabledBorder { get; set; }
-		public Drawable FocusedBorder { get; set; }
+		public IRenderable Border { get; set; }
+		public IRenderable OverBorder { get; set; }
+		public IRenderable DisabledBorder { get; set; }
+		public IRenderable FocusedBorder { get; set; }
 
 		public int? PaddingLeft { get; set; }
 		public int? PaddingRight { get; set; }

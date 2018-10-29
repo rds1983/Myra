@@ -2,7 +2,7 @@
 {
 	public class SeparatorStyle: WidgetStyle
 	{
-		public Drawable Image { get; set; }
+		public IRenderable Image { get; set; }
 		public int Thickness { get; set; }
 
 		public SeparatorStyle()

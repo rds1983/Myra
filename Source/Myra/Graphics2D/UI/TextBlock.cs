@@ -75,6 +75,10 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
+		public Color? OverTextColor { get; set; }
+
+		[HiddenInEditor]
+		[JsonIgnore]
 		public Color? PressedTextColor { get; set; }
 
 		[HiddenInEditor]
@@ -128,6 +132,9 @@ namespace Myra.Graphics2D.UI
 			} else if (IsPressed && PressedTextColor != null)
 			{
 				color = PressedTextColor.Value;
+			} else if (IsMouseOver && OverTextColor != null)
+			{
+				color = OverTextColor.Value;
 			}
 
 			_formattedText.Draw(context.Batch, bounds, color, context.Opacity);
@@ -176,6 +183,7 @@ namespace Myra.Graphics2D.UI
 
 			TextColor = style.TextColor;
 			DisabledTextColor = style.DisabledTextColor;
+			OverTextColor = style.OverTextColor;
 			PressedTextColor = style.PressedTextColor;
 			Font = style.Font;
 		}

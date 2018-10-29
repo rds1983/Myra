@@ -23,22 +23,22 @@ namespace Myra.Graphics2D.TextureAtlases
 			get { return Regions[name]; }
 		}
 
-		public TextureRegionAtlas(Dictionary<string, TextureRegion> drawables)
+		public TextureRegionAtlas(Dictionary<string, TextureRegion> regions)
 		{
-			if (drawables == null)
+			if (regions == null)
 			{
-				throw new ArgumentNullException("drawables");
+				throw new ArgumentNullException("regions");
 			}
 
-			_regions = drawables;
+			_regions = regions;
 		}
 
-		public TextureRegion EnsureDrawable(string id)
+		public TextureRegion EnsureRegion(string id)
 		{
 			TextureRegion result;
 			if (!_regions.TryGetValue(id, out result))
 			{
-				throw new ArgumentNullException(string.Format("Could not resolve drawable '{0}'", id));
+				throw new ArgumentNullException(string.Format("Could not resolve region '{0}'", id));
 			}
 
 			return result;

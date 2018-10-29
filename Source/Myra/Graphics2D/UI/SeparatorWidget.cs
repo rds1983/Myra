@@ -20,7 +20,7 @@ namespace Myra.Graphics2D.UI
 		{
 			ApplyWidgetStyle(style);
 
-			Drawable = style.Image;
+			Renderable = style.Image;
 
 			if (_orientation == Orientation.Horizontal)
 			{

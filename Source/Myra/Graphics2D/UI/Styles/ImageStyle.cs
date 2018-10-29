@@ -2,8 +2,8 @@
 {
 	public class ImageStyle: WidgetStyle
 	{
-		public Drawable Image { get; set; }
-		public Drawable OverImage { get; set; }
+		public IRenderable Image { get; set; }
+		public IRenderable OverImage { get; set; }
 
 		public ImageStyle()
 		{

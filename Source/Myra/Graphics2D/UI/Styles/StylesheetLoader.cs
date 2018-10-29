@@ -57,6 +57,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string TextColorName = "textColor";
 		public const string DisabledTextColorName = "disabledTextColor";
 		public const string FocusedTextColorName = "focusedTextColor";
+		public const string OverTextColorName = "overTextColor";
 		public const string PressedTextColorName = "pressedTextColor";
 		public const string HorizontalScrollName = "horizontalScroll";
 		public const string HorizontalScrollKnobName = "horizontalScrollKnob";
@@ -130,19 +131,15 @@ namespace Myra.Graphics2D.UI.Styles
 			_textureLoader = textureLoader;
 		}
 
-		private Drawable GetDrawable(string id)
+		private IRenderable GetDrawable(string id)
 		{
-			Tuple<string, Color> drawableFromTable;
-			if (_drawables.TryGetValue(id, out drawableFromTable))
+			Tuple<string, Color> IRenderableFromTable;
+			if (_drawables.TryGetValue(id, out IRenderableFromTable))
 			{
-				return new Drawable(_textureLoader(drawableFromTable.Item1))
-				{
-					Color = drawableFromTable.Item2
-				};
+				return new ColoredRegion(_textureLoader(IRenderableFromTable.Item1), IRenderableFromTable.Item2);
 			}
 
-
-			return new Drawable(_textureLoader(id));
+			return _textureLoader(id);
 		}
 
 		private void ParseDrawables(JObject drawables)
@@ -155,8 +152,8 @@ namespace Myra.Graphics2D.UI.Styles
 				var name = props.Value["name"].ToString();
 				var color = props.Value["color"].ToString();
 
-				var drawableEntry = new Tuple<string, Color>(name, GetColor(color));
-				_drawables.Add(props.Name, drawableEntry);
+				var IRenderableEntry = new Tuple<string, Color>(name, GetColor(color));
+				_drawables.Add(props.Name, IRenderableEntry);
 			}
 		}
 
@@ -332,6 +329,11 @@ namespace Myra.Graphics2D.UI.Styles
 			if (source.GetStyle(DisabledTextColorName, out name))
 			{
 				result.DisabledTextColor = GetColor(name);
+			}
+
+			if (source.GetStyle(OverTextColorName, out name))
+			{
+				result.OverTextColor = GetColor(name);
 			}
 
 			if (source.GetStyle(PressedTextColorName, out name))

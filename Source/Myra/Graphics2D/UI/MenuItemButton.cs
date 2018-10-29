@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Newtonsoft.Json;
+using System;
 
 namespace Myra.Graphics2D.UI
 {
@@ -45,15 +46,25 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public Drawable TextureRegion
+		public IRenderable Image
 		{
-			get { return _image.Drawable; }
-			set { _image.Drawable = value; }
+			get { return _image.Renderable; }
+			set { _image.Renderable = value; }
 		}
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public Drawable OpenBackground { get; set; }
+		[Obsolete("Use Image")]
+		public IRenderable TextureRegion
+		{
+			get { return Image; }
+			set { Image = value; }
+		}
+
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public IRenderable OpenBackground { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]

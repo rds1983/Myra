@@ -8,12 +8,12 @@ namespace Myra.Graphics2D.UI
 {
 	public class ImageButton: ButtonBase<Image>
 	{
-		private Drawable _image, _overImage, _pressedImage;
+		private IRenderable _image, _overImage, _pressedImage;
 
 		[JsonIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
-		public Drawable Image
+		public IRenderable Image
 		{
 			get
 			{
@@ -35,7 +35,7 @@ namespace Myra.Graphics2D.UI
 		[JsonIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
-		public Drawable OverImage
+		public IRenderable OverImage
 		{
 			get
 			{
@@ -57,7 +57,7 @@ namespace Myra.Graphics2D.UI
 		[JsonIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
-		public Drawable PressedImage
+		public IRenderable PressedImage
 		{
 			get
 			{
@@ -155,7 +155,7 @@ namespace Myra.Graphics2D.UI
 				image = OverImage;
 			}
 
-			Widget.Drawable = image;
+			Widget.Renderable = image;
 		}
 
 		public override void OnMouseEntered(Point position)

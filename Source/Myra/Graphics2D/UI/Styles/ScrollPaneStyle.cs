@@ -2,10 +2,10 @@
 {
 	public class ScrollPaneStyle : WidgetStyle
 	{
-		public Drawable HorizontalScrollBackground { get; set; }
-		public Drawable HorizontalScrollKnob { get; set; }
-		public Drawable VerticalScrollBackground { get; set; }
-		public Drawable VerticalScrollKnob { get; set; }
+		public IRenderable HorizontalScrollBackground { get; set; }
+		public IRenderable HorizontalScrollKnob { get; set; }
+		public IRenderable VerticalScrollBackground { get; set; }
+		public IRenderable VerticalScrollKnob { get; set; }
 
 		public ScrollPaneStyle()
 		{

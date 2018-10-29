@@ -2,7 +2,7 @@
 {
 	public class ProgressBarStyle: GridStyle
 	{
-		public Drawable Filled { get; set; }
+		public IRenderable Filled { get; set; }
 
 		public ProgressBarStyle()
 		{

@@ -214,27 +214,26 @@ namespace Myra.Graphics2D.TextureAtlases
 				}
 			}
 
-			var drawables = new Dictionary<string, TextureRegion>();
-
+			var regions = new Dictionary<string, TextureRegion>();
 			foreach (var sd in spriteDatas)
 			{
 				var texture = sd.Value.PageData.Texture;
 				var bounds = sd.Value.SourceRectangle;
 
-				TextureRegion drawable;
+				TextureRegion IRenderable;
 				if (!sd.Value.Split.HasValue)
 				{
-					drawable = new TextureRegion(texture, bounds);
+					IRenderable = new TextureRegion(texture, bounds);
 				}
 				else
 				{
-					drawable = new NinePatchRegion(texture, bounds, sd.Value.Split.Value);
+					IRenderable = new NinePatchRegion(texture, bounds, sd.Value.Split.Value);
 				}
 
-				drawables[sd.Key] = drawable;
+				regions[sd.Key] = IRenderable;
 			}
 
-			return new TextureRegionAtlas(drawables);
+			return new TextureRegionAtlas(regions);
 		}
 
 	}

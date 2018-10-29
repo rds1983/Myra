@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
-using Myra.Graphics2D;
 using Myra.Graphics2D.UI;
 
 namespace Myra.Editor.UI.File
@@ -125,9 +124,9 @@ namespace Myra.Editor.UI.File
 
 			_listBoxPlaces.Background = null;
 
-			_buttonBack.Image = new Drawable(DefaultAssets.UISpritesheet["icon-arrow-left"]);
-			_buttonForward.Image = new Drawable(DefaultAssets.UISpritesheet["icon-arrow-right"]);
-			_buttonParent.Image = new Drawable(DefaultAssets.UISpritesheet["icon-folder-parent"]);
+			_buttonBack.Image = DefaultAssets.UISpritesheet["icon-arrow-left"];
+			_buttonForward.Image = DefaultAssets.UISpritesheet["icon-arrow-right"];
+			_buttonParent.Image = DefaultAssets.UISpritesheet["icon-folder-parent"];
 
 			var homePath = (Environment.OSVersion.Platform == PlatformID.Unix ||
 							Environment.OSVersion.Platform == PlatformID.MacOSX)
@@ -155,7 +154,7 @@ namespace Myra.Editor.UI.File
 
 				_listBoxPlaces.Items.Add(new ListItem(Path.GetFileName(p), null, p)
 				{
-					Image = new Drawable(iconFolder),
+					Image = iconFolder,
 					ImageTextSpacing = ImageTextSpacing
 				});
 			}
@@ -189,7 +188,7 @@ namespace Myra.Editor.UI.File
 
 				_listBoxPlaces.Items.Add(new ListItem(s, null, d.RootDirectory.Name)
 				{
-					Image = new Drawable(iconDrive),
+					Image = iconDrive,
 					ImageTextSpacing = ImageTextSpacing
 				});
 			}
@@ -378,7 +377,7 @@ namespace Myra.Editor.UI.File
 
 				var image = new Image
 				{
-					Drawable = new Drawable(iconFolder),
+					Renderable = iconFolder,
 					GridPositionY = gridY,
 					HorizontalAlignment = HorizontalAlignment.Center,
 					VerticalAlignment = VerticalAlignment.Center

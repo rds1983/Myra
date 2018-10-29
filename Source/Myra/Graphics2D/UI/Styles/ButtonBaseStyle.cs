@@ -2,7 +2,7 @@
 {
 	public class ButtonBaseStyle: WidgetStyle
 	{
-		public Drawable PressedBackground { get; set; }
+		public IRenderable PressedBackground { get; set; }
 
 		public ButtonBaseStyle()
 		{

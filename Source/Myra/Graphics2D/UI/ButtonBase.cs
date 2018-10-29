@@ -28,7 +28,7 @@ namespace Myra.Graphics2D.UI
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public virtual Drawable PressedBackground { get; set; }
+		public virtual IRenderable PressedBackground { get; set; }
 
 		[EditCategory("Behavior")]
 		public virtual bool Toggleable { get; set; }
@@ -150,7 +150,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override Drawable GetCurrentBackground()
+		public override IRenderable GetCurrentBackground()
 		{
 			var isOver = IsMouseOver;
 			var result = Background;

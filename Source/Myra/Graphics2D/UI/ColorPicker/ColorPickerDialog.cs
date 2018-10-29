@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Myra.Graphics2D.TextureAtlases;
 using Myra.Utility;
 using System;
 
@@ -29,17 +30,17 @@ namespace Myra.Graphics2D.UI.ColorPicker
 		{
 			get
 			{
-				return _imageColor.Drawable.Color;
+				return _imageColor.Color;
 			}
 
 			set
 			{
-				if (value == _imageColor.Drawable.Color)
+				if (value == _imageColor.Color)
 				{
 					return;
 				}
 
-				_imageColor.Drawable.Color = value;
+				_imageColor.Color= value;
 
 				OnColorChanged();
 			}
@@ -126,7 +127,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 						VerticalAlignment = VerticalAlignment.Stretch,
 						GridPositionX = col,
 						GridPositionY = row,
-						Drawable = new Drawable(DefaultAssets.WhiteRegion),
+						Renderable = DefaultAssets.WhiteRegion,
 						PaddingLeft = 8,
 						PaddingRight = 8,
 						PaddingTop = 8,
@@ -177,7 +178,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			};
 
 			// Set default value
-			_imageColor.Drawable = new Drawable(DefaultAssets.WhiteRegion);
+			_imageColor.Renderable = DefaultAssets.WhiteRegion;
 			Color = Color.White;
 
 			OnColorChanged();
@@ -205,12 +206,12 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 		private Color GetUserColor(int index)
 		{
-			return ((Image)_gridUserColors.Widgets[index]).Drawable.Color;
+			return ((Image)_gridUserColors.Widgets[index]).Color;
 		}
 
 		private void SetUserColor(int index, Color color)
 		{
-			((Image)_gridUserColors.Widgets[index]).Drawable.Color = color;
+			((Image)_gridUserColors.Widgets[index]).Color = color;
 		}
 
 		private void UpdateEnabled()

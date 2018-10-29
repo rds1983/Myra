@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Myra.Graphics2D.TextureAtlases
 {
-	public class TextureRegion
+	public class TextureRegion: IRenderable
 	{
 		private readonly Texture2D _texture;
 		private readonly Rectangle _bounds;
@@ -17,6 +17,14 @@ namespace Myra.Graphics2D.TextureAtlases
 		public Rectangle Bounds
 		{
 			get { return _bounds; }
+		}
+
+		public Point Size
+		{
+			get
+			{
+				return Bounds.Size;
+			}
 		}
 
 		/// <summary>
@@ -50,20 +58,12 @@ namespace Myra.Graphics2D.TextureAtlases
 			_bounds = bounds;
 		}
 
-		public virtual void Draw(SpriteBatch batch, Rectangle dest, Color? color = null)
+		public virtual void Draw(SpriteBatch batch, Rectangle dest, Color color)
 		{
 			batch.Draw(Texture,
 				dest,
 				Bounds,
-				color ?? Color.White);
-		}
-
-		public virtual void Draw(SpriteBatch batch, Vector2 dest, Color? color = null)
-		{
-			batch.Draw(Texture,
-				dest,
-				Bounds,
-				color ?? Color.White);
+				color);
 		}
 	}
 }

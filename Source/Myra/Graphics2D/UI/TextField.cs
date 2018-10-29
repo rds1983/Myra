@@ -92,12 +92,12 @@ namespace Myra.Graphics2D.UI
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable Cursor { get; set; }
+		public IRenderable Cursor { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public Drawable Selection { get; set; }
+		public IRenderable Selection { get; set; }
 
 		[EditCategory("Behavior")]
 		[DefaultValue(450)]
