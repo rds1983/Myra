@@ -51,11 +51,13 @@
     <Compile Include="Cyotek.Drawing.BitmapFont\Padding.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\Page.cs" />
     <Compile Include="Graphics2D\ColorBuffer.cs" />
+    <Compile Include="Graphics2D\IRenderable.cs" />
     <Compile Include="Graphics2D\SpriteBatchBeginParams.cs" />
     <Compile Include="Graphics2D\StbSharp\CRuntime.cs" />
     <Compile Include="Graphics2D\StbSharp\ImageReader.cs" />
     <Compile Include="Graphics2D\StbSharp\StbImage.cs" />
     <Compile Include="Graphics2D\StbSharp\StbImage.Generated.cs" />
+    <Compile Include="Graphics2D\TextureAtlases\ColoredRegion.cs" />
     <Compile Include="Graphics2D\TextureAtlases\NinePatchRegion.cs" />
     <Compile Include="Graphics2D\TextureAtlases\TextureRegionAtlas.cs" />
     <Compile Include="Graphics2D\TextureAtlases\TextureRegion.cs" />

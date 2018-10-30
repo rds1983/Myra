@@ -14,7 +14,7 @@ namespace Myra.Graphics2D.TextureAtlases
 		{
 			get
 			{
-				return TextureRegion.Bounds.Size;
+				return new Point(TextureRegion.Bounds.Width, TextureRegion.Bounds.Height);
 			}
 		}
 

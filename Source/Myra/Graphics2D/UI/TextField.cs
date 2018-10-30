@@ -439,7 +439,7 @@ namespace Myra.Graphics2D.UI
 				textColor = FocusedTextColor.Value;
 			}
 
-			var centeredBounds = LayoutUtils.Align(bounds.Size, _formattedText.Size, HorizontalAlignment.Left, TextVerticalAlignment);
+			var centeredBounds = LayoutUtils.Align(new Point(bounds.Width, bounds.Height), _formattedText.Size, HorizontalAlignment.Left, TextVerticalAlignment);
 			centeredBounds.Offset(bounds.Location);
 			_formattedText.Draw(context.Batch, centeredBounds, textColor, context.Opacity);
 
