@@ -100,7 +100,8 @@ namespace Myra.Graphics2D.UI
 				GridSpanY = 2,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
-				InputFilter = InputFilter
+				InputFilter = InputFilter,
+				TextVerticalAlignment = VerticalAlignment.Center
 			};
 
 			_textField.TextChanged += TextFieldOnTextChanged;

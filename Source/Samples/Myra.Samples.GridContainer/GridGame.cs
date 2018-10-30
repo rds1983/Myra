@@ -97,7 +97,7 @@ namespace Myra.Samples.GridContainer
 			grid.Widgets.Add(button);
 
 			// Button
-			var button2 = new Button
+			var button2 = new TextButton
 			{
 				GridPositionX = 2,
 				GridPositionY = 2,
@@ -178,7 +178,8 @@ namespace Myra.Samples.GridContainer
 				WidthHint = 125,
 				Text = "This is textblock which spans for several lines to demonstrate row proportion set to Auto",
 				GridPositionX = 4,
-				GridPositionY = 1
+				GridPositionY = 1,
+				Wrap = true
 			};
 			grid.Widgets.Add(textBlock);
 

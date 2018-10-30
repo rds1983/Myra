@@ -13,10 +13,6 @@ namespace Myra.Graphics2D.UI
 		private TreeNode _selectedRow;
 		private bool _rowInfosDirty = true;
 
-		public IRenderable RowSelectionBackgroundWithoutFocus { get; set; }
-		public IRenderable RowSelectionBackground { get; set; }
-		public IRenderable RowHoverBackground { get; set; }
-
 		public List<TreeNode> AllNodes
 		{
 			get { return _allNodes; }
@@ -205,6 +201,13 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public override void OnMouseLeft()
+		{
+			base.OnMouseLeft();
+
+			HoverRow = null;
+		}
+
 		public override void RemoveAllSubNodes()
 		{
 			base.RemoveAllSubNodes();
@@ -293,21 +296,14 @@ namespace Myra.Graphics2D.UI
 				_rowInfosDirty = false;
 			}
 
-			if (HoverRow != null && HoverRow != SelectedRow && RowHoverBackground != null)
+			if (HoverRow != null && HoverRow != SelectedRow && SelectionHoverBackground != null)
 			{
-				context.Draw(RowHoverBackground, HoverRow.RowBounds);
+				context.Draw(SelectionHoverBackground, HoverRow.RowBounds);
 			}
 
-			if (SelectedRow != null && SelectedRow.RowVisible && RowSelectionBackground != null)
+			if (SelectedRow != null && SelectedRow.RowVisible && SelectionBackground != null)
 			{
-				if (!IsFocused && RowSelectionBackgroundWithoutFocus != null)
-				{
-					context.Draw(RowSelectionBackgroundWithoutFocus, SelectedRow.RowBounds);
-				}
-				else
-				{
-					context.Draw(RowSelectionBackground, SelectedRow.RowBounds);
-				}
+				context.Draw(SelectionBackground, SelectedRow.RowBounds);
 			}
 
 			base.InternalRender(context);
@@ -316,9 +312,6 @@ namespace Myra.Graphics2D.UI
 		public void ApplyTreeStyle(TreeStyle style)
 		{
 			ApplyTreeNodeStyle(style);
-
-			RowSelectionBackground = style.SelectionBackground;
-			RowHoverBackground = style.SelectionHoverBackground;
 		}
 
 		private static bool FindPath(Stack<TreeNode> path, TreeNode node)

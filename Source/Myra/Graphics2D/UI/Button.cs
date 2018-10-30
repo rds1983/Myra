@@ -144,7 +144,9 @@ namespace Myra.Graphics2D.UI
 
 			_textBlock = new TextBlock
 			{
-				GridPositionX = 1
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				GridPositionX = 1,
+				Wrap = true
 			};
 
 			Widget.Widgets.Add(_textBlock);

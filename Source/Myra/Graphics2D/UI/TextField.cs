@@ -110,6 +110,10 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(false)]
 		public bool Readonly { get; set; }
 
+		[EditCategory("Behavior")]
+		[DefaultValue(VerticalAlignment.Top)]
+		public VerticalAlignment TextVerticalAlignment { get; set; }
+
 		private bool AcceptsInput
 		{
 			get
@@ -435,7 +439,7 @@ namespace Myra.Graphics2D.UI
 				textColor = FocusedTextColor.Value;
 			}
 
-			var centeredBounds = LayoutUtils.Align(bounds.Size, _formattedText.Size, HorizontalAlignment.Left, VerticalAlignment.Center);
+			var centeredBounds = LayoutUtils.Align(bounds.Size, _formattedText.Size, HorizontalAlignment.Left, TextVerticalAlignment);
 			centeredBounds.Offset(bounds.Location);
 			_formattedText.Draw(context.Batch, centeredBounds, textColor, context.Opacity);
 

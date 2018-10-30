@@ -40,7 +40,8 @@ namespace Myra.Graphics2D.UI
 			_textBlock = new TextBlock
 			{
 				VerticalAlignment = VerticalAlignment.Center,
-				HorizontalAlignment = HorizontalAlignment.Center
+				HorizontalAlignment = HorizontalAlignment.Center,
+				Wrap = true
 			};
 
 			Widget = _textBlock;

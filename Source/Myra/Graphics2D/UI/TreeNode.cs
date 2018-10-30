@@ -223,7 +223,7 @@ namespace Myra.Graphics2D.UI
 
 		public void ApplyTreeNodeStyle(TreeStyle style)
 		{
-			ApplyWidgetStyle(style);
+			ApplyGridStyle(style);
 
 			if (style.MarkStyle != null)
 			{
