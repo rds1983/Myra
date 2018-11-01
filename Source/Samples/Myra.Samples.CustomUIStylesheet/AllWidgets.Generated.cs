@@ -42,7 +42,6 @@ namespace Myra.Samples.CustomUIStylesheet
 			textBlock2.GridPositionY = 2;
 
 			_imageButton = new ImageButton();
-			_imageButton.ImageVisible = true;
 			_imageButton.ContentHorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
 			_imageButton.ContentVerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
 			_imageButton.Id = "_imageButton";

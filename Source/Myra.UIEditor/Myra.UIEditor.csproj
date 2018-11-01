@@ -113,8 +113,6 @@
     </Compile>
     <None Include="Resources\ExportCSDesigner.cstemplate" />
     <None Include="Resources\ExportCSMain.cstemplate" />
-    <None Include="UI\exportOptions.ui" />
-    <None Include="UI\studio.ui" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

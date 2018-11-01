@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using Myra.Attributes;
 
 namespace Myra.Graphics2D.UI
@@ -41,9 +42,23 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		public virtual IList<Widget> Widgets
+		public virtual ObservableCollection<Widget> Widgets
 		{
 			get { return _widgets; }
+		}
+
+		[DefaultValue(HorizontalAlignment.Stretch)]
+		public override HorizontalAlignment HorizontalAlignment
+		{
+			get { return base.HorizontalAlignment; }
+			set { base.HorizontalAlignment = value; }
+		}
+
+		[DefaultValue(VerticalAlignment.Stretch)]
+		public override VerticalAlignment VerticalAlignment
+		{
+			get { return base.VerticalAlignment; }
+			set { base.VerticalAlignment = value; }
 		}
 
 		public MultipleItemsContainer()

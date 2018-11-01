@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -12,6 +13,7 @@ namespace Myra.Graphics2D.UI
 		private readonly List<TreeNode> _allNodes = new List<TreeNode>();
 		private TreeNode _selectedRow;
 		private bool _rowInfosDirty = true;
+		private bool _hasRoot = true;
 
 		public List<TreeNode> AllNodes
 		{
@@ -41,6 +43,33 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[DefaultValue(true)]
+		public override bool CanFocus
+		{
+			get { return base.CanFocus; }
+			set { base.CanFocus = value; }
+		}
+
+		[DefaultValue(true)]
+		public bool HasRoot
+		{
+			get
+			{
+				return _hasRoot;
+			}
+
+			set
+			{
+				if (value == _hasRoot)
+				{
+					return;
+				}
+
+				_hasRoot = value;
+				UpdateHasRoot();
+			}
+		}
+
 		public event EventHandler SelectionChanged;
 
 		public Tree(TreeStyle style) : base(style, null)
@@ -61,6 +90,23 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
+		private void UpdateHasRoot()
+		{
+			if (_hasRoot)
+			{
+				Mark.Visible = true;
+				Label.Visible = true;
+				ChildNodesGrid.Visible = Mark.IsPressed;
+			}
+			else
+			{
+				Mark.Visible = false;
+				Label.Visible = false;
+				Mark.IsPressed = true;
+				ChildNodesGrid.Visible = true;
+			}
+		}
+
 		public override void OnKeyDown(Keys k)
 		{
 			base.OnKeyDown(k);
@@ -72,7 +118,7 @@ namespace Myra.Graphics2D.UI
 
 			int index = 0;
 			IList<Widget> parentWidgets = null;
-			if (SelectedRow.ParentNode != null && SelectedRow.ParentNode.HasRoot)
+			if (SelectedRow.ParentNode != null)
 			{
 				parentWidgets = SelectedRow.ParentNode.ChildNodesGrid.Widgets;
 				index = parentWidgets.IndexOf(SelectedRow);
@@ -307,6 +353,16 @@ namespace Myra.Graphics2D.UI
 			}
 
 			base.InternalRender(context);
+		}
+
+		protected override void UpdateMark()
+		{
+			if (!HasRoot)
+			{
+				return;
+			}
+
+			base.UpdateMark();
 		}
 
 		public void ApplyTreeStyle(TreeStyle style)

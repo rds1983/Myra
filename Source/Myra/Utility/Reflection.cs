@@ -19,5 +19,16 @@ namespace Myra.Utility
 
 			return result;
 		}
+
+		public static bool IsNullablePrimitive(this Type type)
+		{
+			return type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>) &&
+					type.GenericTypeArguments[0].GetTypeInfo().IsPrimitive;
+		}
+
+		public static Type GetNullableType(this Type type)
+		{
+			return type.GenericTypeArguments[0];
+		}
 	}
 }

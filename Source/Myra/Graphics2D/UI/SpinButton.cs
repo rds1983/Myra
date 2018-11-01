@@ -11,13 +11,16 @@ namespace Myra.Graphics2D.UI
 		private readonly ImageButton _upButton;
 		private readonly ImageButton _downButton;
 
+		[DefaultValue(false)]
 		public bool Nullable { get; set; }
 
+		[DefaultValue(null)]
 		public float? Maximum { get; set; }
 
+		[DefaultValue(null)]
 		public float? Minimum { get; set; }
 
-		[DefaultValue(0)]
+		[DefaultValue(0.0f)]
 		public float? Value
 		{
 			get
@@ -72,7 +75,22 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[DefaultValue(false)]
 		public bool Integer { get; set; }
+
+		[DefaultValue(HorizontalAlignment.Left)]
+		public override HorizontalAlignment HorizontalAlignment
+		{
+			get { return base.HorizontalAlignment; }
+			set { base.HorizontalAlignment = value; }
+		}
+
+		[DefaultValue(VerticalAlignment.Top)]
+		public override VerticalAlignment VerticalAlignment
+		{
+			get { return base.VerticalAlignment; }
+			set { base.VerticalAlignment = value; }
+		}
 
 		/// <summary>
 		/// Fires when the value had been changed

@@ -36,13 +36,11 @@ namespace Myra.UIEditor.UI
 					return;
 				}
 
-				// Root node
-				var projectNode = Tree.AddSubNode("Project");
-				projectNode.Tag = _project;
+				Widget.Tag = _project;
 
 				if (_project.Root != null)
 				{
-					var rootNode = AddObject(projectNode, _project.Root);
+					var rootNode = AddObject((Tree)Widget, _project.Root);
 					Rebuild(rootNode, _project.Root);
 				}
 			}
@@ -67,7 +65,7 @@ namespace Myra.UIEditor.UI
 		{
 			Widget = new Tree
 			{
-				HasRoot = false
+				Text = "Project"
 			};
 		}
 

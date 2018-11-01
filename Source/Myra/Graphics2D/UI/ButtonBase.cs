@@ -1,7 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
 using Microsoft.Xna.Framework.Input;
 using Myra.Attributes;
-using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using Newtonsoft.Json;
 
@@ -12,6 +12,7 @@ namespace Myra.Graphics2D.UI
 		private bool _isPressed;
 
 		[EditCategory("Appearance")]
+		[DefaultValue(HorizontalAlignment.Center)]
 		public virtual HorizontalAlignment ContentHorizontalAlignment
 		{
 			get { return Widget.HorizontalAlignment; }
@@ -19,6 +20,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Appearance")]
+		[DefaultValue(VerticalAlignment.Center)]
 		public virtual VerticalAlignment ContentVerticalAlignment
 		{
 			get { return Widget.VerticalAlignment; }
@@ -31,9 +33,11 @@ namespace Myra.Graphics2D.UI
 		public virtual IRenderable PressedBackground { get; set; }
 
 		[EditCategory("Behavior")]
+		[DefaultValue(false)]
 		public virtual bool Toggleable { get; set; }
 
 		[EditCategory("Behavior")]
+		[DefaultValue(false)]
 		public bool IgnoreMouseButton { get; set; }
 
 		[HiddenInEditor]

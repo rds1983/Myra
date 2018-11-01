@@ -15,7 +15,7 @@ namespace Myra.Graphics2D.UI
 		[JsonIgnore]
 		public Button ButtonCancel { get; private set; }
 
-		public Dialog()
+		public Dialog(DialogStyle style) : base(style)
 		{
 			RowsProportions.Add(new Proportion());
 
@@ -66,11 +66,19 @@ namespace Myra.Graphics2D.UI
 			Widgets.Add(buttonsGrid);
 		}
 
+		public Dialog(string style) : this(Stylesheet.Current.DialogStyles[style])
+		{
+		}
+
+		public Dialog() : this(Stylesheet.Current.DialogStyle)
+		{
+		}
+
 		public override void OnKeyDown(Keys k)
 		{
 			base.OnKeyDown(k);
 
-			switch(k)
+			switch (k)
 			{
 				case Keys.Escape:
 					ButtonCancel.Press();

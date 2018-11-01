@@ -412,7 +412,15 @@ namespace Myra.Editor.UI.File
 			}
 			else
 			{
-				files = Directory.EnumerateFiles(path, Filter);
+				var parts = Filter.Split('|');
+				var result = new List<string>();
+
+				foreach (var part in parts)
+				{
+					result.AddRange(Directory.EnumerateFiles(path, part));
+				}
+
+				files = result;
 			}
 
 			foreach (var f in files)

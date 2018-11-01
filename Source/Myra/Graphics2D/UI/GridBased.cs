@@ -24,7 +24,7 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public override IList<Widget> Widgets
+		public override ObservableCollection<Widget> Widgets
 		{
 			get { return base.Widgets; }
 		}

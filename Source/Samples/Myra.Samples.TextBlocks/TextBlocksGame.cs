@@ -50,6 +50,7 @@ namespace Myra.Samples.TextBlocks
 			{
 				Text = "Hello, [Red]World!",
 				TextColor = Color.Blue,
+				Wrap = true,
 				HorizontalAlignment = HorizontalAlignment.Right,
 				VerticalAlignment = VerticalAlignment.Bottom,
 				WidthHint = 50

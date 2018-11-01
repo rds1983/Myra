@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.UI.Styles;
@@ -12,18 +11,30 @@ namespace Myra.Graphics2D.UI
 		private readonly Grid _childNodesGrid;
 		private readonly ImageButton _mark;
 		private readonly TextBlock _label;
-		private bool _hasRoot = true;
 
 		public bool IsExpanded
 		{
-			get { return !HasRoot || _mark.IsPressed; }
+			get { return _mark.IsPressed; }
 
 			set { _mark.IsPressed = value; }
+		}
+
+		public TextBlock Label
+		{
+			get
+			{
+				return _label;
+			}
 		}
 
 		public ImageButton Mark
 		{
 			get { return _mark; }
+		}
+
+		public Grid ChildNodesGrid
+		{
+			get { return _childNodesGrid; }
 		}
 
 		public string Text
@@ -49,11 +60,6 @@ namespace Myra.Graphics2D.UI
 			get { return _childNodesGrid.ChildCount; }
 		}
 
-		internal Grid ChildNodesGrid
-		{
-			get { return _childNodesGrid; }
-		}
-
 		internal Rectangle RowBounds { get; set; }
 
 		internal bool RowVisible { get; set; }
@@ -61,26 +67,6 @@ namespace Myra.Graphics2D.UI
 		public TreeNode ParentNode { get; internal set; }
 
 		public TreeStyle TreeStyle { get; private set; }
-
-		[DefaultValue(true)]
-		public bool HasRoot
-		{
-			get
-			{
-				return _hasRoot;
-			}
-
-			set
-			{
-				if (value == _hasRoot)
-				{
-					return;
-				}
-
-				_hasRoot = value;
-				UpdateHasRoot();
-			}
-		}
 
 		public TreeNode(TreeStyle style, Tree topTree): base(style)
 		{
@@ -138,23 +124,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			UpdateMark();
-			UpdateHasRoot();
-		}
-
-		private void UpdateHasRoot()
-		{
-			if (_hasRoot)
-			{
-				_mark.Visible = true;
-				_label.Visible = true;
-				_childNodesGrid.Visible = _mark.IsPressed;
-			}
-			else
-			{
-				_mark.Visible = false;
-				_label.Visible = false;
-				_childNodesGrid.Visible = true;
-			}
 		}
 
 		private void MarkOnDown(object sender, EventArgs eventArgs)
@@ -167,9 +136,9 @@ namespace Myra.Graphics2D.UI
 			_childNodesGrid.Visible = false;
 		}
 
-		private void UpdateMark()
+		protected virtual void UpdateMark()
 		{
-			_mark.ImageVisible = _childNodesGrid.Widgets.Count > 0;
+			_mark.Visible = _childNodesGrid.Widgets.Count > 0;
 		}
 
 		public virtual void RemoveAllSubNodes()

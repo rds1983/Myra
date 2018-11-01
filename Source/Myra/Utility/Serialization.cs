@@ -1,4 +1,5 @@
-﻿using Myra.Attributes;
+﻿using Microsoft.Xna.Framework;
+using Myra.Attributes;
 using Newtonsoft.Json.Linq;
 using System;
 using System.ComponentModel;
@@ -122,22 +123,22 @@ namespace Myra.Utility
 			return true;
 		}
 
-		private static object GetDefaultValue(Type type)
-		{
-			if (type.GetTypeInfo().IsValueType)
-			{
-				return Activator.CreateInstance(type);
-			}
-
-			return null;
-		}
-
 		public static bool HasDefaultValue(this PropertyInfo property, object value)
 		{
-			var defaultValue = GetDefaultValue(property.PropertyType);
 			var defaultAttribute = property.FindAttribute<DefaultValueAttribute>();
-			if ((defaultAttribute != null && Equals(value, defaultAttribute.Value)) ||
-				(defaultAttribute == null && Equals(value, defaultValue)))
+
+			object defaultAttributeValue = null;
+			if (defaultAttribute != null)
+			{
+				defaultAttributeValue = defaultAttribute.Value;
+				// If property is of Color type, than DefaultValueAttribute should contain its name or hex
+				if (property.PropertyType == typeof(Color))
+				{
+					defaultAttributeValue = defaultAttributeValue.ToString().FromName().Value;
+				}
+			}
+
+			if ((defaultAttribute != null && Equals(value, defaultAttributeValue)))
 			{
 				// Skip default
 				return true;

@@ -78,6 +78,34 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(true)]
 		public bool AllowVerticalScrolling { get; set; }
 
+		[DefaultValue(HorizontalAlignment.Stretch)]
+		public override HorizontalAlignment HorizontalAlignment
+		{
+			get { return base.HorizontalAlignment; }
+			set { base.HorizontalAlignment = value; }
+		}
+
+		[DefaultValue(VerticalAlignment.Stretch)]
+		public override VerticalAlignment VerticalAlignment
+		{
+			get { return base.VerticalAlignment; }
+			set { base.VerticalAlignment = value; }
+		}
+
+		[DefaultValue(true)]
+		public override bool ClipToBounds
+		{
+			get { return base.ClipToBounds; }
+			set { base.ClipToBounds = value; }
+		}
+
+		[DefaultValue(true)]
+		public override bool CanFocus
+		{
+			get { return base.CanFocus; }
+			set { base.CanFocus = value; }
+		}
+
 		/// <summary>
 		/// Same as Widget. Used by the JSON serializer.
 		/// </summary>

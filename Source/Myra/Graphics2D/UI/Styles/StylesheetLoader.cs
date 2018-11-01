@@ -33,6 +33,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string HorizontalMenuName = "horizontalMenu";
 		public const string VerticalMenuName = "verticalMenu";
 		public const string WindowName = "window";
+		public const string DialogName = "dialog";
 		public const string LeftName = "left";
 		public const string RightName = "right";
 		public const string WidthName = "width";
@@ -668,6 +669,11 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		private void LoadDialogStyleFromSource(JObject source, DialogStyle result)
+		{
+			LoadWindowStyleFromSource(source, result);
+		}
+
 		private void FillStyles<T>(string key,
 			Dictionary<string, T> stylesDict,
 			Action<JObject, T> fillAction) where T : WidgetStyle, new()
@@ -688,8 +694,8 @@ namespace Myra.Graphics2D.UI.Styles
 
 			foreach (var pair in styles)
 			{
-				var variant = (T) stylesDict[Stylesheet.DefaultStyleName].Clone();
-				fillAction((JObject) pair.Value, variant);
+				var variant = (T)stylesDict[Stylesheet.DefaultStyleName].Clone();
+				fillAction((JObject)pair.Value, variant);
 				stylesDict[pair.Key] = variant;
 			}
 		}
@@ -733,6 +739,7 @@ namespace Myra.Graphics2D.UI.Styles
 			FillStyles(HorizontalMenuName, result.HorizontalMenuStyles, LoadMenuStyleFromSource);
 			FillStyles(VerticalMenuName, result.VerticalMenuStyles, LoadMenuStyleFromSource);
 			FillStyles(WindowName, result.WindowStyles, LoadWindowStyleFromSource);
+			FillStyles(DialogName, result.DialogStyles, LoadDialogStyleFromSource);
 
 			return result;
 		}

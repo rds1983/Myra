@@ -15,6 +15,7 @@ namespace Myra.Graphics2D.UI
 		private bool _wrap = false;
 
 		[EditCategory("Appearance")]
+		[DefaultValue(0)]
 		public int VerticalSpacing
 		{
 			get { return _formattedText.VerticalSpacing; }

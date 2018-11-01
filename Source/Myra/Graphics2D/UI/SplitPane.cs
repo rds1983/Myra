@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
@@ -32,6 +33,20 @@ namespace Myra.Graphics2D.UI
 		public ImageButtonStyle HandleStyle { get; private set; }
 
 		public event EventHandler ProportionsChanged;
+
+		[DefaultValue(HorizontalAlignment.Stretch)]
+		public override HorizontalAlignment HorizontalAlignment
+		{
+			get { return base.HorizontalAlignment; }
+			set { base.HorizontalAlignment = value; }
+		}
+
+		[DefaultValue(VerticalAlignment.Stretch)]
+		public override VerticalAlignment VerticalAlignment
+		{
+			get { return base.VerticalAlignment; }
+			set { base.VerticalAlignment = value; }
+		}
 
 		protected SplitPane(SplitPaneStyle style)
 		{

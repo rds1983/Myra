@@ -142,7 +142,6 @@ namespace Myra.Samples.TabControl
 			textBlock4.GridPositionY = 3;
 
 			_imageButton = new ImageButton();
-			_imageButton.ImageVisible = true;
 			_imageButton.ContentHorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
 			_imageButton.ContentVerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
 			_imageButton.Id = "_imageButton";

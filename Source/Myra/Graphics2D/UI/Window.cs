@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -33,6 +34,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Appearance")]
+		[StylePropertyPath("TitleStyle.TextColor")]
 		public Color TitleTextColor
 		{
 			get { return _titleLabel.TextColor; }
@@ -97,7 +99,30 @@ namespace Myra.Graphics2D.UI
 		[Obsolete("Property is obsolete and will be removed in the future version. Use Result.")]
 		public int ModalResult { get; set; }
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public bool Result { get; set; }
+
+		[DefaultValue(HorizontalAlignment.Left)]
+		public override HorizontalAlignment HorizontalAlignment
+		{
+			get { return base.HorizontalAlignment; }
+			set { base.HorizontalAlignment = value; }
+		}
+
+		[DefaultValue(VerticalAlignment.Top)]
+		public override VerticalAlignment VerticalAlignment
+		{
+			get { return base.VerticalAlignment; }
+			set { base.VerticalAlignment = value; }
+		}
+
+		[DefaultValue(true)]
+		public override bool CanFocus
+		{
+			get { return base.CanFocus; }
+			set { base.CanFocus = value; }
+		}
 
 		public event EventHandler Closed;
 

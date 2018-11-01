@@ -1,0 +1,26 @@
+<Project>
+  <ExportOptions Namespace="Myra.Samples.Notepad" Class="Notepad" OutputPath="D:\Projects\Hebron\Myra\Source\Samples\Myra.Samples.Notepad" />
+  <Grid Id="Root">
+    <ColumnsProportions />
+    <RowsProportions>
+      <Proportion />
+      <Proportion Type="Fill" />
+    </RowsProportions>
+    <HorizontalMenu VerticalAlignment="Stretch" Id="mainMenu">
+      <MenuItem Id="menuItemFile" Text="File">
+        <MenuItem Id="menuItemNew" Text="New" />
+        <MenuItem Id="menuItemOpen" Text="Open..." />
+        <MenuItem Id="menuItemSave" Text="Save" />
+        <MenuItem Id="menuItemSaveAs" Text="Save As..." />
+        <MenuSeparator />
+        <MenuItem Id="menuItemQuit" Text="Quit" />
+      </MenuItem>
+      <MenuItem Id="menuItemHelp" Text="Help">
+        <MenuItem Id="menuItemAbout" Text="About" />
+      </MenuItem>
+    </HorizontalMenu>
+    <ScrollPane GridPositionY="1">
+      <TextField Text="" Wrap="True" Multiline="True" Id="textArea" VerticalAlignment="Stretch" />
+    </ScrollPane>
+  </Grid>
+</Project>

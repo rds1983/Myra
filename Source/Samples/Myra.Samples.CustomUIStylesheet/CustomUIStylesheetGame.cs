@@ -38,11 +38,17 @@ namespace Myra.Samples.CustomUIStylesheet
 
 			MyraEnvironment.Game = this;
 
-			// Load image containing font & ui spritesheet
-			var texture = Content.Load<Texture2D>("ui_stylesheet_atlas");
-
 			// Create resource asset resolver
 			var assetResolver = new ResourceAssetResolver(GetType().Assembly, "Myra.Samples.CustomUIStylesheet.Resources.");
+
+			// Load image containing font & ui spritesheet
+			Texture2D texture;
+			using (var stream = assetResolver.Open("ui_stylesheet_atlas.png"))
+			{
+				var colorBuffer = ColorBuffer.FromStream(stream);
+				colorBuffer.PremultiplyAlpha();
+				texture = colorBuffer.CreateTexture2D();
+			}
 
 			// Load ui text atlas
 			var textureAtlas = TextureRegionAtlas.FromJson(assetResolver.ReadAsString("ui_stylesheet_atlas.json"), texture);

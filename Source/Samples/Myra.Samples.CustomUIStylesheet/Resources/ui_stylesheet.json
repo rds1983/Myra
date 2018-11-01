@@ -222,5 +222,32 @@
 				}
 			}
 		}
+	},
+	"dialog": {
+		"background": "window",
+		"padding": {
+			"top": 25.0,
+			"bottom": 25.0,
+			"left": 25.0,
+			"right": 25.0
+		},
+		"title": {
+			"font": "commodore-64",
+			"textColor": "white"
+		},
+		"variants": {
+			"dialog": {
+				"background": "dialog",
+				"title": {
+					"font": "commodore-64"
+				}
+			},
+			"dialog-modal": {
+				"background": "dialog",
+				"title": {
+					"font": "commodore-64"
+				}
+			}
+		}
 	}
 }

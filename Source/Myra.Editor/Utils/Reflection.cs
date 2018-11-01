@@ -81,18 +81,6 @@ namespace Myra.Editor.Utils
 			return FindGenericType(baseType, genericType);
 		}
 
-		public static bool IsNullablePrimitive(this Type type)
-		{
-			return (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>) &&
-					type.GetGenericArguments()[0].IsPrimitive);
-		}
-
-
-		public static Type GetNullableType(this Type type)
-		{
-			return type.GetGenericArguments()[0];
-		}
-
 		public static bool IsNumericInteger(this Type t)
 		{
 			switch (Type.GetTypeCode(t))

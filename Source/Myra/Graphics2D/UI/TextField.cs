@@ -22,6 +22,7 @@ namespace Myra.Graphics2D.UI
 		private bool _wrap = false;
 
 		[EditCategory("Appearance")]
+		[DefaultValue(0)]
 		public int VerticalSpacing
 		{
 			get { return _formattedText.VerticalSpacing; }
@@ -86,6 +87,7 @@ namespace Myra.Graphics2D.UI
 		public Color? FocusedTextColor { get; set; }
 
 		[EditCategory("Appearance")]
+		[DefaultValue(null)]
 		[Obsolete]
 		public Color? MessageTextColor { get; set; }
 
@@ -104,6 +106,7 @@ namespace Myra.Graphics2D.UI
 		public int BlinkIntervalInMs { get; set; }
 
 		[EditCategory("Behavior")]
+		[DefaultValue(false)]
 		public bool Multiline { get; set; }
 
 		[EditCategory("Behavior")]
@@ -134,6 +137,27 @@ namespace Myra.Graphics2D.UI
 					_cursorIndex = string.IsNullOrEmpty(Text) ? 0 : Text.Length;
 				}
 			}
+		}
+
+		[DefaultValue(true)]
+		public override bool ClipToBounds
+		{
+			get { return base.ClipToBounds; }
+			set { base.ClipToBounds = value; }
+		}
+
+		[DefaultValue(true)]
+		public override bool CanFocus
+		{
+			get { return base.CanFocus; }
+			set { base.CanFocus = value; }
+		}
+
+		[DefaultValue(HorizontalAlignment.Stretch)]
+		public override HorizontalAlignment HorizontalAlignment
+		{
+			get { return base.HorizontalAlignment; }
+			set { base.HorizontalAlignment = value; }
 		}
 
 		[HiddenInEditor]

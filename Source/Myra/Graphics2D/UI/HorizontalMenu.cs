@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Linq;
 using Microsoft.Xna.Framework.Input;
 using Myra.Graphics2D.UI.Styles;
 
@@ -11,9 +12,15 @@ namespace Myra.Graphics2D.UI
 			get { return Orientation.Horizontal; }
 		}
 
+		[DefaultValue(VerticalAlignment.Top)]
+		public override VerticalAlignment VerticalAlignment
+		{
+			get { return base.VerticalAlignment; }
+			set { base.VerticalAlignment = value; }
+		}
+
 		public HorizontalMenu(MenuStyle style) : base(style)
 		{
-			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Top;
 		}
 

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Linq;
 using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
@@ -8,6 +9,13 @@ namespace Myra.Graphics2D.UI
 		public override Orientation Orientation
 		{
 			get { return Orientation.Horizontal; }
+		}
+
+		[DefaultValue(HorizontalAlignment.Stretch)]
+		public override HorizontalAlignment HorizontalAlignment
+		{
+			get { return base.HorizontalAlignment; }
+			set { base.HorizontalAlignment = value; }
 		}
 
 		public HorizontalSlider(SliderStyle style) : base(style)

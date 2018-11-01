@@ -64,6 +64,7 @@ namespace Myra.Graphics2D.UI.Styles
 		private readonly Dictionary<string, MenuStyle> _horizontalMenuStyles = new Dictionary<string, MenuStyle>();
 		private readonly Dictionary<string, MenuStyle> _verticalMenuStyles = new Dictionary<string, MenuStyle>();
 		private readonly Dictionary<string, WindowStyle> _windowStyles = new Dictionary<string, WindowStyle>();
+		private readonly Dictionary<string, DialogStyle> _dialogStyles = new Dictionary<string, DialogStyle>();
 
 		public TextBlockStyle TextBlockStyle
 		{
@@ -204,6 +205,12 @@ namespace Myra.Graphics2D.UI.Styles
 			set { _windowStyles[DefaultStyleName] = value; }
 		}
 
+		public DialogStyle DialogStyle
+		{
+			get { return _dialogStyles[DefaultStyleName]; }
+			set { _dialogStyles[DefaultStyleName] = value; }
+		}
+
 		public Dictionary<string, TextBlockStyle> TextBlockStyles
 		{
 			get { return _textBlockStyles; }
@@ -319,6 +326,11 @@ namespace Myra.Graphics2D.UI.Styles
 			get { return _windowStyles; }
 		}
 
+		public Dictionary<string, DialogStyle> DialogStyles
+		{
+			get { return _dialogStyles; }
+		}
+
 		public Stylesheet()
 		{
 			TextBlockStyle = new TextBlockStyle();
@@ -344,6 +356,7 @@ namespace Myra.Graphics2D.UI.Styles
 			HorizontalMenuStyle = new MenuStyle();
 			VerticalMenuStyle = new MenuStyle();
 			WindowStyle = new WindowStyle();
+			DialogStyle = new DialogStyle();
 		}
 
 		public static Stylesheet CreateFromSource(string s,

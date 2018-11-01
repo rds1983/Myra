@@ -24,8 +24,8 @@ namespace Myra.Graphics2D.UI
 		private int _xHint, _yHint;
 		private int? _widthHint, _heightHint;
 		private int _gridPositionX, _gridPositionY, _gridSpanX = 1, _gridSpanY = 1;
-		private HorizontalAlignment _horizontalAlignment;
-		private VerticalAlignment _verticalAlignment;
+		private HorizontalAlignment _horizontalAlignment = HorizontalAlignment.Left;
+		private VerticalAlignment _verticalAlignment = VerticalAlignment.Top;
 		private LayoutState _layoutState = LayoutState.Invalid;
 		private bool _measureDirty = true;
 
@@ -49,6 +49,7 @@ namespace Myra.Graphics2D.UI
 		private bool _canFocus;
 		private string _styleName;
 
+		[DefaultValue(null)]
 		public string Id { get; set; }
 
 		[Selection(typeof(StyleNamesProvider))]
@@ -68,6 +69,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Layout")]
+		[DefaultValue(0)]
 		public int XHint
 		{
 			get { return _xHint; }
@@ -88,6 +90,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Layout")]
+		[DefaultValue(0)]
 		public int YHint
 		{
 			get { return _yHint; }
@@ -108,6 +111,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Layout")]
+		[DefaultValue(null)]
 		public int? WidthHint
 		{
 			get { return _widthHint; }
@@ -124,6 +128,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Layout")]
+		[DefaultValue(null)]
 		public int? HeightHint
 		{
 			get { return _heightHint; }
@@ -140,6 +145,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Layout")]
+		[DefaultValue(0)]
 		public int PaddingLeft
 		{
 			get { return _paddingLeft; }
@@ -157,6 +163,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Layout")]
+		[DefaultValue(0)]
 		public int PaddingRight
 		{
 			get { return _paddingRight; }
@@ -174,6 +181,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Layout")]
+		[DefaultValue(0)]
 		public int PaddingTop
 		{
 			get { return _paddingTop; }
@@ -191,6 +199,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Layout")]
+		[DefaultValue(0)]
 		public int PaddingBottom
 		{
 			get { return _paddingBottom; }
@@ -208,7 +217,8 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Layout")]
-		public HorizontalAlignment HorizontalAlignment
+		[DefaultValue(HorizontalAlignment.Left)]
+		public virtual HorizontalAlignment HorizontalAlignment
 		{
 			get { return _horizontalAlignment; }
 
@@ -225,7 +235,8 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Layout")]
-		public VerticalAlignment VerticalAlignment
+		[DefaultValue(VerticalAlignment.Top)]
+		public virtual VerticalAlignment VerticalAlignment
 		{
 			get { return _verticalAlignment; }
 
@@ -242,6 +253,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Layout")]
+		[DefaultValue(0)]
 		public int GridPositionX
 		{
 			get { return _gridPositionX; }
@@ -259,6 +271,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Layout")]
+		[DefaultValue(0)]
 		public int GridPositionY
 		{
 			get { return _gridPositionY; }
@@ -339,7 +352,7 @@ namespace Myra.Graphics2D.UI
 
 		[EditCategory("Behavior")]
 		[DefaultValue(true)]
-		public bool Visible
+		public virtual bool Visible
 		{
 			get { return _visible; }
 
@@ -431,7 +444,8 @@ namespace Myra.Graphics2D.UI
 		public IRenderable FocusedBorder { get; set; }
 
 		[EditCategory("Appearance")]
-		public bool ClipToBounds { get; set; }
+		[DefaultValue(false)]
+		public virtual bool ClipToBounds { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
@@ -528,7 +542,8 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Behavior")]
-		public bool CanFocus
+		[DefaultValue(false)]
+		public virtual bool CanFocus
 		{
 			get
 			{

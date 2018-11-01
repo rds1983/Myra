@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Myra.Attributes;
@@ -44,6 +45,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[DefaultValue(null)]
 		public Color? Color
 		{
 			get { return _color; }
@@ -60,6 +62,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public bool IsSeparator { get; set; }
 
 		[HiddenInEditor]

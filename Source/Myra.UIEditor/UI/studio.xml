@@ -1,0 +1,64 @@
+<Project>
+  <ExportOptions Namespace="Myra.UIEditor.UI" Class="StudioWidget" OutputPath="D:/Projects/Hebron/Myra/Source/Myra.UIEditor/UI" />
+  <Grid Id="Root">
+    <ColumnsProportions />
+    <RowsProportions>
+      <Proportion />
+      <Proportion Type="Fill" />
+    </RowsProportions>
+    <HorizontalMenu Id="">
+      <MenuItem Id="" Text="&amp;File">
+        <MenuItem Id="_menuFileNew" Text="&amp;New" />
+        <MenuItem Id="_menuFileOpen" Text="&amp;Open" />
+        <MenuItem Id="_menuFileSave" Text="&amp;Save" />
+        <MenuItem Id="_menuFileSaveAs" Text="Save &amp;As..." />
+        <MenuItem Id="_menuFileExportToCS" Text="&amp;Export To C#..." />
+        <MenuSeparator />
+        <MenuItem Id="_menuFileDebugOptions" Text="&amp;UI Debug Options" />
+        <MenuSeparator />
+        <MenuItem Id="_menuFileQuit" Text="&amp;Quit" />
+      </MenuItem>
+      <MenuItem Id="_menuControls" Text="&amp;Controls">
+        <MenuItem Id="_menuControlsAddButton" Text="Add Button" />
+        <MenuItem Id="_menuControlsAddCheckBox" Text="Add CheckBox" />
+        <MenuItem Id="_menuControlsAddImageButton" Text="Add ImageButton" />
+        <MenuItem Id="_menuControlsAddTextButton" Text="Add TextButton" />
+        <MenuItem Id="_menuControlsAddHorizontalSlider" Text="Add Horizontal Slider" />
+        <MenuItem Id="_menuControlsAddVerticalSlider" Text="Add Vertical Slider" />
+        <MenuItem Id="_menuControlsAddHorizontalProgressBar" Text="Add Horizontal ProgressBar" />
+        <MenuItem Id="_menuControlsAddVerticalProgressBar" Text="Add Vertical ProgressBar" />
+        <MenuItem Id="_menuControlsAddHorizontalSeparator" Text="Add Horizontal Separator" />
+        <MenuItem Id="_menuControlsAddVerticalSeparator" Text="Add Vertical Separator" />
+        <MenuItem Id="_menuControlsAddComboBox" Text="Add ComboBox" />
+        <MenuItem Id="_menuControlsAddListBox" Text="Add ListBox" />
+        <MenuItem Id="_menuControlsAddImage" Text="Add Image" />
+        <MenuItem Id="_menuControlsAddTextBlock" Text="Add TextBlock" />
+        <MenuItem Id="_menuControlsAddTextField" Text="Add TextField" />
+        <MenuItem Id="_menuControlsAddSpinButton" Text="Add SpinButton" />
+        <MenuSeparator />
+        <MenuItem Id="_menuControlsAddPanel" Text="Add Panel" />
+        <MenuItem Id="_menuControlsAddGrid" Text="Add Grid" />
+        <MenuItem Id="_menuControlsAddScrollPane" Text="Add ScrollPane" />
+        <MenuItem Id="_menuControlsAddHorizontalSplitPane" Text="Add Horizontal SplitPane" />
+        <MenuItem Id="_menuControlsAddVerticalSplitPane" Text="Add Vertical SplitPane" />
+        <MenuItem Id="_menuControlsAddWindow" Text="Add Window" />
+        <MenuItem Id="_menuControlsAddDialog" Text="Add Dialog" />
+        <MenuSeparator />
+        <MenuItem Id="_menuControlsAddHorizontalMenu" Text="Add HorizontalMenu" />
+        <MenuItem Id="_menuControlsAddVerticalMenu" Text="Add Vertical Menu" />
+        <MenuItem Id="_menuControlsAddMenuItem" Text="Add Menu Item" />
+        <MenuItem Id="_menuControlsAddMenuSeparator" Text="Add Menu Separator" />
+      </MenuItem>
+      <MenuItem Id="" Text="&amp;Help">
+        <MenuItem Id="_menuHelpAbout" Text="&amp;About" />
+      </MenuItem>
+    </HorizontalMenu>
+    <HorizontalSplitPane Id="_topSplitPane" GridPositionY="1">
+      <Panel Id="_projectHolder" />
+      <VerticalSplitPane Id="_rightSplitPane" GridPositionX="2">
+        <Panel Id="_explorerHolder" />
+        <ScrollPane Id="_propertyGridPane" GridPositionY="2" />
+      </VerticalSplitPane>
+    </HorizontalSplitPane>
+  </Grid>
+</Project>

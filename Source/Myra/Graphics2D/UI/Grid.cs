@@ -137,9 +137,11 @@ namespace Myra.Graphics2D.UI
 		public bool DrawLines { get; set; }
 
 		[EditCategory("Behavior")]
+		[DefaultValue("White")]
 		public Color DrawLinesColor { get; set; }
 
 		[EditCategory("Grid")]
+		[DefaultValue(0)]
 		public virtual int ColumnSpacing
 		{
 			get { return _columnSpacing; }
@@ -156,6 +158,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Grid")]
+		[DefaultValue(0)]
 		public virtual int RowSpacing
 		{
 			get { return _rowSpacing; }
@@ -184,6 +187,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Grid")]
+		[DefaultValue(null)]
 		public virtual float? TotalRowsPart
 		{
 			get { return _totalRowsPart; }
@@ -201,6 +205,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Grid")]
+		[DefaultValue(null)]
 		public virtual float? TotalColumnsPart
 		{
 			get { return _totalColumnsPart; }

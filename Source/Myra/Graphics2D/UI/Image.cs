@@ -2,6 +2,7 @@
 using Myra.Attributes;
 using Newtonsoft.Json;
 using System;
+using System.ComponentModel;
 
 namespace Myra.Graphics2D.UI
 {
@@ -47,6 +48,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[DefaultValue("#FFFFFFFF")]
 		public Color Color
 		{
 			get

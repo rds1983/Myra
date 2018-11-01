@@ -1,0 +1,114 @@
+<Project>
+  <ExportOptions Namespace="Myra.Samples.AllWidgets" Class="AllWidgets" OutputPath="D:\Projects\Hebron\Myra\Source\Samples\Myra.Samples.AllWidgets" />
+  <Grid RowSpacing="8" Id="Root">
+    <ColumnsProportions />
+    <RowsProportions>
+      <Proportion />
+      <Proportion Type="Fill" />
+    </RowsProportions>
+    <HorizontalMenu VerticalAlignment="Stretch">
+      <MenuItem Id="" Text="&amp;File">
+        <MenuItem Id="_menuItemNew" Text="&amp;New" />
+        <MenuItem Id="_menuItemOpen" Text="&amp;Open" />
+        <MenuItem Id="_menuItemSave" Text="&amp;Save" />
+        <MenuItem Id="_menuItemSaveAs" Text="Save &amp;As..." />
+        <MenuSeparator />
+        <MenuItem Id="_menuItemQuit" Text="&amp;Quit" />
+      </MenuItem>
+      <MenuItem Id="" Text="&amp;Edit">
+        <MenuItem Id="_menuItemCopy" Text="&amp;Copy" />
+        <MenuItem Id="_menuItemPaste" Text="&amp;Paste" />
+        <MenuSeparator />
+        <MenuItem Id="_menuItemUndo" Text="&amp;Undo" />
+        <MenuItem Id="_menuItemRedo" Text="&amp;Redo" />
+      </MenuItem>
+      <MenuItem Id="" Text="&amp;Help">
+        <MenuItem Id="_menuItemAbout" Text="&amp;About" />
+      </MenuItem>
+    </HorizontalMenu>
+    <HorizontalSplitPane GridPositionY="1">
+      <ScrollPane>
+        <Grid ColumnSpacing="8" RowSpacing="8" Id="_gridRight">
+          <ColumnsProportions>
+            <Proportion />
+            <Proportion Type="Fill" />
+          </ColumnsProportions>
+          <RowsProportions>
+            <Proportion />
+            <Proportion />
+            <Proportion />
+            <Proportion />
+            <Proportion />
+            <Proportion />
+            <Proportion />
+            <Proportion />
+            <Proportion />
+            <Proportion />
+            <Proportion />
+            <Proportion />
+          </RowsProportions>
+          <TextBlock Text="Button:" Id="" />
+          <Button Text="Open File" ContentHorizontalAlignment="Stretch" ContentVerticalAlignment="Stretch" Id="_button" PaddingLeft="8" PaddingRight="8" GridPositionX="1" />
+          <TextBlock Text="Blue Button:" Id="" GridPositionY="1" />
+          <Button Text="Save File" ContentHorizontalAlignment="Stretch" ContentVerticalAlignment="Stretch" Id="_blueButton" StyleName="blue" PaddingLeft="8" PaddingRight="8" GridPositionX="1" GridPositionY="1" />
+          <TextBlock Text="Text Button:" Id="_textButtonLabel" GridPositionY="2" />
+          <TextButton Text="Choose Color" Id="_textButton" PaddingLeft="8" PaddingRight="8" GridPositionX="1" GridPositionY="2" />
+          <TextBlock Text="Image Button:" Id="" GridPositionY="3" />
+          <ImageButton Id="_imageButton" PaddingLeft="8" PaddingRight="8" GridPositionX="1" GridPositionY="3" />
+          <CheckBox Text="This is checkbox" ImageWidthHint="10" ImageHeightHint="10" ContentHorizontalAlignment="Stretch" ContentVerticalAlignment="Stretch" GridPositionY="4" GridSpanX="2" />
+          <TextBlock Text="Horizontal Slider:" Id="" GridPositionY="5" />
+          <HorizontalSlider Minimum="0" Maximum="100" GridPositionX="1" GridPositionY="5" />
+          <TextBlock Text="Combo Box:" GridPositionY="6" />
+          <ComboBox SelectedIndex="1" WidthHint="200" GridPositionX="1" GridPositionY="6">
+            <ListItem Id="" Text="Red" Color="#FF0000FF" />
+            <ListItem Text="Green" Color="#00FF00FF" />
+            <ListItem Text="Blue" Color="#0080FFFF" />
+          </ComboBox>
+          <TextBlock Text="Text Field:" GridPositionY="7" />
+          <TextField Text="" GridPositionX="1" GridPositionY="7" />
+          <TextBlock Text="Spin Button:" GridPositionY="8" />
+          <SpinButton WidthHint="100" GridPositionX="1" GridPositionY="8" />
+          <TextBlock Text="List Box:" GridPositionY="9" />
+          <ListBox VerticalAlignment="Top" WidthHint="200" GridPositionX="1" GridPositionY="9">
+            <ListItem Text="Red" Color="#FF0000FF" />
+            <ListItem Text="Green" Color="#00FF00FF" />
+            <ListItem Text="Blue" Color="#0000FFFF" />
+          </ListBox>
+          <TextBlock Text="Vertical Menu:" GridPositionY="10" />
+          <VerticalMenu GridPositionX="1" GridPositionY="10">
+            <MenuItem Id="" Text="Start New Game" />
+            <MenuItem Id="" Text="Options" />
+            <MenuItem Id="" Text="Quit" />
+          </VerticalMenu>
+          <TextBlock Text="Tree" GridPositionY="11" />
+        </Grid>
+      </ScrollPane>
+      <VerticalSplitPane GridPositionX="2">
+        <Grid RowSpacing="8">
+          <ColumnsProportions>
+            <Proportion Type="Fill" />
+          </ColumnsProportions>
+          <RowsProportions>
+            <Proportion />
+            <Proportion Type="Fill" />
+          </RowsProportions>
+          <TextBlock Text="Vertical Slider:" />
+          <VerticalSlider HorizontalAlignment="Center" Minimum="0" Maximum="100" GridPositionY="1" />
+        </Grid>
+        <Grid RowSpacing="8" GridPositionY="2">
+          <ColumnsProportions>
+            <Proportion Type="Fill" />
+          </ColumnsProportions>
+          <RowsProportions>
+            <Proportion />
+            <Proportion />
+            <Proportion Type="Fill" />
+          </RowsProportions>
+          <TextBlock Text="Progress Bars:" />
+          <HorizontalProgressBar Minimum="0" Maximum="100" Value="0" Id="_horizontalProgressBar" GridPositionY="1" />
+          <VerticalProgressBar HorizontalAlignment="Center" Minimum="0" Maximum="100" Value="0" Id="_verticalProgressBar" GridPositionY="2" />
+        </Grid>
+      </VerticalSplitPane>
+    </HorizontalSplitPane>
+  </Grid>
+</Project>

@@ -679,7 +679,7 @@ namespace Myra.UIEditor
 		{
 			var dlg = new FileDialog(FileDialogMode.OpenFile)
 			{
-				Filter = "*.ui"
+				Filter = "*.ui|*.xml"
 			};
 
 			if (!string.IsNullOrEmpty(FilePath))
@@ -796,11 +796,16 @@ namespace Myra.UIEditor
 			{
 				var dlg = new FileDialog(FileDialogMode.SaveFile)
 				{
-					Filter = "*.ui"
+					Filter = "*.xml"
 				};
 
 				if (!string.IsNullOrEmpty(FilePath))
 				{
+					if (FilePath.EndsWith(".ui"))
+					{
+						FilePath = FilePath.Substring(0, FilePath.Length - 3) + ".xml";
+					}
+
 					dlg.FilePath = FilePath;
 				}
 				else if (!string.IsNullOrEmpty(_lastFolder))
@@ -820,6 +825,11 @@ namespace Myra.UIEditor
 			}
 			else
 			{
+				if (FilePath.EndsWith(".ui"))
+				{
+					FilePath = FilePath.Substring(0, FilePath.Length - 3) + ".xml";
+				}
+
 				ProcessSave(FilePath);
 			}
 		}
@@ -829,7 +839,18 @@ namespace Myra.UIEditor
 			try
 			{
 				var data = File.ReadAllText(filePath);
-				var project = Project.LoadFromData(data);
+
+				Project project = null;
+				if (filePath.EndsWith(".ui"))
+				{
+					// JSON
+					project = Project.LoadFromJson(data);
+				} else
+				{
+					// XML
+					project = Project.LoadFromXml(data);
+				}
+
 				Project = project;
 				FilePath = filePath;
 				IsDirty = false;

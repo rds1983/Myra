@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
@@ -77,6 +78,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Appearance")]
+		[DefaultValue(null)]
 		public virtual int? ImageWidthHint
 		{
 			get { return Widget.WidthHint; }
@@ -84,18 +86,11 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Appearance")]
+		[DefaultValue(null)]
 		public virtual int? ImageHeightHint
 		{
 			get { return Widget.HeightHint; }
 			set { Widget.HeightHint = value; }
-		}
-
-		[EditCategory("Appearance")]
-		public virtual bool ImageVisible
-		{
-			get { return Widget.Visible; }
-
-			set { Widget.Visible = value; }
 		}
 
 		public ImageButton(ImageButtonStyle style)
