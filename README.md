@@ -8,6 +8,11 @@ It has following functionality:
 ## Documentation
 [https://github.com/rds1983/Myra/wiki](https://github.com/rds1983/Myra/wiki)
 
+## Building From Source Code
+1. git clone https://github.com/rds1983/Myra
+2. cd Myra
+3. git submodule update --init --recursive
+
 ## Credits
 * [MonoGame](http://www.monogame.net/)
 * [FNA](https://github.com/FNA-XNA/FNA)
