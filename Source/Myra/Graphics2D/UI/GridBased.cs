@@ -63,6 +63,10 @@ namespace Myra.Graphics2D.UI
 			set { base.TotalRowsPart = value; }
 		}
 
+		public GridBased()
+		{
+		}
+
 		public GridBased(GridStyle style): base(style)
 		{
 		}

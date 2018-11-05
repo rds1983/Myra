@@ -5,23 +5,12 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Myra.Editor.Plugin;
+using Myra.Editor.UI;
 using Myra.Editor.UI.File;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.ColorPicker;
 using Myra.UIEditor.UI;
 using Myra.Utility;
-using Button = Myra.Graphics2D.UI.Button;
-using CheckBox = Myra.Graphics2D.UI.CheckBox;
-using Color = Microsoft.Xna.Framework.Color;
-using ComboBox = Myra.Graphics2D.UI.ComboBox;
-using FileDialog = Myra.Editor.UI.File.FileDialog;
-using HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment;
-using ListBox = Myra.Graphics2D.UI.ListBox;
-using Menu = Myra.Graphics2D.UI.Menu;
-using MenuItem = Myra.Graphics2D.UI.MenuItem;
-using Point = Microsoft.Xna.Framework.Point;
-using PropertyGrid = Myra.Editor.UI.PropertyGrid;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Myra.UIEditor
 {
@@ -48,7 +37,6 @@ namespace Myra.UIEditor
 		private Project _project;
 		private Type[] _customWidgetTypes;
 		private MenuItem[] _customWidgetMenuItems;
-		private bool _isWindow = false;
 
 		public static Studio Instance
 		{
@@ -330,7 +318,7 @@ namespace Myra.UIEditor
 			};
 			_ui._menuControlsAddPanel.Selected += (s, a) =>
 			{
-				AddStandardControl<Myra.Graphics2D.UI.Panel>();
+				AddStandardControl<Panel>();
 			};
 			_ui._menuControlsAddGrid.Selected += (s, a) =>
 			{
@@ -732,13 +720,6 @@ namespace Myra.UIEditor
 				GraphicsDevice.PresentationParameters.BackBufferHeight);
 			_desktop.Render();
 
-			if (_isWindow)
-			{
-				((Window)Project.Root).CenterInBounds(_ui._projectHolder.Bounds);
-
-				_isWindow = false;
-			}
-
 #if !FNA
 			_drawCallsLabel.Text = string.Format("Draw Calls: {0}", GraphicsDevice.Metrics.DrawCount);
 #else
@@ -854,11 +835,6 @@ namespace Myra.UIEditor
 				Project = project;
 				FilePath = filePath;
 				IsDirty = false;
-
-				if (Project != null && Project.Root is Window)
-				{
-					_isWindow = true;
-				}
 			}
 			catch (Exception ex)
 			{

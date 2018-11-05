@@ -118,7 +118,7 @@ namespace Myra.Editor.UI
 				}
 			}
 
-			public SubGrid(PropertyGrid parent, object value, string header, string category, Record parentProperty) : base(null)
+			public SubGrid(PropertyGrid parent, object value, string header, string category, Record parentProperty)
 			{
 				ColumnSpacing = 4;
 				RowSpacing = 4;
@@ -227,7 +227,7 @@ namespace Myra.Editor.UI
 
 		public event EventHandler<GenericEventArgs<string>> PropertyChanged;
 
-		private PropertyGrid(TreeStyle style, string category, Record parentProperty): base(null)
+		private PropertyGrid(TreeStyle style, string category, Record parentProperty)
 		{
 			_parentProperty = parentProperty;
 			ColumnSpacing = 8;

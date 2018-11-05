@@ -50,6 +50,28 @@ namespace Myra.Graphics2D.UI
 		}
 
 		/// <summary>
+		/// Draws texture region taking into account the context transformations
+		/// </summary>
+		/// <param name="renderable"></param>
+		/// <param name="rectangle"></param>
+		/// <param name="color"></param>
+		public void Draw(IRenderable renderable, Point location, Color? color = null)
+		{
+			var c = color != null ? color.Value : Color.White;
+			renderable.Draw(Batch, new Rectangle(location, renderable.Size), c * Opacity);
+		}
+
+		/// <summary>
+		/// Draws rectangle taking into account the context transformations
+		/// </summary>
+		/// <param name="rectangle"></param>
+		/// <param name="color"></param>
+		public void DrawRectangle(Rectangle rectangle, Color color)
+		{
+			Batch.DrawRectangle(rectangle, color);
+		}
+
+		/// <summary>
 		/// Draws a filled rectangle taking into account the context transformations
 		/// </summary>
 		/// <param name="spriteBatch">The destination drawing surface</param>

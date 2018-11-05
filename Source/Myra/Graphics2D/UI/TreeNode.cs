@@ -174,7 +174,7 @@ namespace Myra.Graphics2D.UI
 		public void RemoveSubNode(TreeNode subNode)
 		{
 			_childNodesGrid.Widgets.Remove(subNode);
-			if (_topTree.SelectedRow == subNode)
+			if (_topTree != null && _topTree.SelectedRow == subNode)
 			{
 				_topTree.SelectedRow = null;
 			}

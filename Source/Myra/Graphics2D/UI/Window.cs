@@ -124,6 +124,11 @@ namespace Myra.Graphics2D.UI
 			set { base.CanFocus = value; }
 		}
 
+		private bool IsWindowPlaced
+		{
+			get;set;
+		}
+
 		public event EventHandler Closed;
 
 		public Window(WindowStyle style): base(style)
@@ -198,14 +203,18 @@ namespace Myra.Graphics2D.UI
 				Desktop.MouseMoved += DesktopOnMouseMoved;
 			}
 
-			CenterOnDesktop();
+			IsWindowPlaced = false;
 		}
 
-		public void CenterInBounds(Rectangle bounds)
+		public override void UpdateLayout()
 		{
-			var size = Measure(bounds.Size());
-			XHint = (bounds.Width - size.X) / 2;
-			YHint = (bounds.Height - size.Y) / 2;
+			base.UpdateLayout();
+
+			if (!IsWindowPlaced)
+			{
+				CenterOnDesktop();
+				IsWindowPlaced = true;
+			}
 		}
 
 		public void CenterOnDesktop()
@@ -215,7 +224,12 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			CenterInBounds(Desktop.Bounds);
+			if (XHint == 0 && YHint == 0)
+			{
+				var size = Bounds.Size;
+				XHint = (ContainerBounds.Width - size.X) / 2;
+				YHint = (ContainerBounds.Height - size.Y) / 2;
+			}
 		}
 
 		private void DesktopOnMouseMoved(object sender, GenericEventArgs<Point> genericEventArgs)

@@ -109,7 +109,8 @@ namespace Myra.Graphics2D.UI
 		{
 			var messageLabel = new TextBlock
 			{
-				Text = message
+				Text = message,
+				Wrap = true
 			};
 
 			return CreateMessageBox(title, messageLabel);
