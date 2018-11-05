@@ -265,6 +265,11 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
+				if (value < 0)
+				{
+					throw new ArgumentOutOfRangeException("value");
+				}
+
 				_gridPositionX = value;
 				InvalidateMeasure();
 			}
@@ -281,6 +286,11 @@ namespace Myra.Graphics2D.UI
 				if (value == _gridPositionY)
 				{
 					return;
+				}
+
+				if (value < 0)
+				{
+					throw new ArgumentOutOfRangeException("value");
 				}
 
 				_gridPositionY = value;
@@ -301,6 +311,11 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
+				if (value < 0)
+				{
+					throw new ArgumentOutOfRangeException("value");
+				}
+
 				_gridSpanX = value;
 				InvalidateMeasure();
 			}
@@ -317,6 +332,11 @@ namespace Myra.Graphics2D.UI
 				if (value == _gridSpanY)
 				{
 					return;
+				}
+
+				if (value < 0)
+				{
+					throw new ArgumentOutOfRangeException("value");
 				}
 
 				_gridSpanY = value;

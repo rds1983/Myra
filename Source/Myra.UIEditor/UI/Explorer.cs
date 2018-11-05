@@ -172,7 +172,7 @@ namespace Myra.UIEditor.UI
 				{
 					widgets = ((SplitPane)item).Widgets;
 				}
-				else if (item is MultipleItemsContainer && !(item is ListBox) && !(item is ComboBox) && !(item is SpinButton))
+				else if (item is MultipleItemsContainer && !(item is ListBox) && !(item is ComboBox) && !(item is SpinButton) && !(item is ProgressBar))
 				{
 					var container = item as MultipleItemsContainer;
 					widgets = container.Children;

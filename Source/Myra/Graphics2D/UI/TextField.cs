@@ -167,12 +167,12 @@ namespace Myra.Graphics2D.UI
 		/// <summary>
 		/// Fires every time when the text had been changed
 		/// </summary>
-		public event EventHandler TextChanged;
+		public event EventHandler<ValueChangedEventArgs<string>> TextChanged;
 
 		/// <summary>
 		/// Fires every time when the text had been changed by user(doesnt fire if it had been assigned through code)
 		/// </summary>
-		public event EventHandler TextChangedByUser;
+		public event EventHandler<ValueChangedEventArgs<string>> TextChangedByUser;
 
 		public TextField(TextFieldStyle style)
 		{
@@ -218,13 +218,14 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
+			var oldValue = _formattedText.Text;
 			_formattedText.Text = value;
 			InvalidateMeasure();
 
 			var ev = TextChanged;
 			if (ev != null)
 			{
-				ev(this, EventArgs.Empty);
+				ev(this, new ValueChangedEventArgs<string>(oldValue, value));
 			}
 
 			if (byUser)
@@ -232,7 +233,7 @@ namespace Myra.Graphics2D.UI
 				ev = TextChangedByUser;
 				if (ev != null)
 				{
-					ev(this, EventArgs.Empty);
+					ev(this, new ValueChangedEventArgs<string>(oldValue, value));
 				}
 			}
 

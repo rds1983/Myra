@@ -17,13 +17,15 @@ namespace Myra.Graphics2D.UI
 		public abstract Orientation Orientation { get; }
 
 		[EditCategory("Behavior")]
+		[DefaultValue(0.0f)]
 		public float Minimum { get; set; }
 
 		[EditCategory("Behavior")]
-		[DefaultValue(100)]
+		[DefaultValue(100.0f)]
 		public float Maximum { get; set; }
 
 		[EditCategory("Behavior")]
+		[DefaultValue(0.0f)]
 		public float Value
 		{
 			get { return _value; }

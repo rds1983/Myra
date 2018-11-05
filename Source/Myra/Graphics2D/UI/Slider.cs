@@ -18,14 +18,15 @@ namespace Myra.Graphics2D.UI
 		public abstract Orientation Orientation { get; }
 
 		[EditCategory("Behavior")]
+		[DefaultValue(0.0f)]
 		public float Minimum { get; set; }
 
 		[EditCategory("Behavior")]
-		[DefaultValue(100)]
+		[DefaultValue(100.0f)]
 		public float Maximum { get; set; }
 
-		[HiddenInEditor]
-		[JsonIgnore]
+		[EditCategory("Behavior")]
+		[DefaultValue(0.0f)]
 		public float Value
 		{
 			get
@@ -51,6 +52,7 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
+				var oldValue = _value;
 				_value = value;
 
 				SyncHintWithValue();
@@ -58,7 +60,7 @@ namespace Myra.Graphics2D.UI
 				var ev = ValueChanged;
 				if (ev != null)
 				{
-					ev(this, EventArgs.Empty);
+					ev(this, new ValueChangedEventArgs<float>(oldValue, value));
 				}
 			}
 		}
@@ -98,12 +100,12 @@ namespace Myra.Graphics2D.UI
 		/// <summary>
 		/// Fires when the value had been changed
 		/// </summary>
-		public event EventHandler ValueChanged;
+		public event EventHandler<ValueChangedEventArgs<float>> ValueChanged;
 
 		/// <summary>
 		/// Fires only when the value had been changed by user(doesnt fire if it had been assigned through code)
 		/// </summary>
-		public event EventHandler ValueChangedByUser;
+		public event EventHandler<ValueChangedEventArgs<float>> ValueChangedByUser;
 
 		protected Slider(SliderStyle sliderStyle)
 		{
@@ -204,6 +206,7 @@ namespace Myra.Graphics2D.UI
 				hint = MaxHint;
 			}
 
+			var oldValue = _value;
 			var valueChanged = false;
 			// Sync Value with Hint
 			if (MaxHint != 0)
@@ -225,13 +228,13 @@ namespace Myra.Graphics2D.UI
 				var ev = ValueChanged;
 				if (ev != null)
 				{
-					ev(this, EventArgs.Empty);
+					ev(this, new ValueChangedEventArgs<float>(oldValue, _value));
 				}
 
 				ev = ValueChangedByUser;
 				if (ev != null)
 				{
-					ev(this, EventArgs.Empty);
+					ev(this, new ValueChangedEventArgs<float>(oldValue, _value));
 				}
 			}
 

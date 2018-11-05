@@ -18,7 +18,7 @@ namespace Myra.Graphics2D.UI
 			set { base.HorizontalAlignment = value; }
 		}
 
-		[DefaultValue(VerticalAlignment.Top)]
+		[DefaultValue(VerticalAlignment.Stretch)]
 		public override VerticalAlignment VerticalAlignment
 		{
 			get { return base.VerticalAlignment; }
@@ -29,7 +29,7 @@ namespace Myra.Graphics2D.UI
 			: base(style)
 		{
 			HorizontalAlignment = HorizontalAlignment.Left;
-			VerticalAlignment = VerticalAlignment.Top;
+			VerticalAlignment = VerticalAlignment.Stretch;
 		}
 
 		public VerticalProgressBar(string style)

@@ -512,9 +512,15 @@ namespace Myra.Editor.UI
 
 								FireChanged(record.Name);
 							}
-							catch (Exception)
+							catch (InvalidCastException)
 							{
 								// TODO: Rework this ugly type conversion solution
+							}
+							catch (Exception ex)
+							{
+								spinButton.Value = args.OldValue;
+								var dialog = Dialog.CreateMessageBox("Error", ex.ToString());
+								dialog.ShowModal(Desktop);
 							}
 						};
 					}

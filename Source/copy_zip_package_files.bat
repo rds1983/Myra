@@ -36,6 +36,9 @@ copy "Myra.Editor\bin\FNA\%CONFIGURATION%\Myra.Editor.pdb" "ZipPackage\FNA\" /Y
 copy "Myra.UIEditor\bin\%CONFIGURATION%\Myra.UIEditor.exe" ZipPackage /Y
 copy "Myra.UIEditor\bin\%CONFIGURATION%\Myra.UIEditor.exe.config" ZipPackage /Y
 copy "Myra.UIEditor\bin\%CONFIGURATION%\Myra.UIEditor.pdb" ZipPackage /Y
+copy "Tools\ToMyraAtlasConverter\bin\%CONFIGURATION%\ToMyraAtlasConverter.exe" ZipPackage /Y
+copy "Tools\ToMyraAtlasConverter\bin\%CONFIGURATION%\ToMyraAtlasConverter.exe.config" ZipPackage /Y
+copy "Tools\ToMyraAtlasConverter\bin\%CONFIGURATION%\ToMyraAtlasConverter.pdb" ZipPackage /Y
 
 copy "Myra-Dependencies\MonoGame.Framework.DesktopGL\MonoGame.Framework.dll" "ZipPackage" /Y
 copy "Myra-Dependencies\MonoGame.Framework.DesktopGL\MonoGame.Framework.dll.config" "ZipPackage" /Y

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
+using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
 {
@@ -11,15 +13,19 @@ namespace Myra.Graphics2D.UI
 		private readonly ImageButton _upButton;
 		private readonly ImageButton _downButton;
 
+		[EditCategory("Behavior")]
 		[DefaultValue(false)]
 		public bool Nullable { get; set; }
 
+		[EditCategory("Behavior")]
 		[DefaultValue(null)]
 		public float? Maximum { get; set; }
 
+		[EditCategory("Behavior")]
 		[DefaultValue(null)]
 		public float? Minimum { get; set; }
 
+		[EditCategory("Behavior")]
 		[DefaultValue(0.0f)]
 		public float? Value
 		{
@@ -75,6 +81,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[EditCategory("Behavior")]
 		[DefaultValue(false)]
 		public bool Integer { get; set; }
 
@@ -95,12 +102,12 @@ namespace Myra.Graphics2D.UI
 		/// <summary>
 		/// Fires when the value had been changed
 		/// </summary>
-		public event EventHandler ValueChanged;
+		public event EventHandler<ValueChangedEventArgs<float?>> ValueChanged;
 
 		/// <summary>
 		/// Fires only when the value had been changed by user(doesnt fire if it had been assigned through code)
 		/// </summary>
-		public event EventHandler ValueChangedByUser;
+		public event EventHandler<ValueChangedEventArgs<float?>> ValueChangedByUser;
 
 		public SpinButton(SpinButtonStyle style): base(style)
 		{
@@ -165,21 +172,31 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
-		private void TextFieldOnTextChanged(object sender, EventArgs eventArgs)
+		private static float? StringToFloat(string s)
+		{
+			if (string.IsNullOrEmpty(s))
+			{
+				return null;
+			}
+
+			return float.Parse(s);
+		}
+
+		private void TextFieldOnTextChanged(object sender, ValueChangedEventArgs<string> eventArgs)
 		{
 			var ev = ValueChanged;
 			if (ev != null)
 			{
-				ev(this, EventArgs.Empty);
+				ev(this, new ValueChangedEventArgs<float?>(StringToFloat(eventArgs.OldValue), StringToFloat(eventArgs.NewValue)));
 			}
 		}
 
-		private void TextFieldOnTextChangedByUser(object sender, EventArgs eventArgs)
+		private void TextFieldOnTextChangedByUser(object sender, ValueChangedEventArgs<string> eventArgs)
 		{
 			var ev = ValueChangedByUser;
 			if (ev != null)
 			{
-				ev(this, EventArgs.Empty);
+				ev(this, new ValueChangedEventArgs<float?>(StringToFloat(eventArgs.OldValue), StringToFloat(eventArgs.NewValue)));
 			}
 		}
 
@@ -238,6 +255,7 @@ namespace Myra.Graphics2D.UI
 			if (InRange(value))
 			{
 				var changed = Value != value;
+				var oldValue = Value;
 				Value = value;
 
 				if (changed)
@@ -245,7 +263,7 @@ namespace Myra.Graphics2D.UI
 					var ev = ValueChangedByUser;
 					if (ev != null)
 					{
-						ev(this, EventArgs.Empty);
+						ev(this, new ValueChangedEventArgs<float?>(oldValue, value));
 					}
 				}
 			}
@@ -263,7 +281,7 @@ namespace Myra.Graphics2D.UI
 			if (InRange(value))
 			{
 				var changed = Value != value;
-
+				var oldValue = Value;
 				Value = value;
 
 				if (changed)
@@ -271,7 +289,7 @@ namespace Myra.Graphics2D.UI
 					var ev = ValueChangedByUser;
 					if (ev != null)
 					{
-						ev(this, EventArgs.Empty);
+						ev(this, new ValueChangedEventArgs<float?>(oldValue, value));
 					}
 				}
 			}
