@@ -376,7 +376,8 @@ namespace Myra.Editor.UI
 						Renderable = DefaultAssets.WhiteRegion,
 						VerticalAlignment = VerticalAlignment.Center,
 						WidthHint = 32,
-						HeightHint = 16
+						HeightHint = 16,
+						Color = color
 					};
 
 					subGrid.Widgets.Add(image);
