@@ -386,7 +386,7 @@ namespace Myra.Graphics2D.UI
 
 		private void Click(MenuItemButton menuItemButton)
 		{
-			if (Desktop == null)
+			if (Desktop == null || !menuItemButton.Enabled)
 			{
 				return;
 			}

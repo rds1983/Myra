@@ -72,6 +72,7 @@ namespace Myra.UIEditor
 				}
 
 				UpdateTitle();
+				UpdateMenuFile();
 			}
 		}
 
@@ -262,6 +263,7 @@ namespace Myra.UIEditor
 
 			_ui._menuFileNew.Selected += NewItemOnClicked;
 			_ui._menuFileOpen.Selected += OpenItemOnClicked;
+			_ui._menuFileReload.Selected += OnMenuFileReloadSelected;
 			_ui._menuFileSave.Selected += SaveItemOnClicked;
 			_ui._menuFileSaveAs.Selected += SaveAsItemOnClicked;
 			_ui._menuFileExportToCS.Selected += ExportCsItemOnSelected;
@@ -476,7 +478,13 @@ namespace Myra.UIEditor
 			_statisticsGrid.YHint = -10;
 			_desktop.Widgets.Add(_statisticsGrid);
 
-			UpdateEnabled();
+			UpdateMenuFile();
+			UpdateMenuControls();
+		}
+
+		private void OnMenuFileReloadSelected(object sender, EventArgs e)
+		{
+			Load(FilePath);
 		}
 
 		private void DebugOptionsItemOnSelected(object sender1, EventArgs eventArgs)
@@ -624,7 +632,7 @@ namespace Myra.UIEditor
 		{
 			_propertyGrid.Object = _explorer.SelectedObject is Project ? null : _explorer.SelectedObject;
 
-			UpdateEnabled();
+			UpdateMenuControls();
 		}
 
 		private void QuitItemOnDown(object sender, EventArgs eventArgs)
@@ -855,7 +863,12 @@ namespace Myra.UIEditor
 			Window.Title = title;
 		}
 
-		private void UpdateEnabled()
+		private void UpdateMenuFile()
+		{
+			_ui._menuFileReload.Enabled = !string.IsNullOrEmpty(FilePath);
+		}
+
+		private void UpdateMenuControls()
 		{
 			var enableStandard = false;
 			var enableContainers = false;

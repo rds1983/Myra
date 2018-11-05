@@ -10,6 +10,7 @@
       <MenuItem Id="" Text="&amp;File">
         <MenuItem Id="_menuFileNew" Text="&amp;New" />
         <MenuItem Id="_menuFileOpen" Text="&amp;Open" />
+        <MenuItem Id="_menuFileReload" Text="&amp;Reload" />
         <MenuItem Id="_menuFileSave" Text="&amp;Save" />
         <MenuItem Id="_menuFileSaveAs" Text="Save &amp;As..." />
         <MenuItem Id="_menuFileExportToCS" Text="&amp;Export To C#..." />

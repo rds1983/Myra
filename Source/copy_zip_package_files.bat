@@ -3,7 +3,6 @@ rmdir "ZipPackage" /Q /S
 
 rem Create required folders
 mkdir "ZipPackage"
-mkdir "ZipPackage\Content"
 mkdir "ZipPackage\FNA"
 mkdir "ZipPackage\x64"
 mkdir "ZipPackage\x86"
@@ -18,7 +17,6 @@ copy "Myra\bin\FNA\%CONFIGURATION%\Myra.pdb" "ZipPackage\FNA\" /Y
 copy "Myra\bin\%CONFIGURATION%\Newtonsoft.Json.dll" ZipPackage /Y
 copy "Myra\bin\%CONFIGURATION%\Newtonsoft.Json.xml" ZipPackage /Y
 copy "Samples\Myra.Samples.AllWidgets\bin\%CONFIGURATION%\Myra.Samples.AllWidgets.exe" ZipPackage /Y
-copy "Samples\Myra.Samples.CustomUIStylesheet\bin\%CONFIGURATION%\Content\*.*" "ZipPackage\Content\" /Y
 copy "Samples\Myra.Samples.CustomUIStylesheet\bin\%CONFIGURATION%\Myra.Samples.CustomUIStylesheet.exe" ZipPackage /Y
 copy "Samples\Myra.Samples.FormattedTextSample\bin\%CONFIGURATION%\Myra.Samples.FormattedTextSample.exe" ZipPackage /Y
 copy "Samples\Myra.Samples.GridContainer\bin\%CONFIGURATION%\Myra.Samples.GridContainer.exe" ZipPackage /Y
