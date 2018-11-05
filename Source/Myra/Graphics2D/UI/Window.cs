@@ -226,7 +226,7 @@ namespace Myra.Graphics2D.UI
 
 			if (XHint == 0 && YHint == 0)
 			{
-				var size = Bounds.Size;
+				var size =  Bounds.Size();
 				XHint = (ContainerBounds.Width - size.X) / 2;
 				YHint = (ContainerBounds.Height - size.Y) / 2;
 			}

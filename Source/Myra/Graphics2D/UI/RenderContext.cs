@@ -58,7 +58,7 @@ namespace Myra.Graphics2D.UI
 		public void Draw(IRenderable renderable, Point location, Color? color = null)
 		{
 			var c = color != null ? color.Value : Color.White;
-			renderable.Draw(Batch, new Rectangle(location, renderable.Size), c * Opacity);
+			renderable.Draw(Batch, new Rectangle(location.X, location.Y, renderable.Size.X, renderable.Size.Y), c * Opacity);
 		}
 
 		/// <summary>
