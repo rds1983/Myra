@@ -28,7 +28,7 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
-		public HorizontalMenu() : base(Stylesheet.Current.HorizontalMenuStyle)
+		public HorizontalMenu() : this(Stylesheet.Current.HorizontalMenuStyle)
 		{
 		}
 
