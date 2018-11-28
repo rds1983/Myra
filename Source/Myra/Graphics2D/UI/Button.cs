@@ -96,6 +96,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Appearance")]
+		[DefaultValue(null)]
 		public virtual int? ImageWidthHint
 		{
 			get { return _image.WidthHint; }
@@ -103,6 +104,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Appearance")]
+		[DefaultValue(null)]
 		public virtual int? ImageHeightHint
 		{
 			get { return _image.HeightHint; }

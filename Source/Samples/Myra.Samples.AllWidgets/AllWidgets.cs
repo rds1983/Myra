@@ -12,23 +12,58 @@ namespace Myra.Samples.AllWidgets
 		{
 			BuildUI();
 
-			_button.Image = DefaultAssets.UISpritesheet["icon-star"];
-			_blueButton.Image = DefaultAssets.UISpritesheet["icon-star"];
-			_imageButton.Image = DefaultAssets.UISpritesheet["icon-star-outline"];
-
-			_button.Up += (sender, args) =>
+			_buttonOpenFile.Image = DefaultAssets.UISpritesheet["icon-star"];
+			_buttonOpenFile.Up += (sender, args) =>
 			{
-				var debugWindow = new FileDialog(FileDialogMode.OpenFile);
-				debugWindow.ShowModal(Desktop);
+				var fileDialog = new FileDialog(FileDialogMode.OpenFile);
+				fileDialog.ShowModal(Desktop);
+
+				fileDialog.Closed += (s, a) =>
+				{
+					if (!fileDialog.Result)
+					{
+						return;
+					}
+
+					_textOpenFile.Text = fileDialog.FilePath;
+				};
 			};
 
-			_blueButton.Up += (sender, args) =>
+			_buttonSaveFile.Image = DefaultAssets.UISpritesheet["icon-star"];
+			_buttonSaveFile.Up += (sender, args) =>
 			{
-				var debugWindow = new FileDialog(FileDialogMode.SaveFile);
-				debugWindow.ShowModal(Desktop);
+				var fileDialog = new FileDialog(FileDialogMode.SaveFile);
+				fileDialog.ShowModal(Desktop);
+
+				fileDialog.Closed += (s, a) =>
+				{
+					if (!fileDialog.Result)
+					{
+						return;
+					}
+
+					_textSaveFile.Text = fileDialog.FilePath;
+				};
 			};
 
-			_textButton.Up += (sender, args) =>
+			_buttonChooseFolder.Image = DefaultAssets.UISpritesheet["icon-star"];
+			_buttonChooseFolder.Up += (sender, args) =>
+			{
+				var fileDialog = new FileDialog(FileDialogMode.ChooseFolder);
+				fileDialog.ShowModal(Desktop);
+
+				fileDialog.Closed += (s, a) =>
+				{
+					if (!fileDialog.Result)
+					{
+						return;
+					}
+
+					_textChooseFolder.Text = fileDialog.FilePath;
+				};
+			};
+
+			_buttonChooseColor.Up += (sender, args) =>
 			{
 				var debugWindow = new ColorPickerDialog();
 				debugWindow.ShowModal(Desktop);
@@ -44,6 +79,7 @@ namespace Myra.Samples.AllWidgets
 				};
 			};
 
+			_imageButton.Image = DefaultAssets.UISpritesheet["icon-star-outline"];
 			_imageButton.Up += (sender, args) =>
 			{
 				var debugWindow = new DebugOptionsDialog();
@@ -60,14 +96,28 @@ namespace Myra.Samples.AllWidgets
 			{
 				HasRoot = false,
 				GridPositionX = 1,
-				GridPositionY = 11
+				GridPositionY = 12,
+				GridSpanX = 2
 			};
 			var node1 = tree.AddSubNode("node1");
 			var node2 = node1.AddSubNode("node2");
 			var node3 = node2.AddSubNode("node3");
 			node3.AddSubNode("node4");
 			node3.AddSubNode("node5");
-			node2.AddSubNode("node6");
+			node3.AddSubNode("node7");
+			node3.AddSubNode("node8");
+			node3.AddSubNode("node9");
+			node3.AddSubNode("node10");
+
+			var node4 = node2.AddSubNode("node6");
+			node4.AddSubNode("node11");
+			node4.AddSubNode("node12");
+			node4.AddSubNode("node13");
+			node4.AddSubNode("node14");
+			node4.AddSubNode("node15");
+			node4.AddSubNode("node16");
+			node4.AddSubNode("node17");
+			node4.AddSubNode("node18");
 			_gridRight.Widgets.Add(tree);
 		}
 	}
