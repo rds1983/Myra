@@ -1,0 +1,74 @@
+<Project>
+  <ExportOptions Namespace="Myra.Samples.CustomUIStylesheet" Class="AllWidgets" OutputPath="D:\Projects\Hebron\Myra\Source\Samples\Myra.Samples.CustomUIStylesheet" />
+  <HorizontalSplitPane GridPositionY="1">
+    <ScrollPane>
+      <Grid ColumnSpacing="8" RowSpacing="8" Id="_gridRight">
+        <ColumnsProportions>
+          <Proportion />
+          <Proportion Type="Fill" />
+        </ColumnsProportions>
+        <RowsProportions>
+          <Proportion />
+          <Proportion />
+          <Proportion />
+          <Proportion />
+          <Proportion />
+          <Proportion />
+          <Proportion />
+          <Proportion />
+          <Proportion />
+        </RowsProportions>
+        <TextBlock Text="Button:" Id="" />
+        <Button Text="Open File" Id="_button" PaddingLeft="8" PaddingRight="8" GridPositionX="1" />
+        <TextBlock Text="Text Button:" Id="_textButtonLabel" GridPositionY="1" />
+        <TextButton Text="Choose Color" Id="_textButton" PaddingLeft="8" PaddingRight="8" GridPositionX="1" GridPositionY="1" />
+        <TextBlock Text="Image Button:" Id="" GridPositionY="2" />
+        <ImageButton Id="_imageButton" PaddingLeft="8" PaddingRight="8" GridPositionX="1" GridPositionY="2" />
+        <CheckBox Text="This is checkbox" ImageWidthHint="10" ImageHeightHint="10" GridPositionY="3" GridSpanX="2" />
+        <TextBlock Text="Horizontal Slider:" Id="" GridPositionY="4" />
+        <HorizontalSlider GridPositionX="1" GridPositionY="4" />
+        <TextBlock Text="Combo Box:" GridPositionY="5" />
+        <ComboBox SelectedIndex="1" WidthHint="200" GridPositionX="1" GridPositionY="5">
+          <ListItem Id="" Text="Red" Color="#FF0000FF" />
+          <ListItem Text="Green" Color="#00FF00FF" />
+          <ListItem Text="Blue" Color="#0080FFFF" />
+        </ComboBox>
+        <TextBlock Text="Text Field:" GridPositionY="6" />
+        <TextField Text="" GridPositionX="1" GridPositionY="6" />
+        <TextBlock Text="List Box:" GridPositionY="7" />
+        <ListBox VerticalAlignment="Top" WidthHint="200" GridPositionX="1" GridPositionY="7">
+          <ListItem Text="Red" Color="#FF0000FF" />
+          <ListItem Text="Green" Color="#00FF00FF" />
+          <ListItem Text="Blue" Color="#0000FFFF" />
+        </ListBox>
+        <TextBlock Text="Tree" GridPositionY="8" />
+      </Grid>
+    </ScrollPane>
+    <VerticalSplitPane GridPositionX="2">
+      <Grid RowSpacing="8">
+        <ColumnsProportions>
+          <Proportion Type="Fill" />
+        </ColumnsProportions>
+        <RowsProportions>
+          <Proportion />
+          <Proportion Type="Fill" />
+        </RowsProportions>
+        <TextBlock Text="Vertical Slider:" />
+        <VerticalSlider HorizontalAlignment="Center" GridPositionY="1" />
+      </Grid>
+      <Grid RowSpacing="8" GridPositionY="2">
+        <ColumnsProportions>
+          <Proportion Type="Fill" />
+        </ColumnsProportions>
+        <RowsProportions>
+          <Proportion />
+          <Proportion />
+          <Proportion Type="Fill" />
+        </RowsProportions>
+        <TextBlock Text="Progress Bars:" />
+        <HorizontalProgressBar Id="_horizontalProgressBar" GridPositionY="1" />
+        <VerticalProgressBar HorizontalAlignment="Center" Id="_verticalProgressBar" GridPositionY="2" />
+      </Grid>
+    </VerticalSplitPane>
+  </HorizontalSplitPane>
+</Project>

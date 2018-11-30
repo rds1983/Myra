@@ -129,6 +129,20 @@ namespace Myra.Graphics2D.UI
 			set { Widget.ColumnSpacing = value; }
 		}
 
+		[DefaultValue(HorizontalAlignment.Stretch)]
+		public override HorizontalAlignment ContentHorizontalAlignment
+		{
+			get => base.ContentHorizontalAlignment;
+			set => base.ContentHorizontalAlignment = value;
+		}
+
+		[DefaultValue(VerticalAlignment.Stretch)]
+		public override VerticalAlignment ContentVerticalAlignment
+		{
+			get => base.ContentVerticalAlignment;
+			set => base.ContentVerticalAlignment = value;
+		}
+
 		public Button(ButtonStyle style)
 		{
 			Widget = new Grid((GridStyle)null);
