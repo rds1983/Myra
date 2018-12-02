@@ -14,34 +14,26 @@
           <Proportion />
           <Proportion />
           <Proportion />
-          <Proportion />
-          <Proportion />
-          <Proportion />
         </RowsProportions>
         <TextBlock Text="Button:" Id="" />
-        <Button Text="Open File" Id="_button" GridPositionX="1" />
-        <TextBlock Text="Text Button:" Id="_textButtonLabel" GridPositionY="1" />
-        <TextButton Text="Choose Color" Id="_textButton" GridPositionX="1" GridPositionY="1" />
-        <TextBlock Text="Image Button:" Id="" GridPositionY="2" />
-        <ImageButton Id="_imageButton" GridPositionX="1" GridPositionY="2" />
-        <CheckBox Text="This is checkbox" ImageWidthHint="12" ImageHeightHint="12" GridPositionY="3" GridSpanX="2" />
-        <TextBlock Text="Horizontal Slider:" Id="" GridPositionY="4" />
-        <HorizontalSlider GridPositionX="1" GridPositionY="4" />
-        <TextBlock Text="Combo Box:" GridPositionY="5" />
-        <ComboBox SelectedIndex="1" GridPositionX="1" GridPositionY="5">
-          <ListItem Id="" Text="Red" Color="#FF0000FF" />
-          <ListItem Text="Green" Color="#00FF00FF" />
-          <ListItem Text="Blue" Color="#0080FFFF" />
+        <Button Text="Button" Id="_button" GridPositionX="1" />
+        <CheckBox Text="This is checkbox" ImageWidthHint="12" ImageHeightHint="12" GridPositionY="1" GridSpanX="2" />
+        <TextBlock Text="Slider:" Id="" GridPositionY="2" />
+        <HorizontalSlider GridPositionX="1" GridPositionY="2" />
+        <TextBlock Text="Combo Box:" GridPositionY="3" />
+        <ComboBox GridPositionX="1" GridPositionY="3">
+          <ListItem Text="Item 1" />
+          <ListItem Text="Item 2" />
+          <ListItem Text="Item 3" />
         </ComboBox>
-        <TextBlock Text="Text Field:" GridPositionY="6" />
-        <TextField Text="" GridPositionX="1" GridPositionY="6" />
-        <TextBlock Text="List Box:" GridPositionY="7" />
-        <ListBox VerticalAlignment="Top" GridPositionX="1" GridPositionY="7">
-          <ListItem Text="Red" Color="#FF0000FF" />
-          <ListItem Text="Green" Color="#00FF00FF" />
-          <ListItem Text="Blue" Color="#0000FFFF" />
+        <TextBlock Text="Text Field:" GridPositionY="4" />
+        <TextField Text="" GridPositionX="1" GridPositionY="4" />
+        <TextBlock Text="List Box:" GridPositionY="5" />
+        <ListBox VerticalAlignment="Top" GridPositionX="1" GridPositionY="5">
+          <ListItem Text="Item 1" />
+          <ListItem Text="Item 2" />
+          <ListItem Text="Item 3" />
         </ListBox>
-        <TextBlock Text="Tree" GridPositionY="8" />
       </Grid>
     </ScrollPane>
     <VerticalSplitPane GridPositionX="2">

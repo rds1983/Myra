@@ -3,6 +3,7 @@ using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Myra.Attributes;
+using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using Newtonsoft.Json;

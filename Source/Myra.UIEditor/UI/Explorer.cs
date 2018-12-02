@@ -163,25 +163,14 @@ namespace Myra.UIEditor.UI
 			}
 			else
 			{
-				IEnumerable<Widget> widgets = null;
-				if (item is Window)
+				var widget = item as Widget;
+
+				if (widget == null)
 				{
-					widgets = new Widget[] { ((Window)item).Content };
-				}
-				else if (item is SplitPane)
-				{
-					widgets = ((SplitPane)item).Widgets;
-				}
-				else if (item is MultipleItemsContainer && !(item is ListBox) && !(item is ComboBox) && !(item is SpinButton) && !(item is ProgressBar))
-				{
-					var container = item as MultipleItemsContainer;
-					widgets = container.Children;
-				}
-				else if (item is ScrollPane)
-				{
-					widgets = ((ScrollPane)item).Children;
+					return;
 				}
 
+				IEnumerable<Widget> widgets = widget.GetRealChildren();
 				if (widgets == null)
 				{
 					return;

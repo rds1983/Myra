@@ -12,7 +12,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class Window : GridBased
 	{
-		[Obsolete("Enum is obsolete and will be removed in the future version")]
+		[Obsolete("This enum is obsolete and will be removed in the future versions")]
 		public enum DefaultModalResult
 		{
 			Ok,

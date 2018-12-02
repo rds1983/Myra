@@ -120,20 +120,19 @@ namespace Myra.Graphics2D.UI
 		{
 			ApplyButtonBaseStyle(style);
 
-			if (style.ImageStyle != null)
-			{
-				var imageStyle = style.ImageStyle;
+			var imageStyle = style.ImageStyle;
 
-				Widget.ApplyWidgetStyle(imageStyle);
+			Widget.ApplyWidgetStyle(imageStyle);
 
-				Image = imageStyle.Image;
-				OverImage = imageStyle.OverImage;
-				PressedImage = imageStyle.PressedImage;
+			Image = imageStyle.Image;
+			OverImage = imageStyle.OverImage;
+			PressedImage = imageStyle.PressedImage;
 
-				Widget.UpdateImageSize(imageStyle.Image);
-				Widget.UpdateImageSize(imageStyle.OverImage);
-				Widget.UpdateImageSize(imageStyle.PressedImage);
-			}
+			Widget.WidthHint = null;
+			Widget.HeightHint = null;
+			Widget.UpdateImageSize(imageStyle.Image);
+			Widget.UpdateImageSize(imageStyle.OverImage);
+			Widget.UpdateImageSize(imageStyle.PressedImage);
 
 			UpdateTextureRegion();
 		}

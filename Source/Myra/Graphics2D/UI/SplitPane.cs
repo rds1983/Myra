@@ -292,6 +292,7 @@ namespace Myra.Graphics2D.UI
 			ApplyWidgetStyle(style);
 
 			HandleStyle = style.HandleStyle;
+			Reset();
 		}
 	}
 }

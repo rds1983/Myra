@@ -140,10 +140,7 @@ namespace Myra.Graphics2D.UI
 		{
 			ApplyWidgetStyle(style);
 
-			if (style.KnobStyle != null)
-			{
-				Widget.ApplyImageButtonStyle(style.KnobStyle);
-			}
+			Widget.ApplyImageButtonStyle(style.KnobStyle);
 		}
 
 		private void SyncHintWithValue()

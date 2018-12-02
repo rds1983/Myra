@@ -15,9 +15,9 @@
         <MenuItem Id="_menuFileSaveAs" Text="Save &amp;As..." />
         <MenuItem Id="_menuFileExportToCS" Text="&amp;Export To C#..." />
         <MenuSeparator />
-        <MenuItem Id="_menuFileLoadStylesheet" Text="Load &amp;Stylesheet" />
-        <MenuItem Id="_menuFileReloadStylesheet" Text="Re&amp;load Stylesheet" />
-        <MenuItem Id="_menuFileResetStylesheet" Text="Re&amp;set Stylesheet" />
+        <MenuItem Id="_menuFileLoadStylesheet" Text="&amp;Load Stylesheet" />
+        <MenuItem Id="_menuFileReloadStylesheet" Text="Rel&amp;oad Stylesheet" />
+        <MenuItem Id="_menuFileResetStylesheet" Text="Rese&amp;t Stylesheet" />
         <MenuSeparator />
         <MenuItem Id="_menuFileDebugOptions" Text="&amp;UI Debug Options" />
         <MenuSeparator />

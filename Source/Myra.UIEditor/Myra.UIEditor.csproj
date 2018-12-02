@@ -54,6 +54,7 @@
     </Compile>
     <Compile Include="State.cs" />
     <Compile Include="Studio.cs" />
+    <Compile Include="UIUtils.cs" />
     <Compile Include="UI\Explorer.cs" />
     <Compile Include="UI\ExportOptionsDialog.cs" />
     <Compile Include="UI\ExportOptionsWidget.cs" />

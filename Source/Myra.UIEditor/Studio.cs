@@ -594,15 +594,14 @@ namespace Myra.UIEditor
 		{
 			a(w);
 
-			var asContainer = w as Container;
-			if (asContainer == null)
-			{
-				return;
-			}
+			var children = w.GetRealChildren();
 
-			foreach (var child in asContainer.Children)
+			if (children != null)
 			{
-				IterateWidget(child, a);
+				foreach (var child in children)
+				{
+					IterateWidget(child, a);
+				}
 			}
 		}
 
@@ -640,9 +639,13 @@ namespace Myra.UIEditor
 				Filter = "*.json"
 			};
 
-			if (Project != null && !string.IsNullOrEmpty(Project.StylesheetPath))
+			if (!string.IsNullOrEmpty(Project.StylesheetPath))
 			{
 				dlg.Folder = Path.GetDirectoryName(Project.StylesheetPath);
+			}
+			else if (!string.IsNullOrEmpty(FilePath))
+			{
+				dlg.Folder = Path.GetDirectoryName(FilePath);
 			}
 
 			dlg.Closed += (s, a) =>
