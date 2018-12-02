@@ -4,13 +4,18 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Myra.Editor.Plugin;
 using Myra.Editor.UI;
 using Myra.Editor.UI.File;
+using Myra.Graphics2D.Text;
+using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.ColorPicker;
+using Myra.Graphics2D.UI.Styles;
 using Myra.UIEditor.UI;
 using Myra.Utility;
+using Newtonsoft.Json.Linq;
 
 namespace Myra.UIEditor
 {
@@ -267,6 +272,9 @@ namespace Myra.UIEditor
 			_ui._menuFileSave.Selected += SaveItemOnClicked;
 			_ui._menuFileSaveAs.Selected += SaveAsItemOnClicked;
 			_ui._menuFileExportToCS.Selected += ExportCsItemOnSelected;
+			_ui._menuFileLoadStylesheet.Selected += OnMenuFileLoadStylesheet;
+			_ui._menuFileReloadStylesheet.Selected += OnMenuFileReloadStylesheet;
+			_ui._menuFileResetStylesheet.Selected += OnMenuFileResetStylesheet;
 			_ui._menuFileDebugOptions.Selected += DebugOptionsItemOnSelected;
 			_ui._menuFileQuit.Selected += QuitItemOnDown;
 
@@ -485,6 +493,188 @@ namespace Myra.UIEditor
 		private void OnMenuFileReloadSelected(object sender, EventArgs e)
 		{
 			Load(FilePath);
+		}
+
+		private static string BuildPath(string folder, string fileName)
+		{
+			if (Path.IsPathRooted(fileName))
+			{
+				return fileName;
+			}
+
+			return Path.Combine(folder, fileName);
+		}
+
+		private Stylesheet StylesheetFromFile(string path)
+		{
+			var data = File.ReadAllText(path);
+			var root = JObject.Parse(data);
+
+			var folder = Path.GetDirectoryName(path);
+
+			// Load texture atlases
+			var textureAtlases = new Dictionary<string, TextureRegionAtlas>();
+			JObject textureAtlasesNode;
+			if (root.GetStyle("textureAtlases", out textureAtlasesNode))
+			{
+				foreach (var pair in textureAtlasesNode)
+				{
+					var atlasPath = BuildPath(folder, pair.Key.ToString());
+					var imagePath = BuildPath(folder, pair.Value.ToString());
+					using (var stream = File.OpenRead(imagePath))
+					{
+						var texture = Texture2D.FromStream(GraphicsDevice, stream);
+
+						var atlasData = File.ReadAllText(atlasPath);
+						textureAtlases[pair.Key] = TextureRegionAtlas.FromJson(atlasData, texture);
+					}
+				}
+			}
+
+			// Load fonts
+			var fonts = new Dictionary<string, SpriteFont>();
+			JObject fontsNode;
+			if (root.GetStyle("fonts", out fontsNode))
+			{
+				foreach (var pair in fontsNode)
+				{
+					var fontPath = BuildPath(folder, pair.Value.ToString());
+
+					var fontData = File.ReadAllText(fontPath);
+					fonts[pair.Key] = SpriteFontHelper.LoadFromFnt(fontData,
+						s =>
+						{
+							if (s.Contains("#"))
+							{
+								var parts = s.Split('#');
+
+								return textureAtlases[parts[0]][parts[1]];
+							}
+
+							var imagePath = BuildPath(folder, s);
+							using (var stream = File.OpenRead(imagePath))
+							{
+								var texture = Texture2D.FromStream(GraphicsDevice, stream);
+
+								return new TextureRegion(texture);
+							}
+						});
+				}
+			}
+
+			return Stylesheet.CreateFromSource(data,
+				s =>
+				{
+					TextureRegion result;
+					foreach (var pair in textureAtlases)
+					{
+						if (pair.Value.Regions.TryGetValue(s, out result))
+						{
+							return result;
+						}
+					}
+
+					throw new Exception(string.Format("Could not find texture region '{0}'", s));
+				},
+				s =>
+				{
+					SpriteFont result;
+
+					if (fonts.TryGetValue(s, out result))
+					{
+						return result;
+					}
+
+					throw new Exception(string.Format("Could not find font '{0}'", s));
+				}
+			);
+		}
+
+		private static void IterateWidget(Widget w, Action<Widget> a)
+		{
+			a(w);
+
+			var asContainer = w as Container;
+			if (asContainer == null)
+			{
+				return;
+			}
+
+			foreach (var child in asContainer.Children)
+			{
+				IterateWidget(child, a);
+			}
+		}
+
+		private void SetStylesheet(Stylesheet stylesheet)
+		{
+			IterateWidget(Project.Root, w => w.ApplyStylesheet(stylesheet));
+			Project.Stylesheet = stylesheet;
+		}
+
+		private void LoadStylesheet(string filePath)
+		{
+			if (string.IsNullOrEmpty(filePath))
+			{
+				return;
+			}
+
+			try
+			{
+				var stylesheet = StylesheetFromFile(filePath);
+				SetStylesheet(stylesheet);
+			}
+			catch (Exception ex)
+			{
+				var dialog = Dialog.CreateMessageBox("Error", ex.ToString());
+				dialog.ShowModal(_desktop);
+			}
+
+			Project.StylesheetPath = filePath;
+		}
+
+		private void OnMenuFileLoadStylesheet(object sender, EventArgs e)
+		{
+			var dlg = new FileDialog(FileDialogMode.OpenFile)
+			{
+				Filter = "*.json"
+			};
+
+			if (Project != null && !string.IsNullOrEmpty(Project.StylesheetPath))
+			{
+				dlg.Folder = Path.GetDirectoryName(Project.StylesheetPath);
+			}
+
+			dlg.Closed += (s, a) =>
+			{
+				if (!dlg.Result)
+				{
+					return;
+				}
+
+				var filePath = dlg.FilePath;
+				LoadStylesheet(filePath);
+				IsDirty = true;
+			};
+
+			dlg.ShowModal(_desktop);
+		}
+
+		private void OnMenuFileReloadStylesheet(object sender, EventArgs e)
+		{
+			if (string.IsNullOrEmpty(Project.StylesheetPath))
+			{
+				return;
+			}
+
+			LoadStylesheet(Project.StylesheetPath);
+		}
+
+		private void OnMenuFileResetStylesheet(object sender, EventArgs e)
+		{
+			SetStylesheet(Stylesheet.Current);
+			Project.StylesheetPath = null;
+			IsDirty = true;
 		}
 
 		private void DebugOptionsItemOnSelected(object sender1, EventArgs eventArgs)
@@ -842,6 +1032,12 @@ namespace Myra.UIEditor
 
 				Project = project;
 				FilePath = filePath;
+
+				if (!string.IsNullOrEmpty(Project.StylesheetPath))
+				{
+					LoadStylesheet(Project.StylesheetPath);
+				}
+
 				IsDirty = false;
 			}
 			catch (Exception ex)

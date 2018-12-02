@@ -26,7 +26,7 @@ namespace Myra.UIEditor.Plugin.LibGDX
 
 			// Load ui font(s)
 			var font = SpriteFontHelper.LoadFromFnt(assetResolver.ReadAsString("ui_font.fnt"),
-				textureAtlas["default"]);
+				s => textureAtlas["default"]);
 
 			// Load stylesheet
 			var stylesheet = Stylesheet.CreateFromSource(assetResolver.ReadAsString("ui_stylesheet.json"),

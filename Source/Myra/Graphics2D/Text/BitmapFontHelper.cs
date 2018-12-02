@@ -11,17 +11,7 @@ namespace Myra.Graphics2D.Text
 {
 	public static class SpriteFontHelper
 	{
-		/// <summary>
-		/// Ensures that the specified text contains valid description for BMFont
-		/// </summary>
-		/// <param name="input"></param>
-		public static void Validate(string input)
-		{
-			var data = new BitmapFont();
-			data.LoadText(input);
-		}
-
-		public static SpriteFont LoadFromFnt(string text, TextureRegion textureRegion)
+		public static SpriteFont LoadFromFnt(string text, Func<string, TextureRegion> textureRegionLoader)
 		{
 			var data = new BitmapFont();
 			data.LoadText(text);
@@ -30,6 +20,8 @@ namespace Myra.Graphics2D.Text
 			var cropping = new List<Rectangle>();
 			var chars = new List<char>();
 			var kerning = new List<Vector3>();
+
+			var textureRegion = textureRegionLoader(data.Pages[0].FileName);
 
 			var characters = data.Characters.Values.OrderBy(c => c.Char);
 			foreach (var character in characters)

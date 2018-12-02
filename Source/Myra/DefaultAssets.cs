@@ -67,7 +67,7 @@ namespace Myra
 				}
 
 				_font = SpriteFontHelper.LoadFromFnt(_assetResolver.ReadAsString(DefaultFontName),
-					UISpritesheet.Regions["default"]);
+					s => UISpritesheet.Regions["default"]);
 
 				return _font;
 			}
@@ -84,7 +84,7 @@ namespace Myra
 
 				_fontSmall = SpriteFontHelper.LoadFromFnt(
 					_assetResolver.ReadAsString(DefaultSmallFontName),
-					UISpritesheet.Regions["font-small"]);
+					s => UISpritesheet.Regions["font-small"]);
 
 				return _fontSmall;
 			}

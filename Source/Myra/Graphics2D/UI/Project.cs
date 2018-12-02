@@ -34,6 +34,12 @@ namespace Myra.Graphics2D.UI
 		public Widget Root { get; set; }
 
 		[HiddenInEditor]
+		public string StylesheetPath
+		{
+			get; set;
+		}
+
+		[HiddenInEditor]
 		[JsonIgnore]
 		public Stylesheet Stylesheet { get; set; }
 

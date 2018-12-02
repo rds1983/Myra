@@ -229,6 +229,21 @@ namespace Myra.Graphics2D.UI
 			ApplyGridStyle(style);
 
 			ListBoxStyle = style;
+
+			foreach (var item in Items)
+			{
+				var asButton = item.Widget as Button;
+				if (asButton != null)
+				{
+					asButton.ApplyButtonStyle(style.ListItemStyle);
+				}
+
+				var asSeparator = item.Widget as SeparatorWidget;
+				if (asSeparator != null)
+				{
+					asSeparator.ApplyMenuSeparatorStyle(style.SeparatorStyle);
+				}
+			}
 		}
 
 		protected override void SetStyleByName(Stylesheet stylesheet, string name)

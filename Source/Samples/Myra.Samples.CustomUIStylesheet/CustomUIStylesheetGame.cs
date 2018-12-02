@@ -56,7 +56,7 @@ namespace Myra.Samples.CustomUIStylesheet
 			// Load ui font(s)
 			var fonts = new Dictionary<string, SpriteFont>
 			{
-				["commodore-64"] = SpriteFontHelper.LoadFromFnt(assetResolver.ReadAsString("commodore-64.fnt"), textureAtlas["commodore-64"]),
+				["commodore-64"] = SpriteFontHelper.LoadFromFnt(assetResolver.ReadAsString("commodore-64.fnt"), s => textureAtlas["commodore-64"]),
 			};
 
 			// Load stylesheet

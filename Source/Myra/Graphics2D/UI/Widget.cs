@@ -977,6 +977,13 @@ namespace Myra.Graphics2D.UI
 			return null;
 		}
 
+		public virtual void ApplyStylesheet(Stylesheet stylesheet)
+		{
+			var styleName = string.IsNullOrEmpty(StyleName) ? Stylesheet.DefaultStyleName : StyleName;
+
+			SetStyleByName(stylesheet, styleName);
+		}
+
 		public virtual void OnMouseLeft()
 		{
 			IsMouseOver = false;

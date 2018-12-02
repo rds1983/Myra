@@ -422,6 +422,11 @@ namespace Myra.Graphics2D.UI
 
 			_dropDownItemStyle = style.ListItemStyle;
 
+			foreach (var item in Items)
+			{
+				((Button)item.Widget).ApplyButtonStyle(_dropDownItemStyle);
+			}
+
 			ApplyButtonStyle(style);
 		}
 
