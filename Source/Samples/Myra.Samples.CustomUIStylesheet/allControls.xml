@@ -19,7 +19,7 @@
           <Proportion />
         </RowsProportions>
         <TextBlock Text="Button:" Id="" />
-        <Button Text="Open File" Id="_button" PaddingLeft="8" PaddingRight="8" GridPositionX="1" />
+        <Button Text="Button" Id="_button" PaddingLeft="8" PaddingRight="8" GridPositionX="1" />
         <TextBlock Text="Text Button:" Id="_textButtonLabel" GridPositionY="1" />
         <TextButton Text="Choose Color" Id="_textButton" PaddingLeft="8" PaddingRight="8" GridPositionX="1" GridPositionY="1" />
         <TextBlock Text="Image Button:" Id="" GridPositionY="2" />

@@ -1082,6 +1082,7 @@ namespace Myra.UIEditor
 				Project = project;
 				FilePath = filePath;
 
+				_ui._projectHolder.Background = null;
 				if (!string.IsNullOrEmpty(Project.StylesheetPath))
 				{
 					LoadStylesheet(Project.StylesheetPath);
