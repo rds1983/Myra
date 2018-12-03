@@ -12,9 +12,9 @@ namespace Myra.Graphics2D.UI
 	public class ScrollPane : SingleItemContainer<Widget>
 	{
 		private Orientation _scrollbarOrientation;
-		private bool _horizontalScrollbarVisible, _verticalScrollbarVisible;
-		private Rectangle _horizontalScrollbarFrame, _horizontalScrollbarThumb;
-		private Rectangle _verticalScrollbarFrame, _verticalScrollbarThumb;
+		internal bool _horizontalScrollbarVisible, _verticalScrollbarVisible;
+		internal Rectangle _horizontalScrollbarFrame, _horizontalScrollbarThumb;
+		internal Rectangle _verticalScrollbarFrame, _verticalScrollbarThumb;
 		private Point _scrollPosition;
 		private int? _startBoundsPos;
 		private int _horizontalMaximum, _verticalMaximum;

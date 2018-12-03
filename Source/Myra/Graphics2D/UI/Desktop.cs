@@ -124,6 +124,14 @@ namespace Myra.Graphics2D.UI
 
 		public float Opacity { get; set; }
 
+		public bool IsMouseOverGUI
+		{
+			get
+			{
+				return IsPointOverGUI(MousePosition);
+			}
+		}
+
 		public Func<MouseState> MouseStateGetter { get; set; }
 		public Func<KeyboardState> KeyboardStateGetter { get; set; } 
 
@@ -534,6 +542,71 @@ namespace Myra.Graphics2D.UI
 			_reversedWidgetsCopy.AddRange(_widgets.Reverse());
 
 			_widgetsDirty = false;
+		}
+
+		private bool InternalIsPointOverGUI(Point p, Widget w)
+		{
+			if (!w.Visible || !w.ActualBounds.Contains(p))
+			{
+				return false;
+			}
+
+			// Non containers are completely solid
+			var asContainer = w as Container;
+			if (asContainer == null)
+			{
+				return true;
+			}
+
+			// Not real containers are solid as well
+			if (!((w is Grid && !(w is GridBased)) ||
+				w is Panel ||
+				w is SplitPane ||
+				w is ScrollPane))
+			{
+				return true;
+			}
+
+			// Real containers are solid only if backround is set
+			if (w.Background != null)
+			{
+				return true;
+			}
+
+			var asScrollPane = w as ScrollPane;
+			if (asScrollPane != null)
+			{
+				// Special case
+				if (asScrollPane._horizontalScrollbarVisible && asScrollPane._horizontalScrollbarFrame.Contains(p) ||
+					asScrollPane._verticalScrollbarVisible && asScrollPane._verticalScrollbarFrame.Contains(p))
+				{
+					return true;
+				}
+			}
+
+			// Or if any child is solid
+			foreach (var ch in asContainer.Children)
+			{
+				if (InternalIsPointOverGUI(p, ch))
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		public bool IsPointOverGUI(Point p)
+		{
+			foreach (var widget in WidgetsCopy)
+			{
+				if (InternalIsPointOverGUI(p, widget))
+				{
+					return true;
+				}
+			}
+
+			return false;
 		}
 	}
 }
