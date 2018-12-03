@@ -132,15 +132,27 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(HorizontalAlignment.Stretch)]
 		public override HorizontalAlignment ContentHorizontalAlignment
 		{
-			get => base.ContentHorizontalAlignment;
-			set => base.ContentHorizontalAlignment = value;
+			get
+			{
+				return base.ContentHorizontalAlignment;
+			}
+			set
+			{
+				base.ContentHorizontalAlignment = value;
+			}
 		}
 
 		[DefaultValue(VerticalAlignment.Stretch)]
 		public override VerticalAlignment ContentVerticalAlignment
 		{
-			get => base.ContentVerticalAlignment;
-			set => base.ContentVerticalAlignment = value;
+			get
+			{
+				return base.ContentVerticalAlignment;
+			}
+			set
+			{
+				base.ContentVerticalAlignment = value;
+			}
 		}
 
 		public Button(ButtonStyle style)
