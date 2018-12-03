@@ -1,4 +1,4 @@
-<Project StylesheetPath="D:\Projects\Hebron\Myra\Source\Samples\Stylesheets\commodore-64\ui_stylesheet.json">
+<Project StylesheetPath="commodore-64/ui_stylesheet.json">
   <ExportOptions Namespace="Myra.Samples.CustomUIStylesheet" Class="AllWidgets" OutputPath="D:\Projects\Hebron\Myra\Source\Samples\Myra.Samples.CustomUIStylesheet" />
   <HorizontalSplitPane GridPositionY="1">
     <ScrollPane>

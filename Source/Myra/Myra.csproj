@@ -115,6 +115,7 @@
     <Compile Include="Graphics2D\UI\ScrollPane.cs" />
     <Compile Include="Graphics2D\UI\SpinButton.cs" />
     <Compile Include="Graphics2D\UI\Styles\ButtonBaseStyle.cs" />
+    <Compile Include="Graphics2D\UI\Styles\DesktopStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\DialogStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\GridStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\ImageButtonStyle.cs" />

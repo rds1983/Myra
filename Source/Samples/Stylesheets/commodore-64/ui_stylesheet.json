@@ -22,6 +22,9 @@
 			"color": "#333333FF"
 		}
 	},
+	"desktop": {
+		"background": "blue"
+	},
 	"checkBox": {
 		"image": {
 			"pressedImage": "check-box",

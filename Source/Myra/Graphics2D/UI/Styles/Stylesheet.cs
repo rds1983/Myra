@@ -66,6 +66,11 @@ namespace Myra.Graphics2D.UI.Styles
 		private readonly Dictionary<string, WindowStyle> _windowStyles = new Dictionary<string, WindowStyle>();
 		private readonly Dictionary<string, DialogStyle> _dialogStyles = new Dictionary<string, DialogStyle>();
 
+		public DesktopStyle DesktopStyle
+		{
+			get; set;
+		}
+
 		public TextBlockStyle TextBlockStyle
 		{
 			get { return _textBlockStyles[DefaultStyleName]; }
@@ -333,6 +338,7 @@ namespace Myra.Graphics2D.UI.Styles
 
 		public Stylesheet()
 		{
+			DesktopStyle = new DesktopStyle();
 			TextBlockStyle = new TextBlockStyle();
 			TextFieldStyle = new TextFieldStyle();
 			ButtonStyle = new ButtonStyle();

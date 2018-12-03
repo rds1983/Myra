@@ -69,11 +69,7 @@ namespace Myra.Samples.CustomUIStylesheet
 			// Widget.DrawFrames = true;
 			_host = new Desktop();
 
-			_allWidgets = new AllWidgets
-			{
-				Background = textureAtlas["blue"]
-			};
-
+			_allWidgets = new AllWidgets();
 			_allWidgets._button.Image = textureAtlas["music-off"];
 			_allWidgets._imageButton.Image = textureAtlas["sound-off"];
 

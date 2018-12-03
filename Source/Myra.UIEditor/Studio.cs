@@ -609,6 +609,15 @@ namespace Myra.UIEditor
 		{
 			IterateWidget(Project.Root, w => w.ApplyStylesheet(stylesheet));
 			Project.Stylesheet = stylesheet;
+
+			if (stylesheet.DesktopStyle != null)
+			{
+				_ui._projectHolder.Background = stylesheet.DesktopStyle.Background;
+			}
+			else
+			{
+				_ui._projectHolder.Background = null;
+			}
 		}
 
 		private void LoadStylesheet(string filePath)
@@ -620,6 +629,11 @@ namespace Myra.UIEditor
 
 			try
 			{
+				if (!Path.IsPathRooted(filePath))
+				{
+					filePath = Path.Combine(Path.GetDirectoryName(FilePath), filePath);
+				}
+
 				var stylesheet = StylesheetFromFile(filePath);
 				SetStylesheet(stylesheet);
 			}
@@ -628,8 +642,6 @@ namespace Myra.UIEditor
 				var dialog = Dialog.CreateMessageBox("Error", ex.ToString());
 				dialog.ShowModal(_desktop);
 			}
-
-			Project.StylesheetPath = filePath;
 		}
 
 		private void OnMenuFileLoadStylesheet(object sender, EventArgs e)
@@ -639,13 +651,26 @@ namespace Myra.UIEditor
 				Filter = "*.json"
 			};
 
-			if (!string.IsNullOrEmpty(Project.StylesheetPath))
+			try
 			{
-				dlg.Folder = Path.GetDirectoryName(Project.StylesheetPath);
+				if (!string.IsNullOrEmpty(Project.StylesheetPath))
+				{
+					var stylesheetPath = Project.StylesheetPath;
+					if (!Path.IsPathRooted(stylesheetPath))
+					{
+						// Prepend folder path
+						stylesheetPath = Path.Combine(Path.GetDirectoryName(FilePath), stylesheetPath);
+					}
+
+					dlg.Folder = Path.GetDirectoryName(stylesheetPath);
+				}
+				else if (!string.IsNullOrEmpty(FilePath))
+				{
+					dlg.Folder = Path.GetDirectoryName(FilePath);
+				}
 			}
-			else if (!string.IsNullOrEmpty(FilePath))
+			catch (Exception)
 			{
-				dlg.Folder = Path.GetDirectoryName(FilePath);
 			}
 
 			dlg.Closed += (s, a) =>
@@ -657,6 +682,27 @@ namespace Myra.UIEditor
 
 				var filePath = dlg.FilePath;
 				LoadStylesheet(filePath);
+
+				// Try to make stylesheet path relative to project folder
+				try
+				{
+					var fullPathUri = new Uri(filePath, UriKind.Absolute);
+
+					var folderPath = Path.GetDirectoryName(FilePath);
+					if (!folderPath.EndsWith(Path.DirectorySeparatorChar.ToString()))
+					{
+						folderPath += Path.DirectorySeparatorChar;
+					}
+					var folderPathUri = new Uri(folderPath, UriKind.Absolute);
+
+					filePath = folderPathUri.MakeRelativeUri(fullPathUri).ToString();
+				}
+				catch (Exception)
+				{
+				}
+
+				Project.StylesheetPath = filePath;
+
 				IsDirty = true;
 			};
 

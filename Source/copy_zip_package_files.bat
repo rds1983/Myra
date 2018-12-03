@@ -6,6 +6,7 @@ mkdir "ZipPackage"
 mkdir "ZipPackage\FNA"
 mkdir "ZipPackage\x64"
 mkdir "ZipPackage\x86"
+mkdir "ZipPackage\Stylesheets"
 
 set "CONFIGURATION=Release"
 
@@ -37,6 +38,7 @@ copy "Myra.UIEditor\bin\%CONFIGURATION%\Myra.UIEditor.pdb" ZipPackage /Y
 copy "Tools\ToMyraAtlasConverter\bin\%CONFIGURATION%\ToMyraAtlasConverter.exe" ZipPackage /Y
 copy "Tools\ToMyraAtlasConverter\bin\%CONFIGURATION%\ToMyraAtlasConverter.exe.config" ZipPackage /Y
 copy "Tools\ToMyraAtlasConverter\bin\%CONFIGURATION%\ToMyraAtlasConverter.pdb" ZipPackage /Y
+xcopy "Samples\Stylesheets\*.*" "ZipPackage\Stylesheets\*.*" /s
 
 copy "Myra-Dependencies\MonoGame.Framework.DesktopGL\MonoGame.Framework.dll" "ZipPackage" /Y
 copy "Myra-Dependencies\MonoGame.Framework.DesktopGL\MonoGame.Framework.dll.config" "ZipPackage" /Y

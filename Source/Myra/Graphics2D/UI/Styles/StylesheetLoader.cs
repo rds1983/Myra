@@ -13,6 +13,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string TypeName = "type";
 		public const string ColorsName = "colors";
 		public const string DrawablesName = "drawables";
+		public const string DesktopName = "desktop";
 		public const string TextBlockName = "textBlock";
 		public const string TextFieldName = "textField";
 		public const string ScrollAreaName = "scrollArea";
@@ -700,6 +701,25 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		private DesktopStyle LoadDesktopStyleFromSource()
+		{
+			var result = new DesktopStyle();
+
+			JObject source;
+			if (!_root.GetStyle(DesktopName, out source) || source == null)
+			{
+				return result;
+			}
+
+			string name;
+			if (source.GetStyle(BackgroundName, out name))
+			{
+				result.Background = GetDrawable(name);
+			}
+
+			return result;
+		}
+
 		public Stylesheet Load()
 		{
 			var result = new Stylesheet();
@@ -715,6 +735,8 @@ namespace Myra.Graphics2D.UI.Styles
 			{
 				ParseDrawables(drawables);
 			}
+
+			result.DesktopStyle = LoadDesktopStyleFromSource();
 
 			FillStyles(TextBlockName, result.TextBlockStyles, LoadTextBlockStyleFromSource);
 			FillStyles(TextFieldName, result.TextFieldStyles, LoadTextFieldStyleFromSource);

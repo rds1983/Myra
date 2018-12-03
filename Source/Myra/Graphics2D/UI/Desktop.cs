@@ -6,6 +6,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
@@ -269,6 +270,12 @@ namespace Myra.Graphics2D.UI
 			_renderContext.Batch.GraphicsDevice.ScissorRectangle = Bounds;
 			_renderContext.View = Bounds;
 			_renderContext.Opacity = Opacity;
+
+			if (Stylesheet.Current.DesktopStyle != null && 
+				Stylesheet.Current.DesktopStyle.Background != null)
+			{
+				_renderContext.Draw(Stylesheet.Current.DesktopStyle.Background, Bounds);
+			}
 
 			foreach (var widget in WidgetsCopy)
 			{
