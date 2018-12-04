@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Myra.Graphics2D.UI;
+using static Myra.Graphics2D.UI.Grid;
 
 namespace Myra.Editor.UI.File
 {
@@ -195,6 +196,8 @@ namespace Myra.Editor.UI.File
 
 			_listBoxPlaces.SelectedIndexChanged += OnPlacesSelectedIndexChanged;
 
+			_gridFiles.SelectionBackground = DefaultAssets.UISpritesheet["tree-selection"];
+			_gridFiles.SelectionHoverBackground = DefaultAssets.UISpritesheet["button-over"];
 			_gridFiles.SelectedIndexChanged += OnGridFilesSelectedIndexChanged;
 			_gridFiles.DoubleClick += OnGridFilesDoubleClick;
 

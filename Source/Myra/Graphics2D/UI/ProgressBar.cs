@@ -4,10 +4,11 @@ using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using Newtonsoft.Json;
+using static Myra.Graphics2D.UI.Grid;
 
 namespace Myra.Graphics2D.UI
 {
-	public abstract class ProgressBar : GridBased
+	public abstract class ProgressBar : SingleItemContainer<Grid>
 	{
 		private readonly Image _filledImage;
 		private float _value;
@@ -61,7 +62,7 @@ namespace Myra.Graphics2D.UI
 
 		private float Hint
 		{
-			get { return Orientation == Orientation.Horizontal ? GetColumnProportion(0).Value : GetRowProportion(1).Value; }
+			get { return Orientation == Orientation.Horizontal ? Widget.GetColumnProportion(0).Value : Widget.GetRowProportion(1).Value; }
 
 			set
 			{
@@ -72,11 +73,11 @@ namespace Myra.Graphics2D.UI
 
 				if (Orientation == Orientation.Horizontal)
 				{
-					ColumnsProportions[0].Value = value;
+					Widget.ColumnsProportions[0].Value = value;
 				}
 				else
 				{
-					RowsProportions[1].Value = value;
+					Widget.RowsProportions[1].Value = value;
 				}
 
 				var ev = ValueChanged;
@@ -89,8 +90,9 @@ namespace Myra.Graphics2D.UI
 
 		public event EventHandler ValueChanged;
 
-		protected ProgressBar(ProgressBarStyle style): base(style)
+		protected ProgressBar(ProgressBarStyle style)
 		{
+			Widget = new Grid();
 			_filledImage = new Image
 			{
 				HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -98,20 +100,20 @@ namespace Myra.Graphics2D.UI
 			};
 			if (Orientation == Orientation.Horizontal)
 			{
-				ColumnsProportions.Add(new Proportion(ProportionType.Part, 0));
-				ColumnsProportions.Add(new Proportion(ProportionType.Fill));
-				TotalColumnsPart = 1.0f;
+				Widget.ColumnsProportions.Add(new Proportion(ProportionType.Part, 0));
+				Widget.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+				Widget.TotalColumnsPart = 1.0f;
 			}
 			else
 			{
-				RowsProportions.Add(new Proportion(ProportionType.Fill));
-				RowsProportions.Add(new Proportion(ProportionType.Part, 0));
-				TotalRowsPart = 1.0f;
+				Widget.RowsProportions.Add(new Proportion(ProportionType.Fill));
+				Widget.RowsProportions.Add(new Proportion(ProportionType.Part, 0));
+				Widget.TotalRowsPart = 1.0f;
 
 				_filledImage.GridPositionY = 1;
 			}
 
-			Widgets.Add(_filledImage);
+			Widget.Widgets.Add(_filledImage);
 
 			if (style != null)
 			{

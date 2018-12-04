@@ -7,17 +7,35 @@ namespace Myra.Graphics2D.UI
 {
 	public abstract class Container : Widget
 	{
-		[JsonIgnore]
-		[HiddenInEditor]
-		public abstract IEnumerable<Widget> Children { get; }
+		private bool _childrenDirty = true;
+		private readonly List<Widget> _childrenCopy = new List<Widget>();
+		private readonly List<Widget> _reverseChildrenCopy = new List<Widget>();
 
 		[JsonIgnore]
 		[HiddenInEditor]
-		public abstract IEnumerable<Widget> ReverseChildren { get; }
+		protected abstract IEnumerable<Widget> Children { get; }
 
-		[JsonIgnore]
-		[HiddenInEditor]
-		public abstract int ChildCount { get; }
+		internal List<Widget> ChildrenCopy
+		{
+			get
+			{
+				// We return copy of our collection
+				// To prevent exception when someone modifies the collection during the iteration
+				UpdateWidgets();
+
+				return _childrenCopy;
+			}
+		}
+
+		internal List<Widget> ReverseChildrenCopy
+		{
+			get
+			{
+				UpdateWidgets();
+
+				return _reverseChildrenCopy;
+			}
+		}
 
 		public override bool Enabled
 		{
@@ -38,6 +56,29 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 		}
+
+		private void UpdateWidgets()
+		{
+			if (!_childrenDirty)
+			{
+				return;
+			}
+
+			_childrenCopy.Clear();
+			_childrenCopy.AddRange(Children);
+
+			_reverseChildrenCopy.Clear();
+			_reverseChildrenCopy.AddRange(Children);
+			_reverseChildrenCopy.Reverse();
+
+			_childrenDirty = false;
+		}
+
+		protected void InvalidateChildren()
+		{
+			_childrenDirty = true;
+		}
+
 
 		public override void OnMouseEntered(Point position)
 		{
@@ -68,21 +109,21 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnMouseMoved(position);
 
-			ReverseChildren.HandleMouseMovement(position);
+			ReverseChildrenCopy.HandleMouseMovement(position);
 		}
 
 		public override void OnMouseDown(MouseButtons mb)
 		{
 			base.OnMouseDown(mb);
 
-			ReverseChildren.HandleMouseDown(mb);
+			ReverseChildrenCopy.HandleMouseDown(mb);
 		}
 
 		public override void OnMouseUp(MouseButtons mb)
 		{
 			base.OnMouseUp(mb);
 
-			ReverseChildren.HandleMouseUp(mb);
+			ReverseChildrenCopy.HandleMouseUp(mb);
 		}
 
 		internal override void MoveChildren(Point delta)
@@ -121,7 +162,7 @@ namespace Myra.Graphics2D.UI
 
 		public int CalculateTotalChildCount(bool visibleOnly)
 		{
-			var result = ChildCount;
+			var result = ChildrenCopy.Count;
 
 			foreach (var child in Children)
 			{

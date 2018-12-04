@@ -506,7 +506,7 @@ namespace Myra.Graphics2D.UI
 				var asContainer = w as Container;
 				if (asContainer != null)
 				{
-					ProcessWidgets(asContainer.Children);
+					ProcessWidgets(asContainer.ChildrenCopy);
 				}
 			}
 		}
@@ -559,7 +559,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			// Not real containers are solid as well
-			if (!((w is Grid && !(w is GridBased)) ||
+			if (!(w is Grid ||
 				w is Panel ||
 				w is SplitPane ||
 				w is ScrollPane))
@@ -585,7 +585,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			// Or if any child is solid
-			foreach (var ch in asContainer.Children)
+			foreach (var ch in asContainer.ChildrenCopy)
 			{
 				if (InternalIsPointOverGUI(p, ch))
 				{

@@ -77,7 +77,6 @@ namespace Myra.Samples.TabControl
 			menuItem3.Items.Add(_menuItemAbout);
 
 			var horizontalMenu1 = new HorizontalMenu();
-			horizontalMenu1.DrawLinesColor = Color.White;
 			horizontalMenu1.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
 			horizontalMenu1.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;
 			horizontalMenu1.Items.Add(menuItem1);
@@ -217,7 +216,6 @@ namespace Myra.Samples.TabControl
 
 			var spinButton1 = new SpinButton();
 			spinButton1.Value = 0;
-			spinButton1.DrawLinesColor = Color.White;
 			spinButton1.WidthHint = 100;
 			spinButton1.GridPositionX = 1;
 			spinButton1.GridPositionY = 8;
@@ -240,7 +238,6 @@ namespace Myra.Samples.TabControl
 			listItem6.Color = Color.Blue;
 
 			var listBox1 = new ListBox();
-			listBox1.DrawLinesColor = Color.White;
 			listBox1.WidthHint = 200;
 			listBox1.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
 			listBox1.GridPositionX = 1;
@@ -267,7 +264,6 @@ namespace Myra.Samples.TabControl
 			menuItem6.Text = "Quit";
 
 			var verticalMenu1 = new VerticalMenu();
-			verticalMenu1.DrawLinesColor = Color.White;
 			verticalMenu1.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;
 			verticalMenu1.GridPositionX = 1;
 			verticalMenu1.GridPositionY = 10;
@@ -367,14 +363,12 @@ namespace Myra.Samples.TabControl
 
 			_horizontalProgressBar = new HorizontalProgressBar();
 			_horizontalProgressBar.Maximum = 100;
-			_horizontalProgressBar.DrawLinesColor = Color.White;
 			_horizontalProgressBar.Id = "_horizontalProgressBar";
 			_horizontalProgressBar.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
 			_horizontalProgressBar.GridPositionY = 1;
 
 			_verticalProgressBar = new VerticalProgressBar();
 			_verticalProgressBar.Maximum = 100;
-			_verticalProgressBar.DrawLinesColor = Color.White;
 			_verticalProgressBar.Id = "_verticalProgressBar";
 			_verticalProgressBar.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
 			_verticalProgressBar.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;

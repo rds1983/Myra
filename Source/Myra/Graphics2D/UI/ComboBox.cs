@@ -250,7 +250,7 @@ namespace Myra.Graphics2D.UI
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
 
-			_itemsContainer = new Grid((GridStyle)null);
+			_itemsContainer = new Grid();
 
 			if (style != null)
 			{
@@ -367,7 +367,7 @@ namespace Myra.Graphics2D.UI
 
 		private void UpdateGridPositions()
 		{
-			for (var i = 0; i < _itemsContainer.ChildCount; ++i)
+			for (var i = 0; i < _itemsContainer.Widgets.Count; ++i)
 			{
 				_itemsContainer.Widgets[i].GridPositionY = i;
 			}

@@ -882,7 +882,7 @@ namespace Myra.Graphics2D.UI
 			var asContainer = this as Container;
 			if (asContainer != null)
 			{
-				foreach (var widget in asContainer.Children)
+				foreach (var widget in asContainer.ChildrenCopy)
 				{
 					var result = widget.FindWidgetBy(finder);
 					if (result != null)

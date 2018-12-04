@@ -4,10 +4,11 @@ using System.Linq;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
+using static Myra.Graphics2D.UI.Grid;
 
 namespace Myra.Graphics2D.UI
 {
-	public class SpinButton: GridBased
+	public class SpinButton: SingleItemContainer<Grid>
 	{
 		private readonly TextField _textField;
 		private readonly ImageButton _upButton;
@@ -109,16 +110,18 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		public event EventHandler<ValueChangedEventArgs<float?>> ValueChangedByUser;
 
-		public SpinButton(SpinButtonStyle style): base(style)
+		public SpinButton(SpinButtonStyle style)
 		{
+			Widget = new Grid();
+
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
 
-			ColumnsProportions.Add(new Proportion(ProportionType.Fill));
-			ColumnsProportions.Add(new Proportion());
+			Widget.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+			Widget.ColumnsProportions.Add(new Proportion());
 
-			RowsProportions.Add(new Proportion());
-			RowsProportions.Add(new Proportion());
+			Widget.RowsProportions.Add(new Proportion());
+			Widget.RowsProportions.Add(new Proportion());
 
 			_textField = new TextField
 			{
@@ -132,7 +135,7 @@ namespace Myra.Graphics2D.UI
 			_textField.TextChanged += TextFieldOnTextChanged;
 			_textField.TextChangedByUser += TextFieldOnTextChangedByUser;
 
-			Widgets.Add(_textField);
+			Widget.Widgets.Add(_textField);
 
 			_upButton = new ImageButton
 			{
@@ -142,7 +145,7 @@ namespace Myra.Graphics2D.UI
 			};
 			_upButton.Up += UpButtonOnUp;
 
-			Widgets.Add(_upButton);
+			Widget.Widgets.Add(_upButton);
 
 			_downButton = new ImageButton
 			{
@@ -152,7 +155,7 @@ namespace Myra.Graphics2D.UI
 				ContentHorizontalAlignment = HorizontalAlignment.Center
 			};
 			_downButton.Up += DownButtonOnUp;
-			Widgets.Add(_downButton);
+			Widget.Widgets.Add(_downButton);
 
 			if (style != null)
 			{

@@ -113,7 +113,7 @@ namespace Myra.Graphics2D.UI
 
 		internal MenuItemButton(MenuItemStyle style)
 		{
-			Widget = new Grid((GridStyle)null);
+			Widget = new Grid();
 
 			_imageProportion = new Grid.Proportion();
 			Widget.ColumnsProportions.Add(_imageProportion);

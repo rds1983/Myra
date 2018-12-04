@@ -5,10 +5,11 @@ using System.Linq;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Newtonsoft.Json;
+using static Myra.Graphics2D.UI.Grid;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ListBox : GridBased
+	public class ListBox : SingleItemContainer<Grid>
 	{
 		private ListItem _selectedItem;
 		private readonly ObservableCollection<ListItem> _items = new ObservableCollection<ListItem>();
@@ -83,11 +84,13 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public new event EventHandler SelectedIndexChanged;
+		public event EventHandler SelectedIndexChanged;
 
-		public ListBox(ListBoxStyle style) : base(style)
+		public ListBox(ListBoxStyle style)
 		{
-			HorizontalAlignment = HorizontalAlignment.Stretch;
+			Widget = new Grid();
+
+			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
 
 			if (style != null)
@@ -135,9 +138,9 @@ namespace Myra.Graphics2D.UI
 
 				case NotifyCollectionChangedAction.Reset:
 					{
-						while (Widgets.Count > 0)
+						while (Widget.Widgets.Count > 0)
 						{
-							RemoveItem((ListItem)(Widgets[0].Tag));
+							RemoveItem((ListItem)Widget.Widgets[0].Tag);
 						}
 						break;
 					}
@@ -161,7 +164,7 @@ namespace Myra.Graphics2D.UI
 		{
 			for (var i = 0; i < Items.Count; ++i)
 			{
-				var widget = Widgets[i];
+				var widget = Widget.Widgets[i];
 				widget.GridPositionY = i;
 			}
 		}
@@ -193,8 +196,8 @@ namespace Myra.Graphics2D.UI
 				widget = new HorizontalSeparator(ListBoxStyle.SeparatorStyle);
 			}
 
-			RowsProportions.Insert(index, new Proportion(ProportionType.Auto));
-			Widgets.Insert(index, widget);
+			Widget.RowsProportions.Insert(index, new Proportion(ProportionType.Auto));
+			Widget.Widgets.Insert(index, widget);
 
 			item.Widget = widget;
 
@@ -205,9 +208,9 @@ namespace Myra.Graphics2D.UI
 		{
 			item.Changed -= ItemOnChanged;
 
-			var index = Widgets.IndexOf(item.Widget);
-			RowsProportions.RemoveAt(index);
-			Widgets.RemoveAt(index);
+			var index = Widget.Widgets.IndexOf(item.Widget);
+			Widget.RowsProportions.RemoveAt(index);
+			Widget.Widgets.RemoveAt(index);
 
 			if (SelectedItem == item)
 			{
@@ -220,13 +223,13 @@ namespace Myra.Graphics2D.UI
 		private void ButtonOnDown(object sender, EventArgs eventArgs)
 		{
 			var item = (Button)sender;
-			var index = Widgets.IndexOf(item);
+			var index = Widget.Widgets.IndexOf(item);
 			SelectedIndex = index;
 		}
 
 		public void ApplyListBoxStyle(ListBoxStyle style)
 		{
-			ApplyGridStyle(style);
+			ApplyWidgetStyle(style);
 
 			ListBoxStyle = style;
 

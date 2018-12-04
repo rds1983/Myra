@@ -157,7 +157,7 @@ namespace Myra.Graphics2D.UI
 
 		public Button(ButtonStyle style)
 		{
-			Widget = new Grid((GridStyle)null);
+			Widget = new Grid();
 
 			Widget.ColumnsProportions.Add(new Grid.Proportion());
 			Widget.ColumnsProportions.Add(new Grid.Proportion());

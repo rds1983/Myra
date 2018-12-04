@@ -2,6 +2,7 @@
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Newtonsoft.Json;
+using static Myra.Graphics2D.UI.Grid;
 
 namespace Myra.Graphics2D.UI
 {
@@ -17,9 +18,9 @@ namespace Myra.Graphics2D.UI
 
 		public Dialog(DialogStyle style) : base(style)
 		{
-			RowsProportions.Add(new Proportion());
+			Widget.RowsProportions.Add(new Proportion());
 
-			var buttonsGrid = new Grid((GridStyle)null)
+			var buttonsGrid = new Grid()
 			{
 				ColumnSpacing = 8,
 				HorizontalAlignment = HorizontalAlignment.Right,
@@ -63,7 +64,7 @@ namespace Myra.Graphics2D.UI
 
 			buttonsGrid.Widgets.Add(ButtonCancel);
 
-			Widgets.Add(buttonsGrid);
+			Widget.Widgets.Add(buttonsGrid);
 		}
 
 		public Dialog(string style) : this(Stylesheet.Current.DialogStyles[style])

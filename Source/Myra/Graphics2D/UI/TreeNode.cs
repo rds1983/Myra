@@ -1,11 +1,14 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
+using Newtonsoft.Json;
+using static Myra.Graphics2D.UI.Grid;
 
 namespace Myra.Graphics2D.UI
 {
-	public class TreeNode : GridBased
+	public class TreeNode : SingleItemContainer<Grid>
 	{
 		private readonly Tree _topTree;
 		private readonly Grid _childNodesGrid;
@@ -57,7 +60,7 @@ namespace Myra.Graphics2D.UI
 
 		public int ChildNodesCount
 		{
-			get { return _childNodesGrid.ChildCount; }
+			get { return _childNodesGrid.Widgets.Count; }
 		}
 
 		internal Rectangle RowBounds { get; set; }
@@ -68,12 +71,28 @@ namespace Myra.Graphics2D.UI
 
 		public TreeStyle TreeStyle { get; private set; }
 
-		public TreeNode(TreeStyle style, Tree topTree): base(style)
+		[HiddenInEditor]
+		[JsonIgnore]
+		public IRenderable SelectionBackground
 		{
+			get; set;
+		}
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public IRenderable SelectionHoverBackground
+		{
+			get; set;
+		}
+
+		public TreeNode(TreeStyle style, Tree topTree)
+		{
+			Widget = new Grid();
+
 			_topTree = topTree;
 
-			ColumnSpacing = 2;
-			RowSpacing = 2;
+			Widget.ColumnSpacing = 2;
+			Widget.RowSpacing = 2;
 
 			if (_topTree != null)
 			{
@@ -90,33 +109,33 @@ namespace Myra.Graphics2D.UI
 			_mark.Down += MarkOnDown;
 			_mark.Up += MarkOnUp;
 
-			Widgets.Add(_mark);
+			Widget.Widgets.Add(_mark);
 
 			_label = new TextBlock
 			{
 				GridPositionX = 1
 			};
 
-			Widgets.Add(_label);
+			Widget.Widgets.Add(_label);
 
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 
-			ColumnsProportions.Add(new Proportion(ProportionType.Auto));
-			ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+			Widget.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
+			Widget.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
 
-			RowsProportions.Add(new Proportion(ProportionType.Auto));
-			RowsProportions.Add(new Proportion(ProportionType.Auto));
+			Widget.RowsProportions.Add(new Proportion(ProportionType.Auto));
+			Widget.RowsProportions.Add(new Proportion(ProportionType.Auto));
 
 			// Second is yet another grid holding child nodes
-			_childNodesGrid = new Grid((GridStyle)null)
+			_childNodesGrid = new Grid()
 			{
 				Visible = false,
 				GridPositionX = 1,
 				GridPositionY =  1
 			};
 
-			Widgets.Add(_childNodesGrid);
+			Widget.Widgets.Add(_childNodesGrid);
 
 			if (style != null)
 			{
@@ -192,7 +211,7 @@ namespace Myra.Graphics2D.UI
 
 		public void ApplyTreeNodeStyle(TreeStyle style)
 		{
-			ApplyGridStyle(style);
+			ApplyWidgetStyle(style);
 
 			if (style.MarkStyle != null)
 			{
@@ -201,6 +220,9 @@ namespace Myra.Graphics2D.UI
 			}
 
 			TreeStyle = style;
+
+			SelectionBackground = style.SelectionBackground;
+			SelectionHoverBackground = style.SelectionHoverBackground;
 		}
 	}
 }

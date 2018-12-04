@@ -72,7 +72,7 @@ namespace Myra.Graphics2D.UI
 
 		public event EventHandler SelectionChanged;
 
-		public Tree(TreeStyle style) : base(style, null)
+		public Tree(TreeStyle style):base(style, null)
 		{
 			CanFocus = true;
 			if (style != null)
@@ -323,7 +323,7 @@ namespace Myra.Graphics2D.UI
 				if (rowInfo.RowVisible)
 				{
 					rowInfo.RowBounds = new Rectangle(bounds.X, rowInfo.Bounds.Y, bounds.Width,
-						rowInfo.GetRowHeight(0));
+						rowInfo.Widget.GetRowHeight(0));
 				}
 			}
 		}

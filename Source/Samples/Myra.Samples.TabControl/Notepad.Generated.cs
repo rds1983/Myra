@@ -50,7 +50,6 @@ namespace Myra.Samples.TabControl
 			menuItemHelp.Items.Add(menuItemAbout);
 
 			mainMenu = new HorizontalMenu();
-			mainMenu.DrawLinesColor = Color.White;
 			mainMenu.Id = "mainMenu";
 			mainMenu.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
 			mainMenu.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;

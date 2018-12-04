@@ -311,27 +311,13 @@ namespace Myra.Graphics2D.UI
 
 		public event EventHandler SelectedIndexChanged = null;
 
-		public Grid(GridStyle style)
+		public Grid()
 		{
 			_columnsProportions.CollectionChanged += OnProportionsChanged;
 			_rowsProportions.CollectionChanged += OnProportionsChanged;
 
 			DrawLines = false;
 			DrawLinesColor = Color.White;
-
-			if (style != null)
-			{
-				ApplyGridStyle(style);
-			}
-		}
-
-		public Grid(string style)
-			: this(Stylesheet.Current.GridStyles[style])
-		{
-		}
-
-		public Grid() : this(Stylesheet.Current.GridStyle)
-		{
 		}
 
 		public int GetColumnWidth(int index)
@@ -1003,14 +989,6 @@ namespace Myra.Graphics2D.UI
 			{
 				SelectedColumnIndex = HoverColumnIndex;
 			}
-		}
-
-		public void ApplyGridStyle(GridStyle style)
-		{
-			ApplyWidgetStyle(style);
-
-			SelectionBackground = style.SelectionBackground;
-			SelectionHoverBackground = style.SelectionHoverBackground;
 		}
 	}
 }

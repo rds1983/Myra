@@ -1,4 +1,5 @@
 using System;
+using static Myra.Graphics2D.UI.Grid;
 
 namespace Myra.Graphics2D.UI
 {
@@ -62,7 +63,7 @@ namespace Myra.Graphics2D.UI
 			optionsCheckBox.Enabled = true;
 			optionsCheckBox.HorizontalAlignment = HorizontalAlignment.Left;
 			optionsCheckBox.VerticalAlignment = VerticalAlignment.Top;
-			optionsCheckBox.GridPositionY = Widgets.Count;
+			optionsCheckBox.GridPositionY = Widget.Widgets.Count;
 			optionsCheckBox.Visible = true;
 			optionsCheckBox.Down += (s, a) => onEnabled();
 			optionsCheckBox.Up += (s, a) => onDisabled();

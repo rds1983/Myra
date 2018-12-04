@@ -622,10 +622,8 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadGridStyleFromSource(JObject source, GridStyle result)
+		private void LoadTreeStyleFromSource(JObject source, TreeStyle result)
 		{
-			LoadWidgetStyleFromSource(source, result);
-
 			string name;
 			if (source.GetStyle(SelectionBackgroundName, out name))
 			{
@@ -636,11 +634,6 @@ namespace Myra.Graphics2D.UI.Styles
 			{
 				result.SelectionHoverBackground = GetDrawable(name);
 			}
-		}
-
-		private void LoadTreeStyleFromSource(JObject source, TreeStyle result)
-		{
-			LoadGridStyleFromSource(source, result);
 
 			JObject obj;
 			if (source.GetStyle(MarkName, out obj))
@@ -754,7 +747,6 @@ namespace Myra.Graphics2D.UI.Styles
 			FillStyles(VerticalSeparatorName, result.VerticalSeparatorStyles, LoadSeparatorStyleFromSource);
 			FillStyles(ComboBoxName, result.ComboBoxStyles, LoadComboBoxStyleFromSource);
 			FillStyles(ListBoxName, result.ListBoxStyles, LoadListBoxStyleFromSource);
-			FillStyles(GridName, result.GridStyles, LoadGridStyleFromSource);
 			FillStyles(TreeName, result.TreeStyles, LoadTreeStyleFromSource);
 			FillStyles(HorizontalSplitPaneName, result.HorizontalSplitPaneStyles, LoadSplitPaneStyleFromSource);
 			FillStyles(VerticalSplitPaneName, result.VerticalSplitPaneStyles, LoadSplitPaneStyleFromSource);

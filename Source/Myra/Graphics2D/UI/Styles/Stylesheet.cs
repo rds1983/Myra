@@ -51,7 +51,6 @@ namespace Myra.Graphics2D.UI.Styles
 
 		private readonly Dictionary<string, ComboBoxStyle> _comboBoxStyles = new Dictionary<string, ComboBoxStyle>();
 		private readonly Dictionary<string, ListBoxStyle> _listBoxStyles = new Dictionary<string, ListBoxStyle>();
-		private readonly Dictionary<string, GridStyle> _gridStyles = new Dictionary<string, GridStyle>();
 		private readonly Dictionary<string, TreeStyle> _treeStyles = new Dictionary<string, TreeStyle>();
 
 		private readonly Dictionary<string, SplitPaneStyle> _horizontalSplitPaneStyles =
@@ -162,12 +161,6 @@ namespace Myra.Graphics2D.UI.Styles
 			set { _listBoxStyles[DefaultStyleName] = value; }
 		}
 
-		public GridStyle GridStyle
-		{
-			get { return _gridStyles[DefaultStyleName]; }
-			set { _gridStyles[DefaultStyleName] = value; }
-		}
-		
 		public TreeStyle TreeStyle
 		{
 			get { return _treeStyles[DefaultStyleName]; }
@@ -296,11 +289,6 @@ namespace Myra.Graphics2D.UI.Styles
 			get { return _treeStyles; }
 		}
 
-		public Dictionary<string, GridStyle> GridStyles
-		{
-			get { return _gridStyles; }
-		}
-
 		public Dictionary<string, SplitPaneStyle> HorizontalSplitPaneStyles
 		{
 			get { return _horizontalSplitPaneStyles; }
@@ -354,7 +342,6 @@ namespace Myra.Graphics2D.UI.Styles
 			VerticalSeparatorStyle = new SeparatorStyle();
 			ComboBoxStyle = new ComboBoxStyle();
 			ListBoxStyle = new ListBoxStyle();
-			GridStyle = new GridStyle();
 			TreeStyle = new TreeStyle();
 			HorizontalSplitPaneStyle = new SplitPaneStyle();
 			VerticalSplitPaneStyle = new SplitPaneStyle();

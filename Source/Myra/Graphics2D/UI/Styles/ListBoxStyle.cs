@@ -1,6 +1,6 @@
 ﻿namespace Myra.Graphics2D.UI.Styles
 {
-	public class ListBoxStyle: GridStyle
+	public class ListBoxStyle: WidgetStyle
 	{
 		public ButtonStyle ListItemStyle { get; set; }
 		public SeparatorStyle SeparatorStyle { get; set; }

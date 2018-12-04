@@ -1,6 +1,6 @@
 ﻿namespace Myra.Graphics2D.UI.Styles
 {
-	public class ProgressBarStyle: GridStyle
+	public class ProgressBarStyle: WidgetStyle
 	{
 		public IRenderable Filled { get; set; }
 

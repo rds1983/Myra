@@ -16,14 +16,14 @@ namespace Myra.UIEditor
 			{
 				widgets = ((SplitPane)w).Widgets;
 			}
-			else if (w is MultipleItemsContainer && !(w is ListBox) && !(w is ComboBox) && !(w is SpinButton) && !(w is ProgressBar))
+			else if (w is MultipleItemsContainer)
 			{
 				var container = w as MultipleItemsContainer;
-				widgets = container.Children;
+				widgets = container.Widgets;
 			}
 			else if (w is ScrollPane)
 			{
-				widgets = ((ScrollPane)w).Children;
+				widgets = new Widget[] { ((ScrollPane)w).Widget };
 			}
 
 			return widgets;

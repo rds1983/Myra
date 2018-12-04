@@ -7,10 +7,11 @@ using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using Newtonsoft.Json;
+using static Myra.Graphics2D.UI.Grid;
 
 namespace Myra.Graphics2D.UI
 {
-	public class Window : GridBased
+	public class Window : SingleItemContainer<Grid>
 	{
 		[Obsolete("This enum is obsolete and will be removed in the future versions")]
 		public enum DefaultModalResult
@@ -81,13 +82,13 @@ namespace Myra.Graphics2D.UI
 				// Remove existing
 				if (_content != null)
 				{
-					Widgets.Remove(_content);
+					Widget.Widgets.Remove(_content);
 				}
 
 				if (value != null)
 				{
 					value.GridPositionY = 1;
-					Widgets.Add(value);
+					Widget.Widgets.Add(value);
 				}
 
 				_content = value;
@@ -131,18 +132,19 @@ namespace Myra.Graphics2D.UI
 
 		public event EventHandler Closed;
 
-		public Window(WindowStyle style): base(style)
+		public Window(WindowStyle style)
 		{
+			Widget = new Grid();
 			ModalResult = (int)DefaultModalResult.Cancel;
 			Result = false;
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
 			CanFocus = true;
 
-			RowSpacing = 8;
+			Widget.RowSpacing = 8;
 
-			RowsProportions.Add(new Proportion(ProportionType.Auto));
-			RowsProportions.Add(new Proportion(ProportionType.Fill));
+			Widget.RowsProportions.Add(new Proportion(ProportionType.Auto));
+			Widget.RowsProportions.Add(new Proportion(ProportionType.Fill));
 
 			_titleGrid = new Grid
 			{
@@ -167,7 +169,7 @@ namespace Myra.Graphics2D.UI
 
 			_titleGrid.Widgets.Add(_closeButton);
 
-			Widgets.Add(_titleGrid);
+			Widget.Widgets.Add(_titleGrid);
 
 			if (style != null)
 			{

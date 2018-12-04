@@ -13,10 +13,11 @@ using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.ColorPicker;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
+using static Myra.Graphics2D.UI.Grid;
 
 namespace Myra.Editor.UI
 {
-	public class PropertyGrid : GridBased
+	public class PropertyGrid : SingleItemContainer<Grid>
 	{
 		private const string DefaultCategoryName = "Miscellaneous";
 
@@ -93,7 +94,7 @@ namespace Myra.Editor.UI
 			}
 		}
 
-		private class SubGrid : GridBased
+		private class SubGrid : SingleItemContainer<Grid>
 		{
 			private readonly ImageButton _mark;
 			private readonly PropertyGrid _propertyGrid;
@@ -112,7 +113,7 @@ namespace Myra.Editor.UI
 			{
 				get
 				{
-					var headerBounds = new Rectangle(ActualBounds.X, ActualBounds.Y, ActualBounds.Width, GetRowHeight(0));
+					var headerBounds = new Rectangle(ActualBounds.X, ActualBounds.Y, ActualBounds.Width, Widget.GetRowHeight(0));
 
 					return headerBounds;
 				}
@@ -120,13 +121,15 @@ namespace Myra.Editor.UI
 
 			public SubGrid(PropertyGrid parent, object value, string header, string category, Record parentProperty)
 			{
-				ColumnSpacing = 4;
-				RowSpacing = 4;
+				Widget = new Grid();
 
-				ColumnsProportions.Add(new Proportion(ProportionType.Auto));
-				ColumnsProportions.Add(new Proportion(ProportionType.Fill));
-				RowsProportions.Add(new Proportion(ProportionType.Auto));
-				RowsProportions.Add(new Proportion(ProportionType.Auto));
+				Widget.ColumnSpacing = 4;
+				Widget.RowSpacing = 4;
+
+				Widget.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
+				Widget.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+				Widget.RowsProportions.Add(new Proportion(ProportionType.Auto));
+				Widget.RowsProportions.Add(new Proportion(ProportionType.Auto));
 
 				_propertyGrid = new PropertyGrid(parent.PropertyGridStyle, category, parentProperty)
 				{
@@ -146,7 +149,7 @@ namespace Myra.Editor.UI
 					VerticalAlignment = VerticalAlignment.Center
 				};
 
-				Widgets.Add(_mark);
+				Widget.Widgets.Add(_mark);
 
 				_mark.Down += (sender, args) =>
 				{
@@ -166,8 +169,11 @@ namespace Myra.Editor.UI
 					GridPositionX = 1
 				};
 
-				Widgets.Add(label);
-				Widgets.Add(_propertyGrid);
+				Widget.Widgets.Add(label);
+				Widget.Widgets.Add(_propertyGrid);
+
+				HorizontalAlignment = HorizontalAlignment.Stretch;
+				VerticalAlignment = VerticalAlignment.Stretch;
 			}
 
 			public override void OnDoubleClick(MouseButtons mb)
@@ -229,11 +235,13 @@ namespace Myra.Editor.UI
 
 		private PropertyGrid(TreeStyle style, string category, Record parentProperty)
 		{
+			Widget = new Grid();
+
 			_parentProperty = parentProperty;
-			ColumnSpacing = 8;
-			RowSpacing = 8;
-			ColumnsProportions.Add(new Proportion(ProportionType.Pixels, 150));
-			ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+			Widget.ColumnSpacing = 8;
+			Widget.RowSpacing = 8;
+			Widget.ColumnsProportions.Add(new Proportion(ProportionType.Pixels, 150));
+			Widget.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
 
 			Category = category;
 
@@ -241,6 +249,9 @@ namespace Myra.Editor.UI
 			{
 				ApplyPropertyGridStyle(style);
 			}
+
+			HorizontalAlignment = HorizontalAlignment.Stretch;
+			VerticalAlignment = VerticalAlignment.Stretch;
 		}
 
 		public PropertyGrid(TreeStyle style, string category) : this(style, category, null)
@@ -665,10 +676,10 @@ namespace Myra.Editor.UI
 							GridPositionY = y
 						};
 
-						Widgets.Add(subGrid);
+						Widget.Widgets.Add(subGrid);
 
 						rowProportion = new Proportion(ProportionType.Auto);
-						RowsProportions.Add(rowProportion);
+						Widget.RowsProportions.Add(rowProportion);
 						++y;
 
 						continue;
@@ -694,25 +705,25 @@ namespace Myra.Editor.UI
 					GridPositionY = oldY
 				};
 
-				Widgets.Add(nameLabel);
+				Widget.Widgets.Add(nameLabel);
 
 				valueWidget.GridPositionX = 1;
 				valueWidget.GridPositionY = oldY;
 				valueWidget.HorizontalAlignment = HorizontalAlignment.Stretch;
 				valueWidget.VerticalAlignment = VerticalAlignment.Top;
 
-				Widgets.Add(valueWidget);
+				Widget.Widgets.Add(valueWidget);
 
 				rowProportion = new Proportion(ProportionType.Auto);
-				RowsProportions.Add(rowProportion);
+				Widget.RowsProportions.Add(rowProportion);
 				++y;
 			}
 		}
 
 		private void Rebuild()
 		{
-			RowsProportions.Clear();
-			Widgets.Clear();
+			Widget.RowsProportions.Clear();
+			Widget.Widgets.Clear();
 			_records.Clear();
 
 			if (_object == null)
@@ -847,7 +858,7 @@ namespace Myra.Editor.UI
 					GridPositionY = y
 				};
 
-				Widgets.Add(subGrid);
+				Widget.Widgets.Add(subGrid);
 
 				if (_expandedCategories.Contains(category.Key))
 				{
@@ -855,7 +866,7 @@ namespace Myra.Editor.UI
 				}
 
 				var rp = new Proportion(ProportionType.Auto);
-				RowsProportions.Add(rp);
+				Widget.RowsProportions.Add(rp);
 
 				y++;
 			}

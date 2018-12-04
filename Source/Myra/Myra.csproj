@@ -74,7 +74,6 @@
     <Compile Include="Graphics2D\Text\GlyphInfo.cs" />
     <Compile Include="Graphics2D\Text\TextRun.cs" />
     <Compile Include="Graphics2D\UI\HorizontalProgressBar.cs" />
-    <Compile Include="Graphics2D\UI\GridBased.cs" />
     <Compile Include="Graphics2D\UI\HorizontalSlider.cs" />
     <Compile Include="Graphics2D\UI\HorizontalSplitPane.cs" />
     <Compile Include="Graphics2D\UI\IItemWithId.cs" />
@@ -117,7 +116,6 @@
     <Compile Include="Graphics2D\UI\Styles\ButtonBaseStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\DesktopStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\DialogStyle.cs" />
-    <Compile Include="Graphics2D\UI\Styles\GridStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\ImageButtonStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\ComboBoxStyle.cs" />
     <Compile Include="Graphics2D\UI\Styles\ImageStyle.cs" />

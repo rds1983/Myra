@@ -53,7 +53,7 @@ namespace Myra.Graphics2D.UI
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 
-			Widget = new Grid((GridStyle)null);
+			Widget = new Grid();
 
 			_widgets.CollectionChanged += WidgetsOnCollectionChanged;
 

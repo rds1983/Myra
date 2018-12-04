@@ -9,36 +9,14 @@ namespace Myra.Graphics2D.UI
 {
 	public abstract class MultipleItemsContainer : Container
 	{
-		private bool _widgetsDirty = true;
-		private readonly List<Widget> _widgetsCopy = new List<Widget>();
-		private readonly List<Widget> _reverseWidgetsCopy = new List<Widget>();
 		protected readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
 
-		public override IEnumerable<Widget> Children
+		protected override IEnumerable<Widget> Children
 		{
 			get
 			{
-				// We return copy of our collection
-				// To prevent exception when someone modifies the collection during the iteration
-				UpdateWidgets();
-
-				return _widgetsCopy;
+				return _widgets;
 			}
-		}
-
-		public override IEnumerable<Widget> ReverseChildren
-		{
-			get
-			{
-				UpdateWidgets();
-
-				return _reverseWidgetsCopy;
-			}
-		}
-
-		public override int ChildCount
-		{
-			get { return _widgets.Count; }
 		}
 
 		[HiddenInEditor]
@@ -69,21 +47,6 @@ namespace Myra.Graphics2D.UI
 			VerticalAlignment = VerticalAlignment.Stretch;
 		}
 
-		private void UpdateWidgets()
-		{
-			if (_widgetsDirty)
-			{
-				_widgetsCopy.Clear();
-				_widgetsCopy.AddRange(_widgets);
-
-				_reverseWidgetsCopy.Clear();
-				_reverseWidgetsCopy.AddRange(_widgets);
-				_reverseWidgetsCopy.Reverse();
-
-				_widgetsDirty = false;
-			}
-		}
-
 		private void WidgetsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
 		{
 			if (args.Action == NotifyCollectionChangedAction.Add)
@@ -108,8 +71,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			InvalidateMeasure();
-
-			_widgetsDirty = true;
+			InvalidateChildren();
 		}
 
 		private void ChildOnMeasureChanged(object sender, EventArgs eventArgs)

@@ -41,11 +41,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override int ChildCount
-		{
-			get { return 1; }
-		}
-
 		private void ChildOnVisibleChanged(object sender, EventArgs eventArgs)
 		{
 			InvalidateMeasure();
@@ -56,20 +51,7 @@ namespace Myra.Graphics2D.UI
 			InvalidateMeasure();
 		}
 
-		public override IEnumerable<Widget> Children
-		{
-			get
-			{
-				if (Widget == null)
-				{
-					yield break;
-				}
-
-				yield return Widget;
-			}
-		}
-
-		public override IEnumerable<Widget> ReverseChildren
+		protected override IEnumerable<Widget> Children
 		{
 			get
 			{

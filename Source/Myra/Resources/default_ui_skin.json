@@ -184,11 +184,6 @@
 			}
 		}
 	},
-	"grid": {
-		"selectionBackground": "tree-selection",
-		"selectionBackgroundWithoutFocus": "splitpane-over",
-		"selectionHoverBackground": "button-over"
-	},
 	"tree": {
 		"selectionBackground": "tree-selection",
 		"selectionHoverBackground": "button-over",
