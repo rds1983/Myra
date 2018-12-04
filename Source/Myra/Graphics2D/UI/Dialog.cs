@@ -18,7 +18,7 @@ namespace Myra.Graphics2D.UI
 
 		public Dialog(DialogStyle style) : base(style)
 		{
-			Widget.RowsProportions.Add(new Proportion());
+			InternalChild.RowsProportions.Add(new Proportion());
 
 			var buttonsGrid = new Grid()
 			{
@@ -64,7 +64,7 @@ namespace Myra.Graphics2D.UI
 
 			buttonsGrid.Widgets.Add(ButtonCancel);
 
-			Widget.Widgets.Add(buttonsGrid);
+			InternalChild.Widgets.Add(buttonsGrid);
 		}
 
 		public Dialog(string style) : this(Stylesheet.Current.DialogStyles[style])

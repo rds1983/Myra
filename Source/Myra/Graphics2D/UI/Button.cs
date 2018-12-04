@@ -124,9 +124,9 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(0)]
 		public int ImageTextSpacing
 		{
-			get { return Widget.ColumnSpacing; }
+			get { return InternalChild.ColumnSpacing; }
 
-			set { Widget.ColumnSpacing = value; }
+			set { InternalChild.ColumnSpacing = value; }
 		}
 
 		[DefaultValue(HorizontalAlignment.Stretch)]
@@ -157,10 +157,10 @@ namespace Myra.Graphics2D.UI
 
 		public Button(ButtonStyle style)
 		{
-			Widget = new Grid();
+			InternalChild = new Grid();
 
-			Widget.ColumnsProportions.Add(new Grid.Proportion());
-			Widget.ColumnsProportions.Add(new Grid.Proportion());
+			InternalChild.ColumnsProportions.Add(new Grid.Proportion());
+			InternalChild.ColumnsProportions.Add(new Grid.Proportion());
 
 			_image = new Image
 			{
@@ -168,7 +168,7 @@ namespace Myra.Graphics2D.UI
 				VerticalAlignment = VerticalAlignment.Center
 			};
 
-			Widget.Widgets.Add(_image);
+			InternalChild.Widgets.Add(_image);
 
 			_textBlock = new TextBlock
 			{
@@ -177,7 +177,7 @@ namespace Myra.Graphics2D.UI
 				Wrap = true
 			};
 
-			Widget.Widgets.Add(_textBlock);
+			InternalChild.Widgets.Add(_textBlock);
 
 			if (style != null)
 			{

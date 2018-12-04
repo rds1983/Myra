@@ -53,7 +53,7 @@ namespace Myra.Graphics2D.UI
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 
-			Widget = new Grid();
+			InternalChild = new Grid();
 
 			_widgets.CollectionChanged += WidgetsOnCollectionChanged;
 
@@ -71,8 +71,8 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var result = Orientation == Orientation.Horizontal
-				? Widget.ColumnsProportions[widgetIndex*2].Value
-				: Widget.RowsProportions[widgetIndex*2].Value;
+				? InternalChild.ColumnsProportions[widgetIndex*2].Value
+				: InternalChild.RowsProportions[widgetIndex*2].Value;
 
 			return result;
 		}
@@ -92,7 +92,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var handleIndex = Widget.Widgets.IndexOf(_handleDown);
+			var handleIndex = InternalChild.Widgets.IndexOf(_handleDown);
 			Grid.Proportion firstProportion, secondProportion;
 			float fp;
 
@@ -102,13 +102,13 @@ namespace Myra.Graphics2D.UI
 
 				for (var i = 0; i < handleIndex - 1; ++i)
 				{
-					firstWidth -= Widget.GetColumnWidth(i);
+					firstWidth -= InternalChild.GetColumnWidth(i);
 				}
 
 				fp = (float) Widgets.Count*firstWidth/(bounds.Width - _handlesSize);
 
-				firstProportion = Widget.ColumnsProportions[handleIndex - 1];
-				secondProportion = Widget.ColumnsProportions[handleIndex + 1];
+				firstProportion = InternalChild.ColumnsProportions[handleIndex - 1];
+				secondProportion = InternalChild.ColumnsProportions[handleIndex + 1];
 			}
 			else
 			{
@@ -116,13 +116,13 @@ namespace Myra.Graphics2D.UI
 
 				for (var i = 0; i < handleIndex - 1; ++i)
 				{
-					firstHeight -= Widget.GetRowHeight(i);
+					firstHeight -= InternalChild.GetRowHeight(i);
 				}
 
 				fp = (float) Widgets.Count*firstHeight/(bounds.Height - _handlesSize);
 
-				firstProportion = Widget.RowsProportions[handleIndex - 1];
-				secondProportion = Widget.RowsProportions[handleIndex + 1];
+				firstProportion = InternalChild.RowsProportions[handleIndex - 1];
+				secondProportion = InternalChild.RowsProportions[handleIndex + 1];
 			}
 
 			if (fp >= 0 && fp <= 2.0f)
@@ -168,11 +168,11 @@ namespace Myra.Graphics2D.UI
 		{
 			var baseIndex = leftWidgetIndex*2;
 			leftProportion = Orientation == Orientation.Horizontal
-				? Widget.ColumnsProportions[baseIndex]
-				: Widget.RowsProportions[baseIndex];
+				? InternalChild.ColumnsProportions[baseIndex]
+				: InternalChild.RowsProportions[baseIndex];
 			rightProportion = Orientation == Orientation.Horizontal
-				? Widget.ColumnsProportions[baseIndex + 2]
-				: Widget.RowsProportions[baseIndex + 2];
+				? InternalChild.ColumnsProportions[baseIndex + 2]
+				: InternalChild.RowsProportions[baseIndex + 2];
 		}
 
 		public float GetSplitterPosition(int leftWidgetIndex)
@@ -201,12 +201,12 @@ namespace Myra.Graphics2D.UI
 		public void Reset()
 		{
 			// Clear
-			Widget.Widgets.Clear();
+			InternalChild.Widgets.Clear();
 			_handles.Clear();
 			_handlesSize = 0;
 
-			Widget.ColumnsProportions.Clear();
-			Widget.RowsProportions.Clear();
+			InternalChild.ColumnsProportions.Clear();
+			InternalChild.RowsProportions.Clear();
 
 			var i = 0;
 
@@ -236,16 +236,16 @@ namespace Myra.Graphics2D.UI
 					{
 						_handlesSize += handleSize;
 						handle.GridPositionX = i*2 - 1;
-						Widget.ColumnsProportions.Add(proportion);
+						InternalChild.ColumnsProportions.Add(proportion);
 					}
 					else
 					{
 						_handlesSize += handleSize;
 						handle.GridPositionY = i*2 - 1;
-						Widget.RowsProportions.Add(proportion);
+						InternalChild.RowsProportions.Add(proportion);
 					}
 
-					Widget.Widgets.Add(handle);
+					InternalChild.Widgets.Add(handle);
 					_handles.Add(handle);
 				}
 
@@ -257,15 +257,15 @@ namespace Myra.Graphics2D.UI
 				if (Orientation == Orientation.Horizontal)
 				{
 					w.GridPositionX = i*2;
-					Widget.ColumnsProportions.Add(proportion);
+					InternalChild.ColumnsProportions.Add(proportion);
 				}
 				else
 				{
 					w.GridPositionY = i*2;
-					Widget.RowsProportions.Add(proportion);
+					InternalChild.RowsProportions.Add(proportion);
 				}
 
-				Widget.Widgets.Add(w);
+				InternalChild.Widgets.Add(w);
 
 				++i;
 			}

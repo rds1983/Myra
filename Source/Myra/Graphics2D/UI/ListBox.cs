@@ -88,7 +88,7 @@ namespace Myra.Graphics2D.UI
 
 		public ListBox(ListBoxStyle style)
 		{
-			Widget = new Grid();
+			InternalChild = new Grid();
 
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
@@ -138,9 +138,9 @@ namespace Myra.Graphics2D.UI
 
 				case NotifyCollectionChangedAction.Reset:
 					{
-						while (Widget.Widgets.Count > 0)
+						while (InternalChild.Widgets.Count > 0)
 						{
-							RemoveItem((ListItem)Widget.Widgets[0].Tag);
+							RemoveItem((ListItem)InternalChild.Widgets[0].Tag);
 						}
 						break;
 					}
@@ -164,7 +164,7 @@ namespace Myra.Graphics2D.UI
 		{
 			for (var i = 0; i < Items.Count; ++i)
 			{
-				var widget = Widget.Widgets[i];
+				var widget = InternalChild.Widgets[i];
 				widget.GridPositionY = i;
 			}
 		}
@@ -196,8 +196,8 @@ namespace Myra.Graphics2D.UI
 				widget = new HorizontalSeparator(ListBoxStyle.SeparatorStyle);
 			}
 
-			Widget.RowsProportions.Insert(index, new Proportion(ProportionType.Auto));
-			Widget.Widgets.Insert(index, widget);
+			InternalChild.RowsProportions.Insert(index, new Proportion(ProportionType.Auto));
+			InternalChild.Widgets.Insert(index, widget);
 
 			item.Widget = widget;
 
@@ -208,9 +208,9 @@ namespace Myra.Graphics2D.UI
 		{
 			item.Changed -= ItemOnChanged;
 
-			var index = Widget.Widgets.IndexOf(item.Widget);
-			Widget.RowsProportions.RemoveAt(index);
-			Widget.Widgets.RemoveAt(index);
+			var index = InternalChild.Widgets.IndexOf(item.Widget);
+			InternalChild.RowsProportions.RemoveAt(index);
+			InternalChild.Widgets.RemoveAt(index);
 
 			if (SelectedItem == item)
 			{
@@ -223,7 +223,7 @@ namespace Myra.Graphics2D.UI
 		private void ButtonOnDown(object sender, EventArgs eventArgs)
 		{
 			var item = (Button)sender;
-			var index = Widget.Widgets.IndexOf(item);
+			var index = InternalChild.Widgets.IndexOf(item);
 			SelectedIndex = index;
 		}
 

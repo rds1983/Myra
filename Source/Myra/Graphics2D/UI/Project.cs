@@ -309,7 +309,7 @@ namespace Myra.Graphics2D.UI
 						}
 						else if (obj is ScrollPane)
 						{
-							((ScrollPane)obj).Widget = (Widget)item;
+							((ScrollPane)obj).InternalChild = (Widget)item;
 						}
 						else if (obj is Project)
 						{

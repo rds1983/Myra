@@ -44,7 +44,7 @@ namespace Myra.Graphics2D.UI
 				Wrap = true
 			};
 
-			Widget = _textBlock;
+			InternalChild = _textBlock;
 
 			if (style != null)
 			{
@@ -85,13 +85,13 @@ namespace Myra.Graphics2D.UI
 		protected override void FireDown()
 		{
 			base.FireDown();
-			Widget.IsPressed = IsPressed;
+			InternalChild.IsPressed = IsPressed;
 		}
 
 		protected override void FireUp()
 		{
 			base.FireUp();
-			Widget.IsPressed = IsPressed;
+			InternalChild.IsPressed = IsPressed;
 		}
 	}
 }

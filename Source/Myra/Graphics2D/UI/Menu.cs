@@ -79,7 +79,7 @@ namespace Myra.Graphics2D.UI
 
 		protected Menu(MenuStyle style)
 		{
-			Widget = new Grid();
+			InternalChild = new Grid();
 
 			OpenMenuItem = null;
 
@@ -141,9 +141,9 @@ namespace Myra.Graphics2D.UI
 
 		private void UpdateGridPositions()
 		{
-			for (var i = 0; i < Widget.Widgets.Count; ++i)
+			for (var i = 0; i < InternalChild.Widgets.Count; ++i)
 			{
-				var widget = Widget.Widgets[i];
+				var widget = InternalChild.Widgets[i];
 				if (Orientation == Orientation.Horizontal)
 				{
 					widget.GridPositionX = i;
@@ -159,16 +159,16 @@ namespace Myra.Graphics2D.UI
 		{
 			if (Orientation == Orientation.Horizontal)
 			{
-				Widget.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
+				InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
 			}
 			else
 			{
 				menuItem.HorizontalAlignment = HorizontalAlignment.Stretch;
 				menuItem.VerticalAlignment = VerticalAlignment.Stretch;
-				Widget.RowsProportions.Add(new Proportion(ProportionType.Auto));
+				InternalChild.RowsProportions.Add(new Proportion(ProportionType.Auto));
 			}
 
-			Widget.Widgets.Insert(index, menuItem);
+			InternalChild.Widgets.Insert(index, menuItem);
 
 			UpdateGridPositions();
 		}
@@ -234,7 +234,7 @@ namespace Myra.Graphics2D.UI
 
 		private void AddItem(IMenuItem item)
 		{
-			InsertItem(item, Widget.Widgets.Count);
+			InsertItem(item, InternalChild.Widgets.Count);
 		}
 
 		private void RemoveItem(IMenuItem iMenuItem)
@@ -260,17 +260,17 @@ namespace Myra.Graphics2D.UI
 				asMenuItemButton.MouseLeft -= MouseOnLeft;
 			}
 
-			var index = Widget.Widgets.IndexOf(widget);
+			var index = InternalChild.Widgets.IndexOf(widget);
 			if (Orientation == Orientation.Horizontal)
 			{
-				Widget.ColumnsProportions.RemoveAt(index);
+				InternalChild.ColumnsProportions.RemoveAt(index);
 			}
 			else
 			{
-				Widget.RowsProportions.RemoveAt(index);
+				InternalChild.RowsProportions.RemoveAt(index);
 			}
 
-			Widget.Widgets.RemoveAt(index);
+			InternalChild.Widgets.RemoveAt(index);
 			UpdateGridPositions();
 		}
 
@@ -412,13 +412,13 @@ namespace Myra.Graphics2D.UI
 
 			if (OpenMenuItem != null)
 			{
-				selectedIndex = Widget.Widgets.IndexOf(OpenMenuItem);
+				selectedIndex = InternalChild.Widgets.IndexOf(OpenMenuItem);
 			}
 			else
 			{
-				for (var i = 0; i < Widget.Widgets.Count; ++i)
+				for (var i = 0; i < InternalChild.Widgets.Count; ++i)
 				{
-					if (Widget.Widgets[i].IsMouseOver)
+					if (InternalChild.Widgets[i].IsMouseOver)
 					{
 						selectedIndex = i;
 						break;
@@ -441,7 +441,7 @@ namespace Myra.Graphics2D.UI
 				int selectedIndex = GetSelectedIndex();
 				if (selectedIndex != -1)
 				{
-					var button = Widget.Widgets[selectedIndex] as MenuItemButton;
+					var button = InternalChild.Widgets[selectedIndex] as MenuItemButton;
 					if (button != null && !button.CanOpen)
 					{
 						Click(button);
@@ -451,7 +451,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var ch = k.ToChar(false);
-			foreach (var w in Widget.Widgets)
+			foreach (var w in InternalChild.Widgets)
 			{
 				var button = w as MenuItemButton;
 				if (button == null)
@@ -476,7 +476,7 @@ namespace Myra.Graphics2D.UI
 
 		public void MoveSelection(int delta)
 		{
-			if (Widget.Widgets.Count == 0)
+			if (InternalChild.Widgets.Count == 0)
 			{
 				return;
 			}
@@ -488,7 +488,7 @@ namespace Myra.Graphics2D.UI
 			var iterations = 0;
 			while (true)
 			{
-				if (iterations > Widget.Widgets.Count)
+				if (iterations > InternalChild.Widgets.Count)
 				{
 					return;
 				}
@@ -497,15 +497,15 @@ namespace Myra.Graphics2D.UI
 
 				if (selectedIndex < 0)
 				{
-					selectedIndex = Widget.Widgets.Count - 1;
+					selectedIndex = InternalChild.Widgets.Count - 1;
 				}
 
-				if (selectedIndex >= Widget.Widgets.Count)
+				if (selectedIndex >= InternalChild.Widgets.Count)
 				{
 					selectedIndex = 0;
 				}
 
-				if (Widget.Widgets[selectedIndex] is MenuItemButton)
+				if (InternalChild.Widgets[selectedIndex] is MenuItemButton)
 				{
 					break;
 				}
@@ -514,7 +514,7 @@ namespace Myra.Graphics2D.UI
 				++iterations;
 			}
 
-			if (selectedIndex < 0 || selectedIndex >= Widget.Widgets.Count || selectedIndex == oldIndex)
+			if (selectedIndex < 0 || selectedIndex >= InternalChild.Widgets.Count || selectedIndex == oldIndex)
 			{
 				return;
 			}
@@ -522,7 +522,7 @@ namespace Myra.Graphics2D.UI
 			MenuItemButton menuItemButton;
 			if (oldIndex != -1)
 			{
-				menuItemButton = Widget.Widgets[oldIndex] as MenuItemButton;
+				menuItemButton = InternalChild.Widgets[oldIndex] as MenuItemButton;
 				if (menuItemButton != null)
 				{
 					menuItemButton.IsMouseOver = false;
@@ -530,7 +530,7 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			menuItemButton = Widget.Widgets[selectedIndex] as MenuItemButton;
+			menuItemButton = InternalChild.Widgets[selectedIndex] as MenuItemButton;
 			if (menuItemButton != null)
 			{
 				if (!menuItemButton.CanOpen)

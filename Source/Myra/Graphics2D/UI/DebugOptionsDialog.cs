@@ -63,7 +63,7 @@ namespace Myra.Graphics2D.UI
 			optionsCheckBox.Enabled = true;
 			optionsCheckBox.HorizontalAlignment = HorizontalAlignment.Left;
 			optionsCheckBox.VerticalAlignment = VerticalAlignment.Top;
-			optionsCheckBox.GridPositionY = Widget.Widgets.Count;
+			optionsCheckBox.GridPositionY = InternalChild.Widgets.Count;
 			optionsCheckBox.Visible = true;
 			optionsCheckBox.Down += (s, a) => onEnabled();
 			optionsCheckBox.Up += (s, a) => onDisabled();

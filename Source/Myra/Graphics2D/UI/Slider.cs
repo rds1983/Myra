@@ -67,7 +67,7 @@ namespace Myra.Graphics2D.UI
 
 		private int Hint
 		{
-			get { return Orientation == Orientation.Horizontal ? Widget.XHint : Widget.YHint; }
+			get { return Orientation == Orientation.Horizontal ? InternalChild.XHint : InternalChild.YHint; }
 
 			set
 			{
@@ -78,11 +78,11 @@ namespace Myra.Graphics2D.UI
 
 				if (Orientation == Orientation.Horizontal)
 				{
-					Widget.XHint = value;
+					InternalChild.XHint = value;
 				}
 				else
 				{
-					Widget.YHint = value;
+					InternalChild.YHint = value;
 				}
 			}
 		}
@@ -92,8 +92,8 @@ namespace Myra.Graphics2D.UI
 			get
 			{
 				return Orientation == Orientation.Horizontal
-					? Bounds.Width - Widget.Bounds.Width
-					: Bounds.Height - Widget.Bounds.Height;
+					? Bounds.Width - InternalChild.Bounds.Width
+					: Bounds.Height - InternalChild.Bounds.Height;
 			}
 		}
 
@@ -109,10 +109,10 @@ namespace Myra.Graphics2D.UI
 
 		protected Slider(SliderStyle sliderStyle)
 		{
-			Widget = new ImageButton((ImageButtonStyle)null);
+			InternalChild = new ImageButton((ImageButtonStyle)null);
 
-			Widget.Down += WidgetOnDown;
-			Widget.Up += WidgetOnUp;
+			InternalChild.Down += WidgetOnDown;
+			InternalChild.Up += WidgetOnUp;
 			if (sliderStyle != null)
 			{
 				ApplySliderStyle(sliderStyle);
@@ -140,7 +140,7 @@ namespace Myra.Graphics2D.UI
 		{
 			ApplyWidgetStyle(style);
 
-			Widget.ApplyImageButtonStyle(style.KnobStyle);
+			InternalChild.ApplyImageButtonStyle(style.KnobStyle);
 		}
 
 		private void SyncHintWithValue()

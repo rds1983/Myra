@@ -81,21 +81,21 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(null)]
 		public virtual int? ImageWidthHint
 		{
-			get { return Widget.WidthHint; }
-			set { Widget.WidthHint = value; }
+			get { return InternalChild.WidthHint; }
+			set { InternalChild.WidthHint = value; }
 		}
 
 		[EditCategory("Appearance")]
 		[DefaultValue(null)]
 		public virtual int? ImageHeightHint
 		{
-			get { return Widget.HeightHint; }
-			set { Widget.HeightHint = value; }
+			get { return InternalChild.HeightHint; }
+			set { InternalChild.HeightHint = value; }
 		}
 
 		public ImageButton(ImageButtonStyle style)
 		{
-			Widget = new Image
+			InternalChild = new Image
 			{
 				HorizontalAlignment = HorizontalAlignment.Center,
 				VerticalAlignment = VerticalAlignment.Center
@@ -122,17 +122,17 @@ namespace Myra.Graphics2D.UI
 
 			var imageStyle = style.ImageStyle;
 
-			Widget.ApplyWidgetStyle(imageStyle);
+			InternalChild.ApplyWidgetStyle(imageStyle);
 
 			Image = imageStyle.Image;
 			OverImage = imageStyle.OverImage;
 			PressedImage = imageStyle.PressedImage;
 
-			Widget.WidthHint = null;
-			Widget.HeightHint = null;
-			Widget.UpdateImageSize(imageStyle.Image);
-			Widget.UpdateImageSize(imageStyle.OverImage);
-			Widget.UpdateImageSize(imageStyle.PressedImage);
+			InternalChild.WidthHint = null;
+			InternalChild.HeightHint = null;
+			InternalChild.UpdateImageSize(imageStyle.Image);
+			InternalChild.UpdateImageSize(imageStyle.OverImage);
+			InternalChild.UpdateImageSize(imageStyle.PressedImage);
 
 			UpdateTextureRegion();
 		}
@@ -149,7 +149,7 @@ namespace Myra.Graphics2D.UI
 				image = OverImage;
 			}
 
-			Widget.Renderable = image;
+			InternalChild.Renderable = image;
 		}
 
 		public override void OnMouseEntered(Point position)

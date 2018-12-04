@@ -15,16 +15,16 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(HorizontalAlignment.Center)]
 		public virtual HorizontalAlignment ContentHorizontalAlignment
 		{
-			get { return Widget.HorizontalAlignment; }
-			set { Widget.HorizontalAlignment = value; }
+			get { return InternalChild.HorizontalAlignment; }
+			set { InternalChild.HorizontalAlignment = value; }
 		}
 
 		[EditCategory("Appearance")]
 		[DefaultValue(VerticalAlignment.Center)]
 		public virtual VerticalAlignment ContentVerticalAlignment
 		{
-			get { return Widget.VerticalAlignment; }
-			set { Widget.VerticalAlignment = value; }
+			get { return InternalChild.VerticalAlignment; }
+			set { InternalChild.VerticalAlignment = value; }
 		}
 
 		[HiddenInEditor]

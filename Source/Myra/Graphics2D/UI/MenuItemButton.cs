@@ -113,17 +113,17 @@ namespace Myra.Graphics2D.UI
 
 		internal MenuItemButton(MenuItemStyle style)
 		{
-			Widget = new Grid();
+			InternalChild = new Grid();
 
 			_imageProportion = new Grid.Proportion();
-			Widget.ColumnsProportions.Add(_imageProportion);
+			InternalChild.ColumnsProportions.Add(_imageProportion);
 			var textProportion = new Grid.Proportion();
-			Widget.ColumnsProportions.Add(textProportion);
+			InternalChild.ColumnsProportions.Add(textProportion);
 			_shortcutProportion = new Grid.Proportion();
-			Widget.ColumnsProportions.Add(_shortcutProportion);
+			InternalChild.ColumnsProportions.Add(_shortcutProportion);
 
 			_image = new Image();
-			Widget.Widgets.Add(_image);
+			InternalChild.Widgets.Add(_image);
 
 			_textBlock = new TextBlock
 			{
@@ -131,7 +131,7 @@ namespace Myra.Graphics2D.UI
 				IsMenuText = true
 			};
 
-			Widget.Widgets.Add(_textBlock);
+			InternalChild.Widgets.Add(_textBlock);
 
 			PaddingLeft = 5;
 			PaddingRight = 5;

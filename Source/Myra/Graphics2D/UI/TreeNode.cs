@@ -87,12 +87,12 @@ namespace Myra.Graphics2D.UI
 
 		public TreeNode(TreeStyle style, Tree topTree)
 		{
-			Widget = new Grid();
+			InternalChild = new Grid();
 
 			_topTree = topTree;
 
-			Widget.ColumnSpacing = 2;
-			Widget.RowSpacing = 2;
+			InternalChild.ColumnSpacing = 2;
+			InternalChild.RowSpacing = 2;
 
 			if (_topTree != null)
 			{
@@ -109,23 +109,23 @@ namespace Myra.Graphics2D.UI
 			_mark.Down += MarkOnDown;
 			_mark.Up += MarkOnUp;
 
-			Widget.Widgets.Add(_mark);
+			InternalChild.Widgets.Add(_mark);
 
 			_label = new TextBlock
 			{
 				GridPositionX = 1
 			};
 
-			Widget.Widgets.Add(_label);
+			InternalChild.Widgets.Add(_label);
 
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 
-			Widget.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
-			Widget.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+			InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
+			InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
 
-			Widget.RowsProportions.Add(new Proportion(ProportionType.Auto));
-			Widget.RowsProportions.Add(new Proportion(ProportionType.Auto));
+			InternalChild.RowsProportions.Add(new Proportion(ProportionType.Auto));
+			InternalChild.RowsProportions.Add(new Proportion(ProportionType.Auto));
 
 			// Second is yet another grid holding child nodes
 			_childNodesGrid = new Grid()
@@ -135,7 +135,7 @@ namespace Myra.Graphics2D.UI
 				GridPositionY =  1
 			};
 
-			Widget.Widgets.Add(_childNodesGrid);
+			InternalChild.Widgets.Add(_childNodesGrid);
 
 			if (style != null)
 			{

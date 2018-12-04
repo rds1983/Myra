@@ -60,12 +60,12 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public override Widget Widget
+		public Widget Widget
 		{
-			get { return base.Widget; }
+			get { return base.InternalChild; }
 			set
 			{
-				base.Widget = value;
+				base.InternalChild = value;
 				ResetScroll();
 			}
 		}
@@ -112,8 +112,8 @@ namespace Myra.Graphics2D.UI
 		[HiddenInEditor]
 		public Widget Child
 		{
-			get { return Widget; }
-			set { Widget = value; }
+			get { return InternalChild; }
+			set { InternalChild = value; }
 		}
 
 		public ScrollPane(ScrollPaneStyle style)
@@ -144,7 +144,7 @@ namespace Myra.Graphics2D.UI
 
 		private void UpdateWidgetLocation()
 		{
-			if (Widget == null) return;
+			if (InternalChild == null) return;
 
 			var prop = Vector2.Zero;
 
@@ -160,15 +160,15 @@ namespace Myra.Graphics2D.UI
 
 			var bounds = ActualBounds;
 			var origin = new Point((int)(prop.X *
-										  (Widget.Bounds.Width - bounds.Width +
+										  (InternalChild.Bounds.Width - bounds.Width +
 										   (_verticalScrollbarVisible ? _verticalScrollbarThumb.Width : 0))),
 				(int)(prop.Y *
-					   (Widget.Bounds.Height - bounds.Height +
+					   (InternalChild.Bounds.Height - bounds.Height +
 						(_horizontalScrollbarVisible ? _horizontalScrollbarThumb.Height : 0)))
 			);
 
-			Widget.XHint = -origin.X;
-			Widget.YHint = -origin.Y;
+			InternalChild.XHint = -origin.X;
+			InternalChild.YHint = -origin.Y;
 		}
 
 		private void MoveThumb(int delta)
@@ -280,7 +280,7 @@ namespace Myra.Graphics2D.UI
 
 		public override void InternalRender(RenderContext context)
 		{
-			if (Widget == null || !Widget.Visible)
+			if (InternalChild == null || !InternalChild.Visible)
 			{
 				return;
 			}
@@ -325,12 +325,12 @@ namespace Myra.Graphics2D.UI
 
 		protected override Point InternalMeasure(Point availableSize)
 		{
-			if (Widget == null)
+			if (InternalChild == null)
 			{
 				return Point.Zero;
 			}
 
-			var measureSize = Widget.Measure(availableSize);
+			var measureSize = InternalChild.Measure(availableSize);
 
 			var horizontalScrollbarVisible = AllowHorizontalScrolling && measureSize.X > availableSize.X;
 			var verticalScrollbarVisible = AllowVerticalScrolling && measureSize.Y > availableSize.Y;
@@ -352,14 +352,14 @@ namespace Myra.Graphics2D.UI
 
 		public override void Arrange()
 		{
-			if (Widget == null)
+			if (InternalChild == null)
 			{
 				return;
 			}
 
 			var bounds = ActualBounds;
 			var availableSize = bounds.Size();
-			var measureSize = Widget.Measure(availableSize);
+			var measureSize = InternalChild.Measure(availableSize);
 
 			_horizontalScrollbarVisible = AllowHorizontalScrolling && measureSize.X > bounds.Width;
 			_verticalScrollbarVisible = AllowVerticalScrolling && measureSize.Y > bounds.Height;
@@ -386,7 +386,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				// Remeasure with scrollbars
-				measureSize = Widget.Measure(availableSize);
+				measureSize = InternalChild.Measure(availableSize);
 
 				var vsWidth = VerticalScrollBackground != null ? VerticalScrollBackground.Size.X : VerticalScrollKnob.Size.X;
 				var hsHeight = HorizontalScrollBackground != null ? HorizontalScrollBackground.Size.Y : HorizontalScrollKnob.Size.Y;
@@ -466,7 +466,7 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			Widget.Layout(bounds);
+			InternalChild.Layout(bounds);
 
 			UpdateWidgetLocation();
 		}

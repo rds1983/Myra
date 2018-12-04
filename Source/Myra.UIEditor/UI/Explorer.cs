@@ -13,7 +13,7 @@ namespace Myra.UIEditor.UI
 
 		public Tree Tree
 		{
-			get { return (Tree)Widget; }
+			get { return (Tree)InternalChild; }
 		}
 
 		public Project Project
@@ -36,11 +36,11 @@ namespace Myra.UIEditor.UI
 					return;
 				}
 
-				Widget.Tag = _project;
+				InternalChild.Tag = _project;
 
 				if (_project.Root != null)
 				{
-					var rootNode = AddObject((Tree)Widget, _project.Root);
+					var rootNode = AddObject((Tree)InternalChild, _project.Root);
 					Rebuild(rootNode, _project.Root);
 				}
 			}
@@ -63,7 +63,7 @@ namespace Myra.UIEditor.UI
 
 		public Explorer()
 		{
-			Widget = new Tree
+			InternalChild = new Tree
 			{
 				Text = "Project"
 			};

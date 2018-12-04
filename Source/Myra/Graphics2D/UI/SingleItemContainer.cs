@@ -8,35 +8,35 @@ namespace Myra.Graphics2D.UI
 {
 	public abstract class SingleItemContainer<T> : Container where T : Widget
 	{
-		private T _widget;
+		private T _internalChild;
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public virtual T Widget
+		protected internal virtual T InternalChild
 		{
-			get { return _widget; }
+			get { return _internalChild; }
 			set
 			{
-				if (_widget != null)
+				if (_internalChild != null)
 				{
-					_widget.Parent = null;
-					_widget.Desktop = null;
+					_internalChild.Parent = null;
+					_internalChild.Desktop = null;
 
-					_widget.VisibleChanged -= ChildOnVisibleChanged;
-					_widget.MeasureChanged -= ChildOnMeasureChanged;
+					_internalChild.VisibleChanged -= ChildOnVisibleChanged;
+					_internalChild.MeasureChanged -= ChildOnMeasureChanged;
 
-					_widget = null;
+					_internalChild = null;
 				}
 
-				_widget = value;
+				_internalChild = value;
 
-				if (_widget != null)
+				if (_internalChild != null)
 				{
-					_widget.Parent = this;
-					_widget.Desktop = Desktop;
+					_internalChild.Parent = this;
+					_internalChild.Desktop = Desktop;
 
-					_widget.VisibleChanged += ChildOnVisibleChanged;
-					_widget.MeasureChanged += ChildOnMeasureChanged;
+					_internalChild.VisibleChanged += ChildOnVisibleChanged;
+					_internalChild.MeasureChanged += ChildOnMeasureChanged;
 				}
 			}
 		}
@@ -55,12 +55,12 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				if (Widget == null)
+				if (InternalChild == null)
 				{
 					yield break;
 				}
 
-				yield return Widget;
+				yield return InternalChild;
 			}
 		}
 
@@ -68,21 +68,21 @@ namespace Myra.Graphics2D.UI
 		{
 			base.Arrange();
 
-			if (Widget == null)
+			if (InternalChild == null)
 			{
 				return;
 			}
 
-			Widget.Layout(ActualBounds);
+			InternalChild.Layout(ActualBounds);
 		}
 
 		protected override Point InternalMeasure(Point availableSize)
 		{
 			var result = Point.Zero;
 
-			if (Widget != null)
+			if (InternalChild != null)
 			{
-				result = Widget.Measure(availableSize);
+				result = InternalChild.Measure(availableSize);
 			}
 
 			return result;
@@ -90,12 +90,12 @@ namespace Myra.Graphics2D.UI
 
 		public override void RemoveChild(Widget widget)
 		{
-			if (widget != Widget)
+			if (widget != InternalChild)
 			{
 				return;
 			}
 
-			Widget = null;
+			InternalChild = null;
 		}
 	}
 }

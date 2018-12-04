@@ -82,13 +82,13 @@ namespace Myra.Graphics2D.UI
 				// Remove existing
 				if (_content != null)
 				{
-					Widget.Widgets.Remove(_content);
+					InternalChild.Widgets.Remove(_content);
 				}
 
 				if (value != null)
 				{
 					value.GridPositionY = 1;
-					Widget.Widgets.Add(value);
+					InternalChild.Widgets.Add(value);
 				}
 
 				_content = value;
@@ -134,17 +134,17 @@ namespace Myra.Graphics2D.UI
 
 		public Window(WindowStyle style)
 		{
-			Widget = new Grid();
+			InternalChild = new Grid();
 			ModalResult = (int)DefaultModalResult.Cancel;
 			Result = false;
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
 			CanFocus = true;
 
-			Widget.RowSpacing = 8;
+			InternalChild.RowSpacing = 8;
 
-			Widget.RowsProportions.Add(new Proportion(ProportionType.Auto));
-			Widget.RowsProportions.Add(new Proportion(ProportionType.Fill));
+			InternalChild.RowsProportions.Add(new Proportion(ProportionType.Auto));
+			InternalChild.RowsProportions.Add(new Proportion(ProportionType.Fill));
 
 			_titleGrid = new Grid
 			{
@@ -169,7 +169,7 @@ namespace Myra.Graphics2D.UI
 
 			_titleGrid.Widgets.Add(_closeButton);
 
-			Widget.Widgets.Add(_titleGrid);
+			InternalChild.Widgets.Add(_titleGrid);
 
 			if (style != null)
 			{

@@ -323,7 +323,7 @@ namespace Myra.Graphics2D.UI
 				if (rowInfo.RowVisible)
 				{
 					rowInfo.RowBounds = new Rectangle(bounds.X, rowInfo.Bounds.Y, bounds.Width,
-						rowInfo.Widget.GetRowHeight(0));
+						rowInfo.InternalChild.GetRowHeight(0));
 				}
 			}
 		}

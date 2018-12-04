@@ -112,16 +112,16 @@ namespace Myra.Graphics2D.UI
 
 		public SpinButton(SpinButtonStyle style)
 		{
-			Widget = new Grid();
+			InternalChild = new Grid();
 
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
 
-			Widget.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
-			Widget.ColumnsProportions.Add(new Proportion());
+			InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+			InternalChild.ColumnsProportions.Add(new Proportion());
 
-			Widget.RowsProportions.Add(new Proportion());
-			Widget.RowsProportions.Add(new Proportion());
+			InternalChild.RowsProportions.Add(new Proportion());
+			InternalChild.RowsProportions.Add(new Proportion());
 
 			_textField = new TextField
 			{
@@ -135,7 +135,7 @@ namespace Myra.Graphics2D.UI
 			_textField.TextChanged += TextFieldOnTextChanged;
 			_textField.TextChangedByUser += TextFieldOnTextChangedByUser;
 
-			Widget.Widgets.Add(_textField);
+			InternalChild.Widgets.Add(_textField);
 
 			_upButton = new ImageButton
 			{
@@ -145,7 +145,7 @@ namespace Myra.Graphics2D.UI
 			};
 			_upButton.Up += UpButtonOnUp;
 
-			Widget.Widgets.Add(_upButton);
+			InternalChild.Widgets.Add(_upButton);
 
 			_downButton = new ImageButton
 			{
@@ -155,7 +155,7 @@ namespace Myra.Graphics2D.UI
 				ContentHorizontalAlignment = HorizontalAlignment.Center
 			};
 			_downButton.Up += DownButtonOnUp;
-			Widget.Widgets.Add(_downButton);
+			InternalChild.Widgets.Add(_downButton);
 
 			if (style != null)
 			{

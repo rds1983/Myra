@@ -62,7 +62,7 @@ namespace Myra.Graphics2D.UI
 
 		private float Hint
 		{
-			get { return Orientation == Orientation.Horizontal ? Widget.GetColumnProportion(0).Value : Widget.GetRowProportion(1).Value; }
+			get { return Orientation == Orientation.Horizontal ? InternalChild.GetColumnProportion(0).Value : InternalChild.GetRowProportion(1).Value; }
 
 			set
 			{
@@ -73,11 +73,11 @@ namespace Myra.Graphics2D.UI
 
 				if (Orientation == Orientation.Horizontal)
 				{
-					Widget.ColumnsProportions[0].Value = value;
+					InternalChild.ColumnsProportions[0].Value = value;
 				}
 				else
 				{
-					Widget.RowsProportions[1].Value = value;
+					InternalChild.RowsProportions[1].Value = value;
 				}
 
 				var ev = ValueChanged;
@@ -92,7 +92,7 @@ namespace Myra.Graphics2D.UI
 
 		protected ProgressBar(ProgressBarStyle style)
 		{
-			Widget = new Grid();
+			InternalChild = new Grid();
 			_filledImage = new Image
 			{
 				HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -100,20 +100,20 @@ namespace Myra.Graphics2D.UI
 			};
 			if (Orientation == Orientation.Horizontal)
 			{
-				Widget.ColumnsProportions.Add(new Proportion(ProportionType.Part, 0));
-				Widget.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
-				Widget.TotalColumnsPart = 1.0f;
+				InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Part, 0));
+				InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+				InternalChild.TotalColumnsPart = 1.0f;
 			}
 			else
 			{
-				Widget.RowsProportions.Add(new Proportion(ProportionType.Fill));
-				Widget.RowsProportions.Add(new Proportion(ProportionType.Part, 0));
-				Widget.TotalRowsPart = 1.0f;
+				InternalChild.RowsProportions.Add(new Proportion(ProportionType.Fill));
+				InternalChild.RowsProportions.Add(new Proportion(ProportionType.Part, 0));
+				InternalChild.TotalRowsPart = 1.0f;
 
 				_filledImage.GridPositionY = 1;
 			}
 
-			Widget.Widgets.Add(_filledImage);
+			InternalChild.Widgets.Add(_filledImage);
 
 			if (style != null)
 			{

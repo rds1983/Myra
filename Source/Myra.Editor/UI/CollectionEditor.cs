@@ -20,7 +20,7 @@ namespace Myra.Editor.UI
 			_collection = collection;
 			_type = type;
 
-			Widget = new Grid
+			InternalChild = new Grid
 			{
 				PaddingLeft = 8,
 				PaddingRight = 8,
@@ -30,11 +30,11 @@ namespace Myra.Editor.UI
 				RowSpacing = 8
 			};
 
-			Widget.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-			Widget.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill));
+			InternalChild.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
+			InternalChild.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill));
 
-			Widget.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill));
-			Widget.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
+			InternalChild.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill));
+			InternalChild.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
 
 			_listItems = new ListBox
 			{
@@ -50,12 +50,12 @@ namespace Myra.Editor.UI
 				_listItems.Items.Add(new ListItem(BuildItemText(item), null, item));
 			}
 
-			Widget.Widgets.Add(_listItems);
+			InternalChild.Widgets.Add(_listItems);
 
 			_propertyGrid = new PropertyGrid { GridPositionX = 1 };
 			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
 
-			Widget.Widgets.Add(_propertyGrid);
+			InternalChild.Widgets.Add(_propertyGrid);
 
 			var buttonsGrid = new Grid
 			{
@@ -96,7 +96,7 @@ namespace Myra.Editor.UI
 			_buttonMoveDown.Up += ButtonMoveDownOnUp;
 			buttonsGrid.Widgets.Add(_buttonMoveDown);
 
-			Widget.Widgets.Add(buttonsGrid);
+			InternalChild.Widgets.Add(buttonsGrid);
 
 			UpdateButtonsEnabled();
 		}
