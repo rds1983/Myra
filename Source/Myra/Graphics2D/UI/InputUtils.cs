@@ -31,7 +31,7 @@ namespace Myra.Graphics2D.UI
 					continue;
 				}
 
-				if (w.MouseButtonsDown != null)
+				if (w.IsMouseOver || w.IsTouchDown)
 				{
 					w.OnMouseUp(buttons);
 					break;

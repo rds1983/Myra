@@ -57,6 +57,23 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public override Desktop Desktop
+		{
+			get
+			{
+				return base.Desktop;
+			}
+			set
+			{
+				base.Desktop = value;
+
+				foreach (var child in Children)
+				{
+					child.Desktop = Desktop;
+				}
+			}
+		}
+
 		private void UpdateWidgets()
 		{
 			if (!_childrenDirty)
@@ -147,16 +164,6 @@ namespace Myra.Graphics2D.UI
 					continue;
 
 				child.Render(batch);
-			}
-		}
-
-		public override void OnDesktopChanged()
-		{
-			base.OnDesktopChanged();
-
-			foreach (var child in Children)
-			{
-				child.Desktop = Desktop;
 			}
 		}
 

@@ -97,6 +97,28 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public override Desktop Desktop
+		{
+			get
+			{
+				return base.Desktop;
+			}
+			set
+			{
+				if (Desktop != null)
+				{
+					Desktop.MouseMoved -= DesktopMouseMoved;
+				}
+
+				base.Desktop = value;
+
+				if (Desktop != null)
+				{
+					Desktop.MouseMoved += DesktopMouseMoved;
+				}
+			}
+		}
+
 		/// <summary>
 		/// Fires when the value had been changed
 		/// </summary>
@@ -109,7 +131,10 @@ namespace Myra.Graphics2D.UI
 
 		protected Slider(SliderStyle sliderStyle)
 		{
-			InternalChild = new ImageButton((ImageButtonStyle)null);
+			InternalChild = new ImageButton((ImageButtonStyle)null)
+			{
+				HandleMouseEnterLeave = false
+			};
 
 			InternalChild.Down += WidgetOnDown;
 			InternalChild.Up += WidgetOnUp;
@@ -153,26 +178,6 @@ namespace Myra.Graphics2D.UI
 			base.Arrange();
 
 			SyncHintWithValue();
-		}
-
-		public override void OnDesktopChanging()
-		{
-			base.OnDesktopChanging();
-
-			if (Desktop != null)
-			{
-				Desktop.MouseMoved -= DesktopMouseMoved;
-			}
-		}
-
-		public override void OnDesktopChanged()
-		{
-			base.OnDesktopChanged();
-
-			if (Desktop != null)
-			{
-				Desktop.MouseMoved += DesktopMouseMoved;
-			}
 		}
 
 		private void DesktopMouseMoved(object sender, GenericEventArgs<Point> e)

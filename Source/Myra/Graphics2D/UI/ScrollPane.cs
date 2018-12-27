@@ -116,6 +116,28 @@ namespace Myra.Graphics2D.UI
 			set { InternalChild = value; }
 		}
 
+		public override Desktop Desktop
+		{
+			get
+			{
+				return base.Desktop;
+			}
+			set
+			{
+				if (Desktop != null)
+				{
+					Desktop.MouseMoved -= DesktopMouseMoved;
+				}
+
+				base.Desktop = value;
+
+				if (Desktop != null)
+				{
+					Desktop.MouseMoved += DesktopMouseMoved;
+				}
+			}
+		}
+
 		public ScrollPane(ScrollPaneStyle style)
 		{
 			ClipToBounds = true;
@@ -475,26 +497,6 @@ namespace Myra.Graphics2D.UI
 		{
 			_scrollPosition = Point.Zero;
 			UpdateWidgetLocation();
-		}
-
-		public override void OnDesktopChanging()
-		{
-			base.OnDesktopChanging();
-
-			if (Desktop != null)
-			{
-				Desktop.MouseMoved -= DesktopMouseMoved;
-			}
-		}
-
-		public override void OnDesktopChanged()
-		{
-			base.OnDesktopChanged();
-
-			if (Desktop != null)
-			{
-				Desktop.MouseMoved += DesktopMouseMoved;
-			}
 		}
 
 		private void DesktopMouseMoved(object sender, GenericEventArgs<Point> e)

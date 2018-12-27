@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
@@ -51,13 +52,41 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (value == _isPressed)
-				{
-					return;
-				}
+				SetIsPressed(value, true);
+			}
+		}
 
-				_isPressed = value;
+		internal bool HandleMouseEnterLeave
+		{
+			get; set;
+		}
 
+		public event EventHandler Down;
+		public event EventHandler Up;
+
+		public ButtonBase()
+		{
+			Toggleable = false;
+			HandleMouseEnterLeave = true;
+		}
+
+		public void Press()
+		{
+			OnMouseDown(MouseButtons.Left);
+			OnMouseUp(MouseButtons.Left);
+		}
+
+		private void SetIsPressed(bool value, bool fire)
+		{
+			if (value == _isPressed)
+			{
+				return;
+			}
+
+			_isPressed = value;
+
+			if (fire)
+			{
 				if (value)
 				{
 					FireDown();
@@ -69,24 +98,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public event EventHandler Down;
-		public event EventHandler Up;
-
-		public ButtonBase()
+		private void HandleTouchUp(bool fire)
 		{
-			Toggleable = false;
-		}
-
-		public void Press()
-		{
-			OnMouseDown(MouseButtons.Left);
-			OnMouseUp(MouseButtons.Left);
-		}
-
-		public override void OnMouseUp(MouseButtons mb)
-		{
-			base.OnMouseUp(mb);
-
 			if (IgnoreMouseButton)
 			{
 				return;
@@ -94,14 +107,12 @@ namespace Myra.Graphics2D.UI
 
 			if (!Toggleable)
 			{
-				IsPressed = false;
+				SetIsPressed(false, fire);
 			}
 		}
 
-		public override void OnMouseDown(MouseButtons mb)
+		private void HandleTouchDown(bool fire)
 		{
-			base.OnMouseDown(mb);
-
 			if (!Enabled || IgnoreMouseButton)
 			{
 				return;
@@ -109,12 +120,56 @@ namespace Myra.Graphics2D.UI
 
 			if (!Toggleable)
 			{
-				IsPressed = true;
+				SetIsPressed(true, fire);
 			}
 			else
 			{
-				IsPressed = !IsPressed;
+				SetIsPressed(!IsPressed, fire);
 			}
+		}
+
+		public override void OnMouseEntered(Point position)
+		{
+			base.OnMouseEntered(position);
+
+			if (!HandleMouseEnterLeave)
+			{
+				return;
+			}
+
+			if (Desktop.IsTouchDown)
+			{
+				HandleTouchDown(false);
+			}
+		}
+
+		public override void OnMouseLeft()
+		{
+			base.OnMouseLeft();
+
+			if (!HandleMouseEnterLeave)
+			{
+				return;
+			}
+
+			if (Desktop.IsTouchDown)
+			{
+				HandleTouchUp(false);
+			}
+		}
+
+		public override void OnMouseUp(MouseButtons mb)
+		{
+			base.OnMouseUp(mb);
+
+			HandleTouchUp(true);
+		}
+
+		public override void OnMouseDown(MouseButtons mb)
+		{
+			base.OnMouseDown(mb);
+
+			HandleTouchDown(true);
 		}
 
 		public override void OnKeyDown(Keys k)

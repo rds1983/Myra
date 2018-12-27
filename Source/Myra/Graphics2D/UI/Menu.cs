@@ -77,6 +77,30 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public override Desktop Desktop
+		{
+			get
+			{
+				return base.Desktop;
+			}
+			set
+			{
+				if (Desktop != null)
+				{
+					Desktop.ContextMenuClosing -= DesktopOnContextMenuClosing;
+					Desktop.ContextMenuClosed -= DesktopOnContextMenuClosed;
+				}
+
+				base.Desktop = value;
+
+				if (Desktop != null)
+				{
+					Desktop.ContextMenuClosing += DesktopOnContextMenuClosing;
+					Desktop.ContextMenuClosed += DesktopOnContextMenuClosed;
+				}
+			}
+		}
+
 		protected Menu(MenuStyle style)
 		{
 			InternalChild = new Grid();
@@ -295,28 +319,6 @@ namespace Myra.Graphics2D.UI
 			Desktop.ContextMenuClosed += DesktopOnContextMenuClosed;
 
 			OpenMenuItem = menuItem;
-		}
-
-		public override void OnDesktopChanging()
-		{
-			if (Desktop == null)
-			{
-				return;
-			}
-
-			Desktop.ContextMenuClosing -= DesktopOnContextMenuClosing;
-			Desktop.ContextMenuClosed -= DesktopOnContextMenuClosed;
-		}
-
-		public override void OnDesktopChanged()
-		{
-			if (Desktop == null)
-			{
-				return;
-			}
-
-			Desktop.ContextMenuClosing += DesktopOnContextMenuClosing;
-			Desktop.ContextMenuClosed += DesktopOnContextMenuClosed;
 		}
 
 		private void DesktopOnContextMenuClosing(object sender, ContextMenuClosingEventArgs args)

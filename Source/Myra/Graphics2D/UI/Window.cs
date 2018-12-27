@@ -130,6 +130,30 @@ namespace Myra.Graphics2D.UI
 			get;set;
 		}
 
+		public override Desktop Desktop
+		{
+			get
+			{
+				return base.Desktop;
+			}
+			set
+			{
+				if (Desktop != null)
+				{
+					Desktop.MouseMoved -= DesktopOnMouseMoved;
+				}
+
+				base.Desktop = value;
+
+				if (Desktop != null)
+				{
+					Desktop.MouseMoved += DesktopOnMouseMoved;
+				}
+
+				IsWindowPlaced = false;
+			}
+		}
+
 		public event EventHandler Closed;
 
 		public Window(WindowStyle style)
@@ -184,28 +208,6 @@ namespace Myra.Graphics2D.UI
 
 		public Window() : this(Stylesheet.Current.WindowStyle)
 		{
-		}
-
-		public override void OnDesktopChanging()
-		{
-			base.OnDesktopChanging();
-
-			if (Desktop != null)
-			{
-				Desktop.MouseMoved -= DesktopOnMouseMoved;
-			}
-		}
-
-		public override void OnDesktopChanged()
-		{
-			base.OnDesktopChanged();
-
-			if (Desktop != null)
-			{
-				Desktop.MouseMoved += DesktopOnMouseMoved;
-			}
-
-			IsWindowPlaced = false;
 		}
 
 		public override void UpdateLayout()

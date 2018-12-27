@@ -34,7 +34,7 @@ namespace Myra.Graphics2D.UI
 		private Point _lastMeasureAvailableSize;
 		private Point _lastLocationHint;
 
-		private MouseButtons? _mouseButtonsDown;
+		private bool _isTouchDown;
 
 		private Rectangle _containerBounds;
 		private Rectangle _bounds;
@@ -532,28 +532,19 @@ namespace Myra.Graphics2D.UI
 		[JsonIgnore]
 		public bool IsMouseOver { get; set; }
 
-		[HiddenInEditor]
-		[JsonIgnore]
-		public MouseButtons? MouseButtonsDown
+		public bool IsTouchDown
 		{
-			get { return _mouseButtonsDown; }
+			get { return _isTouchDown; }
 		}
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public Desktop Desktop
+		public virtual Desktop Desktop
 		{
 			get { return _desktop; }
 
 			set
 			{
-				if (value == _desktop)
-				{
-					return;
-				}
-
-				OnDesktopChanging();
-
 				if (CanFocus && _desktop != null)
 				{
 					_desktop.RemoveFocusableWidget(this);
@@ -565,8 +556,6 @@ namespace Myra.Graphics2D.UI
 				{
 					_desktop.AddFocusableWidget(this);
 				}
-
-				OnDesktopChanged();
 			}
 		}
 
@@ -925,13 +914,6 @@ namespace Myra.Graphics2D.UI
 			_layoutState = LayoutState.Normal;
 		}
 
-		public virtual void OnDesktopChanging()
-		{
-		}
-
-		public virtual void OnDesktopChanged()
-		{
-		}
 		private Widget FindWidgetBy(Func<Widget, bool> finder)
 		{
 			if (finder(this))
@@ -1078,7 +1060,7 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnMouseDown(MouseButtons mb)
 		{
-			_mouseButtonsDown = mb;
+			_isTouchDown = true;
 
 			var ev = MouseDown;
 			if (ev != null)
@@ -1111,7 +1093,7 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnMouseUp(MouseButtons mb)
 		{
-			_mouseButtonsDown = null;
+			_isTouchDown = false;
 
 			var ev = MouseUp;
 			if (ev != null)

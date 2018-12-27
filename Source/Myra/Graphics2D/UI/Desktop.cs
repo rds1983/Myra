@@ -132,6 +132,11 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public bool IsTouchDown
+		{
+			get; private set;
+		}
+
 		public Func<MouseState> MouseStateGetter { get; set; }
 		public Func<KeyboardState> KeyboardStateGetter { get; set; } 
 
@@ -348,6 +353,8 @@ namespace Myra.Graphics2D.UI
 		{
 			if (buttonState == ButtonState.Pressed && lastState == ButtonState.Released)
 			{
+				IsTouchDown = true;
+
 				var ev = MouseDown;
 				if (ev != null)
 				{
@@ -359,6 +366,8 @@ namespace Myra.Graphics2D.UI
 			}
 			else if (buttonState == ButtonState.Released && lastState == ButtonState.Pressed)
 			{
+				IsTouchDown = false;
+
 				var ev = MouseUp;
 				if (ev != null)
 				{
