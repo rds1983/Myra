@@ -24,11 +24,11 @@ namespace Myra.Graphics2D.UI
 
 			if (_orientation == Orientation.Horizontal)
 			{
-				HeightHint = style.Thickness;
+				Height = style.Thickness;
 			}
 			else
 			{
-				WidthHint = style.Thickness;
+				Width = style.Thickness;
 			}
 		}
 

@@ -152,8 +152,8 @@ namespace Myra.Samples.TabControl
 			var checkBox1 = new CheckBox();
 			checkBox1.Text = "This is checkbox";
 			checkBox1.TextColor = Color.White;
-			checkBox1.ImageWidthHint = 10;
-			checkBox1.ImageHeightHint = 10;
+			checkBox1.ImageWidth = 10;
+			checkBox1.ImageHeight = 10;
 			checkBox1.ContentHorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
 			checkBox1.ContentVerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;
 			checkBox1.GridPositionY = 4;
@@ -189,7 +189,7 @@ namespace Myra.Samples.TabControl
 			listItem3.Text = "Blue";
 
 			var comboBox1 = new ComboBox();
-			comboBox1.WidthHint = 200;
+			comboBox1.Width = 200;
 			comboBox1.GridPositionX = 1;
 			comboBox1.GridPositionY = 6;
 			comboBox1.Items.Add(listItem1);
@@ -216,7 +216,7 @@ namespace Myra.Samples.TabControl
 
 			var spinButton1 = new SpinButton();
 			spinButton1.Value = 0;
-			spinButton1.WidthHint = 100;
+			spinButton1.Width = 100;
 			spinButton1.GridPositionX = 1;
 			spinButton1.GridPositionY = 8;
 
@@ -238,7 +238,7 @@ namespace Myra.Samples.TabControl
 			listItem6.Color = Color.Blue;
 
 			var listBox1 = new ListBox();
-			listBox1.WidthHint = 200;
+			listBox1.Width = 200;
 			listBox1.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
 			listBox1.GridPositionX = 1;
 			listBox1.GridPositionY = 9;

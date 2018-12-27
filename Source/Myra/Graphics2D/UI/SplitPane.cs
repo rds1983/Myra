@@ -274,13 +274,13 @@ namespace Myra.Graphics2D.UI
 			{
 				if (Orientation == Orientation.Horizontal)
 				{
-					h.WidthHint = handleSize;
-					h.HeightHint = null;
+					h.Width = handleSize;
+					h.Height = null;
 				}
 				else
 				{
-					h.WidthHint = null;
-					h.HeightHint = handleSize;
+					h.Width = null;
+					h.Height = handleSize;
 				}
 			}
 

@@ -386,8 +386,8 @@ namespace Myra.Editor.UI
 					{
 						Renderable = DefaultAssets.WhiteRegion,
 						VerticalAlignment = VerticalAlignment.Center,
-						WidthHint = 32,
-						HeightHint = 16,
+						Width = 32,
+						Height = 16,
 						Color = color
 					};
 

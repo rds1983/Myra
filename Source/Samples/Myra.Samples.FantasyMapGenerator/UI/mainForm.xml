@@ -36,12 +36,12 @@
         <TextBlock Text="Variability:" GridPositionY="1" />
         <SpinButton Value="1" HorizontalAlignment="Stretch" Id="_spinVariability" GridPositionX="1" GridPositionY="1" />
         <TextBlock Text="Water/Land(60%):" Id="_textWaterLand" GridPositionY="2" />
-        <HorizontalSlider Minimum="0" Maximum="100" Id="_sliderWaterLand" GridPositionX="1" GridPositionY="2" />
+        <HorizontalSlider Id="_sliderWaterLand" GridPositionX="1" GridPositionY="2" />
       </Grid>
-      <CheckBox Text="Surrounded By Water" ImageWidthHint="10" ImageHeightHint="10" ContentHorizontalAlignment="Stretch" ContentVerticalAlignment="Stretch" Id="_checkSurrondedByWater" GridPositionY="1" />
-      <CheckBox Text="Smooth" ImageWidthHint="10" ImageHeightHint="10" ContentHorizontalAlignment="Stretch" ContentVerticalAlignment="Stretch" Id="_checkSmooth" GridPositionY="2" />
-      <CheckBox Text="Remove Small Islands" ImageWidthHint="10" ImageHeightHint="10" ContentHorizontalAlignment="Stretch" ContentVerticalAlignment="Stretch" Id="_checkRemoveSmalIslands" GridPositionY="3" />
-      <CheckBox Text="Remove Small Lakes" ImageWidthHint="10" ImageHeightHint="10" ContentHorizontalAlignment="Stretch" ContentVerticalAlignment="Stretch" Id="_checkRemoveSmallLakes" GridPositionY="4" />
+      <CheckBox Text="Surrounded By Water" ImageWidth="10" ImageHeight="10" Id="_checkSurrondedByWater" GridPositionY="1" />
+      <CheckBox Text="Smooth" ImageWidth="10" ImageHeight="10" Id="_checkSmooth" GridPositionY="2" />
+      <CheckBox Text="Remove Small Islands" ImageWidth="10" ImageHeight="10" Id="_checkRemoveSmalIslands" GridPositionY="3" />
+      <CheckBox Text="Remove Small Lakes" ImageWidth="10" ImageHeight="10" Id="_checkRemoveSmallLakes" GridPositionY="4" />
       <TextButton Text="Generate" Id="_buttonGenerate" HorizontalAlignment="Stretch" GridPositionY="5" />
       <Grid ColumnSpacing="8" GridPositionY="6">
         <ColumnsProportions>

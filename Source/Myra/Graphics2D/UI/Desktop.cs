@@ -191,8 +191,8 @@ namespace Myra.Graphics2D.UI
 				ContextMenu.HorizontalAlignment = HorizontalAlignment.Left;
 				ContextMenu.VerticalAlignment = VerticalAlignment.Top;
 
-				ContextMenu.XHint = position.X;
-				ContextMenu.YHint = position.Y;
+				ContextMenu.Left = position.X;
+				ContextMenu.Top = position.Y;
 
 				ContextMenu.Visible = true;
 

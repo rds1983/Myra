@@ -1,6 +1,6 @@
 <Project>
   <ExportOptions Namespace="Myra.UIEditor.UI" Class="ExportOptionsWidget" OutputPath="D:\Projects\Hebron\Myra\Source\Myra.UIEditor\UI" />
-  <Grid ColumnSpacing="8" RowSpacing="8" Id="Root" WidthHint="800">
+  <Grid ColumnSpacing="8" RowSpacing="8" Id="Root" Width="800">
     <ColumnsProportions>
       <Proportion />
       <Proportion Type="Fill" />

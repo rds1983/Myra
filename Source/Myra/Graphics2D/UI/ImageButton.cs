@@ -81,16 +81,16 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(null)]
 		public virtual int? ImageWidthHint
 		{
-			get { return InternalChild.WidthHint; }
-			set { InternalChild.WidthHint = value; }
+			get { return InternalChild.Width; }
+			set { InternalChild.Width = value; }
 		}
 
 		[EditCategory("Appearance")]
 		[DefaultValue(null)]
 		public virtual int? ImageHeightHint
 		{
-			get { return InternalChild.HeightHint; }
-			set { InternalChild.HeightHint = value; }
+			get { return InternalChild.Height; }
+			set { InternalChild.Height = value; }
 		}
 
 		public ImageButton(ImageButtonStyle style)
@@ -128,8 +128,8 @@ namespace Myra.Graphics2D.UI
 			OverImage = imageStyle.OverImage;
 			PressedImage = imageStyle.PressedImage;
 
-			InternalChild.WidthHint = null;
-			InternalChild.HeightHint = null;
+			InternalChild.Width = null;
+			InternalChild.Height = null;
 			InternalChild.UpdateImageSize(imageStyle.Image);
 			InternalChild.UpdateImageSize(imageStyle.OverImage);
 			InternalChild.UpdateImageSize(imageStyle.PressedImage);

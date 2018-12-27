@@ -127,8 +127,8 @@ namespace Myra.Samples.GridContainer
 			var pane = new ScrollPane
 			{
 				Widget = label,
-				WidthHint = 200,
-				HeightHint = 200
+				Width = 200,
+				Height = 200
 			};
 
 			_window = new Window
@@ -175,7 +175,7 @@ namespace Myra.Samples.GridContainer
 
 			var textBlock = new TextBlock
 			{
-				WidthHint = 125,
+				Width = 125,
 				Text = "This is textblock which spans for several lines to demonstrate row proportion set to Auto",
 				GridPositionX = 4,
 				GridPositionY = 1,
@@ -196,7 +196,7 @@ namespace Myra.Samples.GridContainer
 			{
 				GridPositionX = 5,
 				GridPositionY = 1,
-				WidthHint = 100
+				Width = 100
 			};
 			grid.Widgets.Add(textField);
 
@@ -204,7 +204,7 @@ namespace Myra.Samples.GridContainer
 			{
 				GridPositionX = 5,
 				GridPositionY = 2,
-				WidthHint = 100,
+				Width = 100,
 				Integer = true
 			};
 			grid.Widgets.Add(spinButton2);
@@ -214,7 +214,7 @@ namespace Myra.Samples.GridContainer
 			{
 				GridPositionX = 5,
 				GridPositionY = 3,
-				WidthHint = 100
+				Width = 100
 			};
 			grid.Widgets.Add(_horizontalProgressBar);
 
@@ -222,7 +222,7 @@ namespace Myra.Samples.GridContainer
 			{
 				GridPositionX = 6,
 				GridPositionY = 1,
-				HeightHint = 100
+				Height = 100
 			};
 			grid.Widgets.Add(_verticalProgressBar);
 

@@ -22,8 +22,8 @@ namespace Myra.Graphics2D.UI
 		public const string DefaultStyleName = "default";
 		public const int DoubleClickIntervalInMs = 500;
 
-		private int _xHint, _yHint;
-		private int? _widthHint, _heightHint;
+		private int _left, _top;
+		private int? _width, _height;
 		private int _gridPositionX, _gridPositionY, _gridSpanX = 1, _gridSpanY = 1;
 		private HorizontalAlignment _horizontalAlignment = HorizontalAlignment.Left;
 		private VerticalAlignment _verticalAlignment = VerticalAlignment.Top;
@@ -71,39 +71,54 @@ namespace Myra.Graphics2D.UI
 
 		[EditCategory("Layout")]
 		[DefaultValue(0)]
-		public int XHint
+		public int Left
 		{
-			get { return _xHint; }
+			get { return _left; }
 
 			set
 			{
-				if (value == _xHint)
+				if (value == _left)
 				{
 					return;
 				}
 
-				_xHint = value;
+				_left = value;
 				if (_layoutState == LayoutState.Normal)
 				{
 					_layoutState = LayoutState.LocationInvalid;
 				}
+			}
+		}
+
+		[Obsolete("Use Left instead")]
+		[HiddenInEditor]
+		public int XHint
+		{
+			get
+			{
+				return Left;
+			}
+
+			set
+			{
+				Left = value;
 			}
 		}
 
 		[EditCategory("Layout")]
 		[DefaultValue(0)]
-		public int YHint
+		public int Top
 		{
-			get { return _yHint; }
+			get { return _top; }
 
 			set
 			{
-				if (value == _yHint)
+				if (value == _top)
 				{
 					return;
 				}
 
-				_yHint = value;
+				_top = value;
 				if (_layoutState == LayoutState.Normal)
 				{
 					_layoutState = LayoutState.LocationInvalid;
@@ -111,37 +126,82 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Layout")]
-		[DefaultValue(null)]
-		public int? WidthHint
+		[Obsolete("Use Top instead")]
+		[HiddenInEditor]
+		public int YHint
 		{
-			get { return _widthHint; }
+			get
+			{
+				return Top;
+			}
+
 			set
 			{
-				if (value == _widthHint)
-				{
-					return;
-				}
-
-				_widthHint = value;
-				InvalidateMeasure();
+				Top = value;
 			}
 		}
 
 		[EditCategory("Layout")]
 		[DefaultValue(null)]
-		public int? HeightHint
+		public int? Width
 		{
-			get { return _heightHint; }
+			get { return _width; }
 			set
 			{
-				if (value == _heightHint)
+				if (value == _width)
 				{
 					return;
 				}
 
-				_heightHint = value;
+				_width = value;
 				InvalidateMeasure();
+			}
+		}
+
+		[Obsolete("Use Width instead")]
+		[HiddenInEditor]
+		public int? WidthHint
+		{
+			get
+			{
+				return Width;
+			}
+
+			set
+			{
+				Width = value;
+			}
+		}
+
+		[EditCategory("Layout")]
+		[DefaultValue(null)]
+		public int? Height
+		{
+			get { return _height; }
+			set
+			{
+				if (value == _height)
+				{
+					return;
+				}
+
+				_height = value;
+				InvalidateMeasure();
+			}
+		}
+
+		[Obsolete("Use Height instead")]
+		[HiddenInEditor]
+		public int? HeightHint
+		{
+			get
+			{
+				return Height;
+			}
+
+			set
+			{
+				Height = value;
 			}
 		}
 
@@ -753,21 +813,21 @@ namespace Myra.Graphics2D.UI
 
 			Point result;
 
-			if (WidthHint.HasValue && HeightHint.HasValue)
+			if (Width.HasValue && Height.HasValue)
 			{
-				result = new Point(WidthHint.Value, HeightHint.Value);
+				result = new Point(Width.Value, Height.Value);
 			}
 			else
 			{
 				result = InternalMeasure(availableSize);
-				if (WidthHint.HasValue)
+				if (Width.HasValue)
 				{
-					result.X = WidthHint.Value;
+					result.X = Width.Value;
 				}
 
-				if (HeightHint.HasValue)
+				if (Height.HasValue)
 				{
-					result.Y = HeightHint.Value;
+					result.Y = Height.Value;
 				}
 			}
 
@@ -848,7 +908,7 @@ namespace Myra.Graphics2D.UI
 				var controlBounds = LayoutUtils.Align(_containerBounds.Size(), size, HorizontalAlignment, VerticalAlignment);
 				controlBounds.Offset(_containerBounds.Location);
 
-				controlBounds.Offset(XHint, YHint);
+				controlBounds.Offset(Left, Top);
 
 				_bounds = controlBounds;
 				_actualBounds = CalculateClientBounds(controlBounds);
@@ -858,10 +918,10 @@ namespace Myra.Graphics2D.UI
 			else
 			{
 				// Only location
-				MoveChildren(new Point(XHint - _lastLocationHint.X, YHint - _lastLocationHint.Y));
+				MoveChildren(new Point(Left - _lastLocationHint.X, Top - _lastLocationHint.Y));
 			}
 
-			_lastLocationHint = new Point(XHint, YHint);
+			_lastLocationHint = new Point(Left, Top);
 			_layoutState = LayoutState.Normal;
 		}
 
@@ -938,8 +998,8 @@ namespace Myra.Graphics2D.UI
 
 		public void ApplyWidgetStyle(WidgetStyle style)
 		{
-			WidthHint = style.WidthHint;
-			HeightHint = style.HeightHint;
+			Width = style.WidthHint;
+			Height = style.HeightHint;
 
 			Background = style.Background;
 			OverBackground = style.OverBackground;

@@ -167,8 +167,8 @@ namespace Myra.Graphics2D.UI
 						(_horizontalScrollbarVisible ? _horizontalScrollbarThumb.Height : 0)))
 			);
 
-			InternalChild.XHint = -origin.X;
-			InternalChild.YHint = -origin.Y;
+			InternalChild.Left = -origin.X;
+			InternalChild.Top = -origin.Y;
 		}
 
 		private void MoveThumb(int delta)

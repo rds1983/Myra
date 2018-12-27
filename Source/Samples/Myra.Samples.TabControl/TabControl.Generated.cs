@@ -15,7 +15,7 @@ namespace Myra.Samples.TabControl
 			_buttonAllWidgets.ContentVerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
 			_buttonAllWidgets.IgnoreMouseButton = true;
 			_buttonAllWidgets.Id = "_buttonAllWidgets";
-			_buttonAllWidgets.WidthHint = 100;
+			_buttonAllWidgets.Width = 100;
 
 			_buttonGrid = new TextButton();
 			_buttonGrid.Text = "Grid";
@@ -24,7 +24,7 @@ namespace Myra.Samples.TabControl
 			_buttonGrid.ContentVerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
 			_buttonGrid.IgnoreMouseButton = true;
 			_buttonGrid.Id = "_buttonGrid";
-			_buttonGrid.WidthHint = 100;
+			_buttonGrid.Width = 100;
 			_buttonGrid.GridPositionX = 1;
 
 			_buttonNotepad = new TextButton();
@@ -34,7 +34,7 @@ namespace Myra.Samples.TabControl
 			_buttonNotepad.ContentVerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
 			_buttonNotepad.IgnoreMouseButton = true;
 			_buttonNotepad.Id = "_buttonNotepad";
-			_buttonNotepad.WidthHint = 100;
+			_buttonNotepad.Width = 100;
 			_buttonNotepad.GridPositionX = 2;
 
 			var grid1 = new Grid();

@@ -48,7 +48,7 @@ namespace Myra.Graphics2D.UI
 				}
 				else
 				{
-					_itemsContainer.WidthHint = Bounds.Width;
+					_itemsContainer.Width = Bounds.Width;
 
 					Desktop.ShowContextMenu(_itemsContainer, new Point(Bounds.X, Bounds.Bottom));
 				}
@@ -205,18 +205,18 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public override int? ImageWidthHint
+		public override int? ImageWidth
 		{
-			get { return base.ImageWidthHint; }
-			set { base.ImageWidthHint = value; }
+			get { return base.ImageWidth; }
+			set { base.ImageWidth = value; }
 		}
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public override int? ImageHeightHint
+		public override int? ImageHeight
 		{
-			get { return base.ImageHeightHint; }
-			set { base.ImageHeightHint = value; }
+			get { return base.ImageHeight; }
+			set { base.ImageHeight = value; }
 		}
 
 		[HiddenInEditor]

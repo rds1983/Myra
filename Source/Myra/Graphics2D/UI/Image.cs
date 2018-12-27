@@ -90,14 +90,14 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			if (WidthHint == null || image.Size.X > WidthHint.Value)
+			if (Width == null || image.Size.X > Width.Value)
 			{
-				WidthHint = image.Size.X;
+				Width = image.Size.X;
 			}
 
-			if (HeightHint == null || image.Size.Y > HeightHint.Value)
+			if (Height == null || image.Size.Y > Height.Value)
 			{
-				HeightHint = image.Size.Y;
+				Height = image.Size.Y;
 			}
 		}
 	}

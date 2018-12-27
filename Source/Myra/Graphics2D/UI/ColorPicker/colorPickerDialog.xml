@@ -1,6 +1,6 @@
 <Project>
   <ExportOptions Namespace="Myra.Graphics2D.UI.ColorPicker" Class="ColorPickerDialog" OutputPath="D:\Projects\Hebron\Myra\Source\Myra\Graphics2D\UI\ColorPicker" />
-  <Dialog Title="Color Picker" XHint="219" YHint="205" WidthHint="450">
+  <Dialog Title="Color Picker" Left="210" Top="205" Width="450">
     <Grid RowSpacing="-1" GridPositionY="1">
       <ColumnsProportions />
       <RowsProportions>
@@ -11,8 +11,8 @@
         <Proportion />
         <Proportion />
       </RowsProportions>
-      <Image Id="_imageColor" HeightHint="50" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-      <HorizontalSeparator HeightHint="4" GridPositionY="1" />
+      <Image Id="_imageColor" Height="50" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+      <HorizontalSeparator Height="4" GridPositionY="1" />
       <Grid GridPositionY="2">
         <ColumnsProportions>
           <Proportion Type="Part" />
@@ -36,18 +36,18 @@
           </RowsProportions>
           <TextBlock Text="R" VerticalAlignment="Center" />
           <SpinButton Maximum="255" Minimum="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Id="_spinButtonR" GridPositionX="1" />
-          <HorizontalSlider Minimum="0" Maximum="255" Id="_sliderR" VerticalAlignment="Center" GridPositionX="2" />
+          <HorizontalSlider Maximum="255" Id="_sliderR" VerticalAlignment="Center" GridPositionX="2" />
           <TextBlock Text="G" VerticalAlignment="Center" GridPositionY="1" />
           <SpinButton Maximum="255" Minimum="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Id="_spinButtonG" GridPositionX="1" GridPositionY="1" />
-          <HorizontalSlider Minimum="0" Maximum="255" Id="_sliderG" VerticalAlignment="Center" GridPositionX="2" GridPositionY="1" />
+          <HorizontalSlider Maximum="255" Id="_sliderG" VerticalAlignment="Center" GridPositionX="2" GridPositionY="1" />
           <TextBlock Text="B" GridPositionY="2" />
           <SpinButton Maximum="255" Minimum="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Id="_spinButtonB" GridPositionX="1" GridPositionY="2" />
-          <HorizontalSlider Minimum="0" Maximum="255" Id="_sliderB" VerticalAlignment="Center" GridPositionX="2" GridPositionY="2" />
+          <HorizontalSlider Maximum="255" Id="_sliderB" VerticalAlignment="Center" GridPositionX="2" GridPositionY="2" />
           <TextBlock Text="A" GridPositionY="3" />
           <SpinButton Maximum="255" Minimum="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Id="_spinButtonA" GridPositionX="1" GridPositionY="3" />
-          <HorizontalSlider Minimum="0" Maximum="255" Id="_sliderA" VerticalAlignment="Center" GridPositionX="2" GridPositionY="3" />
+          <HorizontalSlider Maximum="255" Id="_sliderA" VerticalAlignment="Center" GridPositionX="2" GridPositionY="3" />
         </Grid>
-        <VerticalSeparator WidthHint="3" GridPositionX="1" />
+        <VerticalSeparator Width="3" GridPositionX="1" />
         <Grid ColumnSpacing="8" RowSpacing="5" PaddingTop="4" PaddingBottom="4" GridPositionX="2">
           <ColumnsProportions>
             <Proportion />
@@ -62,25 +62,25 @@
           </RowsProportions>
           <TextBlock Text="H" />
           <SpinButton Maximum="360" Minimum="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Id="_spinButtonH" GridPositionX="1" />
-          <HorizontalSlider Minimum="0" Maximum="360" Id="_sliderH" VerticalAlignment="Center" GridPositionX="2" />
+          <HorizontalSlider Maximum="360" Id="_sliderH" VerticalAlignment="Center" GridPositionX="2" />
           <TextBlock Text="S" GridPositionY="1" />
           <SpinButton Maximum="100" Minimum="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Id="_spinButtonS" GridPositionX="1" GridPositionY="1" />
-          <HorizontalSlider Minimum="0" Maximum="100" Id="_sliderS" VerticalAlignment="Center" GridPositionX="2" GridPositionY="1" />
+          <HorizontalSlider Id="_sliderS" VerticalAlignment="Center" GridPositionX="2" GridPositionY="1" />
           <TextBlock Text="V" GridPositionY="2" />
           <SpinButton Maximum="100" Minimum="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Id="_spinButtonV" GridPositionX="1" GridPositionY="2" />
-          <HorizontalSlider Minimum="0" Maximum="100" Id="_sliderV" VerticalAlignment="Center" GridPositionX="2" GridPositionY="2" />
+          <HorizontalSlider Id="_sliderV" VerticalAlignment="Center" GridPositionX="2" GridPositionY="2" />
           <TextBlock Text="#" GridPositionY="3" />
           <TextField Text="" Id="_textFieldHex" VerticalAlignment="Center" GridPositionX="1" GridPositionY="3" GridSpanX="2" />
         </Grid>
       </Grid>
-      <HorizontalSeparator HeightHint="4" GridPositionY="3" />
+      <HorizontalSeparator Height="4" GridPositionY="3" />
       <Grid RowSpacing="4" GridPositionY="4">
         <ColumnsProportions />
         <RowsProportions>
           <Proportion />
           <Proportion />
         </RowsProportions>
-        <Grid ColumnSpacing="4" RowSpacing="4" GridSelectionMode="Cell" Id="_gridUserColors" HeightHint="100">
+        <Grid ColumnSpacing="4" RowSpacing="4" GridSelectionMode="Cell" Id="_gridUserColors" Height="100">
           <ColumnsProportions>
             <Proportion Type="Part" />
             <Proportion Type="Part" />
@@ -96,7 +96,7 @@
         </Grid>
         <TextButton Text="Save Color" Id="_buttonSaveColor" HorizontalAlignment="Right" GridPositionY="1" />
       </Grid>
-      <HorizontalSeparator HeightHint="4" GridPositionY="5" />
+      <HorizontalSeparator Height="4" GridPositionY="5" />
     </Grid>
   </Dialog>
 </Project>

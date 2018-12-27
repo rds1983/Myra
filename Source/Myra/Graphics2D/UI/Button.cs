@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -97,18 +98,48 @@ namespace Myra.Graphics2D.UI
 
 		[EditCategory("Appearance")]
 		[DefaultValue(null)]
-		public virtual int? ImageWidthHint
+		public virtual int? ImageWidth
 		{
-			get { return _image.WidthHint; }
-			set { _image.WidthHint = value; }
+			get { return _image.Width; }
+			set { _image.Width = value; }
+		}
+
+		[Obsolete("Use ImageWidth instead")]
+		[HiddenInEditor]
+		public int? ImageWidthHint
+		{
+			get
+			{
+				return ImageWidth;
+			}
+
+			set
+			{
+				ImageWidth = value;
+			}
 		}
 
 		[EditCategory("Appearance")]
 		[DefaultValue(null)]
-		public virtual int? ImageHeightHint
+		public virtual int? ImageHeight
 		{
-			get { return _image.HeightHint; }
-			set { _image.HeightHint = value; }
+			get { return _image.Height; }
+			set { _image.Height = value; }
+		}
+
+		[Obsolete("Use ImageHeight instead")]
+		[HiddenInEditor]
+		public int? ImageHeightHint
+		{
+			get
+			{
+				return ImageHeight;
+			}
+
+			set
+			{
+				ImageHeight = value;
+			}
 		}
 
 		[EditCategory("Appearance")]

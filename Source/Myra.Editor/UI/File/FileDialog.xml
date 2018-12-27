@@ -1,6 +1,6 @@
 <Project>
   <ExportOptions Namespace="Myra.Editor.UI.File" Class="FileDialog" OutputPath="D:/Projects/Hebron/Myra/Source/Myra.Editor/UI/File" />
-  <Dialog Title="Open File..." XHint="144" YHint="183" WidthHint="600" HeightHint="400">
+  <Dialog Title="Open File..." Left="135" Top="183" Width="600" Height="400">
     <Grid RowSpacing="4" GridPositionY="1">
       <ColumnsProportions />
       <RowsProportions>
@@ -22,7 +22,7 @@
         <ImageButton Id="_buttonParent" HorizontalAlignment="Center" VerticalAlignment="Center" GridPositionX="3" />
       </Grid>
       <HorizontalSplitPane Id="_splitPane" GridPositionY="1">
-        <ListBox VerticalAlignment="Top" Id="_listBoxPlaces" ClipToBounds="True" />
+        <ListBox Id="_listBoxPlaces" HorizontalAlignment="Stretch" ClipToBounds="True" />
         <ScrollPane AllowHorizontalScrolling="False" Id="_scrollPane" GridPositionX="2">
           <Grid ColumnSpacing="4" RowSpacing="4" GridSelectionMode="Row" Id="_gridFiles" CanFocus="True">
             <ColumnsProportions>

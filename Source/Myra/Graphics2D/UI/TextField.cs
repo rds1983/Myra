@@ -507,9 +507,9 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var width = availableSize.X;
-			if (WidthHint != null && WidthHint.Value < width)
+			if (Width != null && Width.Value < width)
 			{
-				width = WidthHint.Value;
+				width = Width.Value;
 			}
 
 			var result = Point.Zero;

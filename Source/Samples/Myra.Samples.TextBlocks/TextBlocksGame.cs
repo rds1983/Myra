@@ -29,8 +29,8 @@ namespace Myra.Samples.TextBlocks
 			{
 				Text = "Hello, World!",
 				TextColor = Color.Red,
-				XHint = 100,
-				YHint = 50
+				Left = 100,
+				Top = 50
 			};
 
 			var textBlock2 = new TextBlock
@@ -53,7 +53,7 @@ namespace Myra.Samples.TextBlocks
 				Wrap = true,
 				HorizontalAlignment = HorizontalAlignment.Right,
 				VerticalAlignment = VerticalAlignment.Bottom,
-				WidthHint = 50
+				Width = 50
 			};
 
 			_host.Widgets.Add(textBlock1);

@@ -227,8 +227,8 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var size = Bounds.Size();
-			XHint = (ContainerBounds.Width - size.X) / 2;
-			YHint = (ContainerBounds.Height - size.Y) / 2;
+			Left = (ContainerBounds.Width - size.X) / 2;
+			Top = (ContainerBounds.Height - size.Y) / 2;
 		}
 
 		private void DesktopOnMouseMoved(object sender, GenericEventArgs<Point> genericEventArgs)
@@ -275,33 +275,33 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			XHint += delta.X;
+			Left += delta.X;
 
-			if (XHint < 0)
+			if (Left < 0)
 			{
-				XHint = 0;
+				Left = 0;
 			}
 
 			if (Desktop != null)
 			{
-				if (XHint + Bounds.Width > Desktop.Bounds.Right)
+				if (Left + Bounds.Width > Desktop.Bounds.Right)
 				{
-					XHint = Desktop.Bounds.Right - Bounds.Width;
+					Left = Desktop.Bounds.Right - Bounds.Width;
 				}
 			}
 
-			YHint += delta.Y;
+			Top += delta.Y;
 
-			if (YHint < 0)
+			if (Top < 0)
 			{
-				YHint = 0;
+				Top = 0;
 			}
 
 			if (Desktop != null)
 			{
-				if (YHint + Bounds.Height > Desktop.Bounds.Bottom)
+				if (Top + Bounds.Height > Desktop.Bounds.Bottom)
 				{
-					YHint = Desktop.Bounds.Bottom - Bounds.Height;
+					Top = Desktop.Bounds.Bottom - Bounds.Height;
 				}
 			}
 

@@ -232,8 +232,14 @@ namespace Myra.UIEditor
 					continue;
 				}
 
-				var attr = property.FindAttribute<JsonIgnoreAttribute>();
-				if (attr != null)
+				var jsonIgnoreAttr = property.FindAttribute<JsonIgnoreAttribute>();
+				if (jsonIgnoreAttr != null)
+				{
+					continue;
+				}
+
+				var obsoleteAttr = property.FindAttribute<ObsoleteAttribute>();
+				if (obsoleteAttr != null)
 				{
 					continue;
 				}

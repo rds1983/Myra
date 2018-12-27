@@ -62,11 +62,11 @@
           <TextButton Text="Choose Color" Id="_buttonChooseColor" PaddingLeft="8" PaddingRight="8" GridPositionX="1" GridPositionY="3" />
           <TextBlock Text="Image Button:" Id="" GridPositionY="4" />
           <ImageButton Id="_imageButton" PaddingLeft="8" PaddingRight="8" GridPositionX="1" GridPositionY="4" />
-          <CheckBox Text="This is checkbox" ImageWidthHint="10" ImageHeightHint="10" GridPositionY="5" GridSpanX="2" />
+          <CheckBox Text="This is checkbox" ImageWidth="10" ImageHeight="10" GridPositionY="5" GridSpanX="2" />
           <TextBlock Text="Horizontal Slider:" Id="" GridPositionY="6" />
           <HorizontalSlider GridPositionX="1" GridPositionY="6" GridSpanX="2" />
           <TextBlock Text="Combo Box:" GridPositionY="7" />
-          <ComboBox SelectedIndex="1" WidthHint="200" GridPositionX="1" GridPositionY="7" GridSpanX="2">
+          <ComboBox SelectedIndex="1" Width="200" GridPositionX="1" GridPositionY="7" GridSpanX="2">
             <ListItem Id="" Text="Red" Color="#FF0000FF" />
             <ListItem Text="Green" Color="#00FF00FF" />
             <ListItem Text="Blue" Color="#0080FFFF" />
@@ -74,9 +74,9 @@
           <TextBlock Text="Text Field:" GridPositionY="8" />
           <TextField Text="" GridPositionX="1" GridPositionY="8" GridSpanX="2" />
           <TextBlock Text="Spin Button:" GridPositionY="9" />
-          <SpinButton WidthHint="100" GridPositionX="1" GridPositionY="9" />
+          <SpinButton Width="100" GridPositionX="1" GridPositionY="9" />
           <TextBlock Text="List Box:" GridPositionY="10" />
-          <ListBox WidthHint="200" GridPositionX="1" GridPositionY="10" GridSpanX="2">
+          <ListBox Width="200" GridPositionX="1" GridPositionY="10" GridSpanX="2">
             <ListItem Text="Red" Color="#FF0000FF" />
             <ListItem Text="Green" Color="#00FF00FF" />
             <ListItem Text="Blue" Color="#0000FFFF" />

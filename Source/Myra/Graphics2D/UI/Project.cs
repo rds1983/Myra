@@ -121,6 +121,13 @@ namespace Myra.Graphics2D.UI
 					continue;
 				}
 
+				// Obsolete properties ignored only on save(and not ignored on load)
+				var attr = property.FindAttribute<ObsoleteAttribute>();
+				if (attr != null)
+				{
+					continue;
+				}
+
 				var value = property.GetValue(obj);
 				if (value != null)
 				{

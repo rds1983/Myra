@@ -482,8 +482,8 @@ namespace Myra.UIEditor
 
 			_statisticsGrid.HorizontalAlignment = HorizontalAlignment.Left;
 			_statisticsGrid.VerticalAlignment = VerticalAlignment.Bottom;
-			_statisticsGrid.XHint = 10;
-			_statisticsGrid.YHint = -10;
+			_statisticsGrid.Left = 10;
+			_statisticsGrid.Top = -10;
 			_desktop.Widgets.Add(_statisticsGrid);
 
 			UpdateMenuFile();

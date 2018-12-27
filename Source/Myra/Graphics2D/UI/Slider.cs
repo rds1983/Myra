@@ -67,7 +67,7 @@ namespace Myra.Graphics2D.UI
 
 		private int Hint
 		{
-			get { return Orientation == Orientation.Horizontal ? InternalChild.XHint : InternalChild.YHint; }
+			get { return Orientation == Orientation.Horizontal ? InternalChild.Left : InternalChild.Top; }
 
 			set
 			{
@@ -78,11 +78,11 @@ namespace Myra.Graphics2D.UI
 
 				if (Orientation == Orientation.Horizontal)
 				{
-					InternalChild.XHint = value;
+					InternalChild.Left = value;
 				}
 				else
 				{
-					InternalChild.YHint = value;
+					InternalChild.Top = value;
 				}
 			}
 		}
