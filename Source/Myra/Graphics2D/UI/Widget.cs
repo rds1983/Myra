@@ -20,7 +20,6 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public const string DefaultStyleName = "default";
-		public const int DoubleClickIntervalInMs = 500;
 
 		private int _left, _top;
 		private int? _width, _height;
@@ -45,7 +44,6 @@ namespace Myra.Graphics2D.UI
 		private int _paddingLeft, _paddingRight, _paddingTop, _paddingBottom;
 		private float _opacity = 1.0f;
 
-		private DateTime _lastDown;
 		private bool _enabled;
 		private bool _canFocus;
 		private string _styleName;
@@ -657,7 +655,7 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler<GenericEventArgs<Point>> MouseMoved;
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseDown;
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseUp;
-		public event EventHandler<GenericEventArgs<MouseButtons>> DoubleClick;
+		public event EventHandler<GenericEventArgs<MouseButtons>> MouseDoubleClick;
 
 		public event EventHandler<GenericEventArgs<float>> MouseWheelChanged;
 
@@ -1067,28 +1065,15 @@ namespace Myra.Graphics2D.UI
 			{
 				ev(this, new GenericEventArgs<MouseButtons>(mb));
 			}
-
-			if ((DateTime.Now - _lastDown).TotalMilliseconds < DoubleClickIntervalInMs)
-			{
-				// Double click
-				OnDoubleClick(mb);
-				var ev2 = DoubleClick;
-				if (ev2 != null)
-				{
-					ev2(this, new GenericEventArgs<MouseButtons>(mb));
-				}
-
-				_lastDown = DateTime.MinValue;
-			}
-			else
-			{
-				_lastDown = DateTime.Now;
-			}
 		}
 
-		public virtual void OnDoubleClick(MouseButtons mb)
+		public virtual void OnMouseDoubleClick(MouseButtons mb)
 		{
-
+			var ev = MouseDoubleClick;
+			if (ev != null)
+			{
+				ev(this, new GenericEventArgs<MouseButtons>(mb));
+			}
 		}
 
 		public virtual void OnMouseUp(MouseButtons mb)

@@ -52,41 +52,13 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				SetIsPressed(value, true);
-			}
-		}
+				if (value == _isPressed)
+				{
+					return;
+				}
 
-		internal bool HandleMouseEnterLeave
-		{
-			get; set;
-		}
+				_isPressed = value;
 
-		public event EventHandler Down;
-		public event EventHandler Up;
-
-		public ButtonBase()
-		{
-			Toggleable = false;
-			HandleMouseEnterLeave = true;
-		}
-
-		public void Press()
-		{
-			OnMouseDown(MouseButtons.Left);
-			OnMouseUp(MouseButtons.Left);
-		}
-
-		private void SetIsPressed(bool value, bool fire)
-		{
-			if (value == _isPressed)
-			{
-				return;
-			}
-
-			_isPressed = value;
-
-			if (fire)
-			{
 				if (value)
 				{
 					FireDown();
@@ -98,6 +70,20 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public event EventHandler Down;
+		public event EventHandler Up;
+
+		public ButtonBase()
+		{
+			Toggleable = false;
+		}
+
+		public void Press()
+		{
+			OnMouseDown(MouseButtons.Left);
+			OnMouseUp(MouseButtons.Left);
+		}
+
 		private void HandleTouchUp(bool fire)
 		{
 			if (IgnoreMouseButton)
@@ -107,7 +93,7 @@ namespace Myra.Graphics2D.UI
 
 			if (!Toggleable)
 			{
-				SetIsPressed(false, fire);
+				IsPressed = false;
 			}
 		}
 
@@ -120,41 +106,11 @@ namespace Myra.Graphics2D.UI
 
 			if (!Toggleable)
 			{
-				SetIsPressed(true, fire);
+				IsPressed = true;
 			}
 			else
 			{
-				SetIsPressed(!IsPressed, fire);
-			}
-		}
-
-		public override void OnMouseEntered(Point position)
-		{
-			base.OnMouseEntered(position);
-
-			if (!HandleMouseEnterLeave)
-			{
-				return;
-			}
-
-			if (Desktop.IsTouchDown)
-			{
-				HandleTouchDown(false);
-			}
-		}
-
-		public override void OnMouseLeft()
-		{
-			base.OnMouseLeft();
-
-			if (!HandleMouseEnterLeave)
-			{
-				return;
-			}
-
-			if (Desktop.IsTouchDown)
-			{
-				HandleTouchUp(false);
+				IsPressed = !IsPressed;
 			}
 		}
 

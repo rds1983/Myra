@@ -143,6 +143,13 @@ namespace Myra.Graphics2D.UI
 			ReverseChildrenCopy.HandleMouseUp(mb);
 		}
 
+		public override void OnMouseDoubleClick(MouseButtons mb)
+		{
+			base.OnMouseDoubleClick(mb);
+
+			ReverseChildrenCopy.HandleMouseDoubleClick(mb);
+		}
+
 		internal override void MoveChildren(Point delta)
 		{
 			base.MoveChildren(delta);

@@ -131,11 +131,7 @@ namespace Myra.Graphics2D.UI
 
 		protected Slider(SliderStyle sliderStyle)
 		{
-			InternalChild = new ImageButton((ImageButtonStyle)null)
-			{
-				HandleMouseEnterLeave = false
-			};
-
+			InternalChild = new ImageButton((ImageButtonStyle)null);
 			InternalChild.Down += WidgetOnDown;
 			InternalChild.Up += WidgetOnUp;
 			if (sliderStyle != null)

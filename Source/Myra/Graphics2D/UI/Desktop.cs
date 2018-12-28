@@ -13,6 +13,8 @@ namespace Myra.Graphics2D.UI
 {
 	public class Desktop
 	{
+		public const int DoubleClickIntervalInMs = 500;
+
 		private RenderContext _renderContext;
 
 		private bool _layoutDirty = true;
@@ -23,6 +25,7 @@ namespace Myra.Graphics2D.UI
 		private readonly List<Widget> _reversedWidgetsCopy = new List<Widget>();
 		protected readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
 		private readonly List<Widget> _focusableWidgets = new List<Widget>();
+		private DateTime _lastTouch;
 
 		public Point MousePosition { get; private set; }
 		public int MouseWheel { get; private set; }
@@ -138,14 +141,16 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public Func<MouseState> MouseStateGetter { get; set; }
-		public Func<KeyboardState> KeyboardStateGetter { get; set; } 
+		public Func<KeyboardState> KeyboardStateGetter { get; set; }
 
 		public event EventHandler<GenericEventArgs<Point>> MouseMoved;
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseDown;
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseUp;
+		public event EventHandler<GenericEventArgs<MouseButtons>> MouseDoubleClick;
 
 		public event EventHandler<GenericEventArgs<float>> MouseWheelChanged;
 
+		public event EventHandler<GenericEventArgs<Keys>> KeyUp;
 		public event EventHandler<GenericEventArgs<Keys>> KeyDown;
 
 		public event EventHandler<ContextMenuClosingEventArgs> ContextMenuClosing;
@@ -363,6 +368,24 @@ namespace Myra.Graphics2D.UI
 
 				InputOnMouseDown();
 				ReversedWidgetsCopy.HandleMouseDown(buttons);
+
+				if ((DateTime.Now - _lastTouch).TotalMilliseconds < DoubleClickIntervalInMs)
+				{
+					// Double click
+					var ev2 = MouseDoubleClick;
+					if (ev2 != null)
+					{
+						ev2(this, new GenericEventArgs<MouseButtons>(buttons));
+					}
+
+					ReversedWidgetsCopy.HandleMouseDoubleClick(buttons);
+
+					_lastTouch = DateTime.MinValue;
+				}
+				else
+				{
+					_lastTouch = DateTime.Now;
+				}
 			}
 			else if (buttonState == ButtonState.Released && lastState == ButtonState.Pressed)
 			{
@@ -476,10 +499,19 @@ namespace Myra.Graphics2D.UI
 				for (var i = 0; i < lastPressedKeys.Length; ++i)
 				{
 					var key = lastPressedKeys[i];
-					if (!KeyboardState.IsKeyDown(key) && _focusedWidget != null)
+					if (!KeyboardState.IsKeyDown(key))
 					{
 						// Key had been released
-						_focusedWidget.IterateFocusable(w => w.OnKeyUp(key));
+						var ev = KeyUp;
+						if (ev != null)
+						{
+							ev(this, new GenericEventArgs<Keys>(key));
+						}
+
+						if (_focusedWidget != null)
+						{
+							_focusedWidget.IterateFocusable(w => w.OnKeyUp(key));
+						}
 					}
 				}
 			}

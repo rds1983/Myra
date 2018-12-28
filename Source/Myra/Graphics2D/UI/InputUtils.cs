@@ -22,6 +22,23 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public static void HandleMouseDoubleClick(this IEnumerable<Widget> widgets, MouseButtons buttons)
+		{
+			foreach (var w in widgets)
+			{
+				if (!w.Visible)
+				{
+					continue;
+				}
+
+				if (w.IsMouseOver)
+				{
+					w.OnMouseDoubleClick(buttons);
+					break;
+				}
+			}
+		}
+
 		public static void HandleMouseUp(this IEnumerable<Widget> widgets, MouseButtons buttons)
 		{
 			foreach (var w in widgets)
@@ -31,7 +48,7 @@ namespace Myra.Graphics2D.UI
 					continue;
 				}
 
-				if (w.IsMouseOver || w.IsTouchDown)
+				if (w.IsTouchDown)
 				{
 					w.OnMouseUp(buttons);
 					break;

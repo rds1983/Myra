@@ -176,9 +176,9 @@ namespace Myra.Editor.UI
 				VerticalAlignment = VerticalAlignment.Stretch;
 			}
 
-			public override void OnDoubleClick(MouseButtons mb)
+			public override void OnMouseDoubleClick(MouseButtons mb)
 			{
-				base.OnDoubleClick(mb);
+				base.OnMouseDoubleClick(mb);
 
 				var mousePosition = Desktop.MousePosition;
 				if (mb != MouseButtons.Left || !HeaderBounds.Contains(mousePosition) || _mark.Bounds.Contains(mousePosition))
