@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>Myra</PackageId>
+    <Authors>MyraTeam</Authors>
+    <Product>Myra</Product>
+    <Description>UI Library for MonoGame</Description>
+    <PackageLicenseUrl>https://en.wikipedia.org/wiki/MIT_License</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/rds1983/Myra</PackageProjectUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <NoWarn>NU1701</NoWarn>
+    <AssemblyName>Myra</AssemblyName>
+    <RootNamespace>Myra</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\default_font.fnt" />
+    <None Remove="Resources\default_font_small.fnt" />
+    <None Remove="Resources\default_ui_skin.json" />
+    <None Remove="Resources\default_ui_skin_atlas.json" />
+    <None Remove="Resources\default_ui_skin_atlas.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\default_font.fnt" />
+    <EmbeddedResource Include="Resources\default_font_small.fnt" />
+    <EmbeddedResource Include="Resources\default_ui_skin.json" />
+    <EmbeddedResource Include="Resources\default_ui_skin_atlas.json" />
+    <EmbeddedResource Include="Resources\default_ui_skin_atlas.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MonoGame.Framework.Portable" PrivateAssets="All" Version="3.6.0.1625" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
+</Project>

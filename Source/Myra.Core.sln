@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Core.Samples.AllWidgets", "Samples\Myra.Samples.AllWidgets\Myra.Core.Samples.AllWidgets.csproj", "{A0A2357C-DB8E-46F5-A435-1C3ED9037B0D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Core.Editor", "Myra.Editor\Myra.Core.Editor.csproj", "{2E0B4569-3B45-47F7-8209-023EBFFA97CA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Core", "Myra\Myra.Core.csproj", "{D43C459E-F87F-4B39-9919-88C3EAABC2AA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{6BB5314A-944C-4BF1-910A-7B388E7F96C4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Core.Samples.CustomUIStylesheet", "Samples\Myra.Samples.CustomUIStylesheet\Myra.Core.Samples.CustomUIStylesheet.csproj", "{D2C68B60-9A5D-4C94-B471-0830B9887BB9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A0A2357C-DB8E-46F5-A435-1C3ED9037B0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0A2357C-DB8E-46F5-A435-1C3ED9037B0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0A2357C-DB8E-46F5-A435-1C3ED9037B0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0A2357C-DB8E-46F5-A435-1C3ED9037B0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E0B4569-3B45-47F7-8209-023EBFFA97CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E0B4569-3B45-47F7-8209-023EBFFA97CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E0B4569-3B45-47F7-8209-023EBFFA97CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E0B4569-3B45-47F7-8209-023EBFFA97CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D43C459E-F87F-4B39-9919-88C3EAABC2AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D43C459E-F87F-4B39-9919-88C3EAABC2AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D43C459E-F87F-4B39-9919-88C3EAABC2AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D43C459E-F87F-4B39-9919-88C3EAABC2AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2C68B60-9A5D-4C94-B471-0830B9887BB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2C68B60-9A5D-4C94-B471-0830B9887BB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2C68B60-9A5D-4C94-B471-0830B9887BB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2C68B60-9A5D-4C94-B471-0830B9887BB9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A0A2357C-DB8E-46F5-A435-1C3ED9037B0D} = {6BB5314A-944C-4BF1-910A-7B388E7F96C4}
+		{D2C68B60-9A5D-4C94-B471-0830B9887BB9} = {6BB5314A-944C-4BF1-910A-7B388E7F96C4}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {29A648FC-EE9B-4080-9D07-E8ED9FAA19CE}
+	EndGlobalSection
+EndGlobal
