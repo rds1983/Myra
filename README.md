@@ -1,5 +1,5 @@
 ## Overview
-[![Build Status](https://ci.appveyor.com/api/projects/status/ec4fpr4v0gn9moi7?svg=true)]
+[![Build Status](https://ci.appveyor.com/api/projects/status/ec4fpr4v0gn9moi7?svg=true)]((https://ci.appveyor.com/api/projects/status/ec4fpr4v0gn9moi7?svg=true)
 
 Myra is UI Library for [MonoGame](http://www.monogame.net/) and [FNA](https://github.com/FNA-XNA/FNA).  
 It has following functionality:
