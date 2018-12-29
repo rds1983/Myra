@@ -16,11 +16,13 @@ It has following functionality:
 
 ## Gallery
 All Widgets In Action
+
 ![](/Screenshots/AllWidgetsSample.gif)
 
 Commodore 64 Skin
 
 UI Editor
+
 ![](/Screenshots/UIEditor.gif)
 
 ## Credits
