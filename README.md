@@ -20,7 +20,7 @@ All Widgets In Action
 ![](/images/AllWidgetsSample.png)
 
 Commodore 64 Skin
-![](/images/CustomUIStylesheetSample.png)
+![](/images/CustomStylesheetSample.png)
 
 UI Editor
 ![](/images/UIEditor.png)
