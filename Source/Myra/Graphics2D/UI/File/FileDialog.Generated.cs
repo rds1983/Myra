@@ -12,14 +12,12 @@ namespace Myra.Graphics2D.UI.File
 			_buttonBack.Id = "_buttonBack";
 			_buttonBack.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
 			_buttonBack.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
-			_buttonBack.IsTouchDown = false;
 
 			_buttonForward = new ImageButton();
 			_buttonForward.Id = "_buttonForward";
 			_buttonForward.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
 			_buttonForward.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
 			_buttonForward.GridPositionX = 1;
-			_buttonForward.IsTouchDown = false;
 
 			_textFieldPath = new TextField();
 			_textFieldPath.Text = "";
@@ -27,14 +25,12 @@ namespace Myra.Graphics2D.UI.File
 			_textFieldPath.Id = "_textFieldPath";
 			_textFieldPath.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
 			_textFieldPath.GridPositionX = 2;
-			_textFieldPath.IsTouchDown = false;
 
 			_buttonParent = new ImageButton();
 			_buttonParent.Id = "_buttonParent";
 			_buttonParent.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
 			_buttonParent.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
 			_buttonParent.GridPositionX = 3;
-			_buttonParent.IsTouchDown = false;
 
 			var grid1 = new Grid();
 			grid1.ColumnSpacing = 4;
@@ -45,7 +41,6 @@ namespace Myra.Graphics2D.UI.File
 				Type = Myra.Graphics2D.UI.Grid.ProportionType.Fill,
 			});
 			grid1.ColumnsProportions.Add(new Grid.Proportion());
-			grid1.IsTouchDown = false;
 			grid1.Widgets.Add(_buttonBack);
 			grid1.Widgets.Add(_buttonForward);
 			grid1.Widgets.Add(_textFieldPath);
@@ -55,7 +50,6 @@ namespace Myra.Graphics2D.UI.File
 			_listBoxPlaces.Id = "_listBoxPlaces";
 			_listBoxPlaces.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
 			_listBoxPlaces.ClipToBounds = true;
-			_listBoxPlaces.IsTouchDown = false;
 
 			_gridFiles = new Grid();
 			_gridFiles.ColumnSpacing = 4;
@@ -67,33 +61,28 @@ namespace Myra.Graphics2D.UI.File
 			});
 			_gridFiles.GridSelectionMode = Myra.Graphics2D.UI.GridSelectionMode.Row;
 			_gridFiles.Id = "_gridFiles";
-			_gridFiles.IsTouchDown = false;
 			_gridFiles.CanFocus = true;
 
 			_scrollPane = new ScrollPane();
 			_scrollPane.AllowHorizontalScrolling = false;
 			_scrollPane.Id = "_scrollPane";
 			_scrollPane.GridPositionX = 2;
-			_scrollPane.IsTouchDown = false;
 			_scrollPane.Child = _gridFiles;
 
 			_splitPane = new HorizontalSplitPane();
 			_splitPane.Id = "_splitPane";
 			_splitPane.GridPositionY = 1;
-			_splitPane.IsTouchDown = false;
 			_splitPane.Widgets.Add(_listBoxPlaces);
 			_splitPane.Widgets.Add(_scrollPane);
 
 			_textBlockFileName = new TextBlock();
 			_textBlockFileName.Text = "File name";
 			_textBlockFileName.Id = "_textBlockFileName";
-			_textBlockFileName.IsTouchDown = false;
 
 			_textFieldFileName = new TextField();
 			_textFieldFileName.Text = "";
 			_textFieldFileName.Id = "_textFieldFileName";
 			_textFieldFileName.GridPositionX = 1;
-			_textFieldFileName.IsTouchDown = false;
 
 			var grid2 = new Grid();
 			grid2.ColumnSpacing = 4;
@@ -103,7 +92,6 @@ namespace Myra.Graphics2D.UI.File
 				Type = Myra.Graphics2D.UI.Grid.ProportionType.Fill,
 			});
 			grid2.GridPositionY = 2;
-			grid2.IsTouchDown = false;
 			grid2.Widgets.Add(_textBlockFileName);
 			grid2.Widgets.Add(_textFieldFileName);
 
@@ -116,7 +104,6 @@ namespace Myra.Graphics2D.UI.File
 			});
 			grid3.RowsProportions.Add(new Grid.Proportion());
 			grid3.GridPositionY = 1;
-			grid3.IsTouchDown = false;
 			grid3.Widgets.Add(grid1);
 			grid3.Widgets.Add(_splitPane);
 			grid3.Widgets.Add(grid2);
@@ -127,11 +114,9 @@ namespace Myra.Graphics2D.UI.File
 			Top = 202;
 			Width = 600;
 			Height = 400;
-			IsTouchDown = false;
 			Content = grid3;
 		}
 
-		
 		public ImageButton _buttonBack;
 		public ImageButton _buttonForward;
 		public TextField _textFieldPath;

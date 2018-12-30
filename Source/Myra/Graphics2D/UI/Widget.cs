@@ -530,6 +530,8 @@ namespace Myra.Graphics2D.UI
 		[JsonIgnore]
 		public bool IsMouseOver { get; set; }
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public bool IsTouchDown
 		{
 			get { return _isTouchDown; }
