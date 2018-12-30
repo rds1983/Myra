@@ -17,7 +17,7 @@ Myra is UI Library for [MonoGame](http://www.monogame.net/) and [FNA](https://gi
 2. Open any solution, located in the "build" folder.
 
 ## Gallery
-All Widgets In Action
+All Widgets Sample
 ![](/images/AllWidgetsSample.png)
 
 Commodore 64 Skin
