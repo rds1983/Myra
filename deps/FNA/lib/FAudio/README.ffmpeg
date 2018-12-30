@@ -1,0 +1,23 @@
+FAudio has optional support for decoding xWMA resources using FFmpeg.
+
+Please note that enabling support for FFmpeg means your project has to comply
+with the FFmpeg license. For more information please consult the FFmpeg project at
+https://www.ffmpeg.org/legal.html
+
+Building with FFmpeg support on *nix platforms
+----------------------------------------------
+# to enable FFMPEG support
+export FAUDIO_FFMPEG=1         
+
+# to build against specific FFmpeg binaries (if not set `pkg-config` will be used)
+export FAUDIO_FFMPEG_PREFIX=/path/to/ffmpeg/binaries
+
+make
+
+Building with FFmpeg support on Windows
+---------------------------------------
+You'll need to modify the Visual Studio project for FAudio to enable support:
+- add HAVE_FFMPEG=1 to preprocessor defines
+- add the correct include and lib paths to the VisualC++ directories.
+- add avutil.lib and avcodec.lib to the linker input
+- add faudio_ffmpeg.c to the sources of the project 

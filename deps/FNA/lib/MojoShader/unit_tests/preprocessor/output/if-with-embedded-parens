@@ -1,0 +1,7 @@
+// Before hg changeset 91c22d2de774, the preprocessor incorrect thought
+//  that the '+' is a unary operator and would fail to parse the expression.
+#if ((1) + (0) < 12)
+RIGHT
+#else
+WRONG
+#endif

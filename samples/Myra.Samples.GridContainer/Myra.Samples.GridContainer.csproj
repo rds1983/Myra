@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(SolutionDir)SolutionDefines.targets" />
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net45</TargetFramework>
+    <ApplicationIcon />
+    <StartupObject />
+    <AssemblyName>Myra.Samples.GridContainer</AssemblyName>
+    <RootNamespace>Myra.Samples.GridContainer</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.7.1.189" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Myra\Myra.csproj" />
+  </ItemGroup>  
+
+</Project>

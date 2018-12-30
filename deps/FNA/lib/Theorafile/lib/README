@@ -1,0 +1,9 @@
+This is a local copy of the Xiph libs used by Theorafile, with all the unused
+files stripped out. Below are the notes for each library.
+
+libogg: Version 1.3.3
+	- os_types.h falls back to stdint for unrecognized platforms
+libvorbis: Version 1.3.6
+	- info.c has been renamed to vinfo.c
+libtheora: Version 1.1.1
+	- info.c has been renamed to tinfo.c

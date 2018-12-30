@@ -1,0 +1,67 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E7C2030A-AF9E-41B2-BD5C-39D8F70A09A7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra", "..\..\src\Myra\Myra.csproj", "{4DCBB001-9C79-4F6B-996D-D654062D93E0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.AllWidgets", "..\..\samples\Myra.Samples.AllWidgets\Myra.Samples.AllWidgets.csproj", "{9F5D8FED-C555-48E7-AA65-ABD66B008909}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FNA.Core", "..\..\deps\FNA\FNA.Core.csproj", "{30320EC1-8D20-4F28-AF44-3A6766E7484E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4DCBB001-9C79-4F6B-996D-D654062D93E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DCBB001-9C79-4F6B-996D-D654062D93E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DCBB001-9C79-4F6B-996D-D654062D93E0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4DCBB001-9C79-4F6B-996D-D654062D93E0}.Debug|x64.Build.0 = Debug|Any CPU
+		{4DCBB001-9C79-4F6B-996D-D654062D93E0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4DCBB001-9C79-4F6B-996D-D654062D93E0}.Debug|x86.Build.0 = Debug|Any CPU
+		{4DCBB001-9C79-4F6B-996D-D654062D93E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DCBB001-9C79-4F6B-996D-D654062D93E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DCBB001-9C79-4F6B-996D-D654062D93E0}.Release|x64.ActiveCfg = Release|Any CPU
+		{4DCBB001-9C79-4F6B-996D-D654062D93E0}.Release|x64.Build.0 = Release|Any CPU
+		{4DCBB001-9C79-4F6B-996D-D654062D93E0}.Release|x86.ActiveCfg = Release|Any CPU
+		{4DCBB001-9C79-4F6B-996D-D654062D93E0}.Release|x86.Build.0 = Release|Any CPU
+		{9F5D8FED-C555-48E7-AA65-ABD66B008909}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F5D8FED-C555-48E7-AA65-ABD66B008909}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F5D8FED-C555-48E7-AA65-ABD66B008909}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9F5D8FED-C555-48E7-AA65-ABD66B008909}.Debug|x64.Build.0 = Debug|Any CPU
+		{9F5D8FED-C555-48E7-AA65-ABD66B008909}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9F5D8FED-C555-48E7-AA65-ABD66B008909}.Debug|x86.Build.0 = Debug|Any CPU
+		{9F5D8FED-C555-48E7-AA65-ABD66B008909}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F5D8FED-C555-48E7-AA65-ABD66B008909}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F5D8FED-C555-48E7-AA65-ABD66B008909}.Release|x64.ActiveCfg = Release|Any CPU
+		{9F5D8FED-C555-48E7-AA65-ABD66B008909}.Release|x64.Build.0 = Release|Any CPU
+		{9F5D8FED-C555-48E7-AA65-ABD66B008909}.Release|x86.ActiveCfg = Release|Any CPU
+		{9F5D8FED-C555-48E7-AA65-ABD66B008909}.Release|x86.Build.0 = Release|Any CPU
+		{30320EC1-8D20-4F28-AF44-3A6766E7484E}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{30320EC1-8D20-4F28-AF44-3A6766E7484E}.Debug|Any CPU.Build.0 = Debug|x64
+		{30320EC1-8D20-4F28-AF44-3A6766E7484E}.Debug|x64.ActiveCfg = Debug|x64
+		{30320EC1-8D20-4F28-AF44-3A6766E7484E}.Debug|x64.Build.0 = Debug|x64
+		{30320EC1-8D20-4F28-AF44-3A6766E7484E}.Debug|x86.ActiveCfg = Debug|x64
+		{30320EC1-8D20-4F28-AF44-3A6766E7484E}.Release|Any CPU.ActiveCfg = Release|x64
+		{30320EC1-8D20-4F28-AF44-3A6766E7484E}.Release|x64.ActiveCfg = Release|x64
+		{30320EC1-8D20-4F28-AF44-3A6766E7484E}.Release|x64.Build.0 = Release|x64
+		{30320EC1-8D20-4F28-AF44-3A6766E7484E}.Release|x86.ActiveCfg = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A9C9D369-EE58-4E9D-B9FE-63023B644741}
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Myra.UIEditor\Myra.UIEditor.csproj
+	EndGlobalSection
+EndGlobal

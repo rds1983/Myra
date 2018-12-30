@@ -1,0 +1,10 @@
+// This shouldn't care that there's a multiline comment before a preprocessor
+//  directive. It should translate to whitespace, thrown away, making the
+//  "#if 1" the first thing on the line, and thus valid.
+// Note that this isn't legal in C/C++ preprocessing, but Microsoft's fxc.exe
+//  allows this quirk.
+/* comment! */ #if 1
+RIGHT
+#else
+WRONG
+#endif

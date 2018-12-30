@@ -1,0 +1,33 @@
+This is Theorafile, a library for quickly and easily decoding Ogg Theora videos.
+
+Project Website: https://github.com/FNA-XNA/Theorafile
+
+License
+-------
+Theorafile is released under the zlib license.
+
+libogg/libvorbis/libtheora are released under the BSD license.
+
+See the licenses/ folder for details.
+
+About Theorafile
+----------------
+Theorafile was written to be used for FNA's VideoPlayer. We access this library
+via Theorafile#, which you can find in the 'csharp/' directory.
+
+Dependencies
+------------
+Theorafile depends solely on the C runtime. libogg, libvorbis, and libtheoradec
+are statically linked into Theorafile.
+
+Theorafile's "sdl2test" test program requires SDL2.
+
+Building Theorafile
+-------------------
+For *nix platforms, just type `make` in the root directory!
+
+For Windows, see the 'visualc/' directory.
+
+For Xbox One, see the 'visualc-winrt/' directory.
+
+For iOS/tvOS, see the 'Xcode-iOS/' directory.

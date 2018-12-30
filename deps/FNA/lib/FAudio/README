@@ -1,0 +1,34 @@
+This is FAudio, an XAudio reimplementation that focuses solely on developing
+fully accurate DirectX Audio runtime libraries for the FNA project, including
+XAudio2, X3DAudio, XAPO, and XACT3.
+
+Project Website: http://fna-xna.github.io/
+
+License
+-------
+FAudio is released under the zlib license. See LICENSE for details.
+
+About FAudio
+------------
+FAudio was written to be used for FNA's Audio/Media namespaces. We access this
+library via FAudio#, which you can find in the 'csharp/' directory.
+
+Dependencies
+------------
+FAudio depends solely on SDL2. FAudio never explicitly uses the C runtime.
+
+Building FAudio
+---------------
+For *nix platforms, just type `make` in the root directory!
+
+For Windows, see the 'visualc/' directory.
+
+For Xbox One, see the 'visualc-winrt/' directory.
+
+For iOS/tvOS, see the 'Xcode-iOS/' directory.
+
+Found an issue?
+---------------
+Issues and patches can be reported via GitHub:
+
+https://github.com/FNA-XNA/FAudio/issues

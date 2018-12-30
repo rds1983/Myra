@@ -1,0 +1,18 @@
+Building FAudio for UWP
+-----------------------
+FAudio uses Visual Studio 2017 to build on Xbox One.
+
+Dependencies
+------------
+Before building, download SDL2's source code from SDL's website:
+
+http://libsdl.org/download-2.0.php
+
+After extracting the zip file, be sure to rename the directory to remove the
+version number (for example, 'SDL2-2.0.8' should be 'SDL2').
+
+Compiling
+---------
+1. Build SDL2/VisualC-WinRT/UWP_VS2015/SDL-UWP.sln
+2. Build FAudio.sln
+3. Grab FAudio.dll and SDL2.dll, ship it!

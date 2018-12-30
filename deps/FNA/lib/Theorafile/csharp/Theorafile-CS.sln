@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theorafile-CS", "Theorafile-CS.csproj", "{47CF0C2E-3710-4188-BB11-30D248B2B5FB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{47CF0C2E-3710-4188-BB11-30D248B2B5FB}.Debug|x86.ActiveCfg = Debug|x86
+		{47CF0C2E-3710-4188-BB11-30D248B2B5FB}.Debug|x86.Build.0 = Debug|x86
+		{47CF0C2E-3710-4188-BB11-30D248B2B5FB}.Release|x86.ActiveCfg = Release|x86
+		{47CF0C2E-3710-4188-BB11-30D248B2B5FB}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Theorafile-CS.csproj
+	EndGlobalSection
+EndGlobal

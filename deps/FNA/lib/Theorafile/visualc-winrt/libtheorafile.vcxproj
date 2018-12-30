@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\lib\ogg\bitwise.c" />
+    <ClCompile Include="..\lib\ogg\framing.c" />
+    <ClCompile Include="..\lib\theora\apiwrapper.c" />
+    <ClCompile Include="..\lib\theora\bitpack.c" />
+    <ClCompile Include="..\lib\theora\decapiwrapper.c" />
+    <ClCompile Include="..\lib\theora\decinfo.c" />
+    <ClCompile Include="..\lib\theora\decode.c" />
+    <ClCompile Include="..\lib\theora\dequant.c" />
+    <ClCompile Include="..\lib\theora\fragment.c" />
+    <ClCompile Include="..\lib\theora\huffdec.c" />
+    <ClCompile Include="..\lib\theora\idct.c" />
+    <ClCompile Include="..\lib\theora\tinfo.c" />
+    <ClCompile Include="..\lib\theora\internal.c" />
+    <ClCompile Include="..\lib\theora\quant.c" />
+    <ClCompile Include="..\lib\theora\state.c" />
+    <ClCompile Include="..\lib\vorbis\analysis.c" />
+    <ClCompile Include="..\lib\vorbis\bitrate.c" />
+    <ClCompile Include="..\lib\vorbis\block.c" />
+    <ClCompile Include="..\lib\vorbis\codebook.c" />
+    <ClCompile Include="..\lib\vorbis\envelope.c" />
+    <ClCompile Include="..\lib\vorbis\floor0.c" />
+    <ClCompile Include="..\lib\vorbis\floor1.c" />
+    <ClCompile Include="..\lib\vorbis\vinfo.c" />
+    <ClCompile Include="..\lib\vorbis\lookup.c" />
+    <ClCompile Include="..\lib\vorbis\lpc.c" />
+    <ClCompile Include="..\lib\vorbis\lsp.c" />
+    <ClCompile Include="..\lib\vorbis\mapping0.c" />
+    <ClCompile Include="..\lib\vorbis\mdct.c" />
+    <ClCompile Include="..\lib\vorbis\psy.c" />
+    <ClCompile Include="..\lib\vorbis\registry.c" />
+    <ClCompile Include="..\lib\vorbis\res0.c" />
+    <ClCompile Include="..\lib\vorbis\sharedbook.c" />
+    <ClCompile Include="..\lib\vorbis\smallft.c" />
+    <ClCompile Include="..\lib\vorbis\synthesis.c" />
+    <ClCompile Include="..\lib\vorbis\window.c" />
+    <ClCompile Include="..\theorafile.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\theorafile.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8f981fcd-813b-44f1-a6a3-9d1c7aa3a8ab}</ProjectGuid>
+    <Keyword>DynamicLibrary</Keyword>
+    <RootNamespace>libtheorafile</RootNamespace>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+    <AppContainerApplication>true</AppContainerApplication>
+    <ApplicationType>Windows Store</ApplicationType>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>10.0.16299.0</WindowsTargetPlatformMinVersion>
+    <ApplicationTypeRevision>10.0</ApplicationTypeRevision>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <GenerateManifest>false</GenerateManifest>
+    <IgnoreImportLibrary>false</IgnoreImportLibrary>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <GenerateManifest>false</GenerateManifest>
+    <IgnoreImportLibrary>false</IgnoreImportLibrary>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <AdditionalIncludeDirectories>..\lib;$(ProjectDir);$(GeneratedFilesDir);$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <AdditionalIncludeDirectories>..\lib;$(ProjectDir);$(GeneratedFilesDir);$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

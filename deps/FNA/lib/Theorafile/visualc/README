@@ -1,0 +1,34 @@
+Building Theorafile for Windows
+-------------------------------
+Theorafile uses Visual Studio 2010 to build on Windows.
+
+Dependencies
+------------
+Before building, download libogg/libvorbis from the Xiph website:
+
+https://xiph.org/downloads/
+
+After extracting the zip files, be sure to rename the directories to remove the
+version numbers (for example, 'libogg-1.3.2' should be 'libogg').
+
+As of writing, libtheora 1.1.1 does not build with Visual Studio 2010. Instead,
+download the upstream version via Git:
+
+git clone git://github.com/xiph/theora.git libtheora
+
+If building the sdl2test program, download SDL2's Visual Studio libraries:
+
+http://libsdl.org/download-2.0.php
+
+After extracting the zip file, be sure to rename the directory to remove the
+version number (for example, 'SDL2-2.0.5' should be 'SDL2').
+
+Compiling
+---------
+1. Build libogg/win32/VS2010/libogg_dynamic.sln
+2. Build libvorbis/win32/VS2010/libvorbis_dynamic.sln
+3. Build libtheora/win32/VS2010/libtheora_dynamic.sln
+4. Build Theorafile/visualc/libtheorafile.sln
+5. Grab the output DLL from each project, ship it!
+
+Be sure your build configurations match for each library!

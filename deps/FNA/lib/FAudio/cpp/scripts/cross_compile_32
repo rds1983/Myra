@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# set this to the path where you installed the mingw32 version of SDL 
+SDL_CROSS_PATH=/usr
+
+MINGW=i686-w64-mingw32
+MINGWROOT=sys-root/mingw
+
+if [ ! -f $SDL_CROSS_PATH/$MINGW/$MINGWROOT/bin/sdl2-config ]; then
+	echo "Please check your mingw32 SDL installation"
+	return -1
+fi
+
+export PATH=$SDL_CROSS_PATH/$MINGW/$MINGWROOT/bin:$PATH
+export CC=${MINGW}-gcc
+export CXX=${MINGW}-g++
+export AR=${MINGW}-ar
+export DLLTOOL=${MINGW}-dlltool
+export DISABLE_XNASONG=1

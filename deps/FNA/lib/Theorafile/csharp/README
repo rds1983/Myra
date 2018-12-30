@@ -1,0 +1,17 @@
+This is Theorafile#, a C# wrapper for Theorafile, a library for quickly and
+easily decoding Ogg Theora videos.
+
+Project Website: https://github.com/FNA-XNA/Theorafile
+
+License
+-------
+Theorafile# is released under the zlib license. See LICENSE for details.
+
+About Theorafile#
+-----------------
+Theorafile# was written to be used for FNA's VideoPlayer. We wrap this around
+Theorafile compiled as a shared library.
+
+Building Theorafile#
+--------------------
+Just type `make` in the root directory!

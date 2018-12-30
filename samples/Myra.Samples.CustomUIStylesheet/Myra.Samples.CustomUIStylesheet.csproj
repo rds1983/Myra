@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(SolutionDir)SolutionDefines.targets" />
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net45</TargetFramework>
+    <ApplicationIcon />
+    <StartupObject />
+    <AssemblyName>Myra.Samples.CustomUIStylesheet</AssemblyName>
+    <RootNamespace>Myra.Samples.CustomUIStylesheet</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\commodore-64.fnt" />
+    <None Remove="Resources\ui_stylesheet.json" />
+    <None Remove="Resources\ui_stylesheet_atlas.json" />
+    <None Remove="Resources\ui_stylesheet_atlas.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\commodore-64.fnt" />
+    <EmbeddedResource Include="Resources\ui_stylesheet.json" />
+    <EmbeddedResource Include="Resources\ui_stylesheet_atlas.json" />
+    <EmbeddedResource Include="Resources\ui_stylesheet_atlas.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.7.1.189" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Myra\Myra.csproj" />
+  </ItemGroup>  
+
+</Project>
