@@ -17,13 +17,13 @@ Myra is UI Library for [MonoGame](http://www.monogame.net/) and [FNA](https://gi
 
 ## Gallery
 All Widgets In Action
-![](/Screenshots/AllWidgetsSample.png)
+![](/images/AllWidgetsSample.png)
 
 Commodore 64 Skin
-![](/Screenshots/CustomUIStylesheetSample.png)
+![](/images/CustomUIStylesheetSample.png)
 
 UI Editor
-![](/Screenshots/UIEditor.png)
+![](/images/UIEditor.png)
 
 ## Credits
 * [MonoGame](http://www.monogame.net/)
