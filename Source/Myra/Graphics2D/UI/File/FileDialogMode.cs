@@ -1,4 +1,4 @@
-﻿namespace Myra.Editor.UI.File
+﻿namespace Myra.Graphics2D.UI.File
 {
 	public enum FileDialogMode
 	{

@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using Myra.Graphics2D.TextureAtlases;
 using Myra.Utility;
 using System;
 

@@ -2,7 +2,7 @@
 using System.Collections;
 using Myra.Graphics2D.UI;
 
-namespace Myra.Editor.UI
+namespace Myra.Graphics2D.UI.Properties
 {
 	public class CollectionEditor : SingleItemContainer<Grid>
 	{

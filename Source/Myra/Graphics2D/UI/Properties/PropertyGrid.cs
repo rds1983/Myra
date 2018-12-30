@@ -7,15 +7,12 @@ using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Attributes;
-using Myra.Editor.Utils;
-using Myra.Graphics2D;
-using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.ColorPicker;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using static Myra.Graphics2D.UI.Grid;
 
-namespace Myra.Editor.UI
+namespace Myra.Graphics2D.UI.Properties
 {
 	public class PropertyGrid : SingleItemContainer<Grid>
 	{

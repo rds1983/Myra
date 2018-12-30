@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Myra.Editor.UI.File;
 using Myra.Graphics2D.UI;
+using Myra.Graphics2D.UI.File;
 
 namespace Myra.UIEditor.UI
 {

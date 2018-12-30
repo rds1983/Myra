@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using Myra.Graphics2D.UI;
 using static Myra.Graphics2D.UI.Grid;
 
-namespace Myra.Editor.UI.File
+namespace Myra.Graphics2D.UI.File
 {
 	public partial class FileDialog : Dialog
 	{

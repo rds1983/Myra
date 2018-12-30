@@ -1,193 +1,56 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4DCBB001-9C79-4F6B-996D-D654062D93E0}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Myra</RootNamespace>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <PackageId>Myra</PackageId>
+    <Authors>MyraTeam</Authors>
+    <Product>Myra</Product>
+    <Description>UI Library for MonoGame</Description>
+    <PackageLicenseUrl>https://en.wikipedia.org/wiki/MIT_License</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/rds1983/Myra</PackageProjectUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <NoWarn>NU1701</NoWarn>
     <AssemblyName>Myra</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
-    <NuGetPackageImportStamp>523922a1</NuGetPackageImportStamp>
+    <RootNamespace>Myra</RootNamespace>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="MonoGame.Framework">
-      <HintPath>..\Myra-Dependencies\MonoGame.Framework.Portable\MonoGame.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\Myra-Dependencies\Newtonsoft.Json\Newtonsoft.Json.dll</HintPath>
-    </Reference>
+    <Compile Remove="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Attributes\EditCategoryAttribute.cs" />
-    <Compile Include="Attributes\HiddenInEditorAttribute.cs" />
-    <Compile Include="Attributes\IItemsProvider.cs" />
-    <Compile Include="Attributes\SelectionAttribute.cs" />
-    <Compile Include="Attributes\StylePropertyPathAttribute.cs" />
-    <Compile Include="Cyotek.Drawing.BitmapFont\BitmapFont.cs" />
-    <Compile Include="Cyotek.Drawing.BitmapFont\BitmapFontLoader.cs" />
-    <Compile Include="Cyotek.Drawing.BitmapFont\Character.cs" />
-    <Compile Include="Cyotek.Drawing.BitmapFont\Kerning.cs" />
-    <Compile Include="Cyotek.Drawing.BitmapFont\Padding.cs" />
-    <Compile Include="Cyotek.Drawing.BitmapFont\Page.cs" />
-    <Compile Include="Graphics2D\ColorBuffer.cs" />
-    <Compile Include="Graphics2D\TextureAtlases\ColoredRegion.cs" />
-    <Compile Include="Graphics2D\IRenderable.cs" />
-    <Compile Include="Graphics2D\SpriteBatchBeginParams.cs" />
-    <Compile Include="Graphics2D\UI\ColorPicker\ColorPickerDialog.cs" />
-    <Compile Include="Graphics2D\UI\ColorPicker\ColorPickerDialog.Generated.cs" />
-    <Compile Include="Graphics2D\UI\HorizontalSeparator.cs" />
-    <Compile Include="Graphics2D\StbSharp\CRuntime.cs" />
-    <Compile Include="Graphics2D\StbSharp\ImageReader.cs" />
-    <Compile Include="Graphics2D\StbSharp\StbImage.cs" />
-    <Compile Include="Graphics2D\StbSharp\StbImage.Generated.cs" />
-    <Compile Include="Graphics2D\TextureAtlases\NinePatchRegion.cs" />
-    <Compile Include="Graphics2D\TextureAtlases\TextureRegionAtlas.cs" />
-    <Compile Include="Graphics2D\TextureAtlases\TextureRegionAtlas.GDX.cs" />
-    <Compile Include="Graphics2D\TextureAtlases\TextureRegion.cs" />
-    <Compile Include="Graphics2D\Text\BitmapFontHelper.cs" />
-    <Compile Include="Graphics2D\Text\GlyphInfo.cs" />
-    <Compile Include="Graphics2D\Text\TextRun.cs" />
-    <Compile Include="Graphics2D\UI\HorizontalProgressBar.cs" />
-    <Compile Include="Graphics2D\UI\HorizontalSlider.cs" />
-    <Compile Include="Graphics2D\UI\HorizontalSplitPane.cs" />
-    <Compile Include="Graphics2D\UI\IItemWithId.cs" />
-    <Compile Include="Graphics2D\UI\ImageButton.cs" />
-    <Compile Include="Graphics2D\UI\IMenuItemsContainer.cs" />
-    <Compile Include="Graphics2D\UI\ListItem.cs" />
-    <Compile Include="Graphics2D\PaddingInfo.cs" />
-    <Compile Include="Graphics2D\Text\CharInfo.cs" />
-    <Compile Include="Graphics2D\Text\FormattedText.cs" />
-    <Compile Include="Graphics2D\Text\TextLine.cs" />
-    <Compile Include="Graphics2D\UI\CheckBox.cs" />
-    <Compile Include="Graphics2D\UI\ComboBox.cs" />
-    <Compile Include="Graphics2D\UI\ButtonBase.cs" />
-    <Compile Include="Graphics2D\UI\DebugOptionsDialog.cs" />
-    <Compile Include="Graphics2D\UI\DebugOptionsDialog.Generated.cs" />
-    <Compile Include="Graphics2D\UI\Dialog.cs" />
-    <Compile Include="Graphics2D\UI\HorizontalMenu.cs" />
-    <Compile Include="Graphics2D\UI\Image.cs" />
-    <Compile Include="Graphics2D\UI\InputUtils.cs" />
-    <Compile Include="Graphics2D\UI\LayoutUtils.cs" />
-    <Compile Include="Graphics2D\UI\Container.cs" />
-    <Compile Include="Graphics2D\UI\Enums.cs" />
-    <Compile Include="Graphics2D\UI\Grid.cs" />
-    <Compile Include="Graphics2D\UI\ContextMenuClosingEventArgs.cs" />
-    <Compile Include="Graphics2D\UI\Desktop.cs" />
-    <Compile Include="Graphics2D\UI\ListBox.cs" />
-    <Compile Include="Graphics2D\UI\Menu.cs" />
-    <Compile Include="Graphics2D\UI\MenuItem.cs" />
-    <Compile Include="Graphics2D\UI\IMenuItem.cs" />
-    <Compile Include="Graphics2D\UI\MenuItemButton.cs" />
-    <Compile Include="Graphics2D\UI\MenuSeparator.cs" />
-    <Compile Include="Graphics2D\UI\SeparatorWidget.cs" />
-    <Compile Include="Graphics2D\UI\MultipleItemsContainer.cs" />
-    <Compile Include="Graphics2D\UI\Panel.cs" />
-    <Compile Include="Graphics2D\UI\ProgressBar.cs" />
-    <Compile Include="Graphics2D\UI\Project.cs" />
-    <Compile Include="Graphics2D\UI\RenderContext.cs" />
-    <Compile Include="Graphics2D\UI\ScrollPane.cs" />
-    <Compile Include="Graphics2D\UI\SpinButton.cs" />
-    <Compile Include="Graphics2D\UI\Styles\ButtonBaseStyle.cs" />
-    <Compile Include="Graphics2D\UI\Styles\DesktopStyle.cs" />
-    <Compile Include="Graphics2D\UI\Styles\DialogStyle.cs" />
-    <Compile Include="Graphics2D\UI\Styles\ImageButtonStyle.cs" />
-    <Compile Include="Graphics2D\UI\Styles\ComboBoxStyle.cs" />
-    <Compile Include="Graphics2D\UI\Styles\ImageStyle.cs" />
-    <Compile Include="Graphics2D\UI\Styles\ListBoxStyle.cs" />
-    <Compile Include="Graphics2D\UI\Styles\SeparatorStyle.cs" />
-    <Compile Include="Graphics2D\UI\Styles\PressableImageStyle.cs" />
-    <Compile Include="Graphics2D\UI\Slider.cs" />
-    <Compile Include="Graphics2D\UI\Styles\ProgressBarStyle.cs" />
-    <Compile Include="Graphics2D\UI\Styles\SliderStyle.cs" />
-    <Compile Include="Graphics2D\UI\Styles\SpinButtonStyle.cs" />
-    <Compile Include="Graphics2D\UI\Styles\SplitPaneStyle.cs" />
-    <Compile Include="Graphics2D\UI\Styles\StyleNamesProvider.cs" />
-    <Compile Include="Graphics2D\UI\Styles\TextButtonStyle.cs" />
-    <Compile Include="Graphics2D\UI\TextButton.cs" />
-    <Compile Include="Graphics2D\UI\TreeNode.cs" />
-    <Compile Include="Graphics2D\UI\VerticalMenu.cs" />
-    <Compile Include="Graphics2D\UI\VerticalProgressBar.cs" />
-    <Compile Include="Graphics2D\UI\VerticalSeparator.cs" />
-    <Compile Include="Graphics2D\UI\VerticalSlider.cs" />
-    <Compile Include="Graphics2D\UI\VerticalSplitPane.cs" />
-    <Compile Include="ShapeExtensions.cs" />
-    <Compile Include="Utility\ColorHSV.cs" />
-    <Compile Include="Utility\Input.cs" />
-    <Compile Include="Utility\ProgressInfo.cs" />
-    <Compile Include="DefaultAssets.cs" />
-    <Compile Include="Utility\Collections.cs" />
-    <Compile Include="Utility\GraphicsExtension.cs" />
-    <Compile Include="Utility\Mathematics.cs" />
-    <Compile Include="Utility\Reflection.cs" />
-    <Compile Include="Utility\ResourceAssetResolver.cs" />
-    <Compile Include="Utility\Serialization.cs" />
-    <Compile Include="Graphics2D\UI\SingleItemContainer.cs" />
-    <Compile Include="Graphics2D\UI\Styles\MenuItemStyle.cs" />
-    <Compile Include="Graphics2D\UI\Styles\MenuStyle.cs" />
-    <Compile Include="Graphics2D\UI\Styles\TextFieldStyle.cs" />
-    <Compile Include="Graphics2D\UI\Styles\WindowStyle.cs" />
-    <Compile Include="Graphics2D\UI\TextBlock.cs" />
-    <Compile Include="Graphics2D\UI\SplitPane.cs" />
-    <Compile Include="Graphics2D\UI\Styles\ButtonStyle.cs" />
-    <Compile Include="Graphics2D\UI\Styles\TextBlockStyle.cs" />
-    <Compile Include="Graphics2D\UI\Styles\ScrollPaneStyle.cs" />
-    <Compile Include="Graphics2D\UI\Styles\Stylesheet.cs" />
-    <Compile Include="Graphics2D\UI\Styles\StylesheetLoader.cs" />
-    <Compile Include="Graphics2D\UI\Styles\TreeStyle.cs" />
-    <Compile Include="Graphics2D\UI\Styles\WidgetStyle.cs" />
-    <Compile Include="Graphics2D\UI\Button.cs" />
-    <Compile Include="Graphics2D\UI\TextField.cs" />
-    <Compile Include="Graphics2D\UI\Tree.cs" />
-    <Compile Include="Graphics2D\UI\Widget.cs" />
-    <Compile Include="Graphics2D\UI\Window.cs" />
-    <Compile Include="MyraEnvironment.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utility\GenericEventArgs.cs" />
-    <Compile Include="Utility\ValueChangedEventArgs.cs" />
+    <None Remove="Resources\default_font.fnt" />
+    <None Remove="Resources\default_font_small.fnt" />
+    <None Remove="Resources\default_ui_skin.json" />
+    <None Remove="Resources\default_ui_skin_atlas.json" />
+    <None Remove="Resources\default_ui_skin_atlas.png" />
   </ItemGroup>
+
   <ItemGroup>
     <EmbeddedResource Include="Resources\default_font.fnt" />
     <EmbeddedResource Include="Resources\default_font_small.fnt" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\default_ui_skin.json" />
     <EmbeddedResource Include="Resources\default_ui_skin_atlas.json" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\default_ui_skin_atlas.png" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
+  <ItemGroup>
+    <PackageReference Include="MonoGame.Framework.Portable" PrivateAssets="All" Version="3.6.0.1625" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
 </Project>

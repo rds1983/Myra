@@ -6,7 +6,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Microsoft.Xna.Framework;
-using Myra.Editor.Utils;
 using Myra.Graphics2D.UI;
 using Myra.Utility;
 using Newtonsoft.Json;

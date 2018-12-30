@@ -5,13 +5,12 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Editor.Plugin;
-using Myra.Editor.UI;
-using Myra.Editor.UI.File;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.ColorPicker;
+using Myra.Graphics2D.UI.File;
+using Myra.Graphics2D.UI.Properties;
 using Myra.Graphics2D.UI.Styles;
 using Myra.UIEditor.UI;
 using Myra.Utility;
@@ -178,7 +177,6 @@ namespace Myra.UIEditor
 
 			MyraEnvironment.Game = this;
 
-			ProcessPlugin();
 			BuildUI();
 
 			if (_state == null || string.IsNullOrEmpty(_state.EditedFile))
@@ -213,51 +211,6 @@ namespace Myra.UIEditor
 			};
 
 			mb.ShowModal(_desktop);
-		}
-
-		private void ProcessPlugin()
-		{
-			var pluginPath = Configuration.PluginPath;
-			if (string.IsNullOrEmpty(pluginPath))
-			{
-				return;
-			}
-
-			if (!Path.IsPathRooted(pluginPath))
-			{
-				// Add folder path
-				var path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-
-				pluginPath = Path.Combine(path, pluginPath);
-			}
-
-			try
-			{
-				var pluginAssembly = Assembly.LoadFile(pluginPath);
-
-				// Find implementation of IUIEditorPlugin
-				foreach (var c in pluginAssembly.GetExportedTypes())
-				{
-					if (typeof(IUIEditorPlugin).IsAssignableFrom(c))
-					{
-						// Found
-						// Instantiate
-						var plugin = (IUIEditorPlugin)Activator.CreateInstance(c);
-
-						// Call on load
-						plugin.OnLoad();
-
-						var customWidgets = new WidgetTypesSet();
-						plugin.FillCustomWidgetTypes(customWidgets);
-
-						_customWidgetTypes = customWidgets.Types;
-						break;
-					}
-				}
-			}
-			catch (Exception)
-			{
-			}
 		}
 
 		private void BuildUI()
