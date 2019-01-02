@@ -468,8 +468,6 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-
-
 			if (OpenMenuItem != null)
 			{
 				OpenMenuItem.SubMenu.OnKeyDown(k);

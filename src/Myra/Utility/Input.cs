@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Myra.Utility
 {
-	public static class Input
+	internal static class Input
 	{
 		/// <summary>
 		/// Converts a key to its char representation

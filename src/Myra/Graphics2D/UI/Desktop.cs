@@ -152,6 +152,7 @@ namespace Myra.Graphics2D.UI
 
 		public event EventHandler<GenericEventArgs<Keys>> KeyUp;
 		public event EventHandler<GenericEventArgs<Keys>> KeyDown;
+		public event EventHandler<GenericEventArgs<char>> CharDown;
 
 		public event EventHandler<ContextMenuClosingEventArgs> ContextMenuClosing;
 		public event EventHandler<GenericEventArgs<Widget>> ContextMenuClosed;
@@ -163,6 +164,23 @@ namespace Myra.Graphics2D.UI
 
 			MouseStateGetter = Mouse.GetState;
 			KeyboardStateGetter = Keyboard.GetState;
+
+#if MONOGAME
+			MyraEnvironment.Game.Window.TextInput += (s, a) =>
+			{
+				var c = a.Character;
+				var ev = CharDown;
+				if (ev != null)
+				{
+					ev(this, new GenericEventArgs<char>(c));
+				}
+
+				if (_focusedWidget != null)
+				{
+					_focusedWidget.IterateFocusable(w => w.OnCharDown(c));
+				}
+			};
+#endif
 		}
 
 		private void InputOnMouseDown()
@@ -437,7 +455,6 @@ namespace Myra.Graphics2D.UI
 				HandleButton(MouseState.MiddleButton, lastState.MiddleButton, MouseButtons.Middle);
 				HandleButton(MouseState.RightButton, lastState.RightButton, MouseButtons.Right);
 
-
 				if (MouseWheel != lastState.ScrollWheelValue)
 				{
 					var delta = MouseWheel - lastState.ScrollWheelValue;
@@ -485,6 +502,15 @@ namespace Myra.Graphics2D.UI
 							if (_focusedWidget != null)
 							{
 								_focusedWidget.IterateFocusable(w => w.OnKeyDown(key));
+
+#if FNA
+								var ch = key.ToChar(KeyboardState.IsKeyDown(Keys.LeftShift) || KeyboardState.IsKeyDown(Keys.RightShift));
+								if (ch != null)
+								{
+									_focusedWidget.IterateFocusable(w => w.OnCharDown(ch.Value));
+								}
+								break;
+#endif
 							}
 						}
 

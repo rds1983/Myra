@@ -26,8 +26,6 @@ namespace Myra.Samples.CustomUIStylesheet
 				PreferredBackBufferHeight = 800
 			};
 
-			Content.RootDirectory = "Content";
-
 			IsMouseVisible = true;
 			Window.AllowUserResizing = true;
 		}

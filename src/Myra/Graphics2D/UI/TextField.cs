@@ -390,6 +390,13 @@ namespace Myra.Graphics2D.UI
 					_cursorIndex = 0;
 					break;
 
+				case Keys.End:
+					if (!string.IsNullOrEmpty(Text))
+					{
+						_cursorIndex = Text.Length;
+					}
+					break;
+
 				case Keys.Enter:
 					{
 						if (!Multiline)
@@ -409,20 +416,16 @@ namespace Myra.Graphics2D.UI
 						}
 					}
 					break;
+			}
+		}
 
-				default:
-					if (Desktop == null)
-					{
-						break;
-					}
+		public override void OnCharDown(char c)
+		{
+			base.OnCharDown(c);
 
-					var ch = k.ToChar(Desktop.KeyboardState.IsKeyDown(Keys.LeftShift) || Desktop.KeyboardState.IsKeyDown(Keys.RightShift));
-
-					if (ch.HasValue)
-					{
-						ProcessChar(ch.Value);
-					}
-					break;
+			if (!char.IsControl(c))
+			{
+				ProcessChar(c);
 			}
 		}
 
