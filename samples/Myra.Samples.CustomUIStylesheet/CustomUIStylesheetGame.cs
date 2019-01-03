@@ -43,9 +43,7 @@ namespace Myra.Samples.CustomUIStylesheet
 			Texture2D texture;
 			using (var stream = assetResolver.Open("ui_stylesheet_atlas.png"))
 			{
-				var colorBuffer = ColorBuffer.FromStream(stream);
-				colorBuffer.PremultiplyAlpha();
-				texture = colorBuffer.CreateTexture2D();
+				texture = Texture2D.FromStream(GraphicsDevice, stream);
 			}
 
 			// Load ui text atlas
@@ -64,7 +62,6 @@ namespace Myra.Samples.CustomUIStylesheet
 
 			Stylesheet.Current = stylesheet;
 
-			// Widget.DrawFrames = true;
 			_host = new Desktop();
 
 			_allWidgets = new AllWidgets();

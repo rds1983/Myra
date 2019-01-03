@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Myra.Utility
 {
@@ -240,6 +241,43 @@ namespace Myra.Utility
 			}
 
 			return new Color(r, g, b, 255);
+		}
+
+		private static byte ApplyAlpha(byte color, byte alpha)
+		{
+			var fc = color / 255.0f;
+			var fa = alpha / 255.0f;
+			var fr = (int)(255.0f * fc * fa);
+			if (fr < 0)
+			{
+				fr = 0;
+			}
+			if (fr > 255)
+			{
+				fr = 255;
+			}
+			return (byte)fr;
+		}
+
+		/// <summary>
+		/// Updates texture colors by alpha
+		/// </summary>
+		/// <param name="texture"></param>
+		public static void PremultiplyAlpha(this Texture2D texture)
+		{
+			Color[] data = new Color[texture.Width * texture.Height];
+			texture.GetData(data);
+
+			for (int i = 0; i < data.Length; ++i)
+			{
+				byte a = data[i].A;
+
+				data[i].R = ApplyAlpha(data[i].R, a);
+				data[i].G = ApplyAlpha(data[i].G, a);
+				data[i].B = ApplyAlpha(data[i].B, a);
+			}
+
+			texture.SetData(data);
 		}
 	}
 }

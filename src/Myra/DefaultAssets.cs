@@ -128,9 +128,8 @@ namespace Myra
 					return _uiBitmap;
 				}
 
-				var rawImage = ColorBuffer.FromStream(_assetResolver.Open(DefaultAtlasImageName));
-				rawImage.PremultiplyAlpha();
-				_uiBitmap = rawImage.CreateTexture2D();
+				_uiBitmap = Texture2D.FromStream(MyraEnvironment.GraphicsDevice, _assetResolver.Open(DefaultAtlasImageName));
+				_uiBitmap.PremultiplyAlpha();
 
 				return _uiBitmap;
 			}
