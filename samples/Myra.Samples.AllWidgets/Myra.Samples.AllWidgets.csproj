@@ -10,6 +10,14 @@
     <RootNamespace>Myra.Samples.AllWidgets</RootNamespace>
   </PropertyGroup>
   
+  <PropertyGroup Condition="$(DefineConstants.Contains('MONOGAME'))">
+    <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(DefineConstants.Contains('FNA'))">
+    <OutputPath>bin\FNA\$(Configuration)</OutputPath>
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.7.1.189" Condition="$(DefineConstants.Contains('MONOGAME'))" />
   </ItemGroup>

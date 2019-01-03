@@ -663,7 +663,7 @@ namespace Myra.Graphics2D.UI
 
 		public event EventHandler<GenericEventArgs<Keys>> KeyUp;
 		public event EventHandler<GenericEventArgs<Keys>> KeyDown;
-		public event EventHandler<GenericEventArgs<char>> CharDown;
+		public event EventHandler<GenericEventArgs<char>> Char;
 
 		public Widget()
 		{
@@ -1117,9 +1117,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public virtual void OnCharDown(char c)
+		public virtual void OnChar(char c)
 		{
-			var ev = CharDown;
+			var ev = Char;
 			if (ev != null)
 			{
 				ev(this, new GenericEventArgs<char>(c));

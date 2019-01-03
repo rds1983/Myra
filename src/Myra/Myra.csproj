@@ -3,7 +3,6 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
-    <PackageId>Myra</PackageId>
     <Authors>MyraTeam</Authors>
     <Product>Myra</Product>
     <Description>UI Library for MonoGame/FNA</Description>
@@ -13,8 +12,20 @@
     <AssemblyName>Myra</AssemblyName>
     <RootNamespace>Myra</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Version>0.7.7.148</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
- 
+
+  <PropertyGroup Condition="$(DefineConstants.Contains('MONOGAME'))">
+    <PackageId>Myra</PackageId>
+    <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(DefineConstants.Contains('FNA'))">
+    <PackageId>Myra.FNA</PackageId>
+    <OutputPath>bin\FNA\$(Configuration)</OutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="Resources\default_font.fnt" />
     <None Remove="Resources\default_font_small.fnt" />

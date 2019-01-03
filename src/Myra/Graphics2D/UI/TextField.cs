@@ -419,9 +419,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void OnCharDown(char c)
+		public override void OnChar(char c)
 		{
-			base.OnCharDown(c);
+			base.OnChar(c);
 
 			if (!char.IsControl(c))
 			{
