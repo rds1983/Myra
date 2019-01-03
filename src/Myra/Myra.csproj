@@ -12,7 +12,6 @@
     <AssemblyName>Myra</AssemblyName>
     <RootNamespace>Myra</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Version>0.7.7.148</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
