@@ -141,6 +141,7 @@ namespace Myra.Graphics2D.UI
 				if (Desktop != null)
 				{
 					Desktop.MouseMoved -= DesktopOnMouseMoved;
+					Desktop.TouchUp -= DesktopTouchUp;
 				}
 
 				base.Desktop = value;
@@ -148,6 +149,7 @@ namespace Myra.Graphics2D.UI
 				if (Desktop != null)
 				{
 					Desktop.MouseMoved += DesktopOnMouseMoved;
+					Desktop.TouchUp += DesktopTouchUp;
 				}
 
 				IsWindowPlaced = false;
@@ -310,29 +312,31 @@ namespace Myra.Graphics2D.UI
 			_startPos = position;
 		}
 
-		public override void OnMouseUp(MouseButtons mb)
+		private void DesktopTouchUp(object sender, EventArgs args)
 		{
-			base.OnMouseUp(mb);
+			_startPos = null;
+		}
+
+		public override void OnTouchUp()
+		{
+			base.OnTouchUp();
 
 			_startPos = null;
 		}
 
-		public override void OnMouseDown(MouseButtons mb)
+		public override void OnTouchDown()
 		{
-			base.OnMouseDown(mb);
+			base.OnTouchDown();
 
-			if (Desktop != null)
+			var x = Bounds.X;
+			var y = Bounds.Y;
+			var bounds = new Rectangle(x, y,
+				_titleGrid.Bounds.Right - x,
+				_titleGrid.Bounds.Bottom - y);
+			var mousePos = Desktop.MousePosition;
+			if (bounds.Contains(mousePos))
 			{
-				var x = Bounds.X;
-				var y = Bounds.Y;
-				var bounds = new Rectangle(x, y,
-					_titleGrid.Bounds.Right - x,
-					_titleGrid.Bounds.Bottom - y);
-				var mousePos = Desktop.MousePosition;
-				if (bounds.Contains(mousePos))
-				{
-					_startPos = mousePos;
-				}
+				_startPos = mousePos;
 			}
 		}
 
