@@ -289,6 +289,13 @@ namespace Myra.Graphics2D.UI
 			_textBlock.IsPressed = IsPressed;
 		}
 
+		public override void OnToggledChanged()
+		{
+			base.OnToggledChanged();
+
+			UpdateRenderable();
+		}
+
 		protected override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
 			ApplyButtonStyle(stylesheet.ButtonStyles[name]);

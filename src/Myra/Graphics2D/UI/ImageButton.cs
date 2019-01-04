@@ -173,6 +173,13 @@ namespace Myra.Graphics2D.UI
 			UpdateTextureRegion();
 		}
 
+		public override void OnToggledChanged()
+		{
+			base.OnToggledChanged();
+
+			UpdateTextureRegion();
+		}
+
 		protected override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
 			ApplyImageButtonStyle(stylesheet.ImageButtonStyles[name]);
