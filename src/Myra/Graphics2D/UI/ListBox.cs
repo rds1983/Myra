@@ -65,14 +65,14 @@ namespace Myra.Graphics2D.UI
 
 				if (_selectedItem != null)
 				{
-					((Button)_selectedItem.Widget).IsPressed = false;
+					((Button)_selectedItem.Widget).IsToggled = false;
 				}
 
 				_selectedItem = value;
 
 				if (_selectedItem != null)
 				{
-					((Button)_selectedItem.Widget).IsPressed = true;
+					((Button)_selectedItem.Widget).IsToggled = true;
 					_selectedItem.FireSelected();
 				}
 
@@ -189,7 +189,7 @@ namespace Myra.Graphics2D.UI
 					Toggleable = true
 				};
 
-				((Button)widget).Down += ButtonOnDown;
+				((Button)widget).Click += ButtonOnClick;
 			}
 			else
 			{
@@ -220,7 +220,7 @@ namespace Myra.Graphics2D.UI
 			UpdateGridPositions();
 		}
 
-		private void ButtonOnDown(object sender, EventArgs eventArgs)
+		private void ButtonOnClick(object sender, EventArgs eventArgs)
 		{
 			var item = (Button)sender;
 			var index = InternalChild.Widgets.IndexOf(item);

@@ -254,7 +254,7 @@ namespace Myra.Graphics2D.UI
 		private void UpdateRenderable()
 		{
 			var image = Image;
-			if (IsPressed && PressedImage != null)
+			if (IsToggled && PressedImage != null)
 			{
 				image = PressedImage;
 			}
@@ -266,9 +266,9 @@ namespace Myra.Graphics2D.UI
 			_image.Renderable = image;
 		}
 
-		public override void OnMouseEntered(Point position)
+		public override void OnMouseEntered()
 		{
-			base.OnMouseEntered(position);
+			base.OnMouseEntered();
 
 			UpdateRenderable();
 		}
@@ -280,18 +280,9 @@ namespace Myra.Graphics2D.UI
 			UpdateRenderable();
 		}
 
-		protected override void FireUp()
+		public override void OnPressedChanged()
 		{
-			base.FireUp();
-
-			UpdateRenderable();
-
-			_textBlock.IsPressed = IsPressed;
-		}
-
-		protected override void FireDown()
-		{
-			base.FireDown();
+			base.OnPressedChanged();
 
 			UpdateRenderable();
 

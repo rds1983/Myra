@@ -96,13 +96,13 @@ namespace Myra.Graphics2D.UI
 			{
 				Mark.Visible = true;
 				Label.Visible = true;
-				ChildNodesGrid.Visible = Mark.IsPressed;
+				ChildNodesGrid.Visible = Mark.IsToggled;
 			}
 			else
 			{
 				Mark.Visible = false;
 				Label.Visible = false;
-				Mark.IsPressed = true;
+				Mark.IsToggled = true;
 				ChildNodesGrid.Visible = true;
 			}
 		}
@@ -221,16 +221,18 @@ namespace Myra.Graphics2D.UI
 
 				if (HoverRow.Mark.Visible && !HoverRow.Mark.Bounds.Contains(Desktop.MousePosition))
 				{
-					HoverRow.Mark.IsPressed = !HoverRow.Mark.IsPressed;
+					HoverRow.Mark.DoClick();
 				}
 			}
 		}
 
-		public override void OnMouseMoved(Point position)
+		public override void OnMouseMoved()
 		{
-			base.OnMouseMoved(position);
+			base.OnMouseMoved();
 
 			HoverRow = null;
+
+			var position = MousePosition;
 
 			if (!Bounds.Contains(position))
 			{

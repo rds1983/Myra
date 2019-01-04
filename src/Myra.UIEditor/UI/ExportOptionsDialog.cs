@@ -20,12 +20,12 @@ namespace Myra.UIEditor.UI
 			_exportOptionsWidget._textClassName.Text = Studio.Instance.Project.ExportOptions.Class;
 			_exportOptionsWidget._textOutputPath.Text = Studio.Instance.Project.ExportOptions.OutputPath;
 
-			_exportOptionsWidget._buttonChangeOutputPath.Down += ButtonChangeOutputPathOnDown;
+			_exportOptionsWidget._buttonChangeOutputPath.Click += ButtonChangeOutputPathOnClick;
 
-			ButtonOk.Down += ButtonOkOnDown;
+			ButtonOk.Click += ButtonOkOnDown;
 		}
 
-		private void ButtonChangeOutputPathOnDown(object sender, EventArgs eventArgs)
+		private void ButtonChangeOutputPathOnClick(object sender, EventArgs eventArgs)
 		{
 			var dlg = new FileDialog(FileDialogMode.ChooseFolder)
 			{

@@ -44,7 +44,7 @@ namespace Myra.Samples.SplitPaneContainer
 				Text = "Switch Orientation"
 			};
 
-			buttonSwitchOrientation.Down += (sender, args) =>
+			buttonSwitchOrientation.Click += (sender, args) =>
 			{
 				RebuildSplitPane(_splitPane.Orientation == Orientation.Horizontal ? Orientation.Vertical : Orientation.Horizontal);
 			};
@@ -57,7 +57,7 @@ namespace Myra.Samples.SplitPaneContainer
 				GridPositionX = 1
 			};
 
-			buttonReset.Down += (sender, args) =>
+			buttonReset.Click += (sender, args) =>
 			{
 				_splitPane.Reset();
 			};

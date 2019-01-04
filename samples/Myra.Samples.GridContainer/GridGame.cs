@@ -88,7 +88,7 @@ namespace Myra.Samples.GridContainer
 				Text = "This is 2 columns button"
 			};
 
-			button.Down += (s, a) =>
+			button.Click += (s, a) =>
 			{
 				var messageBox = Dialog.CreateMessageBox("2C", "2 Columns Button pushed!");
 				messageBox.ShowModal(_host);
@@ -108,7 +108,7 @@ namespace Myra.Samples.GridContainer
 				Text = "This is 2 rows button"
 			};
 
-			button2.Down += (s, a) =>
+			button2.Click += (s, a) =>
 			{
 				var messageBox = Dialog.CreateMessageBox("2R", "2 Rows Button pushed!");
 				messageBox.ShowModal(_host);
@@ -145,7 +145,7 @@ namespace Myra.Samples.GridContainer
 			};
 			grid.Widgets.Add(button3);
 
-			button3.Up += (sender, args) =>
+			button3.Click += (sender, args) =>
 			{
 				_window.ShowModal(_host);
 			};

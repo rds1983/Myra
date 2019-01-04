@@ -33,8 +33,6 @@ namespace Myra.Graphics2D.UI
 		private Point _lastMeasureAvailableSize;
 		private Point _lastLocationHint;
 
-		private bool _isTouchDown;
-
 		private Rectangle _containerBounds;
 		private Rectangle _bounds;
 		private Rectangle _actualBounds;
@@ -528,13 +526,42 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public bool IsMouseOver { get; set; }
+		internal bool WasMouseOver
+		{
+			get
+			{
+				if (Desktop == null)
+				{
+					return false;
+				}
+
+				return Bounds.Contains(Desktop.OldMousePosition);
+			}
+		}
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public bool IsTouchDown
+		public bool IsMouseOver
 		{
-			get { return _isTouchDown; }
+			get
+			{
+				if (Desktop == null)
+				{
+					return false;
+				}
+
+				return Bounds.Contains(Desktop.MousePosition);
+			}
+		}
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public Point MousePosition
+		{
+			get
+			{
+				return Desktop.MousePosition;
+			}
 		}
 
 		[HiddenInEditor]
@@ -653,11 +680,14 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler EnabledChanged;
 
 		public event EventHandler MouseLeft;
-		public event EventHandler<GenericEventArgs<Point>> MouseEntered;
-		public event EventHandler<GenericEventArgs<Point>> MouseMoved;
+		public event EventHandler MouseEntered;
+		public event EventHandler MouseMoved;
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseDown;
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseUp;
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseDoubleClick;
+
+		public event EventHandler TouchDown;
+		public event EventHandler TouchUp;
 
 		public event EventHandler<GenericEventArgs<float>> MouseWheelChanged;
 
@@ -1030,8 +1060,6 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnMouseLeft()
 		{
-			IsMouseOver = false;
-
 			var ev = MouseLeft;
 			if (ev != null)
 			{
@@ -1039,30 +1067,26 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public virtual void OnMouseEntered(Point position)
+		public virtual void OnMouseEntered()
 		{
-			IsMouseOver = true;
-
 			var ev = MouseEntered;
 			if (ev != null)
 			{
-				ev(this, new GenericEventArgs<Point>(position));
+				ev(this, EventArgs.Empty);
 			}
 		}
 
-		public virtual void OnMouseMoved(Point position)
+		public virtual void OnMouseMoved()
 		{
 			var ev = MouseMoved;
 			if (ev != null)
 			{
-				ev(this, new GenericEventArgs<Point>(position));
+				ev(this, EventArgs.Empty);
 			}
 		}
 
 		public virtual void OnMouseDown(MouseButtons mb)
 		{
-			_isTouchDown = true;
-
 			var ev = MouseDown;
 			if (ev != null)
 			{
@@ -1081,8 +1105,6 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnMouseUp(MouseButtons mb)
 		{
-			_isTouchDown = false;
-
 			var ev = MouseUp;
 			if (ev != null)
 			{
@@ -1096,6 +1118,24 @@ namespace Myra.Graphics2D.UI
 			if (ev != null)
 			{
 				ev(this, new GenericEventArgs<float>(delta));
+			}
+		}
+
+		public virtual void OnTouchDown()
+		{
+			var ev = TouchDown;
+			if (ev != null)
+			{
+				ev(this, EventArgs.Empty);
+			}
+		}
+
+		public virtual void OnTouchUp()
+		{
+			var ev = TouchUp;
+			if (ev != null)
+			{
+				ev(this, EventArgs.Empty);
 			}
 		}
 

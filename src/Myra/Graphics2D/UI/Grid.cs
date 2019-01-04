@@ -957,28 +957,23 @@ namespace Myra.Graphics2D.UI
 			UpdateHoverPosition(null);
 		}
 
-		public override void OnMouseEntered(Point position)
+		public override void OnMouseEntered()
 		{
-			base.OnMouseEntered(position);
+			base.OnMouseEntered();
 
-			UpdateHoverPosition(position);
+			UpdateHoverPosition(MousePosition);
 		}
 
-		public override void OnMouseMoved(Point position)
+		public override void OnMouseMoved()
 		{
-			base.OnMouseMoved(position);
+			base.OnMouseMoved();
 
-			UpdateHoverPosition(position);
+			UpdateHoverPosition(MousePosition);
 		}
 
-		public override void OnMouseDown(MouseButtons mb)
+		public override void OnTouchDown()
 		{
-			base.OnMouseDown(mb);
-
-			if (mb != MouseButtons.Left)
-			{
-				return;
-			}
+			base.OnTouchDown();
 
 			if (HoverRowIndex != null)
 			{

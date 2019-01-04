@@ -82,15 +82,10 @@ namespace Myra.Graphics2D.UI
 			return stylesheet.TextButtonStyles.Keys.ToArray();
 		}
 
-		protected override void FireDown()
+		public override void OnPressedChanged()
 		{
-			base.FireDown();
-			InternalChild.IsPressed = IsPressed;
-		}
+			base.OnPressedChanged();
 
-		protected override void FireUp()
-		{
-			base.FireUp();
 			InternalChild.IsPressed = IsPressed;
 		}
 	}

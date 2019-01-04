@@ -97,11 +97,11 @@ namespace Myra.Graphics2D.UI
 		}
 
 
-		public override void OnMouseEntered(Point position)
+		public override void OnMouseEntered()
 		{
-			base.OnMouseEntered(position);
+			base.OnMouseEntered();
 
-			Children.HandleMouseMovement(position);
+			Children.HandleMouseMovement();
 		}
 
 		public override void OnMouseLeft()
@@ -115,18 +115,18 @@ namespace Myra.Graphics2D.UI
 					continue;
 				}
 
-				if (w.IsMouseOver)
+				if (w.WasMouseOver)
 				{
 					w.OnMouseLeft();
 				}
 			}
 		}
 
-		public override void OnMouseMoved(Point position)
+		public override void OnMouseMoved()
 		{
-			base.OnMouseMoved(position);
+			base.OnMouseMoved();
 
-			ReverseChildrenCopy.HandleMouseMovement(position);
+			ReverseChildrenCopy.HandleMouseMovement();
 		}
 
 		public override void OnMouseDown(MouseButtons mb)
@@ -148,6 +148,20 @@ namespace Myra.Graphics2D.UI
 			base.OnMouseDoubleClick(mb);
 
 			ReverseChildrenCopy.HandleMouseDoubleClick(mb);
+		}
+
+		public override void OnTouchDown()
+		{
+			base.OnTouchDown();
+
+			ReverseChildrenCopy.HandleTouchDown();
+		}
+
+		public override void OnTouchUp()
+		{
+			base.OnTouchUp();
+
+			ReverseChildrenCopy.HandleTouchUp();
 		}
 
 		internal override void MoveChildren(Point delta)

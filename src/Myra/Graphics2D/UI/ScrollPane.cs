@@ -127,6 +127,7 @@ namespace Myra.Graphics2D.UI
 				if (Desktop != null)
 				{
 					Desktop.MouseMoved -= DesktopMouseMoved;
+					Desktop.TouchUp -= DesktopTouchUp;
 				}
 
 				base.Desktop = value;
@@ -134,6 +135,7 @@ namespace Myra.Graphics2D.UI
 				if (Desktop != null)
 				{
 					Desktop.MouseMoved += DesktopMouseMoved;
+					Desktop.TouchUp += DesktopTouchUp;
 				}
 			}
 		}
@@ -247,20 +249,18 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void OnMouseUp(MouseButtons mb)
+		public override void OnTouchUp()
 		{
-			base.OnMouseUp(mb);
+			base.OnTouchUp();
 
 			_startBoundsPos = null;
 		}
 
-		public override void OnMouseDown(MouseButtons mb)
+		public override void OnTouchDown()
 		{
-			base.OnMouseDown(mb);
+			base.OnTouchDown();
 
 			var mousePosition = Desktop.MousePosition;
-
-			if (mb != MouseButtons.Left) return;
 
 			var r = _verticalScrollbarThumb;
 			r.Y += _scrollPosition.Y;
@@ -499,11 +499,11 @@ namespace Myra.Graphics2D.UI
 			UpdateWidgetLocation();
 		}
 
-		private void DesktopMouseMoved(object sender, GenericEventArgs<Point> e)
+		private void DesktopMouseMoved(object sender, EventArgs args)
 		{
 			if (!_startBoundsPos.HasValue) return;
 
-			var position = e.Data;
+			var position = Desktop.MousePosition;
 
 			int delta;
 			if (_scrollbarOrientation == Orientation.Horizontal)
@@ -518,6 +518,11 @@ namespace Myra.Graphics2D.UI
 			}
 
 			MoveThumb(delta);
+		}
+
+		private void DesktopTouchUp(object sender, EventArgs args)
+		{
+			_startBoundsPos = null;
 		}
 
 		protected override void SetStyleByName(Stylesheet stylesheet, string name)

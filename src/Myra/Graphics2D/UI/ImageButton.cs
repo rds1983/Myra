@@ -140,7 +140,7 @@ namespace Myra.Graphics2D.UI
 		private void UpdateTextureRegion()
 		{
 			var image = Image;
-			if (IsPressed && PressedImage != null)
+			if (ShowAsPressed && PressedImage != null)
 			{
 				image = PressedImage;
 			}
@@ -152,9 +152,9 @@ namespace Myra.Graphics2D.UI
 			InternalChild.Renderable = image;
 		}
 
-		public override void OnMouseEntered(Point position)
+		public override void OnMouseEntered()
 		{
-			base.OnMouseEntered(position);
+			base.OnMouseEntered();
 
 			UpdateTextureRegion();
 		}
@@ -166,16 +166,9 @@ namespace Myra.Graphics2D.UI
 			UpdateTextureRegion();
 		}
 
-		protected override void FireUp()
+		public override void OnPressedChanged()
 		{
-			base.FireUp();
-
-			UpdateTextureRegion();
-		}
-
-		protected override void FireDown()
-		{
-			base.FireDown();
+			base.OnPressedChanged();
 
 			UpdateTextureRegion();
 		}

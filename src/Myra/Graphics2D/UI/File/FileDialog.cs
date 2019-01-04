@@ -201,12 +201,12 @@ namespace Myra.Graphics2D.UI.File
 			_gridFiles.SelectedIndexChanged += OnGridFilesSelectedIndexChanged;
 			_gridFiles.MouseDoubleClick += OnGridFilesDoubleClick;
 
-			_buttonParent.Down += OnButtonParent;
+			_buttonParent.Click += OnButtonParent;
 
 			_textFieldFileName.TextChanged += (s, a) => UpdateEnabled();
 
-			_buttonBack.Down += OnButtonBack;
-			_buttonForward.Down += OnButtonForward;
+			_buttonBack.Click += OnButtonBack;
+			_buttonForward.Click += OnButtonForward;
 
 			UpdateEnabled();
 		}

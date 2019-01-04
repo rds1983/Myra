@@ -229,12 +229,19 @@ namespace Myra.Graphics2D.UI
 					menuItemButton.TextColor = menuItem.Color.Value;
 				}
 
-				menuItemButton.Down += ButtonOnDown;
-				menuItemButton.Up += ButtonOnUp;
 				menuItemButton.MouseEntered += MouseOnEntered;
 				menuItemButton.MouseLeft += MouseOnLeft;
 				menuItemButton.SubMenu.Items = menuItem.Items;
 				menuItemButton.Toggleable = menuItem.Items.Count > 0;
+
+				if (menuItemButton.Toggleable)
+				{
+					menuItemButton.ToggledChanged += ButtonOnToggledChanged;
+				}
+				else
+				{
+					menuItemButton.Click += ButtonOnClick;
+				}
 
 				widget = menuItemButton;
 			}
@@ -278,8 +285,8 @@ namespace Myra.Graphics2D.UI
 			var asMenuItemButton = widget as MenuItemButton;
 			if (asMenuItemButton != null)
 			{
-				asMenuItemButton.Down -= ButtonOnDown;
-				asMenuItemButton.Up -= ButtonOnUp;
+				asMenuItemButton.ToggledChanged -= ButtonOnToggledChanged;
+				asMenuItemButton.Click -= ButtonOnClick;
 				asMenuItemButton.MouseEntered -= MouseOnEntered;
 				asMenuItemButton.MouseLeft -= MouseOnLeft;
 			}
@@ -307,7 +314,7 @@ namespace Myra.Graphics2D.UI
 		{
 			if (OpenMenuItem != null)
 			{
-				OpenMenuItem.IsPressed = false;
+				OpenMenuItem.IsToggled = false;
 			}
 
 			if (menuItem == null || !menuItem.CanOpen)
@@ -334,7 +341,8 @@ namespace Myra.Graphics2D.UI
 		{
 			if (OpenMenuItem == null) return;
 
-			OpenMenuItem.IsPressed = false;
+			OpenMenuItem.IsToggled = false;
+			OpenMenuItem = null;
 		}
 
 		private void MouseOnEntered(object sender, EventArgs eventArgs)
@@ -347,7 +355,7 @@ namespace Myra.Graphics2D.UI
 			var menuItemButton = (MenuItemButton)sender;
 			if (menuItemButton.CanOpen && OpenMenuItem != menuItemButton)
 			{
-				menuItemButton.IsPressed = true;
+				menuItemButton.IsToggled = true;
 			}
 		}
 
@@ -355,7 +363,7 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
-		private void ButtonOnDown(object sender, EventArgs eventArgs)
+		private void ButtonOnToggledChanged(object sender, EventArgs eventArgs)
 		{
 			if (Desktop == null)
 			{
@@ -363,13 +371,21 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var menuItemButton = (MenuItemButton)sender;
-			if (menuItemButton.CanOpen)
+
+			if (menuItemButton.IsToggled)
 			{
-				ShowSubMenu(menuItemButton);
+				if (menuItemButton.CanOpen)
+				{
+					ShowSubMenu(menuItemButton);
+				}
+			}
+			else
+			{
+				Close();
 			}
 		}
 
-		private void ButtonOnUp(object sender, EventArgs eventArgs)
+		private void ButtonOnClick(object sender, EventArgs eventArgs)
 		{
 			if (Desktop == null)
 			{
@@ -382,10 +398,6 @@ namespace Myra.Graphics2D.UI
 			if (!menuItem.CanOpen)
 			{
 				((MenuItem)menuItem.Tag).FireSelected();
-			}
-			else
-			{
-				OpenMenuItem = null;
 			}
 		}
 
@@ -404,7 +416,7 @@ namespace Myra.Graphics2D.UI
 			}
 			else
 			{
-				menuItemButton.IsPressed = true;
+				menuItemButton.IsToggled = true;
 			}
 		}
 
@@ -525,21 +537,16 @@ namespace Myra.Graphics2D.UI
 				menuItemButton = InternalChild.Widgets[oldIndex] as MenuItemButton;
 				if (menuItemButton != null)
 				{
-					menuItemButton.IsMouseOver = false;
-					menuItemButton.IsPressed = false;
+					menuItemButton.IsToggled = false;
 				}
 			}
 
 			menuItemButton = InternalChild.Widgets[selectedIndex] as MenuItemButton;
 			if (menuItemButton != null)
 			{
-				if (!menuItemButton.CanOpen)
+				if (menuItemButton.CanOpen)
 				{
-					menuItemButton.IsMouseOver = true;
-				}
-				else
-				{
-					menuItemButton.IsPressed = true;
+					menuItemButton.IsToggled = true;
 				}
 			}
 		}

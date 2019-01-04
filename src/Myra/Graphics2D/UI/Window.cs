@@ -186,7 +186,7 @@ namespace Myra.Graphics2D.UI
 				GridPositionX = 1
 			};
 
-			_closeButton.Up += (sender, args) =>
+			_closeButton.Click += (sender, args) =>
 			{
 				Close();
 			};
@@ -233,14 +233,14 @@ namespace Myra.Graphics2D.UI
 			Top = (ContainerBounds.Height - size.Y) / 2;
 		}
 
-		private void DesktopOnMouseMoved(object sender, GenericEventArgs<Point> genericEventArgs)
+		private void DesktopOnMouseMoved(object sender, EventArgs args)
 		{
 			if (_startPos == null)
 			{
 				return;
 			}
 
-			var position = genericEventArgs.Data;
+			var position = Desktop.MousePosition;
 
 			var delta = new Point(position.X - _startPos.Value.X,
 				position.Y - _startPos.Value.Y);

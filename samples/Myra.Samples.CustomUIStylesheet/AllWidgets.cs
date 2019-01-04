@@ -11,11 +11,11 @@ namespace Myra.Samples.CustomUIStylesheet
 		{
 			BuildUI();
 
-			_button.Up += (sender, args) =>
+			_button.Click += (sender, args) =>
 			{
 			};
 
-			_textButton.Up += (sender, args) =>
+			_textButton.Click += (sender, args) =>
 			{
 				var debugWindow = new ColorPickerDialog();
 				debugWindow.ShowModal(Desktop);
@@ -31,7 +31,7 @@ namespace Myra.Samples.CustomUIStylesheet
 				};
 			};
 
-			_imageButton.Up += (sender, args) =>
+			_imageButton.Click += (sender, args) =>
 			{
 				var debugWindow = new DebugOptionsDialog();
 				debugWindow.ShowModal(Desktop);

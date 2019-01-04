@@ -143,7 +143,7 @@ namespace Myra.Graphics2D.UI
 				ContentVerticalAlignment = VerticalAlignment.Center,
 				ContentHorizontalAlignment = HorizontalAlignment.Center
 			};
-			_upButton.Up += UpButtonOnUp;
+			_upButton.Click += UpButtonOnUp;
 
 			InternalChild.Widgets.Add(_upButton);
 
@@ -154,7 +154,7 @@ namespace Myra.Graphics2D.UI
 				ContentVerticalAlignment = VerticalAlignment.Center,
 				ContentHorizontalAlignment = HorizontalAlignment.Center
 			};
-			_downButton.Up += DownButtonOnUp;
+			_downButton.Click += DownButtonOnUp;
 			InternalChild.Widgets.Add(_downButton);
 
 			if (style != null)

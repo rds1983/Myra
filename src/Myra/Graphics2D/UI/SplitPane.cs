@@ -77,9 +77,9 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public override void OnMouseMoved(Point position)
+		public override void OnMouseMoved()
 		{
-			base.OnMouseMoved(position);
+			base.OnMouseMoved();
 
 			if (_mouseCoord == null)
 			{
@@ -96,6 +96,7 @@ namespace Myra.Graphics2D.UI
 			Grid.Proportion firstProportion, secondProportion;
 			float fp;
 
+			var position = Desktop.MousePosition;
 			if (Orientation == Orientation.Horizontal)
 			{
 				var firstWidth = position.X - bounds.X - _mouseCoord.Value;
@@ -143,18 +144,22 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void HandleOnUp(object sender, EventArgs args)
+		private void HandleOnPressedChanged(object sender, EventArgs args)
 		{
-			_handleDown = null;
-			_mouseCoord = null;
-		}
+			var handle = (ImageButton)sender;
 
-		private void HandleOnDown(object sender, EventArgs args)
-		{
-			_handleDown = (ImageButton)sender;
-			_mouseCoord = Orientation == Orientation.Horizontal
-				? Desktop.MousePosition.X - _handleDown.Bounds.X
-				: Desktop.MousePosition.Y - _handleDown.Bounds.Y;
+			if (!handle.IsPressed)
+			{
+				_handleDown = null;
+				_mouseCoord = null;
+			}
+			else
+			{
+				_handleDown = (ImageButton)sender;
+				_mouseCoord = Orientation == Orientation.Horizontal
+					? Desktop.MousePosition.X - _handleDown.Bounds.X
+					: Desktop.MousePosition.Y - _handleDown.Bounds.Y;
+			}
 		}
 
 		private void WidgetsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
@@ -224,11 +229,11 @@ namespace Myra.Graphics2D.UI
 					{
 						HorizontalAlignment = HorizontalAlignment.Stretch,
 						VerticalAlignment = VerticalAlignment.Stretch,
-						CanFocus = false
+						CanFocus = false,
+						ReleaseOnMouseLeft = false
 					};
 
-					handle.Down += HandleOnDown;
-					handle.Up += HandleOnUp;
+					handle.PressedChanged += HandleOnPressedChanged;
 
 					proportion = new Grid.Proportion(Grid.ProportionType.Auto);
 

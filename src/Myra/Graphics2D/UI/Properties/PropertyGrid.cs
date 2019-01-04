@@ -148,16 +148,18 @@ namespace Myra.Graphics2D.UI.Properties
 
 				InternalChild.Widgets.Add(_mark);
 
-				_mark.Down += (sender, args) =>
+				_mark.ToggledChanged += (sender, args) =>
 				{
-					_propertyGrid.Visible = true;
-					parent._expandedCategories.Add(category);
-				};
-
-				_mark.Up += (sender, args) =>
-				{
-					_propertyGrid.Visible = false;
-					parent._expandedCategories.Remove(category);
+					if (_mark.IsToggled)
+					{
+						_propertyGrid.Visible = true;
+						parent._expandedCategories.Add(category);
+					}
+					else
+					{
+						_propertyGrid.Visible = false;
+						parent._expandedCategories.Remove(category);
+					}
 				};
 
 				var label = new TextBlock(parent.PropertyGridStyle.LabelStyle)
@@ -183,7 +185,7 @@ namespace Myra.Graphics2D.UI.Properties
 					return;
 				}
 
-				_mark.IsPressed = !_mark.IsPressed;
+				_mark.IsToggled = !_mark.IsToggled;
 			}
 
 			public override void InternalRender(RenderContext context)
@@ -330,21 +332,14 @@ namespace Myra.Graphics2D.UI.Properties
 					var isChecked = (bool)value;
 					var cb = new CheckBox
 					{
-						IsPressed = isChecked
+						IsToggled = isChecked
 					};
 
 					if (hasSetter)
 					{
-
-						cb.Down += (sender, args) =>
+						cb.Click += (sender, args) =>
 						{
-							record.SetValue(_object, true);
-							FireChanged(propertyType.Name);
-						};
-
-						cb.Up += (sender, args) =>
-						{
-							record.SetValue(_object, false);
+							record.SetValue(_object, cb.IsToggled);
 							FireChanged(propertyType.Name);
 						};
 					}
@@ -403,7 +398,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 					if (hasSetter)
 					{
-						button.Up += (sender, args) =>
+						button.Click += (sender, args) =>
 						{
 							var dlg = new ColorPickerDialog()
 							{
@@ -642,13 +637,13 @@ namespace Myra.Graphics2D.UI.Properties
 								GridPositionX = 1
 							};
 
-							button.Up += (sender, args) =>
+							button.Click += (sender, args) =>
 							{
 								var collectionEditor = new CollectionEditor(items, itemType);
 
 								var dialog = Dialog.CreateMessageBox("Edit", collectionEditor);
 
-								dialog.ButtonOk.Up += (o, eventArgs) =>
+								dialog.ButtonOk.Click += (o, eventArgs) =>
 								{
 									collectionEditor.SaveChanges();
 									UpdateLabelCount(label, items.Count);
@@ -859,7 +854,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 				if (_expandedCategories.Contains(category.Key))
 				{
-					subGrid.Mark.IsPressed = true;
+					subGrid.Mark.IsToggled = true;
 				}
 
 				var rp = new Proportion(ProportionType.Auto);

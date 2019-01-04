@@ -13,7 +13,7 @@ namespace Myra.Samples.AllWidgets
 			BuildUI();
 
 			_buttonOpenFile.Image = DefaultAssets.UISpritesheet["icon-star"];
-			_buttonOpenFile.Up += (sender, args) =>
+			_buttonOpenFile.Click += (sender, args) =>
 			{
 				var fileDialog = new FileDialog(FileDialogMode.OpenFile);
 				fileDialog.ShowModal(Desktop);
@@ -30,7 +30,7 @@ namespace Myra.Samples.AllWidgets
 			};
 
 			_buttonSaveFile.Image = DefaultAssets.UISpritesheet["icon-star"];
-			_buttonSaveFile.Up += (sender, args) =>
+			_buttonSaveFile.Click += (sender, args) =>
 			{
 				var fileDialog = new FileDialog(FileDialogMode.SaveFile);
 				fileDialog.ShowModal(Desktop);
@@ -47,7 +47,7 @@ namespace Myra.Samples.AllWidgets
 			};
 
 			_buttonChooseFolder.Image = DefaultAssets.UISpritesheet["icon-star"];
-			_buttonChooseFolder.Up += (sender, args) =>
+			_buttonChooseFolder.Click += (sender, args) =>
 			{
 				var fileDialog = new FileDialog(FileDialogMode.ChooseFolder);
 				fileDialog.ShowModal(Desktop);
@@ -63,7 +63,7 @@ namespace Myra.Samples.AllWidgets
 				};
 			};
 
-			_buttonChooseColor.Up += (sender, args) =>
+			_buttonChooseColor.Click += (sender, args) =>
 			{
 				var debugWindow = new ColorPickerDialog();
 				debugWindow.ShowModal(Desktop);
@@ -80,7 +80,7 @@ namespace Myra.Samples.AllWidgets
 			};
 
 			_imageButton.Image = DefaultAssets.UISpritesheet["icon-star-outline"];
-			_imageButton.Up += (sender, args) =>
+			_imageButton.Click += (sender, args) =>
 			{
 				var debugWindow = new DebugOptionsDialog();
 				debugWindow.ShowModal(Desktop);

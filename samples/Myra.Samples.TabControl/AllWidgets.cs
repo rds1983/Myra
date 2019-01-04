@@ -14,25 +14,25 @@ namespace Myra.Samples.TabControl
 			_blueButton.Image = DefaultAssets.UISpritesheet["icon-star"];
 			_imageButton.Image = DefaultAssets.UISpritesheet["icon-star-outline"];
 
-			_button.Up += (sender, args) =>
+			_button.Click += (sender, args) =>
 			{
 				var debugWindow = new DebugOptionsDialog();
 				debugWindow.ShowModal(Desktop);
 			};
 
-			_blueButton.Up += (sender, args) =>
+			_blueButton.Click += (sender, args) =>
 			{
 				var debugWindow = new DebugOptionsDialog();
 				debugWindow.ShowModal(Desktop);
 			};
 
-			_textButton.Up += (sender, args) =>
+			_textButton.Click += (sender, args) =>
 			{
 				var debugWindow = new DebugOptionsDialog();
 				debugWindow.ShowModal(Desktop);
 			};
 
-			_imageButton.Up += (sender, args) =>
+			_imageButton.Click += (sender, args) =>
 			{
 				var debugWindow = new DebugOptionsDialog();
 				debugWindow.ShowModal(Desktop);

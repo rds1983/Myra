@@ -133,10 +133,6 @@ namespace Myra.Graphics2D.UI
 
 			InternalChild.Widgets.Add(_textBlock);
 
-			PaddingLeft = 5;
-			PaddingRight = 5;
-			PaddingBottom = 2;
-
 			if (style != null)
 			{
 				ApplyMenuItemStyle(style);
@@ -165,16 +161,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		protected override void FireDown()
+		public override void OnToggledChanged()
 		{
-			base.FireDown();
-			_textBlock.IsPressed = IsPressed;
-		}
-
-		protected override void FireUp()
-		{
-			base.FireUp();
-			_textBlock.IsPressed = IsPressed;
+			base.OnToggledChanged();
+			_textBlock.IsPressed = IsToggled;
 		}
 	}
 }

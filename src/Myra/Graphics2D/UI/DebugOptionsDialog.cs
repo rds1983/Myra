@@ -13,44 +13,28 @@ namespace Myra.Graphics2D.UI
 
 			BuildUI();
 
-			_checkBoxWidgetFrames.IsPressed = MyraEnvironment.DrawWidgetsFrames;
-			_checkBoxWidgetFrames.Down += (s, a) =>
+			_checkBoxWidgetFrames.IsToggled = MyraEnvironment.DrawWidgetsFrames;
+			_checkBoxWidgetFrames.ToggledChanged += (s, a) =>
 			{
-				MyraEnvironment.DrawWidgetsFrames = true;
-			};
-			_checkBoxWidgetFrames.Up += (s, a) =>
-			{
-				MyraEnvironment.DrawWidgetsFrames = false;
+				MyraEnvironment.DrawWidgetsFrames = _checkBoxWidgetFrames.IsToggled;
 			};
 
-			_checkBoxFocusedWidgetFrame.IsPressed = MyraEnvironment.DrawFocusedWidgetFrame;
-			_checkBoxFocusedWidgetFrame.Down += (s, a) =>
+			_checkBoxFocusedWidgetFrame.IsToggled = MyraEnvironment.DrawFocusedWidgetFrame;
+			_checkBoxFocusedWidgetFrame.ToggledChanged += (s, a) =>
 			{
-				MyraEnvironment.DrawFocusedWidgetFrame = true;
-			};
-			_checkBoxFocusedWidgetFrame.Up += (s, a) =>
-			{
-				MyraEnvironment.DrawFocusedWidgetFrame = false;
+				MyraEnvironment.DrawFocusedWidgetFrame = _checkBoxFocusedWidgetFrame.IsToggled;
 			};
 
-			_checkBoxGlyphFrames.IsPressed = MyraEnvironment.DrawTextGlyphsFrames;
-			_checkBoxGlyphFrames.Down += (s, a) =>
+			_checkBoxGlyphFrames.IsToggled = MyraEnvironment.DrawTextGlyphsFrames;
+			_checkBoxGlyphFrames.ToggledChanged += (s, a) =>
 			{
-				MyraEnvironment.DrawTextGlyphsFrames = true;
-			};
-			_checkBoxGlyphFrames.Up += (s, a) =>
-			{
-				MyraEnvironment.DrawTextGlyphsFrames = false;
+				MyraEnvironment.DrawTextGlyphsFrames = _checkBoxGlyphFrames.IsToggled;
 			};
 
-			_checkBoxDisableClipping.IsPressed = MyraEnvironment.DisableClipping;
-			_checkBoxDisableClipping.Down += (s, a) =>
+			_checkBoxDisableClipping.IsToggled = MyraEnvironment.DisableClipping;
+			_checkBoxDisableClipping.ToggledChanged += (s, a) =>
 			{
-				MyraEnvironment.DisableClipping = true;
-			};
-			_checkBoxDisableClipping.Up += (s, a) =>
-			{
-				MyraEnvironment.DisableClipping = false;
+				MyraEnvironment.DisableClipping = _checkBoxDisableClipping.IsToggled;
 			};
 		}
 
@@ -65,8 +49,17 @@ namespace Myra.Graphics2D.UI
 			optionsCheckBox.VerticalAlignment = VerticalAlignment.Top;
 			optionsCheckBox.GridPositionY = InternalChild.Widgets.Count;
 			optionsCheckBox.Visible = true;
-			optionsCheckBox.Down += (s, a) => onEnabled();
-			optionsCheckBox.Up += (s, a) => onDisabled();
+			optionsCheckBox.ToggledChanged += (s, a) =>
+			{
+				if (optionsCheckBox.IsToggled)
+				{
+					onEnabled();
+				}
+				else
+				{
+					onDisabled();
+				}
+			};
 			optionsCheckBox.GridPositionY = Root.RowsProportions.Count;
 
 			Root.RowsProportions.Add(new Proportion

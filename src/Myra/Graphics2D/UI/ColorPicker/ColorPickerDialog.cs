@@ -142,8 +142,10 @@ namespace Myra.Graphics2D.UI.ColorPicker
 				SetUserColor(i, UserColors[i]);
 			}
 
+			_gridUserColors.SelectionHoverBackground = DefaultAssets.UISpritesheet["button-over"];
+			_gridUserColors.SelectionBackground = DefaultAssets.UISpritesheet["button-down"];
 			_gridUserColors.SelectedIndexChanged += GridUserColorsSelectedIndexChanged;
-			_buttonSaveColor.Down += ButtonSaveColorDown;
+			_buttonSaveColor.Click += ButtonSaveColorDown;
 			UpdateEnabled();
 
 			// Subscriptions

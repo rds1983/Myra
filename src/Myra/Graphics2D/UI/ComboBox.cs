@@ -123,7 +123,7 @@ namespace Myra.Graphics2D.UI
 				var item = SelectedItem;
 				if (item != null && item.Widget != null)
 				{
-					((Button)item.Widget).IsPressed = false;
+					((Button)item.Widget).IsToggled = false;
 				}
 
 				SelectingIndex = value;
@@ -133,7 +133,7 @@ namespace Myra.Graphics2D.UI
 
 				if (item != null && item.Widget != null)
 				{
-					((Button)item.Widget).IsPressed = true;
+					((Button)item.Widget).IsToggled = true;
 				}
 
 				UpdateSelectedItem();
@@ -337,7 +337,7 @@ namespace Myra.Graphics2D.UI
 			item.Widget = button;
 
 			button.MouseEntered += ItemOnMouseEntered;
-			button.Down += ItemOnDown;
+			button.Click += ItemOnClick;
 
 			button.HorizontalAlignment = HorizontalAlignment.Stretch;
 			button.VerticalAlignment = VerticalAlignment.Stretch;
@@ -373,13 +373,13 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void ItemOnMouseEntered(object sender, GenericEventArgs<Point> genericEventArgs)
+		private void ItemOnMouseEntered(object sender, EventArgs args)
 		{
 			var widget = (Widget)sender;
 			SelectingItem = (ListItem)widget.Tag;
 		}
 
-		private void ItemOnDown(object sender, EventArgs eventArgs)
+		private void ItemOnClick(object sender, EventArgs eventArgs)
 		{
 			var widget = (Button)sender;
 			SelectedItem = (ListItem)widget.Tag;
@@ -401,9 +401,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		protected override void FireDown()
+		public override void OnTouchDown()
 		{
-			base.FireDown();
+			base.OnTouchDown();
 
 			if (_itemsContainer.Widgets.Count == 0)
 			{

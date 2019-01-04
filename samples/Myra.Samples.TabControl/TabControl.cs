@@ -23,15 +23,15 @@ namespace Myra.Samples.TabControl
 			_buttons.Add(_buttonGrid);
 			_buttons.Add(_buttonNotepad);
 
-			_buttonAllWidgets.MouseDown += ButtonAllWidgetsOnMouseDown;
-			_buttonGrid.MouseDown += ButtonGridOnMouseDown;
-			_buttonNotepad.MouseDown += ButtonNotepadOnMouseDown;
+			_buttonAllWidgets.Click += ButtonAllWidgetsOnMouseDown;
+			_buttonGrid.Click += ButtonGridOnMouseDown;
+			_buttonNotepad.Click += ButtonNotepadOnMouseDown;
 
 			// Initially 'AllWidgets' tab is selected
-			_buttonAllWidgets.Press();
+			_buttonAllWidgets.DoClick();
 		}
 
-		private void ButtonNotepadOnMouseDown(object sender, GenericEventArgs<MouseButtons> genericEventArgs)
+		private void ButtonNotepadOnMouseDown(object sender, EventArgs genericEventArgs)
 		{
 			if (Notepad == null)
 			{
@@ -44,7 +44,7 @@ namespace Myra.Samples.TabControl
 			SetIsPressed(_buttonNotepad);
 		}
 
-		private void ButtonGridOnMouseDown(object sender, GenericEventArgs<MouseButtons> genericEventArgs)
+		private void ButtonGridOnMouseDown(object sender, EventArgs genericEventArgs)
 		{
 			if (GridTabPage == null)
 			{
@@ -57,7 +57,7 @@ namespace Myra.Samples.TabControl
 			SetIsPressed(_buttonGrid);
 		}
 
-		private void ButtonAllWidgetsOnMouseDown(object sender, GenericEventArgs<MouseButtons> genericEventArgs)
+		private void ButtonAllWidgetsOnMouseDown(object sender, EventArgs genericEventArgs)
 		{
 			if (AllWidgets == null)
 			{
@@ -72,7 +72,7 @@ namespace Myra.Samples.TabControl
 
 		private void SetIsPressed(TextButton exception)
 		{
-			exception.IsPressed = true;
+			exception.IsToggled = true;
 
 			foreach (var b in _buttons)
 			{
@@ -81,7 +81,7 @@ namespace Myra.Samples.TabControl
 					continue;
 				}
 
-				b.IsPressed = false;
+				b.IsToggled = false;
 			}
 		}
 	}

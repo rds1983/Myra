@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
@@ -10,7 +9,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class ButtonBase<T> : SingleItemContainer<T> where T : Widget
 	{
-		private bool _isPressed;
+		private bool _isPressed = false, _isToggled = false;
 
 		[EditCategory("Appearance")]
 		[DefaultValue(HorizontalAlignment.Center)]
@@ -43,6 +42,26 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
+		public bool IsToggled
+		{
+			get
+			{
+				return _isToggled;
+			}
+
+			set
+			{
+				if (value == _isToggled)
+				{
+					return;
+				}
+
+				_isToggled = value;
+
+				OnToggledChanged();
+			}
+		}
+
 		public bool IsPressed
 		{
 			get
@@ -59,73 +78,129 @@ namespace Myra.Graphics2D.UI
 
 				_isPressed = value;
 
-				if (value)
+				OnPressedChanged();
+			}
+		}
+
+		internal bool ReleaseOnMouseLeft
+		{
+			get; set;
+		}
+
+		protected bool ShowAsPressed
+		{
+			get
+			{
+				return IsToggled || IsPressed;
+			}
+		}
+
+		public override Desktop Desktop
+		{
+			get
+			{
+				return base.Desktop;
+			}
+			set
+			{
+				// If we're not releasing the button on mouse left,
+				// we have to do it on touch up
+				if (!ReleaseOnMouseLeft && Desktop != null)
 				{
-					FireDown();
+					Desktop.TouchUp -= DesktopTouchUp;
 				}
-				else
+
+				base.Desktop = value;
+
+				if (!ReleaseOnMouseLeft && Desktop != null)
 				{
-					FireUp();
+					Desktop.TouchUp += DesktopTouchUp;
 				}
 			}
 		}
 
-		public event EventHandler Down;
-		public event EventHandler Up;
+		public event EventHandler Click;
+		public event EventHandler PressedChanged;
+		public event EventHandler ToggledChanged;
 
 		public ButtonBase()
 		{
 			Toggleable = false;
+			ReleaseOnMouseLeft = true;
 		}
 
-		public void Press()
+		public void DoClick()
 		{
-			OnMouseDown(MouseButtons.Left);
-			OnMouseUp(MouseButtons.Left);
+			OnTouchDown();
+			OnTouchUp();
 		}
 
-		private void HandleTouchUp(bool fire)
+		public virtual void OnToggledChanged()
 		{
-			if (IgnoreMouseButton)
+			var ev = ToggledChanged;
+			if (ev != null)
 			{
-				return;
+				ev(this, EventArgs.Empty);
 			}
+		}
 
-			if (!Toggleable)
+		public virtual void OnPressedChanged()
+		{
+			var ev = PressedChanged;
+			if (ev != null)
+			{
+				ev(this, EventArgs.Empty);
+			}
+		}
+
+		public override void OnMouseLeft()
+		{
+			base.OnMouseLeft();
+
+			if (ReleaseOnMouseLeft)
 			{
 				IsPressed = false;
 			}
 		}
 
-		private void HandleTouchDown(bool fire)
+		public override void OnTouchUp()
 		{
+			base.OnTouchUp();
+
 			if (!Enabled || IgnoreMouseButton)
 			{
 				return;
 			}
 
-			if (!Toggleable)
+			var OldPressed = IsPressed;
+
+			IsPressed = false;
+
+			if (OldPressed == true && !IsPressed)
 			{
-				IsPressed = true;
-			}
-			else
-			{
-				IsPressed = !IsPressed;
+				if (Toggleable)
+				{
+					IsToggled = !IsToggled;
+				}
+
+				var ev = Click;
+				if (ev != null)
+				{
+					ev(this, EventArgs.Empty);
+				}
 			}
 		}
 
-		public override void OnMouseUp(MouseButtons mb)
+		public override void OnTouchDown()
 		{
-			base.OnMouseUp(mb);
+			base.OnTouchDown();
 
-			HandleTouchUp(true);
-		}
+			if (!Enabled || IgnoreMouseButton)
+			{
+				return;
+			}
 
-		public override void OnMouseDown(MouseButtons mb)
-		{
-			base.OnMouseDown(mb);
-
-			HandleTouchDown(true);
+			IsPressed = true;
 		}
 
 		public override void OnKeyDown(Keys k)
@@ -137,46 +212,26 @@ namespace Myra.Graphics2D.UI
 				if (!Toggleable)
 				{
 					// Emulate click
-					IsPressed = true;
-					IsPressed = false;
+					DoClick();
 				}
 				else
 				{
-					IsPressed = !IsPressed;
+					IsToggled = !IsToggled;
 				}
-			}
-		}
-
-		protected virtual void FireUp()
-		{
-			var ev = Up;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
-		}
-
-		protected virtual void FireDown()
-		{
-			var ev = Down;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
 			}
 		}
 
 		public override IRenderable GetCurrentBackground()
 		{
-			var isOver = IsMouseOver;
 			var result = Background;
 
 			if (Enabled)
 			{
-				if (IsPressed && PressedBackground != null)
+				if (ShowAsPressed && PressedBackground != null)
 				{
 					result = PressedBackground;
 				}
-				else if (isOver && OverBackground != null)
+				else if (IsMouseOver && OverBackground != null)
 				{
 					result = OverBackground;
 				}
@@ -197,6 +252,11 @@ namespace Myra.Graphics2D.UI
 			ApplyWidgetStyle(style);
 
 			PressedBackground = style.PressedBackground;
+		}
+
+		private void DesktopTouchUp(object sender, EventArgs args)
+		{
+			IsPressed = false;
 		}
 	}
 }

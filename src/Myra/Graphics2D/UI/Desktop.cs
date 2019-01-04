@@ -27,6 +27,10 @@ namespace Myra.Graphics2D.UI
 		private readonly List<Widget> _focusableWidgets = new List<Widget>();
 		private DateTime _lastTouch;
 
+		internal Point OldMousePosition
+		{
+			get; private set;
+		}
 		public Point MousePosition { get; private set; }
 		public int MouseWheel { get; private set; }
 		public MouseState MouseState { get; private set; }
@@ -143,10 +147,13 @@ namespace Myra.Graphics2D.UI
 		public Func<MouseState> MouseStateGetter { get; set; }
 		public Func<KeyboardState> KeyboardStateGetter { get; set; }
 
-		public event EventHandler<GenericEventArgs<Point>> MouseMoved;
+		public event EventHandler MouseMoved;
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseDown;
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseUp;
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseDoubleClick;
+
+		public event EventHandler TouchDown;
+		public event EventHandler TouchUp;
 
 		public event EventHandler<GenericEventArgs<float>> MouseWheelChanged;
 
@@ -396,6 +403,14 @@ namespace Myra.Graphics2D.UI
 				InputOnMouseDown();
 				ReversedWidgetsCopy.HandleMouseDown(buttons);
 
+				var td = TouchDown;
+				if (td != null)
+				{
+					td(this, EventArgs.Empty);
+				}
+
+				ReversedWidgetsCopy.HandleTouchDown();
+
 				if ((DateTime.Now - _lastTouch).TotalMilliseconds < DoubleClickIntervalInMs)
 				{
 					// Double click
@@ -425,6 +440,14 @@ namespace Myra.Graphics2D.UI
 				}
 
 				ReversedWidgetsCopy.HandleMouseUp(buttons);
+
+				var tu = TouchUp;
+				if (tu != null)
+				{
+					tu(this, EventArgs.Empty);
+				}
+
+				ReversedWidgetsCopy.HandleTouchUp();
 			}
 		}
 
@@ -433,6 +456,7 @@ namespace Myra.Graphics2D.UI
 			if (MouseStateGetter != null)
 			{
 				var lastState = MouseState;
+				OldMousePosition = new Point(lastState.X, lastState.Y);
 
 				MouseState = MouseStateGetter();
 				MousePosition = new Point(MouseState.X, MouseState.Y);
@@ -454,10 +478,10 @@ namespace Myra.Graphics2D.UI
 					var ev = MouseMoved;
 					if (ev != null)
 					{
-						ev(this, new GenericEventArgs<Point>(MousePosition));
+						ev(this, EventArgs.Empty);
 					}
 
-					ReversedWidgetsCopy.HandleMouseMovement(MousePosition);
+					ReversedWidgetsCopy.HandleMouseMovement();
 				}
 
 				HandleButton(MouseState.LeftButton, lastState.LeftButton, MouseButtons.Left);

@@ -35,7 +35,7 @@ namespace Myra.Graphics2D.UI
 				Text = "Ok"
 			};
 
-			ButtonOk.Up += (sender, args) =>
+			ButtonOk.Click += (sender, args) =>
 			{
 				if (!CanCloseByOk())
 				{
@@ -55,7 +55,7 @@ namespace Myra.Graphics2D.UI
 				GridPositionX = 1
 			};
 
-			ButtonCancel.Up += (sender, args) =>
+			ButtonCancel.Click += (sender, args) =>
 			{
 				Result = false;
 				ModalResult = (int)DefaultModalResult.Cancel;
@@ -82,10 +82,10 @@ namespace Myra.Graphics2D.UI
 			switch (k)
 			{
 				case Keys.Escape:
-					ButtonCancel.Press();
+					ButtonCancel.DoClick();
 					break;
 				case Keys.Enter:
-					ButtonOk.Press();
+					ButtonOk.DoClick();
 					break;
 			}
 		}

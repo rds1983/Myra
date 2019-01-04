@@ -15,15 +15,24 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public abstract Orientation Orientation { get; }
+		public abstract Orientation Orientation
+		{
+			get;
+		}
 
 		[EditCategory("Behavior")]
 		[DefaultValue(0.0f)]
-		public float Minimum { get; set; }
+		public float Minimum
+		{
+			get; set;
+		}
 
 		[EditCategory("Behavior")]
 		[DefaultValue(100.0f)]
-		public float Maximum { get; set; }
+		public float Maximum
+		{
+			get; set;
+		}
 
 		[EditCategory("Behavior")]
 		[DefaultValue(0.0f)]
@@ -67,7 +76,10 @@ namespace Myra.Graphics2D.UI
 
 		private int Hint
 		{
-			get { return Orientation == Orientation.Horizontal ? InternalChild.Left : InternalChild.Top; }
+			get
+			{
+				return Orientation == Orientation.Horizontal ? InternalChild.Left : InternalChild.Top;
+			}
 
 			set
 			{
@@ -131,9 +143,11 @@ namespace Myra.Graphics2D.UI
 
 		protected Slider(SliderStyle sliderStyle)
 		{
-			InternalChild = new ImageButton((ImageButtonStyle)null);
-			InternalChild.Down += WidgetOnDown;
-			InternalChild.Up += WidgetOnUp;
+			InternalChild = new ImageButton((ImageButtonStyle)null)
+			{
+				ReleaseOnMouseLeft = false
+			};
+			InternalChild.PressedChanged += WidgetOnPressedChanged;
 			if (sliderStyle != null)
 			{
 				ApplySliderStyle(sliderStyle);
@@ -142,14 +156,16 @@ namespace Myra.Graphics2D.UI
 			Maximum = 100;
 		}
 
-		private void WidgetOnUp(object sender, EventArgs eventArgs)
+		private void WidgetOnPressedChanged(object sender, EventArgs eventArgs)
 		{
-			_mousePos = null;
-		}
-
-		private void WidgetOnDown(object sender, EventArgs eventArgs)
-		{
-			_mousePos = GetMousePos();
+			if (!InternalChild.IsPressed)
+			{
+				_mousePos = null;
+			}
+			else
+			{
+				_mousePos = GetMousePos();
+			}
 		}
 
 		private int GetMousePos()
@@ -176,7 +192,7 @@ namespace Myra.Graphics2D.UI
 			SyncHintWithValue();
 		}
 
-		private void DesktopMouseMoved(object sender, GenericEventArgs<Point> e)
+		private void DesktopMouseMoved(object sender, EventArgs args)
 		{
 			if (_mousePos == null)
 			{

@@ -69,7 +69,7 @@ namespace Myra.Graphics2D.UI.Properties
 			buttonsGrid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
 
 			var buttonNew = new Button { Text = "New" };
-			buttonNew.Up += ButtonNewOnUp;
+			buttonNew.Click += ButtonNewOnUp;
 			buttonsGrid.Widgets.Add(buttonNew);
 
 			_buttonDelete = new Button
@@ -77,7 +77,7 @@ namespace Myra.Graphics2D.UI.Properties
 				Text = "Delete",
 				GridPositionX = 1
 			};
-			_buttonDelete.Up += ButtonDeleteOnUp;
+			_buttonDelete.Click += ButtonDeleteOnUp;
 			buttonsGrid.Widgets.Add(_buttonDelete);
 
 			_buttonMoveUp = new Button
@@ -85,7 +85,7 @@ namespace Myra.Graphics2D.UI.Properties
 				Text = "Up",
 				GridPositionX = 2
 			};
-			_buttonMoveUp.Up += ButtonMoveUpOnUp;
+			_buttonMoveUp.Click += ButtonMoveUpOnUp;
 			buttonsGrid.Widgets.Add(_buttonMoveUp);
 
 			_buttonMoveDown = new Button
@@ -93,7 +93,7 @@ namespace Myra.Graphics2D.UI.Properties
 				Text = "Down",
 				GridPositionX = 3
 			};
-			_buttonMoveDown.Up += ButtonMoveDownOnUp;
+			_buttonMoveDown.Click += ButtonMoveDownOnUp;
 			buttonsGrid.Widgets.Add(_buttonMoveDown);
 
 			InternalChild.Widgets.Add(buttonsGrid);

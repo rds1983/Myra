@@ -48,7 +48,7 @@ namespace Myra.Graphics2D.UI
 					continue;
 				}
 
-				if (w.IsTouchDown)
+				if (w.IsMouseOver)
 				{
 					w.OnMouseUp(buttons);
 					break;
@@ -56,9 +56,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public static void HandleMouseMovement(this IEnumerable<Widget> widgets, Point mousePosition)
+		public static void HandleMouseMovement(this IEnumerable<Widget> widgets)
 		{
-			var movedHandled = false;
 			foreach (var w in widgets)
 			{
 				if (!w.Visible)
@@ -66,24 +65,56 @@ namespace Myra.Graphics2D.UI
 					continue;
 				}
 
-				if (!movedHandled && w.Bounds.Contains(mousePosition))
+				if (w.IsMouseOver)
 				{
-					if (w.IsMouseOver)
+					if (w.WasMouseOver)
 					{
 						// Already inside
-						w.OnMouseMoved(mousePosition);
+						w.OnMouseMoved();
 					}
 					else
 					{
-						w.OnMouseEntered(mousePosition);
+						w.OnMouseEntered();
 					}
-
-					movedHandled = true;
 				}
-				else if (w.IsMouseOver)
+				else if (w.WasMouseOver)
 				{
 					// Left
 					w.OnMouseLeft();
+				}
+			}
+		}
+
+		public static void HandleTouchDown(this IEnumerable<Widget> widgets)
+		{
+			foreach (var w in widgets)
+			{
+				if (!w.Visible)
+				{
+					continue;
+				}
+
+				if (w.IsMouseOver)
+				{
+					w.OnTouchDown();
+					break;
+				}
+			}
+		}
+
+		public static void HandleTouchUp(this IEnumerable<Widget> widgets)
+		{
+			foreach (var w in widgets)
+			{
+				if (!w.Visible)
+				{
+					continue;
+				}
+
+				if (w.IsMouseOver)
+				{
+					w.OnTouchUp();
+					break;
 				}
 			}
 		}
