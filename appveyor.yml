@@ -18,7 +18,7 @@ artifacts:
   - path: src/Myra/bin/FNA/Release/Myra.FNA.$(appveyor_build_version).nupkg
     name: Myra.FNA.nupkg
     
-  - path: Source/Myra.$(appveyor_build_version).zip
+  - path: Myra.$(appveyor_build_version).zip
     name: ZipPackage    
 deploy:
   - provider: GitHub
