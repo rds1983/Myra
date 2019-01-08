@@ -83,6 +83,8 @@ namespace Myra.Graphics2D.UI
 				{
 					_layoutState = LayoutState.LocationInvalid;
 				}
+
+				FireLocationChanged();
 			}
 		}
 
@@ -119,6 +121,8 @@ namespace Myra.Graphics2D.UI
 				{
 					_layoutState = LayoutState.LocationInvalid;
 				}
+
+				FireLocationChanged();
 			}
 		}
 
@@ -151,6 +155,7 @@ namespace Myra.Graphics2D.UI
 
 				_width = value;
 				InvalidateMeasure();
+				FireSizeChanged();
 			}
 		}
 
@@ -183,6 +188,7 @@ namespace Myra.Graphics2D.UI
 
 				_height = value;
 				InvalidateMeasure();
+				FireSizeChanged();
 			}
 		}
 
@@ -679,6 +685,10 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler MeasureChanged;
 		public event EventHandler EnabledChanged;
 
+		public event EventHandler LocationChanged;
+		public event EventHandler SizeChanged;
+		public event EventHandler LayoutUpdated;
+
 		public event EventHandler MouseLeft;
 		public event EventHandler MouseEntered;
 		public event EventHandler MouseMoved;
@@ -943,6 +953,12 @@ namespace Myra.Graphics2D.UI
 
 			_lastLocationHint = new Point(Left, Top);
 			_layoutState = LayoutState.Normal;
+
+			var ev = LayoutUpdated;
+			if (ev != null)
+			{
+				ev(this, EventArgs.Empty);
+			}
 		}
 
 		private Widget FindWidgetBy(Func<Widget, bool> finder)
@@ -1217,6 +1233,24 @@ namespace Myra.Graphics2D.UI
 			}
 
 			Desktop.Widgets.Remove(this);
+		}
+
+		private void FireLocationChanged()
+		{
+			var ev = LocationChanged;
+			if (ev != null)
+			{
+				ev(this, EventArgs.Empty);
+			}
+		}
+
+		private void FireSizeChanged()
+		{
+			var ev = SizeChanged;
+			if (ev != null)
+			{
+				ev(this, EventArgs.Empty);
+			}
 		}
 	}
 }
