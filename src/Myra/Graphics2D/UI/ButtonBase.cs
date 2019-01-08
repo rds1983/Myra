@@ -91,6 +91,14 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		protected virtual bool CanChangePressedOnTouchUp
+		{
+			get
+			{
+				return true;
+			}
+		}
+
 		public event EventHandler Click;
 		public event EventHandler PressedChanged;
 
@@ -134,11 +142,16 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var OldPressed = IsPressed;
-
-			if (!Toggleable)
+			if (CanChangePressedOnTouchUp)
 			{
-				IsPressed = false;
+				if (!Toggleable)
+				{
+					IsPressed = false;
+				}
+				else
+				{
+					IsPressed = !IsPressed;
+				}
 			}
 
 			var ev = Click;
@@ -160,10 +173,6 @@ namespace Myra.Graphics2D.UI
 			if (!Toggleable)
 			{
 				IsPressed = true;
-			}
-			else
-			{
-				IsPressed = !IsPressed;
 			}
 		}
 

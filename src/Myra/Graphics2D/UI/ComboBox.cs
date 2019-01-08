@@ -326,11 +326,10 @@ namespace Myra.Graphics2D.UI
 		{
 			item.Changed += ItemOnChanged;
 
-			var button = new Button(_dropDownItemStyle)
+			var button = new ListButton(_dropDownItemStyle)
 			{
 				Text = item.Text,
 				TextColor = item.Color ?? _dropDownItemStyle.LabelStyle.TextColor,
-				Toggleable = true,
 				Tag = item
 			};
 
@@ -394,6 +393,7 @@ namespace Myra.Graphics2D.UI
 			{
 				Text = item.Text;
 				TextColor = item.Color ?? _dropDownItemStyle.LabelStyle.TextColor;
+				((Button)item.Widget).IsPressed = true;
 			}
 			else
 			{

@@ -7,7 +7,7 @@ using System;
 
 namespace Myra.Graphics2D.UI
 {
-	public class MenuItemButton : ButtonBase<Grid>
+	internal class MenuItemButton : ButtonBase<Grid>
 	{
 		private readonly Grid.Proportion _imageProportion;
 		private readonly Grid.Proportion _shortcutProportion;

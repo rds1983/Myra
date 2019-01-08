@@ -13,7 +13,7 @@ namespace Myra.Graphics2D.UI
 
 		[JsonIgnore]
 		[HiddenInEditor]
-		protected abstract IEnumerable<Widget> Children { get; }
+		public abstract IEnumerable<Widget> Children { get; }
 
 		internal List<Widget> ChildrenCopy
 		{

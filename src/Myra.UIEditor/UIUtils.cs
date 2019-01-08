@@ -10,7 +10,7 @@ namespace Myra.UIEditor
 			IEnumerable<Widget> widgets = null;
 			if (w is Window)
 			{
-				widgets = new Widget[] { ((Window)w).Content };
+				widgets = ((Container)w).Children;
 			}
 			else if (w is SplitPane)
 			{

@@ -177,7 +177,7 @@ namespace Myra.Graphics2D.UI
 
 			if (!item.IsSeparator)
 			{
-				widget = new Button(ListBoxStyle.ListItemStyle)
+				widget = new ListButton(ListBoxStyle.ListItemStyle)
 				{
 					Text = item.Text,
 					TextColor = item.Color ?? ListBoxStyle.ListItemStyle.LabelStyle.TextColor,
@@ -185,8 +185,7 @@ namespace Myra.Graphics2D.UI
 					HorizontalAlignment = HorizontalAlignment.Stretch,
 					VerticalAlignment = VerticalAlignment.Stretch,
 					Image = item.Image,
-					ImageTextSpacing = item.ImageTextSpacing,
-					Toggleable = true
+					ImageTextSpacing = item.ImageTextSpacing
 				};
 
 				((Button)widget).Click += ButtonOnClick;

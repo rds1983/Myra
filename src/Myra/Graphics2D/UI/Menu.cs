@@ -29,7 +29,7 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public MenuItemButton OpenMenuItem { get; private set; }
+		internal MenuItemButton OpenMenuItem { get; private set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]

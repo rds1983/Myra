@@ -51,7 +51,7 @@ namespace Myra.Graphics2D.UI
 			InvalidateMeasure();
 		}
 
-		protected override IEnumerable<Widget> Children
+		public override IEnumerable<Widget> Children
 		{
 			get
 			{

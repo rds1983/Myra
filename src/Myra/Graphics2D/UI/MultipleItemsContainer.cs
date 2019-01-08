@@ -11,7 +11,7 @@ namespace Myra.Graphics2D.UI
 	{
 		protected readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
 
-		protected override IEnumerable<Widget> Children
+		public override IEnumerable<Widget> Children
 		{
 			get
 			{
