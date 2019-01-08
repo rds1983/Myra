@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 
 namespace Myra.UIEditor
 {
@@ -19,6 +20,7 @@ namespace Myra.UIEditor
 			}
 			catch (Exception ex)
 			{
+				MessageBox.Show(ex.ToString());
 				Console.WriteLine(ex.ToString());
 			}
 		}

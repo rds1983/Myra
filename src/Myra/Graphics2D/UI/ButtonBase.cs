@@ -62,6 +62,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public bool IsPressed
 		{
 			get

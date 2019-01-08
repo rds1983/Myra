@@ -560,10 +560,14 @@ namespace Myra.UIEditor
 
 		private void SetStylesheet(Stylesheet stylesheet)
 		{
-			IterateWidget(Project.Root, w => w.ApplyStylesheet(stylesheet));
+			if (Project.Root != null)
+			{
+				IterateWidget(Project.Root, w => w.ApplyStylesheet(stylesheet));
+			}
+
 			Project.Stylesheet = stylesheet;
 
-			if (stylesheet.DesktopStyle != null)
+			if (stylesheet != null && stylesheet.DesktopStyle != null)
 			{
 				_ui._projectHolder.Background = stylesheet.DesktopStyle.Background;
 			}
@@ -955,6 +959,7 @@ namespace Myra.UIEditor
 
 			FilePath = string.Empty;
 			IsDirty = false;
+			_ui._projectHolder.Background = null;
 		}
 
 		private void ProcessSave(string filePath)

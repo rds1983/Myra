@@ -9,21 +9,19 @@ namespace Myra.Graphics2D.UI
 {
 	public class TextButton : ButtonBase<TextBlock>
 	{
-		private readonly TextBlock _textBlock;
-
 		[EditCategory("Appearance")]
 		public string Text
 		{
-			get { return _textBlock.Text; }
-			set { _textBlock.Text = value; }
+			get { return InternalChild.Text; }
+			set { InternalChild.Text = value; }
 		}
 
 		[EditCategory("Appearance")]
 		[StylePropertyPath("LabelStyle.TextColor")]
 		public Color TextColor
 		{
-			get { return _textBlock.TextColor; }
-			set { _textBlock.TextColor = value; }
+			get { return InternalChild.TextColor; }
+			set { InternalChild.TextColor = value; }
 		}
 
 		[JsonIgnore]
@@ -31,20 +29,18 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Appearance")]
 		public SpriteFont Font
 		{
-			get { return _textBlock.Font; }
-			set { _textBlock.Font = value; }
+			get { return InternalChild.Font; }
+			set { InternalChild.Font = value; }
 		}
 
 		public TextButton(TextButtonStyle style)
 		{
-			_textBlock = new TextBlock
+			InternalChild = new TextBlock
 			{
 				VerticalAlignment = VerticalAlignment.Center,
 				HorizontalAlignment = HorizontalAlignment.Center,
 				Wrap = true
 			};
-
-			InternalChild = _textBlock;
 
 			if (style != null)
 			{
@@ -68,7 +64,7 @@ namespace Myra.Graphics2D.UI
 
 			if (style.LabelStyle != null)
 			{
-				_textBlock.ApplyTextBlockStyle(style.LabelStyle);
+				InternalChild.ApplyTextBlockStyle(style.LabelStyle);
 			}
 		}
 
