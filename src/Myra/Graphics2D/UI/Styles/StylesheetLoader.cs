@@ -19,6 +19,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string ScrollAreaName = "scrollArea";
 		public const string ButtonName = "button";
 		public const string CheckBoxName = "checkBox";
+		public const string RadioButtonName = "radioButton";
 		public const string ImageButtonName = "imageButton";
 		public const string SpinButtonName = "spinButton";
 		public const string TextButtonName = "textButton";
@@ -41,8 +42,6 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string HeightName = "height";
 		public const string TopName = "top";
 		public const string BottomName = "bottom";
-		public const string WidthHintName = "widthHint";
-		public const string HeightHintName = "heightHint";
 		public const string BackgroundName = "background";
 		public const string OverBackgroundName = "overBackground";
 		public const string DisabledBackgroundName = "disabledBackground";
@@ -236,14 +235,14 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 
 			int i;
-			if (source.GetStyle(WidthHintName, out i))
+			if (source.GetStyle(WidthName, out i))
 			{
-				result.WidthHint = i;
+				result.Width = i;
 			}
 
-			if (source.GetStyle(HeightHintName, out i))
+			if (source.GetStyle(HeightName, out i))
 			{
-				result.HeightHint = i;
+				result.Height = i;
 			}
 
 			string name;
@@ -462,6 +461,12 @@ namespace Myra.Graphics2D.UI.Styles
 			if (source.GetStyle(ImageStyleName, out labelStyle))
 			{
 				LoadPressableImageStyleFromSource(labelStyle, result.ImageStyle);
+			}
+
+			int spacing;
+			if (source.GetStyle(SpacingName, out spacing))
+			{
+				result.ImageTextSpacing = spacing;
 			}
 		}
 
@@ -736,6 +741,7 @@ namespace Myra.Graphics2D.UI.Styles
 			FillStyles(ScrollAreaName, result.ScrollPaneStyles, LoadScrollAreaStyleFromSource);
 			FillStyles(ButtonName, result.ButtonStyles, LoadButtonStyleFromSource);
 			FillStyles(CheckBoxName, result.CheckBoxStyles, LoadButtonStyleFromSource);
+			FillStyles(RadioButtonName, result.RadioButtonStyles, LoadButtonStyleFromSource);
 			FillStyles(ImageButtonName, result.ImageButtonStyles, LoadImageButtonStyleFromSource);
 			FillStyles(SpinButtonName, result.SpinButtonStyles, LoadSpinButtonStyleFromSource);
 			FillStyles(TextButtonName, result.TextButtonStyles, LoadTextButtonStyleFromSource);

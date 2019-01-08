@@ -236,7 +236,7 @@ namespace Myra.Graphics2D.UI
 
 				if (menuItemButton.Toggleable)
 				{
-					menuItemButton.ToggledChanged += ButtonOnToggledChanged;
+					menuItemButton.PressedChanged += ButtonOnPressedChanged;
 				}
 				else
 				{
@@ -285,7 +285,7 @@ namespace Myra.Graphics2D.UI
 			var asMenuItemButton = widget as MenuItemButton;
 			if (asMenuItemButton != null)
 			{
-				asMenuItemButton.ToggledChanged -= ButtonOnToggledChanged;
+				asMenuItemButton.PressedChanged -= ButtonOnPressedChanged;
 				asMenuItemButton.Click -= ButtonOnClick;
 				asMenuItemButton.MouseEntered -= MouseOnEntered;
 				asMenuItemButton.MouseLeft -= MouseOnLeft;
@@ -314,7 +314,7 @@ namespace Myra.Graphics2D.UI
 		{
 			if (OpenMenuItem != null)
 			{
-				OpenMenuItem.IsToggled = false;
+				OpenMenuItem.IsPressed = false;
 			}
 
 			if (menuItem == null || !menuItem.CanOpen)
@@ -341,7 +341,7 @@ namespace Myra.Graphics2D.UI
 		{
 			if (OpenMenuItem == null) return;
 
-			OpenMenuItem.IsToggled = false;
+			OpenMenuItem.IsPressed = false;
 			OpenMenuItem = null;
 		}
 
@@ -355,7 +355,7 @@ namespace Myra.Graphics2D.UI
 			var menuItemButton = (MenuItemButton)sender;
 			if (menuItemButton.CanOpen && OpenMenuItem != menuItemButton)
 			{
-				menuItemButton.IsToggled = true;
+				menuItemButton.IsPressed = true;
 			}
 		}
 
@@ -363,7 +363,7 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
-		private void ButtonOnToggledChanged(object sender, EventArgs eventArgs)
+		private void ButtonOnPressedChanged(object sender, EventArgs eventArgs)
 		{
 			if (Desktop == null)
 			{
@@ -372,7 +372,7 @@ namespace Myra.Graphics2D.UI
 
 			var menuItemButton = (MenuItemButton)sender;
 
-			if (menuItemButton.IsToggled)
+			if (menuItemButton.IsPressed)
 			{
 				if (menuItemButton.CanOpen)
 				{
@@ -416,7 +416,7 @@ namespace Myra.Graphics2D.UI
 			}
 			else
 			{
-				menuItemButton.IsToggled = true;
+				menuItemButton.IsPressed = true;
 			}
 		}
 
@@ -537,7 +537,7 @@ namespace Myra.Graphics2D.UI
 				menuItemButton = InternalChild.Widgets[oldIndex] as MenuItemButton;
 				if (menuItemButton != null)
 				{
-					menuItemButton.IsToggled = false;
+					menuItemButton.IsPressed = false;
 				}
 			}
 
@@ -546,7 +546,7 @@ namespace Myra.Graphics2D.UI
 			{
 				if (menuItemButton.CanOpen)
 				{
-					menuItemButton.IsToggled = true;
+					menuItemButton.IsPressed = true;
 				}
 			}
 		}

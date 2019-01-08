@@ -2,8 +2,18 @@
 {
 	public class ButtonStyle : ButtonBaseStyle
 	{
-		public TextBlockStyle LabelStyle { get; set; }
-		public PressableImageStyle ImageStyle { get; set; }
+		public TextBlockStyle LabelStyle
+		{
+			get; set;
+		}
+		public PressableImageStyle ImageStyle
+		{
+			get; set;
+		}
+		public int ImageTextSpacing
+		{
+			get; set;
+		}
 
 		public ButtonStyle()
 		{

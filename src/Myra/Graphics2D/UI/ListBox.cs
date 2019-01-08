@@ -65,14 +65,14 @@ namespace Myra.Graphics2D.UI
 
 				if (_selectedItem != null)
 				{
-					((Button)_selectedItem.Widget).IsToggled = false;
+					((Button)_selectedItem.Widget).IsPressed = false;
 				}
 
 				_selectedItem = value;
 
 				if (_selectedItem != null)
 				{
-					((Button)_selectedItem.Widget).IsToggled = true;
+					((Button)_selectedItem.Widget).IsPressed = true;
 					_selectedItem.FireSelected();
 				}
 

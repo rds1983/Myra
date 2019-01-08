@@ -80,14 +80,24 @@
 			"pressedImage": "vis-check-tick"
 		}
 	},
+	"radioButton": {
+		"label": {
+			"font": "default-font",
+			"textColor": "white"
+		},
+		"image": {
+			"image": "vis-radio-tick-disabled",
+			"pressedImage": "vis-radio-tick"
+		}
+	},
 	"spinButton": {
 		"background": "textfield",
 		"upButton": {
 			"background": "button",
 			"pressedBackground": "button-down",
 			"overBackground": "button-over",
-			"widthHint": 12,
-			"heightHint": 12,
+			"width": 12,
+			"height": 12,
 			"image": {
 				"image": "select-up"
 			}
@@ -96,8 +106,8 @@
 			"background": "button",
 			"pressedBackground": "button-down",
 			"overBackground": "button-over",
-			"widthHint": 12,
-			"heightHint": 12,
+			"width": 12,
+			"height": 12,
 			"image": {
 				"image": "select-down"
 			}

@@ -239,6 +239,10 @@ namespace Myra.UIEditor
 			{
 				AddStandardControl<CheckBox>();
 			};
+			_ui._menuControlsAddRadioButton.Selected += (s, a) =>
+			{
+				AddStandardControl<RadioButton>();
+			};
 			_ui._menuControlsAddImageButton.Selected += (s, a) =>
 			{
 				AddStandardControl<ImageButton>();
@@ -790,6 +794,10 @@ namespace Myra.UIEditor
 			{
 				((ScrollPane)root).Widget = widget;
 			}
+			else if (root is Window)
+			{
+				((Window)root).Content = widget;
+			}
 			else if (root is Project)
 			{
 				((Project)root).Root = widget;
@@ -1100,6 +1108,10 @@ namespace Myra.UIEditor
 				{
 					enableStandard = true;
 				}
+				else if (selectedObject is Window)
+				{
+					enableStandard = true;
+				}
 				else if (selectedObject is Project && ((Project)selectedObject).Root == null)
 				{
 					enableContainers = true;
@@ -1109,6 +1121,7 @@ namespace Myra.UIEditor
 
 			_ui._menuControlsAddButton.Enabled = enableStandard;
 			_ui._menuControlsAddCheckBox.Enabled = enableStandard;
+			_ui._menuControlsAddRadioButton.Enabled = enableStandard;
 			_ui._menuControlsAddImageButton.Enabled = enableStandard;
 			_ui._menuControlsAddTextButton.Enabled = enableStandard;
 			_ui._menuControlsAddHorizontalSlider.Enabled = enableStandard;

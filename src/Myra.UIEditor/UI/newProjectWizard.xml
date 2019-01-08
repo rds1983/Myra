@@ -1,0 +1,24 @@
+<Project>
+  <ExportOptions />
+  <Dialog Title="Choose Root Container" Left="229" Top="265">
+    <Grid GridPositionY="1">
+      <ColumnsProportions />
+      <RowsProportions>
+        <Proportion />
+        <Proportion />
+        <Proportion />
+        <Proportion />
+        <Proportion />
+        <Proportion />
+        <Proportion />
+      </RowsProportions>
+      <RadioButton Text="Grid" ImageWidth="8" ImageHeight="8" Id="_radioButtonGrid" />
+      <RadioButton Text="Panel" ImageWidth="8" ImageHeight="8" Id="_radioButtonPanel" GridPositionY="1" />
+      <RadioButton Text="ScrollPane" ImageWidth="8" ImageHeight="8" Id="_radioButtonScrollPane" GridPositionY="2" />
+      <RadioButton Text="HorizontalSplitPane" ImageWidth="8" ImageHeight="8" Id="_radioButtonHorizontalSplitPane" GridPositionY="3" />
+      <RadioButton Text="VerticalSplitPane" ImageWidth="8" ImageHeight="8" Id="_radioButtonVerticalSplitPane" GridPositionY="4" />
+      <RadioButton Text="Window" ImageWidth="8" ImageHeight="8" Id="_radioButtonWindow" GridPositionY="5" />
+      <RadioButton Text="Dialog" ImageWidth="8" ImageHeight="8" Id="_radioButtonDialog" GridPositionY="6" />
+    </Grid>
+  </Dialog>
+</Project>

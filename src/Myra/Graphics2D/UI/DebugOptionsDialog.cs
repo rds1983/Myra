@@ -13,28 +13,28 @@ namespace Myra.Graphics2D.UI
 
 			BuildUI();
 
-			_checkBoxWidgetFrames.IsToggled = MyraEnvironment.DrawWidgetsFrames;
-			_checkBoxWidgetFrames.ToggledChanged += (s, a) =>
+			_checkBoxWidgetFrames.IsPressed = MyraEnvironment.DrawWidgetsFrames;
+			_checkBoxWidgetFrames.PressedChanged += (s, a) =>
 			{
-				MyraEnvironment.DrawWidgetsFrames = _checkBoxWidgetFrames.IsToggled;
+				MyraEnvironment.DrawWidgetsFrames = _checkBoxWidgetFrames.IsPressed;
 			};
 
-			_checkBoxFocusedWidgetFrame.IsToggled = MyraEnvironment.DrawFocusedWidgetFrame;
-			_checkBoxFocusedWidgetFrame.ToggledChanged += (s, a) =>
+			_checkBoxFocusedWidgetFrame.IsPressed = MyraEnvironment.DrawFocusedWidgetFrame;
+			_checkBoxFocusedWidgetFrame.PressedChanged += (s, a) =>
 			{
-				MyraEnvironment.DrawFocusedWidgetFrame = _checkBoxFocusedWidgetFrame.IsToggled;
+				MyraEnvironment.DrawFocusedWidgetFrame = _checkBoxFocusedWidgetFrame.IsPressed;
 			};
 
-			_checkBoxGlyphFrames.IsToggled = MyraEnvironment.DrawTextGlyphsFrames;
-			_checkBoxGlyphFrames.ToggledChanged += (s, a) =>
+			_checkBoxGlyphFrames.IsPressed = MyraEnvironment.DrawTextGlyphsFrames;
+			_checkBoxGlyphFrames.PressedChanged += (s, a) =>
 			{
-				MyraEnvironment.DrawTextGlyphsFrames = _checkBoxGlyphFrames.IsToggled;
+				MyraEnvironment.DrawTextGlyphsFrames = _checkBoxGlyphFrames.IsPressed;
 			};
 
-			_checkBoxDisableClipping.IsToggled = MyraEnvironment.DisableClipping;
-			_checkBoxDisableClipping.ToggledChanged += (s, a) =>
+			_checkBoxDisableClipping.IsPressed = MyraEnvironment.DisableClipping;
+			_checkBoxDisableClipping.PressedChanged += (s, a) =>
 			{
-				MyraEnvironment.DisableClipping = _checkBoxDisableClipping.IsToggled;
+				MyraEnvironment.DisableClipping = _checkBoxDisableClipping.IsPressed;
 			};
 		}
 
@@ -49,9 +49,9 @@ namespace Myra.Graphics2D.UI
 			optionsCheckBox.VerticalAlignment = VerticalAlignment.Top;
 			optionsCheckBox.GridPositionY = InternalChild.Widgets.Count;
 			optionsCheckBox.Visible = true;
-			optionsCheckBox.ToggledChanged += (s, a) =>
+			optionsCheckBox.PressedChanged += (s, a) =>
 			{
-				if (optionsCheckBox.IsToggled)
+				if (optionsCheckBox.IsPressed)
 				{
 					onEnabled();
 				}

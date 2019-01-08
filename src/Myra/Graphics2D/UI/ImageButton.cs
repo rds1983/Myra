@@ -140,7 +140,7 @@ namespace Myra.Graphics2D.UI
 		private void UpdateTextureRegion()
 		{
 			var image = Image;
-			if (ShowAsPressed && PressedImage != null)
+			if (IsPressed && PressedImage != null)
 			{
 				image = PressedImage;
 			}
@@ -169,13 +169,6 @@ namespace Myra.Graphics2D.UI
 		public override void OnPressedChanged()
 		{
 			base.OnPressedChanged();
-
-			UpdateTextureRegion();
-		}
-
-		public override void OnToggledChanged()
-		{
-			base.OnToggledChanged();
 
 			UpdateTextureRegion();
 		}

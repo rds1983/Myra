@@ -1,5 +1,5 @@
 <Project>
-  <ExportOptions Namespace="Myra.UIEditor.UI" Class="StudioWidget" OutputPath="D:/Projects/Hebron/Myra/Source/Myra.UIEditor/UI" />
+  <ExportOptions Namespace="Myra.UIEditor.UI" Class="StudioWidget" OutputPath="D:/Projects/Hebron/Myra/src/Myra.UIEditor/UI" />
   <Grid Id="Root">
     <ColumnsProportions />
     <RowsProportions>
@@ -26,6 +26,7 @@
       <MenuItem Id="_menuControls" Text="&amp;Controls">
         <MenuItem Id="_menuControlsAddButton" Text="Add Button" />
         <MenuItem Id="_menuControlsAddCheckBox" Text="Add CheckBox" />
+        <MenuItem Id="_menuControlsAddRadioButton" Text="Add RadioButton" />
         <MenuItem Id="_menuControlsAddImageButton" Text="Add ImageButton" />
         <MenuItem Id="_menuControlsAddTextButton" Text="Add TextButton" />
         <MenuItem Id="_menuControlsAddHorizontalSlider" Text="Add Horizontal Slider" />

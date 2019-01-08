@@ -2,8 +2,8 @@
 {
 	public class WidgetStyle
 	{
-		public int? WidthHint { get; set; }
-		public int? HeightHint { get; set; }
+		public int? Width { get; set; }
+		public int? Height { get; set; }
 
 		public IRenderable Background { get; set; }
 		public IRenderable OverBackground { get; set; }
@@ -26,8 +26,8 @@
 
 		public WidgetStyle(WidgetStyle style)
 		{
-			WidthHint = style.WidthHint;
-			HeightHint = style.HeightHint;
+			Width = style.Width;
+			Height = style.Height;
 			Background = style.Background;
 			OverBackground = style.OverBackground;
 			DisabledBackground = style.DisabledBackground;

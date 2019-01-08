@@ -160,11 +160,10 @@ namespace Myra.Graphics2D.UI
 				_textBlock.ApplyTextBlockStyle(style.LabelStyle);
 			}
 		}
-
-		public override void OnToggledChanged()
+		public override void OnPressedChanged()
 		{
-			base.OnToggledChanged();
-			_textBlock.IsPressed = IsToggled;
+			base.OnPressedChanged();
+			_textBlock.IsPressed = IsPressed;
 		}
 	}
 }

@@ -148,9 +148,9 @@ namespace Myra.Graphics2D.UI.Properties
 
 				InternalChild.Widgets.Add(_mark);
 
-				_mark.ToggledChanged += (sender, args) =>
+				_mark.PressedChanged += (sender, args) =>
 				{
-					if (_mark.IsToggled)
+					if (_mark.IsPressed)
 					{
 						_propertyGrid.Visible = true;
 						parent._expandedCategories.Add(category);
@@ -185,7 +185,7 @@ namespace Myra.Graphics2D.UI.Properties
 					return;
 				}
 
-				_mark.IsToggled = !_mark.IsToggled;
+				_mark.IsPressed = !_mark.IsPressed;
 			}
 
 			public override void InternalRender(RenderContext context)
@@ -332,14 +332,14 @@ namespace Myra.Graphics2D.UI.Properties
 					var isChecked = (bool)value;
 					var cb = new CheckBox
 					{
-						IsToggled = isChecked
+						IsPressed = isChecked
 					};
 
 					if (hasSetter)
 					{
 						cb.Click += (sender, args) =>
 						{
-							record.SetValue(_object, cb.IsToggled);
+							record.SetValue(_object, cb.IsPressed);
 							FireChanged(propertyType.Name);
 						};
 					}
@@ -854,7 +854,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 				if (_expandedCategories.Contains(category.Key))
 				{
-					subGrid.Mark.IsToggled = true;
+					subGrid.Mark.IsPressed = true;
 				}
 
 				var rp = new Proportion(ProportionType.Auto);

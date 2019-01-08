@@ -123,7 +123,7 @@ namespace Myra.Graphics2D.UI
 				var item = SelectedItem;
 				if (item != null && item.Widget != null)
 				{
-					((Button)item.Widget).IsToggled = false;
+					((Button)item.Widget).IsPressed = false;
 				}
 
 				SelectingIndex = value;
@@ -133,7 +133,7 @@ namespace Myra.Graphics2D.UI
 
 				if (item != null && item.Widget != null)
 				{
-					((Button)item.Widget).IsToggled = true;
+					((Button)item.Widget).IsPressed = true;
 				}
 
 				UpdateSelectedItem();

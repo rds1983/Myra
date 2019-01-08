@@ -9,7 +9,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class ButtonBase<T> : SingleItemContainer<T> where T : Widget
 	{
-		private bool _isPressed = false, _isToggled = false;
+		private bool _isPressed = false, _IsPressed = false;
 
 		[EditCategory("Appearance")]
 		[DefaultValue(HorizontalAlignment.Center)]
@@ -42,28 +42,6 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public bool IsToggled
-		{
-			get
-			{
-				return _isToggled;
-			}
-
-			set
-			{
-				if (value == _isToggled)
-				{
-					return;
-				}
-
-				_isToggled = value;
-
-				OnToggledChanged();
-			}
-		}
-
-		[HiddenInEditor]
-		[JsonIgnore]
 		public bool IsPressed
 		{
 			get
@@ -87,14 +65,6 @@ namespace Myra.Graphics2D.UI
 		internal bool ReleaseOnMouseLeft
 		{
 			get; set;
-		}
-
-		protected bool ShowAsPressed
-		{
-			get
-			{
-				return IsToggled || IsPressed;
-			}
 		}
 
 		public override Desktop Desktop
@@ -123,7 +93,6 @@ namespace Myra.Graphics2D.UI
 
 		public event EventHandler Click;
 		public event EventHandler PressedChanged;
-		public event EventHandler ToggledChanged;
 
 		public ButtonBase()
 		{
@@ -135,15 +104,6 @@ namespace Myra.Graphics2D.UI
 		{
 			OnTouchDown();
 			OnTouchUp();
-		}
-
-		public virtual void OnToggledChanged()
-		{
-			var ev = ToggledChanged;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
 		}
 
 		public virtual void OnPressedChanged()
@@ -159,7 +119,7 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnMouseLeft();
 
-			if (ReleaseOnMouseLeft)
+			if (ReleaseOnMouseLeft && !Toggleable)
 			{
 				IsPressed = false;
 			}
@@ -176,20 +136,15 @@ namespace Myra.Graphics2D.UI
 
 			var OldPressed = IsPressed;
 
-			IsPressed = false;
-
-			if (OldPressed == true && !IsPressed)
+			if (!Toggleable)
 			{
-				if (Toggleable)
-				{
-					IsToggled = !IsToggled;
-				}
+				IsPressed = false;
+			}
 
-				var ev = Click;
-				if (ev != null)
-				{
-					ev(this, EventArgs.Empty);
-				}
+			var ev = Click;
+			if (ev != null)
+			{
+				ev(this, EventArgs.Empty);
 			}
 		}
 
@@ -202,7 +157,14 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			IsPressed = true;
+			if (!Toggleable)
+			{
+				IsPressed = true;
+			}
+			else
+			{
+				IsPressed = !IsPressed;
+			}
 		}
 
 		public override void OnKeyDown(Keys k)
@@ -218,7 +180,7 @@ namespace Myra.Graphics2D.UI
 				}
 				else
 				{
-					IsToggled = !IsToggled;
+					IsPressed = !IsPressed;
 				}
 			}
 		}
@@ -229,7 +191,7 @@ namespace Myra.Graphics2D.UI
 
 			if (Enabled)
 			{
-				if (ShowAsPressed && PressedBackground != null)
+				if (IsPressed && PressedBackground != null)
 				{
 					result = PressedBackground;
 				}

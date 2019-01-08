@@ -31,6 +31,7 @@ namespace Myra.Graphics2D.UI.Styles
 		private readonly Dictionary<string, TextFieldStyle> _textFieldStyles = new Dictionary<string, TextFieldStyle>();
 		private readonly Dictionary<string, ButtonStyle> _buttonStyles = new Dictionary<string, ButtonStyle>();
 		private readonly Dictionary<string, ButtonStyle> _checkBoxStyles = new Dictionary<string, ButtonStyle>();
+		private readonly Dictionary<string, ButtonStyle> _radioButtonStyles = new Dictionary<string, ButtonStyle>();
 		private readonly Dictionary<string, ImageButtonStyle> _imageButtonStyles = new Dictionary<string, ImageButtonStyle>();
 		private readonly Dictionary<string, SpinButtonStyle> _spinButtonStyles = new Dictionary<string, SpinButtonStyle>();
 		private readonly Dictionary<string, TextButtonStyle> _textButtonStyles = new Dictionary<string, TextButtonStyle>();
@@ -92,6 +93,18 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get { return _checkBoxStyles[DefaultStyleName]; }
 			set { _checkBoxStyles[DefaultStyleName] = value; }
+		}
+
+		public ButtonStyle RadioButtonStyle
+		{
+			get
+			{
+				return _radioButtonStyles[DefaultStyleName];
+			}
+			set
+			{
+				_radioButtonStyles[DefaultStyleName] = value;
+			}
 		}
 
 		public ImageButtonStyle ImageButtonStyle
@@ -229,6 +242,14 @@ namespace Myra.Graphics2D.UI.Styles
 			get { return _checkBoxStyles; }
 		}
 
+		public Dictionary<string, ButtonStyle> RadioButtonStyles
+		{
+			get
+			{
+				return _radioButtonStyles;
+			}
+		}
+
 		public Dictionary<string, ImageButtonStyle> ImageButtonStyles
 		{
 			get { return _imageButtonStyles; }
@@ -331,6 +352,7 @@ namespace Myra.Graphics2D.UI.Styles
 			TextFieldStyle = new TextFieldStyle();
 			ButtonStyle = new ButtonStyle();
 			CheckBoxStyle = new ButtonStyle();
+			RadioButtonStyle = new ButtonStyle();
 			ImageButtonStyle = new ImageButtonStyle();
 			SpinButtonStyle = new SpinButtonStyle();
 			TextButtonStyle = new TextButtonStyle();

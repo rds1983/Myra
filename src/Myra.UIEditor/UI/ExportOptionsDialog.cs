@@ -21,8 +21,6 @@ namespace Myra.UIEditor.UI
 			_exportOptionsWidget._textOutputPath.Text = Studio.Instance.Project.ExportOptions.OutputPath;
 
 			_exportOptionsWidget._buttonChangeOutputPath.Click += ButtonChangeOutputPathOnClick;
-
-			ButtonOk.Click += ButtonOkOnDown;
 		}
 
 		private void ButtonChangeOutputPathOnClick(object sender, EventArgs eventArgs)
@@ -45,7 +43,7 @@ namespace Myra.UIEditor.UI
 			dlg.ShowModal(Desktop);
 		}
 
-		private void ButtonOkOnDown(object sender, EventArgs eventArgs)
+		public override void Close()
 		{
 			try
 			{
@@ -68,6 +66,8 @@ namespace Myra.UIEditor.UI
 				var msg = CreateMessageBox("Error", ex.Message);
 				msg.ShowModal(Desktop);
 			}
+
+			base.Close();
 		}
 	}
 }

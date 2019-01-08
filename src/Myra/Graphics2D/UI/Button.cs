@@ -248,13 +248,15 @@ namespace Myra.Graphics2D.UI
 				_image.UpdateImageSize(imageStyle.PressedImage);
 			}
 
+			ImageTextSpacing = style.ImageTextSpacing;
+
 			UpdateRenderable();
 		}
 
 		private void UpdateRenderable()
 		{
 			var image = Image;
-			if (IsToggled && PressedImage != null)
+			if (IsPressed && PressedImage != null)
 			{
 				image = PressedImage;
 			}
@@ -287,13 +289,6 @@ namespace Myra.Graphics2D.UI
 			UpdateRenderable();
 
 			_textBlock.IsPressed = IsPressed;
-		}
-
-		public override void OnToggledChanged()
-		{
-			base.OnToggledChanged();
-
-			UpdateRenderable();
 		}
 
 		protected override void SetStyleByName(Stylesheet stylesheet, string name)
