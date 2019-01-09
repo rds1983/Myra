@@ -8,6 +8,8 @@ namespace Myra.UIEditor.UI
 		public NewProjectWizard()
 		{
 			BuildUI();
+
+			_radioButtonGrid.IsPressed = true;
 		}
 	}
 }

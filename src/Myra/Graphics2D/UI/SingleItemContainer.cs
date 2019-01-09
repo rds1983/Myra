@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Myra.Attributes;
 using Newtonsoft.Json;
@@ -38,6 +37,16 @@ namespace Myra.Graphics2D.UI
 					_internalChild.VisibleChanged += ChildOnVisibleChanged;
 					_internalChild.MeasureChanged += ChildOnMeasureChanged;
 				}
+
+				InvalidateChildren();
+			}
+		}
+
+		public override int ChildrenCount
+		{
+			get
+			{
+				return InternalChild != null ? 1 : 0;
 			}
 		}
 
@@ -51,17 +60,16 @@ namespace Myra.Graphics2D.UI
 			InvalidateMeasure();
 		}
 
-		public override IEnumerable<Widget> Children
+		public override Widget GetChild(int index)
 		{
-			get
+			if (index < 0 ||
+				InternalChild == null ||
+				index >= 1)
 			{
-				if (InternalChild == null)
-				{
-					yield break;
-				}
-
-				yield return InternalChild;
+				throw new ArgumentOutOfRangeException("index");
 			}
+
+			return InternalChild;
 		}
 
 		public override void Arrange()

@@ -11,11 +11,11 @@ namespace Myra.Graphics2D.UI
 	{
 		protected readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
 
-		public override IEnumerable<Widget> Children
+		public override int ChildrenCount
 		{
 			get
 			{
-				return _widgets;
+				return _widgets.Count;
 			}
 		}
 
@@ -45,6 +45,11 @@ namespace Myra.Graphics2D.UI
 
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
+		}
+
+		public override Widget GetChild(int index)
+		{
+			return _widgets[index];
 		}
 
 		private void WidgetsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)

@@ -181,7 +181,7 @@ namespace Myra.UIEditor
 
 			if (_state == null || string.IsNullOrEmpty(_state.EditedFile))
 			{
-				New();
+				New(new Grid());
 			}
 			else
 			{
@@ -872,7 +872,56 @@ namespace Myra.UIEditor
 
 		private void NewItemOnClicked(object sender, EventArgs eventArgs)
 		{
-			New();
+			var dlg = new NewProjectWizard();
+
+			dlg.Closed += (s, a) =>
+			{
+				if (!dlg.Result)
+				{
+					return;
+				}
+
+				Container rootWidget = null;
+
+				if (dlg._radioButtonGrid.IsPressed)
+				{
+					rootWidget = new Grid();
+				}
+				else
+				if (dlg._radioButtonPanel.IsPressed)
+				{
+					rootWidget = new Panel();
+				}
+				else
+				if (dlg._radioButtonScrollPane.IsPressed)
+				{
+					rootWidget = new ScrollPane();
+				}
+				else
+				if (dlg._radioButtonHorizontalSplitPane.IsPressed)
+				{
+					rootWidget = new HorizontalSplitPane();
+				}
+				else
+				if (dlg._radioButtonVerticalSplitPane.IsPressed)
+				{
+					rootWidget = new VerticalSplitPane();
+				}
+				else
+				if (dlg._radioButtonWindow.IsPressed)
+				{
+					rootWidget = new Window();
+				}
+				else
+				if (dlg._radioButtonDialog.IsPressed)
+				{
+					rootWidget = new Dialog();
+				}
+
+				New(rootWidget);
+			};
+
+			dlg.ShowModal(_desktop);
 		}
 
 		private void OpenItemOnClicked(object sender, EventArgs eventArgs)
@@ -959,9 +1008,12 @@ namespace Myra.UIEditor
 			state.Save();
 		}
 
-		private void New()
+		private void New(Container root)
 		{
-			var project = new Project();
+			var project = new Project
+			{
+				Root = root
+			};
 
 			Project = project;
 

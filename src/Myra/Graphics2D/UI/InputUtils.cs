@@ -5,10 +5,12 @@ namespace Myra.Graphics2D.UI
 {
 	internal static class InputUtils
 	{
-		public static void HandleMouseDown(this IEnumerable<Widget> widgets, MouseButtons buttons)
+		public static void HandleMouseDown(this List<Widget> widgets, MouseButtons buttons)
 		{
-			foreach (var w in widgets)
+			for(var i = widgets.Count - 1; i >= 0; --i)
 			{
+				var w = widgets[i];
+
 				if (!w.Visible)
 				{
 					continue;
@@ -22,10 +24,12 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public static void HandleMouseDoubleClick(this IEnumerable<Widget> widgets, MouseButtons buttons)
+		public static void HandleMouseDoubleClick(this List<Widget> widgets, MouseButtons buttons)
 		{
-			foreach (var w in widgets)
+			for (var i = widgets.Count - 1; i >= 0; --i)
 			{
+				var w = widgets[i];
+
 				if (!w.Visible)
 				{
 					continue;
@@ -39,10 +43,12 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public static void HandleMouseUp(this IEnumerable<Widget> widgets, MouseButtons buttons)
+		public static void HandleMouseUp(this List<Widget> widgets, MouseButtons buttons)
 		{
-			foreach (var w in widgets)
+			for (var i = widgets.Count - 1; i >= 0; --i)
 			{
+				var w = widgets[i];
+
 				if (!w.Visible)
 				{
 					continue;
@@ -56,9 +62,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public static void HandleMouseMovement(this IEnumerable<Widget> widgets)
+		public static void HandleMouseMovement(this List<Widget> widgets)
 		{
-			foreach (var w in widgets)
+			foreach(var w in widgets)
 			{
 				if (!w.Visible)
 				{
@@ -85,10 +91,12 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public static void HandleTouchDown(this IEnumerable<Widget> widgets)
+		public static void HandleTouchDown(this List<Widget> widgets)
 		{
-			foreach (var w in widgets)
+			for (var i = widgets.Count - 1; i >= 0; --i)
 			{
+				var w = widgets[i];
+
 				if (!w.Visible)
 				{
 					continue;
@@ -102,10 +110,12 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public static void HandleTouchUp(this IEnumerable<Widget> widgets)
+		public static void HandleTouchUp(this List<Widget> widgets)
 		{
-			foreach (var w in widgets)
+			for (var i = widgets.Count - 1; i >= 0; --i)
 			{
+				var w = widgets[i];
+
 				if (!w.Visible)
 				{
 					continue;

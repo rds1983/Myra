@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -22,7 +21,6 @@ namespace Myra.Graphics2D.UI
 		private bool _widgetsDirty = true;
 		private Widget _focusedWidget;
 		private readonly List<Widget> _widgetsCopy = new List<Widget>();
-		private readonly List<Widget> _reversedWidgetsCopy = new List<Widget>();
 		protected readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
 		private readonly List<Widget> _focusableWidgets = new List<Widget>();
 		private DateTime _lastTouch;
@@ -31,27 +29,19 @@ namespace Myra.Graphics2D.UI
 		{
 			get; private set;
 		}
+
 		public Point MousePosition { get; private set; }
 		public int MouseWheel { get; private set; }
 		public MouseState MouseState { get; private set; }
 		public KeyboardState KeyboardState { get; private set; }
 		public HorizontalMenu MenuBar { get; set; }
 
-		private IEnumerable<Widget> WidgetsCopy
+		internal List<Widget> ChildrenCopy
 		{
 			get
 			{
 				UpdateWidgetsCopy();
 				return _widgetsCopy;
-			}
-		}
-
-		private IEnumerable<Widget> ReversedWidgetsCopy
-		{
-			get
-			{
-				UpdateWidgetsCopy();
-				return _reversedWidgetsCopy;
 			}
 		}
 
@@ -185,6 +175,11 @@ namespace Myra.Graphics2D.UI
 #endif
 		}
 
+		public Widget GetChild(int index)
+		{
+			return ChildrenCopy[index];
+		}
+
 		private void OnChar(char c)
 		{
 			var ev = Char;
@@ -283,6 +278,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			InvalidateLayout();
+
 			_widgetsDirty = true;
 		}
 
@@ -329,7 +325,7 @@ namespace Myra.Graphics2D.UI
 				_renderContext.Draw(Stylesheet.Current.DesktopStyle.Background, Bounds);
 			}
 
-			foreach (var widget in WidgetsCopy)
+			foreach (var widget in ChildrenCopy)
 			{
 				if (widget.Visible)
 				{
@@ -355,7 +351,7 @@ namespace Myra.Graphics2D.UI
 
 			ProcessWidgets();
 
-			foreach (var widget in WidgetsCopy)
+			foreach (var widget in ChildrenCopy)
 			{
 				if (widget.Visible)
 				{
@@ -401,7 +397,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				InputOnMouseDown();
-				ReversedWidgetsCopy.HandleMouseDown(buttons);
+				ChildrenCopy.HandleMouseDown(buttons);
 
 				var td = TouchDown;
 				if (td != null)
@@ -409,7 +405,7 @@ namespace Myra.Graphics2D.UI
 					td(this, EventArgs.Empty);
 				}
 
-				ReversedWidgetsCopy.HandleTouchDown();
+				ChildrenCopy.HandleTouchDown();
 
 				if ((DateTime.Now - _lastTouch).TotalMilliseconds < DoubleClickIntervalInMs)
 				{
@@ -420,7 +416,7 @@ namespace Myra.Graphics2D.UI
 						ev2(this, new GenericEventArgs<MouseButtons>(buttons));
 					}
 
-					ReversedWidgetsCopy.HandleMouseDoubleClick(buttons);
+					ChildrenCopy.HandleMouseDoubleClick(buttons);
 
 					_lastTouch = DateTime.MinValue;
 				}
@@ -439,7 +435,7 @@ namespace Myra.Graphics2D.UI
 					ev(this, new GenericEventArgs<MouseButtons>(buttons));
 				}
 
-				ReversedWidgetsCopy.HandleMouseUp(buttons);
+				ChildrenCopy.HandleMouseUp(buttons);
 
 				var tu = TouchUp;
 				if (tu != null)
@@ -447,7 +443,7 @@ namespace Myra.Graphics2D.UI
 					tu(this, EventArgs.Empty);
 				}
 
-				ReversedWidgetsCopy.HandleTouchUp();
+				ChildrenCopy.HandleTouchUp();
 			}
 		}
 
@@ -481,7 +477,7 @@ namespace Myra.Graphics2D.UI
 						ev(this, EventArgs.Empty);
 					}
 
-					ReversedWidgetsCopy.HandleMouseMovement();
+					ChildrenCopy.HandleMouseMovement();
 				}
 
 				HandleButton(MouseState.LeftButton, lastState.LeftButton, MouseButtons.Left);
@@ -629,9 +625,6 @@ namespace Myra.Graphics2D.UI
 			_widgetsCopy.Clear();
 			_widgetsCopy.AddRange(_widgets);
 
-			_reversedWidgetsCopy.Clear();
-			_reversedWidgetsCopy.AddRange(_widgets.Reverse());
-
 			_widgetsDirty = false;
 		}
 
@@ -689,7 +682,7 @@ namespace Myra.Graphics2D.UI
 
 		public bool IsPointOverGUI(Point p)
 		{
-			foreach (var widget in WidgetsCopy)
+			foreach (var widget in ChildrenCopy)
 			{
 				if (InternalIsPointOverGUI(p, widget))
 				{

@@ -1,7 +1,7 @@
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Myra.Attributes;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Myra.Graphics2D.UI
 {
@@ -9,11 +9,10 @@ namespace Myra.Graphics2D.UI
 	{
 		private bool _childrenDirty = true;
 		private readonly List<Widget> _childrenCopy = new List<Widget>();
-		private readonly List<Widget> _reverseChildrenCopy = new List<Widget>();
 
 		[JsonIgnore]
 		[HiddenInEditor]
-		public abstract IEnumerable<Widget> Children { get; }
+		public abstract int ChildrenCount { get; }
 
 		internal List<Widget> ChildrenCopy
 		{
@@ -24,16 +23,6 @@ namespace Myra.Graphics2D.UI
 				UpdateWidgets();
 
 				return _childrenCopy;
-			}
-		}
-
-		internal List<Widget> ReverseChildrenCopy
-		{
-			get
-			{
-				UpdateWidgets();
-
-				return _reverseChildrenCopy;
 			}
 		}
 
@@ -50,7 +39,7 @@ namespace Myra.Graphics2D.UI
 
 				base.Enabled = value;
 
-				foreach (var item in Children)
+				foreach (var item in ChildrenCopy)
 				{
 					item.Enabled = value;
 				}
@@ -67,12 +56,14 @@ namespace Myra.Graphics2D.UI
 			{
 				base.Desktop = value;
 
-				foreach (var child in Children)
+				foreach (var child in ChildrenCopy)
 				{
 					child.Desktop = Desktop;
 				}
 			}
 		}
+
+		public abstract Widget GetChild(int index);
 
 		private void UpdateWidgets()
 		{
@@ -82,11 +73,11 @@ namespace Myra.Graphics2D.UI
 			}
 
 			_childrenCopy.Clear();
-			_childrenCopy.AddRange(Children);
 
-			_reverseChildrenCopy.Clear();
-			_reverseChildrenCopy.AddRange(Children);
-			_reverseChildrenCopy.Reverse();
+			for (var i = 0; i < ChildrenCount; ++i)
+			{
+				_childrenCopy.Add(GetChild(i));
+			}
 
 			_childrenDirty = false;
 		}
@@ -96,19 +87,18 @@ namespace Myra.Graphics2D.UI
 			_childrenDirty = true;
 		}
 
-
 		public override void OnMouseEntered()
 		{
 			base.OnMouseEntered();
 
-			Children.HandleMouseMovement();
+			ChildrenCopy.HandleMouseMovement();
 		}
 
 		public override void OnMouseLeft()
 		{
 			base.OnMouseLeft();
 
-			foreach (var w in Children)
+			foreach (var w in ChildrenCopy)
 			{
 				if (!w.Visible)
 				{
@@ -126,49 +116,49 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnMouseMoved();
 
-			ReverseChildrenCopy.HandleMouseMovement();
+			ChildrenCopy.HandleMouseMovement();
 		}
 
 		public override void OnMouseDown(MouseButtons mb)
 		{
 			base.OnMouseDown(mb);
 
-			ReverseChildrenCopy.HandleMouseDown(mb);
+			ChildrenCopy.HandleMouseDown(mb);
 		}
 
 		public override void OnMouseUp(MouseButtons mb)
 		{
 			base.OnMouseUp(mb);
 
-			ReverseChildrenCopy.HandleMouseUp(mb);
+			ChildrenCopy.HandleMouseUp(mb);
 		}
 
 		public override void OnMouseDoubleClick(MouseButtons mb)
 		{
 			base.OnMouseDoubleClick(mb);
 
-			ReverseChildrenCopy.HandleMouseDoubleClick(mb);
+			ChildrenCopy.HandleMouseDoubleClick(mb);
 		}
 
 		public override void OnTouchDown()
 		{
 			base.OnTouchDown();
 
-			ReverseChildrenCopy.HandleTouchDown();
+			ChildrenCopy.HandleTouchDown();
 		}
 
 		public override void OnTouchUp()
 		{
 			base.OnTouchUp();
 
-			ReverseChildrenCopy.HandleTouchUp();
+			ChildrenCopy.HandleTouchUp();
 		}
 
 		internal override void MoveChildren(Point delta)
 		{
 			base.MoveChildren(delta);
 
-			foreach (var child in Children)
+			foreach (var child in ChildrenCopy)
 			{
 				if (!child.Visible)
 					continue;
@@ -179,7 +169,7 @@ namespace Myra.Graphics2D.UI
 
 		public override void InternalRender(RenderContext batch)
 		{
-			foreach (var child in Children)
+			foreach (var child in ChildrenCopy)
 			{
 				if (!child.Visible)
 					continue;
@@ -192,7 +182,7 @@ namespace Myra.Graphics2D.UI
 		{
 			var result = ChildrenCopy.Count;
 
-			foreach (var child in Children)
+			foreach (var child in ChildrenCopy)
 			{
 				if (visibleOnly && !child.Visible)
 				{
