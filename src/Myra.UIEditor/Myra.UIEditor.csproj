@@ -11,6 +11,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\ExportCSDesigner.cstemplate" />
+    <None Remove="Resources\ExportCSMain.cstemplate" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ExportCSDesigner.cstemplate" />
+    <EmbeddedResource Include="Resources\ExportCSMain.cstemplate" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.7.1.189" />
   </ItemGroup>
 

@@ -1,6 +1,6 @@
 <Project>
-  <ExportOptions />
-  <Dialog Title="Choose Root Container" Left="229" Top="265">
+  <ExportOptions Namespace="Myra.UIEditor.UI" Class="NewProjectWizard" OutputPath="D:\Projects\Hebron\Myra\src\Myra.UIEditor\UI" />
+  <Dialog Title="Choose Root Container" Left="229" Top="234">
     <Grid GridPositionY="1">
       <ColumnsProportions />
       <RowsProportions>
