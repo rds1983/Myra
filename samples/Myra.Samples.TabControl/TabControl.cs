@@ -72,7 +72,7 @@ namespace Myra.Samples.TabControl
 
 		private void SetIsPressed(TextButton exception)
 		{
-			exception.IsToggled = true;
+			exception.IsPressed = true;
 
 			foreach (var b in _buttons)
 			{
@@ -81,7 +81,7 @@ namespace Myra.Samples.TabControl
 					continue;
 				}
 
-				b.IsToggled = false;
+				b.IsPressed = false;
 			}
 		}
 	}
