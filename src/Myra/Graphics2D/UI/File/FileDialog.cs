@@ -180,18 +180,24 @@ namespace Myra.Graphics2D.UI.File
 					continue;
 				}
 
-				var s = d.RootDirectory.Name;
-
-				if (!string.IsNullOrEmpty(d.VolumeLabel) && d.VolumeLabel != d.RootDirectory.Name)
+				try
 				{
-					s += " (" + d.VolumeLabel + ")";
+					var s = d.RootDirectory.Name;
+
+					if (!string.IsNullOrEmpty(d.VolumeLabel) && d.VolumeLabel != d.RootDirectory.Name)
+					{
+						s += " (" + d.VolumeLabel + ")";
+					}
+
+					_listBoxPlaces.Items.Add(new ListItem(s, null, d.RootDirectory.Name)
+					{
+						Image = iconDrive,
+						ImageTextSpacing = ImageTextSpacing
+					});
 				}
-
-				_listBoxPlaces.Items.Add(new ListItem(s, null, d.RootDirectory.Name)
+				catch (Exception)
 				{
-					Image = iconDrive,
-					ImageTextSpacing = ImageTextSpacing
-				});
+				}
 			}
 
 			_listBoxPlaces.SelectedIndexChanged += OnPlacesSelectedIndexChanged;
