@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using Myra.Graphics2D.UI;
-using ComboBox = Myra.Graphics2D.UI.ComboBox;
-using ListBox = Myra.Graphics2D.UI.ListBox;
 using MenuItem = Myra.Graphics2D.UI.MenuItem;
 using TreeNode = Myra.Graphics2D.UI.TreeNode;
 
@@ -42,6 +40,10 @@ namespace Myra.UIEditor.UI
 				{
 					var rootNode = AddObject((Tree)InternalChild, _project.Root);
 					Rebuild(rootNode, _project.Root);
+
+					SelectedNode = rootNode;
+
+					((Tree)InternalChild).IsExpanded = true;
 				}
 			}
 		}
@@ -49,6 +51,10 @@ namespace Myra.UIEditor.UI
 		public TreeNode SelectedNode
 		{
 			get { return Tree.SelectedRow; }
+			set
+			{
+				Tree.SelectedRow = value;
+			}
 		}
 
 		public object SelectedObject
