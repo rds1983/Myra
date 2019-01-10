@@ -1,7 +1,7 @@
 <Project>
-  <ExportOptions Namespace="Myra.Graphics2D.UI" Class="DebugOptionsDialog" OutputPath="D:/Projects/Hebron/Myra/Source/Myra/Graphics2D/UI" />
-  <Dialog Title="Debug Options" Left="279" Top="312">
-    <Grid Id="Root" GridPositionY="1">
+  <ExportOptions Namespace="Myra.Graphics2D.UI" Class="DebugOptionsDialog" OutputPath="D:/Projects/Hebron/Myra/src/Myra/Graphics2D/UI" />
+  <Dialog Title="Debug Options" Left="171" Top="266">
+    <Grid Id="Root" GridRow="1">
       <ColumnsProportions />
       <RowsProportions>
         <Proportion />
@@ -9,10 +9,10 @@
         <Proportion />
         <Proportion />
       </RowsProportions>
-      <CheckBox Text="Draw green frame around every widget" ImageWidth="10" ImageHeight="10" Id="_checkBoxWidgetFrames" />
-      <CheckBox Text="Draw red frame around the focused widget" ImageWidth="10" ImageHeight="10" Id="_checkBoxFocusedWidgetFrame" GridPositionY="1" />
-      <CheckBox Text="Draw white frame around every letter glyph" ImageWidth="10" ImageHeight="10" Id="_checkBoxGlyphFrames" GridPositionY="2" />
-      <CheckBox Text="Disable clipping" ImageWidth="10" ImageHeight="10" Id="_checkBoxDisableClipping" GridPositionY="3" />
+      <CheckBox Text="Draw green frame around every widget" Id="_checkBoxWidgetFrames" />
+      <CheckBox Text="Draw red frame around the focused widget" Id="_checkBoxFocusedWidgetFrame" GridRow="1" />
+      <CheckBox Text="Draw white frame around every letter glyph" Id="_checkBoxGlyphFrames" GridRow="2" />
+      <CheckBox Text="Disable clipping" Id="_checkBoxDisableClipping" GridRow="3" />
     </Grid>
   </Dialog>
 </Project>

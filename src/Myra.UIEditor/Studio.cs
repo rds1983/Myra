@@ -414,7 +414,7 @@ namespace Myra.UIEditor
 			{
 				Text = "FPS: ",
 				Font = DefaultAssets.FontSmall,
-				GridPositionY = 1
+				GridRow = 1
 			};
 
 			_statisticsGrid.Widgets.Add(_fpsLabel);
@@ -423,7 +423,7 @@ namespace Myra.UIEditor
 			{
 				Text = "Total Widgets: ",
 				Font = DefaultAssets.FontSmall,
-				GridPositionY = 2
+				GridRow = 2
 			};
 
 			_statisticsGrid.Widgets.Add(_widgetsCountLabel);
@@ -432,7 +432,7 @@ namespace Myra.UIEditor
 			{
 				Text = "Draw Calls: ",
 				Font = DefaultAssets.FontSmall,
-				GridPositionY = 3
+				GridRow = 3
 			};
 
 			_statisticsGrid.Widgets.Add(_drawCallsLabel);

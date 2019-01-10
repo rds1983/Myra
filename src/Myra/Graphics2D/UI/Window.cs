@@ -87,18 +87,13 @@ namespace Myra.Graphics2D.UI
 
 				if (value != null)
 				{
-					value.GridPositionY = 1;
+					value.GridRow = 1;
 					InternalChild.Widgets.Add(value);
 				}
 
 				_content = value;
 			}
 		}
-
-		[HiddenInEditor]
-		[JsonIgnore]
-		[Obsolete("Property is obsolete and will be removed in the future version. Use Result.")]
-		public int ModalResult { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
@@ -161,7 +156,6 @@ namespace Myra.Graphics2D.UI
 		public Window(WindowStyle style)
 		{
 			InternalChild = new Grid();
-			ModalResult = (int)DefaultModalResult.Cancel;
 			Result = false;
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
@@ -185,7 +179,7 @@ namespace Myra.Graphics2D.UI
 
 			_closeButton = new ImageButton
 			{
-				GridPositionX = 1
+				GridColumn = 1
 			};
 
 			_closeButton.Click += (sender, args) =>

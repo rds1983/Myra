@@ -124,8 +124,8 @@ namespace Myra.Graphics2D.UI.ColorPicker
 					{
 						HorizontalAlignment = HorizontalAlignment.Stretch,
 						VerticalAlignment = VerticalAlignment.Stretch,
-						GridPositionX = col,
-						GridPositionY = row,
+						GridColumn = col,
+						GridRow = row,
 						Renderable = DefaultAssets.WhiteRegion,
 						PaddingLeft = 8,
 						PaddingRight = 8,

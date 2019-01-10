@@ -1,5 +1,5 @@
 <Project>
-  <ExportOptions Namespace="Myra.UIEditor.UI" Class="ExportOptionsWidget" OutputPath="D:\Projects\Hebron\Myra\Source\Myra.UIEditor\UI" />
+  <ExportOptions Namespace="Myra.UIEditor.UI" Class="ExportOptionsWidget" OutputPath="D:\Projects\Hebron\Myra\src\Myra.UIEditor\UI" />
   <Grid ColumnSpacing="8" RowSpacing="8" Id="Root" Width="800">
     <ColumnsProportions>
       <Proportion />
@@ -11,12 +11,12 @@
       <Proportion />
       <Proportion />
     </RowsProportions>
-    <TextBlock Text="Class Name:" Id="" GridPositionY="1" />
-    <TextField Text="" Id="_textClassName" GridPositionX="1" GridPositionY="1" />
-    <TextBlock Text="Output Path:" GridPositionY="2" />
-    <TextField Text="" Id="_textOutputPath" GridPositionX="1" GridPositionY="2" />
-    <TextButton Text="Change..." Id="_buttonChangeOutputPath" GridPositionX="2" GridPositionY="2" />
+    <TextBlock Text="Class Name:" Id="" GridRow="1" />
+    <TextField Text="" Id="_textClassName" GridColumn="1" GridRow="1" />
+    <TextBlock Text="Output Path:" GridRow="2" />
+    <TextField Text="" Id="_textOutputPath" GridColumn="1" GridRow="2" />
+    <TextButton Text="Change..." Id="_buttonChangeOutputPath" GridColumn="2" GridRow="2" />
     <TextBlock Text="Namespace:" />
-    <TextField Text="" Id="_textNamespace" GridPositionX="1" />
+    <TextField Text="" Id="_textNamespace" GridColumn="1" />
   </Grid>
 </Project>

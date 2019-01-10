@@ -115,7 +115,7 @@ namespace Myra.Graphics2D.UI
 
 			_label = new TextBlock
 			{
-				GridPositionX = 1
+				GridColumn = 1
 			};
 
 			InternalChild.Widgets.Add(_label);
@@ -133,8 +133,8 @@ namespace Myra.Graphics2D.UI
 			_childNodesGrid = new Grid()
 			{
 				Visible = false,
-				GridPositionX = 1,
-				GridPositionY =  1
+				GridColumn = 1,
+				GridRow =  1
 			};
 
 			InternalChild.Widgets.Add(_childNodesGrid);
@@ -170,7 +170,7 @@ namespace Myra.Graphics2D.UI
 			var result = new TreeNode(TreeStyle, _topTree ?? (Tree) this)
 			{
 				Text = text,
-				GridPositionY = _childNodesGrid.Widgets.Count,
+				GridRow = _childNodesGrid.Widgets.Count,
 				ParentNode = this
 			};
 

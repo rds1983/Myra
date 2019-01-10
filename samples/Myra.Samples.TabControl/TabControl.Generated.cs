@@ -25,7 +25,7 @@ namespace Myra.Samples.TabControl
 			_buttonGrid.IgnoreMouseButton = true;
 			_buttonGrid.Id = "_buttonGrid";
 			_buttonGrid.Width = 100;
-			_buttonGrid.GridPositionX = 1;
+			_buttonGrid.GridColumn = 1;
 
 			_buttonNotepad = new TextButton();
 			_buttonNotepad.Text = "Notepad";
@@ -35,7 +35,7 @@ namespace Myra.Samples.TabControl
 			_buttonNotepad.IgnoreMouseButton = true;
 			_buttonNotepad.Id = "_buttonNotepad";
 			_buttonNotepad.Width = 100;
-			_buttonNotepad.GridPositionX = 2;
+			_buttonNotepad.GridColumn = 2;
 
 			var grid1 = new Grid();
 			grid1.DrawLinesColor = Color.White;
@@ -53,7 +53,7 @@ namespace Myra.Samples.TabControl
 			_panelContent.Id = "_panelContent";
 			_panelContent.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
 			_panelContent.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;
-			_panelContent.GridPositionY = 1;
+			_panelContent.GridRow = 1;
 
 			
 			DrawLinesColor = Color.White;

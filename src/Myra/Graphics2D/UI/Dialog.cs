@@ -24,7 +24,7 @@ namespace Myra.Graphics2D.UI
 			{
 				ColumnSpacing = 8,
 				HorizontalAlignment = HorizontalAlignment.Right,
-				GridPositionY = 2
+				GridRow = 2
 			};
 
 			buttonsGrid.ColumnsProportions.Add(new Proportion());
@@ -43,7 +43,6 @@ namespace Myra.Graphics2D.UI
 				}
 
 				Result = true;
-				ModalResult = (int)DefaultModalResult.Ok;
 				Close();
 			};
 
@@ -52,13 +51,12 @@ namespace Myra.Graphics2D.UI
 			ButtonCancel = new Button
 			{
 				Text = "Cancel",
-				GridPositionX = 1
+				GridColumn = 1
 			};
 
 			ButtonCancel.Click += (sender, args) =>
 			{
 				Result = false;
-				ModalResult = (int)DefaultModalResult.Cancel;
 				Close();
 			};
 

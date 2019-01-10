@@ -34,8 +34,8 @@ namespace Myra.Samples.TabControl
 				var header = new TextBlock
 				{
 					Text = ColumnsProportions[i].ToString(),
-					GridPositionX = i,
-					GridPositionY = 0
+					GridColumn = i,
+					GridRow = 0
 				};
 
 				Widgets.Add(header);
@@ -44,8 +44,8 @@ namespace Myra.Samples.TabControl
 			// Combo
 			var combo = new ComboBox
 			{
-				GridPositionX = 1,
-				GridPositionY = 1
+				GridColumn = 1,
+				GridRow = 1
 			};
 
 			combo.Items.Add(new ListItem("Red", Color.Red));
@@ -56,10 +56,10 @@ namespace Myra.Samples.TabControl
 			// Button
 			var button = new Button
 			{
-				GridPositionX = 2,
-				GridPositionY = 1,
-				GridSpanX = 2,
-				GridSpanY = 1,
+				GridColumn = 2,
+				GridRow = 1,
+				GridColumnSpan = 2,
+				GridRowSpan = 1,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				Text = "This is 2 columns button"
 			};
@@ -75,10 +75,10 @@ namespace Myra.Samples.TabControl
 			// Button
 			var button2 = new Button
 			{
-				GridPositionX = 2,
-				GridPositionY = 2,
-				GridSpanX = 1,
-				GridSpanY = 2,
+				GridColumn = 2,
+				GridRow = 2,
+				GridColumnSpan = 1,
+				GridRowSpan = 2,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
 				Text = "This is 2 rows button"
@@ -116,8 +116,8 @@ namespace Myra.Samples.TabControl
 			var button3 = new Button
 			{
 				Text = "Show Window",
-				GridPositionX = 4,
-				GridPositionY = 3
+				GridColumn = 4,
+				GridRow = 3
 			};
 			Widgets.Add(button3);
 
@@ -129,16 +129,16 @@ namespace Myra.Samples.TabControl
 			// Horizontal slider
 			var hslider = new HorizontalSlider
 			{
-				GridPositionX = 3,
-				GridPositionY = 2
+				GridColumn = 3,
+				GridRow = 2
 			};
 			Widgets.Add(hslider);
 
 			// Horizontal slider value
 			var hsliderValue = new TextBlock
 			{
-				GridPositionX = 4,
-				GridPositionY = 2,
+				GridColumn = 4,
+				GridRow = 2,
 				Text = "HSlider Value: 0"
 			};
 
@@ -153,32 +153,32 @@ namespace Myra.Samples.TabControl
 			{
 				Width = 125,
 				Text = "This is textblock which spans for several lines to demonstrate row proportion set to Auto",
-				GridPositionX = 4,
-				GridPositionY = 1
+				GridColumn = 4,
+				GridRow = 1
 			};
 			Widgets.Add(textBlock);
 
 			var checkBox = new CheckBox
 			{
 				Text = "This is a checkbox",
-				GridPositionX = 3,
-				GridPositionY = 3,
+				GridColumn = 3,
+				GridRow = 3,
 			};
 			Widgets.Add(checkBox);
 
 			// Spin buttons
 			var textField = new TextField
 			{
-				GridPositionX = 5,
-				GridPositionY = 1,
+				GridColumn = 5,
+				GridRow = 1,
 				Width = 100
 			};
 			Widgets.Add(textField);
 
 			var spinButton2 = new SpinButton
 			{
-				GridPositionX = 5,
-				GridPositionY = 2,
+				GridColumn = 5,
+				GridRow = 2,
 				Width = 100,
 				Integer = true
 			};
@@ -187,16 +187,16 @@ namespace Myra.Samples.TabControl
 			// Progress bars
 			var horizontalProgressBar = new HorizontalProgressBar
 			{
-				GridPositionX = 5,
-				GridPositionY = 3,
+				GridColumn = 5,
+				GridRow = 3,
 				Width = 100
 			};
 			Widgets.Add(horizontalProgressBar);
 
 			var verticalProgressBar = new VerticalProgressBar
 			{
-				GridPositionX = 6,
-				GridPositionY = 1,
+				GridColumn = 6,
+				GridRow = 1,
 				Height = 100
 			};
 			Widgets.Add(verticalProgressBar);
@@ -204,8 +204,8 @@ namespace Myra.Samples.TabControl
 			// List box
 			var list = new ListBox
 			{
-				GridPositionX = 5,
-				GridPositionY = 4
+				GridColumn = 5,
+				GridRow = 4
 			};
 
 			list.Items.Add(new ListItem("Red", Color.Red));
@@ -216,16 +216,16 @@ namespace Myra.Samples.TabControl
 			// Vertical slider
 			var vslider = new VerticalSlider
 			{
-				GridPositionX = 2,
-				GridPositionY = 4
+				GridColumn = 2,
+				GridRow = 4
 			};
 			Widgets.Add(vslider);
 
 			// Vertical slider value
 			var vsliderValue = new TextBlock
 			{
-				GridPositionX = 4,
-				GridPositionY = 4,
+				GridColumn = 4,
+				GridRow = 4,
 				Text = "VSlider Value: 0"
 			};
 
@@ -239,8 +239,8 @@ namespace Myra.Samples.TabControl
 			var tree = new Tree
 			{
 				HasRoot = false,
-				GridPositionX = 3,
-				GridPositionY = 4
+				GridColumn = 3,
+				GridRow = 4
 			};
 			var node1 = tree.AddSubNode("node1");
 			var node2 = node1.AddSubNode("node2");
@@ -254,15 +254,15 @@ namespace Myra.Samples.TabControl
 			var textBlock2 = new TextBlock
 			{
 				Text = "This is long textblock",
-				GridPositionX = 1,
-				GridPositionY = 4
+				GridColumn = 1,
+				GridRow = 4
 			};
 			Widgets.Add(textBlock2);
 
 			var hsplitPane = new HorizontalSplitPane
 			{
-				GridPositionX = 1,
-				GridPositionY = 5
+				GridColumn = 1,
+				GridRow = 5
 			};
 			var hsplitPaneLabel1 = new TextBlock
 			{
@@ -278,8 +278,8 @@ namespace Myra.Samples.TabControl
 
 			var vsplitPane = new VerticalSplitPane
 			{
-				GridPositionX = 6,
-				GridPositionY = 4
+				GridColumn = 6,
+				GridRow = 4
 			};
 			var vsplitPaneLabel1 = new TextBlock
 			{
@@ -298,8 +298,8 @@ namespace Myra.Samples.TabControl
 				var header = new TextBlock
 				{
 					Text = RowsProportions[i].ToString(),
-					GridPositionX = 0,
-					GridPositionY = i
+					GridColumn = 0,
+					GridRow = i
 				};
 
 				Widgets.Add(header);

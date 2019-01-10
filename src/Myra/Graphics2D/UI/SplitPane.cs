@@ -240,13 +240,13 @@ namespace Myra.Graphics2D.UI
 					if (Orientation == Orientation.Horizontal)
 					{
 						_handlesSize += handleSize;
-						handle.GridPositionX = i*2 - 1;
+						handle.GridColumn = i*2 - 1;
 						InternalChild.ColumnsProportions.Add(proportion);
 					}
 					else
 					{
 						_handlesSize += handleSize;
-						handle.GridPositionY = i*2 - 1;
+						handle.GridRow = i*2 - 1;
 						InternalChild.RowsProportions.Add(proportion);
 					}
 
@@ -261,12 +261,12 @@ namespace Myra.Graphics2D.UI
 				// Set grid coord and add widget itself
 				if (Orientation == Orientation.Horizontal)
 				{
-					w.GridPositionX = i*2;
+					w.GridColumn = i*2;
 					InternalChild.ColumnsProportions.Add(proportion);
 				}
 				else
 				{
-					w.GridPositionY = i*2;
+					w.GridRow = i*2;
 					InternalChild.RowsProportions.Add(proportion);
 				}
 

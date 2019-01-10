@@ -95,9 +95,9 @@ namespace Myra.Samples.AllWidgets
 			var tree = new Tree
 			{
 				HasRoot = false,
-				GridPositionX = 1,
-				GridPositionY = 12,
-				GridSpanX = 2
+				GridColumn = 1,
+				GridRow = 12,
+				GridColumnSpan = 2
 			};
 			var node1 = tree.AddSubNode("node1");
 			var node2 = node1.AddSubNode("node2");

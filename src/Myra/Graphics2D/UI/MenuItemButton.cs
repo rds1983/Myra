@@ -127,7 +127,7 @@ namespace Myra.Graphics2D.UI
 
 			_textBlock = new TextBlock
 			{
-				GridPositionX = 1,
+				GridColumn = 1,
 				IsMenuText = true
 			};
 

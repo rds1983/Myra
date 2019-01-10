@@ -52,14 +52,14 @@ namespace Myra.Graphics2D.UI.Properties
 
 			InternalChild.Widgets.Add(_listItems);
 
-			_propertyGrid = new PropertyGrid { GridPositionX = 1 };
+			_propertyGrid = new PropertyGrid { GridColumn = 1 };
 			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
 
 			InternalChild.Widgets.Add(_propertyGrid);
 
 			var buttonsGrid = new Grid
 			{
-				GridPositionY = 1,
+				GridRow = 1,
 				ColumnSpacing = 4
 			};
 
@@ -75,7 +75,7 @@ namespace Myra.Graphics2D.UI.Properties
 			_buttonDelete = new Button
 			{
 				Text = "Delete",
-				GridPositionX = 1
+				GridColumn = 1
 			};
 			_buttonDelete.Click += ButtonDeleteOnUp;
 			buttonsGrid.Widgets.Add(_buttonDelete);
@@ -83,7 +83,7 @@ namespace Myra.Graphics2D.UI.Properties
 			_buttonMoveUp = new Button
 			{
 				Text = "Up",
-				GridPositionX = 2
+				GridColumn = 2
 			};
 			_buttonMoveUp.Click += ButtonMoveUpOnUp;
 			buttonsGrid.Widgets.Add(_buttonMoveUp);
@@ -91,7 +91,7 @@ namespace Myra.Graphics2D.UI.Properties
 			_buttonMoveDown = new Button
 			{
 				Text = "Down",
-				GridPositionX = 3
+				GridColumn = 3
 			};
 			_buttonMoveDown.Click += ButtonMoveDownOnUp;
 			buttonsGrid.Widgets.Add(_buttonMoveDown);

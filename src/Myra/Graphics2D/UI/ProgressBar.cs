@@ -110,7 +110,7 @@ namespace Myra.Graphics2D.UI
 				InternalChild.RowsProportions.Add(new Proportion(ProportionType.Part, 0));
 				InternalChild.TotalRowsPart = 1.0f;
 
-				_filledImage.GridPositionY = 1;
+				_filledImage.GridRow = 1;
 			}
 
 			InternalChild.Widgets.Add(_filledImage);

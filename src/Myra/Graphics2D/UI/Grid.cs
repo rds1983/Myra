@@ -134,7 +134,23 @@ namespace Myra.Graphics2D.UI
 
 		[EditCategory("Behavior")]
 		[DefaultValue(false)]
-		public bool DrawLines { get; set; }
+		public bool ShowGridLines { get; set; }
+
+		[Obsolete("Use ShowGridLines")]
+		[HiddenInEditor]
+		public bool DrawLines
+		{
+			get
+			{
+				return ShowGridLines;
+			}
+
+			set
+			{
+				ShowGridLines = value;
+			}
+		}
+
 
 		[EditCategory("Behavior")]
 		[DefaultValue("White")]
@@ -316,7 +332,7 @@ namespace Myra.Graphics2D.UI
 			_columnsProportions.CollectionChanged += OnProportionsChanged;
 			_rowsProportions.CollectionChanged += OnProportionsChanged;
 
-			DrawLines = false;
+			ShowGridLines = false;
 			DrawLinesColor = Color.White;
 		}
 
@@ -422,7 +438,7 @@ namespace Myra.Graphics2D.UI
 
 		private Point GetActualGridPosition(Widget child)
 		{
-			var result = new Point(child.GridPositionX, child.GridPositionY);
+			var result = new Point(child.GridColumn, child.GridRow);
 
 			if (result.X > ColumnsProportions.Count)
 			{
@@ -450,14 +466,14 @@ namespace Myra.Graphics2D.UI
 					_visibleWidgets.Add(child);
 
 					var gridPosition = GetActualGridPosition(child);
-					if (gridPosition.X + child.GridSpanX > columns)
+					if (gridPosition.X + child.GridColumnSpan > columns)
 					{
-						columns = gridPosition.X + child.GridSpanX;
+						columns = gridPosition.X + child.GridColumnSpan;
 					}
 
-					if (gridPosition.Y + child.GridSpanY > rows)
+					if (gridPosition.Y + child.GridRowSpan > rows)
 					{
-						rows = gridPosition.Y + child.GridSpanY;
+						rows = gridPosition.Y + child.GridRowSpan;
 					}
 				}
 			}
@@ -521,12 +537,12 @@ namespace Myra.Graphics2D.UI
 							measuredSize = widget.Measure(availableSize);
 						}
 
-						if (widget.GridSpanX != 1)
+						if (widget.GridColumnSpan != 1)
 						{
 							measuredSize.X = 0;
 						}
 
-						if (widget.GridSpanY != 1)
+						if (widget.GridRowSpan != 1)
 						{
 							measuredSize.Y = 0;
 						}
@@ -709,8 +725,6 @@ namespace Myra.Graphics2D.UI
 
 			var p = Point.Zero;
 
-			_gridLinesX.Add(p.X);
-
 			for (var i = 0; i < _colWidths.Count; ++i)
 			{
 				_cellLocationsX.Add(p.X);
@@ -727,12 +741,8 @@ namespace Myra.Graphics2D.UI
 				_actualSize.X += _colWidths[i];
 			}
 
-			_gridLinesX.Add(bounds.Width - 1);
-
 			_gridLinesY.Clear();
 			_cellLocationsY.Clear();
-
-			_gridLinesY.Add(p.Y);
 
 			for (var i = 0; i < _rowHeights.Count; ++i)
 			{
@@ -750,8 +760,6 @@ namespace Myra.Graphics2D.UI
 				_actualSize.Y += _rowHeights[i];
 			}
 
-			_gridLinesY.Add(bounds.Height - 1);
-
 			foreach (var control in _visibleWidgets)
 			{
 				LayoutControl(control);
@@ -766,21 +774,21 @@ namespace Myra.Graphics2D.UI
 
 			var cellSize = Point.Zero;
 
-			for (var i = col; i < col + control.GridSpanX; ++i)
+			for (var i = col; i < col + control.GridColumnSpan; ++i)
 			{
 				cellSize.X += _colWidths[i];
 
-				if (i < col + control.GridSpanX - 1)
+				if (i < col + control.GridColumnSpan - 1)
 				{
 					cellSize.X += _columnSpacing;
 				}
 			}
 
-			for (var i = row; i < row + control.GridSpanY; ++i)
+			for (var i = row; i < row + control.GridRowSpan; ++i)
 			{
 				cellSize.Y += _rowHeights[i];
 
-				if (i < row + control.GridSpanY - 1)
+				if (i < row + control.GridRowSpan - 1)
 				{
 					cellSize.Y += _rowSpacing;
 				}
@@ -881,7 +889,7 @@ namespace Myra.Graphics2D.UI
 
 			base.InternalRender(context);
 
-			if (!DrawLines)
+			if (!ShowGridLines)
 			{
 				return;
 			}

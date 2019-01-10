@@ -125,7 +125,7 @@ namespace Myra.Graphics2D.UI
 
 			_textField = new TextField
 			{
-				GridSpanY = 2,
+				GridRowSpan = 2,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
 				InputFilter = InputFilter,
@@ -139,7 +139,7 @@ namespace Myra.Graphics2D.UI
 
 			_upButton = new ImageButton
 			{
-				GridPositionX = 1,
+				GridColumn = 1,
 				ContentVerticalAlignment = VerticalAlignment.Center,
 				ContentHorizontalAlignment = HorizontalAlignment.Center
 			};
@@ -149,8 +149,8 @@ namespace Myra.Graphics2D.UI
 
 			_downButton = new ImageButton
 			{
-				GridPositionX = 1,
-				GridPositionY = 1,
+				GridColumn = 1,
+				GridRow = 1,
 				ContentVerticalAlignment = VerticalAlignment.Center,
 				ContentHorizontalAlignment = HorizontalAlignment.Center
 			};

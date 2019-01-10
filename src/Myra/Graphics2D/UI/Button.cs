@@ -204,7 +204,7 @@ namespace Myra.Graphics2D.UI
 			_textBlock = new TextBlock
 			{
 				HorizontalAlignment = HorizontalAlignment.Stretch,
-				GridPositionX = 1,
+				GridColumn = 1,
 				Wrap = true
 			};
 
@@ -242,10 +242,6 @@ namespace Myra.Graphics2D.UI
 				Image = imageStyle.Image;
 				OverImage = imageStyle.OverImage;
 				PressedImage = imageStyle.PressedImage;
-
-				_image.UpdateImageSize(imageStyle.Image);
-				_image.UpdateImageSize(imageStyle.OverImage);
-				_image.UpdateImageSize(imageStyle.PressedImage);
 			}
 
 			ImageTextSpacing = style.ImageTextSpacing;

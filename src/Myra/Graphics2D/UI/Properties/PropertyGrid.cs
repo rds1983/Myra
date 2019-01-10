@@ -133,8 +133,8 @@ namespace Myra.Graphics2D.UI.Properties
 					Object = value,
 					Visible = false,
 					HorizontalAlignment = HorizontalAlignment.Stretch,
-					GridPositionX = 1,
-					GridPositionY = 1,
+					GridColumn = 1,
+					GridRow = 1,
 					_parentGrid = parent
 				};
 
@@ -165,7 +165,7 @@ namespace Myra.Graphics2D.UI.Properties
 				var label = new TextBlock(parent.PropertyGridStyle.LabelStyle)
 				{
 					Text = header,
-					GridPositionX = 1
+					GridColumn = 1
 				};
 
 				InternalChild.Widgets.Add(label);
@@ -391,7 +391,7 @@ namespace Myra.Graphics2D.UI.Properties
 						ContentHorizontalAlignment = HorizontalAlignment.Center,
 						Tag = value,
 						HorizontalAlignment = HorizontalAlignment.Stretch,
-						GridPositionX = 1
+						GridColumn = 1
 					};
 
 					subGrid.Widgets.Add(button);
@@ -634,7 +634,7 @@ namespace Myra.Graphics2D.UI.Properties
 								ContentHorizontalAlignment = HorizontalAlignment.Center,
 								Tag = value,
 								HorizontalAlignment = HorizontalAlignment.Stretch,
-								GridPositionX = 1
+								GridColumn = 1
 							};
 
 							button.Click += (sender, args) =>
@@ -664,8 +664,8 @@ namespace Myra.Graphics2D.UI.Properties
 					{
 						var subGrid = new SubGrid(this, value, record.Name, DefaultCategoryName, record)
 						{
-							GridSpanX = 2,
-							GridPositionY = y
+							GridColumnSpan = 2,
+							GridRow = y
 						};
 
 						InternalChild.Widgets.Add(subGrid);
@@ -693,14 +693,14 @@ namespace Myra.Graphics2D.UI.Properties
 				{
 					Text = record.Name,
 					VerticalAlignment = VerticalAlignment.Center,
-					GridPositionX = 0,
-					GridPositionY = oldY
+					GridColumn = 0,
+					GridRow = oldY
 				};
 
 				InternalChild.Widgets.Add(nameLabel);
 
-				valueWidget.GridPositionX = 1;
-				valueWidget.GridPositionY = oldY;
+				valueWidget.GridColumn = 1;
+				valueWidget.GridRow = oldY;
 				valueWidget.HorizontalAlignment = HorizontalAlignment.Stretch;
 				valueWidget.VerticalAlignment = VerticalAlignment.Top;
 
@@ -846,8 +846,8 @@ namespace Myra.Graphics2D.UI.Properties
 
 				var subGrid = new SubGrid(this, Object, category.Key, category.Key, null)
 				{
-					GridSpanX = 2,
-					GridPositionY = y
+					GridColumnSpan = 2,
+					GridRow = y
 				};
 
 				InternalChild.Widgets.Add(subGrid);

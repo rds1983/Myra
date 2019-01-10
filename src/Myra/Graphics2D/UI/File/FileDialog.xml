@@ -1,14 +1,14 @@
 <Project>
-  <ExportOptions Namespace="Myra.Graphics2D.UI.File" Class="FileDialog" OutputPath="D:/Projects/Hebron/Myra/Source/Myra/Graphics2D/UI/File" />
-  <Dialog Title="Open File..." Left="196" Top="202" Width="600" Height="400" IsTouchDown="False">
-    <Grid RowSpacing="4" GridPositionY="1" IsTouchDown="False">
+  <ExportOptions Namespace="Myra.Graphics2D.UI.File" Class="FileDialog" OutputPath="D:/Projects/Hebron/Myra/src/Myra/Graphics2D/UI/File" />
+  <Dialog Title="Open File..." Left="22" Top="137" Width="600" Height="400">
+    <Grid RowSpacing="4" GridRow="1">
       <ColumnsProportions />
       <RowsProportions>
         <Proportion />
         <Proportion Type="Fill" />
         <Proportion />
       </RowsProportions>
-      <Grid ColumnSpacing="4" IsTouchDown="False">
+      <Grid ColumnSpacing="4">
         <ColumnsProportions>
           <Proportion />
           <Proportion />
@@ -16,15 +16,15 @@
           <Proportion />
         </ColumnsProportions>
         <RowsProportions />
-        <ImageButton Id="_buttonBack" HorizontalAlignment="Center" VerticalAlignment="Center" IsTouchDown="False" />
-        <ImageButton Id="_buttonForward" HorizontalAlignment="Center" VerticalAlignment="Center" GridPositionX="1" IsTouchDown="False" />
-        <TextField Text="" Readonly="True" Id="_textFieldPath" VerticalAlignment="Center" GridPositionX="2" IsTouchDown="False" />
-        <ImageButton Id="_buttonParent" HorizontalAlignment="Center" VerticalAlignment="Center" GridPositionX="3" IsTouchDown="False" />
+        <ImageButton Id="_buttonBack" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <ImageButton Id="_buttonForward" HorizontalAlignment="Center" VerticalAlignment="Center" GridColumn="1" />
+        <TextField Text="" Readonly="True" Id="_textFieldPath" VerticalAlignment="Center" GridColumn="2" />
+        <ImageButton Id="_buttonParent" HorizontalAlignment="Center" VerticalAlignment="Center" GridColumn="3" />
       </Grid>
-      <HorizontalSplitPane Id="_splitPane" GridPositionY="1" IsTouchDown="False">
-        <ListBox Id="_listBoxPlaces" HorizontalAlignment="Stretch" ClipToBounds="True" IsTouchDown="False" />
-        <ScrollPane AllowHorizontalScrolling="False" Id="_scrollPane" GridPositionX="2" IsTouchDown="False">
-          <Grid ColumnSpacing="4" RowSpacing="4" GridSelectionMode="Row" Id="_gridFiles" IsTouchDown="False" CanFocus="True">
+      <HorizontalSplitPane Id="_splitPane" GridRow="1">
+        <ListBox Id="_listBoxPlaces" HorizontalAlignment="Stretch" ClipToBounds="True" />
+        <ScrollPane AllowHorizontalScrolling="False" Id="_scrollPane" GridColumn="2">
+          <Grid ColumnSpacing="4" RowSpacing="4" GridSelectionMode="Row" Id="_gridFiles" CanFocus="True">
             <ColumnsProportions>
               <Proportion />
               <Proportion Type="Fill" />
@@ -33,14 +33,14 @@
           </Grid>
         </ScrollPane>
       </HorizontalSplitPane>
-      <Grid ColumnSpacing="4" GridPositionY="2" IsTouchDown="False">
+      <Grid ColumnSpacing="4" GridRow="2">
         <ColumnsProportions>
           <Proportion />
           <Proportion Type="Fill" />
         </ColumnsProportions>
         <RowsProportions />
-        <TextBlock Text="File name" Id="_textBlockFileName" IsTouchDown="False" />
-        <TextField Text="" Id="_textFieldFileName" GridPositionX="1" IsTouchDown="False" />
+        <TextBlock Text="File name" Id="_textBlockFileName" />
+        <TextField Text="" Id="_textFieldFileName" GridColumn="1" />
       </Grid>
     </Grid>
   </Dialog>

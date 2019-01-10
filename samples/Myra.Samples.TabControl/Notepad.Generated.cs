@@ -69,7 +69,7 @@ namespace Myra.Samples.TabControl
 			var scrollPane1 = new ScrollPane();
 			scrollPane1.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
 			scrollPane1.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;
-			scrollPane1.GridPositionY = 1;
+			scrollPane1.GridRow = 1;
 			scrollPane1.ClipToBounds = true;
 			scrollPane1.CanFocus = true;
 			scrollPane1.Child = textArea;

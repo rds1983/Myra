@@ -47,7 +47,7 @@ namespace Myra.Graphics2D.UI
 			optionsCheckBox.Enabled = true;
 			optionsCheckBox.HorizontalAlignment = HorizontalAlignment.Left;
 			optionsCheckBox.VerticalAlignment = VerticalAlignment.Top;
-			optionsCheckBox.GridPositionY = InternalChild.Widgets.Count;
+			optionsCheckBox.GridRow = InternalChild.Widgets.Count;
 			optionsCheckBox.Visible = true;
 			optionsCheckBox.PressedChanged += (s, a) =>
 			{
@@ -60,7 +60,7 @@ namespace Myra.Graphics2D.UI
 					onDisabled();
 				}
 			};
-			optionsCheckBox.GridPositionY = Root.RowsProportions.Count;
+			optionsCheckBox.GridRow = Root.RowsProportions.Count;
 
 			Root.RowsProportions.Add(new Proportion
 			{

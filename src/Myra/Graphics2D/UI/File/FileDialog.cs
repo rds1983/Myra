@@ -80,7 +80,7 @@ namespace Myra.Graphics2D.UI.File
 
 						if (asTextBlock.Text == FileName)
 						{
-							_gridFiles.SelectedRowIndex = asTextBlock.GridPositionY;
+							_gridFiles.SelectedRowIndex = asTextBlock.GridRow;
 							break;
 						}
 					}
@@ -387,7 +387,7 @@ namespace Myra.Graphics2D.UI.File
 				var image = new Image
 				{
 					Renderable = iconFolder,
-					GridPositionY = gridY,
+					GridRow = gridY,
 					HorizontalAlignment = HorizontalAlignment.Center,
 					VerticalAlignment = VerticalAlignment.Center
 				};
@@ -397,8 +397,8 @@ namespace Myra.Graphics2D.UI.File
 				var name = new TextBlock
 				{
 					Text = Path.GetFileName(f),
-					GridPositionX = 1,
-					GridPositionY = gridY
+					GridColumn = 1,
+					GridRow = gridY
 				};
 
 				_gridFiles.Widgets.Add(name);
@@ -447,8 +447,8 @@ namespace Myra.Graphics2D.UI.File
 				var name = new TextBlock
 				{
 					Text = Path.GetFileName(f),
-					GridPositionX = 1,
-					GridPositionY = gridY
+					GridColumn = 1,
+					GridRow = gridY
 				};
 
 				_gridFiles.Widgets.Add(name);

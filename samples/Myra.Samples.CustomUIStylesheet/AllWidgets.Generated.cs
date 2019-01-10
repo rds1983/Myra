@@ -17,52 +17,52 @@ namespace Myra.Samples.CustomUIStylesheet
 			_button.Id = "_button";
 			_button.PaddingLeft = 8;
 			_button.PaddingRight = 8;
-			_button.GridPositionX = 1;
+			_button.GridColumn = 1;
 
 			_textButtonLabel = new TextBlock();
 			_textButtonLabel.Text = "Text Button:";
 			_textButtonLabel.Id = "_textButtonLabel";
-			_textButtonLabel.GridPositionY = 1;
+			_textButtonLabel.GridRow = 1;
 
 			_textButton = new TextButton();
 			_textButton.Text = "Choose Color";
 			_textButton.Id = "_textButton";
 			_textButton.PaddingLeft = 8;
 			_textButton.PaddingRight = 8;
-			_textButton.GridPositionX = 1;
-			_textButton.GridPositionY = 1;
+			_textButton.GridColumn = 1;
+			_textButton.GridRow = 1;
 
 			var textBlock2 = new TextBlock();
 			textBlock2.Text = "Image Button:";
 			textBlock2.Id = "";
-			textBlock2.GridPositionY = 2;
+			textBlock2.GridRow = 2;
 
 			_imageButton = new ImageButton();
 			_imageButton.Id = "_imageButton";
 			_imageButton.PaddingLeft = 8;
 			_imageButton.PaddingRight = 8;
-			_imageButton.GridPositionX = 1;
-			_imageButton.GridPositionY = 2;
+			_imageButton.GridColumn = 1;
+			_imageButton.GridRow = 2;
 
 			var checkBox1 = new CheckBox();
 			checkBox1.Text = "This is checkbox";
 			checkBox1.ImageWidth = 10;
 			checkBox1.ImageHeight = 10;
-			checkBox1.GridPositionY = 3;
-			checkBox1.GridSpanX = 2;
+			checkBox1.GridRow = 3;
+			checkBox1.GridColumnSpan = 2;
 
 			var textBlock3 = new TextBlock();
 			textBlock3.Text = "Horizontal Slider:";
 			textBlock3.Id = "";
-			textBlock3.GridPositionY = 4;
+			textBlock3.GridRow = 4;
 
 			var horizontalSlider1 = new HorizontalSlider();
-			horizontalSlider1.GridPositionX = 1;
-			horizontalSlider1.GridPositionY = 4;
+			horizontalSlider1.GridColumn = 1;
+			horizontalSlider1.GridRow = 4;
 
 			var textBlock4 = new TextBlock();
 			textBlock4.Text = "Combo Box:";
-			textBlock4.GridPositionY = 5;
+			textBlock4.GridRow = 5;
 
 			var listItem1 = new ListItem();
 			listItem1.Id = "";
@@ -88,24 +88,24 @@ namespace Myra.Samples.CustomUIStylesheet
 			var comboBox1 = new ComboBox();
 			comboBox1.SelectedIndex = 1;
 			comboBox1.Width = 200;
-			comboBox1.GridPositionX = 1;
-			comboBox1.GridPositionY = 5;
+			comboBox1.GridColumn = 1;
+			comboBox1.GridRow = 5;
 			comboBox1.Items.Add(listItem1);
 			comboBox1.Items.Add(listItem2);
 			comboBox1.Items.Add(listItem3);
 
 			var textBlock5 = new TextBlock();
 			textBlock5.Text = "Text Field:";
-			textBlock5.GridPositionY = 6;
+			textBlock5.GridRow = 6;
 
 			var textField1 = new TextField();
 			textField1.Text = "";
-			textField1.GridPositionX = 1;
-			textField1.GridPositionY = 6;
+			textField1.GridColumn = 1;
+			textField1.GridRow = 6;
 
 			var textBlock6 = new TextBlock();
 			textBlock6.Text = "List Box:";
-			textBlock6.GridPositionY = 7;
+			textBlock6.GridRow = 7;
 
 			var listItem4 = new ListItem();
 			listItem4.Id = null;
@@ -124,15 +124,15 @@ namespace Myra.Samples.CustomUIStylesheet
 
 			var listBox1 = new ListBox();
 			listBox1.Width = 200;
-			listBox1.GridPositionX = 1;
-			listBox1.GridPositionY = 7;
+			listBox1.GridColumn = 1;
+			listBox1.GridRow = 7;
 			listBox1.Items.Add(listItem4);
 			listBox1.Items.Add(listItem5);
 			listBox1.Items.Add(listItem6);
 
 			var textBlock7 = new TextBlock();
 			textBlock7.Text = "Tree";
-			textBlock7.GridPositionY = 8;
+			textBlock7.GridRow = 8;
 
 			_gridRight = new Grid();
 			_gridRight.ColumnSpacing = 8;
@@ -177,7 +177,7 @@ namespace Myra.Samples.CustomUIStylesheet
 
 			var verticalSlider1 = new VerticalSlider();
 			verticalSlider1.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
-			verticalSlider1.GridPositionY = 1;
+			verticalSlider1.GridRow = 1;
 
 			var grid1 = new Grid();
 			grid1.RowSpacing = 8;
@@ -198,12 +198,12 @@ namespace Myra.Samples.CustomUIStylesheet
 
 			_horizontalProgressBar = new HorizontalProgressBar();
 			_horizontalProgressBar.Id = "_horizontalProgressBar";
-			_horizontalProgressBar.GridPositionY = 1;
+			_horizontalProgressBar.GridRow = 1;
 
 			_verticalProgressBar = new VerticalProgressBar();
 			_verticalProgressBar.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
 			_verticalProgressBar.Id = "_verticalProgressBar";
-			_verticalProgressBar.GridPositionY = 2;
+			_verticalProgressBar.GridRow = 2;
 
 			var grid2 = new Grid();
 			grid2.RowSpacing = 8;
@@ -217,18 +217,18 @@ namespace Myra.Samples.CustomUIStylesheet
 			{
 				Type = Myra.Graphics2D.UI.Grid.ProportionType.Fill,
 			});
-			grid2.GridPositionY = 2;
+			grid2.GridRow = 2;
 			grid2.Widgets.Add(textBlock9);
 			grid2.Widgets.Add(_horizontalProgressBar);
 			grid2.Widgets.Add(_verticalProgressBar);
 
 			var verticalSplitPane1 = new VerticalSplitPane();
-			verticalSplitPane1.GridPositionX = 2;
+			verticalSplitPane1.GridColumn = 2;
 			verticalSplitPane1.Widgets.Add(grid1);
 			verticalSplitPane1.Widgets.Add(grid2);
 
 			
-			GridPositionY = 1;
+			GridRow = 1;
 			Widgets.Add(scrollPane1);
 			Widgets.Add(verticalSplitPane1);
 		}

@@ -9,7 +9,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class ButtonBase<T> : SingleItemContainer<T> where T : Widget
 	{
-		private bool _isPressed = false, _IsPressed = false;
+		private bool _isPressed = false;
 
 		[EditCategory("Appearance")]
 		[DefaultValue(HorizontalAlignment.Center)]

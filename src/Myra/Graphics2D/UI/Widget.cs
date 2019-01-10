@@ -23,7 +23,7 @@ namespace Myra.Graphics2D.UI
 
 		private int _left, _top;
 		private int? _width, _height;
-		private int _gridPositionX, _gridPositionY, _gridSpanX = 1, _gridSpanY = 1;
+		private int _gridColumn, _gridRow, _gridColumnSpan = 1, _gridRowSpan = 1;
 		private HorizontalAlignment _horizontalAlignment = HorizontalAlignment.Left;
 		private VerticalAlignment _verticalAlignment = VerticalAlignment.Top;
 		private LayoutState _layoutState = LayoutState.Invalid;
@@ -317,13 +317,13 @@ namespace Myra.Graphics2D.UI
 
 		[EditCategory("Layout")]
 		[DefaultValue(0)]
-		public int GridPositionX
+		public int GridColumn
 		{
-			get { return _gridPositionX; }
+			get { return _gridColumn; }
 
 			set
 			{
-				if (value == _gridPositionX)
+				if (value == _gridColumn)
 				{
 					return;
 				}
@@ -333,20 +333,73 @@ namespace Myra.Graphics2D.UI
 					throw new ArgumentOutOfRangeException("value");
 				}
 
-				_gridPositionX = value;
+				_gridColumn = value;
 				InvalidateMeasure();
+			}
+		}
+
+		[Obsolete("Use GridColumn")]
+		[HiddenInEditor]
+		public int GridPositionX
+		{
+			get
+			{
+				return GridColumn;
+			}
+
+			set
+			{
+				GridColumn = value;
 			}
 		}
 
 		[EditCategory("Layout")]
 		[DefaultValue(0)]
+		public int GridRow
+		{
+			get { return _gridRow; }
+
+			set
+			{
+				if (value == _gridRow)
+				{
+					return;
+				}
+
+				if (value < 0)
+				{
+					throw new ArgumentOutOfRangeException("value");
+				}
+
+				_gridRow = value;
+				InvalidateMeasure();
+			}
+		}
+
+		[Obsolete("Use GridRow")]
+		[HiddenInEditor]
 		public int GridPositionY
 		{
-			get { return _gridPositionY; }
+			get
+			{
+				return GridRow;
+			}
 
 			set
 			{
-				if (value == _gridPositionY)
+				GridRow = value;
+			}
+		}
+
+		[EditCategory("Layout")]
+		[DefaultValue(1)]
+		public int GridColumnSpan
+		{
+			get { return _gridColumnSpan; }
+
+			set
+			{
+				if (value == _gridColumnSpan)
 				{
 					return;
 				}
@@ -356,43 +409,35 @@ namespace Myra.Graphics2D.UI
 					throw new ArgumentOutOfRangeException("value");
 				}
 
-				_gridPositionY = value;
+				_gridColumnSpan = value;
 				InvalidateMeasure();
 			}
 		}
 
-		[EditCategory("Layout")]
-		[DefaultValue(1)]
+		[Obsolete("Use GridColumnSpan")]
+		[HiddenInEditor]
 		public int GridSpanX
 		{
-			get { return _gridSpanX; }
+			get
+			{
+				return GridColumnSpan;
+			}
 
 			set
 			{
-				if (value == _gridSpanX)
-				{
-					return;
-				}
-
-				if (value < 0)
-				{
-					throw new ArgumentOutOfRangeException("value");
-				}
-
-				_gridSpanX = value;
-				InvalidateMeasure();
+				GridColumnSpan = value;
 			}
 		}
 
 		[EditCategory("Layout")]
 		[DefaultValue(1)]
-		public int GridSpanY
+		public int GridRowSpan
 		{
-			get { return _gridSpanY; }
+			get { return _gridRowSpan; }
 
 			set
 			{
-				if (value == _gridSpanY)
+				if (value == _gridRowSpan)
 				{
 					return;
 				}
@@ -402,8 +447,23 @@ namespace Myra.Graphics2D.UI
 					throw new ArgumentOutOfRangeException("value");
 				}
 
-				_gridSpanY = value;
+				_gridRowSpan = value;
 				InvalidateMeasure();
+			}
+		}
+
+		[Obsolete("Use GridRowSpan")]
+		[HiddenInEditor]
+		public int GridSpanY
+		{
+			get
+			{
+				return GridRowSpan;
+			}
+
+			set
+			{
+				GridRowSpan = value;
 			}
 		}
 

@@ -53,12 +53,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
-		[JsonIgnore]
-		[EditCategory("Appearance")]
-		[Obsolete]
-		public SpriteFont MessageFont { get; set; }
-
 		[EditCategory("Appearance")]
 		[DefaultValue(false)]
 		public bool Wrap
@@ -551,7 +545,6 @@ namespace Myra.Graphics2D.UI
 			Selection = style.Selection;
 
 			Font = style.Font;
-			MessageFont = style.MessageFont;
 		}
 
 		public void EnsureIndexInRange()

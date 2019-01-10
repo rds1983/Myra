@@ -47,8 +47,8 @@ namespace Myra.Samples.TabControl
 			var tree = new Tree
 			{
 				HasRoot = false,
-				GridPositionX = 1,
-				GridPositionY = 11
+				GridColumn = 1,
+				GridRow = 11
 			};
 			var node1 = tree.AddSubNode("node1");
 			var node2 = node1.AddSubNode("node2");

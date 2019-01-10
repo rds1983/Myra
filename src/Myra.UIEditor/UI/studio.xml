@@ -59,11 +59,11 @@
         <MenuItem Id="_menuHelpAbout" Text="&amp;About" />
       </MenuItem>
     </HorizontalMenu>
-    <HorizontalSplitPane Id="_topSplitPane" GridPositionY="1">
+    <HorizontalSplitPane Id="_topSplitPane" GridRow="1">
       <Panel Id="_projectHolder" />
-      <VerticalSplitPane Id="_rightSplitPane" GridPositionX="2">
+      <VerticalSplitPane Id="_rightSplitPane" GridColumn="2">
         <Panel Id="_explorerHolder" />
-        <ScrollPane Id="_propertyGridPane" GridPositionY="2" />
+        <ScrollPane Id="_propertyGridPane" GridRow="2" />
       </VerticalSplitPane>
     </HorizontalSplitPane>
   </Grid>

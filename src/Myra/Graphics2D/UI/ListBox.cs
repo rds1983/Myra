@@ -165,7 +165,7 @@ namespace Myra.Graphics2D.UI
 			for (var i = 0; i < Items.Count; ++i)
 			{
 				var widget = InternalChild.Widgets[i];
-				widget.GridPositionY = i;
+				widget.GridRow = i;
 			}
 		}
 

@@ -1,6 +1,6 @@
 <Project StylesheetPath="commodore-64/ui_stylesheet.json">
   <ExportOptions Namespace="Myra.Samples.CustomUIStylesheet" Class="AllWidgets" OutputPath="D:\Projects\Hebron\Myra\Source\Samples\Myra.Samples.CustomUIStylesheet" />
-  <HorizontalSplitPane GridPositionY="1">
+  <HorizontalSplitPane GridRow="1">
     <ScrollPane>
       <Grid ColumnSpacing="8" RowSpacing="8" Id="_gridRight">
         <ColumnsProportions>
@@ -16,27 +16,27 @@
           <Proportion />
         </RowsProportions>
         <TextBlock Text="Button:" Id="" />
-        <Button Text="Button" Id="_button" GridPositionX="1" />
-        <CheckBox Text="This is checkbox" ImageWidth="12" ImageHeight="12" GridPositionY="1" GridSpanX="2" />
-        <TextBlock Text="Slider:" Id="" GridPositionY="2" />
-        <HorizontalSlider GridPositionX="1" GridPositionY="2" />
-        <TextBlock Text="Combo Box:" GridPositionY="3" />
-        <ComboBox GridPositionX="1" GridPositionY="3">
+        <Button Text="Button" Id="_button" GridColumn="1" />
+        <CheckBox Text="This is checkbox" GridRow="1" GridColumnSpan="2" />
+        <TextBlock Text="Slider:" Id="" GridRow="2" />
+        <HorizontalSlider GridColumn="1" GridRow="2" />
+        <TextBlock Text="Combo Box:" GridRow="3" />
+        <ComboBox GridColumn="1" GridRow="3">
           <ListItem Text="Item 1" />
           <ListItem Text="Item 2" />
           <ListItem Text="Item 3" />
         </ComboBox>
-        <TextBlock Text="Text Field:" GridPositionY="4" />
-        <TextField Text="" GridPositionX="1" GridPositionY="4" />
-        <TextBlock Text="List Box:" GridPositionY="5" />
-        <ListBox GridPositionX="1" GridPositionY="5">
+        <TextBlock Text="Text Field:" GridRow="4" />
+        <TextField Text="" GridColumn="1" GridRow="4" />
+        <TextBlock Text="List Box:" GridRow="5" />
+        <ListBox GridColumn="1" GridRow="5">
           <ListItem Text="Item 1" />
           <ListItem Text="Item 2" />
           <ListItem Text="Item 3" />
         </ListBox>
       </Grid>
     </ScrollPane>
-    <VerticalSplitPane GridPositionX="2">
+    <VerticalSplitPane GridColumn="2">
       <Grid RowSpacing="8">
         <ColumnsProportions>
           <Proportion Type="Fill" />
@@ -46,9 +46,9 @@
           <Proportion Type="Fill" />
         </RowsProportions>
         <TextBlock Text="Vertical Slider:" />
-        <VerticalSlider HorizontalAlignment="Center" GridPositionY="1" />
+        <VerticalSlider HorizontalAlignment="Center" GridRow="1" />
       </Grid>
-      <Grid RowSpacing="8" GridPositionY="2">
+      <Grid RowSpacing="8" GridRow="2">
         <ColumnsProportions>
           <Proportion Type="Fill" />
         </ColumnsProportions>
@@ -58,8 +58,8 @@
           <Proportion Type="Fill" />
         </RowsProportions>
         <TextBlock Text="Progress Bars:" />
-        <HorizontalProgressBar Id="_horizontalProgressBar" GridPositionY="1" />
-        <VerticalProgressBar HorizontalAlignment="Center" Id="_verticalProgressBar" GridPositionY="2" />
+        <HorizontalProgressBar Id="_horizontalProgressBar" GridRow="1" />
+        <VerticalProgressBar HorizontalAlignment="Center" Id="_verticalProgressBar" GridRow="2" />
       </Grid>
     </VerticalSplitPane>
   </HorizontalSplitPane>

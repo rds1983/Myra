@@ -368,7 +368,7 @@ namespace Myra.Graphics2D.UI
 		{
 			for (var i = 0; i < _itemsContainer.Widgets.Count; ++i)
 			{
-				_itemsContainer.Widgets[i].GridPositionY = i;
+				_itemsContainer.Widgets[i].GridRow = i;
 			}
 		}
 

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using System.Linq;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Newtonsoft.Json;
@@ -77,22 +75,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Appearance")]
-		[DefaultValue(null)]
-		public virtual int? ImageWidthHint
-		{
-			get { return InternalChild.Width; }
-			set { InternalChild.Width = value; }
-		}
-
-		[EditCategory("Appearance")]
-		[DefaultValue(null)]
-		public virtual int? ImageHeightHint
-		{
-			get { return InternalChild.Height; }
-			set { InternalChild.Height = value; }
-		}
-
 		public ImageButton(ImageButtonStyle style)
 		{
 			InternalChild = new Image
@@ -127,12 +109,6 @@ namespace Myra.Graphics2D.UI
 			Image = imageStyle.Image;
 			OverImage = imageStyle.OverImage;
 			PressedImage = imageStyle.PressedImage;
-
-			InternalChild.Width = null;
-			InternalChild.Height = null;
-			InternalChild.UpdateImageSize(imageStyle.Image);
-			InternalChild.UpdateImageSize(imageStyle.OverImage);
-			InternalChild.UpdateImageSize(imageStyle.PressedImage);
 
 			UpdateTextureRegion();
 		}

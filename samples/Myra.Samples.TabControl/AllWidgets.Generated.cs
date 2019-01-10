@@ -97,13 +97,13 @@ namespace Myra.Samples.TabControl
 			_button.Id = "_button";
 			_button.PaddingLeft = 8;
 			_button.PaddingRight = 8;
-			_button.GridPositionX = 1;
+			_button.GridColumn = 1;
 
 			var textBlock2 = new TextBlock();
 			textBlock2.Text = "Blue Button:";
 			textBlock2.TextColor = Color.White;
 			textBlock2.Id = "";
-			textBlock2.GridPositionY = 1;
+			textBlock2.GridRow = 1;
 
 			_blueButton = new Button("blue");
 			_blueButton.Text = "Show Window";
@@ -114,14 +114,14 @@ namespace Myra.Samples.TabControl
 			_blueButton.Id = "_blueButton";
 			_blueButton.PaddingLeft = 8;
 			_blueButton.PaddingRight = 8;
-			_blueButton.GridPositionX = 1;
-			_blueButton.GridPositionY = 1;
+			_blueButton.GridColumn = 1;
+			_blueButton.GridRow = 1;
 
 			var textBlock3 = new TextBlock();
 			textBlock3.Text = "Text Button:";
 			textBlock3.TextColor = Color.White;
 			textBlock3.Id = "";
-			textBlock3.GridPositionY = 2;
+			textBlock3.GridRow = 2;
 
 			_textButton = new TextButton();
 			_textButton.Text = "Show Window";
@@ -131,14 +131,14 @@ namespace Myra.Samples.TabControl
 			_textButton.Id = "_textButton";
 			_textButton.PaddingLeft = 8;
 			_textButton.PaddingRight = 8;
-			_textButton.GridPositionX = 1;
-			_textButton.GridPositionY = 2;
+			_textButton.GridColumn = 1;
+			_textButton.GridRow = 2;
 
 			var textBlock4 = new TextBlock();
 			textBlock4.Text = "Image Button:";
 			textBlock4.TextColor = Color.White;
 			textBlock4.Id = "";
-			textBlock4.GridPositionY = 3;
+			textBlock4.GridRow = 3;
 
 			_imageButton = new ImageButton();
 			_imageButton.ContentHorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
@@ -146,8 +146,8 @@ namespace Myra.Samples.TabControl
 			_imageButton.Id = "_imageButton";
 			_imageButton.PaddingLeft = 8;
 			_imageButton.PaddingRight = 8;
-			_imageButton.GridPositionX = 1;
-			_imageButton.GridPositionY = 3;
+			_imageButton.GridColumn = 1;
+			_imageButton.GridRow = 3;
 
 			var checkBox1 = new CheckBox();
 			checkBox1.Text = "This is checkbox";
@@ -156,25 +156,25 @@ namespace Myra.Samples.TabControl
 			checkBox1.ImageHeight = 10;
 			checkBox1.ContentHorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
 			checkBox1.ContentVerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;
-			checkBox1.GridPositionY = 4;
-			checkBox1.GridSpanX = 2;
+			checkBox1.GridRow = 4;
+			checkBox1.GridColumnSpan = 2;
 
 			var textBlock5 = new TextBlock();
 			textBlock5.Text = "Horizontal Slider:";
 			textBlock5.TextColor = Color.White;
 			textBlock5.Id = "";
-			textBlock5.GridPositionY = 5;
+			textBlock5.GridRow = 5;
 
 			var horizontalSlider1 = new HorizontalSlider();
 			horizontalSlider1.Maximum = 100;
 			horizontalSlider1.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
-			horizontalSlider1.GridPositionX = 1;
-			horizontalSlider1.GridPositionY = 5;
+			horizontalSlider1.GridColumn = 1;
+			horizontalSlider1.GridRow = 5;
 
 			var textBlock6 = new TextBlock();
 			textBlock6.Text = "Combo Box:";
 			textBlock6.TextColor = Color.White;
-			textBlock6.GridPositionY = 6;
+			textBlock6.GridRow = 6;
 
 			var listItem1 = new ListItem();
 			listItem1.Id = "";
@@ -190,8 +190,8 @@ namespace Myra.Samples.TabControl
 
 			var comboBox1 = new ComboBox();
 			comboBox1.Width = 200;
-			comboBox1.GridPositionX = 1;
-			comboBox1.GridPositionY = 6;
+			comboBox1.GridColumn = 1;
+			comboBox1.GridRow = 6;
 			comboBox1.Items.Add(listItem1);
 			comboBox1.Items.Add(listItem2);
 			comboBox1.Items.Add(listItem3);
@@ -199,31 +199,31 @@ namespace Myra.Samples.TabControl
 			var textBlock7 = new TextBlock();
 			textBlock7.Text = "Text Field:";
 			textBlock7.TextColor = Color.White;
-			textBlock7.GridPositionY = 7;
+			textBlock7.GridRow = 7;
 
 			var textField1 = new TextField();
 			textField1.Text = "";
 			textField1.TextColor = Color.White;
 			textField1.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
-			textField1.GridPositionX = 1;
-			textField1.GridPositionY = 7;
+			textField1.GridColumn = 1;
+			textField1.GridRow = 7;
 			textField1.CanFocus = true;
 
 			var textBlock8 = new TextBlock();
 			textBlock8.Text = "Spin Button:";
 			textBlock8.TextColor = Color.White;
-			textBlock8.GridPositionY = 8;
+			textBlock8.GridRow = 8;
 
 			var spinButton1 = new SpinButton();
 			spinButton1.Value = 0;
 			spinButton1.Width = 100;
-			spinButton1.GridPositionX = 1;
-			spinButton1.GridPositionY = 8;
+			spinButton1.GridColumn = 1;
+			spinButton1.GridRow = 8;
 
 			var textBlock9 = new TextBlock();
 			textBlock9.Text = "List Box:";
 			textBlock9.TextColor = Color.White;
-			textBlock9.GridPositionY = 9;
+			textBlock9.GridRow = 9;
 
 			var listItem4 = new ListItem();
 			listItem4.Text = "Red";
@@ -240,8 +240,8 @@ namespace Myra.Samples.TabControl
 			var listBox1 = new ListBox();
 			listBox1.Width = 200;
 			listBox1.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
-			listBox1.GridPositionX = 1;
-			listBox1.GridPositionY = 9;
+			listBox1.GridColumn = 1;
+			listBox1.GridRow = 9;
 			listBox1.Items.Add(listItem4);
 			listBox1.Items.Add(listItem5);
 			listBox1.Items.Add(listItem6);
@@ -249,7 +249,7 @@ namespace Myra.Samples.TabControl
 			var textBlock10 = new TextBlock();
 			textBlock10.Text = "Vertical Menu:";
 			textBlock10.TextColor = Color.White;
-			textBlock10.GridPositionY = 10;
+			textBlock10.GridRow = 10;
 
 			var menuItem4 = new MenuItem();
 			menuItem4.Id = "";
@@ -265,8 +265,8 @@ namespace Myra.Samples.TabControl
 
 			var verticalMenu1 = new VerticalMenu();
 			verticalMenu1.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;
-			verticalMenu1.GridPositionX = 1;
-			verticalMenu1.GridPositionY = 10;
+			verticalMenu1.GridColumn = 1;
+			verticalMenu1.GridRow = 10;
 			verticalMenu1.Items.Add(menuItem4);
 			verticalMenu1.Items.Add(menuItem5);
 			verticalMenu1.Items.Add(menuItem6);
@@ -274,7 +274,7 @@ namespace Myra.Samples.TabControl
 			var textBlock11 = new TextBlock();
 			textBlock11.Text = "Tree";
 			textBlock11.TextColor = Color.White;
-			textBlock11.GridPositionY = 11;
+			textBlock11.GridRow = 11;
 
 			_gridRight = new Grid();
 			_gridRight.DrawLinesColor = Color.White;
@@ -338,7 +338,7 @@ namespace Myra.Samples.TabControl
 			verticalSlider1.Maximum = 100;
 			verticalSlider1.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
 			verticalSlider1.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;
-			verticalSlider1.GridPositionY = 1;
+			verticalSlider1.GridRow = 1;
 
 			var grid1 = new Grid();
 			grid1.DrawLinesColor = Color.White;
@@ -365,14 +365,14 @@ namespace Myra.Samples.TabControl
 			_horizontalProgressBar.Maximum = 100;
 			_horizontalProgressBar.Id = "_horizontalProgressBar";
 			_horizontalProgressBar.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
-			_horizontalProgressBar.GridPositionY = 1;
+			_horizontalProgressBar.GridRow = 1;
 
 			_verticalProgressBar = new VerticalProgressBar();
 			_verticalProgressBar.Maximum = 100;
 			_verticalProgressBar.Id = "_verticalProgressBar";
 			_verticalProgressBar.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
 			_verticalProgressBar.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;
-			_verticalProgressBar.GridPositionY = 2;
+			_verticalProgressBar.GridRow = 2;
 
 			var grid2 = new Grid();
 			grid2.DrawLinesColor = Color.White;
@@ -389,7 +389,7 @@ namespace Myra.Samples.TabControl
 			});
 			grid2.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
 			grid2.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;
-			grid2.GridPositionY = 2;
+			grid2.GridRow = 2;
 			grid2.Widgets.Add(textBlock13);
 			grid2.Widgets.Add(_horizontalProgressBar);
 			grid2.Widgets.Add(_verticalProgressBar);
@@ -397,14 +397,14 @@ namespace Myra.Samples.TabControl
 			var verticalSplitPane1 = new VerticalSplitPane();
 			verticalSplitPane1.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
 			verticalSplitPane1.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;
-			verticalSplitPane1.GridPositionX = 2;
+			verticalSplitPane1.GridColumn = 2;
 			verticalSplitPane1.Widgets.Add(grid1);
 			verticalSplitPane1.Widgets.Add(grid2);
 
 			var horizontalSplitPane1 = new HorizontalSplitPane();
 			horizontalSplitPane1.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Stretch;
 			horizontalSplitPane1.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;
-			horizontalSplitPane1.GridPositionY = 1;
+			horizontalSplitPane1.GridRow = 1;
 			horizontalSplitPane1.Widgets.Add(scrollPane1);
 			horizontalSplitPane1.Widgets.Add(verticalSplitPane1);
 
