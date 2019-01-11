@@ -130,7 +130,6 @@ namespace Myra.Graphics2D.UI
 			if (style.Filled == null) return;
 
 			_filledImage.Renderable = style.Filled;
-			_filledImage.UpdateImageSize(style.Filled);
 		}
 	}
 }

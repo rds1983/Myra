@@ -11,7 +11,6 @@ namespace Myra.Graphics2D.UI
 {
 	public class Button : ButtonBase<Grid>
 	{
-		private IRenderable _textureRegion, _overTextureRegion, _pressedTextureRegion;
 		private readonly Image _image;
 		private readonly TextBlock _textBlock;
 
@@ -44,17 +43,11 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Appearance")]
 		public IRenderable Image
 		{
-			get { return _textureRegion; }
+			get { return _image.Renderable; }
 
 			set
 			{
-				if (value == _textureRegion)
-				{
-					return;
-				}
-
-				_textureRegion = value;
-				UpdateRenderable();
+				_image.Renderable = value;
 			}
 		}
 
@@ -63,17 +56,11 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Appearance")]
 		public IRenderable OverImage
 		{
-			get { return _overTextureRegion; }
+			get { return _image.OverRenderable; }
 
 			set
 			{
-				if (value == _textureRegion)
-				{
-					return;
-				}
-
-				_overTextureRegion = value;
-				UpdateRenderable();
+				_image.OverRenderable = value;
 			}
 		}
 
@@ -82,17 +69,11 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Appearance")]
 		public IRenderable PressedImage
 		{
-			get { return _pressedTextureRegion; }
+			get { return _image.PressedRenderable; }
 
 			set
 			{
-				if (value == _pressedTextureRegion)
-				{
-					return;
-				}
-
-				_pressedTextureRegion = value;
-				UpdateRenderable();
+				_image.PressedRenderable = value;
 			}
 		}
 
@@ -245,45 +226,13 @@ namespace Myra.Graphics2D.UI
 			}
 
 			ImageTextSpacing = style.ImageTextSpacing;
-
-			UpdateRenderable();
-		}
-
-		private void UpdateRenderable()
-		{
-			var image = Image;
-			if (IsPressed && PressedImage != null)
-			{
-				image = PressedImage;
-			}
-			else if (IsMouseOver && OverImage != null)
-			{
-				image = OverImage;
-			}
-
-			_image.Renderable = image;
-		}
-
-		public override void OnMouseEntered()
-		{
-			base.OnMouseEntered();
-
-			UpdateRenderable();
-		}
-
-		public override void OnMouseLeft()
-		{
-			base.OnMouseLeft();
-
-			UpdateRenderable();
 		}
 
 		public override void OnPressedChanged()
 		{
 			base.OnPressedChanged();
 
-			UpdateRenderable();
-
+			_image.IsPressed = IsPressed;
 			_textBlock.IsPressed = IsPressed;
 		}
 

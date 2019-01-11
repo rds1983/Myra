@@ -154,11 +154,11 @@ namespace Myra.Graphics2D.UI
 
 		[EditCategory("Behavior")]
 		[DefaultValue("White")]
-		public Color DrawLinesColor { get; set; }
+		public Color GridLinesColor { get; set; }
 
 		[EditCategory("Grid")]
 		[DefaultValue(0)]
-		public virtual int ColumnSpacing
+		public int ColumnSpacing
 		{
 			get { return _columnSpacing; }
 			set
@@ -175,7 +175,7 @@ namespace Myra.Graphics2D.UI
 
 		[EditCategory("Grid")]
 		[DefaultValue(0)]
-		public virtual int RowSpacing
+		public int RowSpacing
 		{
 			get { return _rowSpacing; }
 			set
@@ -191,20 +191,20 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Grid")]
-		public virtual ObservableCollection<Proportion> ColumnsProportions
+		public ObservableCollection<Proportion> ColumnsProportions
 		{
 			get { return _columnsProportions; }
 		}
 
 		[EditCategory("Grid")]
-		public virtual ObservableCollection<Proportion> RowsProportions
+		public ObservableCollection<Proportion> RowsProportions
 		{
 			get { return _rowsProportions; }
 		}
 
 		[EditCategory("Grid")]
 		[DefaultValue(null)]
-		public virtual float? TotalRowsPart
+		public float? TotalRowsPart
 		{
 			get { return _totalRowsPart; }
 
@@ -222,7 +222,7 @@ namespace Myra.Graphics2D.UI
 
 		[EditCategory("Grid")]
 		[DefaultValue(null)]
-		public virtual float? TotalColumnsPart
+		public float? TotalColumnsPart
 		{
 			get { return _totalColumnsPart; }
 
@@ -333,7 +333,7 @@ namespace Myra.Graphics2D.UI
 			_rowsProportions.CollectionChanged += OnProportionsChanged;
 
 			ShowGridLines = false;
-			DrawLinesColor = Color.White;
+			GridLinesColor = Color.White;
 		}
 
 		public int GetColumnWidth(int index)
@@ -898,13 +898,13 @@ namespace Myra.Graphics2D.UI
 			for (i = 0; i < _gridLinesX.Count; ++i)
 			{
 				var x = _gridLinesX[i] + bounds.Left;
-				context.FillRectangle(new Rectangle(x, bounds.Top, 1, bounds.Height), DrawLinesColor);
+				context.FillRectangle(new Rectangle(x, bounds.Top, 1, bounds.Height), GridLinesColor);
 			}
 
 			for (i = 0; i < _gridLinesY.Count; ++i)
 			{
 				var y = _gridLinesY[i] + bounds.Top;
-				context.FillRectangle(new Rectangle(bounds.Left, y, bounds.Width, 1), DrawLinesColor);
+				context.FillRectangle(new Rectangle(bounds.Left, y, bounds.Width, 1), GridLinesColor);
 			}
 		}
 

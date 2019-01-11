@@ -38,7 +38,7 @@ namespace Myra.Samples.TabControl
 			_buttonNotepad.GridColumn = 2;
 
 			var grid1 = new Grid();
-			grid1.DrawLinesColor = Color.White;
+			grid1.GridLinesColor = Color.White;
 			grid1.ColumnSpacing = 4;
 			grid1.ColumnsProportions.Add(new Proportion());
 			grid1.ColumnsProportions.Add(new Proportion());
@@ -56,7 +56,7 @@ namespace Myra.Samples.TabControl
 			_panelContent.GridRow = 1;
 
 			
-			DrawLinesColor = Color.White;
+			GridLinesColor = Color.White;
 			RowsProportions.Add(new Proportion());
 			RowsProportions.Add(new Proportion
 			{

@@ -7,8 +7,6 @@ namespace Myra.Graphics2D.UI
 {
 	public class ImageButton: ButtonBase<Image>
 	{
-		private IRenderable _image, _overImage, _pressedImage;
-
 		[JsonIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
@@ -16,18 +14,12 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return _image;
+				return InternalChild.Renderable;
 			}
 
 			set
 			{
-				if (value == _image)
-				{
-					return;
-				}
-
-				_image = value;
-				UpdateTextureRegion();
+				InternalChild.Renderable = value;
 			}
 		}
 
@@ -38,18 +30,12 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return _overImage;
+				return InternalChild.OverRenderable;
 			}
 
 			set
 			{
-				if (value == _image)
-				{
-					return;
-				}
-
-				_overImage = value;
-				UpdateTextureRegion();
+				InternalChild.OverRenderable = value;
 			}
 		}
 
@@ -60,18 +46,12 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return _pressedImage;
+				return InternalChild.PressedRenderable;
 			}
 
 			set
 			{
-				if (value == _pressedImage)
-				{
-					return;
-				}
-
-				_pressedImage = value;
-				UpdateTextureRegion();
+				InternalChild.PressedRenderable = value;
 			}
 		}
 
@@ -109,44 +89,13 @@ namespace Myra.Graphics2D.UI
 			Image = imageStyle.Image;
 			OverImage = imageStyle.OverImage;
 			PressedImage = imageStyle.PressedImage;
-
-			UpdateTextureRegion();
-		}
-
-		private void UpdateTextureRegion()
-		{
-			var image = Image;
-			if (IsPressed && PressedImage != null)
-			{
-				image = PressedImage;
-			}
-			else if (IsMouseOver && OverImage != null)
-			{
-				image = OverImage;
-			}
-
-			InternalChild.Renderable = image;
-		}
-
-		public override void OnMouseEntered()
-		{
-			base.OnMouseEntered();
-
-			UpdateTextureRegion();
-		}
-
-		public override void OnMouseLeft()
-		{
-			base.OnMouseLeft();
-
-			UpdateTextureRegion();
 		}
 
 		public override void OnPressedChanged()
 		{
 			base.OnPressedChanged();
 
-			UpdateTextureRegion();
+			InternalChild.IsPressed = IsPressed;
 		}
 
 		protected override void SetStyleByName(Stylesheet stylesheet, string name)

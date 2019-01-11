@@ -8,7 +8,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class Image : Widget
 	{
-		private IRenderable _image;
+		private IRenderable _image, _overImage, _pressedImage;
 		private Color _color = Color.White;
 
 		[HiddenInEditor]
@@ -30,6 +30,55 @@ namespace Myra.Graphics2D.UI
 				_image = value;
 				InvalidateMeasure();
 			}
+		}
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public IRenderable OverRenderable
+		{
+			get
+			{
+				return _overImage;
+			}
+
+			set
+			{
+				if (value == _overImage)
+				{
+					return;
+				}
+
+				_overImage = value;
+				InvalidateMeasure();
+			}
+		}
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public IRenderable PressedRenderable
+		{
+			get
+			{
+				return _pressedImage;
+			}
+
+			set
+			{
+				if (value == _pressedImage)
+				{
+					return;
+				}
+
+				_pressedImage = value;
+				InvalidateMeasure();
+			}
+		}
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public bool IsPressed
+		{
+			get; set;
 		}
 
 		[HiddenInEditor]
@@ -64,40 +113,51 @@ namespace Myra.Graphics2D.UI
 
 		protected override Point InternalMeasure(Point availableSize)
 		{
-			if (Renderable == null)
+			var result = _image != null ? _image.Size : Point.Zero;
+
+			var overSize = _overImage != null ? _overImage.Size : Point.Zero;
+			if (overSize.X > result.X)
 			{
-				return Point.Zero;
+				result.X = overSize.X;
 			}
 
-			return Renderable.Size;
+			if (overSize.Y > result.Y)
+			{
+				result.Y = overSize.Y;
+			}
+
+			var pressedSize = _pressedImage != null ? _pressedImage.Size : Point.Zero;
+			if (pressedSize.X > result.X)
+			{
+				result.X = pressedSize.X;
+			}
+
+			if (pressedSize.Y > result.Y)
+			{
+				result.Y = pressedSize.Y;
+			}
+
+			return result;
 		}
 
 		public override void InternalRender(RenderContext context)
 		{
-			base.InternalRender(context);
+			var image = Renderable;
 
-			if (Renderable != null)
+			if (IsMouseOver && OverRenderable != null)
+			{
+				image = OverRenderable;
+			}
+
+			if (IsPressed && PressedRenderable != null)
+			{
+				image = PressedRenderable;
+			}
+
+			if (image != null)
 			{
 				var bounds = ActualBounds;
-				context.Draw(Renderable, bounds, Color);
-			}
-		}
-
-		public void UpdateImageSize(IRenderable image)
-		{
-			if (image == null)
-			{
-				return;
-			}
-
-			if (Width == null || image.Size.X > Width.Value)
-			{
-				Width = image.Size.X;
-			}
-
-			if (Height == null || image.Size.Y > Height.Value)
-			{
-				Height = image.Size.Y;
+				context.Draw(image, bounds, Color);
 			}
 		}
 	}

@@ -10,6 +10,7 @@ using Myra.Attributes;
 using Myra.Graphics2D.UI.ColorPicker;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
+using Newtonsoft.Json;
 using static Myra.Graphics2D.UI.Grid;
 
 namespace Myra.Graphics2D.UI.Properties
@@ -207,11 +208,17 @@ namespace Myra.Graphics2D.UI.Properties
 		private Record _parentProperty;
 		private readonly Dictionary<string, List<Record>> _records = new Dictionary<string, List<Record>>();
 		private readonly HashSet<string> _expandedCategories = new HashSet<string>();
-
-		public TreeStyle PropertyGridStyle { get; private set; }
-
 		private object _object;
 
+		[HiddenInEditor]
+		[JsonIgnore]
+		public TreeStyle PropertyGridStyle
+		{
+			get; private set;
+		}
+
+		[HiddenInEditor]
+		[JsonIgnore]
 		public object Object
 		{
 			get { return _object; }
@@ -228,6 +235,8 @@ namespace Myra.Graphics2D.UI.Properties
 			}
 		}
 
+		[HiddenInEditor]
+		[JsonIgnore]
 		public string Category { get; private set; }
 
 		public event EventHandler<GenericEventArgs<string>> PropertyChanged;

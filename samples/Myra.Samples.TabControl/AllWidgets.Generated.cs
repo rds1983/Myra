@@ -277,7 +277,7 @@ namespace Myra.Samples.TabControl
 			textBlock11.GridRow = 11;
 
 			_gridRight = new Grid();
-			_gridRight.DrawLinesColor = Color.White;
+			_gridRight.GridLinesColor = Color.White;
 			_gridRight.ColumnSpacing = 8;
 			_gridRight.RowSpacing = 8;
 			_gridRight.ColumnsProportions.Add(new Proportion());
@@ -341,7 +341,7 @@ namespace Myra.Samples.TabControl
 			verticalSlider1.GridRow = 1;
 
 			var grid1 = new Grid();
-			grid1.DrawLinesColor = Color.White;
+			grid1.GridLinesColor = Color.White;
 			grid1.RowSpacing = 8;
 			grid1.ColumnsProportions.Add(new Proportion
 			{
@@ -375,7 +375,7 @@ namespace Myra.Samples.TabControl
 			_verticalProgressBar.GridRow = 2;
 
 			var grid2 = new Grid();
-			grid2.DrawLinesColor = Color.White;
+			grid2.GridLinesColor = Color.White;
 			grid2.RowSpacing = 8;
 			grid2.ColumnsProportions.Add(new Proportion
 			{
@@ -409,7 +409,7 @@ namespace Myra.Samples.TabControl
 			horizontalSplitPane1.Widgets.Add(verticalSplitPane1);
 
 			
-			DrawLinesColor = Color.White;
+			GridLinesColor = Color.White;
 			RowSpacing = 8;
 			RowsProportions.Add(new Proportion());
 			RowsProportions.Add(new Proportion

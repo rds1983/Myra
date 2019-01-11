@@ -75,7 +75,7 @@ namespace Myra.Samples.TabControl
 			scrollPane1.Child = textArea;
 
 			
-			DrawLinesColor = Color.White;
+			GridLinesColor = Color.White;
 			RowsProportions.Add(new Proportion());
 			RowsProportions.Add(new Proportion
 			{
