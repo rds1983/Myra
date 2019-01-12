@@ -207,7 +207,8 @@ namespace Myra.Graphics2D.UI
 #if !XENKO
 		public static Point DefaultMousePositionGetter()
 		{
-			return Mouse.GetState().Position;
+			var state = Mouse.GetState();
+			return new Point(state.X, state.Y);
 		}
 
 		public static bool DefaultIsMouseButtonDownChecker(MouseButtons mb)

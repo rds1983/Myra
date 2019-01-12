@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cyotek.Drawing.BitmapFont;
 using Myra.Graphics2D.TextureAtlases;
+using System.Reflection;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -44,8 +45,8 @@ namespace Myra.Graphics2D.Text
 
 				kerning.Add(new Vector3(0, character.Bounds.Width, character.XAdvance - character.Bounds.Width));
 			}
-			
-			var constructorInfo = typeof(SpriteFont).GetConstructors().First();
+
+			var constructorInfo = typeof(SpriteFont).GetTypeInfo().DeclaredConstructors.First();
 			var result = (SpriteFont) constructorInfo.Invoke(new object[]
 			{
 				textureRegion.Texture, glyphBounds, cropping,
