@@ -12,6 +12,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class TabControl : SingleItemContainer<Grid>
 	{
+		private int? _selectedIndex;
 		private TabItem _selectedItem;
 		private readonly ObservableCollection<TabItem> _items = new ObservableCollection<TabItem>();
 		private Grid _gridButtons;
@@ -33,22 +34,22 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
-		[HiddenInEditor]
-		[JsonIgnore]
 		public int? SelectedIndex
 		{
 			get
 			{
-				if (_selectedItem == null)
-				{
-					return null;
-				}
-
-				return _items.IndexOf(_selectedItem);
+				return _selectedIndex;
 			}
 
 			set
 			{
+				if (value == _selectedIndex)
+				{
+					return;
+				}
+
+				_selectedIndex = value;
+
 				if (value == null || value.Value < 0 || value.Value >= Items.Count)
 				{
 					SelectedItem = null;
@@ -97,7 +98,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[DefaultValue(HorizontalAlignment.Stretch)]
+		[DefaultValue(HorizontalAlignment.Left)]
 		public override HorizontalAlignment HorizontalAlignment
 		{
 			get
@@ -110,7 +111,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[DefaultValue(VerticalAlignment.Stretch)]
+		[DefaultValue(VerticalAlignment.Top)]
 		public override VerticalAlignment VerticalAlignment
 		{
 			get
@@ -140,12 +141,14 @@ namespace Myra.Graphics2D.UI
 
 			_panelContent = new SingleItemContainer<Widget>()
 			{
-				GridRow = 1
+				GridRow = 1,
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				VerticalAlignment = VerticalAlignment.Stretch
 			};
 			InternalChild.Widgets.Add(_panelContent);
 
-			HorizontalAlignment = HorizontalAlignment.Stretch;
-			VerticalAlignment = VerticalAlignment.Stretch;
+			HorizontalAlignment = HorizontalAlignment.Left;
+			VerticalAlignment = VerticalAlignment.Top;
 
 			if (style != null)
 			{
@@ -246,6 +249,11 @@ namespace Myra.Graphics2D.UI
 			item.Button = button;
 
 			UpdateGridPositions();
+
+			if (index == SelectedIndex)
+			{
+				SelectedItem = item;
+			}
 		}
 
 		private void RemoveItem(TabItem item)
@@ -276,6 +284,11 @@ namespace Myra.Graphics2D.UI
 			ApplyWidgetStyle(style);
 
 			TabControlStyle = style;
+
+			InternalChild.RowSpacing = style.HeaderSpacing;
+			_gridButtons.ColumnSpacing = style.ButtonSpacing;
+
+			_panelContent.ApplyWidgetStyle(style.ContentStyle);
 
 			foreach (var item in Items)
 			{

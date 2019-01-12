@@ -1,0 +1,87 @@
+<Project>
+  <ExportOptions />
+  <Panel>
+    <TabControl SelectedIndex="0" GridRow="1" Width="280" Height="260" HorizontalAlignment="Center" VerticalAlignment="Center">
+      <TabItem Text="Character">
+        <Grid ColumnSpacing="8" RowSpacing="8">
+          <ColumnsProportions>
+            <Proportion />
+            <Proportion />
+          </ColumnsProportions>
+          <RowsProportions>
+            <Proportion />
+            <Proportion />
+            <Proportion />
+            <Proportion />
+          </RowsProportions>
+          <TextBlock Text="Name" />
+          <TextField Text="" Width="200" GridColumn="1" />
+          <TextBlock Text="Race" GridRow="1" />
+          <ComboBox SelectedIndex="0" Width="200" GridColumn="1" GridRow="1">
+            <ListItem Text="Human" />
+            <ListItem Text="Dwarf" />
+            <ListItem Text="Elf" />
+            <ListItem Text="Hobbit" />
+          </ComboBox>
+          <TextBlock Text="Class" GridRow="2" />
+          <ComboBox SelectedIndex="0" Width="200" GridColumn="1" GridRow="2">
+            <ListItem Text="Warrior" />
+            <ListItem Text="Mage" />
+            <ListItem Text="Priest" />
+            <ListItem Text="Rogue" />
+          </ComboBox>
+        </Grid>
+      </TabItem>
+      <TabItem Text="Skills">
+        <Grid ColumnSpacing="8" RowSpacing="8">
+          <ColumnsProportions>
+            <Proportion />
+            <Proportion />
+          </ColumnsProportions>
+          <RowsProportions>
+            <Proportion />
+            <Proportion />
+            <Proportion />
+            <Proportion />
+            <Proportion />
+            <Proportion />
+            <Proportion />
+          </RowsProportions>
+          <TextBlock Text="You have 10 points left to distribute" GridColumnSpan="2" />
+          <TextBlock Text="Strength" GridRow="1" />
+          <SpinButton Value="5" Width="50" GridColumn="1" GridRow="1" />
+          <TextBlock Text="Dexterity" GridRow="2" />
+          <SpinButton Value="5" Width="50" GridColumn="1" GridRow="2" />
+          <TextBlock Text="Constitution" GridRow="3" />
+          <SpinButton Value="5" Width="50" GridColumn="1" GridRow="3" />
+          <TextBlock Text="Intelligence" GridRow="4" />
+          <SpinButton Value="5" Width="50" GridColumn="1" GridRow="4" />
+          <TextBlock Text="Wisdom" GridRow="5" />
+          <SpinButton Value="5" Width="50" GridColumn="1" GridRow="5" />
+          <TextBlock Text="Charisma" GridRow="6" />
+          <SpinButton Value="5" Width="50" GridColumn="1" GridRow="6" />
+        </Grid>
+      </TabItem>
+      <TabItem Text="Feats">
+        <Grid ColumnSpacing="8" RowSpacing="8">
+          <ColumnsProportions>
+            <Proportion Type="Fill" />
+          </ColumnsProportions>
+          <RowsProportions>
+            <Proportion />
+            <Proportion />
+            <Proportion />
+            <Proportion />
+            <Proportion />
+          </RowsProportions>
+          <TextBlock Text="You have 2 feats left to choose" />
+          <Button Text="Swordsman" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="1" />
+          <Button Text="Salesman" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="2" />
+          <Button Text="Trapsmith" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="3" />
+          <Button Text="Cunning" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="4" />
+          <Button Text="Empathy" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="5" />
+        </Grid>
+      </TabItem>
+    </TabControl>
+  </Panel>
+</Project>

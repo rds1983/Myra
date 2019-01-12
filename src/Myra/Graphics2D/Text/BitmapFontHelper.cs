@@ -38,7 +38,7 @@ namespace Myra.Graphics2D.Text
 				kerning.Add(new Vector3(0, character.Bounds.Width, character.XAdvance - character.Bounds.Width));
 			}
 
-			var constructorInfo = typeof(SpriteFont).GetTypeInfo().DeclaredConstructors.First();
+			var constructorInfo = typeof(SpriteFont).GetConstructors().First();
 			var result = (SpriteFont) constructorInfo.Invoke(new object[]
 			{
 				textureRegion.Texture, glyphBounds, cropping,

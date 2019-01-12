@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.TabControl", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.RogueEditor", "..\..\samples\Myra.Samples.RogueEditor\Myra.Samples.RogueEditor.csproj", "{28D3D20E-FE7C-46FC-B68C-653C32C5096E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.UIViewer", "..\..\src\Myra.UIViewer\Myra.UIViewer.csproj", "{5DA1FB3E-7EA9-43EF-9F47-CF06B4EE9249}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{28D3D20E-FE7C-46FC-B68C-653C32C5096E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28D3D20E-FE7C-46FC-B68C-653C32C5096E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28D3D20E-FE7C-46FC-B68C-653C32C5096E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DA1FB3E-7EA9-43EF-9F47-CF06B4EE9249}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DA1FB3E-7EA9-43EF-9F47-CF06B4EE9249}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DA1FB3E-7EA9-43EF-9F47-CF06B4EE9249}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DA1FB3E-7EA9-43EF-9F47-CF06B4EE9249}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

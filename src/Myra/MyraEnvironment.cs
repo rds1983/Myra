@@ -70,7 +70,7 @@ namespace Myra
 		{
 			get
 			{
-				var assembly = typeof(MyraEnvironment).GetTypeInfo().Assembly;
+				var assembly = typeof(MyraEnvironment).Assembly;
 				var name = new AssemblyName(assembly.FullName);
 
 				return name.Version.ToString();

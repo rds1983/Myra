@@ -18,7 +18,7 @@ namespace Myra
 		private const string DefaultAtlasImageName = "default_ui_skin_atlas.png";
 
 		private static readonly ResourceAssetResolver _assetResolver = new ResourceAssetResolver(
-			typeof(DefaultAssets).GetTypeInfo().Assembly,
+			typeof(DefaultAssets).Assembly,
 			"Myra.Resources.");
 
 		private static SpriteFont _font;

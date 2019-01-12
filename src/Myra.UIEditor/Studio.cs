@@ -1188,6 +1188,7 @@ namespace Myra.UIEditor
 			_ui._menuControlsAddVerticalSeparator.Enabled = enableStandard;
 			_ui._menuControlsAddComboBox.Enabled = enableStandard;
 			_ui._menuControlsAddListBox.Enabled = enableStandard;
+			_ui._menuControlsAddTabControl.Enabled = enableStandard;
 			_ui._menuControlsAddImage.Enabled = enableStandard;
 			_ui._menuControlsAddHorizontalMenu.Enabled = enableStandard;
 			_ui._menuControlsAddVerticalMenu.Enabled = enableStandard;

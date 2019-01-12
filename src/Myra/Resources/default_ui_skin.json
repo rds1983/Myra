@@ -195,6 +195,16 @@
 		}
 	},
 	"tabControl": {
+		"buttonSpacing": 4,
+		"content": {
+			"background": "window",
+			"padding": {
+				"top": 5.0,
+				"bottom": 5.0,
+				"left": 5.0,
+				"right": 5.0
+			}
+		},
 		"tabItem": {
 			"overBackground": "button-over",
 			"pressedBackground": "list-selection",

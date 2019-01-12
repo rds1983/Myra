@@ -72,7 +72,6 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
 		public Widget Content
 		{
 			get; set;

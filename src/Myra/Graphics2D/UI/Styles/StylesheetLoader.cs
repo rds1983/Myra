@@ -79,6 +79,8 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string IconWidthName = "iconWidth";
 		public const string ShortcutWidthName = "shortcutWidth";
 		public const string SpacingName = "spacing";
+		public const string HeaderSpacingName = "headerSpacing";
+		public const string ButtonSpacingName = "buttonSpacing";
 		public const string LabelStyleName = "label";
 		public const string ImageStyleName = "image";
 		public const string TextFieldStyleName = "textField";
@@ -103,6 +105,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string VerticalSeparatorName = "verticalSeparator";
 		public const string FilledName = "filled";
 		public const string VariantsName = "variants";
+		public const string ContentName = "content";
 
 		private readonly Dictionary<string, Color> _colors = new Dictionary<string, Color>();
 		private readonly Dictionary<string, Tuple<string, Color>> _drawables = new Dictionary<string, Tuple<string, Color>>();
@@ -577,6 +580,22 @@ namespace Myra.Graphics2D.UI.Styles
 			if (source.GetStyle(TabItemName, out subStyle))
 			{
 				LoadButtonStyleFromSource(subStyle, result.TabItemStyle);
+			}
+
+			if (source.GetStyle(ContentName, out subStyle))
+			{
+				LoadWidgetStyleFromSource(subStyle, result.ContentStyle);
+			}
+
+			int spacing;
+			if (source.GetStyle(HeaderSpacingName, out spacing))
+			{
+				result.HeaderSpacing = spacing;
+			}
+
+			if (source.GetStyle(ButtonSpacingName, out spacing))
+			{
+				result.ButtonSpacing = spacing;
 			}
 		}
 

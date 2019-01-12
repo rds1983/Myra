@@ -85,15 +85,15 @@ namespace Myra.Graphics2D.UI
 					continue;
 				}
 
-				if ((from t in SerializableTypes where t.GetTypeInfo().IsAssignableFrom(property.PropertyType.GetTypeInfo()) select t).FirstOrDefault() != null)
+				if ((from t in SerializableTypes where t.IsAssignableFrom(property.PropertyType) select t).FirstOrDefault() != null)
 				{
 					complexProperties.Add(property);
 				}
 				else
 				{
 					var propertyType = property.PropertyType;
-					if (typeof(IList).GetTypeInfo().IsAssignableFrom(propertyType.GetTypeInfo()) && propertyType.GetTypeInfo().IsGenericType &&
-						(from t in SerializableTypes where t.GetTypeInfo().IsAssignableFrom(propertyType.GenericTypeArguments[0].GetTypeInfo()) select t).FirstOrDefault() != null)
+					if (typeof(IList).IsAssignableFrom(propertyType) && propertyType.IsGenericType &&
+						(from t in SerializableTypes where t.IsAssignableFrom(propertyType.GenericTypeArguments[0]) select t).FirstOrDefault() != null)
 					{
 						complexProperties.Add(property);
 					}
@@ -168,7 +168,7 @@ namespace Myra.Graphics2D.UI
 				else
 				{
 					var collectionRoot = el;
-					if (!typeof(IItemWithId).GetTypeInfo().IsAssignableFrom(property.PropertyType.GenericTypeArguments[0].GetTypeInfo()))
+					if (!typeof(IItemWithId).IsAssignableFrom(property.PropertyType.GenericTypeArguments[0]))
 					{
 						collectionRoot = new XElement(property.Name);
 						el.Add(collectionRoot);
@@ -217,7 +217,7 @@ namespace Myra.Graphics2D.UI
 				{
 					object value = null;
 
-					if (property.PropertyType.GetTypeInfo().IsEnum)
+					if (property.PropertyType.IsEnum)
 					{
 						value = Enum.Parse(property.PropertyType, attr.Value);
 					}
@@ -240,7 +240,7 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			var widgetNamespace = typeof(Widget).GetTypeInfo().Namespace;
+			var widgetNamespace = typeof(Widget).Namespace;
 			foreach (var child in el.Elements())
 			{
 				// Find property
@@ -277,7 +277,7 @@ namespace Myra.Graphics2D.UI
 				{
 					// Property not found
 					// Should be widget class name then
-					var widgetType = typeof(Widget).GetTypeInfo().Assembly.GetType(widgetNamespace + "." + child.Name);
+					var widgetType = typeof(Widget).Assembly.GetType(widgetNamespace + "." + child.Name);
 
 					if (widgetType != null)
 					{
