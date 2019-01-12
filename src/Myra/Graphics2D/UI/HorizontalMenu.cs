@@ -1,7 +1,12 @@
 ﻿using System.ComponentModel;
 using System.Linq;
-using Microsoft.Xna.Framework.Input;
 using Myra.Graphics2D.UI.Styles;
+
+#if !XENKO
+using Microsoft.Xna.Framework.Input;
+#else
+using Xenko.Input;
+#endif
 
 namespace Myra.Graphics2D.UI
 {

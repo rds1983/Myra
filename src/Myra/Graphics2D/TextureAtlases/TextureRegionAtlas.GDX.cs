@@ -1,8 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+
+#if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+#else
+using Xenko.Core.Mathematics;
+using Xenko.Graphics;
+using Texture2D = Xenko.Graphics.Texture;
+using SurfaceFormat = Xenko.Graphics.PixelFormat;
+#endif
 
 namespace Myra.Graphics2D.TextureAtlases
 {
@@ -139,7 +147,11 @@ namespace Myra.Graphics2D.TextureAtlases
 							SurfaceFormat format;
 							if (!Enum.TryParse(value, out format))
 							{
+#if !XENKO
 								format = SurfaceFormat.Color;
+#else
+								format = SurfaceFormat.R8G8B8A8_SNorm;
+#endif
 							}
 
 							pageData.Format = format;

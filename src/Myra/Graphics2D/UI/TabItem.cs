@@ -1,9 +1,14 @@
-﻿using Microsoft.Xna.Framework;
-using Myra.Attributes;
+﻿using Myra.Attributes;
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
 using System.Text;
+
+#if !XENKO
+using Microsoft.Xna.Framework;
+#else
+using Xenko.Core.Mathematics;
+#endif
 
 namespace Myra.Graphics2D.UI
 {

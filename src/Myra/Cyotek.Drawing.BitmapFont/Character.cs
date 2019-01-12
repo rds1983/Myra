@@ -6,7 +6,11 @@
  * Licensed under the MIT License. See license.txt for the full text.
  */
 
+#if !XENKO
 using Microsoft.Xna.Framework;
+#else
+using Xenko.Core.Mathematics;
+#endif
 
 namespace Cyotek.Drawing.BitmapFont
 {

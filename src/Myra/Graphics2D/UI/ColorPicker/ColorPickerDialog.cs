@@ -1,6 +1,12 @@
-using Microsoft.Xna.Framework;
 using Myra.Utility;
 using System;
+
+#if !XENKO
+using Microsoft.Xna.Framework;
+#else
+using Xenko.Core.Mathematics;
+using ColorHSV = Myra.Utility.ColorHSV;
+#endif
 
 namespace Myra.Graphics2D.UI.ColorPicker
 {

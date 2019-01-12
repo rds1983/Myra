@@ -1,5 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿#if !XENKO
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+#else
+using Xenko.Graphics;
+using Xenko.Core.Mathematics;
+#endif
 
 namespace Myra.Graphics2D.UI.Styles
 {

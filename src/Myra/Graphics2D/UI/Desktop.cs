@@ -2,11 +2,20 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
+using Myra.Graphics2D.UI.Styles;
+using Myra.Utility;
+
+#if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Myra.Graphics2D.UI.Styles;
-using Myra.Utility;
+#else
+using Xenko.Core.Mathematics;
+using Xenko.Graphics;
+using Xenko.Input;
+using Xenko.Core.Collections;
+#endif
 
 namespace Myra.Graphics2D.UI
 {
@@ -24,17 +33,38 @@ namespace Myra.Graphics2D.UI
 		protected readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
 		private readonly List<Widget> _focusableWidgets = new List<Widget>();
 		private DateTime _lastTouch;
+		private float _lastMouseWheel;
+		private readonly bool[] _lastMouseButtonsDownState = new bool[Enum.GetNames(typeof(MouseButtons)).Length];
+		private IReadOnlyCollection<Keys> _lastDownKeys;
 
-		internal Point OldMousePosition
+		internal Point LastMousePosition
 		{
 			get; private set;
 		}
 
 		public Point MousePosition { get; private set; }
-		public int MouseWheel { get; private set; }
-		public MouseState MouseState { get; private set; }
-		public KeyboardState KeyboardState { get; private set; }
+		public float MouseWheel { get; private set; }
 		public HorizontalMenu MenuBar { get; set; }
+
+		public Func<Point> MousePositionGetter
+		{
+			get; set;
+		}
+
+		public Func<MouseButtons, bool> IsMouseButtonDownChecker
+		{
+			get; set;
+		}
+
+		public Func<float> MouseWheelGetter
+		{
+			get; set;
+		}
+
+		public Func<IReadOnlyCollection<Keys>> DownKeysGetter
+		{
+			get; set;
+		}
 
 		internal List<Widget> ChildrenCopy
 		{
@@ -134,9 +164,6 @@ namespace Myra.Graphics2D.UI
 			get; private set;
 		}
 
-		public Func<MouseState> MouseStateGetter { get; set; }
-		public Func<KeyboardState> KeyboardStateGetter { get; set; }
-
 		public event EventHandler MouseMoved;
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseDown;
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseUp;
@@ -159,8 +186,10 @@ namespace Myra.Graphics2D.UI
 			Opacity = 1.0f;
 			_widgets.CollectionChanged += WidgetsOnCollectionChanged;
 
-			MouseStateGetter = Mouse.GetState;
-			KeyboardStateGetter = Keyboard.GetState;
+			MousePositionGetter = DefaultMousePositionGetter;
+			IsMouseButtonDownChecker = DefaultIsMouseButtonDownChecker;
+			MouseWheelGetter = DefaultMouseWheelGetter;
+			DownKeysGetter = DefaultDownKeysGetter;
 
 #if MONOGAME
 			MyraEnvironment.Game.Window.TextInput += (s, a) =>
@@ -174,6 +203,79 @@ namespace Myra.Graphics2D.UI
 			};
 #endif
 		}
+
+#if !XENKO
+		public static Point DefaultMousePositionGetter()
+		{
+			return Mouse.GetState().Position;
+		}
+
+		public static bool DefaultIsMouseButtonDownChecker(MouseButtons mb)
+		{
+			var state = Mouse.GetState();
+			switch (mb)
+			{
+				case MouseButtons.Left:
+					return state.LeftButton == ButtonState.Pressed;
+				case MouseButtons.Middle:
+					return state.MiddleButton == ButtonState.Pressed;
+				case MouseButtons.Right:
+					return state.RightButton == ButtonState.Pressed;
+			}
+
+			return false;
+		}
+
+		public static float DefaultMouseWheelGetter()
+		{
+			var state = Mouse.GetState();
+			return state.ScrollWheelValue;
+		}
+
+		public static IReadOnlyCollection<Keys> DefaultDownKeysGetter()
+		{
+			return Keyboard.GetState().GetPressedKeys();
+		}
+#else
+		public static Point DefaultMousePositionGetter()
+		{
+			var input = MyraEnvironment.Game.Input;
+
+			var v = input.AbsoluteMousePosition;
+			return new Point((int)v.X, (int)v.Y);
+		}
+
+		public static bool DefaultIsMouseButtonDownChecker(MouseButtons mb)
+		{
+			var input = MyraEnvironment.Game.Input;
+
+			switch (mb)
+			{
+				case MouseButtons.Left:
+					return input.IsMouseButtonDown(MouseButton.Left);
+				case MouseButtons.Middle:
+					return input.IsMouseButtonDown(MouseButton.Middle);
+				case MouseButtons.Right:
+					return input.IsMouseButtonDown(MouseButton.Right);
+			}
+
+			return false;
+		}
+
+		public static float DefaultMouseWheelGetter()
+		{
+			var input = MyraEnvironment.Game.Input;
+
+			return input.MouseWheelDelta;
+		}
+
+		public static IReadOnlyCollection<Keys> DefaultDownKeysGetter()
+		{
+			var input = MyraEnvironment.Game.Input;
+
+			return input.Keyboard.DownKeys;
+		}
+#endif
 
 		public Widget GetChild(int index)
 		{
@@ -311,11 +413,11 @@ namespace Myra.Graphics2D.UI
 
 			EnsureRenderContext();
 
-			var oldScissorRectangle = _renderContext.Batch.GraphicsDevice.ScissorRectangle;
+			var oldScissorRectangle = CrossEngineStuff.GetScissor();
 
 			_renderContext.Begin();
 
-			_renderContext.Batch.GraphicsDevice.ScissorRectangle = Bounds;
+			CrossEngineStuff.SetScissor(Bounds);
 			_renderContext.View = Bounds;
 			_renderContext.Opacity = Opacity;
 
@@ -334,7 +436,8 @@ namespace Myra.Graphics2D.UI
 			}
 
 			_renderContext.End();
-			_renderContext.Batch.GraphicsDevice.ScissorRectangle = oldScissorRectangle;
+
+			CrossEngineStuff.SetScissor(oldScissorRectangle);
 		}
 
 		public void InvalidateLayout()
@@ -384,9 +487,12 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public void HandleButton(ButtonState buttonState, ButtonState lastState, MouseButtons buttons)
+		public void HandleButton(MouseButtons buttons)
 		{
-			if (buttonState == ButtonState.Pressed && lastState == ButtonState.Released)
+			var isDown = IsMouseButtonDownChecker(buttons);
+			var wasDown = _lastMouseButtonsDownState[(int)buttons];
+
+			if (isDown && !wasDown)
 			{
 				IsTouchDown = true;
 
@@ -425,7 +531,7 @@ namespace Myra.Graphics2D.UI
 					_lastTouch = DateTime.Now;
 				}
 			}
-			else if (buttonState == ButtonState.Released && lastState == ButtonState.Pressed)
+			else if (!isDown && wasDown)
 			{
 				IsTouchDown = false;
 
@@ -445,17 +551,15 @@ namespace Myra.Graphics2D.UI
 
 				ChildrenCopy.HandleTouchUp();
 			}
+
+			_lastMouseButtonsDownState[(int)buttons] = isDown;
 		}
 
 		public void UpdateInput()
 		{
-			if (MouseStateGetter != null)
+			if (MousePositionGetter != null)
 			{
-				var lastState = MouseState;
-				OldMousePosition = new Point(lastState.X, lastState.Y);
-
-				MouseState = MouseStateGetter();
-				MousePosition = new Point(MouseState.X, MouseState.Y);
+				MousePosition = MousePositionGetter();
 
 				if (SpriteBatchBeginParams.TransformMatrix != null)
 				{
@@ -467,9 +571,8 @@ namespace Myra.Graphics2D.UI
 					MousePosition = new Point((int)t.X, (int)t.Y);
 				}
 
-				MouseWheel = MouseState.ScrollWheelValue;
-
-				if (MouseState.X != lastState.X || MouseState.Y != lastState.Y)
+				if (MousePosition.X != LastMousePosition.X || 
+					MousePosition.Y != LastMousePosition.Y)
 				{
 					var ev = MouseMoved;
 					if (ev != null)
@@ -480,13 +583,27 @@ namespace Myra.Graphics2D.UI
 					ChildrenCopy.HandleMouseMovement();
 				}
 
-				HandleButton(MouseState.LeftButton, lastState.LeftButton, MouseButtons.Left);
-				HandleButton(MouseState.MiddleButton, lastState.MiddleButton, MouseButtons.Middle);
-				HandleButton(MouseState.RightButton, lastState.RightButton, MouseButtons.Right);
+				LastMousePosition = MousePosition;
+			}
 
-				if (MouseWheel != lastState.ScrollWheelValue)
+			if (IsMouseButtonDownChecker != null)
+			{
+				HandleButton(MouseButtons.Left);
+				HandleButton(MouseButtons.Middle);
+				HandleButton(MouseButtons.Right);
+			}
+
+			if (MouseWheelGetter != null)
+			{
+				MouseWheel = MouseWheelGetter();
+
+				if (MouseWheel != _lastMouseWheel)
 				{
-					var delta = MouseWheel - lastState.ScrollWheelValue;
+					var delta = MouseWheel;
+#if !XENKO
+					delta -= _lastMouseWheel;
+#endif
+
 					var ev = MouseWheelChanged;
 					if (ev != null)
 					{
@@ -498,68 +615,81 @@ namespace Myra.Graphics2D.UI
 						_focusedWidget.IterateFocusable(w => w.OnMouseWheel(delta));
 					}
 				}
+
+				_lastMouseWheel = MouseWheel;
 			}
 
-			if (KeyboardStateGetter != null)
+			if (DownKeysGetter != null)
 			{
-				var lastKeyboardState = KeyboardState;
-				KeyboardState = Keyboard.GetState();
+				var pressedKeys = DownKeysGetter();
 
-				var pressedKeys = KeyboardState.GetPressedKeys();
-
-				MyraEnvironment.ShowUnderscores = (MenuBar != null && MenuBar.OpenMenuItem != null) ||
-				                                  KeyboardState.IsKeyDown(Keys.LeftAlt) ||
-				                                  KeyboardState.IsKeyDown(Keys.RightAlt);
-
-				for (var i = 0; i < pressedKeys.Length; ++i)
+				if (pressedKeys != null)
 				{
-					var key = pressedKeys[i];
-					if (!lastKeyboardState.IsKeyDown(key))
-					{
-						var ev = KeyDown;
-						if (ev != null)
-						{
-							ev(this, new GenericEventArgs<Keys>(key));
-						}
+					MyraEnvironment.ShowUnderscores = (MenuBar != null && MenuBar.OpenMenuItem != null) ||
+													  pressedKeys.Contains(Keys.LeftAlt) ||
+													  pressedKeys.Contains(Keys.RightAlt);
 
-						if (MenuBar != null && MyraEnvironment.ShowUnderscores)
+					if (_lastDownKeys != null)
+					{
+						foreach (var key in pressedKeys)
 						{
-							MenuBar.OnKeyDown(key);
-						}
-						else
-						{
-							if (_focusedWidget != null)
+							if (!_lastDownKeys.Contains(key))
 							{
-								_focusedWidget.IterateFocusable(w => w.OnKeyDown(key));
+								var ev = KeyDown;
+								if (ev != null)
+								{
+									ev(this, new GenericEventArgs<Keys>(key));
+								}
+
+								if (MenuBar != null && MyraEnvironment.ShowUnderscores)
+								{
+									MenuBar.OnKeyDown(key);
+								}
+								else
+								{
+									if (_focusedWidget != null)
+									{
+										_focusedWidget.IterateFocusable(w => w.OnKeyDown(key));
+
+#if XENKO
+										var ch = key.ToChar(pressedKeys.Contains(Keys.LeftShift) ||
+															pressedKeys.Contains(Keys.RightShift));
+										if (ch != null)
+										{
+											_focusedWidget.IterateFocusable(w => w.OnChar(ch.Value));
+										}
+#endif
+									}
+								}
+
+								if (key == Keys.Escape && ContextMenu != null)
+								{
+									HideContextMenu();
+								}
 							}
 						}
 
-						if (key == Keys.Escape && ContextMenu != null)
+						foreach (var key in _lastDownKeys)
 						{
-							HideContextMenu();
+							if (!pressedKeys.Contains(key))
+							{
+								// Key had been released
+								var ev = KeyUp;
+								if (ev != null)
+								{
+									ev(this, new GenericEventArgs<Keys>(key));
+								}
+
+								if (_focusedWidget != null)
+								{
+									_focusedWidget.IterateFocusable(w => w.OnKeyUp(key));
+								}
+							}
 						}
 					}
 				}
 
-				var lastPressedKeys = lastKeyboardState.GetPressedKeys();
-				for (var i = 0; i < lastPressedKeys.Length; ++i)
-				{
-					var key = lastPressedKeys[i];
-					if (!KeyboardState.IsKeyDown(key))
-					{
-						// Key had been released
-						var ev = KeyUp;
-						if (ev != null)
-						{
-							ev(this, new GenericEventArgs<Keys>(key));
-						}
-
-						if (_focusedWidget != null)
-						{
-							_focusedWidget.IterateFocusable(w => w.OnKeyUp(key));
-						}
-					}
-				}
+				_lastDownKeys = pressedKeys.ToArray();
 			}
 		}
 

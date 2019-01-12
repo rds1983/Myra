@@ -14,7 +14,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+
+#if !XENKO
 using Microsoft.Xna.Framework;
+#else
+using Xenko.Core.Mathematics;
+#endif
 
 namespace Cyotek.Drawing.BitmapFont
 {
@@ -24,16 +29,16 @@ namespace Cyotek.Drawing.BitmapFont
 	/// <seealso cref="T:System.Collections.Generic.IEnumerable{Cyotek.Drawing.BitmapFont.Character}"/>
 	internal class BitmapFont : IEnumerable<Character>
 	{
-		#region Constants
+#region Constants
 
 		/// <summary>
 		/// When used with <see cref="MeasureFont(string,double)"/>, specifies that no wrapping should occur.
 		/// </summary>
 		public const int NoMaxWidth = -1;
 
-		#endregion
+#endregion
 
-		#region Properties
+#region Properties
 
 		/// <summary>
 		/// Gets or sets the alpha channel.
@@ -240,9 +245,9 @@ namespace Cyotek.Drawing.BitmapFont
 		/// </value>
 		public bool Unicode { get; set; }
 
-		#endregion
+#endregion
 
-		#region Methods
+#region Methods
 
 		/// <summary>
 		/// Gets the kerning for the specified character combination.
@@ -565,9 +570,9 @@ namespace Cyotek.Drawing.BitmapFont
 			return result;
 		}
 
-		#endregion
+#endregion
 
-		#region IEnumerable<Character> Interface
+#region IEnumerable<Character> Interface
 
 		/// <summary>
 		/// Returns an enumerator that iterates through the collection.
@@ -596,6 +601,6 @@ namespace Cyotek.Drawing.BitmapFont
 			return this.GetEnumerator();
 		}
 
-		#endregion
+#endregion
 	}
 }

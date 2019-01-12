@@ -1,5 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿#if !XENKO
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+#else
+using Xenko.Core.Mathematics;
+using Xenko.Graphics;
+using BlendState = Xenko.Graphics.BlendStateDescription;
+using DepthStencilState = Xenko.Graphics.DepthStencilStateDescription;
+using RasterizerState = Xenko.Graphics.RasterizerStateDescription;
+#endif
 
 namespace Myra.Graphics2D
 {

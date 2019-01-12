@@ -1,6 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+
+#if !XENKO
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
+#else
+using Xenko.Core.Mathematics;
+using Xenko.Graphics;
+#endif
 
 namespace Myra.Graphics2D.TextureAtlases
 {

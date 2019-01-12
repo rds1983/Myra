@@ -1,7 +1,16 @@
-﻿using System;
+﻿using Myra.Utility;
+using System;
 using System.Collections.Generic;
+
+#if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Clr = Microsoft.Xna.Framework.Color;
+#else
+using Xenko.Core.Mathematics;
+using Xenko.Graphics;
+using Clr = Xenko.Core.Mathematics.Color;
+#endif
 
 namespace Myra.Graphics2D.Text
 {
@@ -103,7 +112,7 @@ namespace Myra.Graphics2D.Text
 			{
 				var sz = _spriteFont.MeasureString(_text);
 				_size = new Point((int) sz.X, (int) sz.Y);
-#if !FNA
+#if MONOGAME
 				var fontGlyphs = _spriteFont.GetGlyphs();
 
 				var offset = Vector2.Zero;
@@ -152,7 +161,7 @@ namespace Myra.Graphics2D.Text
 			}
 			else
 			{
-				_size = new Point(0, _spriteFont.LineSpacing);
+				_size = new Point(0, CrossEngineStuff.LineSpacing(_spriteFont));
 			}
 
 			_dirty = false;
@@ -186,7 +195,7 @@ namespace Myra.Graphics2D.Text
 						pos.Y + g.Bounds.Y, 
 						g.Bounds.Width, g.Bounds.Height);
 
-					batch.DrawRectangle(r, Microsoft.Xna.Framework.Color.White);
+					batch.DrawRectangle(r, Clr.White);
 				}
 			}
 

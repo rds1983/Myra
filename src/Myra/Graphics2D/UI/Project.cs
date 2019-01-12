@@ -9,9 +9,13 @@ using Myra.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Xml.Linq;
-using Microsoft.Xna.Framework;
 using System.Globalization;
-using Microsoft.Xna.Framework.Input;
+
+#if !XENKO
+using Microsoft.Xna.Framework;
+#else
+using Xenko.Core.Mathematics;
+#endif
 
 namespace Myra.Graphics2D.UI
 {

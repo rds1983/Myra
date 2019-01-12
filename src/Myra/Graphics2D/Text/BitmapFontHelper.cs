@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Cyotek.Drawing.BitmapFont;
+using Myra.Graphics2D.TextureAtlases;
+
+#if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Graphics2D.TextureAtlases;
+#else
+using Xenko.Core.Mathematics;
+using Xenko.Graphics;
+using Xenko.Graphics.Font;
+#endif
 
 namespace Myra.Graphics2D.Text
 {
@@ -16,6 +22,7 @@ namespace Myra.Graphics2D.Text
 			var data = new BitmapFont();
 			data.LoadText(text);
 
+#if !XENKO
 			var glyphBounds = new List<Rectangle>();
 			var cropping = new List<Rectangle>();
 			var chars = new List<char>();
@@ -37,7 +44,7 @@ namespace Myra.Graphics2D.Text
 
 				kerning.Add(new Vector3(0, character.Bounds.Width, character.XAdvance - character.Bounds.Width));
 			}
-
+			
 			var constructorInfo = typeof(SpriteFont).GetConstructors().First();
 			var result = (SpriteFont) constructorInfo.Invoke(new object[]
 			{
@@ -46,6 +53,36 @@ namespace Myra.Graphics2D.Text
 			});
 
 			return result;
+#else
+			var textureRegion = textureRegionLoader(data.Pages[0].FileName);
+
+			var glyphs = new List<Glyph>();
+			foreach (var pair in data.Characters)
+			{
+				var character = pair.Value;
+
+				var bounds = character.Bounds;
+				bounds.X += textureRegion.Bounds.X;
+				bounds.Y += textureRegion.Bounds.Y;
+				var glyph = new Glyph
+				{
+					Character = character.Char,
+					BitmapIndex = 0,
+					Offset = new Vector2(character.Offset.X, character.Offset.Y),
+					Subrect = bounds,
+					XAdvance = character.XAdvance
+				};
+
+				glyphs.Add(glyph);
+			}
+
+			var images = new List<Image>
+			{
+				DefaultAssets.UIImage
+			};
+
+			return DefaultAssets.FontSystem.NewStatic(data.LineHeight, glyphs, images, 0, data.LineHeight);
+#endif
 		}
 	}
 }

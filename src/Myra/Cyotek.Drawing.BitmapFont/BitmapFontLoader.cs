@@ -9,7 +9,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+
+#if !XENKO
 using Microsoft.Xna.Framework;
+#else
+using Xenko.Core.Mathematics;
+#endif
 
 namespace Cyotek.Drawing.BitmapFont
 {

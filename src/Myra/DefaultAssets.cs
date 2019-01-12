@@ -1,11 +1,18 @@
-﻿using System.Reflection;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Myra.Graphics2D;
-using Myra.Graphics2D.Text;
+﻿using Myra.Graphics2D.Text;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
+
+#if !XENKO
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+#else
+using Xenko.Core.Mathematics;
+using Xenko.Graphics;
+using Xenko.Graphics.Font;
+using Texture2D = Xenko.Graphics.Texture;
+using RasterizerState = Xenko.Graphics.RasterizerStateDescription;
+#endif
 
 namespace Myra
 {
@@ -20,6 +27,11 @@ namespace Myra
 		private static readonly ResourceAssetResolver _assetResolver = new ResourceAssetResolver(
 			typeof(DefaultAssets).Assembly,
 			"Myra.Resources.");
+
+#if XENKO
+		internal static FontSystem FontSystem = new FontSystem();
+		private static Image _uiImage;
+#endif
 
 		private static SpriteFont _font;
 		private static SpriteFont _fontSmall;
@@ -36,8 +48,8 @@ namespace Myra
 			{
 				if (_white == null)
 				{
-					_white = new Texture2D(MyraEnvironment.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
-					_white.SetData(new[] {Color.White});
+					_white = CrossEngineStuff.CreateTexture2D(1, 1);
+					CrossEngineStuff.SetData(_white, new[] {Color.White});
 				}
 
 				return _white;
@@ -119,6 +131,49 @@ namespace Myra
 			}
 		}
 
+#if XENKO
+		public static Image UIImage
+		{
+			get
+			{
+				if (_uiImage != null)
+				{
+					return _uiImage;
+				}
+
+				_uiImage = Image.Load(_assetResolver.Open(DefaultAtlasImageName));
+
+				// Premultiply Alpha
+/*				var pixelBuffer = _uiImage.PixelBuffer[0];
+				for (var y = 0; y < pixelBuffer.Height; ++y)
+				{
+					for (var x = 0; x < pixelBuffer.Width; ++x)
+					{
+						var color = pixelBuffer.GetPixel<Color>(x, y);
+						color = color.ApplyAlpha();
+						pixelBuffer.SetPixel(x, y, color);
+					}
+				}*/
+
+				return _uiImage;
+			}
+		}
+
+		public static Texture2D UIBitmap
+		{
+			get
+			{
+				if (_uiBitmap != null)
+				{
+					return _uiBitmap;
+				}
+
+				_uiBitmap = Texture2D.New(MyraEnvironment.GraphicsDevice, UIImage);
+
+				return _uiBitmap;
+			}
+		}
+#else
 		public static Texture2D UIBitmap
 		{
 			get
@@ -134,6 +189,7 @@ namespace Myra
 				return _uiBitmap;
 			}
 		}
+#endif
 
 		public static RasterizerState UIRasterizerState
 		{
@@ -150,6 +206,13 @@ namespace Myra
 				};
 				return _uiRasterizerState;
 			}
+		}
+
+		static DefaultAssets()
+		{
+#if XENKO
+			FontSystem.Load(MyraEnvironment.GraphicsDevice, null);
+#endif
 		}
 
 		internal static void Dispose()
@@ -171,13 +234,15 @@ namespace Myra
 			{
 				_uiBitmap.Dispose();
 				_uiBitmap = null;
-			}		
+			}
 
+#if !XENKO
 			if (_uiRasterizerState != null)
 			{
 				_uiRasterizerState.Dispose();
 				_uiRasterizerState = null;
 			}
+#endif
 		}
 	}
 }

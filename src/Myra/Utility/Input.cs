@@ -1,6 +1,11 @@
 ﻿// This code had been borrowed from the MonoGame.Extended project: https://github.com/craftworkgames/MonoGame.Extended
 
+
+#if !XENKO
 using Microsoft.Xna.Framework.Input;
+#else
+using Xenko.Input;
+#endif
 
 namespace Myra.Utility
 {

@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Utility;
 using Newtonsoft.Json.Linq;
+
+#if !XENKO
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+#else
+using Xenko.Graphics;
+using Xenko.Core.Mathematics;
+#endif
 
 namespace Myra.Graphics2D.UI.Styles
 {

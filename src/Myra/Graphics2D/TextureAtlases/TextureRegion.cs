@@ -1,6 +1,13 @@
 ﻿using System;
+
+#if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+#else
+using Xenko.Core.Mathematics;
+using Xenko.Graphics;
+using Texture2D = Xenko.Graphics.Texture;
+#endif
 
 namespace Myra.Graphics2D.TextureAtlases
 {
@@ -60,10 +67,19 @@ namespace Myra.Graphics2D.TextureAtlases
 
 		public virtual void Draw(SpriteBatch batch, Rectangle dest, Color color)
 		{
+#if !XENKO
 			batch.Draw(Texture,
 				dest,
 				Bounds,
 				color);
+#else
+			batch.Draw(Texture,
+				new RectangleF(dest.X, dest.Y, dest.Width, dest.Height),
+				new RectangleF(Bounds.X, Bounds.Y, Bounds.Width, Bounds.Height),
+				color,
+				0.0f,
+				Vector2.Zero);
+#endif
 		}
 	}
 }

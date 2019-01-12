@@ -1,12 +1,17 @@
 using System;
 using System.ComponentModel;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Myra.Attributes;
-using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using Newtonsoft.Json;
+
+#if !XENKO
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+#else
+using Xenko.Core.Mathematics;
+using Xenko.Input;
+#endif
 
 namespace Myra.Graphics2D.UI
 {
@@ -601,7 +606,7 @@ namespace Myra.Graphics2D.UI
 					return false;
 				}
 
-				return Bounds.Contains(Desktop.OldMousePosition);
+				return Bounds.Contains(Desktop.LastMousePosition);
 			}
 		}
 
@@ -833,7 +838,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var batch = context.Batch;
-			var oldScissorRectangle = batch.GraphicsDevice.ScissorRectangle;
+			var oldScissorRectangle = CrossEngineStuff.GetScissor();
 			if (ClipToBounds && !MyraEnvironment.DisableClipping)
 			{
 				var newScissorRectangle = Rectangle.Intersect(oldScissorRectangle, view);
@@ -844,7 +849,8 @@ namespace Myra.Graphics2D.UI
 				}
 
 				context.Flush();
-				batch.GraphicsDevice.ScissorRectangle = newScissorRectangle;
+
+				CrossEngineStuff.SetScissor(newScissorRectangle);
 			}
 
 			var oldOpacity = context.Opacity;
@@ -883,7 +889,7 @@ namespace Myra.Graphics2D.UI
 			if (ClipToBounds && !MyraEnvironment.DisableClipping)
 			{
 				context.Flush();
-				batch.GraphicsDevice.ScissorRectangle = oldScissorRectangle;
+				CrossEngineStuff.SetScissor(oldScissorRectangle);
 			}
 
 			context.Opacity = oldOpacity;
@@ -957,9 +963,14 @@ namespace Myra.Graphics2D.UI
 
 		internal virtual void MoveChildren(Point delta)
 		{
-			_bounds.Location += delta;
-			_actualBounds.Location += delta;
-			_containerBounds.Location += delta;
+			_bounds.X += delta.X;
+			_bounds.Y += delta.Y;
+
+			_actualBounds.X += delta.X;
+			_actualBounds.Y += delta.Y;
+
+			_containerBounds.X += delta.X;
+			_containerBounds.Y += delta.Y;
 		}
 
 		public virtual void UpdateLayout()

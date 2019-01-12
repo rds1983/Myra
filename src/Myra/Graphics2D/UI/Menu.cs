@@ -1,13 +1,19 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using Newtonsoft.Json;
 using static Myra.Graphics2D.UI.Grid;
+
+#if !XENKO
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+#else
+using Xenko.Core.Mathematics;
+using Xenko.Input;
+#endif
 
 namespace Myra.Graphics2D.UI
 {

@@ -1,11 +1,18 @@
 using System.ComponentModel;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Myra.Attributes;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
+using Myra.Utility;
 using Newtonsoft.Json;
+
+#if !XENKO
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+#else
+using Xenko.Core.Mathematics;
+using Xenko.Graphics;
+#endif
 
 namespace Myra.Graphics2D.UI
 {
@@ -163,9 +170,9 @@ namespace Myra.Graphics2D.UI
 				result = formattedText.Size;
 			}
 
-			if (result.Y < Font.LineSpacing)
+			if (result.Y < CrossEngineStuff.LineSpacing(Font))
 			{
-				result.Y = Font.LineSpacing;
+				result.Y = CrossEngineStuff.LineSpacing(Font);
 			}
 
 			return result;

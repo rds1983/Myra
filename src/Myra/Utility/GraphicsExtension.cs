@@ -2,8 +2,14 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
+
+#if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+#else
+using Xenko.Core.Mathematics;
+using Texture2D = Xenko.Graphics.Texture;
+#endif
 
 namespace Myra.Utility
 {
@@ -259,25 +265,31 @@ namespace Myra.Utility
 			return (byte)fr;
 		}
 
+		internal static Color ApplyAlpha(this Color src)
+		{
+			byte a = src.A;
+
+			src.R = ApplyAlpha(src.R, a);
+			src.G = ApplyAlpha(src.G, a);
+			src.B = ApplyAlpha(src.B, a);
+
+			return src;
+		}
+
 		/// <summary>
 		/// Updates texture colors by alpha
 		/// </summary>
 		/// <param name="texture"></param>
 		public static void PremultiplyAlpha(this Texture2D texture)
 		{
-			Color[] data = new Color[texture.Width * texture.Height];
-			texture.GetData(data);
+			var data = CrossEngineStuff.GetData(texture);
 
 			for (int i = 0; i < data.Length; ++i)
 			{
-				byte a = data[i].A;
-
-				data[i].R = ApplyAlpha(data[i].R, a);
-				data[i].G = ApplyAlpha(data[i].G, a);
-				data[i].B = ApplyAlpha(data[i].B, a);
+				data[i] = ApplyAlpha(data[i]);
 			}
 
-			texture.SetData(data);
+			CrossEngineStuff.SetData(texture, data);
 		}
 	}
 }

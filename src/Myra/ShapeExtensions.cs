@@ -1,9 +1,16 @@
 ﻿// This code had been borrowed from the MonoGame.Extended project: https://github.com/craftworkgames/MonoGame.Extended
 
 using System;
+
+#if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Utility;
+#else
+using Xenko.Core.Mathematics;
+using Xenko.Graphics;
+using Texture2D = Xenko.Graphics.Texture;
+#endif
+
 
 namespace Myra
 {

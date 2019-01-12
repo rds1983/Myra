@@ -1,7 +1,14 @@
 ﻿using System;
 using System.Reflection;
+
+#if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+#else
+using Xenko.Core.Mathematics;
+using Xenko.Engine;
+using Xenko.Graphics;
+#endif
 
 namespace Myra
 {
@@ -26,17 +33,21 @@ namespace Myra
 					return;
 				}
 
+#if !XENKO
 				if (_game != null)
 				{
 					_game.Disposed -= GameOnDisposed;
 				}
+#endif
 
 				_game = value;
 
+#if !XENKO
 				if (_game != null)
 				{
 					_game.Disposed += GameOnDisposed;
 				}
+#endif
 			}
 		}
 
