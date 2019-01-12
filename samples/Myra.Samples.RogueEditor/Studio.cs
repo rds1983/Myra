@@ -5,6 +5,7 @@ using System.IO;
 using Myra.Samples.RogueEditor.UI;
 using Myra.Graphics2D.UI.File;
 using Myra.Samples.RogueEditor.Data;
+using Myra.Graphics2D.UI.Properties;
 
 namespace Myra.Samples.RogueEditor
 {
@@ -24,8 +25,10 @@ namespace Myra.Samples.RogueEditor
 		private string _lastFolder;
 		private bool _isDirty;
 		private readonly uint[] _customColors;
-		private Module _project;
 		private NewMapDialog _newMapDialog;
+		private Explorer _explorer;
+		private MapEditor _mapEditor;
+		private PropertyGrid _propertyGrid;
 
 		public string FilePath
 		{
@@ -79,21 +82,24 @@ namespace Myra.Samples.RogueEditor
 			}
 		}
 
-		public Module Module
+		public Module Project
 		{
 			get
 			{
-				return _project;
+				return _explorer.Project;
 			}
 
 			set
 			{
-				if (_project == value)
-				{
-					return;
-				}
+				_explorer.Project = value;
+			}
+		}
 
-				_project = value;
+		public Explorer Explorer
+		{
+			get
+			{
+				return _explorer;
 			}
 		}
 
@@ -147,6 +153,7 @@ namespace Myra.Samples.RogueEditor
 
 			if (_state == null || string.IsNullOrEmpty(_state.EditedFile))
 			{
+				New();
 			}
 			else
 			{
@@ -164,7 +171,7 @@ namespace Myra.Samples.RogueEditor
 
 			_ui = new StudioWidget();
 
-			_ui._menuFileNew.Selected += NewMapItemOnClicked;
+			_ui._menuFileNew.Selected += NewItemOnClicked;
 			_ui._menuFileOpen.Selected += OpenProjectItemOnClicked;
 			_ui._menuFileSave.Selected += SaveItemOnClicked;
 			_ui._menuFileDebugOptions.Selected += DebugOptionsItemOnSelected;
@@ -175,6 +182,17 @@ namespace Myra.Samples.RogueEditor
 			_desktop.Widgets.Add(_ui);
 
 			_ui._topSplitPane.SetSplitterPosition(0, _state != null ? _state.TopSplitterPosition : 0.75f);
+
+			_explorer = new Explorer();
+			_explorer.Tree.SelectionChanged += OnExplorerSelectionChanged;
+			_ui._explorerContainer.Widgets.Add(_explorer);
+
+			_propertyGrid = new PropertyGrid();
+			_propertyGrid.PropertyChanged += OnPropertyChanged;
+			_ui._rightSplitPane.Widgets.Add(_propertyGrid);
+
+			_mapEditor = new MapEditor();
+			_ui._leftContainer.Widgets.Add(_mapEditor);
 
 			_statisticsGrid = new Grid
 			{
@@ -236,6 +254,21 @@ namespace Myra.Samples.RogueEditor
 		{
 			var dialog = Dialog.CreateMessageBox("About", "Myra.Samples.RogueEditor " + MyraEnvironment.Version);
 			dialog.ShowModal(_desktop);
+		}
+
+		private void New()
+		{
+			Module newDocument = Module.New();
+
+			Project = newDocument;
+
+			FilePath = string.Empty;
+			IsDirty = false;
+		}
+
+		private void NewItemOnClicked(object sender, EventArgs eventArgs)
+		{
+			New();
 		}
 
 		private void SaveItemOnClicked(object sender, EventArgs eventArgs)
@@ -328,7 +361,7 @@ namespace Myra.Samples.RogueEditor
 					}
 				}
 
-//				_ui._mapEditor.Map = newMap;
+				_mapEditor.Map = newMap;
 
 				FilePath = string.Empty;
 				IsDirty = false;
@@ -347,7 +380,7 @@ namespace Myra.Samples.RogueEditor
 				return;
 			}
 
-			var data = _project.ToJSON();
+			var data = Project.ToJSON();
 			File.WriteAllText(filePath, data);
 
 			FilePath = filePath;
@@ -396,7 +429,7 @@ namespace Myra.Samples.RogueEditor
 				// Load module
 				Module newDocument = Module.FromJSON(File.ReadAllText(filePath));
 
-				Module = newDocument;
+				Project = newDocument;
 
 				FilePath = filePath;
 				IsDirty = false;
@@ -415,7 +448,7 @@ namespace Myra.Samples.RogueEditor
 
 		private void UpdateTitle()
 		{
-			var title = string.IsNullOrEmpty(_filePath) ? "Hebron Map Editor" : _filePath;
+			var title = string.IsNullOrEmpty(_filePath) ? "Myra.Samples.RogueEditor" : _filePath;
 
 			if (_isDirty)
 			{
@@ -423,6 +456,22 @@ namespace Myra.Samples.RogueEditor
 			}
 
 			Window.Title = title;
+		}
+
+		private void OnPropertyChanged(object sender, Utility.GenericEventArgs<string> e)
+		{
+			IsDirty = true;
+		}
+
+		private void OnExplorerSelectionChanged(object sender, EventArgs e)
+		{
+			_propertyGrid.Object = _explorer.SelectedObject is Project ? null : _explorer.SelectedObject;
+
+			var asMap = _propertyGrid.Object as Map;
+			if (asMap != null)
+			{
+				_mapEditor.Map = asMap;
+			}
 		}
 	}
 }

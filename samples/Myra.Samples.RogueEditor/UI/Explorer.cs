@@ -32,6 +32,28 @@ namespace Myra.Samples.RogueEditor.UI
 			get { return (Tree) Widget; }
 		}
 
+		public TreeNode SelectedNode
+		{
+			get
+			{
+				return Tree.SelectedRow;
+			}
+			set
+			{
+				Tree.SelectedRow = value;
+			}
+		}
+
+		public object SelectedObject
+		{
+			get
+			{
+				var treeNode = SelectedNode;
+
+				return treeNode != null ? treeNode.Tag : null;
+			}
+		}
+
 		public Explorer()
 		{
 			Widget = new Tree();
@@ -60,7 +82,7 @@ namespace Myra.Samples.RogueEditor.UI
 				return;
 			}
 
-			root.Text = "Root";
+			root.Text = "Project";
 
 			var tileInfosNode = root.AddSubNode("TileInfos");
 			foreach (var tileInfo in _project.TileInfos.Values)

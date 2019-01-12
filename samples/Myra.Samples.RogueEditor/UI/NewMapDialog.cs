@@ -9,7 +9,7 @@ namespace Myra.Samples.RogueEditor.UI
 		{
 			Title = "New Map";
 
-			foreach(var tileInfo in Studio.Instance.Module.TileInfos)
+			foreach(var tileInfo in Studio.Instance.Project.TileInfos)
 			{
 				var text = "[" + tileInfo.Value.Color.ToHexString() + "]" + tileInfo.Key;
 				_comboFiller.Items.Add(new ListItem(text, null, tileInfo.Value));

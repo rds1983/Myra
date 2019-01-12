@@ -7,6 +7,7 @@ namespace Myra.Samples.RogueEditor.Data
 	{
 		private TileInfo[,] _tiles;
 
+		[HiddenInEditor]
 		public Point Size
 		{
 			get
@@ -33,11 +34,6 @@ namespace Myra.Samples.RogueEditor.Data
 			}
 		}
 
-		public bool Local
-		{
-			get; set;
-		}
-
 		[HiddenInEditor]
 		public TileInfo[,] Tiles
 		{
@@ -45,11 +41,6 @@ namespace Myra.Samples.RogueEditor.Data
 			{
 				return _tiles;
 			}
-		}
-
-		public Map()
-		{
-			Local = true;
 		}
 
 		public TileInfo GetTileAt(int x, int y)

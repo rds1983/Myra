@@ -28,7 +28,7 @@
     <HorizontalSplitPane Id="_topSplitPane" GridRow="1">
       <Panel Id="_leftContainer" />
       <VerticalSplitPane Id="_rightSplitPane" GridColumn="2" GridRow="1">
-        <Panel Id="_mapViewerContainer" />
+        <Panel Id="_explorerContainer" />
       </VerticalSplitPane>
     </HorizontalSplitPane>
   </Grid>
