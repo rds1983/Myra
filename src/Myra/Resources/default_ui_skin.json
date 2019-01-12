@@ -194,6 +194,21 @@
 			}
 		}
 	},
+	"tabControl": {
+		"tabItem": {
+			"overBackground": "button-over",
+			"pressedBackground": "list-selection",
+			"padding": {
+				"left": 5.0,
+				"right": 5.0
+			},
+			"label": {
+				"font": "default-font",
+				"textColor": "white",
+				"disabledTextColor": "grey"
+			}
+		}
+	},
 	"tree": {
 		"selectionBackground": "tree-selection",
 		"selectionHoverBackground": "button-over",

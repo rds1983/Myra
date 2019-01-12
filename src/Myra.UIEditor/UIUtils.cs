@@ -1,16 +1,17 @@
-﻿using Myra.Graphics2D.UI;
+﻿using Myra.Graphics2D;
+using Myra.Graphics2D.UI;
 using System.Collections.Generic;
 
 namespace Myra.UIEditor
 {
 	public static class UIUtils
 	{
-		public static IEnumerable<Widget> GetRealChildren(this Widget w)
+		public static IEnumerable<Widget> GetRealChildren(this object w)
 		{
 			IEnumerable<Widget> widgets = null;
-			if (w is Window)
+			if (w is IContent)
 			{
-				widgets = new Widget[] { ((Window)w).Content };
+				widgets = new Widget[] { ((IContent)w).Content };
 			}
 			else if (w is SplitPane)
 			{
@@ -20,10 +21,6 @@ namespace Myra.UIEditor
 			{
 				var container = w as MultipleItemsContainer;
 				widgets = container.Widgets;
-			}
-			else if (w is ScrollPane)
-			{
-				widgets = new Widget[] { ((ScrollPane)w).Widget };
 			}
 
 			return widgets;

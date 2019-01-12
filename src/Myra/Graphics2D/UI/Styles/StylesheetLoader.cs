@@ -26,7 +26,9 @@ namespace Myra.Graphics2D.UI.Styles
 		public const string ComboBoxName = "comboBox";
 		public const string ComboBoxItemName = "comboBoxItem";
 		public const string ListBoxName = "listBox";
+		public const string TabControlName = "tabControl";
 		public const string ListBoxItemName = "listBoxItem";
+		public const string TabItemName = "tabItem";
 		public const string GridName = "grid";
 		public const string TreeName = "tree";
 		public const string SplitPaneName = "splitPane";
@@ -565,7 +567,17 @@ namespace Myra.Graphics2D.UI.Styles
 			{
 				LoadSeparatorStyleFromSource(subStyle, result.SeparatorStyle);
 			}
+		}
 
+		private void LoadTabControlStyleFromSource(JObject source, TabControlStyle result)
+		{
+			LoadWidgetStyleFromSource(source, result);
+
+			JObject subStyle;
+			if (source.GetStyle(TabItemName, out subStyle))
+			{
+				LoadButtonStyleFromSource(subStyle, result.TabItemStyle);
+			}
 		}
 
 		private void LoadMenuItemStyleFromSource(JObject source, MenuItemStyle result)
@@ -753,6 +765,7 @@ namespace Myra.Graphics2D.UI.Styles
 			FillStyles(VerticalSeparatorName, result.VerticalSeparatorStyles, LoadSeparatorStyleFromSource);
 			FillStyles(ComboBoxName, result.ComboBoxStyles, LoadComboBoxStyleFromSource);
 			FillStyles(ListBoxName, result.ListBoxStyles, LoadListBoxStyleFromSource);
+			FillStyles(TabControlName, result.TabControlStyles, LoadTabControlStyleFromSource);
 			FillStyles(TreeName, result.TreeStyles, LoadTreeStyleFromSource);
 			FillStyles(HorizontalSplitPaneName, result.HorizontalSplitPaneStyles, LoadSplitPaneStyleFromSource);
 			FillStyles(VerticalSplitPaneName, result.VerticalSplitPaneStyles, LoadSplitPaneStyleFromSource);

@@ -836,7 +836,6 @@ namespace Myra.Graphics2D.UI
 			var oldScissorRectangle = batch.GraphicsDevice.ScissorRectangle;
 			if (ClipToBounds && !MyraEnvironment.DisableClipping)
 			{
-				oldScissorRectangle = batch.GraphicsDevice.ScissorRectangle;
 				var newScissorRectangle = Rectangle.Intersect(oldScissorRectangle, view);
 
 				if (newScissorRectangle.IsEmpty)

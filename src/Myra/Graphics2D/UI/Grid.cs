@@ -5,7 +5,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using Myra.Attributes;
-using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using Newtonsoft.Json;
 

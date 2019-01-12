@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using Myra.Graphics2D.UI;
-using MenuItem = Myra.Graphics2D.UI.MenuItem;
-using TreeNode = Myra.Graphics2D.UI.TreeNode;
 
 namespace Myra.UIEditor.UI
 {
@@ -11,12 +9,18 @@ namespace Myra.UIEditor.UI
 
 		public Tree Tree
 		{
-			get { return (Tree)InternalChild; }
+			get
+			{
+				return (Tree)InternalChild;
+			}
 		}
 
 		public Project Project
 		{
-			get { return _project; }
+			get
+			{
+				return _project;
+			}
 
 			set
 			{
@@ -50,7 +54,10 @@ namespace Myra.UIEditor.UI
 
 		public TreeNode SelectedNode
 		{
-			get { return Tree.SelectedRow; }
+			get
+			{
+				return Tree.SelectedRow;
+			}
 			set
 			{
 				Tree.SelectedRow = value;
@@ -115,6 +122,12 @@ namespace Myra.UIEditor.UI
 				id = asWidget.Id;
 			}
 
+			var asTabItem = item as TabItem;
+			if (asTabItem != null)
+			{
+				id = asTabItem.Id;
+			}
+
 			var text = item.GetType().Name;
 			var i = text.IndexOf("`");
 			if (i >= 0)
@@ -166,27 +179,32 @@ namespace Myra.UIEditor.UI
 					var subNode = AddObject(node, subItem);
 					Rebuild(subNode, subItem);
 				}
+
+				return;
 			}
-			else
+
+			var asTabControl = item as TabControl;
+			if (asTabControl != null)
 			{
-				var widget = item as Widget;
-
-				if (widget == null)
+				foreach (var subItem in asTabControl.Items)
 				{
-					return;
+					var subNode = AddObject(node, subItem);
+					Rebuild(subNode, subItem);
 				}
 
-				IEnumerable<Widget> widgets = widget.GetRealChildren();
-				if (widgets == null)
-				{
-					return;
-				}
+				return;
+			}
 
-				foreach (var child in widgets)
-				{
-					var subNode = AddObject(node, child);
-					Rebuild(subNode, child);
-				}
+			IEnumerable<Widget> widgets = item.GetRealChildren();
+			if (widgets == null)
+			{
+				return;
+			}
+
+			foreach (var child in widgets)
+			{
+				var subNode = AddObject(node, child);
+				Rebuild(subNode, child);
 			}
 		}
 	}

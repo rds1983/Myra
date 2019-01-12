@@ -84,6 +84,7 @@ namespace Myra.Graphics2D.UI
 
 		protected void InvalidateChildren()
 		{
+			InvalidateMeasure();
 			_childrenDirty = true;
 		}
 

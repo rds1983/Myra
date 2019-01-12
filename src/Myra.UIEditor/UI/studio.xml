@@ -37,6 +37,7 @@
         <MenuItem Id="_menuControlsAddVerticalSeparator" Text="Add Vertical Separator" />
         <MenuItem Id="_menuControlsAddComboBox" Text="Add ComboBox" />
         <MenuItem Id="_menuControlsAddListBox" Text="Add ListBox" />
+        <MenuItem Id="_menuControlsAddTabControl" Text="Add TabControl" />
         <MenuItem Id="_menuControlsAddImage" Text="Add Image" />
         <MenuItem Id="_menuControlsAddTextBlock" Text="Add TextBlock" />
         <MenuItem Id="_menuControlsAddTextField" Text="Add TextField" />

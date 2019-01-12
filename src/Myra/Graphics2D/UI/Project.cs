@@ -294,6 +294,11 @@ namespace Myra.Graphics2D.UI
 							((ListBox)obj).Items.Add((ListItem)item);
 						}
 						else
+						if (obj is TabControl)
+						{
+							((TabControl)obj).Items.Add((TabItem)item);
+						}
+						else
 						if (obj is MenuItem)
 						{
 							((MenuItem)obj).Items.Add((IMenuItem)item);
@@ -302,9 +307,9 @@ namespace Myra.Graphics2D.UI
 						{
 							((Menu)obj).Items.Add((IMenuItem)item);
 						}
-						else if (obj is Window)
+						else if (obj is IContent)
 						{
-							((Window)obj).Content = (Widget)item;
+							((IContent)obj).Content = (Widget)item;
 						}
 						else if (obj is MultipleItemsContainer)
 						{
@@ -313,10 +318,6 @@ namespace Myra.Graphics2D.UI
 						else if (obj is SplitPane)
 						{
 							((SplitPane)obj).Widgets.Add((Widget)item);
-						}
-						else if (obj is ScrollPane)
-						{
-							((ScrollPane)obj).InternalChild = (Widget)item;
 						}
 						else if (obj is Project)
 						{

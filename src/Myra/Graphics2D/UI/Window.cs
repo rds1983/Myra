@@ -11,7 +11,7 @@ using static Myra.Graphics2D.UI.Grid;
 
 namespace Myra.Graphics2D.UI
 {
-	public class Window : SingleItemContainer<Grid>
+	public class Window : SingleItemContainer<Grid>, IContent
 	{
 		[Obsolete("This enum is obsolete and will be removed in the future versions")]
 		public enum DefaultModalResult

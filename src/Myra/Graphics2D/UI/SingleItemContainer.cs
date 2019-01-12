@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
-	public abstract class SingleItemContainer<T> : Container where T : Widget
+	public class SingleItemContainer<T> : Container where T : Widget
 	{
 		private T _internalChild;
 

@@ -283,6 +283,10 @@ namespace Myra.UIEditor
 			{
 				AddStandardControl<ListBox>();
 			};
+			_ui._menuControlsAddTabControl.Selected += (s, a) =>
+			{
+				AddStandardControl<TabControl>();
+			};
 			_ui._menuControlsAddPanel.Selected += (s, a) =>
 			{
 				AddStandardControl<Panel>();

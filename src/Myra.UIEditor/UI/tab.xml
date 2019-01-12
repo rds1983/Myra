@@ -1,0 +1,10 @@
+<Project>
+  <ExportOptions />
+  <Panel>
+    <TabControl>
+      <TabItem Id="" Text="Tab 1" />
+      <TabItem Text="Tab 2" />
+      <TabItem Text="Tab 3" />
+    </TabControl>
+  </Panel>
+</Project>
