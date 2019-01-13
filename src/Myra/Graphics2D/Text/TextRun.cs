@@ -173,7 +173,7 @@ namespace Myra.Graphics2D.Text
 
 			batch.DrawString(_spriteFont, _text, new Vector2(pos.X, pos.Y), color * opacity);
 
-#if !FNA
+#if MONOGAME
 			if (MyraEnvironment.ShowUnderscores && UnderscoreIndex != null && UnderscoreIndex.Value < Count)
 			{
 				var g = _glyphs[UnderscoreIndex.Value];
