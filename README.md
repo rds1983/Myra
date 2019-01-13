@@ -29,7 +29,7 @@ UI Editor
 ## Credits
 * [MonoGame](http://www.monogame.net/)
 * [FNA](https://github.com/FNA-XNA/FNA)
-* [Xenko](hhttps://xenko.com/)
+* [Xenko](https://xenko.com/)
 * [MonoGame.Extended](https://github.com/craftworkgames/MonoGame.Extended)
 * [VisUI](https://github.com/kotcrab/vis-editor/wiki/VisUI)
 * [LibGDX](http://libgdx.badlogicgames.com/)

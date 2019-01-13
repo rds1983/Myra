@@ -14,11 +14,19 @@ using Microsoft.Xna.Framework.Input;
 using Xenko.Core.Mathematics;
 using Xenko.Graphics;
 using Xenko.Input;
-using Xenko.Core.Collections;
 #endif
 
 namespace Myra.Graphics2D.UI
 {
+	public struct MouseInfo
+	{
+		public Point Position;
+		public bool IsLeftButtonDown;
+		public bool IsMiddleButtonDown;
+		public bool IsRightButtonDown;
+		public float Wheel;
+	}
+
 	public class Desktop
 	{
 		public const int DoubleClickIntervalInMs = 500;
@@ -33,30 +41,21 @@ namespace Myra.Graphics2D.UI
 		protected readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
 		private readonly List<Widget> _focusableWidgets = new List<Widget>();
 		private DateTime _lastTouch;
-		private float _lastMouseWheel;
-		private readonly bool[] _lastMouseButtonsDownState = new bool[Enum.GetNames(typeof(MouseButtons)).Length];
+		private MouseInfo _lastMouseInfo;
 		private IReadOnlyCollection<Keys> _lastDownKeys;
 
 		internal Point LastMousePosition
 		{
-			get; private set;
+			get
+			{
+				return _lastMouseInfo.Position;
+			}
 		}
 
 		public Point MousePosition { get; private set; }
-		public float MouseWheel { get; private set; }
 		public HorizontalMenu MenuBar { get; set; }
 
-		public Func<Point> MousePositionGetter
-		{
-			get; set;
-		}
-
-		public Func<MouseButtons, bool> IsMouseButtonDownChecker
-		{
-			get; set;
-		}
-
-		public Func<float> MouseWheelGetter
+		public Func<MouseInfo> MouseInfoGetter
 		{
 			get; set;
 		}
@@ -186,9 +185,7 @@ namespace Myra.Graphics2D.UI
 			Opacity = 1.0f;
 			_widgets.CollectionChanged += WidgetsOnCollectionChanged;
 
-			MousePositionGetter = DefaultMousePositionGetter;
-			IsMouseButtonDownChecker = DefaultIsMouseButtonDownChecker;
-			MouseWheelGetter = DefaultMouseWheelGetter;
+			MouseInfoGetter = DefaultMouseInfoGetter;
 			DownKeysGetter = DefaultDownKeysGetter;
 
 #if MONOGAME
@@ -205,32 +202,20 @@ namespace Myra.Graphics2D.UI
 		}
 
 #if !XENKO
-		public static Point DefaultMousePositionGetter()
+		public static MouseInfo DefaultMouseInfoGetter()
 		{
 			var state = Mouse.GetState();
-			return new Point(state.X, state.Y);
-		}
 
-		public static bool DefaultIsMouseButtonDownChecker(MouseButtons mb)
-		{
-			var state = Mouse.GetState();
-			switch (mb)
+			var result = new MouseInfo
 			{
-				case MouseButtons.Left:
-					return state.LeftButton == ButtonState.Pressed;
-				case MouseButtons.Middle:
-					return state.MiddleButton == ButtonState.Pressed;
-				case MouseButtons.Right:
-					return state.RightButton == ButtonState.Pressed;
-			}
+				Position = new Point(state.X, state.Y),
+				IsLeftButtonDown = state.LeftButton == ButtonState.Pressed,
+				IsMiddleButtonDown = state.MiddleButton == ButtonState.Pressed,
+				IsRightButtonDown = state.RightButton == ButtonState.Pressed,
+				Wheel = state.ScrollWheelValue
+			};
 
-			return false;
-		}
-
-		public static float DefaultMouseWheelGetter()
-		{
-			var state = Mouse.GetState();
-			return state.ScrollWheelValue;
+			return result;
 		}
 
 		public static IReadOnlyCollection<Keys> DefaultDownKeysGetter()
@@ -238,36 +223,22 @@ namespace Myra.Graphics2D.UI
 			return Keyboard.GetState().GetPressedKeys();
 		}
 #else
-		public static Point DefaultMousePositionGetter()
+		public static MouseInfo DefaultMouseInfoGetter()
 		{
 			var input = MyraEnvironment.Game.Input;
 
 			var v = input.AbsoluteMousePosition;
-			return new Point((int)v.X, (int)v.Y);
-		}
 
-		public static bool DefaultIsMouseButtonDownChecker(MouseButtons mb)
-		{
-			var input = MyraEnvironment.Game.Input;
-
-			switch (mb)
+			var result = new MouseInfo
 			{
-				case MouseButtons.Left:
-					return input.IsMouseButtonDown(MouseButton.Left);
-				case MouseButtons.Middle:
-					return input.IsMouseButtonDown(MouseButton.Middle);
-				case MouseButtons.Right:
-					return input.IsMouseButtonDown(MouseButton.Right);
-			}
+				Position = new Point((int)v.X, (int)v.Y),
+				IsLeftButtonDown = input.IsMouseButtonDown(MouseButton.Left),
+				IsMiddleButtonDown = input.IsMouseButtonDown(MouseButton.Middle),
+				IsRightButtonDown = input.IsMouseButtonDown(MouseButton.Right),
+				Wheel = input.MouseWheelDelta
+			};
 
-			return false;
-		}
-
-		public static float DefaultMouseWheelGetter()
-		{
-			var input = MyraEnvironment.Game.Input;
-
-			return input.MouseWheelDelta;
+			return result;
 		}
 
 		public static IReadOnlyCollection<Keys> DefaultDownKeysGetter()
@@ -488,11 +459,8 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public void HandleButton(MouseButtons buttons)
+		public void HandleButton(bool isDown, bool wasDown, MouseButtons buttons)
 		{
-			var isDown = IsMouseButtonDownChecker(buttons);
-			var wasDown = _lastMouseButtonsDownState[(int)buttons];
-
 			if (isDown && !wasDown)
 			{
 				IsTouchDown = true;
@@ -552,15 +520,14 @@ namespace Myra.Graphics2D.UI
 
 				ChildrenCopy.HandleTouchUp();
 			}
-
-			_lastMouseButtonsDownState[(int)buttons] = isDown;
 		}
 
 		public void UpdateInput()
 		{
-			if (MousePositionGetter != null)
+			if (MouseInfoGetter != null)
 			{
-				MousePosition = MousePositionGetter();
+				var mouseInfo = MouseInfoGetter();
+				MousePosition = mouseInfo.Position;
 
 				if (SpriteBatchBeginParams.TransformMatrix != null)
 				{
@@ -584,25 +551,21 @@ namespace Myra.Graphics2D.UI
 					ChildrenCopy.HandleMouseMovement();
 				}
 
-				LastMousePosition = MousePosition;
-			}
+				HandleButton(mouseInfo.IsLeftButtonDown, _lastMouseInfo.IsLeftButtonDown, MouseButtons.Left);
+				HandleButton(mouseInfo.IsMiddleButtonDown, _lastMouseInfo.IsMiddleButtonDown, MouseButtons.Middle);
+				HandleButton(mouseInfo.IsRightButtonDown, _lastMouseInfo.IsRightButtonDown, MouseButtons.Right);
 
-			if (IsMouseButtonDownChecker != null)
-			{
-				HandleButton(MouseButtons.Left);
-				HandleButton(MouseButtons.Middle);
-				HandleButton(MouseButtons.Right);
-			}
+#if XENKO
+				var handleWheel = mouseInfo.Wheel != 0;
+#else
+				var handleWheel = mouseInfo.Wheel != _lastMouseInfo.Wheel;
+#endif
 
-			if (MouseWheelGetter != null)
-			{
-				MouseWheel = MouseWheelGetter();
-
-				if (MouseWheel != _lastMouseWheel)
+				if (handleWheel)
 				{
-					var delta = MouseWheel;
+					var delta = mouseInfo.Wheel;
 #if !XENKO
-					delta -= _lastMouseWheel;
+					delta -= _lastMouseInfo.Wheel;
 #endif
 
 					var ev = MouseWheelChanged;
@@ -617,7 +580,7 @@ namespace Myra.Graphics2D.UI
 					}
 				}
 
-				_lastMouseWheel = MouseWheel;
+				_lastMouseInfo = mouseInfo;
 			}
 
 			if (DownKeysGetter != null)

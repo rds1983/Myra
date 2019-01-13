@@ -4,6 +4,7 @@ rmdir "ZipPackage" /Q /S
 rem Create required folders
 mkdir "ZipPackage"
 mkdir "ZipPackage\FNA"
+mkdir "ZipPackage\Xenko"
 mkdir "ZipPackage\x64"
 mkdir "ZipPackage\x86"
 mkdir "ZipPackage\Stylesheets"
@@ -15,6 +16,8 @@ copy "src\Myra\bin\MonoGame\%CONFIGURATION%\Myra.dll" ZipPackage /Y
 copy "src\Myra\bin\MonoGame\%CONFIGURATION%\Myra.pdb" ZipPackage /Y
 copy "src\Myra\bin\FNA\%CONFIGURATION%\Myra.dll" "ZipPackage\FNA\" /Y
 copy "src\Myra\bin\FNA\%CONFIGURATION%\Myra.pdb" "ZipPackage\FNA\" /Y
+copy "src\Myra\bin\Xenko\%CONFIGURATION%\Myra.dll" "ZipPackage\Xenko\" /Y
+copy "src\Myra\bin\Xenko\%CONFIGURATION%\Myra.pdb" "ZipPackage\Xenko\" /Y
 copy "src\Myra\bin\MonoGame\%CONFIGURATION%\Newtonsoft.Json.dll" ZipPackage /Y
 copy "samples\Myra.Samples.AllWidgets\bin\MonoGame\%CONFIGURATION%\Myra.Samples.AllWidgets.exe" ZipPackage /Y
 copy "samples\Myra.Samples.CustomUIStylesheet\bin\%CONFIGURATION%\Myra.Samples.CustomUIStylesheet.exe" ZipPackage /Y

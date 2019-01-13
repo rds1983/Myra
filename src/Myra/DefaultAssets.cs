@@ -141,7 +141,10 @@ namespace Myra
 					return _uiImage;
 				}
 
-				_uiImage = Image.Load(_assetResolver.Open(DefaultAtlasImageName));
+				using (var stream = _assetResolver.Open(DefaultAtlasImageName))
+				{
+					_uiImage = Image.Load(stream);
+				}
 
 				// Premultiply Alpha
 /*				var pixelBuffer = _uiImage.PixelBuffer[0];
@@ -183,7 +186,11 @@ namespace Myra
 					return _uiBitmap;
 				}
 
-				_uiBitmap = Texture2D.FromStream(MyraEnvironment.GraphicsDevice, _assetResolver.Open(DefaultAtlasImageName));
+				using(var stream = _assetResolver.Open(DefaultAtlasImageName))
+				{
+					_uiBitmap = Texture2D.FromStream(MyraEnvironment.GraphicsDevice, stream);
+				}
+
 				_uiBitmap.PremultiplyAlpha();
 
 				return _uiBitmap;
