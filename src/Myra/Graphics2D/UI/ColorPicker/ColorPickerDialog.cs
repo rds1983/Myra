@@ -45,7 +45,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 					return;
 				}
 
-				_imageColor.Color= value;
+				_imageColor.Color = value;
 
 				OnColorChanged();
 			}

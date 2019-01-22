@@ -242,74 +242,51 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var position = Desktop.MousePosition;
+			var position = new Point(Desktop.MousePosition.X - _startPos.Value.X,
+				Desktop.MousePosition.Y - _startPos.Value.Y);
 
-			var delta = new Point(position.X - _startPos.Value.X,
-				position.Y - _startPos.Value.Y);
+			if (position.X < 0)
+			{
+				position.X = 0;
+			}
 
-			var right = delta.X + Bounds.Width;
 			if (Parent != null)
 			{
-				if (right > Parent.Bounds.Right)
+				if (position.X + Bounds.Width > Parent.Bounds.Right)
 				{
-					delta.X = Parent.Bounds.Right - Bounds.Width;
+					position.X = Parent.Bounds.Right - Bounds.Width;
 				}
 			}
 			else if (Desktop != null)
 			{
-				if (right > Desktop.Bounds.Right)
+				if (position.X + Bounds.Width > Desktop.Bounds.Right)
 				{
-					delta.X = Desktop.Bounds.Right - Bounds.Width;
+					position.X = Desktop.Bounds.Right - Bounds.Width;
 				}
 			}
 
-			var bottom = delta.Y + Bounds.Height;
+			if (position.Y < 0)
+			{
+				position.Y = 0;
+			}
+
 			if (Parent != null)
 			{
-				if (bottom > Parent.Bounds.Bottom)
+				if (position.Y + Bounds.Height > Parent.Bounds.Bottom)
 				{
-					delta.Y = Parent.Bounds.Bottom - Bounds.Height;
+					position.Y = Parent.Bounds.Bottom - Bounds.Height;
 				}
 			}
 			else if (Desktop != null)
 			{
-				if (bottom > Desktop.Bounds.Bottom)
+				if (position.Y + Bounds.Height > Desktop.Bounds.Bottom)
 				{
-					delta.Y = Desktop.Bounds.Bottom - Bounds.Height;
+					position.Y = Desktop.Bounds.Bottom - Bounds.Height;
 				}
 			}
 
-			Left += delta.X;
-
-			if (Left < 0)
-			{
-				Left = 0;
-			}
-
-			if (Desktop != null)
-			{
-				if (Left + Bounds.Width > Desktop.Bounds.Right)
-				{
-					Left = Desktop.Bounds.Right - Bounds.Width;
-				}
-			}
-
-			Top += delta.Y;
-
-			if (Top < 0)
-			{
-				Top = 0;
-			}
-
-			if (Desktop != null)
-			{
-				if (Top + Bounds.Height > Desktop.Bounds.Bottom)
-				{
-					Top = Desktop.Bounds.Bottom - Bounds.Height;
-				}
-			}
-
-			_startPos = position;
+			Left = position.X;
+			Top = position.Y;
 		}
 
 		private void DesktopTouchUp(object sender, EventArgs args)
@@ -336,7 +313,8 @@ namespace Myra.Graphics2D.UI
 			var mousePos = Desktop.MousePosition;
 			if (bounds.Contains(mousePos))
 			{
-				_startPos = mousePos;
+				_startPos = new Point(mousePos.X - ActualBounds.Location.X,
+					mousePos.Y - ActualBounds.Location.Y);
 			}
 		}
 

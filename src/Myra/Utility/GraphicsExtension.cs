@@ -246,7 +246,7 @@ namespace Myra.Utility
 					break;
 			}
 
-			return new Color(r, g, b, 255);
+			return new Color((byte)r, (byte)g, (byte)b, (byte)255);
 		}
 
 		private static byte ApplyAlpha(byte color, byte alpha)

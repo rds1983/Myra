@@ -195,7 +195,7 @@
 		}
 	},
 	"tabControl": {
-		"buttonSpacing": 4,
+		"buttonSpacing": 0,
 		"content": {
 			"background": "window",
 			"padding": {

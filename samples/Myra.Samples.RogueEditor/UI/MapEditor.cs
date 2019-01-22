@@ -168,10 +168,10 @@ namespace Myra.Samples.RogueEditor.UI
 			var gameCoords = ScreenToGame(Desktop.MousePosition);
 			MarkPosition = new Point((int)gameCoords.X, (int)gameCoords.Y);
 
-			if (Desktop.MouseState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
+/*			if (Desktop.MouseState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
 			{
 				ProcessMouseDown();
-			}
+			}*/
 		}
 
 		public override void OnMouseDown(MouseButtons mb)
