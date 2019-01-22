@@ -10,14 +10,15 @@ mkdir "ZipPackage\x86"
 mkdir "ZipPackage\Stylesheets"
 
 set "CONFIGURATION=Release\net45"
+set "CONFIGURATION_XENKO=Release\netstandard2.0"
 
 rem Copy output files
 copy "src\Myra\bin\MonoGame\%CONFIGURATION%\Myra.dll" ZipPackage /Y
 copy "src\Myra\bin\MonoGame\%CONFIGURATION%\Myra.pdb" ZipPackage /Y
 copy "src\Myra\bin\FNA\%CONFIGURATION%\Myra.dll" "ZipPackage\FNA\" /Y
 copy "src\Myra\bin\FNA\%CONFIGURATION%\Myra.pdb" "ZipPackage\FNA\" /Y
-copy "src\Myra\bin\Xenko\%CONFIGURATION%\Myra.dll" "ZipPackage\Xenko\" /Y
-copy "src\Myra\bin\Xenko\%CONFIGURATION%\Myra.pdb" "ZipPackage\Xenko\" /Y
+copy "src\Myra\bin\Xenko\%CONFIGURATION_XENKO%\Myra.dll" "ZipPackage\Xenko\" /Y
+copy "src\Myra\bin\Xenko\%CONFIGURATION_XENKO%\Myra.pdb" "ZipPackage\Xenko\" /Y
 copy "src\Myra\bin\MonoGame\%CONFIGURATION%\Newtonsoft.Json.dll" ZipPackage /Y
 copy "samples\Myra.Samples.AllWidgets\bin\MonoGame\%CONFIGURATION%\Myra.Samples.AllWidgets.exe" ZipPackage /Y
 copy "samples\Myra.Samples.CustomUIStylesheet\bin\%CONFIGURATION%\Myra.Samples.CustomUIStylesheet.exe" ZipPackage /Y
