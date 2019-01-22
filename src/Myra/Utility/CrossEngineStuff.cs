@@ -1,8 +1,9 @@
-﻿#if !XENKO
+﻿using System.IO;
+
+#if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 #else
-using System.IO;
 using Xenko.Core.Mathematics;
 using Xenko.Graphics;
 using Texture2D = Xenko.Graphics.Texture;
@@ -12,6 +13,15 @@ namespace Myra.Utility
 {
 	internal static class CrossEngineStuff
 	{
+		public static Texture2D LoadTexture2D(Stream stream)
+		{
+#if !XENKO
+			return Texture2D.FromStream(MyraEnvironment.GraphicsDevice, stream);
+#else
+			return Texture2D.Load(MyraEnvironment.GraphicsDevice, stream);
+#endif
+		}
+
 		public static Texture2D CreateTexture2D(int width, int height)
 		{
 #if !XENKO

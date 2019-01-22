@@ -77,12 +77,12 @@ namespace Myra.Graphics2D.Text
 				glyphs.Add(glyph);
 			}
 
-			var images = new List<Image>
+			var textures = new List<Texture>
 			{
-				DefaultAssets.UIImage
+				textureRegion.Texture
 			};
 
-			return DefaultAssets.FontSystem.NewStatic(data.LineHeight, glyphs, images, 0, data.LineHeight);
+			return DefaultAssets.FontSystem.NewStatic(data.LineHeight, glyphs, textures, 0, data.LineHeight);
 #endif
 		}
 	}

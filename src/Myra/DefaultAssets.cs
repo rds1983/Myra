@@ -131,72 +131,27 @@ namespace Myra
 			}
 		}
 
-#if XENKO
-		public static Image UIImage
+		public static Texture2D UIBitmap
 		{
 			get
 			{
-				if (_uiImage != null)
+				if (_uiBitmap != null)
 				{
-					return _uiImage;
+					return _uiBitmap;
 				}
 
 				using (var stream = _assetResolver.Open(DefaultAtlasImageName))
 				{
-					_uiImage = Image.Load(stream);
+					_uiBitmap = CrossEngineStuff.LoadTexture2D(stream);
 				}
 
-				// Premultiply Alpha
-/*				var pixelBuffer = _uiImage.PixelBuffer[0];
-				for (var y = 0; y < pixelBuffer.Height; ++y)
-				{
-					for (var x = 0; x < pixelBuffer.Width; ++x)
-					{
-						var color = pixelBuffer.GetPixel<Color>(x, y);
-						color = color.ApplyAlpha();
-						pixelBuffer.SetPixel(x, y, color);
-					}
-				}*/
-
-				return _uiImage;
-			}
-		}
-
-		public static Texture2D UIBitmap
-		{
-			get
-			{
-				if (_uiBitmap != null)
-				{
-					return _uiBitmap;
-				}
-
-				_uiBitmap = Texture2D.New(MyraEnvironment.GraphicsDevice, UIImage);
-
-				return _uiBitmap;
-			}
-		}
-#else
-		public static Texture2D UIBitmap
-		{
-			get
-			{
-				if (_uiBitmap != null)
-				{
-					return _uiBitmap;
-				}
-
-				using(var stream = _assetResolver.Open(DefaultAtlasImageName))
-				{
-					_uiBitmap = Texture2D.FromStream(MyraEnvironment.GraphicsDevice, stream);
-				}
-
+#if !XENKO
 				_uiBitmap.PremultiplyAlpha();
+#endif
 
 				return _uiBitmap;
 			}
 		}
-#endif
 
 		public static RasterizerState UIRasterizerState
 		{

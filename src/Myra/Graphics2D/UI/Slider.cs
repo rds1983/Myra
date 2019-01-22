@@ -16,7 +16,6 @@ namespace Myra.Graphics2D.UI
 	public abstract class Slider : SingleItemContainer<ImageButton>
 	{
 		private float _value;
-		private int? _mousePos;
 
 		[HiddenInEditor]
 		[JsonIgnore]
@@ -152,7 +151,7 @@ namespace Myra.Graphics2D.UI
 			{
 				ReleaseOnMouseLeft = false
 			};
-			InternalChild.PressedChanged += WidgetOnPressedChanged;
+
 			if (sliderStyle != null)
 			{
 				ApplySliderStyle(sliderStyle);
@@ -161,21 +160,10 @@ namespace Myra.Graphics2D.UI
 			Maximum = 100;
 		}
 
-		private void WidgetOnPressedChanged(object sender, EventArgs eventArgs)
+		private int GetHint()
 		{
-			if (!InternalChild.IsPressed)
-			{
-				_mousePos = null;
-			}
-			else
-			{
-				_mousePos = GetMousePos();
-			}
-		}
-
-		private int GetMousePos()
-		{
-			return Orientation == Orientation.Horizontal ? Desktop.MousePosition.X : Desktop.MousePosition.Y;
+			return Orientation == Orientation.Horizontal ? Desktop.MousePosition.X - ActualBounds.X - InternalChild.ActualBounds.Width / 2 :
+				Desktop.MousePosition.Y - ActualBounds.Y - InternalChild.ActualBounds.Height / 2;
 		}
 
 		public void ApplySliderStyle(SliderStyle style)
@@ -197,24 +185,17 @@ namespace Myra.Graphics2D.UI
 			SyncHintWithValue();
 		}
 
-		private void DesktopMouseMoved(object sender, EventArgs args)
+		public override void OnTouchDown()
 		{
-			if (_mousePos == null)
-			{
-				return;
-			}
+			base.OnTouchDown();
 
-			var mousePos = GetMousePos();
-			var delta = mousePos - _mousePos.Value;
+			UpdateHint();
+			InternalChild.IsPressed = true;
+		}
 
-			if (delta == 0)
-			{
-				return;
-			}
-
-			var hint = Hint;
-			hint += delta;
-
+		private void UpdateHint()
+		{
+			var hint = GetHint();
 			if (hint < 0)
 			{
 				hint = 0;
@@ -256,8 +237,17 @@ namespace Myra.Graphics2D.UI
 					ev(this, new ValueChangedEventArgs<float>(oldValue, _value));
 				}
 			}
+		}
 
-			_mousePos = mousePos;
+
+		private void DesktopMouseMoved(object sender, EventArgs args)
+		{
+			if (!InternalChild.IsPressed)
+			{
+				return;
+			}
+
+			UpdateHint();
 		}
 	}
 }
