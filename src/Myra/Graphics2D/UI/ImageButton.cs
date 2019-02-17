@@ -1,13 +1,13 @@
 ﻿using System.Linq;
+using System.Xml.Serialization;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
-using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
 	public class ImageButton: ButtonBase<Image>
 	{
-		[JsonIgnore]
+		[XmlIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
 		public IRenderable Image
@@ -23,7 +23,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[JsonIgnore]
+		[XmlIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
 		public IRenderable OverImage
@@ -39,7 +39,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[JsonIgnore]
+		[XmlIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
 		public IRenderable PressedImage

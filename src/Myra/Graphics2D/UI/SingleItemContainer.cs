@@ -1,6 +1,6 @@
 ﻿using System;
 using Myra.Attributes;
-using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -15,7 +15,7 @@ namespace Myra.Graphics2D.UI
 		private T _internalChild;
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		protected internal virtual T InternalChild
 		{
 			get { return _internalChild; }

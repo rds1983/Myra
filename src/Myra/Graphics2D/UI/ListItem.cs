@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Text;
 using Myra.Attributes;
-using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -68,23 +68,23 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public bool IsSeparator { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public object Tag { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public IRenderable Image { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public int ImageTextSpacing { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public Widget Widget { get; set; }
 
 		public event EventHandler Changed;

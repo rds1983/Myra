@@ -4,171 +4,64 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "UIEditor",
-            "type": "process",
-            "command": "msbuild",
+            "label": "FNA Debug",
+            "command": "dotnet build",
+            "type": "shell",
+            "group": "build",
             "args": [
-                "Myra.UIEditor/Myra.UIEditor.csproj",
+                "build/FNA/Myra.sln",
                 "/t:build",
                 "/p:Configuration=Debug"
             ],
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "FNA Release",
+            "command": "dotnet build",
+            "type": "shell",
             "group": "build",
-            "problemMatcher": [
-                "$go"
-            ]
+            "args": [
+                "build/FNA/Myra.sln",
+                "/t:build",
+                "/p:Configuration=Release"
+            ],
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile"
 		},
         {
-            "label": "Samples.AllWidgetsSample",
-            "type": "process",
-            "command": "msbuild",
+            "label": "MonoGame Debug",
+            "command": "dotnet build",
+            "type": "shell",
+            "group": "build",
             "args": [
-                "Samples/Myra.Samples.AllWidgetsSample/Myra.Samples.AllWidgetsSample.csproj",
+                "build/MonoGame/Myra.sln",
                 "/t:build",
                 "/p:Configuration=Debug"
             ],
-            "group": "build",
-            "problemMatcher": [
-                "$go"
-            ]
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile"
         },
         {
-            "label": "Samples.CustomUIStylesheetSample",
-            "type": "process",
-            "command": "msbuild",
+            "label": "MonoGame Release",
+            "command": "dotnet build",
+            "type": "shell",
+            "group": "build",
             "args": [
-                "Samples/Myra.Samples.CustomUIStylesheetSample/Myra.Samples.CustomUIStylesheetSample.csproj",
+                "build/MonoGame/Myra.sln",
                 "/t:build",
-                "/p:Configuration=Debug"
+                "/p:Configuration=Release"
             ],
-            "group": "build",
-            "problemMatcher": [
-                "$go"
-            ]
-        },
-        {
-            "label": "Samples.FormattedTextSample",
-            "type": "process",
-            "command": "msbuild",
-            "args": [
-                "Samples/Myra.Samples.FormattedTextSample/Myra.Samples.FormattedTextSample.csproj",
-                "/t:build",
-                "/p:Configuration=Debug"
-            ],
-            "group": "build",
-            "problemMatcher": [
-                "$go"
-            ]
-        },
-        {
-            "label": "Samples.GridSample",
-            "type": "process",
-            "command": "msbuild",
-            "args": [
-                "Samples/Myra.Samples.GridSample/Myra.Samples.GridSample.csproj",
-                "/t:build",
-                "/p:Configuration=Debug"
-            ],
-            "group": "build",
-            "problemMatcher": [
-                "$go"
-            ]
-        },
-        {
-            "label": "Samples.NotepadSample",
-            "type": "process",
-            "command": "msbuild",
-            "args": [
-                "Samples/Myra.Samples.NotepadSample/Myra.Samples.NotepadSample.csproj",
-                "/t:build",
-                "/p:Configuration=Debug"
-            ],
-            "group": "build",
-            "problemMatcher": [
-                "$go"
-            ]
-        },
-        {
-            "label": "Samples.SplitPaneSample",
-            "type": "process",
-            "command": "msbuild",
-            "args": [
-                "Samples/Myra.Samples.SplitPaneSample/Myra.Samples.SplitPaneSample.csproj",
-                "/t:build",
-                "/p:Configuration=Debug"
-            ],
-            "group": "build",
-            "problemMatcher": [
-                "$go"
-            ]
-        },
-        {
-            "label": "Samples.TabControlSample",
-            "type": "process",
-            "command": "msbuild",
-            "args": [
-                "Samples/Myra.Samples.TabControlSample/Myra.Samples.TabControlSample.csproj",
-                "/t:build",
-                "/p:Configuration=Debug"
-            ],
-            "group": "build",
-            "problemMatcher": [
-                "$go"
-            ]
-        },
-        {
-            "label": "Samples.TextBlocksSample",
-            "type": "process",
-            "command": "msbuild",
-            "args": [
-                "Samples/Myra.Samples.TextBlocksSample/Myra.Samples.TextBlocksSample.csproj",
-                "/t:build",
-                "/p:Configuration=Debug"
-            ],
-            "group": "build",
-            "problemMatcher": [
-                "$go"
-            ]
-		},
-        {
-            "label": "Samples.AllWidgetsSample.FNA",
-            "type": "process",
-            "command": "msbuild",
-            "args": [
-                "Samples/Myra.Samples.AllWidgetsSample/Myra.Samples.AllWidgetsSample.FNA.csproj",
-                "/t:build",
-                "/p:Configuration=Debug"
-            ],
-            "group": "build",
-            "problemMatcher": [
-                "$go"
-            ]
-        },		
-		{
-            "label": "UIEditor.FNA",
-            "type": "process",
-            "command": "msbuild",
-            "args": [
-                "Myra.UIEditor/Myra.UIEditor.FNA.csproj",
-                "/t:build",
-                "/p:Configuration=Debug"
-            ],
-            "group": "build",
-            "problemMatcher": [
-                "$go"
-            ]
-		},
-		{
-            "label": "Clean All",
-            "type": "process",
-            "command": "msbuild",
-            "args": [
-                "Myra.sln",
-                "/t:clean"
-            ],
-            "group": "build",
-            "problemMatcher": [
-                "$go"
-            ]
-		},		
-	]
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile"
+        }		
+    ]
 }

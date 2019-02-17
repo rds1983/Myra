@@ -1,6 +1,6 @@
 ﻿using Myra.Attributes;
-using Newtonsoft.Json;
 using System.ComponentModel;
+using System.Xml.Serialization;
 
 namespace Myra.Graphics2D.UI
 {
@@ -10,15 +10,15 @@ namespace Myra.Graphics2D.UI
 		public string Id { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public Menu Menu { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public Widget Widget { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public char? UnderscoreChar { get { return null; } }
 	}
 }

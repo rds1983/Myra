@@ -4,8 +4,8 @@ using System.Collections.Specialized;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
-using Newtonsoft.Json;
 using static Myra.Graphics2D.UI.Grid;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -22,23 +22,23 @@ namespace Myra.Graphics2D.UI
 		private ObservableCollection<IMenuItem> _items;
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public abstract Orientation Orientation { get; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public MenuItemStyle MenuItemStyle { get; private set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public SeparatorStyle SeparatorStyle { get; private set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		internal MenuItemButton OpenMenuItem { get; private set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public bool IsOpen
 		{
 			get

@@ -1010,6 +1010,7 @@ namespace Microsoft.Xna.Framework.Graphics
 					Math.Abs(cGlyph.Height),
 					MathHelper.MachineEpsilonFloat
 				) / (float) textureValue.Height;
+
 				PushSprite(
 					textureValue,
 					cGlyph.X / (float) textureValue.Width,

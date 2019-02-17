@@ -4,8 +4,8 @@ using System.Linq;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
-using Newtonsoft.Json;
 using static Myra.Graphics2D.UI.Grid;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -49,7 +49,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public SpriteFont TitleFont
 		{
 			get { return _titleLabel.Font; }
@@ -57,14 +57,14 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public Grid TitleGrid
 		{
 			get { return _titleGrid; }
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public ImageButton CloseButton
 		{
 			get { return _closeButton; }
@@ -102,7 +102,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public bool Result { get; set; }
 
 		[DefaultValue(HorizontalAlignment.Left)]

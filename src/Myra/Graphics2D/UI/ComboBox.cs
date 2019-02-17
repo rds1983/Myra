@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
-using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -30,7 +30,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public bool IsExpanded
 		{
 			get { return _isExpanded; }
@@ -60,7 +60,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public int SelectingIndex
 		{
 			get
@@ -80,7 +80,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public ListItem SelectingItem
 		{
 			get { return _selectingIndex >= 0 && _selectingIndex < Items.Count ? Items[_selectingIndex] : null; }
@@ -151,7 +151,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public ListItem SelectedItem
 		{
 			get { return _selectedIndex >= 0 && _selectedIndex < Items.Count ? Items[_selectedIndex] : null; }
@@ -180,7 +180,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public override HorizontalAlignment ContentHorizontalAlignment
 		{
 			get { return base.ContentHorizontalAlignment; }
@@ -188,7 +188,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public override VerticalAlignment ContentVerticalAlignment
 		{
 			get { return base.ContentVerticalAlignment; }
@@ -196,7 +196,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public override bool Toggleable
 		{
 			get { return base.Toggleable; }
@@ -208,7 +208,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public override int? ImageWidth
 		{
 			get { return base.ImageWidth; }
@@ -216,7 +216,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public override int? ImageHeight
 		{
 			get { return base.ImageHeight; }
@@ -224,7 +224,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public override bool ImageVisible
 		{
 			get { return base.ImageVisible; }
@@ -232,7 +232,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public override string Text
 		{
 			get { return base.Text; }
@@ -240,7 +240,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public override Color TextColor
 		{
 			get { return base.TextColor; }

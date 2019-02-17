@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Myra;
@@ -6,7 +7,6 @@ using Myra.Attributes;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Samples.RogueEditor.Data;
-using Newtonsoft.Json;
 
 namespace Myra.Samples.RogueEditor.UI
 {
@@ -18,21 +18,21 @@ namespace Myra.Samples.RogueEditor.UI
 		private Point _gridSize;
 		private bool _isMouseDown = false;
 
-		[JsonIgnore]
+		[XmlIgnore]
 		[HiddenInEditor]
 		public SpriteFont Font { get; set; }
 
 		public Vector2 TopLeft { get; set; }
 
-		[JsonIgnore]
+		[XmlIgnore]
 		[HiddenInEditor]
 		public Point? MarkPosition { get; set; }
 
-		[JsonIgnore]
+		[XmlIgnore]
 		[HiddenInEditor]
 		public Point GridSize { get; private set; }
 
-		[JsonIgnore]
+		[XmlIgnore]
 		[HiddenInEditor]
 		public Map Map
 		{
@@ -113,23 +113,16 @@ namespace Myra.Samples.RogueEditor.UI
 						var s = tile.Image.ToString();
 						var sz = Font.MeasureString(s);
 
-						var offset = new Vector2((TileSize.X - sz.X) / 2,
-							(TileSize.Y - sz.Y) / 2);
+						var offset = new Point((int)(TileSize.X - sz.X) / 2, (int)(TileSize.Y - sz.Y) / 2);
+						screen += offset;
+
 						context.Batch.DrawString(Font,
 							tile.Image.ToString(),
-							screen.ToVector2() + offset,
+							new Vector2(screen.X, screen.Y),
 							tile.Color);
 					}
 				}
 			}
-		}
-
-		private void DrawAppearance(RenderContext context, Color color, TextureRegion image, Rectangle rect)
-		{
-			var pos = new Point(rect.X + (rect.Width - image.Bounds.Width) / 2,
-				rect.Y + (rect.Height - image.Bounds.Height) / 2);
-
-			context.Draw(image, pos, color);
 		}
 
 		private Point GameToScreen(Vector2 gamePosition)

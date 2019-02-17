@@ -5,7 +5,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
-using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -23,7 +23,7 @@ namespace Myra.Graphics2D.UI
 		private int? _mouseCoord;
 		private int _handlesSize;
 
-		[JsonIgnore]
+		[XmlIgnore]
 		[HiddenInEditor]
 		public abstract Orientation Orientation { get; }
 
@@ -33,7 +33,7 @@ namespace Myra.Graphics2D.UI
 			get { return _widgets; }
 		}
 
-		[JsonIgnore]
+		[XmlIgnore]
 		[HiddenInEditor]
 		public ImageButtonStyle HandleStyle { get; private set; }
 

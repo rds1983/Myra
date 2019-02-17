@@ -4,7 +4,7 @@ using Myra.Attributes;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
-using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -45,7 +45,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		[EditCategory("Appearance")]
 		public SpriteFont Font
 		{
@@ -82,15 +82,15 @@ namespace Myra.Graphics2D.UI
 		public Color? DisabledTextColor { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public Color? OverTextColor { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public Color? PressedTextColor { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public bool IsMenuText
 		{
 			get { return _formattedText.IsMenuText; }
@@ -104,7 +104,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public bool IsPressed { get; set; }
 
 		public TextBlock(TextBlockStyle style)

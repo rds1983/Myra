@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Myra.Graphics2D.TextureAtlases;
-using Newtonsoft.Json.Linq;
-
-#if !XENKO
+using System.IO;
 using Microsoft.Xna.Framework.Graphics;
-#else
-using Xenko.Graphics;
-#endif
+using MiniJSON;
+using Myra.Graphics2D.TextureAtlases;
 
 namespace Myra.Graphics2D.UI.Styles
 {
@@ -124,7 +120,6 @@ namespace Myra.Graphics2D.UI.Styles
 			get { return _spinButtonStyles[DefaultStyleName]; }
 			set { _spinButtonStyles[DefaultStyleName] = value; }
 		}
-
 
 		public TextButtonStyle TextButtonStyle
 		{
@@ -405,7 +400,7 @@ namespace Myra.Graphics2D.UI.Styles
 			Func<string, TextureRegion> textureGetter,
 			Func<string, SpriteFont> fontGetter)
 		{
-			var root = JObject.Parse(s);
+			var root = (Dictionary<string, object>)Json.Deserialize(s);
 
 			var loader = new StylesheetLoader(root, textureGetter, fontGetter);
 			return loader.Load();

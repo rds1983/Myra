@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Xml.Serialization;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
-using Newtonsoft.Json;
 using static Myra.Graphics2D.UI.Grid;
 
 namespace Myra.Graphics2D.UI
@@ -14,7 +14,7 @@ namespace Myra.Graphics2D.UI
 		private float _value;
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public abstract Orientation Orientation { get; }
 
 		[EditCategory("Behavior")]

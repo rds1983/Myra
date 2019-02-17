@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
-using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -30,7 +30,7 @@ namespace Myra.Graphics2D.UI
 			set { InternalChild.TextColor = value; }
 		}
 
-		[JsonIgnore]
+		[XmlIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
 		public SpriteFont Font

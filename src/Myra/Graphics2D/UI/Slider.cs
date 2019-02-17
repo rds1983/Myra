@@ -3,7 +3,7 @@ using System.ComponentModel;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
-using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -18,7 +18,7 @@ namespace Myra.Graphics2D.UI
 		private float _value;
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public abstract Orientation Orientation
 		{
 			get;

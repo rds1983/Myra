@@ -4,7 +4,7 @@ using System.Linq;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
-using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -25,7 +25,7 @@ namespace Myra.Graphics2D.UI
 		private int _horizontalMaximum, _verticalMaximum;
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public Point ScrollPosition
 		{
 			get { return _scrollPosition; }
@@ -37,34 +37,34 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public Point ScrollMaximum
 		{
 			get { return new Point(_horizontalMaximum, _verticalMaximum); }
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		[EditCategory("Appearance")]
 		public IRenderable HorizontalScrollBackground { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		[EditCategory("Appearance")]
 		public IRenderable HorizontalScrollKnob { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		[EditCategory("Appearance")]
 		public IRenderable VerticalScrollBackground { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		[EditCategory("Appearance")]
 		public IRenderable VerticalScrollKnob { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public Widget Content
 		{
 			get
@@ -79,7 +79,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		[Obsolete("Use Content")]
 		public Widget Widget
 		{

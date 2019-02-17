@@ -1,7 +1,7 @@
 ﻿using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
-using Newtonsoft.Json;
 using System;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -29,7 +29,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public SpriteFont Font
 		{
 			get { return _textBlock.Font; }
@@ -51,7 +51,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public IRenderable Image
 		{
 			get { return _image.Renderable; }
@@ -59,7 +59,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		[Obsolete("Use Image")]
 		public IRenderable TextureRegion
 		{
@@ -69,18 +69,18 @@ namespace Myra.Graphics2D.UI
 
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public IRenderable OpenBackground { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public Menu SubMenu
 		{
 			get { return _subMenu; }
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public bool CanOpen
 		{
 			get
@@ -90,7 +90,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public override HorizontalAlignment ContentHorizontalAlignment
 		{
 			get { return base.ContentHorizontalAlignment; }
@@ -98,7 +98,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public override VerticalAlignment ContentVerticalAlignment
 		{
 			get { return base.ContentVerticalAlignment; }
@@ -106,7 +106,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public override bool Toggleable
 		{
 			get { return base.Toggleable; }

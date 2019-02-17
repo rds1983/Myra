@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Myra.Attributes;
-using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -15,7 +15,7 @@ namespace Myra.Graphics2D.UI
 		private readonly ObservableCollection<IMenuItem> _items = new ObservableCollection<IMenuItem>();
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public Menu Menu { get; set; }
 
 		[HiddenInEditor]
@@ -25,7 +25,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public bool Enabled
 		{
 			get { return Widget != null && Widget.Enabled; }
@@ -34,7 +34,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public char? UnderscoreChar
 		{
 			get

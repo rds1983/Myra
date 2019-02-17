@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
-using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -35,7 +35,7 @@ namespace Myra.Graphics2D.UI
 			set { _textBlock.TextColor = value; }
 		}
 
-		[JsonIgnore]
+		[XmlIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
 		public SpriteFont Font
@@ -44,7 +44,7 @@ namespace Myra.Graphics2D.UI
 			set { _textBlock.Font = value; }
 		}
 
-		[JsonIgnore]
+		[XmlIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
 		public IRenderable Image
@@ -57,7 +57,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[JsonIgnore]
+		[XmlIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
 		public IRenderable OverImage
@@ -70,7 +70,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[JsonIgnore]
+		[XmlIgnore]
 		[HiddenInEditor]
 		[EditCategory("Appearance")]
 		public IRenderable PressedImage

@@ -1,7 +1,7 @@
 ﻿using Myra.Attributes;
-using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -17,7 +17,7 @@ namespace Myra.Graphics2D.UI
 		private Color _color = Color.White;
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public IRenderable Renderable
 		{
 			get
@@ -38,7 +38,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public IRenderable OverRenderable
 		{
 			get
@@ -59,7 +59,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public IRenderable PressedRenderable
 		{
 			get
@@ -80,14 +80,14 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public bool IsPressed
 		{
 			get; set;
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		[Obsolete("Use Renderable")]
 		public IRenderable TextureRegion
 		{

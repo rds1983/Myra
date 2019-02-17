@@ -2,9 +2,9 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Xml.Serialization;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
-using Newtonsoft.Json;
 using static Myra.Graphics2D.UI.Grid;
 
 namespace Myra.Graphics2D.UI
@@ -21,11 +21,11 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public ListBoxStyle ListBoxStyle { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public int? SelectedIndex
 		{
 			get
@@ -51,7 +51,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public ListItem SelectedItem
 		{
 			get { return _selectedItem; }

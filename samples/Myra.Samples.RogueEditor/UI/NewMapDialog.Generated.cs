@@ -15,7 +15,7 @@ namespace Myra.Samples.RogueEditor.UI
 			_textId = new TextField();
 			_textId.Text = "";
 			_textId.Wrap = true;
-			_textId.FocusedTextColor = Color.TransparentBlack;
+			_textId.FocusedTextColor = Color.Transparent;
 			_textId.ClipToBounds = false;
 			_textId.Id = "_textId";
 			_textId.GridColumn = 1;

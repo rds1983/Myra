@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Utility;
-using Newtonsoft.Json.Linq;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -115,11 +114,11 @@ namespace Myra.Graphics2D.UI.Styles
 
 		private readonly Dictionary<string, Color> _colors = new Dictionary<string, Color>();
 		private readonly Dictionary<string, Tuple<string, Color>> _drawables = new Dictionary<string, Tuple<string, Color>>();
-		private readonly JObject _root;
+		private readonly Dictionary<string, object> _root;
 		private readonly Func<string, SpriteFont> _fontLoader;
 		private readonly Func<string, TextureRegion> _textureLoader;
 
-		public StylesheetLoader(JObject root,
+		public StylesheetLoader(Dictionary<string, object> root,
 			Func<string, TextureRegion> textureLoader,
 			Func<string, SpriteFont> fontLoader)
 		{
@@ -154,18 +153,20 @@ namespace Myra.Graphics2D.UI.Styles
 			return _textureLoader(id);
 		}
 
-		private void ParseDrawables(JObject drawables)
+		private void ParseDrawables(Dictionary<string, object> drawables)
 		{
 			_drawables.Clear();
 
-			foreach (var props in drawables.Properties())
+			foreach (var props in drawables)
 			{
 				// Parse it
-				var name = props.Value["name"].ToString();
-				var color = props.Value["color"].ToString();
+				var drawable = (Dictionary<string, object>)props.Value;
 
-				var IRenderableEntry = new Tuple<string, Color>(name, GetColor(color));
-				_drawables.Add(props.Name, IRenderableEntry);
+				var name = drawable["name"].ToString();
+				var color = drawable["color"].ToString();
+
+				var renderable = new Tuple<string, Color>(name, GetColor(color));
+				_drawables.Add(props.Key, renderable);
 			}
 		}
 
@@ -179,11 +180,11 @@ namespace Myra.Graphics2D.UI.Styles
 			return _fontLoader(id);
 		}
 
-		private void ParseColors(JObject colors)
+		private void ParseColors(Dictionary<string, object> colors)
 		{
 			_colors.Clear();
 
-			foreach (var props in colors.Properties())
+			foreach (var props in colors)
 			{
 				// Parse it
 				var stringValue = props.Value.ToString();
@@ -193,7 +194,7 @@ namespace Myra.Graphics2D.UI.Styles
 					throw new Exception(string.Format("Could not parse color '{0}'", stringValue));
 				}
 
-				_colors.Add(props.Name, parsedColor.Value);
+				_colors.Add(props.Key, parsedColor.Value);
 			}
 		}
 
@@ -215,34 +216,7 @@ namespace Myra.Graphics2D.UI.Styles
 			throw new Exception(string.Format("Unknown color '{0}'", color));
 		}
 
-		private static PaddingInfo GetPaddingInfo(JObject padding)
-		{
-			var result = new PaddingInfo();
-			int value;
-			if (padding.GetStyle(LeftName, out value))
-			{
-				result.Left = value;
-			}
-
-			if (padding.GetStyle(RightName, out value))
-			{
-				result.Right = value;
-			}
-
-			if (padding.GetStyle(TopName, out value))
-			{
-				result.Top = value;
-			}
-
-			if (padding.GetStyle(BottomName, out value))
-			{
-				result.Bottom = value;
-			}
-
-			return result;
-		}
-
-		private void LoadWidgetStyleFromSource(JObject source, WidgetStyle result)
+		private void LoadWidgetStyleFromSource(Dictionary<string, object> source, WidgetStyle result)
 		{
 
 			int i;
@@ -297,7 +271,7 @@ namespace Myra.Graphics2D.UI.Styles
 				result.FocusedBorder = GetDrawable(name);
 			}
 
-			JObject padding;
+			Dictionary<string, object> padding;
 			if (source.GetStyle(PaddingName, out padding))
 			{
 				int value;
@@ -323,7 +297,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadTextBlockStyleFromSource(JObject source, TextBlockStyle result)
+		private void LoadTextBlockStyleFromSource(Dictionary<string, object> source, TextBlockStyle result)
 		{
 			LoadWidgetStyleFromSource(source, result);
 
@@ -354,7 +328,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadTextFieldStyleFromSource(JObject source, TextFieldStyle result)
+		private void LoadTextFieldStyleFromSource(Dictionary<string, object> source, TextFieldStyle result)
 		{
 			LoadWidgetStyleFromSource(source, result);
 
@@ -395,7 +369,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadScrollAreaStyleFromSource(JObject source, ScrollPaneStyle result)
+		private void LoadScrollAreaStyleFromSource(Dictionary<string, object> source, ScrollPaneStyle result)
 		{
 			LoadWidgetStyleFromSource(source, result);
 
@@ -421,7 +395,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadImageStyleFromSource(JObject source, ImageStyle result)
+		private void LoadImageStyleFromSource(Dictionary<string, object> source, ImageStyle result)
 		{
 			LoadWidgetStyleFromSource(source, result);
 
@@ -437,7 +411,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadPressableImageStyleFromSource(JObject source, PressableImageStyle result)
+		private void LoadPressableImageStyleFromSource(Dictionary<string, object> source, PressableImageStyle result)
 		{
 			LoadImageStyleFromSource(source, result);
 
@@ -448,7 +422,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadButtonBaseStyleFromSource(JObject source, ButtonBaseStyle result)
+		private void LoadButtonBaseStyleFromSource(Dictionary<string, object> source, ButtonBaseStyle result)
 		{
 			LoadWidgetStyleFromSource(source, result);
 
@@ -459,11 +433,11 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadButtonStyleFromSource(JObject source, ButtonStyle result)
+		private void LoadButtonStyleFromSource(Dictionary<string, object> source, ButtonStyle result)
 		{
 			LoadButtonBaseStyleFromSource(source, result);
 
-			JObject labelStyle;
+			Dictionary<string, object> labelStyle;
 			if (source.GetStyle(LabelStyleName, out labelStyle))
 			{
 				LoadTextBlockStyleFromSource(labelStyle, result.LabelStyle);
@@ -481,33 +455,33 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadTextButtonStyleFromSource(JObject source, TextButtonStyle result)
+		private void LoadTextButtonStyleFromSource(Dictionary<string, object> source, TextButtonStyle result)
 		{
 			LoadButtonBaseStyleFromSource(source, result);
 
-			JObject labelStyle;
+			Dictionary<string, object> labelStyle;
 			if (source.GetStyle(LabelStyleName, out labelStyle))
 			{
 				LoadTextBlockStyleFromSource(labelStyle, result.LabelStyle);
 			}
 		}
 
-		private void LoadImageButtonStyleFromSource(JObject source, ImageButtonStyle result)
+		private void LoadImageButtonStyleFromSource(Dictionary<string, object> source, ImageButtonStyle result)
 		{
 			LoadButtonBaseStyleFromSource(source, result);
 
-			JObject style;
+			Dictionary<string, object> style;
 			if (source.GetStyle(ImageStyleName, out style))
 			{
 				LoadPressableImageStyleFromSource(style, result.ImageStyle);
 			}
 		}
 
-		private void LoadSpinButtonStyleFromSource(JObject source, SpinButtonStyle result)
+		private void LoadSpinButtonStyleFromSource(Dictionary<string, object> source, SpinButtonStyle result)
 		{
 			LoadWidgetStyleFromSource(source, result);
 
-			JObject style;
+			Dictionary<string, object> style;
 			if (source.GetStyle(TextFieldStyleName, out style))
 			{
 				LoadTextFieldStyleFromSource(style, result.TextFieldStyle);
@@ -524,18 +498,18 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadSliderStyleFromSource(JObject source, SliderStyle result)
+		private void LoadSliderStyleFromSource(Dictionary<string, object> source, SliderStyle result)
 		{
 			LoadWidgetStyleFromSource(source, result);
 
-			JObject knobStyle;
+			Dictionary<string, object> knobStyle;
 			if (source.GetStyle(KnobName, out knobStyle))
 			{
 				LoadImageButtonStyleFromSource(knobStyle, result.KnobStyle);
 			}
 		}
 
-		private void LoadProgressBarStyleFromSource(JObject source, ProgressBarStyle result)
+		private void LoadProgressBarStyleFromSource(Dictionary<string, object> source, ProgressBarStyle result)
 		{
 			LoadWidgetStyleFromSource(source, result);
 
@@ -546,11 +520,11 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadComboBoxStyleFromSource(JObject source, ComboBoxStyle result)
+		private void LoadComboBoxStyleFromSource(Dictionary<string, object> source, ComboBoxStyle result)
 		{
 			LoadButtonStyleFromSource(source, result);
 
-			JObject subStyle;
+			Dictionary<string, object> subStyle;
 			if (source.GetStyle(ItemsContainerName, out subStyle))
 			{
 				LoadWidgetStyleFromSource(subStyle, result.ItemsContainerStyle);
@@ -562,11 +536,11 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadListBoxStyleFromSource(JObject source, ListBoxStyle result)
+		private void LoadListBoxStyleFromSource(Dictionary<string, object> source, ListBoxStyle result)
 		{
 			LoadWidgetStyleFromSource(source, result);
 
-			JObject subStyle;
+			Dictionary<string, object> subStyle;
 			if (source.GetStyle(ListBoxItemName, out subStyle))
 			{
 				LoadButtonStyleFromSource(subStyle, result.ListItemStyle);
@@ -578,11 +552,11 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadTabControlStyleFromSource(JObject source, TabControlStyle result)
+		private void LoadTabControlStyleFromSource(Dictionary<string, object> source, TabControlStyle result)
 		{
 			LoadWidgetStyleFromSource(source, result);
 
-			JObject subStyle;
+			Dictionary<string, object> subStyle;
 			if (source.GetStyle(TabItemName, out subStyle))
 			{
 				LoadButtonStyleFromSource(subStyle, result.TabItemStyle);
@@ -605,7 +579,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadMenuItemStyleFromSource(JObject source, MenuItemStyle result)
+		private void LoadMenuItemStyleFromSource(Dictionary<string, object> source, MenuItemStyle result)
 		{
 			LoadButtonStyleFromSource(source, result);
 
@@ -621,7 +595,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadSeparatorStyleFromSource(JObject source, SeparatorStyle result)
+		private void LoadSeparatorStyleFromSource(Dictionary<string, object> source, SeparatorStyle result)
 		{
 			LoadWidgetStyleFromSource(source, result);
 
@@ -637,22 +611,22 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadSplitPaneStyleFromSource(JObject source, SplitPaneStyle result)
+		private void LoadSplitPaneStyleFromSource(Dictionary<string, object> source, SplitPaneStyle result)
 		{
 			LoadWidgetStyleFromSource(source, result);
 
-			JObject handle;
+			Dictionary<string, object> handle;
 			if (source.GetStyle(HandleName, out handle))
 			{
 				LoadImageButtonStyleFromSource(handle, result.HandleStyle);
 			}
 		}
 
-		private void LoadMenuStyleFromSource(JObject source, MenuStyle result)
+		private void LoadMenuStyleFromSource(Dictionary<string, object> source, MenuStyle result)
 		{
 			LoadWidgetStyleFromSource(source, result);
 
-			JObject menuItem;
+			Dictionary<string, object> menuItem;
 			if (source.GetStyle(MenuItemName, out menuItem))
 			{
 				LoadMenuItemStyleFromSource(menuItem, result.MenuItemStyle);
@@ -664,7 +638,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadTreeStyleFromSource(JObject source, TreeStyle result)
+		private void LoadTreeStyleFromSource(Dictionary<string, object> source, TreeStyle result)
 		{
 			string name;
 			if (source.GetStyle(SelectionBackgroundName, out name))
@@ -677,7 +651,7 @@ namespace Myra.Graphics2D.UI.Styles
 				result.SelectionHoverBackground = GetDrawable(name);
 			}
 
-			JObject obj;
+			Dictionary<string, object> obj;
 			if (source.GetStyle(MarkName, out obj))
 			{
 				LoadImageButtonStyleFromSource(obj, result.MarkStyle);
@@ -689,11 +663,11 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadWindowStyleFromSource(JObject source, WindowStyle result)
+		private void LoadWindowStyleFromSource(Dictionary<string, object> source, WindowStyle result)
 		{
 			LoadWidgetStyleFromSource(source, result);
 
-			JObject obj;
+			Dictionary<string, object> obj;
 			if (source.GetStyle(TitleStyleName, out obj))
 			{
 				LoadTextBlockStyleFromSource(obj, result.TitleStyle);
@@ -705,16 +679,16 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadDialogStyleFromSource(JObject source, DialogStyle result)
+		private void LoadDialogStyleFromSource(Dictionary<string, object> source, DialogStyle result)
 		{
 			LoadWindowStyleFromSource(source, result);
 		}
 
 		private void FillStyles<T>(string key,
 			Dictionary<string, T> stylesDict,
-			Action<JObject, T> fillAction) where T : WidgetStyle, new()
+			Action<Dictionary<string, object>, T> fillAction) where T : WidgetStyle, new()
 		{
-			JObject source;
+			Dictionary<string, object> source;
 			if (!_root.GetStyle(key, out source) || source == null)
 			{
 				return;
@@ -722,7 +696,7 @@ namespace Myra.Graphics2D.UI.Styles
 
 			fillAction(source, stylesDict[Stylesheet.DefaultStyleName]);
 
-			JObject styles;
+			Dictionary<string, object> styles;
 			if (!source.GetStyle(VariantsName, out styles) || styles == null)
 			{
 				return;
@@ -731,7 +705,7 @@ namespace Myra.Graphics2D.UI.Styles
 			foreach (var pair in styles)
 			{
 				var variant = (T)stylesDict[Stylesheet.DefaultStyleName].Clone();
-				fillAction((JObject)pair.Value, variant);
+				fillAction((Dictionary<string, object>)pair.Value, variant);
 				stylesDict[pair.Key] = variant;
 			}
 		}
@@ -740,7 +714,7 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			var result = new DesktopStyle();
 
-			JObject source;
+			Dictionary<string, object> source;
 			if (!_root.GetStyle(DesktopName, out source) || source == null)
 			{
 				return result;
@@ -759,13 +733,13 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			var result = new Stylesheet();
 
-			JObject colors;
+			Dictionary<string, object> colors;
 			if (_root.GetStyle(ColorsName, out colors))
 			{
 				ParseColors(colors);
 			}
 
-			JObject drawables;
+			Dictionary<string, object> drawables;
 			if (_root.GetStyle(DrawablesName, out drawables))
 			{
 				ParseDrawables(drawables);

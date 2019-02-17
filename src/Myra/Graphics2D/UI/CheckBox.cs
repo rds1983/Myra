@@ -1,15 +1,15 @@
 ﻿using System.ComponentModel;
 using System.Linq;
+using System.Xml.Serialization;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
-using Newtonsoft.Json;
 
 namespace Myra.Graphics2D.UI
 {
 	public class CheckBox : Button
 	{
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		[EditCategory("Behavior")]
 		[DefaultValue(true)]
 		public override bool Toggleable

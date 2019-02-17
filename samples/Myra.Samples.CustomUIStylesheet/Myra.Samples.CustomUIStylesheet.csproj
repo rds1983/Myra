@@ -3,12 +3,21 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net45</TargetFramework>
     <ApplicationIcon />
     <StartupObject />
     <AssemblyName>Myra.Samples.CustomUIStylesheet</AssemblyName>
     <RootNamespace>Myra.Samples.CustomUIStylesheet</RootNamespace>
   </PropertyGroup>
+
+  <PropertyGroup Condition="$(DefineConstants.Contains('MONOGAME'))">
+    <TargetFramework>net45</TargetFramework>
+    <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(DefineConstants.Contains('FNA'))">
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <OutputPath>bin\FNA\$(Configuration)</OutputPath>
+  </PropertyGroup>  
 
   <ItemGroup>
     <None Remove="Resources\commodore-64.fnt" />
@@ -24,7 +33,7 @@
     <EmbeddedResource Include="Resources\ui_stylesheet_atlas.png" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="$(DefineConstants.Contains('MONOGAME'))">
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.7.1.189" />
   </ItemGroup>
 

@@ -6,10 +6,9 @@ using System.Linq;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Xml.Linq;
 using System.Globalization;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -44,7 +43,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public Stylesheet Stylesheet { get; set; }
 
 		public Project()
@@ -83,7 +82,7 @@ namespace Myra.Graphics2D.UI
 					continue;
 				}
 
-				var attr = property.FindAttribute<JsonIgnoreAttribute>();
+				var attr = property.FindAttribute<XmlIgnoreAttribute>();
 				if (attr != null)
 				{
 					continue;
@@ -186,14 +185,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			return el;
-		}
-
-		public static Project LoadFromJson(string data)
-		{
-			return (Project)JsonConvert.DeserializeObject(data, new JsonSerializerSettings
-			{
-				TypeNameHandling = TypeNameHandling.Objects
-			});
 		}
 
 		public static Project LoadFromXml(string data)
@@ -333,22 +324,6 @@ namespace Myra.Graphics2D.UI
 						throw new Exception(string.Format("Could not resolve tag '{0}'", child.Name));
 					}
 				}
-			}
-		}
-
-		public static void PopulateFromData<T>(string data, T target) where T: Widget
-		{
-			var project = JObject.Parse(data);
-			var root = project["Root"];
-
-			using (var sr = root.CreateReader())
-			{
-				var serializer = JsonSerializer.CreateDefault(new JsonSerializerSettings
-				{
-					TypeNameHandling = TypeNameHandling.Objects
-				});
-
-				serializer.Populate(sr, target);
 			}
 		}
 

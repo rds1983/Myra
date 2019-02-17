@@ -3,7 +3,7 @@ using System.ComponentModel;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
-using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -542,52 +542,52 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		[EditCategory("Appearance")]
 		public IRenderable Background { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		[EditCategory("Appearance")]
 		public IRenderable OverBackground { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		[EditCategory("Appearance")]
 		public IRenderable DisabledBackground { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		[EditCategory("Appearance")]
 		public IRenderable FocusedBackground { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		[EditCategory("Appearance")]
 		public IRenderable DisabledOverBackground { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		[EditCategory("Appearance")]
 		public IRenderable OverrideBackground { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		[EditCategory("Appearance")]
 		public IRenderable Border { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		[EditCategory("Appearance")]
 		public IRenderable OverBorder { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		[EditCategory("Appearance")]
 		public IRenderable DisabledBorder { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		[EditCategory("Appearance")]
 		public IRenderable FocusedBorder { get; set; }
 
@@ -596,7 +596,7 @@ namespace Myra.Graphics2D.UI
 		public virtual bool ClipToBounds { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		internal bool WasMouseOver
 		{
 			get
@@ -611,7 +611,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public bool IsMouseOver
 		{
 			get
@@ -626,7 +626,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public Point MousePosition
 		{
 			get
@@ -636,7 +636,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public virtual Desktop Desktop
 		{
 			get { return _desktop; }
@@ -658,15 +658,15 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public Container Parent { get; internal set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public object Tag { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public Rectangle Bounds
 		{
 			get
@@ -676,7 +676,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public Rectangle ActualBounds
 		{
 			get
@@ -686,7 +686,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public Rectangle ContainerBounds
 		{
 			get
@@ -696,14 +696,14 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public int PaddingWidth
 		{
 			get { return _paddingLeft + _paddingRight; }
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public int PaddingHeight
 		{
 			get { return _paddingTop + _paddingBottom; }
@@ -743,7 +743,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public virtual bool IsFocused { get; internal set; }
 
 		public event EventHandler VisibleChanged;

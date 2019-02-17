@@ -1,15 +1,10 @@
-﻿using Myra.Graphics2D.UI.Styles;
-using Newtonsoft.Json.Linq;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using MiniJSON;
+using Myra.Graphics2D.UI.Styles;
 using System;
 using System.Collections.Generic;
-
-#if !XENKO
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-#else
-using Xenko.Core.Mathematics;
-using Texture2D = Xenko.Graphics.Texture;
-#endif
+using System.IO;
 
 namespace Myra.Graphics2D.TextureAtlases
 {
@@ -52,15 +47,15 @@ namespace Myra.Graphics2D.TextureAtlases
 
 		public string ToJson()
 		{
-			var root = new JObject();
+			var root = new Dictionary<string, object>();
 
 			foreach(var pair in _regions)
 			{
-				var entry = new JObject();
+				var entry = new Dictionary<string, object>();
 
 				var region = pair.Value;
 
-				var jBounds = new JObject
+				var jBounds = new Dictionary<string, object>
 				{
 					[StylesheetLoader.LeftName] = region.Bounds.X,
 					[StylesheetLoader.TopName] = region.Bounds.Y,
@@ -78,7 +73,7 @@ namespace Myra.Graphics2D.TextureAtlases
 				{
 					entry[StylesheetLoader.TypeName] = "1";
 
-					var jPadding = new JObject
+					var jPadding = new Dictionary<string, object>
 					{
 						[StylesheetLoader.LeftName] = asNinePatch.Info.Left,
 						[StylesheetLoader.TopName] = asNinePatch.Info.Top,
@@ -97,15 +92,15 @@ namespace Myra.Graphics2D.TextureAtlases
 
 		public static TextureRegionAtlas FromJson(string json, Texture2D texture)
 		{
-			var root = JObject.Parse(json);
+			var root = (Dictionary<string, object>)Json.Deserialize(json);
 
 			var regions = new Dictionary<string, TextureRegion>();
 
 			foreach(var pair in root)
 			{
-				var entry = pair.Value;
+				var entry = (Dictionary<string, object>)pair.Value;
 
-				var jBounds = entry[StylesheetLoader.BoundsName];
+				var jBounds = (Dictionary<string, object>)entry[StylesheetLoader.BoundsName];
 				var bounds = new Rectangle(int.Parse(jBounds[StylesheetLoader.LeftName].ToString()),
 					int.Parse(jBounds[StylesheetLoader.TopName].ToString()),
 					int.Parse(jBounds[StylesheetLoader.WidthName].ToString()),
@@ -117,7 +112,7 @@ namespace Myra.Graphics2D.TextureAtlases
 					region = new TextureRegion(texture, bounds);
 				} else
 				{
-					var jPadding = entry[StylesheetLoader.PaddingName];
+					var jPadding = (Dictionary<string, object>)entry[StylesheetLoader.PaddingName];
 					var padding = new PaddingInfo
 					{
 						Left = int.Parse(jPadding[StylesheetLoader.LeftName].ToString()),

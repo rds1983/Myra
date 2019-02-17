@@ -6,7 +6,7 @@ using Myra.Attributes;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
-using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -48,7 +48,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		[EditCategory("Appearance")]
 		public SpriteFont Font
 		{
@@ -93,12 +93,12 @@ namespace Myra.Graphics2D.UI
 		public Color? MessageTextColor { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		[EditCategory("Appearance")]
 		public IRenderable Cursor { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		[EditCategory("Appearance")]
 		public IRenderable Selection { get; set; }
 
@@ -162,7 +162,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public Func<string, string> InputFilter { get; set; }
 
 		/// <summary>
@@ -496,6 +496,7 @@ namespace Myra.Graphics2D.UI
 					y = glyphRender.TextRun.RenderedPosition.Value.Y;
 				}
 
+				++x;
 				context.Draw(Cursor, new Rectangle(x,
 					y,
 					Cursor.Size.X,

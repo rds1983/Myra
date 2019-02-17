@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="$(DefineConstants.Contains('FNA'))">
-    <TargetFramework>net45</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <OutputPath>bin\FNA\$(Configuration)</OutputPath>
   </PropertyGroup>
   
@@ -24,11 +24,8 @@
     <OutputPath>bin\Xenko\$(Configuration)</OutputPath>
   </PropertyGroup>
 
-  <ItemGroup>
-  </ItemGroup>
-  
   <ItemGroup Condition="$(DefineConstants.Contains('MONOGAME'))">
-    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.7.1.189" Condition="$(DefineConstants.Contains('MONOGAME'))" />
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.7.1.189" />
   </ItemGroup>
 
   <ItemGroup>

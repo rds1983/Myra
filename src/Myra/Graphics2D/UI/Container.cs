@@ -1,6 +1,6 @@
 using Myra.Attributes;
-using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -15,7 +15,7 @@ namespace Myra.Graphics2D.UI
 		private bool _childrenDirty = true;
 		private readonly List<Widget> _childrenCopy = new List<Widget>();
 
-		[JsonIgnore]
+		[XmlIgnore]
 		[HiddenInEditor]
 		public abstract int ChildrenCount { get; }
 

@@ -8,8 +8,8 @@ using Myra.Attributes;
 using Myra.Graphics2D.UI.ColorPicker;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
-using Newtonsoft.Json;
 using static Myra.Graphics2D.UI.Grid;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -217,14 +217,14 @@ namespace Myra.Graphics2D.UI.Properties
 		private object _object;
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public TreeStyle PropertyGridStyle
 		{
 			get; private set;
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public object Object
 		{
 			get { return _object; }
@@ -242,7 +242,7 @@ namespace Myra.Graphics2D.UI.Properties
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public string Category { get; private set; }
 
 		public event EventHandler<GenericEventArgs<string>> PropertyChanged;

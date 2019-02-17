@@ -1,7 +1,7 @@
 ﻿using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
-using Newtonsoft.Json;
 using static Myra.Graphics2D.UI.Grid;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework.Input;
@@ -14,11 +14,11 @@ namespace Myra.Graphics2D.UI
 	public class Dialog : Window
 	{
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public Button ButtonOk { get; private set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public Button ButtonCancel { get; private set; }
 
 		public Dialog(DialogStyle style) : base(style)

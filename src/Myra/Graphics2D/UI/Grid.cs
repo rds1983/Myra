@@ -5,7 +5,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using Myra.Attributes;
 using Myra.Utility;
-using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -243,11 +243,11 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public IRenderable SelectionBackground { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public IRenderable SelectionHoverBackground { get; set; }
 
 		[EditCategory("Behavior")]
@@ -256,7 +256,7 @@ namespace Myra.Graphics2D.UI
 
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public List<int> GridLinesX
 		{
 			get
@@ -266,7 +266,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public List<int> GridLinesY
 		{
 			get
@@ -276,15 +276,15 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public int? HoverRowIndex { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public int? HoverColumnIndex { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public int? SelectedRowIndex
 		{
 			get { return _selectedRowIndex; }
@@ -307,7 +307,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public int? SelectedColumnIndex
 		{
 			get { return _selectedColumnIndex; }

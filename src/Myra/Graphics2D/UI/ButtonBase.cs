@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
-using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework.Input;
@@ -33,7 +33,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		[EditCategory("Appearance")]
 		public virtual IRenderable PressedBackground { get; set; }
 
@@ -46,7 +46,7 @@ namespace Myra.Graphics2D.UI
 		public bool IgnoreMouseButton { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public bool IsPressed
 		{
 			get

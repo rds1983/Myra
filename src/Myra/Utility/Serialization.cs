@@ -1,24 +1,19 @@
-﻿using Myra.Attributes;
-using Newtonsoft.Json.Linq;
+﻿using Microsoft.Xna.Framework;
+using Myra.Attributes;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
-
-#if !XENKO
-using Microsoft.Xna.Framework;
-#else
-using Xenko.Core.Mathematics;
-#endif
 
 namespace Myra.Utility
 {
 	public static class Serialization
 	{
-		public static bool GetStyle(this JObject styles, string name, out string result)
+		public static bool GetStyle(this Dictionary<string, object> styles, string name, out string result)
 		{
 			result = null;
 
-			JToken obj;
+			object obj;
 			if (!styles.TryGetValue(name, out obj))
 			{
 				return false;
@@ -29,22 +24,22 @@ namespace Myra.Utility
 			return true;
 		}
 
-		public static bool GetStyle(this JObject styles, string name, out JObject result)
+		public static bool GetStyle(this Dictionary<string, object> styles, string name, out Dictionary<string, object> result)
 		{
 			result = null;
 
-			JToken obj;
+			object obj;
 			if (!styles.TryGetValue(name, out obj))
 			{
 				return false;
 			}
 
-			result = obj.ToObject<JObject>();
+			result = (Dictionary<string, object>)obj;
 
 			return true;
 		}
 
-		public static bool GetStyle(this JObject styles, string name, out int result)
+		public static bool GetStyle(this Dictionary<string, object> styles, string name, out int result)
 		{
 			result = 0;
 
@@ -54,18 +49,18 @@ namespace Myra.Utility
 				return false;
 			}
 
-			int i;
-			if (!int.TryParse(s, out i))
+			double i;
+			if (!double.TryParse(s, out i))
 			{
 				return false;
 			}
 
-			result = i;
+			result = (int)i;
 
 			return true;
 		}
 
-		public static bool GetStyle(this JObject styles, string name, out bool result)
+		public static bool GetStyle(this Dictionary<string, object> styles, string name, out bool result)
 		{
 			result = false;
 
@@ -86,28 +81,7 @@ namespace Myra.Utility
 			return true;
 		}
 
-		public static bool GetStyle(this JObject styles, string name, out char result)
-		{
-			result = '\0';
-
-			string s;
-			if (!GetStyle(styles, name, out s))
-			{
-				return false;
-			}
-
-			char i;
-			if (!char.TryParse(s, out i))
-			{
-				return false;
-			}
-
-			result = i;
-
-			return true;
-		}
-
-		public static bool GetStyle(this JObject styles, string name, out float result)
+		public static bool GetStyle(this Dictionary<string, object> styles, string name, out float result)
 		{
 			result = 0.0f;
 

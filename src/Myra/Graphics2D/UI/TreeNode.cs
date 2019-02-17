@@ -1,8 +1,8 @@
 ﻿using System;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
-using Newtonsoft.Json;
 using static Myra.Graphics2D.UI.Grid;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -78,14 +78,14 @@ namespace Myra.Graphics2D.UI
 		public TreeStyle TreeStyle { get; private set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public IRenderable SelectionBackground
 		{
 			get; set;
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public IRenderable SelectionHoverBackground
 		{
 			get; set;

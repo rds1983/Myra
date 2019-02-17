@@ -1,5 +1,5 @@
 ﻿using Myra.Attributes;
-using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 namespace Myra.Graphics2D
 {
@@ -13,14 +13,14 @@ namespace Myra.Graphics2D
 		public int Bottom { get; set; }
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public int Width
 		{
 			get { return Left + Right; }
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public int Height
 		{
 			get { return Top + Bottom; }

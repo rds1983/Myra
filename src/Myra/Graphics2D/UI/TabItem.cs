@@ -1,8 +1,8 @@
 ﻿using Myra.Attributes;
-using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
 using System.Text;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -83,28 +83,28 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public object Tag
 		{
 			get; set;
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public IRenderable Image
 		{
 			get; set;
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public int ImageTextSpacing
 		{
 			get; set;
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		internal Button Button
 		{
 			get; set;

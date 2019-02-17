@@ -19,7 +19,7 @@
 		"disabledTextColor": "grey",
 		"selection": "selection",
 		"background": "textfield",
-		//        "focusedBorder": "window",
+		"focusedBorder": "border",
 		"cursor": "cursor",
 		"messageFont": "default-font",
 		"messageTextColor": "grey"
@@ -176,8 +176,8 @@
 			"overBackground": "button-over",
 			"pressedBackground": "list-selection",
 			"padding": {
-				"left": 5.0,
-				"right": 5.0
+				"left": 5,
+				"right": 5
 			},
 			"label": {
 				"font": "default-font",
@@ -189,8 +189,8 @@
 			"image": "separator-menu",
 			"thickness": 4,
 			"padding": {
-				"top": 2.0,
-				"bottom": 2.0
+				"top": 2,
+				"bottom": 2
 			}
 		}
 	},
@@ -199,18 +199,18 @@
 		"content": {
 			"background": "window",
 			"padding": {
-				"top": 5.0,
-				"bottom": 5.0,
-				"left": 5.0,
-				"right": 5.0
+				"top": 5,
+				"bottom": 5,
+				"left": 5,
+				"right": 5
 			}
 		},
 		"tabItem": {
 			"overBackground": "button-over",
 			"pressedBackground": "list-selection",
 			"padding": {
-				"left": 5.0,
-				"right": 5.0
+				"left": 5,
+				"right": 5
 			},
 			"label": {
 				"font": "default-font",
@@ -264,9 +264,9 @@
 			"overBackground": "button-over",
 			"pressedBackground": "button-down",
 			"padding": {
-				"left": 5.0,
-				"right": 5.0,
-				"bottom": 2.0
+				"left": 5,
+				"right": 5,
+				"bottom": 2
 			},
 			"label": {
 				"font": "default-font",
@@ -282,8 +282,8 @@
 			"image": "separator-menu",
 			"thickness": 4,
 			"padding": {
-				"top": 2.0,
-				"bottom": 2.0
+				"top": 2,
+				"bottom": 2
 			}
 		},
 		"menuItem": {
@@ -292,8 +292,8 @@
 			"iconWidth": 22,
 			"shortcutWidth": 22,
 			"padding": {
-				"left": 5.0,
-				"right": 5.0
+				"left": 5,
+				"right": 5
 			},
 			"label": {
 				"font": "default-font",
@@ -305,10 +305,10 @@
 	"window": {
 		"background": "window",
 		"padding": {
-			"top": 5.0,
-			"bottom": 5.0,
-			"left": 5.0,
-			"right": 5.0
+			"top": 5,
+			"bottom": 5,
+			"left": 5,
+			"right": 5
 		},
 		"title": {
 			"font": "default-font",
@@ -318,10 +318,10 @@
 			"overBackground": "button-over",
 			"pressedBackground": "button-red",
 			"padding": {
-				"top": 5.0,
-				"bottom": 5.0,
-				"left": 5.0,
-				"right": 5.0
+				"top": 5,
+				"bottom": 5,
+				"left": 5,
+				"right": 5
 			},
 			"image": {
 				"image": "icon-close"
@@ -331,10 +331,10 @@
 	"dialog": {
 		"background": "window",
 		"padding": {
-			"top": 5.0,
-			"bottom": 5.0,
-			"left": 5.0,
-			"right": 5.0
+			"top": 5,
+			"bottom": 5,
+			"left": 5,
+			"right": 5
 		},
 		"title": {
 			"font": "default-font",
@@ -344,10 +344,10 @@
 			"overBackground": "button-over",
 			"pressedBackground": "button-red",
 			"padding": {
-				"top": 5.0,
-				"bottom": 5.0,
-				"left": 5.0,
-				"right": 5.0
+				"top": 5,
+				"bottom": 5,
+				"left": 5,
+				"right": 5
 			},
 			"image": {
 				"image": "icon-close"

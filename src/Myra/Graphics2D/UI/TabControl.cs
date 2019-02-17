@@ -1,11 +1,11 @@
 ﻿using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
-using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Xml.Serialization;
 using static Myra.Graphics2D.UI.Grid;
 
 namespace Myra.Graphics2D.UI
@@ -28,7 +28,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public TabControlStyle TabControlStyle
 		{
 			get; set;
@@ -61,7 +61,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[JsonIgnore]
+		[XmlIgnore]
 		public TabItem SelectedItem
 		{
 			get
