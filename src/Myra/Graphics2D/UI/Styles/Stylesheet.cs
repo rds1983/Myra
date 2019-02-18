@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using Microsoft.Xna.Framework.Graphics;
 using MiniJSON;
 using Myra.Graphics2D.TextureAtlases;
+
+#if !XENKO
+using Microsoft.Xna.Framework.Graphics;
+#else
+using Xenko.Graphics;
+#endif
 
 namespace Myra.Graphics2D.UI.Styles
 {

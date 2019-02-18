@@ -1,5 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿#if !XENKO
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+#else
+using Xenko.Core.Mathematics;
+using Xenko.Graphics;
+using Texture2D = Xenko.Graphics.Texture;
+#endif
+
 using MiniJSON;
 using Myra.Graphics2D.UI.Styles;
 using System;

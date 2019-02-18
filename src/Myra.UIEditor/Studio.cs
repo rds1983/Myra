@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MiniJSON;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
@@ -14,7 +15,6 @@ using Myra.Graphics2D.UI.Properties;
 using Myra.Graphics2D.UI.Styles;
 using Myra.UIEditor.UI;
 using Myra.Utility;
-using Newtonsoft.Json.Linq;
 
 namespace Myra.UIEditor
 {
@@ -469,13 +469,13 @@ namespace Myra.UIEditor
 		private Stylesheet StylesheetFromFile(string path)
 		{
 			var data = File.ReadAllText(path);
-			var root = JObject.Parse(data);
+			var root = (Dictionary<string, object>)Json.Deserialize(data);
 
 			var folder = Path.GetDirectoryName(path);
 
 			// Load texture atlases
 			var textureAtlases = new Dictionary<string, TextureRegionAtlas>();
-			JObject textureAtlasesNode;
+			Dictionary<string, object> textureAtlasesNode;
 			if (root.GetStyle("textureAtlases", out textureAtlasesNode))
 			{
 				foreach (var pair in textureAtlasesNode)
@@ -494,7 +494,7 @@ namespace Myra.UIEditor
 
 			// Load fonts
 			var fonts = new Dictionary<string, SpriteFont>();
-			JObject fontsNode;
+			Dictionary<string, object> fontsNode;
 			if (root.GetStyle("fonts", out fontsNode))
 			{
 				foreach (var pair in fontsNode)
@@ -1094,7 +1094,9 @@ namespace Myra.UIEditor
 				if (filePath.EndsWith(".ui"))
 				{
 					// JSON
-					project = Project.LoadFromJson(data);
+					var dialog = Dialog.CreateMessageBox("Error", "'.ui' is no longer supported. Use Myra UI Editor 0.8.2 to convert it to '.xml'.");
+					dialog.ShowModal(_desktop);
+					return;
 				} else
 				{
 					// XML

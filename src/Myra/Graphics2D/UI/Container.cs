@@ -97,7 +97,10 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnMouseEntered();
 
-			ChildrenCopy.HandleMouseMovement();
+			foreach (var w in ChildrenCopy)
+			{
+				w.HandleMouseMovement();
+			}
 		}
 
 		public override void OnMouseLeft()
@@ -111,10 +114,7 @@ namespace Myra.Graphics2D.UI
 					continue;
 				}
 
-				if (w.WasMouseOver)
-				{
-					w.OnMouseLeft();
-				}
+				w.IsMouseOver = false;
 			}
 		}
 
@@ -122,42 +122,60 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnMouseMoved();
 
-			ChildrenCopy.HandleMouseMovement();
+			foreach (var w in ChildrenCopy)
+			{
+				w.HandleMouseMovement();
+			}
 		}
 
 		public override void OnMouseDown(MouseButtons mb)
 		{
 			base.OnMouseDown(mb);
 
-			ChildrenCopy.HandleMouseDown(mb);
+			foreach (var w in ChildrenCopy)
+			{
+				w.HandleMouseDown(mb);
+			}
 		}
 
 		public override void OnMouseUp(MouseButtons mb)
 		{
 			base.OnMouseUp(mb);
 
-			ChildrenCopy.HandleMouseUp(mb);
+			foreach (var w in ChildrenCopy)
+			{
+				w.HandleMouseUp(mb);
+			}
 		}
 
 		public override void OnMouseDoubleClick(MouseButtons mb)
 		{
 			base.OnMouseDoubleClick(mb);
 
-			ChildrenCopy.HandleMouseDoubleClick(mb);
+			foreach (var w in ChildrenCopy)
+			{
+				w.HandleMouseDoubleClick(mb);
+			}
 		}
 
 		public override void OnTouchDown()
 		{
 			base.OnTouchDown();
 
-			ChildrenCopy.HandleTouchDown();
+			foreach (var w in ChildrenCopy)
+			{
+				w.HandleTouchDown();
+			}
 		}
 
 		public override void OnTouchUp()
 		{
 			base.OnTouchUp();
 
-			ChildrenCopy.HandleTouchUp();
+			foreach (var w in ChildrenCopy)
+			{
+				w.HandleTouchUp();
+			}
 		}
 
 		internal override void MoveChildren(Point delta)

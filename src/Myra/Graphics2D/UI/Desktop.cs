@@ -44,7 +44,15 @@ namespace Myra.Graphics2D.UI
 		private MouseInfo _lastMouseInfo;
 		private IReadOnlyCollection<Keys> _lastDownKeys;
 
-		internal Point LastMousePosition
+		public MouseInfo LastMouseInfo
+		{
+			get
+			{
+				return _lastMouseInfo;
+			}
+		}
+
+		private Point LastMousePosition
 		{
 			get
 			{
@@ -459,8 +467,28 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
+		private Widget GetActiveWidget()
+		{
+			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
+			{
+				var w = ChildrenCopy[i];
+				if (w.Visible)
+				{
+					return w;
+				}
+			}
+
+			return null;
+		}
+
 		public void HandleButton(bool isDown, bool wasDown, MouseButtons buttons)
 		{
+			var activeWidget = GetActiveWidget();
+			if (activeWidget == null)
+			{
+				return;
+			}
+
 			if (isDown && !wasDown)
 			{
 				IsTouchDown = true;
@@ -472,7 +500,9 @@ namespace Myra.Graphics2D.UI
 				}
 
 				InputOnMouseDown();
-				ChildrenCopy.HandleMouseDown(buttons);
+
+
+				activeWidget.HandleMouseDown(buttons);
 
 				var td = TouchDown;
 				if (td != null)
@@ -480,7 +510,7 @@ namespace Myra.Graphics2D.UI
 					td(this, EventArgs.Empty);
 				}
 
-				ChildrenCopy.HandleTouchDown();
+				activeWidget.HandleTouchDown();
 
 				if ((DateTime.Now - _lastTouch).TotalMilliseconds < DoubleClickIntervalInMs)
 				{
@@ -491,7 +521,7 @@ namespace Myra.Graphics2D.UI
 						ev2(this, new GenericEventArgs<MouseButtons>(buttons));
 					}
 
-					ChildrenCopy.HandleMouseDoubleClick(buttons);
+					activeWidget.HandleMouseDoubleClick(buttons);
 
 					_lastTouch = DateTime.MinValue;
 				}
@@ -510,7 +540,7 @@ namespace Myra.Graphics2D.UI
 					ev(this, new GenericEventArgs<MouseButtons>(buttons));
 				}
 
-				ChildrenCopy.HandleMouseUp(buttons);
+				activeWidget.HandleMouseUp(buttons);
 
 				var tu = TouchUp;
 				if (tu != null)
@@ -518,12 +548,18 @@ namespace Myra.Graphics2D.UI
 					tu(this, EventArgs.Empty);
 				}
 
-				ChildrenCopy.HandleTouchUp();
+				activeWidget.HandleTouchUp();
 			}
 		}
 
 		public void UpdateInput()
 		{
+			var activeWidget = GetActiveWidget();
+			if (activeWidget == null)
+			{
+				return;
+			}
+
 			if (MouseInfoGetter != null)
 			{
 				var mouseInfo = MouseInfoGetter();
@@ -548,7 +584,7 @@ namespace Myra.Graphics2D.UI
 						ev(this, EventArgs.Empty);
 					}
 
-					ChildrenCopy.HandleMouseMovement();
+					activeWidget.HandleMouseMovement();
 				}
 
 				HandleButton(mouseInfo.IsLeftButtonDown, _lastMouseInfo.IsLeftButtonDown, MouseButtons.Left);

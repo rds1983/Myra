@@ -33,6 +33,7 @@ namespace Myra.Graphics2D.UI
 		private VerticalAlignment _verticalAlignment = VerticalAlignment.Top;
 		private LayoutState _layoutState = LayoutState.Invalid;
 		private bool _measureDirty = true;
+		private bool _isMouseOver = false;
 
 		private Point _lastMeasureSize;
 		private Point _lastMeasureAvailableSize;
@@ -513,11 +514,7 @@ namespace Myra.Graphics2D.UI
 
 				_visible = value;
 
-				var ev = VisibleChanged;
-				if (ev != null)
-				{
-					ev(this, EventArgs.Empty);
-				}
+				OnVisibleChanged();
 			}
 		}
 
@@ -597,31 +594,30 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[XmlIgnore]
-		internal bool WasMouseOver
-		{
-			get
-			{
-				if (Desktop == null)
-				{
-					return false;
-				}
-
-				return Bounds.Contains(Desktop.LastMousePosition);
-			}
-		}
-
-		[HiddenInEditor]
-		[XmlIgnore]
 		public bool IsMouseOver
 		{
 			get
 			{
-				if (Desktop == null)
+				return _isMouseOver;
+			}
+
+			set
+			{
+				if (value == _isMouseOver)
 				{
-					return false;
+					return;
 				}
 
-				return Bounds.Contains(Desktop.MousePosition);
+				_isMouseOver = value;
+
+				if (value)
+				{
+					OnMouseEntered();
+				}
+				else
+				{
+					OnMouseLeft();
+				}
 			}
 		}
 
@@ -1252,6 +1248,18 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public virtual void OnVisibleChanged()
+		{
+			// Visibility change can generate MouseEnter/MouseLeft events
+			HandleMouseMovement();
+
+			var ev = VisibleChanged;
+			if (ev != null)
+			{
+				ev(this, EventArgs.Empty);
+			}
+		}
+
 		internal Rectangle CalculateClientBounds(Rectangle clientBounds)
 		{
 			clientBounds.X += _paddingLeft;
@@ -1320,6 +1328,86 @@ namespace Myra.Graphics2D.UI
 			if (ev != null)
 			{
 				ev(this, EventArgs.Empty);
+			}
+		}
+
+		internal void HandleMouseDown(MouseButtons buttons)
+		{
+			if (!Visible)
+			{
+				return;
+			}
+
+			if (IsMouseOver)
+			{
+				OnMouseDown(buttons);
+			}
+		}
+
+		internal void HandleMouseDoubleClick(MouseButtons buttons)
+		{
+			if (!Visible)
+			{
+				return;
+			}
+
+			if (IsMouseOver)
+			{
+				OnMouseDoubleClick(buttons);
+			}
+		}
+
+		internal void HandleMouseUp(MouseButtons buttons)
+		{
+			if (!Visible)
+			{
+				return;
+			}
+
+			if (IsMouseOver)
+			{
+				OnMouseUp(buttons);
+			}
+		}
+
+		internal void HandleMouseMovement()
+		{
+			var wasMouseOver = IsMouseOver;
+
+			IsMouseOver = Visible && Desktop != null && Bounds.Contains(Desktop.MousePosition);
+			if (IsMouseOver)
+			{
+				if (wasMouseOver)
+				{
+					// Already inside
+					OnMouseMoved();
+				}
+			}
+		}
+
+		internal void HandleTouchDown()
+		{
+			if (!Visible)
+			{
+				return;
+			}
+
+			if (IsMouseOver)
+			{
+				OnTouchDown();
+			}
+		}
+
+		internal void HandleTouchUp()
+		{
+			if (!Visible)
+			{
+				return;
+			}
+
+			if (IsMouseOver)
+			{
+				OnTouchUp();
 			}
 		}
 	}

@@ -5,10 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Myra.Graphics2D.UI;
 using Myra.Utility;
-using Newtonsoft.Json;
 
 namespace Myra.UIEditor
 {
@@ -231,7 +231,7 @@ namespace Myra.UIEditor
 					continue;
 				}
 
-				var jsonIgnoreAttr = property.FindAttribute<JsonIgnoreAttribute>();
+				var jsonIgnoreAttr = property.FindAttribute<XmlIgnoreAttribute>();
 				if (jsonIgnoreAttr != null)
 				{
 					continue;
@@ -332,7 +332,7 @@ namespace Myra.UIEditor
 					continue;
 				}
 
-				var jsonIgnoreAttribute = property.FindAttribute<JsonIgnoreAttribute>();
+				var jsonIgnoreAttribute = property.FindAttribute<XmlIgnoreAttribute>();
 				if (jsonIgnoreAttribute != null)
 				{
 					continue;
