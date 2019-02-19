@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.AllWidgets", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.UIViewer", "..\..\src\Myra.UIViewer\Myra.UIViewer.csproj", "{5DA1FB3E-7EA9-43EF-9F47-CF06B4EE9249}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.Notepad", "..\..\samples\Myra.Samples.Notepad\Myra.Samples.Notepad.csproj", "{C98D1921-8281-4FA4-B451-E648B59C23B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{5DA1FB3E-7EA9-43EF-9F47-CF06B4EE9249}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DA1FB3E-7EA9-43EF-9F47-CF06B4EE9249}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DA1FB3E-7EA9-43EF-9F47-CF06B4EE9249}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C98D1921-8281-4FA4-B451-E648B59C23B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C98D1921-8281-4FA4-B451-E648B59C23B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C98D1921-8281-4FA4-B451-E648B59C23B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C98D1921-8281-4FA4-B451-E648B59C23B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +70,7 @@ Global
 		{E96FADDC-29FA-49F7-920D-4AD9F5FBD705} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{15129613-1D63-4709-8B71-70E73BAB9C0B} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{0F48899B-E533-423E-BAE4-FDD09A3A6698} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{C98D1921-8281-4FA4-B451-E648B59C23B5} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35ACDF4E-2CE2-46B1-A19F-35DC131069A1}

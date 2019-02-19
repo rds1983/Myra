@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MiniJSON;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
@@ -13,6 +12,7 @@ using Myra.Graphics2D.UI.ColorPicker;
 using Myra.Graphics2D.UI.File;
 using Myra.Graphics2D.UI.Properties;
 using Myra.Graphics2D.UI.Styles;
+using Myra.MiniJSON;
 using Myra.UIEditor.UI;
 using Myra.Utility;
 

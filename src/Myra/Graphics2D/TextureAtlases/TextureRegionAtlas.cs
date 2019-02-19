@@ -7,8 +7,8 @@ using Xenko.Graphics;
 using Texture2D = Xenko.Graphics.Texture;
 #endif
 
-using MiniJSON;
 using Myra.Graphics2D.UI.Styles;
+using Myra.MiniJSON;
 using System;
 using System.Collections.Generic;
 using System.IO;
