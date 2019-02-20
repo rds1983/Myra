@@ -2,15 +2,9 @@
 {
 	public interface ITextEditHandler
 	{
-		string Text
-		{
-			get; set;
-		}
+		string Text { get; set; }
 
-		int Length
-		{
-			get;
-		}
+		int Length { get; }
 
 		TextEditRow LayoutRow(int startIndex);
 		float GetWidth(int index);

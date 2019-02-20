@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 
 namespace StbTextEditSharp
 {
@@ -6,102 +7,82 @@ namespace StbTextEditSharp
 	{
 		internal readonly ITextEditHandler Handler;
 
-		public int cursor;
-		public int select_start;
-		public int select_end;
-		public bool insert_mode;
-		public bool cursor_at_end_of_line;
-		public bool initialized;
-		public bool has_preferred_x;
-		public bool single_line;
-		public byte padding1;
-		public byte padding2;
-		public byte padding3;
-		public float preferred_x;
-		public UndoState undostate;
-
-		public int Length
-		{
-			get
-			{
-				return Handler.Length;
-			}
-		}
-
-		public string text
-		{
-			get
-			{
-				return Handler.Text;
-			}
-
-			set
-			{
-				Handler.Text = value;
-			}
-		}
+		public int CursorIndex;
+		public bool CursorAtEndOfLine;
+		public bool HasPreferredX;
+		public bool InsertMode;
+		public float PreferredX;
+		public int SelectEnd;
+		public int SelectStart;
+		public bool SingleLine;
+		public UndoState UndoState;
 
 		public TextEdit(ITextEditHandler handler)
 		{
-			if (handler == null)
-			{
-				throw new ArgumentNullException("handler");
-			}
+			if (handler == null) throw new ArgumentNullException("handler");
 
 			Handler = handler;
 
-			undostate = new UndoState();
+			UndoState = new UndoState();
 			ClearState(false);
+		}
+
+		public int Length => Handler.Length;
+
+		public string text
+		{
+			get => Handler.Text;
+
+			set => Handler.Text = value;
 		}
 
 		public void SortSelection()
 		{
-			if ((select_end) < (select_start))
+			if (SelectEnd < SelectStart)
 			{
-				int temp = (int)(select_end);
-				select_end = (int)(select_start);
-				select_start = (int)(temp);
+				var temp = SelectEnd;
+				SelectEnd = SelectStart;
+				SelectStart = temp;
 			}
 		}
 
 		public void MoveToFirst()
 		{
-			if ((select_start != select_end))
+			if (SelectStart != SelectEnd)
 			{
 				SortSelection();
-				cursor = (int)(select_start);
-				select_end = (int)(select_start);
-				has_preferred_x = false;
+				CursorIndex = SelectStart;
+				SelectEnd = SelectStart;
+				HasPreferredX = false;
 			}
 		}
 
 		public void PrepareSelectionAtCursor()
 		{
-			if (!(select_start != select_end))
-				select_start = (int)(select_end = (int)(cursor));
+			if (!(SelectStart != SelectEnd))
+				SelectStart = SelectEnd = CursorIndex;
 			else
-				cursor = (int)(select_end);
+				CursorIndex = SelectEnd;
 		}
 
 		public void MakeUndoInsert(int where, int length)
 		{
-			undostate.CreateUndo(where, 0, length);
+			UndoState.CreateUndo(where, 0, length);
 		}
 
 		public void ClearState(bool is_single_line)
 		{
-			undostate.undo_point = (short)(0);
-			undostate.undo_char_point = (int)(0);
-			undostate.redo_point = (short)(99);
-			undostate.redo_char_point = (int)(999);
-			select_end = (int)(select_start = (int)(0));
-			cursor = (int)(0);
-			has_preferred_x = false;
-			preferred_x = (float)(0);
-			cursor_at_end_of_line = false;
-			initialized = true;
-			single_line = is_single_line;
-			insert_mode = false;
+			UndoState.undo_point = 0;
+			UndoState.undo_char_point = 0;
+			UndoState.redo_point = 99;
+			UndoState.redo_char_point = 999;
+			SelectEnd = SelectStart = 0;
+			CursorIndex = 0;
+			HasPreferredX = false;
+			PreferredX = 0;
+			CursorAtEndOfLine = false;
+			SingleLine = is_single_line;
+			InsertMode = false;
 		}
 
 		public void DeleteChars(int pos, int l)
@@ -112,10 +93,17 @@ namespace StbTextEditSharp
 			text = text.Substring(0, pos) + text.Substring(pos + l);
 		}
 
-		public int InsertChars(int pos, int[] codepoints, int start, int legth)
+		public int InsertChars(int pos, int[] codepoints, int start, int length)
 		{
-			// TODO
-			return 0;
+			var sb = new StringBuilder();
+			for (var i = start; i < start + length; ++i)
+			{
+				sb.Append(char.ConvertFromUtf32(codepoints[i]));
+			}
+
+			InsertChars(pos, sb.ToString());
+
+			return length;
 		}
 
 		public int InsertChars(int pos, string s)
@@ -139,138 +127,137 @@ namespace StbTextEditSharp
 
 		public int LocateCoord(float x, float y)
 		{
-			TextEditRow r = new TextEditRow();
-			int n = (int)(Length);
-			float base_y = (float)(0);
-			float prev_x = 0;
-			int i = (int)(0);
-			int k = 0;
-			r.x0 = (float)(r.x1 = (float)(0));
-			r.ymin = (float)(r.ymax = (float)(0));
-			r.num_chars = (int)(0);
-			while ((i) < (n))
+			var r = new TextEditRow();
+			var n = Length;
+			var base_y = (float)0;
+			var i = 0;
+			var k = 0;
+			r.x0 = r.x1 = 0;
+			r.ymin = r.ymax = 0;
+			r.num_chars = 0;
+			while (i < n)
 			{
-				r = Handler.LayoutRow((int)(i));
+				r = Handler.LayoutRow(i);
 				if (r.num_chars <= 0)
-					return (int)(n);
-				if (((i) == (0)) && ((y) < (base_y + r.ymin)))
-					return (int)(0);
-				if ((y) < (base_y + r.ymax))
+					return n;
+				if (i == 0 && y < base_y + r.ymin)
+					return 0;
+				if (y < base_y + r.ymax)
 					break;
-				i += (int)(r.num_chars);
-				base_y += (float)(r.baseline_y_delta);
+				i += r.num_chars;
+				base_y += r.baseline_y_delta;
 			}
-			if ((i) >= (n))
-				return (int)(n);
-			if ((x) < (r.x0))
-				return (int)(i);
-			if ((x) < (r.x1))
+
+			if (i >= n)
+				return n;
+			if (x < r.x0)
+				return i;
+			if (x < r.x1)
 			{
-				prev_x = (float)(r.x0);
-				for (k = (int)(0); (k) < (r.num_chars); ++k)
+				var prev_x = r.x0;
+				for (k = 0; k < r.num_chars; ++k)
 				{
-					float w = Handler.GetWidth(i + k);
-					if ((x) < (prev_x + w))
+					var w = Handler.GetWidth(i + k);
+					if (x < prev_x + w)
 					{
-						if ((x) < (prev_x + w / 2))
-							return (int)(k + i);
-						else
-							return (int)(k + i + 1);
+						if (x < prev_x + w / 2)
+							return k + i;
+						return k + i + 1;
 					}
-					prev_x += (float)(w);
+
+					prev_x += w;
 				}
 			}
 
-			if ((text[i + r.num_chars - 1]) == ('\n'))
-				return (int)(i + r.num_chars - 1);
-			else
-				return (int)(i + r.num_chars);
+			if (text[i + r.num_chars - 1] == '\n')
+				return i + r.num_chars - 1;
+			return i + r.num_chars;
 		}
 
 		public void Click(float x, float y)
 		{
-			if (single_line)
+			if (SingleLine)
 			{
-				TextEditRow r = new TextEditRow();
-				r = Handler.LayoutRow((int)(0));
-				y = (float)(r.ymin);
+				var r = new TextEditRow();
+				r = Handler.LayoutRow(0);
+				y = r.ymin;
 			}
 
-			cursor = (int)(LocateCoord((float)(x), (float)(y)));
-			select_start = (int)(cursor);
-			select_end = (int)(cursor);
-			has_preferred_x = false;
+			CursorIndex = LocateCoord(x, y);
+			SelectStart = CursorIndex;
+			SelectEnd = CursorIndex;
+			HasPreferredX = false;
 		}
 
 		public void Drag(float x, float y)
 		{
-			int p = (int)(0);
-			if (single_line)
+			var p = 0;
+			if (SingleLine)
 			{
-				TextEditRow r = new TextEditRow();
-				r = Handler.LayoutRow((int)(0));
-				y = (float)(r.ymin);
+				var r = new TextEditRow();
+				r = Handler.LayoutRow(0);
+				y = r.ymin;
 			}
 
-			if ((select_start) == (select_end))
-				select_start = (int)(cursor);
-			p = (int)(LocateCoord((float)(x), (float)(y)));
-			cursor = (int)(select_end = (int)(p));
+			if (SelectStart == SelectEnd)
+				SelectStart = CursorIndex;
+			p = LocateCoord(x, y);
+			CursorIndex = SelectEnd = p;
 		}
 
 		public void Clamp()
 		{
-			int n = (int)(Length);
-			if ((select_start != select_end))
+			var n = Length;
+			if (SelectStart != SelectEnd)
 			{
-				if ((select_start) > (n))
-					select_start = (int)(n);
-				if ((select_end) > (n))
-					select_end = (int)(n);
-				if ((select_start) == (select_end))
-					cursor = (int)(select_start);
+				if (SelectStart > n)
+					SelectStart = n;
+				if (SelectEnd > n)
+					SelectEnd = n;
+				if (SelectStart == SelectEnd)
+					CursorIndex = SelectStart;
 			}
 
-			if ((cursor) > (n))
-				cursor = (int)(n);
+			if (CursorIndex > n)
+				CursorIndex = n;
 		}
 
 		public void Delete(int where, int len)
 		{
-			MakeUndoDelete((int)(where), (int)(len));
-			DeleteChars((int)(where), (int)(len));
-			has_preferred_x = false;
+			MakeUndoDelete(where, len);
+			DeleteChars(where, len);
+			HasPreferredX = false;
 		}
 
 		public void DeleteSelection()
 		{
 			Clamp();
-			if ((select_start != select_end))
+			if (SelectStart != SelectEnd)
 			{
-				if ((select_start) < (select_end))
+				if (SelectStart < SelectEnd)
 				{
-					Delete((int)(select_start), (int)(select_end - select_start));
-					select_end = (int)(cursor = (int)(select_start));
+					Delete(SelectStart, SelectEnd - SelectStart);
+					SelectEnd = CursorIndex = SelectStart;
 				}
 				else
 				{
-					Delete((int)(select_end), (int)(select_start - select_end));
-					select_start = (int)(cursor = (int)(select_end));
+					Delete(SelectEnd, SelectStart - SelectEnd);
+					SelectStart = CursorIndex = SelectEnd;
 				}
-				has_preferred_x = false;
-			}
 
+				HasPreferredX = false;
+			}
 		}
 
 		public void MoveToLast()
 		{
-			if ((select_start != select_end))
+			if (SelectStart != SelectEnd)
 			{
 				SortSelection();
 				Clamp();
-				cursor = (int)(select_end);
-				select_start = (int)(select_end);
-				has_preferred_x = false;
+				CursorIndex = SelectEnd;
+				SelectStart = SelectEnd;
+				HasPreferredX = false;
 			}
 		}
 
@@ -281,85 +268,79 @@ namespace StbTextEditSharp
 
 		public bool IsWordBoundary(int idx)
 		{
-			return (idx) > (0) ? (((IsSpace((int)(text[idx - 1])))) && (!IsSpace((int)(text[idx])))) : true;
+			return idx > 0 ? IsSpace(text[idx - 1]) && !IsSpace(text[idx]) : true;
 		}
 
 		public int MoveToPreviousWord(int c)
 		{
 			--c;
-			while (((c) >= (0)) && (!IsWordBoundary((int)(c))))
-			{
-				--c;
-			}
-			if ((c) < (0))
-				c = (int)(0);
-			return (int)(c);
+			while (c >= 0 && !IsWordBoundary(c)) --c;
+			if (c < 0)
+				c = 0;
+			return c;
 		}
 
 		public int MoveToNextWord(int c)
 		{
-			int len = (int)(Length);
+			var len = Length;
 			++c;
-			while (((c) < (len)) && (!IsWordBoundary((int)(c))))
-			{
-				++c;
-			}
-			if ((c) > (len))
-				c = (int)(len);
-			return (int)(c);
+			while (c < len && !IsWordBoundary(c)) ++c;
+			if (c > len)
+				c = len;
+			return c;
 		}
 
 		public int Cut()
 		{
-			if ((select_start != select_end))
+			if (SelectStart != SelectEnd)
 			{
 				DeleteSelection();
-				has_preferred_x = false;
-				return (int)(1);
+				HasPreferredX = false;
+				return 1;
 			}
 
-			return (int)(0);
+			return 0;
 		}
 
 		private int PasteInternal(string text)
 		{
 			Clamp();
 			DeleteSelection();
-			if ((InsertChars((int)(cursor), text)) != 0)
+			if (InsertChars(CursorIndex, text) != 0)
 			{
-				MakeUndoInsert((int)(cursor), text.Length);
-				cursor += text.Length;
-				has_preferred_x = false;
-				return (int)(1);
+				MakeUndoInsert(CursorIndex, text.Length);
+				CursorIndex += text.Length;
+				HasPreferredX = false;
+				return 1;
 			}
 
-			if ((undostate.undo_point) != 0)
-				--undostate.undo_point;
-			return (int)(0);
+			if (UndoState.undo_point != 0)
+				--UndoState.undo_point;
+			return 0;
 		}
 
 		public void InputChar(char ch)
 		{
-			if (((ch) == ('\n')) && (single_line))
+			if (ch == '\n' && SingleLine)
 				return;
-			if (((insert_mode) && (!(select_start != select_end))) && ((cursor) < (Length)))
+			if (InsertMode && !(SelectStart != SelectEnd) && CursorIndex < Length)
 			{
-				MakeUndoReplace((int)(cursor), (int)(1), (int)(1));
-				DeleteChars((int)(cursor), (int)(1));
-				if ((InsertChar((int)(cursor), ch)) != 0)
+				MakeUndoReplace(CursorIndex, 1, 1);
+				DeleteChars(CursorIndex, 1);
+				if (InsertChar(CursorIndex, ch) != 0)
 				{
-					++cursor;
-					has_preferred_x = false;
+					++CursorIndex;
+					HasPreferredX = false;
 				}
 			}
 			else
 			{
 				DeleteSelection();
-				if ((InsertChar((int)(cursor), ch)) != 0)
+				if (InsertChar(CursorIndex, ch) != 0)
 				{
-					MakeUndoInsert((int)(cursor), (int)(1));
-					++cursor;
-					has_preferred_x = false;
+					MakeUndoInsert(CursorIndex, 1);
+					++CursorIndex;
+					HasPreferredX = false;
 				}
 			}
 		}
@@ -370,356 +351,367 @@ namespace StbTextEditSharp
 			switch (key)
 			{
 				case ControlKeys.InsertMode:
-					insert_mode = !insert_mode;
+					InsertMode = !InsertMode;
 					break;
 				case ControlKeys.Undo:
 					Undo();
-					has_preferred_x = false;
+					HasPreferredX = false;
 					break;
 				case ControlKeys.Redo:
 					Redo();
-					has_preferred_x = false;
+					HasPreferredX = false;
 					break;
 				case ControlKeys.Left:
-					if ((select_start != select_end))
+					if (SelectStart != SelectEnd)
 						MoveToFirst();
-					else if ((cursor) > (0))
-						--cursor;
-					has_preferred_x = false;
+					else if (CursorIndex > 0)
+						--CursorIndex;
+					HasPreferredX = false;
 					break;
 				case ControlKeys.Right:
-					if ((select_start != select_end))
+					if (SelectStart != SelectEnd)
 						MoveToLast();
 					else
-						++cursor;
+						++CursorIndex;
 					Clamp();
-					has_preferred_x = false;
+					HasPreferredX = false;
 					break;
 				case ControlKeys.Left | ControlKeys.Shift:
 					Clamp();
 					PrepareSelectionAtCursor();
-					if ((select_end) > (0))
-						--select_end;
-					cursor = (int)(select_end);
-					has_preferred_x = false;
+					if (SelectEnd > 0)
+						--SelectEnd;
+					CursorIndex = SelectEnd;
+					HasPreferredX = false;
 					break;
 				case ControlKeys.WordLeft:
-					if ((select_start != select_end))
+					if (SelectStart != SelectEnd)
+					{
 						MoveToFirst();
+					}
 					else
 					{
-						cursor = (int)(MoveToPreviousWord((int)(cursor)));
+						CursorIndex = MoveToPreviousWord(CursorIndex);
 						Clamp();
 					}
+
 					break;
 				case ControlKeys.WordLeft | ControlKeys.Shift:
-					if (!(select_start != select_end))
+					if (SelectStart == SelectEnd)
 						PrepareSelectionAtCursor();
-					cursor = (int)(MoveToPreviousWord((int)(cursor)));
-					select_end = (int)(cursor);
+					CursorIndex = MoveToPreviousWord(CursorIndex);
+					SelectEnd = CursorIndex;
 					Clamp();
 					break;
 				case ControlKeys.WordRight:
-					if ((select_start != select_end))
+					if (SelectStart != SelectEnd)
+					{
 						MoveToLast();
+					}
 					else
 					{
-						cursor = (int)(MoveToNextWord((int)(cursor)));
+						CursorIndex = MoveToNextWord(CursorIndex);
 						Clamp();
 					}
+
 					break;
 				case ControlKeys.WordRight | ControlKeys.Shift:
-					if (!(select_start != select_end))
+					if (SelectStart == SelectEnd)
 						PrepareSelectionAtCursor();
-					cursor = (int)(MoveToNextWord((int)(cursor)));
-					select_end = (int)(cursor);
+					CursorIndex = MoveToNextWord(CursorIndex);
+					SelectEnd = CursorIndex;
 					Clamp();
 					break;
 				case ControlKeys.Right | ControlKeys.Shift:
 					PrepareSelectionAtCursor();
-					++select_end;
+					++SelectEnd;
 					Clamp();
-					cursor = (int)(select_end);
-					has_preferred_x = false;
+					CursorIndex = SelectEnd;
+					HasPreferredX = false;
 					break;
 				case ControlKeys.Down:
 				case ControlKeys.Down | ControlKeys.Shift:
-				{
-					FindState find = new FindState();
-					TextEditRow row = new TextEditRow();
-					int i = 0;
-					bool sel = ((key & ControlKeys.Shift) != 0);
-					if (single_line)
 					{
-						key = (ControlKeys.Right | (key & ControlKeys.Shift));
-						goto retry;
-					}
-					if ((sel))
-						PrepareSelectionAtCursor();
-					else if ((select_start != select_end))
-						MoveToLast();
-					Clamp();
-					find.FindCharPosition(this, (int)(cursor), single_line);
-					if ((find.length) != 0)
-					{
-						float goal_x = (float)(has_preferred_x ? preferred_x : find.x);
-						float x = 0;
-						int start = (int)(find.first_char + find.length);
-						cursor = (int)(start);
-						row = Handler.LayoutRow((int)(cursor));
-						x = (float)(row.x0);
-						for (i = (int)(0); (i) < (row.num_chars); ++i)
+						var find = new FindState();
+						var row = new TextEditRow();
+						var sel = (key & ControlKeys.Shift) != 0;
+						if (SingleLine)
 						{
-							float dx = (float)(1);
-							x += (float)(dx);
-							if ((x) > (goal_x))
-								break;
-							++cursor;
+							key = ControlKeys.Right | (key & ControlKeys.Shift);
+							goto retry;
 						}
+
+						if (sel)
+							PrepareSelectionAtCursor();
+						else if (SelectStart != SelectEnd)
+							MoveToLast();
 						Clamp();
-						has_preferred_x = true;
-						preferred_x = (float)(goal_x);
-						if ((sel))
-							select_end = (int)(cursor);
+						find.FindCharPosition(this, CursorIndex, SingleLine);
+						if (find.length != 0)
+						{
+							var goal_x = HasPreferredX ? PreferredX : find.x;
+							float x = 0;
+							var start = find.first_char + find.length;
+							CursorIndex = start;
+							row = Handler.LayoutRow(CursorIndex);
+							x = row.x0;
+							for (var i = 0; i < row.num_chars; ++i)
+							{
+								var dx = (float)1;
+								x += dx;
+								if (x > goal_x)
+									break;
+								++CursorIndex;
+							}
+
+							Clamp();
+							HasPreferredX = true;
+							PreferredX = goal_x;
+							if (sel)
+								SelectEnd = CursorIndex;
+						}
+
+						break;
 					}
-					break;
-				}
 				case ControlKeys.Up:
 				case ControlKeys.Up | ControlKeys.Shift:
-				{
-					FindState find = new FindState();
-					TextEditRow row = new TextEditRow();
-					int i = 0;
-					bool sel = ((key & ControlKeys.Shift) != 0);
-					if (single_line)
 					{
-						key = (ControlKeys.Left | (key & ControlKeys.Shift));
-						goto retry;
-					}
-					if (sel)
-						PrepareSelectionAtCursor();
-					else if ((select_start != select_end))
-						MoveToFirst();
-					Clamp();
-					find.FindCharPosition(this, (int)(cursor), single_line);
-					if (find.prev_first != find.first_char)
-					{
-						float goal_x = (float)(has_preferred_x ? preferred_x : find.x);
-						float x = 0;
-						cursor = (int)(find.prev_first);
-						row = Handler.LayoutRow((int)(cursor));
-						x = (float)(row.x0);
-						for (i = (int)(0); (i) < (row.num_chars); ++i)
+						var find = new FindState();
+						var row = new TextEditRow();
+						var i = 0;
+						var sel = (key & ControlKeys.Shift) != 0;
+						if (SingleLine)
 						{
-							float dx = (float)(1);
-							x += (float)(dx);
-							if ((x) > (goal_x))
-								break;
-							++cursor;
+							key = ControlKeys.Left | (key & ControlKeys.Shift);
+							goto retry;
 						}
-						Clamp();
-						has_preferred_x = true;
-						preferred_x = (float)(goal_x);
+
 						if (sel)
-							select_end = (int)(cursor);
+							PrepareSelectionAtCursor();
+						else if (SelectStart != SelectEnd)
+							MoveToFirst();
+						Clamp();
+						find.FindCharPosition(this, CursorIndex, SingleLine);
+						if (find.prev_first != find.first_char)
+						{
+							var goal_x = HasPreferredX ? PreferredX : find.x;
+							float x = 0;
+							CursorIndex = find.prev_first;
+							row = Handler.LayoutRow(CursorIndex);
+							x = row.x0;
+							for (i = 0; i < row.num_chars; ++i)
+							{
+								var dx = (float)1;
+								x += dx;
+								if (x > goal_x)
+									break;
+								++CursorIndex;
+							}
+
+							Clamp();
+							HasPreferredX = true;
+							PreferredX = goal_x;
+							if (sel)
+								SelectEnd = CursorIndex;
+						}
+
+						break;
 					}
-					break;
-				}
 				case ControlKeys.Delete:
 				case ControlKeys.Delete | ControlKeys.Shift:
-					if ((select_start != select_end))
+					if (SelectStart != SelectEnd)
+					{
 						DeleteSelection();
+					}
 					else
 					{
-						int n = (int)(Length);
-						if ((cursor) < (n))
-							Delete((int)(cursor), (int)(1));
+						var n = Length;
+						if (CursorIndex < n)
+							Delete(CursorIndex, 1);
 					}
-					has_preferred_x = false;
+
+					HasPreferredX = false;
 					break;
 				case ControlKeys.BackSpace:
 				case ControlKeys.BackSpace | ControlKeys.Shift:
-					if ((select_start != select_end))
+					if (SelectStart != SelectEnd)
+					{
 						DeleteSelection();
+					}
 					else
 					{
 						Clamp();
-						if ((cursor) > (0))
+						if (CursorIndex > 0)
 						{
-							Delete((int)(cursor - 1), (int)(1));
-							--cursor;
+							Delete(CursorIndex - 1, 1);
+							--CursorIndex;
 						}
 					}
-					has_preferred_x = false;
+
+					HasPreferredX = false;
 					break;
 				case ControlKeys.TextStart:
-					cursor = (int)(select_start = (int)(select_end = (int)(0)));
-					has_preferred_x = false;
+					CursorIndex = SelectStart = SelectEnd = 0;
+					HasPreferredX = false;
 					break;
 				case ControlKeys.TextEnd:
-					cursor = (int)(Length);
-					select_start = (int)(select_end = (int)(0));
-					has_preferred_x = false;
+					CursorIndex = Length;
+					SelectStart = SelectEnd = 0;
+					HasPreferredX = false;
 					break;
 				case ControlKeys.TextStart | ControlKeys.Shift:
 					PrepareSelectionAtCursor();
-					cursor = (int)(select_end = (int)(0));
-					has_preferred_x = false;
+					CursorIndex = SelectEnd = 0;
+					HasPreferredX = false;
 					break;
 				case ControlKeys.TextEnd | ControlKeys.Shift:
 					PrepareSelectionAtCursor();
-					cursor = (int)(select_end = (int)(Length));
-					has_preferred_x = false;
+					CursorIndex = SelectEnd = Length;
+					HasPreferredX = false;
 					break;
 				case ControlKeys.LineStart:
 					Clamp();
 					MoveToFirst();
-					if (single_line)
-						cursor = (int)(0);
+					if (SingleLine)
+						CursorIndex = 0;
 					else
-						while (((cursor) > (0)) && ((text[cursor - 1]) != '\n'))
-						{
-							--cursor;
-						}
-					has_preferred_x = false;
+						while (CursorIndex > 0 && text[CursorIndex - 1] != '\n')
+							--CursorIndex;
+					HasPreferredX = false;
 					break;
 				case ControlKeys.LineEnd:
-				{
-					int n = (int)(Length);
-					Clamp();
-					MoveToFirst();
-					if (single_line)
-						cursor = (int)(n);
-					else
-						while (((cursor) < (n)) && ((text[cursor]) != '\n'))
-						{
-							++cursor;
-						}
-					has_preferred_x = false;
-					break;
-				}
+					{
+						var n = Length;
+						Clamp();
+						MoveToFirst();
+						if (SingleLine)
+							CursorIndex = n;
+						else
+							while (CursorIndex < n && text[CursorIndex] != '\n')
+								++CursorIndex;
+						HasPreferredX = false;
+						break;
+					}
 				case ControlKeys.LineStart | ControlKeys.Shift:
 					Clamp();
 					PrepareSelectionAtCursor();
-					if (single_line)
-						cursor = (int)(0);
+					if (SingleLine)
+						CursorIndex = 0;
 					else
-						while (((cursor) > (0)) && ((text[cursor - 1]) != '\n'))
-						{
-							--cursor;
-						}
-					select_end = (int)(cursor);
-					has_preferred_x = false;
+						while (CursorIndex > 0 && text[CursorIndex - 1] != '\n')
+							--CursorIndex;
+					SelectEnd = CursorIndex;
+					HasPreferredX = false;
 					break;
 				case ControlKeys.LineEnd | ControlKeys.Shift:
-				{
-					int n = (int)(Length);
-					Clamp();
-					PrepareSelectionAtCursor();
-					if (single_line)
-						cursor = (int)(n);
-					else
-						while (((cursor) < (n)) && ((text[cursor]) != '\n'))
-						{
-							++cursor;
-						}
-					select_end = (int)(cursor);
-					has_preferred_x = false;
-					break;
-				}
+					{
+						var n = Length;
+						Clamp();
+						PrepareSelectionAtCursor();
+						if (SingleLine)
+							CursorIndex = n;
+						else
+							while (CursorIndex < n && text[CursorIndex] != '\n')
+								++CursorIndex;
+						SelectEnd = CursorIndex;
+						HasPreferredX = false;
+						break;
+					}
 			}
 		}
 
 		public void Undo()
 		{
-			UndoState s = undostate;
-			UndoRecord u = new UndoRecord();
-			if ((s.undo_point) == (0))
+			var s = UndoState;
+			var u = new UndoRecord();
+			if (s.undo_point == 0)
 				return;
-			u = (UndoRecord)(s.undo_rec[s.undo_point - 1]);
-			int rpos = s.redo_point - 1;
-			s.undo_rec[rpos].char_storage = (int)(-1);
-			s.undo_rec[rpos].insert_length = (int)(u.delete_length);
-			s.undo_rec[rpos].delete_length = (int)(u.insert_length);
-			s.undo_rec[rpos].where = (int)(u.where);
-			if ((u.delete_length) != 0)
+			u = s.undo_rec[s.undo_point - 1];
+			var rpos = s.redo_point - 1;
+			s.undo_rec[rpos].char_storage = -1;
+			s.undo_rec[rpos].insert_length = u.delete_length;
+			s.undo_rec[rpos].delete_length = u.insert_length;
+			s.undo_rec[rpos].where = u.where;
+			if (u.delete_length != 0)
 			{
-				if ((s.undo_char_point + u.delete_length) >= (999))
+				if (s.undo_char_point + u.delete_length >= 999)
 				{
-					s.undo_rec[rpos].insert_length = (int)(0);
+					s.undo_rec[rpos].insert_length = 0;
 				}
 				else
 				{
-					int i = 0;
-					while ((s.undo_char_point + u.delete_length) > (s.redo_char_point))
+					var i = 0;
+					while (s.undo_char_point + u.delete_length > s.redo_char_point)
 					{
-						if ((s.redo_point) == (99))
+						if (s.redo_point == 99)
 							return;
 						s.DiscardRedo();
 					}
+
 					rpos = s.redo_point - 1;
-					s.undo_rec[rpos].char_storage = (int)(s.redo_char_point - u.delete_length);
-					s.redo_char_point = (int)(s.redo_char_point - u.delete_length);
-					for (i = (int)(0); (i) < (u.delete_length); ++i)
-					{
-						s.undo_char[s.undo_rec[rpos].char_storage + i] = (sbyte)(text[u.where + i]);
-					}
+					s.undo_rec[rpos].char_storage = s.redo_char_point - u.delete_length;
+					s.redo_char_point = s.redo_char_point - u.delete_length;
+					for (i = 0; i < u.delete_length; ++i)
+						s.undo_char[s.undo_rec[rpos].char_storage + i] = (sbyte)text[u.where + i];
 				}
-				DeleteChars((int)(u.where), (int)(u.delete_length));
+
+				DeleteChars(u.where, u.delete_length);
 			}
 
-			if ((u.insert_length) != 0)
+			if (u.insert_length != 0)
 			{
-				InsertChars((int)(u.where), s.undo_char, u.char_storage, (int)(u.insert_length));
-				s.undo_char_point -= (int)(u.insert_length);
+				InsertChars(u.where, s.undo_char, u.char_storage, u.insert_length);
+				s.undo_char_point -= u.insert_length;
 			}
 
-			cursor = (int)(u.where + u.insert_length);
+			CursorIndex = u.where + u.insert_length;
 			s.undo_point--;
 			s.redo_point--;
 		}
 
 		public void Redo()
 		{
-			UndoState s = undostate;
-			UndoRecord r = new UndoRecord();
-			if ((s.redo_point) == (99))
+			var s = UndoState;
+			var r = new UndoRecord();
+			if (s.redo_point == 99)
 				return;
 			int upos = s.undo_point;
-			r = (UndoRecord)(s.undo_rec[s.redo_point]);
-			s.undo_rec[upos].delete_length = (int)(r.insert_length);
-			s.undo_rec[upos].insert_length = (int)(r.delete_length);
-			s.undo_rec[upos].where = (int)(r.where);
-			s.undo_rec[upos].char_storage = (int)(-1);
+			r = s.undo_rec[s.redo_point];
+			s.undo_rec[upos].delete_length = r.insert_length;
+			s.undo_rec[upos].insert_length = r.delete_length;
+			s.undo_rec[upos].where = r.where;
+			s.undo_rec[upos].char_storage = -1;
 
 			var u = s.undo_rec[upos];
-			if ((r.delete_length) != 0)
+			if (r.delete_length != 0)
 			{
-				if ((s.undo_char_point + u.insert_length) > (s.redo_char_point))
+				if (s.undo_char_point + u.insert_length > s.redo_char_point)
 				{
-					s.undo_rec[upos].insert_length = (int)(0);
-					s.undo_rec[upos].delete_length = (int)(0);
+					s.undo_rec[upos].insert_length = 0;
+					s.undo_rec[upos].delete_length = 0;
 				}
 				else
 				{
-					int i = 0;
-					s.undo_rec[upos].char_storage = (int)(s.undo_char_point);
-					s.undo_char_point = (int)(s.undo_char_point + u.insert_length);
-					for (i = (int)(0); (i) < (u.insert_length); ++i)
+					var i = 0;
+					s.undo_rec[upos].char_storage = s.undo_char_point;
+					s.undo_char_point = s.undo_char_point + u.insert_length;
+					u = s.undo_rec[upos];
+					for (i = 0; i < u.insert_length; ++i)
 					{
-						s.undo_char[u.char_storage + i] = (sbyte)(text[u.where + i]);
+						s.undo_char[u.char_storage + i] = text[u.where + i];
 					}
 				}
-				DeleteChars((int)(r.where), (int)(r.delete_length));
+
+				DeleteChars(r.where, r.delete_length);
 			}
 
-			if ((r.insert_length) != 0)
+			if (r.insert_length != 0)
 			{
-				InsertChars((int)(r.where), s.undo_char, r.char_storage, (int)(r.insert_length));
-				s.redo_char_point += (int)(r.insert_length);
+				InsertChars(r.where, s.undo_char, r.char_storage, r.insert_length);
+				s.redo_char_point += r.insert_length;
 			}
 
-			cursor = (int)(r.where + r.insert_length);
+			CursorIndex = r.where + r.insert_length;
 			s.undo_point++;
 			s.redo_point++;
 		}
@@ -727,32 +719,24 @@ namespace StbTextEditSharp
 		public void MakeUndoDelete(int where, int length)
 		{
 			int i;
-			int? p = undostate.CreateUndo((int)(where), (int)(length), (int)(0));
-			if ((p) != null)
-			{
-				for (i = (int)(0); (i) < (length); ++i)
-				{
-					undostate.undo_char[p.Value + i] = (char)(text[(int)(where + i)]);
-				}
-			}
+			var p = UndoState.CreateUndo(where, length, 0);
+			if (p != null)
+				for (i = 0; i < length; ++i)
+					UndoState.undo_char[p.Value + i] = text[where + i];
 		}
 
 		public void MakeUndoReplace(int where, int old_length, int new_length)
 		{
 			int i;
-			int? p = undostate.CreateUndo((int)(where), (int)(old_length), (int)(new_length));
-			if ((p) != null)
-			{
-				for (i = (int)(0); (i) < (old_length); ++i)
-				{
-					undostate.undo_char[p.Value + i] = (char)(text[(int)(where + i)]);
-				}
-			}
+			var p = UndoState.CreateUndo(where, old_length, new_length);
+			if (p != null)
+				for (i = 0; i < old_length; ++i)
+					UndoState.undo_char[p.Value + i] = text[where + i];
 		}
 
 		public int Paste(string ctext)
 		{
-			return (int)(PasteInternal(ctext));
+			return PasteInternal(ctext);
 		}
 	}
 }

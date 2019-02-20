@@ -21,11 +21,35 @@ namespace Myra.Graphics2D.UI
 		private readonly Image _image;
 		private readonly TextBlock _textBlock;
 		private readonly Menu _subMenu = new VerticalMenu();
+		private char? _underscoreChar;
+		private string _text;
 
 		public string Text
 		{
-			get { return _textBlock.Text; }
-			set { _textBlock.Text = value; }
+			get { return _text; }
+			set
+			{
+				if (value == _text)
+				{
+					return;
+				}
+
+				_text = value;
+
+				string text = _text;
+				_underscoreChar = null;
+				if (value != null)
+				{
+					var underscoreIndex = value.IndexOf('&');
+					if (underscoreIndex >= 0 && underscoreIndex + 1 < value.Length)
+					{
+						_underscoreChar = char.ToLower(value[underscoreIndex + 1]);
+						text = value.Substring(0, underscoreIndex) + value.Substring(underscoreIndex + 1);
+					}
+				}
+
+				_textBlock.Text = text;
+			}
 		}
 
 		[HiddenInEditor]
@@ -46,7 +70,7 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return _textBlock.UnderscoreChar;
+				return _underscoreChar;
 			}
 		}
 
@@ -134,7 +158,6 @@ namespace Myra.Graphics2D.UI
 			_textBlock = new TextBlock
 			{
 				GridColumn = 1,
-				IsMenuText = true
 			};
 
 			InternalChild.Widgets.Add(_textBlock);

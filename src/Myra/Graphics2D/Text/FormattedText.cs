@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Text;
-using Myra.Utility;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Myra.Utility;
+using StbTextEditSharp;
 #else
 using Xenko.Core.Mathematics;
 using Xenko.Graphics;
@@ -14,257 +15,14 @@ namespace Myra.Graphics2D.Text
 {
 	public class FormattedText
 	{
-		public struct Options
-		{
-			public int? Width;
-			public bool Color;
-			public bool IsMenuText;
-		}
-
-		public class TextParser
-		{
-			private enum ParseType
-			{
-				Text,
-				Color
-			}
-
-			private enum LexemeType
-			{
-				Word,
-				Space,
-				LineBreak,
-				Color
-			}
-
-			private class Lexeme
-			{
-				public readonly StringBuilder text = new StringBuilder();
-				public LexemeType type = LexemeType.Word;
-				public readonly List<CharInfo> chars = new List<CharInfo>();
-				public Color color;
-				public int? UnderscoreIndex;
-
-				public void AppendChar(char c, int originalIndex)
-				{
-					chars.Add(new CharInfo
-					{
-						Value = c,
-						OriginalIndex = originalIndex
-					});
-
-					text.Append(c);
-				}
-			}
-
-			private readonly List<Lexeme> _lexemes = new List<Lexeme>();
-			private Lexeme _lexeme = new Lexeme();
-			private Color? _currentColor;
-			private readonly StringBuilder _fullString = new StringBuilder();
-
-			private TextLine _lastLine;
-			private TextRun _lastRun;
-
-			private readonly List<TextLine> _result = new List<TextLine>();
-			private SpriteFont _font;
-
-			private void StoreLexeme()
-			{
-				if (_lexeme.chars.Count == 0)
-				{
-					return;
-				}
-
-				_lexemes.Add(_lexeme);
-				_lexeme = new Lexeme();
-			}
-
-			private void StoreRun()
-			{
-				if (_lastRun.Count > 0)
-				{
-					_lastRun.LineIndex = _result.Count;
-					_lastLine.TextRuns.Add(_lastRun);
-				}
-
-				_lastRun = new TextRun(_font, _currentColor);
-			}
-
-			private void StoreLine()
-			{
-				StoreRun();
-
-				_result.Add(_lastLine);
-
-				_lastLine = new TextLine();
-
-				_fullString.Clear();
-			}
-
-			public TextLine[] Format(SpriteFont font, string text, Options options)
-			{
-				if (string.IsNullOrEmpty(text))
-				{
-					return new TextLine[0];
-				}
-
-				_font = font;
-
-				var pt = ParseType.Text;
-
-				// First run - gather lexemes
-				_lexeme = new Lexeme();
-				_lexemes.Clear();
-				var str = new StringBuilder();
-				for (var pos = 0; pos < text.Length; ++pos)
-				{
-					var c = text[pos];
-					if (pt == ParseType.Text)
-					{
-						if (options.Color && c == '[' && pos < text.Length - 1 && text[pos + 1] != '[')
-						{
-							// Switch to color parsing
-							StoreLexeme();
-							pt = ParseType.Color;
-						}
-						else if (c == '\n')
-						{
-							StoreLexeme();
-
-							// Add linebreak lexeme
-							_lexeme.type = LexemeType.LineBreak;
-							_lexeme.AppendChar(c, pos);
-							StoreLexeme();
-						}
-						else if (c == ' ' && _lexeme.type == LexemeType.Word)
-						{
-							StoreLexeme();
-							_lexeme.type = LexemeType.Space;
-							_lexeme.AppendChar(c, pos);
-						}
-						else if (c == ' ')
-						{
-							_lexeme.AppendChar(c, pos);
-						}
-						else if (c > ' ')
-						{
-							if (_lexeme.type == LexemeType.Space)
-							{
-								StoreLexeme();
-								_lexeme.type = LexemeType.Word;
-							}
-
-							if (options.IsMenuText && c == '&')
-							{
-								_lexeme.UnderscoreIndex = _lexeme.chars.Count;
-							}
-							else
-							{
-								_lexeme.AppendChar(c, pos);
-							}
-
-							if (options.Color && c == '[')
-							{
-								// Means we have [[
-								// So one [ should be skipped
-								++pos;
-							}
-						}
-					}
-					else if (pt == ParseType.Color)
-					{
-						if (c != ']')
-						{
-							str.Append(c);
-						}
-						else if (str.Length >= 1)
-						{
-							var color = str.ToString().FromName();
-							str.Clear();
-
-							var l = new Lexeme
-							{
-								type = LexemeType.Color,
-								color = color ?? Color.White
-							};
-
-							_lexemes.Add(l);
-							pt = ParseType.Text;
-						}
-					}
-				}
-
-				StoreLexeme();
-
-				// Second run - go through lexemes
-				_result.Clear();
-				_lastLine = new TextLine();
-				_lastRun = new TextRun(_font, _currentColor);
-				_fullString.Clear();
-
-				foreach (var li in _lexemes)
-				{
-					switch (li.type)
-					{
-						case LexemeType.LineBreak:
-							StoreLine();
-							break;
-						case LexemeType.Space:
-						case LexemeType.Word:
-							_fullString.Append(li.text);
-
-							if (li.UnderscoreIndex != null)
-							{
-								_lastRun.UnderscoreIndex = _lastRun.Count + li.UnderscoreIndex;
-							}
-
-							if (options.Width.HasValue)
-							{
-								var sz = font.MeasureString(_fullString.ToString());
-								if (sz.X <= options.Width.Value)
-								{
-									_lastRun.Append(li.chars);
-								}
-								else
-								{
-									StoreLine();
-
-									if (li.type == LexemeType.Word)
-									{
-										_fullString.Append(li.text);
-										_lastRun.Append(li.chars);
-									}
-								}
-							}
-							else
-							{
-								_lastRun.Append(li.chars);
-							}
-
-							break;
-						case LexemeType.Color:
-							_currentColor = li.color;
-							StoreRun();
-							break;
-					}
-				}
-
-				StoreLine();
-
-				return _result.ToArray();
-			}
-		}
-
 		private SpriteFont _font;
 		private string _text = string.Empty;
 		private int _verticalSpacing;
 		private int? _width;
 		private TextLine[] _strings;
 		private Point _size;
-		private bool _colored = true;
-		private bool _isMenuText;
 		private bool _dirty = true;
-		private char? _underscoreChar;
+		private StringBuilder _stringBuilder = new StringBuilder();
 
 		public SpriteFont Font
 		{
@@ -327,37 +85,6 @@ namespace Myra.Graphics2D.Text
 			}
 		}
 
-		public bool IsColored
-		{
-			get { return _colored; }
-			set
-			{
-				if (value == _colored)
-				{
-					return;
-				}
-
-				_colored = value;
-				InvalidateLayout();
-			}
-		}
-
-		public bool IsMenuText
-		{
-			get { return _isMenuText; }
-
-			set
-			{
-				if (value == _isMenuText)
-				{
-					return;
-				}
-
-				_isMenuText = value;
-				InvalidateLayout();
-			}
-		}
-
 		public TextLine[] Strings
 		{
 			get
@@ -376,9 +103,95 @@ namespace Myra.Graphics2D.Text
 			}
 		}
 
-		internal char? UnderscoreChar
+		public TextEditRow LayoutRow(int startIndex, int? width)
 		{
-			get { return _underscoreChar; }
+			var r = new TextEditRow();
+
+			if (string.IsNullOrEmpty(_text))
+			{
+				return r;
+			}
+
+			_stringBuilder.Clear();
+			int? lastBreakPosition = null;
+			Vector2? lastBreakMeasure = null;
+
+			for (var i = startIndex; i < _text.Length; ++i)
+			{
+				var c = Text[i];
+
+				_stringBuilder.Append(c);
+				var sz = Font.MeasureString(_stringBuilder);
+
+				if (char.IsWhiteSpace(c))
+				{
+					lastBreakPosition = i + 1;
+					lastBreakMeasure = sz;
+				}
+
+				if ((width != null && sz.X > width.Value) || c == '\n')
+				{
+					if (lastBreakPosition != null)
+					{
+						r.num_chars = lastBreakPosition.Value - startIndex;
+					}
+
+					if (lastBreakMeasure != null)
+					{
+						r.x1 = lastBreakMeasure.Value.X;
+						r.ymax = lastBreakMeasure.Value.Y;
+						r.baseline_y_delta = lastBreakMeasure.Value.Y;
+					}
+
+					break;
+				}
+
+				++r.num_chars;
+				r.x1 = sz.X;
+				r.ymax = sz.Y;
+				r.baseline_y_delta = sz.Y;
+			}
+
+			return r;
+		}
+
+		public Point Measure(int? width)
+		{
+			var result = Point.Zero;
+			if (_text != null)
+			{
+				var i = 0;
+
+				float y = 0;
+				while (i < _text.Length)
+				{
+					var r = LayoutRow(i, width);
+
+					if (r.num_chars == 0)
+					{
+						break;
+					}
+
+					if (r.x1 > result.X)
+					{
+						result.X = (int)r.x1;
+					}
+
+					i += r.num_chars;
+
+					y += r.ymax;
+					y += _verticalSpacing;
+				}
+
+				result.Y = (int)y;
+			}
+
+			if (result.Y == 0)
+			{
+				result.Y = CrossEngineStuff.LineSpacing(_font);
+			}
+
+			return result;
 		}
 
 		private void Update()
@@ -388,45 +201,53 @@ namespace Myra.Graphics2D.Text
 				return;
 			}
 
-			var parser = new TextParser();
-
-			var options = new Options
+			if (string.IsNullOrEmpty(_text))
 			{
-				Color = _colored,
-				Width = _width,
-				IsMenuText = _isMenuText
-			};
+				_strings = new TextLine[0];
+				_dirty = false;
+				return;
+			}
 
-			_strings = parser.Format(_font, _text, options);
+			var lines = new List<TextLine>();
+
+			var i = 0;
+			while (i < _text.Length)
+			{
+				var r = LayoutRow(i, Width);
+
+				if (r.num_chars == 0)
+				{
+					break;
+				}
+
+				var line = new TextLine(_font, _text.Substring(i, r.num_chars));
+				lines.Add(line);
+
+				i += r.num_chars;
+			}
+
+			_strings = lines.ToArray();
 
 			// Calculate size
 			_size = Point.Zero;
-			_underscoreChar = null;
-			for (var i = 0; i < _strings.Length; ++i)
+			var y = 0;
+			for (i = 0; i < _strings.Length; ++i)
 			{
-				var si = _strings[i];
+				var line = _strings[i];
 
-				if (si.Size.X > _size.X)
+				line.LineIndex = i;
+				line.Top = _size.Y;
+
+				if (line.Size.X > _size.X)
 				{
-					_size.X = si.Size.X;
+					_size.X = line.Size.X;
 				}
 
-				_size.Y += si.Size.Y;
+				_size.Y += line.Size.Y;
 
 				if (i < _strings.Length - 1)
 				{
 					_size.Y += _verticalSpacing;
-				}
-
-				if (_underscoreChar == null)
-				{
-					foreach (var r in si.TextRuns)
-					{
-						if (r.UnderscoreIndex.HasValue && r.UnderscoreIndex.Value < r.Count)
-						{
-							_underscoreChar = char.ToLower(r.Text[r.UnderscoreIndex.Value]);
-						}
-					}
 				}
 			}
 
@@ -468,11 +289,6 @@ namespace Myra.Graphics2D.Text
 
 		public GlyphInfo GetGlyphInfoByIndex(int charIndex)
 		{
-			if (Text != null && charIndex >= Text.Length)
-			{
-				charIndex = Text.Length - 1;
-			}
-
 			var strings = Strings;
 
 			foreach (var si in strings)
@@ -488,18 +304,6 @@ namespace Myra.Graphics2D.Text
 			}
 
 			return null;
-		}
-
-		public FormattedText Clone()
-		{
-			return new FormattedText
-			{
-				IsColored = IsColored,
-				Font = Font,
-				Text = Text,
-				VerticalSpacing = VerticalSpacing,
-				Width = Width
-			};
 		}
 	}
 }

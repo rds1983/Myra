@@ -1,5 +1,3 @@
-using System.Runtime.InteropServices;
-
 namespace StbTextEditSharp
 {
 	public struct FindState
@@ -13,59 +11,59 @@ namespace StbTextEditSharp
 
 		public void FindCharPosition(TextEdit str, int n, bool single_line)
 		{
-			TextEditRow r = new TextEditRow();
-			int prev_start = (int)(0);
-			int z = (int)(str.Length);
-			int i = (int)(0);
-			int first = 0;
-			if ((n) == (z))
+			var r = new TextEditRow();
+			var prev_start = 0;
+			var z = str.Length;
+			var i = 0;
+			var first = 0;
+			if (n == z)
 			{
 				if (single_line)
 				{
 					r = str.Handler.LayoutRow(0);
-					y = (float)(0);
-					first_char = (int)(0);
-					length = (int)(z);
-					height = (float)(r.ymax - r.ymin);
-					x = (float)(r.x1);
+					y = 0;
+					first_char = 0;
+					length = z;
+					height = r.ymax - r.ymin;
+					x = r.x1;
 				}
 				else
 				{
-					y = (float)(0);
-					x = (float)(0);
-					height = (float)(1);
-					while ((i) < (z))
+					y = 0;
+					x = 0;
+					height = 1;
+					while (i < z)
 					{
 						r = str.Handler.LayoutRow(i);
-						prev_start = (int)(i);
-						i += (int)(r.num_chars);
+						prev_start = i;
+						i += r.num_chars;
 					}
-					first_char = (int)(i);
-					length = (int)(0);
-					prev_first = (int)(prev_start);
+
+					first_char = i;
+					length = 0;
+					prev_first = prev_start;
 				}
+
 				return;
 			}
 
-			y = (float)(0);
+			y = 0;
 			for (; ; )
 			{
 				r = str.Handler.LayoutRow(i);
-				if ((n) < (i + r.num_chars))
+				if (n < i + r.num_chars)
 					break;
-				prev_start = (int)(i);
-				i += (int)(r.num_chars);
-				y += (float)(r.baseline_y_delta);
+				prev_start = i;
+				i += r.num_chars;
+				y += r.baseline_y_delta;
 			}
-			first_char = (int)(first = (int)(i));
-			length = (int)(r.num_chars);
-			height = (float)(r.ymax - r.ymin);
-			prev_first = (int)(prev_start);
-			x = (float)(r.x0);
-			for (i = (int)(0); (first + i) < (n); ++i)
-			{
-				x += (float)(1);
-			}
+
+			first_char = first = i;
+			length = r.num_chars;
+			height = r.ymax - r.ymin;
+			prev_first = prev_start;
+			x = r.x0;
+			for (i = 0; first + i < n; ++i) x += 1;
 		}
 	}
 }

@@ -42,7 +42,15 @@ namespace Myra.Graphics2D.UI
 		private readonly List<Widget> _focusableWidgets = new List<Widget>();
 		private DateTime _lastTouch;
 		private MouseInfo _lastMouseInfo;
-		private IReadOnlyCollection<Keys> _lastDownKeys;
+		private IReadOnlyCollection<Keys> _downKeys, _lastDownKeys;
+
+		public IReadOnlyCollection<Keys> DownKeys
+		{
+			get
+			{
+				return _downKeys;
+			}
+		}
 
 		public MouseInfo LastMouseInfo
 		{
@@ -621,17 +629,17 @@ namespace Myra.Graphics2D.UI
 
 			if (DownKeysGetter != null)
 			{
-				var pressedKeys = DownKeysGetter();
+				_downKeys = DownKeysGetter();
 
-				if (pressedKeys != null)
+				if (_downKeys != null)
 				{
 					MyraEnvironment.ShowUnderscores = (MenuBar != null && MenuBar.OpenMenuItem != null) ||
-													  pressedKeys.Contains(Keys.LeftAlt) ||
-													  pressedKeys.Contains(Keys.RightAlt);
+													  _downKeys.Contains(Keys.LeftAlt) ||
+													  _downKeys.Contains(Keys.RightAlt);
 
 					if (_lastDownKeys != null)
 					{
-						foreach (var key in pressedKeys)
+						foreach (var key in _downKeys)
 						{
 							if (!_lastDownKeys.Contains(key))
 							{
@@ -671,7 +679,7 @@ namespace Myra.Graphics2D.UI
 
 						foreach (var key in _lastDownKeys)
 						{
-							if (!pressedKeys.Contains(key))
+							if (!_downKeys.Contains(key))
 							{
 								// Key had been released
 								var ev = KeyUp;
@@ -689,7 +697,7 @@ namespace Myra.Graphics2D.UI
 					}
 				}
 
-				_lastDownKeys = pressedKeys.ToArray();
+				_lastDownKeys = _downKeys.ToArray();
 			}
 		}
 

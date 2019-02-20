@@ -91,20 +91,6 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[XmlIgnore]
-		public bool IsMenuText
-		{
-			get { return _formattedText.IsMenuText; }
-
-			set { _formattedText.IsMenuText = value; }
-		}
-
-		internal char? UnderscoreChar
-		{
-			get { return _formattedText.UnderscoreChar; }
-		}
-
-		[HiddenInEditor]
-		[XmlIgnore]
 		public bool IsPressed { get; set; }
 
 		public TextBlock(TextBlockStyle style)
@@ -164,10 +150,7 @@ namespace Myra.Graphics2D.UI
 			var result = Point.Zero;
 			if (Font != null)
 			{
-				var formattedText = _formattedText.Clone();
-				formattedText.Width = _wrap ? width : default(int?);
-
-				result = formattedText.Size;
+				result = _formattedText.Measure(_wrap ? width : default(int?));
 			}
 
 			if (result.Y < CrossEngineStuff.LineSpacing(Font))
