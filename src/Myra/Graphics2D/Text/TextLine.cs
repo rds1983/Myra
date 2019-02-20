@@ -103,31 +103,5 @@ namespace Myra.Graphics2D.Text
 
 			return null;
 		}
-
-		public GlyphInfo Hit(Point position)
-		{
-			if (_renderedPosition == null)
-			{
-				return null;
-			}
-
-			var r = new Rectangle(_renderedPosition.Value.X, _renderedPosition.Value.Y, Size.X, Size.Y);
-			if (!r.Contains(position))
-			{
-				return null;
-			}
-
-			foreach (var run in _textRuns)
-			{
-				var result = run.Hit(position);
-
-				if (result != null)
-				{
-					return result;
-				}
-			}
-
-			return null;
-		}
 	}
 }

@@ -21,7 +21,7 @@ namespace Myra.Graphics2D.Text
 			public bool IsMenuText;
 		}
 
-		private class TextParser
+		public class TextParser
 		{
 			private enum ParseType
 			{
@@ -83,6 +83,7 @@ namespace Myra.Graphics2D.Text
 			{
 				if (_lastRun.Count > 0)
 				{
+					_lastRun.LineIndex = _result.Count;
 					_lastLine.TextRuns.Add(_lastRun);
 				}
 
@@ -264,6 +265,7 @@ namespace Myra.Graphics2D.Text
 		private bool _isMenuText;
 		private bool _dirty = true;
 		private char? _underscoreChar;
+
 		public SpriteFont Font
 		{
 			get { return _font; }
@@ -464,118 +466,6 @@ namespace Myra.Graphics2D.Text
 			_dirty = true;
 		}
 
-/*		public GlyphRender Hit(Point pos)
-		{
-			var strings = Strings;
-
-			foreach (var si in strings)
-			{
-				if (si.RenderedBounds == null)
-				{
-					continue;
-				}
-
-				foreach (var gr in si.GlyphRenders)
-				{
-					if (gr.RenderedBounds.HasValue && gr.RenderedBounds.Value.Contains(pos))
-					{
-						return gr;
-					}
-				}
-
-				if (pos.Y >= si.RenderedBounds.Value.Top &&
-				    pos.Y < si.RenderedBounds.Value.Bottom &&
-				    si.GlyphRenders.Count > 0)
-				{
-					// If position fits into the entire line, use the last glyph as result
-					return si.GlyphRenders[si.GlyphRenders.Count - 1];
-				}
-			}
-
-			return null;
-		}
-
-		public int? GetIndexByGlyphRender(GlyphRender glyphRender)
-		{
-			var strings = Strings;
-
-			var ch = 0;
-			foreach (var si in strings)
-			{
-				foreach (var gr in si.GlyphRenders)
-				{
-					if (gr == glyphRender)
-					{
-						return ch;
-					}
-
-					++ch;
-				}
-			}
-
-			return null;
-		}
-
-		public bool GetPositionByCharIndex(int charIndex, out int lineIndex, out int glyphIndex)
-		{
-			var strings = Strings;
-
-			lineIndex = 0;
-			glyphIndex = 0;
-
-			var line = 0;
-			var ch = 0;
-			foreach (var si in strings)
-			{
-				var glyph = 0;
-
-				foreach (var gr in si.GlyphRenders)
-				{
-					if (charIndex == ch)
-					{
-						lineIndex = line;
-						glyphIndex = glyph;
-
-						return true;
-					}
-
-					++ch;
-					++glyph;
-				}
-
-				++line;
-			}
-
-			return false;
-		}
-
-		public int? GetCharIndexByPosition(int lineIndex, int glyphIndex)
-		{
-			var strings = Strings;
-
-			var line = 0;
-
-			var ch = 0;
-			foreach (var si in strings)
-			{
-				var glyph = 0;
-				foreach (var gr in si.GlyphRenders)
-				{
-					if (line == lineIndex && glyphIndex == glyph)
-					{
-						return ch;
-					}
-
-					++glyph;
-					++ch;
-				}
-
-				++line;
-			}
-
-			return null;
-		}*/
-
 		public GlyphInfo GetGlyphInfoByIndex(int charIndex)
 		{
 			if (Text != null && charIndex >= Text.Length)
@@ -587,30 +477,13 @@ namespace Myra.Graphics2D.Text
 
 			foreach (var si in strings)
 			{
-				if (charIndex > si.Count)
+				if (charIndex >= si.Count)
 				{
 					charIndex -= si.Count;
 				}
 				else
 				{
 					return si.GetGlyphInfoByIndex(charIndex);
-				}
-			}
-
-			return null;
-		}
-
-		public GlyphInfo Hit(Point pos)
-		{
-			var strings = Strings;
-
-			foreach (var si in strings)
-			{
-				var r = si.Hit(pos);
-
-				if (r != null)
-				{
-					return r;
 				}
 			}
 

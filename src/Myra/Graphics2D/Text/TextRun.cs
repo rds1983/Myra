@@ -57,6 +57,11 @@ namespace Myra.Graphics2D.Text
 			get { return _renderedPosition; }
 		}
 
+		public int LineIndex
+		{
+			get; internal set;
+		}
+
 		public TextRun(SpriteFont font, Color? color)
 		{
 			if (font == null)
