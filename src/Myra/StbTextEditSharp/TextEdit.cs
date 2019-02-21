@@ -38,7 +38,7 @@ namespace StbTextEditSharp
 		public float PreferredX;
 		public int SelectEnd;
 		public int SelectStart;
-		public bool SingleLine;
+		public bool SingleLine = true;
 		public UndoState UndoState;
 
 		public event EventHandler CursorIndexChanged;
@@ -50,7 +50,7 @@ namespace StbTextEditSharp
 			Handler = handler;
 
 			UndoState = new UndoState();
-			ClearState(false);
+			ClearState();
 		}
 
 		public int Length => Handler.Length;
@@ -96,7 +96,7 @@ namespace StbTextEditSharp
 			UndoState.CreateUndo(where, 0, length);
 		}
 
-		public void ClearState(bool is_single_line)
+		public void ClearState()
 		{
 			UndoState.undo_point = 0;
 			UndoState.undo_char_point = 0;
@@ -107,7 +107,6 @@ namespace StbTextEditSharp
 			HasPreferredX = false;
 			PreferredX = 0;
 			CursorAtEndOfLine = false;
-			SingleLine = is_single_line;
 			InsertMode = false;
 		}
 
@@ -137,7 +136,7 @@ namespace StbTextEditSharp
 			if (string.IsNullOrEmpty(s))
 				return 0;
 
-			if (text == null)
+			if (string.IsNullOrEmpty(text))
 				text = s;
 			else
 				text = text.Substring(0, pos) + s + text.Substring(pos);

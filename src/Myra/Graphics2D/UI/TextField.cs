@@ -326,7 +326,7 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnKeyDown(k);
 
-			if (!AcceptsInput)
+			if (!Enabled)
 			{
 				return;
 			}
@@ -347,7 +347,7 @@ namespace Myra.Graphics2D.UI
 					}
 					break;
 				case Keys.V:
-					if (IsControlDown)
+					if (!Readonly && IsControlDown)
 					{
 						var clipboardText = Clipboard.GetText();
 						if (!string.IsNullOrEmpty(clipboardText))
@@ -358,18 +358,21 @@ namespace Myra.Graphics2D.UI
 					break;
 
 				case Keys.Insert:
-					controlKey = ControlKeys.InsertMode;
+					if (!Readonly)
+					{
+						controlKey = ControlKeys.InsertMode;
+					}
 					break;
 
 				case Keys.Z:
-					if (IsControlDown)
+					if (!Readonly && IsControlDown)
 					{
 						controlKey = ControlKeys.Undo;
 					}
 					break;
 
 				case Keys.Y:
-					if (IsControlDown)
+					if (!Readonly && IsControlDown)
 					{
 						controlKey = ControlKeys.Redo;
 					}
@@ -423,11 +426,17 @@ namespace Myra.Graphics2D.UI
 					break;
 
 				case Keys.Back:
-					controlKey = ApplyShiftOrNone(ControlKeys.BackSpace);
+					if (!Readonly)
+					{
+						controlKey = ApplyShiftOrNone(ControlKeys.BackSpace);
+					}
 					break;
 
 				case Keys.Delete:
-					controlKey = ApplyShiftOrNone(ControlKeys.Delete);
+					if (!Readonly)
+					{
+						controlKey = ApplyShiftOrNone(ControlKeys.Delete);
+					}
 					break;
 
 				case Keys.Home:
@@ -471,7 +480,10 @@ namespace Myra.Graphics2D.UI
 					break;
 
 				case Keys.Enter:
-					_textEdit.InputChar('\n');
+					if (!Readonly)
+					{
+						_textEdit.InputChar('\n');
+					}
 					break;
 			}
 
@@ -485,7 +497,7 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnChar(c);
 
-			if (!char.IsControl(c))
+			if (AcceptsInput && !char.IsControl(c))
 			{
 				_textEdit.InputChar(c);
 			}
@@ -567,7 +579,7 @@ namespace Myra.Graphics2D.UI
 
 			var bounds = ActualBounds;
 
-			if (Selection != null)
+			if (Selection != null && !string.IsNullOrEmpty(Text))
 			{
 				var selectStart = Math.Min(_textEdit.SelectStart, _textEdit.SelectEnd);
 				var selectEnd = Math.Max(_textEdit.SelectStart, _textEdit.SelectEnd);
