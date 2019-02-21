@@ -26,6 +26,19 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[XmlIgnore]
+		internal Point ScrollMaximumPixels
+		{
+			get
+			{
+				var bounds = ActualBounds;
+
+				return new Point(InternalChild.Bounds.Width - bounds.Width + (_verticalScrollbarVisible ? _verticalScrollbarThumb.Width : 0),
+								 InternalChild.Bounds.Height - bounds.Height + (_horizontalScrollbarVisible ? _horizontalScrollbarThumb.Height : 0));
+			}
+		}
+
+		[HiddenInEditor]
+		[XmlIgnore]
 		public Point ScrollPosition
 		{
 			get { return _scrollPosition; }
@@ -206,13 +219,8 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var bounds = ActualBounds;
-			var origin = new Point((int)(prop.X *
-										  (InternalChild.Bounds.Width - bounds.Width +
-										   (_verticalScrollbarVisible ? _verticalScrollbarThumb.Width : 0))),
-				(int)(prop.Y *
-					   (InternalChild.Bounds.Height - bounds.Height +
-						(_horizontalScrollbarVisible ? _horizontalScrollbarThumb.Height : 0)))
-			);
+			var maximumPixels = ScrollMaximumPixels;
+			var origin = new Point((int)(prop.X * maximumPixels.X), (int)(prop.Y * maximumPixels.Y));
 
 			InternalChild.Left = -origin.X;
 			InternalChild.Top = -origin.Y;

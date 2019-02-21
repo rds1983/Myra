@@ -1,6 +1,6 @@
 namespace StbTextEditSharp
 {
-	public struct TextEditRow
+	internal struct TextEditRow
 	{
 		public float x0;
 		public float x1;

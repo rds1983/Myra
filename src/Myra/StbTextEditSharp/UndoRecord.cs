@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 namespace StbTextEditSharp
 {
 	[StructLayout(LayoutKind.Sequential)]
-	public struct UndoRecord
+	internal struct UndoRecord
 	{
 		public int where;
 		public int insert_length;

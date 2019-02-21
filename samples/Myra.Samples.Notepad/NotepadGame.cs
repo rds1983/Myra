@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.File;
+using Myra.Utility;
 
 namespace Myra.Samples.Notepad
 {
@@ -12,7 +13,7 @@ namespace Myra.Samples.Notepad
 
 		private string _filePath;
 		private bool _dirty = true;
-		private Desktop _host;
+		private Desktop _desktop;
 		private TextField _textField;
 
 		public string FilePath
@@ -62,7 +63,7 @@ namespace Myra.Samples.Notepad
 
 			UpdateTitle();
 
-			_host = new Desktop();
+			_desktop = new Desktop();
 
 			// Load UI
 			var ui = new Notepad();
@@ -82,6 +83,8 @@ namespace Myra.Samples.Notepad
 			var saveAsItem = ui.menuItemSaveAs;
 			saveAsItem.Selected += SaveAsItemOnDown;
 
+			ui.menuItemDebugOptions.Selected += DebugOptionsOnDown;
+
 			// File/Quit
 			var quitItem = ui.menuItemQuit;
 			quitItem.Selected += QuitItemOnDown;
@@ -91,12 +94,20 @@ namespace Myra.Samples.Notepad
 
 			_textField = ui.textArea;
 
-			_textField.Text =
-				"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum!";
+			var resources = new ResourceAssetResolver(typeof(NotepadGame).Assembly, "Myra.Samples.Notepad.");
+			_textField.Text = resources.ReadAsString("hobbits.txt");
+			_desktop.FocusedWidget = _textField;
 
 			_textField.TextChanged += TextFieldOnTextChanged;
 
-			_host.Widgets.Add(ui);
+			_desktop.Widgets.Add(ui);
+		}
+
+		private void DebugOptionsOnDown(object sender, EventArgs e)
+		{
+			var dlg = new DebugOptionsDialog();
+
+			dlg.ShowModal(_desktop);
 		}
 
 		private void UpdateTitle()
@@ -159,7 +170,7 @@ namespace Myra.Samples.Notepad
 					}
 				};
 
-				dlg.ShowModal(_host);
+				dlg.ShowModal(_desktop);
 			}
 			else
 			{
@@ -170,7 +181,7 @@ namespace Myra.Samples.Notepad
 		private void AboutItemOnDown(object sender, EventArgs eventArgs)
 		{
 			var messageBox = Dialog.CreateMessageBox("Notepad", "Myra Notepad Sample " + MyraEnvironment.Version);
-			messageBox.ShowModal(_host);
+			messageBox.ShowModal(_desktop);
 		}
 
 		private void SaveAsItemOnDown(object sender, EventArgs eventArgs)
@@ -213,7 +224,7 @@ namespace Myra.Samples.Notepad
 				Dirty = false;
 			};
 
-			dlg.ShowModal(_host);
+			dlg.ShowModal(_desktop);
 		}
 
 		private void NewItemOnDown(object sender, EventArgs eventArgs)
@@ -241,9 +252,9 @@ namespace Myra.Samples.Notepad
 
 			GraphicsDevice.Clear(Color.Black);
 
-			_host.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth,
+			_desktop.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth,
 				GraphicsDevice.PresentationParameters.BackBufferHeight);
-			_host.Render();
+			_desktop.Render();
 		}
 
 	}

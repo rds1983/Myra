@@ -8,9 +8,7 @@ using System.Xml.Serialization;
 using StbTextEditSharp;
 using Myra.Graphics2D.Text;
 using System.Text;
-using System.Diagnostics;
-using System.Windows.Forms;
-using Keys = Microsoft.Xna.Framework.Input.Keys;
+using TextCopy;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -33,6 +31,7 @@ namespace Myra.Graphics2D.UI
 		public readonly FormattedText _formattedText = new FormattedText();
 		private readonly StringBuilder _stringBuilder = new StringBuilder();
 		private bool _isTouchDown;
+		private int? _lastCursorY;
 
 		[EditCategory("Appearance")]
 		[DefaultValue(0)]
@@ -143,20 +142,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override bool IsFocused
-		{
-			get { return base.IsFocused; }
-			internal set
-			{
-				base.IsFocused = value;
-
-				if (base.IsFocused)
-				{
-					_textEdit.CursorIndex = string.IsNullOrEmpty(Text) ? 0 : Text.Length;
-				}
-			}
-		}
-
 		[DefaultValue(true)]
 		public override bool ClipToBounds
 		{
@@ -182,7 +167,7 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public Func<string, string> InputFilter { get; set; }
 
-		public int Length
+		int ITextEditHandler.Length
 		{
 			get
 			{
@@ -203,6 +188,7 @@ namespace Myra.Graphics2D.UI
 		public TextField(TextFieldStyle style)
 		{
 			_textEdit = new TextEdit(this);
+			_textEdit.CursorIndexChanged += _textEdit_CursorIndexChanged;
 
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Top;
@@ -225,6 +211,49 @@ namespace Myra.Graphics2D.UI
 
 		public TextField() : this(Stylesheet.Current.TextFieldStyle)
 		{
+		}
+
+		private void _textEdit_CursorIndexChanged(object sender, EventArgs e)
+		{
+			var asScrollPane = Parent as ScrollPane;
+			if (asScrollPane == null)
+			{
+				return;
+			}
+
+			var p = GetRenderPositionByIndex(_textEdit.CursorIndex);
+
+			if (p.Y == _lastCursorY)
+			{
+				return;
+			}
+
+			var scrollMaximumPixels = asScrollPane.ScrollMaximumPixels;
+			if (scrollMaximumPixels.Y == 0)
+			{
+				return;
+			}
+
+			var lineHeight = CrossEngineStuff.LineSpacing(_formattedText.Font);
+
+			if (p.Y - lineHeight < asScrollPane.ActualBounds.Top)
+			{
+				var scrollMaximum = asScrollPane.ScrollMaximum;
+				var newY = (-Top + p.Y - lineHeight) * scrollMaximum.Y / scrollMaximumPixels.Y;
+
+				var sp = asScrollPane.ScrollPosition;
+				asScrollPane.ScrollPosition = new Point(sp.X, newY);
+
+			} else if (p.Y + lineHeight > asScrollPane.ActualBounds.Bottom)
+			{
+				var scrollMaximum = asScrollPane.ScrollMaximum;
+				var newY = (-Top + p.Y + lineHeight - asScrollPane.ActualBounds.Height) * scrollMaximum.Y / scrollMaximumPixels.Y;
+
+				var sp = asScrollPane.ScrollPosition;
+				asScrollPane.ScrollPosition = new Point(sp.X, newY);
+			}
+
+			_lastCursorY = p.Y;
 		}
 
 		private bool SetText(string value, bool byUser)
@@ -306,6 +335,28 @@ namespace Myra.Graphics2D.UI
 
 			switch (k)
 			{
+				case Keys.C:
+					if (IsControlDown)
+					{
+						if (_textEdit.SelectEnd != _textEdit.SelectStart)
+						{
+							var selectStart = Math.Min(_textEdit.SelectStart, _textEdit.SelectEnd);
+							var selectEnd = Math.Max(_textEdit.SelectStart, _textEdit.SelectEnd);
+							Clipboard.SetText(Text.Substring(selectStart, selectEnd - selectStart));
+						}
+					}
+					break;
+				case Keys.V:
+					if (IsControlDown)
+					{
+						var clipboardText = Clipboard.GetText();
+						if (!string.IsNullOrEmpty(clipboardText))
+						{
+							_textEdit.Paste(clipboardText);
+						}
+					}
+					break;
+
 				case Keys.Insert:
 					controlKey = ControlKeys.InsertMode;
 					break;
@@ -445,7 +496,8 @@ namespace Myra.Graphics2D.UI
 			base.OnTouchDown();
 
 			var mousePos = Desktop.MousePosition;
-			_textEdit.Click(mousePos.X, mousePos.Y);
+
+			_textEdit.Click(mousePos.X, mousePos.Y, IsShiftDown);
 			_isTouchDown = true;
 		}
 
@@ -578,7 +630,8 @@ namespace Myra.Graphics2D.UI
 
 			var centeredBounds = LayoutUtils.Align(new Point(bounds.Width, bounds.Height), _formattedText.Size, HorizontalAlignment.Left, TextVerticalAlignment);
 			centeredBounds.Offset(bounds.Location);
-			_formattedText.Draw(context.Batch, centeredBounds, textColor, context.Opacity);
+
+			_formattedText.Draw(context.Batch, centeredBounds.Location, context.View, textColor, context.Opacity);
 
 			if (!IsFocused)
 			{
@@ -661,7 +714,15 @@ namespace Myra.Graphics2D.UI
 			return stylesheet.TextFieldStyles.Keys.ToArray();
 		}
 
-		public TextEditRow LayoutRow(int startIndex)
+		int ITextEditHandler.NewLineWidth
+		{
+			get
+			{
+				return FormattedText.NewLineWidth;
+			}
+		}
+
+		TextEditRow ITextEditHandler.LayoutRow(int startIndex)
 		{
 			var bounds = ActualBounds;
 			var r = _formattedText.LayoutRow(startIndex, bounds.Width);
@@ -681,6 +742,11 @@ namespace Myra.Graphics2D.UI
 			if (glyph == null)
 			{
 				return 0;
+			}
+
+			if (glyph.Character == '\n')
+			{
+				return FormattedText.NewLineWidth;
 			}
 
 			return glyph.Bounds.Width;

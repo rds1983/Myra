@@ -51,7 +51,7 @@ namespace Myra.Graphics2D.Text
 			get; internal set;
 		}
 
-		public TextLine(SpriteFont font, string text)
+		public TextLine(SpriteFont font, string text, Point size)
 		{
 			if (font == null)
 			{
@@ -60,12 +60,10 @@ namespace Myra.Graphics2D.Text
 
 			_spriteFont = font;
 			_text = text;
+			_size = size;
 
 			if (!string.IsNullOrEmpty(_text))
 			{
-				var sz = _spriteFont.MeasureString(_text);
-				_size = new Point((int) sz.X, (int) sz.Y);
-
 				for (var i = 0; i < _text.Length; ++i)
 				{
 					_glyphs.Add(new GlyphInfo
@@ -82,8 +80,13 @@ namespace Myra.Graphics2D.Text
 
 				for (var i = 0; i < _text.Length; ++i)
 				{
+					var c = _text[i];
+
 					SpriteFont.Glyph g;
-					fontGlyphs.TryGetValue(_text[i], out g);
+					if (!fontGlyphs.TryGetValue(c, out g) && font.DefaultCharacter != null && c != '\n' && c != '\r')
+					{
+						fontGlyphs.TryGetValue(font.DefaultCharacter.Value, out g);
+					}
 
 					// The first character on a line might have a negative left side bearing.
 					// In this scenario, SpriteBatch/SpriteFont normally offset the text to the right,

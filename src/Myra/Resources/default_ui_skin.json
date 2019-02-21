@@ -19,7 +19,6 @@
 		"disabledTextColor": "grey",
 		"selection": "selection",
 		"background": "textfield",
-		"focusedBorder": "border",
 		"cursor": "cursor",
 		"messageFont": "default-font",
 		"messageTextColor": "grey"

@@ -34,3 +34,5 @@ UI Editor
 * [VisUI](https://github.com/kotcrab/vis-editor/wiki/VisUI)
 * [LibGDX](http://libgdx.badlogicgames.com/)
 * [Cyotek.Drawing.BitmapFont](https://github.com/cyotek/Cyotek.Drawing.BitmapFont)
+* [stb](https://github.com/nothings/stb)
+* [TextCopy](https://github.com/SimonCropp/TextCopy)

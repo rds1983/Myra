@@ -1,6 +1,6 @@
 namespace StbTextEditSharp
 {
-	public enum ControlKeys
+	internal enum ControlKeys
 	{
 		None = 0,
 		Shift = 0x20000,

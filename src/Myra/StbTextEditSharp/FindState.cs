@@ -1,6 +1,6 @@
 namespace StbTextEditSharp
 {
-	public struct FindState
+	internal struct FindState
 	{
 		public float x;
 		public float y;
@@ -63,7 +63,7 @@ namespace StbTextEditSharp
 			height = r.ymax - r.ymin;
 			prev_first = prev_start;
 			x = r.x0;
-			for (i = 0; first + i < n; ++i) x += 1;
+			for (i = 0; first + i < n; ++i) x += str.Handler.GetWidth(first + i);
 		}
 	}
 }

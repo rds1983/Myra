@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 #if !XENKO
@@ -15,6 +16,8 @@ namespace Myra.Graphics2D.Text
 {
 	public class FormattedText
 	{
+		public const int NewLineWidth = 0;
+
 		private SpriteFont _font;
 		private string _text = string.Empty;
 		private int _verticalSpacing;
@@ -103,7 +106,7 @@ namespace Myra.Graphics2D.Text
 			}
 		}
 
-		public TextEditRow LayoutRow(int startIndex, int? width)
+		internal TextEditRow LayoutRow(int startIndex, int? width)
 		{
 			var r = new TextEditRow();
 
@@ -121,15 +124,26 @@ namespace Myra.Graphics2D.Text
 				var c = Text[i];
 
 				_stringBuilder.Append(c);
-				var sz = Font.MeasureString(_stringBuilder);
 
-				if (char.IsWhiteSpace(c))
+				Vector2 sz =Vector2.Zero;
+
+				if (c != '\n')
 				{
-					lastBreakPosition = i + 1;
-					lastBreakMeasure = sz;
+					sz = Font.MeasureString(_stringBuilder);
+				}
+				else
+				{
+					sz = new Vector2(r.x1 + NewLineWidth, Math.Max(r.ymax, CrossEngineStuff.LineSpacing(_font)));
 				}
 
-				if ((width != null && sz.X > width.Value) || c == '\n')
+				if (width != null && c == '\n')
+				{
+					// Break right here
+					++r.num_chars;
+					break;
+				}
+
+				if (width != null && sz.X > width.Value)
 				{
 					if (lastBreakPosition != null)
 					{
@@ -144,6 +158,12 @@ namespace Myra.Graphics2D.Text
 					}
 
 					break;
+				}
+
+				if (char.IsWhiteSpace(c))
+				{
+					lastBreakPosition = i + 1;
+					lastBreakMeasure = sz;
 				}
 
 				++r.num_chars;
@@ -220,7 +240,7 @@ namespace Myra.Graphics2D.Text
 					break;
 				}
 
-				var line = new TextLine(_font, _text.Substring(i, r.num_chars));
+				var line = new TextLine(_font, _text.Substring(i, r.num_chars), new Point((int)(r.x1 - r.x0), (int)(r.baseline_y_delta)));
 				lines.Add(line);
 
 				i += r.num_chars;
@@ -254,7 +274,7 @@ namespace Myra.Graphics2D.Text
 			_dirty = false;
 		}
 
-		public void Draw(SpriteBatch batch, Rectangle bounds, Color textColor, float opacity = 1.0f)
+		public void Draw(SpriteBatch batch, Point position, Rectangle clip, Color textColor, float opacity = 1.0f)
 		{
 			var strings = Strings;
 
@@ -263,23 +283,18 @@ namespace Myra.Graphics2D.Text
 				return;
 			}
 
-			var y = bounds.Top;
+			var y = position.Y;
 
 			foreach (var si in strings)
 			{
-				if (y >= bounds.Top && y < bounds.Bottom)
+				if (y + si.Size.Y >= clip.Top && y <= clip.Bottom)
 				{
-					si.Draw(batch, new Point(bounds.Left, y), textColor, opacity);
+					si.Draw(batch, new Point(position.X, y), textColor, opacity);
 				}
 
 				y += si.Size.Y;
 				y += _verticalSpacing;
 			}
-		}
-
-		public void Draw(SpriteBatch batch, Point pos, Color textColor)
-		{
-			Draw(batch, new Rectangle(pos.X, pos.Y, _size.X, _size.Y), textColor);
 		}
 
 		private void InvalidateLayout()

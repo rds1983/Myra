@@ -2,7 +2,7 @@ using System;
 
 namespace StbTextEditSharp
 {
-	public class UndoState
+	internal class UndoState
 	{
 		public int redo_char_point;
 		public short redo_point;

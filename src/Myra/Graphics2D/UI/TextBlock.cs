@@ -131,7 +131,7 @@ namespace Myra.Graphics2D.UI
 				color = OverTextColor.Value;
 			}
 
-			_formattedText.Draw(context.Batch, bounds, color, context.Opacity);
+			_formattedText.Draw(context.Batch, bounds.Location, context.View, color, context.Opacity);
 		}
 
 		protected override Point InternalMeasure(Point availableSize)
