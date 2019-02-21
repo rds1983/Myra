@@ -140,6 +140,9 @@ namespace Myra.Graphics2D.Text
 				{
 					// Break right here
 					++r.num_chars;
+					r.x1 = sz.X;
+					r.ymax = sz.Y;
+					r.baseline_y_delta = sz.Y;
 					break;
 				}
 

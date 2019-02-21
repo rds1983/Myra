@@ -24,12 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="default_ui_skin.json" />
     <None Remove="hobbits.txt" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="default_ui_skin.json" />
     <EmbeddedResource Include="hobbits.txt" />
   </ItemGroup>
 
