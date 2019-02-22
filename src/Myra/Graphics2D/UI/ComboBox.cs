@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Linq;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
@@ -15,19 +12,11 @@ using Xenko.Core.Mathematics;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ComboBox : Button
+	public class ComboBox : Selector<Button, ListItem>
 	{
 		private readonly Grid _itemsContainer;
 		private bool _isExpanded;
 		private ButtonStyle _dropDownItemStyle;
-		private readonly ObservableCollection<ListItem> _items = new ObservableCollection<ListItem>();
-		private int _selectingIndex = -1, _selectedIndex = -1;
-
-		[EditCategory("Data")]
-		public ObservableCollection<ListItem> Items
-		{
-			get { return _items; }
-		}
 
 		[HiddenInEditor]
 		[XmlIgnore]
@@ -44,8 +33,6 @@ namespace Myra.Graphics2D.UI
 
 				_isExpanded = value;
 
-				SelectingItem = SelectedItem;
-
 				if (!_isExpanded)
 				{
 					Desktop.HideContextMenu();
@@ -59,197 +46,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
-		[XmlIgnore]
-		public int SelectingIndex
-		{
-			get
-			{
-				return _selectingIndex;
-			}
-
-			set
-			{
-				if (value == _selectingIndex)
-				{
-					return;
-				}
-
-				_selectingIndex = value;
-			}
-		}
-
-		[HiddenInEditor]
-		[XmlIgnore]
-		public ListItem SelectingItem
-		{
-			get { return _selectingIndex >= 0 && _selectingIndex < Items.Count ? Items[_selectingIndex] : null; }
-			set
-			{
-				if (value == SelectingItem)
-				{
-					return;
-				}
-
-				if (value == null)
-				{
-					SelectingIndex = -1;
-				}
-				else
-				{
-					var index = Items.IndexOf(value);
-					if (index < 0)
-					{
-						throw new ArgumentException("item is not in the list");
-					}
-
-					SelectingIndex = index;
-				}
-			}
-		}
-
-		[EditCategory("Data")]
-		[DefaultValue(-1)]
-		public int SelectedIndex
-		{
-			get
-			{
-				return _selectedIndex;
-			}
-
-			set
-			{
-				if (value == _selectedIndex)
-				{
-					return;
-				}
-
-				var item = SelectedItem;
-				if (item != null && item.Widget != null)
-				{
-					((Button)item.Widget).IsPressed = false;
-				}
-
-				SelectingIndex = value;
-				_selectedIndex = value;
-
-				item = SelectedItem;
-
-				if (item != null && item.Widget != null)
-				{
-					((Button)item.Widget).IsPressed = true;
-				}
-
-				UpdateSelectedItem();
-
-				var ev = SelectedIndexChanged;
-				if (ev != null)
-				{
-					ev(this, EventArgs.Empty);
-				}
-			}
-		}
-
-		[HiddenInEditor]
-		[XmlIgnore]
-		public ListItem SelectedItem
-		{
-			get { return _selectedIndex >= 0 && _selectedIndex < Items.Count ? Items[_selectedIndex] : null; }
-			set
-			{
-				if (value == SelectedItem)
-				{
-					return;
-				}
-
-				if (value == null)
-				{
-					SelectedIndex = -1;
-				}
-				else
-				{
-					var index = Items.IndexOf(value);
-					if (index < 0)
-					{
-						throw new ArgumentException("item is not in the list");
-					}
-
-					SelectedIndex = index;
-				}
-			}
-		}
-
-		[HiddenInEditor]
-		[XmlIgnore]
-		public override HorizontalAlignment ContentHorizontalAlignment
-		{
-			get { return base.ContentHorizontalAlignment; }
-			set { base.ContentHorizontalAlignment = value; }
-		}
-
-		[HiddenInEditor]
-		[XmlIgnore]
-		public override VerticalAlignment ContentVerticalAlignment
-		{
-			get { return base.ContentVerticalAlignment; }
-			set { base.ContentVerticalAlignment = value; }
-		}
-
-		[HiddenInEditor]
-		[XmlIgnore]
-		public override bool Toggleable
-		{
-			get { return base.Toggleable; }
-
-			set
-			{
-				base.Toggleable = value;
-			}
-		}
-
-		[HiddenInEditor]
-		[XmlIgnore]
-		public override int? ImageWidth
-		{
-			get { return base.ImageWidth; }
-			set { base.ImageWidth = value; }
-		}
-
-		[HiddenInEditor]
-		[XmlIgnore]
-		public override int? ImageHeight
-		{
-			get { return base.ImageHeight; }
-			set { base.ImageHeight = value; }
-		}
-
-		[HiddenInEditor]
-		[XmlIgnore]
-		public override bool ImageVisible
-		{
-			get { return base.ImageVisible; }
-			set { base.ImageVisible = value; }
-		}
-
-		[HiddenInEditor]
-		[XmlIgnore]
-		public override string Text
-		{
-			get { return base.Text; }
-			set { base.Text = value; }
-		}
-
-		[HiddenInEditor]
-		[XmlIgnore]
-		public override Color TextColor
-		{
-			get { return base.TextColor; }
-			set { base.TextColor = value; }
-		}
-
-		public event EventHandler SelectedIndexChanged;
-
-		public ComboBox(ComboBoxStyle style) : base(style)
+		public ComboBox(ComboBoxStyle style) : base(new Button((ButtonStyle)null))
 		{
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
@@ -260,8 +57,6 @@ namespace Myra.Graphics2D.UI
 			{
 				ApplyComboBoxStyle(style);
 			}
-
-			_items.CollectionChanged += ItemsOnCollectionChanged;
 		}
 
 		public ComboBox(string style) : this(Stylesheet.Current.ComboBoxStyles[style])
@@ -270,43 +65,6 @@ namespace Myra.Graphics2D.UI
 
 		public ComboBox() : this(Stylesheet.Current.ComboBoxStyle)
 		{
-		}
-
-		private void ItemsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
-		{
-			switch (args.Action)
-			{
-				case NotifyCollectionChangedAction.Add:
-					{
-						var index = args.NewStartingIndex;
-						foreach (ListItem item in args.NewItems)
-						{
-							InsertItem(item, index);
-							++index;
-						}
-						break;
-					}
-
-				case NotifyCollectionChangedAction.Remove:
-					{
-						foreach (ListItem item in args.OldItems)
-						{
-							RemoveItem(item);
-						}
-						break;
-					}
-
-				case NotifyCollectionChangedAction.Reset:
-					{
-						while (_itemsContainer.Widgets.Count > 0)
-						{
-							RemoveItem((ListItem)_itemsContainer.Widgets[0].Tag);
-						}
-						break;
-					}
-			}
-
-			InvalidateMeasure();
 		}
 
 		private void ItemOnChanged(object sender, EventArgs eventArgs)
@@ -319,14 +77,14 @@ namespace Myra.Graphics2D.UI
 
 			if (SelectedItem == item)
 			{
-				Text = item.Text;
-				TextColor = widget.TextColor;
+				InternalChild.Text = item.Text;
+				InternalChild.TextColor = widget.TextColor;
 			}
 
 			InvalidateMeasure();
 		}
 
-		private void InsertItem(ListItem item, int index)
+		protected override void InsertItem(ListItem item, int index)
 		{
 			item.Changed += ItemOnChanged;
 
@@ -351,7 +109,7 @@ namespace Myra.Graphics2D.UI
 			UpdateGridPositions();
 		}
 
-		private void RemoveItem(ListItem item)
+		protected override void RemoveItem(ListItem item)
 		{
 			item.Changed -= ItemOnChanged;
 
@@ -368,6 +126,26 @@ namespace Myra.Graphics2D.UI
 			UpdateGridPositions();
 		}
 
+		protected override void UnselectItem(ListItem item)
+		{
+			((Button)item.Widget).IsPressed = false;
+		}
+
+		protected override void SelectItem(ListItem item)
+		{
+			((Button)item.Widget).IsPressed = true;
+			UpdateSelectedItem();
+		}
+
+		protected override void Reset()
+		{
+			while (_itemsContainer.Widgets.Count > 0)
+			{
+				RemoveItem((ListItem)_itemsContainer.Widgets[0].Tag);
+			}
+		}
+
+
 		private void UpdateGridPositions()
 		{
 			for (var i = 0; i < _itemsContainer.Widgets.Count; ++i)
@@ -379,7 +157,6 @@ namespace Myra.Graphics2D.UI
 		private void ItemOnMouseEntered(object sender, EventArgs args)
 		{
 			var widget = (Widget)sender;
-			SelectingItem = (ListItem)widget.Tag;
 		}
 
 		private void ItemOnClick(object sender, EventArgs eventArgs)
@@ -395,13 +172,13 @@ namespace Myra.Graphics2D.UI
 			var item = SelectedItem;
 			if (item != null)
 			{
-				Text = item.Text;
-				TextColor = item.Color ?? _dropDownItemStyle.LabelStyle.TextColor;
+				InternalChild.Text = item.Text;
+				InternalChild.TextColor = item.Color ?? _dropDownItemStyle.LabelStyle.TextColor;
 				((Button)item.Widget).IsPressed = true;
 			}
 			else
 			{
-				Text = string.Empty;
+				InternalChild.Text = string.Empty;
 			}
 		}
 
@@ -431,7 +208,7 @@ namespace Myra.Graphics2D.UI
 				((Button)item.Widget).ApplyButtonStyle(_dropDownItemStyle);
 			}
 
-			ApplyButtonStyle(style);
+			InternalChild.ApplyButtonStyle(style);
 		}
 
 		protected override Point InternalMeasure(Point availableSize)

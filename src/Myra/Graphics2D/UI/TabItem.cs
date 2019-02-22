@@ -12,7 +12,7 @@ using Xenko.Core.Mathematics;
 
 namespace Myra.Graphics2D.UI
 {
-	public class TabItem : IItemWithId, IContent
+	public class TabItem : ISelectorItem, IContent
 	{
 		private string _id;
 		private string _text;

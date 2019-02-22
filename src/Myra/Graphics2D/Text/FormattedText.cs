@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Myra.Utility;
+using StbTextEditSharp;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Utility;
-using StbTextEditSharp;
 #else
 using Xenko.Core.Mathematics;
 using Xenko.Graphics;

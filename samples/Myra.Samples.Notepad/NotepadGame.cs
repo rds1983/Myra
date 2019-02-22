@@ -1,15 +1,26 @@
 ﻿using System;
 using System.IO;
-using Microsoft.Xna.Framework;
+using System.Threading.Tasks;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.File;
 using Myra.Utility;
+
+#if !XENKO
+using Microsoft.Xna.Framework;
+#else
+using Xenko.Core.Mathematics;
+using Xenko.Engine;
+using Xenko.Games;
+using Xenko.Graphics;
+#endif
 
 namespace Myra.Samples.Notepad
 {
 	public class NotepadGame : Game
 	{
+#if !XENKO
 		private readonly GraphicsDeviceManager graphics;
+#endif
 
 		private string _filePath;
 		private bool _dirty = true;
@@ -51,11 +62,17 @@ namespace Myra.Samples.Notepad
 
 		public NotepadGame()
 		{
+#if !XENKO
 			graphics = new GraphicsDeviceManager(this);
+#endif
 			IsMouseVisible = true;
 		}
 
+#if !XENKO
 		protected override void LoadContent()
+#else
+		protected override Task LoadContent()
+#endif
 		{
 			base.LoadContent();
 
@@ -101,7 +118,12 @@ namespace Myra.Samples.Notepad
 			_textField.TextChanged += TextFieldOnTextChanged;
 
 			_desktop.Widgets.Add(ui);
+
+#if XENKO
+			return base.LoadContent();
+#endif
 		}
+
 
 		private void DebugOptionsOnDown(object sender, EventArgs e)
 		{
@@ -242,6 +264,7 @@ namespace Myra.Samples.Notepad
 		{
 			base.Draw(gameTime);
 
+#if !XENKO
 			if (graphics.PreferredBackBufferWidth != Window.ClientBounds.Width ||
 			    graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
 			{
@@ -254,6 +277,17 @@ namespace Myra.Samples.Notepad
 
 			_desktop.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth,
 				GraphicsDevice.PresentationParameters.BackBufferHeight);
+#else
+			// Clear screen
+			GraphicsContext.CommandList.Clear(GraphicsDevice.Presenter.BackBuffer, Color.Black);
+			GraphicsContext.CommandList.Clear(GraphicsDevice.Presenter.DepthStencilBuffer, DepthStencilClearOptions.DepthBuffer | DepthStencilClearOptions.Stencil);
+
+			// Set render target
+			GraphicsContext.CommandList.SetRenderTargetAndViewport(GraphicsDevice.Presenter.DepthStencilBuffer, GraphicsDevice.Presenter.BackBuffer);
+
+			_desktop.Bounds = new Rectangle(0, 0, GraphicsDevice.Presenter.BackBuffer.ViewWidth, GraphicsDevice.Presenter.BackBuffer.ViewHeight);
+#endif
+
 			_desktop.Render();
 		}
 

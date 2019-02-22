@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Xml.Serialization;
 using Myra.Attributes;
@@ -9,144 +7,26 @@ using static Myra.Graphics2D.UI.Grid;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ListBox : SingleItemContainer<Grid>
+	public class ListBox : Selector<Grid, ListItem>
 	{
-		private ListItem _selectedItem;
-		private readonly ObservableCollection<ListItem> _items = new ObservableCollection<ListItem>();
-
-		[EditCategory("Data")]
-		public ObservableCollection<ListItem> Items
-		{
-			get { return _items; }
-		}
-
 		[HiddenInEditor]
 		[XmlIgnore]
 		public ListBoxStyle ListBoxStyle { get; set; }
 
-		[HiddenInEditor]
-		[XmlIgnore]
-		public int? SelectedIndex
+		public ListBox(ListBoxStyle style) : base(new Grid())
 		{
-			get
-			{
-				if (_selectedItem == null)
-				{
-					return null;
-				}
-
-				return _items.IndexOf(_selectedItem);
-			}
-
-			set
-			{
-				if (value == null || value.Value < 0 || value.Value >= Items.Count)
-				{
-					SelectedItem = null;
-					return;
-				}
-
-				SelectedItem = Items[value.Value];
-			}
-		}
-
-		[HiddenInEditor]
-		[XmlIgnore]
-		public ListItem SelectedItem
-		{
-			get { return _selectedItem; }
-
-			set
-			{
-				if (value == _selectedItem)
-				{
-					return;
-				}
-
-				if (_selectedItem != null)
-				{
-					((Button)_selectedItem.Widget).IsPressed = false;
-				}
-
-				_selectedItem = value;
-
-				if (_selectedItem != null)
-				{
-					((Button)_selectedItem.Widget).IsPressed = true;
-					_selectedItem.FireSelected();
-				}
-
-				var ev = SelectedIndexChanged;
-				if (ev != null)
-				{
-					ev(this, EventArgs.Empty);
-				}
-			}
-		}
-
-		public event EventHandler SelectedIndexChanged;
-
-		public ListBox(ListBoxStyle style)
-		{
-			InternalChild = new Grid();
-
-			HorizontalAlignment = HorizontalAlignment.Left;
-			VerticalAlignment = VerticalAlignment.Top;
-
 			if (style != null)
 			{
 				ApplyListBoxStyle(style);
 			}
-
-			_items.CollectionChanged += ItemsOnCollectionChanged;
 		}
 
-		public ListBox(string style)
-			: this(Stylesheet.Current.ListBoxStyles[style])
+		public ListBox(string style) : this(Stylesheet.Current.ListBoxStyles[style])
 		{
 		}
 
-		public ListBox()
-			: this(
-				Stylesheet.Current.ListBoxStyle)
+		public ListBox() : this(Stylesheet.Current.ListBoxStyle)
 		{
-		}
-
-		private void ItemsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
-		{
-			switch (args.Action)
-			{
-				case NotifyCollectionChangedAction.Add:
-					{
-						var index = args.NewStartingIndex;
-						foreach (ListItem item in args.NewItems)
-						{
-							InsertItem(item, index);
-							++index;
-						}
-						break;
-					}
-
-				case NotifyCollectionChangedAction.Remove:
-					{
-						foreach (ListItem item in args.OldItems)
-						{
-							RemoveItem(item);
-						}
-						break;
-					}
-
-				case NotifyCollectionChangedAction.Reset:
-					{
-						while (InternalChild.Widgets.Count > 0)
-						{
-							RemoveItem((ListItem)InternalChild.Widgets[0].Tag);
-						}
-						break;
-					}
-			}
-
-			InvalidateMeasure();
 		}
 
 		private void ItemOnChanged(object sender, EventArgs eventArgs)
@@ -169,7 +49,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void InsertItem(ListItem item, int index)
+		protected override void InsertItem(ListItem item, int index)
 		{
 			item.Changed += ItemOnChanged;
 
@@ -203,7 +83,7 @@ namespace Myra.Graphics2D.UI
 			UpdateGridPositions();
 		}
 
-		private void RemoveItem(ListItem item)
+		protected override void RemoveItem(ListItem item)
 		{
 			item.Changed -= ItemOnChanged;
 
@@ -217,6 +97,25 @@ namespace Myra.Graphics2D.UI
 			}
 
 			UpdateGridPositions();
+		}
+
+		protected override void UnselectItem(ListItem item)
+		{
+			((Button)item.Widget).IsPressed = false;
+		}
+
+		protected override void SelectItem(ListItem item)
+		{
+			((Button)item.Widget).IsPressed = true;
+			item.FireSelected();
+		}
+
+		protected override void Reset()
+		{
+			while (InternalChild.Widgets.Count > 0)
+			{
+				RemoveItem((ListItem)InternalChild.Widgets[0].Tag);
+			}
 		}
 
 		private void ButtonOnClick(object sender, EventArgs eventArgs)

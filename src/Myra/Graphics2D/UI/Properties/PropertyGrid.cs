@@ -330,7 +330,7 @@ namespace Myra.Graphics2D.UI.Properties
 					{
 						cb.SelectedIndexChanged += (sender, args) =>
 						{
-							var item = cb.SelectedItem != null ? values[cb.SelectedIndex] : null;
+							var item = cb.SelectedIndex != null ? values[cb.SelectedIndex.Value] : null;
 							record.SetValue(_object, item);
 							FireChanged(propertyType.Name);
 						};

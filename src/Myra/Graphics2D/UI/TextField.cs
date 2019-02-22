@@ -300,7 +300,11 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
+#if !XENKO
 				return Desktop.DownKeys.Contains(Keys.LeftControl) || Desktop.DownKeys.Contains(Keys.RightControl);
+#else
+				return Desktop.DownKeys.Contains(Keys.LeftCtrl) || Desktop.DownKeys.Contains(Keys.RightCtrl);
+#endif
 			}
 		}
 

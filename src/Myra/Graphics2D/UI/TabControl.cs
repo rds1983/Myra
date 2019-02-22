@@ -1,8 +1,6 @@
 ﻿using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using System;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
@@ -10,92 +8,16 @@ using static Myra.Graphics2D.UI.Grid;
 
 namespace Myra.Graphics2D.UI
 {
-	public class TabControl : SingleItemContainer<Grid>
+	public class TabControl : Selector<Grid, TabItem>
 	{
-		private int? _selectedIndex;
-		private TabItem _selectedItem;
-		private readonly ObservableCollection<TabItem> _items = new ObservableCollection<TabItem>();
 		private Grid _gridButtons;
 		private SingleItemContainer<Widget> _panelContent;
-
-		[EditCategory("Data")]
-		public ObservableCollection<TabItem> Items
-		{
-			get
-			{
-				return _items;
-			}
-		}
 
 		[HiddenInEditor]
 		[XmlIgnore]
 		public TabControlStyle TabControlStyle
 		{
 			get; set;
-		}
-
-		public int? SelectedIndex
-		{
-			get
-			{
-				return _selectedIndex;
-			}
-
-			set
-			{
-				if (value == _selectedIndex)
-				{
-					return;
-				}
-
-				_selectedIndex = value;
-
-				if (value == null || value.Value < 0 || value.Value >= Items.Count)
-				{
-					SelectedItem = null;
-					return;
-				}
-
-				SelectedItem = Items[value.Value];
-			}
-		}
-
-		[HiddenInEditor]
-		[XmlIgnore]
-		public TabItem SelectedItem
-		{
-			get
-			{
-				return _selectedItem;
-			}
-
-			set
-			{
-				if (value == _selectedItem)
-				{
-					return;
-				}
-
-				if (_selectedItem != null)
-				{
-					_selectedItem.Button.IsPressed = false;
-				}
-
-				_selectedItem = value;
-
-				if (_selectedItem != null)
-				{
-					_selectedItem.Button.IsPressed = true;
-					_panelContent.InternalChild = _selectedItem.Content;
-					_selectedItem.FireSelected();
-				}
-
-				var ev = SelectedIndexChanged;
-				if (ev != null)
-				{
-					ev(this, EventArgs.Empty);
-				}
-			}
 		}
 
 		[DefaultValue(HorizontalAlignment.Left)]
@@ -124,12 +46,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public event EventHandler SelectedIndexChanged;
-
-		public TabControl(TabControlStyle style)
+		public TabControl(TabControlStyle style): base(new Grid())
 		{
-			InternalChild = new Grid();
-
 			// First row contains button
 			InternalChild.RowsProportions.Add(new Proportion());
 
@@ -154,8 +72,6 @@ namespace Myra.Graphics2D.UI
 			{
 				ApplyTabControlStyle(style);
 			}
-
-			_items.CollectionChanged += ItemsOnCollectionChanged;
 		}
 
 		public TabControl(string style)
@@ -163,47 +79,8 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
-		public TabControl()
-			: this(
-				Stylesheet.Current.TabControlStyle)
+		public TabControl(): this(Stylesheet.Current.TabControlStyle)
 		{
-		}
-
-		private void ItemsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
-		{
-			switch (args.Action)
-			{
-				case NotifyCollectionChangedAction.Add:
-				{
-					var index = args.NewStartingIndex;
-					foreach (TabItem item in args.NewItems)
-					{
-						InsertItem(item, index);
-						++index;
-					}
-					break;
-				}
-
-				case NotifyCollectionChangedAction.Remove:
-				{
-					foreach (TabItem item in args.OldItems)
-					{
-						RemoveItem(item);
-					}
-					break;
-				}
-
-				case NotifyCollectionChangedAction.Reset:
-				{
-					while (_gridButtons.Widgets.Count > 0)
-					{
-						RemoveItem((TabItem)_gridButtons.Widgets[0].Tag);
-					}
-					break;
-				}
-			}
-
-			InvalidateMeasure();
 		}
 
 		private void ItemOnChanged(object sender, EventArgs eventArgs)
@@ -226,7 +103,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void InsertItem(TabItem item, int index)
+		protected override void InsertItem(TabItem item, int index)
 		{
 			item.Changed += ItemOnChanged;
 
@@ -256,7 +133,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void RemoveItem(TabItem item)
+		protected override void RemoveItem(TabItem item)
 		{
 			item.Changed -= ItemOnChanged;
 
@@ -270,6 +147,26 @@ namespace Myra.Graphics2D.UI
 			}
 
 			UpdateGridPositions();
+		}
+
+		protected override void UnselectItem(TabItem item)
+		{
+			item.Button.IsPressed = false;
+		}
+
+		protected override void SelectItem(TabItem item)
+		{
+			item.Button.IsPressed = true;
+			_panelContent.InternalChild = item.Content;
+			item.FireSelected();
+		}
+
+		protected override void Reset()
+		{
+			while (_gridButtons.Widgets.Count > 0)
+			{
+				RemoveItem((TabItem)_gridButtons.Widgets[0].Tag);
+			}
 		}
 
 		private void ButtonOnClick(object sender, EventArgs eventArgs)

@@ -665,8 +665,8 @@ namespace Myra.Graphics2D.UI
 										_focusedWidget.IterateFocusable(w => w.OnKeyDown(key));
 
 #if XENKO
-										var ch = key.ToChar(pressedKeys.Contains(Keys.LeftShift) ||
-															pressedKeys.Contains(Keys.RightShift));
+										var ch = key.ToChar(_downKeys.Contains(Keys.LeftShift) ||
+															_downKeys.Contains(Keys.RightShift));
 										if (ch != null)
 										{
 											_focusedWidget.IterateFocusable(w => w.OnChar(ch.Value));
