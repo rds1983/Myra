@@ -480,7 +480,7 @@ namespace Myra.Graphics2D.UI
 			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
 			{
 				var w = ChildrenCopy[i];
-				if (w.Visible)
+				if (w.Visible && w.Enabled)
 				{
 					return w;
 				}
@@ -562,12 +562,6 @@ namespace Myra.Graphics2D.UI
 
 		public void UpdateInput()
 		{
-			var activeWidget = GetActiveWidget();
-			if (activeWidget == null)
-			{
-				return;
-			}
-
 			if (MouseInfoGetter != null)
 			{
 				var mouseInfo = MouseInfoGetter();
@@ -592,7 +586,18 @@ namespace Myra.Graphics2D.UI
 						ev(this, EventArgs.Empty);
 					}
 
-					activeWidget.HandleMouseMovement();
+					for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
+					{
+						var w = ChildrenCopy[i];
+						if (w.Visible && w.Enabled)
+						{
+							var asWindow = w as Window;
+							if (w.HandleMouseMovement() || (asWindow != null && asWindow.IsModal))
+							{
+								break;
+							}
+						}
+					}
 				}
 
 				HandleButton(mouseInfo.IsLeftButtonDown, _lastMouseInfo.IsLeftButtonDown, MouseButtons.Left);

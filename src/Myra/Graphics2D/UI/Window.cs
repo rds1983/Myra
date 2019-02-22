@@ -32,6 +32,13 @@ namespace Myra.Graphics2D.UI
 		private readonly ImageButton _closeButton;
 		private Widget _content;
 
+		[HiddenInEditor]
+		[XmlIgnore]
+		public bool IsModal
+		{
+			get; set;
+		}
+
 		[EditCategory("Appearance")]
 		public string Title
 		{
@@ -337,6 +344,7 @@ namespace Myra.Graphics2D.UI
 		{
 			desktop.Widgets.Add(this);
 			desktop.FocusedWidget = this;
+			IsModal = true;
 		}
 
 		public virtual void Close()
@@ -355,6 +363,8 @@ namespace Myra.Graphics2D.UI
 				{
 					ev(this, EventArgs.Empty);
 				}
+
+				IsModal = false;
 			}
 		}
 

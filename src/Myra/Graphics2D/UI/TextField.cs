@@ -134,14 +134,6 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(VerticalAlignment.Top)]
 		public VerticalAlignment TextVerticalAlignment { get; set; }
 
-		private bool AcceptsInput
-		{
-			get
-			{
-				return Enabled && !Readonly;
-			}
-		}
-
 		[DefaultValue(true)]
 		public override bool ClipToBounds
 		{
@@ -326,11 +318,6 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnKeyDown(k);
 
-			if (!Enabled)
-			{
-				return;
-			}
-
 			ControlKeys? controlKey = null;
 
 			switch (k)
@@ -497,7 +484,7 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnChar(c);
 
-			if (AcceptsInput && !char.IsControl(c))
+			if (!Readonly && !char.IsControl(c))
 			{
 				_textEdit.InputChar(c);
 			}

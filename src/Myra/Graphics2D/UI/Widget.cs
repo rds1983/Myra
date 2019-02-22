@@ -1370,7 +1370,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		internal void HandleMouseMovement()
+		internal bool HandleMouseMovement()
 		{
 			var wasMouseOver = IsMouseOver;
 
@@ -1383,6 +1383,8 @@ namespace Myra.Graphics2D.UI
 					OnMouseMoved();
 				}
 			}
+
+			return IsMouseOver;
 		}
 
 		internal void HandleTouchDown()
