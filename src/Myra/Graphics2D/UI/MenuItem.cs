@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using Myra.Attributes;
 using System.Xml.Serialization;
+using System;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -10,7 +11,7 @@ using Xenko.Core.Mathematics;
 
 namespace Myra.Graphics2D.UI
 {
-	public class MenuItem : ListItem, IMenuItemsContainer, IMenuItem
+	public class MenuItem : SelectableItem, IMenuItemsContainer, IMenuItem
 	{
 		private readonly ObservableCollection<IMenuItem> _items = new ObservableCollection<IMenuItem>();
 
@@ -35,6 +36,13 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[XmlIgnore]
+		public Widget Widget
+		{
+			get; set;
+		}
+
+		[HiddenInEditor]
+		[XmlIgnore]
 		public char? UnderscoreChar
 		{
 			get
@@ -44,9 +52,13 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public event EventHandler Selected;
+
 		public MenuItem(string id, string text, Color? color, object tag) : base(text, color, tag)
 		{
 			Id = id;
+			Text = text;
+
 		}
 
 		public MenuItem(string id, string text, Color? color) : this(id, text, color, null)
@@ -88,6 +100,16 @@ namespace Myra.Graphics2D.UI
 			}
 
 			return null;
+		}
+
+		public void FireSelected()
+		{
+			var ev = Selected;
+
+			if (ev != null)
+			{
+				ev(this, EventArgs.Empty);
+			}
 		}
 	}
 }

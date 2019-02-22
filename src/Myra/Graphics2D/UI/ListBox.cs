@@ -13,6 +13,19 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public ListBoxStyle ListBoxStyle { get; set; }
 
+		public SelectionMode SelectionMode
+		{
+			get
+			{
+				return ((ISelector)this).SelectionMode;
+			}
+
+			set
+			{
+				((ISelector)this).SelectionMode = value;
+			}
+		}
+
 		public ListBox(ListBoxStyle style) : base(new Grid())
 		{
 			if (style != null)
@@ -57,7 +70,7 @@ namespace Myra.Graphics2D.UI
 
 			if (!item.IsSeparator)
 			{
-				widget = new ListButton(ListBoxStyle.ListItemStyle)
+				widget = new ListButton(ListBoxStyle.ListItemStyle, this)
 				{
 					Text = item.Text,
 					TextColor = item.Color ?? ListBoxStyle.ListItemStyle.LabelStyle.TextColor,
@@ -99,17 +112,6 @@ namespace Myra.Graphics2D.UI
 			UpdateGridPositions();
 		}
 
-		protected override void UnselectItem(ListItem item)
-		{
-			((Button)item.Widget).IsPressed = false;
-		}
-
-		protected override void SelectItem(ListItem item)
-		{
-			((Button)item.Widget).IsPressed = true;
-			item.FireSelected();
-		}
-
 		protected override void Reset()
 		{
 			while (InternalChild.Widgets.Count > 0)
@@ -121,8 +123,12 @@ namespace Myra.Graphics2D.UI
 		private void ButtonOnClick(object sender, EventArgs eventArgs)
 		{
 			var item = (Button)sender;
-			var index = InternalChild.Widgets.IndexOf(item);
-			SelectedIndex = index;
+			var listItem = (ListItem)item.Tag;
+
+			if (SelectionMode == SelectionMode.Single)
+			{
+				SelectedItem = listItem;
+			}
 		}
 
 		public void ApplyListBoxStyle(ListBoxStyle style)

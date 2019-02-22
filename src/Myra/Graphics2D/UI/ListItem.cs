@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Text;
 using Myra.Attributes;
 using System.Xml.Serialization;
 
@@ -12,68 +10,13 @@ using Xenko.Core.Mathematics;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ListItem : ISelectorItem
+	public class ListItem : SelectableItem, ISelectorItem
 	{
-		private string _id;
-		private string _text;
-		private Color? _color;
-
-		public string Id
-		{
-			get { return _id; }
-
-			set
-			{
-				if (value == _id)
-				{
-					return;
-				}
-
-				_id = value;
-				FireChanged();
-			}
-		}
-
-		public string Text
-		{
-			get { return _text; }
-
-			set
-			{
-				if (value == _text)
-				{
-					return;
-				}
-
-				_text = value;
-				FireChanged();
-			}
-		}
-
-		[DefaultValue(null)]
-		public Color? Color
-		{
-			get { return _color; }
-
-			set
-			{
-				if (value == _color)
-				{
-					return;
-				}
-
-				_color = value;
-				FireChanged();
-			}
-		}
+		private Widget _widget;
 
 		[HiddenInEditor]
 		[XmlIgnore]
 		public bool IsSeparator { get; set; }
-
-		[HiddenInEditor]
-		[XmlIgnore]
-		public object Tag { get; set; }
 
 		[HiddenInEditor]
 		[XmlIgnore]
@@ -85,16 +28,60 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[XmlIgnore]
-		public Widget Widget { get; set; }
+		public Widget Widget
+		{
+			get
+			{
+				return _widget;
+			}
 
-		public event EventHandler Changed;
-		public event EventHandler Selected;
+			set
+			{
+				_widget = value;
+
+				var asButton = _widget as Button;
+				if (asButton != null)
+				{
+					asButton.PressedChanged += (s, a) => FireSelectedChanged();
+				}
+			}
+		}
+
+		[HiddenInEditor]
+		[XmlIgnore]
+		public bool IsSelected
+		{
+			get
+			{
+				var asButton = _widget as Button;
+				if (asButton == null)
+				{
+					return false;
+				}
+
+				return asButton.IsPressed;
+			}
+
+			set
+			{
+				var asButton = _widget as Button;
+				if (asButton == null)
+				{
+					return;
+				}
+
+				asButton.IsPressed = value;
+			}
+		}
+
+
+		public event EventHandler SelectedChanged;
 
 		public ListItem()
 		{
 		}
 
-		public ListItem(string text, Color? color, object tag)
+		public ListItem(string text, Color? color, object tag): base(text, color, tag)
 		{
 			Text = text;
 			Color = color;
@@ -109,37 +96,9 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
-		public override string ToString()
+		public void FireSelectedChanged()
 		{
-			var sb = new StringBuilder();
-
-			if (!string.IsNullOrEmpty(Text))
-			{
-				sb.Append(Text);
-				sb.Append(" ");
-			}
-
-			if (!string.IsNullOrEmpty(Id))
-			{
-				sb.Append("(#");
-				sb.Append(Id);
-				sb.Append(")");
-			}
-			return sb.ToString();
-		}
-
-		protected void FireChanged()
-		{
-			var ev = Changed;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
-		}
-
-		public void FireSelected()
-		{
-			var ev = Selected;
+			var ev = SelectedChanged;
 			if (ev != null)
 			{
 				ev(this, EventArgs.Empty);

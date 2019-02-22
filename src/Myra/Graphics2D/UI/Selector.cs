@@ -6,11 +6,17 @@ using System.Xml.Serialization;
 
 namespace Myra.Graphics2D.UI
 {
-	public abstract class Selector<WidgetType, ItemType>: SingleItemContainer<WidgetType> where WidgetType : Widget
-		where ItemType: class, ISelectorItem
+	public abstract class Selector<WidgetType, ItemType> : SingleItemContainer<WidgetType>, ISelector
+		where WidgetType : Widget
+		where ItemType : class, ISelectorItem
 	{
 		private ItemType _selectedItem;
 		private readonly ObservableCollection<ItemType> _items = new ObservableCollection<ItemType>();
+
+		SelectionMode ISelector.SelectionMode
+		{
+			get; set;
+		}
 
 		[EditCategory("Data")]
 		public ObservableCollection<ItemType> Items
@@ -63,23 +69,20 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
-				if (_selectedItem != null)
+				if (((ISelector)this).SelectionMode == SelectionMode.Single && _selectedItem != null)
 				{
-					UnselectItem(_selectedItem);
+					_selectedItem.IsSelected = false;
 				}
 
 				_selectedItem = value;
 
 				if (_selectedItem != null)
 				{
-					SelectItem(_selectedItem);
+					_selectedItem.IsSelected = true;
 				}
 
-				var ev = SelectedIndexChanged;
-				if (ev != null)
-				{
-					ev(this, EventArgs.Empty);
-				}
+				FireSelectedIndexChanged();
+				OnSelectedItemChanged();
 			}
 		}
 
@@ -131,8 +134,19 @@ namespace Myra.Graphics2D.UI
 			InvalidateMeasure();
 		}
 
-		protected abstract void UnselectItem(ItemType item);
-		protected abstract void SelectItem(ItemType item);
+		protected virtual void OnSelectedItemChanged()
+		{
+		}
+
+		private void FireSelectedIndexChanged()
+		{
+			var ev = SelectedIndexChanged;
+			if (ev != null)
+			{
+				ev(this, EventArgs.Empty);
+			}
+		}
+
 		protected abstract void Reset();
 		protected abstract void InsertItem(ItemType item, int index);
 		protected abstract void RemoveItem(ItemType item);

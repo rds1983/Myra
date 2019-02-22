@@ -179,6 +179,27 @@ namespace Myra.Graphics2D.UI
 			get; private set;
 		}
 
+
+		internal bool IsShiftDown
+		{
+			get
+			{
+				return _downKeys.Contains(Keys.LeftShift) || _downKeys.Contains(Keys.RightShift);
+			}
+		}
+
+		internal bool IsControlDown
+		{
+			get
+			{
+#if !XENKO
+				return _downKeys.Contains(Keys.LeftControl) || _downKeys.Contains(Keys.RightControl);
+#else
+				return _downKeys.Contains(Keys.LeftCtrl) || _downKeys.Contains(Keys.RightCtrl);
+#endif
+			}
+		}
+
 		public event EventHandler MouseMoved;
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseDown;
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseUp;

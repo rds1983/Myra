@@ -15,7 +15,7 @@ namespace Myra.Graphics2D.UI
 			_checkBoxFocusedWidgetFrame.GridRow = 1;
 
 			_checkBoxGlyphFrames = new CheckBox();
-			_checkBoxGlyphFrames.Text = "Draw white frame around every letter glyph";
+			_checkBoxGlyphFrames.Text = "Draw white frame around every letter glyph in TextField";
 			_checkBoxGlyphFrames.Id = "_checkBoxGlyphFrames";
 			_checkBoxGlyphFrames.GridRow = 2;
 

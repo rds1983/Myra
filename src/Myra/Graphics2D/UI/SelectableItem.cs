@@ -10,12 +10,12 @@ using Microsoft.Xna.Framework;
 using Xenko.Core.Mathematics;
 #endif
 
+
 namespace Myra.Graphics2D.UI
 {
-	public class TabItem : ISelectorItem, IContent
+	public class SelectableItem: IItemWithId
 	{
-		private string _id;
-		private string _text;
+		private string _id, _text;
 		private Color? _color;
 
 		public string Id
@@ -77,76 +77,30 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		public Widget Content
-		{
-			get; set;
-		}
-
-		[HiddenInEditor]
 		[XmlIgnore]
 		public object Tag
 		{
 			get; set;
 		}
 
-		[HiddenInEditor]
-		[XmlIgnore]
-		public IRenderable Image
-		{
-			get; set;
-		}
-
-		[HiddenInEditor]
-		[XmlIgnore]
-		public int ImageTextSpacing
-		{
-			get; set;
-		}
-
-		[HiddenInEditor]
-		[XmlIgnore]
-		internal Button Button
-		{
-			get; set;
-		}
-
-		[HiddenInEditor]
-		[XmlIgnore]
-		public bool IsSelected
-		{
-			get
-			{
-				return Button.IsPressed;
-			}
-
-			set
-			{
-				if (value == IsSelected)
-				{
-					return;
-				}
-
-				Button.IsPressed = value;
-				FireSelected();
-			}
-		}
-
 		public event EventHandler Changed;
-		public event EventHandler SelectedChanged;
 
-		public TabItem()
+		public SelectableItem()
 		{
 		}
 
-		public TabItem(string text, Color? color = null, object tag = null, Widget content = null)
+		public SelectableItem(string text, Color? color, object tag)
 		{
 			Text = text;
 			Color = color;
 			Tag = tag;
-			Content = content;
 		}
 
-		public TabItem(string text, Widget content): this(text, null, null, content)
+		public SelectableItem(string text, Color? color) : this(text, color, null)
+		{
+		}
+
+		public SelectableItem(string text) : this(text, null)
 		{
 		}
 
@@ -172,15 +126,6 @@ namespace Myra.Graphics2D.UI
 		protected void FireChanged()
 		{
 			var ev = Changed;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
-		}
-
-		public void FireSelected()
-		{
-			var ev = SelectedChanged;
 			if (ev != null)
 			{
 				ev(this, EventArgs.Empty);

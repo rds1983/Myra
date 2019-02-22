@@ -107,7 +107,7 @@ namespace Myra.Graphics2D.UI
 		{
 			item.Changed += ItemOnChanged;
 
-			Button button = new ListButton(TabControlStyle.TabItemStyle)
+			Button button = new ListButton(TabControlStyle.TabItemStyle, this)
 			{
 				Text = item.Text,
 				TextColor = item.Color ?? TabControlStyle.TabItemStyle.LabelStyle.TextColor,
@@ -149,16 +149,14 @@ namespace Myra.Graphics2D.UI
 			UpdateGridPositions();
 		}
 
-		protected override void UnselectItem(TabItem item)
+		protected override void OnSelectedItemChanged()
 		{
-			item.Button.IsPressed = false;
-		}
+			base.OnSelectedItemChanged();
 
-		protected override void SelectItem(TabItem item)
-		{
-			item.Button.IsPressed = true;
-			_panelContent.InternalChild = item.Content;
-			item.FireSelected();
+			if (SelectedItem != null)
+			{
+				_panelContent.InternalChild = SelectedItem.Content;
+			}
 		}
 
 		protected override void Reset()

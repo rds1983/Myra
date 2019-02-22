@@ -88,7 +88,7 @@ namespace Myra.Graphics2D.UI
 		{
 			item.Changed += ItemOnChanged;
 
-			var button = new ListButton(_dropDownItemStyle)
+			var button = new ListButton(_dropDownItemStyle, this)
 			{
 				Text = item.Text,
 				TextColor = item.Color ?? _dropDownItemStyle.LabelStyle.TextColor,
@@ -126,14 +126,9 @@ namespace Myra.Graphics2D.UI
 			UpdateGridPositions();
 		}
 
-		protected override void UnselectItem(ListItem item)
+		protected override void OnSelectedItemChanged()
 		{
-			((Button)item.Widget).IsPressed = false;
-		}
-
-		protected override void SelectItem(ListItem item)
-		{
-			((Button)item.Widget).IsPressed = true;
+			base.OnSelectedItemChanged();
 			UpdateSelectedItem();
 		}
 

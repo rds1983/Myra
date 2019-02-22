@@ -28,7 +28,7 @@ namespace Myra.Graphics2D.UI
 		private bool _cursorOn = true;
 		private bool _wrap = false;
 		private readonly TextEdit _textEdit;
-		public readonly FormattedText _formattedText = new FormattedText();
+		public readonly FormattedTextWithGlyphs _formattedText = new FormattedTextWithGlyphs();
 		private readonly StringBuilder _stringBuilder = new StringBuilder();
 		private bool _isTouchDown;
 		private int? _lastCursorY;
@@ -288,29 +288,9 @@ namespace Myra.Graphics2D.UI
 			return true;
 		}
 
-		private bool IsShiftDown
-		{
-			get
-			{
-				return Desktop.DownKeys.Contains(Keys.LeftShift) || Desktop.DownKeys.Contains(Keys.RightShift);
-			}
-		}
-
-		private bool IsControlDown
-		{
-			get
-			{
-#if !XENKO
-				return Desktop.DownKeys.Contains(Keys.LeftControl) || Desktop.DownKeys.Contains(Keys.RightControl);
-#else
-				return Desktop.DownKeys.Contains(Keys.LeftCtrl) || Desktop.DownKeys.Contains(Keys.RightCtrl);
-#endif
-			}
-		}
-
 		private ControlKeys ApplyShiftOrNone(ControlKeys k)
 		{
-			if (IsShiftDown)
+			if (Desktop.IsShiftDown)
 			{
 				k |= ControlKeys.Shift;
 			}
@@ -327,7 +307,7 @@ namespace Myra.Graphics2D.UI
 			switch (k)
 			{
 				case Keys.C:
-					if (IsControlDown)
+					if (Desktop.IsControlDown)
 					{
 						if (_textEdit.SelectEnd != _textEdit.SelectStart)
 						{
@@ -338,7 +318,7 @@ namespace Myra.Graphics2D.UI
 					}
 					break;
 				case Keys.V:
-					if (!Readonly && IsControlDown)
+					if (!Readonly && Desktop.IsControlDown)
 					{
 						var clipboardText = Clipboard.GetText();
 						if (!string.IsNullOrEmpty(clipboardText))
@@ -356,29 +336,29 @@ namespace Myra.Graphics2D.UI
 					break;
 
 				case Keys.Z:
-					if (!Readonly && IsControlDown)
+					if (!Readonly && Desktop.IsControlDown)
 					{
 						controlKey = ControlKeys.Undo;
 					}
 					break;
 
 				case Keys.Y:
-					if (!Readonly && IsControlDown)
+					if (!Readonly && Desktop.IsControlDown)
 					{
 						controlKey = ControlKeys.Redo;
 					}
 					break;
 
 				case Keys.Left:
-					if (IsShiftDown && IsControlDown)
+					if (Desktop.IsShiftDown && Desktop.IsControlDown)
 					{
 						controlKey = ControlKeys.Shift | ControlKeys.WordLeft;
 					}
-					else if (IsShiftDown)
+					else if (Desktop.IsShiftDown)
 					{
 						controlKey = ControlKeys.Shift | ControlKeys.Left;
 					}
-					else if (IsControlDown)
+					else if (Desktop.IsControlDown)
 					{
 						controlKey = ControlKeys.WordLeft;
 					}
@@ -389,15 +369,15 @@ namespace Myra.Graphics2D.UI
 					break;
 
 				case Keys.Right:
-					if (IsShiftDown && IsControlDown)
+					if (Desktop.IsShiftDown && Desktop.IsControlDown)
 					{
 						controlKey = ControlKeys.Shift | ControlKeys.WordRight;
 					}
-					else if (IsShiftDown)
+					else if (Desktop.IsShiftDown)
 					{
 						controlKey = ControlKeys.Shift | ControlKeys.Right;
 					}
-					else if (IsControlDown)
+					else if (Desktop.IsControlDown)
 					{
 						controlKey = ControlKeys.WordRight;
 					}
@@ -431,15 +411,15 @@ namespace Myra.Graphics2D.UI
 					break;
 
 				case Keys.Home:
-					if (IsShiftDown && IsControlDown)
+					if (Desktop.IsShiftDown && Desktop.IsControlDown)
 					{
 						controlKey = ControlKeys.Shift | ControlKeys.TextStart;
 					}
-					else if (IsShiftDown)
+					else if (Desktop.IsShiftDown)
 					{
 						controlKey = ControlKeys.Shift | ControlKeys.LineStart;
 					}
-					else if (IsControlDown)
+					else if (Desktop.IsControlDown)
 					{
 						controlKey = ControlKeys.TextStart;
 					}
@@ -451,15 +431,15 @@ namespace Myra.Graphics2D.UI
 					break;
 
 				case Keys.End:
-					if (IsShiftDown && IsControlDown)
+					if (Desktop.IsShiftDown && Desktop.IsControlDown)
 					{
 						controlKey = ControlKeys.Shift | ControlKeys.TextEnd;
 					}
-					else if (IsShiftDown)
+					else if (Desktop.IsShiftDown)
 					{
 						controlKey = ControlKeys.Shift | ControlKeys.LineEnd;
 					}
-					else if (IsControlDown)
+					else if (Desktop.IsControlDown)
 					{
 						controlKey = ControlKeys.TextEnd;
 					}
@@ -500,7 +480,7 @@ namespace Myra.Graphics2D.UI
 
 			var mousePos = Desktop.MousePosition;
 
-			_textEdit.Click(mousePos.X, mousePos.Y, IsShiftDown);
+			_textEdit.Click(mousePos.X, mousePos.Y, Desktop.IsShiftDown);
 			_isTouchDown = true;
 		}
 
