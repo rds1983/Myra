@@ -12,6 +12,7 @@ using Myra.MiniJSON;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace Myra.Graphics2D.TextureAtlases
 {
@@ -94,7 +95,7 @@ namespace Myra.Graphics2D.TextureAtlases
 				root[pair.Key] = entry;
 			}
 
-			return root.ToString();
+			return Json.Serialize(root);
 		}
 
 		public static TextureRegionAtlas FromJson(string json, Texture2D texture)

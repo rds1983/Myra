@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra", "..\..\src\Myra\Myra.csproj", "{4DCBB001-9C79-4F6B-996D-D654062D93E0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E7C2030A-AF9E-41B2-BD5C-39D8F70A09A7}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.UIEditor", "..\..\src\Myra.UIEditor\Myra.UIEditor.csproj", "{3B7E30AA-A659-4A13-9223-B9E0442E5B55}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{EAB0AA24-7185-4897-A866-AE87AF3F2E0B}"
@@ -24,6 +22,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.Notepad", "..\..\samples\Myra.Samples.Notepad\Myra.Samples.Notepad.csproj", "{C98D1921-8281-4FA4-B451-E648B59C23B5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyraPad", "..\..\src\MyraPad\MyraPad.csproj", "{78E5B206-FC8A-42A3-A0DB-FB82D12183B6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Tools.ToMyraAtlasConverter", "..\..\src\Myra.Tools.MyraAtlasConverter\Myra.Tools.ToMyraAtlasConverter.csproj", "{0E975F74-0DE6-4D3C-A969-EE70A9E7D005}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +67,10 @@ Global
 		{78E5B206-FC8A-42A3-A0DB-FB82D12183B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78E5B206-FC8A-42A3-A0DB-FB82D12183B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78E5B206-FC8A-42A3-A0DB-FB82D12183B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E975F74-0DE6-4D3C-A969-EE70A9E7D005}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E975F74-0DE6-4D3C-A969-EE70A9E7D005}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E975F74-0DE6-4D3C-A969-EE70A9E7D005}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E975F74-0DE6-4D3C-A969-EE70A9E7D005}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

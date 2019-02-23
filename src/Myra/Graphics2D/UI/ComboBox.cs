@@ -15,25 +15,22 @@ namespace Myra.Graphics2D.UI
 	public class ComboBox : Selector<Button, ListItem>
 	{
 		private readonly Grid _itemsContainer;
-		private bool _isExpanded;
 		private ButtonStyle _dropDownItemStyle;
 
 		[HiddenInEditor]
 		[XmlIgnore]
 		public bool IsExpanded
 		{
-			get { return _isExpanded; }
+			get { return Desktop.ContextMenu == _itemsContainer; }
 
 			private set
 			{
-				if (value == _isExpanded)
+				if (value == IsExpanded)
 				{
 					return;
 				}
 
-				_isExpanded = value;
-
-				if (!_isExpanded)
+				if (IsExpanded)
 				{
 					Desktop.HideContextMenu();
 				}

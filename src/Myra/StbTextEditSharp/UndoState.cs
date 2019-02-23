@@ -5,16 +5,16 @@ namespace StbTextEditSharp
 	internal class UndoState
 	{
 		public int redo_char_point;
-		public short redo_point;
+		public int redo_point;
 		public int[] undo_char = new int[999];
 		public int undo_char_point;
-		public short undo_point;
+		public int undo_point;
 		public UndoRecord[] undo_rec = new UndoRecord[99];
 
 		public void FlushRedo()
 		{
-			redo_point = 99;
-			redo_char_point = 999;
+			redo_point = undo_rec.Length;
+			redo_char_point = undo_char.Length;
 		}
 
 		public void DiscardUndo()
@@ -88,16 +88,16 @@ namespace StbTextEditSharp
 			var rposv = rpos.Value;
 
 			undo_rec[rposv].where = pos;
-			undo_rec[rposv].insert_length = (short)insert_len;
-			undo_rec[rposv].delete_length = (short)delete_len;
+			undo_rec[rposv].insert_length = insert_len;
+			undo_rec[rposv].delete_length =  delete_len;
 			if (insert_len == 0)
 			{
 				undo_rec[rposv].char_storage = -1;
 				return null;
 			}
 
-			undo_rec[rposv].char_storage = (short)undo_char_point;
-			undo_char_point = (short)(undo_char_point + insert_len);
+			undo_rec[rposv].char_storage = undo_char_point;
+			undo_char_point = undo_char_point + insert_len;
 			return undo_rec[rposv].char_storage;
 		}
 	}

@@ -801,18 +801,8 @@ namespace MyraPad
 			{
 				var data = File.ReadAllText(filePath);
 
-				Project project = null;
-				if (filePath.EndsWith(".ui"))
-				{
-					// JSON
-					var dialog = Dialog.CreateMessageBox("Error", "'.ui' is no longer supported. Use MyraPad 0.8.2 to convert it to '.xml'.");
-					dialog.ShowModal(_desktop);
-					return;
-				} else
-				{
-					// XML
-					project = Project.LoadFromXml(data);
-				}
+
+				var	project = Project.LoadFromXml(data);
 
 				Project = project;
 				FilePath = filePath;
@@ -824,6 +814,7 @@ namespace MyraPad
 				}
 
 				_ui._textSource.Text = data;
+				_desktop.FocusedWidget = _ui._textSource;
 
 				IsDirty = false;
 			}

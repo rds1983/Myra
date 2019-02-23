@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Myra\Myra.csproj" />
+    <ProjectReference Include="..\Myra\Myra.csproj" />
   </ItemGroup>
 
 </Project>
