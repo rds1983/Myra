@@ -228,10 +228,10 @@ namespace Myra.Graphics2D.UI
 
 			var lineHeight = CrossEngineStuff.LineSpacing(_formattedText.Font);
 
-			if (p.Y - lineHeight < asScrollPane.ActualBounds.Top)
+			if (p.Y < asScrollPane.ActualBounds.Top)
 			{
 				var scrollMaximum = asScrollPane.ScrollMaximum;
-				var newY = (-Top + p.Y - lineHeight) * scrollMaximum.Y / scrollMaximumPixels.Y;
+				var newY = (-Top + p.Y - asScrollPane.ActualBounds.Top) * scrollMaximum.Y / scrollMaximumPixels.Y;
 
 				var sp = asScrollPane.ScrollPosition;
 				asScrollPane.ScrollPosition = new Point(sp.X, newY);
@@ -239,13 +239,14 @@ namespace Myra.Graphics2D.UI
 			} else if (p.Y + lineHeight > asScrollPane.ActualBounds.Bottom)
 			{
 				var scrollMaximum = asScrollPane.ScrollMaximum;
-				var newY = (-Top + p.Y + lineHeight - asScrollPane.ActualBounds.Height) * scrollMaximum.Y / scrollMaximumPixels.Y;
+				var newY = (-Top + p.Y + lineHeight - asScrollPane.ActualBounds.Bottom) * scrollMaximum.Y / scrollMaximumPixels.Y;
 
 				var sp = asScrollPane.ScrollPosition;
 				asScrollPane.ScrollPosition = new Point(sp.X, newY);
 			}
 
 			_lastCursorY = p.Y;
+			UpdateLayout();
 		}
 
 		private bool SetText(string value, bool byUser)
