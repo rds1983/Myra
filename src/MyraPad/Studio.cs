@@ -15,12 +15,16 @@ using Myra.MiniJSON;
 using MyraPad.UI;
 using Myra.Utility;
 using Myra;
+using System.Xml;
+using System.Text.RegularExpressions;
 
 namespace MyraPad
 {
 	public class Studio : Game
 	{
 		private static Studio _instance;
+
+		private readonly List<WidgetInfo> _projectInfo = new List<WidgetInfo>();
 
 		private readonly GraphicsDeviceManager _graphicsDeviceManager;
 		private readonly State _state;
@@ -37,6 +41,8 @@ namespace MyraPad
 		private string _lastFolder;
 		private bool _isDirty;
 		private Project _project;
+		private int? _tagStart, _tagEnd;
+
 
 		public static Studio Instance
 		{
@@ -228,6 +234,8 @@ namespace MyraPad
 
 			_ui._menuHelpAbout.Selected += AboutItemOnClicked;
 
+			_ui._textSource.CursorPositionChanged += _textSource_CursorPositionChanged;
+
 			_propertyGrid = new PropertyGrid();
 			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
 
@@ -288,6 +296,87 @@ namespace MyraPad
 			_desktop.Widgets.Add(_statisticsGrid);
 
 			UpdateMenuFile();
+		}
+
+		private void _textSource_CursorPositionChanged(object sender, EventArgs e)
+		{
+			try
+			{
+				_tagStart = _tagEnd = null;
+				_propertyGrid.Object = null;
+
+				if (string.IsNullOrEmpty(_ui._textSource.Text))
+				{
+					return;
+				}
+
+				var text = _ui._textSource.Text;
+
+				var start = _ui._textSource.CursorPosition;
+				var needsCloseTag = true;
+
+				// Find start
+				while (start >= 0)
+				{
+					var c = text[start];
+					if (c == '>' ||
+						(start == 0 && c != '<'))
+					{
+						return;
+					}
+
+					if (c == '/')
+					{
+						needsCloseTag = false;
+					}
+
+					if (c == '<')
+					{
+						break;
+					}
+
+					--start;
+				}
+
+				var end = _ui._textSource.CursorPosition;
+				while (end < text.Length)
+				{
+					var c = text[end];
+					if (c == '<' ||
+						(end == text.Length - 1 && c != '>'))
+					{
+						return;
+					}
+
+					if (c == '/')
+					{
+						needsCloseTag = false;
+					}
+
+					if (c == '>')
+					{
+						break;
+					}
+
+					++end;
+				}
+
+				var xml = text.Substring(start, end - start + 1);
+
+				if (needsCloseTag)
+				{
+					var tagName = Regex.Match(xml, "<([A-Za-z0-9]+)").Groups[1].Value;
+
+					xml += "</" + tagName + ">";
+				}
+
+				var obj = Project.LoadObjectFromXml(xml);
+
+				_propertyGrid.Object = obj;
+			}
+			catch (Exception)
+			{
+			}
 		}
 
 		private void OnMenuFileReloadSelected(object sender, EventArgs e)

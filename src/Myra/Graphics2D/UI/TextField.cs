@@ -167,6 +167,19 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public int CursorPosition
+		{
+			get
+			{
+				return _textEdit.CursorIndex;
+			}
+
+			set
+			{
+				_textEdit.CursorIndex = value;
+			}
+		}
+
 		/// <summary>
 		/// Fires every time when the text had been changed
 		/// </summary>
@@ -176,6 +189,20 @@ namespace Myra.Graphics2D.UI
 		/// Fires every time when the text had been changed by user(doesnt fire if it had been assigned through code)
 		/// </summary>
 		public event EventHandler<ValueChangedEventArgs<string>> TextChangedByUser;
+
+		public event EventHandler CursorPositionChanged
+		{
+			add
+			{
+				_textEdit.CursorIndexChanged += value;
+			}
+
+			remove
+			{
+				_textEdit.CursorIndexChanged -= value;
+			}
+		}
+
 
 		public TextField(TextFieldStyle style)
 		{

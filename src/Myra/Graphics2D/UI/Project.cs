@@ -197,6 +197,28 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
+		public static object LoadObjectFromXml(string data)
+		{
+			XDocument xDoc = XDocument.Parse(data);
+
+			Type itemType;
+			if (xDoc.Root.Name != "Proportion")
+			{
+
+				var itemNamespace = typeof(Widget).Namespace;
+				itemType = typeof(Widget).Assembly.GetType(itemNamespace + "." + xDoc.Root.Name);
+			}
+			else
+			{
+				itemType = typeof(Grid.Proportion);
+			}
+
+			var item = Activator.CreateInstance(itemType);
+			InternalLoad(item, xDoc.Root);
+
+			return item;
+		}
+
 		private static void InternalLoad(object obj, XElement el)
 		{
 			var type = obj.GetType();
