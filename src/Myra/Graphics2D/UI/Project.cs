@@ -108,7 +108,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private XElement InternalSave(object obj)
+		private XElement InternalSave(object obj, bool skipComplex = false)
 		{
 			var type = obj.GetType();
 
@@ -154,32 +154,35 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			foreach (var property in complexProperties)
+			if (!skipComplex)
 			{
-				var value = property.GetValue(obj);
+				foreach (var property in complexProperties)
+				{
+					var value = property.GetValue(obj);
 
-				if (value == null)
-				{
-					continue;
-				}
-
-				var asList = value as IList;
-				if (asList == null)
-				{
-					el.Add(InternalSave(value));
-				}
-				else
-				{
-					var collectionRoot = el;
-					if (!typeof(IItemWithId).IsAssignableFrom(property.PropertyType.GenericTypeArguments[0]))
+					if (value == null)
 					{
-						collectionRoot = new XElement(property.Name);
-						el.Add(collectionRoot);
+						continue;
 					}
 
-					foreach (var comp in asList)
+					var asList = value as IList;
+					if (asList == null)
 					{
-						collectionRoot.Add(InternalSave(comp));
+						el.Add(InternalSave(value));
+					}
+					else
+					{
+						var collectionRoot = el;
+						if (!typeof(IItemWithId).IsAssignableFrom(property.PropertyType.GenericTypeArguments[0]))
+						{
+							collectionRoot = new XElement(property.Name);
+							el.Add(collectionRoot);
+						}
+
+						foreach (var comp in asList)
+						{
+							collectionRoot.Add(InternalSave(comp));
+						}
 					}
 				}
 			}
@@ -217,6 +220,11 @@ namespace Myra.Graphics2D.UI
 			InternalLoad(item, xDoc.Root);
 
 			return item;
+		}
+
+		public string SaveObjectToXml(object obj)
+		{
+			return InternalSave(obj, true).ToString();
 		}
 
 		private static void InternalLoad(object obj, XElement el)

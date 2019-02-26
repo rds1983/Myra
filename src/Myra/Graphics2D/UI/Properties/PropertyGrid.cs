@@ -283,6 +283,14 @@ namespace Myra.Graphics2D.UI.Properties
 		private void FireChanged(string name)
 		{
 			var ev = PropertyChanged;
+
+			var p = _parentGrid;
+			while (p != null)
+			{
+				ev = p.PropertyChanged;
+				p = p._parentGrid;
+			}
+
 			if (ev != null)
 			{
 				ev(this, new GenericEventArgs<string>(name));

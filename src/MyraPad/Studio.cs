@@ -235,6 +235,7 @@ namespace MyraPad
 			_ui._menuHelpAbout.Selected += AboutItemOnClicked;
 
 			_ui._textSource.CursorPositionChanged += _textSource_CursorPositionChanged;
+			_ui._textSource.TextChanged += _textSource_TextChanged;
 
 			_propertyGrid = new PropertyGrid();
 			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
@@ -296,6 +297,17 @@ namespace MyraPad
 			_desktop.Widgets.Add(_statisticsGrid);
 
 			UpdateMenuFile();
+		}
+
+		private void _textSource_TextChanged(object sender, ValueChangedEventArgs<string> e)
+		{
+			try
+			{
+				Project = Project.LoadFromXml(_ui._textSource.Text);
+			}
+			catch (Exception)
+			{
+			}
 		}
 
 		private void _textSource_CursorPositionChanged(object sender, EventArgs e)
@@ -371,6 +383,9 @@ namespace MyraPad
 				}
 
 				var obj = Project.LoadObjectFromXml(xml);
+
+				_tagStart = start;
+				_tagEnd = end;
 
 				_propertyGrid.Object = obj;
 			}
@@ -641,6 +656,16 @@ namespace MyraPad
 		private void PropertyGridOnPropertyChanged(object sender, GenericEventArgs<string> eventArgs)
 		{
 			IsDirty = true;
+
+			var xml = _project.SaveObjectToXml(_propertyGrid.Object);
+
+			if (_tagStart != null && _tagEnd != null)
+			{
+				var t = _ui._textSource.Text;
+
+				_ui._textSource.Text = t.Substring(0, _tagStart.Value) + xml + t.Substring(_tagEnd.Value + 1);
+				_tagEnd = _tagStart.Value + xml.Length - 1;
+			}
 		}
 
 		private void QuitItemOnDown(object sender, EventArgs eventArgs)
@@ -891,7 +916,7 @@ namespace MyraPad
 				var data = File.ReadAllText(filePath);
 
 
-				var	project = Project.LoadFromXml(data);
+				var project = Project.LoadFromXml(data);
 
 				Project = project;
 				FilePath = filePath;
