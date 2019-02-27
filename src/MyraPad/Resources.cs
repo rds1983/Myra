@@ -6,7 +6,7 @@ namespace MyraPad
 	{
 		private static readonly ResourceAssetResolver _assetResolver = new ResourceAssetResolver(typeof(Resources).Assembly, "MyraPad.Resources.");
 
-		private static string _exportCsDesigner, _exportCsMain;
+		private static string _exportCsDesigner, _exportCsMain, _newProjectTemplate;
 
 		public static string ExportCSDesigner
 		{
@@ -31,6 +31,19 @@ namespace MyraPad
 				}
 
 				return _exportCsMain;
+			}
+		}
+
+		public static string NewProjectTemplate
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(_newProjectTemplate))
+				{
+					_newProjectTemplate = _assetResolver.ReadAsString("NewProject.xmltemplate");
+				}
+
+				return _newProjectTemplate;
 			}
 		}
 	}

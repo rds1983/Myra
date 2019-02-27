@@ -26,6 +26,17 @@ namespace MyraPad
 		public string EditedFile { get; set; }
 		public string LastFolder { get; set; }
 		public uint[] UserColors { get; set; }
+		public Options Options;
+
+		public State()
+		{
+			Options = new Options
+			{
+				AutoIndent = true,
+				IndentSpacesSize = 2,
+				AutoClose = true
+			};
+		}
 
 		public void Save()
 		{

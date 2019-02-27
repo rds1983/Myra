@@ -15,8 +15,8 @@ using Myra.MiniJSON;
 using MyraPad.UI;
 using Myra.Utility;
 using Myra;
-using System.Xml;
 using System.Text.RegularExpressions;
+using Microsoft.Xna.Framework.Input;
 
 namespace MyraPad
 {
@@ -42,6 +42,10 @@ namespace MyraPad
 		private bool _isDirty;
 		private Project _project;
 		private int? _tagStart, _tagEnd;
+		private bool _needsCloseTag;
+		private int _line, _col, _indentLevel;
+		private bool _applyAutoIndent = false;
+		private bool _applyAutoClose = false;
 
 
 		public static Studio Instance
@@ -180,11 +184,7 @@ namespace MyraPad
 
 			BuildUI();
 
-			if (_state == null || string.IsNullOrEmpty(_state.EditedFile))
-			{
-				New(new Grid());
-			}
-			else
+			if (_state != null && !string.IsNullOrEmpty(_state.EditedFile))
 			{
 				Load(_state.EditedFile);
 			}
@@ -236,6 +236,8 @@ namespace MyraPad
 
 			_ui._textSource.CursorPositionChanged += _textSource_CursorPositionChanged;
 			_ui._textSource.TextChanged += _textSource_TextChanged;
+			_ui._textSource.KeyDown += _textSource_KeyDown;
+			_ui._textSource.Char += _textSource_Char;
 
 			_propertyGrid = new PropertyGrid();
 			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
@@ -299,10 +301,79 @@ namespace MyraPad
 			UpdateMenuFile();
 		}
 
+		private void _textSource_Char(object sender, GenericEventArgs<char> e)
+		{
+			_applyAutoClose = e.Data == '>';
+		}
+
+		private void _textSource_KeyDown(object sender, GenericEventArgs<Keys> e)
+		{
+			_applyAutoIndent = e.Data == Keys.Enter;
+		}
+
+		private void ApplyAutoIndent()
+		{
+			if (!_state.Options.AutoIndent || _state.Options.IndentSpacesSize <= 0 || !_applyAutoIndent)
+			{
+				return;
+			}
+
+			_applyAutoIndent = false;
+
+			var text = _ui._textSource.Text;
+			var pos = _ui._textSource.CursorPosition;
+
+			if (string.IsNullOrEmpty(text) || pos == 0 || pos >= text.Length)
+			{
+				return;
+			}
+
+			var il = _indentLevel;
+			if (pos < text.Length - 2 && text[pos] == '<' && text[pos + 1] == '/')
+			{
+				--il;
+			}
+
+			if (il <= 0)
+			{
+				return;
+			}
+
+			// Insert indent
+			var indent = new string(' ', il * _state.Options.IndentSpacesSize);
+			_ui._textSource.Text = text.Substring(0, pos) + indent + text.Substring(pos);
+
+			// Move cursor
+			_ui._textSource.CursorPosition += indent.Length;
+		}
+
+		private void ApplyAutoClose()
+		{
+			if (!_state.Options.AutoClose || !_applyAutoClose)
+			{
+				return;
+			}
+
+			_applyAutoClose = false;
+
+			var text = _ui._textSource.Text;
+			var pos = _ui._textSource.CursorPosition;
+
+			if (_tagStart == null || _tagEnd == null || !_needsCloseTag)
+			{
+				return;
+			}
+
+			var tagName = text.Substring(_tagStart.Value + 1, _tagEnd.Value - _tagStart.Value - 1);
+			var close = "</" + tagName + ">";
+			_ui._textSource.Text = text.Substring(0, pos) + close + text.Substring(pos);
+		}
+
 		private void _textSource_TextChanged(object sender, ValueChangedEventArgs<string> e)
 		{
 			try
 			{
+				IsDirty = true;
 				Project = Project.LoadFromXml(_ui._textSource.Text);
 			}
 			catch (Exception)
@@ -310,84 +381,146 @@ namespace MyraPad
 			}
 		}
 
-		private void _textSource_CursorPositionChanged(object sender, EventArgs e)
+		private void UpdatePositions()
 		{
-			try
-			{
-				_tagStart = _tagEnd = null;
-				_propertyGrid.Object = null;
+			_line = _col = _indentLevel = 0;
 
-				if (string.IsNullOrEmpty(_ui._textSource.Text))
+			if (string.IsNullOrEmpty(_ui._textSource.Text))
+			{
+				return;
+			}
+
+			var cursorPos = _ui._textSource.CursorPosition;
+			var text = _ui._textSource.Text;
+
+			for (var i = 0; i < Math.Min(text.Length, cursorPos); ++i)
+			{
+				var c = text[i];
+				if (c == '\n')
+				{
+					++_line;
+					_col = 0;
+				}
+
+				if (c == '>')
+				{
+					if (i > 0 && text[i - 1] == '/')
+					{
+						// Tag without closing
+						continue;
+					}
+
+					for (var j = i; j >= 0; j--)
+					{
+						if (text[j] == '<')
+						{
+							if (text[j + 1] != '/')
+							{
+								++_indentLevel;
+							}
+							else
+							{
+								--_indentLevel;
+							}
+
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		private void UpdateTag()
+		{
+			_tagStart = _tagEnd = null;
+			_needsCloseTag = false;
+			_propertyGrid.Object = null;
+
+			if (string.IsNullOrEmpty(_ui._textSource.Text))
+			{
+				return;
+			}
+
+			var cursorPos = _ui._textSource.CursorPosition;
+			var text = _ui._textSource.Text;
+
+			var start = cursorPos;
+			var end = start;
+
+			if (start > 1 && (text[start - 1] == '>' || text[start] == '>'))
+			{
+				start -= 2;
+				end -= 2;
+			}
+
+			// Find start
+			while (start >= 0)
+			{
+				var c = text[start];
+				if (c == '>' ||
+					(start == 0 && c != '<'))
 				{
 					return;
 				}
 
-				var text = _ui._textSource.Text;
-
-				var start = _ui._textSource.CursorPosition;
-				var needsCloseTag = true;
-
-				// Find start
-				while (start >= 0)
+				if (c == '<')
 				{
-					var c = text[start];
-					if (c == '>' ||
-						(start == 0 && c != '<'))
-					{
-						return;
-					}
-
-					if (c == '/')
-					{
-						needsCloseTag = false;
-					}
-
-					if (c == '<')
-					{
-						break;
-					}
-
-					--start;
+					break;
 				}
 
-				var end = _ui._textSource.CursorPosition;
-				while (end < text.Length)
+				--start;
+			}
+
+			while (end < text.Length)
+			{
+				var c = text[end];
+				if ((end > start && c == '<') ||
+					(end == text.Length - 1 && c != '>'))
 				{
-					var c = text[end];
-					if (c == '<' ||
-						(end == text.Length - 1 && c != '>'))
-					{
-						return;
-					}
-
-					if (c == '/')
-					{
-						needsCloseTag = false;
-					}
-
-					if (c == '>')
-					{
-						break;
-					}
-
-					++end;
+					return;
 				}
 
-				var xml = text.Substring(start, end - start + 1);
-
-				if (needsCloseTag)
+				if (c == '>')
 				{
-					var tagName = Regex.Match(xml, "<([A-Za-z0-9]+)").Groups[1].Value;
-
-					xml += "</" + tagName + ">";
+					break;
 				}
 
-				var obj = Project.LoadObjectFromXml(xml);
+				++end;
+			}
 
-				_tagStart = start;
-				_tagEnd = end;
+			var xml = text.Substring(start, end - start + 1);
 
-				_propertyGrid.Object = obj;
+			if (xml[1] == '/')
+			{
+				// Close tag
+				return;
+			}
+
+			_needsCloseTag = xml[xml.Length - 2] != '/';
+
+			if (_needsCloseTag)
+			{
+				var tagName = Regex.Match(xml, "<([A-Za-z0-9]+)").Groups[1].Value;
+
+				xml += "</" + tagName + ">";
+			}
+
+			var obj = Project.LoadObjectFromXml(xml);
+
+			_tagStart = start;
+			_tagEnd = end;
+
+			_propertyGrid.Object = obj;
+		}
+
+		private void _textSource_CursorPositionChanged(object sender, EventArgs e)
+		{
+			try
+			{
+				UpdatePositions();
+				UpdateTag();
+				ApplyAutoIndent();
+				ApplyAutoClose();
 			}
 			catch (Exception)
 			{
@@ -659,6 +792,11 @@ namespace MyraPad
 
 			var xml = _project.SaveObjectToXml(_propertyGrid.Object);
 
+			if (_needsCloseTag)
+			{
+				xml = xml.Replace("/>", ">");
+			}
+
 			if (_tagStart != null && _tagEnd != null)
 			{
 				var t = _ui._textSource.Text;
@@ -710,44 +848,39 @@ namespace MyraPad
 					return;
 				}
 
-				Container rootWidget = null;
+				var rootType = "Grid";
 
-				if (dlg._radioButtonGrid.IsPressed)
-				{
-					rootWidget = new Grid();
-				}
-				else
 				if (dlg._radioButtonPanel.IsPressed)
 				{
-					rootWidget = new Panel();
+					rootType = "Panel";
 				}
 				else
 				if (dlg._radioButtonScrollPane.IsPressed)
 				{
-					rootWidget = new ScrollPane();
+					rootType = "ScrollPane";
 				}
 				else
 				if (dlg._radioButtonHorizontalSplitPane.IsPressed)
 				{
-					rootWidget = new HorizontalSplitPane();
+					rootType = "HorizontalSplitPane";
 				}
 				else
 				if (dlg._radioButtonVerticalSplitPane.IsPressed)
 				{
-					rootWidget = new VerticalSplitPane();
+					rootType = "VerticalSplitPane";
 				}
 				else
 				if (dlg._radioButtonWindow.IsPressed)
 				{
-					rootWidget = new Window();
+					rootType = "Window";
 				}
 				else
 				if (dlg._radioButtonDialog.IsPressed)
 				{
-					rootWidget = new Dialog();
+					rootType = "Dialog";
 				}
 
-				New(rootWidget);
+				New(rootType);
 			};
 
 			dlg.ShowModal(_desktop);
@@ -837,14 +970,27 @@ namespace MyraPad
 			state.Save();
 		}
 
-		private void New(Container root)
+		private void New(string rootType)
 		{
-			var project = new Project
-			{
-				Root = root
-			};
+			var source = Resources.NewProjectTemplate.Replace("$containerType", rootType);
 
-			Project = project;
+			_ui._textSource.Text = source;
+
+			var newLineCount = 0;
+			var pos = 0;
+			while (pos < _ui._textSource.Text.Length && newLineCount < 3)
+			{
+				++pos;
+
+				if (_ui._textSource.Text[pos] == '\n')
+				{
+					++newLineCount;
+				}
+			}
+
+			_ui._textSource.CursorPosition = pos;
+			_desktop.FocusedWidget = _ui._textSource;
+
 
 			FilePath = string.Empty;
 			IsDirty = false;
@@ -858,8 +1004,7 @@ namespace MyraPad
 				return;
 			}
 
-			var data = _project.Save();
-			File.WriteAllText(filePath, data);
+			File.WriteAllText(filePath, _ui._textSource.Text);
 
 			FilePath = filePath;
 			IsDirty = false;
@@ -876,11 +1021,6 @@ namespace MyraPad
 
 				if (!string.IsNullOrEmpty(FilePath))
 				{
-					if (FilePath.EndsWith(".ui"))
-					{
-						FilePath = FilePath.Substring(0, FilePath.Length - 3) + ".xml";
-					}
-
 					dlg.FilePath = FilePath;
 				}
 				else if (!string.IsNullOrEmpty(_lastFolder))
@@ -900,11 +1040,6 @@ namespace MyraPad
 			}
 			else
 			{
-				if (FilePath.EndsWith(".ui"))
-				{
-					FilePath = FilePath.Substring(0, FilePath.Length - 3) + ".xml";
-				}
-
 				ProcessSave(FilePath);
 			}
 		}
@@ -915,17 +1050,7 @@ namespace MyraPad
 			{
 				var data = File.ReadAllText(filePath);
 
-
-				var project = Project.LoadFromXml(data);
-
-				Project = project;
 				FilePath = filePath;
-
-				_ui._projectHolder.Background = null;
-				if (!string.IsNullOrEmpty(Project.StylesheetPath))
-				{
-					LoadStylesheet(Project.StylesheetPath);
-				}
 
 				_ui._textSource.Text = data;
 				_desktop.FocusedWidget = _ui._textSource;
