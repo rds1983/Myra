@@ -247,6 +247,9 @@ namespace MyraPad
 			_ui._textSource.KeyDown += _textSource_KeyDown;
 			_ui._textSource.Char += _textSource_Char;
 
+			_ui._textStatus.Text = string.Empty;
+			_ui._textLocation.Text = "Line: 0, Column: 0, Indent: 0";
+
 			_propertyGrid = new PropertyGrid();
 			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
 
@@ -307,14 +310,6 @@ namespace MyraPad
 			_desktop.Widgets.Add(_statisticsGrid);
 
 			UpdateMenuFile();
-
-			try
-			{
-				UpdatePositions();
-			}
-			catch (Exception)
-			{
-			}
 		}
 
 		private void _menuEditFormatSource_Selected(object sender, EventArgs e)
