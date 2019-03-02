@@ -29,11 +29,13 @@ namespace Myra.Graphics2D.UI
 	{
 		private readonly ExportOptions _exportOptions = new ExportOptions();
 
+		[HiddenInEditor]
 		public ExportOptions ExportOptions
 		{
 			get { return _exportOptions; }
 		}
 
+		[HiddenInEditor]
 		public Widget Root { get; set; }
 
 		[HiddenInEditor]

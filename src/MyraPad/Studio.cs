@@ -17,6 +17,9 @@ using Myra.Utility;
 using Myra;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework.Input;
+using System.Xml;
+using System.Text;
+using System.Threading;
 
 namespace MyraPad
 {
@@ -46,7 +49,9 @@ namespace MyraPad
 		private int _line, _col, _indentLevel;
 		private bool _applyAutoIndent = false;
 		private bool _applyAutoClose = false;
-
+		private Project _newProject;
+		private object _newObject;
+		private DateTime? _refreshInitiated;
 
 		public static Studio Instance
 		{
@@ -121,6 +126,8 @@ namespace MyraPad
 				{
 					_ui._projectHolder.Widgets.Add(_project.Root);
 				}
+
+				_ui._menuFileReloadStylesheet.Enabled = _project != null && !string.IsNullOrEmpty(_project.StylesheetPath);
 			}
 		}
 
@@ -226,11 +233,12 @@ namespace MyraPad
 			_ui._menuFileSave.Selected += SaveItemOnClicked;
 			_ui._menuFileSaveAs.Selected += SaveAsItemOnClicked;
 			_ui._menuFileExportToCS.Selected += ExportCsItemOnSelected;
-			_ui._menuFileLoadStylesheet.Selected += OnMenuFileLoadStylesheet;
 			_ui._menuFileReloadStylesheet.Selected += OnMenuFileReloadStylesheet;
-			_ui._menuFileResetStylesheet.Selected += OnMenuFileResetStylesheet;
+			_ui._menuFileReloadStylesheet.Enabled = false;
 			_ui._menuFileDebugOptions.Selected += DebugOptionsItemOnSelected;
 			_ui._menuFileQuit.Selected += QuitItemOnDown;
+
+			_ui._menuEditFormatSource.Selected += _menuEditFormatSource_Selected;
 
 			_ui._menuHelpAbout.Selected += AboutItemOnClicked;
 
@@ -299,6 +307,35 @@ namespace MyraPad
 			_desktop.Widgets.Add(_statisticsGrid);
 
 			UpdateMenuFile();
+		}
+
+		private void _menuEditFormatSource_Selected(object sender, EventArgs e)
+		{
+			try
+			{
+				var doc = new XmlDocument();
+				doc.LoadXml(_ui._textSource.Text);
+
+				StringBuilder sb = new StringBuilder();
+				XmlWriterSettings settings = new XmlWriterSettings
+				{
+					Indent = _state.Options.AutoIndent,
+					IndentChars = new string(' ', _state.Options.IndentSpacesSize),
+					NewLineChars = "\n",
+					NewLineHandling = NewLineHandling.Replace
+				};
+				using (XmlWriter writer = XmlWriter.Create(sb, settings))
+				{
+					doc.Save(writer);
+				}
+
+				_ui._textSource.Text = sb.ToString();
+			}
+			catch (Exception ex)
+			{
+				var messageBox = Dialog.CreateMessageBox("Error", ex.Message);
+				messageBox.ShowModal(_desktop);
+			}
 		}
 
 		private void _textSource_Char(object sender, GenericEventArgs<char> e)
@@ -374,10 +411,42 @@ namespace MyraPad
 			try
 			{
 				IsDirty = true;
-				Project = Project.LoadFromXml(_ui._textSource.Text);
+
+				var newLength = string.IsNullOrEmpty(e.NewValue) ? 0 : e.NewValue.Length;
+				var oldLength = string.IsNullOrEmpty(e.OldValue) ? 0 : e.OldValue.Length;
+				if (Math.Abs(newLength - oldLength) > 1 || _applyAutoClose)
+				{
+					// Refresh now
+					QueueRefreshProject();
+				}
+				else
+				{
+					// Refresh after delay
+					_refreshInitiated = DateTime.Now;
+				}
 			}
 			catch (Exception)
 			{
+			}
+		}
+
+		private void QueueRefreshProject()
+		{
+			_refreshInitiated = null;
+			ThreadPool.QueueUserWorkItem(RefreshProjectAsync);
+		}
+
+		private void RefreshProjectAsync(object state)
+		{
+			try
+			{
+				_ui._textStatus.Text = "Reloading...";
+				_newProject = Project.LoadFromXml(_ui._textSource.Text);
+				_ui._textStatus.Text = string.Empty;
+			}
+			catch (Exception ex)
+			{
+				_ui._textStatus.Text = ex.Message;
 			}
 		}
 
@@ -395,6 +464,8 @@ namespace MyraPad
 
 			for (var i = 0; i < Math.Min(text.Length, cursorPos); ++i)
 			{
+				++_col;
+
 				var c = text[i];
 				if (c == '\n')
 				{
@@ -404,7 +475,7 @@ namespace MyraPad
 
 				if (c == '>')
 				{
-					if (i > 0 && text[i - 1] == '/')
+					if (i > 0 && (text[i - 1] == '/' || text[i - 1] == '?'))
 					{
 						// Tag without closing
 						continue;
@@ -432,6 +503,8 @@ namespace MyraPad
 
 		private void UpdateTag()
 		{
+			var lastStart = _tagStart;
+			var lastEnd = _tagEnd;
 			_tagStart = _tagEnd = null;
 			_needsCloseTag = false;
 			_propertyGrid.Object = null;
@@ -505,19 +578,34 @@ namespace MyraPad
 				xml += "</" + tagName + ">";
 			}
 
-			var obj = Project.LoadObjectFromXml(xml);
+			if (start != lastStart || end != lastEnd)
+			{
+				ThreadPool.QueueUserWorkItem(LoadObjectAsync, xml);
+			}
 
 			_tagStart = start;
 			_tagEnd = end;
-
-			_propertyGrid.Object = obj;
 		}
 
-		private void _textSource_CursorPositionChanged(object sender, EventArgs e)
+		private void LoadObjectAsync(object state)
+		{
+			try
+			{
+				var xml = (string)state;
+				_newObject = Project.LoadObjectFromXml(xml);
+			}
+			catch (Exception)
+			{
+			}
+		}
+
+		private void UpdateCursor()
 		{
 			try
 			{
 				UpdatePositions();
+				_ui._textLocation.Text = string.Format("Line: {0}, Col: {1}, Indent: {2}", _line, _col, _indentLevel);
+
 				UpdateTag();
 				ApplyAutoIndent();
 				ApplyAutoClose();
@@ -525,6 +613,11 @@ namespace MyraPad
 			catch (Exception)
 			{
 			}
+		}
+
+		private void _textSource_CursorPositionChanged(object sender, EventArgs e)
+		{
+			UpdateCursor();
 		}
 
 		private void OnMenuFileReloadSelected(object sender, EventArgs e)
@@ -760,13 +853,6 @@ namespace MyraPad
 			LoadStylesheet(Project.StylesheetPath);
 		}
 
-		private void OnMenuFileResetStylesheet(object sender, EventArgs e)
-		{
-			SetStylesheet(Stylesheet.Current);
-			Project.StylesheetPath = null;
-			IsDirty = true;
-		}
-
 		private void DebugOptionsItemOnSelected(object sender1, EventArgs eventArgs)
 		{
 			var dlg = new DebugOptionsDialog();
@@ -783,8 +869,6 @@ namespace MyraPad
 			var dlg = new ExportOptionsDialog();
 			dlg.ShowModal(_desktop);
 		}
-
-
 
 		private void PropertyGridOnPropertyChanged(object sender, GenericEventArgs<string> eventArgs)
 		{
@@ -925,7 +1009,22 @@ namespace MyraPad
 		{
 			base.Update(gameTime);
 
-			//			_fpsCounter.Update(gameTime);
+			if (_refreshInitiated != null && (DateTime.Now - _refreshInitiated.Value).TotalSeconds >= 2)
+			{
+				QueueRefreshProject();
+			}
+
+			if (_newObject != null)
+			{
+				_propertyGrid.Object = _newObject;
+				_newObject = null;
+			}
+
+			if (_newProject != null)
+			{
+				Project = _newProject;
+				_newProject = null;
+			}
 		}
 
 		protected override void Draw(GameTime gameTime)
@@ -1053,6 +1152,8 @@ namespace MyraPad
 				FilePath = filePath;
 
 				_ui._textSource.Text = data;
+				_ui._textSource.CursorPosition = 0;
+				UpdateCursor();
 				_desktop.FocusedWidget = _ui._textSource;
 
 				IsDirty = false;

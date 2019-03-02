@@ -169,6 +169,8 @@ namespace Myra.Graphics2D.UI.Properties
 					}
 				};
 
+				_mark.IsPressed = true;
+
 				var label = new TextBlock(parent.PropertyGridStyle.LabelStyle)
 				{
 					Text = header,
@@ -740,6 +742,7 @@ namespace Myra.Graphics2D.UI.Properties
 			InternalChild.RowsProportions.Clear();
 			InternalChild.Widgets.Clear();
 			_records.Clear();
+			_expandedCategories.Clear();
 
 			if (_object == null)
 			{

@@ -28,7 +28,7 @@ namespace Myra.Graphics2D.UI
 		private bool _cursorOn = true;
 		private bool _wrap = false;
 		private readonly TextEdit _textEdit;
-		public readonly FormattedTextWithGlyphs _formattedText = new FormattedTextWithGlyphs();
+		private readonly FormattedTextWithGlyphs _formattedText = new FormattedTextWithGlyphs();
 		private readonly StringBuilder _stringBuilder = new StringBuilder();
 		private bool _isTouchDown;
 		private int? _lastCursorY;
