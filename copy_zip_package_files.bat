@@ -25,6 +25,7 @@ copy "samples\Myra.Samples.GridContainer\bin\MonoGame\%CONFIGURATION%\Myra.Sampl
 copy "samples\Myra.Samples.SplitPaneContainer\bin\MonoGame\%CONFIGURATION%\Myra.Samples.SplitPaneContainer.exe" ZipPackage /Y
 copy "samples\Myra.Samples.Notepad\bin\MonoGame\%CONFIGURATION%\Myra.Samples.Notepad.exe" ZipPackage /Y
 copy "src\Myra.UIEditor\bin\%CONFIGURATION%\Myra.UIEditor.exe" ZipPackage /Y
+copy "src\MyraPad\bin\%CONFIGURATION%\MyraPad.exe" ZipPackage /Y
 xcopy "samples\Stylesheets\*.*" "ZipPackage\Stylesheets\*.*" /s
 
 copy "src\Myra.UIEditor\bin\%CONFIGURATION%\MonoGame.Framework.dll" "ZipPackage" /Y

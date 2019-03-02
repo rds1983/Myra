@@ -307,6 +307,14 @@ namespace MyraPad
 			_desktop.Widgets.Add(_statisticsGrid);
 
 			UpdateMenuFile();
+
+			try
+			{
+				UpdatePositions();
+			}
+			catch (Exception)
+			{
+			}
 		}
 
 		private void _menuEditFormatSource_Selected(object sender, EventArgs e)
@@ -499,6 +507,8 @@ namespace MyraPad
 					}
 				}
 			}
+
+			_ui._textLocation.Text = string.Format("Line: {0}, Col: {1}, Indent: {2}", _line + 1, _col + 1, _indentLevel);
 		}
 
 		private void UpdateTag()
@@ -604,8 +614,6 @@ namespace MyraPad
 			try
 			{
 				UpdatePositions();
-				_ui._textLocation.Text = string.Format("Line: {0}, Col: {1}, Indent: {2}", _line, _col, _indentLevel);
-
 				UpdateTag();
 				ApplyAutoIndent();
 				ApplyAutoClose();
@@ -1009,7 +1017,7 @@ namespace MyraPad
 		{
 			base.Update(gameTime);
 
-			if (_refreshInitiated != null && (DateTime.Now - _refreshInitiated.Value).TotalSeconds >= 2)
+			if (_refreshInitiated != null && (DateTime.Now - _refreshInitiated.Value).TotalSeconds >= 1)
 			{
 				QueueRefreshProject();
 			}
