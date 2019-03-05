@@ -123,6 +123,14 @@ namespace Myra.Graphics2D.UI.Properties
 				}
 			}
 
+			public bool IsEmpty
+			{
+				get
+				{
+					return _propertyGrid.IsEmpty;
+				}
+			}
+
 			public SubGrid(PropertyGrid parent, object value, string header, string category, Record parentProperty)
 			{
 				InternalChild = new Grid();
@@ -135,14 +143,13 @@ namespace Myra.Graphics2D.UI.Properties
 				InternalChild.RowsProportions.Add(new Proportion(ProportionType.Auto));
 				InternalChild.RowsProportions.Add(new Proportion(ProportionType.Auto));
 
-				_propertyGrid = new PropertyGrid(parent.PropertyGridStyle, category, parentProperty)
+				_propertyGrid = new PropertyGrid(parent.PropertyGridStyle, category, parentProperty, parent)
 				{
 					Object = value,
 					Visible = false,
 					HorizontalAlignment = HorizontalAlignment.Stretch,
 					GridColumn = 1,
-					GridRow = 1,
-					_parentGrid = parent
+					GridRow = 1
 				};
 
 				// Mark
@@ -212,11 +219,12 @@ namespace Myra.Graphics2D.UI.Properties
 			}
 		}
 
-		private PropertyGrid _parentGrid;
+		private readonly PropertyGrid _parentGrid;
 		private Record _parentProperty;
 		private readonly Dictionary<string, List<Record>> _records = new Dictionary<string, List<Record>>();
 		private readonly HashSet<string> _expandedCategories = new HashSet<string>();
 		private object _object;
+		private bool _ignoreCollections;
 
 		[HiddenInEditor]
 		[XmlIgnore]
@@ -246,11 +254,38 @@ namespace Myra.Graphics2D.UI.Properties
 		[HiddenInEditor]
 		[XmlIgnore]
 		public string Category { get; private set; }
+		
+		public bool IgnoreCollections
+		{
+			get
+			{
+				if (_parentGrid != null)
+				{
+					return _parentGrid.IgnoreCollections;
+				}
+
+				return _ignoreCollections;
+			}
+
+			set
+			{
+				_ignoreCollections = value;
+			}
+		}
+
+		public bool IsEmpty
+		{
+			get
+			{
+				return InternalChild.Widgets.Count == 0;
+			}
+		}
 
 		public event EventHandler<GenericEventArgs<string>> PropertyChanged;
 
-		private PropertyGrid(TreeStyle style, string category, Record parentProperty)
+		private PropertyGrid(TreeStyle style, string category, Record parentProperty, PropertyGrid parentGrid = null)
 		{
+			_parentGrid = parentGrid;
 			InternalChild = new Grid();
 
 			_parentProperty = parentProperty;
@@ -628,57 +663,61 @@ namespace Myra.Graphics2D.UI.Properties
 				}
 				else if (typeof(IList).IsAssignableFrom(propertyType))
 				{
-					var it = propertyType.FindGenericType(typeof(ICollection<>));
-					if (it != null)
+					if (!IgnoreCollections)
 					{
-						var itemType = it.GenericTypeArguments[0];
-						if (value != null)
+
+						var it = propertyType.FindGenericType(typeof(ICollection<>));
+						if (it != null)
 						{
-							var items = (IList)value;
-
-							var subGrid = new Grid
+							var itemType = it.GenericTypeArguments[0];
+							if (value != null)
 							{
-								ColumnSpacing = 8,
-								HorizontalAlignment = HorizontalAlignment.Stretch
-							};
+								var items = (IList)value;
 
-							subGrid.ColumnsProportions.Add(new Proportion());
-							subGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
-
-							var label = new TextBlock
-							{
-								VerticalAlignment = VerticalAlignment.Center,
-							};
-							UpdateLabelCount(label, items.Count);
-
-							subGrid.Widgets.Add(label);
-
-							var button = new Button
-							{
-								Text = "Change...",
-								ContentHorizontalAlignment = HorizontalAlignment.Center,
-								Tag = value,
-								HorizontalAlignment = HorizontalAlignment.Stretch,
-								GridColumn = 1
-							};
-
-							button.Click += (sender, args) =>
-							{
-								var collectionEditor = new CollectionEditor(items, itemType);
-
-								var dialog = Dialog.CreateMessageBox("Edit", collectionEditor);
-
-								dialog.ButtonOk.Click += (o, eventArgs) =>
+								var subGrid = new Grid
 								{
-									collectionEditor.SaveChanges();
-									UpdateLabelCount(label, items.Count);
+									ColumnSpacing = 8,
+									HorizontalAlignment = HorizontalAlignment.Stretch
 								};
 
-								dialog.ShowModal(Desktop);
-							};
+								subGrid.ColumnsProportions.Add(new Proportion());
+								subGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
 
-							subGrid.Widgets.Add(button);
-							valueWidget = subGrid;
+								var label = new TextBlock
+								{
+									VerticalAlignment = VerticalAlignment.Center,
+								};
+								UpdateLabelCount(label, items.Count);
+
+								subGrid.Widgets.Add(label);
+
+								var button = new Button
+								{
+									Text = "Change...",
+									ContentHorizontalAlignment = HorizontalAlignment.Center,
+									Tag = value,
+									HorizontalAlignment = HorizontalAlignment.Stretch,
+									GridColumn = 1
+								};
+
+								button.Click += (sender, args) =>
+								{
+									var collectionEditor = new CollectionEditor(items, itemType);
+
+									var dialog = Dialog.CreateMessageBox("Edit", collectionEditor);
+
+									dialog.ButtonOk.Click += (o, eventArgs) =>
+									{
+										collectionEditor.SaveChanges();
+										UpdateLabelCount(label, items.Count);
+									};
+
+									dialog.ShowModal(Desktop);
+								};
+
+								subGrid.Widgets.Add(button);
+								valueWidget = subGrid;
+							}
 						}
 					}
 				}
@@ -851,8 +890,6 @@ namespace Myra.Graphics2D.UI.Properties
 
 			var y = 0;
 			List<Record> defaultCategoryRecords;
-
-
 			if (_records.TryGetValue(Category, out defaultCategoryRecords))
 			{
 				FillSubGrid(ref y, defaultCategoryRecords);
@@ -875,6 +912,11 @@ namespace Myra.Graphics2D.UI.Properties
 					GridColumnSpan = 2,
 					GridRow = y
 				};
+
+				if (subGrid.IsEmpty)
+				{
+					continue;
+				}
 
 				InternalChild.Widgets.Add(subGrid);
 

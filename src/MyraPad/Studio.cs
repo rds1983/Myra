@@ -250,7 +250,10 @@ namespace MyraPad
 			_ui._textStatus.Text = string.Empty;
 			_ui._textLocation.Text = "Line: 0, Column: 0, Indent: 0";
 
-			_propertyGrid = new PropertyGrid();
+			_propertyGrid = new PropertyGrid
+			{
+				IgnoreCollections = true
+			};
 			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
 
 			_ui._propertyGridPane.Content = _propertyGrid;
