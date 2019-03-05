@@ -44,8 +44,9 @@ namespace MyraPad
 		private string _lastFolder;
 		private bool _isDirty;
 		private Project _project;
-		private int? _tagStart, _tagEnd;
 		private bool _needsCloseTag;
+		private string _parentTag;
+		private int? _currentTagStart, _currentTagEnd;
 		private int _line, _col, _indentLevel;
 		private bool _applyAutoIndent = false;
 		private bool _applyAutoClose = false;
@@ -141,6 +142,19 @@ namespace MyraPad
 			set
 			{
 				_statisticsGrid.Visible = value;
+			}
+		}
+
+		private string CurrentTag
+		{
+			get
+			{
+				if (_currentTagStart == null || _currentTagEnd == null || _currentTagEnd.Value <= _currentTagStart.Value)
+				{
+					return null;
+				}
+
+				return _ui._textSource.Text.Substring(_currentTagStart.Value, _currentTagEnd.Value - _currentTagStart.Value + 1);
 			}
 		}
 
@@ -402,13 +416,13 @@ namespace MyraPad
 			var text = _ui._textSource.Text;
 			var pos = _ui._textSource.CursorPosition;
 
-			if (_tagStart == null || _tagEnd == null || !_needsCloseTag)
+			var currentTag = CurrentTag;
+			if (string.IsNullOrEmpty(currentTag) || !_needsCloseTag)
 			{
 				return;
 			}
 
-			var tagName = text.Substring(_tagStart.Value + 1, _tagEnd.Value - _tagStart.Value - 1);
-			var close = "</" + tagName + ">";
+			var close = "</" + ExtractTag(currentTag) + ">";
 			_ui._textSource.Text = text.Substring(0, pos) + close + text.Substring(pos);
 		}
 
@@ -456,9 +470,28 @@ namespace MyraPad
 			}
 		}
 
+		private static readonly Regex TagResolver = new Regex("<([A-Za-z0-9]+)");
+
+		private static string ExtractTag(string source)
+		{
+			if (string.IsNullOrEmpty(source))
+			{
+				return null;
+			}
+
+			return TagResolver.Match(source).Groups[1].Value;
+		}
+
 		private void UpdatePositions()
 		{
+			var lastStart = _currentTagStart;
+			var lastEnd = _currentTagEnd;
+
 			_line = _col = _indentLevel = 0;
+			_parentTag = null;
+			_currentTagStart = null;
+			_currentTagEnd = null;
+			_needsCloseTag = false;
 
 			if (string.IsNullOrEmpty(_ui._textSource.Text))
 			{
@@ -468,8 +501,32 @@ namespace MyraPad
 			var cursorPos = _ui._textSource.CursorPosition;
 			var text = _ui._textSource.Text;
 
-			for (var i = 0; i < Math.Min(text.Length, cursorPos); ++i)
+			int? tagOpen = null;
+			var isOpenTag = true;
+			var length = text.Length;
+
+			string currentTag = null, lastTag = null;
+			var parentStack = new Stack<string>();
+			for (var i = 0; i < length; ++i)
 			{
+				if (tagOpen == null)
+				{
+					if (i >= cursorPos + 1)
+					{
+						break;
+					}
+
+					lastTag = currentTag;
+					currentTag = null;
+					_currentTagStart = null;
+					_currentTagEnd = null;
+				}
+
+				if (i >= cursorPos + 1 && tagOpen == null)
+				{
+					break;
+				}
+
 				++_col;
 
 				var c = text[i];
@@ -479,120 +536,81 @@ namespace MyraPad
 					_col = 0;
 				}
 
-				if (c == '>')
+				if (c == '<' && i < length - 1 && text[i + 1] != '?')
 				{
-					if (i > 0 && (text[i - 1] == '/' || text[i - 1] == '?'))
+					tagOpen = i;
+					isOpenTag = text[i + 1] != '/';
+				}
+
+				if (tagOpen != null && i > tagOpen.Value && c == '>')
+				{
+					if (isOpenTag)
 					{
-						// Tag without closing
-						continue;
+						var needsCloseTag = text[i - 1] != '/';
+						if (!needsCloseTag)
+						{
+							++_indentLevel;
+						}
+
+						if (lastTag != null && _needsCloseTag)
+						{
+							parentStack.Push(lastTag);
+						}
+
+						_needsCloseTag = needsCloseTag;
+
+						currentTag = text.Substring(tagOpen.Value, i - tagOpen.Value + 1);
+						_currentTagStart = tagOpen;
+						_currentTagEnd = i;
+					}
+					else
+					{
+						--_indentLevel;
+
+						if (parentStack.Count > 0)
+						{
+							parentStack.Pop();
+						}
 					}
 
-					for (var j = i; j >= 0; j--)
-					{
-						if (text[j] == '<')
-						{
-							if (text[j + 1] != '/')
-							{
-								++_indentLevel;
-							}
-							else
-							{
-								--_indentLevel;
-							}
+					tagOpen = null;
 
-							break;
-						}
+					if (i >= cursorPos - 1)
+					{
+						break;
 					}
 				}
 			}
 
 			_ui._textLocation.Text = string.Format("Line: {0}, Col: {1}, Indent: {2}", _line + 1, _col + 1, _indentLevel);
-		}
 
-		private void UpdateTag()
-		{
-			var lastStart = _tagStart;
-			var lastEnd = _tagEnd;
-			_tagStart = _tagEnd = null;
-			_needsCloseTag = false;
-			_propertyGrid.Object = null;
-
-			if (string.IsNullOrEmpty(_ui._textSource.Text))
+			if (parentStack.Count > 0)
 			{
-				return;
-			}
-
-			var cursorPos = _ui._textSource.CursorPosition;
-			var text = _ui._textSource.Text;
-
-			var start = cursorPos;
-			var end = start;
-
-			if (start > 1 && (text[start - 1] == '>' || text[start] == '>'))
-			{
-				start -= 2;
-				end -= 2;
-			}
-
-			// Find start
-			while (start >= 0)
-			{
-				var c = text[start];
-				if (c == '>' ||
-					(start == 0 && c != '<'))
+				_parentTag = parentStack.Pop();
+				if (!string.IsNullOrEmpty(_parentTag))
 				{
-					return;
-				}
+					_parentTag = ExtractTag(_parentTag);
 
-				if (c == '<')
+					_ui._textLocation.Text += ", Parent: " + _parentTag;
+				}
+			}
+
+			if ((lastStart != _currentTagStart || lastEnd != _currentTagEnd))
+			{
+				_propertyGrid.Object = null;
+				if (!string.IsNullOrEmpty(currentTag))
 				{
-					break;
+					var xml = currentTag;
+
+					if (_needsCloseTag)
+					{
+						var tag = ExtractTag(currentTag);
+						xml += "</" + tag + ">";
+					}
+
+					ThreadPool.QueueUserWorkItem(LoadObjectAsync, xml);
 				}
-
-				--start;
 			}
-
-			while (end < text.Length)
-			{
-				var c = text[end];
-				if ((end > start && c == '<') ||
-					(end == text.Length - 1 && c != '>'))
-				{
-					return;
-				}
-
-				if (c == '>')
-				{
-					break;
-				}
-
-				++end;
-			}
-
-			var xml = text.Substring(start, end - start + 1);
-
-			if (xml[1] == '/')
-			{
-				// Close tag
-				return;
-			}
-
-			_needsCloseTag = xml[xml.Length - 2] != '/';
-
-			if (_needsCloseTag)
-			{
-				var tagName = Regex.Match(xml, "<([A-Za-z0-9]+)").Groups[1].Value;
-
-				xml += "</" + tagName + ">";
-			}
-
-			if (start != lastStart || end != lastEnd)
-			{
-				ThreadPool.QueueUserWorkItem(LoadObjectAsync, xml);
-			}
-
-			_tagStart = start;
-			_tagEnd = end;
 		}
 
 		private void LoadObjectAsync(object state)
@@ -612,7 +630,6 @@ namespace MyraPad
 			try
 			{
 				UpdatePositions();
-				UpdateTag();
 				ApplyAutoIndent();
 				ApplyAutoClose();
 			}
@@ -887,12 +904,12 @@ namespace MyraPad
 				xml = xml.Replace("/>", ">");
 			}
 
-			if (_tagStart != null && _tagEnd != null)
+			if (_currentTagStart != null && _currentTagEnd != null)
 			{
 				var t = _ui._textSource.Text;
 
-				_ui._textSource.Text = t.Substring(0, _tagStart.Value) + xml + t.Substring(_tagEnd.Value + 1);
-				_tagEnd = _tagStart.Value + xml.Length - 1;
+				_ui._textSource.Text = t.Substring(0, _currentTagStart.Value) + xml + t.Substring(_currentTagEnd.Value + 1);
+				_currentTagEnd = _currentTagStart.Value + xml.Length - 1;
 			}
 		}
 
