@@ -847,7 +847,39 @@ namespace Myra.Graphics2D.UI
 
 			var bounds = ActualBounds;
 
-			control.Layout(new Rectangle(bounds.Left + _cellLocationsX[col], bounds.Top + _cellLocationsY[row], cellSize.X, cellSize.Y));
+			var rect = new Rectangle(bounds.Left + _cellLocationsX[col], bounds.Top + _cellLocationsY[row], cellSize.X, cellSize.Y);
+
+			if (rect.Right > bounds.Right)
+			{
+				rect.Width = bounds.Right - rect.X;
+			}
+
+			if (rect.Width < 0)
+			{
+				rect.Width = 0;
+			}
+
+			if (rect.Width > bounds.Width)
+			{
+				rect.Width = bounds.Width;
+			}
+
+			if (rect.Bottom > bounds.Bottom)
+			{
+				rect.Height = bounds.Bottom - rect.Y;
+			}
+
+			if (rect.Height < 0)
+			{
+				rect.Height = 0;
+			}
+
+			if (rect.Height > bounds.Height)
+			{
+				rect.Height = bounds.Height;
+			}
+
+			control.Layout(rect);
 		}
 
 		private void RenderSelection(RenderContext context)
