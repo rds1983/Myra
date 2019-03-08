@@ -133,6 +133,8 @@ namespace Myra.Graphics2D.UI
 		private readonly List<Widget> _visibleWidgets = new List<Widget>();
 		private readonly List<int> _colWidths = new List<int>();
 		private readonly List<int> _rowHeights = new List<int>();
+		private int? _hoverRowIndex = null;
+		private int? _hoverColumnIndex = null;
 		private int? _selectedRowIndex = null;
 		private int? _selectedColumnIndex = null;
 
@@ -277,11 +279,55 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[XmlIgnore]
-		public int? HoverRowIndex { get; set; }
+		public int? HoverRowIndex
+		{
+			get
+			{
+				return _hoverRowIndex;
+			}
+
+			set
+			{
+				if (value == _hoverRowIndex)
+				{
+					return;
+				}
+
+				_hoverRowIndex = value;
+
+				var ev = HoverIndexChanged;
+				if (ev != null)
+				{
+					ev(this, EventArgs.Empty);
+				}
+			}
+		}
 
 		[HiddenInEditor]
 		[XmlIgnore]
-		public int? HoverColumnIndex { get; set; }
+		public int? HoverColumnIndex
+		{
+			get
+			{
+				return _hoverColumnIndex;
+			}
+
+			set
+			{
+				if (value == _hoverColumnIndex)
+				{
+					return;
+				}
+
+				_hoverColumnIndex = value;
+
+				var ev = HoverIndexChanged;
+				if (ev != null)
+				{
+					ev(this, EventArgs.Empty);
+				}
+			}
+		}
 
 		[HiddenInEditor]
 		[XmlIgnore]
@@ -330,6 +376,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public event EventHandler SelectedIndexChanged = null;
+		public event EventHandler HoverIndexChanged = null;
 
 		public Grid()
 		{
