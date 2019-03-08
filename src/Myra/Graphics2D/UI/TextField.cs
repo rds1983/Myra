@@ -295,7 +295,10 @@ namespace Myra.Graphics2D.UI
 			}
 
 			// Remove '\r'
-			value = value.Replace("\r", string.Empty);
+			if (value != null)
+			{
+				value = value.Replace("\r", string.Empty);
+			}
 
 			var oldValue = _formattedText.Text;
 			_formattedText.Text = value;

@@ -516,7 +516,10 @@ namespace MyraPad
 						break;
 					}
 
-					lastTag = currentTag;
+					if (currentTag != null)
+					{
+						lastTag = currentTag;
+					}
 					currentTag = null;
 					_currentTagStart = null;
 					_currentTagEnd = null;
