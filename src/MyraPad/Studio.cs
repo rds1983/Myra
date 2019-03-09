@@ -54,6 +54,49 @@ namespace MyraPad
 		private object _newObject;
 		private DateTime? _refreshInitiated;
 
+		private const string RowsProportions = "RowsProportions";
+		private const string ColumnsProportions = "ColumnsProportions";
+		private const string Proportion = "Proportion";
+		private const string MenuItem = "MenuItem";
+
+		private static readonly string[] SimpleWidgets = new[]
+		{
+			"Button",
+			"TextButton",
+			"ImageButton",
+			"RadioButton",
+			"SpinButton",
+			"CheckBox",
+			"HorizontalProgressBar",
+			"VerticalProgressBar",
+			"HorizontalSeparator",
+			"VerticalSeparator",
+			"HorizontalSlider",
+			"VerticalSlider",
+			"Image",
+			"TextBlock",
+			"TextField",
+		};
+
+		private static readonly string[] Containers = new[]
+		{
+			"Window",
+			"Grid",
+			"Panel",
+			"ScrollPane",
+			"VerticalSplitPane",
+			"HorizontalSplitPane"
+		};
+
+		private static readonly string[] SpecialContainers = new[]
+{
+			"HorizontalMenu",
+			"VerticalMenu",
+			"ComboBox",
+			"ListBox",
+			"TabControl",
+		};
+
 		public static Studio Instance
 		{
 			get
@@ -505,29 +548,20 @@ namespace MyraPad
 			var isOpenTag = true;
 			var length = text.Length;
 
-			string currentTag = null, lastTag = null;
-			var parentStack = new Stack<string>();
+			string currentTag = null;
+			Stack<string> parentStack = new Stack<string>();
 			for (var i = 0; i < length; ++i)
 			{
 				if (tagOpen == null)
 				{
-					if (i >= cursorPos + 1)
+					if (i >= cursorPos)
 					{
 						break;
 					}
 
-					if (currentTag != null)
-					{
-						lastTag = currentTag;
-					}
 					currentTag = null;
 					_currentTagStart = null;
 					_currentTagEnd = null;
-				}
-
-				if (i >= cursorPos + 1 && tagOpen == null)
-				{
-					break;
 				}
 
 				++_col;
@@ -539,10 +573,21 @@ namespace MyraPad
 					_col = 0;
 				}
 
-				if (c == '<' && i < length - 1 && text[i + 1] != '?')
+				if (c == '<')
 				{
-					tagOpen = i;
-					isOpenTag = text[i + 1] != '/';
+					if (tagOpen != null && isOpenTag && i >= cursorPos + 1)
+					{
+						// tag is not closed
+						_currentTagStart = tagOpen;
+						_currentTagEnd = null;
+						break;
+					}
+
+					if (i < length - 1 && text[i + 1] != '?')
+					{
+						tagOpen = i;
+						isOpenTag = text[i + 1] != '/';
+					}
 				}
 
 				if (tagOpen != null && i > tagOpen.Value && c == '>')
@@ -550,26 +595,19 @@ namespace MyraPad
 					if (isOpenTag)
 					{
 						var needsCloseTag = text[i - 1] != '/';
-						if (!needsCloseTag)
-						{
-							++_indentLevel;
-						}
-
-						if (lastTag != null && _needsCloseTag)
-						{
-							parentStack.Push(lastTag);
-						}
-
 						_needsCloseTag = needsCloseTag;
 
 						currentTag = text.Substring(tagOpen.Value, i - tagOpen.Value + 1);
 						_currentTagStart = tagOpen;
 						_currentTagEnd = i;
+
+						if (needsCloseTag && i <= cursorPos)
+						{
+							parentStack.Push(currentTag);
+						}
 					}
 					else
 					{
-						--_indentLevel;
-
 						if (parentStack.Count > 0)
 						{
 							parentStack.Pop();
@@ -577,25 +615,22 @@ namespace MyraPad
 					}
 
 					tagOpen = null;
-
-					if (i >= cursorPos - 1)
-					{
-						break;
-					}
 				}
+			}
+
+			_indentLevel = parentStack.Count;
+			if (parentStack.Count > 0)
+			{
+				_parentTag = parentStack.Pop();
 			}
 
 			_ui._textLocation.Text = string.Format("Line: {0}, Col: {1}, Indent: {2}", _line + 1, _col + 1, _indentLevel);
 
-			if (parentStack.Count > 0)
+			if (!string.IsNullOrEmpty(_parentTag))
 			{
-				_parentTag = parentStack.Pop();
-				if (!string.IsNullOrEmpty(_parentTag))
-				{
-					_parentTag = ExtractTag(_parentTag);
+				_parentTag = ExtractTag(_parentTag);
 
-					_ui._textLocation.Text += ", Parent: " + _parentTag;
-				}
+				_ui._textLocation.Text += ", Parent: " + _parentTag;
 			}
 
 			if ((lastStart != _currentTagStart || lastEnd != _currentTagEnd))
@@ -614,6 +649,112 @@ namespace MyraPad
 					ThreadPool.QueueUserWorkItem(LoadObjectAsync, xml);
 				}
 			}
+
+			if (_currentTagStart != null && _currentTagEnd == null && !string.IsNullOrEmpty(_parentTag))
+			{
+				// Tag isn't closed
+				var typed = text.Substring(_currentTagStart.Value, cursorPos - _currentTagStart.Value);
+				if (typed.StartsWith("<"))
+				{
+					typed = typed.Substring(1);
+
+					var all = BuildAutoCompleteVariants();
+
+					// Filter typed
+					if (!string.IsNullOrEmpty(typed))
+					{
+						all = (from a in all where a.StartsWith(typed, StringComparison.OrdinalIgnoreCase) select a).ToList();
+					}
+
+					if (all.Count > 0)
+					{
+						// Build context menu
+						var menu = new VerticalMenu();
+						foreach (var a in all)
+						{
+							var menuItem = new MenuItem
+							{
+								Text = a
+							};
+
+							menuItem.Selected += (s, args) =>
+							{
+								var result = "<" + menuItem.Text;
+								var skip = result.Length;
+								var needsClose = false;
+
+								if (SimpleWidgets.Contains(menuItem.Text) || 
+									menuItem.Text == Proportion ||
+									menuItem.Text == MenuItem)
+								{
+									result += "/>";
+									skip += 2;
+								}
+								else
+								{
+									result += "></" + menuItem.Text + ">";
+									++skip;
+									needsClose = true;
+								}
+
+								text = text.Substring(0, _currentTagStart.Value) + result + text.Substring(cursorPos);
+								_ui._textSource.Text = text;
+								_ui._textSource.CursorPosition = _currentTagStart.Value + skip;
+								if (needsClose)
+								{
+//									_ui._textSource.OnKeyDown(Keys.Enter);
+								}
+							};
+
+							menu.Items.Add(menuItem);
+						}
+
+						var screen = _ui._textSource.CursorScreenPosition;
+						screen.Y += _ui._textSource.Font.LineSpacing;
+						_desktop.ShowContextMenu(menu, screen);
+					}
+				}
+			}
+		}
+
+		private List<string> BuildAutoCompleteVariants()
+		{
+			var result = new List<string>();
+
+			if (string.IsNullOrEmpty(_parentTag))
+			{
+				return result;
+			}
+
+			if (_parentTag == "Project")
+			{
+				result.AddRange(Containers);
+				result.Add("Dialog");
+			}
+			else if (Containers.Contains(_parentTag) || _parentTag == "Dialog")
+			{
+				result.AddRange(SimpleWidgets);
+				result.AddRange(Containers);
+				result.AddRange(SpecialContainers);
+			}
+			else if (_parentTag == RowsProportions || _parentTag == ColumnsProportions)
+			{
+				result.Add(Proportion);
+			}
+			else if (_parentTag.EndsWith("Menu"))
+			{
+				result.Add("MenuItem");
+			}
+
+			if (_parentTag == "Grid")
+			{
+				result.Add(ColumnsProportions);
+				result.Add(RowsProportions);
+			}
+
+			result = result.OrderBy(s => s).ToList();
+
+			return result;
 		}
 
 		private void LoadObjectAsync(object state)
@@ -1035,7 +1176,7 @@ namespace MyraPad
 		{
 			base.Update(gameTime);
 
-			if (_refreshInitiated != null && (DateTime.Now - _refreshInitiated.Value).TotalSeconds >= 1)
+			if (_refreshInitiated != null && (DateTime.Now - _refreshInitiated.Value).TotalSeconds >= 0.5f)
 			{
 				QueueRefreshProject();
 			}

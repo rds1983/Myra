@@ -180,6 +180,14 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public Point CursorScreenPosition
+		{
+			get
+			{
+				return GetRenderPositionByIndex(CursorPosition);
+			}
+		}
+
 		/// <summary>
 		/// Fires every time when the text had been changed
 		/// </summary>
