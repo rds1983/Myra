@@ -668,6 +668,8 @@ namespace MyraPad
 
 					if (all.Count > 0)
 					{
+						var lastStartPos = _currentTagStart.Value;
+						var lastEndPos = cursorPos;
 						// Build context menu
 						var menu = new VerticalMenu();
 						foreach (var a in all)
@@ -697,9 +699,9 @@ namespace MyraPad
 									needsClose = true;
 								}
 
-								text = text.Substring(0, _currentTagStart.Value) + result + text.Substring(cursorPos);
+								text = text.Substring(0, lastStartPos) + result + text.Substring(lastEndPos);
 								_ui._textSource.Text = text;
-								_ui._textSource.CursorPosition = _currentTagStart.Value + skip;
+								_ui._textSource.CursorPosition = lastStartPos + skip;
 								if (needsClose)
 								{
 //									_ui._textSource.OnKeyDown(Keys.Enter);
@@ -1176,7 +1178,7 @@ namespace MyraPad
 		{
 			base.Update(gameTime);
 
-			if (_refreshInitiated != null && (DateTime.Now - _refreshInitiated.Value).TotalSeconds >= 0.5f)
+			if (_refreshInitiated != null && (DateTime.Now - _refreshInitiated.Value).TotalSeconds >= 0.75f)
 			{
 				QueueRefreshProject();
 			}
