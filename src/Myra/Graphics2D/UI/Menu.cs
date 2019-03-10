@@ -107,6 +107,55 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+
+		[HiddenInEditor]
+		[XmlIgnore]
+		public int? HoverIndex
+		{
+			get
+			{
+				int? hoverIndex = null;
+
+				for (var i = 0; i < InternalChild.Widgets.Count; ++i)
+				{
+					if (InternalChild.Widgets[i].IsMouseOver)
+					{
+						hoverIndex = i;
+						break;
+					}
+				}
+
+				return hoverIndex;
+			}
+
+			set
+			{
+				var oldIndex = HoverIndex;
+				if (value == oldIndex)
+				{
+					return;
+				}
+
+				if (oldIndex != null)
+				{
+					var menuItemButton = InternalChild.Widgets[oldIndex.Value] as MenuItemButton;
+					if (menuItemButton != null)
+					{
+						menuItemButton.IsMouseOver = false;
+					}
+				}
+
+				if (value != null)
+				{
+					var menuItemButton = InternalChild.Widgets[value.Value] as MenuItemButton;
+					if (menuItemButton != null)
+					{
+						menuItemButton.IsMouseOver = true;
+					}
+				}
+			}
+		}
+
 		protected Menu(MenuStyle style)
 		{
 			InternalChild = new Grid();
@@ -224,7 +273,7 @@ namespace Myra.Graphics2D.UI
 			if (menuItem != null)
 			{
 				menuItem.Changed += MenuItemOnChanged;
-				var menuItemButton = new MenuItemButton(MenuItemStyle)
+				var menuItemButton = new MenuItemButton(this, MenuItemStyle)
 				{
 					Text = menuItem.Text,
 					Tag = menuItem
@@ -328,6 +377,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
+			menuItem.SubMenu.HoverIndex = null;
 			Desktop.ShowContextMenu(menuItem.SubMenu, new Point(menuItem.Bounds.X, Bounds.Bottom));
 			Desktop.ContextMenuClosed += DesktopOnContextMenuClosed;
 
@@ -422,52 +472,30 @@ namespace Myra.Graphics2D.UI
 			}
 			else
 			{
+				menuItemButton.IsMouseOver = true;
 				menuItemButton.IsPressed = true;
 			}
 		}
 
-		private int GetSelectedIndex()
-		{
-			int selectedIndex = -1;
-
-			if (OpenMenuItem != null)
-			{
-				selectedIndex = InternalChild.Widgets.IndexOf(OpenMenuItem);
-			}
-			else
-			{
-				for (var i = 0; i < InternalChild.Widgets.Count; ++i)
-				{
-					if (InternalChild.Widgets[i].IsMouseOver)
-					{
-						selectedIndex = i;
-						break;
-					}
-				}
-			}
-
-			return selectedIndex;
-		}
-
 		public override void OnKeyDown(Keys k)
 		{
-			if (!MyraEnvironment.ShowUnderscores)
-			{
-				return;
-			}
-
 			if (k == Keys.Enter || k == Keys.Space)
 			{
-				int selectedIndex = GetSelectedIndex();
-				if (selectedIndex != -1)
+				int? selectedIndex = HoverIndex;
+				if (selectedIndex != null)
 				{
-					var button = InternalChild.Widgets[selectedIndex] as MenuItemButton;
+					var button = InternalChild.Widgets[selectedIndex.Value] as MenuItemButton;
 					if (button != null && !button.CanOpen)
 					{
 						Click(button);
 						return;
 					}
 				}
+			}
+
+			if (!MyraEnvironment.ShowUnderscores)
+			{
+				return;
 			}
 
 			var ch = k.ToChar(false);
@@ -492,7 +520,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public void MoveSelection(int delta)
+		public void MoveHover(int delta)
 		{
 			if (InternalChild.Widgets.Count == 0)
 			{
@@ -500,8 +528,9 @@ namespace Myra.Graphics2D.UI
 			}
 
 			// First step - determine index of currently selected item
-			int selectedIndex = GetSelectedIndex();
-			var oldIndex = selectedIndex;
+			var si = HoverIndex;
+			var hoverIndex = si != null?si.Value:-1;
+			var oldHover = hoverIndex;
 
 			var iterations = 0;
 			while (true)
@@ -511,19 +540,19 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
-				selectedIndex += delta;
+				hoverIndex += delta;
 
-				if (selectedIndex < 0)
+				if (hoverIndex < 0)
 				{
-					selectedIndex = InternalChild.Widgets.Count - 1;
+					hoverIndex = InternalChild.Widgets.Count - 1;
 				}
 
-				if (selectedIndex >= InternalChild.Widgets.Count)
+				if (hoverIndex >= InternalChild.Widgets.Count)
 				{
-					selectedIndex = 0;
+					hoverIndex = 0;
 				}
 
-				if (InternalChild.Widgets[selectedIndex] is MenuItemButton)
+				if (InternalChild.Widgets[hoverIndex] is MenuItemButton)
 				{
 					break;
 				}
@@ -532,31 +561,9 @@ namespace Myra.Graphics2D.UI
 				++iterations;
 			}
 
-			if (selectedIndex < 0 || selectedIndex >= InternalChild.Widgets.Count || selectedIndex == oldIndex)
-			{
-				return;
-			}
-
-			MenuItemButton menuItemButton;
-			if (oldIndex != -1)
-			{
-				menuItemButton = InternalChild.Widgets[oldIndex] as MenuItemButton;
-				if (menuItemButton != null)
-				{
-					menuItemButton.IsPressed = false;
-				}
-			}
-
-			menuItemButton = InternalChild.Widgets[selectedIndex] as MenuItemButton;
-			if (menuItemButton != null)
-			{
-				if (menuItemButton.CanOpen)
-				{
-					menuItemButton.IsPressed = true;
-				}
-			}
+			HoverIndex = hoverIndex;
 		}
-
+	
 		public void ApplyMenuStyle(MenuStyle style)
 		{
 			ApplyWidgetStyle(style);

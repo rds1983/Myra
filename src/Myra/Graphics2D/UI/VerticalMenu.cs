@@ -54,10 +54,10 @@ namespace Myra.Graphics2D.UI
 			switch (k)
 			{
 				case Keys.Up:
-					MoveSelection(-1);
+					MoveHover(-1);
 					break;
 				case Keys.Down:
-					MoveSelection(1);
+					MoveHover(1);
 					break;
 			}
 		}

@@ -281,7 +281,8 @@ namespace Myra.Graphics2D.UI
 			}
 
 			_lastCursorY = p.Y;
-			UpdateLayout();
+
+			asScrollPane.UpdateLayout();
 		}
 
 		private bool SetText(string value, bool byUser)

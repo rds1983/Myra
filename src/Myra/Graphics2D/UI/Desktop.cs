@@ -200,6 +200,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public Action<Keys> KeyDownHandler;
+
 		public event EventHandler MouseMoved;
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseDown;
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseUp;
@@ -224,6 +226,8 @@ namespace Myra.Graphics2D.UI
 
 			MouseInfoGetter = DefaultMouseInfoGetter;
 			DownKeysGetter = DefaultDownKeysGetter;
+
+			KeyDownHandler = OnKeyDown;
 
 #if MONOGAME
 			MyraEnvironment.Game.Window.TextInput += (s, a) =>
@@ -681,36 +685,9 @@ namespace Myra.Graphics2D.UI
 						{
 							if (!_lastDownKeys.Contains(key))
 							{
-								var ev = KeyDown;
-								if (ev != null)
+								if (KeyDownHandler != null)
 								{
-									ev(this, new GenericEventArgs<Keys>(key));
-								}
-
-								if (MenuBar != null && MyraEnvironment.ShowUnderscores)
-								{
-									MenuBar.OnKeyDown(key);
-								}
-								else
-								{
-									if (_focusedWidget != null)
-									{
-										_focusedWidget.IterateFocusable(w => w.OnKeyDown(key));
-
-#if XENKO
-										var ch = key.ToChar(_downKeys.Contains(Keys.LeftShift) ||
-															_downKeys.Contains(Keys.RightShift));
-										if (ch != null)
-										{
-											_focusedWidget.IterateFocusable(w => w.OnChar(ch.Value));
-										}
-#endif
-									}
-								}
-
-								if (key == Keys.Escape && ContextMenu != null)
-								{
-									HideContextMenu();
+									KeyDownHandler(key);
 								}
 							}
 						}
@@ -736,6 +713,41 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_lastDownKeys = _downKeys.ToArray();
+			}
+		}
+
+		public void OnKeyDown(Keys key)
+		{
+			var ev = KeyDown;
+			if (ev != null)
+			{
+				ev(this, new GenericEventArgs<Keys>(key));
+			}
+
+			if (MenuBar != null && MyraEnvironment.ShowUnderscores)
+			{
+				MenuBar.OnKeyDown(key);
+			}
+			else
+			{
+				if (_focusedWidget != null)
+				{
+					_focusedWidget.IterateFocusable(w => w.OnKeyDown(key));
+
+#if XENKO
+										var ch = key.ToChar(_downKeys.Contains(Keys.LeftShift) ||
+															_downKeys.Contains(Keys.RightShift));
+										if (ch != null)
+										{
+											_focusedWidget.IterateFocusable(w => w.OnChar(ch.Value));
+										}
+#endif
+				}
+			}
+
+			if (key == Keys.Escape && ContextMenu != null)
+			{
+				HideContextMenu();
 			}
 		}
 

@@ -141,8 +141,14 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		internal MenuItemButton(MenuItemStyle style)
+		private Menu Menu
 		{
+			get; set;
+		}
+
+		internal MenuItemButton(Menu menu, MenuItemStyle style)
+		{
+			Menu = menu;
 			InternalChild = new Grid();
 
 			_imageProportion = new Grid.Proportion();
@@ -189,10 +195,27 @@ namespace Myra.Graphics2D.UI
 				_textBlock.ApplyTextBlockStyle(style.LabelStyle);
 			}
 		}
+
 		public override void OnPressedChanged()
 		{
 			base.OnPressedChanged();
 			_textBlock.IsPressed = IsPressed;
+		}
+
+		public override void OnMouseEntered()
+		{
+			base.OnMouseEntered();
+
+			// Only one menu button can be hovered at time
+			foreach (var item in Menu.Items)
+			{
+				if (item.Widget == this)
+				{
+					continue;
+				}
+
+				item.Widget.IsMouseOver = false;
+			}
 		}
 	}
 }

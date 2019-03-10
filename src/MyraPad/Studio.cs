@@ -53,6 +53,7 @@ namespace MyraPad
 		private Project _newProject;
 		private object _newObject;
 		private DateTime? _refreshInitiated;
+		private VerticalMenu _autoCompleteMenu = null;
 
 		private const string RowsProportions = "RowsProportions";
 		private const string ColumnsProportions = "ColumnsProportions";
@@ -282,6 +283,20 @@ namespace MyraPad
 		{
 			_desktop = new Desktop();
 
+			_desktop.ContextMenuClosed += _desktop_ContextMenuClosed;
+			_desktop.KeyDownHandler = key =>
+			{
+				if (_autoCompleteMenu != null &&
+					(key == Keys.Up || key == Keys.Down || key == Keys.Enter))
+				{
+					_autoCompleteMenu.OnKeyDown(key);
+				}
+				else
+				{
+					_desktop.OnKeyDown(key);
+				}
+			};
+
 			_ui = new StudioWidget();
 
 			_ui._menuFileNew.Selected += NewItemOnClicked;
@@ -370,6 +385,16 @@ namespace MyraPad
 			_desktop.Widgets.Add(_statisticsGrid);
 
 			UpdateMenuFile();
+		}
+
+		private void _desktop_ContextMenuClosed(object sender, GenericEventArgs<Widget> e)
+		{
+			if (e.Data != _autoCompleteMenu)
+			{
+				return;
+			}
+
+			_autoCompleteMenu = null;
 		}
 
 		private void _menuEditFormatSource_Selected(object sender, EventArgs e)
@@ -650,71 +675,86 @@ namespace MyraPad
 				}
 			}
 
-			if (_currentTagStart != null && _currentTagEnd == null && !string.IsNullOrEmpty(_parentTag))
+			HandleAutoComplete();
+		}
+
+		private void HandleAutoComplete()
+		{
+			_desktop.HideContextMenu();
+
+			if (_currentTagStart == null || _currentTagEnd != null || string.IsNullOrEmpty(_parentTag))
 			{
-				// Tag isn't closed
-				var typed = text.Substring(_currentTagStart.Value, cursorPos - _currentTagStart.Value);
-				if (typed.StartsWith("<"))
+				return;
+			}
+
+			var cursorPos = _ui._textSource.CursorPosition;
+			var text = _ui._textSource.Text;
+
+			// Tag isn't closed
+			var typed = text.Substring(_currentTagStart.Value, cursorPos - _currentTagStart.Value);
+			if (typed.StartsWith("<"))
+			{
+				typed = typed.Substring(1);
+
+				var all = BuildAutoCompleteVariants();
+
+				// Filter typed
+				if (!string.IsNullOrEmpty(typed))
 				{
-					typed = typed.Substring(1);
+					all = (from a in all where a.StartsWith(typed, StringComparison.OrdinalIgnoreCase) select a).ToList();
+				}
 
-					var all = BuildAutoCompleteVariants();
-
-					// Filter typed
-					if (!string.IsNullOrEmpty(typed))
+				if (all.Count > 0)
+				{
+					var lastStartPos = _currentTagStart.Value;
+					var lastEndPos = cursorPos;
+					// Build context menu
+					_autoCompleteMenu = new VerticalMenu();
+					foreach (var a in all)
 					{
-						all = (from a in all where a.StartsWith(typed, StringComparison.OrdinalIgnoreCase) select a).ToList();
-					}
-
-					if (all.Count > 0)
-					{
-						var lastStartPos = _currentTagStart.Value;
-						var lastEndPos = cursorPos;
-						// Build context menu
-						var menu = new VerticalMenu();
-						foreach (var a in all)
+						var menuItem = new MenuItem
 						{
-							var menuItem = new MenuItem
+							Text = a
+						};
+
+						menuItem.Selected += (s, args) =>
+						{
+							var result = "<" + menuItem.Text;
+							var skip = result.Length;
+							var needsClose = false;
+
+							if (SimpleWidgets.Contains(menuItem.Text) ||
+								menuItem.Text == Proportion ||
+								menuItem.Text == MenuItem)
 							{
-								Text = a
-							};
-
-							menuItem.Selected += (s, args) =>
+								result += "/>";
+								skip += 2;
+							}
+							else
 							{
-								var result = "<" + menuItem.Text;
-								var skip = result.Length;
-								var needsClose = false;
+								result += "></" + menuItem.Text + ">";
+								++skip;
+								needsClose = true;
+							}
 
-								if (SimpleWidgets.Contains(menuItem.Text) || 
-									menuItem.Text == Proportion ||
-									menuItem.Text == MenuItem)
-								{
-									result += "/>";
-									skip += 2;
-								}
-								else
-								{
-									result += "></" + menuItem.Text + ">";
-									++skip;
-									needsClose = true;
-								}
+							text = text.Substring(0, lastStartPos) + result + text.Substring(lastEndPos);
+							_ui._textSource.Text = text;
+							_ui._textSource.CursorPosition = lastStartPos + skip;
+							if (needsClose)
+							{
+//								_ui._textSource.OnKeyDown(Keys.Enter);
+							}
+						};
 
-								text = text.Substring(0, lastStartPos) + result + text.Substring(lastEndPos);
-								_ui._textSource.Text = text;
-								_ui._textSource.CursorPosition = lastStartPos + skip;
-								if (needsClose)
-								{
-//									_ui._textSource.OnKeyDown(Keys.Enter);
-								}
-							};
-
-							menu.Items.Add(menuItem);
-						}
-
-						var screen = _ui._textSource.CursorScreenPosition;
-						screen.Y += _ui._textSource.Font.LineSpacing;
-						_desktop.ShowContextMenu(menu, screen);
+						_autoCompleteMenu.Items.Add(menuItem);
 					}
+
+					var screen = _ui._textSource.CursorScreenPosition;
+					screen.Y += _ui._textSource.Font.LineSpacing;
+
+					_autoCompleteMenu.HoverIndex = 0;
+					_desktop.ShowContextMenu(_autoCompleteMenu, screen);
+					_refreshInitiated = null;
 				}
 			}
 		}
