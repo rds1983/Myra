@@ -167,6 +167,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[HiddenInEditor]
+		[XmlIgnore]
 		public int CursorPosition
 		{
 			get
@@ -180,6 +182,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[HiddenInEditor]
+		[XmlIgnore]
 		public Point CursorScreenPosition
 		{
 			get

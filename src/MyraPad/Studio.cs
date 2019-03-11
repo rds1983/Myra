@@ -54,11 +54,13 @@ namespace MyraPad
 		private object _newObject;
 		private DateTime? _refreshInitiated;
 		private VerticalMenu _autoCompleteMenu = null;
+		private readonly Options _options = null;
 
-		private const string RowsProportions = "RowsProportions";
-		private const string ColumnsProportions = "ColumnsProportions";
-		private const string Proportion = "Proportion";
-		private const string MenuItem = "MenuItem";
+		private const string RowsProportionsName = "RowsProportions";
+		private const string ColumnsProportionsName = "ColumnsProportions";
+		private const string ProportionName = "Proportion";
+		private const string MenuItemName = "MenuItem";
+		private const string ListItemName = "ListItem";
 
 		private static readonly string[] SimpleWidgets = new[]
 		{
@@ -225,11 +227,13 @@ namespace MyraPad
 				}
 
 				_lastFolder = _state.LastFolder;
+				_options = _state.Options;
 			}
 			else
 			{
 				_graphicsDeviceManager.PreferredBackBufferWidth = 1280;
 				_graphicsDeviceManager.PreferredBackBufferHeight = 800;
+				_options = new Options();
 			}
 		}
 
@@ -407,8 +411,8 @@ namespace MyraPad
 				StringBuilder sb = new StringBuilder();
 				XmlWriterSettings settings = new XmlWriterSettings
 				{
-					Indent = _state.Options.AutoIndent,
-					IndentChars = new string(' ', _state.Options.IndentSpacesSize),
+					Indent = _options.AutoIndent,
+					IndentChars = new string(' ', _options.IndentSpacesSize),
 					NewLineChars = "\n",
 					NewLineHandling = NewLineHandling.Replace
 				};
@@ -438,7 +442,7 @@ namespace MyraPad
 
 		private void ApplyAutoIndent()
 		{
-			if (!_state.Options.AutoIndent || _state.Options.IndentSpacesSize <= 0 || !_applyAutoIndent)
+			if (!_options.AutoIndent || _options.IndentSpacesSize <= 0 || !_applyAutoIndent)
 			{
 				return;
 			}
@@ -465,7 +469,7 @@ namespace MyraPad
 			}
 
 			// Insert indent
-			var indent = new string(' ', il * _state.Options.IndentSpacesSize);
+			var indent = new string(' ', il * _options.IndentSpacesSize);
 			_ui._textSource.Text = text.Substring(0, pos) + indent + text.Substring(pos);
 
 			// Move cursor
@@ -474,7 +478,7 @@ namespace MyraPad
 
 		private void ApplyAutoClose()
 		{
-			if (!_state.Options.AutoClose || !_applyAutoClose)
+			if (!_options.AutoClose || !_applyAutoClose)
 			{
 				return;
 			}
@@ -589,7 +593,10 @@ namespace MyraPad
 					_currentTagEnd = null;
 				}
 
-				++_col;
+				if (i < cursorPos)
+				{
+					++_col;
+				}
 
 				var c = text[i];
 				if (c == '\n')
@@ -724,15 +731,32 @@ namespace MyraPad
 							var needsClose = false;
 
 							if (SimpleWidgets.Contains(menuItem.Text) ||
-								menuItem.Text == Proportion ||
-								menuItem.Text == MenuItem)
+								menuItem.Text == ProportionName ||
+								menuItem.Text == MenuItemName ||
+								menuItem.Text == ListItemName)
 							{
 								result += "/>";
 								skip += 2;
 							}
 							else
 							{
-								result += "></" + menuItem.Text + ">";
+								result += ">";
+								++skip;
+
+								if (_options.AutoIndent && _options.IndentSpacesSize > 0)
+								{
+									// Indent before cursor pos
+									result += "\n";
+									var indentSize = _options.IndentSpacesSize * (_indentLevel + 1);
+									result += new string(' ', indentSize);
+									skip += indentSize;
+
+									// Indent before closing tag
+									result += "\n";
+									indentSize = _options.IndentSpacesSize * _indentLevel;
+									result += new string(' ', indentSize);
+								}
+								result += "</" + menuItem.Text + ">";
 								++skip;
 								needsClose = true;
 							}
@@ -779,19 +803,27 @@ namespace MyraPad
 				result.AddRange(Containers);
 				result.AddRange(SpecialContainers);
 			}
-			else if (_parentTag == RowsProportions || _parentTag == ColumnsProportions)
+			else if (_parentTag == RowsProportionsName || _parentTag == ColumnsProportionsName)
 			{
-				result.Add(Proportion);
+				result.Add(ProportionName);
 			}
 			else if (_parentTag.EndsWith("Menu"))
 			{
 				result.Add("MenuItem");
 			}
+			else if (_parentTag == "ListBox" || _parentTag == "ComboBox")
+			{
+				result.Add("ListItem");
+			}
+			else if (_parentTag == "TabControl")
+			{
+				result.Add("TabItem");
+			}
 
 			if (_parentTag == "Grid")
 			{
-				result.Add(ColumnsProportions);
-				result.Add(RowsProportions);
+				result.Add(ColumnsProportionsName);
+				result.Add(RowsProportionsName);
 			}
 
 			result = result.OrderBy(s => s).ToList();

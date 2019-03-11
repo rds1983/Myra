@@ -30,12 +30,7 @@ namespace MyraPad
 
 		public State()
 		{
-			Options = new Options
-			{
-				AutoIndent = true,
-				IndentSpacesSize = 2,
-				AutoClose = true
-			};
+			Options = new Options();
 		}
 
 		public void Save()

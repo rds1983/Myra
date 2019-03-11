@@ -345,7 +345,7 @@ namespace Myra.Graphics2D.UI
 				ContextMenu.HorizontalAlignment = HorizontalAlignment.Left;
 				ContextMenu.VerticalAlignment = VerticalAlignment.Top;
 
-				var measure = ContextMenu.Measure(Bounds.Size);
+				var measure = ContextMenu.Measure(Bounds.Size());
 
 				if (position.X + measure.X > Bounds.Right)
 				{
