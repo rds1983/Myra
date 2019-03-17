@@ -256,7 +256,6 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(GridSelectionMode.None)]
 		public GridSelectionMode GridSelectionMode { get; set; }
 
-
 		[HiddenInEditor]
 		[XmlIgnore]
 		public List<int> GridLinesX

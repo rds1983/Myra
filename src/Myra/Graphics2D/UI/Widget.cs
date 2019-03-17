@@ -1221,13 +1221,18 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public virtual void OnKeyDown(Keys k)
+		protected void FireKeyDown(Keys k)
 		{
 			var ev = KeyDown;
 			if (ev != null)
 			{
 				ev(this, new GenericEventArgs<Keys>(k));
 			}
+		}
+
+		public virtual void OnKeyDown(Keys k)
+		{
+			FireKeyDown(k);
 		}
 
 		public virtual void OnKeyUp(Keys k)

@@ -80,7 +80,7 @@ namespace Myra.Graphics2D.UI
 
 		public override void OnKeyDown(Keys k)
 		{
-			base.OnKeyDown(k);
+			FireKeyDown(k);
 
 			switch (k)
 			{

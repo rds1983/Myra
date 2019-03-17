@@ -6,6 +6,7 @@ using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using static Myra.Graphics2D.UI.Grid;
 using System.Xml.Serialization;
+using Microsoft.Xna.Framework.Input;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -31,6 +32,7 @@ namespace Myra.Graphics2D.UI
 		private readonly TextBlock _titleLabel;
 		private readonly ImageButton _closeButton;
 		private Widget _content;
+		private Widget _previousFocus;
 
 		[HiddenInEditor]
 		[XmlIgnore]
@@ -325,6 +327,18 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public override void OnKeyDown(Keys k)
+		{
+			base.OnKeyDown(k);
+
+			switch (k)
+			{
+				case Keys.Escape:
+					Close();
+					break;
+			}
+		}
+
 		public void ApplyWindowStyle(WindowStyle style)
 		{
 			ApplyWidgetStyle(style);
@@ -343,6 +357,7 @@ namespace Myra.Graphics2D.UI
 		public void ShowModal(Desktop desktop)
 		{
 			desktop.Widgets.Add(this);
+			_previousFocus = desktop.FocusedWidget;
 			desktop.FocusedWidget = this;
 			IsModal = true;
 		}
@@ -356,7 +371,9 @@ namespace Myra.Graphics2D.UI
 					Desktop.FocusedWidget = null;
 				}
 
+				var desktop = Desktop;
 				Desktop.Widgets.Remove(this);
+				desktop.FocusedWidget = _previousFocus;
 
 				var ev = Closed;
 				if (ev != null)
