@@ -130,7 +130,15 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(false)]
 		public bool Readonly { get; set; }
 
-		[EditCategory("Behavior")]
+	    [EditCategory("Behavior")]
+	    [DefaultValue(false)]
+	    public bool PasswordField
+	    {
+	        get { return _formattedText.IsPassword; }
+	        set { _formattedText.IsPassword = value; }
+	    }
+
+        [EditCategory("Behavior")]
 		[DefaultValue(VerticalAlignment.Top)]
 		public VerticalAlignment TextVerticalAlignment { get; set; }
 
