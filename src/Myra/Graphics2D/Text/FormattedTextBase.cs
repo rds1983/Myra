@@ -20,6 +20,7 @@ namespace Myra.Graphics2D.Text
 
 		private SpriteFont _font;
 		private string _text = string.Empty;
+	    private string _displayText = string.Empty;
 		private int _verticalSpacing;
 		private int? _width;
 		private T[] _strings;
@@ -43,6 +44,8 @@ namespace Myra.Graphics2D.Text
 			}
 		}
 
+        public bool IsPassword { get; set; }
+
 		public string Text
 		{
 			get { return _text; }
@@ -54,7 +57,8 @@ namespace Myra.Graphics2D.Text
 				}
 
 				_text = value;
-				InvalidateLayout();
+			    _displayText = IsPassword ? new string('*', _text.Length) : _text;
+                InvalidateLayout();
 			}
 		}
 
@@ -132,7 +136,7 @@ namespace Myra.Graphics2D.Text
 
 			for (var i = startIndex; i < _text.Length; ++i)
 			{
-				var c = Text[i];
+				var c = _displayText[i];
 
 				_stringBuilder.Append(c);
 
@@ -254,7 +258,7 @@ namespace Myra.Graphics2D.Text
 					break;
 				}
 
-				var line = _lineCreator(_font, _text.Substring(i, r.num_chars), new Point((int)(r.x1 - r.x0), (int)(r.baseline_y_delta)));
+				var line = _lineCreator(_font, _displayText.Substring(i, r.num_chars), new Point((int)(r.x1 - r.x0), (int)(r.baseline_y_delta)));
 				lines.Add(line);
 
 				i += r.num_chars;
