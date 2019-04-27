@@ -363,6 +363,11 @@ namespace Myra.Graphics2D.UI
 				ContextMenu.Visible = true;
 
 				_widgets.Add(ContextMenu);
+
+				if (ContextMenu.CanFocus)
+				{
+					FocusedWidget = ContextMenu;
+				}
 			}
 		}
 

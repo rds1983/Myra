@@ -14,14 +14,20 @@ namespace Myra.Graphics2D.UI
 {
 	public class ComboBox : Selector<Button, ListItem>
 	{
+		private readonly ScrollPane _itemsContainerScroll;
 		private readonly Grid _itemsContainer;
 		private ButtonStyle _dropDownItemStyle;
+
+		public int? DropdownMaximumHeight
+		{
+			get; set;
+		}
 
 		[HiddenInEditor]
 		[XmlIgnore]
 		public bool IsExpanded
 		{
-			get { return Desktop.ContextMenu == _itemsContainer; }
+			get { return Desktop.ContextMenu == _itemsContainerScroll; }
 
 			private set
 			{
@@ -38,7 +44,7 @@ namespace Myra.Graphics2D.UI
 				{
 					_itemsContainer.Width = Bounds.Width;
 
-					Desktop.ShowContextMenu(_itemsContainer, new Point(Bounds.X, Bounds.Bottom));
+					Desktop.ShowContextMenu(_itemsContainerScroll, new Point(Bounds.X, Bounds.Bottom));
 				}
 			}
 		}
@@ -49,6 +55,13 @@ namespace Myra.Graphics2D.UI
 			VerticalAlignment = VerticalAlignment.Top;
 
 			_itemsContainer = new Grid();
+			_itemsContainerScroll = new ScrollPane
+			{
+				Content = _itemsContainer
+			};
+			_itemsContainerScroll.LayoutUpdated += _itemsContainerScroll_LayoutUpdated;
+
+			DropdownMaximumHeight = 300;
 
 			if (style != null)
 			{
@@ -62,6 +75,17 @@ namespace Myra.Graphics2D.UI
 
 		public ComboBox() : this(Stylesheet.Current.ComboBoxStyle)
 		{
+		}
+
+		private void _itemsContainerScroll_LayoutUpdated(object sender, EventArgs e)
+		{
+			if (DropdownMaximumHeight == null)
+			{
+				return;
+			}
+
+			_itemsContainerScroll.Height = _itemsContainerScroll.ActualBounds.Height > DropdownMaximumHeight.Value ?
+				DropdownMaximumHeight.Value : default(int?);
 		}
 
 		private void ItemOnChanged(object sender, EventArgs eventArgs)
