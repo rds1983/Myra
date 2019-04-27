@@ -3,6 +3,7 @@ using System.Linq;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
+using System.ComponentModel;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -14,13 +15,43 @@ namespace Myra.Graphics2D.UI
 {
 	public class ComboBox : Selector<Button, ListItem>
 	{
-		private readonly ScrollPane _itemsContainerScroll;
+		private class CustomScrollPane : ScrollPane
+		{
+			public int? MaximumHeight
+			{
+				get; set;
+			}
+
+			protected override Point InternalMeasure(Point availableSize)
+			{
+				var result = base.InternalMeasure(availableSize);
+
+				if (MaximumHeight != null && result.Y > MaximumHeight.Value)
+				{
+					result.Y = MaximumHeight.Value;
+				}
+
+				return result;
+			}
+		}
+
+		private readonly CustomScrollPane _itemsContainerScroll;
 		private readonly Grid _itemsContainer;
 		private ButtonStyle _dropDownItemStyle;
 
+		[EditCategory("Behavior")]
+		[DefaultValue(300)]
 		public int? DropdownMaximumHeight
 		{
-			get; set;
+			get
+			{
+				return _itemsContainerScroll.MaximumHeight;
+			}
+
+			set
+			{
+				_itemsContainerScroll.MaximumHeight = value;
+			}
 		}
 
 		[HiddenInEditor]
@@ -55,11 +86,10 @@ namespace Myra.Graphics2D.UI
 			VerticalAlignment = VerticalAlignment.Top;
 
 			_itemsContainer = new Grid();
-			_itemsContainerScroll = new ScrollPane
+			_itemsContainerScroll = new CustomScrollPane
 			{
 				Content = _itemsContainer
 			};
-			_itemsContainerScroll.LayoutUpdated += _itemsContainerScroll_LayoutUpdated;
 
 			DropdownMaximumHeight = 300;
 
@@ -75,17 +105,6 @@ namespace Myra.Graphics2D.UI
 
 		public ComboBox() : this(Stylesheet.Current.ComboBoxStyle)
 		{
-		}
-
-		private void _itemsContainerScroll_LayoutUpdated(object sender, EventArgs e)
-		{
-			if (DropdownMaximumHeight == null)
-			{
-				return;
-			}
-
-			_itemsContainerScroll.Height = _itemsContainerScroll.ActualBounds.Height > DropdownMaximumHeight.Value ?
-				DropdownMaximumHeight.Value : default(int?);
 		}
 
 		private void ItemOnChanged(object sender, EventArgs eventArgs)
