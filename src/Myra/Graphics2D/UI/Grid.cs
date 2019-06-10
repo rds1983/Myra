@@ -597,12 +597,12 @@ namespace Myra.Graphics2D.UI
 							measuredSize.Y = 0;
 						}
 
-						if (measuredSize.X > _measureColWidths[col])
+						if (measuredSize.X > _measureColWidths[col] && colProportion.Type != ProportionType.Pixels)
 						{
 							_measureColWidths[col] = measuredSize.X;
 						}
 
-						if (measuredSize.Y > _measureRowHeights[row])
+						if (measuredSize.Y > _measureRowHeights[row] && rowProportion.Type != ProportionType.Pixels)
 						{
 							_measureRowHeights[row] = measuredSize.Y;
 						}
