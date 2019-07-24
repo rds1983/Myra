@@ -8,23 +8,76 @@ using static Myra.Graphics2D.UI.Grid;
 
 namespace Myra.Graphics2D.UI
 {
-	public class SpinButton: SingleItemContainer<Grid>
+	public class SpinButton : SingleItemContainer<Grid>
 	{
 		private readonly TextField _textField;
 		private readonly ImageButton _upButton;
 		private readonly ImageButton _downButton;
+		private bool _integer = false;
 
 		[EditCategory("Behavior")]
 		[DefaultValue(false)]
-		public bool Nullable { get; set; }
+		public bool Nullable
+		{
+			get; set;
+		}
 
 		[EditCategory("Behavior")]
 		[DefaultValue(null)]
-		public float? Maximum { get; set; }
+		public float? Maximum
+		{
+			get; set;
+		}
 
 		[EditCategory("Behavior")]
 		[DefaultValue(null)]
-		public float? Minimum { get; set; }
+		public float? Minimum
+		{
+			get; set;
+		}
+
+		public override bool IsFocused
+		{
+			get
+			{
+				return base.IsFocused;
+			}
+			internal set
+			{
+				base.IsFocused = value;
+
+				if (!value && string.IsNullOrEmpty(_textField.Text) && !Nullable)
+				{
+					_textField.Text = "0";
+				}
+			}
+		}
+
+		[DefaultValue(HorizontalAlignment.Left)]
+		public override HorizontalAlignment HorizontalAlignment
+		{
+			get
+			{
+				return base.HorizontalAlignment;
+			}
+			set
+			{
+				base.HorizontalAlignment = value;
+			}
+		}
+
+		[DefaultValue(VerticalAlignment.Top)]
+		public override VerticalAlignment VerticalAlignment
+		{
+			get
+			{
+				return base.VerticalAlignment;
+			}
+			set
+			{
+				base.VerticalAlignment = value;
+			}
+		}
 
 		[EditCategory("Behavior")]
 		[DefaultValue(0.0f)]
@@ -62,42 +115,135 @@ namespace Myra.Graphics2D.UI
 				{
 					throw new Exception("Value can't be higher than Maximum");
 				}
+				if (FixedNumberSize)
+				{
+					string MajorString = "";
+					int k = 0;
+					int k2 = 0;
+					if (Maximum.HasValue)
+					{
+						k = Math.Abs(Maximum.Value).ToString().Count();
+					}
+					if (Minimum.HasValue)
+					{
+						k2 = Math.Abs(Minimum.Value).ToString().Count();
+					}
+					k = k > k2 ? k : k2;
+					for (int i = 0; i < k; i++)
+					{
+						MajorString += "0";
+					}
+					if (value.HasValue && value.Value >= 0)
+					{
+						MajorString = " " + MajorString;
+					}
+					string MinorString = ".";
+					for (int i = 0; i < _DecimalPlaces; i++)
+					{
+						MinorString += "0";
+					}
+					_textField.Text = value.HasValue ? value.Value.ToString(MajorString + MinorString) : string.Empty;
+				}
+				else
+				{
+					_textField.Text = value.HasValue ? value.Value.ToString() : string.Empty;
+				}
 
-
-				_textField.Text = value.HasValue ? value.Value.ToString() : string.Empty;
+				if (_textField.Text != null)
+				{
+					_textField.CursorPosition = 0;
+				}
 			}
 		}
 
-		public override bool IsFocused
+		private float _Increment = 1f;
+		[EditCategory("Behavior")]
+		[DefaultValue(1f)]
+		public float Increment
 		{
-			get { return base.IsFocused; }
-			internal set
+			get
 			{
-				base.IsFocused = value;
+				return _Increment;
+			}
 
-				if (!value && string.IsNullOrEmpty(_textField.Text) && !Nullable)
+			set
+			{
+				if (Integer)
 				{
-					_textField.Text = "0";
+					_Increment = (int)value;
+				}
+				else
+				{
+					_Increment = value;
+				}
+			}
+		}
+
+		private int _DecimalPlaces = 0;
+		[EditCategory("Behavior")]
+		[DefaultValue(0)]
+		public int DecimalPlaces
+		{
+			get
+			{
+				return _DecimalPlaces;
+			}
+
+			set
+			{
+				if (Integer)
+				{
+					_DecimalPlaces = 0;
+				}
+				else
+				{
+					_DecimalPlaces = value;
 				}
 			}
 		}
 
 		[EditCategory("Behavior")]
 		[DefaultValue(false)]
-		public bool Integer { get; set; }
-
-		[DefaultValue(HorizontalAlignment.Left)]
-		public override HorizontalAlignment HorizontalAlignment
+		public bool FixedNumberSize
 		{
-			get { return base.HorizontalAlignment; }
-			set { base.HorizontalAlignment = value; }
+			get; set;
 		}
 
-		[DefaultValue(VerticalAlignment.Top)]
-		public override VerticalAlignment VerticalAlignment
+		[EditCategory("Behavior")]
+		[DefaultValue(false)]
+		public bool Integer
 		{
-			get { return base.VerticalAlignment; }
-			set { base.VerticalAlignment = value; }
+			get
+			{
+				return _integer;
+			}
+
+			set
+			{
+				_integer = value;
+				if (Integer)
+				{
+					_Increment = (int)_Increment;
+					Value = (int)Value;
+				}
+			}
+		}
+
+		[EditCategory("Behavior")]
+		[DefaultValue(1f)]
+		public float Mul_Increment { get; set; } = 1f;
+
+		[DefaultValue(true)]
+		public override bool CanFocus
+		{
+			get
+			{
+				return base.CanFocus;
+			}
+			set
+			{
+				base.CanFocus = value;
+			}
 		}
 
 		/// <summary>
@@ -112,6 +258,8 @@ namespace Myra.Graphics2D.UI
 
 		public SpinButton(SpinButtonStyle style)
 		{
+			CanFocus = true;
+
 			InternalChild = new Grid();
 
 			HorizontalAlignment = HorizontalAlignment.Left;
@@ -246,58 +394,6 @@ namespace Myra.Graphics2D.UI
 			return true;
 		}
 
-		private void UpButtonOnUp(object sender, EventArgs eventArgs)
-		{
-			float value;
-			if (!float.TryParse(_textField.Text, out value))
-			{
-				value = 0;
-			}
-
-			++value;
-			if (InRange(value))
-			{
-				var changed = Value != value;
-				var oldValue = Value;
-				Value = value;
-
-				if (changed)
-				{
-					var ev = ValueChangedByUser;
-					if (ev != null)
-					{
-						ev(this, new ValueChangedEventArgs<float?>(oldValue, value));
-					}
-				}
-			}
-		}
-		
-		private void DownButtonOnUp(object sender, EventArgs eventArgs)
-		{
-			float value;
-			if (!float.TryParse(_textField.Text, out value))
-			{
-				value = 0;
-			}
-
-			--value;
-			if (InRange(value))
-			{
-				var changed = Value != value;
-				var oldValue = Value;
-				Value = value;
-
-				if (changed)
-				{
-					var ev = ValueChangedByUser;
-					if (ev != null)
-					{
-						ev(this, new ValueChangedEventArgs<float?>(oldValue, value));
-					}
-				}
-			}
-		}
-
 		public void ApplySpinButtonStyle(SpinButtonStyle style)
 		{
 			ApplyWidgetStyle(style);
@@ -326,6 +422,104 @@ namespace Myra.Graphics2D.UI
 		internal override string[] GetStyleNames(Stylesheet stylesheet)
 		{
 			return stylesheet.SpinButtonStyles.Keys.ToArray();
+		}
+
+		private void UpButtonOnUp(object sender, EventArgs eventArgs)
+		{
+			float value;
+			if (!float.TryParse(_textField.Text, out value))
+			{
+				value = 0;
+			}
+			value += _Increment;
+			if (InRange(value))
+			{
+				var changed = Value != value;
+				var oldValue = Value;
+				Value = value;
+
+				if (changed)
+				{
+					var ev = ValueChangedByUser;
+					if (ev != null)
+					{
+						ev(this, new ValueChangedEventArgs<float?>(oldValue, value));
+					}
+				}
+			}
+		}
+		private void DownButtonOnUp(object sender, EventArgs eventArgs)
+		{
+			float value;
+			if (!float.TryParse(_textField.Text, out value))
+			{
+				value = 0;
+			}
+
+			value -= _Increment;
+			if (InRange(value))
+			{
+				var changed = Value != value;
+				var oldValue = Value;
+				Value = value;
+
+				if (changed)
+				{
+					var ev = ValueChangedByUser;
+					if (ev != null)
+					{
+						ev(this, new ValueChangedEventArgs<float?>(oldValue, value));
+					}
+				}
+			}
+		}
+		public override void OnMouseWheel(float delta)
+		{
+			base.OnMouseWheel(delta);
+			float value;
+			if (!float.TryParse(_textField.Text, out value))
+			{
+				value = 0;
+			}
+
+			if (delta < 0)
+			{
+				value -= _Increment * Mul_Increment;
+				if (InRange(value))
+				{
+					var changed = Value != value;
+					var oldValue = Value;
+					Value = value;
+
+					if (changed)
+					{
+						var ev = ValueChangedByUser;
+						if (ev != null)
+						{
+							ev(this, new ValueChangedEventArgs<float?>(oldValue, value));
+						}
+					}
+				}
+			}
+			else if (delta > 0)
+			{
+				value += _Increment * Mul_Increment;
+				if (InRange(value))
+				{
+					var changed = Value != value;
+					var oldValue = Value;
+					Value = value;
+
+					if (changed)
+					{
+						var ev = ValueChangedByUser;
+						if (ev != null)
+						{
+							ev(this, new ValueChangedEventArgs<float?>(oldValue, value));
+						}
+					}
+				}
+			}
 		}
 	}
 }

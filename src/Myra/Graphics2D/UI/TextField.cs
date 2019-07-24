@@ -37,7 +37,10 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(0)]
 		public int VerticalSpacing
 		{
-			get { return _formattedText.VerticalSpacing; }
+			get
+			{
+				return _formattedText.VerticalSpacing;
+			}
 			set
 			{
 				_formattedText.VerticalSpacing = value;
@@ -48,8 +51,26 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Appearance")]
 		public string Text
 		{
-			get { return _formattedText.Text; }
-			set { SetText(value, false); }
+			get
+			{
+				return _formattedText.Text;
+			}
+			set
+			{
+				SetText(value, false);
+			}
+		}
+
+		string ITextEditHandler.Text
+		{
+			get
+			{
+				return _formattedText.Text;
+			}
+			set
+			{
+				SetText(value, true);
+			}
 		}
 
 		[HiddenInEditor]
@@ -57,7 +78,10 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Appearance")]
 		public SpriteFont Font
 		{
-			get { return _formattedText.Font; }
+			get
+			{
+				return _formattedText.Font;
+			}
 			set
 			{
 				_formattedText.Font = value;
@@ -69,7 +93,10 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(false)]
 		public bool Wrap
 		{
-			get { return _wrap; }
+			get
+			{
+				return _wrap;
+			}
 
 			set
 			{
@@ -84,32 +111,53 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Appearance")]
-		public Color TextColor { get; set; }
+		public Color TextColor
+		{
+			get; set;
+		}
 
 		[EditCategory("Appearance")]
-		public Color? DisabledTextColor { get; set; }
+		public Color? DisabledTextColor
+		{
+			get; set;
+		}
 
 		[EditCategory("Appearance")]
-		public Color? FocusedTextColor { get; set; }
+		public Color? FocusedTextColor
+		{
+			get; set;
+		}
 
 		[EditCategory("Appearance")]
 		[DefaultValue(null)]
 		[Obsolete]
-		public Color? MessageTextColor { get; set; }
+		public Color? MessageTextColor
+		{
+			get; set;
+		}
 
 		[HiddenInEditor]
 		[XmlIgnore]
 		[EditCategory("Appearance")]
-		public IRenderable Cursor { get; set; }
+		public IRenderable Cursor
+		{
+			get; set;
+		}
 
 		[HiddenInEditor]
 		[XmlIgnore]
 		[EditCategory("Appearance")]
-		public IRenderable Selection { get; set; }
+		public IRenderable Selection
+		{
+			get; set;
+		}
 
 		[EditCategory("Behavior")]
 		[DefaultValue(450)]
-		public int BlinkIntervalInMs { get; set; }
+		public int BlinkIntervalInMs
+		{
+			get; set;
+		}
 
 		[EditCategory("Behavior")]
 		[DefaultValue(false)]
@@ -128,44 +176,77 @@ namespace Myra.Graphics2D.UI
 
 		[EditCategory("Behavior")]
 		[DefaultValue(false)]
-		public bool Readonly { get; set; }
+		public bool Readonly
+		{
+			get; set;
+		}
 
-	    [EditCategory("Behavior")]
-	    [DefaultValue(false)]
-	    public bool PasswordField
-	    {
-	        get { return _formattedText.IsPassword; }
-	        set { _formattedText.IsPassword = value; }
-	    }
+		[EditCategory("Behavior")]
+		[DefaultValue(false)]
+		public bool PasswordField
+		{
+			get
+			{
+				return _formattedText.IsPassword;
+			}
+			set
+			{
+				_formattedText.IsPassword = value;
+			}
+		}
 
-        [EditCategory("Behavior")]
+		[EditCategory("Behavior")]
 		[DefaultValue(VerticalAlignment.Top)]
-		public VerticalAlignment TextVerticalAlignment { get; set; }
+		public VerticalAlignment TextVerticalAlignment
+		{
+			get; set;
+		}
 
 		[DefaultValue(true)]
 		public override bool ClipToBounds
 		{
-			get { return base.ClipToBounds; }
-			set { base.ClipToBounds = value; }
+			get
+			{
+				return base.ClipToBounds;
+			}
+			set
+			{
+				base.ClipToBounds = value;
+			}
 		}
 
 		[DefaultValue(true)]
 		public override bool CanFocus
 		{
-			get { return base.CanFocus; }
-			set { base.CanFocus = value; }
+			get
+			{
+				return base.CanFocus;
+			}
+			set
+			{
+				base.CanFocus = value;
+			}
 		}
 
 		[DefaultValue(HorizontalAlignment.Stretch)]
 		public override HorizontalAlignment HorizontalAlignment
 		{
-			get { return base.HorizontalAlignment; }
-			set { base.HorizontalAlignment = value; }
+			get
+			{
+				return base.HorizontalAlignment;
+			}
+			set
+			{
+				base.HorizontalAlignment = value;
+			}
 		}
 
 		[HiddenInEditor]
 		[XmlIgnore]
-		public Func<string, string> InputFilter { get; set; }
+		public Func<string, string> InputFilter
+		{
+			get; set;
+		}
 
 		int ITextEditHandler.Length
 		{
@@ -283,7 +364,8 @@ namespace Myra.Graphics2D.UI
 				var sp = asScrollPane.ScrollPosition;
 				asScrollPane.ScrollPosition = new Point(sp.X, newY);
 
-			} else if (p.Y + lineHeight > asScrollPane.ActualBounds.Bottom)
+			}
+			else if (p.Y + lineHeight > asScrollPane.ActualBounds.Bottom)
 			{
 				var scrollMaximum = asScrollPane.ScrollMaximum;
 				var newY = (-Top + p.Y + lineHeight - asScrollPane.ActualBounds.Bottom) * scrollMaximum.Y / scrollMaximumPixels.Y;
@@ -612,7 +694,7 @@ namespace Myra.Graphics2D.UI
 
 				if (selectStart < selectEnd)
 				{
-//					Debug.WriteLine("{0} - {1}", selectStart, selectEnd);
+					//					Debug.WriteLine("{0} - {1}", selectStart, selectEnd);
 
 					var startGlyph = _formattedText.GetGlyphInfoByIndex(selectStart);
 					var lineIndex = startGlyph.TextLine.LineIndex;
@@ -636,7 +718,7 @@ namespace Myra.Graphics2D.UI
 							break;
 						}
 
-						context.Draw(Selection, 
+						context.Draw(Selection,
 							new Rectangle(startPosition.X,
 								startPosition.Y,
 								bounds.Left + startGlyph.TextLine.Size.X - startPosition.X,
@@ -661,7 +743,8 @@ namespace Myra.Graphics2D.UI
 			if (!Enabled && DisabledTextColor != null)
 			{
 				textColor = DisabledTextColor.Value;
-			} else if (IsFocused && FocusedTextColor != null)
+			}
+			else if (IsFocused && FocusedTextColor != null)
 			{
 				textColor = FocusedTextColor.Value;
 			}
