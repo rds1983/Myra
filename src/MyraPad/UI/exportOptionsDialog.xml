@@ -1,0 +1,24 @@
+<Project>
+  <ExportOptions Namespace="MyraPad.UI" Class="ExportOptionsDialog" OutputPath="D:\Projects\Myra\src\MyraPad\UI" />
+  <Dialog Title="Export" Left="73" Top="113">
+    <Grid ColumnSpacing="8" RowSpacing="8" Id="Root" Width="800" GridRow="1">
+      <ColumnsProportions>
+        <Proportion />
+        <Proportion Type="Fill" />
+        <Proportion />
+      </ColumnsProportions>
+      <RowsProportions>
+        <Proportion />
+        <Proportion />
+        <Proportion />
+      </RowsProportions>
+      <TextBlock Text="Class Name:" Id="" GridRow="1" />
+      <TextField Text="" Id="_textClassName" GridColumn="1" GridRow="1" />
+      <TextBlock Text="Output Path:" GridRow="2" />
+      <TextField Text="" Id="_textOutputPath" GridColumn="1" GridRow="2" />
+      <TextButton Text="Change..." Id="_buttonChangeOutputPath" GridColumn="2" GridRow="2" />
+      <TextBlock Text="Namespace:" />
+      <TextField Text="" Id="_textNamespace" GridColumn="1" />
+    </Grid>
+  </Dialog>
+</Project>

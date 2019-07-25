@@ -381,6 +381,12 @@ namespace Myra.Graphics2D.UI
 
 		private bool SetText(string value, bool byUser)
 		{
+			// Remove '\r'
+			if (value != null)
+			{
+				value = value.Replace("\r", string.Empty);
+			}
+
 			if (value == _formattedText.Text)
 			{
 				return false;
@@ -395,12 +401,6 @@ namespace Myra.Graphics2D.UI
 				{
 					return false;
 				}
-			}
-
-			// Remove '\r'
-			if (value != null)
-			{
-				value = value.Replace("\r", string.Empty);
 			}
 
 			var oldValue = _formattedText.Text;

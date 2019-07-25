@@ -411,6 +411,7 @@ namespace MyraPad
 				StringBuilder sb = new StringBuilder();
 				XmlWriterSettings settings = new XmlWriterSettings
 				{
+					OmitXmlDeclaration = true,
 					Indent = _options.AutoIndent,
 					IndentChars = new string(' ', _options.IndentSpacesSize),
 					NewLineChars = "\n",
@@ -1109,6 +1110,39 @@ namespace MyraPad
 		{
 			var dlg = new ExportOptionsDialog();
 			dlg.ShowModal(_desktop);
+
+			dlg.Closed += (s, a) =>
+			{
+				if (!dlg.Result)
+				{
+					return;
+				}
+
+				try
+				{
+					Project.ExportOptions.Namespace = dlg._textNamespace.Text;
+					Project.ExportOptions.OutputPath = dlg._textOutputPath.Text;
+					Project.ExportOptions.Class = dlg._textClassName.Text;
+
+					_ui._textSource.Text = Project.Save();
+
+					var export = new ExporterCS(Instance.Project);
+
+					var strings = new List<string>
+					{
+						"Success. Following files had been written:"
+					};
+					strings.AddRange(export.Export());
+
+					var msg = Dialog.CreateMessageBox("Export To C#", string.Join("\n", strings));
+					msg.ShowModal(_desktop);
+				}
+				catch (Exception ex)
+				{
+					var msg = Dialog.CreateMessageBox("Error", ex.Message);
+					msg.ShowModal(_desktop);
+				}
+			};
 		}
 
 		private void PropertyGridOnPropertyChanged(object sender, GenericEventArgs<string> eventArgs)

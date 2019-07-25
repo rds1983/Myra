@@ -6,9 +6,9 @@ using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using static Myra.Graphics2D.UI.Grid;
 using System.Xml.Serialization;
-using Microsoft.Xna.Framework.Input;
 
 #if !XENKO
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 #else
