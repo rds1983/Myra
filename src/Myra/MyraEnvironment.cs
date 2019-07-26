@@ -52,7 +52,11 @@ namespace Myra
 		}
 
 		public static bool DrawWidgetsFrames { get; set; }
-		public static bool DrawFocusedWidgetFrame { get; set; }
+		public static bool DrawKeyboardFocusedWidgetFrame { get; set; }
+		public static bool DrawMouseWheelFocusedWidgetFrame
+		{
+			get; set;
+		}
 		public static bool DrawTextGlyphsFrames { get; set; }
 		public static bool DisableClipping { get; set; }
 		public static bool DrawPartialLastSymbol { get; set; }

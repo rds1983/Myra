@@ -113,7 +113,7 @@ namespace Myra.Samples.Notepad
 
 			var resources = new ResourceAssetResolver(typeof(NotepadGame).Assembly, "Myra.Samples.Notepad.");
 			_textField.Text = resources.ReadAsString("hobbits.txt");
-			_desktop.FocusedWidget = _textField;
+			_desktop.FocusedKeyboardWidget = _textField;
 
 			_textField.TextChanged += TextFieldOnTextChanged;
 

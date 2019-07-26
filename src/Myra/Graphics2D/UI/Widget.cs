@@ -49,7 +49,6 @@ namespace Myra.Graphics2D.UI
 		private float _opacity = 1.0f;
 
 		private bool _enabled;
-		private bool _canFocus;
 		private string _styleName;
 
 		[DefaultValue(null)]
@@ -491,11 +490,7 @@ namespace Myra.Graphics2D.UI
 
 				_enabled = value;
 
-				var ev = EnabledChanged;
-				if (ev != null)
-				{
-					ev(this, EventArgs.Empty);
-				}
+				EnabledChanged?.Invoke(this, EventArgs.Empty);
 			}
 		}
 
@@ -639,17 +634,7 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (CanFocus && _desktop != null)
-				{
-					_desktop.RemoveFocusableWidget(this);
-				}
-
 				_desktop = value;
-
-				if (CanFocus && _desktop != null)
-				{
-					_desktop.AddFocusableWidget(this);
-				}
 			}
 		}
 
@@ -707,40 +692,63 @@ namespace Myra.Graphics2D.UI
 
 		[EditCategory("Behavior")]
 		[DefaultValue(false)]
+		[Obsolete("Use AcceptsKeyboardFocus instead")]
 		public virtual bool CanFocus
 		{
 			get
 			{
-				return _canFocus;
+				return AcceptsKeyboardFocus;
 			}
 
 			set
 			{
-				if (_canFocus == value)
+				AcceptsKeyboardFocus = false;
+			}
+		}
+
+		[HiddenInEditor]
+		[DefaultValue(false)]
+		public virtual bool AcceptsKeyboardFocus
+		{
+			get; set;
+		}
+
+		[HiddenInEditor]
+		[DefaultValue(false)]
+		public virtual bool AcceptsMouseWheelFocus
+		{
+			get; set;
+		}
+
+		[HiddenInEditor]
+		[XmlIgnore]
+		public virtual bool IsKeyboardFocused
+		{
+			get
+			{
+				if (Desktop == null)
 				{
-					return;
+					return false;
 				}
 
-				// If old value was true, remove from focusable widgets
-				if (_canFocus && Desktop != null)
-				{
-					Desktop.RemoveFocusableWidget(this);
-				}
-
-				_canFocus = value;
-
-				// If new value is true, add to focusable widgets
-				if (_canFocus && Desktop != null)
-				{
-					Desktop.AddFocusableWidget(this);
-				}
-
+				return Desktop.FocusedKeyboardWidget == this;
 			}
 		}
 
 		[HiddenInEditor]
 		[XmlIgnore]
-		public virtual bool IsFocused { get; internal set; }
+		public virtual bool IsMouseWheelFocused
+		{
+			get
+			{
+				if (Desktop == null)
+				{
+					return false;
+				}
+
+				return Desktop.FocusedMouseWheelWidget == this;
+			}
+		}
 
 		public event EventHandler VisibleChanged;
 		public event EventHandler MeasureChanged;
@@ -780,7 +788,7 @@ namespace Myra.Graphics2D.UI
 			{
 				result = DisabledBackground;
 			}
-			else if (Enabled && IsFocused && FocusedBackground != null)
+			else if (Enabled && IsKeyboardFocused && FocusedBackground != null)
 			{
 				result = FocusedBackground;
 			}
@@ -806,7 +814,7 @@ namespace Myra.Graphics2D.UI
 			{
 				result = DisabledBorder;
 			}
-			else if (Enabled && IsFocused && FocusedBorder != null)
+			else if (Enabled && IsKeyboardFocused && FocusedBorder != null)
 			{
 				result = FocusedBorder;
 			}
@@ -877,9 +885,14 @@ namespace Myra.Graphics2D.UI
 				batch.DrawRectangle(Bounds, Color.LightGreen);
 			}
 
-			if (MyraEnvironment.DrawFocusedWidgetFrame && IsFocused)
+			if (MyraEnvironment.DrawKeyboardFocusedWidgetFrame && IsKeyboardFocused)
 			{
 				batch.DrawRectangle(Bounds, Color.Red);
+			}
+
+			if (MyraEnvironment.DrawMouseWheelFocusedWidgetFrame && IsMouseWheelFocused)
+			{
+				batch.DrawRectangle(Bounds, Color.Yellow);
 			}
 
 			if (ClipToBounds && !MyraEnvironment.DisableClipping)
@@ -1020,11 +1033,7 @@ namespace Myra.Graphics2D.UI
 			_lastLocationHint = new Point(Left, Top);
 			_layoutState = LayoutState.Normal;
 
-			var ev = LayoutUpdated;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
+			LayoutUpdated?.Invoke(this, EventArgs.Empty);
 		}
 
 		private Widget FindWidgetBy(Func<Widget, bool> finder)
@@ -1084,11 +1093,7 @@ namespace Myra.Graphics2D.UI
 
 			InvalidateLayout();
 
-			var ev = MeasureChanged;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
+			MeasureChanged?.Invoke(this, EventArgs.Empty);
 		}
 
 		public void ApplyWidgetStyle(WidgetStyle style)
@@ -1142,92 +1147,59 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnMouseLeft()
 		{
-			var ev = MouseLeft;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
+			MouseLeft?.Invoke(this, EventArgs.Empty);
 		}
 
 		public virtual void OnMouseEntered()
 		{
-			var ev = MouseEntered;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
+			MouseEntered?.Invoke(this, EventArgs.Empty);
 		}
 
 		public virtual void OnMouseMoved()
 		{
-			var ev = MouseMoved;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
+			MouseMoved?.Invoke(this, EventArgs.Empty);
 		}
 
 		public virtual void OnMouseDown(MouseButtons mb)
 		{
-			var ev = MouseDown;
-			if (ev != null)
-			{
-				ev(this, new GenericEventArgs<MouseButtons>(mb));
-			}
+			MouseDown?.Invoke(this, new GenericEventArgs<MouseButtons>(mb));
 		}
 
 		public virtual void OnMouseDoubleClick(MouseButtons mb)
 		{
-			var ev = MouseDoubleClick;
-			if (ev != null)
-			{
-				ev(this, new GenericEventArgs<MouseButtons>(mb));
-			}
+			MouseDoubleClick?.Invoke(this, new GenericEventArgs<MouseButtons>(mb));
 		}
 
 		public virtual void OnMouseUp(MouseButtons mb)
 		{
-			var ev = MouseUp;
-			if (ev != null)
-			{
-				ev(this, new GenericEventArgs<MouseButtons>(mb));
-			}
+			MouseUp?.Invoke(this, new GenericEventArgs<MouseButtons>(mb));
+		}
+
+		protected void FireMouseWheelChanged(float delta)
+		{
+			MouseWheelChanged?.Invoke(this, new GenericEventArgs<float>(delta));
 		}
 
 		public virtual void OnMouseWheel(float delta)
 		{
-			var ev = MouseWheelChanged;
-			if (ev != null)
-			{
-				ev(this, new GenericEventArgs<float>(delta));
-			}
+			// If there's scrollpane 
+
+			FireMouseWheelChanged(delta);
 		}
 
 		public virtual void OnTouchDown()
 		{
-			var ev = TouchDown;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
+			TouchDown?.Invoke(this, EventArgs.Empty);
 		}
 
 		public virtual void OnTouchUp()
 		{
-			var ev = TouchUp;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
+			TouchUp?.Invoke(this, EventArgs.Empty);
 		}
 
 		protected void FireKeyDown(Keys k)
 		{
-			var ev = KeyDown;
-			if (ev != null)
-			{
-				ev(this, new GenericEventArgs<Keys>(k));
-			}
+			KeyDown?.Invoke(this, new GenericEventArgs<Keys>(k));
 		}
 
 		public virtual void OnKeyDown(Keys k)
@@ -1237,20 +1209,12 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnKeyUp(Keys k)
 		{
-			var ev = KeyUp;
-			if (ev != null)
-			{
-				ev(this, new GenericEventArgs<Keys>(k));
-			}
+			KeyUp?.Invoke(this, new GenericEventArgs<Keys>(k));
 		}
 
 		public virtual void OnChar(char c)
 		{
-			var ev = Char;
-			if (ev != null)
-			{
-				ev(this, new GenericEventArgs<char>(c));
-			}
+			Char?.Invoke(this, new GenericEventArgs<char>(c));
 		}
 
 		public virtual void OnVisibleChanged()
@@ -1258,11 +1222,15 @@ namespace Myra.Graphics2D.UI
 			// Visibility change can generate MouseEnter/MouseLeft events
 			HandleMouseMovement();
 
-			var ev = VisibleChanged;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
+			VisibleChanged?.Invoke(this, EventArgs.Empty);
+		}
+
+		public virtual void OnLostKeyboardFocus()
+		{
+		}
+
+		public virtual void OnGotKeyboardFocus()
+		{
 		}
 
 		internal Rectangle CalculateClientBounds(Rectangle clientBounds)
@@ -1283,19 +1251,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			return clientBounds;
-		}
-
-		internal void IterateFocusable(Action<Widget> action)
-		{
-			Widget w = this;
-			while (w != null)
-			{
-				if (w.CanFocus)
-				{
-					action(w);
-				}
-				w = w.Parent;
-			}
 		}
 
 		public void RemoveFromParent()
@@ -1320,20 +1275,12 @@ namespace Myra.Graphics2D.UI
 
 		private void FireLocationChanged()
 		{
-			var ev = LocationChanged;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
+			LocationChanged?.Invoke(this, EventArgs.Empty);
 		}
 
 		private void FireSizeChanged()
 		{
-			var ev = SizeChanged;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
+			SizeChanged?.Invoke(this, EventArgs.Empty);
 		}
 
 		internal void HandleMouseDown(MouseButtons buttons)

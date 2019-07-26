@@ -36,24 +36,6 @@ namespace Myra.Graphics2D.UI
 		{
 			get; set;
 		}
-
-		public override bool IsFocused
-		{
-			get
-			{
-				return base.IsFocused;
-			}
-			internal set
-			{
-				base.IsFocused = value;
-
-				if (!value && string.IsNullOrEmpty(_textField.Text) && !Nullable)
-				{
-					_textField.Text = "0";
-				}
-			}
-		}
-
 		[DefaultValue(HorizontalAlignment.Left)]
 		public override HorizontalAlignment HorizontalAlignment
 		{
@@ -234,15 +216,28 @@ namespace Myra.Graphics2D.UI
 		public float Mul_Increment { get; set; } = 1f;
 
 		[DefaultValue(true)]
-		public override bool CanFocus
+		public override bool AcceptsKeyboardFocus
 		{
 			get
 			{
-				return base.CanFocus;
+				return base.AcceptsKeyboardFocus;
 			}
 			set
 			{
-				base.CanFocus = value;
+				base.AcceptsKeyboardFocus = value;
+			}
+		}
+
+		[DefaultValue(true)]
+		public override bool AcceptsMouseWheelFocus
+		{
+			get
+			{
+				return base.AcceptsMouseWheelFocus;
+			}
+			set
+			{
+				base.AcceptsMouseWheelFocus = value;
 			}
 		}
 
@@ -258,7 +253,7 @@ namespace Myra.Graphics2D.UI
 
 		public SpinButton(SpinButtonStyle style)
 		{
-			CanFocus = true;
+			AcceptsKeyboardFocus = AcceptsMouseWheelFocus = true;
 
 			InternalChild = new Grid();
 
@@ -473,6 +468,7 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 		}
+
 		public override void OnMouseWheel(float delta)
 		{
 			base.OnMouseWheel(delta);
@@ -519,6 +515,16 @@ namespace Myra.Graphics2D.UI
 						}
 					}
 				}
+			}
+		}
+
+		public override void OnLostKeyboardFocus()
+		{
+			base.OnLostKeyboardFocus();
+
+			if (string.IsNullOrEmpty(_textField.Text) && !Nullable)
+			{
+				_textField.Text = "0";
 			}
 		}
 	}

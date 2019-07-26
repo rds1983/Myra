@@ -1,6 +1,6 @@
 <Project>
-  <ExportOptions Namespace="Myra.Graphics2D.UI" Class="DebugOptionsDialog" OutputPath="D:/Projects/Hebron/Myra/src/Myra/Graphics2D/UI" />
-  <Dialog Title="Debug Options" Left="171" Top="266">
+  <ExportOptions Namespace="Myra.Graphics2D.UI" Class="DebugOptionsDialog" OutputPath="D:/Projects/Myra/src/Myra/Graphics2D/UI" />
+  <Dialog Title="Debug Options" Left="260" Top="100">
     <Grid Id="Root" GridRow="1">
       <ColumnsProportions />
       <RowsProportions>
@@ -8,11 +8,13 @@
         <Proportion />
         <Proportion />
         <Proportion />
+        <Proportion />
       </RowsProportions>
       <CheckBox Text="Draw green frame around every widget" Id="_checkBoxWidgetFrames" />
-      <CheckBox Text="Draw red frame around the focused widget" Id="_checkBoxFocusedWidgetFrame" GridRow="1" />
-      <CheckBox Text="Draw white frame around every letter glyph" Id="_checkBoxGlyphFrames" GridRow="2" />
-      <CheckBox Text="Disable clipping" Id="_checkBoxDisableClipping" GridRow="3" />
+      <CheckBox Text="Draw red frame around the keyboard focused widget" Id="_checkBoxKeyboardFocusedWidgetFrame" GridRow="1" />
+      <CheckBox Text="Draw yellow frame around the mouse wheel focused widget" Id="_checkBoxMouseWheelFocusedWidgetFrame" GridRow="2" />
+      <CheckBox Text="Draw white frame around every letter glyph" Id="_checkBoxGlyphFrames" GridRow="3" />
+      <CheckBox Text="Disable clipping" Id="_checkBoxDisableClipping" GridRow="4" />
     </Grid>
   </Dialog>
 </Project>

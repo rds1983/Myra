@@ -136,10 +136,16 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[DefaultValue(true)]
-		public override bool CanFocus
+		public override bool AcceptsMouseWheelFocus
 		{
-			get { return base.CanFocus; }
-			set { base.CanFocus = value; }
+			get
+			{
+				return base.AcceptsMouseWheelFocus;
+			}
+			set
+			{
+				base.AcceptsMouseWheelFocus = value;
+			}
 		}
 
 		/// <summary>
@@ -179,7 +185,7 @@ namespace Myra.Graphics2D.UI
 		public ScrollPane(ScrollPaneStyle style)
 		{
 			ClipToBounds = true;
-			CanFocus = true;
+			AcceptsMouseWheelFocus = true;
 			_horizontalScrollbarVisible = _verticalScrollbarVisible = false;
 
 			AllowVerticalScrolling = AllowHorizontalScrolling = true;

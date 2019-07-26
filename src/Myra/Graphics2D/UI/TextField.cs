@@ -216,15 +216,15 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[DefaultValue(true)]
-		public override bool CanFocus
+		public override bool AcceptsKeyboardFocus
 		{
 			get
 			{
-				return base.CanFocus;
+				return base.AcceptsKeyboardFocus;
 			}
 			set
 			{
-				base.CanFocus = value;
+				base.AcceptsKeyboardFocus = value;
 			}
 		}
 
@@ -313,7 +313,7 @@ namespace Myra.Graphics2D.UI
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Top;
 
-			CanFocus = true;
+			AcceptsKeyboardFocus = true;
 			ClipToBounds = true;
 
 			if (style != null)
@@ -749,7 +749,7 @@ namespace Myra.Graphics2D.UI
 			{
 				textColor = DisabledTextColor.Value;
 			}
-			else if (IsFocused && FocusedTextColor != null)
+			else if (IsKeyboardFocused && FocusedTextColor != null)
 			{
 				textColor = FocusedTextColor.Value;
 			}
@@ -759,7 +759,7 @@ namespace Myra.Graphics2D.UI
 
 			_formattedText.Draw(context.Batch, centeredBounds.Location, context.View, textColor, context.Opacity);
 
-			if (!IsFocused)
+			if (!IsKeyboardFocused)
 			{
 				// Skip cursor rendering if the widget doesnt have the focus
 				return;

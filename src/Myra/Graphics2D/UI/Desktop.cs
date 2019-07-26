@@ -36,10 +36,9 @@ namespace Myra.Graphics2D.UI
 		private bool _layoutDirty = true;
 		private Rectangle _bounds;
 		private bool _widgetsDirty = true;
-		private Widget _focusedWidget;
+		private Widget _focusedKeyboardWidget;
 		private readonly List<Widget> _widgetsCopy = new List<Widget>();
 		protected readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
-		private readonly List<Widget> _focusableWidgets = new List<Widget>();
 		private DateTime _lastTouch;
 		private MouseInfo _lastMouseInfo;
 		private IReadOnlyCollection<Keys> _downKeys, _lastDownKeys;
@@ -113,29 +112,36 @@ namespace Myra.Graphics2D.UI
 
 		public Widget ContextMenu { get; private set; }
 
-		public Widget FocusedWidget
+		public Widget FocusedKeyboardWidget
 		{
-			get { return _focusedWidget; }
+			get { return _focusedKeyboardWidget; }
 
 			set
 			{
-				if (value == _focusedWidget)
+				if (value == _focusedKeyboardWidget)
 				{
 					return;
 				}
 
-				if (_focusedWidget != null)
+				if (_focusedKeyboardWidget != null)
 				{
-					_focusedWidget.IterateFocusable(w => w.IsFocused = false);
+					_focusedKeyboardWidget.OnLostKeyboardFocus();
+					WidgetLostKeyboardFocus?.Invoke(this, new GenericEventArgs<Widget>(_focusedKeyboardWidget));
 				}
 
-				_focusedWidget = value;
+				_focusedKeyboardWidget = value;
 
-				if (_focusedWidget != null)
+				if (_focusedKeyboardWidget != null)
 				{
-					_focusedWidget.IterateFocusable(w => w.IsFocused = true);
+					_focusedKeyboardWidget.OnGotKeyboardFocus();
+					WidgetGotKeyboardFocus?.Invoke(this, new GenericEventArgs<Widget>(_focusedKeyboardWidget));
 				}
 			}
+		}
+
+		public Widget FocusedMouseWheelWidget
+		{
+			get; set;
 		}
 
 		private RenderContext RenderContext
@@ -218,6 +224,9 @@ namespace Myra.Graphics2D.UI
 
 		public event EventHandler<ContextMenuClosingEventArgs> ContextMenuClosing;
 		public event EventHandler<GenericEventArgs<Widget>> ContextMenuClosed;
+
+		public event EventHandler<GenericEventArgs<Widget>> WidgetLostKeyboardFocus;
+		public event EventHandler<GenericEventArgs<Widget>> WidgetGotKeyboardFocus;
 
 		public Desktop()
 		{
@@ -303,14 +312,15 @@ namespace Myra.Graphics2D.UI
 				ev(this, new GenericEventArgs<char>(c));
 			}
 
-			if (_focusedWidget != null)
+			if (_focusedKeyboardWidget != null)
 			{
-				_focusedWidget.IterateFocusable(w => w.OnChar(c));
+				_focusedKeyboardWidget.OnChar(c);
 			}
 		}
 
 		private void InputOnMouseDown()
 		{
+			// Handle context menu
 			if (ContextMenu != null && !ContextMenu.Bounds.Contains(MousePosition))
 			{
 				var ev = ContextMenuClosing;
@@ -326,6 +336,38 @@ namespace Myra.Graphics2D.UI
 				}
 
 				HideContextMenu();
+			}
+
+			// Handle focus
+			var activeWidget = GetActiveWidget();
+			if (activeWidget == null)
+			{
+				return;
+			}
+
+			// Widgets at the bottom of tree become focused
+			Widget focusedWidget = null;
+			ProcessWidgets(activeWidget, s =>
+			{
+				if (s.IsMouseOver && s.AcceptsKeyboardFocus)
+				{
+					focusedWidget = s;
+				}
+			});
+			FocusedKeyboardWidget = focusedWidget;
+
+			focusedWidget = null;
+			ProcessWidgets(activeWidget, s =>
+			{
+				if (s.IsMouseOver && s.AcceptsMouseWheelFocus)
+				{
+					focusedWidget = s;
+				}
+			});
+
+			if (focusedWidget != null)
+			{
+				FocusedMouseWheelWidget = focusedWidget;
 			}
 		}
 
@@ -366,7 +408,7 @@ namespace Myra.Graphics2D.UI
 
 				if (ContextMenu.CanFocus)
 				{
-					FocusedWidget = ContextMenu;
+					FocusedKeyboardWidget = ContextMenu;
 				}
 			}
 		}
@@ -551,7 +593,6 @@ namespace Myra.Graphics2D.UI
 
 				InputOnMouseDown();
 
-
 				activeWidget.HandleMouseDown(buttons);
 
 				var td = TouchDown;
@@ -665,9 +706,9 @@ namespace Myra.Graphics2D.UI
 						ev(null, new GenericEventArgs<float>(delta));
 					}
 
-					if (_focusedWidget != null)
+					if (FocusedMouseWheelWidget != null)
 					{
-						_focusedWidget.IterateFocusable(w => w.OnMouseWheel(delta));
+						FocusedMouseWheelWidget.OnMouseWheel(delta);
 					}
 				}
 
@@ -708,9 +749,9 @@ namespace Myra.Graphics2D.UI
 									ev(this, new GenericEventArgs<Keys>(key));
 								}
 
-								if (_focusedWidget != null)
+								if (_focusedKeyboardWidget != null)
 								{
-									_focusedWidget.IterateFocusable(w => w.OnKeyUp(key));
+									_focusedKeyboardWidget.OnKeyUp(key);
 								}
 							}
 						}
@@ -735,9 +776,9 @@ namespace Myra.Graphics2D.UI
 			}
 			else
 			{
-				if (_focusedWidget != null)
+				if (_focusedKeyboardWidget != null)
 				{
-					_focusedWidget.IterateFocusable(w => w.OnKeyDown(key));
+					_focusedKeyboardWidget.OnKeyDown(key);
 
 #if XENKO
 										var ch = key.ToChar(_downKeys.Contains(Keys.LeftShift) ||
@@ -756,37 +797,21 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		internal void AddFocusableWidget(Widget w)
+		private void ProcessWidgets(Widget root, Action<Widget> operation)
 		{
-			w.MouseDown += FocusableWidgetOnMouseDown;
-			_focusableWidgets.Add(w);
-		}
-
-		internal void RemoveFocusableWidget(Widget w)
-		{
-			w.MouseDown -= FocusableWidgetOnMouseDown;
-			_focusableWidgets.Remove(w);
-		}
-
-		private void ProcessWidgets(IEnumerable<Widget> widgets)
-		{
-			foreach (var w in widgets)
+			if (!root.Visible)
 			{
-				if (!w.Visible)
-				{
-					continue;
-				}
+				return;
+			}
 
+			operation(root);
 
-				if (MenuBar == null && w is HorizontalMenu)
+			var asContainer = root as Container;
+			if (asContainer != null)
+			{
+				foreach (var w in asContainer.ChildrenCopy)
 				{
-					MenuBar = (HorizontalMenu)w;
-				}
-
-				var asContainer = w as Container;
-				if (asContainer != null)
-				{
-					ProcessWidgets(asContainer.ChildrenCopy);
+					ProcessWidgets(w, operation);
 				}
 			}
 		}
@@ -795,16 +820,15 @@ namespace Myra.Graphics2D.UI
 		{
 			MenuBar = null;
 
-			ProcessWidgets(_widgets);
-		}
-
-		private void FocusableWidgetOnMouseDown(object sender, GenericEventArgs<MouseButtons> genericEventArgs)
-		{
-			var widget = (Widget)sender;
-
-			if (!widget.IsFocused)
+			foreach (var w in _widgets)
 			{
-				FocusedWidget = widget;
+				ProcessWidgets(w, widget =>
+				{
+					if (MenuBar == null && widget is HorizontalMenu)
+					{
+						MenuBar = (HorizontalMenu)widget;
+					}
+				});
 			}
 		}
 

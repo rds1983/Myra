@@ -19,10 +19,16 @@ namespace Myra.Graphics2D.UI
 				MyraEnvironment.DrawWidgetsFrames = _checkBoxWidgetFrames.IsPressed;
 			};
 
-			_checkBoxFocusedWidgetFrame.IsPressed = MyraEnvironment.DrawFocusedWidgetFrame;
-			_checkBoxFocusedWidgetFrame.PressedChanged += (s, a) =>
+			_checkBoxKeyboardFocusedWidgetFrame.IsPressed = MyraEnvironment.DrawKeyboardFocusedWidgetFrame;
+			_checkBoxKeyboardFocusedWidgetFrame.PressedChanged += (s, a) =>
 			{
-				MyraEnvironment.DrawFocusedWidgetFrame = _checkBoxFocusedWidgetFrame.IsPressed;
+				MyraEnvironment.DrawKeyboardFocusedWidgetFrame = _checkBoxKeyboardFocusedWidgetFrame.IsPressed;
+			};
+
+			_checkBoxMouseWheelFocusedWidgetFrame.IsPressed = MyraEnvironment.DrawMouseWheelFocusedWidgetFrame;
+			_checkBoxMouseWheelFocusedWidgetFrame.PressedChanged += (s, a) =>
+			{
+				MyraEnvironment.DrawMouseWheelFocusedWidgetFrame = _checkBoxMouseWheelFocusedWidgetFrame.IsPressed;
 			};
 
 			_checkBoxGlyphFrames.IsPressed = MyraEnvironment.DrawTextGlyphsFrames;

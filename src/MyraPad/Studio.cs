@@ -1375,7 +1375,7 @@ namespace MyraPad
 			}
 
 			_ui._textSource.CursorPosition = pos;
-			_desktop.FocusedWidget = _ui._textSource;
+			_desktop.FocusedKeyboardWidget = _ui._textSource;
 
 
 			FilePath = string.Empty;
@@ -1441,7 +1441,7 @@ namespace MyraPad
 				_ui._textSource.Text = data;
 				_ui._textSource.CursorPosition = 0;
 				UpdateCursor();
-				_desktop.FocusedWidget = _ui._textSource;
+				_desktop.FocusedKeyboardWidget = _ui._textSource;
 
 				IsDirty = false;
 			}

@@ -50,10 +50,16 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[DefaultValue(true)]
-		public override bool CanFocus
+		public override bool AcceptsKeyboardFocus
 		{
-			get { return base.CanFocus; }
-			set { base.CanFocus = value; }
+			get
+			{
+				return base.AcceptsKeyboardFocus;
+			}
+			set
+			{
+				base.AcceptsKeyboardFocus = value;
+			}
 		}
 
 		[DefaultValue(true)]
@@ -80,7 +86,7 @@ namespace Myra.Graphics2D.UI
 
 		public Tree(TreeStyle style):base(style, null)
 		{
-			CanFocus = true;
+			AcceptsKeyboardFocus = true;
 			if (style != null)
 			{
 				ApplyTreeStyle(style);

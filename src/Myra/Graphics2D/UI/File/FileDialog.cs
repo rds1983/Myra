@@ -469,7 +469,7 @@ namespace Myra.Graphics2D.UI.File
 
 			if (_firstRender)
 			{
-				Desktop.FocusedWidget = _gridFiles;
+				Desktop.FocusedMouseWheelWidget = _scrollPane;
 				_firstRender = false;
 			}
 		}

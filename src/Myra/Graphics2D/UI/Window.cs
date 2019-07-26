@@ -32,7 +32,8 @@ namespace Myra.Graphics2D.UI
 		private readonly TextBlock _titleLabel;
 		private readonly ImageButton _closeButton;
 		private Widget _content;
-		private Widget _previousFocus;
+		private Widget _previousKeyboardFocus;
+		private Widget _previousMouseWheelFocus;
 
 		[HiddenInEditor]
 		[XmlIgnore]
@@ -128,13 +129,6 @@ namespace Myra.Graphics2D.UI
 			set { base.VerticalAlignment = value; }
 		}
 
-		[DefaultValue(true)]
-		public override bool CanFocus
-		{
-			get { return base.CanFocus; }
-			set { base.CanFocus = value; }
-		}
-
 		private bool IsWindowPlaced
 		{
 			get;set;
@@ -174,7 +168,6 @@ namespace Myra.Graphics2D.UI
 			Result = false;
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
-			CanFocus = true;
 
 			InternalChild.RowSpacing = 8;
 
@@ -357,8 +350,10 @@ namespace Myra.Graphics2D.UI
 		public void ShowModal(Desktop desktop)
 		{
 			desktop.Widgets.Add(this);
-			_previousFocus = desktop.FocusedWidget;
-			desktop.FocusedWidget = this;
+			_previousKeyboardFocus = desktop.FocusedKeyboardWidget;
+			_previousMouseWheelFocus = desktop.FocusedMouseWheelWidget;
+			desktop.FocusedKeyboardWidget = this;
+			desktop.FocusedMouseWheelWidget = this;
 			IsModal = true;
 		}
 
@@ -366,14 +361,15 @@ namespace Myra.Graphics2D.UI
 		{
 			if (Desktop != null && Desktop.Widgets.Contains(this))
 			{
-				if (Desktop.FocusedWidget == this)
+				if (Desktop.FocusedKeyboardWidget == this)
 				{
-					Desktop.FocusedWidget = null;
+					Desktop.FocusedKeyboardWidget = null;
 				}
 
 				var desktop = Desktop;
 				Desktop.Widgets.Remove(this);
-				desktop.FocusedWidget = _previousFocus;
+				desktop.FocusedKeyboardWidget = _previousKeyboardFocus;
+				desktop.FocusedMouseWheelWidget = _previousMouseWheelFocus;
 
 				var ev = Closed;
 				if (ev != null)
