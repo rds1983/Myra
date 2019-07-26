@@ -14,6 +14,7 @@ namespace Myra.Graphics2D.UI
 		private readonly ImageButton _upButton;
 		private readonly ImageButton _downButton;
 		private bool _integer = false;
+		private int _decimalPlaces = 0;
 
 		[EditCategory("Behavior")]
 		[DefaultValue(false)]
@@ -138,7 +139,7 @@ namespace Myra.Graphics2D.UI
 						MajorString = " " + MajorString;
 					}
 					string MinorString = ".";
-					for (int i = 0; i < _DecimalPlaces; i++)
+					for (int i = 0; i < _decimalPlaces; i++)
 					{
 						MinorString += "0";
 					}
@@ -179,25 +180,24 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private int _DecimalPlaces = 0;
 		[EditCategory("Behavior")]
 		[DefaultValue(0)]
 		public int DecimalPlaces
 		{
 			get
 			{
-				return _DecimalPlaces;
+				return _decimalPlaces;
 			}
 
 			set
 			{
 				if (Integer)
 				{
-					_DecimalPlaces = 0;
+					_decimalPlaces = 0;
 				}
 				else
 				{
-					_DecimalPlaces = value;
+					_decimalPlaces = value;
 				}
 			}
 		}

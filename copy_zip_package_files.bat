@@ -3,8 +3,6 @@ rmdir "ZipPackage" /Q /S
 
 rem Create required folders
 mkdir "ZipPackage"
-mkdir "ZipPackage\FNA"
-mkdir "ZipPackage\Xenko"
 mkdir "ZipPackage\x64"
 mkdir "ZipPackage\x86"
 mkdir "ZipPackage\Stylesheets"
@@ -15,16 +13,11 @@ set "CONFIGURATION_XENKO=Release\netstandard2.0"
 rem Copy output files
 copy "src\Myra\bin\MonoGame\%CONFIGURATION%\Myra.dll" ZipPackage /Y
 copy "src\Myra\bin\MonoGame\%CONFIGURATION%\Myra.pdb" ZipPackage /Y
-copy "src\Myra\bin\FNA\%CONFIGURATION%\Myra.dll" "ZipPackage\FNA\" /Y
-copy "src\Myra\bin\FNA\%CONFIGURATION%\Myra.pdb" "ZipPackage\FNA\" /Y
-copy "src\Myra\bin\Xenko\%CONFIGURATION_XENKO%\Myra.dll" "ZipPackage\Xenko\" /Y
-copy "src\Myra\bin\Xenko\%CONFIGURATION_XENKO%\Myra.pdb" "ZipPackage\Xenko\" /Y
 copy "samples\Myra.Samples.AllWidgets\bin\MonoGame\%CONFIGURATION%\Myra.Samples.AllWidgets.exe" ZipPackage /Y
 copy "samples\Myra.Samples.CustomUIStylesheet\bin\MonoGame\%CONFIGURATION%\Myra.Samples.CustomUIStylesheet.exe" ZipPackage /Y
 copy "samples\Myra.Samples.GridContainer\bin\MonoGame\%CONFIGURATION%\Myra.Samples.GridContainer.exe" ZipPackage /Y
 copy "samples\Myra.Samples.SplitPaneContainer\bin\MonoGame\%CONFIGURATION%\Myra.Samples.SplitPaneContainer.exe" ZipPackage /Y
 copy "samples\Myra.Samples.Notepad\bin\MonoGame\%CONFIGURATION%\Myra.Samples.Notepad.exe" ZipPackage /Y
-copy "src\Myra.UIEditor\bin\%CONFIGURATION%\Myra.UIEditor.exe" ZipPackage /Y
 copy "src\MyraPad\bin\%CONFIGURATION%\MyraPad.exe" ZipPackage /Y
 xcopy "samples\Stylesheets\*.*" "ZipPackage\Stylesheets\*.*" /s
 
