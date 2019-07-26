@@ -54,7 +54,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="$(DefineConstants.Contains('FNA'))">
-    <ProjectReference Include="..\..\deps\FNA\FNA.Core.csproj" />
+    <ProjectReference Include="$(FNAProj)" />
   </ItemGroup>
 
   <ItemGroup Condition="$(DefineConstants.Contains('XENKO'))">
