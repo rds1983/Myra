@@ -100,8 +100,8 @@ namespace StbTextEditSharp
 		{
 			UndoState.undo_point = 0;
 			UndoState.undo_char_point = 0;
-			UndoState.redo_point = 99;
-			UndoState.redo_char_point = 999;
+			UndoState.redo_point = UndoState.UndoRecordCount;
+			UndoState.redo_char_point = UndoState.UndoCharCount;
 			SelectEnd = SelectStart = 0;
 			CursorIndex = 0;
 			HasPreferredX = false;
@@ -372,6 +372,22 @@ namespace StbTextEditSharp
 					++CursorIndex;
 					HasPreferredX = false;
 				}
+			}
+		}
+
+		public void Replace(int where, int len, string text)
+		{
+			if (string.IsNullOrEmpty(text))
+			{
+				Delete(where, len);
+				return;
+			}
+
+			MakeUndoReplace(where, len, text.Length);
+			DeleteChars(where, len);
+			if (InsertChars(where, text) != 0)
+			{
+				HasPreferredX = false;
 			}
 		}
 
@@ -669,7 +685,7 @@ namespace StbTextEditSharp
 			s.undo_rec[rpos].where = u.where;
 			if (u.delete_length != 0)
 			{
-				if (s.undo_char_point + u.delete_length >= 999)
+				if (s.undo_char_point + u.delete_length >= UndoState.UndoCharCount)
 				{
 					s.undo_rec[rpos].insert_length = 0;
 				}
@@ -678,7 +694,7 @@ namespace StbTextEditSharp
 					var i = 0;
 					while (s.undo_char_point + u.delete_length > s.redo_char_point)
 					{
-						if (s.redo_point == 99)
+						if (s.redo_point == UndoState.UndoRecordCount)
 							return;
 						s.DiscardRedo();
 					}
@@ -708,7 +724,7 @@ namespace StbTextEditSharp
 		{
 			var s = UndoState;
 			var r = new UndoRecord();
-			if (s.redo_point == 99)
+			if (s.redo_point == UndoState.UndoRecordCount)
 				return;
 			int upos = s.undo_point;
 			r = s.undo_rec[s.redo_point];

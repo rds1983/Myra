@@ -49,7 +49,7 @@
 	"imageButton": {
 		"background": "button",
 		"pressedBackground": "button-down",
-		"overBackground": "button-down"
+		"overBackground": "button-over"
 	},
 	"textButton": {
 		"background": "button",

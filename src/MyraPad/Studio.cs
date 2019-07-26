@@ -110,7 +110,10 @@ namespace MyraPad
 
 		public string FilePath
 		{
-			get { return _filePath; }
+			get
+			{
+				return _filePath;
+			}
 
 			set
 			{
@@ -140,7 +143,10 @@ namespace MyraPad
 
 		public bool IsDirty
 		{
-			get { return _isDirty; }
+			get
+			{
+				return _isDirty;
+			}
 
 			set
 			{
@@ -156,7 +162,10 @@ namespace MyraPad
 
 		public Project Project
 		{
-			get { return _project; }
+			get
+			{
+				return _project;
+			}
 
 			set
 			{
@@ -220,7 +229,7 @@ namespace MyraPad
 
 				if (_state.UserColors != null)
 				{
-					for(var i = 0; i < Math.Min(ColorPickerDialog.UserColors.Length, _state.UserColors.Length); ++i)
+					for (var i = 0; i < Math.Min(ColorPickerDialog.UserColors.Length, _state.UserColors.Length); ++i)
 					{
 						ColorPickerDialog.UserColors[i] = new Color(_state.UserColors[i]);
 					}
@@ -767,7 +776,7 @@ namespace MyraPad
 							_ui._textSource.CursorPosition = lastStartPos + skip;
 							if (needsClose)
 							{
-//								_ui._textSource.OnKeyDown(Keys.Enter);
+								//								_ui._textSource.OnKeyDown(Keys.Enter);
 							}
 						};
 
@@ -1160,7 +1169,10 @@ namespace MyraPad
 			{
 				var t = _ui._textSource.Text;
 
-				_ui._textSource.Text = t.Substring(0, _currentTagStart.Value) + xml + t.Substring(_currentTagEnd.Value + 1);
+				_ui._textSource.Replace(_currentTagStart.Value,
+					_currentTagEnd.Value - _currentTagStart.Value + 1,
+					xml);
+
 				_currentTagEnd = _currentTagStart.Value + xml.Length - 1;
 			}
 		}

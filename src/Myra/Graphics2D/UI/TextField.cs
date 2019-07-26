@@ -333,6 +333,11 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
+		public void Replace(int position, int length, string text)
+		{
+			_textEdit.Replace(position, length, text);
+		}
+
 		private void _textEdit_CursorIndexChanged(object sender, EventArgs e)
 		{
 			var asScrollPane = Parent as ScrollPane;

@@ -4,17 +4,20 @@ namespace StbTextEditSharp
 {
 	internal class UndoState
 	{
+		public const int UndoCharCount = 99999;
+		public const int UndoRecordCount = 999;
+
 		public int redo_char_point;
 		public int redo_point;
-		public int[] undo_char = new int[999];
+		public int[] undo_char = new int[UndoCharCount];
 		public int undo_char_point;
 		public int undo_point;
-		public UndoRecord[] undo_rec = new UndoRecord[99];
+		public UndoRecord[] undo_rec = new UndoRecord[UndoRecordCount];
 
 		public void FlushRedo()
 		{
-			redo_point = undo_rec.Length;
-			redo_char_point = undo_char.Length;
+			redo_point = UndoRecordCount;
+			redo_char_point = UndoCharCount;
 		}
 
 		public void DiscardUndo()
@@ -41,7 +44,7 @@ namespace StbTextEditSharp
 		public void DiscardRedo()
 		{
 			int num;
-			var k = 99 - 1;
+			var k = UndoRecordCount - 1;
 			if (redo_point <= k)
 			{
 				if (undo_rec[k].char_storage >= 0)
@@ -49,7 +52,7 @@ namespace StbTextEditSharp
 					var n = undo_rec[k].insert_length;
 					int i;
 					redo_char_point += n;
-					num = 999 - redo_char_point;
+					num = UndoCharCount - redo_char_point;
 
 					Array.Copy(undo_char, redo_char_point - n, undo_char, redo_char_point, num);
 					for (i = (int)redo_point; i < k; ++i)
@@ -58,7 +61,7 @@ namespace StbTextEditSharp
 				}
 
 				++redo_point;
-				num = 99 - redo_point;
+				num = UndoRecordCount - redo_point;
 				if (num != 0) Array.Copy(undo_rec, redo_point, undo_rec, redo_point - 1, num);
 			}
 		}
@@ -66,16 +69,16 @@ namespace StbTextEditSharp
 		public int? CreateUndoRecord(int numchars)
 		{
 			FlushRedo();
-			if (undo_point == 99)
+			if (undo_point == UndoRecordCount)
 				DiscardUndo();
-			if (numchars > 999)
+			if (numchars > UndoCharCount)
 			{
 				undo_point = 0;
 				undo_char_point = 0;
 				return null;
 			}
 
-			while (undo_char_point + numchars > 999) DiscardUndo();
+			while (undo_char_point + numchars > UndoCharCount) DiscardUndo();
 			return undo_point++;
 		}
 
