@@ -513,6 +513,11 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		internal bool Active
+		{
+			get; set;
+		}
+
 		[EditCategory("Appearance")]
 		[DefaultValue(1.0f)]
 		public float Opacity
@@ -792,7 +797,7 @@ namespace Myra.Graphics2D.UI
 			{
 				result = FocusedBackground;
 			}
-			else if (IsMouseOver && OverBackground != null)
+			else if (Active && IsMouseOver && OverBackground != null)
 			{
 				if (!Enabled && DisabledOverBackground != null)
 				{

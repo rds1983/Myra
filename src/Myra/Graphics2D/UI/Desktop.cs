@@ -524,7 +524,30 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			ProcessWidgets();
+			// Find MenuBar
+			MenuBar = null;
+
+			foreach (var w in _widgets)
+			{
+				ProcessWidgets(w, widget =>
+				{
+					if (MenuBar == null && widget is HorizontalMenu)
+					{
+						MenuBar = (HorizontalMenu)widget;
+					}
+				});
+			}
+
+			// Update Active
+			var activeWidget = GetActiveWidget();
+			foreach (var w in _widgets)
+			{
+				var active = activeWidget == w;
+				ProcessWidgets(w, widget =>
+				{
+					widget.Active = active;
+				});
+			}
 
 			foreach (var widget in ChildrenCopy)
 			{
@@ -813,22 +836,6 @@ namespace Myra.Graphics2D.UI
 				{
 					ProcessWidgets(w, operation);
 				}
-			}
-		}
-
-		private void ProcessWidgets()
-		{
-			MenuBar = null;
-
-			foreach (var w in _widgets)
-			{
-				ProcessWidgets(w, widget =>
-				{
-					if (MenuBar == null && widget is HorizontalMenu)
-					{
-						MenuBar = (HorizontalMenu)widget;
-					}
-				});
 			}
 		}
 

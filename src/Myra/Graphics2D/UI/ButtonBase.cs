@@ -209,7 +209,7 @@ namespace Myra.Graphics2D.UI
 				{
 					result = PressedBackground;
 				}
-				else if (IsMouseOver && OverBackground != null)
+				else if (Active && IsMouseOver && OverBackground != null)
 				{
 					result = OverBackground;
 				}
