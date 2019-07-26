@@ -14,19 +14,13 @@ using Microsoft.Xna.Framework.Graphics;
 #else
 using Xenko.Core.Mathematics;
 using Xenko.Graphics;
+using Xenko.Input;
 #endif
 
 namespace Myra.Graphics2D.UI
 {
 	public class Window : SingleItemContainer<Grid>, IContent
 	{
-		[Obsolete("This enum is obsolete and will be removed in the future versions")]
-		public enum DefaultModalResult
-		{
-			Ok,
-			Cancel
-		}
-
 		private Point? _startPos;
 		private readonly Grid _titleGrid;
 		private readonly TextBlock _titleLabel;

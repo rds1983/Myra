@@ -91,21 +91,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
-		[XmlIgnore]
-		[Obsolete("Use Content")]
-		public Widget Widget
-		{
-			get
-			{
-				return Content;
-			}
-			set
-			{
-				Content = value;
-			}
-		}
-
 		[EditCategory("Behavior")]
 		[DefaultValue(true)]
 		public bool AllowHorizontalScrolling { get; set; }

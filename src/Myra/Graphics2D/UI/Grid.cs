@@ -142,22 +142,6 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(false)]
 		public bool ShowGridLines { get; set; }
 
-		[Obsolete("Use ShowGridLines")]
-		[HiddenInEditor]
-		public bool DrawLines
-		{
-			get
-			{
-				return ShowGridLines;
-			}
-
-			set
-			{
-				ShowGridLines = value;
-			}
-		}
-
-
 		[EditCategory("Behavior")]
 		[DefaultValue("White")]
 		public Color GridLinesColor { get; set; }

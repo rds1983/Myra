@@ -128,14 +128,6 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
-		[EditCategory("Appearance")]
-		[DefaultValue(null)]
-		[Obsolete]
-		public Color? MessageTextColor
-		{
-			get; set;
-		}
-
 		[HiddenInEditor]
 		[XmlIgnore]
 		[EditCategory("Appearance")]

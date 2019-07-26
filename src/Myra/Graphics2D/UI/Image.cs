@@ -86,22 +86,6 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
-		[HiddenInEditor]
-		[XmlIgnore]
-		[Obsolete("Use Renderable")]
-		public IRenderable TextureRegion
-		{
-			get
-			{
-				return Renderable;
-			}
-
-			set
-			{
-				Renderable = value;
-			}
-		}
-
 		[DefaultValue("#FFFFFFFF")]
 		public Color Color
 		{

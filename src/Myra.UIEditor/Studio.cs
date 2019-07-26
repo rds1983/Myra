@@ -391,7 +391,7 @@ namespace Myra.UIEditor
 			_propertyGrid = new PropertyGrid();
 			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
 
-			_ui._propertyGridPane.Widget = _propertyGrid;
+			_ui._propertyGridPane.Content = _propertyGrid;
 
 			_ui._topSplitPane.SetSplitterPosition(0, _state != null ? _state.TopSplitterPosition : 0.75f);
 			_ui._rightSplitPane.SetSplitterPosition(0, _state != null ? _state.RightSplitterPosition : 0.5f);
@@ -736,7 +736,7 @@ namespace Myra.UIEditor
 					}
 					else if (container is ScrollPane)
 					{
-						((ScrollPane)container).Widget = null;
+						((ScrollPane)container).Content = null;
 					}
 				}
 			}
@@ -796,7 +796,7 @@ namespace Myra.UIEditor
 			}
 			else if (root is ScrollPane)
 			{
-				((ScrollPane)root).Widget = widget;
+				((ScrollPane)root).Content = widget;
 			}
 			else if (root is Window)
 			{
@@ -1162,7 +1162,7 @@ namespace Myra.UIEditor
 				{
 					enableStandard = true;
 				}
-				else if (selectedObject is ScrollPane && ((ScrollPane)selectedObject).Widget == null)
+				else if (selectedObject is ScrollPane && ((ScrollPane)selectedObject).Content == null)
 				{
 					enableStandard = true;
 				}

@@ -91,42 +91,12 @@ namespace Myra.Graphics2D.UI
 			set { _image.Width = value; }
 		}
 
-		[Obsolete("Use ImageWidth instead")]
-		[HiddenInEditor]
-		public int? ImageWidthHint
-		{
-			get
-			{
-				return ImageWidth;
-			}
-
-			set
-			{
-				ImageWidth = value;
-			}
-		}
-
 		[EditCategory("Appearance")]
 		[DefaultValue(null)]
 		public virtual int? ImageHeight
 		{
 			get { return _image.Height; }
 			set { _image.Height = value; }
-		}
-
-		[Obsolete("Use ImageHeight instead")]
-		[HiddenInEditor]
-		public int? ImageHeightHint
-		{
-			get
-			{
-				return ImageHeight;
-			}
-
-			set
-			{
-				ImageHeight = value;
-			}
 		}
 
 		[EditCategory("Appearance")]

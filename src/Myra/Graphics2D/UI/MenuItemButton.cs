@@ -84,16 +84,6 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[XmlIgnore]
-		[Obsolete("Use Image")]
-		public IRenderable TextureRegion
-		{
-			get { return Image; }
-			set { Image = value; }
-		}
-
-
-		[HiddenInEditor]
-		[XmlIgnore]
 		public IRenderable OpenBackground { get; set; }
 
 		[HiddenInEditor]

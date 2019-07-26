@@ -7,7 +7,7 @@ namespace Myra.Samples.GridContainer
 	{
 		private readonly GraphicsDeviceManager graphics;
 
-		private Desktop _host;
+		private Desktop _desktop;
 		private Window _window;
 		private HorizontalProgressBar _horizontalProgressBar;
 		private VerticalProgressBar _verticalProgressBar;
@@ -27,7 +27,7 @@ namespace Myra.Samples.GridContainer
 			MyraEnvironment.Game = this;
 
 			// Widget.DrawFrames = true;
-			_host = new Desktop();
+			_desktop = new Desktop();
 
 			var grid = new Grid
 			{
@@ -58,8 +58,8 @@ namespace Myra.Samples.GridContainer
 				var header = new TextBlock
 				{
 					Text = grid.ColumnsProportions[i].ToString(),
-					GridPositionX = i,
-					GridPositionY = 0
+					GridColumn = i,
+					GridRow = 0
 				};
 
 				grid.Widgets.Add(header);
@@ -68,8 +68,8 @@ namespace Myra.Samples.GridContainer
 			// Combo
 			var combo = new ComboBox
 			{
-				GridPositionX = 1,
-				GridPositionY = 1
+				GridColumn = 1,
+				GridRow = 1
 			};
 
 			combo.Items.Add(new ListItem("Red", Color.Red));
@@ -80,10 +80,10 @@ namespace Myra.Samples.GridContainer
 			// Button
 			var button = new Button
 			{
-				GridPositionX = 2,
-				GridPositionY = 1,
-				GridSpanX = 2,
-				GridSpanY = 1,
+				GridColumn = 2,
+				GridRow = 1,
+				GridColumnSpan = 2,
+				GridRowSpan = 1,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				Text = "This is 2 columns button"
 			};
@@ -91,7 +91,7 @@ namespace Myra.Samples.GridContainer
 			button.Click += (s, a) =>
 			{
 				var messageBox = Dialog.CreateMessageBox("2C", "2 Columns Button pushed!");
-				messageBox.ShowModal(_host);
+				messageBox.ShowModal(_desktop);
 			};
 
 			grid.Widgets.Add(button);
@@ -99,10 +99,10 @@ namespace Myra.Samples.GridContainer
 			// Button
 			var button2 = new TextButton
 			{
-				GridPositionX = 2,
-				GridPositionY = 2,
-				GridSpanX = 1,
-				GridSpanY = 2,
+				GridColumn = 2,
+				GridRow = 2,
+				GridColumnSpan = 1,
+				GridRowSpan = 2,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
 				Text = "This is 2 rows button"
@@ -111,7 +111,7 @@ namespace Myra.Samples.GridContainer
 			button2.Click += (s, a) =>
 			{
 				var messageBox = Dialog.CreateMessageBox("2R", "2 Rows Button pushed!");
-				messageBox.ShowModal(_host);
+				messageBox.ShowModal(_desktop);
 			};
 			grid.Widgets.Add(button2);
 
@@ -126,7 +126,7 @@ namespace Myra.Samples.GridContainer
 
 			var pane = new ScrollPane
 			{
-				Widget = label,
+				Content = label,
 				Width = 200,
 				Height = 200
 			};
@@ -140,29 +140,30 @@ namespace Myra.Samples.GridContainer
 			var button3 = new Button
 			{
 				Text = "Show Window",
-				GridPositionX = 4,
-				GridPositionY = 3
+				GridColumn = 4,
+				GridRow = 3
 			};
 			grid.Widgets.Add(button3);
 
 			button3.Click += (sender, args) =>
 			{
-				_window.ShowModal(_host);
+				_window.ShowModal(_desktop);
+				_desktop.FocusedMouseWheelWidget = pane;
 			};
 
 			// Horizontal slider
 			var hslider = new HorizontalSlider
 			{
-				GridPositionX = 3,
-				GridPositionY = 2
+				GridColumn = 3,
+				GridRow = 2
 			};
 			grid.Widgets.Add(hslider);
 
 			// Horizontal slider value
 			var hsliderValue = new TextBlock
 			{
-				GridPositionX = 4,
-				GridPositionY = 2,
+				GridColumn = 4,
+				GridRow = 2,
 				Text = "HSlider Value: 0"
 			};
 
@@ -177,8 +178,8 @@ namespace Myra.Samples.GridContainer
 			{
 				Width = 125,
 				Text = "This is textblock which spans for several lines to demonstrate row proportion set to Auto",
-				GridPositionX = 4,
-				GridPositionY = 1,
+				GridColumn = 4,
+				GridRow = 1,
 				Wrap = true
 			};
 			grid.Widgets.Add(textBlock);
@@ -186,24 +187,24 @@ namespace Myra.Samples.GridContainer
 			var checkBox = new CheckBox
 			{
 				Text = "This is a checkbox",
-				GridPositionX = 3,
-				GridPositionY = 3,
+				GridColumn = 3,
+				GridRow = 3,
 			};
 			grid.Widgets.Add(checkBox);
 
 			// Spin buttons
 			var textField = new TextField
 			{
-				GridPositionX = 5,
-				GridPositionY = 1,
+				GridColumn = 5,
+				GridRow = 1,
 				Width = 100
 			};
 			grid.Widgets.Add(textField);
 
 			var spinButton2 = new SpinButton
 			{
-				GridPositionX = 5,
-				GridPositionY = 2,
+				GridColumn = 5,
+				GridRow = 2,
 				Width = 100,
 				Integer = true
 			};
@@ -212,16 +213,16 @@ namespace Myra.Samples.GridContainer
 			// Progress bars
 			_horizontalProgressBar = new HorizontalProgressBar
 			{
-				GridPositionX = 5,
-				GridPositionY = 3,
+				GridColumn = 5,
+				GridRow = 3,
 				Width = 100
 			};
 			grid.Widgets.Add(_horizontalProgressBar);
 
 			_verticalProgressBar = new VerticalProgressBar
 			{
-				GridPositionX = 6,
-				GridPositionY = 1,
+				GridColumn = 6,
+				GridRow = 1,
 				Height = 100
 			};
 			grid.Widgets.Add(_verticalProgressBar);
@@ -229,8 +230,8 @@ namespace Myra.Samples.GridContainer
 			// List box
 			var list = new ListBox
 			{
-				GridPositionX = 5,
-				GridPositionY = 4
+				GridColumn = 5,
+				GridRow = 4
 			};
 
 			list.Items.Add(new ListItem("Red", Color.Red));
@@ -241,16 +242,16 @@ namespace Myra.Samples.GridContainer
 			// Vertical slider
 			var vslider = new VerticalSlider
 			{
-				GridPositionX = 2,
-				GridPositionY = 4
+				GridColumn = 2,
+				GridRow = 4
 			};
 			grid.Widgets.Add(vslider);
 
 			// Vertical slider value
 			var vsliderValue = new TextBlock
 			{
-				GridPositionX = 4,
-				GridPositionY = 4,
+				GridColumn = 4,
+				GridRow = 4,
 				Text = "VSlider Value: 0"
 			};
 
@@ -264,8 +265,8 @@ namespace Myra.Samples.GridContainer
 			var tree = new Tree
 			{
 				HasRoot = false,
-				GridPositionX = 3,
-				GridPositionY = 4
+				GridColumn = 3,
+				GridRow = 4
 			};
 			var node1 = tree.AddSubNode("node1");
 			var node2 = node1.AddSubNode("node2");
@@ -279,15 +280,15 @@ namespace Myra.Samples.GridContainer
 			var textBlock2 = new TextBlock
 			{
 				Text = "This is long textblock",
-				GridPositionX = 1,
-				GridPositionY = 4
+				GridColumn = 1,
+				GridRow = 4
 			};
 			grid.Widgets.Add(textBlock2);
 
 			var hsplitPane = new HorizontalSplitPane
 			{
-				GridPositionX = 1,
-				GridPositionY = 5
+				GridColumn = 1,
+				GridRow = 5
 			};
 			var hsplitPaneLabel1 = new TextBlock
 			{
@@ -303,8 +304,8 @@ namespace Myra.Samples.GridContainer
 
 			var vsplitPane = new VerticalSplitPane
 			{
-				GridPositionX = 6,
-				GridPositionY = 4
+				GridColumn = 6,
+				GridRow = 4
 			};
 			var vsplitPaneLabel1 = new TextBlock
 			{
@@ -323,14 +324,14 @@ namespace Myra.Samples.GridContainer
 				var header = new TextBlock
 				{
 					Text = grid.RowsProportions[i].ToString(),
-					GridPositionX = 0,
-					GridPositionY = i
+					GridColumn = 0,
+					GridRow = i
 				};
 
 				grid.Widgets.Add(header);
 			}
 
-			_host.Widgets.Add(grid);
+			_desktop.Widgets.Add(grid);
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -364,8 +365,8 @@ namespace Myra.Samples.GridContainer
 
 			GraphicsDevice.Clear(Color.Black);
 
-			_host.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight);
-			_host.Render();
+			_desktop.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight);
+			_desktop.Render();
 		}
 	}
 }

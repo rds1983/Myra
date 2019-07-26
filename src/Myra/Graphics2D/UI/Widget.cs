@@ -93,21 +93,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[Obsolete("Use Left instead")]
-		[HiddenInEditor]
-		public int XHint
-		{
-			get
-			{
-				return Left;
-			}
-
-			set
-			{
-				Left = value;
-			}
-		}
-
 		[EditCategory("Layout")]
 		[DefaultValue(0)]
 		public int Top
@@ -131,21 +116,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[Obsolete("Use Top instead")]
-		[HiddenInEditor]
-		public int YHint
-		{
-			get
-			{
-				return Top;
-			}
-
-			set
-			{
-				Top = value;
-			}
-		}
-
 		[EditCategory("Layout")]
 		[DefaultValue(null)]
 		public int? Width
@@ -164,21 +134,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[Obsolete("Use Width instead")]
-		[HiddenInEditor]
-		public int? WidthHint
-		{
-			get
-			{
-				return Width;
-			}
-
-			set
-			{
-				Width = value;
-			}
-		}
-
 		[EditCategory("Layout")]
 		[DefaultValue(null)]
 		public int? Height
@@ -194,21 +149,6 @@ namespace Myra.Graphics2D.UI
 				_height = value;
 				InvalidateMeasure();
 				FireSizeChanged();
-			}
-		}
-
-		[Obsolete("Use Height instead")]
-		[HiddenInEditor]
-		public int? HeightHint
-		{
-			get
-			{
-				return Height;
-			}
-
-			set
-			{
-				Height = value;
 			}
 		}
 
@@ -343,21 +283,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[Obsolete("Use GridColumn")]
-		[HiddenInEditor]
-		public int GridPositionX
-		{
-			get
-			{
-				return GridColumn;
-			}
-
-			set
-			{
-				GridColumn = value;
-			}
-		}
-
 		[EditCategory("Layout")]
 		[DefaultValue(0)]
 		public int GridRow
@@ -378,21 +303,6 @@ namespace Myra.Graphics2D.UI
 
 				_gridRow = value;
 				InvalidateMeasure();
-			}
-		}
-
-		[Obsolete("Use GridRow")]
-		[HiddenInEditor]
-		public int GridPositionY
-		{
-			get
-			{
-				return GridRow;
-			}
-
-			set
-			{
-				GridRow = value;
 			}
 		}
 
@@ -419,21 +329,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[Obsolete("Use GridColumnSpan")]
-		[HiddenInEditor]
-		public int GridSpanX
-		{
-			get
-			{
-				return GridColumnSpan;
-			}
-
-			set
-			{
-				GridColumnSpan = value;
-			}
-		}
-
 		[EditCategory("Layout")]
 		[DefaultValue(1)]
 		public int GridRowSpan
@@ -454,21 +349,6 @@ namespace Myra.Graphics2D.UI
 
 				_gridRowSpan = value;
 				InvalidateMeasure();
-			}
-		}
-
-		[Obsolete("Use GridRowSpan")]
-		[HiddenInEditor]
-		public int GridSpanY
-		{
-			get
-			{
-				return GridRowSpan;
-			}
-
-			set
-			{
-				GridRowSpan = value;
 			}
 		}
 
