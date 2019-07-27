@@ -1,35 +1,47 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
+using Microsoft.Xna.Framework;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
-using static Myra.Graphics2D.UI.Grid;
 
 namespace Myra.Graphics2D.UI
 {
-	public abstract class ProgressBar : SingleItemContainer<Grid>
+	public abstract class ProgressBar : Widget
 	{
-		private readonly Image _filledImage;
+		private IRenderable _filler;
 		private float _value;
 
 		[HiddenInEditor]
 		[XmlIgnore]
-		public abstract Orientation Orientation { get; }
+		public abstract Orientation Orientation
+		{
+			get;
+		}
 
 		[EditCategory("Behavior")]
 		[DefaultValue(0.0f)]
-		public float Minimum { get; set; }
+		public float Minimum
+		{
+			get; set;
+		}
 
 		[EditCategory("Behavior")]
 		[DefaultValue(100.0f)]
-		public float Maximum { get; set; }
+		public float Maximum
+		{
+			get; set;
+		}
 
 		[EditCategory("Behavior")]
 		[DefaultValue(0.0f)]
 		public float Value
 		{
-			get { return _value; }
+			get
+			{
+				return _value;
+			}
 
 			set
 			{
@@ -39,52 +51,23 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_value = value;
-				var v = value;
-				if (v < Minimum)
-				{
-					v = Minimum;
-				}
 
-				if (v > Maximum)
-				{
-					v = Maximum;
-				}
-
-				var delta = Maximum - Minimum;
-				if (delta.IsZero())
-				{
-					return;
-				}
-
-				Hint = (v - Minimum)/delta;
+				ValueChanged?.Invoke(this, EventArgs.Empty);
 			}
 		}
 
-		private float Hint
+		[HiddenInEditor]
+		[XmlIgnore]
+		public IRenderable Filler
 		{
-			get { return Orientation == Orientation.Horizontal ? InternalChild.GetColumnProportion(0).Value : InternalChild.GetRowProportion(1).Value; }
+			get
+			{
+				return _filler;
+			}
 
 			set
 			{
-				if (Hint.EpsilonEquals(value))
-				{
-					return;
-				}
-
-				if (Orientation == Orientation.Horizontal)
-				{
-					InternalChild.ColumnsProportions[0].Value = value;
-				}
-				else
-				{
-					InternalChild.RowsProportions[1].Value = value;
-				}
-
-				var ev = ValueChanged;
-				if (ev != null)
-				{
-					ev(this, EventArgs.Empty);
-				}
+				_filler = value;
 			}
 		}
 
@@ -92,29 +75,6 @@ namespace Myra.Graphics2D.UI
 
 		protected ProgressBar(ProgressBarStyle style)
 		{
-			InternalChild = new Grid();
-			_filledImage = new Image
-			{
-				HorizontalAlignment = HorizontalAlignment.Stretch,
-				VerticalAlignment = VerticalAlignment.Stretch
-			};
-			if (Orientation == Orientation.Horizontal)
-			{
-				InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Part, 0));
-				InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
-				InternalChild.TotalColumnsPart = 1.0f;
-			}
-			else
-			{
-				InternalChild.RowsProportions.Add(new Proportion(ProportionType.Fill));
-				InternalChild.RowsProportions.Add(new Proportion(ProportionType.Part, 0));
-				InternalChild.TotalRowsPart = 1.0f;
-
-				_filledImage.GridRow = 1;
-			}
-
-			InternalChild.Widgets.Add(_filledImage);
-
 			if (style != null)
 			{
 				ApplyProgressBarStyle(style);
@@ -127,9 +87,66 @@ namespace Myra.Graphics2D.UI
 		{
 			ApplyWidgetStyle(style);
 
-			if (style.Filled == null) return;
+			if (style.Filled == null)
+				return;
 
-			_filledImage.Renderable = style.Filled;
+			_filler = style.Filled;
+
+			if (Orientation == Orientation.Horizontal)
+			{
+				Height = style.Filled.Size.Y;
+			}
+			else
+			{
+				Width = style.Filled.Size.X;
+			}
+		}
+
+		public override void InternalRender(RenderContext context)
+		{
+			base.InternalRender(context);
+
+			if (_filler == null)
+			{
+				return;
+			}
+
+			var v = _value;
+			if (v < Minimum)
+			{
+				v = Minimum;
+			}
+
+			if (v > Maximum)
+			{
+				v = Maximum;
+			}
+
+			var delta = Maximum - Minimum;
+			if (delta.IsZero())
+			{
+				return;
+			}
+
+			var filledPart = (v - Minimum) / delta;
+			if (filledPart.EpsilonEquals(0.0f))
+			{
+				return;
+			}
+
+			var bounds = ActualBounds;
+			if (Orientation == Orientation.Horizontal)
+			{
+				_filler.Draw(context.Batch,
+					new Rectangle(bounds.X, bounds.Y, (int)(filledPart * bounds.Width), bounds.Height),
+					Color.White);
+			}
+			else
+			{
+				_filler.Draw(context.Batch,
+					new Rectangle(bounds.X, bounds.Y, bounds.Width, (int)(filledPart * bounds.Height)),
+					Color.White);
+			}
 		}
 	}
 }
