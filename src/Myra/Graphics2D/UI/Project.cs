@@ -27,6 +27,11 @@ namespace Myra.Graphics2D.UI
 
 	public class Project
 	{
+		private static readonly Dictionary<string, string> LegacyNames = new Dictionary<string, string>
+		{
+			{ "Button", "ImageTextButton" }
+		};
+
 		private readonly ExportOptions _exportOptions = new ExportOptions();
 
 		[HiddenInEditor]
@@ -211,7 +216,15 @@ namespace Myra.Graphics2D.UI
 			{
 
 				var itemNamespace = typeof(Widget).Namespace;
-				itemType = typeof(Widget).Assembly.GetType(itemNamespace + "." + xDoc.Root.Name);
+
+				var widgetName = xDoc.Root.Name.ToString();
+				string newName;
+				if (LegacyNames.TryGetValue(widgetName, out newName))
+				{
+					widgetName = newName;
+				}
+
+				itemType = typeof(Widget).Assembly.GetType(itemNamespace + "." + widgetName);
 			}
 			else
 			{
@@ -304,8 +317,14 @@ namespace Myra.Graphics2D.UI
 				{
 					// Property not found
 					// Should be widget class name then
-					var widgetType = typeof(Widget).Assembly.GetType(widgetNamespace + "." + child.Name);
+					var widgetName = child.Name.ToString();
+					string newName;
+					if (LegacyNames.TryGetValue(widgetName, out newName))
+					{
+						widgetName = newName;
+					}
 
+					var widgetType = typeof(Widget).Assembly.GetType(widgetNamespace + "." + widgetName);
 					if (widgetType != null)
 					{
 						var item = (IItemWithId)Activator.CreateInstance(widgetType);

@@ -91,15 +91,25 @@ namespace Myra.Graphics2D.UI
 				return;
 
 			_filler = style.Filled;
+		}
 
-			if (Orientation == Orientation.Horizontal)
+		protected override Point InternalMeasure(Point availableSize)
+		{
+			var result = Point.Zero;
+
+			if (_filler != null)
 			{
-				Height = style.Filled.Size.Y;
+				if (Orientation == Orientation.Horizontal)
+				{
+					result.Y = _filler.Size.Y;
+				}
+				else
+				{
+					result.X = _filler.Size.X;
+				}
 			}
-			else
-			{
-				Width = style.Filled.Size.X;
-			}
+
+			return result;
 		}
 
 		public override void InternalRender(RenderContext context)
