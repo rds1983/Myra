@@ -372,7 +372,7 @@ namespace Myra.Graphics2D.UI
 					}
 					else
 					{
-						throw new Exception(string.Format("Could not resolve tag '{0}'", child.Name));
+						throw new Exception(string.Format("Could not resolve tag '{0}'", widgetName));
 					}
 				}
 			}
@@ -411,7 +411,15 @@ namespace Myra.Graphics2D.UI
 			var stylesheet = Stylesheet;
 
 			// Find styles dict of that widget
-			var stylesDictPropertyName = w.GetType().Name + "Styles";
+			var typeName = w.GetType().Name;
+			if (typeName == "ImageTextButton")
+			{
+				// Small hack
+				// ImageTextButton styles are stored in Stylesheet.ButtonStyles
+				typeName = "Button";
+			}
+
+			var stylesDictPropertyName = typeName + "Styles";
 			var stylesDictProperty = stylesheet.GetType().GetRuntimeProperty(stylesDictPropertyName);
 			if (stylesDictProperty == null)
 			{

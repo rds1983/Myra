@@ -6,7 +6,7 @@ using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
 {
-	public class RadioButton : Button
+	public class RadioButton : ImageTextButton
 	{
 		[HiddenInEditor]
 		[XmlIgnore]
@@ -33,7 +33,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public RadioButton(ButtonStyle bs) : base(bs)
+		public RadioButton(ImageTextButtonStyle bs) : base(bs)
 		{
 			Toggleable = true;
 		}

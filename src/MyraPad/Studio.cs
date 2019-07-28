@@ -323,7 +323,7 @@ namespace MyraPad
 			_ui._menuFileDebugOptions.Selected += DebugOptionsItemOnSelected;
 			_ui._menuFileQuit.Selected += QuitItemOnDown;
 
-			_ui._menuEditFormatSource.Selected += _menuEditFormatSource_Selected;
+			_ui._menuEditUpdateSource.Selected += _menuEditUpdateSource_Selected;
 
 			_ui._menuHelpAbout.Selected += AboutItemOnClicked;
 
@@ -410,28 +410,22 @@ namespace MyraPad
 			_autoCompleteMenu = null;
 		}
 
-		private void _menuEditFormatSource_Selected(object sender, EventArgs e)
+		private void UpdateSource()
+		{
+			var data = Project != null ? Project.Save() : string.Empty;
+			if (data == _ui._textSource.Text)
+			{
+				return;
+			}
+
+			_ui._textSource.ReplaceAll(data);
+		}
+
+		private void _menuEditUpdateSource_Selected(object sender, EventArgs e)
 		{
 			try
 			{
-				var doc = new XmlDocument();
-				doc.LoadXml(_ui._textSource.Text);
-
-				StringBuilder sb = new StringBuilder();
-				XmlWriterSettings settings = new XmlWriterSettings
-				{
-					OmitXmlDeclaration = true,
-					Indent = _options.AutoIndent,
-					IndentChars = new string(' ', _options.IndentSpacesSize),
-					NewLineChars = "\n",
-					NewLineHandling = NewLineHandling.Replace
-				};
-				using (XmlWriter writer = XmlWriter.Create(sb, settings))
-				{
-					doc.Save(writer);
-				}
-
-				_ui._textSource.Text = sb.ToString();
+				UpdateSource();
 			}
 			catch (Exception ex)
 			{
@@ -1133,7 +1127,7 @@ namespace MyraPad
 					Project.ExportOptions.OutputPath = dlg._textOutputPath.Text;
 					Project.ExportOptions.Class = dlg._textClassName.Text;
 
-					_ui._textSource.Text = Project.Save();
+					UpdateSource();
 
 					var export = new ExporterCS(Instance.Project);
 

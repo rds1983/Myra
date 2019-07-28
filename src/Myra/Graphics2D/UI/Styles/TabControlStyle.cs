@@ -2,7 +2,7 @@
 {
 	public class TabControlStyle : WidgetStyle
 	{
-		public ButtonStyle TabItemStyle
+		public ImageTextButtonStyle TabItemStyle
 		{
 			get; set;
 		}
@@ -24,13 +24,13 @@
 
 		public TabControlStyle()
 		{
-			TabItemStyle = new ButtonStyle();
+			TabItemStyle = new ImageTextButtonStyle();
 			ContentStyle = new WidgetStyle();
 		}
 
 		public TabControlStyle(TabControlStyle style) : base(style)
 		{
-			TabItemStyle = new ButtonStyle(style.TabItemStyle);
+			TabItemStyle = new ImageTextButtonStyle(style.TabItemStyle);
 			ContentStyle = new WidgetStyle(style.ContentStyle);
 
 			ButtonSpacing = style.ButtonSpacing;

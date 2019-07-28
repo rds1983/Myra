@@ -39,7 +39,7 @@ namespace Myra.Samples.SplitPaneContainer
 			topRow.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
 			topRow.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
 
-			var buttonSwitchOrientation = new Button
+			var buttonSwitchOrientation = new ImageTextButton
 			{
 				Text = "Switch Orientation"
 			};
@@ -51,7 +51,7 @@ namespace Myra.Samples.SplitPaneContainer
 
 			topRow.Widgets.Add(buttonSwitchOrientation);
 
-			var buttonReset = new Button
+			var buttonReset = new ImageTextButton
 			{
 				Text = "Reset",
 				GridColumn = 1

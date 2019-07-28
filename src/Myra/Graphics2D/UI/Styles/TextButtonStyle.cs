@@ -1,6 +1,6 @@
 ﻿namespace Myra.Graphics2D.UI.Styles
 {
-	public class TextButtonStyle : ButtonBaseStyle
+	public class TextButtonStyle : ButtonStyle
 	{
 		public TextBlockStyle LabelStyle { get; set; }
 

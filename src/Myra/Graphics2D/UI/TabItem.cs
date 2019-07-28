@@ -105,7 +105,7 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[XmlIgnore]
-		internal Button Button
+		internal ImageTextButton Button
 		{
 			get; set;
 		}

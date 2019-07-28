@@ -12,7 +12,7 @@ namespace Myra.Samples.CustomUIStylesheet
 			textBlock1.Text = "Button:";
 			textBlock1.Id = "";
 
-			_button = new Button();
+			_button = new ImageTextButton();
 			_button.Text = "Button";
 			_button.Id = "_button";
 			_button.PaddingLeft = 8;
@@ -234,7 +234,7 @@ namespace Myra.Samples.CustomUIStylesheet
 		}
 
 		
-		public Button _button;
+		public ImageTextButton _button;
 		public TextBlock _textButtonLabel;
 		public TextButton _textButton;
 		public ImageButton _imageButton;

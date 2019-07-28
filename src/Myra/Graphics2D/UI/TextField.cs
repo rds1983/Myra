@@ -327,7 +327,21 @@ namespace Myra.Graphics2D.UI
 
 		public void Replace(int position, int length, string text)
 		{
+			text = Process(text);
+
 			_textEdit.Replace(position, length, text);
+		}
+
+		public void ReplaceAll(string text)
+		{
+			if (string.IsNullOrEmpty(Text))
+			{
+				Replace(0, 0, text);
+			}
+			else
+			{
+				Replace(0, Text.Length, text);
+			}
 		}
 
 		private void _textEdit_CursorIndexChanged(object sender, EventArgs e)
@@ -360,7 +374,6 @@ namespace Myra.Graphics2D.UI
 
 				var sp = asScrollPane.ScrollPosition;
 				asScrollPane.ScrollPosition = new Point(sp.X, newY);
-
 			}
 			else if (p.Y + lineHeight > asScrollPane.ActualBounds.Bottom)
 			{
@@ -376,13 +389,20 @@ namespace Myra.Graphics2D.UI
 			asScrollPane.UpdateLayout();
 		}
 
-		private bool SetText(string value, bool byUser)
+		private static string Process(string value)
 		{
 			// Remove '\r'
 			if (value != null)
 			{
 				value = value.Replace("\r", string.Empty);
 			}
+
+			return value;
+		}
+
+		private bool SetText(string value, bool byUser)
+		{
+			value = Process(value);
 
 			if (value == _formattedText.Text)
 			{

@@ -422,7 +422,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadButtonBaseStyleFromSource(Dictionary<string, object> source, ButtonBaseStyle result)
+		private void LoadButtonBaseStyleFromSource(Dictionary<string, object> source, ButtonStyle result)
 		{
 			LoadWidgetStyleFromSource(source, result);
 
@@ -433,7 +433,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadButtonStyleFromSource(Dictionary<string, object> source, ButtonStyle result)
+		private void LoadButtonStyleFromSource(Dictionary<string, object> source, ImageTextButtonStyle result)
 		{
 			LoadButtonBaseStyleFromSource(source, result);
 

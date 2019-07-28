@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
 using Myra.Attributes;
@@ -13,6 +14,8 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public ListBoxStyle ListBoxStyle { get; set; }
 
+		[EditCategory("Behavior")]
+		[DefaultValue(SelectionMode.Single)]
 		public SelectionMode SelectionMode
 		{
 			get
@@ -46,7 +49,7 @@ namespace Myra.Graphics2D.UI
 		{
 			var item = (ListItem)sender;
 
-			var button = (Button)item.Widget;
+			var button = (ImageTextButton)item.Widget;
 			button.Text = item.Text;
 			button.TextColor = item.Color ?? ListBoxStyle.ListItemStyle.LabelStyle.TextColor;
 
@@ -81,7 +84,7 @@ namespace Myra.Graphics2D.UI
 					ImageTextSpacing = item.ImageTextSpacing
 				};
 
-				((Button)widget).Click += ButtonOnClick;
+				((ImageTextButton)widget).Click += ButtonOnClick;
 			}
 			else
 			{
@@ -122,7 +125,7 @@ namespace Myra.Graphics2D.UI
 
 		private void ButtonOnClick(object sender, EventArgs eventArgs)
 		{
-			var item = (Button)sender;
+			var item = (ImageTextButton)sender;
 			var listItem = (ListItem)item.Tag;
 
 			if (SelectionMode == SelectionMode.Single)
@@ -139,7 +142,7 @@ namespace Myra.Graphics2D.UI
 
 			foreach (var item in Items)
 			{
-				var asButton = item.Widget as Button;
+				var asButton = item.Widget as ImageTextButton;
 				if (asButton != null)
 				{
 					asButton.ApplyButtonStyle(style.ListItemStyle);

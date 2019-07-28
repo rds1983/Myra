@@ -2,18 +2,18 @@
 {
 	public class ListBoxStyle: WidgetStyle
 	{
-		public ButtonStyle ListItemStyle { get; set; }
+		public ImageTextButtonStyle ListItemStyle { get; set; }
 		public SeparatorStyle SeparatorStyle { get; set; }
 
 		public ListBoxStyle()
 		{
-			ListItemStyle = new ButtonStyle();
+			ListItemStyle = new ImageTextButtonStyle();
 			SeparatorStyle = new SeparatorStyle();
 		}
 
 		public ListBoxStyle(ListBoxStyle style) : base(style)
 		{
-			ListItemStyle = new ButtonStyle(style.ListItemStyle);
+			ListItemStyle = new ImageTextButtonStyle(style.ListItemStyle);
 			SeparatorStyle = new SeparatorStyle(style.SeparatorStyle);
 		}
 

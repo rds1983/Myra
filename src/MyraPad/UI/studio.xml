@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-16"?>
 <Project>
   <ExportOptions Namespace="MyraPad.UI" Class="StudioWidget" OutputPath="D:/Projects/Myra/src/MyraPad/UI" />
   <Grid Id="Root">
@@ -23,7 +22,7 @@
         <MenuItem Id="_menuFileQuit" Text="&amp;Quit" />
       </MenuItem>
       <MenuItem Id="" Text="&amp;Edit">
-        <MenuItem Id="_menuEditFormatSource" Text="&amp;Format Source" />
+        <MenuItem Id="_menuEditUpdateSource" Text="&amp;Updates Source" />
       </MenuItem>
       <MenuItem Id="" Text="&amp;Help">
         <MenuItem Id="_menuHelpAbout" Text="&amp;About" />
@@ -31,6 +30,7 @@
     </HorizontalMenu>
     <HorizontalSplitPane Id="_topSplitPane" GridRow="1">
       <Grid>
+        <ColumnsProportions />
         <RowsProportions>
           <Proportion Type="Fill" />
           <Proportion />
@@ -42,18 +42,19 @@
             <TextField Text="" Wrap="True" Multiline="True" Id="_textSource" VerticalAlignment="Stretch" GridRow="2" />
           </ScrollPane>
         </VerticalSplitPane>
-        <HorizontalSeparator GridRow="1" />
-        <TextBlock Id="_textStatus" Text="Reloading..." GridRow="2" />
+        <HorizontalSeparator Height="4" GridRow="1" />
+        <TextBlock Text="Reloading..." Id="_textStatus" GridRow="2" />
       </Grid>
-      <Grid>
+      <Grid GridColumn="2">
+        <ColumnsProportions />
         <RowsProportions>
           <Proportion Type="Fill" />
           <Proportion />
           <Proportion />
         </RowsProportions>
         <ScrollPane Id="_propertyGridPane" />
-        <HorizontalSeparator GridRow="1" />
-        <TextBlock Id="_textLocation" Text="Line: 1, Column: 2, Indent: 3" GridRow="2" />
+        <HorizontalSeparator Height="4" GridRow="1" />
+        <TextBlock Text="Line: 1, Column: 2, Indent: 3" Id="_textLocation" GridRow="2" />
       </Grid>
     </HorizontalSplitPane>
   </Grid>

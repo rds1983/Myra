@@ -6,7 +6,7 @@ using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
 {
-	public class CheckBox : Button
+	public class CheckBox : ImageTextButton
 	{
 		[HiddenInEditor]
 		[XmlIgnore]
@@ -18,7 +18,7 @@ namespace Myra.Graphics2D.UI
 			set { base.Toggleable = value; }
 		}
 
-		public CheckBox(ButtonStyle bs) : base(bs)
+		public CheckBox(ImageTextButtonStyle bs) : base(bs)
 		{
 			Toggleable = true;
 		}

@@ -15,11 +15,11 @@ namespace Myra.Graphics2D.UI
 	{
 		[HiddenInEditor]
 		[XmlIgnore]
-		public Button ButtonOk { get; private set; }
+		public ImageTextButton ButtonOk { get; private set; }
 
 		[HiddenInEditor]
 		[XmlIgnore]
-		public Button ButtonCancel { get; private set; }
+		public ImageTextButton ButtonCancel { get; private set; }
 
 		public Dialog(DialogStyle style) : base(style)
 		{
@@ -35,7 +35,7 @@ namespace Myra.Graphics2D.UI
 			buttonsGrid.ColumnsProportions.Add(new Proportion());
 			buttonsGrid.ColumnsProportions.Add(new Proportion());
 
-			ButtonOk = new Button
+			ButtonOk = new ImageTextButton
 			{
 				Text = "Ok"
 			};
@@ -53,7 +53,7 @@ namespace Myra.Graphics2D.UI
 
 			buttonsGrid.Widgets.Add(ButtonOk);
 
-			ButtonCancel = new Button
+			ButtonCancel = new ImageTextButton
 			{
 				Text = "Cancel",
 				GridColumn = 1

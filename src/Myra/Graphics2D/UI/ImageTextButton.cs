@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Linq;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
@@ -15,7 +14,7 @@ using Xenko.Graphics;
 
 namespace Myra.Graphics2D.UI
 {
-	public class Button : ButtonBase<Grid>
+	public class ImageTextButton : ButtonBase<Grid>
 	{
 		private readonly Image _image;
 		private readonly TextBlock _textBlock;
@@ -143,7 +142,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public Button(ButtonStyle style)
+		public ImageTextButton(ImageTextButtonStyle style)
 		{
 			InternalChild = new Grid();
 
@@ -173,15 +172,15 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public Button(string style) : this(Stylesheet.Current.ButtonStyles[style])
+		public ImageTextButton(string style) : this(Stylesheet.Current.ButtonStyles[style])
 		{
 		}
 
-		public Button() : this(Stylesheet.Current.ButtonStyle)
+		public ImageTextButton() : this(Stylesheet.Current.ButtonStyle)
 		{
 		}
 
-		public void ApplyButtonStyle(ButtonStyle style)
+		public void ApplyButtonStyle(ImageTextButtonStyle style)
 		{
 			ApplyButtonBaseStyle(style);
 

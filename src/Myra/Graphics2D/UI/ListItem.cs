@@ -39,7 +39,7 @@ namespace Myra.Graphics2D.UI
 			{
 				_widget = value;
 
-				var asButton = _widget as Button;
+				var asButton = _widget as ImageTextButton;
 				if (asButton != null)
 				{
 					asButton.PressedChanged += (s, a) => FireSelectedChanged();
@@ -53,7 +53,7 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				var asButton = _widget as Button;
+				var asButton = _widget as ImageTextButton;
 				if (asButton == null)
 				{
 					return false;
@@ -64,7 +64,7 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				var asButton = _widget as Button;
+				var asButton = _widget as ImageTextButton;
 				if (asButton == null)
 				{
 					return;

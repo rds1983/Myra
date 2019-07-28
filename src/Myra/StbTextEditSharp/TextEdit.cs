@@ -1,3 +1,4 @@
+using Myra.Utility;
 using System;
 using System.Text;
 
@@ -8,6 +9,7 @@ namespace StbTextEditSharp
 		internal readonly ITextEditHandler Handler;
 
 		private int _cursorIndex;
+		private bool _suppressRedoStackReset = false;
 
 		public int CursorIndex
 		{
@@ -32,6 +34,27 @@ namespace StbTextEditSharp
 			}
 		}
 
+		public int Length => Handler.Length;
+
+		public string Text
+		{
+			get
+			{
+				return Handler.Text;
+			}
+
+			set
+			{
+				Handler.Text = value;
+
+				if (!_suppressRedoStackReset)
+				{
+					RedoStack.Reset();
+				}
+			}
+		}
+
+
 		public bool CursorAtEndOfLine;
 		public bool HasPreferredX;
 		public bool InsertMode;
@@ -39,27 +62,19 @@ namespace StbTextEditSharp
 		public int SelectEnd;
 		public int SelectStart;
 		public bool SingleLine = true;
-		public UndoState UndoState;
+		public readonly UndoRedoStack UndoStack = new UndoRedoStack();
+		public readonly UndoRedoStack RedoStack = new UndoRedoStack();
 
 		public event EventHandler CursorIndexChanged;
 
 		public TextEdit(ITextEditHandler handler)
 		{
-			if (handler == null) throw new ArgumentNullException("handler");
+			if (handler == null)
+				throw new ArgumentNullException("handler");
 
 			Handler = handler;
 
-			UndoState = new UndoState();
 			ClearState();
-		}
-
-		public int Length => Handler.Length;
-
-		public string text
-		{
-			get => Handler.Text;
-
-			set => Handler.Text = value;
 		}
 
 		public void SortSelection()
@@ -91,17 +106,10 @@ namespace StbTextEditSharp
 				CursorIndex = SelectEnd;
 		}
 
-		public void MakeUndoInsert(int where, int length)
-		{
-			UndoState.CreateUndo(where, 0, length);
-		}
-
 		public void ClearState()
 		{
-			UndoState.undo_point = 0;
-			UndoState.undo_char_point = 0;
-			UndoState.redo_point = UndoState.UndoRecordCount;
-			UndoState.redo_char_point = UndoState.UndoCharCount;
+			UndoStack.Reset();
+			RedoStack.Reset();
 			SelectEnd = SelectStart = 0;
 			CursorIndex = 0;
 			HasPreferredX = false;
@@ -115,7 +123,7 @@ namespace StbTextEditSharp
 			if (l == 0)
 				return;
 
-			text = text.Substring(0, pos) + text.Substring(pos + l);
+			Text = Text.Substring(0, pos) + Text.Substring(pos + l);
 		}
 
 		public int InsertChars(int pos, int[] codepoints, int start, int length)
@@ -136,10 +144,10 @@ namespace StbTextEditSharp
 			if (string.IsNullOrEmpty(s))
 				return 0;
 
-			if (string.IsNullOrEmpty(text))
-				text = s;
+			if (string.IsNullOrEmpty(Text))
+				Text = s;
 			else
-				text = text.Substring(0, pos) + s + text.Substring(pos);
+				Text = Text.Substring(0, pos) + s + Text.Substring(pos);
 
 			return s.Length;
 		}
@@ -194,7 +202,7 @@ namespace StbTextEditSharp
 				}
 			}
 
-			if (text[i + r.num_chars - 1] == '\n')
+			if (Text[i + r.num_chars - 1] == '\n')
 				return i + r.num_chars - 1;
 			return i + r.num_chars;
 		}
@@ -254,7 +262,7 @@ namespace StbTextEditSharp
 
 		public void Delete(int where, int len)
 		{
-			MakeUndoDelete(where, len);
+			UndoStack.MakeDelete(Text, where, len);
 			DeleteChars(where, len);
 			HasPreferredX = false;
 		}
@@ -298,13 +306,14 @@ namespace StbTextEditSharp
 
 		public bool IsWordBoundary(int idx)
 		{
-			return idx > 0 ? IsSpace(text[idx - 1]) && !IsSpace(text[idx]) : true;
+			return idx > 0 ? IsSpace(Text[idx - 1]) && !IsSpace(Text[idx]) : true;
 		}
 
 		public int MoveToPreviousWord(int c)
 		{
 			--c;
-			while (c >= 0 && !IsWordBoundary(c)) --c;
+			while (c >= 0 && !IsWordBoundary(c))
+				--c;
 			if (c < 0)
 				c = 0;
 			return c;
@@ -314,39 +323,38 @@ namespace StbTextEditSharp
 		{
 			var len = Length;
 			++c;
-			while (c < len && !IsWordBoundary(c)) ++c;
+			while (c < len && !IsWordBoundary(c))
+				++c;
 			if (c > len)
 				c = len;
 			return c;
 		}
 
-		public int Cut()
+		public bool Cut()
 		{
 			if (SelectStart != SelectEnd)
 			{
 				DeleteSelection();
 				HasPreferredX = false;
-				return 1;
+				return true;
 			}
 
-			return 0;
+			return false;
 		}
 
-		private int PasteInternal(string text)
+		private bool PasteInternal(string text)
 		{
 			Clamp();
 			DeleteSelection();
 			if (InsertChars(CursorIndex, text) != 0)
 			{
-				MakeUndoInsert(CursorIndex, text.Length);
+				UndoStack.MakeInsert(CursorIndex, string.IsNullOrEmpty(text) ? 0 : text.Length);
 				CursorIndex += text.Length;
 				HasPreferredX = false;
-				return 1;
+				return true;
 			}
 
-			if (UndoState.undo_point != 0)
-				--UndoState.undo_point;
-			return 0;
+			return false;
 		}
 
 		public void InputChar(char ch)
@@ -355,7 +363,7 @@ namespace StbTextEditSharp
 				return;
 			if (InsertMode && !(SelectStart != SelectEnd) && CursorIndex < Length)
 			{
-				MakeUndoReplace(CursorIndex, 1, 1);
+				UndoStack.MakeReplace(Text, CursorIndex, 1, 1);
 				DeleteChars(CursorIndex, 1);
 				if (InsertChar(CursorIndex, ch) != 0)
 				{
@@ -368,7 +376,7 @@ namespace StbTextEditSharp
 				DeleteSelection();
 				if (InsertChar(CursorIndex, ch) != 0)
 				{
-					MakeUndoInsert(CursorIndex, 1);
+					UndoStack.MakeInsert(CursorIndex, 1);
 					++CursorIndex;
 					HasPreferredX = false;
 				}
@@ -377,13 +385,7 @@ namespace StbTextEditSharp
 
 		public void Replace(int where, int len, string text)
 		{
-			if (string.IsNullOrEmpty(text))
-			{
-				Delete(where, len);
-				return;
-			}
-
-			MakeUndoReplace(where, len, text.Length);
+			UndoStack.MakeReplace(Text, where, len, string.IsNullOrEmpty(text) ? 0 : text.Length);
 			DeleteChars(where, len);
 			if (InsertChars(where, text) != 0)
 			{
@@ -626,7 +628,7 @@ namespace StbTextEditSharp
 					if (SingleLine)
 						CursorIndex = 0;
 					else
-						while (CursorIndex > 0 && text[CursorIndex - 1] != '\n')
+						while (CursorIndex > 0 && Text[CursorIndex - 1] != '\n')
 							--CursorIndex;
 					HasPreferredX = false;
 					break;
@@ -638,7 +640,7 @@ namespace StbTextEditSharp
 					if (SingleLine)
 						CursorIndex = n;
 					else
-						while (CursorIndex < n && text[CursorIndex] != '\n')
+						while (CursorIndex < n && Text[CursorIndex] != '\n')
 							++CursorIndex;
 					HasPreferredX = false;
 					break;
@@ -649,7 +651,7 @@ namespace StbTextEditSharp
 					if (SingleLine)
 						CursorIndex = 0;
 					else
-						while (CursorIndex > 0 && text[CursorIndex - 1] != '\n')
+						while (CursorIndex > 0 && Text[CursorIndex - 1] != '\n')
 							--CursorIndex;
 					SelectEnd = CursorIndex;
 					HasPreferredX = false;
@@ -662,7 +664,7 @@ namespace StbTextEditSharp
 					if (SingleLine)
 						CursorIndex = n;
 					else
-						while (CursorIndex < n && text[CursorIndex] != '\n')
+						while (CursorIndex < n && Text[CursorIndex] != '\n')
 							++CursorIndex;
 					SelectEnd = CursorIndex;
 					HasPreferredX = false;
@@ -673,119 +675,79 @@ namespace StbTextEditSharp
 
 		public void Undo()
 		{
-			var s = UndoState;
-			var u = new UndoRecord();
-			if (s.undo_point == 0)
+			if (UndoStack.Stack.Count == 0)
+			{
 				return;
-			u = s.undo_rec[s.undo_point - 1];
-			var rpos = s.redo_point - 1;
-			s.undo_rec[rpos].char_storage = -1;
-			s.undo_rec[rpos].insert_length = u.delete_length;
-			s.undo_rec[rpos].delete_length = u.insert_length;
-			s.undo_rec[rpos].where = u.where;
-			if (u.delete_length != 0)
-			{
-				if (s.undo_char_point + u.delete_length >= UndoState.UndoCharCount)
-				{
-					s.undo_rec[rpos].insert_length = 0;
-				}
-				else
-				{
-					var i = 0;
-					while (s.undo_char_point + u.delete_length > s.redo_char_point)
-					{
-						if (s.redo_point == UndoState.UndoRecordCount)
-							return;
-						s.DiscardRedo();
-					}
-
-					rpos = s.redo_point - 1;
-					s.undo_rec[rpos].char_storage = s.redo_char_point - u.delete_length;
-					s.redo_char_point = s.redo_char_point - u.delete_length;
-					for (i = 0; i < u.delete_length; ++i)
-						s.undo_char[s.undo_rec[rpos].char_storage + i] = (sbyte)text[u.where + i];
-				}
-
-				DeleteChars(u.where, u.delete_length);
 			}
 
-			if (u.insert_length != 0)
+			var record = UndoStack.Stack.Pop();
+			try
 			{
-				InsertChars(u.where, s.undo_char, u.char_storage, u.insert_length);
-				s.undo_char_point -= u.insert_length;
+				_suppressRedoStackReset = true;
+				switch (record.OperationType)
+				{
+					case OperationType.Insert:
+						RedoStack.MakeDelete(Text, record.Where, record.Length);
+						DeleteChars(record.Where, record.Length);
+						CursorIndex = record.Where;
+						break;
+					case OperationType.Delete:
+						var length = InsertChars(record.Where, record.Data);
+						RedoStack.MakeInsert(record.Where, length);
+						CursorIndex = record.Where + length;
+						break;
+					case OperationType.Replace:
+						RedoStack.MakeReplace(Text, record.Where, record.Length, record.Data.Length());
+						DeleteChars(record.Where, record.Length);
+						InsertChars(record.Where, record.Data);
+						break;
+				}
 			}
-
-			CursorIndex = u.where + u.insert_length;
-			s.undo_point--;
-			s.redo_point--;
+			finally
+			{
+				_suppressRedoStackReset = false;
+			}
 		}
 
 		public void Redo()
 		{
-			var s = UndoState;
-			var r = new UndoRecord();
-			if (s.redo_point == UndoState.UndoRecordCount)
+			if (RedoStack.Stack.Count == 0)
+			{
 				return;
-			int upos = s.undo_point;
-			r = s.undo_rec[s.redo_point];
-			s.undo_rec[upos].delete_length = r.insert_length;
-			s.undo_rec[upos].insert_length = r.delete_length;
-			s.undo_rec[upos].where = r.where;
-			s.undo_rec[upos].char_storage = -1;
-
-			var u = s.undo_rec[upos];
-			if (r.delete_length != 0)
-			{
-				if (s.undo_char_point + u.insert_length > s.redo_char_point)
-				{
-					s.undo_rec[upos].insert_length = 0;
-					s.undo_rec[upos].delete_length = 0;
-				}
-				else
-				{
-					var i = 0;
-					s.undo_rec[upos].char_storage = s.undo_char_point;
-					s.undo_char_point = s.undo_char_point + u.insert_length;
-					u = s.undo_rec[upos];
-					for (i = 0; i < u.insert_length; ++i)
-					{
-						s.undo_char[u.char_storage + i] = text[u.where + i];
-					}
-				}
-
-				DeleteChars(r.where, r.delete_length);
 			}
 
-			if (r.insert_length != 0)
+			var record = RedoStack.Stack.Pop();
+
+			try
 			{
-				InsertChars(r.where, s.undo_char, r.char_storage, r.insert_length);
-				s.redo_char_point += r.insert_length;
+				_suppressRedoStackReset = true;
+
+				switch (record.OperationType)
+				{
+					case OperationType.Insert:
+						UndoStack.MakeDelete(Text, record.Where, record.Length);
+						DeleteChars(record.Where, record.Length);
+						CursorIndex = record.Where;
+						break;
+					case OperationType.Delete:
+						var length = InsertChars(record.Where, record.Data);
+						UndoStack.MakeInsert(record.Where, length);
+						CursorIndex = record.Where + length;
+						break;
+					case OperationType.Replace:
+						UndoStack.MakeReplace(Text, record.Where, record.Length, record.Data.Length());
+						DeleteChars(record.Where, record.Length);
+						InsertChars(record.Where, record.Data);
+						break;
+				}
 			}
-
-			CursorIndex = r.where + r.insert_length;
-			s.undo_point++;
-			s.redo_point++;
+			finally
+			{
+				_suppressRedoStackReset = false;
+			}
 		}
 
-		public void MakeUndoDelete(int where, int length)
-		{
-			int i;
-			var p = UndoState.CreateUndo(where, length, 0);
-			if (p != null)
-				for (i = 0; i < length; ++i)
-					UndoState.undo_char[p.Value + i] = text[where + i];
-		}
-
-		public void MakeUndoReplace(int where, int old_length, int new_length)
-		{
-			int i;
-			var p = UndoState.CreateUndo(where, old_length, new_length);
-			if (p != null)
-				for (i = 0; i < old_length; ++i)
-					UndoState.undo_char[p.Value + i] = text[where + i];
-		}
-
-		public int Paste(string ctext)
+		public bool Paste(string ctext)
 		{
 			return PasteInternal(ctext);
 		}

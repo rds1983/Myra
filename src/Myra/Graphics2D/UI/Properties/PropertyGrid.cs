@@ -445,7 +445,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 					subGrid.Widgets.Add(image);
 
-					var button = new Button
+					var button = new ImageTextButton
 					{
 						Text = "Change...",
 						ContentHorizontalAlignment = HorizontalAlignment.Center,
@@ -691,7 +691,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 								subGrid.Widgets.Add(label);
 
-								var button = new Button
+								var button = new ImageTextButton
 								{
 									Text = "Change...",
 									ContentHorizontalAlignment = HorizontalAlignment.Center,

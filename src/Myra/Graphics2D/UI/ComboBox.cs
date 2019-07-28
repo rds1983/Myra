@@ -13,7 +13,7 @@ using Xenko.Core.Mathematics;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ComboBox : Selector<Button, ListItem>
+	public class ComboBox : Selector<ImageTextButton, ListItem>
 	{
 		private class CustomScrollPane : ScrollPane
 		{
@@ -37,7 +37,7 @@ namespace Myra.Graphics2D.UI
 
 		private readonly CustomScrollPane _itemsContainerScroll;
 		private readonly Grid _itemsContainer;
-		private ButtonStyle _dropDownItemStyle;
+		private ImageTextButtonStyle _dropDownItemStyle;
 
 		[EditCategory("Behavior")]
 		[DefaultValue(300)]
@@ -80,7 +80,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ComboBox(ComboBoxStyle style) : base(new Button((ButtonStyle)null))
+		public ComboBox(ComboBoxStyle style) : base(new ImageTextButton((ImageTextButtonStyle)null))
 		{
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
@@ -110,7 +110,7 @@ namespace Myra.Graphics2D.UI
 		private void ItemOnChanged(object sender, EventArgs eventArgs)
 		{
 			var item = (ListItem)sender;
-			var widget = (Button)item.Widget;
+			var widget = (ImageTextButton)item.Widget;
 
 			widget.Text = item.Text;
 			widget.TextColor = item.Color ?? _dropDownItemStyle.LabelStyle.TextColor;
@@ -196,7 +196,7 @@ namespace Myra.Graphics2D.UI
 
 		private void ItemOnClick(object sender, EventArgs eventArgs)
 		{
-			var widget = (Button)sender;
+			var widget = (ImageTextButton)sender;
 			SelectedItem = (ListItem)widget.Tag;
 
 			IsExpanded = false;
@@ -209,7 +209,7 @@ namespace Myra.Graphics2D.UI
 			{
 				InternalChild.Text = item.Text;
 				InternalChild.TextColor = item.Color ?? _dropDownItemStyle.LabelStyle.TextColor;
-				((Button)item.Widget).IsPressed = true;
+				((ImageTextButton)item.Widget).IsPressed = true;
 			}
 			else
 			{
@@ -240,7 +240,7 @@ namespace Myra.Graphics2D.UI
 
 			foreach (var item in Items)
 			{
-				((Button)item.Widget).ApplyButtonStyle(_dropDownItemStyle);
+				((ImageTextButton)item.Widget).ApplyButtonStyle(_dropDownItemStyle);
 			}
 
 			InternalChild.ApplyButtonStyle(style);

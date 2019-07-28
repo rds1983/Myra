@@ -233,7 +233,7 @@ namespace Myra.UIEditor
 
 			_ui._menuControlsAddButton.Selected += (s, a) =>
 			{
-				AddStandardControl<Button>();
+				AddStandardControl<ImageTextButton>();
 			};
 			_ui._menuControlsAddCheckBox.Selected += (s, a) =>
 			{

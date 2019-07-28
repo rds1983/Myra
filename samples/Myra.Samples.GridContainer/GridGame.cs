@@ -78,7 +78,7 @@ namespace Myra.Samples.GridContainer
 			grid.Widgets.Add(combo);
 
 			// Button
-			var button = new Button
+			var button = new ImageTextButton
 			{
 				GridColumn = 2,
 				GridRow = 1,
@@ -137,7 +137,7 @@ namespace Myra.Samples.GridContainer
 				Content = pane
 			};
 
-			var button3 = new Button
+			var button3 = new ImageTextButton
 			{
 				Text = "Show Window",
 				GridColumn = 4,

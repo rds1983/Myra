@@ -107,7 +107,7 @@ namespace Myra.Graphics2D.UI
 		{
 			item.Changed += ItemOnChanged;
 
-			Button button = new ListButton(TabControlStyle.TabItemStyle, this)
+			ImageTextButton button = new ListButton(TabControlStyle.TabItemStyle, this)
 			{
 				Text = item.Text,
 				TextColor = item.Color ?? TabControlStyle.TabItemStyle.LabelStyle.TextColor,
@@ -169,7 +169,7 @@ namespace Myra.Graphics2D.UI
 
 		private void ButtonOnClick(object sender, EventArgs eventArgs)
 		{
-			var item = (Button)sender;
+			var item = (ImageTextButton)sender;
 			var index = _gridButtons.Widgets.IndexOf(item);
 			SelectedIndex = index;
 		}

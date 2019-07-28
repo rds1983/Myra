@@ -1,5 +1,5 @@
 <Project>
-  <ExportOptions Namespace="Myra.Samples.AllWidgets" Class="AllWidgets" OutputPath="D:\Projects\Hebron\Myra\samples\Myra.Samples.AllWidgets" />
+  <ExportOptions Namespace="Myra.Samples.AllWidgets" Class="AllWidgets" OutputPath="D:\Projects\Myra\samples\Myra.Samples.AllWidgets" />
   <Grid RowSpacing="8" Id="Root">
     <ColumnsProportions />
     <RowsProportions>
@@ -50,13 +50,13 @@
             <Proportion />
           </RowsProportions>
           <TextBlock Text="Button:" Id="" />
-          <Button Text="Save File" Id="_buttonSaveFile" PaddingLeft="8" PaddingRight="8" GridColumn="1" />
+          <ImageTextButton Text="Save File" Id="_buttonSaveFile" PaddingLeft="8" PaddingRight="8" GridColumn="1" />
           <TextField Text="" Id="_textSaveFile" GridColumn="2" />
           <TextBlock Text="Another Button:" Id="" GridRow="1" />
-          <Button Text="Open File" Id="_buttonOpenFile" PaddingLeft="8" PaddingRight="8" GridColumn="1" GridRow="1" />
+          <ImageTextButton Text="Open File" Id="_buttonOpenFile" PaddingLeft="8" PaddingRight="8" GridColumn="1" GridRow="1" />
           <TextField Text="" Id="_textOpenFile" GridColumn="2" GridRow="1" />
           <TextBlock Text="Blue Button:" Id="" GridRow="2" />
-          <Button Text="Choose Folder" Id="_buttonChooseFolder" StyleName="blue" PaddingLeft="8" PaddingRight="8" GridColumn="1" GridRow="2" />
+          <ImageTextButton Text="Choose Folder" Id="_buttonChooseFolder" StyleName="blue" PaddingLeft="8" PaddingRight="8" GridColumn="1" GridRow="2" />
           <TextField Text="" Id="_textChooseFolder" GridColumn="2" GridRow="2" />
           <TextBlock Text="Text Button:" Id="_textButtonLabel" GridRow="3" />
           <TextButton Text="Choose Color" Id="_buttonChooseColor" PaddingLeft="8" PaddingRight="8" GridColumn="1" GridRow="3" />
@@ -66,7 +66,7 @@
           <TextBlock Text="Horizontal Slider:" Id="" GridRow="6" />
           <HorizontalSlider GridColumn="1" GridRow="6" GridColumnSpan="2" />
           <TextBlock Text="Combo Box:" GridRow="7" />
-          <ComboBox SelectedIndex="1" Width="200" GridColumn="1" GridRow="7" GridColumnSpan="2">
+          <ComboBox Width="200" GridColumn="1" GridRow="7" GridColumnSpan="2">
             <ListItem Id="" Text="Red" Color="#FF0000FF" />
             <ListItem Text="Green" Color="#00FF00FF" />
             <ListItem Text="Blue" Color="#0080FFFF" />

@@ -225,7 +225,7 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public void ApplyButtonBaseStyle(ButtonBaseStyle style)
+		public void ApplyButtonBaseStyle(ButtonStyle style)
 		{
 			ApplyWidgetStyle(style);
 

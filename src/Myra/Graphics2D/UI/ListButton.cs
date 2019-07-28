@@ -2,7 +2,7 @@
 
 namespace Myra.Graphics2D.UI
 {
-	internal class ListButton: Button
+	internal class ListButton: ImageTextButton
 	{
 		private readonly ISelector _selector;
 
@@ -15,7 +15,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ListButton(ButtonStyle bs, ISelector selector) : base(bs)
+		public ListButton(ImageTextButtonStyle bs, ISelector selector) : base(bs)
 		{
 			_selector = selector;
 			Toggleable = true;
