@@ -27,7 +27,8 @@ namespace Myra.Graphics2D.Text
 					_glyphs.Add(new GlyphInfo
 					{
 						TextLine = this,
-						Character = _text[i]
+						Character = _text[i],
+						Index = i
 					});
 				}
 #if MONOGAME
@@ -123,6 +124,42 @@ namespace Myra.Graphics2D.Text
 			}
 
 			return _glyphs[index];
+		}
+
+		public int? GetGlyphIndexByX(int x)
+		{
+			if (_glyphs.Count == 0 || x < 0)
+			{
+				return null;
+			}
+
+			var i = 0;
+			for (;i < _glyphs.Count; ++i)
+			{
+				var glyph = _glyphs[i];
+				var right = glyph.Bounds.Right;
+				if (i < _glyphs.Count - 1)
+				{
+					right = _glyphs[i + 1].Bounds.X;
+				}
+
+				if (glyph.Bounds.X <= x && x <= right)
+				{
+					if (x - glyph.Bounds.X >= glyph.Bounds.Width / 2)
+					{
+						++i;
+					}
+
+					break;
+				}
+			}
+
+			if (i - 1 >= 0 && i - 1 < _glyphs.Count && _glyphs[i - 1].Character == '\n')
+			{
+				--i;
+			}
+
+			return i;
 		}
 	}
 }

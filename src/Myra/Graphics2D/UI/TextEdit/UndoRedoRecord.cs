@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace StbTextEditSharp
+namespace Myra.Graphics2D.UI.TextEdit
 {
 	internal enum OperationType
 	{

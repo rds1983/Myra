@@ -5,10 +5,10 @@ using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Serialization;
-using StbTextEditSharp;
 using Myra.Graphics2D.Text;
 using System.Text;
 using TextCopy;
+using Myra.Graphics2D.UI.TextEdit;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -22,16 +22,20 @@ using Xenko.Input;
 
 namespace Myra.Graphics2D.UI
 {
-	public class TextField : Widget, ITextEditHandler
+	public class TextField : Widget
 	{
 		private DateTime _lastBlinkStamp = DateTime.Now;
 		private bool _cursorOn = true;
 		private bool _wrap = false;
-		private readonly TextEdit _textEdit;
 		private readonly FormattedTextWithGlyphs _formattedText = new FormattedTextWithGlyphs();
 		private readonly StringBuilder _stringBuilder = new StringBuilder();
 		private bool _isTouchDown;
 		private int? _lastCursorY;
+		private int _cursorIndex;
+		private bool _suppressRedoStackReset = false;
+
+		private readonly UndoRedoStack UndoStack = new UndoRedoStack();
+		private readonly UndoRedoStack RedoStack = new UndoRedoStack();
 
 		[EditCategory("Appearance")]
 		[DefaultValue(0)]
@@ -61,16 +65,37 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		string ITextEditHandler.Text
+		[EditCategory("Behavior")]
+		[DefaultValue(false)]
+		public bool Multiline
+		{
+			get; set;
+		}
+
+		private string UserText
 		{
 			get
 			{
 				return _formattedText.Text;
 			}
+
 			set
 			{
 				SetText(value, true);
 			}
+		}
+
+		private int Length
+		{
+			get
+			{
+				return _formattedText.Text.Length();
+			}
+		}
+
+		private bool InsertMode
+		{
+			get; set;
 		}
 
 		[HiddenInEditor]
@@ -153,21 +178,6 @@ namespace Myra.Graphics2D.UI
 
 		[EditCategory("Behavior")]
 		[DefaultValue(false)]
-		public bool Multiline
-		{
-			get
-			{
-				return !_textEdit.SingleLine;
-			}
-
-			set
-			{
-				_textEdit.SingleLine = !value;
-			}
-		}
-
-		[EditCategory("Behavior")]
-		[DefaultValue(false)]
 		public bool Readonly
 		{
 			get; set;
@@ -240,26 +250,25 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
-		int ITextEditHandler.Length
-		{
-			get
-			{
-				return Text != null ? Text.Length : 0;
-			}
-		}
-
 		[HiddenInEditor]
 		[XmlIgnore]
 		public int CursorPosition
 		{
 			get
 			{
-				return _textEdit.CursorIndex;
+				return _cursorIndex;
 			}
 
 			set
 			{
-				_textEdit.CursorIndex = value;
+				if (_cursorIndex == value)
+				{
+					return;
+				}
+
+				_cursorIndex = value;
+
+				OnCursorIndexChanged();
 			}
 		}
 
@@ -273,6 +282,16 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public int SelectStart
+		{
+			get; private set;
+		}
+
+		public int SelectEnd
+		{
+			get; private set;
+		}
+
 		/// <summary>
 		/// Fires every time when the text had been changed
 		/// </summary>
@@ -283,25 +302,10 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		public event EventHandler<ValueChangedEventArgs<string>> TextChangedByUser;
 
-		public event EventHandler CursorPositionChanged
-		{
-			add
-			{
-				_textEdit.CursorIndexChanged += value;
-			}
-
-			remove
-			{
-				_textEdit.CursorIndexChanged -= value;
-			}
-		}
-
+		public event EventHandler CursorPositionChanged;
 
 		public TextField(TextFieldStyle style)
 		{
-			_textEdit = new TextEdit(this);
-			_textEdit.CursorIndexChanged += _textEdit_CursorIndexChanged;
-
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Top;
 
@@ -325,11 +329,44 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
-		public void Replace(int position, int length, string text)
+		private void DeleteChars(int pos, int l)
+		{
+			if (l == 0)
+				return;
+
+			UserText = UserText.Substring(0, pos) + UserText.Substring(pos + l);
+		}
+
+		private bool InsertChars(int pos, string s)
+		{
+			if (string.IsNullOrEmpty(s))
+				return false;
+
+			if (string.IsNullOrEmpty(Text))
+				UserText = s;
+			else
+				UserText = UserText.Substring(0, pos) + s + UserText.Substring(pos);
+
+			return true;
+		}
+
+		private bool InsertChar(int pos, char ch)
+		{
+			if (string.IsNullOrEmpty(Text))
+				UserText = ch.ToString();
+			else
+				UserText = UserText.Substring(0, pos) + ch + UserText.Substring(pos);
+
+			return true;
+		}
+
+		public void Replace(int where, int len, string text)
 		{
 			text = Process(text);
 
-			_textEdit.Replace(position, length, text);
+			UndoStack.MakeReplace(Text, where, len, string.IsNullOrEmpty(text) ? 0 : text.Length);
+			DeleteChars(where, len);
+			InsertChars(where, text);
 		}
 
 		public void ReplaceAll(string text)
@@ -344,7 +381,377 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void _textEdit_CursorIndexChanged(object sender, EventArgs e)
+		private bool Delete(int where, int len)
+		{
+			if (where < 0 || where >= Length || len < 0)
+			{
+				return false;
+			}
+
+			UndoStack.MakeDelete(Text, where, len);
+			DeleteChars(where, len);
+
+			return true;
+		}
+
+		private void DeleteSelection()
+		{
+			if (SelectStart != SelectEnd)
+			{
+				if (SelectStart < SelectEnd)
+				{
+					Delete(SelectStart, SelectEnd - SelectStart);
+					SelectEnd = CursorPosition = SelectStart;
+				}
+				else
+				{
+					Delete(SelectEnd, SelectStart - SelectEnd);
+					SelectStart = CursorPosition = SelectEnd;
+				}
+			}
+		}
+
+		private bool Paste(string text)
+		{
+			DeleteSelection();
+			if (InsertChars(CursorPosition, text))
+			{
+				UndoStack.MakeInsert(CursorPosition, text.Length());
+				CursorPosition += text.Length;
+				return true;
+			}
+
+			return false;
+		}
+
+		private void InputChar(char ch)
+		{
+			if (!Multiline && ch == '\n')
+				return;
+			if (InsertMode && !(SelectStart != SelectEnd) && CursorPosition < Length)
+			{
+				UndoStack.MakeReplace(Text, CursorPosition, 1, 1);
+				DeleteChars(CursorPosition, 1);
+				if (InsertChar(CursorPosition, ch))
+				{
+					UserSetCursorPosition(CursorPosition + 1);
+				}
+			}
+			else
+			{
+				DeleteSelection();
+				if (InsertChar(CursorPosition, ch))
+				{
+					UndoStack.MakeInsert(CursorPosition, 1);
+					UserSetCursorPosition(CursorPosition + 1);
+				}
+			}
+		}
+
+		private void UndoRedo(UndoRedoStack undoStack, UndoRedoStack redoStack)
+		{
+			if (undoStack.Stack.Count == 0)
+			{
+				return;
+			}
+
+			var record = undoStack.Stack.Pop();
+			try
+			{
+				_suppressRedoStackReset = true;
+				switch (record.OperationType)
+				{
+					case OperationType.Insert:
+						redoStack.MakeDelete(Text, record.Where, record.Length);
+						DeleteChars(record.Where, record.Length);
+						UserSetCursorPosition(record.Where);
+						break;
+					case OperationType.Delete:
+						if (InsertChars(record.Where, record.Data))
+						{
+							redoStack.MakeInsert(record.Where, record.Data.Length);
+							UserSetCursorPosition(record.Where + record.Data.Length);
+						}
+						break;
+					case OperationType.Replace:
+						redoStack.MakeReplace(Text, record.Where, record.Length, record.Data.Length());
+						DeleteChars(record.Where, record.Length);
+						InsertChars(record.Where, record.Data);
+						break;
+				}
+			}
+			finally
+			{
+				_suppressRedoStackReset = false;
+			}
+		}
+
+		private void Undo()
+		{
+			UndoRedo(UndoStack, RedoStack);
+		}
+
+		private void Redo()
+		{
+			UndoRedo(RedoStack, UndoStack);
+		}
+
+		private void UserSetCursorPosition(int newPosition)
+		{
+			if (newPosition > Length)
+			{
+				newPosition = Length;
+			}
+
+			if (newPosition < 0)
+			{
+				newPosition = 0;
+			}
+
+			CursorPosition = newPosition;
+
+			if (!Desktop.IsShiftDown && !_isTouchDown)
+			{
+				SelectStart = SelectEnd = CursorPosition;
+			}
+			else
+			{
+				SelectEnd = CursorPosition;
+			}
+		}
+
+		private void MoveLine(int delta)
+		{
+			var line = _formattedText.GetLineByCursorPosition(CursorPosition);
+			if (line == null)
+			{
+				return;
+			}
+
+			var newLine = line.LineIndex + delta;
+			if (newLine < 0 || newLine >= _formattedText.Strings.Length)
+			{
+				return;
+			}
+
+			var bounds = ActualBounds;
+			var pos = GetRenderPositionByIndex(CursorPosition);
+			var preferredX = pos.X - bounds.X;
+
+			// Find closest glyph
+			var newString = _formattedText.Strings[newLine];
+			var glyphIndex = newString.GetGlyphIndexByX(preferredX);
+			if (glyphIndex != null)
+			{
+				UserSetCursorPosition(newString.LineStart + glyphIndex.Value);
+			}
+		}
+
+		public override void OnKeyDown(Keys k)
+		{
+			base.OnKeyDown(k);
+
+			switch (k)
+			{
+				case Keys.C:
+					if (Desktop.IsControlDown)
+					{
+						if (SelectEnd != SelectStart)
+						{
+							var selectStart = Math.Min(SelectStart, SelectEnd);
+							var selectEnd = Math.Max(SelectStart, SelectEnd);
+							Clipboard.SetText(Text.Substring(selectStart, selectEnd - selectStart));
+						}
+					}
+					break;
+				case Keys.V:
+					if (!Readonly && Desktop.IsControlDown)
+					{
+						var clipboardText = Clipboard.GetText();
+						if (!string.IsNullOrEmpty(clipboardText))
+						{
+							Paste(clipboardText);
+						}
+					}
+					break;
+
+				case Keys.Insert:
+					if (!Readonly)
+					{
+						InsertMode = !InsertMode;
+					}
+					break;
+
+				case Keys.Z:
+					if (!Readonly && Desktop.IsControlDown)
+					{
+						Undo();
+					}
+					break;
+
+				case Keys.Y:
+					if (!Readonly && Desktop.IsControlDown)
+					{
+						Redo();
+					}
+					break;
+
+				case Keys.Left:
+					if (CursorPosition > 0)
+					{
+						UserSetCursorPosition(CursorPosition - 1);
+					}
+					break;
+
+				case Keys.Right:
+					if (CursorPosition < Length)
+					{
+						UserSetCursorPosition(CursorPosition + 1);
+					}
+
+					break;
+
+				case Keys.Up:
+					MoveLine(-1);
+					break;
+
+				case Keys.Down:
+					MoveLine(1);
+					break;
+
+				case Keys.Back:
+					if (SelectStart == SelectEnd)
+					{
+						if (Delete(CursorPosition - 1, 1))
+						{
+							UserSetCursorPosition(CursorPosition - 1);
+						}
+					}
+					else
+					{
+						DeleteSelection();
+					}
+					break;
+
+				case Keys.Delete:
+					if (SelectStart == SelectEnd)
+					{
+						Delete(CursorPosition, 1);
+					}
+					else
+					{
+						DeleteSelection();
+					}
+					break;
+
+				case Keys.Home:
+				{
+					if (!Desktop.IsControlDown)
+					{
+						var line = _formattedText.GetLineByCursorPosition(CursorPosition);
+						if (line != null)
+						{
+							UserSetCursorPosition(line.LineStart);
+						}
+					}
+					else
+					{
+						UserSetCursorPosition(0);
+					}
+
+					break;
+				}
+
+				case Keys.End:
+				{
+					if (!Desktop.IsControlDown)
+					{
+						var newPosition = CursorPosition;
+
+						while (newPosition < Length && Text[newPosition] != '\n')
+						{
+							++newPosition;
+						}
+
+						UserSetCursorPosition(newPosition);
+					}
+					else
+					{
+						UserSetCursorPosition(Length);
+					}
+
+					break;
+				}
+
+				case Keys.Enter:
+					if (!Readonly)
+					{
+						InputChar('\n');
+					}
+					break;
+			}
+		}
+
+		private static string Process(string value)
+		{
+			// Remove '\r'
+			if (value != null)
+			{
+				value = value.Replace("\r", string.Empty);
+			}
+
+			return value;
+		}
+
+		private bool SetText(string value, bool byUser)
+		{
+			value = Process(value);
+
+			if (value == _formattedText.Text)
+			{
+				return false;
+			}
+
+			// Filter check
+			var f = InputFilter;
+			if (f != null)
+			{
+				value = f(value);
+				if (value == null)
+				{
+					return false;
+				}
+			}
+
+			var oldValue = _formattedText.Text;
+			_formattedText.Text = value;
+
+			if (!_suppressRedoStackReset)
+			{
+				RedoStack.Reset();
+			}
+
+			InvalidateMeasure();
+
+			var ev = TextChanged;
+			if (ev != null)
+			{
+				ev(this, new ValueChangedEventArgs<string>(oldValue, value));
+			}
+
+			if (byUser)
+			{
+				ev = TextChangedByUser;
+				if (ev != null)
+				{
+					ev(this, new ValueChangedEventArgs<string>(oldValue, value));
+				}
+			}
+
+			return true;
+		}
+
+		private void UpdateScrolling()
 		{
 			var asScrollPane = Parent as ScrollPane;
 			if (asScrollPane == null)
@@ -352,7 +759,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var p = GetRenderPositionByIndex(_textEdit.CursorIndex);
+			var p = GetRenderPositionByIndex(CursorPosition);
 
 			if (p.Y == _lastCursorY)
 			{
@@ -389,233 +796,11 @@ namespace Myra.Graphics2D.UI
 			asScrollPane.UpdateLayout();
 		}
 
-		private static string Process(string value)
+		private void OnCursorIndexChanged()
 		{
-			// Remove '\r'
-			if (value != null)
-			{
-				value = value.Replace("\r", string.Empty);
-			}
+			UpdateScrolling();
 
-			return value;
-		}
-
-		private bool SetText(string value, bool byUser)
-		{
-			value = Process(value);
-
-			if (value == _formattedText.Text)
-			{
-				return false;
-			}
-
-			// Filter check
-			var f = InputFilter;
-			if (f != null)
-			{
-				value = f(value);
-				if (value == null)
-				{
-					return false;
-				}
-			}
-
-			var oldValue = _formattedText.Text;
-			_formattedText.Text = value;
-			InvalidateMeasure();
-
-			var ev = TextChanged;
-			if (ev != null)
-			{
-				ev(this, new ValueChangedEventArgs<string>(oldValue, value));
-			}
-
-			if (byUser)
-			{
-				ev = TextChangedByUser;
-				if (ev != null)
-				{
-					ev(this, new ValueChangedEventArgs<string>(oldValue, value));
-				}
-			}
-
-			return true;
-		}
-
-		private ControlKeys ApplyShiftOrNone(ControlKeys k)
-		{
-			if (Desktop.IsShiftDown)
-			{
-				k |= ControlKeys.Shift;
-			}
-
-			return k;
-		}
-
-		public override void OnKeyDown(Keys k)
-		{
-			base.OnKeyDown(k);
-
-			ControlKeys? controlKey = null;
-
-			switch (k)
-			{
-				case Keys.C:
-					if (Desktop.IsControlDown)
-					{
-						if (_textEdit.SelectEnd != _textEdit.SelectStart)
-						{
-							var selectStart = Math.Min(_textEdit.SelectStart, _textEdit.SelectEnd);
-							var selectEnd = Math.Max(_textEdit.SelectStart, _textEdit.SelectEnd);
-							Clipboard.SetText(Text.Substring(selectStart, selectEnd - selectStart));
-						}
-					}
-					break;
-				case Keys.V:
-					if (!Readonly && Desktop.IsControlDown)
-					{
-						var clipboardText = Clipboard.GetText();
-						if (!string.IsNullOrEmpty(clipboardText))
-						{
-							_textEdit.Paste(clipboardText);
-						}
-					}
-					break;
-
-				case Keys.Insert:
-					if (!Readonly)
-					{
-						controlKey = ControlKeys.InsertMode;
-					}
-					break;
-
-				case Keys.Z:
-					if (!Readonly && Desktop.IsControlDown)
-					{
-						controlKey = ControlKeys.Undo;
-					}
-					break;
-
-				case Keys.Y:
-					if (!Readonly && Desktop.IsControlDown)
-					{
-						controlKey = ControlKeys.Redo;
-					}
-					break;
-
-				case Keys.Left:
-					if (Desktop.IsShiftDown && Desktop.IsControlDown)
-					{
-						controlKey = ControlKeys.Shift | ControlKeys.WordLeft;
-					}
-					else if (Desktop.IsShiftDown)
-					{
-						controlKey = ControlKeys.Shift | ControlKeys.Left;
-					}
-					else if (Desktop.IsControlDown)
-					{
-						controlKey = ControlKeys.WordLeft;
-					}
-					else
-					{
-						controlKey = ControlKeys.Left;
-					}
-					break;
-
-				case Keys.Right:
-					if (Desktop.IsShiftDown && Desktop.IsControlDown)
-					{
-						controlKey = ControlKeys.Shift | ControlKeys.WordRight;
-					}
-					else if (Desktop.IsShiftDown)
-					{
-						controlKey = ControlKeys.Shift | ControlKeys.Right;
-					}
-					else if (Desktop.IsControlDown)
-					{
-						controlKey = ControlKeys.WordRight;
-					}
-					else
-					{
-						controlKey = ControlKeys.Right;
-					}
-
-					break;
-
-				case Keys.Up:
-					controlKey = ApplyShiftOrNone(ControlKeys.Up);
-					break;
-
-				case Keys.Down:
-					controlKey = ApplyShiftOrNone(ControlKeys.Down);
-					break;
-
-				case Keys.Back:
-					if (!Readonly)
-					{
-						controlKey = ApplyShiftOrNone(ControlKeys.BackSpace);
-					}
-					break;
-
-				case Keys.Delete:
-					if (!Readonly)
-					{
-						controlKey = ApplyShiftOrNone(ControlKeys.Delete);
-					}
-					break;
-
-				case Keys.Home:
-					if (Desktop.IsShiftDown && Desktop.IsControlDown)
-					{
-						controlKey = ControlKeys.Shift | ControlKeys.TextStart;
-					}
-					else if (Desktop.IsShiftDown)
-					{
-						controlKey = ControlKeys.Shift | ControlKeys.LineStart;
-					}
-					else if (Desktop.IsControlDown)
-					{
-						controlKey = ControlKeys.TextStart;
-					}
-					else
-					{
-						controlKey = ControlKeys.LineStart;
-					}
-
-					break;
-
-				case Keys.End:
-					if (Desktop.IsShiftDown && Desktop.IsControlDown)
-					{
-						controlKey = ControlKeys.Shift | ControlKeys.TextEnd;
-					}
-					else if (Desktop.IsShiftDown)
-					{
-						controlKey = ControlKeys.Shift | ControlKeys.LineEnd;
-					}
-					else if (Desktop.IsControlDown)
-					{
-						controlKey = ControlKeys.TextEnd;
-					}
-					else
-					{
-						controlKey = ControlKeys.LineEnd;
-					}
-
-					break;
-
-				case Keys.Enter:
-					if (!Readonly)
-					{
-						_textEdit.InputChar('\n');
-					}
-					break;
-			}
-
-			if (controlKey != null)
-			{
-				_textEdit.Key(controlKey.Value);
-			}
+			CursorPositionChanged?.Invoke(this, EventArgs.Empty);
 		}
 
 		public override void OnChar(char c)
@@ -624,7 +809,26 @@ namespace Myra.Graphics2D.UI
 
 			if (!Readonly && !char.IsControl(c))
 			{
-				_textEdit.InputChar(c);
+				InputChar(c);
+			}
+		}
+
+		private void SetCursorByTouch()
+		{
+			var bounds = ActualBounds;
+			var mousePos = Desktop.MousePosition;
+
+			mousePos.X -= bounds.X;
+			mousePos.Y -= bounds.Y;
+
+			var line = _formattedText.GetLineByY(mousePos.Y);
+			if (line != null)
+			{
+				var glyphIndex = line.GetGlyphIndexByX(mousePos.X);
+				if (glyphIndex != null)
+				{
+					UserSetCursorPosition(line.LineStart + glyphIndex.Value);
+				}
 			}
 		}
 
@@ -632,9 +836,13 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnTouchDown();
 
-			var mousePos = Desktop.MousePosition;
+			if (Length == 0)
+			{
+				return;
+			}
 
-			_textEdit.Click(mousePos.X, mousePos.Y, Desktop.IsShiftDown);
+			SetCursorByTouch();
+
 			_isTouchDown = true;
 		}
 
@@ -654,8 +862,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var mousePos = Desktop.MousePosition;
-			_textEdit.Drag(mousePos.X, mousePos.Y);
+			SetCursorByTouch();
 		}
 
 		private Point GetRenderPositionByIndex(int index)
@@ -706,8 +913,8 @@ namespace Myra.Graphics2D.UI
 
 			if (Selection != null && !string.IsNullOrEmpty(Text))
 			{
-				var selectStart = Math.Min(_textEdit.SelectStart, _textEdit.SelectEnd);
-				var selectEnd = Math.Max(_textEdit.SelectStart, _textEdit.SelectEnd);
+				var selectStart = Math.Min(SelectStart, SelectEnd);
+				var selectEnd = Math.Max(SelectStart, SelectEnd);
 
 				if (selectStart < selectEnd)
 				{
@@ -786,7 +993,7 @@ namespace Myra.Graphics2D.UI
 
 			if (_cursorOn && Cursor != null)
 			{
-				var pos = GetRenderPositionByIndex(_textEdit.CursorIndex);
+				var pos = GetRenderPositionByIndex(CursorPosition);
 				context.Draw(Cursor, new Rectangle(pos.X,
 					pos.Y,
 					Cursor.Size.X,
@@ -850,27 +1057,6 @@ namespace Myra.Graphics2D.UI
 		internal override string[] GetStyleNames(Stylesheet stylesheet)
 		{
 			return stylesheet.TextFieldStyles.Keys.ToArray();
-		}
-
-		int ITextEditHandler.NewLineWidth
-		{
-			get
-			{
-				return FormattedText.NewLineWidth;
-			}
-		}
-
-		TextEditRow ITextEditHandler.LayoutRow(int startIndex)
-		{
-			var bounds = ActualBounds;
-			var r = _formattedText.LayoutRow(startIndex, bounds.Width);
-
-			r.x0 += bounds.X;
-			r.x1 += bounds.X;
-			r.ymin += bounds.Y;
-			r.ymax += bounds.Y;
-
-			return r;
 		}
 
 		public float GetWidth(int index)

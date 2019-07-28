@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace StbTextEditSharp
+namespace Myra.Graphics2D.UI.TextEdit
 {
 	internal class UndoRedoStack
 	{

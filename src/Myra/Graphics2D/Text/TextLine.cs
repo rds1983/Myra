@@ -3,6 +3,7 @@
 #if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Myra.Utility;
 #else
 using Xenko.Core.Mathematics;
 using Xenko.Graphics;
@@ -18,7 +19,7 @@ namespace Myra.Graphics2D.Text
 
 		public int Count
 		{
-			get { return _text != null ? _text.Length : 0; }
+			get { return _text.Length(); }
 		}
 
 		public string Text
@@ -42,6 +43,11 @@ namespace Myra.Graphics2D.Text
 		}
 
 		public int Top
+		{
+			get; internal set;
+		}
+
+		public int LineStart
 		{
 			get; internal set;
 		}
