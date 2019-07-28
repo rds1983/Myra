@@ -1,10 +1,16 @@
-﻿using Myra.Graphics2D.UI.Styles;
+﻿using Microsoft.Xna.Framework;
+using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
 {
 	public class SeparatorWidget : Image
 	{
 		private readonly Orientation _orientation;
+
+		public int Thickness
+		{
+			get; set;
+		}
 
 		internal SeparatorWidget(Orientation orientation, SeparatorStyle style)
 		{
@@ -21,15 +27,23 @@ namespace Myra.Graphics2D.UI
 			ApplyWidgetStyle(style);
 
 			Renderable = style.Image;
+			Thickness = style.Thickness;
+		}
+
+		protected override Point InternalMeasure(Point availableSize)
+		{
+			var result = Point.Zero;
 
 			if (_orientation == Orientation.Horizontal)
 			{
-				Height = style.Thickness;
+				result.Y = Thickness;
 			}
 			else
 			{
-				Width = style.Thickness;
+				result.X = Thickness;
 			}
+
+			return result;
 		}
 
 		public override void InternalRender(RenderContext context)
