@@ -168,21 +168,23 @@ namespace Myra.Graphics2D.UI
 
 			if (style != null)
 			{
-				ApplyButtonStyle(style);
+				ApplyImageTextButtonStyle(style);
 			}
 		}
 
-		public ImageTextButton(string style) : this(Stylesheet.Current.ButtonStyles[style])
+		public ImageTextButton(string style) :
+			this(new ImageTextButtonStyle(Stylesheet.Current.ButtonStyles[style], Stylesheet.Current.TextBlockStyle))
 		{
 		}
 
-		public ImageTextButton() : this(Stylesheet.Current.ButtonStyle)
+		public ImageTextButton() :
+			this(new ImageTextButtonStyle(Stylesheet.Current.ButtonStyle, Stylesheet.Current.TextBlockStyle))
 		{
 		}
 
-		public void ApplyButtonStyle(ImageTextButtonStyle style)
+		public void ApplyImageTextButtonStyle(ImageTextButtonStyle style)
 		{
-			ApplyButtonBaseStyle(style);
+			ApplyButtonStyle(style);
 
 			if (style.LabelStyle != null)
 			{

@@ -35,7 +35,7 @@ namespace Myra.Graphics2D.UI
 
 		[XmlIgnore]
 		[HiddenInEditor]
-		public ImageButtonStyle HandleStyle { get; private set; }
+		public ButtonStyle HandleStyle { get; private set; }
 
 		public event EventHandler ProportionsChanged;
 
@@ -230,13 +230,15 @@ namespace Myra.Graphics2D.UI
 				if (i > 0)
 				{
 					// Add splitter
-					var handle = new ImageButton(HandleStyle)
+					var handle = new ImageButton((ImageButtonStyle)null)
 					{
 						HorizontalAlignment = HorizontalAlignment.Stretch,
 						VerticalAlignment = VerticalAlignment.Stretch,
 						CanFocus = false,
 						ReleaseOnMouseLeft = false
 					};
+
+					handle.ApplyButtonStyle(HandleStyle);
 
 					handle.PressedChanged += HandleOnPressedChanged;
 

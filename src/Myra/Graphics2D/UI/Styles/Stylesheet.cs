@@ -82,11 +82,11 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get
 			{
-				return _textBlockStyles[DefaultStyleName];
+				return GetDefaultStyle(_textBlockStyles);
 			}
 			set
 			{
-				_textBlockStyles[DefaultStyleName] = value;
+				SetDefaultStyle(_textBlockStyles, value);
 			}
 		}
 
@@ -94,11 +94,11 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get
 			{
-				return _textFieldStyles[DefaultStyleName];
+				return GetDefaultStyle(_textFieldStyles);
 			}
 			set
 			{
-				_textFieldStyles[DefaultStyleName] = value;
+				SetDefaultStyle(_textFieldStyles, value);
 			}
 		}
 
@@ -106,11 +106,11 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get
 			{
-				return _buttonStyles[DefaultStyleName];
+				return GetDefaultStyle(_buttonStyles);
 			}
 			set
 			{
-				_buttonStyles[DefaultStyleName] = value;
+				SetDefaultStyle(_buttonStyles, value);
 			}
 		}
 
@@ -118,11 +118,11 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get
 			{
-				return _checkBoxStyles[DefaultStyleName];
+				return GetDefaultStyle(_checkBoxStyles);
 			}
 			set
 			{
-				_checkBoxStyles[DefaultStyleName] = value;
+				SetDefaultStyle(_checkBoxStyles, value);
 			}
 		}
 
@@ -130,11 +130,11 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get
 			{
-				return _radioButtonStyles[DefaultStyleName];
+				return GetDefaultStyle(_radioButtonStyles);
 			}
 			set
 			{
-				_radioButtonStyles[DefaultStyleName] = value;
+				SetDefaultStyle(_radioButtonStyles, value);
 			}
 		}
 
@@ -142,11 +142,11 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get
 			{
-				return _spinButtonStyles[DefaultStyleName];
+				return GetDefaultStyle(_spinButtonStyles);
 			}
 			set
 			{
-				_spinButtonStyles[DefaultStyleName] = value;
+				SetDefaultStyle(_spinButtonStyles, value);
 			}
 		}
 
@@ -154,11 +154,11 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get
 			{
-				return _horizontalSliderStyles[DefaultStyleName];
+				return GetDefaultStyle(_horizontalSliderStyles);
 			}
 			set
 			{
-				_horizontalSliderStyles[DefaultStyleName] = value;
+				SetDefaultStyle(_horizontalSliderStyles, value);
 			}
 		}
 
@@ -166,11 +166,11 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get
 			{
-				return _verticalSliderStyles[DefaultStyleName];
+				return GetDefaultStyle(_verticalSliderStyles);
 			}
 			set
 			{
-				_verticalSliderStyles[DefaultStyleName] = value;
+				SetDefaultStyle(_verticalSliderStyles, value);
 			}
 		}
 
@@ -178,11 +178,11 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get
 			{
-				return _horizontalProgressBarStyles[DefaultStyleName];
+				return GetDefaultStyle(_horizontalProgressBarStyles);
 			}
 			set
 			{
-				_horizontalProgressBarStyles[DefaultStyleName] = value;
+				SetDefaultStyle(_horizontalProgressBarStyles, value);
 			}
 		}
 
@@ -190,11 +190,11 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get
 			{
-				return _verticalProgressBarStyles[DefaultStyleName];
+				return GetDefaultStyle(_verticalProgressBarStyles);
 			}
 			set
 			{
-				_verticalProgressBarStyles[DefaultStyleName] = value;
+				SetDefaultStyle(_verticalProgressBarStyles, value);
 			}
 		}
 
@@ -202,11 +202,11 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get
 			{
-				return _horizontalSeparatorStyles[DefaultStyleName];
+				return GetDefaultStyle(_horizontalSeparatorStyles);
 			}
 			set
 			{
-				_horizontalSeparatorStyles[DefaultStyleName] = value;
+				SetDefaultStyle(_horizontalSeparatorStyles, value);
 			}
 		}
 
@@ -214,11 +214,11 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get
 			{
-				return _verticalSeparatorStyles[DefaultStyleName];
+				return GetDefaultStyle(_verticalSeparatorStyles);
 			}
 			set
 			{
-				_verticalSeparatorStyles[DefaultStyleName] = value;
+				SetDefaultStyle(_verticalSeparatorStyles, value);
 			}
 		}
 
@@ -226,11 +226,11 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get
 			{
-				return _comboBoxStyles[DefaultStyleName];
+				return GetDefaultStyle(_comboBoxStyles);
 			}
 			set
 			{
-				_comboBoxStyles[DefaultStyleName] = value;
+				SetDefaultStyle(_comboBoxStyles, value);
 			}
 		}
 
@@ -238,11 +238,11 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get
 			{
-				return _listBoxStyles[DefaultStyleName];
+				return GetDefaultStyle(_listBoxStyles);
 			}
 			set
 			{
-				_listBoxStyles[DefaultStyleName] = value;
+				SetDefaultStyle(_listBoxStyles, value);
 			}
 		}
 
@@ -250,11 +250,11 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get
 			{
-				return _tabControlStyles[DefaultStyleName];
+				return GetDefaultStyle(_tabControlStyles);
 			}
 			set
 			{
-				_tabControlStyles[DefaultStyleName] = value;
+				SetDefaultStyle(_tabControlStyles, value);
 			}
 		}
 
@@ -262,11 +262,11 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get
 			{
-				return _treeStyles[DefaultStyleName];
+				return GetDefaultStyle(_treeStyles);
 			}
 			set
 			{
-				_treeStyles[DefaultStyleName] = value;
+				SetDefaultStyle(_treeStyles, value);
 			}
 		}
 
@@ -274,11 +274,11 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get
 			{
-				return _horizontalSplitPaneStyles[DefaultStyleName];
+				return GetDefaultStyle(_horizontalSplitPaneStyles);
 			}
 			set
 			{
-				_horizontalSplitPaneStyles[DefaultStyleName] = value;
+				SetDefaultStyle(_horizontalSplitPaneStyles, value);
 			}
 		}
 
@@ -286,11 +286,11 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get
 			{
-				return _verticalSplitPaneStyles[DefaultStyleName];
+				return GetDefaultStyle(_verticalSplitPaneStyles);
 			}
 			set
 			{
-				_verticalSplitPaneStyles[DefaultStyleName] = value;
+				SetDefaultStyle(_verticalSplitPaneStyles, value);
 			}
 		}
 
@@ -298,11 +298,11 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get
 			{
-				return _scrollPaneStyles[DefaultStyleName];
+				return GetDefaultStyle(_scrollPaneStyles);
 			}
 			set
 			{
-				_scrollPaneStyles[DefaultStyleName] = value;
+				SetDefaultStyle(_scrollPaneStyles, value);
 			}
 		}
 
@@ -310,11 +310,11 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get
 			{
-				return _horizontalMenuStyles[DefaultStyleName];
+				return GetDefaultStyle(_horizontalMenuStyles);
 			}
 			set
 			{
-				_horizontalMenuStyles[DefaultStyleName] = value;
+				SetDefaultStyle(_horizontalMenuStyles, value);
 			}
 		}
 
@@ -322,11 +322,11 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get
 			{
-				return _verticalMenuStyles[DefaultStyleName];
+				return GetDefaultStyle(_verticalMenuStyles);
 			}
 			set
 			{
-				_verticalMenuStyles[DefaultStyleName] = value;
+				SetDefaultStyle(_verticalMenuStyles, value);
 			}
 		}
 
@@ -334,11 +334,11 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get
 			{
-				return _windowStyles[DefaultStyleName];
+				return GetDefaultStyle(_windowStyles);
 			}
 			set
 			{
-				_windowStyles[DefaultStyleName] = value;
+				SetDefaultStyle(_windowStyles, value);
 			}
 		}
 
@@ -346,11 +346,11 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			get
 			{
-				return _dialogStyles[DefaultStyleName];
+				return GetDefaultStyle(_dialogStyles);
 			}
 			set
 			{
-				_dialogStyles[DefaultStyleName] = value;
+				SetDefaultStyle(_dialogStyles, value);
 			}
 		}
 
@@ -536,6 +536,18 @@ namespace Myra.Graphics2D.UI.Styles
 			{
 				return _dialogStyles;
 			}
+		}
+
+		private static T GetDefaultStyle<T>(Dictionary<string, T> styles) where T : WidgetStyle
+		{
+			T result = null;
+			styles.TryGetValue(DefaultStyleName, out result);
+			return result;
+		}
+
+		private static void SetDefaultStyle<T>(Dictionary<string, T> styles, T value) where T : WidgetStyle
+		{
+			styles[DefaultStyleName] = value;
 		}
 
 		public static Stylesheet CreateFromSource(string s,
