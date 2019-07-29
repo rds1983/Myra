@@ -22,7 +22,7 @@
         <MenuItem Id="_menuFileQuit" Text="&amp;Quit" />
       </MenuItem>
       <MenuItem Id="" Text="&amp;Edit">
-        <MenuItem Id="_menuEditUpdateSource" Text="&amp;Updates Source" />
+        <MenuItem Id="_menuEditUpdateSource" Text="&amp;Update Source" />
       </MenuItem>
       <MenuItem Id="" Text="&amp;Help">
         <MenuItem Id="_menuHelpAbout" Text="&amp;About" />
@@ -39,7 +39,7 @@
         <VerticalSplitPane Id="_leftSplitPane">
           <Panel Id="_projectHolder" />
           <ScrollPane GridRow="2">
-            <TextField Text="" Wrap="True" Multiline="True" Id="_textSource" VerticalAlignment="Stretch" GridRow="2" />
+            <TextField Text="" Multiline="True" Wrap="True" Id="_textSource" VerticalAlignment="Stretch" GridRow="2" />
           </ScrollPane>
         </VerticalSplitPane>
         <HorizontalSeparator GridRow="1" />

@@ -282,11 +282,15 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[HiddenInEditor]
+		[XmlIgnore]
 		public int SelectStart
 		{
 			get; private set;
 		}
 
+		[HiddenInEditor]
+		[XmlIgnore]
 		public int SelectEnd
 		{
 			get; private set;
@@ -664,11 +668,14 @@ namespace Myra.Graphics2D.UI
 				{
 					if (!Desktop.IsControlDown)
 					{
-						var line = _formattedText.GetLineByCursorPosition(CursorPosition);
-						if (line != null)
+						var newPosition = CursorPosition;
+
+						while (newPosition > 0 && Text[newPosition - 1] != '\n')
 						{
-							UserSetCursorPosition(line.LineStart);
+							--newPosition;
 						}
+
+						UserSetCursorPosition(newPosition);
 					}
 					else
 					{

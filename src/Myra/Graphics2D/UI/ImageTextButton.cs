@@ -27,7 +27,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Appearance")]
-		[StylePropertyPath("LabelStyle.TextColor")]
+		[StylePropertyPath("/TextBlockStyle/TextColor")]
 		public virtual Color TextColor
 		{
 			get { return _textBlock.TextColor; }

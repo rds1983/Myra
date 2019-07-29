@@ -45,7 +45,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Appearance")]
-		[StylePropertyPath("TitleStyle.TextColor")]
+		[StylePropertyPath("TitleStyle/TextColor")]
 		public Color TitleTextColor
 		{
 			get { return _titleLabel.TextColor; }

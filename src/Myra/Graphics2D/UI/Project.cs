@@ -412,7 +412,7 @@ namespace Myra.Graphics2D.UI
 
 			// Find styles dict of that widget
 			var typeName = w.GetType().Name;
-			if (typeName == "ImageTextButton")
+			if (typeName == "ImageTextButton" || typeName == "ImageButton" || typeName == "TextButton")
 			{
 				// Small hack
 				// ImageTextButton styles are stored in Stylesheet.ButtonStyles
@@ -433,7 +433,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			// Fetch style from the dict
-			var style = stylesDict[styleName];
+			object obj = stylesDict[styleName];
 
 			// Now find corresponding property
 			PropertyInfo styleProperty = null;
@@ -441,21 +441,27 @@ namespace Myra.Graphics2D.UI
 			var stylePropertyPathAttribute = property.FindAttribute<StylePropertyPathAttribute>();
 			if (stylePropertyPathAttribute != null)
 			{
-				var parts = stylePropertyPathAttribute.Name.Split('.');
+				var path = stylePropertyPathAttribute.Name;
+				if (path.StartsWith("/"))
+				{
+					obj = stylesheet;
+					path = path.Substring(1);
+				}
 
+				var parts = path.Split('/');
 				for (var i = 0; i < parts.Length; ++i)
 				{
-					styleProperty = style.GetType().GetRuntimeProperty(parts[i]);
+					styleProperty = obj.GetType().GetRuntimeProperty(parts[i]);
 
 					if (i < parts.Length - 1)
 					{
-						style = styleProperty.GetValue(style);
+						obj = styleProperty.GetValue(obj);
 					}
 				}
 			}
 			else
 			{
-				styleProperty = style.GetType().GetRuntimeProperty(property.Name);
+				styleProperty = obj.GetType().GetRuntimeProperty(property.Name);
 			}
 
 			if (styleProperty == null)
@@ -464,7 +470,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			// Compare values
-			var styleValue = styleProperty.GetValue(style);
+			var styleValue = styleProperty.GetValue(obj);
 			var value = property.GetValue(w);
 			if (!Equals(styleValue, value))
 			{
