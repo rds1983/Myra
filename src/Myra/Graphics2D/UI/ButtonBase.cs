@@ -3,6 +3,7 @@ using System.ComponentModel;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
+using System.Linq;
 
 #if !XENKO
 using Microsoft.Xna.Framework.Input;
@@ -225,7 +226,7 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public void ApplyButtonBaseStyle(ButtonStyle style)
+		public void ApplyButtonStyle(ButtonStyle style)
 		{
 			ApplyWidgetStyle(style);
 
@@ -235,6 +236,16 @@ namespace Myra.Graphics2D.UI
 		private void DesktopTouchUp(object sender, EventArgs args)
 		{
 			IsPressed = false;
+		}
+
+		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		{
+			ApplyButtonStyle(stylesheet.ButtonStyles[name]);
+		}
+
+		internal override string[] GetStyleNames(Stylesheet stylesheet)
+		{
+			return stylesheet.ButtonStyles.Keys.ToArray();
 		}
 	}
 }

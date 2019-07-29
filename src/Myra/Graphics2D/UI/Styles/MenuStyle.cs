@@ -7,14 +7,12 @@
 
 		public MenuStyle()
 		{
-			MenuItemStyle = new MenuItemStyle();
-			SeparatorStyle = new SeparatorStyle();
 		}
 
 		public MenuStyle(MenuStyle style) : base(style)
 		{
-			MenuItemStyle = new MenuItemStyle(style.MenuItemStyle);
-			SeparatorStyle = new SeparatorStyle(style.SeparatorStyle);
+			MenuItemStyle = style.MenuItemStyle != null ? new MenuItemStyle(style.MenuItemStyle) : null;
+			SeparatorStyle = style.SeparatorStyle != null ? new SeparatorStyle(style.SeparatorStyle) : null;
 		}
 
 		public override WidgetStyle Clone()

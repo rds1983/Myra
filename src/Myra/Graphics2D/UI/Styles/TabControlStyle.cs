@@ -24,14 +24,12 @@
 
 		public TabControlStyle()
 		{
-			TabItemStyle = new ImageTextButtonStyle();
-			ContentStyle = new WidgetStyle();
 		}
 
 		public TabControlStyle(TabControlStyle style) : base(style)
 		{
-			TabItemStyle = new ImageTextButtonStyle(style.TabItemStyle);
-			ContentStyle = new WidgetStyle(style.ContentStyle);
+			TabItemStyle = style.TabItemStyle != null ? new ImageTextButtonStyle(style.TabItemStyle) : null;
+			ContentStyle = style.ContentStyle != null ? new WidgetStyle(style.ContentStyle) : null;
 
 			ButtonSpacing = style.ButtonSpacing;
 			HeaderSpacing = style.HeaderSpacing;

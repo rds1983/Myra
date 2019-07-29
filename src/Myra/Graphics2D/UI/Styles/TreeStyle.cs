@@ -15,14 +15,12 @@
 
 		public TreeStyle()
 		{
-			MarkStyle = new ImageButtonStyle();
-			LabelStyle = new TextBlockStyle();
 		}
 
 		public TreeStyle(TreeStyle style): base(style)
 		{
-			MarkStyle = new ImageButtonStyle(style.MarkStyle);
-			LabelStyle = new TextBlockStyle(style.LabelStyle);
+			MarkStyle = style.MarkStyle != null ? new ImageButtonStyle(style.MarkStyle) : null;
+			LabelStyle = style.LabelStyle != null ? new TextBlockStyle(style.LabelStyle) : null;
 			SelectionBackground = style.SelectionBackground;
 			SelectionHoverBackground = style.SelectionHoverBackground;
 		}

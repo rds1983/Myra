@@ -428,13 +428,14 @@ namespace Myra.Graphics2D.UI
 		{
 			if (!Multiline && ch == '\n')
 				return;
+
 			if (InsertMode && !(SelectStart != SelectEnd) && CursorPosition < Length)
 			{
 				UndoStack.MakeReplace(Text, CursorPosition, 1, 1);
 				DeleteChars(CursorPosition, 1);
 				if (InsertChar(CursorPosition, ch))
 				{
-					UserSetCursorPosition(CursorPosition + 1);
+					UserSetCursorPosition(CursorPosition + 1, true);
 				}
 			}
 			else
@@ -443,7 +444,7 @@ namespace Myra.Graphics2D.UI
 				if (InsertChar(CursorPosition, ch))
 				{
 					UndoStack.MakeInsert(CursorPosition, 1);
-					UserSetCursorPosition(CursorPosition + 1);
+					UserSetCursorPosition(CursorPosition + 1, true);
 				}
 			}
 		}
@@ -496,7 +497,7 @@ namespace Myra.Graphics2D.UI
 			UndoRedo(RedoStack, UndoStack);
 		}
 
-		private void UserSetCursorPosition(int newPosition)
+		private void UserSetCursorPosition(int newPosition, bool forceChangeOnly = false)
 		{
 			if (newPosition > Length)
 			{
@@ -510,7 +511,7 @@ namespace Myra.Graphics2D.UI
 
 			CursorPosition = newPosition;
 
-			if (!Desktop.IsShiftDown && !_isTouchDown)
+			if (forceChangeOnly || (!Desktop.IsShiftDown && !_isTouchDown))
 			{
 				SelectStart = SelectEnd = CursorPosition;
 			}
@@ -595,6 +596,14 @@ namespace Myra.Graphics2D.UI
 						Redo();
 					}
 					break;
+				case Keys.A:
+					if (Desktop.IsControlDown)
+					{
+						// Select all
+						SelectStart = 0;
+						SelectEnd = Length;
+					}
+					break;
 
 				case Keys.Left:
 					if (CursorPosition > 0)
@@ -620,27 +629,34 @@ namespace Myra.Graphics2D.UI
 					break;
 
 				case Keys.Back:
-					if (SelectStart == SelectEnd)
+					if (!Readonly)
 					{
-						if (Delete(CursorPosition - 1, 1))
+
+						if (SelectStart == SelectEnd)
 						{
-							UserSetCursorPosition(CursorPosition - 1);
+							if (Delete(CursorPosition - 1, 1))
+							{
+								UserSetCursorPosition(CursorPosition - 1);
+							}
 						}
-					}
-					else
-					{
-						DeleteSelection();
+						else
+						{
+							DeleteSelection();
+						}
 					}
 					break;
 
 				case Keys.Delete:
-					if (SelectStart == SelectEnd)
+					if (!Readonly)
 					{
-						Delete(CursorPosition, 1);
-					}
-					else
-					{
-						DeleteSelection();
+						if (SelectStart == SelectEnd)
+						{
+							Delete(CursorPosition, 1);
+						}
+						else
+						{
+							DeleteSelection();
+						}
 					}
 					break;
 

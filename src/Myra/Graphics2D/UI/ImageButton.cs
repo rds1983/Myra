@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 
@@ -69,26 +68,28 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ImageButton(string style)
-			: this(Stylesheet.Current.ImageButtonStyles[style])
+		public ImageButton(string style): this(new ImageButtonStyle(Stylesheet.Current.ButtonStyles[style]))
 		{
 		}
 
-		public ImageButton() : this(Stylesheet.Current.ImageButtonStyle)
+		public ImageButton() : this(new ImageButtonStyle(Stylesheet.Current.ButtonStyle))
 		{
 		}
 
 		public void ApplyImageButtonStyle(ImageButtonStyle style)
 		{
-			ApplyButtonBaseStyle(style);
+			ApplyButtonStyle(style);
 
 			var imageStyle = style.ImageStyle;
 
-			InternalChild.ApplyWidgetStyle(imageStyle);
+			if (imageStyle != null)
+			{
+				InternalChild.ApplyWidgetStyle(imageStyle);
 
-			Image = imageStyle.Image;
-			OverImage = imageStyle.OverImage;
-			PressedImage = imageStyle.PressedImage;
+				Image = imageStyle.Image;
+				OverImage = imageStyle.OverImage;
+				PressedImage = imageStyle.PressedImage;
+			}
 		}
 
 		public override void OnPressedChanged()
@@ -96,16 +97,6 @@ namespace Myra.Graphics2D.UI
 			base.OnPressedChanged();
 
 			InternalChild.IsPressed = IsPressed;
-		}
-
-		protected override void SetStyleByName(Stylesheet stylesheet, string name)
-		{
-			ApplyImageButtonStyle(stylesheet.ImageButtonStyles[name]);
-		}
-
-		internal override string[] GetStyleNames(Stylesheet stylesheet)
-		{
-			return stylesheet.ImageButtonStyles.Keys.ToArray();
 		}
 	}
 }

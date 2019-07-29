@@ -2,16 +2,15 @@
 {
 	public class SplitPaneStyle: WidgetStyle
 	{
-		public ImageButtonStyle HandleStyle { get; set; }
+		public ButtonStyle HandleStyle { get; set; }
 
 		public SplitPaneStyle()
 		{
-			HandleStyle = new ImageButtonStyle();
 		}
 
 		public SplitPaneStyle(SplitPaneStyle style) : base(style)
 		{
-			HandleStyle = new ImageButtonStyle(style.HandleStyle);
+			HandleStyle = style.HandleStyle != null ? new ButtonStyle(style.HandleStyle) : null;
 		}
 
 		public override WidgetStyle Clone()

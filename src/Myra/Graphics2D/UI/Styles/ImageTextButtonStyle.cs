@@ -17,14 +17,17 @@
 
 		public ImageTextButtonStyle()
 		{
-			LabelStyle = new TextBlockStyle();
-			ImageStyle = new PressableImageStyle();
 		}
 
 		public ImageTextButtonStyle(ImageTextButtonStyle style) : base(style)
 		{
-			LabelStyle = new TextBlockStyle(style.LabelStyle);
-			ImageStyle = new PressableImageStyle(style.ImageStyle);
+			LabelStyle = style.LabelStyle != null ? new TextBlockStyle(style.LabelStyle) : null;
+			ImageStyle = style.ImageStyle != null ? new PressableImageStyle(style.ImageStyle) : null;
+		}
+
+		public ImageTextButtonStyle(ButtonStyle buttonStyle, TextBlockStyle textBlockStyle) : base(buttonStyle)
+		{
+			LabelStyle = textBlockStyle != null ? new TextBlockStyle(textBlockStyle) : null;
 		}
 
 		public override WidgetStyle Clone()

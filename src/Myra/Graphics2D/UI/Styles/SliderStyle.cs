@@ -6,12 +6,11 @@
 
 		public SliderStyle()
 		{
-			KnobStyle = new ImageButtonStyle();
 		}
 
 		public SliderStyle(SliderStyle style) : base(style)
 		{
-			KnobStyle = new ImageButtonStyle(style.KnobStyle);
+			KnobStyle = style.KnobStyle != null ? new ImageButtonStyle(style.KnobStyle) : null;
 		}
 
 		public override WidgetStyle Clone()

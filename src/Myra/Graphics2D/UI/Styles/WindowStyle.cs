@@ -7,14 +7,12 @@
 
 		public WindowStyle()
 		{
-			TitleStyle = new TextBlockStyle();
-			CloseButtonStyle = new ImageButtonStyle();
 		}
 
 		public WindowStyle(WindowStyle style) : base(style)
 		{
-			TitleStyle = new TextBlockStyle(style.TitleStyle);
-			CloseButtonStyle = new ImageButtonStyle(style.CloseButtonStyle);
+			TitleStyle = style.TitleStyle != null ? new TextBlockStyle(style.TitleStyle) : null;
+			CloseButtonStyle = style.CloseButtonStyle != null ? new ImageButtonStyle(style.CloseButtonStyle) : null;
 		}
 
 		public override WidgetStyle Clone()

@@ -54,34 +54,24 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public TextButton(string style)
-			: this(Stylesheet.Current.TextButtonStyles[style])
+		public TextButton(string style) :
+			this(new TextButtonStyle(Stylesheet.Current.ButtonStyles[style], Stylesheet.Current.TextBlockStyle))
 		{
 		}
 
-		public TextButton()
-			: this(Stylesheet.Current.TextButtonStyle)
+		public TextButton() :
+			this(new TextButtonStyle(Stylesheet.Current.ButtonStyle, Stylesheet.Current.TextBlockStyle))
 		{
 		}
 
 		public void ApplyButtonStyle(TextButtonStyle style)
 		{
-			ApplyButtonBaseStyle(style);
+			ApplyButtonStyle((ButtonStyle)style);
 
 			if (style.LabelStyle != null)
 			{
 				InternalChild.ApplyTextBlockStyle(style.LabelStyle);
 			}
-		}
-
-		protected override void SetStyleByName(Stylesheet stylesheet, string name)
-		{
-			ApplyButtonStyle(stylesheet.TextButtonStyles[name]);
-		}
-
-		internal override string[] GetStyleNames(Stylesheet stylesheet)
-		{
-			return stylesheet.TextButtonStyles.Keys.ToArray();
 		}
 
 		public override void OnPressedChanged()

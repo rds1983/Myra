@@ -6,12 +6,15 @@
 
 		public ImageButtonStyle()
 		{
-			ImageStyle = new PressableImageStyle();
 		}
 
 		public ImageButtonStyle(ImageButtonStyle style): base(style)
 		{
-			ImageStyle = new PressableImageStyle(style.ImageStyle);
+			ImageStyle = style.ImageStyle != null ? new PressableImageStyle(style.ImageStyle) : null;
+		}
+
+		public ImageButtonStyle(ButtonStyle buttonStyle) : base(buttonStyle)
+		{
 		}
 
 		public override WidgetStyle Clone()

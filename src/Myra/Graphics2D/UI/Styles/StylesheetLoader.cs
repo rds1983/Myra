@@ -218,7 +218,6 @@ namespace Myra.Graphics2D.UI.Styles
 
 		private void LoadWidgetStyleFromSource(Dictionary<string, object> source, WidgetStyle result)
 		{
-
 			int i;
 			if (source.GetStyle(WidthName, out i))
 			{
@@ -422,7 +421,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadButtonBaseStyleFromSource(Dictionary<string, object> source, ButtonStyle result)
+		private void LoadButtonStyleFromSource(Dictionary<string, object> source, ButtonStyle result)
 		{
 			LoadWidgetStyleFromSource(source, result);
 
@@ -433,19 +432,21 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private void LoadButtonStyleFromSource(Dictionary<string, object> source, ImageTextButtonStyle result)
+		private void LoadImageTextButtonStyleFromSource(Dictionary<string, object> source, ImageTextButtonStyle result)
 		{
-			LoadButtonBaseStyleFromSource(source, result);
+			LoadButtonStyleFromSource(source, result);
 
-			Dictionary<string, object> labelStyle;
-			if (source.GetStyle(LabelStyleName, out labelStyle))
+			Dictionary<string, object> style;
+			if (source.GetStyle(LabelStyleName, out style))
 			{
-				LoadTextBlockStyleFromSource(labelStyle, result.LabelStyle);
+				result.LabelStyle = new TextBlockStyle();
+				LoadTextBlockStyleFromSource(style, result.LabelStyle);
 			}
 
-			if (source.GetStyle(ImageStyleName, out labelStyle))
+			if (source.GetStyle(ImageStyleName, out style))
 			{
-				LoadPressableImageStyleFromSource(labelStyle, result.ImageStyle);
+				result.ImageStyle = new PressableImageStyle();
+				LoadPressableImageStyleFromSource(style, result.ImageStyle);
 			}
 
 			int spacing;
@@ -457,22 +458,24 @@ namespace Myra.Graphics2D.UI.Styles
 
 		private void LoadTextButtonStyleFromSource(Dictionary<string, object> source, TextButtonStyle result)
 		{
-			LoadButtonBaseStyleFromSource(source, result);
+			LoadButtonStyleFromSource(source, result);
 
 			Dictionary<string, object> labelStyle;
 			if (source.GetStyle(LabelStyleName, out labelStyle))
 			{
+				result.LabelStyle = new TextBlockStyle();
 				LoadTextBlockStyleFromSource(labelStyle, result.LabelStyle);
 			}
 		}
 
 		private void LoadImageButtonStyleFromSource(Dictionary<string, object> source, ImageButtonStyle result)
 		{
-			LoadButtonBaseStyleFromSource(source, result);
+			LoadButtonStyleFromSource(source, result);
 
 			Dictionary<string, object> style;
 			if (source.GetStyle(ImageStyleName, out style))
 			{
+				result.ImageStyle = new PressableImageStyle();
 				LoadPressableImageStyleFromSource(style, result.ImageStyle);
 			}
 		}
@@ -484,16 +487,19 @@ namespace Myra.Graphics2D.UI.Styles
 			Dictionary<string, object> style;
 			if (source.GetStyle(TextFieldStyleName, out style))
 			{
+				result.TextFieldStyle = new TextFieldStyle();
 				LoadTextFieldStyleFromSource(style, result.TextFieldStyle);
 			}
 
 			if (source.GetStyle(UpButtonStyleName, out style))
 			{
+				result.UpButtonStyle = new ImageButtonStyle();
 				LoadImageButtonStyleFromSource(style, result.UpButtonStyle);
 			}
 
 			if (source.GetStyle(DownButtonStyleName, out style))
 			{
+				result.DownButtonStyle = new ImageButtonStyle();
 				LoadImageButtonStyleFromSource(style, result.DownButtonStyle);
 			}
 		}
@@ -505,6 +511,7 @@ namespace Myra.Graphics2D.UI.Styles
 			Dictionary<string, object> knobStyle;
 			if (source.GetStyle(KnobName, out knobStyle))
 			{
+				result.KnobStyle = new ImageButtonStyle();
 				LoadImageButtonStyleFromSource(knobStyle, result.KnobStyle);
 			}
 		}
@@ -522,17 +529,19 @@ namespace Myra.Graphics2D.UI.Styles
 
 		private void LoadComboBoxStyleFromSource(Dictionary<string, object> source, ComboBoxStyle result)
 		{
-			LoadButtonStyleFromSource(source, result);
+			LoadImageTextButtonStyleFromSource(source, result);
 
 			Dictionary<string, object> subStyle;
 			if (source.GetStyle(ItemsContainerName, out subStyle))
 			{
+				result.ItemsContainerStyle = new WidgetStyle();
 				LoadWidgetStyleFromSource(subStyle, result.ItemsContainerStyle);
 			}
 
 			if (source.GetStyle(ComboBoxItemName, out subStyle))
 			{
-				LoadButtonStyleFromSource(subStyle, result.ListItemStyle);
+				result.ListItemStyle = new ImageTextButtonStyle();
+				LoadImageTextButtonStyleFromSource(subStyle, result.ListItemStyle);
 			}
 		}
 
@@ -543,11 +552,13 @@ namespace Myra.Graphics2D.UI.Styles
 			Dictionary<string, object> subStyle;
 			if (source.GetStyle(ListBoxItemName, out subStyle))
 			{
-				LoadButtonStyleFromSource(subStyle, result.ListItemStyle);
+				result.ListItemStyle = new ImageTextButtonStyle();
+				LoadImageTextButtonStyleFromSource(subStyle, result.ListItemStyle);
 			}
 
 			if (source.GetStyle(SeparatorName, out subStyle))
 			{
+				result.SeparatorStyle = new SeparatorStyle();
 				LoadSeparatorStyleFromSource(subStyle, result.SeparatorStyle);
 			}
 		}
@@ -559,11 +570,13 @@ namespace Myra.Graphics2D.UI.Styles
 			Dictionary<string, object> subStyle;
 			if (source.GetStyle(TabItemName, out subStyle))
 			{
-				LoadButtonStyleFromSource(subStyle, result.TabItemStyle);
+				result.TabItemStyle = new ImageTextButtonStyle();
+				LoadImageTextButtonStyleFromSource(subStyle, result.TabItemStyle);
 			}
 
 			if (source.GetStyle(ContentName, out subStyle))
 			{
+				result.ContentStyle = new WidgetStyle();
 				LoadWidgetStyleFromSource(subStyle, result.ContentStyle);
 			}
 
@@ -581,7 +594,7 @@ namespace Myra.Graphics2D.UI.Styles
 
 		private void LoadMenuItemStyleFromSource(Dictionary<string, object> source, MenuItemStyle result)
 		{
-			LoadButtonStyleFromSource(source, result);
+			LoadImageTextButtonStyleFromSource(source, result);
 
 			int value;
 			if (source.GetStyle(IconWidthName, out value))
@@ -618,7 +631,8 @@ namespace Myra.Graphics2D.UI.Styles
 			Dictionary<string, object> handle;
 			if (source.GetStyle(HandleName, out handle))
 			{
-				LoadImageButtonStyleFromSource(handle, result.HandleStyle);
+				result.HandleStyle = new ButtonStyle();
+				LoadButtonStyleFromSource(handle, result.HandleStyle);
 			}
 		}
 
@@ -629,11 +643,13 @@ namespace Myra.Graphics2D.UI.Styles
 			Dictionary<string, object> menuItem;
 			if (source.GetStyle(MenuItemName, out menuItem))
 			{
+				result.MenuItemStyle = new MenuItemStyle();
 				LoadMenuItemStyleFromSource(menuItem, result.MenuItemStyle);
 			}
 
 			if (source.GetStyle(SeparatorName, out menuItem))
 			{
+				result.SeparatorStyle = new SeparatorStyle();
 				LoadSeparatorStyleFromSource(menuItem, result.SeparatorStyle);
 			}
 		}
@@ -654,10 +670,12 @@ namespace Myra.Graphics2D.UI.Styles
 			Dictionary<string, object> obj;
 			if (source.GetStyle(MarkName, out obj))
 			{
+				result.MarkStyle = new ImageButtonStyle();
 				LoadImageButtonStyleFromSource(obj, result.MarkStyle);
 
 				if (obj.GetStyle(LabelStyleName, out obj))
 				{
+					result.LabelStyle = new TextBlockStyle();
 					LoadTextBlockStyleFromSource(obj, result.LabelStyle);
 				}
 			}
@@ -670,11 +688,13 @@ namespace Myra.Graphics2D.UI.Styles
 			Dictionary<string, object> obj;
 			if (source.GetStyle(TitleStyleName, out obj))
 			{
+				result.TitleStyle = new TextBlockStyle();
 				LoadTextBlockStyleFromSource(obj, result.TitleStyle);
 			}
 
 			if (source.GetStyle(CloseButtonStyleName, out obj))
 			{
+				result.CloseButtonStyle = new ImageButtonStyle();
 				LoadImageButtonStyleFromSource(obj, result.CloseButtonStyle);
 			}
 		}
@@ -694,6 +714,7 @@ namespace Myra.Graphics2D.UI.Styles
 				return;
 			}
 
+			stylesDict[Stylesheet.DefaultStyleName] = new T();
 			fillAction(source, stylesDict[Stylesheet.DefaultStyleName]);
 
 			Dictionary<string, object> styles;
@@ -751,11 +772,9 @@ namespace Myra.Graphics2D.UI.Styles
 			FillStyles(TextFieldName, result.TextFieldStyles, LoadTextFieldStyleFromSource);
 			FillStyles(ScrollAreaName, result.ScrollPaneStyles, LoadScrollAreaStyleFromSource);
 			FillStyles(ButtonName, result.ButtonStyles, LoadButtonStyleFromSource);
-			FillStyles(CheckBoxName, result.CheckBoxStyles, LoadButtonStyleFromSource);
-			FillStyles(RadioButtonName, result.RadioButtonStyles, LoadButtonStyleFromSource);
-			FillStyles(ImageButtonName, result.ImageButtonStyles, LoadImageButtonStyleFromSource);
+			FillStyles(CheckBoxName, result.CheckBoxStyles, LoadImageTextButtonStyleFromSource);
+			FillStyles(RadioButtonName, result.RadioButtonStyles, LoadImageTextButtonStyleFromSource);
 			FillStyles(SpinButtonName, result.SpinButtonStyles, LoadSpinButtonStyleFromSource);
-			FillStyles(TextButtonName, result.TextButtonStyles, LoadTextButtonStyleFromSource);
 			FillStyles(HorizontalSliderName, result.HorizontalSliderStyles, LoadSliderStyleFromSource);
 			FillStyles(VerticalSliderName, result.VerticalSliderStyles, LoadSliderStyleFromSource);
 			FillStyles(HorizontalProgressBarName, result.HorizontalProgressBarStyles, LoadProgressBarStyleFromSource);

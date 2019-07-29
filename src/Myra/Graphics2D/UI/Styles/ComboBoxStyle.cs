@@ -7,14 +7,12 @@
 
 		public ComboBoxStyle()
 		{
-			ItemsContainerStyle = new WidgetStyle();
-			ListItemStyle = new ImageTextButtonStyle();
 		}
 
 		public ComboBoxStyle(ComboBoxStyle style) : base(style)
 		{
-			ItemsContainerStyle = new WidgetStyle(style.ItemsContainerStyle);
-			ListItemStyle = new ImageTextButtonStyle(style.ListItemStyle);
+			ItemsContainerStyle = style.ItemsContainerStyle != null ? new WidgetStyle(style.ItemsContainerStyle) : null;
+			ListItemStyle = style.ListItemStyle != null ? new ImageTextButtonStyle(style.ListItemStyle) : null;
 		}
 
 		public override WidgetStyle Clone()

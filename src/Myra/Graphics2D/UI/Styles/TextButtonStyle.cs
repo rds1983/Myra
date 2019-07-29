@@ -6,13 +6,17 @@
 
 		public TextButtonStyle()
 		{
-			LabelStyle = new TextBlockStyle();
 		}
 
 		public TextButtonStyle(TextButtonStyle style)
 			: base(style)
 		{
-			LabelStyle = new TextBlockStyle(style.LabelStyle);
+			LabelStyle = style.LabelStyle != null ? new TextBlockStyle(style.LabelStyle) : null;
+		}
+
+		public TextButtonStyle(ButtonStyle buttonStyle, TextBlockStyle textBlockStyle): base(buttonStyle)
+		{
+			LabelStyle = textBlockStyle != null ? new TextBlockStyle(textBlockStyle) : null;
 		}
 
 		public override WidgetStyle Clone()

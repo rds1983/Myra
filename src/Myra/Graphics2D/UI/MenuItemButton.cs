@@ -166,7 +166,7 @@ namespace Myra.Graphics2D.UI
 
 		public void ApplyMenuItemStyle(MenuItemStyle style)
 		{
-			ApplyButtonBaseStyle(style);
+			ApplyButtonStyle(style);
 
 			if (style.IconWidth.HasValue)
 			{
