@@ -31,16 +31,6 @@
 			"textColor": "white"
 		}
 	},
-	"imageButton": {
-		"background": "button",
-		"pressedBackground": "button-down",
-		"padding": {
-			"top": 5.0,
-			"bottom": 5.0,
-			"left": 8.0,
-			"right": 8.0
-		}
-	},
 	"textBlock": {
 		"font": "commodore-64",
 		"textColor": "white",
@@ -140,21 +130,6 @@
 	"verticalSplitPane": {
 		"handle": {
 			"background": "vertical-split-pane"
-		}
-	},
-	"textButton": {
-		"label": {
-			"font": "commodore-64",
-			"textColor": "white",
-			"pressedTextColor": "blue"
-		},
-		"background": "button",
-		"pressedBackground": "button-down",
-		"padding": {
-			"top": 5.0,
-			"bottom": 5.0,
-			"left": 8.0,
-			"right": 8.0
 		}
 	},
 	"button": {

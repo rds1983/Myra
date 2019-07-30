@@ -1,5 +1,5 @@
 <Project>
-  <ExportOptions Namespace="Myra.Samples.CustomUIStylesheet" Class="AllWidgets" OutputPath="D:\Projects\Hebron\Myra\Source\Samples\Myra.Samples.CustomUIStylesheet" />
+  <ExportOptions Namespace="Myra.Samples.CustomUIStylesheet" Class="AllWidgets" OutputPath="D:\Projects\Myra\samples\Myra.Samples.CustomUIStylesheet" />
   <HorizontalSplitPane GridRow="1">
     <ScrollPane>
       <Grid ColumnSpacing="8" RowSpacing="8" Id="_gridRight">
@@ -19,7 +19,7 @@
           <Proportion />
         </RowsProportions>
         <TextBlock Text="Button:" Id="" />
-        <Button Text="Button" Id="_button" PaddingLeft="8" PaddingRight="8" GridColumn="1" />
+        <ImageTextButton Text="Button" Id="_button" PaddingLeft="8" PaddingRight="8" GridColumn="1" />
         <TextBlock Text="Text Button:" Id="_textButtonLabel" GridRow="1" />
         <TextButton Text="Choose Color" Id="_textButton" PaddingLeft="8" PaddingRight="8" GridColumn="1" GridRow="1" />
         <TextBlock Text="Image Button:" Id="" GridRow="2" />
@@ -28,7 +28,7 @@
         <TextBlock Text="Horizontal Slider:" Id="" GridRow="4" />
         <HorizontalSlider GridColumn="1" GridRow="4" />
         <TextBlock Text="Combo Box:" GridRow="5" />
-        <ComboBox SelectedIndex="1" Width="200" GridColumn="1" GridRow="5">
+        <ComboBox Width="200" GridColumn="1" GridRow="5">
           <ListItem Id="" Text="Red" Color="#FF0000FF" />
           <ListItem Text="Green" Color="#00FF00FF" />
           <ListItem Text="Blue" Color="#0080FFFF" />

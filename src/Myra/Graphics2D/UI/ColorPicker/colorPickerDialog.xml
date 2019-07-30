@@ -1,6 +1,6 @@
 <Project>
-  <ExportOptions Namespace="Myra.Graphics2D.UI.ColorPicker" Class="ColorPickerDialog" OutputPath="D:\Projects\Hebron\Myra\src\Myra\Graphics2D\UI\ColorPicker" />
-  <Dialog Title="Color Picker" Left="97" Top="159" Width="450">
+  <ExportOptions Namespace="Myra.Graphics2D.UI.ColorPicker" Class="ColorPickerDialog" OutputPath="D:\Projects\Myra\src\Myra\Graphics2D\UI\ColorPicker" />
+  <Dialog Title="Color Picker" Left="249" Top="3" Width="450">
     <Grid RowSpacing="-1" GridRow="1">
       <ColumnsProportions />
       <RowsProportions>

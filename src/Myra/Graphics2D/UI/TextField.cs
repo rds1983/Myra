@@ -26,7 +26,7 @@ namespace Myra.Graphics2D.UI
 	{
 		private DateTime _lastBlinkStamp = DateTime.Now;
 		private bool _cursorOn = true;
-		private bool _wrap = false;
+		private bool _multiLine = false;
 		private readonly FormattedTextWithGlyphs _formattedText = new FormattedTextWithGlyphs();
 		private readonly StringBuilder _stringBuilder = new StringBuilder();
 		private bool _isTouchDown;
@@ -63,13 +63,6 @@ namespace Myra.Graphics2D.UI
 			{
 				SetText(value, false);
 			}
-		}
-
-		[EditCategory("Behavior")]
-		[DefaultValue(false)]
-		public bool Multiline
-		{
-			get; set;
 		}
 
 		private string UserText
@@ -116,21 +109,21 @@ namespace Myra.Graphics2D.UI
 
 		[EditCategory("Appearance")]
 		[DefaultValue(false)]
-		public bool Wrap
+		public bool Multiline
 		{
 			get
 			{
-				return _wrap;
+				return _multiLine;
 			}
 
 			set
 			{
-				if (value == _wrap)
+				if (value == _multiLine)
 				{
 					return;
 				}
 
-				_wrap = value;
+				_multiLine = value;
 				InvalidateMeasure();
 			}
 		}
@@ -1040,7 +1033,7 @@ namespace Myra.Graphics2D.UI
 			var result = Point.Zero;
 			if (Font != null)
 			{
-				result = _formattedText.Measure(_wrap ? width : default(int?));
+				result = _formattedText.Measure(_multiLine ? width : default(int?));
 			}
 
 			if (result.Y < CrossEngineStuff.LineSpacing(Font))
@@ -1055,7 +1048,7 @@ namespace Myra.Graphics2D.UI
 		{
 			base.Arrange();
 
-			_formattedText.Width = _wrap ? ActualBounds.Width : default(int?);
+			_formattedText.Width = _multiLine ? ActualBounds.Width : default(int?);
 		}
 
 		public void ApplyTextFieldStyle(TextFieldStyle style)

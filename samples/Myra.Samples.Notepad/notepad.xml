@@ -22,9 +22,9 @@
         <MenuItem Id="menuItemAbout" Text="About" />
       </MenuItem>
     </HorizontalMenu>
-	<HorizontalSeparator GridRow="1"/>
+    <HorizontalSeparator GridRow="1" />
     <ScrollPane GridRow="2">
-      <TextField Text="" Wrap="True" Multiline="True" Id="textArea" VerticalAlignment="Stretch" />
+      <TextField Text="" Multiline="True" Id="textArea" VerticalAlignment="Stretch" />
     </ScrollPane>
   </Grid>
 </Project>

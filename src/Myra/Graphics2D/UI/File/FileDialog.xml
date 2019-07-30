@@ -1,6 +1,6 @@
 <Project>
-  <ExportOptions Namespace="Myra.Graphics2D.UI.File" Class="FileDialog" OutputPath="D:/Projects/Hebron/Myra/src/Myra/Graphics2D/UI/File" />
-  <Dialog Title="Open File..." Left="22" Top="137" Width="600" Height="400">
+  <ExportOptions Namespace="Myra.Graphics2D.UI.File" Class="FileDialog" OutputPath="D:/Projects/Myra/src/Myra/Graphics2D/UI/File" />
+  <Dialog Title="Open File..." Left="174" Width="600" Height="400">
     <Grid RowSpacing="4" GridRow="1">
       <ColumnsProportions />
       <RowsProportions>
@@ -24,7 +24,7 @@
       <HorizontalSplitPane Id="_splitPane" GridRow="1">
         <ListBox Id="_listBoxPlaces" HorizontalAlignment="Stretch" ClipToBounds="True" />
         <ScrollPane AllowHorizontalScrolling="False" Id="_scrollPane" GridColumn="2">
-          <Grid ColumnSpacing="4" RowSpacing="4" GridSelectionMode="Row" Id="_gridFiles" CanFocus="True">
+          <Grid ColumnSpacing="4" RowSpacing="4" GridSelectionMode="Row" Id="_gridFiles">
             <ColumnsProportions>
               <Proportion />
               <Proportion Type="Fill" />
