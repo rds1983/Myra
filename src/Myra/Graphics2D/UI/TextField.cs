@@ -364,11 +364,38 @@ namespace Myra.Graphics2D.UI
 			return true;
 		}
 
-		public void Replace(int where, int len, string text)
+		public void Insert(int where, string text)
 		{
 			text = Process(text);
+			if (string.IsNullOrEmpty(text))
+			{
+				return;
+			}
 
-			UndoStack.MakeReplace(Text, where, len, string.IsNullOrEmpty(text) ? 0 : text.Length);
+			if (InsertChars(where, text))
+			{
+				UndoStack.MakeInsert(where, text.Length());
+				CursorPosition += text.Length;
+			}
+		}
+
+		public void Replace(int where, int len, string text)
+		{
+			if (len <= 0)
+			{
+				Insert(where, text);
+				return;
+			}
+
+			text = Process(text);
+
+			if (string.IsNullOrEmpty(text))
+			{
+				Delete(where, len);
+				return;
+			}
+
+			UndoStack.MakeReplace(Text, where, len, text.Length);
 			DeleteChars(where, len);
 			InsertChars(where, text);
 		}
@@ -418,6 +445,7 @@ namespace Myra.Graphics2D.UI
 		private bool Paste(string text)
 		{
 			DeleteSelection();
+			Insert(CursorPosition, text);
 			if (InsertChars(CursorPosition, text))
 			{
 				UndoStack.MakeInsert(CursorPosition, text.Length());
@@ -749,9 +777,20 @@ namespace Myra.Graphics2D.UI
 			var oldValue = _formattedText.Text;
 			_formattedText.Text = value;
 
-			if (!byUser)
+			// Clamp
+			if (CursorPosition > Length)
 			{
-				CursorPosition = SelectStart = SelectEnd = 0;
+				CursorPosition = Length;
+			}
+
+			if (SelectStart > Length)
+			{
+				SelectStart = Length;
+			}
+
+			if (SelectEnd > Length)
+			{
+				SelectEnd = Length;
 			}
 
 			if (!_suppressRedoStackReset)

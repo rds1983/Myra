@@ -17,8 +17,6 @@ using Myra.Utility;
 using Myra;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework.Input;
-using System.Xml;
-using System.Text;
 using System.Threading;
 
 namespace MyraPad
@@ -34,12 +32,6 @@ namespace MyraPad
 		private Desktop _desktop;
 		private StudioWidget _ui;
 		private PropertyGrid _propertyGrid;
-		private Grid _statisticsGrid;
-		private TextBlock _gcMemoryLabel;
-		private TextBlock _fpsLabel;
-		private TextBlock _widgetsCountLabel;
-		private TextBlock _drawCallsLabel;
-		//		private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
 		private string _filePath;
 		private string _lastFolder;
 		private bool _isDirty;
@@ -64,7 +56,7 @@ namespace MyraPad
 
 		private static readonly string[] SimpleWidgets = new[]
 		{
-			"Button",
+			"ImageTextButton",
 			"TextButton",
 			"ImageButton",
 			"RadioButton",
@@ -184,19 +176,6 @@ namespace MyraPad
 				}
 
 				_ui._menuFileReloadStylesheet.Enabled = _project != null && !string.IsNullOrEmpty(_project.StylesheetPath);
-			}
-		}
-
-		public bool ShowDebugInfo
-		{
-			get
-			{
-				return _statisticsGrid.Visible;
-			}
-
-			set
-			{
-				_statisticsGrid.Visible = value;
 			}
 		}
 
@@ -348,55 +327,6 @@ namespace MyraPad
 
 			_desktop.Widgets.Add(_ui);
 
-			_statisticsGrid = new Grid
-			{
-				Visible = false
-			};
-
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-			_statisticsGrid.RowsProportions.Add(new Grid.Proportion());
-
-			_gcMemoryLabel = new TextBlock
-			{
-				Text = "GC Memory: ",
-				Font = DefaultAssets.FontSmall
-			};
-			_statisticsGrid.Widgets.Add(_gcMemoryLabel);
-
-			_fpsLabel = new TextBlock
-			{
-				Text = "FPS: ",
-				Font = DefaultAssets.FontSmall,
-				GridRow = 1
-			};
-
-			_statisticsGrid.Widgets.Add(_fpsLabel);
-
-			_widgetsCountLabel = new TextBlock
-			{
-				Text = "Total Widgets: ",
-				Font = DefaultAssets.FontSmall,
-				GridRow = 2
-			};
-
-			_statisticsGrid.Widgets.Add(_widgetsCountLabel);
-
-			_drawCallsLabel = new TextBlock
-			{
-				Text = "Draw Calls: ",
-				Font = DefaultAssets.FontSmall,
-				GridRow = 3
-			};
-
-			_statisticsGrid.Widgets.Add(_drawCallsLabel);
-
-			_statisticsGrid.HorizontalAlignment = HorizontalAlignment.Left;
-			_statisticsGrid.VerticalAlignment = VerticalAlignment.Bottom;
-			_statisticsGrid.Left = 10;
-			_statisticsGrid.Top = -10;
-			_desktop.Widgets.Add(_statisticsGrid);
-
 			UpdateMenuFile();
 		}
 
@@ -474,10 +404,7 @@ namespace MyraPad
 
 			// Insert indent
 			var indent = new string(' ', il * _options.IndentSpacesSize);
-			_ui._textSource.Text = text.Substring(0, pos) + indent + text.Substring(pos);
-
-			// Move cursor
-			_ui._textSource.CursorPosition += indent.Length;
+			_ui._textSource.Insert(pos, indent);
 		}
 
 		private void ApplyAutoClose()
@@ -765,8 +692,7 @@ namespace MyraPad
 								needsClose = true;
 							}
 
-							text = text.Substring(0, lastStartPos) + result + text.Substring(lastEndPos);
-							_ui._textSource.Text = text;
+							_ui._textSource.Replace(lastStartPos, lastEndPos - lastStartPos, result);
 							_ui._textSource.CursorPosition = lastStartPos + skip;
 							if (needsClose)
 							{
@@ -1102,10 +1028,6 @@ namespace MyraPad
 		{
 			var dlg = new DebugOptionsDialog();
 
-			dlg.AddOption("Show debug info",
-						() => { ShowDebugInfo = true; },
-						() => { ShowDebugInfo = false; });
-
 			dlg.ShowModal(_desktop);
 		}
 
@@ -1312,24 +1234,12 @@ namespace MyraPad
 		{
 			base.Draw(gameTime);
 
-			_gcMemoryLabel.Text = string.Format("GC Memory: {0} kb", GC.GetTotalMemory(false) / 1024);
-			//			_fpsLabel.Text = string.Format("FPS: {0}", _fpsCounter.FramesPerSecond);
-			_widgetsCountLabel.Text = string.Format("Visible Widgets: {0}", _desktop.CalculateTotalWidgets(true));
-
 			GraphicsDevice.Clear(Color.Black);
 
 			_desktop.Bounds = new Rectangle(0, 0,
 				GraphicsDevice.PresentationParameters.BackBufferWidth,
 				GraphicsDevice.PresentationParameters.BackBufferHeight);
 			_desktop.Render();
-
-#if !FNA
-			_drawCallsLabel.Text = string.Format("Draw Calls: {0}", GraphicsDevice.Metrics.DrawCount);
-#else
-			_drawCallsLabel.Text = "Draw Calls: ?";
-#endif
-
-			//			_fpsCounter.Draw(gameTime);
 		}
 
 		protected override void EndRun()
