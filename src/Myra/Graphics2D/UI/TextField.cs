@@ -445,7 +445,6 @@ namespace Myra.Graphics2D.UI
 		private bool Paste(string text)
 		{
 			DeleteSelection();
-			Insert(CursorPosition, text);
 			if (InsertChars(CursorPosition, text))
 			{
 				UndoStack.MakeInsert(CursorPosition, text.Length());
@@ -777,20 +776,9 @@ namespace Myra.Graphics2D.UI
 			var oldValue = _formattedText.Text;
 			_formattedText.Text = value;
 
-			// Clamp
-			if (CursorPosition > Length)
+			if (!byUser)
 			{
-				CursorPosition = Length;
-			}
-
-			if (SelectStart > Length)
-			{
-				SelectStart = Length;
-			}
-
-			if (SelectEnd > Length)
-			{
-				SelectEnd = Length;
+				CursorPosition = SelectStart = SelectEnd = 0;
 			}
 
 			if (!_suppressRedoStackReset)
