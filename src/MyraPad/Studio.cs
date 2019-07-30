@@ -426,7 +426,7 @@ namespace MyraPad
 			}
 
 			var close = "</" + ExtractTag(currentTag) + ">";
-			_ui._textSource.Text = text.Substring(0, pos) + close + text.Substring(pos);
+			_ui._textSource.Insert(pos, close);
 		}
 
 		private void _textSource_TextChanged(object sender, ValueChangedEventArgs<string> e)
