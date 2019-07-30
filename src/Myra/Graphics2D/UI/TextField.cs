@@ -26,7 +26,7 @@ namespace Myra.Graphics2D.UI
 	{
 		private DateTime _lastBlinkStamp = DateTime.Now;
 		private bool _cursorOn = true;
-		private bool _multiLine = false;
+		private bool _wrap = false;
 		private readonly FormattedTextWithGlyphs _formattedText = new FormattedTextWithGlyphs();
 		private readonly StringBuilder _stringBuilder = new StringBuilder();
 		private bool _isTouchDown;
@@ -63,6 +63,13 @@ namespace Myra.Graphics2D.UI
 			{
 				SetText(value, false);
 			}
+		}
+
+		[EditCategory("Behavior")]
+		[DefaultValue(false)]
+		public bool Multiline
+		{
+			get; set;
 		}
 
 		private string UserText
@@ -109,21 +116,21 @@ namespace Myra.Graphics2D.UI
 
 		[EditCategory("Appearance")]
 		[DefaultValue(false)]
-		public bool Multiline
+		public bool Wrap
 		{
 			get
 			{
-				return _multiLine;
+				return _wrap;
 			}
 
 			set
 			{
-				if (value == _multiLine)
+				if (value == _wrap)
 				{
 					return;
 				}
 
-				_multiLine = value;
+				_wrap = value;
 				InvalidateMeasure();
 			}
 		}
@@ -742,6 +749,11 @@ namespace Myra.Graphics2D.UI
 			var oldValue = _formattedText.Text;
 			_formattedText.Text = value;
 
+			if (!byUser)
+			{
+				CursorPosition = SelectStart = SelectEnd = 0;
+			}
+
 			if (!_suppressRedoStackReset)
 			{
 				RedoStack.Reset();
@@ -1033,7 +1045,7 @@ namespace Myra.Graphics2D.UI
 			var result = Point.Zero;
 			if (Font != null)
 			{
-				result = _formattedText.Measure(_multiLine ? width : default(int?));
+				result = _formattedText.Measure(_wrap ? width : default(int?));
 			}
 
 			if (result.Y < CrossEngineStuff.LineSpacing(Font))
@@ -1048,7 +1060,7 @@ namespace Myra.Graphics2D.UI
 		{
 			base.Arrange();
 
-			_formattedText.Width = _multiLine ? ActualBounds.Width : default(int?);
+			_formattedText.Width = _wrap ? ActualBounds.Width : default(int?);
 		}
 
 		public void ApplyTextFieldStyle(TextFieldStyle style)

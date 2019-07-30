@@ -39,7 +39,7 @@
         <VerticalSplitPane Id="_leftSplitPane">
           <Panel Id="_projectHolder" />
           <ScrollPane GridRow="2">
-            <TextField Text="" Multiline="True" Id="_textSource" VerticalAlignment="Stretch" GridRow="2" />
+            <TextField Text="" Multiline="True" Wrap="True" Id="_textSource" VerticalAlignment="Stretch" GridRow="2" />
           </ScrollPane>
         </VerticalSplitPane>
         <HorizontalSeparator GridRow="1" />

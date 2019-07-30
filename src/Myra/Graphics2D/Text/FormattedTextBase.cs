@@ -163,10 +163,7 @@ namespace Myra.Graphics2D.Text
 				else
 				{
 					sz = new Point(r.X + NewLineWidth, Math.Max(r.Y, CrossEngineStuff.LineSpacing(_font)));
-				}
 
-				if (width != null && c == '\n')
-				{
 					// Break right here
 					++r.CharsCount;
 					r.X = sz.X;

@@ -24,7 +24,7 @@
     </HorizontalMenu>
     <HorizontalSeparator GridRow="1" />
     <ScrollPane GridRow="2">
-      <TextField Text="" Multiline="True" Id="textArea" VerticalAlignment="Stretch" />
+      <TextField Text="" Multiline="True" Wrap="True" Id="textArea" VerticalAlignment="Stretch" />
     </ScrollPane>
   </Grid>
 </Project>
