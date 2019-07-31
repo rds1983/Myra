@@ -34,6 +34,8 @@ namespace MyraPad
 		private readonly ConcurrentQueue<Project> _newProjectsQueue = new ConcurrentQueue<Project>();
 		private readonly AutoResetEvent _refreshProjectEvent = new AutoResetEvent(false);
 
+		private readonly ConcurrentDictionary<string, Stylesheet> _stylesheetCache = new ConcurrentDictionary<string, Stylesheet>();
+
 		private bool _suppressProjectRefresh = false;
 		private readonly GraphicsDeviceManager _graphicsDeviceManager;
 		private readonly State _state;
@@ -308,7 +310,7 @@ namespace MyraPad
 			_ui._menuFileSave.Selected += SaveItemOnClicked;
 			_ui._menuFileSaveAs.Selected += SaveAsItemOnClicked;
 			_ui._menuFileExportToCS.Selected += ExportCsItemOnSelected;
-			_ui._menuFileLoadStylesheet.Selected += OnMenuFileLoadStylesheetSelected;
+			_ui._menuFileLoadStylesheet.Selected += OnMenuFileLoadStylesheet;
 			_ui._menuFileReloadStylesheet.Selected += OnMenuFileReloadStylesheet;
 			_ui._menuFileResetStylesheet.Selected += OnMenuFileResetStylesheetSelected;
 			_ui._menuFileDebugOptions.Selected += DebugOptionsItemOnSelected;
@@ -885,6 +887,12 @@ namespace MyraPad
 				path = Path.Combine(Path.GetDirectoryName(FilePath), path);
 			}
 
+			Stylesheet stylesheet;
+			if (_stylesheetCache.TryGetValue(path, out stylesheet))
+			{
+				return stylesheet;
+			}
+
 			var data = File.ReadAllText(path);
 			var root = (Dictionary<string, object>)Json.Deserialize(data);
 
@@ -940,7 +948,7 @@ namespace MyraPad
 				}
 			}
 
-			return Stylesheet.CreateFromSource(data,
+			stylesheet = Stylesheet.CreateFromSource(data,
 				s =>
 				{
 					TextureRegion result;
@@ -966,6 +974,10 @@ namespace MyraPad
 					throw new Exception(string.Format("Could not find font '{0}'", s));
 				}
 			);
+
+			_stylesheetCache[path] = stylesheet;
+
+			return stylesheet;
 		}
 
 		private static void IterateWidget(Widget w, Action<Widget> a)
@@ -1028,8 +1040,14 @@ namespace MyraPad
 			}
 		}
 
-		private void OnMenuFileLoadStylesheetSelected(object sender, EventArgs e)
+		private void ResetStylesheetCache()
 		{
+			_stylesheetCache.Clear();
+		}
+
+		private void OnMenuFileLoadStylesheet(object sender, EventArgs e)
+		{
+			ResetStylesheetCache();
 			var dlg = new FileDialog(FileDialogMode.OpenFile)
 			{
 				Filter = "*.json"
@@ -1090,8 +1108,6 @@ namespace MyraPad
 				Project.StylesheetPath = filePath;
 				UpdateSource();
 				UpdateMenuFile();
-
-				IsDirty = true;
 			};
 
 			dlg.ShowModal(_desktop);
@@ -1099,20 +1115,22 @@ namespace MyraPad
 
 		private void OnMenuFileReloadStylesheet(object sender, EventArgs e)
 		{
+			ResetStylesheetCache();
+
 			if (string.IsNullOrEmpty(Project.StylesheetPath))
 			{
 				return;
 			}
 
-//			LoadStylesheet(Project, Project.StylesheetPath);
+			QueueRefreshProject();
 		}
 
 		private void OnMenuFileResetStylesheetSelected(object sender, EventArgs e)
 		{
-			SetStylesheet(Project, Stylesheet.Current);
-			Project.StylesheetPath = null;
-			IsDirty = true;
+			ResetStylesheetCache();
 
+			Project.StylesheetPath = null;
+			UpdateSource();
 			UpdateMenuFile();
 		}
 
