@@ -308,13 +308,19 @@ namespace Myra.Graphics2D.UI
 			Value = 0;
 		}
 
-		public SpinButton(string style)
-			: this(Stylesheet.Current.SpinButtonStyles[style])
+		public SpinButton(Stylesheet stylesheet, string style) : this(stylesheet.SpinButtonStyles[style])
 		{
 		}
 
-		public SpinButton()
-			: this(Stylesheet.Current.SpinButtonStyle)
+		public SpinButton(Stylesheet stylesheet) : this(stylesheet.SpinButtonStyle)
+		{
+		}
+
+		public SpinButton(string style) : this(Stylesheet.Current, style)
+		{
+		}
+
+		public SpinButton() : this(Stylesheet.Current)
 		{
 		}
 
@@ -348,7 +354,7 @@ namespace Myra.Graphics2D.UI
 
 		private string InputFilter(string s)
 		{
-			if (string.IsNullOrEmpty(s))
+			if (string.IsNullOrEmpty(s) || s == "-")
 			{
 				return s;
 			}

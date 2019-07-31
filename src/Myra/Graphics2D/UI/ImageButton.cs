@@ -4,7 +4,7 @@ using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ImageButton: ButtonBase<Image>
+	public class ImageButton : ButtonBase<Image>
 	{
 		[XmlIgnore]
 		[HiddenInEditor]
@@ -68,11 +68,21 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ImageButton(string style): this(new ImageButtonStyle(Stylesheet.Current.ButtonStyles[style]))
+		public ImageButton(Stylesheet stylesheet, string style) :
+			this(stylesheet.ButtonStyles[style].ToImageButtonStyle())
 		{
 		}
 
-		public ImageButton() : this(new ImageButtonStyle(Stylesheet.Current.ButtonStyle))
+		public ImageButton(Stylesheet stylesheet) :
+			this(stylesheet.ButtonStyle.ToImageButtonStyle())
+		{
+		}
+
+		public ImageButton(string style) : this(Stylesheet.Current, style)
+		{
+		}
+
+		public ImageButton() : this(Stylesheet.Current)
 		{
 		}
 

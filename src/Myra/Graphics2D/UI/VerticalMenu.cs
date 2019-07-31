@@ -14,21 +14,36 @@ namespace Myra.Graphics2D.UI
 	{
 		public override Orientation Orientation
 		{
-			get { return Orientation.Vertical; }
+			get
+			{
+				return Orientation.Vertical;
+			}
 		}
 
 		[DefaultValue(HorizontalAlignment.Left)]
 		public override HorizontalAlignment HorizontalAlignment
 		{
-			get { return base.HorizontalAlignment; }
-			set { base.HorizontalAlignment = value; }
+			get
+			{
+				return base.HorizontalAlignment;
+			}
+			set
+			{
+				base.HorizontalAlignment = value;
+			}
 		}
 
 		[DefaultValue(VerticalAlignment.Top)]
 		public override VerticalAlignment VerticalAlignment
 		{
-			get { return base.VerticalAlignment; }
-			set { base.VerticalAlignment = value; }
+			get
+			{
+				return base.VerticalAlignment;
+			}
+			set
+			{
+				base.VerticalAlignment = value;
+			}
 		}
 
 		public VerticalMenu(MenuStyle style) : base(style)
@@ -37,13 +52,19 @@ namespace Myra.Graphics2D.UI
 			VerticalAlignment = VerticalAlignment.Top;
 		}
 
-		public VerticalMenu(string style)
-			: this(Stylesheet.Current.VerticalMenuStyles[style])
+		public VerticalMenu(Stylesheet stylesheet, string style) : this(stylesheet.VerticalMenuStyles[style])
 		{
 		}
 
-		public VerticalMenu()
-			: this(Stylesheet.Current.VerticalMenuStyle)
+		public VerticalMenu(Stylesheet stylesheet) : this(stylesheet.VerticalMenuStyle)
+		{
+		}
+
+		public VerticalMenu(string style) : this(Stylesheet.Current, style)
+		{
+		}
+
+		public VerticalMenu() : this(Stylesheet.Current)
 		{
 		}
 

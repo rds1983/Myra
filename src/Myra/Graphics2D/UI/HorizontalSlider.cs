@@ -8,14 +8,23 @@ namespace Myra.Graphics2D.UI
 	{
 		public override Orientation Orientation
 		{
-			get { return Orientation.Horizontal; }
+			get
+			{
+				return Orientation.Horizontal;
+			}
 		}
 
 		[DefaultValue(HorizontalAlignment.Stretch)]
 		public override HorizontalAlignment HorizontalAlignment
 		{
-			get { return base.HorizontalAlignment; }
-			set { base.HorizontalAlignment = value; }
+			get
+			{
+				return base.HorizontalAlignment;
+			}
+			set
+			{
+				base.HorizontalAlignment = value;
+			}
 		}
 
 		public HorizontalSlider(SliderStyle style) : base(style)
@@ -24,12 +33,19 @@ namespace Myra.Graphics2D.UI
 			VerticalAlignment = VerticalAlignment.Top;
 		}
 
-		public HorizontalSlider(string style)
-			: this(Stylesheet.Current.HorizontalSliderStyles[style])
+		public HorizontalSlider(Stylesheet stylesheet, string style) : this(stylesheet.HorizontalSliderStyles[style])
 		{
 		}
 
-		public HorizontalSlider() : this(Stylesheet.Current.HorizontalSliderStyle)
+		public HorizontalSlider(Stylesheet stylesheet) : this(stylesheet.HorizontalSliderStyle)
+		{
+		}
+
+		public HorizontalSlider(string style) : this(Stylesheet.Current, style)
+		{
+		}
+
+		public HorizontalSlider() : this(Stylesheet.Current)
 		{
 		}
 

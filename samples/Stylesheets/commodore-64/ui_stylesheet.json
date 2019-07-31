@@ -1,4 +1,7 @@
 {
+	"textureAtlases": {
+		"ui_stylesheet_atlas.json": "ui_stylesheet_atlas.png"
+	},
 	"colors": {
 		"green": "#00FF00FF",
 		"light_grey": "#CCCCCCFF",
@@ -9,9 +12,6 @@
 		"dark_grey": "#666666FF",
 		"blue": "#4242E7FF",
 		"black": "#000000FF"
-	},
-	"textureAtlases": {
-		"ui_stylesheet_atlas.json": "ui_stylesheet_atlas.png"
 	},
 	"fonts": {
 		"commodore-64": "commodore-64.fnt"
@@ -35,16 +35,6 @@
 		"label": {
 			"font": "commodore-64",
 			"textColor": "white"
-		}
-	},
-	"imageButton": {
-		"background": "button",
-		"pressedBackground": "button-down",
-		"padding": {
-			"top": 5.0,
-			"bottom": 5.0,
-			"left": 8.0,
-			"right": 8.0
 		}
 	},
 	"textBlock": {
@@ -146,21 +136,6 @@
 	"verticalSplitPane": {
 		"handle": {
 			"background": "vertical-split-pane"
-		}
-	},
-	"textButton": {
-		"label": {
-			"font": "commodore-64",
-			"textColor": "white",
-			"pressedTextColor": "blue"
-		},
-		"background": "button",
-		"pressedBackground": "button-down",
-		"padding": {
-			"top": 5.0,
-			"bottom": 5.0,
-			"left": 8.0,
-			"right": 8.0
 		}
 	},
 	"button": {

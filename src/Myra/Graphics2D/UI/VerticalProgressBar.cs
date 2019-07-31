@@ -8,37 +8,58 @@ namespace Myra.Graphics2D.UI
 	{
 		public override Orientation Orientation
 		{
-			get { return Orientation.Vertical; }
+			get
+			{
+				return Orientation.Vertical;
+			}
 		}
 
 		[DefaultValue(HorizontalAlignment.Left)]
 		public override HorizontalAlignment HorizontalAlignment
 		{
-			get { return base.HorizontalAlignment; }
-			set { base.HorizontalAlignment = value; }
+			get
+			{
+				return base.HorizontalAlignment;
+			}
+			set
+			{
+				base.HorizontalAlignment = value;
+			}
 		}
 
 		[DefaultValue(VerticalAlignment.Stretch)]
 		public override VerticalAlignment VerticalAlignment
 		{
-			get { return base.VerticalAlignment; }
-			set { base.VerticalAlignment = value; }
+			get
+			{
+				return base.VerticalAlignment;
+			}
+			set
+			{
+				base.VerticalAlignment = value;
+			}
 		}
 
-		public VerticalProgressBar(ProgressBarStyle style)
-			: base(style)
+		public VerticalProgressBar(ProgressBarStyle style) : base(style)
 		{
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Stretch;
 		}
 
-		public VerticalProgressBar(string style)
-			: this(Stylesheet.Current.VerticalProgressBarStyles[style])
+		public VerticalProgressBar(Stylesheet stylesheet, string style) :
+			this(stylesheet.VerticalProgressBarStyles[style])
 		{
 		}
 
-		public VerticalProgressBar()
-			: this(Stylesheet.Current.VerticalProgressBarStyle)
+		public VerticalProgressBar(Stylesheet stylesheet) : this(stylesheet.VerticalProgressBarStyle)
+		{
+		}
+
+		public VerticalProgressBar(string style) : this(Stylesheet.Current, style)
+		{
+		}
+
+		public VerticalProgressBar() : this(Stylesheet.Current)
 		{
 		}
 

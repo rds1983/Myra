@@ -70,11 +70,19 @@ namespace Myra.Graphics2D.UI
 			InternalChild.Widgets.Add(buttonsGrid);
 		}
 
-		public Dialog(string style) : this(Stylesheet.Current.DialogStyles[style])
+		public Dialog(Stylesheet stylesheet, string style) : this(stylesheet.DialogStyles[style])
 		{
 		}
 
-		public Dialog() : this(Stylesheet.Current.DialogStyle)
+		public Dialog(Stylesheet stylesheet) : this(stylesheet.DialogStyle)
+		{
+		}
+
+		public Dialog(string style) : this(Stylesheet.Current, style)
+		{
+		}
+
+		public Dialog() : this(Stylesheet.Current)
 		{
 		}
 

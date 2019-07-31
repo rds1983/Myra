@@ -6,7 +6,7 @@ namespace Myra.Graphics2D
 	{
 		Widget Content
 		{
-			get;set;
+			get; set;
 		}
 	}
 }

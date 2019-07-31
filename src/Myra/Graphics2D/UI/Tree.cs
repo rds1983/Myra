@@ -23,14 +23,23 @@ namespace Myra.Graphics2D.UI
 
 		public List<TreeNode> AllNodes
 		{
-			get { return _allNodes; }
+			get
+			{
+				return _allNodes;
+			}
 		}
 
-		private TreeNode HoverRow { get; set; }
+		private TreeNode HoverRow
+		{
+			get; set;
+		}
 
 		public TreeNode SelectedRow
 		{
-			get { return _selectedRow; }
+			get
+			{
+				return _selectedRow;
+			}
 
 			set
 			{
@@ -84,7 +93,7 @@ namespace Myra.Graphics2D.UI
 
 		public event EventHandler SelectionChanged;
 
-		public Tree(TreeStyle style):base(style, null)
+		public Tree(TreeStyle style) : base(style, null)
 		{
 			AcceptsKeyboardFocus = true;
 			if (style != null)
@@ -93,12 +102,19 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public Tree(string style)
-			: this(Stylesheet.Current.TreeStyles[style])
+		public Tree(Stylesheet stylesheet, string style) : this(stylesheet.TreeStyles[style])
 		{
 		}
 
-		public Tree() : this(Stylesheet.Current.TreeStyle)
+		public Tree(Stylesheet stylesheet) : this(stylesheet.TreeStyle)
+		{
+		}
+
+		public Tree(string style) : this(Stylesheet.Current, style)
+		{
+		}
+
+		public Tree() : this(Stylesheet.Current)
 		{
 		}
 
@@ -155,28 +171,28 @@ namespace Myra.Graphics2D.UI
 						}
 						else if (index > 0)
 						{
-							var previousRow = (TreeNode) parentWidgets[index - 1];
+							var previousRow = (TreeNode)parentWidgets[index - 1];
 							if (!previousRow.IsExpanded || previousRow.ChildNodesCount == 0)
 							{
 								SelectedRow = previousRow;
 							}
 							else
 							{
-								SelectedRow = (TreeNode) previousRow.ChildNodesGrid.Widgets[previousRow.ChildNodesCount - 1];
+								SelectedRow = (TreeNode)previousRow.ChildNodesGrid.Widgets[previousRow.ChildNodesCount - 1];
 							}
 						}
 					}
 				}
-					break;
+				break;
 				case Keys.Down:
 				{
 					if (SelectedRow.IsExpanded && SelectedRow.ChildNodesCount > 0)
 					{
-						SelectedRow = (TreeNode) SelectedRow.ChildNodesGrid.Widgets[0];
+						SelectedRow = (TreeNode)SelectedRow.ChildNodesGrid.Widgets[0];
 					}
 					else if (parentWidgets != null && index + 1 < parentWidgets.Count)
 					{
-						SelectedRow = (TreeNode) parentWidgets[index + 1];
+						SelectedRow = (TreeNode)parentWidgets[index + 1];
 					}
 					else if (parentWidgets != null && index + 1 >= parentWidgets.Count)
 					{
@@ -186,12 +202,12 @@ namespace Myra.Graphics2D.UI
 							var parentIndex = parentOfParent.ChildNodesGrid.Widgets.IndexOf(SelectedRow.ParentNode);
 							if (parentIndex + 1 < parentOfParent.ChildNodesCount)
 							{
-								SelectedRow = (TreeNode) parentOfParent.ChildNodesGrid.Widgets[parentIndex + 1];
+								SelectedRow = (TreeNode)parentOfParent.ChildNodesGrid.Widgets[parentIndex + 1];
 							}
 						}
 					}
 				}
-					break;
+				break;
 			}
 		}
 
@@ -288,7 +304,7 @@ namespace Myra.Graphics2D.UI
 
 			foreach (var widget in node.ChildNodesGrid.Widgets)
 			{
-				var subNode = (TreeNode) widget;
+				var subNode = (TreeNode)widget;
 				if (!Iterate(subNode, action))
 				{
 					return false;
@@ -315,7 +331,7 @@ namespace Myra.Graphics2D.UI
 			{
 				foreach (var widget in tree.ChildNodesGrid.Widgets)
 				{
-					var treeNode = (TreeNode) widget;
+					var treeNode = (TreeNode)widget;
 					RecursiveUpdateRowVisibility(treeNode);
 				}
 			}

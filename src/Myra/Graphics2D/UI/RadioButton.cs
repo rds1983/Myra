@@ -38,11 +38,19 @@ namespace Myra.Graphics2D.UI
 			Toggleable = true;
 		}
 
-		public RadioButton(string style) : this(Stylesheet.Current.RadioButtonStyles[style])
+		public RadioButton(Stylesheet stylesheet, string style) : this(stylesheet.RadioButtonStyles[style])
 		{
 		}
 
-		public RadioButton() : this(Stylesheet.Current.RadioButtonStyle)
+		public RadioButton(Stylesheet stylesheet) : this(stylesheet.RadioButtonStyle)
+		{
+		}
+
+		public RadioButton(string style) : this(Stylesheet.Current, style)
+		{
+		}
+
+		public RadioButton() : this(Stylesheet.Current)
 		{
 		}
 
@@ -68,7 +76,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
-			ApplyButtonStyle(stylesheet.RadioButtonStyles[name]);
+			ApplyImageTextButtonStyle(stylesheet.RadioButtonStyles[name]);
 		}
 
 		internal override string[] GetStyleNames(Stylesheet stylesheet)

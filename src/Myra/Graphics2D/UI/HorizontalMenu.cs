@@ -49,11 +49,19 @@ namespace Myra.Graphics2D.UI
 			VerticalAlignment = VerticalAlignment.Top;
 		}
 
-		public HorizontalMenu(string style) : this(Stylesheet.Current.HorizontalMenuStyles[style])
+		public HorizontalMenu(Stylesheet stylesheet, string style) : this(stylesheet.HorizontalMenuStyles[style])
 		{
 		}
 
-		public HorizontalMenu() : this(Stylesheet.Current.HorizontalMenuStyle)
+		public HorizontalMenu(Stylesheet stylesheet) : this(stylesheet.HorizontalMenuStyle)
+		{
+		}
+
+		public HorizontalMenu(string style) : this(Stylesheet.Current, style)
+		{
+		}
+
+		public HorizontalMenu() : this(Stylesheet.Current)
 		{
 		}
 

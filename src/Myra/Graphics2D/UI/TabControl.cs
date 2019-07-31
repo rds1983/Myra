@@ -46,7 +46,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public TabControl(TabControlStyle style): base(new Grid())
+		public TabControl(TabControlStyle style) : base(new Grid())
 		{
 			// First row contains button
 			InternalChild.RowsProportions.Add(new Proportion());
@@ -74,12 +74,19 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public TabControl(string style)
-			: this(Stylesheet.Current.TabControlStyles[style])
+		public TabControl(Stylesheet stylesheet, string style) : this(stylesheet.TabControlStyles[style])
 		{
 		}
 
-		public TabControl(): this(Stylesheet.Current.TabControlStyle)
+		public TabControl(Stylesheet stylesheet) : this(stylesheet.TabControlStyle)
+		{
+		}
+
+		public TabControl(string style) : this(Stylesheet.Current, style)
+		{
+		}
+
+		public TabControl() : this(Stylesheet.Current)
 		{
 		}
 
@@ -187,7 +194,7 @@ namespace Myra.Graphics2D.UI
 
 			foreach (var item in Items)
 			{
-				item.Button.ApplyButtonStyle(style.TabItemStyle);
+				item.Button.ApplyImageTextButtonStyle(style.TabItemStyle);
 			}
 		}
 

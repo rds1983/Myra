@@ -41,7 +41,10 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public Point ScrollPosition
 		{
-			get { return _scrollPosition; }
+			get
+			{
+				return _scrollPosition;
+			}
 			set
 			{
 				_scrollPosition = value;
@@ -53,28 +56,43 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public Point ScrollMaximum
 		{
-			get { return new Point(_horizontalMaximum, _verticalMaximum); }
+			get
+			{
+				return new Point(_horizontalMaximum, _verticalMaximum);
+			}
 		}
 
 		[HiddenInEditor]
 		[XmlIgnore]
 		[EditCategory("Appearance")]
-		public IRenderable HorizontalScrollBackground { get; set; }
+		public IRenderable HorizontalScrollBackground
+		{
+			get; set;
+		}
 
 		[HiddenInEditor]
 		[XmlIgnore]
 		[EditCategory("Appearance")]
-		public IRenderable HorizontalScrollKnob { get; set; }
+		public IRenderable HorizontalScrollKnob
+		{
+			get; set;
+		}
 
 		[HiddenInEditor]
 		[XmlIgnore]
 		[EditCategory("Appearance")]
-		public IRenderable VerticalScrollBackground { get; set; }
+		public IRenderable VerticalScrollBackground
+		{
+			get; set;
+		}
 
 		[HiddenInEditor]
 		[XmlIgnore]
 		[EditCategory("Appearance")]
-		public IRenderable VerticalScrollKnob { get; set; }
+		public IRenderable VerticalScrollKnob
+		{
+			get; set;
+		}
 
 		[HiddenInEditor]
 		[XmlIgnore]
@@ -93,31 +111,55 @@ namespace Myra.Graphics2D.UI
 
 		[EditCategory("Behavior")]
 		[DefaultValue(true)]
-		public bool AllowHorizontalScrolling { get; set; }
+		public bool AllowHorizontalScrolling
+		{
+			get; set;
+		}
 
 		[EditCategory("Behavior")]
 		[DefaultValue(true)]
-		public bool AllowVerticalScrolling { get; set; }
+		public bool AllowVerticalScrolling
+		{
+			get; set;
+		}
 
 		[DefaultValue(HorizontalAlignment.Stretch)]
 		public override HorizontalAlignment HorizontalAlignment
 		{
-			get { return base.HorizontalAlignment; }
-			set { base.HorizontalAlignment = value; }
+			get
+			{
+				return base.HorizontalAlignment;
+			}
+			set
+			{
+				base.HorizontalAlignment = value;
+			}
 		}
 
 		[DefaultValue(VerticalAlignment.Stretch)]
 		public override VerticalAlignment VerticalAlignment
 		{
-			get { return base.VerticalAlignment; }
-			set { base.VerticalAlignment = value; }
+			get
+			{
+				return base.VerticalAlignment;
+			}
+			set
+			{
+				base.VerticalAlignment = value;
+			}
 		}
 
 		[DefaultValue(true)]
 		public override bool ClipToBounds
 		{
-			get { return base.ClipToBounds; }
-			set { base.ClipToBounds = value; }
+			get
+			{
+				return base.ClipToBounds;
+			}
+			set
+			{
+				base.ClipToBounds = value;
+			}
 		}
 
 		[DefaultValue(true)]
@@ -139,8 +181,14 @@ namespace Myra.Graphics2D.UI
 		[HiddenInEditor]
 		public Widget Child
 		{
-			get { return InternalChild; }
-			set { InternalChild = value; }
+			get
+			{
+				return InternalChild;
+			}
+			set
+			{
+				InternalChild = value;
+			}
 		}
 
 		public override Desktop Desktop
@@ -184,18 +232,26 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ScrollPane(string style)
-			: this(Stylesheet.Current.ScrollPaneStyles[style])
+		public ScrollPane(Stylesheet stylesheet, string style) : this(stylesheet.ScrollPaneStyles[style])
 		{
 		}
 
-		public ScrollPane() : this(Stylesheet.Current.ScrollPaneStyle)
+		public ScrollPane(Stylesheet stylesheet) : this(stylesheet.ScrollPaneStyle)
+		{
+		}
+
+		public ScrollPane(string style) : this(Stylesheet.Current, style)
+		{
+		}
+
+		public ScrollPane() : this(Stylesheet.Current)
 		{
 		}
 
 		private void UpdateWidgetLocation()
 		{
-			if (InternalChild == null) return;
+			if (InternalChild == null)
+				return;
 
 			var prop = Vector2.Zero;
 
@@ -523,7 +579,8 @@ namespace Myra.Graphics2D.UI
 
 		private void DesktopMouseMoved(object sender, EventArgs args)
 		{
-			if (!_startBoundsPos.HasValue) return;
+			if (!_startBoundsPos.HasValue)
+				return;
 
 			var position = Desktop.MousePosition;
 

@@ -22,16 +22,28 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Appearance")]
 		public virtual string Text
 		{
-			get { return _textBlock.Text; }
-			set { _textBlock.Text = value; }
+			get
+			{
+				return _textBlock.Text;
+			}
+			set
+			{
+				_textBlock.Text = value;
+			}
 		}
 
 		[EditCategory("Appearance")]
 		[StylePropertyPath("/TextBlockStyle/TextColor")]
 		public virtual Color TextColor
 		{
-			get { return _textBlock.TextColor; }
-			set { _textBlock.TextColor = value; }
+			get
+			{
+				return _textBlock.TextColor;
+			}
+			set
+			{
+				_textBlock.TextColor = value;
+			}
 		}
 
 		[XmlIgnore]
@@ -39,8 +51,14 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Appearance")]
 		public SpriteFont Font
 		{
-			get { return _textBlock.Font; }
-			set { _textBlock.Font = value; }
+			get
+			{
+				return _textBlock.Font;
+			}
+			set
+			{
+				_textBlock.Font = value;
+			}
 		}
 
 		[XmlIgnore]
@@ -48,7 +66,10 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Appearance")]
 		public IRenderable Image
 		{
-			get { return _image.Renderable; }
+			get
+			{
+				return _image.Renderable;
+			}
 
 			set
 			{
@@ -61,7 +82,10 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Appearance")]
 		public IRenderable OverImage
 		{
-			get { return _image.OverRenderable; }
+			get
+			{
+				return _image.OverRenderable;
+			}
 
 			set
 			{
@@ -74,7 +98,10 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Appearance")]
 		public IRenderable PressedImage
 		{
-			get { return _image.PressedRenderable; }
+			get
+			{
+				return _image.PressedRenderable;
+			}
 
 			set
 			{
@@ -86,34 +113,58 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(null)]
 		public virtual int? ImageWidth
 		{
-			get { return _image.Width; }
-			set { _image.Width = value; }
+			get
+			{
+				return _image.Width;
+			}
+			set
+			{
+				_image.Width = value;
+			}
 		}
 
 		[EditCategory("Appearance")]
 		[DefaultValue(null)]
 		public virtual int? ImageHeight
 		{
-			get { return _image.Height; }
-			set { _image.Height = value; }
+			get
+			{
+				return _image.Height;
+			}
+			set
+			{
+				_image.Height = value;
+			}
 		}
 
 		[EditCategory("Appearance")]
 		[DefaultValue(true)]
 		public virtual bool ImageVisible
 		{
-			get { return _image.Visible; }
+			get
+			{
+				return _image.Visible;
+			}
 
-			set { _image.Visible = value; }
+			set
+			{
+				_image.Visible = value;
+			}
 		}
 
 		[EditCategory("Appearance")]
 		[DefaultValue(0)]
 		public int ImageTextSpacing
 		{
-			get { return InternalChild.ColumnSpacing; }
+			get
+			{
+				return InternalChild.ColumnSpacing;
+			}
 
-			set { InternalChild.ColumnSpacing = value; }
+			set
+			{
+				InternalChild.ColumnSpacing = value;
+			}
 		}
 
 		[DefaultValue(HorizontalAlignment.Stretch)]
@@ -172,13 +223,21 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ImageTextButton(string style) :
-			this(new ImageTextButtonStyle(Stylesheet.Current.ButtonStyles[style], Stylesheet.Current.TextBlockStyle))
+		public ImageTextButton(Stylesheet stylesheet, string style) :
+			this(stylesheet.ButtonStyles[style].ToImageTextButtonStyle(stylesheet.TextBlockStyle))
 		{
 		}
 
-		public ImageTextButton() :
-			this(new ImageTextButtonStyle(Stylesheet.Current.ButtonStyle, Stylesheet.Current.TextBlockStyle))
+		public ImageTextButton(Stylesheet stylesheet) :
+			this(stylesheet.ButtonStyle.ToImageTextButtonStyle(stylesheet.TextBlockStyle))
+		{
+		}
+
+		public ImageTextButton(string style) : this(Stylesheet.Current, style)
+		{
+		}
+
+		public ImageTextButton() : this(Stylesheet.Current)
 		{
 		}
 
@@ -215,12 +274,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
-			ApplyButtonStyle(stylesheet.ButtonStyles[name]);
-		}
-
-		internal override string[] GetStyleNames(Stylesheet stylesheet)
-		{
-			return stylesheet.ButtonStyles.Keys.ToArray();
+			ApplyImageTextButtonStyle(new ImageTextButtonStyle(stylesheet.ButtonStyles[name], stylesheet.TextBlockStyle));
 		}
 	}
 }

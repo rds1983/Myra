@@ -99,11 +99,19 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ComboBox(string style) : this(Stylesheet.Current.ComboBoxStyles[style])
+		public ComboBox(Stylesheet stylesheet, string style) : this(stylesheet.ComboBoxStyles[style])
 		{
 		}
 
-		public ComboBox() : this(Stylesheet.Current.ComboBoxStyle)
+		public ComboBox(Stylesheet stylesheet) : this(stylesheet.ComboBoxStyle)
+		{
+		}
+
+		public ComboBox(string style) : this(Stylesheet.Current, style)
+		{
+		}
+
+		public ComboBox() : this(Stylesheet.Current)
 		{
 		}
 
@@ -240,10 +248,15 @@ namespace Myra.Graphics2D.UI
 
 			foreach (var item in Items)
 			{
-				((ImageTextButton)item.Widget).ApplyButtonStyle(_dropDownItemStyle);
+				var button = (ImageTextButton)item.Widget;
+				button.ApplyImageTextButtonStyle(_dropDownItemStyle);
+				if (item.Color != null)
+				{
+					button.TextColor = item.Color.Value;
+				}
 			}
 
-			InternalChild.ApplyButtonStyle(style);
+			InternalChild.ApplyImageTextButtonStyle(style);
 		}
 
 		protected override Point InternalMeasure(Point availableSize)

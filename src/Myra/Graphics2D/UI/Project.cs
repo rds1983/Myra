@@ -197,17 +197,28 @@ namespace Myra.Graphics2D.UI
 			return el;
 		}
 
-		public static Project LoadFromXml(string data)
+		public static Project LoadFromXml(XDocument xDoc, Stylesheet stylesheet)
 		{
-			XDocument xDoc = XDocument.Parse(data);
-
-			var result = new Project();
-			InternalLoad(result, xDoc.Root);
+			var result = new Project
+			{
+				Stylesheet = stylesheet
+			};
+			InternalLoad(result, xDoc.Root, stylesheet);
 
 			return result;
 		}
 
-		public static object LoadObjectFromXml(string data)
+		public static Project LoadFromXml(string data, Stylesheet stylesheet)
+		{
+			return LoadFromXml(XDocument.Parse(data), stylesheet);
+		}
+
+		public static Project LoadFromXml(string data)
+		{
+			return LoadFromXml(data, Stylesheet.Current);
+		}
+
+		public static object LoadObjectFromXml(string data, Stylesheet stylesheet)
 		{
 			XDocument xDoc = XDocument.Parse(data);
 
@@ -231,10 +242,15 @@ namespace Myra.Graphics2D.UI
 				itemType = typeof(Grid.Proportion);
 			}
 
-			var item = Activator.CreateInstance(itemType);
-			InternalLoad(item, xDoc.Root);
+			var item = CreateItem(itemType, stylesheet);
+			InternalLoad(item, xDoc.Root, stylesheet);
 
 			return item;
+		}
+
+		public static object LoadObjectFromXml(string data)
+		{
+			return LoadObjectFromXml(data, Stylesheet.Current);
 		}
 
 		public string SaveObjectToXml(object obj)
@@ -242,7 +258,32 @@ namespace Myra.Graphics2D.UI
 			return InternalSave(obj, true).ToString();
 		}
 
-		private static void InternalLoad(object obj, XElement el)
+		private static object CreateItem(Type type, Stylesheet stylesheet)
+		{
+			// Check whether item has constructor with stylesheet param
+			var acceptsStylesheet = false;
+			foreach (var c in type.GetConstructors())
+			{
+				var p = c.GetParameters();
+				if (p != null && p.Length == 1)
+				{
+					if (p[0].ParameterType == typeof(Stylesheet))
+					{
+						acceptsStylesheet = true;
+						break;
+					}
+				}
+			}
+
+			if (acceptsStylesheet)
+			{
+				return Activator.CreateInstance(type, stylesheet);
+			}
+
+			return Activator.CreateInstance(type);
+		}
+
+		private static void InternalLoad(object obj, XElement el, Stylesheet stylesheet)
 		{
 			var type = obj.GetType();
 
@@ -296,20 +337,20 @@ namespace Myra.Graphics2D.UI
 						{
 							foreach (var child2 in child.Elements())
 							{
-								var item = Activator.CreateInstance(property.PropertyType.GenericTypeArguments[0]);
-								InternalLoad(item, child2);
+								var item = CreateItem(property.PropertyType.GenericTypeArguments[0], stylesheet);
+								InternalLoad(item, child2, stylesheet);
 								asCollection.Add(item);
 							}
 						}
 						else
 						{
-							InternalLoad(value, child);
+							InternalLoad(value, child, stylesheet);
 						}
 					}
 					else
 					{
-						var value = Activator.CreateInstance(property.PropertyType);
-						InternalLoad(value, child);
+						var value = CreateItem(property.PropertyType, stylesheet);
+						InternalLoad(value, child, stylesheet);
 						property.SetValue(obj, value);
 					}
 				}
@@ -324,11 +365,11 @@ namespace Myra.Graphics2D.UI
 						widgetName = newName;
 					}
 
-					var widgetType = typeof(Widget).Assembly.GetType(widgetNamespace + "." + widgetName);
-					if (widgetType != null)
+					var itemType = typeof(Widget).Assembly.GetType(widgetNamespace + "." + widgetName);
+					if (itemType != null)
 					{
-						var item = (IItemWithId)Activator.CreateInstance(widgetType);
-						InternalLoad(item, child);
+						var item = (IItemWithId)CreateItem(itemType, stylesheet);
+						InternalLoad(item, child, stylesheet);
 
 						if (obj is ComboBox)
 						{

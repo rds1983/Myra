@@ -39,39 +39,63 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Appearance")]
 		public string Title
 		{
-			get { return _titleLabel.Text; }
+			get
+			{
+				return _titleLabel.Text;
+			}
 
-			set { _titleLabel.Text = value; }
+			set
+			{
+				_titleLabel.Text = value;
+			}
 		}
 
 		[EditCategory("Appearance")]
 		[StylePropertyPath("TitleStyle/TextColor")]
 		public Color TitleTextColor
 		{
-			get { return _titleLabel.TextColor; }
-			set { _titleLabel.TextColor = value; }
+			get
+			{
+				return _titleLabel.TextColor;
+			}
+			set
+			{
+				_titleLabel.TextColor = value;
+			}
 		}
 
 		[HiddenInEditor]
 		[XmlIgnore]
 		public SpriteFont TitleFont
 		{
-			get { return _titleLabel.Font; }
-			set { _titleLabel.Font = value; }
+			get
+			{
+				return _titleLabel.Font;
+			}
+			set
+			{
+				_titleLabel.Font = value;
+			}
 		}
 
 		[HiddenInEditor]
 		[XmlIgnore]
 		public Grid TitleGrid
 		{
-			get { return _titleGrid; }
+			get
+			{
+				return _titleGrid;
+			}
 		}
 
 		[HiddenInEditor]
 		[XmlIgnore]
 		public ImageButton CloseButton
 		{
-			get { return _closeButton; }
+			get
+			{
+				return _closeButton;
+			}
 		}
 
 		[HiddenInEditor]
@@ -107,25 +131,40 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[XmlIgnore]
-		public bool Result { get; set; }
+		public bool Result
+		{
+			get; set;
+		}
 
 		[DefaultValue(HorizontalAlignment.Left)]
 		public override HorizontalAlignment HorizontalAlignment
 		{
-			get { return base.HorizontalAlignment; }
-			set { base.HorizontalAlignment = value; }
+			get
+			{
+				return base.HorizontalAlignment;
+			}
+			set
+			{
+				base.HorizontalAlignment = value;
+			}
 		}
 
 		[DefaultValue(VerticalAlignment.Top)]
 		public override VerticalAlignment VerticalAlignment
 		{
-			get { return base.VerticalAlignment; }
-			set { base.VerticalAlignment = value; }
+			get
+			{
+				return base.VerticalAlignment;
+			}
+			set
+			{
+				base.VerticalAlignment = value;
+			}
 		}
 
 		private bool IsWindowPlaced
 		{
-			get;set;
+			get; set;
 		}
 
 		public override Desktop Desktop
@@ -199,12 +238,19 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public Window(string style)
-			: this(Stylesheet.Current.WindowStyles[style])
+		public Window(Stylesheet stylesheet, string style) : this(stylesheet.WindowStyles[style])
 		{
 		}
 
-		public Window() : this(Stylesheet.Current.WindowStyle)
+		public Window(Stylesheet stylesheet) : this(stylesheet.WindowStyle)
+		{
+		}
+
+		public Window(string style) : this(Stylesheet.Current, style)
+		{
+		}
+
+		public Window() : this(Stylesheet.Current)
 		{
 		}
 

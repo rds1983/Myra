@@ -575,7 +575,7 @@ namespace Myra.Graphics2D.UI
 			get { return _paddingTop + _paddingBottom; }
 		}
 
-		[EditCategory("Behavior")]
+		[HiddenInEditor]
 		[DefaultValue(false)]
 		[Obsolete("Use AcceptsKeyboardFocus instead")]
 		public virtual bool CanFocus
@@ -591,14 +591,14 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[EditCategory("Behavior")]
 		[DefaultValue(false)]
 		public virtual bool AcceptsKeyboardFocus
 		{
 			get; set;
 		}
 
-		[HiddenInEditor]
+		[EditCategory("Behavior")]
 		[DefaultValue(false)]
 		public virtual bool AcceptsMouseWheelFocus
 		{

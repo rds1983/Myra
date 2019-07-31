@@ -23,17 +23,25 @@ namespace Myra.Graphics2D.UI
 			Toggleable = true;
 		}
 
-		public CheckBox(string style) : this(Stylesheet.Current.CheckBoxStyles[style])
+		public CheckBox(Stylesheet stylesheet, string style) : this(stylesheet.CheckBoxStyles[style])
 		{
 		}
 
-		public CheckBox() : this(Stylesheet.Current.CheckBoxStyle)
+		public CheckBox(Stylesheet stylesheet) : this(stylesheet.CheckBoxStyle)
+		{
+		}
+
+		public CheckBox(string style) : this(Stylesheet.Current, style)
+		{
+		}
+
+		public CheckBox() : this(Stylesheet.Current)
 		{
 		}
 
 		protected override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
-			ApplyButtonStyle(stylesheet.CheckBoxStyles[name]);
+			ApplyImageTextButtonStyle(stylesheet.CheckBoxStyles[name]);
 		}
 
 		internal override string[] GetStyleNames(Stylesheet stylesheet)

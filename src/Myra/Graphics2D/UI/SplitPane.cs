@@ -234,7 +234,6 @@ namespace Myra.Graphics2D.UI
 					{
 						HorizontalAlignment = HorizontalAlignment.Stretch,
 						VerticalAlignment = VerticalAlignment.Stretch,
-						CanFocus = false,
 						ReleaseOnMouseLeft = false
 					};
 

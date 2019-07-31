@@ -7,19 +7,30 @@ namespace Myra.Graphics2D.UI
 	{
 		public override Orientation Orientation
 		{
-			get { return Orientation.Vertical; }
+			get
+			{
+				return Orientation.Vertical;
+			}
 		}
 
 		public VerticalSplitPane(SplitPaneStyle style) : base(style)
 		{
 		}
 
-		public VerticalSplitPane(string style)
-			: this(Stylesheet.Current.VerticalSplitPaneStyles[style])
+		public VerticalSplitPane(Stylesheet stylesheet, string style) :
+			this(stylesheet.VerticalSplitPaneStyles[style])
 		{
 		}
 
-		public VerticalSplitPane() : this(Stylesheet.Current.VerticalSplitPaneStyle)
+		public VerticalSplitPane(Stylesheet stylesheet) : this(stylesheet.VerticalSplitPaneStyle)
+		{
+		}
+
+		public VerticalSplitPane(string style) : this(Stylesheet.Current, style)
+		{
+		}
+
+		public VerticalSplitPane() : this(Stylesheet.Current)
 		{
 		}
 

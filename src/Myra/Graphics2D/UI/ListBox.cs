@@ -12,7 +12,10 @@ namespace Myra.Graphics2D.UI
 	{
 		[HiddenInEditor]
 		[XmlIgnore]
-		public ListBoxStyle ListBoxStyle { get; set; }
+		public ListBoxStyle ListBoxStyle
+		{
+			get; set;
+		}
 
 		[EditCategory("Behavior")]
 		[DefaultValue(SelectionMode.Single)]
@@ -37,11 +40,19 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ListBox(string style) : this(Stylesheet.Current.ListBoxStyles[style])
+		public ListBox(Stylesheet stylesheet, string style) : this(stylesheet.ListBoxStyles[style])
 		{
 		}
 
-		public ListBox() : this(Stylesheet.Current.ListBoxStyle)
+		public ListBox(Stylesheet stylesheet) : this(stylesheet.ListBoxStyle)
+		{
+		}
+
+		public ListBox(string style) : this(Stylesheet.Current, style)
+		{
+		}
+
+		public ListBox() : this(Stylesheet.Current)
 		{
 		}
 
@@ -145,7 +156,11 @@ namespace Myra.Graphics2D.UI
 				var asButton = item.Widget as ImageTextButton;
 				if (asButton != null)
 				{
-					asButton.ApplyButtonStyle(style.ListItemStyle);
+					asButton.ApplyImageTextButtonStyle(style.ListItemStyle);
+					if (item.Color != null)
+					{
+						asButton.TextColor = item.Color.Value;
+					}
 				}
 
 				var asSeparator = item.Widget as SeparatorWidget;

@@ -18,6 +18,9 @@ using Myra;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework.Input;
 using System.Threading;
+using System.Xml;
+using System.Text;
+using System.Xml.Linq;
 
 namespace MyraPad
 {
@@ -175,7 +178,7 @@ namespace MyraPad
 					_ui._projectHolder.Widgets.Add(_project.Root);
 				}
 
-				_ui._menuFileReloadStylesheet.Enabled = _project != null && !string.IsNullOrEmpty(_project.StylesheetPath);
+				UpdateMenuFile();
 			}
 		}
 
@@ -297,12 +300,13 @@ namespace MyraPad
 			_ui._menuFileSave.Selected += SaveItemOnClicked;
 			_ui._menuFileSaveAs.Selected += SaveAsItemOnClicked;
 			_ui._menuFileExportToCS.Selected += ExportCsItemOnSelected;
+			_ui._menuFileLoadStylesheet.Selected += OnMenuFileLoadStylesheetSelected;
 			_ui._menuFileReloadStylesheet.Selected += OnMenuFileReloadStylesheet;
-			_ui._menuFileReloadStylesheet.Enabled = false;
+			_ui._menuFileResetStylesheet.Selected += OnMenuFileResetStylesheetSelected;
 			_ui._menuFileDebugOptions.Selected += DebugOptionsItemOnSelected;
 			_ui._menuFileQuit.Selected += QuitItemOnDown;
 
-			_ui._menuEditUpdateSource.Selected += _menuEditUpdateSource_Selected;
+			_ui._menuEditFormatSource.Selected += _menuEditUpdateSource_Selected;
 
 			_ui._menuHelpAbout.Selected += AboutItemOnClicked;
 
@@ -355,7 +359,24 @@ namespace MyraPad
 		{
 			try
 			{
-				UpdateSource();
+				var doc = new XmlDocument();
+				doc.LoadXml(_ui._textSource.Text);
+
+				var sb = new StringBuilder();
+				var settings = new XmlWriterSettings
+				{
+					OmitXmlDeclaration = true,
+					Indent = _options.AutoIndent,
+					IndentChars = new string(' ', _options.IndentSpacesSize),
+					NewLineChars = "\n",
+					NewLineHandling = NewLineHandling.Replace
+				};
+				using (var writer = XmlWriter.Create(sb, settings))
+				{
+					doc.Save(writer);
+				}
+
+				_ui._textSource.Text = sb.ToString();
 			}
 			catch (Exception ex)
 			{
@@ -464,7 +485,35 @@ namespace MyraPad
 			try
 			{
 				_ui._textStatus.Text = "Reloading...";
-				_newProject = Project.LoadFromXml(_ui._textSource.Text);
+
+				var xDoc = XDocument.Parse(_ui._textSource.Text);
+
+				var stylesheet = Stylesheet.Current;
+				var stylesheetPathAttr = xDoc.Root.Attribute("StylesheetPath");
+				if (stylesheetPathAttr != null)
+				{
+					try
+					{
+						stylesheet = StylesheetFromFile(stylesheetPathAttr.Value);
+					}
+					catch (Exception ex)
+					{
+						var dialog = Dialog.CreateMessageBox("Error", ex.ToString());
+						dialog.ShowModal(_desktop);
+					}
+				}
+
+				_newProject = Project.LoadFromXml(xDoc, stylesheet);
+
+				if (_newProject.Stylesheet != null && _newProject.Stylesheet.DesktopStyle != null)
+				{
+					_ui._projectHolder.Background = _newProject.Stylesheet.DesktopStyle.Background;
+				}
+				else
+				{
+					_ui._projectHolder.Background = null;
+				}
+
 				_ui._textStatus.Text = string.Empty;
 			}
 			catch (Exception ex)
@@ -808,6 +857,11 @@ namespace MyraPad
 
 		private Stylesheet StylesheetFromFile(string path)
 		{
+			if (!Path.IsPathRooted(path))
+			{
+				path = Path.Combine(Path.GetDirectoryName(FilePath), path);
+			}
+
 			var data = File.ReadAllText(path);
 			var root = (Dictionary<string, object>)Json.Deserialize(data);
 
@@ -906,14 +960,14 @@ namespace MyraPad
 			}
 		}
 
-		private void SetStylesheet(Stylesheet stylesheet)
+		private void SetStylesheet(Project project, Stylesheet stylesheet)
 		{
-			if (Project.Root != null)
+			if (project.Root != null)
 			{
-				IterateWidget(Project.Root, w => w.ApplyStylesheet(stylesheet));
+				IterateWidget(project.Root, w => w.ApplyStylesheet(stylesheet));
 			}
 
-			Project.Stylesheet = stylesheet;
+			project.Stylesheet = stylesheet;
 
 			if (stylesheet != null && stylesheet.DesktopStyle != null)
 			{
@@ -940,7 +994,9 @@ namespace MyraPad
 				}
 
 				var stylesheet = StylesheetFromFile(filePath);
-				SetStylesheet(stylesheet);
+
+				Project.StylesheetPath = filePath;
+				UpdateSource();
 			}
 			catch (Exception ex)
 			{
@@ -949,7 +1005,7 @@ namespace MyraPad
 			}
 		}
 
-		private void OnMenuFileLoadStylesheet(object sender, EventArgs e)
+		private void OnMenuFileLoadStylesheetSelected(object sender, EventArgs e)
 		{
 			var dlg = new FileDialog(FileDialogMode.OpenFile)
 			{
@@ -986,7 +1042,9 @@ namespace MyraPad
 				}
 
 				var filePath = dlg.FilePath;
-				LoadStylesheet(filePath);
+
+				// Check whether stylesheet could be loaded
+				var stylesheet = StylesheetFromFile(filePath);
 
 				// Try to make stylesheet path relative to project folder
 				try
@@ -1007,6 +1065,8 @@ namespace MyraPad
 				}
 
 				Project.StylesheetPath = filePath;
+				UpdateSource();
+				UpdateMenuFile();
 
 				IsDirty = true;
 			};
@@ -1021,7 +1081,16 @@ namespace MyraPad
 				return;
 			}
 
-			LoadStylesheet(Project.StylesheetPath);
+//			LoadStylesheet(Project, Project.StylesheetPath);
+		}
+
+		private void OnMenuFileResetStylesheetSelected(object sender, EventArgs e)
+		{
+			SetStylesheet(Project, Stylesheet.Current);
+			Project.StylesheetPath = null;
+			IsDirty = true;
+
+			UpdateMenuFile();
 		}
 
 		private void DebugOptionsItemOnSelected(object sender1, EventArgs eventArgs)
@@ -1371,6 +1440,7 @@ namespace MyraPad
 		private void UpdateMenuFile()
 		{
 			_ui._menuFileReload.Enabled = !string.IsNullOrEmpty(FilePath);
+			_ui._menuFileReloadStylesheet.Enabled = _project != null && !string.IsNullOrEmpty(_project.StylesheetPath);
 		}
 	}
 }

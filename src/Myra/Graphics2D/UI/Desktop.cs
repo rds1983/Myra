@@ -406,7 +406,7 @@ namespace Myra.Graphics2D.UI
 
 				_widgets.Add(ContextMenu);
 
-				if (ContextMenu.CanFocus)
+				if (ContextMenu.AcceptsKeyboardFocus)
 				{
 					FocusedKeyboardWidget = ContextMenu;
 				}

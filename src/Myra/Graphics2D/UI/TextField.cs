@@ -324,12 +324,19 @@ namespace Myra.Graphics2D.UI
 			BlinkIntervalInMs = 450;
 		}
 
-		public TextField(string style)
-			: this(Stylesheet.Current.TextFieldStyles[style])
+		public TextField(Stylesheet stylesheet, string style) : this(stylesheet.TextFieldStyles[style])
 		{
 		}
 
-		public TextField() : this(Stylesheet.Current.TextFieldStyle)
+		public TextField(Stylesheet stylesheet) : this(stylesheet.TextFieldStyle)
+		{
+		}
+
+		public TextField(string style) : this(Stylesheet.Current, style)
+		{
+		}
+
+		public TextField() : this(Stylesheet.Current)
 		{
 		}
 

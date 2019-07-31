@@ -8,7 +8,10 @@ namespace Myra.Graphics2D.UI
 	{
 		public override Orientation Orientation
 		{
-			get { return Orientation.Horizontal; }
+			get
+			{
+				return Orientation.Horizontal;
+			}
 		}
 
 		[DefaultValue(HorizontalAlignment.Stretch)]
@@ -43,13 +46,19 @@ namespace Myra.Graphics2D.UI
 			VerticalAlignment = VerticalAlignment.Top;
 		}
 
-		public HorizontalProgressBar(string style)
-			: this(Stylesheet.Current.HorizontalProgressBarStyles[style])
+		public HorizontalProgressBar(Stylesheet stylesheet, string style) : this(stylesheet.HorizontalProgressBarStyles[style])
 		{
 		}
 
-		public HorizontalProgressBar()
-			: this(Stylesheet.Current.HorizontalProgressBarStyle)
+		public HorizontalProgressBar(Stylesheet stylesheet) : this(stylesheet.HorizontalProgressBarStyle)
+		{
+		}
+
+		public HorizontalProgressBar(string style) : this(Stylesheet.Current, style)
+		{
+		}
+
+		public HorizontalProgressBar() : this(Stylesheet.Current)
 		{
 		}
 

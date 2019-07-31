@@ -25,7 +25,10 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(0)]
 		public int VerticalSpacing
 		{
-			get { return _formattedText.VerticalSpacing; }
+			get
+			{
+				return _formattedText.VerticalSpacing;
+			}
 			set
 			{
 				_formattedText.VerticalSpacing = value;
@@ -36,7 +39,10 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Appearance")]
 		public string Text
 		{
-			get { return _formattedText.Text; }
+			get
+			{
+				return _formattedText.Text;
+			}
 			set
 			{
 				_formattedText.Text = value;
@@ -49,7 +55,10 @@ namespace Myra.Graphics2D.UI
 		[EditCategory("Appearance")]
 		public SpriteFont Font
 		{
-			get { return _formattedText.Font; }
+			get
+			{
+				return _formattedText.Font;
+			}
 			set
 			{
 				_formattedText.Font = value;
@@ -61,7 +70,10 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(false)]
 		public bool Wrap
 		{
-			get { return _wrap; }
+			get
+			{
+				return _wrap;
+			}
 
 			set
 			{
@@ -76,22 +88,37 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Appearance")]
-		public Color TextColor { get; set; }
+		public Color TextColor
+		{
+			get; set;
+		}
 
 		[EditCategory("Appearance")]
-		public Color? DisabledTextColor { get; set; }
+		public Color? DisabledTextColor
+		{
+			get; set;
+		}
 
 		[HiddenInEditor]
 		[XmlIgnore]
-		public Color? OverTextColor { get; set; }
+		public Color? OverTextColor
+		{
+			get; set;
+		}
 
 		[HiddenInEditor]
 		[XmlIgnore]
-		public Color? PressedTextColor { get; set; }
+		public Color? PressedTextColor
+		{
+			get; set;
+		}
 
 		[HiddenInEditor]
 		[XmlIgnore]
-		public bool IsPressed { get; set; }
+		public bool IsPressed
+		{
+			get; set;
+		}
 
 		public TextBlock(TextBlockStyle style)
 		{
@@ -101,12 +128,19 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public TextBlock(string style)
-			: this(Stylesheet.Current.TextBlockStyles[style])
+		public TextBlock(Stylesheet stylesheet, string style) : this(stylesheet.TextBlockStyles[style])
 		{
 		}
 
-		public TextBlock() : this(Stylesheet.Current.TextBlockStyle)
+		public TextBlock(Stylesheet stylesheet) : this(stylesheet.TextBlockStyle)
+		{
+		}
+
+		public TextBlock(string style) : this(Stylesheet.Current, style)
+		{
+		}
+
+		public TextBlock() : this(Stylesheet.Current)
 		{
 		}
 
@@ -123,10 +157,12 @@ namespace Myra.Graphics2D.UI
 			if (!Enabled && DisabledTextColor != null)
 			{
 				color = DisabledTextColor.Value;
-			} else if (IsPressed && PressedTextColor != null)
+			}
+			else if (IsPressed && PressedTextColor != null)
 			{
 				color = PressedTextColor.Value;
-			} else if (IsMouseOver && OverTextColor != null)
+			}
+			else if (IsMouseOver && OverTextColor != null)
 			{
 				color = OverTextColor.Value;
 			}
