@@ -55,7 +55,6 @@ namespace MyraPad
 		private object _newObject;
 		private DateTime? _refreshInitiated;
 
-
 		private VerticalMenu _autoCompleteMenu = null;
 		private readonly Options _options = null;
 

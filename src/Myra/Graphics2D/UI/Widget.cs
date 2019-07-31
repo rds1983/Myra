@@ -591,6 +591,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[HiddenInEditor]
 		[EditCategory("Behavior")]
 		[DefaultValue(false)]
 		public virtual bool AcceptsKeyboardFocus
@@ -598,6 +599,7 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
+		[HiddenInEditor]
 		[EditCategory("Behavior")]
 		[DefaultValue(false)]
 		public virtual bool AcceptsMouseWheelFocus
