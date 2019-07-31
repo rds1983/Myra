@@ -9,6 +9,7 @@ using Myra.Utility;
 using System.Xml.Linq;
 using System.Globalization;
 using System.Xml.Serialization;
+using System.Collections.Concurrent;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -27,10 +28,7 @@ namespace Myra.Graphics2D.UI
 
 	public class Project
 	{
-		private static readonly Dictionary<string, string> LegacyNames = new Dictionary<string, string>
-		{
-			{ "Button", "ImageTextButton" }
-		};
+		private static readonly ConcurrentDictionary<string, string> LegacyNames = new ConcurrentDictionary<string, string>();
 
 		private readonly ExportOptions _exportOptions = new ExportOptions();
 
@@ -52,6 +50,11 @@ namespace Myra.Graphics2D.UI
 		[HiddenInEditor]
 		[XmlIgnore]
 		public Stylesheet Stylesheet { get; set; }
+
+		static Project()
+		{
+			LegacyNames["Button"] = "ImageTextButton";
+		}
 
 		public Project()
 		{
@@ -225,7 +228,6 @@ namespace Myra.Graphics2D.UI
 			Type itemType;
 			if (xDoc.Root.Name != "Proportion")
 			{
-
 				var itemNamespace = typeof(Widget).Namespace;
 
 				var widgetName = xDoc.Root.Name.ToString();
@@ -240,6 +242,11 @@ namespace Myra.Graphics2D.UI
 			else
 			{
 				itemType = typeof(Grid.Proportion);
+			}
+
+			if (itemType == null)
+			{
+				return null;
 			}
 
 			var item = CreateItem(itemType, stylesheet);

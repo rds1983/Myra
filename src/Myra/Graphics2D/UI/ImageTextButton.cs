@@ -208,7 +208,7 @@ namespace Myra.Graphics2D.UI
 
 			InternalChild.Widgets.Add(_image);
 
-			_textBlock = new TextBlock
+			_textBlock = new TextBlock(style != null ? style.LabelStyle : null)
 			{
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				GridColumn = 1,

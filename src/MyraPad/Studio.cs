@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -29,7 +30,11 @@ namespace MyraPad
 		private static Studio _instance;
 
 		private readonly List<WidgetInfo> _projectInfo = new List<WidgetInfo>();
+		private readonly ConcurrentQueue<string> _loadQueue = new ConcurrentQueue<string>();
+		private readonly ConcurrentQueue<Project> _newProjectsQueue = new ConcurrentQueue<Project>();
+		private readonly AutoResetEvent _refreshProjectEvent = new AutoResetEvent(false);
 
+		private bool _suppressProjectRefresh = false;
 		private readonly GraphicsDeviceManager _graphicsDeviceManager;
 		private readonly State _state;
 		private Desktop _desktop;
@@ -45,9 +50,10 @@ namespace MyraPad
 		private int _line, _col, _indentLevel;
 		private bool _applyAutoIndent = false;
 		private bool _applyAutoClose = false;
-		private Project _newProject;
 		private object _newObject;
 		private DateTime? _refreshInitiated;
+
+
 		private VerticalMenu _autoCompleteMenu = null;
 		private readonly Options _options = null;
 
@@ -226,6 +232,8 @@ namespace MyraPad
 				_graphicsDeviceManager.PreferredBackBufferHeight = 800;
 				_options = new Options();
 			}
+
+			ThreadPool.QueueUserWorkItem(RefreshProjectProc);
 		}
 
 		protected override void Initialize()
@@ -456,6 +464,11 @@ namespace MyraPad
 			{
 				IsDirty = true;
 
+				if (_suppressProjectRefresh)
+				{
+					return;
+				}
+
 				var newLength = string.IsNullOrEmpty(e.NewValue) ? 0 : e.NewValue.Length;
 				var oldLength = string.IsNullOrEmpty(e.OldValue) ? 0 : e.OldValue.Length;
 				if (Math.Abs(newLength - oldLength) > 1 || _applyAutoClose)
@@ -477,48 +490,58 @@ namespace MyraPad
 		private void QueueRefreshProject()
 		{
 			_refreshInitiated = null;
-			ThreadPool.QueueUserWorkItem(RefreshProjectAsync);
+
+			_loadQueue.Enqueue(_ui._textSource.Text);
+			_refreshProjectEvent.Set();
 		}
 
-		private void RefreshProjectAsync(object state)
+		private void RefreshProjectProc(object state)
 		{
-			try
+			while (true)
 			{
-				_ui._textStatus.Text = "Reloading...";
+				_refreshProjectEvent.WaitOne();
 
-				var xDoc = XDocument.Parse(_ui._textSource.Text);
+				string data;
 
-				var stylesheet = Stylesheet.Current;
-				var stylesheetPathAttr = xDoc.Root.Attribute("StylesheetPath");
-				if (stylesheetPathAttr != null)
+				// We're interested only in the last data
+				while (_loadQueue.Count > 1)
+				{
+					_loadQueue.TryDequeue(out data);
+				}
+
+				if (_loadQueue.TryDequeue(out data))
 				{
 					try
 					{
-						stylesheet = StylesheetFromFile(stylesheetPathAttr.Value);
+						_ui._textStatus.Text = "Reloading...";
+
+						var xDoc = XDocument.Parse(data);
+
+						var stylesheet = Stylesheet.Current;
+						var stylesheetPathAttr = xDoc.Root.Attribute("StylesheetPath");
+						if (stylesheetPathAttr != null)
+						{
+							try
+							{
+								stylesheet = StylesheetFromFile(stylesheetPathAttr.Value);
+							}
+							catch (Exception ex)
+							{
+								var dialog = Dialog.CreateMessageBox("Error", ex.ToString());
+								dialog.ShowModal(_desktop);
+							}
+						}
+
+						var newProject = Project.LoadFromXml(xDoc, stylesheet);
+						_newProjectsQueue.Enqueue(newProject);
+
+						_ui._textStatus.Text = string.Empty;
 					}
 					catch (Exception ex)
 					{
-						var dialog = Dialog.CreateMessageBox("Error", ex.ToString());
-						dialog.ShowModal(_desktop);
+						_ui._textStatus.Text = ex.Message;
 					}
 				}
-
-				_newProject = Project.LoadFromXml(xDoc, stylesheet);
-
-				if (_newProject.Stylesheet != null && _newProject.Stylesheet.DesktopStyle != null)
-				{
-					_ui._projectHolder.Background = _newProject.Stylesheet.DesktopStyle.Background;
-				}
-				else
-				{
-					_ui._projectHolder.Background = null;
-				}
-
-				_ui._textStatus.Text = string.Empty;
-			}
-			catch (Exception ex)
-			{
-				_ui._textStatus.Text = ex.Message;
 			}
 		}
 
@@ -1154,9 +1177,18 @@ namespace MyraPad
 			{
 				var t = _ui._textSource.Text;
 
-				_ui._textSource.Replace(_currentTagStart.Value,
-					_currentTagEnd.Value - _currentTagStart.Value + 1,
-					xml);
+				try
+				{
+					_suppressProjectRefresh = true;
+					_ui._textSource.Replace(_currentTagStart.Value,
+						_currentTagEnd.Value - _currentTagStart.Value + 1,
+						xml);
+					QueueRefreshProject();
+				}
+				finally
+				{
+					_suppressProjectRefresh = false;
+				}
 
 				_currentTagEnd = _currentTagStart.Value + xml.Length - 1;
 			}
@@ -1292,10 +1324,24 @@ namespace MyraPad
 				_newObject = null;
 			}
 
-			if (_newProject != null)
+			Project newProject;
+			while (_newProjectsQueue.Count > 1)
 			{
-				Project = _newProject;
-				_newProject = null;
+				_newProjectsQueue.TryDequeue(out newProject);
+			}
+
+			if (_newProjectsQueue.TryDequeue(out newProject))
+			{
+				Project = newProject;
+
+				if (Project.Stylesheet != null && Project.Stylesheet.DesktopStyle != null)
+				{
+					_ui._projectHolder.Background = Project.Stylesheet.DesktopStyle.Background;
+				}
+				else
+				{
+					_ui._projectHolder.Background = null;
+				}
 			}
 		}
 

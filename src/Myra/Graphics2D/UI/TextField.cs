@@ -403,8 +403,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			UndoStack.MakeReplace(Text, where, len, text.Length);
-			DeleteChars(where, len);
-			InsertChars(where, text);
+			UserText = UserText.Substring(0, where) + text + UserText.Substring(where + len);
 		}
 
 		public void ReplaceAll(string text)

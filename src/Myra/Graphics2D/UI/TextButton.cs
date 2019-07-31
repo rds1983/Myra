@@ -59,7 +59,7 @@ namespace Myra.Graphics2D.UI
 
 		public TextButton(TextButtonStyle style)
 		{
-			InternalChild = new TextBlock
+			InternalChild = new TextBlock(style != null ? style.LabelStyle : null)
 			{
 				VerticalAlignment = VerticalAlignment.Center,
 				HorizontalAlignment = HorizontalAlignment.Center,
