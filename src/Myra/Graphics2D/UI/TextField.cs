@@ -30,7 +30,7 @@ namespace Myra.Graphics2D.UI
 		private readonly FormattedTextWithGlyphs _formattedText = new FormattedTextWithGlyphs();
 		private readonly StringBuilder _stringBuilder = new StringBuilder();
 		private bool _isTouchDown;
-		private int? _lastCursorY;
+		private Point? _lastCursorPosition;
 		private int _cursorIndex;
 		private bool _suppressRedoStackReset = false;
 
@@ -820,41 +820,47 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
+			var bounds = ActualBounds;
 			var p = GetRenderPositionByIndex(CursorPosition);
-
-			if (p.Y == _lastCursorY)
+			p.X -= bounds.X;
+			p.Y -= bounds.Y;
+			if (p == _lastCursorPosition)
 			{
 				return;
 			}
 
-			var scrollMaximumPixels = asScrollPane.ScrollMaximumPixels;
-			if (scrollMaximumPixels.Y == 0)
+			asScrollPane.UpdateLayout();
+
+			var scrollMaximum = asScrollPane.ScrollMaximum;
+			if (scrollMaximum == Point.Zero)
 			{
 				return;
 			}
 
 			var lineHeight = CrossEngineStuff.LineSpacing(_formattedText.Font);
 
-			if (p.Y < asScrollPane.ActualBounds.Top)
+			var sp = asScrollPane.ScrollPosition;
+			if (p.Y < sp.Y)
 			{
-				var scrollMaximum = asScrollPane.ScrollMaximum;
-				var newY = (-Top + p.Y - asScrollPane.ActualBounds.Top) * scrollMaximum.Y / scrollMaximumPixels.Y;
+				sp.Y = p.Y;
 
-				var sp = asScrollPane.ScrollPosition;
-				asScrollPane.ScrollPosition = new Point(sp.X, newY);
 			}
-			else if (p.Y + lineHeight > asScrollPane.ActualBounds.Bottom)
+			else if (p.Y + lineHeight > sp.Y + asScrollPane.ActualBounds.Height)
 			{
-				var scrollMaximum = asScrollPane.ScrollMaximum;
-				var newY = (-Top + p.Y + lineHeight - asScrollPane.ActualBounds.Bottom) * scrollMaximum.Y / scrollMaximumPixels.Y;
-
-				var sp = asScrollPane.ScrollPosition;
-				asScrollPane.ScrollPosition = new Point(sp.X, newY);
+				sp.Y = p.Y + lineHeight - asScrollPane.ActualBounds.Height;
 			}
 
-			_lastCursorY = p.Y;
+			if (p.X < sp.X)
+			{
+				sp.X = p.X;
+			}
+			else if (p.X > sp.X + asScrollPane.ActualBounds.Width)
+			{
+				sp.X = p.X + Cursor.Size.X - asScrollPane.ActualBounds.Width;
+			}
 
-			asScrollPane.UpdateLayout();
+			asScrollPane.ScrollPosition = sp;
+			_lastCursorPosition = p;
 		}
 
 		private void OnCursorIndexChanged()
@@ -1084,6 +1090,12 @@ namespace Myra.Graphics2D.UI
 			if (result.Y < CrossEngineStuff.LineSpacing(Font))
 			{
 				result.Y = CrossEngineStuff.LineSpacing(Font);
+			}
+
+			if (Cursor != null)
+			{
+				result.X += (Cursor.Size.X + 1);
+				result.Y = Math.Max(result.Y, Cursor.Size.Y);
 			}
 
 			return result;

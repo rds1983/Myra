@@ -23,7 +23,7 @@
       </Grid>
       <HorizontalSplitPane Id="_splitPane" GridRow="1">
         <ListBox Id="_listBoxPlaces" HorizontalAlignment="Stretch" ClipToBounds="True" />
-        <ScrollPane AllowHorizontalScrolling="False" Id="_scrollPane" GridColumn="2">
+        <ScrollPane ShowHorizontalScrollBar="False" Id="_scrollPane" GridColumn="2">
           <Grid ColumnSpacing="4" RowSpacing="4" GridSelectionMode="Row" Id="_gridFiles">
             <ColumnsProportions>
               <Proportion />

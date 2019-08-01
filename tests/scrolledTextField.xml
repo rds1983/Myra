@@ -1,0 +1,7 @@
+<Project>
+  <Panel>
+    <ScrollPane ShowHorizontalScrollBar="False" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" >
+      <TextField Text="" />
+    </ScrollPane>
+  </Panel>
+</Project>

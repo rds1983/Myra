@@ -885,8 +885,8 @@ namespace Myra.Graphics2D.UI
 			if (asScrollPane != null)
 			{
 				// Special case
-				if (asScrollPane._horizontalScrollbarVisible && asScrollPane._horizontalScrollbarFrame.Contains(p) ||
-					asScrollPane._verticalScrollbarVisible && asScrollPane._verticalScrollbarFrame.Contains(p))
+				if (asScrollPane._horizontalScrollingOn && asScrollPane._horizontalScrollbarFrame.Contains(p) ||
+					asScrollPane._verticalScrollingOn && asScrollPane._verticalScrollbarFrame.Contains(p))
 				{
 					return true;
 				}
