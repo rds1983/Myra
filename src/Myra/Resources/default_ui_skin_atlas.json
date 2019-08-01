@@ -318,9 +318,9 @@
     "type": "1",
     "padding": {
       "left": 4,
-      "top": 0,
+      "top": 24,
       "right": 16,
-      "bottom": 24
+      "bottom": 0
     }
   },
   "default-select-selection": {
