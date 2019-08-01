@@ -32,8 +32,8 @@ namespace Myra.Graphics2D.UI
 			{
 				var bounds = ActualBounds;
 
-				return new Point(InternalChild.Bounds.Width - bounds.Width + (_verticalScrollingOn ? _verticalScrollbarThumb.Width : 0),
-								 InternalChild.Bounds.Height - bounds.Height + (_horizontalScrollingOn ? _horizontalScrollbarThumb.Height : 0));
+				return new Point(InternalChild.Bounds.Width - bounds.Width + ((_verticalScrollingOn && ShowVerticalScrollBar) ? _verticalScrollbarThumb.Width : 0),
+								 InternalChild.Bounds.Height - bounds.Height + ((_horizontalScrollingOn && ShowHorizontalScrollBar) ? _horizontalScrollbarThumb.Height : 0));
 			}
 		}
 
@@ -631,11 +631,11 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
+			InternalChild.Layout(bounds);
+
 			// Fit scroll position in new maximums
 			var scrollPosition = ScrollPosition;
 			ScrollPosition = scrollPosition;
-
-			InternalChild.Layout(bounds);
 		}
 
 		public void ResetScroll()

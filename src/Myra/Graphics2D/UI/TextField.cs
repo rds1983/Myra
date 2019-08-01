@@ -822,14 +822,15 @@ namespace Myra.Graphics2D.UI
 
 			var bounds = ActualBounds;
 			var p = GetRenderPositionByIndex(CursorPosition);
-			p.X -= bounds.X;
-			p.Y -= bounds.Y;
 			if (p == _lastCursorPosition)
 			{
 				return;
 			}
 
 			asScrollPane.UpdateLayout();
+
+			p.X -= bounds.X;
+			p.Y -= bounds.Y;
 
 			var scrollMaximum = asScrollPane.ScrollMaximum;
 			if (scrollMaximum == Point.Zero)
