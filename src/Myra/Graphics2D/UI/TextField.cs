@@ -297,6 +297,14 @@ namespace Myra.Graphics2D.UI
 			get; private set;
 		}
 
+		private int CursorWidth
+		{
+			get
+			{
+				return 1 + (Cursor != null ? Cursor.Size.X : 0);
+			}
+		}
+
 		/// <summary>
 		/// Fires every time when the text had been changed
 		/// </summary>
@@ -834,8 +842,8 @@ namespace Myra.Graphics2D.UI
 			else
 			{
 				sz = new Point(Bounds.Width, Bounds.Height);
-				maximum = _formattedText.Size - sz;
-				maximum.X += Cursor.Size.X + 1;
+				maximum = new Point(_formattedText.Size.X + CursorWidth - sz.X,
+					_formattedText.Size.Y - sz.Y);
 
 				if (maximum.X < 0)
 				{
@@ -883,9 +891,9 @@ namespace Myra.Graphics2D.UI
 			{
 				sp.X = p.X;
 			}
-			else if (p.X + Cursor.Size.X > sp.X + sz.X)
+			else if (p.X + CursorWidth > sp.X + sz.X)
 			{
-				sp.X = p.X + Cursor.Size.X - sz.X;
+				sp.X = p.X + CursorWidth - sz.X;
 			}
 
 			if (asScrollPane != null)
@@ -1100,7 +1108,10 @@ namespace Myra.Graphics2D.UI
 			var centeredBounds = LayoutUtils.Align(new Point(bounds.Width, bounds.Height), _formattedText.Size, HorizontalAlignment.Left, TextVerticalAlignment);
 			centeredBounds.Offset(bounds.Location);
 
-			_formattedText.Draw(context.Batch, centeredBounds.Location - _internalScrolling, 
+			var p = new Point(centeredBounds.Location.X - _internalScrolling.X,
+				centeredBounds.Location.Y - _internalScrolling.Y);
+			_formattedText.Draw(context.Batch, 
+				p,
 				context.View, textColor, context.Opacity);
 
 			if (!IsKeyboardFocused)
@@ -1118,11 +1129,13 @@ namespace Myra.Graphics2D.UI
 
 			if (_cursorOn && Cursor != null)
 			{
-				var pos = GetRenderPositionByIndex(CursorPosition) - _internalScrolling;
-				context.Draw(Cursor, new Rectangle(pos.X,
-					pos.Y,
-					Cursor.Size.X,
-					CrossEngineStuff.LineSpacing(_formattedText.Font)));
+				p = GetRenderPositionByIndex(CursorPosition);
+				p.X -= _internalScrolling.X;
+				p.Y -= _internalScrolling.Y;
+				context.Draw(Cursor,
+					new Rectangle(p.X, p.Y,
+						Cursor.Size.X,
+						CrossEngineStuff.LineSpacing(_formattedText.Font)));
 			}
 		}
 
@@ -1139,6 +1152,8 @@ namespace Myra.Graphics2D.UI
 				width = Width.Value;
 			}
 
+			width -= CursorWidth;
+
 			var result = Point.Zero;
 			if (Font != null)
 			{
@@ -1152,7 +1167,7 @@ namespace Myra.Graphics2D.UI
 
 			if (Cursor != null)
 			{
-				result.X += (Cursor.Size.X + 1);
+				result.X += CursorWidth;
 				result.Y = Math.Max(result.Y, Cursor.Size.Y);
 			}
 

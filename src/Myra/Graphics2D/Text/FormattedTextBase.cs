@@ -158,7 +158,8 @@ namespace Myra.Graphics2D.Text
 
 				if (c != '\n')
 				{
-					sz = Font.MeasureString(_stringBuilder).ToPoint();
+					var v = Font.MeasureString(_stringBuilder);
+					sz = new Point((int)v.X, (int)v.Y);
 				}
 				else
 				{

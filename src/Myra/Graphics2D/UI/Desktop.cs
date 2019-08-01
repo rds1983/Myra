@@ -799,6 +799,14 @@ namespace Myra.Graphics2D.UI
 			}
 			else
 			{
+				// Small workaround: if key is escape  active widget is window
+				// Send it there
+				var asWindow = GetActiveWidget() as Window;
+				if (asWindow != null && key == Keys.Escape && _focusedKeyboardWidget != asWindow)
+				{
+					asWindow.OnKeyDown(key);
+				}
+
 				if (_focusedKeyboardWidget != null)
 				{
 					_focusedKeyboardWidget.OnKeyDown(key);

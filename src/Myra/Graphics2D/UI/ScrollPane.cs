@@ -653,15 +653,16 @@ namespace Myra.Graphics2D.UI
 			int delta;
 			if (_scrollbarOrientation == Orientation.Horizontal)
 			{
-				delta = position.X - _startBoundsPos.Value;
+				delta = (position.X - _startBoundsPos.Value) * ScrollMaximum.X / _thumbMaximumX;
 				_startBoundsPos = position.X;
 			}
 			else
 			{
-				delta = position.Y - _startBoundsPos.Value;
+				delta = (position.Y - _startBoundsPos.Value) * ScrollMaximum.Y / _thumbMaximumY;
 				_startBoundsPos = position.Y;
 			}
 
+			
 			MoveThumb(delta);
 		}
 
