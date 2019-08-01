@@ -32,6 +32,7 @@ namespace Myra.Graphics2D.UI
 		private bool _isTouchDown;
 		private Point? _lastCursorPosition;
 		private int _cursorIndex;
+		private Point _internalScrolling = Point.Zero;
 		private bool _suppressRedoStackReset = false;
 
 		private readonly UndoRedoStack UndoStack = new UndoRedoStack();
@@ -814,53 +815,108 @@ namespace Myra.Graphics2D.UI
 
 		private void UpdateScrolling()
 		{
-			var asScrollPane = Parent as ScrollPane;
-			if (asScrollPane == null)
-			{
-				return;
-			}
-
-			var bounds = ActualBounds;
 			var p = GetRenderPositionByIndex(CursorPosition);
 			if (p == _lastCursorPosition)
 			{
 				return;
 			}
 
-			asScrollPane.UpdateLayout();
+			var asScrollPane = Parent as ScrollPane;
+
+			Point sz, maximum;
+			var bounds = ActualBounds;
+			if (asScrollPane != null)
+			{
+				asScrollPane.UpdateLayout();
+				sz = new Point(asScrollPane.Bounds.Width, asScrollPane.Bounds.Height);
+				maximum = asScrollPane.ScrollMaximum;
+			}
+			else
+			{
+				sz = new Point(Bounds.Width, Bounds.Height);
+				maximum = _formattedText.Size - sz;
+				maximum.X += Cursor.Size.X + 1;
+
+				if (maximum.X < 0)
+				{
+					maximum.X = 0;
+				}
+
+				if (maximum.Y < 0)
+				{
+					maximum.Y = 0;
+				}
+			}
+
+			if (maximum == Point.Zero)
+			{
+				_internalScrolling = Point.Zero;
+				_lastCursorPosition = p;
+				return;
+			}
 
 			p.X -= bounds.X;
 			p.Y -= bounds.Y;
 
-			var scrollMaximum = asScrollPane.ScrollMaximum;
-			if (scrollMaximum == Point.Zero)
-			{
-				return;
-			}
-
 			var lineHeight = CrossEngineStuff.LineSpacing(_formattedText.Font);
 
-			var sp = asScrollPane.ScrollPosition;
+			Point sp;
+			if (asScrollPane != null)
+			{
+				sp = asScrollPane.ScrollPosition;
+			}
+			else
+			{
+				sp = _internalScrolling;
+			}
+
 			if (p.Y < sp.Y)
 			{
 				sp.Y = p.Y;
-
 			}
-			else if (p.Y + lineHeight > sp.Y + asScrollPane.ActualBounds.Height)
+			else if (p.Y + lineHeight > sp.Y + sz.Y)
 			{
-				sp.Y = p.Y + lineHeight - asScrollPane.ActualBounds.Height;
+				sp.Y = p.Y + lineHeight - sz.Y;
 			}
 
 			if (p.X < sp.X)
 			{
 				sp.X = p.X;
 			}
-			else if (p.X > sp.X + asScrollPane.ActualBounds.Width)
+			else if (p.X + Cursor.Size.X > sp.X + sz.X)
 			{
-				sp.X = p.X + Cursor.Size.X - asScrollPane.ActualBounds.Width;
+				sp.X = p.X + Cursor.Size.X - sz.X;
 			}
 
-			asScrollPane.ScrollPosition = sp;
+			if (asScrollPane != null)
+			{
+				asScrollPane.ScrollPosition = sp;
+			}
+			else
+			{
+				if (sp.X < 0)
+				{
+					sp.X = 0;
+				}
+
+				if (sp.X > maximum.X)
+				{
+					sp.X = maximum.X;
+				}
+
+				if (sp.Y < 0)
+				{
+					sp.Y = 0;
+				}
+
+				if (sp.Y > maximum.Y)
+				{
+					sp.Y = maximum.Y;
+				}
+
+				_internalScrolling = sp;
+			}
+
 			_lastCursorPosition = p;
 		}
 
@@ -1002,8 +1058,8 @@ namespace Myra.Graphics2D.UI
 							var endPosition = GetRenderPositionByIndex(selectEnd);
 
 							context.Draw(Selection,
-								new Rectangle(startPosition.X,
-									startPosition.Y,
+								new Rectangle(startPosition.X - _internalScrolling.X,
+									startPosition.Y - _internalScrolling.Y,
 									endPosition.X - startPosition.X,
 									CrossEngineStuff.LineSpacing(_formattedText.Font)));
 
@@ -1011,8 +1067,8 @@ namespace Myra.Graphics2D.UI
 						}
 
 						context.Draw(Selection,
-							new Rectangle(startPosition.X,
-								startPosition.Y,
+							new Rectangle(startPosition.X - _internalScrolling.X,
+								startPosition.Y - _internalScrolling.Y,
 								bounds.Left + startGlyph.TextLine.Size.X - startPosition.X,
 								CrossEngineStuff.LineSpacing(_formattedText.Font)));
 
@@ -1044,7 +1100,8 @@ namespace Myra.Graphics2D.UI
 			var centeredBounds = LayoutUtils.Align(new Point(bounds.Width, bounds.Height), _formattedText.Size, HorizontalAlignment.Left, TextVerticalAlignment);
 			centeredBounds.Offset(bounds.Location);
 
-			_formattedText.Draw(context.Batch, centeredBounds.Location, context.View, textColor, context.Opacity);
+			_formattedText.Draw(context.Batch, centeredBounds.Location - _internalScrolling, 
+				context.View, textColor, context.Opacity);
 
 			if (!IsKeyboardFocused)
 			{
@@ -1061,7 +1118,7 @@ namespace Myra.Graphics2D.UI
 
 			if (_cursorOn && Cursor != null)
 			{
-				var pos = GetRenderPositionByIndex(CursorPosition);
+				var pos = GetRenderPositionByIndex(CursorPosition) - _internalScrolling;
 				context.Draw(Cursor, new Rectangle(pos.X,
 					pos.Y,
 					Cursor.Size.X,
