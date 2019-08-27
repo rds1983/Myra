@@ -1,10 +1,11 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Linq;
 using Myra.Attributes;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Serialization;
+using System;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -21,7 +22,12 @@ namespace Myra.Graphics2D.UI
 		private readonly FormattedText _formattedText = new FormattedText();
 		private bool _wrap = false;
 
-		[EditCategory("Appearance")]
+        private FormattedText _autoEllipsisText;
+        private bool _autoEllipsis = false;
+        private string _autoEllipsisString = "...";
+        private AutoEllipsisMethod _autoEllipsisMethod;
+
+        [EditCategory("Appearance")]
 		[DefaultValue(0)]
 		public int VerticalSpacing
 		{
@@ -87,7 +93,52 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Appearance")]
+        /// <summary>
+        /// Replaces overflowing text with an ellipsis.
+        /// </summary>
+        [EditCategory("Appearance")]
+        [DefaultValue(false)]    
+        public bool AutoEllipsis
+        {
+            get => _autoEllipsis;
+            set
+            {
+                if (value == _autoEllipsis) return;
+                _autoEllipsis = value;
+                InvalidateMeasure();
+            }
+        }
+
+        /// <summary>
+        /// The string to use as ellipsis.
+        /// </summary>
+        [EditCategory("Appearance")]
+        [DefaultValue("...")]
+        public string AutoEllipsisString
+        {
+            get => _autoEllipsisString;
+            set
+            {
+                if (value == _autoEllipsisString) return;
+                _autoEllipsisString = value;
+                InvalidateMeasure();
+            }
+        }
+
+        [EditCategory("Appearance")]
+        [DefaultValue(AutoEllipsisMethod.Character)]
+        public AutoEllipsisMethod AutoEllipsisMethod
+        {
+            get => _autoEllipsisMethod;
+            set
+            {
+                if (value == _autoEllipsisMethod) return;
+                _autoEllipsisMethod = value;
+                InvalidateMeasure();
+            }
+        }
+
+        [EditCategory("Appearance")]
 		public Color TextColor
 		{
 			get; set;
@@ -167,12 +218,13 @@ namespace Myra.Graphics2D.UI
 				color = OverTextColor.Value;
 			}
 
-			_formattedText.Draw(context.Batch, bounds.Location, context.View, color, context.Opacity);
+            var textToDraw = _autoEllipsis ? _autoEllipsisText : _formattedText;
+            textToDraw.Draw(context.Batch, bounds.Location, context.View, color, context.Opacity);
 		}
 
 		protected override Point InternalMeasure(Point availableSize)
 		{
-			if (Font == null)
+            if (Font == null)
 			{
 				return Point.Zero;
 			}
@@ -189,7 +241,13 @@ namespace Myra.Graphics2D.UI
 				result = _formattedText.Measure(_wrap ? width : default(int?));
 			}
 
-			if (result.Y < CrossEngineStuff.LineSpacing(Font))
+            if(_autoEllipsis)
+            {
+                _autoEllipsisText = ApplyAutoEllipsis(width);
+                result = _autoEllipsisText.Measure(null);
+            }
+
+            if (result.Y < CrossEngineStuff.LineSpacing(Font))
 			{
 				result.Y = CrossEngineStuff.LineSpacing(Font);
 			}
@@ -197,7 +255,78 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public override void Arrange()
+        private FormattedText ApplyAutoEllipsis(int width)
+        {
+            if (_formattedText.Measure(null).X <= width)
+                return _formattedText; // don't even need to do anything
+
+            var origText = _formattedText.Text;
+            var measureText = new FormattedText()
+            {
+                Text = _formattedText.Text,
+                Font = _formattedText.Font,
+                IsPassword = _formattedText.IsPassword,
+                VerticalSpacing = _formattedText.VerticalSpacing,
+                Width = _formattedText.Width
+            };
+            string result;
+
+            // find longest possible string using binary search
+            int left = 0;
+            int right = origText.Length;
+            int center = 0;
+
+            while (left <= right)
+            {
+                center = left + ((right - left) / 2);
+                measureText.Text = $"{origText.Substring(0, center)}{AutoEllipsisString}";
+
+                var measure = measureText.Measure(null).X;
+                if(measure == width)
+                {
+                    break;
+                }
+                else if (measure > width)
+                {
+                    right = center - 1;
+                }
+                else
+                {
+                    left = center + 1;
+                }
+            }
+
+            result = origText.Substring(0, center);
+
+            if (AutoEllipsisMethod == AutoEllipsisMethod.Word)
+            {
+                // cut on spaces rather than in the middle of a word.
+                // preserve a space character before the ellipsis if there is
+                // enough room for it.
+
+                var closestSpace = origText.LastIndexOf(' ', center);
+
+                int subStrLength = closestSpace;
+                measureText.Text = origText.Substring(0, closestSpace + 1) + AutoEllipsisString;
+                if(measureText.Measure(null).X < width)
+                {
+                    subStrLength++;
+                }
+
+                result = origText.Substring(0, subStrLength);
+            }
+
+            return new FormattedText()
+            {
+                Text = result + AutoEllipsisString,
+                Font = _formattedText.Font,
+                IsPassword = _formattedText.IsPassword,
+                VerticalSpacing =_formattedText.VerticalSpacing,
+                Width = _formattedText.Width
+            };
+        }
+
+        public override void Arrange()
 		{
 			base.Arrange();
 
@@ -225,4 +354,10 @@ namespace Myra.Graphics2D.UI
 			return stylesheet.TextBlockStyles.Keys.ToArray();
 		}
 	}
+
+    public enum AutoEllipsisMethod
+    {
+        Character,
+        Word
+    }
 }
