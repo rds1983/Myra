@@ -230,6 +230,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var width = availableSize.X;
+            var height = availableSize.Y;
 			if (Width != null && Width.Value < width)
 			{
 				width = Width.Value;
@@ -243,8 +244,8 @@ namespace Myra.Graphics2D.UI
 
             if(_autoEllipsis)
             {
-                _autoEllipsisText = ApplyAutoEllipsis(width);
-                result = _autoEllipsisText.Measure(null);
+                _autoEllipsisText = ApplyAutoEllipsis(width, height);
+                result = _autoEllipsisText.Measure(_wrap ? width : default(int?));
             }
 
             if (result.Y < CrossEngineStuff.LineSpacing(Font))
@@ -255,10 +256,13 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-        private FormattedText ApplyAutoEllipsis(int width)
+        private FormattedText ApplyAutoEllipsis(int width, int height)
         {
-            if (_formattedText.Measure(null).X <= width)
+            var unchangedMeasure = _formattedText.Measure(_wrap ? width : default(int?));
+            if (unchangedMeasure.X <= width && unchangedMeasure.Y <= height)
+            {
                 return _formattedText; // don't even need to do anything
+            }
 
             var origText = _formattedText.Text;
             var measureText = new FormattedText()
@@ -281,12 +285,12 @@ namespace Myra.Graphics2D.UI
                 center = left + ((right - left) / 2);
                 measureText.Text = $"{origText.Substring(0, center)}{AutoEllipsisString}";
 
-                var measure = measureText.Measure(null).X;
-                if(measure == width)
+                var measure = GetMeasure();
+                if (measure.X == width && measure.Y <= height)
                 {
                     break;
                 }
-                else if (measure > width)
+                else if (measure.X > width || measure.Y > height)
                 {
                     right = center - 1;
                 }
@@ -303,17 +307,24 @@ namespace Myra.Graphics2D.UI
                 // cut on spaces rather than in the middle of a word.
                 // preserve a space character before the ellipsis if there is
                 // enough room for it.
-
-                var closestSpace = origText.LastIndexOf(' ', center);
-
-                int subStrLength = closestSpace;
-                measureText.Text = origText.Substring(0, closestSpace + 1) + AutoEllipsisString;
-                if(measureText.Measure(null).X < width)
+                try
                 {
-                    subStrLength++;
+                    var closestSpace = origText.LastIndexOf(' ', center);
+                    if (closestSpace > 0)
+                    {
+                        int subStrLength = closestSpace;
+                        measureText.Text = origText.Substring(0, closestSpace + 1) + AutoEllipsisString;
+                        if (GetMeasure().X < width)
+                        {
+                            subStrLength++;
+                        }
+                        result = origText.Substring(0, subStrLength);
+                    }
                 }
-
-                result = origText.Substring(0, subStrLength);
+                catch (ArgumentOutOfRangeException)
+                {
+                    // do nothing
+                }
             }
 
             return new FormattedText()
@@ -324,6 +335,11 @@ namespace Myra.Graphics2D.UI
                 VerticalSpacing =_formattedText.VerticalSpacing,
                 Width = _formattedText.Width
             };
+
+            Point GetMeasure()
+            {
+                return measureText.Measure(_wrap ? width : default(int?));
+            }
         }
 
         public override void Arrange()
