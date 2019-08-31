@@ -22,12 +22,12 @@ namespace Myra.Graphics2D.UI
 		private readonly FormattedText _formattedText = new FormattedText();
 		private bool _wrap = false;
 
-        private FormattedText _autoEllipsisText;
-        private bool _autoEllipsis = false;
-        private string _autoEllipsisString = "...";
-        private AutoEllipsisMethod _autoEllipsisMethod;
+		private FormattedText _autoEllipsisText;
+		private bool _autoEllipsis = false;
+		private string _autoEllipsisString = "...";
+		private AutoEllipsisMethod _autoEllipsisMethod;
 
-        [EditCategory("Appearance")]
+		[EditCategory("Appearance")]
 		[DefaultValue(0)]
 		public int VerticalSpacing
 		{
@@ -93,52 +93,52 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-        /// <summary>
-        /// Replaces overflowing text with an ellipsis.
-        /// </summary>
-        [EditCategory("Appearance")]
-        [DefaultValue(false)]    
-        public bool AutoEllipsis
-        {
-            get => _autoEllipsis;
-            set
-            {
-                if (value == _autoEllipsis) return;
-                _autoEllipsis = value;
-                InvalidateMeasure();
-            }
-        }
+		/// <summary>
+		/// Replaces overflowing text with an ellipsis.
+		/// </summary>
+		[EditCategory("Appearance")]
+		[DefaultValue(false)]    
+		public bool AutoEllipsis
+		{
+			get => _autoEllipsis;
+			set
+			{
+				if (value == _autoEllipsis) return;
+				_autoEllipsis = value;
+				InvalidateMeasure();
+			}
+		}
 
-        /// <summary>
-        /// The string to use as ellipsis.
-        /// </summary>
-        [EditCategory("Appearance")]
-        [DefaultValue("...")]
-        public string AutoEllipsisString
-        {
-            get => _autoEllipsisString;
-            set
-            {
-                if (value == _autoEllipsisString) return;
-                _autoEllipsisString = value;
-                InvalidateMeasure();
-            }
-        }
+		/// <summary>
+		/// The string to use as ellipsis.
+		/// </summary>
+		[EditCategory("Appearance")]
+		[DefaultValue("...")]
+		public string AutoEllipsisString
+		{
+			get => _autoEllipsisString;
+			set
+			{
+				if (value == _autoEllipsisString) return;
+				_autoEllipsisString = value;
+				InvalidateMeasure();
+			}
+		}
 
-        [EditCategory("Appearance")]
-        [DefaultValue(AutoEllipsisMethod.Character)]
-        public AutoEllipsisMethod AutoEllipsisMethod
-        {
-            get => _autoEllipsisMethod;
-            set
-            {
-                if (value == _autoEllipsisMethod) return;
-                _autoEllipsisMethod = value;
-                InvalidateMeasure();
-            }
-        }
+		[EditCategory("Appearance")]
+		[DefaultValue(AutoEllipsisMethod.Character)]
+		public AutoEllipsisMethod AutoEllipsisMethod
+		{
+			get => _autoEllipsisMethod;
+			set
+			{
+				if (value == _autoEllipsisMethod) return;
+				_autoEllipsisMethod = value;
+				InvalidateMeasure();
+			}
+		}
 
-        [EditCategory("Appearance")]
+		[EditCategory("Appearance")]
 		public Color TextColor
 		{
 			get; set;
@@ -218,19 +218,19 @@ namespace Myra.Graphics2D.UI
 				color = OverTextColor.Value;
 			}
 
-            var textToDraw = _autoEllipsis ? _autoEllipsisText : _formattedText;
-            textToDraw.Draw(context.Batch, bounds.Location, context.View, color, context.Opacity);
+			var textToDraw = _autoEllipsis ? _autoEllipsisText : _formattedText;
+			textToDraw.Draw(context.Batch, bounds.Location, context.View, color, context.Opacity);
 		}
 
 		protected override Point InternalMeasure(Point availableSize)
 		{
-            if (Font == null)
+			if (Font == null)
 			{
 				return Point.Zero;
 			}
 
 			var width = availableSize.X;
-            var height = availableSize.Y;
+			var height = availableSize.Y;
 			if (Width != null && Width.Value < width)
 			{
 				width = Width.Value;
@@ -242,13 +242,13 @@ namespace Myra.Graphics2D.UI
 				result = _formattedText.Measure(_wrap ? width : default(int?));
 			}
 
-            if(_autoEllipsis)
-            {
-                _autoEllipsisText = ApplyAutoEllipsis(width, height);
-                result = _autoEllipsisText.Measure(_wrap ? width : default(int?));
-            }
+			if(_autoEllipsis)
+			{
+				_autoEllipsisText = ApplyAutoEllipsis(width, height);
+				result = _autoEllipsisText.Measure(_wrap ? width : default(int?));
+			}
 
-            if (result.Y < CrossEngineStuff.LineSpacing(Font))
+			if (result.Y < CrossEngineStuff.LineSpacing(Font))
 			{
 				result.Y = CrossEngineStuff.LineSpacing(Font);
 			}
@@ -256,93 +256,93 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-        private FormattedText ApplyAutoEllipsis(int width, int height)
-        {
-            var unchangedMeasure = _formattedText.Measure(_wrap ? width : default(int?));
-            if (unchangedMeasure.X <= width && unchangedMeasure.Y <= height)
-            {
-                return _formattedText; // don't even need to do anything
-            }
+		private FormattedText ApplyAutoEllipsis(int width, int height)
+		{
+			var unchangedMeasure = _formattedText.Measure(_wrap ? width : default(int?));
+			if (unchangedMeasure.X <= width && unchangedMeasure.Y <= height)
+			{
+				return _formattedText; // don't even need to do anything.
+			}
 
-            var origText = _formattedText.Text;
-            var measureText = new FormattedText()
-            {
-                Text = _formattedText.Text,
-                Font = _formattedText.Font,
-                IsPassword = _formattedText.IsPassword,
-                VerticalSpacing = _formattedText.VerticalSpacing,
-                Width = _formattedText.Width
-            };
-            string result;
+			var origText = _formattedText.Text;
+			var measureText = new FormattedText()
+			{
+				Text = _formattedText.Text,
+				Font = _formattedText.Font,
+				IsPassword = _formattedText.IsPassword,
+				VerticalSpacing = _formattedText.VerticalSpacing,
+				Width = _formattedText.Width
+			};
+			string result;
 
-            // find longest possible string using binary search
-            int left = 0;
-            int right = origText.Length;
-            int center = 0;
+			// find longest possible string using binary search
+			int left = 0;
+			int right = origText.Length;
+			int center = 0;
 
-            while (left <= right)
-            {
-                center = left + ((right - left) / 2);
-                measureText.Text = $"{origText.Substring(0, center)}{AutoEllipsisString}";
+			while (left <= right)
+			{
+				center = left + ((right - left) / 2);
+				measureText.Text = $"{origText.Substring(0, center)}{AutoEllipsisString}";
 
-                var measure = GetMeasure();
-                if (measure.X == width && measure.Y <= height)
-                {
-                    break;
-                }
-                else if (measure.X > width || measure.Y > height)
-                {
-                    right = center - 1;
-                }
-                else
-                {
-                    left = center + 1;
-                }
-            }
+				var measure = GetMeasure();
+				if (measure.X == width && measure.Y <= height)
+				{
+					break;
+				}
+				else if (measure.X > width || measure.Y > height)
+				{
+					right = center - 1;
+				}
+				else
+				{
+					left = center + 1;
+				}
+			}
 
-            result = origText.Substring(0, center);
+			result = origText.Substring(0, center);
 
-            if (AutoEllipsisMethod == AutoEllipsisMethod.Word)
-            {
-                // cut on spaces rather than in the middle of a word.
-                // preserve a space character before the ellipsis if there is
-                // enough room for it.
-                try
-                {
-                    var closestSpace = origText.LastIndexOf(' ', center);
-                    if (closestSpace > 0)
-                    {
-                        int subStrLength = closestSpace;
-                        measureText.Text = origText.Substring(0, closestSpace + 1) + AutoEllipsisString;
-                        if (GetMeasure().X < width)
-                        {
-                            subStrLength++;
-                        }
-                        result = origText.Substring(0, subStrLength);
-                    }
-                }
-                catch (ArgumentOutOfRangeException)
-                {
-                    // do nothing
-                }
-            }
+			if (AutoEllipsisMethod == AutoEllipsisMethod.Word)
+			{
+				// cut on spaces rather than in the middle of a word.
+				// preserve a space character before the ellipsis if there is
+				// enough room for it.
+				try
+				{
+					var closestSpace = origText.LastIndexOf(' ', center);
+					if (closestSpace > 0)
+					{
+						int subStrLength = closestSpace;
+						measureText.Text = origText.Substring(0, closestSpace + 1) + AutoEllipsisString;
+						if (GetMeasure().X < width)
+						{
+							subStrLength++;
+						}
+						result = origText.Substring(0, subStrLength);
+					}
+				}
+				catch (ArgumentOutOfRangeException)
+				{
+					// do nothing
+				}
+			}
 
-            return new FormattedText()
-            {
-                Text = result + AutoEllipsisString,
-                Font = _formattedText.Font,
-                IsPassword = _formattedText.IsPassword,
-                VerticalSpacing =_formattedText.VerticalSpacing,
-                Width = _formattedText.Width
-            };
+			return new FormattedText()
+			{
+				Text = result + AutoEllipsisString,
+				Font = _formattedText.Font,
+				IsPassword = _formattedText.IsPassword,
+				VerticalSpacing =_formattedText.VerticalSpacing,
+				Width = _formattedText.Width
+			};
 
-            Point GetMeasure()
-            {
-                return measureText.Measure(_wrap ? width : default(int?));
-            }
-        }
+			Point GetMeasure()
+			{
+				return measureText.Measure(_wrap ? width : default(int?));
+			}
+		}
 
-        public override void Arrange()
+		public override void Arrange()
 		{
 			base.Arrange();
 
@@ -371,9 +371,9 @@ namespace Myra.Graphics2D.UI
 		}
 	}
 
-    public enum AutoEllipsisMethod
-    {
-        Character,
-        Word
-    }
+	public enum AutoEllipsisMethod
+	{
+		Character,
+		Word
+	}
 }
