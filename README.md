@@ -14,7 +14,7 @@ Myra is UI Library for [MonoGame](http://www.monogame.net/), [FNA](https://githu
 
 ## Building From Source Code
 1. Clone this repo.
-2. `git submodule update --init --recursive--`
+2. `git submodule update --init --recursive`
 3. Open a solution from the "build" folder.
 
 ## Gallery
