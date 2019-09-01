@@ -12,7 +12,6 @@ using Myra.Graphics2D.UI.ColorPicker;
 using Myra.Graphics2D.UI.File;
 using Myra.Graphics2D.UI.Properties;
 using Myra.Graphics2D.UI.Styles;
-using Myra.MiniJSON;
 using MyraPad.UI;
 using Myra.Utility;
 using Myra;
@@ -22,6 +21,8 @@ using System.Threading;
 using System.Xml;
 using System.Text;
 using System.Xml.Linq;
+using MiniJSON;
+using SpriteFontPlus;
 
 namespace MyraPad
 {
@@ -926,14 +927,15 @@ namespace MyraPad
 					var fontPath = BuildPath(folder, pair.Value.ToString());
 
 					var fontData = File.ReadAllText(fontPath);
-					fonts[pair.Key] = SpriteFontHelper.LoadFromFnt(fontData,
+					fonts[pair.Key] = BMFontLoader.LoadText(fontData,
 						s =>
 						{
 							if (s.Contains("#"))
 							{
 								var parts = s.Split('#');
+								var region = textureAtlases[parts[0]][parts[1]];
 
-								return textureAtlases[parts[0]][parts[1]];
+								return new TextureWithOffset(region.Texture, region.Bounds.Location);
 							}
 
 							var imagePath = BuildPath(folder, s);
@@ -941,7 +943,7 @@ namespace MyraPad
 							{
 								var texture = Texture2D.FromStream(GraphicsDevice, stream);
 
-								return new TextureRegion(texture);
+								return new TextureWithOffset(texture);
 							}
 						});
 				}

@@ -1,3 +1,0 @@
-This Effect is used by the FNA VideoPlayer for optimized YUV->RGBA conversion.
-
-See "src/Media/Xiph/VideoPlayer.cs" for details.

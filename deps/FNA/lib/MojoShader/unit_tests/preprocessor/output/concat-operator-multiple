@@ -1,4 +1,0 @@
-/* This should produce "RIGHT" instead of "RI ## G ## HT" */
-#define x(a,b) a##G##b
-x(RI, HT)
-

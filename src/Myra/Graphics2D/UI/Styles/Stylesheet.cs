@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Myra.Graphics2D.TextureAtlases;
-using Myra.MiniJSON;
+using MiniJSON;
 
 #if !XENKO
 using Microsoft.Xna.Framework.Graphics;

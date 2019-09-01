@@ -1,3 +1,0 @@
-#define right(   x   ,   y   )       x    ##    y
-right(     RI   ,    GHT    )
-

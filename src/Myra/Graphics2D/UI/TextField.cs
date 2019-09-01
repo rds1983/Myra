@@ -1030,8 +1030,6 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			++x;
-
 			return new Point(x, y);
 		}
 

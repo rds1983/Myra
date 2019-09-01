@@ -56,6 +56,11 @@
   <ItemGroup Condition="$(DefineConstants.Contains('FNA'))">
     <ProjectReference Include="$(FNAProj)" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="..\..\deps\MiniJson\**\*.cs" LinkBase="ThirdParty\MiniJson" />
+    <Compile Include="..\..\deps\BMFontToSpriteFont\**\*.cs" LinkBase="ThirdParty\BMFontToSpriteFont" />
+  </ItemGroup>  
 
   <ItemGroup Condition="$(DefineConstants.Contains('XENKO'))">
     <PackageReference Include="Xenko.Engine" Version="3.1.0.1-beta01-0396" PrivateAssets="contentfiles;analyzers" />

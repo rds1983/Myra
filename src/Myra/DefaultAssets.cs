@@ -2,6 +2,7 @@
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
+using SpriteFontPlus;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -78,8 +79,10 @@ namespace Myra
 					return _font;
 				}
 
-				_font = SpriteFontHelper.LoadFromFnt(_assetResolver.ReadAsString(DefaultFontName),
-					s => UISpritesheet.Regions["default"]);
+				var region = UISpritesheet.Regions["default"];
+				_font = BMFontLoader.LoadText(
+					_assetResolver.ReadAsString(DefaultFontName),
+					s => new TextureWithOffset(region.Texture, region.Bounds.Location));
 
 				return _font;
 			}
@@ -94,9 +97,10 @@ namespace Myra
 					return _fontSmall;
 				}
 
-				_fontSmall = SpriteFontHelper.LoadFromFnt(
+				var region = UISpritesheet.Regions["font-small"];
+				_fontSmall = BMFontLoader.LoadText(
 					_assetResolver.ReadAsString(DefaultSmallFontName),
-					s => UISpritesheet.Regions["font-small"]);
+					s => new TextureWithOffset(region.Texture, region.Bounds.Location));
 
 				return _fontSmall;
 			}

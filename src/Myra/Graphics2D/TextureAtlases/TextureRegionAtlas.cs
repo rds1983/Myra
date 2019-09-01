@@ -1,6 +1,7 @@
 ﻿#if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MiniJSON;
 #else
 using Xenko.Core.Mathematics;
 using Xenko.Graphics;
@@ -8,7 +9,6 @@ using Texture2D = Xenko.Graphics.Texture;
 #endif
 
 using Myra.Graphics2D.UI.Styles;
-using Myra.MiniJSON;
 using System;
 using System.Collections.Generic;
 using System.IO;

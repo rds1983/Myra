@@ -1,5 +1,0 @@
-/* This should produce "RIGHT RIGHT" instead of "WRONG WRONG" (etc) */
-#define x(WRONG,ANDWRONG) WRONG ANDWRONG
-x(RIGHT,)
-x(,RIGHT)
-x(,)

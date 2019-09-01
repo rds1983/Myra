@@ -1,4 +1,0 @@
-/* This should produce "RIGHT" instead of "WRONG" */
-#define x(WRONG) WRONG
-x(RIGHT)
-

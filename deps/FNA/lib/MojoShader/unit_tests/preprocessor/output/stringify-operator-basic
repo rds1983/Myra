@@ -1,3 +1,0 @@
-// will output "RIGHT"
-#define x(z) #z
-x(RIGHT)
