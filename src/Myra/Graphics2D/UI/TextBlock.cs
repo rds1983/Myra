@@ -22,10 +22,9 @@ namespace Myra.Graphics2D.UI
 		private readonly FormattedText _formattedText = new FormattedText();
 		private bool _wrap = false;
 
-		private FormattedText _autoEllipsisText;
-		private bool _autoEllipsis = false;
+        private AutoEllipsisMethod _autoEllipsisMethod;
+        private FormattedText _autoEllipsisText;
 		private string _autoEllipsisString = "...";
-		private AutoEllipsisMethod _autoEllipsisMethod;
 
 		[EditCategory("Appearance")]
 		[DefaultValue(0)]
@@ -93,26 +92,28 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		/// <summary>
-		/// Replaces overflowing text with an ellipsis.
-		/// </summary>
-		[EditCategory("Appearance")]
-		[DefaultValue(false)]    
-		public bool AutoEllipsis
-		{
-			get => _autoEllipsis;
-			set
-			{
-				if (value == _autoEllipsis) return;
-				_autoEllipsis = value;
-				InvalidateMeasure();
-			}
-		}
 
-		/// <summary>
-		/// The string to use as ellipsis.
-		/// </summary>
-		[EditCategory("Appearance")]
+        /// <summary>
+        /// The method used to abbreviate overflowing text.
+        /// </summary>
+        [EditCategory("Appearance")]
+        [DefaultValue(AutoEllipsisMethod.Character)]
+        public AutoEllipsisMethod AutoEllipsisMethod
+        {
+            get => _autoEllipsisMethod;
+            set
+            {
+                if (value == _autoEllipsisMethod) return;
+                _autoEllipsisMethod = value;
+                InvalidateMeasure();
+            }
+        }
+
+
+        /// <summary>
+        /// The string to use as ellipsis.
+        /// </summary>
+        [EditCategory("Appearance")]
 		[DefaultValue("...")]
 		public string AutoEllipsisString
 		{
@@ -121,19 +122,6 @@ namespace Myra.Graphics2D.UI
 			{
 				if (value == _autoEllipsisString) return;
 				_autoEllipsisString = value;
-				InvalidateMeasure();
-			}
-		}
-
-		[EditCategory("Appearance")]
-		[DefaultValue(AutoEllipsisMethod.Character)]
-		public AutoEllipsisMethod AutoEllipsisMethod
-		{
-			get => _autoEllipsisMethod;
-			set
-			{
-				if (value == _autoEllipsisMethod) return;
-				_autoEllipsisMethod = value;
 				InvalidateMeasure();
 			}
 		}
@@ -218,7 +206,8 @@ namespace Myra.Graphics2D.UI
 				color = OverTextColor.Value;
 			}
 
-			var textToDraw = _autoEllipsis ? _autoEllipsisText : _formattedText;
+			var textToDraw = (_autoEllipsisMethod == AutoEllipsisMethod.None) 
+                ? _formattedText : _autoEllipsisText;
 			textToDraw.Draw(context.Batch, bounds.Location, context.View, color, context.Opacity);
 		}
 
@@ -242,7 +231,7 @@ namespace Myra.Graphics2D.UI
 				result = _formattedText.Measure(_wrap ? width : default(int?));
 			}
 
-			if(_autoEllipsis)
+			if((_autoEllipsisMethod != AutoEllipsisMethod.None))
 			{
 				_autoEllipsisText = ApplyAutoEllipsis(width, height);
 				result = _autoEllipsisText.Measure(_wrap ? width : default(int?));
@@ -373,7 +362,19 @@ namespace Myra.Graphics2D.UI
 
 	public enum AutoEllipsisMethod
 	{
+        /// <summary>
+        /// Autoellipsis is disabled.
+        /// </summary>
+        None,
+
+        /// <summary>
+        /// The text can be cut at any character.
+        /// </summary>
 		Character,
+
+        /// <summary>
+        /// The text will be cut at spaces.
+        /// </summary>
 		Word
 	}
 }
