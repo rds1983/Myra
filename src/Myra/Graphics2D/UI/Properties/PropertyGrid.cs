@@ -665,7 +665,6 @@ namespace Myra.Graphics2D.UI.Properties
 				{
 					if (!IgnoreCollections)
 					{
-
 						var it = propertyType.FindGenericType(typeof(ICollection<>));
 						if (it != null)
 						{

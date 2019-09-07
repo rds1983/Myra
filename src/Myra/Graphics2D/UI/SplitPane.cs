@@ -28,6 +28,7 @@ namespace Myra.Graphics2D.UI
 		public abstract Orientation Orientation { get; }
 
 		[HiddenInEditor]
+		[Content]
 		public ObservableCollection<Widget> Widgets
 		{
 			get { return _widgets; }

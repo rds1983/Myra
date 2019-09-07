@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 
+using Myra.Graphics2D;
+using Myra.Graphics2D.TextureAtlases;
+
 #if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,7 +15,7 @@ using Texture2D = Xenko.Graphics.Texture;
 using SurfaceFormat = Xenko.Graphics.PixelFormat;
 #endif
 
-namespace Myra.Graphics2D.TextureAtlases
+namespace Myra.Tools.ToMyraAtlasConverter
 {
 	public static class Gdx
 	{

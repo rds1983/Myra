@@ -20,17 +20,7 @@
   </PropertyGroup>  
 
   <ItemGroup>
-    <None Remove="Resources\commodore-64.fnt" />
-    <None Remove="Resources\ui_stylesheet.json" />
-    <None Remove="Resources\ui_stylesheet_atlas.json" />
-    <None Remove="Resources\ui_stylesheet_atlas.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\commodore-64.fnt" />
-    <EmbeddedResource Include="Resources\ui_stylesheet.json" />
-    <EmbeddedResource Include="Resources\ui_stylesheet_atlas.json" />
-    <EmbeddedResource Include="Resources\ui_stylesheet_atlas.png" />
+    <EmbeddedResource Include="Resources\**\*.*" />
   </ItemGroup>
 
   <ItemGroup Condition="$(DefineConstants.Contains('MONOGAME'))">

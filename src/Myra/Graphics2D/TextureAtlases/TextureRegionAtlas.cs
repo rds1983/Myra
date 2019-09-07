@@ -19,6 +19,14 @@ namespace Myra.Graphics2D.TextureAtlases
 	public partial class TextureRegionAtlas
 	{
 		private const string BoundsName = "bounds";
+		private const string LeftName = "left";
+		private const string RightName = "right";
+		private const string WidthName = "width";
+		private const string HeightName = "height";
+		private const string TopName = "top";
+		private const string BottomName = "bottom";
+		private const string TypeName = "type";
+		private const string PaddingName = "padding";
 
 		private readonly Dictionary<string, TextureRegion> _regions;
 
@@ -65,31 +73,31 @@ namespace Myra.Graphics2D.TextureAtlases
 
 				var jBounds = new Dictionary<string, object>
 				{
-					[StylesheetLoader.LeftName] = region.Bounds.X,
-					[StylesheetLoader.TopName] = region.Bounds.Y,
-					[StylesheetLoader.WidthName] = region.Bounds.Width,
-					[StylesheetLoader.HeightName] = region.Bounds.Height
+					[LeftName] = region.Bounds.X,
+					[TopName] = region.Bounds.Y,
+					[WidthName] = region.Bounds.Width,
+					[HeightName] = region.Bounds.Height
 				};
 
-				entry[StylesheetLoader.BoundsName] = jBounds;
+				entry[BoundsName] = jBounds;
 
 				var asNinePatch = region as NinePatchRegion;
 				if (asNinePatch == null)
 				{
-					entry[StylesheetLoader.TypeName] = "0";
+					entry[TypeName] = "0";
 				} else
 				{
-					entry[StylesheetLoader.TypeName] = "1";
+					entry[TypeName] = "1";
 
 					var jPadding = new Dictionary<string, object>
 					{
-						[StylesheetLoader.LeftName] = asNinePatch.Info.Left,
-						[StylesheetLoader.TopName] = asNinePatch.Info.Top,
-						[StylesheetLoader.RightName] = asNinePatch.Info.Right,
-						[StylesheetLoader.BottomName] = asNinePatch.Info.Bottom
+						[LeftName] = asNinePatch.Info.Left,
+						[TopName] = asNinePatch.Info.Top,
+						[RightName] = asNinePatch.Info.Right,
+						[BottomName] = asNinePatch.Info.Bottom
 					};
 
-					entry[StylesheetLoader.PaddingName] = jPadding;
+					entry[PaddingName] = jPadding;
 				}
 
 				root[pair.Key] = entry;
@@ -108,25 +116,25 @@ namespace Myra.Graphics2D.TextureAtlases
 			{
 				var entry = (Dictionary<string, object>)pair.Value;
 
-				var jBounds = (Dictionary<string, object>)entry[StylesheetLoader.BoundsName];
-				var bounds = new Rectangle(int.Parse(jBounds[StylesheetLoader.LeftName].ToString()),
-					int.Parse(jBounds[StylesheetLoader.TopName].ToString()),
-					int.Parse(jBounds[StylesheetLoader.WidthName].ToString()),
-					int.Parse(jBounds[StylesheetLoader.HeightName].ToString()));
+				var jBounds = (Dictionary<string, object>)entry[BoundsName];
+				var bounds = new Rectangle(int.Parse(jBounds[LeftName].ToString()),
+					int.Parse(jBounds[TopName].ToString()),
+					int.Parse(jBounds[WidthName].ToString()),
+					int.Parse(jBounds[HeightName].ToString()));
 
 				TextureRegion region;
-				if (entry[StylesheetLoader.TypeName].ToString() == "0")
+				if (entry[TypeName].ToString() == "0")
 				{
 					region = new TextureRegion(texture, bounds);
 				} else
 				{
-					var jPadding = (Dictionary<string, object>)entry[StylesheetLoader.PaddingName];
+					var jPadding = (Dictionary<string, object>)entry[PaddingName];
 					var padding = new PaddingInfo
 					{
-						Left = int.Parse(jPadding[StylesheetLoader.LeftName].ToString()),
-						Top = int.Parse(jPadding[StylesheetLoader.TopName].ToString()),
-						Right = int.Parse(jPadding[StylesheetLoader.RightName].ToString()),
-						Bottom = int.Parse(jPadding[StylesheetLoader.BottomName].ToString())
+						Left = int.Parse(jPadding[LeftName].ToString()),
+						Top = int.Parse(jPadding[TopName].ToString()),
+						Right = int.Parse(jPadding[RightName].ToString()),
+						Bottom = int.Parse(jPadding[BottomName].ToString())
 					};
 
 					region = new NinePatchRegion(texture, bounds, padding);

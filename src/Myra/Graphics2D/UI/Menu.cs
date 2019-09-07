@@ -48,6 +48,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
+		[Content]
 		public ObservableCollection<IMenuItem> Items
 		{
 			get { return _items; }

@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Stylesheet>
+  <Designer>
+    <TextureAtlas Atlas="ui_stylesheet_atlas.json" Image="ui_stylesheet_atlas.png" />
+    <Font Id="ui_font" File="ui_font.fnt" />
+  </Designer>
+  <TextBlockStyles>
+    <TextBlockStyle Font="ui_font" TextColor="white" DisabledTextColor="grey" />
+  </TextBlockStyles>
+  <TextFieldStyles>
+    <TextFieldStyle Background="textfield" TextColor="white" DisabledTextColor="grey" Font="ui_font" Cursor="cursor" Selection="selection" />
+  </TextFieldStyles>
+  <ScrollPaneStyles>
+    <ScrollPaneStyle Background="default-rect" HorizontalScrollBackground="default-scroll" HorizontalScrollKnob="default-round-large" VerticalScrollBackground="default-scroll" VerticalScrollKnob="default-round-large" />
+  </ScrollPaneStyles>
+  <ButtonStyles>
+    <ButtonStyle Background="default-round" PaddingLeft="5" PaddingRight="5" PressedBackground="default-round-down" />
+  </ButtonStyles>
+  <CheckBoxStyles>
+    <CheckBoxStyle>
+      <LabelStyle Font="ui_font" TextColor="white" />
+      <ImageStyle Image="check-off" PressedImage="check-on" />
+    </CheckBoxStyle>
+  </CheckBoxStyles>
+  <SpinButtonStyles>
+    <SpinButtonStyle Background="textfield">
+      <TextFieldStyle TextColor="white" DisabledTextColor="grey" Font="ui_font" Cursor="cursor" Selection="selection" />
+      <UpButtonStyle Background="default-round" PressedBackground="default-round-down">
+        <ImageStyle Image="tree-plus" />
+      </UpButtonStyle>
+      <DownButtonStyle Background="default-round" PressedBackground="default-round-down">
+        <ImageStyle Image="tree-minus" />
+      </DownButtonStyle>
+    </SpinButtonStyle>
+  </SpinButtonStyles>
+  <HorizontalSliderStyles>
+    <HorizontalSliderStyle Background="default-slider">
+      <KnobStyle>
+        <ImageStyle Image="default-slider-knob" />
+      </KnobStyle>
+    </HorizontalSliderStyle>
+  </HorizontalSliderStyles>
+  <VerticalSliderStyles>
+    <VerticalSliderStyle Background="default-slider">
+      <KnobStyle>
+        <ImageStyle Image="default-slider-knob" />
+      </KnobStyle>
+    </VerticalSliderStyle>
+  </VerticalSliderStyles>
+  <HorizontalProgressBarStyles>
+    <HorizontalProgressBarStyle Background="default-round" Filled="default-round-down" />
+  </HorizontalProgressBarStyles>
+  <VerticalProgressBarStyles>
+    <VerticalProgressBarStyle Background="default-round" Filled="default-round-down" />
+  </VerticalProgressBarStyles>
+  <ComboBoxStyles>
+    <ComboBoxStyle Background="default-select">
+      <LabelStyle Font="ui_font" TextColor="white" />
+      <ItemsContainerStyle Background="default-rect" />
+      <ListItemStyle PressedBackground="default-select-selection">
+        <LabelStyle Font="ui_font" TextColor="white" />
+      </ListItemStyle>
+    </ComboBoxStyle>
+  </ComboBoxStyles>
+  <ListBoxStyles>
+    <ListBoxStyle Background="default-rect">
+      <ListItemStyle PaddingLeft="5" PaddingRight="5" PressedBackground="default-select-selection">
+        <LabelStyle Font="ui_font" TextColor="white" DisabledTextColor="grey" />
+      </ListItemStyle>
+    </ListBoxStyle>
+  </ListBoxStyles>
+  <TreeStyles>
+    <TreeStyle>
+      <MarkStyle>
+        <ImageStyle Image="tree-plus" PressedImage="tree-minus" />
+      </MarkStyle>
+      <LabelStyle Font="ui_font" TextColor="white" DisabledTextColor="grey" />
+    </TreeStyle>
+  </TreeStyles>
+  <HorizontalSplitPaneStyles>
+    <HorizontalSplitPaneStyle>
+      <HandleStyle Background="default-splitpane" />
+    </HorizontalSplitPaneStyle>
+  </HorizontalSplitPaneStyles>
+  <VerticalSplitPaneStyles>
+    <VerticalSplitPaneStyle>
+      <HandleStyle Background="default-splitpane-vertical" />
+    </VerticalSplitPaneStyle>
+  </VerticalSplitPaneStyles>
+  <HorizontalMenuStyles>
+    <HorizontalMenuStyle Background="default-round">
+      <MenuItemStyle PaddingLeft="5" PaddingRight="5" PaddingBottom="2" PressedBackground="default-round-down">
+        <LabelStyle Font="ui_font" TextColor="white" DisabledTextColor="grey" />
+      </MenuItemStyle>
+      <SeparatorStyle Image="default-round" Thickness="3" />
+    </HorizontalMenuStyle>
+  </HorizontalMenuStyles>
+  <VerticalMenuStyles>
+    <VerticalMenuStyle Background="default-round">
+      <MenuItemStyle PaddingLeft="5" PaddingRight="5" PaddingTop="2" PaddingBottom="2" PressedBackground="default-round-down" IconWidth="22" ShortcutWidth="22">
+        <LabelStyle Font="ui_font" TextColor="white" DisabledTextColor="grey" />
+      </MenuItemStyle>
+      <SeparatorStyle PaddingTop="2" PaddingBottom="2" Image="default-round" Thickness="4" />
+    </VerticalMenuStyle>
+  </VerticalMenuStyles>
+  <WindowStyles>
+    <WindowStyle Background="default-window" PaddingLeft="2" PaddingRight="2">
+      <TitleStyle PaddingLeft="5" PaddingRight="5" Font="ui_font" TextColor="white" />
+      <CloseButtonStyle>
+        <ImageStyle Image="default-round" PressedImage="default-round-down" />
+      </CloseButtonStyle>
+    </WindowStyle>
+  </WindowStyles>
+</Stylesheet>

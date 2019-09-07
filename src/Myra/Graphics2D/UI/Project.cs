@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.Reflection;
-using System.Linq;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Linq;
-using System.Globalization;
 using System.Xml.Serialization;
 using System.Collections.Concurrent;
+using System;
+using Myra.MML;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -39,6 +37,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
+		[Content]
 		public Widget Root { get; set; }
 
 		[HiddenInEditor]
@@ -61,143 +60,47 @@ namespace Myra.Graphics2D.UI
 			Stylesheet = Stylesheet.Current;
 		}
 
+		internal static SaveContext CreateSaveContext(Stylesheet stylesheet)
+		{
+			return new SaveContext
+			{
+				ShouldSerializeProperty = (o, p) =>
+				{
+					return !SaveContext.HasDefaultValue(o, p) &&
+						(!(o is Widget) ||
+						!HasStylesheetValue((Widget)o, p, stylesheet));
+				}
+			};
+		}
+
+		internal SaveContext CreateSaveContext()
+		{
+			return CreateSaveContext(Stylesheet);
+		}
+
+		internal static LoadContext CreateLoadContext(Stylesheet stylesheet)
+		{
+			return new LoadContext
+			{
+				LegacyNames = LegacyNames,
+				ObjectCreator = t => CreateItem(t, stylesheet),
+				Namespace = typeof(Widget).Namespace
+			};
+		}
+
+		internal LoadContext CreateLoadContext()
+		{
+			return CreateLoadContext(Stylesheet);
+		}
+
 		public string Save()
 		{
-			var root = InternalSave(this);
+			var saveContext = CreateSaveContext();
+			var root = saveContext.Save(this);
 
 			var xDoc = new XDocument(root);
 
 			return xDoc.ToString();
-		}
-
-		private static readonly Type[] SerializableTypes = new Type[]
-		{
-			typeof(IItemWithId),
-			typeof(ExportOptions),
-			typeof(Grid.Proportion)
-		};
-
-		private static void ParseProperties(Type type, out List<PropertyInfo> complexProperties, out List<PropertyInfo> simpleProperties)
-		{
-			complexProperties = new List<PropertyInfo>();
-			simpleProperties = new List<PropertyInfo>();
-
-			var allProperties = type.GetRuntimeProperties();
-			foreach (var property in allProperties)
-			{
-				if (property.GetMethod == null ||
-					!property.GetMethod.IsPublic ||
-					property.GetMethod.IsStatic)
-				{
-					continue;
-				}
-
-				var attr = property.FindAttribute<XmlIgnoreAttribute>();
-				if (attr != null)
-				{
-					continue;
-				}
-
-				if ((from t in SerializableTypes where t.IsAssignableFrom(property.PropertyType) select t).FirstOrDefault() != null)
-				{
-					complexProperties.Add(property);
-				}
-				else
-				{
-					var propertyType = property.PropertyType;
-					if (typeof(IList).IsAssignableFrom(propertyType) && propertyType.IsGenericType &&
-						(from t in SerializableTypes where t.IsAssignableFrom(propertyType.GenericTypeArguments[0]) select t).FirstOrDefault() != null)
-					{
-						complexProperties.Add(property);
-					}
-					else
-					{
-						simpleProperties.Add(property);
-					}
-				}
-			}
-		}
-
-		private XElement InternalSave(object obj, bool skipComplex = false)
-		{
-			var type = obj.GetType();
-
-			List<PropertyInfo> complexProperties, simpleProperties;
-			ParseProperties(type, out complexProperties, out simpleProperties);
-
-			var el = new XElement(type.Name);
-
-			foreach (var property in simpleProperties)
-			{
-				if (!ShouldSerializeProperty(obj, property))
-				{
-					continue;
-				}
-
-				// Obsolete properties ignored only on save(and not ignored on load)
-				var attr = property.FindAttribute<ObsoleteAttribute>();
-				if (attr != null)
-				{
-					continue;
-				}
-
-				var value = property.GetValue(obj);
-				if (value != null)
-				{
-					string str;
-
-					if (property.PropertyType == typeof(Color?))
-					{
-						str = ((Color?)value).Value.ToHexString();
-					}
-					else
-					if (property.PropertyType == typeof(Color))
-					{
-						str = ((Color)value).ToHexString();
-					}
-					else
-					{
-						str = Convert.ToString(value, CultureInfo.InvariantCulture);
-					}
-
-					el.Add(new XAttribute(property.Name, str));
-				}
-			}
-
-			if (!skipComplex)
-			{
-				foreach (var property in complexProperties)
-				{
-					var value = property.GetValue(obj);
-
-					if (value == null)
-					{
-						continue;
-					}
-
-					var asList = value as IList;
-					if (asList == null)
-					{
-						el.Add(InternalSave(value));
-					}
-					else
-					{
-						var collectionRoot = el;
-						if (!typeof(IItemWithId).IsAssignableFrom(property.PropertyType.GenericTypeArguments[0]))
-						{
-							collectionRoot = new XElement(property.Name);
-							el.Add(collectionRoot);
-						}
-
-						foreach (var comp in asList)
-						{
-							collectionRoot.Add(InternalSave(comp));
-						}
-					}
-				}
-			}
-
-			return el;
 		}
 
 		public static Project LoadFromXml(XDocument xDoc, Stylesheet stylesheet)
@@ -206,7 +109,9 @@ namespace Myra.Graphics2D.UI
 			{
 				Stylesheet = stylesheet
 			};
-			InternalLoad(result, xDoc.Root, stylesheet);
+
+			var loadContext = result.CreateLoadContext();
+			loadContext.Load(result, xDoc.Root);
 
 			return result;
 		}
@@ -250,7 +155,8 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var item = CreateItem(itemType, stylesheet);
-			InternalLoad(item, xDoc.Root, stylesheet);
+			var loadContext = CreateLoadContext(stylesheet);
+			loadContext.Load(item, xDoc.Root);
 
 			return item;
 		}
@@ -262,7 +168,8 @@ namespace Myra.Graphics2D.UI
 
 		public string SaveObjectToXml(object obj)
 		{
-			return InternalSave(obj, true).ToString();
+			var saveContext = CreateSaveContext(Stylesheet);
+			return saveContext.Save(obj, true).ToString();
 		}
 
 		private static object CreateItem(Type type, Stylesheet stylesheet)
@@ -290,143 +197,7 @@ namespace Myra.Graphics2D.UI
 			return Activator.CreateInstance(type);
 		}
 
-		private static void InternalLoad(object obj, XElement el, Stylesheet stylesheet)
-		{
-			var type = obj.GetType();
-
-			List<PropertyInfo> complexProperties, simpleProperties;
-			ParseProperties(type, out complexProperties, out simpleProperties);
-
-			foreach (var attr in el.Attributes())
-			{
-				var property = (from p in simpleProperties where p.Name == attr.Name select p).FirstOrDefault();
-
-				if (property != null)
-				{
-					object value = null;
-
-					if (property.PropertyType.IsEnum)
-					{
-						value = Enum.Parse(property.PropertyType, attr.Value);
-					}
-					else if (property.PropertyType == typeof(Color) ||
-						property.PropertyType == typeof(Color?))
-					{
-						value = attr.Value.FromName();
-					}
-					else
-					{
-						var type2 = property.PropertyType;
-						if (property.PropertyType.IsNullablePrimitive())
-						{
-							type2 = property.PropertyType.GetNullableType();
-						}
-
-						value = Convert.ChangeType(attr.Value, type2, CultureInfo.InvariantCulture);
-					}
-					property.SetValue(obj, value);
-				}
-			}
-
-			var widgetNamespace = typeof(Widget).Namespace;
-			foreach (var child in el.Elements())
-			{
-				// Find property
-				var property = (from p in complexProperties where p.Name == child.Name select p).FirstOrDefault();
-				if (property != null)
-				{
-					if (property.SetMethod == null)
-					{
-						// Readonly property
-						var value = property.GetValue(obj);
-						var asCollection = value as IList;
-						if (asCollection != null)
-						{
-							foreach (var child2 in child.Elements())
-							{
-								var item = CreateItem(property.PropertyType.GenericTypeArguments[0], stylesheet);
-								InternalLoad(item, child2, stylesheet);
-								asCollection.Add(item);
-							}
-						}
-						else
-						{
-							InternalLoad(value, child, stylesheet);
-						}
-					}
-					else
-					{
-						var value = CreateItem(property.PropertyType, stylesheet);
-						InternalLoad(value, child, stylesheet);
-						property.SetValue(obj, value);
-					}
-				}
-				else
-				{
-					// Property not found
-					// Should be widget class name then
-					var widgetName = child.Name.ToString();
-					string newName;
-					if (LegacyNames.TryGetValue(widgetName, out newName))
-					{
-						widgetName = newName;
-					}
-
-					var itemType = typeof(Widget).Assembly.GetType(widgetNamespace + "." + widgetName);
-					if (itemType != null)
-					{
-						var item = (IItemWithId)CreateItem(itemType, stylesheet);
-						InternalLoad(item, child, stylesheet);
-
-						if (obj is ComboBox)
-						{
-							((ComboBox)obj).Items.Add((ListItem)item);
-						}
-						else
-						if (obj is ListBox)
-						{
-							((ListBox)obj).Items.Add((ListItem)item);
-						}
-						else
-						if (obj is TabControl)
-						{
-							((TabControl)obj).Items.Add((TabItem)item);
-						}
-						else
-						if (obj is MenuItem)
-						{
-							((MenuItem)obj).Items.Add((IMenuItem)item);
-						}
-						else if (obj is Menu)
-						{
-							((Menu)obj).Items.Add((IMenuItem)item);
-						}
-						else if (obj is IContent)
-						{
-							((IContent)obj).Content = (Widget)item;
-						}
-						else if (obj is MultipleItemsContainer)
-						{
-							((MultipleItemsContainer)obj).Widgets.Add((Widget)item);
-						}
-						else if (obj is SplitPane)
-						{
-							((SplitPane)obj).Widgets.Add((Widget)item);
-						}
-						else if (obj is Project)
-						{
-							((Project)obj).Root = (Widget)item;
-						}
-					}
-					else
-					{
-						throw new Exception(string.Format("Could not resolve tag '{0}'", widgetName));
-					}
-				}
-			}
-		}
-
-		public bool ShouldSerializeProperty(Object w, PropertyInfo property)
+		public bool ShouldSerializeProperty(object w, PropertyInfo property)
 		{
 			var value = property.GetValue(w);
 			if (property.HasDefaultValue(value))
@@ -435,7 +206,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var asWidget = w as Widget;
-			if (asWidget != null && HasStylesheetValue(asWidget, property))
+			if (asWidget != null && HasStylesheetValue(asWidget, property, Stylesheet))
 			{
 				return false;
 			}
@@ -443,9 +214,9 @@ namespace Myra.Graphics2D.UI
 			return true;
 		}
 
-		private bool HasStylesheetValue(Widget w, PropertyInfo property)
+		private static bool HasStylesheetValue(Widget w, PropertyInfo property, Stylesheet stylesheet)
 		{
-			if (Stylesheet == null)
+			if (stylesheet == null)
 			{
 				return false;
 			}
@@ -455,8 +226,6 @@ namespace Myra.Graphics2D.UI
 			{
 				styleName = Stylesheet.DefaultStyleName;
 			}
-
-			var stylesheet = Stylesheet;
 
 			// Find styles dict of that widget
 			var typeName = w.GetType().Name;

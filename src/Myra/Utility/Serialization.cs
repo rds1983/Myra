@@ -42,69 +42,6 @@ namespace Myra.Utility
 			return true;
 		}
 
-		public static bool GetStyle(this Dictionary<string, object> styles, string name, out int result)
-		{
-			result = 0;
-
-			string s;
-			if (!GetStyle(styles, name, out s))
-			{
-				return false;
-			}
-
-			double i;
-			if (!double.TryParse(s, out i))
-			{
-				return false;
-			}
-
-			result = (int)i;
-
-			return true;
-		}
-
-		public static bool GetStyle(this Dictionary<string, object> styles, string name, out bool result)
-		{
-			result = false;
-
-			string s;
-			if (!GetStyle(styles, name, out s))
-			{
-				return false;
-			}
-
-			bool i;
-			if (!bool.TryParse(s, out i))
-			{
-				return false;
-			}
-
-			result = i;
-
-			return true;
-		}
-
-		public static bool GetStyle(this Dictionary<string, object> styles, string name, out float result)
-		{
-			result = 0.0f;
-
-			string s;
-			if (!GetStyle(styles, name, out s))
-			{
-				return false;
-			}
-
-			float f;
-			if (!float.TryParse(s, out f))
-			{
-				return false;
-			}
-
-			result = f;
-
-			return true;
-		}
-
 		public static bool HasDefaultValue(this PropertyInfo property, object value)
 		{
 			var defaultAttribute = property.FindAttribute<DefaultValueAttribute>();

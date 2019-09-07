@@ -42,6 +42,9 @@ namespace Myra.Graphics2D.UI
 		private DateTime _lastTouch;
 		private MouseInfo _lastMouseInfo;
 		private IReadOnlyCollection<Keys> _downKeys, _lastDownKeys;
+		private Widget _previousKeyboardFocus;
+		private Widget _previousMouseWheelFocus;
+		private Widget _scheduleMouseWheelFocus;
 
 		public IReadOnlyCollection<Keys> DownKeys
 		{
@@ -408,8 +411,11 @@ namespace Myra.Graphics2D.UI
 
 				if (ContextMenu.AcceptsKeyboardFocus)
 				{
+					_previousKeyboardFocus = FocusedKeyboardWidget;
 					FocusedKeyboardWidget = ContextMenu;
 				}
+
+				_scheduleMouseWheelFocus = ContextMenu;
 			}
 		}
 
@@ -430,6 +436,18 @@ namespace Myra.Graphics2D.UI
 			}
 
 			ContextMenu = null;
+
+			if (_previousKeyboardFocus != null)
+			{
+				FocusedKeyboardWidget = _previousKeyboardFocus;
+				_previousKeyboardFocus = null;
+			}
+
+			if (_previousMouseWheelFocus != null)
+			{
+				FocusedMouseWheelWidget = _previousMouseWheelFocus;
+				_previousMouseWheelFocus = null;
+			}
 		}
 
 		private void WidgetsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
@@ -482,6 +500,17 @@ namespace Myra.Graphics2D.UI
 
 			UpdateInput();
 			UpdateLayout();
+
+			if (_scheduleMouseWheelFocus != null)
+			{
+				if (_scheduleMouseWheelFocus.AcceptsMouseWheelFocus)
+				{
+					_previousMouseWheelFocus = FocusedMouseWheelWidget;
+					FocusedMouseWheelWidget = _scheduleMouseWheelFocus;
+				}
+
+				_scheduleMouseWheelFocus = null;
+			}
 
 			EnsureRenderContext();
 

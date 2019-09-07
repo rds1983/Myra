@@ -77,6 +77,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
+		[Content]
 		public Widget Content
 		{
 			get; set;

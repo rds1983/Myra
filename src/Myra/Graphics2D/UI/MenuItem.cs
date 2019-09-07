@@ -20,6 +20,7 @@ namespace Myra.Graphics2D.UI
 		public Menu Menu { get; set; }
 
 		[HiddenInEditor]
+		[Content]
 		public ObservableCollection<IMenuItem> Items
 		{
 			get { return _items; }

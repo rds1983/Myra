@@ -21,7 +21,7 @@ namespace Myra
 	{
 		private const string DefaultFontName = "default_font.fnt";
 		private const string DefaultSmallFontName = "default_font_small.fnt";
-		private const string DefaultStylesheetName = "default_ui_skin.json";
+		private const string DefaultStylesheetName = "default_ui_skin.xml";
 		private const string DefaultAtlasName = "default_ui_skin_atlas.json";
 		private const string DefaultAtlasImageName = "default_ui_skin_atlas.png";
 
@@ -127,7 +127,8 @@ namespace Myra
 					return _uiStylesheet;
 				}
 
-				_uiStylesheet = Stylesheet.CreateFromSource(_assetResolver.ReadAsString(DefaultStylesheetName),
+				_uiStylesheet = Stylesheet.LoadFromSource(
+					_assetResolver.ReadAsString(DefaultStylesheetName),
 					s => string.IsNullOrEmpty(s) ? null : UISpritesheet.Regions[s],
 					f => f == "default-font" ? Font : FontSmall);
 

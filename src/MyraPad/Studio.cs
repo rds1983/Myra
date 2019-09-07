@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Graphics2D.Text;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.ColorPicker;
@@ -21,7 +20,6 @@ using System.Threading;
 using System.Xml;
 using System.Text;
 using System.Xml.Linq;
-using MiniJSON;
 using SpriteFontPlus;
 
 namespace MyraPad
@@ -529,7 +527,7 @@ namespace MyraPad
 							}
 							catch (Exception ex)
 							{
-								var dialog = Dialog.CreateMessageBox("Error", ex.ToString());
+								var dialog = Dialog.CreateMessageBox("Stylesheet Error", ex.ToString());
 								dialog.ShowModal(_desktop);
 							}
 						}
@@ -894,62 +892,60 @@ namespace MyraPad
 			}
 
 			var data = File.ReadAllText(path);
-			var root = (Dictionary<string, object>)Json.Deserialize(data);
+			var doc = XDocument.Parse(data);
+			var root = doc.Root;
 
-			var folder = Path.GetDirectoryName(path);
-
-			// Load texture atlases
 			var textureAtlases = new Dictionary<string, TextureRegionAtlas>();
-			Dictionary<string, object> textureAtlasesNode;
-			if (root.GetStyle("textureAtlases", out textureAtlasesNode))
-			{
-				foreach (var pair in textureAtlasesNode)
-				{
-					var atlasPath = BuildPath(folder, pair.Key.ToString());
-					var imagePath = BuildPath(folder, pair.Value.ToString());
-					using (var stream = File.OpenRead(imagePath))
-					{
-						var texture = Texture2D.FromStream(GraphicsDevice, stream);
+			var fonts = new Dictionary<string, SpriteFont>();
 
-						var atlasData = File.ReadAllText(atlasPath);
-						textureAtlases[pair.Key] = TextureRegionAtlas.FromJson(atlasData, texture);
+			var designer = root.Element("Designer");
+			if (designer != null)
+			{
+				var folder = Path.GetDirectoryName(path);
+
+				foreach(var element in designer.Elements())
+				{
+					if (element.Name == "TextureAtlas")
+					{
+						var atlasPath = BuildPath(folder, element.Attribute("Atlas").Value);
+						var imagePath = BuildPath(folder, element.Attribute("Image").Value);
+						using (var stream = File.OpenRead(imagePath))
+						{
+							var texture = Texture2D.FromStream(GraphicsDevice, stream);
+							var atlasData = File.ReadAllText(atlasPath);
+							textureAtlases[Path.GetFileName(atlasPath)] = TextureRegionAtlas.FromJson(atlasData, texture);
+						}
+					}
+					else if (element.Name == "Font")
+					{
+						var id = element.Attribute("Id").Value;
+						var fontPath = BuildPath(folder, element.Attribute("File").Value);
+
+						var fontData = File.ReadAllText(fontPath);
+						fonts[id] = BMFontLoader.LoadText(fontData,
+							s =>
+							{
+								if (s.Contains("#"))
+								{
+									var parts = s.Split('#');
+									var region = textureAtlases[parts[0]][parts[1]];
+
+									return new TextureWithOffset(region.Texture, region.Bounds.Location);
+								}
+
+								var imagePath = BuildPath(folder, s);
+								using (var stream = File.OpenRead(imagePath))
+								{
+									var texture = Texture2D.FromStream(GraphicsDevice, stream);
+
+									return new TextureWithOffset(texture);
+								}
+							});
 					}
 				}
 			}
 
-			// Load fonts
-			var fonts = new Dictionary<string, SpriteFont>();
-			Dictionary<string, object> fontsNode;
-			if (root.GetStyle("fonts", out fontsNode))
-			{
-				foreach (var pair in fontsNode)
-				{
-					var fontPath = BuildPath(folder, pair.Value.ToString());
-
-					var fontData = File.ReadAllText(fontPath);
-					fonts[pair.Key] = BMFontLoader.LoadText(fontData,
-						s =>
-						{
-							if (s.Contains("#"))
-							{
-								var parts = s.Split('#');
-								var region = textureAtlases[parts[0]][parts[1]];
-
-								return new TextureWithOffset(region.Texture, region.Bounds.Location);
-							}
-
-							var imagePath = BuildPath(folder, s);
-							using (var stream = File.OpenRead(imagePath))
-							{
-								var texture = Texture2D.FromStream(GraphicsDevice, stream);
-
-								return new TextureWithOffset(texture);
-							}
-						});
-				}
-			}
-
-			stylesheet = Stylesheet.CreateFromSource(data,
+			stylesheet = Stylesheet.LoadFromSource(data,
 				s =>
 				{
 					TextureRegion result;
@@ -1051,7 +1047,7 @@ namespace MyraPad
 			ResetStylesheetCache();
 			var dlg = new FileDialog(FileDialogMode.OpenFile)
 			{
-				Filter = "*.json"
+				Filter = "*.xml"
 			};
 
 			try
@@ -1086,7 +1082,16 @@ namespace MyraPad
 				var filePath = dlg.FilePath;
 
 				// Check whether stylesheet could be loaded
-				var stylesheet = StylesheetFromFile(filePath);
+				try
+				{
+					var stylesheet = StylesheetFromFile(filePath);
+				}
+				catch(Exception ex)
+				{
+					var msg = Dialog.CreateMessageBox("Stylesheet Error", ex.Message);
+					msg.ShowModal(_desktop);
+					return;
+				}
 
 				// Try to make stylesheet path relative to project folder
 				try

@@ -71,7 +71,7 @@ namespace Myra.Graphics2D.UI.File
 			_scrollPane.ShowHorizontalScrollBar = false;
 			_scrollPane.Id = "_scrollPane";
 			_scrollPane.GridColumn = 2;
-			_scrollPane.Child = _gridFiles;
+			_scrollPane.Content = _gridFiles;
 
 			_splitPane = new HorizontalSplitPane();
 			_splitPane.Id = "_splitPane";

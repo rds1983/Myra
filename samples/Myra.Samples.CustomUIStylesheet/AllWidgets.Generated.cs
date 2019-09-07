@@ -174,7 +174,7 @@ namespace Myra.Samples.CustomUIStylesheet
 			_gridRight.Widgets.Add(textBlock7);
 
 			var scrollPane1 = new ScrollPane();
-			scrollPane1.Child = _gridRight;
+			scrollPane1.Content = _gridRight;
 
 			var textBlock8 = new TextBlock();
 			textBlock8.Text = "Vertical Slider:";

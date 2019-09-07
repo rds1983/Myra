@@ -118,7 +118,7 @@ namespace MyraPad.UI
 
 			var scrollPane1 = new ScrollPane();
 			scrollPane1.GridRow = 2;
-			scrollPane1.Child = _textSource;
+			scrollPane1.Content = _textSource;
 
 			_leftSplitPane = new VerticalSplitPane();
 			_leftSplitPane.Id = "_leftSplitPane";
@@ -145,7 +145,7 @@ namespace MyraPad.UI
 			grid1.Widgets.Add(_textStatus);
 
 			_propertyGridPane = new ScrollPane();
-			_propertyGridPane.Child = null;
+			_propertyGridPane.Content = null;
 			_propertyGridPane.Id = "_propertyGridPane";
 
 			var horizontalSeparator2 = new HorizontalSeparator();

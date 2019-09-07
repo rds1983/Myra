@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Stylesheet>
+  <DesktopStyle Background="blue" />
+  <TextBlockStyles>
+    <TextBlockStyle Font="commodore-64" TextColor="white" />
+    <TextBlockStyle Id="optional" Font="commodore-64" />
+    <TextBlockStyle Id="error" Font="commodore-64" />
+    <TextBlockStyle Id="title" Font="commodore-64" />
+  </TextBlockStyles>
+  <TextFieldStyles>
+    <TextFieldStyle Background="white" TextColor="black" Font="commodore-64" Cursor="cursor-black" Selection="light-blue" />
+    <TextFieldStyle Id="nobg" Font="commodore-64" Cursor="cursor" Selection="white" />
+  </TextFieldStyles>
+  <ScrollPaneStyles>
+    <ScrollPaneStyle HorizontalScrollBackground="scroll-bar" HorizontalScrollKnob="scroll-bar-horizontal-knob" VerticalScrollBackground="scroll-bar" VerticalScrollKnob="scroll-bar-vertical-knob" />
+  </ScrollPaneStyles>
+  <ButtonStyles>
+    <ButtonStyle Background="button" PaddingLeft="8" PaddingRight="8" PaddingTop="5" PaddingBottom="5" PressedBackground="button-down" />
+  </ButtonStyles>
+  <CheckBoxStyles>
+    <CheckBoxStyle>
+      <LabelStyle Font="commodore-64" TextColor="white" />
+      <ImageStyle Image="check-box-off" PressedImage="check-box" />
+    </CheckBoxStyle>
+  </CheckBoxStyles>
+  <HorizontalSliderStyles>
+    <HorizontalSliderStyle Background="slider">
+      <KnobStyle>
+        <ImageStyle Image="slider-knob" />
+      </KnobStyle>
+    </HorizontalSliderStyle>
+  </HorizontalSliderStyles>
+  <VerticalSliderStyles>
+    <VerticalSliderStyle Background="slider">
+      <KnobStyle>
+        <ImageStyle Image="slider-knob" />
+      </KnobStyle>
+    </VerticalSliderStyle>
+  </VerticalSliderStyles>
+  <HorizontalProgressBarStyles>
+    <HorizontalProgressBarStyle Background="progress-bar" Filled="progress-bar-knob" />
+  </HorizontalProgressBarStyles>
+  <VerticalProgressBarStyles>
+    <VerticalProgressBarStyle Background="progress-bar" Filled="progress-bar-knob" />
+  </VerticalProgressBarStyles>
+  <ComboBoxStyles>
+    <ComboBoxStyle Background="list">
+      <LabelStyle Font="commodore-64" TextColor="white" />
+      <ItemsContainerStyle Background="blue" />
+      <ListItemStyle OverBackground="white" PaddingLeft="8" PaddingRight="8" PaddingTop="5" PaddingBottom="5" PressedBackground="button-down">
+        <LabelStyle Font="commodore-64" TextColor="white" OverTextColor="blue" PressedTextColor="blue" />
+      </ListItemStyle>
+    </ComboBoxStyle>
+  </ComboBoxStyles>
+  <ListBoxStyles>
+    <ListBoxStyle>
+      <ListItemStyle PressedBackground="white">
+        <LabelStyle Font="commodore-64" TextColor="white" PressedTextColor="blue" />
+      </ListItemStyle>
+    </ListBoxStyle>
+    <ListBoxStyle Id="dimmed">
+      <ListItemStyle PressedBackground="light-blue">
+        <LabelStyle Font="commodore-64" />
+      </ListItemStyle>
+    </ListBoxStyle>
+  </ListBoxStyles>
+  <TreeStyles>
+    <TreeStyle SelectionBackground="progress-bar">
+      <MarkStyle>
+        <ImageStyle Image="plus" PressedImage="minus" />
+      </MarkStyle>
+      <LabelStyle Font="commodore-64" TextColor="white" />
+    </TreeStyle>
+  </TreeStyles>
+  <HorizontalSplitPaneStyles>
+    <HorizontalSplitPaneStyle>
+      <HandleStyle Background="horizontal-split-pane" />
+    </HorizontalSplitPaneStyle>
+  </HorizontalSplitPaneStyles>
+  <VerticalSplitPaneStyles>
+    <VerticalSplitPaneStyle>
+      <HandleStyle Background="vertical-split-pane" />
+    </VerticalSplitPaneStyle>
+  </VerticalSplitPaneStyles>
+  <WindowStyles>
+    <WindowStyle Background="window" PaddingLeft="25" PaddingRight="25" PaddingTop="25" PaddingBottom="25">
+      <TitleStyle Font="commodore-64" TextColor="white" />
+    </WindowStyle>
+    <WindowStyle Id="dialog" Background="dialog">
+      <TitleStyle Font="commodore-64" />
+    </WindowStyle>
+    <WindowStyle Id="dialog-modal" Background="dialog">
+      <TitleStyle Font="commodore-64" />
+    </WindowStyle>
+  </WindowStyles>
+  <DialogStyles>
+    <DialogStyle Background="window" PaddingLeft="25" PaddingRight="25" PaddingTop="25" PaddingBottom="25">
+      <TitleStyle Font="commodore-64" TextColor="white" />
+    </DialogStyle>
+    <DialogStyle Id="dialog" Background="dialog">
+      <TitleStyle Font="commodore-64" />
+    </DialogStyle>
+    <DialogStyle Id="dialog-modal" Background="dialog">
+      <TitleStyle Font="commodore-64" />
+    </DialogStyle>
+  </DialogStyles>
+</Stylesheet>

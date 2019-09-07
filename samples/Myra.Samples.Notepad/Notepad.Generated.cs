@@ -80,9 +80,8 @@ namespace Myra.Samples.Notepad
 
 			var scrollPane1 = new ScrollPane();
 			scrollPane1.GridRow = 2;
-			scrollPane1.Child = textArea;
+			scrollPane1.Content = textArea;
 
-			
 			RowsProportions.Add(new Grid.Proportion());
 			RowsProportions.Add(new Grid.Proportion());
 			RowsProportions.Add(new Grid.Proportion

@@ -1,7 +1,7 @@
 <Project>
   <ExportOptions />
   <Panel>
-    <TabControl SelectedIndex="0" GridRow="1" Width="280" Height="260" HorizontalAlignment="Center" VerticalAlignment="Center">
+    <TabControl HorizontalAlignment="Center" VerticalAlignment="Center" Width="280" Height="260" GridRow="1">
       <TabItem Text="Character">
         <Grid ColumnSpacing="8" RowSpacing="8">
           <ColumnsProportions>
@@ -17,14 +17,14 @@
           <TextBlock Text="Name" />
           <TextField Text="" Width="200" GridColumn="1" />
           <TextBlock Text="Race" GridRow="1" />
-          <ComboBox SelectedIndex="0" Width="200" GridColumn="1" GridRow="1">
+          <ComboBox Width="200" GridColumn="1" GridRow="1">
             <ListItem Text="Human" />
             <ListItem Text="Dwarf" />
             <ListItem Text="Elf" />
             <ListItem Text="Hobbit" />
           </ComboBox>
           <TextBlock Text="Class" GridRow="2" />
-          <ComboBox SelectedIndex="0" Width="200" GridColumn="1" GridRow="2">
+          <ComboBox Width="200" GridColumn="1" GridRow="2">
             <ListItem Text="Warrior" />
             <ListItem Text="Mage" />
             <ListItem Text="Priest" />
@@ -75,11 +75,11 @@
             <Proportion />
           </RowsProportions>
           <TextBlock Text="You have 2 feats left to choose" />
-          <Button Text="Swordsman" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="1" />
-          <Button Text="Salesman" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="2" />
-          <Button Text="Trapsmith" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="3" />
-          <Button Text="Cunning" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="4" />
-          <Button Text="Empathy" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="5" />
+          <ImageTextButton Text="Swordsman" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="1" />
+          <ImageTextButton Text="Salesman" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="2" />
+          <ImageTextButton Text="Trapsmith" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="3" />
+          <ImageTextButton Text="Cunning" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="4" />
+          <ImageTextButton Text="Empathy" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="5" />
         </Grid>
       </TabItem>
     </TabControl>

@@ -138,7 +138,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
-		[XmlIgnore]
+		[Content]
 		public Widget Content
 		{
 			get
@@ -149,6 +149,22 @@ namespace Myra.Graphics2D.UI
 			{
 				base.InternalChild = value;
 				ResetScroll();
+			}
+		}
+
+		[HiddenInEditor]
+		[XmlIgnore]
+		[Obsolete("Use Content instead")]
+		public Widget Child
+		{
+			get
+			{
+				return Content;
+			}
+
+			set
+			{
+				Content = value;
 			}
 		}
 
@@ -238,27 +254,11 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return base.AcceptsMouseWheelFocus && _verticalScrollingOn;
+				return base.AcceptsMouseWheelFocus;
 			}
 			set
 			{
 				base.AcceptsMouseWheelFocus = value;
-			}
-		}
-
-		/// <summary>
-		/// Same as Widget. Used by the JSON serializer.
-		/// </summary>
-		[HiddenInEditor]
-		public Widget Child
-		{
-			get
-			{
-				return InternalChild;
-			}
-			set
-			{
-				InternalChild = value;
 			}
 		}
 

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Myra.Graphics2D.TextureAtlases;
-using MiniJSON;
+using System.Xml.Serialization;
+using System.Xml.Linq;
+using Myra.MML;
 
 #if !XENKO
 using Microsoft.Xna.Framework.Graphics;
@@ -43,30 +45,22 @@ namespace Myra.Graphics2D.UI.Styles
 		private readonly Dictionary<string, SpinButtonStyle> _spinButtonStyles = new Dictionary<string, SpinButtonStyle>();
 		private readonly Dictionary<string, SliderStyle> _horizontalSliderStyles = new Dictionary<string, SliderStyle>();
 		private readonly Dictionary<string, SliderStyle> _verticalSliderStyles = new Dictionary<string, SliderStyle>();
-
 		private readonly Dictionary<string, ProgressBarStyle> _horizontalProgressBarStyles =
 			new Dictionary<string, ProgressBarStyle>();
-
 		private readonly Dictionary<string, ProgressBarStyle> _verticalProgressBarStyles =
 			new Dictionary<string, ProgressBarStyle>();
-
 		private readonly Dictionary<string, SeparatorStyle> _horizontalSeparatorStyles =
 			new Dictionary<string, SeparatorStyle>();
-
 		private readonly Dictionary<string, SeparatorStyle> _verticalSeparatorStyles =
 			new Dictionary<string, SeparatorStyle>();
-
 		private readonly Dictionary<string, ComboBoxStyle> _comboBoxStyles = new Dictionary<string, ComboBoxStyle>();
 		private readonly Dictionary<string, ListBoxStyle> _listBoxStyles = new Dictionary<string, ListBoxStyle>();
 		private readonly Dictionary<string, TabControlStyle> _tabControlStyles = new Dictionary<string, TabControlStyle>();
 		private readonly Dictionary<string, TreeStyle> _treeStyles = new Dictionary<string, TreeStyle>();
-
 		private readonly Dictionary<string, SplitPaneStyle> _horizontalSplitPaneStyles =
 			new Dictionary<string, SplitPaneStyle>();
-
 		private readonly Dictionary<string, SplitPaneStyle> _verticalSplitPaneStyles =
 			new Dictionary<string, SplitPaneStyle>();
-
 		private readonly Dictionary<string, ScrollPaneStyle> _scrollPaneStyles = new Dictionary<string, ScrollPaneStyle>();
 		private readonly Dictionary<string, MenuStyle> _horizontalMenuStyles = new Dictionary<string, MenuStyle>();
 		private readonly Dictionary<string, MenuStyle> _verticalMenuStyles = new Dictionary<string, MenuStyle>();
@@ -78,6 +72,7 @@ namespace Myra.Graphics2D.UI.Styles
 			get; set;
 		}
 
+		[XmlIgnore]
 		public TextBlockStyle TextBlockStyle
 		{
 			get
@@ -90,6 +85,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		[XmlIgnore]
 		public TextFieldStyle TextFieldStyle
 		{
 			get
@@ -102,6 +98,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		[XmlIgnore]
 		public ButtonStyle ButtonStyle
 		{
 			get
@@ -114,6 +111,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		[XmlIgnore]
 		public ImageTextButtonStyle CheckBoxStyle
 		{
 			get
@@ -126,6 +124,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		[XmlIgnore]
 		public ImageTextButtonStyle RadioButtonStyle
 		{
 			get
@@ -138,6 +137,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		[XmlIgnore]
 		public SpinButtonStyle SpinButtonStyle
 		{
 			get
@@ -150,6 +150,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		[XmlIgnore]
 		public SliderStyle HorizontalSliderStyle
 		{
 			get
@@ -162,6 +163,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		[XmlIgnore]
 		public SliderStyle VerticalSliderStyle
 		{
 			get
@@ -174,6 +176,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		[XmlIgnore]
 		public ProgressBarStyle HorizontalProgressBarStyle
 		{
 			get
@@ -186,6 +189,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		[XmlIgnore]
 		public ProgressBarStyle VerticalProgressBarStyle
 		{
 			get
@@ -198,6 +202,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		[XmlIgnore]
 		public SeparatorStyle HorizontalSeparatorStyle
 		{
 			get
@@ -210,6 +215,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		[XmlIgnore]
 		public SeparatorStyle VerticalSeparatorStyle
 		{
 			get
@@ -222,6 +228,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		[XmlIgnore]
 		public ComboBoxStyle ComboBoxStyle
 		{
 			get
@@ -234,6 +241,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		[XmlIgnore]
 		public ListBoxStyle ListBoxStyle
 		{
 			get
@@ -246,6 +254,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		[XmlIgnore]
 		public TabControlStyle TabControlStyle
 		{
 			get
@@ -258,6 +267,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		[XmlIgnore]
 		public TreeStyle TreeStyle
 		{
 			get
@@ -270,6 +280,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		[XmlIgnore]
 		public SplitPaneStyle HorizontalSplitPaneStyle
 		{
 			get
@@ -282,6 +293,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		[XmlIgnore]
 		public SplitPaneStyle VerticalSplitPaneStyle
 		{
 			get
@@ -294,6 +306,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		[XmlIgnore]
 		public ScrollPaneStyle ScrollPaneStyle
 		{
 			get
@@ -306,6 +319,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		[XmlIgnore]
 		public MenuStyle HorizontalMenuStyle
 		{
 			get
@@ -318,6 +332,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		[XmlIgnore]
 		public MenuStyle VerticalMenuStyle
 		{
 			get
@@ -330,6 +345,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		[XmlIgnore]
 		public WindowStyle WindowStyle
 		{
 			get
@@ -342,6 +358,7 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
+		[XmlIgnore]
 		public DialogStyle DialogStyle
 		{
 			get
@@ -550,14 +567,25 @@ namespace Myra.Graphics2D.UI.Styles
 			styles[DefaultStyleName] = value;
 		}
 
-		public static Stylesheet CreateFromSource(string s,
+		public static Stylesheet LoadFromSource(string s,
 			Func<string, TextureRegion> textureGetter,
 			Func<string, SpriteFont> fontGetter)
 		{
-			var root = (Dictionary<string, object>)Json.Deserialize(s);
+			var xDoc = XDocument.Parse(s);
 
-			var loader = new StylesheetLoader(root, textureGetter, fontGetter);
-			return loader.Load();
+			var result = new Stylesheet();
+
+			var loadContext = new LoadContext
+			{
+				Namespace = typeof(WidgetStyle).Namespace,
+				TextureGetter = textureGetter,
+				FontGetter = fontGetter,
+				NodesToIgnore = new HashSet<string>(new[] { "Designer" })
+			};
+
+			loadContext.Load(result, xDoc.Root);
+
+			return result;
 		}
 	}
 }

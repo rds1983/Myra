@@ -2,6 +2,7 @@
 
 namespace Myra.Attributes
 {
+	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
 	public class StylePropertyPathAttribute : Attribute
 	{
 		private readonly string _name;

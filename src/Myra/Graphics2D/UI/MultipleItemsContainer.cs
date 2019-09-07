@@ -19,6 +19,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[HiddenInEditor]
+		[Content]
 		public virtual ObservableCollection<Widget> Widgets
 		{
 			get { return _widgets; }

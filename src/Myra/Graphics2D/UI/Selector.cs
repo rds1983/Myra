@@ -19,6 +19,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Data")]
+		[Content]
 		public ObservableCollection<ItemType> Items
 		{
 			get
