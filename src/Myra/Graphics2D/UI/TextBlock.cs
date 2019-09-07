@@ -22,7 +22,7 @@ namespace Myra.Graphics2D.UI
 		private readonly FormattedText _formattedText = new FormattedText();
 		private bool _wrap = false;
 
-		private AutoEllipsisMethod _autoEllipsisMethod;
+		private AutoEllipsisMethod _autoEllipsisMethod = AutoEllipsisMethod.None;
 		private FormattedText _autoEllipsisText;
 		private string _autoEllipsisString = "...";
 
@@ -96,7 +96,7 @@ namespace Myra.Graphics2D.UI
 		/// The method used to abbreviate overflowing text.
 		/// </summary>
 		[EditCategory("Appearance")]
-		[DefaultValue(AutoEllipsisMethod.Character)]
+		[DefaultValue(AutoEllipsisMethod.None)]
 		public AutoEllipsisMethod AutoEllipsisMethod
 		{
 			get => _autoEllipsisMethod;
