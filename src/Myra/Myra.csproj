@@ -26,28 +26,17 @@
     <OutputPath>bin\FNA\$(Configuration)</OutputPath>
   </PropertyGroup>
   
-    <PropertyGroup Condition="$(DefineConstants.Contains('XENKO'))">
+  <PropertyGroup Condition="$(DefineConstants.Contains('XENKO'))">
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>Myra.Xenko</PackageId>
     <OutputPath>bin\Xenko\$(Configuration)</OutputPath>
   </PropertyGroup>
 
-
   <ItemGroup>
-    <None Remove="Resources\default_font.fnt" />
-    <None Remove="Resources\default_font_small.fnt" />
-    <None Remove="Resources\default_ui_skin.json" />
-    <None Remove="Resources\default_ui_skin_atlas.json" />
-    <None Remove="Resources\default_ui_skin_atlas.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\default_font.fnt" />
-    <EmbeddedResource Include="Resources\default_font_small.fnt" />
-    <EmbeddedResource Include="Resources\default_ui_skin.json" />
-    <EmbeddedResource Include="Resources\default_ui_skin_atlas.json" />
-    <EmbeddedResource Include="Resources\default_ui_skin_atlas.png" />
-  </ItemGroup>
+    <EmbeddedResource Include="Resources\**\*.*" />
+    <Compile Include="..\..\deps\MiniJson\**\*.cs" LinkBase="ThirdParty\MiniJson" />
+    <Compile Include="..\..\deps\BMFontToSpriteFont\**\*.cs" LinkBase="ThirdParty\BMFontToSpriteFont" />
+  </ItemGroup>  
 
   <ItemGroup Condition="$(DefineConstants.Contains('MONOGAME'))">
     <PackageReference Include="MonoGame.Framework.Portable" PrivateAssets="All" Version="3.6.0.1625" />
@@ -57,11 +46,6 @@
     <ProjectReference Include="$(FNAProj)" />
   </ItemGroup>
   
-  <ItemGroup>
-    <Compile Include="..\..\deps\MiniJson\**\*.cs" LinkBase="ThirdParty\MiniJson" />
-    <Compile Include="..\..\deps\BMFontToSpriteFont\**\*.cs" LinkBase="ThirdParty\BMFontToSpriteFont" />
-  </ItemGroup>  
-
   <ItemGroup Condition="$(DefineConstants.Contains('XENKO'))">
     <PackageReference Include="Xenko.Engine" Version="3.1.0.1-beta01-0396" PrivateAssets="contentfiles;analyzers" />
     <PackageReference Include="Xenko.Core" Version="3.1.0.1-beta01-0396" PrivateAssets="contentfiles;analyzers" />

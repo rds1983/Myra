@@ -14,7 +14,7 @@ using SurfaceFormat = Xenko.Graphics.PixelFormat;
 
 namespace Myra.Graphics2D.TextureAtlases
 {
-	public partial class TextureRegionAtlas
+	public static class Gdx
 	{
 		private enum GDXMode
 		{
@@ -62,7 +62,7 @@ namespace Myra.Graphics2D.TextureAtlases
 		private static readonly Dictionary<string, TextureAddressMode> _gdxIdsToTextureWraps =
 			new Dictionary<string, TextureAddressMode>();
 
-		static TextureRegionAtlas()
+		static Gdx()
 		{
 			_gdxIdsToTextureWraps["MirroredRepeat"] = TextureAddressMode.Mirror;
 			_gdxIdsToTextureWraps["ClampToEdge"] = TextureAddressMode.Clamp;

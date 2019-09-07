@@ -1,13 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Graphics2D;
-using Myra.Graphics2D.Text;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
+using SpriteFontPlus;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Myra.Samples.CustomUIStylesheet
 {
@@ -50,9 +48,14 @@ namespace Myra.Samples.CustomUIStylesheet
 			var textureAtlas = TextureRegionAtlas.FromJson(assetResolver.ReadAsString("ui_stylesheet_atlas.json"), texture);
 
 			// Load ui font(s)
+			var region = textureAtlas["commodore-64"];
 			var fonts = new Dictionary<string, SpriteFont>
 			{
-				["commodore-64"] = SpriteFontHelper.LoadFromFnt(assetResolver.ReadAsString("commodore-64.fnt"), s => textureAtlas["commodore-64"]),
+				["commodore-64"] = 
+					BMFontLoader.LoadText(
+						assetResolver.ReadAsString("commodore-64.fnt"),
+						s => new TextureWithOffset(region.Texture, region.Bounds.Location)
+					)
 			};
 
 			// Load stylesheet

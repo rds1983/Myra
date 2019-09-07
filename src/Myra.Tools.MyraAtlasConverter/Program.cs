@@ -23,7 +23,7 @@ namespace Myra.Tools.ToMyraAtlasConverter
 				var outputFile = args[1];
 
 				var inputData = File.ReadAllText(inputFile);
-				var atlas = TextureRegionAtlas.FromGDX(inputData, s => new Texture2D(null, 1, 1));
+				var atlas = Gdx.FromGDX(inputData, s => new Texture2D(null, 1, 1));
 
 				var json = atlas.ToJson();
 				File.WriteAllText(outputFile, json);
