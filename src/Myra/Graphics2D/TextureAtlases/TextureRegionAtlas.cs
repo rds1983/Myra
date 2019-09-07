@@ -1,18 +1,14 @@
-﻿#if !XENKO
+﻿using System;
+using System.Collections.Generic;
+using MiniJSON;
+
+#if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MiniJSON;
 #else
 using Xenko.Core.Mathematics;
-using Xenko.Graphics;
 using Texture2D = Xenko.Graphics.Texture;
 #endif
-
-using Myra.Graphics2D.UI.Styles;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace Myra.Graphics2D.TextureAtlases
 {

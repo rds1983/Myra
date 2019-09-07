@@ -30,7 +30,6 @@ namespace Myra
 			"Myra.Resources.");
 
 #if XENKO
-		internal static FontSystem FontSystem = new FontSystem();
 		private static Image _uiImage;
 #endif
 
@@ -178,7 +177,7 @@ namespace Myra
 		static DefaultAssets()
 		{
 #if XENKO
-			FontSystem.Load(MyraEnvironment.GraphicsDevice, null);
+			BMFontLoader.GraphicsDevice = MyraEnvironment.GraphicsDevice;
 #endif
 		}
 

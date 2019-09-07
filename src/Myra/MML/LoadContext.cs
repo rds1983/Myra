@@ -1,18 +1,23 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Myra.Attributes;
+﻿using Myra.Attributes;
 using Myra.Graphics2D;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Utility;
 using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
+
+#if !XENKO
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+#else
+using Xenko.Core.Mathematics;
+using Xenko.Graphics;
+#endif
 
 namespace Myra.MML
 {

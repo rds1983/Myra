@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Myra.Attributes;
-using Myra.Graphics2D.UI;
+﻿using Myra.Attributes;
 using Myra.Utility;
 using System;
 using System.Collections;
@@ -8,6 +6,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Xml.Linq;
+
+#if !XENKO
+using Microsoft.Xna.Framework;
+#else
+using Xenko.Core.Mathematics;
+#endif
 
 namespace Myra.MML
 {

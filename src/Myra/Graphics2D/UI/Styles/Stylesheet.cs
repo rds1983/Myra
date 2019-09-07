@@ -5,11 +5,12 @@ using System.Xml.Serialization;
 using System.Xml.Linq;
 using Myra.MML;
 using Myra.Utility;
-using Microsoft.Xna.Framework;
 
 #if !XENKO
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 #else
+using Xenko.Core.Mathematics;
 using Xenko.Graphics;
 #endif
 
