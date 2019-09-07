@@ -8,8 +8,10 @@ using static Myra.Graphics2D.UI.Grid;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ListBox : Selector<Grid, ListItem>
+	public class ListBox : Selector<ScrollPane, ListItem>
 	{
+		private readonly Grid _grid;
+
 		[HiddenInEditor]
 		[XmlIgnore]
 		public ListBoxStyle ListBoxStyle
@@ -32,8 +34,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ListBox(ListBoxStyle style) : base(new Grid())
+		public ListBox(ListBoxStyle style) : base(new ScrollPane())
 		{
+			_grid = new Grid();
+			InternalChild.Content = _grid;
 			if (style != null)
 			{
 				ApplyListBoxStyle(style);
@@ -71,7 +75,7 @@ namespace Myra.Graphics2D.UI
 		{
 			for (var i = 0; i < Items.Count; ++i)
 			{
-				var widget = InternalChild.Widgets[i];
+				var widget = _grid.Widgets[i];
 				widget.GridRow = i;
 			}
 		}
@@ -102,8 +106,8 @@ namespace Myra.Graphics2D.UI
 				widget = new HorizontalSeparator(ListBoxStyle.SeparatorStyle);
 			}
 
-			InternalChild.RowsProportions.Insert(index, new Proportion(ProportionType.Auto));
-			InternalChild.Widgets.Insert(index, widget);
+			_grid.RowsProportions.Insert(index, new Proportion(ProportionType.Auto));
+			_grid.Widgets.Insert(index, widget);
 
 			item.Widget = widget;
 
@@ -114,9 +118,9 @@ namespace Myra.Graphics2D.UI
 		{
 			item.Changed -= ItemOnChanged;
 
-			var index = InternalChild.Widgets.IndexOf(item.Widget);
-			InternalChild.RowsProportions.RemoveAt(index);
-			InternalChild.Widgets.RemoveAt(index);
+			var index = _grid.Widgets.IndexOf(item.Widget);
+			_grid.RowsProportions.RemoveAt(index);
+			_grid.Widgets.RemoveAt(index);
 
 			if (SelectedItem == item)
 			{
@@ -128,9 +132,9 @@ namespace Myra.Graphics2D.UI
 
 		protected override void Reset()
 		{
-			while (InternalChild.Widgets.Count > 0)
+			while (_grid.Widgets.Count > 0)
 			{
-				RemoveItem((ListItem)InternalChild.Widgets[0].Tag);
+				RemoveItem((ListItem)_grid.Widgets[0].Tag);
 			}
 		}
 

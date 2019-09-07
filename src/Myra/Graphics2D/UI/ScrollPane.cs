@@ -238,7 +238,7 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return base.AcceptsMouseWheelFocus;
+				return base.AcceptsMouseWheelFocus && _verticalScrollingOn;
 			}
 			set
 			{
