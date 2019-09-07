@@ -352,7 +352,7 @@ namespace Myra.Graphics2D.UI
 			Widget focusedWidget = null;
 			ProcessWidgets(activeWidget, s =>
 			{
-				if (s.IsMouseOver && s.AcceptsKeyboardFocus)
+				if (s.Enabled && s.IsMouseOver && s.AcceptsKeyboardFocus)
 				{
 					focusedWidget = s;
 				}
@@ -362,7 +362,7 @@ namespace Myra.Graphics2D.UI
 			focusedWidget = null;
 			ProcessWidgets(activeWidget, s =>
 			{
-				if (s.IsMouseOver && s.AcceptsMouseWheelFocus)
+				if (s.Enabled && s.IsMouseOver && s.AcceptsMouseWheelFocus)
 				{
 					focusedWidget = s;
 				}

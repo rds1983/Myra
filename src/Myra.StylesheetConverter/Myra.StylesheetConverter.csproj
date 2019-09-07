@@ -15,7 +15,6 @@
   </ItemGroup>
   
   <ItemGroup Condition="$(DefineConstants.Contains('MONOGAME'))">
-    <PackageReference Include="MonoGame.Framework.Portable" PrivateAssets="All" Version="3.6.0.1625" />
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.7.1.189" />
   </ItemGroup>
-
 </Project>

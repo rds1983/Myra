@@ -5,9 +5,9 @@ using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using System.Collections.Concurrent;
 using System;
 using Myra.MML;
+using System.Collections.Generic;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -26,7 +26,7 @@ namespace Myra.Graphics2D.UI
 
 	public class Project
 	{
-		private static readonly ConcurrentDictionary<string, string> LegacyNames = new ConcurrentDictionary<string, string>();
+		private static readonly Dictionary<string, string> LegacyNames = new Dictionary<string, string>();
 
 		private readonly ExportOptions _exportOptions = new ExportOptions();
 

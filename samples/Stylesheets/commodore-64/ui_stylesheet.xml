@@ -4,6 +4,17 @@
     <TextureAtlas Atlas="ui_stylesheet_atlas.json" Image="ui_stylesheet_atlas.png" />
     <Font Id="commodore-64" File="commodore-64.fnt" />
   </Designer>
+  <Colors>
+    <Color Id="green" Value="#00FF00FF" />
+    <Color Id="light_grey" Value="#CCCCCCFF" />
+    <Color Id="white" Value="#FFFFFFFF" />
+    <Color Id="red" Value="#FF0000FF" />
+    <Color Id="light_blue" Value="#A5A5FFFF" />
+    <Color Id="grey" Value="#B2B2B2FF" />
+    <Color Id="dark_grey" Value="#666666FF" />
+    <Color Id="blue" Value="#4242E7FF" />
+    <Color Id="black" Value="#000000FF" />
+  </Colors>
   <DesktopStyle Background="blue" />
   <TextBlockStyles>
     <TextBlockStyle Font="commodore-64" TextColor="white" />

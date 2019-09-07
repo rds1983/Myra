@@ -4,6 +4,8 @@ using Myra.Graphics2D.TextureAtlases;
 using System.Xml.Serialization;
 using System.Xml.Linq;
 using Myra.MML;
+using Myra.Utility;
+using Microsoft.Xna.Framework;
 
 #if !XENKO
 using Microsoft.Xna.Framework.Graphics;
@@ -573,6 +575,20 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			var xDoc = XDocument.Parse(s);
 
+			var colors = new Dictionary<string, Color>();
+			var colorsNode = xDoc.Root.Element("Colors");
+			if (colorsNode != null)
+			{
+				foreach(var el in colorsNode.Elements())
+				{
+					var color = el.Attribute("Value").Value.FromName();
+					if (color != null)
+					{
+						colors[el.Attribute(BaseContext.IdName).Value] = color.Value;
+					}
+				}
+			}
+
 			var result = new Stylesheet();
 
 			var loadContext = new LoadContext
@@ -580,7 +596,8 @@ namespace Myra.Graphics2D.UI.Styles
 				Namespace = typeof(WidgetStyle).Namespace,
 				TextureGetter = textureGetter,
 				FontGetter = fontGetter,
-				NodesToIgnore = new HashSet<string>(new[] { "Designer" })
+				NodesToIgnore = new HashSet<string>(new[] { "Designer", "Colors" }),
+				Colors = colors
 			};
 
 			loadContext.Load(result, xDoc.Root);

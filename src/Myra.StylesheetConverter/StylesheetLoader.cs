@@ -724,6 +724,17 @@ namespace Myra.StylesheetConverter
 			if (_root.GetStyle(ColorsName, out colors))
 			{
 				ParseColors(colors);
+
+				var colorsNode = new XElement("Colors");
+				foreach(var pair in _colors)
+				{
+					var colorNode = new XElement("Color");
+					colorNode.SetAttributeValue("Id", pair.Key);
+					colorNode.SetAttributeValue("Value", pair.Value.ToHexString());
+					colorsNode.Add(colorNode);
+				}
+
+				root.Add(colorsNode);
 			}
 
 			var desktopStyle = LoadDesktopStyleFromSource();

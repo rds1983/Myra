@@ -4,6 +4,10 @@
     <TextureAtlas Atlas="ui_stylesheet_atlas.json" Image="ui_stylesheet_atlas.png" />
     <Font Id="ui_font" File="ui_font.fnt" />
   </Designer>
+  <Colors>
+    <Color Id="white" Value="#FFFFFFFF" />
+    <Color Id="grey" Value="#AAAAAAFF" />
+  </Colors>
   <TextBlockStyles>
     <TextBlockStyle Font="ui_font" TextColor="white" DisabledTextColor="grey" />
   </TextBlockStyles>

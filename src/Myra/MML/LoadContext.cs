@@ -18,7 +18,8 @@ namespace Myra.MML
 {
 	internal class LoadContext: BaseContext
 	{
-		public ConcurrentDictionary<string, string> LegacyNames = new ConcurrentDictionary<string, string>();
+		public Dictionary<string, string> LegacyNames = new Dictionary<string, string>();
+		public Dictionary<string, Color> Colors;
 		public HashSet<string> NodesToIgnore = null;
 		public Func<Type, object> ObjectCreator = (type) => Activator.CreateInstance(type);
 		public string Namespace;
@@ -46,10 +47,17 @@ namespace Myra.MML
 					{
 						value = Enum.Parse(propertyType, attr.Value);
 					}
-					else if (propertyType == typeof(Color) || 
-						propertyType == typeof(Color?))
+					else if (propertyType == typeof(Color) || propertyType == typeof(Color?))
 					{
-						value = attr.Value.FromName();
+						Color color;
+						if (Colors != null && Colors.TryGetValue(attr.Value, out color))
+						{
+							value = color;
+						}
+						else
+						{
+							value = attr.Value.FromName();
+						}
 					}
 					else if (propertyType == typeof(IRenderable) && TextureGetter != null)
 					{

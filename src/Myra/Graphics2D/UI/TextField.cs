@@ -598,6 +598,10 @@ namespace Myra.Graphics2D.UI
 		public override void OnKeyDown(Keys k)
 		{
 			base.OnKeyDown(k);
+			if (!Enabled)
+			{
+				return;
+			}
 
 			switch (k)
 			{
@@ -940,6 +944,11 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnChar(c);
 
+			if (!Enabled)
+			{
+				return;
+			}
+
 			if (!Readonly && !char.IsControl(c))
 			{
 				InputChar(c);
@@ -968,6 +977,11 @@ namespace Myra.Graphics2D.UI
 		public override void OnTouchDown()
 		{
 			base.OnTouchDown();
+
+			if (!Enabled)
+			{
+				return;
+			}
 
 			if (Length == 0)
 			{
@@ -1126,7 +1140,7 @@ namespace Myra.Graphics2D.UI
 				_lastBlinkStamp = now;
 			}
 
-			if (_cursorOn && Cursor != null)
+			if (Enabled && _cursorOn && Cursor != null)
 			{
 				p = GetRenderPositionByIndex(CursorPosition);
 				p.X -= _internalScrolling.X;
