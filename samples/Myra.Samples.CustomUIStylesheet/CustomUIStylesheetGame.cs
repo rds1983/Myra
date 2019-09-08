@@ -45,7 +45,7 @@ namespace Myra.Samples.CustomUIStylesheet
 			}
 
 			// Load ui text atlas
-			var textureAtlas = TextureRegionAtlas.FromJson(assetResolver.ReadAsString("ui_stylesheet_atlas.json"), texture);
+			var textureAtlas = TextureRegionAtlas.FromXml(assetResolver.ReadAsString("ui_stylesheet_atlas.xml"), texture);
 
 			// Load ui font(s)
 			var region = textureAtlas["commodore-64"];

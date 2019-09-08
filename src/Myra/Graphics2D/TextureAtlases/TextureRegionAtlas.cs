@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using MiniJSON;
+using System.Xml.Linq;
+using Myra.MML;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -14,15 +15,17 @@ namespace Myra.Graphics2D.TextureAtlases
 {
 	public partial class TextureRegionAtlas
 	{
-		private const string BoundsName = "bounds";
-		private const string LeftName = "left";
-		private const string RightName = "right";
-		private const string WidthName = "width";
-		private const string HeightName = "height";
-		private const string TopName = "top";
-		private const string BottomName = "bottom";
-		private const string TypeName = "type";
-		private const string PaddingName = "padding";
+		private const string TextureAtlasName = "TextureAtlas";
+		private const string TextureRegionName = "TextureRegion";
+		private const string NinePatchRegionName = "NinePatchRegion";
+		private const string LeftName = "Left";
+		private const string TopName = "Top";
+		private const string WidthName = "Width";
+		private const string HeightName = "Height";
+		private const string NinePatchLeftName = "NinePatchLeft";
+		private const string NinePatchTopName = "NinePatchTop";
+		private const string NinePatchRightName = "NinePatchRight";
+		private const string NinePatchBottomName = "NinePatchBottom";
 
 		private readonly Dictionary<string, TextureRegion> _regions;
 
@@ -57,86 +60,77 @@ namespace Myra.Graphics2D.TextureAtlases
 			return result;
 		}
 
-		public string ToJson()
+		public string ToXml()
 		{
-			var root = new Dictionary<string, object>();
+			var doc = new XDocument();
+			var root = new XElement(TextureAtlasName);
+			doc.Add(root);
 
 			foreach(var pair in _regions)
 			{
-				var entry = new Dictionary<string, object>();
-
 				var region = pair.Value;
-
-				var jBounds = new Dictionary<string, object>
-				{
-					[LeftName] = region.Bounds.X,
-					[TopName] = region.Bounds.Y,
-					[WidthName] = region.Bounds.Width,
-					[HeightName] = region.Bounds.Height
-				};
-
-				entry[BoundsName] = jBounds;
-
 				var asNinePatch = region as NinePatchRegion;
-				if (asNinePatch == null)
-				{
-					entry[TypeName] = "0";
-				} else
-				{
-					entry[TypeName] = "1";
 
-					var jPadding = new Dictionary<string, object>
-					{
-						[LeftName] = asNinePatch.Info.Left,
-						[TopName] = asNinePatch.Info.Top,
-						[RightName] = asNinePatch.Info.Right,
-						[BottomName] = asNinePatch.Info.Bottom
-					};
+				var entry = new XElement(asNinePatch != null ? NinePatchRegionName : TextureRegionName);
 
-					entry[PaddingName] = jPadding;
+				entry.SetAttributeValue(BaseContext.IdName, pair.Key);
+				entry.SetAttributeValue(LeftName, region.Bounds.Left);
+				entry.SetAttributeValue(TopName, region.Bounds.Top);
+				entry.SetAttributeValue(WidthName, region.Bounds.Width);
+				entry.SetAttributeValue(HeightName, region.Bounds.Height);
+
+				if (asNinePatch != null)
+				{
+					entry.SetAttributeValue(NinePatchLeftName, asNinePatch.Info.Left);
+					entry.SetAttributeValue(NinePatchTopName, asNinePatch.Info.Top);
+					entry.SetAttributeValue(NinePatchRightName, asNinePatch.Info.Right);
+					entry.SetAttributeValue(NinePatchBottomName, asNinePatch.Info.Bottom);
 				}
 
-				root[pair.Key] = entry;
+				root.Add(entry);
 			}
 
-			return Json.Serialize(root);
+			return doc.ToString();
 		}
 
-		public static TextureRegionAtlas FromJson(string json, Texture2D texture)
+		public static TextureRegionAtlas FromXml(string xml, Texture2D texture)
 		{
-			var root = (Dictionary<string, object>)Json.Deserialize(json);
+			var doc = XDocument.Parse(xml);
+			var root = doc.Root;
 
 			var regions = new Dictionary<string, TextureRegion>();
 
-			foreach(var pair in root)
+			foreach(XElement entry in root.Elements())
 			{
-				var entry = (Dictionary<string, object>)pair.Value;
+				var id = entry.Attribute(BaseContext.IdName).Value;
 
-				var jBounds = (Dictionary<string, object>)entry[BoundsName];
-				var bounds = new Rectangle(int.Parse(jBounds[LeftName].ToString()),
-					int.Parse(jBounds[TopName].ToString()),
-					int.Parse(jBounds[WidthName].ToString()),
-					int.Parse(jBounds[HeightName].ToString()));
+				var bounds = new Rectangle(
+					int.Parse(entry.Attribute(LeftName).Value),
+					int.Parse(entry.Attribute(TopName).Value),
+					int.Parse(entry.Attribute(WidthName).Value),
+					int.Parse(entry.Attribute(HeightName).Value)
+				);
+
+				var isNinePatch = entry.Name == NinePatchRegionName;
 
 				TextureRegion region;
-				if (entry[TypeName].ToString() == "0")
+				if (!isNinePatch)
 				{
 					region = new TextureRegion(texture, bounds);
 				} else
 				{
-					var jPadding = (Dictionary<string, object>)entry[PaddingName];
 					var padding = new PaddingInfo
 					{
-						Left = int.Parse(jPadding[LeftName].ToString()),
-						Top = int.Parse(jPadding[TopName].ToString()),
-						Right = int.Parse(jPadding[RightName].ToString()),
-						Bottom = int.Parse(jPadding[BottomName].ToString())
+						Left = int.Parse(entry.Attribute(NinePatchLeftName).Value),
+						Top = int.Parse(entry.Attribute(NinePatchTopName).Value),
+						Right = int.Parse(entry.Attribute(NinePatchRightName).Value),
+						Bottom = int.Parse(entry.Attribute(NinePatchBottomName).Value)
 					};
 
 					region = new NinePatchRegion(texture, bounds, padding);
 				}
 
-				regions[pair.Key.ToString()] = region;
+				regions[id] = region;
 			}
 
 			return new TextureRegionAtlas(regions);

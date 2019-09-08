@@ -22,7 +22,7 @@ namespace Myra
 		private const string DefaultFontName = "default_font.fnt";
 		private const string DefaultSmallFontName = "default_font_small.fnt";
 		private const string DefaultStylesheetName = "default_ui_skin.xml";
-		private const string DefaultAtlasName = "default_ui_skin_atlas.json";
+		private const string DefaultAtlasName = "default_ui_skin_atlas.xml";
 		private const string DefaultAtlasImageName = "default_ui_skin_atlas.png";
 
 		private static readonly ResourceAssetResolver _assetResolver = new ResourceAssetResolver(
@@ -111,7 +111,7 @@ namespace Myra
 			{
 				if (_uiSpritesheet != null) return _uiSpritesheet;
 
-				_uiSpritesheet = TextureRegionAtlas.FromJson(_assetResolver.ReadAsString(DefaultAtlasName), UIBitmap);
+				_uiSpritesheet = TextureRegionAtlas.FromXml(_assetResolver.ReadAsString(DefaultAtlasName), UIBitmap);
 
 				return _uiSpritesheet;
 			}

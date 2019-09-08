@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Stylesheet>
   <Designer>
-    <TextureAtlas Atlas="ui_stylesheet_atlas.json" Image="ui_stylesheet_atlas.png" />
+    <TextureAtlas Atlas="ui_stylesheet_atlas.xml" Image="ui_stylesheet_atlas.png" />
     <Font Id="ui_font" File="ui_font.fnt" />
   </Designer>
   <Colors>

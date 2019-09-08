@@ -4,6 +4,3 @@
 [submodule "deps/BMFontToSpriteFont"]
 	path = deps/BMFontToSpriteFont
 	url = https://github.com/rds1983/BMFontToSpriteFont.git
-[submodule "deps/MiniJson"]
-	path = deps/MiniJson
-	url = https://github.com/rds1983/MiniJson.git

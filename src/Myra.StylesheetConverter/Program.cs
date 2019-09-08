@@ -11,7 +11,7 @@ namespace Myra.StylesheetConverter
 			if (args.Length < 2)
 			{
 				Console.WriteLine("Myra.StylesheetConverter converts old json stylesheet to new xml stylesheet.");
-				Console.WriteLine("Usage: ToMyraAtlasConverter <input.json> <output.xml>");
+				Console.WriteLine("Usage: Myra.StylesheetConverter <input.json> <output.xml>");
 
 				return;
 			}

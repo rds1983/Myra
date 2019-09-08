@@ -19,11 +19,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.Notepad", "..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyraPad", "..\..\src\MyraPad\MyraPad.csproj", "{78E5B206-FC8A-42A3-A0DB-FB82D12183B6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Tools.ToMyraAtlasConverter", "..\..\src\Myra.Tools.MyraAtlasConverter\Myra.Tools.ToMyraAtlasConverter.csproj", "{0E975F74-0DE6-4D3C-A969-EE70A9E7D005}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{869736F8-E5A4-4A51-BC70-0433C6ACE5D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.StylesheetConverter", "..\..\src\Myra.StylesheetConverter\Myra.StylesheetConverter.csproj", "{A24DDA25-F639-4EE1-B71A-B97DDD647706}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.StylesheetConverter", "..\..\src\Myra.StylesheetConverter\Myra.StylesheetConverter.csproj", "{A24DDA25-F639-4EE1-B71A-B97DDD647706}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.TextureAtlasConverter", "..\..\src\Myra.TextureAtlasConverter\Myra.TextureAtlasConverter.csproj", "{77935B44-15AE-4A3E-8D2B-79CC947648A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,14 +59,14 @@ Global
 		{78E5B206-FC8A-42A3-A0DB-FB82D12183B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78E5B206-FC8A-42A3-A0DB-FB82D12183B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78E5B206-FC8A-42A3-A0DB-FB82D12183B6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0E975F74-0DE6-4D3C-A969-EE70A9E7D005}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0E975F74-0DE6-4D3C-A969-EE70A9E7D005}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0E975F74-0DE6-4D3C-A969-EE70A9E7D005}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0E975F74-0DE6-4D3C-A969-EE70A9E7D005}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A24DDA25-F639-4EE1-B71A-B97DDD647706}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A24DDA25-F639-4EE1-B71A-B97DDD647706}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A24DDA25-F639-4EE1-B71A-B97DDD647706}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A24DDA25-F639-4EE1-B71A-B97DDD647706}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77935B44-15AE-4A3E-8D2B-79CC947648A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77935B44-15AE-4A3E-8D2B-79CC947648A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77935B44-15AE-4A3E-8D2B-79CC947648A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77935B44-15AE-4A3E-8D2B-79CC947648A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,8 +78,8 @@ Global
 		{0F48899B-E533-423E-BAE4-FDD09A3A6698} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{C98D1921-8281-4FA4-B451-E648B59C23B5} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{78E5B206-FC8A-42A3-A0DB-FB82D12183B6} = {869736F8-E5A4-4A51-BC70-0433C6ACE5D4}
-		{0E975F74-0DE6-4D3C-A969-EE70A9E7D005} = {869736F8-E5A4-4A51-BC70-0433C6ACE5D4}
 		{A24DDA25-F639-4EE1-B71A-B97DDD647706} = {869736F8-E5A4-4A51-BC70-0433C6ACE5D4}
+		{77935B44-15AE-4A3E-8D2B-79CC947648A7} = {869736F8-E5A4-4A51-BC70-0433C6ACE5D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35ACDF4E-2CE2-46B1-A19F-35DC131069A1}
