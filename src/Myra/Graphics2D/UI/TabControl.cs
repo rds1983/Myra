@@ -134,8 +134,9 @@ namespace Myra.Graphics2D.UI
 
 			UpdateGridPositions();
 
-			if (index == SelectedIndex)
+			if (Items.Count == 1)
 			{
+				// Select first item
 				SelectedItem = item;
 			}
 		}
