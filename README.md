@@ -5,8 +5,8 @@ Myra is UI Library for [MonoGame](http://www.monogame.net/), [FNA](https://githu
 
 ## Features
 * **Rich Set of Widgets.** Myra has following widgets: Button, CheckBox, ComboBox, ListBox, TabControl, Grid, Image, Menu, ProgressBar, ScrollPane, SplitPane(with arbitrary number of splitters), Slider, TextBlock, TextField, SpinButton, Tree, Window, Dialog, FileDialog, ColorPickerDialog and PropertyGrid.
-* **Skinning.**  The default skin(it had been borrowed from [VisUI](https://github.com/kotcrab/vis-ui)) could be replaced with a custom skin loaded from the JSON.
 * **MML(Myra Markup Language).** XML based declarative language to describe UI ([example](/samples/Myra.Samples.AllWidgets/allControls.xml)).
+* **Skinning.**  The default skin(it had been borrowed from [VisUI](https://github.com/kotcrab/vis-ui)) could be replaced with a custom skin loaded from the XML ([example](/samples/Myra.Samples.CustomUIStylesheet/Resources/ui_stylesheet.xml).
 * **MyraPad.** Standalone WYSIWYG MML based UI designer.
 
 ## Documentation
