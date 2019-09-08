@@ -18,7 +18,7 @@ namespace Myra.Samples.AllWidgets
 		private readonly GraphicsDeviceManager _graphics;
 #endif
 
-		private Desktop _host;
+		private Desktop _desktop;
 		private AllWidgets _allWidgets;
 
 		public AllWidgetsGame()
@@ -42,11 +42,11 @@ namespace Myra.Samples.AllWidgets
 
 			MyraEnvironment.Game = this;
 
-			_host = new Desktop();
+			_desktop = new Desktop();
 
 			_allWidgets = new AllWidgets();
 
-			_host.Widgets.Add(_allWidgets);
+			_desktop.Widgets.Add(_allWidgets);
 
 			return base.LoadContent();
 		}
@@ -57,11 +57,11 @@ namespace Myra.Samples.AllWidgets
 
 			MyraEnvironment.Game = this;
 
-			_host = new Desktop();
+			_desktop = new Desktop();
 
 			_allWidgets = new AllWidgets();
 
-			_host.Widgets.Add(_allWidgets);
+			_desktop.Widgets.Add(_allWidgets);
 		}
 #endif
 
@@ -97,8 +97,6 @@ namespace Myra.Samples.AllWidgets
 				_graphics.ApplyChanges();
 			}
 
-			_host.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth,
-							GraphicsDevice.PresentationParameters.BackBufferHeight);
 #else
 			// Clear screen
 			GraphicsContext.CommandList.Clear(GraphicsDevice.Presenter.BackBuffer, Color.Black);
@@ -106,10 +104,8 @@ namespace Myra.Samples.AllWidgets
 
 			// Set render target
 			GraphicsContext.CommandList.SetRenderTargetAndViewport(GraphicsDevice.Presenter.DepthStencilBuffer, GraphicsDevice.Presenter.BackBuffer);
-
-			_host.Bounds = new Rectangle(0, 0, GraphicsDevice.Presenter.BackBuffer.ViewWidth, GraphicsDevice.Presenter.BackBuffer.ViewHeight);
 #endif
-			_host.Render();
+			_desktop.Render();
 		}
 	}
 }

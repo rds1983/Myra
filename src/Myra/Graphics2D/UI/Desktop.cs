@@ -31,6 +31,20 @@ namespace Myra.Graphics2D.UI
 	{
 		public const int DoubleClickIntervalInMs = 500;
 
+		public static Func<Rectangle> DefaultBoundsFetcher = () =>
+		{
+			var device = MyraEnvironment.GraphicsDevice;
+#if !XENKO
+			return new Rectangle(0, 0,
+				device.PresentationParameters.BackBufferWidth,
+				device.PresentationParameters.BackBufferHeight);
+#else
+			return new Rectangle(0, 0,
+				device.Presenter.BackBuffer.ViewWidth, 
+				device.Presenter.BackBuffer.ViewHeight);
+#endif
+		};
+
 		private RenderContext _renderContext;
 
 		private bool _layoutDirty = true;
@@ -97,19 +111,13 @@ namespace Myra.Graphics2D.UI
 			get { return _widgets; }
 		}
 
-		public Rectangle Bounds
+		public Func<Rectangle> BoundsFetcher = DefaultBoundsFetcher;
+
+		internal Rectangle InternalBounds
 		{
-			get { return _bounds; }
-
-			set
+			get
 			{
-				if (value == _bounds)
-				{
-					return;
-				}
-
-				_bounds = value;
-				InvalidateLayout();
+				return _bounds;
 			}
 		}
 
@@ -390,16 +398,16 @@ namespace Myra.Graphics2D.UI
 				ContextMenu.HorizontalAlignment = HorizontalAlignment.Left;
 				ContextMenu.VerticalAlignment = VerticalAlignment.Top;
 
-				var measure = ContextMenu.Measure(Bounds.Size());
+				var measure = ContextMenu.Measure(InternalBounds.Size());
 
-				if (position.X + measure.X > Bounds.Right)
+				if (position.X + measure.X > InternalBounds.Right)
 				{
-					position.X = Bounds.Right - measure.X;
+					position.X = InternalBounds.Right - measure.X;
 				}
 
-				if (position.Y + measure.Y > Bounds.Bottom)
+				if (position.Y + measure.Y > InternalBounds.Bottom)
 				{
-					position.Y = Bounds.Bottom - measure.Y;
+					position.Y = InternalBounds.Bottom - measure.Y;
 				}
 
 				ContextMenu.Left = position.X;
@@ -493,7 +501,16 @@ namespace Myra.Graphics2D.UI
 
 		public void Render()
 		{
-			if (Bounds.IsEmpty)
+			var newBounds = BoundsFetcher();
+
+			if (_bounds != newBounds)
+			{
+				InvalidateLayout();
+			}
+
+			_bounds = newBounds;
+
+			if (_bounds.IsEmpty)
 			{
 				return;
 			}
@@ -518,14 +535,14 @@ namespace Myra.Graphics2D.UI
 
 			_renderContext.Begin();
 
-			CrossEngineStuff.SetScissor(Bounds);
-			_renderContext.View = Bounds;
+			CrossEngineStuff.SetScissor(_bounds);
+			_renderContext.View = _bounds;
 			_renderContext.Opacity = Opacity;
 
 			if (Stylesheet.Current.DesktopStyle != null && 
 				Stylesheet.Current.DesktopStyle.Background != null)
 			{
-				_renderContext.Draw(Stylesheet.Current.DesktopStyle.Background, Bounds);
+				_renderContext.Draw(Stylesheet.Current.DesktopStyle.Background, _bounds);
 			}
 
 			foreach (var widget in ChildrenCopy)

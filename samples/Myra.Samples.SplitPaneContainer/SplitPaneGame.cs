@@ -11,7 +11,7 @@ namespace Myra.Samples.SplitPaneContainer
 
 		private const int Labels = 5;
 
-		private Desktop _host;
+		private Desktop _desktop;
 		private Grid _root;
 		private SplitPane _splitPane;
 
@@ -29,7 +29,7 @@ namespace Myra.Samples.SplitPaneContainer
 
 			MyraEnvironment.Game = this;
 
-			_host = new Desktop();
+			_desktop = new Desktop();
 			_root = new Grid();
 
 			// Top row is buttons
@@ -68,7 +68,7 @@ namespace Myra.Samples.SplitPaneContainer
 
 			RebuildSplitPane(Orientation.Horizontal);
 
-			_host.Widgets.Add(_root);
+			_desktop.Widgets.Add(_root);
 		}
 
 		private void RebuildSplitPane(Orientation orientation)
@@ -130,10 +130,7 @@ namespace Myra.Samples.SplitPaneContainer
 
 			GraphicsDevice.Clear(Color.Black);
 
-			_host.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth,
-				GraphicsDevice.PresentationParameters.BackBufferHeight);
-			_host.Render();
+			_desktop.Render();
 		}
-
 	}
 }

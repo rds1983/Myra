@@ -1375,9 +1375,6 @@ namespace MyraPad
 
 			GraphicsDevice.Clear(Color.Black);
 
-			_desktop.Bounds = new Rectangle(0, 0,
-				GraphicsDevice.PresentationParameters.BackBufferWidth,
-				GraphicsDevice.PresentationParameters.BackBufferHeight);
 			_desktop.Render();
 		}
 

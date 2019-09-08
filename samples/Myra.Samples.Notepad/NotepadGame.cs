@@ -275,8 +275,6 @@ namespace Myra.Samples.Notepad
 
 			GraphicsDevice.Clear(Color.Black);
 
-			_desktop.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth,
-				GraphicsDevice.PresentationParameters.BackBufferHeight);
 #else
 			// Clear screen
 			GraphicsContext.CommandList.Clear(GraphicsDevice.Presenter.BackBuffer, Color.Black);
@@ -284,8 +282,6 @@ namespace Myra.Samples.Notepad
 
 			// Set render target
 			GraphicsContext.CommandList.SetRenderTargetAndViewport(GraphicsDevice.Presenter.DepthStencilBuffer, GraphicsDevice.Presenter.BackBuffer);
-
-			_desktop.Bounds = new Rectangle(0, 0, GraphicsDevice.Presenter.BackBuffer.ViewWidth, GraphicsDevice.Presenter.BackBuffer.ViewHeight);
 #endif
 
 			_desktop.Render();

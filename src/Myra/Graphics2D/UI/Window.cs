@@ -302,9 +302,9 @@ namespace Myra.Graphics2D.UI
 			}
 			else if (Desktop != null)
 			{
-				if (position.X + Bounds.Width > Desktop.Bounds.Right)
+				if (position.X + Bounds.Width > Desktop.InternalBounds.Right)
 				{
-					position.X = Desktop.Bounds.Right - Bounds.Width;
+					position.X = Desktop.InternalBounds.Right - Bounds.Width;
 				}
 			}
 
@@ -322,9 +322,9 @@ namespace Myra.Graphics2D.UI
 			}
 			else if (Desktop != null)
 			{
-				if (position.Y + Bounds.Height > Desktop.Bounds.Bottom)
+				if (position.Y + Bounds.Height > Desktop.InternalBounds.Bottom)
 				{
-					position.Y = Desktop.Bounds.Bottom - Bounds.Height;
+					position.Y = Desktop.InternalBounds.Bottom - Bounds.Height;
 				}
 			}
 
