@@ -1,9 +1,13 @@
-﻿using System.Threading.Tasks;
-using Myra.Graphics2D.UI;
+﻿using Myra.Graphics2D.UI;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
+#if ANDROID
+using System;
+using Microsoft.Xna.Framework.GamerServices;
+#endif
 #else
+using System.Threading.Tasks;
 using Xenko.Engine;
 using Xenko.Games;
 using Xenko.Graphics;
@@ -62,6 +66,28 @@ namespace Myra.Samples.AllWidgets
 			_allWidgets = new AllWidgets();
 
 			_desktop.Widgets.Add(_allWidgets);
+
+#if ANDROID
+			_desktop.WidgetGotKeyboardFocus += (s, a) =>
+			{
+				var asTextField = a.Data as TextField;
+				if (asTextField == null)
+				{
+					return;
+				}
+
+				Guide.BeginShowKeyboardInput(PlayerIndex.One,
+					"Title",
+					"Description",
+					asTextField.Text,
+					new AsyncCallback(r =>
+					{
+						var text = Guide.EndShowKeyboardInput(r);
+						asTextField.Text = text;
+					}),
+					null);
+			};
+#endif
 		}
 #endif
 

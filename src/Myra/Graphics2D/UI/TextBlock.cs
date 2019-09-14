@@ -199,7 +199,7 @@ namespace Myra.Graphics2D.UI
 			{
 				color = PressedTextColor.Value;
 			}
-			else if (IsMouseOver && OverTextColor != null)
+			else if (UseHoverRenderable && OverTextColor != null)
 			{
 				color = OverTextColor.Value;
 			}

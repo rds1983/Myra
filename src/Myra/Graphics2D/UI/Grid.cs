@@ -1049,7 +1049,11 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnTouchDown();
 
-			UpdateHoverPosition(Desktop.TouchPosition);
+			if (Desktop != null)
+			{
+				UpdateHoverPosition(Desktop.TouchPosition);
+			}
+
 			if (HoverRowIndex != null)
 			{
 				SelectedRowIndex = HoverRowIndex;

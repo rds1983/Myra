@@ -33,8 +33,6 @@ namespace Myra.Graphics2D.UI
 		private VerticalAlignment _verticalAlignment = VerticalAlignment.Top;
 		private LayoutState _layoutState = LayoutState.Invalid;
 		private bool _measureDirty = true;
-		private bool _isMouseOver = false;
-		private bool _isTouchOver = false;
 
 		private Point _lastMeasureSize;
 		private Point _lastMeasureAvailableSize;
@@ -371,7 +369,7 @@ namespace Myra.Graphics2D.UI
 
 				_enabled = value;
 
-				EnabledChanged.Fire(this);
+				EnabledChanged.Invoke(this);
 			}
 		}
 
@@ -479,26 +477,25 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return _isMouseOver;
+				if (Desktop == null)
+				{
+					return false;
+				}
+
+				return Bounds.Contains(Desktop.MousePosition);
 			}
+		}
 
-			set
+		internal bool WasMouseOver
+		{
+			get
 			{
-				if (value == _isMouseOver)
+				if (Desktop == null)
 				{
-					return;
+					return false;
 				}
 
-				_isMouseOver = value;
-
-				if (value)
-				{
-					OnMouseEntered();
-				}
-				else
-				{
-					OnMouseLeft();
-				}
+				return Bounds.Contains(Desktop.LastMousePosition);
 			}
 		}
 
@@ -508,26 +505,25 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return _isTouchOver;
+				if (Desktop == null)
+				{
+					return false;
+				}
+
+				return Bounds.Contains(Desktop.TouchPosition);
 			}
+		}
 
-			set
+		internal bool WasTouchOver
+		{
+			get
 			{
-				if (value == _isTouchOver)
+				if (Desktop == null)
 				{
-					return;
+					return false;
 				}
 
-				_isTouchOver = value;
-
-				if (value)
-				{
-					OnTouchEntered();
-				}
-				else
-				{
-					OnTouchLeft();
-				}
+				return Bounds.Contains(Desktop.LastTouchPosition);
 			}
 		}
 
@@ -657,6 +653,14 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		protected virtual bool UseHoverRenderable
+		{
+			get
+			{
+				return IsMouseOver;
+			}
+		}
+
 		public event EventHandler VisibleChanged;
 		public event EventHandler MeasureChanged;
 		public event EventHandler EnabledChanged;
@@ -702,7 +706,7 @@ namespace Myra.Graphics2D.UI
 			{
 				result = FocusedBackground;
 			}
-			else if (Active && IsMouseOver && OverBackground != null)
+			else if (Active && UseHoverRenderable && OverBackground != null)
 			{
 				if (!Enabled && DisabledOverBackground != null)
 				{
@@ -728,7 +732,7 @@ namespace Myra.Graphics2D.UI
 			{
 				result = FocusedBorder;
 			}
-			else if (IsMouseOver && OverBorder != null)
+			else if (UseHoverRenderable && OverBorder != null)
 			{
 				result = OverBorder;
 			}
@@ -943,7 +947,7 @@ namespace Myra.Graphics2D.UI
 			_lastLocationHint = new Point(Left, Top);
 			_layoutState = LayoutState.Normal;
 
-			LayoutUpdated.Fire(this);
+			LayoutUpdated.Invoke(this);
 		}
 
 		private Widget FindWidgetBy(Func<Widget, bool> finder)
@@ -1003,7 +1007,7 @@ namespace Myra.Graphics2D.UI
 
 			InvalidateLayout();
 
-			MeasureChanged.Fire(this);
+			MeasureChanged.Invoke(this);
 		}
 
 		public void ApplyWidgetStyle(WidgetStyle style)
@@ -1057,74 +1061,67 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnMouseLeft()
 		{
-			MouseLeft.Fire(this);
+			MouseLeft.Invoke(this);
 		}
 
 		public virtual void OnMouseEntered()
 		{
-			MouseEntered.Fire(this);
+			MouseEntered.Invoke(this);
 		}
 
 		public virtual void OnMouseMoved()
 		{
-			MouseMoved.Fire(this);
+			MouseMoved.Invoke(this);
 		}
 
 		public virtual void OnMouseDown(MouseButtons mb)
 		{
-			MouseDown.Fire(this, mb);
+			MouseDown.Invoke(this, mb);
 		}
 
 		public virtual void OnMouseDoubleClick(MouseButtons mb)
 		{
-			MouseDoubleClick.Fire(this, mb);
+			MouseDoubleClick.Invoke(this, mb);
 		}
 
 		public virtual void OnMouseUp(MouseButtons mb)
 		{
-			MouseUp.Fire(this, mb);
-		}
-
-		protected void FireMouseWheelChanged(float delta)
-		{
-			MouseWheelChanged.Fire(this, delta);
+			MouseUp.Invoke(this, mb);
 		}
 
 		public virtual void OnMouseWheel(float delta)
 		{
-			// If there's scrollpane 
-
-			FireMouseWheelChanged(delta);
+			MouseWheelChanged.Invoke(this, delta);
 		}
 
 		public virtual void OnTouchLeft()
 		{
-			TouchLeft.Fire(this);
+			TouchLeft.Invoke(this);
 		}
 
 		public virtual void OnTouchEntered()
 		{
-			TouchEntered.Fire(this);
+			TouchEntered.Invoke(this);
 		}
 
 		public virtual void OnTouchMoved()
 		{
-			TouchMoved.Fire(this);
+			TouchMoved.Invoke(this);
 		}
 
 		public virtual void OnTouchDown()
 		{
-			TouchDown.Fire(this);
+			TouchDown.Invoke(this);
 		}
 
 		public virtual void OnTouchUp()
 		{
-			TouchUp.Fire(this);
+			TouchUp.Invoke(this);
 		}
 
 		protected void FireKeyDown(Keys k)
 		{
-			KeyDown.Fire(this, k);
+			KeyDown.Invoke(this, k);
 		}
 
 		public virtual void OnKeyDown(Keys k)
@@ -1134,20 +1131,18 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnKeyUp(Keys k)
 		{
-			KeyUp.Fire(this, k);
+			KeyUp.Invoke(this, k);
 		}
 
 		public virtual void OnChar(char c)
 		{
-			Char.Fire(this, c);
+			Char.Invoke(this, c);
 		}
 
 		public virtual void OnVisibleChanged()
 		{
-			// Visibility change can generate MouseEnter/MouseLeft events
-			HandleMouseMovement();
-
-			VisibleChanged.Fire(this);
+			InvalidateMeasure();
+			VisibleChanged.Invoke(this);
 		}
 
 		public virtual void OnLostKeyboardFocus()
@@ -1200,12 +1195,12 @@ namespace Myra.Graphics2D.UI
 
 		private void FireLocationChanged()
 		{
-			LocationChanged.Fire(this);
+			LocationChanged.Invoke(this);
 		}
 
 		private void FireSizeChanged()
 		{
-			SizeChanged.Fire(this);
+			SizeChanged.Invoke(this);
 		}
 
 		internal void HandleMouseDown(MouseButtons buttons)
@@ -1249,16 +1244,22 @@ namespace Myra.Graphics2D.UI
 
 		internal bool HandleMouseMovement()
 		{
-			var wasMouseOver = IsMouseOver;
+			var isMouseOver = IsMouseOver;
+			var wasMouseOver = WasMouseOver;
 
-			IsMouseOver = Visible && Desktop != null && Bounds.Contains(Desktop.MousePosition);
-			if (IsMouseOver)
+			if (isMouseOver && !wasMouseOver)
 			{
-				if (wasMouseOver)
-				{
-					// Already inside
-					OnMouseMoved();
-				}
+				OnMouseEntered();
+			}
+
+			if (!isMouseOver && wasMouseOver)
+			{
+				OnMouseLeft();
+			}
+
+			if (isMouseOver && wasMouseOver)
+			{
+				OnMouseMoved();
 			}
 
 			return IsMouseOver;
@@ -1292,16 +1293,22 @@ namespace Myra.Graphics2D.UI
 
 		internal bool HandleTouchMovement()
 		{
-			var wasTouchOver = IsTouchOver;
+			var isTouchOver = IsTouchOver;
+			var wasTouchOver = WasTouchOver;
 
-			IsTouchOver = Visible && Desktop != null && Bounds.Contains(Desktop.TouchPosition);
-			if (IsTouchOver)
+			if (isTouchOver && !wasTouchOver)
 			{
-				if (wasTouchOver)
-				{
-					// Already inside
-					OnTouchMoved();
-				}
+				OnTouchEntered();
+			}
+
+			if (!isTouchOver && wasTouchOver)
+			{
+				OnTouchLeft();
+			}
+
+			if (isTouchOver && wasTouchOver)
+			{
+				OnTouchMoved();
 			}
 
 			return IsTouchOver;

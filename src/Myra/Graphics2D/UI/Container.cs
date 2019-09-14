@@ -99,6 +99,11 @@ namespace Myra.Graphics2D.UI
 
 			foreach (var w in ChildrenCopy)
 			{
+				if (!w.Visible)
+				{
+					continue;
+				}
+
 				w.HandleMouseMovement();
 			}
 		}
@@ -114,7 +119,7 @@ namespace Myra.Graphics2D.UI
 					continue;
 				}
 
-				w.IsMouseOver = false;
+				w.HandleMouseMovement();
 			}
 		}
 
@@ -179,7 +184,7 @@ namespace Myra.Graphics2D.UI
 					continue;
 				}
 
-				w.IsTouchOver = false;
+				w.OnTouchLeft();
 			}
 		}
 

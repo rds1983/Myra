@@ -67,7 +67,12 @@ namespace Myra.Utility
 		public static Rectangle GetScissor()
 		{
 #if !XENKO
-			return MyraEnvironment.GraphicsDevice.ScissorRectangle;
+			var rect = MyraEnvironment.GraphicsDevice.ScissorRectangle;
+
+			rect.X -= MyraEnvironment.GraphicsDevice.Viewport.X;
+			rect.Y -= MyraEnvironment.GraphicsDevice.Viewport.Y;
+
+			return rect;
 #else
 			return MyraEnvironment.Game.GraphicsContext.CommandList.Scissor;
 #endif
@@ -76,6 +81,8 @@ namespace Myra.Utility
 		public static void SetScissor(Rectangle rect)
 		{
 #if !XENKO
+			rect.X += MyraEnvironment.GraphicsDevice.Viewport.X;
+			rect.Y += MyraEnvironment.GraphicsDevice.Viewport.Y;
 			MyraEnvironment.GraphicsDevice.ScissorRectangle = rect;
 #else
 			MyraEnvironment.Game.GraphicsContext.CommandList.SetScissorRectangle(rect);

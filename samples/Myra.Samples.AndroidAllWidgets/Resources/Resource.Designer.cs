@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("MGAndroidGame.Resource", IsApplication=true)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("Myra.Samples.AllWidgets.Resource", IsApplication=true)]
 
-namespace MGAndroidGame
+namespace Myra.Samples.AllWidgets
 {
 	
 	

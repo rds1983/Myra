@@ -4,6 +4,7 @@ using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
 using System.Linq;
+using Myra.Utility;
 
 #if !XENKO
 using Microsoft.Xna.Framework.Input;
@@ -64,10 +65,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		internal bool ReleaseOnTouchLeft
-		{
-			get; set;
-		}
+		internal bool ReleaseOnTouchLeft;
 
 		public override Desktop Desktop
 		{
@@ -93,14 +91,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		protected virtual bool CanChangePressedOnTouchUp
-		{
-			get
-			{
-				return true;
-			}
-		}
-
 		public event EventHandler Click;
 		public event EventHandler PressedChanged;
 
@@ -118,11 +108,7 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnPressedChanged()
 		{
-			var ev = PressedChanged;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
+			PressedChanged.Invoke(this);
 		}
 
 		public override void OnTouchLeft()
@@ -144,23 +130,12 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			if (CanChangePressedOnTouchUp)
+			if (!Toggleable)
 			{
-				if (!Toggleable)
-				{
-					IsPressed = false;
-				}
-				else
-				{
-					IsPressed = !IsPressed;
-				}
+				IsPressed = false;
 			}
 
-			var ev = Click;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
+			Click.Invoke(this);
 		}
 
 		public override void OnTouchDown()
@@ -176,6 +151,19 @@ namespace Myra.Graphics2D.UI
 			{
 				IsPressed = true;
 			}
+			else
+			{
+				var value = !IsPressed;
+				if (CanChangeToggleable(value))
+				{
+					IsPressed = value;
+				}
+			}
+		}
+
+		protected virtual bool CanChangeToggleable(bool value)
+		{
+			return true;
 		}
 
 		public override void OnKeyDown(Keys k)
@@ -206,7 +194,7 @@ namespace Myra.Graphics2D.UI
 				{
 					result = PressedBackground;
 				}
-				else if (Active && IsMouseOver && OverBackground != null)
+				else if (Active && UseHoverRenderable && OverBackground != null)
 				{
 					result = OverBackground;
 				}

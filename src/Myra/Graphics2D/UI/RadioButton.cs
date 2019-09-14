@@ -24,15 +24,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		protected override bool CanChangePressedOnTouchUp
-		{
-			get
-			{
-				// At least one radio button should be pressed
-				return !IsPressed;
-			}
-		}
-
 		public RadioButton(ImageTextButtonStyle bs) : base(bs)
 		{
 			Toggleable = true;
@@ -72,6 +63,11 @@ namespace Myra.Graphics2D.UI
 					asRadio.IsPressed = false;
 				}
 			}
+		}
+
+		protected override bool CanChangeToggleable(bool value)
+		{
+			return !IsPressed;
 		}
 
 		protected override void SetStyleByName(Stylesheet stylesheet, string name)

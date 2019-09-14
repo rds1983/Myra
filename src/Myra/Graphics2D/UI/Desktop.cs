@@ -66,8 +66,9 @@ namespace Myra.Graphics2D.UI
 		private Widget _scheduleMouseWheelFocus;
 		private bool _isTouchDown;
 		private Point _mousePosition, _touchPosition;
+		private Point _lastMousePosition, _lastTouchPosition;
 #if MONOGAME
-		private bool _hasTextInput;
+		public bool HasTextInput = false;
 #endif
 
 		public IReadOnlyCollection<Keys> DownKeys
@@ -75,6 +76,14 @@ namespace Myra.Graphics2D.UI
 			get
 			{
 				return _downKeys;
+			}
+		}
+
+		internal Point LastMousePosition
+		{
+			get
+			{
+				return _lastMousePosition;
 			}
 		}
 
@@ -92,8 +101,9 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
+				_lastMousePosition = _mousePosition;
 				_mousePosition = value;
-				MouseMoved.Fire(this);
+				MouseMoved.Invoke(this);
 
 				for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
 				{
@@ -115,6 +125,14 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		internal Point LastTouchPosition
+		{
+			get
+			{
+				return _lastTouchPosition;
+			}
+		}
+
 		public Point TouchPosition
 		{
 			get
@@ -129,9 +147,9 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
+				_lastTouchPosition = _touchPosition;
 				_touchPosition = value;
-
-				TouchMoved.Fire(this);
+				TouchMoved.Invoke(this);
 
 				for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
 				{
@@ -282,6 +300,18 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		internal bool IsAltDown
+		{
+			get
+			{
+#if !XENKO
+				return _downKeys.Contains(Keys.LeftAlt) || _downKeys.Contains(Keys.RightAlt);
+#else
+				return _downKeys.Contains(Keys.LeftAlt) || _downKeys.Contains(Keys.RightAlt);
+#endif
+			}
+		}
+
 		public bool IsTouchDown
 		{
 			get
@@ -302,7 +332,7 @@ namespace Myra.Graphics2D.UI
 				{
 					InputOnTouchDown();
 
-					TouchDown.Fire(this);
+					TouchDown.Invoke(this);
 					if (activeWidget != null)
 					{
 						activeWidget.HandleTouchDown();
@@ -310,7 +340,7 @@ namespace Myra.Graphics2D.UI
 				}
 				else
 				{
-					TouchUp.Fire(this);
+					TouchUp.Invoke(this);
 					if (activeWidget != null)
 					{
 						activeWidget.HandleTouchUp();
@@ -357,7 +387,6 @@ namespace Myra.Graphics2D.UI
 			{
 				OnChar(c);
 			};
-			_hasTextInput = true;
 #endif
 		}
 
@@ -524,7 +553,7 @@ namespace Myra.Graphics2D.UI
 			_widgets.Remove(ContextMenu);
 			ContextMenu.Visible = false;
 
-			ContextMenuClosed.Fire(this, ContextMenu);
+			ContextMenuClosed.Invoke(this, ContextMenu);
 			ContextMenu = null;
 
 			if (_previousKeyboardFocus != null)
@@ -667,7 +696,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			// Update Active
-			var activeWidget = GetActiveWidget();
+			var activeWidget = GetActiveWidget(false);
 			foreach (var w in _widgets)
 			{
 				var active = activeWidget == w;
@@ -710,12 +739,14 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		private Widget GetActiveWidget()
+		private Widget GetActiveWidget(bool containsTouch = true)
 		{
 			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
 			{
 				var w = ChildrenCopy[i];
-				if (w.Visible && w.Enabled)
+				if (w.Visible && w.Enabled &&
+					((containsTouch && w.Bounds.Contains(TouchPosition)) ||
+					!containsTouch))
 				{
 					return w;
 				}
@@ -734,13 +765,13 @@ namespace Myra.Graphics2D.UI
 
 			if (isDown && !wasDown)
 			{
-				MouseDown.Fire(this, buttons);
+				MouseDown.Invoke(this, buttons);
 				activeWidget.HandleMouseDown(buttons);
 				TouchPosition = MousePosition;
 				IsTouchDown = true;
 				if ((DateTime.Now - _lastMouseDown).TotalMilliseconds < DoubleClickIntervalInMs)
 				{
-					MouseDoubleClick.Fire(this, buttons);
+					MouseDoubleClick.Invoke(this, buttons);
 					activeWidget.HandleMouseDoubleClick(buttons);
 
 					_lastMouseDown = DateTime.MinValue;
@@ -752,7 +783,7 @@ namespace Myra.Graphics2D.UI
 			}
 			else if (!isDown && wasDown)
 			{
-				MouseUp.Fire(this, buttons);
+				MouseUp.Invoke(this, buttons);
 				activeWidget.HandleMouseUp(buttons);
 				IsTouchDown = false;
 			}
@@ -770,7 +801,8 @@ namespace Myra.Graphics2D.UI
 
 			if (touchState.Count > 0)
 			{
-				TouchPosition = touchState[0].Position.ToPoint();
+				var pos = touchState[0].Position;
+				TouchPosition = new Point((int)pos.X, (int)pos.Y);
 			}
 
 			if (touchState.Count > 0 && _oldTouchState.Count == 0)
@@ -821,7 +853,7 @@ namespace Myra.Graphics2D.UI
 #if !XENKO
 					delta -= _lastMouseInfo.Wheel;
 #endif
-					MouseWheelChanged.Fire(this, delta);
+					MouseWheelChanged.Invoke(this, delta);
 
 					if (FocusedMouseWheelWidget != null)
 					{
@@ -860,7 +892,7 @@ namespace Myra.Graphics2D.UI
 							if (!_downKeys.Contains(key))
 							{
 								// Key had been released
-								KeyUp.Fire(this, key);
+								KeyUp.Invoke(this, key);
 								if (_focusedKeyboardWidget != null)
 								{
 									_focusedKeyboardWidget.OnKeyUp(key);
@@ -880,7 +912,7 @@ namespace Myra.Graphics2D.UI
 
 		public void OnKeyDown(Keys key)
 		{
-			KeyDown.Fire(this, key);
+			KeyDown.Invoke(this, key);
 
 			if (MenuBar != null && MyraEnvironment.ShowUnderscores)
 			{
@@ -890,7 +922,7 @@ namespace Myra.Graphics2D.UI
 			{
 				// Small workaround: if key is escape  active widget is window
 				// Send it there
-				var asWindow = GetActiveWidget() as Window;
+				var asWindow = GetActiveWidget(false) as Window;
 				if (asWindow != null && key == Keys.Escape && _focusedKeyboardWidget != asWindow)
 				{
 					asWindow.OnKeyDown(key);
@@ -914,6 +946,25 @@ namespace Myra.Graphics2D.UI
 			if (key == Keys.Escape && ContextMenu != null)
 			{
 				HideContextMenu();
+			}
+
+#if MONOGAME
+			if (!HasTextInput && !IsControlDown && !IsAltDown)
+			{
+				var c = key.ToChar(IsShiftDown);
+				if (c != null)
+				{
+					OnChar(c.Value);
+				}
+			}
+#endif
+		}
+
+		public void OnChar(char c)
+		{
+			if (_focusedKeyboardWidget != null)
+			{
+				_focusedKeyboardWidget.OnChar(c);
 			}
 		}
 

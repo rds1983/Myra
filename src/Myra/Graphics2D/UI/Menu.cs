@@ -108,9 +108,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-
-		[HiddenInEditor]
-		[XmlIgnore]
 		public int? HoverIndex
 		{
 			get
@@ -119,7 +116,9 @@ namespace Myra.Graphics2D.UI
 
 				for (var i = 0; i < InternalChild.Widgets.Count; ++i)
 				{
-					if (InternalChild.Widgets[i].IsMouseOver)
+					var widget = InternalChild.Widgets[i];
+					if ((KeyboardHoverButton != null && KeyboardHoverButton == widget) ||
+						(KeyboardHoverButton == null && widget.IsMouseOver))
 					{
 						hoverIndex = i;
 						break;
@@ -128,34 +127,11 @@ namespace Myra.Graphics2D.UI
 
 				return hoverIndex;
 			}
-
-			set
-			{
-				var oldIndex = HoverIndex;
-				if (value == oldIndex)
-				{
-					return;
-				}
-
-				if (oldIndex != null)
-				{
-					var menuItemButton = InternalChild.Widgets[oldIndex.Value] as MenuItemButton;
-					if (menuItemButton != null)
-					{
-						menuItemButton.IsMouseOver = false;
-					}
-				}
-
-				if (value != null)
-				{
-					var menuItemButton = InternalChild.Widgets[value.Value] as MenuItemButton;
-					if (menuItemButton != null)
-					{
-						menuItemButton.IsMouseOver = true;
-					}
-				}
-			}
 		}
+
+		[HiddenInEditor]
+		[XmlIgnore]
+		internal MenuItemButton KeyboardHoverButton;
 
 		protected Menu(MenuStyle style)
 		{
@@ -378,7 +354,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			menuItem.SubMenu.HoverIndex = null;
+			menuItem.SubMenu.KeyboardHoverButton = null;
 			Desktop.ShowContextMenu(menuItem.SubMenu, new Point(menuItem.Bounds.X, Bounds.Bottom));
 			Desktop.ContextMenuClosed += DesktopOnContextMenuClosed;
 
@@ -473,7 +449,6 @@ namespace Myra.Graphics2D.UI
 			}
 			else
 			{
-				menuItemButton.IsMouseOver = true;
 				menuItemButton.IsPressed = true;
 			}
 		}
@@ -558,13 +533,34 @@ namespace Myra.Graphics2D.UI
 					break;
 				}
 
-
 				++iterations;
 			}
 
-			HoverIndex = hoverIndex;
+			var button = InternalChild.Widgets[hoverIndex] as MenuItemButton;
+			if (button != null)
+			{
+				KeyboardHoverButton = button;
+				if (button.CanOpen)
+				{
+					button.IsPressed = true;
+				}
+			}
 		}
-	
+
+		public override void OnVisibleChanged()
+		{
+			base.OnVisibleChanged();
+
+			KeyboardHoverButton = null;
+		}
+
+		public override void OnMouseMoved()
+		{
+			base.OnMouseMoved();
+
+			KeyboardHoverButton = null;
+		}
+
 		public void ApplyMenuStyle(MenuStyle style)
 		{
 			ApplyWidgetStyle(style);

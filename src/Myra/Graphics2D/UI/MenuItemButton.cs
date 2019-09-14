@@ -1,12 +1,12 @@
 ﻿using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
-using System;
 using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 #else
+using System;
 using Xenko.Core.Mathematics;
 using Xenko.Graphics;
 #endif
@@ -192,19 +192,16 @@ namespace Myra.Graphics2D.UI
 			_textBlock.IsPressed = IsPressed;
 		}
 
-		public override void OnMouseEntered()
+		protected override bool UseHoverRenderable
 		{
-			base.OnMouseEntered();
-
-			// Only one menu button can be hovered at time
-			foreach (var item in Menu.Items)
+			get
 			{
-				if (item.Widget == this)
+				if (Menu != null && Menu.KeyboardHoverButton != null)
 				{
-					continue;
+					return Menu.KeyboardHoverButton == this;
 				}
 
-				item.Widget.IsMouseOver = false;
+				return base.UseHoverRenderable;
 			}
 		}
 	}

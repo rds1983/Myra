@@ -99,7 +99,7 @@ namespace Myra.Graphics2D.UI
 					ImageTextSpacing = item.ImageTextSpacing
 				};
 
-				((ImageTextButton)widget).Click += ButtonOnClick;
+				((ImageTextButton)widget).PressedChanged += ButtonOnPressed;
 			}
 			else
 			{
@@ -138,11 +138,15 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void ButtonOnClick(object sender, EventArgs eventArgs)
+		private void ButtonOnPressed(object sender, EventArgs eventArgs)
 		{
 			var item = (ImageTextButton)sender;
-			var listItem = (ListItem)item.Tag;
+			if (!item.IsPressed)
+			{
+				return;
+			}
 
+			var listItem = (ListItem)item.Tag;
 			if (SelectionMode == SelectionMode.Single)
 			{
 				SelectedItem = listItem;

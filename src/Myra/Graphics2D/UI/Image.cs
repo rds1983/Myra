@@ -133,7 +133,7 @@ namespace Myra.Graphics2D.UI
 		{
 			var image = Renderable;
 
-			if (IsMouseOver && OverRenderable != null)
+			if (UseHoverRenderable && OverRenderable != null)
 			{
 				image = OverRenderable;
 			}
