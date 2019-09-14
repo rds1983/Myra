@@ -123,14 +123,14 @@ namespace Myra.Graphics2D.UI
 			{
 				if (Desktop != null)
 				{
-					Desktop.MouseMoved -= DesktopMouseMoved;
+					Desktop.TouchMoved -= DesktopTouchMoved;
 				}
 
 				base.Desktop = value;
 
 				if (Desktop != null)
 				{
-					Desktop.MouseMoved += DesktopMouseMoved;
+					Desktop.TouchMoved += DesktopTouchMoved;
 				}
 			}
 		}
@@ -149,7 +149,7 @@ namespace Myra.Graphics2D.UI
 		{
 			InternalChild = new ImageButton((ImageButtonStyle)null)
 			{
-				ReleaseOnMouseLeft = false
+				ReleaseOnTouchLeft = false
 			};
 
 			if (sliderStyle != null)
@@ -162,8 +162,8 @@ namespace Myra.Graphics2D.UI
 
 		private int GetHint()
 		{
-			return Orientation == Orientation.Horizontal ? Desktop.MousePosition.X - ActualBounds.X - InternalChild.ActualBounds.Width / 2 :
-				Desktop.MousePosition.Y - ActualBounds.Y - InternalChild.ActualBounds.Height / 2;
+			return Orientation == Orientation.Horizontal ? Desktop.TouchPosition.X - ActualBounds.X - InternalChild.ActualBounds.Width / 2 :
+				Desktop.TouchPosition.Y - ActualBounds.Y - InternalChild.ActualBounds.Height / 2;
 		}
 
 		public void ApplySliderStyle(SliderStyle style)
@@ -240,7 +240,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 
-		private void DesktopMouseMoved(object sender, EventArgs args)
+		private void DesktopTouchMoved(object sender, EventArgs args)
 		{
 			if (!InternalChild.IsPressed)
 			{

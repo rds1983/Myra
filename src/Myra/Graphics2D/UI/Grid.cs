@@ -1035,20 +1035,21 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnMouseEntered();
 
-			UpdateHoverPosition(MousePosition);
+			UpdateHoverPosition(Desktop.MousePosition);
 		}
 
 		public override void OnMouseMoved()
 		{
 			base.OnMouseMoved();
 
-			UpdateHoverPosition(MousePosition);
+			UpdateHoverPosition(Desktop.MousePosition);
 		}
 
 		public override void OnTouchDown()
 		{
 			base.OnTouchDown();
 
+			UpdateHoverPosition(Desktop.TouchPosition);
 			if (HoverRowIndex != null)
 			{
 				SelectedRowIndex = HoverRowIndex;

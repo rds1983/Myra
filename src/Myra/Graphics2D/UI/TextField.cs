@@ -958,7 +958,7 @@ namespace Myra.Graphics2D.UI
 		private void SetCursorByTouch()
 		{
 			var bounds = ActualBounds;
-			var mousePos = Desktop.MousePosition;
+			var mousePos = Desktop.TouchPosition;
 
 			mousePos.X -= bounds.X;
 			mousePos.Y -= bounds.Y;
@@ -996,19 +996,12 @@ namespace Myra.Graphics2D.UI
 		public override void OnTouchUp()
 		{
 			base.OnTouchUp();
-
 			_isTouchDown = false;
 		}
 
-		public override void OnMouseMoved()
+		public override void OnTouchMoved()
 		{
-			base.OnMouseMoved();
-
-			if (!_isTouchDown)
-			{
-				return;
-			}
-
+			base.OnTouchMoved();
 			SetCursorByTouch();
 		}
 

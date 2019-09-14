@@ -178,7 +178,7 @@ namespace Myra.Graphics2D.UI
 			{
 				if (Desktop != null)
 				{
-					Desktop.MouseMoved -= DesktopOnMouseMoved;
+					Desktop.TouchMoved -= DesktopOnTouchMoved;
 					Desktop.TouchUp -= DesktopTouchUp;
 				}
 
@@ -186,7 +186,7 @@ namespace Myra.Graphics2D.UI
 
 				if (Desktop != null)
 				{
-					Desktop.MouseMoved += DesktopOnMouseMoved;
+					Desktop.TouchMoved += DesktopOnTouchMoved;
 					Desktop.TouchUp += DesktopTouchUp;
 				}
 
@@ -278,15 +278,15 @@ namespace Myra.Graphics2D.UI
 			Top = (ContainerBounds.Height - size.Y) / 2;
 		}
 
-		private void DesktopOnMouseMoved(object sender, EventArgs args)
+		private void DesktopOnTouchMoved(object sender, EventArgs args)
 		{
 			if (_startPos == null)
 			{
 				return;
 			}
 
-			var position = new Point(Desktop.MousePosition.X - _startPos.Value.X,
-				Desktop.MousePosition.Y - _startPos.Value.Y);
+			var position = new Point(Desktop.TouchPosition.X - _startPos.Value.X,
+				Desktop.TouchPosition.Y - _startPos.Value.Y);
 
 			if (position.X < 0)
 			{
@@ -353,11 +353,11 @@ namespace Myra.Graphics2D.UI
 			var bounds = new Rectangle(x, y,
 				_titleGrid.Bounds.Right - x,
 				_titleGrid.Bounds.Bottom - y);
-			var mousePos = Desktop.MousePosition;
-			if (bounds.Contains(mousePos))
+			var touchPos = Desktop.TouchPosition;
+			if (bounds.Contains(touchPos))
 			{
-				_startPos = new Point(mousePos.X - ActualBounds.Location.X,
-					mousePos.Y - ActualBounds.Location.Y);
+				_startPos = new Point(touchPos.X - ActualBounds.Location.X,
+					touchPos.Y - ActualBounds.Location.Y);
 			}
 		}
 

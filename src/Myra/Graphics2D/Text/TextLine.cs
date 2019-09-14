@@ -4,7 +4,6 @@ using System;
 #if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Utility;
 #else
 using Xenko.Core.Mathematics;
 using Xenko.Graphics;

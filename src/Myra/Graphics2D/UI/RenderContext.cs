@@ -17,7 +17,7 @@ namespace Myra.Graphics2D.UI
 			SpriteSortMode = SpriteSortMode.Deferred,
 #if !XENKO
 			RasterizerState = DefaultAssets.UIRasterizerState,
-			BlendState = BlendState.AlphaBlend,
+			BlendState = BlendState.NonPremultiplied,
 			SamplerState = SamplerState.PointClamp,
 			DepthStencilState = null
 #else

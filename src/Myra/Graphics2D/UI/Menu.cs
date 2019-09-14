@@ -388,7 +388,7 @@ namespace Myra.Graphics2D.UI
 		private void DesktopOnContextMenuClosing(object sender, ContextMenuClosingEventArgs args)
 		{
 			// Prevent closing/opening of the context menu
-			if (OpenMenuItem != null && OpenMenuItem.Bounds.Contains(Desktop.MousePosition))
+			if (OpenMenuItem != null && OpenMenuItem.Bounds.Contains(Desktop.TouchPosition))
 			{
 				args.Cancel = true;
 			}

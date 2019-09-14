@@ -64,7 +64,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		internal bool ReleaseOnMouseLeft
+		internal bool ReleaseOnTouchLeft
 		{
 			get; set;
 		}
@@ -77,16 +77,16 @@ namespace Myra.Graphics2D.UI
 			}
 			set
 			{
-				// If we're not releasing the button on mouse left,
+				// If we're not releasing the button on touch left,
 				// we have to do it on touch up
-				if (!ReleaseOnMouseLeft && Desktop != null)
+				if (!ReleaseOnTouchLeft && Desktop != null)
 				{
 					Desktop.TouchUp -= DesktopTouchUp;
 				}
 
 				base.Desktop = value;
 
-				if (!ReleaseOnMouseLeft && Desktop != null)
+				if (!ReleaseOnTouchLeft && Desktop != null)
 				{
 					Desktop.TouchUp += DesktopTouchUp;
 				}
@@ -107,7 +107,7 @@ namespace Myra.Graphics2D.UI
 		public ButtonBase()
 		{
 			Toggleable = false;
-			ReleaseOnMouseLeft = true;
+			ReleaseOnTouchLeft = true;
 		}
 
 		public void DoClick()
@@ -125,11 +125,11 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void OnMouseLeft()
+		public override void OnTouchLeft()
 		{
-			base.OnMouseLeft();
+			base.OnTouchLeft();
 
-			if (ReleaseOnMouseLeft && !Toggleable)
+			if (ReleaseOnTouchLeft && !Toggleable)
 			{
 				IsPressed = false;
 			}

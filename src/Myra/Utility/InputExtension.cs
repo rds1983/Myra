@@ -9,7 +9,7 @@ using Xenko.Input;
 
 namespace Myra.Utility
 {
-	internal static class Input
+	internal static class InputExtension
 	{
 		/// <summary>
 		/// Converts a key to its char representation

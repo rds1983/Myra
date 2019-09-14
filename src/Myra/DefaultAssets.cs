@@ -3,6 +3,7 @@ using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using SpriteFontPlus;
+using System.IO;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -148,10 +149,6 @@ namespace Myra
 				{
 					_uiBitmap = CrossEngineStuff.LoadTexture2D(stream);
 				}
-
-#if !XENKO
-				_uiBitmap.PremultiplyAlpha();
-#endif
 
 				return _uiBitmap;
 			}

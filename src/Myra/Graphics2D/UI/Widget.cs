@@ -34,6 +34,7 @@ namespace Myra.Graphics2D.UI
 		private LayoutState _layoutState = LayoutState.Invalid;
 		private bool _measureDirty = true;
 		private bool _isMouseOver = false;
+		private bool _isTouchOver = false;
 
 		private Point _lastMeasureSize;
 		private Point _lastMeasureAvailableSize;
@@ -370,7 +371,7 @@ namespace Myra.Graphics2D.UI
 
 				_enabled = value;
 
-				EnabledChanged?.Invoke(this, EventArgs.Empty);
+				EnabledChanged.Fire(this);
 			}
 		}
 
@@ -503,11 +504,30 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[XmlIgnore]
-		public Point MousePosition
+		public bool IsTouchOver
 		{
 			get
 			{
-				return Desktop.MousePosition;
+				return _isTouchOver;
+			}
+
+			set
+			{
+				if (value == _isTouchOver)
+				{
+					return;
+				}
+
+				_isTouchOver = value;
+
+				if (value)
+				{
+					OnTouchEntered();
+				}
+				else
+				{
+					OnTouchLeft();
+				}
 			}
 		}
 
@@ -652,6 +672,9 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseUp;
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseDoubleClick;
 
+		public event EventHandler TouchLeft;
+		public event EventHandler TouchEntered;
+		public event EventHandler TouchMoved;
 		public event EventHandler TouchDown;
 		public event EventHandler TouchUp;
 
@@ -920,7 +943,7 @@ namespace Myra.Graphics2D.UI
 			_lastLocationHint = new Point(Left, Top);
 			_layoutState = LayoutState.Normal;
 
-			LayoutUpdated?.Invoke(this, EventArgs.Empty);
+			LayoutUpdated.Fire(this);
 		}
 
 		private Widget FindWidgetBy(Func<Widget, bool> finder)
@@ -980,7 +1003,7 @@ namespace Myra.Graphics2D.UI
 
 			InvalidateLayout();
 
-			MeasureChanged?.Invoke(this, EventArgs.Empty);
+			MeasureChanged.Fire(this);
 		}
 
 		public void ApplyWidgetStyle(WidgetStyle style)
@@ -1034,37 +1057,37 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnMouseLeft()
 		{
-			MouseLeft?.Invoke(this, EventArgs.Empty);
+			MouseLeft.Fire(this);
 		}
 
 		public virtual void OnMouseEntered()
 		{
-			MouseEntered?.Invoke(this, EventArgs.Empty);
+			MouseEntered.Fire(this);
 		}
 
 		public virtual void OnMouseMoved()
 		{
-			MouseMoved?.Invoke(this, EventArgs.Empty);
+			MouseMoved.Fire(this);
 		}
 
 		public virtual void OnMouseDown(MouseButtons mb)
 		{
-			MouseDown?.Invoke(this, new GenericEventArgs<MouseButtons>(mb));
+			MouseDown.Fire(this, mb);
 		}
 
 		public virtual void OnMouseDoubleClick(MouseButtons mb)
 		{
-			MouseDoubleClick?.Invoke(this, new GenericEventArgs<MouseButtons>(mb));
+			MouseDoubleClick.Fire(this, mb);
 		}
 
 		public virtual void OnMouseUp(MouseButtons mb)
 		{
-			MouseUp?.Invoke(this, new GenericEventArgs<MouseButtons>(mb));
+			MouseUp.Fire(this, mb);
 		}
 
 		protected void FireMouseWheelChanged(float delta)
 		{
-			MouseWheelChanged?.Invoke(this, new GenericEventArgs<float>(delta));
+			MouseWheelChanged.Fire(this, delta);
 		}
 
 		public virtual void OnMouseWheel(float delta)
@@ -1074,19 +1097,34 @@ namespace Myra.Graphics2D.UI
 			FireMouseWheelChanged(delta);
 		}
 
+		public virtual void OnTouchLeft()
+		{
+			TouchLeft.Fire(this);
+		}
+
+		public virtual void OnTouchEntered()
+		{
+			TouchEntered.Fire(this);
+		}
+
+		public virtual void OnTouchMoved()
+		{
+			TouchMoved.Fire(this);
+		}
+
 		public virtual void OnTouchDown()
 		{
-			TouchDown?.Invoke(this, EventArgs.Empty);
+			TouchDown.Fire(this);
 		}
 
 		public virtual void OnTouchUp()
 		{
-			TouchUp?.Invoke(this, EventArgs.Empty);
+			TouchUp.Fire(this);
 		}
 
 		protected void FireKeyDown(Keys k)
 		{
-			KeyDown?.Invoke(this, new GenericEventArgs<Keys>(k));
+			KeyDown.Fire(this, k);
 		}
 
 		public virtual void OnKeyDown(Keys k)
@@ -1096,12 +1134,12 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnKeyUp(Keys k)
 		{
-			KeyUp?.Invoke(this, new GenericEventArgs<Keys>(k));
+			KeyUp.Fire(this, k);
 		}
 
 		public virtual void OnChar(char c)
 		{
-			Char?.Invoke(this, new GenericEventArgs<char>(c));
+			Char.Fire(this, c);
 		}
 
 		public virtual void OnVisibleChanged()
@@ -1109,7 +1147,7 @@ namespace Myra.Graphics2D.UI
 			// Visibility change can generate MouseEnter/MouseLeft events
 			HandleMouseMovement();
 
-			VisibleChanged?.Invoke(this, EventArgs.Empty);
+			VisibleChanged.Fire(this);
 		}
 
 		public virtual void OnLostKeyboardFocus()
@@ -1162,12 +1200,12 @@ namespace Myra.Graphics2D.UI
 
 		private void FireLocationChanged()
 		{
-			LocationChanged?.Invoke(this, EventArgs.Empty);
+			LocationChanged.Fire(this);
 		}
 
 		private void FireSizeChanged()
 		{
-			SizeChanged?.Invoke(this, EventArgs.Empty);
+			SizeChanged.Fire(this);
 		}
 
 		internal void HandleMouseDown(MouseButtons buttons)
@@ -1233,7 +1271,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			if (IsMouseOver)
+			if (IsTouchOver)
 			{
 				OnTouchDown();
 			}
@@ -1246,10 +1284,27 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			if (IsMouseOver)
+			if (IsTouchOver)
 			{
 				OnTouchUp();
 			}
+		}
+
+		internal bool HandleTouchMovement()
+		{
+			var wasTouchOver = IsTouchOver;
+
+			IsTouchOver = Visible && Desktop != null && Bounds.Contains(Desktop.TouchPosition);
+			if (IsTouchOver)
+			{
+				if (wasTouchOver)
+				{
+					// Already inside
+					OnTouchMoved();
+				}
+			}
+
+			return IsTouchOver;
 		}
 	}
 }

@@ -83,9 +83,9 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public override void OnMouseMoved()
+		public override void OnTouchMoved()
 		{
-			base.OnMouseMoved();
+			base.OnTouchMoved();
 
 			if (_mouseCoord == null)
 			{
@@ -102,7 +102,7 @@ namespace Myra.Graphics2D.UI
 			Grid.Proportion firstProportion, secondProportion;
 			float fp;
 
-			var position = Desktop.MousePosition;
+			var position = Desktop.TouchPosition;
 			if (Orientation == Orientation.Horizontal)
 			{
 				var firstWidth = position.X - bounds.X - _mouseCoord.Value;
@@ -163,8 +163,8 @@ namespace Myra.Graphics2D.UI
 			{
 				_handleDown = (ImageButton)sender;
 				_mouseCoord = Orientation == Orientation.Horizontal
-					? Desktop.MousePosition.X - _handleDown.Bounds.X
-					: Desktop.MousePosition.Y - _handleDown.Bounds.Y;
+					? Desktop.TouchPosition.X - _handleDown.Bounds.X
+					: Desktop.TouchPosition.Y - _handleDown.Bounds.Y;
 			}
 		}
 
@@ -235,7 +235,7 @@ namespace Myra.Graphics2D.UI
 					{
 						HorizontalAlignment = HorizontalAlignment.Stretch,
 						VerticalAlignment = VerticalAlignment.Stretch,
-						ReleaseOnMouseLeft = false
+						ReleaseOnTouchLeft = false
 					};
 
 					handle.ApplyButtonStyle(HandleStyle);

@@ -272,7 +272,7 @@ namespace Myra.Graphics2D.UI
 			{
 				if (Desktop != null)
 				{
-					Desktop.MouseMoved -= DesktopMouseMoved;
+					Desktop.TouchMoved -= DesktopTouchMoved;
 					Desktop.TouchUp -= DesktopTouchUp;
 				}
 
@@ -280,7 +280,7 @@ namespace Myra.Graphics2D.UI
 
 				if (Desktop != null)
 				{
-					Desktop.MouseMoved += DesktopMouseMoved;
+					Desktop.TouchMoved += DesktopTouchMoved;
 					Desktop.TouchUp += DesktopTouchUp;
 				}
 			}
@@ -387,22 +387,22 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnTouchDown();
 
-			var mousePosition = Desktop.MousePosition;
+			var touchPosition = Desktop.TouchPosition;
 
 			var r = _verticalScrollbarThumb;
 			var thumbPosition = ThumbPosition;
 			r.Y += thumbPosition.Y;
-			if (ShowVerticalScrollBar && _verticalScrollingOn && r.Contains(mousePosition))
+			if (ShowVerticalScrollBar && _verticalScrollingOn && r.Contains(touchPosition))
 			{
-				_startBoundsPos = mousePosition.Y;
+				_startBoundsPos = touchPosition.Y;
 				_scrollbarOrientation = Orientation.Vertical;
 			}
 
 			r = _horizontalScrollbarThumb;
 			r.X += thumbPosition.X;
-			if (ShowHorizontalScrollBar && _horizontalScrollingOn && r.Contains(mousePosition))
+			if (ShowHorizontalScrollBar && _horizontalScrollingOn && r.Contains(touchPosition))
 			{
-				_startBoundsPos = mousePosition.X;
+				_startBoundsPos = touchPosition.X;
 				_scrollbarOrientation = Orientation.Horizontal;
 			}
 		}
@@ -643,23 +643,23 @@ namespace Myra.Graphics2D.UI
 			ScrollPosition = Point.Zero;
 		}
 
-		private void DesktopMouseMoved(object sender, EventArgs args)
+		private void DesktopTouchMoved(object sender, EventArgs args)
 		{
 			if (!_startBoundsPos.HasValue)
 				return;
 
-			var position = Desktop.MousePosition;
+			var touchPosition = Desktop.TouchPosition;
 
 			int delta;
 			if (_scrollbarOrientation == Orientation.Horizontal)
 			{
-				delta = (position.X - _startBoundsPos.Value) * ScrollMaximum.X / _thumbMaximumX;
-				_startBoundsPos = position.X;
+				delta = (touchPosition.X - _startBoundsPos.Value) * ScrollMaximum.X / _thumbMaximumX;
+				_startBoundsPos = touchPosition.X;
 			}
 			else
 			{
-				delta = (position.Y - _startBoundsPos.Value) * ScrollMaximum.Y / _thumbMaximumY;
-				_startBoundsPos = position.Y;
+				delta = (touchPosition.Y - _startBoundsPos.Value) * ScrollMaximum.Y / _thumbMaximumY;
+				_startBoundsPos = touchPosition.Y;
 			}
 
 			

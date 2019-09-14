@@ -211,14 +211,11 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void OnMouseDown(MouseButtons mb)
+		public override void OnTouchDown()
 		{
-			base.OnMouseDown(mb);
+			base.OnTouchDown();
 
-			if (mb != MouseButtons.Left)
-			{
-				return;
-			}
+			SetHoverRow(Desktop.TouchPosition);
 
 			if (HoverRow != null)
 			{
@@ -247,21 +244,15 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
-				if (HoverRow.Mark.Visible && !HoverRow.Mark.Bounds.Contains(Desktop.MousePosition))
+				if (HoverRow.Mark.Visible && !HoverRow.Mark.Bounds.Contains(Desktop.TouchPosition))
 				{
 					HoverRow.Mark.DoClick();
 				}
 			}
 		}
 
-		public override void OnMouseMoved()
+		private void SetHoverRow(Point position)
 		{
-			base.OnMouseMoved();
-
-			HoverRow = null;
-
-			var position = MousePosition;
-
 			if (!Bounds.Contains(position))
 			{
 				return;
@@ -275,6 +266,16 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 			}
+		}
+
+		public override void OnMouseMoved()
+		{
+			base.OnMouseMoved();
+
+			HoverRow = null;
+
+			var position = Desktop.MousePosition;
+			SetHoverRow(Desktop.MousePosition);
 		}
 
 		public override void OnMouseLeft()

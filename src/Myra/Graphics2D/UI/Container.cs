@@ -158,6 +158,41 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public override void OnTouchEntered()
+		{
+			base.OnTouchEntered();
+
+			foreach (var w in ChildrenCopy)
+			{
+				w.HandleTouchMovement();
+			}
+		}
+
+		public override void OnTouchLeft()
+		{
+			base.OnTouchLeft();
+
+			foreach (var w in ChildrenCopy)
+			{
+				if (!w.Visible)
+				{
+					continue;
+				}
+
+				w.IsTouchOver = false;
+			}
+		}
+
+		public override void OnTouchMoved()
+		{
+			base.OnTouchMoved();
+
+			foreach (var w in ChildrenCopy)
+			{
+				w.HandleTouchMovement();
+			}
+		}
+
 		public override void OnTouchDown()
 		{
 			base.OnTouchDown();

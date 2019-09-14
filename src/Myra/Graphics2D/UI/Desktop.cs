@@ -5,11 +5,13 @@ using System.Collections.Specialized;
 using System.Linq;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
+using System.Reflection;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
 #else
 using Xenko.Core.Mathematics;
 using Xenko.Graphics;
@@ -53,12 +55,20 @@ namespace Myra.Graphics2D.UI
 		private Widget _focusedKeyboardWidget;
 		private readonly List<Widget> _widgetsCopy = new List<Widget>();
 		protected readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
-		private DateTime _lastTouch;
+		private DateTime _lastMouseDown;
 		private MouseInfo _lastMouseInfo;
 		private IReadOnlyCollection<Keys> _downKeys, _lastDownKeys;
 		private Widget _previousKeyboardFocus;
 		private Widget _previousMouseWheelFocus;
+#if !XENKO
+		private TouchCollection _oldTouchState;
+#endif
 		private Widget _scheduleMouseWheelFocus;
+		private bool _isTouchDown;
+		private Point _mousePosition, _touchPosition;
+#if MONOGAME
+		private bool _hasTextInput;
+#endif
 
 		public IReadOnlyCollection<Keys> DownKeys
 		{
@@ -68,23 +78,76 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public MouseInfo LastMouseInfo
+		public Point MousePosition
 		{
 			get
 			{
-				return _lastMouseInfo;
+				return _mousePosition;
+			}
+
+			private set
+			{
+				if (value == _mousePosition)
+				{
+					return;
+				}
+
+				_mousePosition = value;
+				MouseMoved.Fire(this);
+
+				for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
+				{
+					var w = ChildrenCopy[i];
+					if (w.Visible && w.Enabled)
+					{
+						var asWindow = w as Window;
+						if (w.HandleMouseMovement() || (asWindow != null && asWindow.IsModal))
+						{
+							break;
+						}
+					}
+				}
+
+				if (IsTouchDown)
+				{
+					TouchPosition = MousePosition;
+				}
 			}
 		}
 
-		private Point LastMousePosition
+		public Point TouchPosition
 		{
 			get
 			{
-				return _lastMouseInfo.Position;
+				return _touchPosition;
+			}
+
+			private set
+			{
+				if (value == _touchPosition)
+				{
+					return;
+				}
+
+				_touchPosition = value;
+
+				TouchMoved.Fire(this);
+
+				for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
+				{
+					var w = ChildrenCopy[i];
+					if (w.Visible && w.Enabled)
+					{
+						var asWindow = w as Window;
+						if (w.HandleTouchMovement() || (asWindow != null && asWindow.IsModal))
+						{
+							break;
+						}
+					}
+				}
 			}
 		}
 
-		public Point MousePosition { get; private set; }
 		public HorizontalMenu MenuBar { get; set; }
 
 		public Func<MouseInfo> MouseInfoGetter
@@ -191,11 +254,13 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public bool IsTouchDown
+		public bool IsTouchOverGUI
 		{
-			get; private set;
+			get
+			{
+				return IsPointOverGUI(TouchPosition);
+			}
 		}
-
 
 		internal bool IsShiftDown
 		{
@@ -217,6 +282,43 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public bool IsTouchDown
+		{
+			get
+			{
+				return _isTouchDown;
+			}
+
+			set
+			{
+				if (value == _isTouchDown)
+				{
+					return;
+				}
+
+				_isTouchDown = value;
+				var activeWidget = GetActiveWidget();
+				if (_isTouchDown)
+				{
+					InputOnTouchDown();
+
+					TouchDown.Fire(this);
+					if (activeWidget != null)
+					{
+						activeWidget.HandleTouchDown();
+					}
+				}
+				else
+				{
+					TouchUp.Fire(this);
+					if (activeWidget != null)
+					{
+						activeWidget.HandleTouchUp();
+					}
+				}
+			}
+		}
+
 		public Action<Keys> KeyDownHandler;
 
 		public event EventHandler MouseMoved;
@@ -224,6 +326,7 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseUp;
 		public event EventHandler<GenericEventArgs<MouseButtons>> MouseDoubleClick;
 
+		public event EventHandler TouchMoved;
 		public event EventHandler TouchDown;
 		public event EventHandler TouchUp;
 
@@ -249,16 +352,12 @@ namespace Myra.Graphics2D.UI
 
 			KeyDownHandler = OnKeyDown;
 
-#if MONOGAME
-			MyraEnvironment.Game.Window.TextInput += (s, a) =>
-			{
-				OnChar(a.Character);
-			};
-#elif FNA
+#if FNA
 			TextInputEXT.TextInput += c =>
 			{
 				OnChar(c);
 			};
+			_hasTextInput = true;
 #endif
 		}
 
@@ -315,24 +414,12 @@ namespace Myra.Graphics2D.UI
 			return ChildrenCopy[index];
 		}
 
-		private void OnChar(char c)
-		{
-			var ev = Char;
-			if (ev != null)
-			{
-				ev(this, new GenericEventArgs<char>(c));
-			}
+		private PropertyInfo _charPropertyInfo;
 
-			if (_focusedKeyboardWidget != null)
-			{
-				_focusedKeyboardWidget.OnChar(c);
-			}
-		}
-
-		private void InputOnMouseDown()
+		private void InputOnTouchDown()
 		{
 			// Handle context menu
-			if (ContextMenu != null && !ContextMenu.Bounds.Contains(MousePosition))
+			if (ContextMenu != null && !ContextMenu.Bounds.Contains(TouchPosition))
 			{
 				var ev = ContextMenuClosing;
 				if (ev != null)
@@ -360,7 +447,7 @@ namespace Myra.Graphics2D.UI
 			Widget focusedWidget = null;
 			ProcessWidgets(activeWidget, s =>
 			{
-				if (s.Enabled && s.IsMouseOver && s.AcceptsKeyboardFocus)
+				if (s.Enabled && s.IsTouchOver && s.AcceptsKeyboardFocus)
 				{
 					focusedWidget = s;
 				}
@@ -370,7 +457,7 @@ namespace Myra.Graphics2D.UI
 			focusedWidget = null;
 			ProcessWidgets(activeWidget, s =>
 			{
-				if (s.Enabled && s.IsMouseOver && s.AcceptsMouseWheelFocus)
+				if (s.Enabled && s.IsTouchOver && s.AcceptsMouseWheelFocus)
 				{
 					focusedWidget = s;
 				}
@@ -437,12 +524,7 @@ namespace Myra.Graphics2D.UI
 			_widgets.Remove(ContextMenu);
 			ContextMenu.Visible = false;
 
-			var ev = ContextMenuClosed;
-			if (ev != null)
-			{
-				ev(this, new GenericEventArgs<Widget>(ContextMenu));
-			}
-
+			ContextMenuClosed.Fire(this, ContextMenu);
 			ContextMenu = null;
 
 			if (_previousKeyboardFocus != null)
@@ -652,110 +734,81 @@ namespace Myra.Graphics2D.UI
 
 			if (isDown && !wasDown)
 			{
-				IsTouchDown = true;
-
-				var ev = MouseDown;
-				if (ev != null)
-				{
-					ev(this, new GenericEventArgs<MouseButtons>(buttons));
-				}
-
-				InputOnMouseDown();
-
+				MouseDown.Fire(this, buttons);
 				activeWidget.HandleMouseDown(buttons);
-
-				var td = TouchDown;
-				if (td != null)
+				TouchPosition = MousePosition;
+				IsTouchDown = true;
+				if ((DateTime.Now - _lastMouseDown).TotalMilliseconds < DoubleClickIntervalInMs)
 				{
-					td(this, EventArgs.Empty);
-				}
-
-				activeWidget.HandleTouchDown();
-
-				if ((DateTime.Now - _lastTouch).TotalMilliseconds < DoubleClickIntervalInMs)
-				{
-					// Double click
-					var ev2 = MouseDoubleClick;
-					if (ev2 != null)
-					{
-						ev2(this, new GenericEventArgs<MouseButtons>(buttons));
-					}
-
+					MouseDoubleClick.Fire(this, buttons);
 					activeWidget.HandleMouseDoubleClick(buttons);
 
-					_lastTouch = DateTime.MinValue;
+					_lastMouseDown = DateTime.MinValue;
 				}
 				else
 				{
-					_lastTouch = DateTime.Now;
+					_lastMouseDown = DateTime.Now;
 				}
 			}
 			else if (!isDown && wasDown)
 			{
-				IsTouchDown = false;
-
-				var ev = MouseUp;
-				if (ev != null)
-				{
-					ev(this, new GenericEventArgs<MouseButtons>(buttons));
-				}
-
+				MouseUp.Fire(this, buttons);
 				activeWidget.HandleMouseUp(buttons);
-
-				var tu = TouchUp;
-				if (tu != null)
-				{
-					tu(this, EventArgs.Empty);
-				}
-
-				activeWidget.HandleTouchUp();
+				IsTouchDown = false;
 			}
 		}
+
+#if !XENKO
+		private void UpdateTouch()
+		{
+			var touchState = TouchPanel.GetState();
+
+			if (!touchState.IsConnected)
+			{
+				return;
+			}
+
+			if (touchState.Count > 0)
+			{
+				TouchPosition = touchState[0].Position.ToPoint();
+			}
+
+			if (touchState.Count > 0 && _oldTouchState.Count == 0)
+			{
+				// Down
+				IsTouchDown = true;
+			} else if (touchState.Count == 0 && _oldTouchState.Count > 0)
+			{
+				// Up
+				IsTouchDown = false;
+			}
+
+			_oldTouchState = touchState;
+		}
+#endif
 
 		public void UpdateInput()
 		{
 			if (MouseInfoGetter != null)
 			{
 				var mouseInfo = MouseInfoGetter();
-				MousePosition = mouseInfo.Position;
+				var mousePosition = mouseInfo.Position;
 
 				if (SpriteBatchBeginParams.TransformMatrix != null)
 				{
 					// Apply transform
 					var t = Vector2.Transform(
-						new Vector2(MousePosition.X, MousePosition.Y),
+						new Vector2(mousePosition.X, mousePosition.Y),
 						SpriteBatchBeginParams.InverseTransform);
 
-					MousePosition = new Point((int)t.X, (int)t.Y);
+					mousePosition = new Point((int)t.X, (int)t.Y);
 				}
 
-				if (MousePosition.X != LastMousePosition.X || 
-					MousePosition.Y != LastMousePosition.Y)
-				{
-					var ev = MouseMoved;
-					if (ev != null)
-					{
-						ev(this, EventArgs.Empty);
-					}
-
-					for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
-					{
-						var w = ChildrenCopy[i];
-						if (w.Visible && w.Enabled)
-						{
-							var asWindow = w as Window;
-							if (w.HandleMouseMovement() || (asWindow != null && asWindow.IsModal))
-							{
-								break;
-							}
-						}
-					}
-				}
+				MousePosition = mousePosition;
 
 				HandleButton(mouseInfo.IsLeftButtonDown, _lastMouseInfo.IsLeftButtonDown, MouseButtons.Left);
 				HandleButton(mouseInfo.IsMiddleButtonDown, _lastMouseInfo.IsMiddleButtonDown, MouseButtons.Middle);
 				HandleButton(mouseInfo.IsRightButtonDown, _lastMouseInfo.IsRightButtonDown, MouseButtons.Right);
-
 #if XENKO
 				var handleWheel = mouseInfo.Wheel != 0;
 #else
@@ -768,12 +821,7 @@ namespace Myra.Graphics2D.UI
 #if !XENKO
 					delta -= _lastMouseInfo.Wheel;
 #endif
-
-					var ev = MouseWheelChanged;
-					if (ev != null)
-					{
-						ev(null, new GenericEventArgs<float>(delta));
-					}
+					MouseWheelChanged.Fire(this, delta);
 
 					if (FocusedMouseWheelWidget != null)
 					{
@@ -812,12 +860,7 @@ namespace Myra.Graphics2D.UI
 							if (!_downKeys.Contains(key))
 							{
 								// Key had been released
-								var ev = KeyUp;
-								if (ev != null)
-								{
-									ev(this, new GenericEventArgs<Keys>(key));
-								}
-
+								KeyUp.Fire(this, key);
 								if (_focusedKeyboardWidget != null)
 								{
 									_focusedKeyboardWidget.OnKeyUp(key);
@@ -829,15 +872,15 @@ namespace Myra.Graphics2D.UI
 
 				_lastDownKeys = _downKeys.ToArray();
 			}
+
+#if !XENKO
+			UpdateTouch();
+#endif
 		}
 
 		public void OnKeyDown(Keys key)
 		{
-			var ev = KeyDown;
-			if (ev != null)
-			{
-				ev(this, new GenericEventArgs<Keys>(key));
-			}
+			KeyDown.Fire(this, key);
 
 			if (MenuBar != null && MyraEnvironment.ShowUnderscores)
 			{

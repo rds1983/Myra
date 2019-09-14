@@ -9,7 +9,7 @@
     <RootNamespace>Myra.Samples.AllWidgets</RootNamespace>
   </PropertyGroup>
   
-  <PropertyGroup Condition="$(DefineConstants.Contains('MONOGAME'))">
+  <PropertyGroup Condition="$(DefineConstants.Contains('MONOGAME')) AND !$(DefineConstants.Contains('ANDROID'))">
     <TargetFramework>net45</TargetFramework>
     <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
   </PropertyGroup>
@@ -24,7 +24,7 @@
     <OutputPath>bin\Xenko\$(Configuration)</OutputPath>
   </PropertyGroup>
 
-  <ItemGroup Condition="$(DefineConstants.Contains('MONOGAME'))">
+  <ItemGroup Condition="$(DefineConstants.Contains('MONOGAME')) AND !$(DefineConstants.Contains('ANDROID'))">
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.7.1.189" />
   </ItemGroup>
 

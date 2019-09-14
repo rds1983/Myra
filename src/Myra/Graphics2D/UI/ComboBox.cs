@@ -145,7 +145,6 @@ namespace Myra.Graphics2D.UI
 
 			item.Widget = button;
 
-			button.MouseEntered += ItemOnMouseEntered;
 			button.Click += ItemOnClick;
 
 			button.HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -195,11 +194,6 @@ namespace Myra.Graphics2D.UI
 			{
 				_itemsContainer.Widgets[i].GridRow = i;
 			}
-		}
-
-		private void ItemOnMouseEntered(object sender, EventArgs args)
-		{
-			var widget = (Widget)sender;
 		}
 
 		private void ItemOnClick(object sender, EventArgs eventArgs)
