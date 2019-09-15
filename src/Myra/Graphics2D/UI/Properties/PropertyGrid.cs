@@ -191,12 +191,12 @@ namespace Myra.Graphics2D.UI.Properties
 				VerticalAlignment = VerticalAlignment.Stretch;
 			}
 
-			public override void OnMouseDoubleClick(MouseButtons mb)
+			public override void OnTouchDoubleClick()
 			{
-				base.OnMouseDoubleClick(mb);
+				base.OnTouchDoubleClick();
 
 				var mousePosition = Desktop.MousePosition;
-				if (mb != MouseButtons.Left || !HeaderBounds.Contains(mousePosition) || _mark.Bounds.Contains(mousePosition))
+				if (!HeaderBounds.Contains(mousePosition) || _mark.Bounds.Contains(mousePosition))
 				{
 					return;
 				}

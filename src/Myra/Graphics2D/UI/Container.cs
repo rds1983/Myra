@@ -133,33 +133,13 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void OnMouseDown(MouseButtons mb)
+		public override void OnTouchDoubleClick()
 		{
-			base.OnMouseDown(mb);
+			base.OnTouchDoubleClick();
 
 			foreach (var w in ChildrenCopy)
 			{
-				w.HandleMouseDown(mb);
-			}
-		}
-
-		public override void OnMouseUp(MouseButtons mb)
-		{
-			base.OnMouseUp(mb);
-
-			foreach (var w in ChildrenCopy)
-			{
-				w.HandleMouseUp(mb);
-			}
-		}
-
-		public override void OnMouseDoubleClick(MouseButtons mb)
-		{
-			base.OnMouseDoubleClick(mb);
-
-			foreach (var w in ChildrenCopy)
-			{
-				w.HandleMouseDoubleClick(mb);
+				w.HandleTouchDoubleClick();
 			}
 		}
 

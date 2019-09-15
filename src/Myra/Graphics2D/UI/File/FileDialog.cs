@@ -209,7 +209,7 @@ namespace Myra.Graphics2D.UI.File
 			_gridFiles.SelectionBackground = DefaultAssets.UISpritesheet["tree-selection"];
 			_gridFiles.SelectionHoverBackground = DefaultAssets.UISpritesheet["button-over"];
 			_gridFiles.SelectedIndexChanged += OnGridFilesSelectedIndexChanged;
-			_gridFiles.MouseDoubleClick += OnGridFilesDoubleClick;
+			_gridFiles.TouchDoubleClick += OnGridFilesDoubleClick;
 
 			_buttonParent.Click += OnButtonParent;
 

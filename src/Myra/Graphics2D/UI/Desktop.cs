@@ -55,7 +55,7 @@ namespace Myra.Graphics2D.UI
 		private Widget _focusedKeyboardWidget;
 		private readonly List<Widget> _widgetsCopy = new List<Widget>();
 		protected readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
-		private DateTime _lastMouseDown;
+		private DateTime _lastTouchDown;
 		private MouseInfo _lastMouseInfo;
 		private IReadOnlyCollection<Keys> _downKeys, _lastDownKeys;
 		private Widget _previousKeyboardFocus;
@@ -352,13 +352,11 @@ namespace Myra.Graphics2D.UI
 		public Action<Keys> KeyDownHandler;
 
 		public event EventHandler MouseMoved;
-		public event EventHandler<GenericEventArgs<MouseButtons>> MouseDown;
-		public event EventHandler<GenericEventArgs<MouseButtons>> MouseUp;
-		public event EventHandler<GenericEventArgs<MouseButtons>> MouseDoubleClick;
 
 		public event EventHandler TouchMoved;
 		public event EventHandler TouchDown;
 		public event EventHandler TouchUp;
+		public event EventHandler TouchDoubleClick;
 
 		public event EventHandler<GenericEventArgs<float>> MouseWheelChanged;
 
@@ -444,6 +442,28 @@ namespace Myra.Graphics2D.UI
 		}
 
 		private PropertyInfo _charPropertyInfo;
+
+		private void HandleDoubleClick()
+		{
+			if ((DateTime.Now - _lastTouchDown).TotalMilliseconds < DoubleClickIntervalInMs)
+			{
+				TouchDoubleClick.Invoke(this);
+
+				var activeWidget = GetActiveWidget();
+				if (activeWidget == null)
+				{
+					return;
+				}
+
+				activeWidget.HandleTouchDoubleClick();
+
+				_lastTouchDown = DateTime.MinValue;
+			}
+			else
+			{
+				_lastTouchDown = DateTime.Now;
+			}
+		}
 
 		private void InputOnTouchDown()
 		{
@@ -765,26 +785,12 @@ namespace Myra.Graphics2D.UI
 
 			if (isDown && !wasDown)
 			{
-				MouseDown.Invoke(this, buttons);
-				activeWidget.HandleMouseDown(buttons);
 				TouchPosition = MousePosition;
 				IsTouchDown = true;
-				if ((DateTime.Now - _lastMouseDown).TotalMilliseconds < DoubleClickIntervalInMs)
-				{
-					MouseDoubleClick.Invoke(this, buttons);
-					activeWidget.HandleMouseDoubleClick(buttons);
-
-					_lastMouseDown = DateTime.MinValue;
-				}
-				else
-				{
-					_lastMouseDown = DateTime.Now;
-				}
+				HandleDoubleClick();
 			}
 			else if (!isDown && wasDown)
 			{
-				MouseUp.Invoke(this, buttons);
-				activeWidget.HandleMouseUp(buttons);
 				IsTouchDown = false;
 			}
 		}
@@ -809,6 +815,7 @@ namespace Myra.Graphics2D.UI
 			{
 				// Down
 				IsTouchDown = true;
+				HandleDoubleClick();
 			} else if (touchState.Count == 0 && _oldTouchState.Count > 0)
 			{
 				// Up
@@ -966,6 +973,8 @@ namespace Myra.Graphics2D.UI
 			{
 				_focusedKeyboardWidget.OnChar(c);
 			}
+
+			Char.Invoke(this, c);
 		}
 
 		private void ProcessWidgets(Widget root, Action<Widget> operation)

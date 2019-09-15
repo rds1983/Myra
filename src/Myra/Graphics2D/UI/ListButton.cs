@@ -18,15 +18,5 @@ namespace Myra.Graphics2D.UI
 			return _selector.SelectionMode == SelectionMode.Multiple ||
 				!IsPressed;
 		}
-
-		public override void InternalRender(RenderContext batch)
-		{
-			var w = IsMouseOver;
-			if (w)
-			{
-				var b = GetCurrentBackground();
-			}
-			base.InternalRender(batch);
-		}
 	}
 }

@@ -672,15 +672,13 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler MouseLeft;
 		public event EventHandler MouseEntered;
 		public event EventHandler MouseMoved;
-		public event EventHandler<GenericEventArgs<MouseButtons>> MouseDown;
-		public event EventHandler<GenericEventArgs<MouseButtons>> MouseUp;
-		public event EventHandler<GenericEventArgs<MouseButtons>> MouseDoubleClick;
 
 		public event EventHandler TouchLeft;
 		public event EventHandler TouchEntered;
 		public event EventHandler TouchMoved;
 		public event EventHandler TouchDown;
 		public event EventHandler TouchUp;
+		public event EventHandler TouchDoubleClick;
 
 		public event EventHandler<GenericEventArgs<float>> MouseWheelChanged;
 
@@ -1074,19 +1072,9 @@ namespace Myra.Graphics2D.UI
 			MouseMoved.Invoke(this);
 		}
 
-		public virtual void OnMouseDown(MouseButtons mb)
+		public virtual void OnTouchDoubleClick()
 		{
-			MouseDown.Invoke(this, mb);
-		}
-
-		public virtual void OnMouseDoubleClick(MouseButtons mb)
-		{
-			MouseDoubleClick.Invoke(this, mb);
-		}
-
-		public virtual void OnMouseUp(MouseButtons mb)
-		{
-			MouseUp.Invoke(this, mb);
+			TouchDoubleClick.Invoke(this);
 		}
 
 		public virtual void OnMouseWheel(float delta)
@@ -1203,42 +1191,16 @@ namespace Myra.Graphics2D.UI
 			SizeChanged.Invoke(this);
 		}
 
-		internal void HandleMouseDown(MouseButtons buttons)
+		internal void HandleTouchDoubleClick()
 		{
 			if (!Visible)
 			{
 				return;
 			}
 
-			if (IsMouseOver)
+			if (IsTouchOver)
 			{
-				OnMouseDown(buttons);
-			}
-		}
-
-		internal void HandleMouseDoubleClick(MouseButtons buttons)
-		{
-			if (!Visible)
-			{
-				return;
-			}
-
-			if (IsMouseOver)
-			{
-				OnMouseDoubleClick(buttons);
-			}
-		}
-
-		internal void HandleMouseUp(MouseButtons buttons)
-		{
-			if (!Visible)
-			{
-				return;
-			}
-
-			if (IsMouseOver)
-			{
-				OnMouseUp(buttons);
+				OnTouchDoubleClick();
 			}
 		}
 

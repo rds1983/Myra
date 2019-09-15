@@ -228,14 +228,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void OnMouseDoubleClick(MouseButtons mb)
+		public override void OnTouchDoubleClick()
 		{
-			base.OnMouseDoubleClick(mb);
-
-			if (mb != MouseButtons.Left)
-			{
-				return;
-			}
+			base.OnTouchDoubleClick();
 
 			if (HoverRow != null)
 			{
