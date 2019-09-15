@@ -248,5 +248,48 @@ namespace Myra.Utility
 
 			return new Color((byte)r, (byte)g, (byte)b, (byte)255);
 		}
+
+		private static byte ApplyAlpha(byte color, byte alpha)
+		{
+			var fc = color / 255.0f;
+			var fa = alpha / 255.0f;
+			var fr = (int)(255.0f * fc * fa);
+			if (fr < 0)
+			{
+				fr = 0;
+			}
+			if (fr > 255)
+			{
+				fr = 255;
+			}
+			return (byte)fr;
+		}
+
+		internal static Color ApplyAlpha(this Color src)
+		{
+			byte a = src.A;
+
+			src.R = ApplyAlpha(src.R, a);
+			src.G = ApplyAlpha(src.G, a);
+			src.B = ApplyAlpha(src.B, a);
+
+			return src;
+		}
+
+		/// <summary>
+		/// Updates texture colors by alpha
+		/// </summary>
+		/// <param name="texture"></param>
+		public static void PremultiplyAlpha(this Texture2D texture)
+		{
+			var data = CrossEngineStuff.GetData(texture);
+
+			for (int i = 0; i < data.Length; ++i)
+			{
+				data[i] = ApplyAlpha(data[i]);
+			}
+
+			CrossEngineStuff.SetData(texture, data);
+		}
 	}
 }

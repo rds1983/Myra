@@ -30,10 +30,6 @@ namespace Myra
 			typeof(DefaultAssets).Assembly,
 			"Myra.Resources.");
 
-#if XENKO
-		private static Image _uiImage;
-#endif
-
 		private static SpriteFont _font;
 		private static SpriteFont _fontSmall;
 		private static TextureRegionAtlas _uiSpritesheet;
