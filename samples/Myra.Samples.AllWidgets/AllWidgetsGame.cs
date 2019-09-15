@@ -67,6 +67,18 @@ namespace Myra.Samples.AllWidgets
 
 			_desktop.Widgets.Add(_allWidgets);
 
+#if MONOGAME
+			// Inform Myra that external text input is available
+			// So it stops translating Keys to chars
+			_desktop.HasExternalTextInput = true;
+
+			// Provide that text input
+			Window.TextInput += (s, a) =>
+			{
+				_desktop.OnChar(a.Character);
+			};
+#endif
+
 #if ANDROID
 			_desktop.WidgetGotKeyboardFocus += (s, a) =>
 			{

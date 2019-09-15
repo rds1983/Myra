@@ -68,7 +68,7 @@ namespace Myra.Graphics2D.UI
 		private Point _mousePosition, _touchPosition;
 		private Point _lastMousePosition, _lastTouchPosition;
 #if MONOGAME
-		public bool HasTextInput = false;
+		public bool HasExternalTextInput = false;
 #endif
 
 		public IReadOnlyCollection<Keys> DownKeys
@@ -949,7 +949,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 #if MONOGAME
-			if (!HasTextInput && !IsControlDown && !IsAltDown)
+			if (!HasExternalTextInput && !IsControlDown && !IsAltDown)
 			{
 				var c = key.ToChar(IsShiftDown);
 				if (c != null)
