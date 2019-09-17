@@ -777,12 +777,6 @@ namespace Myra.Graphics2D.UI
 
 		public void HandleButton(bool isDown, bool wasDown, MouseButtons buttons)
 		{
-			var activeWidget = GetActiveWidget();
-			if (activeWidget == null)
-			{
-				return;
-			}
-
 			if (isDown && !wasDown)
 			{
 				TouchPosition = MousePosition;
