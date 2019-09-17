@@ -441,8 +441,6 @@ namespace Myra.Graphics2D.UI
 			return ChildrenCopy[index];
 		}
 
-		private PropertyInfo _charPropertyInfo;
-
 		private void HandleDoubleClick()
 		{
 			if ((DateTime.Now - _lastTouchDown).TotalMilliseconds < DoubleClickIntervalInMs)
@@ -450,12 +448,10 @@ namespace Myra.Graphics2D.UI
 				TouchDoubleClick.Invoke(this);
 
 				var activeWidget = GetActiveWidget();
-				if (activeWidget == null)
+				if (activeWidget != null)
 				{
-					return;
+					activeWidget.HandleTouchDoubleClick();
 				}
-
-				activeWidget.HandleTouchDoubleClick();
 
 				_lastTouchDown = DateTime.MinValue;
 			}
