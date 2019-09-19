@@ -12,16 +12,16 @@ Myra is UI Library for [MonoGame](http://www.monogame.net/), [FNA](https://githu
 ## Documentation
 [https://github.com/rds1983/Myra/wiki](https://github.com/rds1983/Myra/wiki)
 
-## Building From Source Code
-1. Clone this repo.
-2. `git submodule update --init --recursive`
-3. Open a solution from the "build" folder.
-
 ## Support
 Use following resources if you need help with Myra or have other questions:
 * [Official MonoGame Discord](https://discord.gg/ct7GQgW) (use #libraries channel or ask @rds directly)
 * [Myra Topic at MonoGame Community Forum](http://community.monogame.net/t/myra-ui-library-for-the-monogame)
 * [Myra Topic at gamedev.ru (Russian)](https://gamedev.ru/code/forum/?id=241617)
+
+## Building From Source Code
+1. Clone this repo.
+2. `git submodule update --init --recursive`
+3. Open a solution from the "build" folder.
 
 ## Gallery
 All Widgets Sample
