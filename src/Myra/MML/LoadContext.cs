@@ -29,7 +29,7 @@ namespace Myra.MML
 		public Func<Type, object> ObjectCreator = (type) => Activator.CreateInstance(type);
 		public string Namespace;
 		public Assembly Assembly = typeof(Widget).Assembly;
-		public Func<string, TextureRegion> TextureGetter = null;
+		public Func<string, IRenderable> TextureGetter = null;
 		public Func<string, SpriteFont> FontGetter = null;
 
 		public void Load(object obj, XElement el)

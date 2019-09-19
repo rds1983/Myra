@@ -570,11 +570,11 @@ namespace Myra.Graphics2D.UI.Styles
 			styles[DefaultStyleName] = value;
 		}
 
-		public static Stylesheet LoadFromSource(string s,
-			Func<string, TextureRegion> textureGetter,
+		public static Stylesheet LoadFromSource(string stylesheetXml,
+			Func<string, IRenderable> textureGetter,
 			Func<string, SpriteFont> fontGetter)
 		{
-			var xDoc = XDocument.Parse(s);
+			var xDoc = XDocument.Parse(stylesheetXml);
 
 			var colors = new Dictionary<string, Color>();
 			var colorsNode = xDoc.Root.Element("Colors");
