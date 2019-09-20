@@ -1,4 +1,4 @@
-﻿using Myra.Attributes;
+﻿using System.ComponentModel;
 using Myra.Utility;
 using System;
 using System.Collections;
@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Xml.Linq;
+using Myra.Attributes;
 
 #if !XENKO
 using Microsoft.Xna.Framework;

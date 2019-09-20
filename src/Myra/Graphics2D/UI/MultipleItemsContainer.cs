@@ -1,8 +1,9 @@
+using Myra.Attributes;
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using Myra.Attributes;
+using System.ComponentModel;
 
 namespace Myra.Graphics2D.UI
 {
@@ -18,7 +19,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[Content]
 		public virtual ObservableCollection<Widget> Widgets
 		{

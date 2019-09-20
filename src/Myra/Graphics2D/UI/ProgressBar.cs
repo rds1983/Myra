@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
-using Myra.Attributes;
+using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 
@@ -18,28 +18,28 @@ namespace Myra.Graphics2D.UI
 		private IRenderable _filler;
 		private float _value;
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public abstract Orientation Orientation
 		{
 			get;
 		}
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(0.0f)]
 		public float Minimum
 		{
 			get; set;
 		}
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(100.0f)]
 		public float Maximum
 		{
 			get; set;
 		}
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(0.0f)]
 		public float Value
 		{
@@ -61,7 +61,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public IRenderable Filler
 		{

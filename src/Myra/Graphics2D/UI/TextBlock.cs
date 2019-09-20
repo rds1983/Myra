@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Linq;
-using Myra.Attributes;
+using System.ComponentModel;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
@@ -26,7 +26,7 @@ namespace Myra.Graphics2D.UI
 		private FormattedText _autoEllipsisText;
 		private string _autoEllipsisString = "...";
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		[DefaultValue(0)]
 		public int VerticalSpacing
 		{
@@ -41,7 +41,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public string Text
 		{
 			get
@@ -55,9 +55,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public SpriteFont Font
 		{
 			get
@@ -71,7 +71,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		[DefaultValue(false)]
 		public bool Wrap
 		{
@@ -95,7 +95,7 @@ namespace Myra.Graphics2D.UI
 		/// <summary>
 		/// The method used to abbreviate overflowing text.
 		/// </summary>
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		[DefaultValue(AutoEllipsisMethod.None)]
 		public AutoEllipsisMethod AutoEllipsisMethod
 		{
@@ -111,7 +111,7 @@ namespace Myra.Graphics2D.UI
 		/// <summary>
 		/// The string to use as ellipsis.
 		/// </summary>
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		[DefaultValue("...")]
 		public string AutoEllipsisString
 		{
@@ -124,33 +124,33 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public Color TextColor
 		{
 			get; set;
 		}
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public Color? DisabledTextColor
 		{
 			get; set;
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public Color? OverTextColor
 		{
 			get; set;
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public Color? PressedTextColor
 		{
 			get; set;
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public bool IsPressed
 		{

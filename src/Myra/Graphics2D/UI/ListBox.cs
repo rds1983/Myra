@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
-using Myra.Attributes;
+using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using static Myra.Graphics2D.UI.Grid;
 
@@ -12,14 +12,14 @@ namespace Myra.Graphics2D.UI
 	{
 		private readonly Grid _grid;
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public ListBoxStyle ListBoxStyle
 		{
 			get; set;
 		}
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(SelectionMode.Single)]
 		public SelectionMode SelectionMode
 		{

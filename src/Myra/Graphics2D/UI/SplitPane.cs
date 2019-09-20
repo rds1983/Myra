@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
+using Myra.Attributes;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -24,10 +24,10 @@ namespace Myra.Graphics2D.UI
 		private int _handlesSize;
 
 		[XmlIgnore]
-		[HiddenInEditor]
+		[Browsable(false)]
 		public abstract Orientation Orientation { get; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[Content]
 		public ObservableCollection<Widget> Widgets
 		{
@@ -35,7 +35,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[XmlIgnore]
-		[HiddenInEditor]
+		[Browsable(false)]
 		public ButtonStyle HandleStyle { get; private set; }
 
 		public event EventHandler ProportionsChanged;

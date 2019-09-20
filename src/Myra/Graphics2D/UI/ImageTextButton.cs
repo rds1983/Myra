@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel;
-using System.Linq;
-using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
+using Myra.Attributes;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -19,7 +18,7 @@ namespace Myra.Graphics2D.UI
 		private readonly Image _image;
 		private readonly TextBlock _textBlock;
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public virtual string Text
 		{
 			get
@@ -32,7 +31,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		[StylePropertyPath("/TextBlockStyle/TextColor")]
 		public virtual Color TextColor
 		{
@@ -47,8 +46,8 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[XmlIgnore]
-		[HiddenInEditor]
-		[EditCategory("Appearance")]
+		[Browsable(false)]
+		[Category("Appearance")]
 		public SpriteFont Font
 		{
 			get
@@ -62,8 +61,8 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[XmlIgnore]
-		[HiddenInEditor]
-		[EditCategory("Appearance")]
+		[Browsable(false)]
+		[Category("Appearance")]
 		public IRenderable Image
 		{
 			get
@@ -78,8 +77,8 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[XmlIgnore]
-		[HiddenInEditor]
-		[EditCategory("Appearance")]
+		[Browsable(false)]
+		[Category("Appearance")]
 		public IRenderable OverImage
 		{
 			get
@@ -94,8 +93,8 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[XmlIgnore]
-		[HiddenInEditor]
-		[EditCategory("Appearance")]
+		[Browsable(false)]
+		[Category("Appearance")]
 		public IRenderable PressedImage
 		{
 			get
@@ -109,7 +108,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		[DefaultValue(null)]
 		public virtual int? ImageWidth
 		{
@@ -123,7 +122,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		[DefaultValue(null)]
 		public virtual int? ImageHeight
 		{
@@ -137,7 +136,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		[DefaultValue(true)]
 		public virtual bool ImageVisible
 		{
@@ -152,7 +151,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		[DefaultValue(0)]
 		public int ImageTextSpacing
 		{

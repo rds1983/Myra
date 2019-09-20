@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using Myra.Attributes;
+﻿using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
+using Myra.Attributes;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -15,7 +15,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class TextButton : ButtonBase<TextBlock>
 	{
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public string Text
 		{
 			get
@@ -28,7 +28,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		[StylePropertyPath("/TextBlockStyle/TextColor")]
 		public Color TextColor
 		{
@@ -43,8 +43,8 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[XmlIgnore]
-		[HiddenInEditor]
-		[EditCategory("Appearance")]
+		[Browsable(false)]
+		[Category("Appearance")]
 		public SpriteFont Font
 		{
 			get

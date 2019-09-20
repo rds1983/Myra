@@ -1,7 +1,8 @@
 ﻿using System.Collections.ObjectModel;
-using Myra.Attributes;
+using System.ComponentModel;
 using System.Xml.Serialization;
 using System;
+using Myra.Attributes;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -15,18 +16,18 @@ namespace Myra.Graphics2D.UI
 	{
 		private readonly ObservableCollection<IMenuItem> _items = new ObservableCollection<IMenuItem>();
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public Menu Menu { get; set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[Content]
 		public ObservableCollection<IMenuItem> Items
 		{
 			get { return _items; }
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public bool Enabled
 		{
@@ -35,14 +36,14 @@ namespace Myra.Graphics2D.UI
 			set { Widget.Enabled = value; }
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public Widget Widget
 		{
 			get; set;
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public char? UnderscoreChar
 		{

@@ -1,9 +1,9 @@
 using System;
 using System.ComponentModel;
-using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Serialization;
+using Myra.Attributes;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -69,7 +69,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Layout")]
+		[Category("Layout")]
 		[DefaultValue(0)]
 		public int Left
 		{
@@ -92,7 +92,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Layout")]
+		[Category("Layout")]
 		[DefaultValue(0)]
 		public int Top
 		{
@@ -115,7 +115,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Layout")]
+		[Category("Layout")]
 		[DefaultValue(null)]
 		public int? Width
 		{
@@ -133,7 +133,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Layout")]
+		[Category("Layout")]
 		[DefaultValue(null)]
 		public int? Height
 		{
@@ -151,7 +151,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Layout")]
+		[Category("Layout")]
 		[DefaultValue(0)]
 		public int PaddingLeft
 		{
@@ -169,7 +169,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Layout")]
+		[Category("Layout")]
 		[DefaultValue(0)]
 		public int PaddingRight
 		{
@@ -187,7 +187,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Layout")]
+		[Category("Layout")]
 		[DefaultValue(0)]
 		public int PaddingTop
 		{
@@ -205,7 +205,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Layout")]
+		[Category("Layout")]
 		[DefaultValue(0)]
 		public int PaddingBottom
 		{
@@ -223,7 +223,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Layout")]
+		[Category("Layout")]
 		[DefaultValue(HorizontalAlignment.Left)]
 		public virtual HorizontalAlignment HorizontalAlignment
 		{
@@ -241,7 +241,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Layout")]
+		[Category("Layout")]
 		[DefaultValue(VerticalAlignment.Top)]
 		public virtual VerticalAlignment VerticalAlignment
 		{
@@ -259,7 +259,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Layout")]
+		[Category("Layout")]
 		[DefaultValue(0)]
 		public int GridColumn
 		{
@@ -282,7 +282,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Layout")]
+		[Category("Layout")]
 		[DefaultValue(0)]
 		public int GridRow
 		{
@@ -305,7 +305,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Layout")]
+		[Category("Layout")]
 		[DefaultValue(1)]
 		public int GridColumnSpan
 		{
@@ -328,7 +328,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Layout")]
+		[Category("Layout")]
 		[DefaultValue(1)]
 		public int GridRowSpan
 		{
@@ -351,7 +351,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(true)]
 		public virtual bool Enabled
 		{
@@ -373,7 +373,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(true)]
 		public virtual bool Visible
 		{
@@ -397,7 +397,7 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		[DefaultValue(1.0f)]
 		public float Opacity
 		{
@@ -417,61 +417,61 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public IRenderable Background { get; set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public IRenderable OverBackground { get; set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public IRenderable DisabledBackground { get; set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public IRenderable FocusedBackground { get; set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public IRenderable DisabledOverBackground { get; set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public IRenderable OverrideBackground { get; set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public IRenderable Border { get; set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public IRenderable OverBorder { get; set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public IRenderable DisabledBorder { get; set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public IRenderable FocusedBorder { get; set; }
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		[DefaultValue(false)]
 		public virtual bool ClipToBounds { get; set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public bool IsMouseOver
 		{
@@ -499,7 +499,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public bool IsTouchOver
 		{
@@ -527,7 +527,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public virtual Desktop Desktop
 		{
@@ -539,15 +539,15 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public Container Parent { get; internal set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public object Tag { get; set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public Rectangle Bounds
 		{
@@ -557,7 +557,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public Rectangle ActualBounds
 		{
@@ -567,7 +567,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public Rectangle ContainerBounds
 		{
@@ -577,21 +577,21 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public int PaddingWidth
 		{
 			get { return _paddingLeft + _paddingRight; }
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public int PaddingHeight
 		{
 			get { return _paddingTop + _paddingBottom; }
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[DefaultValue(false)]
 		[Obsolete("Use AcceptsKeyboardFocus instead")]
 		public virtual bool CanFocus
@@ -607,23 +607,23 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
-		[EditCategory("Behavior")]
+		[Browsable(false)]
+		[Category("Behavior")]
 		[DefaultValue(false)]
 		public virtual bool AcceptsKeyboardFocus
 		{
 			get; set;
 		}
 
-		[HiddenInEditor]
-		[EditCategory("Behavior")]
+		[Browsable(false)]
+		[Category("Behavior")]
 		[DefaultValue(false)]
 		public virtual bool AcceptsMouseWheelFocus
 		{
 			get; set;
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public virtual bool IsKeyboardFocused
 		{
@@ -638,7 +638,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public virtual bool IsMouseWheelFocused
 		{

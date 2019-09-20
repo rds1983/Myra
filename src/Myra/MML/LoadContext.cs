@@ -1,4 +1,4 @@
-﻿using Myra.Attributes;
+﻿using System.ComponentModel;
 using Myra.Graphics2D;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
+using Myra.Attributes;
 
 #if !XENKO
 using Microsoft.Xna.Framework;

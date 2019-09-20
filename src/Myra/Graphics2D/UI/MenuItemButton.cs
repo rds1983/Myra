@@ -1,4 +1,4 @@
-﻿using Myra.Attributes;
+﻿using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
 
@@ -52,7 +52,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public SpriteFont Font
 		{
@@ -74,7 +74,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public IRenderable Image
 		{
@@ -82,18 +82,18 @@ namespace Myra.Graphics2D.UI
 			set { _image.Renderable = value; }
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public IRenderable OpenBackground { get; set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public Menu SubMenu
 		{
 			get { return _subMenu; }
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public bool CanOpen
 		{
@@ -103,7 +103,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public override HorizontalAlignment ContentHorizontalAlignment
 		{
@@ -111,7 +111,7 @@ namespace Myra.Graphics2D.UI
 			set { base.ContentHorizontalAlignment = value; }
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public override VerticalAlignment ContentVerticalAlignment
 		{
@@ -119,7 +119,7 @@ namespace Myra.Graphics2D.UI
 			set { base.ContentVerticalAlignment = value; }
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public override bool Toggleable
 		{

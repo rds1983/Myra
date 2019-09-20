@@ -1,5 +1,5 @@
 ﻿using System;
-using Myra.Attributes;
+using System.ComponentModel;
 using System.Xml.Serialization;
 
 #if !XENKO
@@ -14,7 +14,7 @@ namespace Myra.Graphics2D.UI
 	{
 		private T _internalChild;
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		protected internal virtual T InternalChild
 		{

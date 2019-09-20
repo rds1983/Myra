@@ -1,16 +1,16 @@
 ﻿using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
-using Myra.Attributes;
+using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
 {
 	public class RadioButton : ImageTextButton
 	{
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(true)]
 		public override bool Toggleable
 		{

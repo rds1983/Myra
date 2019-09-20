@@ -1,4 +1,4 @@
-﻿using Myra.Attributes;
+﻿using System.ComponentModel;
 using System.ComponentModel;
 using System.Xml.Serialization;
 
@@ -15,7 +15,7 @@ namespace Myra.Graphics2D.UI
 		private IRenderable _image, _overImage, _pressedImage;
 		private Color _color = Color.White;
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public IRenderable Renderable
 		{
@@ -36,7 +36,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public IRenderable OverRenderable
 		{
@@ -57,7 +57,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public IRenderable PressedRenderable
 		{
@@ -78,7 +78,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public bool IsPressed
 		{

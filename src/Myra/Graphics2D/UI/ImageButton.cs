@@ -1,5 +1,5 @@
 ﻿using System.Xml.Serialization;
-using Myra.Attributes;
+using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
@@ -7,8 +7,8 @@ namespace Myra.Graphics2D.UI
 	public class ImageButton : ButtonBase<Image>
 	{
 		[XmlIgnore]
-		[HiddenInEditor]
-		[EditCategory("Appearance")]
+		[Browsable(false)]
+		[Category("Appearance")]
 		public IRenderable Image
 		{
 			get
@@ -23,8 +23,8 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[XmlIgnore]
-		[HiddenInEditor]
-		[EditCategory("Appearance")]
+		[Browsable(false)]
+		[Category("Appearance")]
 		public IRenderable OverImage
 		{
 			get
@@ -39,8 +39,8 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[XmlIgnore]
-		[HiddenInEditor]
-		[EditCategory("Appearance")]
+		[Browsable(false)]
+		[Category("Appearance")]
 		public IRenderable PressedImage
 		{
 			get

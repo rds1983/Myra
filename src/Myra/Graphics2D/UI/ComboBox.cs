@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Myra.Attributes;
+using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
 using System.ComponentModel;
@@ -39,7 +39,7 @@ namespace Myra.Graphics2D.UI
 		private readonly Grid _itemsContainer;
 		private ImageTextButtonStyle _dropDownItemStyle;
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(300)]
 		public int? DropdownMaximumHeight
 		{
@@ -54,7 +54,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public bool IsExpanded
 		{

@@ -1,8 +1,9 @@
-﻿using Myra.Attributes;
+﻿using System.ComponentModel;
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Xml.Serialization;
+using Myra.Attributes;
 
 namespace Myra.Graphics2D.UI
 {
@@ -18,7 +19,7 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
-		[EditCategory("Data")]
+		[Category("Data")]
 		[Content]
 		public ObservableCollection<ItemType> Items
 		{
@@ -28,7 +29,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public int? SelectedIndex
 		{
@@ -54,7 +55,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public ItemType SelectedItem
 		{

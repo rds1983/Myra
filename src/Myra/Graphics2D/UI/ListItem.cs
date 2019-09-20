@@ -1,5 +1,5 @@
 ﻿using System;
-using Myra.Attributes;
+using System.ComponentModel;
 using System.Xml.Serialization;
 
 #if !XENKO
@@ -14,19 +14,19 @@ namespace Myra.Graphics2D.UI
 	{
 		private Widget _widget;
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public bool IsSeparator { get; set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public IRenderable Image { get; set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public int ImageTextSpacing { get; set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public Widget Widget
 		{
@@ -47,7 +47,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public bool IsSelected
 		{

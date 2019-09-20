@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using Myra.Attributes;
+using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using static Myra.Graphics2D.UI.Grid;
@@ -16,21 +16,21 @@ namespace Myra.Graphics2D.UI
 		private bool _integer = false;
 		private int _decimalPlaces = 0;
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(false)]
 		public bool Nullable
 		{
 			get; set;
 		}
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(null)]
 		public float? Maximum
 		{
 			get; set;
 		}
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(null)]
 		public float? Minimum
 		{
@@ -62,7 +62,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(0.0f)]
 		public float? Value
 		{
@@ -140,7 +140,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		private float _Increment = 1f;
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(1f)]
 		public float Increment
 		{
@@ -162,7 +162,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(0)]
 		public int DecimalPlaces
 		{
@@ -184,14 +184,14 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(false)]
 		public bool FixedNumberSize
 		{
 			get; set;
 		}
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(false)]
 		public bool Integer
 		{
@@ -211,7 +211,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(1f)]
 		public float Mul_Increment { get; set; } = 1f;
 

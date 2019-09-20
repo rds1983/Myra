@@ -1,4 +1,4 @@
-﻿using Myra.Attributes;
+﻿using System.ComponentModel;
 using System;
 using System.ComponentModel;
 using System.Text;
@@ -76,7 +76,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public object Tag
 		{

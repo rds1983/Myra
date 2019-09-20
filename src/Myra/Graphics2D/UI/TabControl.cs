@@ -1,4 +1,4 @@
-﻿using Myra.Attributes;
+﻿using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using System;
 using System.ComponentModel;
@@ -13,7 +13,7 @@ namespace Myra.Graphics2D.UI
 		private Grid _gridButtons;
 		private SingleItemContainer<Widget> _panelContent;
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public TabControlStyle TabControlStyle
 		{

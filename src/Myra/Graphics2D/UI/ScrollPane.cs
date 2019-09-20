@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using Myra.Attributes;
+using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Serialization;
+using Myra.Attributes;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -24,7 +25,7 @@ namespace Myra.Graphics2D.UI
 		private int? _startBoundsPos;
 		private int _thumbMaximumX, _thumbMaximumY;
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		internal Point ScrollMaximum
 		{
@@ -37,7 +38,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public Point ScrollPosition
 		{
@@ -105,39 +106,39 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public IRenderable HorizontalScrollBackground
 		{
 			get; set;
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public IRenderable HorizontalScrollKnob
 		{
 			get; set;
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public IRenderable VerticalScrollBackground
 		{
 			get; set;
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public IRenderable VerticalScrollKnob
 		{
 			get; set;
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[Content]
 		public Widget Content
 		{
@@ -152,7 +153,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		[Obsolete("Use Content instead")]
 		public Widget Child
@@ -168,7 +169,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(true)]
 		public bool ShowHorizontalScrollBar
 		{
@@ -189,7 +190,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(true)]
 		public bool ShowVerticalScrollBar
 		{

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using Myra.Attributes;
+using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using static Myra.Graphics2D.UI.Grid;
 using System.Xml.Serialization;
+using Myra.Attributes;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -21,23 +22,23 @@ namespace Myra.Graphics2D.UI
 	{
 		private ObservableCollection<IMenuItem> _items;
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public abstract Orientation Orientation { get; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public MenuItemStyle MenuItemStyle { get; private set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public SeparatorStyle SeparatorStyle { get; private set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		internal MenuItemButton OpenMenuItem { get; private set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public bool IsOpen
 		{
@@ -47,7 +48,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[Content]
 		public ObservableCollection<IMenuItem> Items
 		{
@@ -129,7 +130,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		internal MenuItemButton KeyboardHoverButton;
 

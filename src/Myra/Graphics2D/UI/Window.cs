@@ -1,11 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using static Myra.Graphics2D.UI.Grid;
 using System.Xml.Serialization;
+using Myra.Attributes;
 
 #if !XENKO
 using Microsoft.Xna.Framework.Input;
@@ -29,14 +29,14 @@ namespace Myra.Graphics2D.UI
 		private Widget _previousKeyboardFocus;
 		private Widget _previousMouseWheelFocus;
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public bool IsModal
 		{
 			get; set;
 		}
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public string Title
 		{
 			get
@@ -50,7 +50,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		[StylePropertyPath("TitleStyle/TextColor")]
 		public Color TitleTextColor
 		{
@@ -64,7 +64,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public SpriteFont TitleFont
 		{
@@ -78,7 +78,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public Grid TitleGrid
 		{
@@ -88,7 +88,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public ImageButton CloseButton
 		{
@@ -98,7 +98,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[Content]
 		public Widget Content
 		{
@@ -130,7 +130,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public bool Result
 		{

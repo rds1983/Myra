@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using Myra.Attributes;
+using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Serialization;
@@ -38,7 +38,7 @@ namespace Myra.Graphics2D.UI
 		private readonly UndoRedoStack UndoStack = new UndoRedoStack();
 		private readonly UndoRedoStack RedoStack = new UndoRedoStack();
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		[DefaultValue(0)]
 		public int VerticalSpacing
 		{
@@ -53,7 +53,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public string Text
 		{
 			get
@@ -66,7 +66,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(false)]
 		public bool Multiline
 		{
@@ -99,9 +99,9 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public SpriteFont Font
 		{
 			get
@@ -115,7 +115,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		[DefaultValue(false)]
 		public bool Wrap
 		{
@@ -136,55 +136,55 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public Color TextColor
 		{
 			get; set;
 		}
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public Color? DisabledTextColor
 		{
 			get; set;
 		}
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public Color? FocusedTextColor
 		{
 			get; set;
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public IRenderable Cursor
 		{
 			get; set;
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public IRenderable Selection
 		{
 			get; set;
 		}
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(450)]
 		public int BlinkIntervalInMs
 		{
 			get; set;
 		}
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(false)]
 		public bool Readonly
 		{
 			get; set;
 		}
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(false)]
 		public bool PasswordField
 		{
@@ -198,7 +198,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(VerticalAlignment.Top)]
 		public VerticalAlignment TextVerticalAlignment
 		{
@@ -244,14 +244,14 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public Func<string, string> InputFilter
 		{
 			get; set;
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public int CursorPosition
 		{
@@ -273,7 +273,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public Point CursorScreenPosition
 		{
@@ -283,14 +283,14 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public int SelectStart
 		{
 			get; private set;
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public int SelectEnd
 		{

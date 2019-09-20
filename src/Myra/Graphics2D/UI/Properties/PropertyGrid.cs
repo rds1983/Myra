@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using Myra.Attributes;
+using System.ComponentModel;
 using Myra.Graphics2D.UI.ColorPicker;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using static Myra.Graphics2D.UI.Grid;
 using System.Xml.Serialization;
+using Myra.Attributes;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -226,14 +227,14 @@ namespace Myra.Graphics2D.UI.Properties
 		private object _object;
 		private bool _ignoreCollections;
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public TreeStyle PropertyGridStyle
 		{
 			get; private set;
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public object Object
 		{
@@ -251,7 +252,7 @@ namespace Myra.Graphics2D.UI.Properties
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public string Category { get; private set; }
 		
@@ -807,12 +808,6 @@ namespace Myra.Graphics2D.UI.Properties
 					continue;
 				}
 
-				var hiddenAttr = property.FindAttribute<HiddenInEditorAttribute>();
-				if (hiddenAttr != null)
-				{
-					continue;
-				}
-
 				var readOnlyAttr = property.FindAttribute<ReadOnlyAttribute>();
 				if (readOnlyAttr != null && readOnlyAttr.IsReadOnly)
 				{
@@ -830,8 +825,8 @@ namespace Myra.Graphics2D.UI.Properties
 					record.ItemsProvider = (IItemsProvider)Activator.CreateInstance(selectionAttr.ItemsProviderType, _object);
 				}
 
-				var categoryAttr = property.FindAttribute<EditCategoryAttribute>();
-				record.Category = categoryAttr != null ? categoryAttr.Name : DefaultCategoryName;
+				var categoryAttr = property.FindAttribute<CategoryAttribute>();
+				record.Category = categoryAttr != null ? categoryAttr.Category : DefaultCategoryName;
 
 				records.Add(record);
 			}
@@ -844,8 +839,13 @@ namespace Myra.Graphics2D.UI.Properties
 					continue;
 				}
 
-				var categoryAttr = field.FindAttribute<EditCategoryAttribute>();
+				var browsableAttr = field.FindAttribute<BrowsableAttribute>();
+				if (browsableAttr != null && !browsableAttr.Browsable)
+				{
+					continue;
+				}
 
+				var categoryAttr = field.FindAttribute<CategoryAttribute>();
 
 				var hasSetter = true;
 				var readOnlyAttr = field.FindAttribute<ReadOnlyAttribute>();
@@ -858,7 +858,7 @@ namespace Myra.Graphics2D.UI.Properties
 				var record = new FieldRecord(field)
 				{
 					HasSetter = hasSetter,
-					Category = categoryAttr != null ? categoryAttr.Name : DefaultCategoryName
+					Category = categoryAttr != null ? categoryAttr.Category : DefaultCategoryName
 				};
 
 				records.Add(record);

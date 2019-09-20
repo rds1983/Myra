@@ -1,4 +1,4 @@
-﻿using Myra.Attributes;
+﻿using System.ComponentModel;
 using System.Xml.Serialization;
 
 namespace Myra.Graphics2D
@@ -12,14 +12,14 @@ namespace Myra.Graphics2D
 		public int Top { get; set; }
 		public int Bottom { get; set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public int Width
 		{
 			get { return Left + Right; }
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public int Height
 		{

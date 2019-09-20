@@ -1,5 +1,5 @@
 ﻿using System;
-using Myra.Attributes;
+using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using static Myra.Graphics2D.UI.Grid;
 using System.Xml.Serialization;
@@ -77,14 +77,14 @@ namespace Myra.Graphics2D.UI
 
 		public TreeStyle TreeStyle { get; private set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public IRenderable SelectionBackground
 		{
 			get; set;
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public IRenderable SelectionHoverBackground
 		{

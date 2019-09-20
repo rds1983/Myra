@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Reflection;
-using Myra.Attributes;
+using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Linq;
@@ -8,6 +8,7 @@ using System.Xml.Serialization;
 using System;
 using Myra.MML;
 using System.Collections.Generic;
+using Myra.Attributes;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -30,23 +31,23 @@ namespace Myra.Graphics2D.UI
 
 		private readonly ExportOptions _exportOptions = new ExportOptions();
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		public ExportOptions ExportOptions
 		{
 			get { return _exportOptions; }
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[Content]
 		public Widget Root { get; set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		public string StylesheetPath
 		{
 			get; set;
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public Stylesheet Stylesheet { get; set; }
 

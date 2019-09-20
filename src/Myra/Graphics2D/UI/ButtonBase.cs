@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
-using Myra.Attributes;
+using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
 using System.Linq;
@@ -18,7 +18,7 @@ namespace Myra.Graphics2D.UI
 	{
 		private bool _isPressed = false;
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		[DefaultValue(HorizontalAlignment.Center)]
 		public virtual HorizontalAlignment ContentHorizontalAlignment
 		{
@@ -26,7 +26,7 @@ namespace Myra.Graphics2D.UI
 			set { InternalChild.HorizontalAlignment = value; }
 		}
 
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		[DefaultValue(VerticalAlignment.Center)]
 		public virtual VerticalAlignment ContentVerticalAlignment
 		{
@@ -34,16 +34,16 @@ namespace Myra.Graphics2D.UI
 			set { InternalChild.VerticalAlignment = value; }
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
-		[EditCategory("Appearance")]
+		[Category("Appearance")]
 		public virtual IRenderable PressedBackground { get; set; }
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(false)]
 		public virtual bool Toggleable { get; set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public bool IsPressed
 		{

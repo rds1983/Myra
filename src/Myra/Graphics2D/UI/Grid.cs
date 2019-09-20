@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using Myra.Attributes;
+using System.ComponentModel;
 using Myra.Utility;
 using System.Xml.Serialization;
 
@@ -138,15 +138,15 @@ namespace Myra.Graphics2D.UI
 		private int? _selectedRowIndex = null;
 		private int? _selectedColumnIndex = null;
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(false)]
 		public bool ShowGridLines { get; set; }
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue("White")]
 		public Color GridLinesColor { get; set; }
 
-		[EditCategory("Grid")]
+		[Category("Grid")]
 		[DefaultValue(0)]
 		public int ColumnSpacing
 		{
@@ -163,7 +163,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Grid")]
+		[Category("Grid")]
 		[DefaultValue(0)]
 		public int RowSpacing
 		{
@@ -180,19 +180,19 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Grid")]
+		[Category("Grid")]
 		public ObservableCollection<Proportion> ColumnsProportions
 		{
 			get { return _columnsProportions; }
 		}
 
-		[EditCategory("Grid")]
+		[Category("Grid")]
 		public ObservableCollection<Proportion> RowsProportions
 		{
 			get { return _rowsProportions; }
 		}
 
-		[EditCategory("Grid")]
+		[Category("Grid")]
 		[DefaultValue(null)]
 		public float? TotalRowsPart
 		{
@@ -210,7 +210,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[EditCategory("Grid")]
+		[Category("Grid")]
 		[DefaultValue(null)]
 		public float? TotalColumnsPart
 		{
@@ -228,19 +228,19 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public IRenderable SelectionBackground { get; set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public IRenderable SelectionHoverBackground { get; set; }
 
-		[EditCategory("Behavior")]
+		[Category("Behavior")]
 		[DefaultValue(GridSelectionMode.None)]
 		public GridSelectionMode GridSelectionMode { get; set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public List<int> GridLinesX
 		{
@@ -250,7 +250,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public List<int> GridLinesY
 		{
@@ -260,7 +260,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public int? HoverRowIndex
 		{
@@ -286,7 +286,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public int? HoverColumnIndex
 		{
@@ -312,7 +312,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public int? SelectedRowIndex
 		{
@@ -335,7 +335,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public int? SelectedColumnIndex
 		{

@@ -1,4 +1,4 @@
-using Myra.Attributes;
+using System.ComponentModel;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
@@ -16,7 +16,7 @@ namespace Myra.Graphics2D.UI
 		private readonly List<Widget> _childrenCopy = new List<Widget>();
 
 		[XmlIgnore]
-		[HiddenInEditor]
+		[Browsable(false)]
 		public abstract int ChildrenCount { get; }
 
 		internal List<Widget> ChildrenCopy

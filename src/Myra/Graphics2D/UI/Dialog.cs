@@ -1,4 +1,4 @@
-﻿using Myra.Attributes;
+﻿using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using static Myra.Graphics2D.UI.Grid;
 using System.Xml.Serialization;
@@ -13,11 +13,11 @@ namespace Myra.Graphics2D.UI
 {
 	public class Dialog : Window
 	{
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public ImageTextButton ButtonOk { get; private set; }
 
-		[HiddenInEditor]
+		[Browsable(false)]
 		[XmlIgnore]
 		public ImageTextButton ButtonCancel { get; private set; }
 
