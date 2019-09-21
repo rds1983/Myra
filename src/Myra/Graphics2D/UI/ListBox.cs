@@ -105,7 +105,6 @@ namespace Myra.Graphics2D.UI
 				widget = new HorizontalSeparator(ListBoxStyle.SeparatorStyle);
 			}
 
-			_grid.RowsProportions.Insert(index, new Proportion(ProportionType.Auto));
 			_grid.Widgets.Insert(index, widget);
 
 			item.Widget = widget;
@@ -118,7 +117,6 @@ namespace Myra.Graphics2D.UI
 			item.Changed -= ItemOnChanged;
 
 			var index = _grid.Widgets.IndexOf(item.Widget);
-			_grid.RowsProportions.RemoveAt(index);
 			_grid.Widgets.RemoveAt(index);
 
 			if (SelectedItem == item)

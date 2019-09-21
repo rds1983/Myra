@@ -34,7 +34,7 @@ namespace Myra.Graphics2D.UI
 
 		public class Proportion
 		{
-			private static readonly Proportion _default = new Proportion(ProportionType.Part, 1.0f);
+			private static readonly Proportion _default = new Proportion(ProportionType.Auto);
 
 			private ProportionType _type;
 			private float _value = 1.0f;
@@ -136,6 +136,7 @@ namespace Myra.Graphics2D.UI
 		private int? _hoverColumnIndex = null;
 		private int? _selectedRowIndex = null;
 		private int? _selectedColumnIndex = null;
+		private List<Widget>[,] _widgetsByGridPosition;
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
@@ -471,19 +472,7 @@ namespace Myra.Graphics2D.UI
 
 		private Point GetActualGridPosition(Widget child)
 		{
-			var result = new Point(child.GridColumn, child.GridRow);
-
-			if (result.X > ColumnsProportions.Count)
-			{
-				result.X = ColumnsProportions.Count;
-			}
-
-			if (result.Y > RowsProportions.Count)
-			{
-				result.Y = RowsProportions.Count;
-			}
-
-			return result;
+			return new Point(child.GridColumn, child.GridRow);
 		}
 
 		private Point LayoutProcessFixed(Point availableSize)
@@ -534,6 +523,32 @@ namespace Myra.Graphics2D.UI
 				_measureRowHeights.Add(0);
 			}
 
+			// Put all visible widget into 2d array
+			if (_widgetsByGridPosition == null ||
+				_widgetsByGridPosition.GetLength(0) < rows ||
+				_widgetsByGridPosition.GetLength(1) < columns)
+			{
+				_widgetsByGridPosition = new List<Widget>[rows, columns];
+			}
+
+			for (var row = 0; row < rows; ++row)
+			{
+				for (var col = 0; col < columns; ++col)
+				{
+					if (_widgetsByGridPosition[row, col] == null)
+					{
+						_widgetsByGridPosition[row, col] = new List<Widget>();
+					}
+
+					_widgetsByGridPosition[row, col].Clear();
+				}
+			}
+
+			foreach (var widget in _visibleWidgets)
+			{
+				_widgetsByGridPosition[widget.GridRow, widget.GridColumn].Add(widget);
+			}
+
 			availableSize.X -= (_measureColWidths.Count - 1) * _columnSpacing;
 			availableSize.Y -= (_measureRowHeights.Count - 1) * _rowSpacing;
 
@@ -554,14 +569,10 @@ namespace Myra.Graphics2D.UI
 						_measureRowHeights[row] = (int)rowProportion.Value;
 					}
 
-					foreach (var widget in _visibleWidgets)
+					var widgets = _widgetsByGridPosition[row, col];
+					foreach (var widget in widgets)
 					{
 						var gridPosition = GetActualGridPosition(widget);
-						if (gridPosition.X != col ||
-							gridPosition.Y != row)
-						{
-							continue;
-						}
 
 						var measuredSize = Point.Zero;
 						if (rowProportion.Type != ProportionType.Pixels ||
@@ -598,13 +609,6 @@ namespace Myra.Graphics2D.UI
 			for (i = 0; i < _measureColWidths.Count; ++i)
 			{
 				var w = _measureColWidths[i];
-
-				/*				if (result.X + w > availableSize.X)
-								{
-									colsWidths[i] = availableSize.X - result.X;
-									result.X += colsWidths[i];
-									break;
-								}*/
 
 				result.X += w;
 				if (i < _measureColWidths.Count - 1)

@@ -286,6 +286,44 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		private int HorizontalScrollbarHeight
+		{
+			get
+			{
+				var result = 0;
+				if (HorizontalScrollBackground != null)
+				{
+					result = HorizontalScrollBackground.Size.Y;
+				}
+
+				if (HorizontalScrollKnob != null && HorizontalScrollKnob.Size.Y > result)
+				{
+					result = HorizontalScrollKnob.Size.Y;
+				}
+
+				return result;
+			}
+		}
+
+		private int VerticalScrollbarWidth
+		{
+			get
+			{
+				var result = 0;
+				if (VerticalScrollBackground != null)
+				{
+					result = VerticalScrollBackground.Size.X;
+				}
+
+				if (VerticalScrollKnob != null && VerticalScrollKnob.Size.X > result)
+				{
+					result = VerticalScrollKnob.Size.X;
+				}
+
+				return result;
+			}
+		}
+
 		public ScrollPane(ScrollPaneStyle style)
 		{
 			ClipToBounds = true;
@@ -505,12 +543,12 @@ namespace Myra.Graphics2D.UI
 			{
 				if (horizontalScrollbarVisible)
 				{
-					measureSize.Y += VerticalScrollBackground.Size.X;
+					measureSize.Y += HorizontalScrollbarHeight;
 				}
 
 				if (verticalScrollbarVisible)
 				{
-					measureSize.X += VerticalScrollBackground.Size.Y;
+					measureSize.X += VerticalScrollbarWidth;
 				}
 			}
 
@@ -532,9 +570,12 @@ namespace Myra.Graphics2D.UI
 			_verticalScrollingOn = oldMeasureSize.Y > bounds.Height;
 			if (_horizontalScrollingOn || _verticalScrollingOn)
 			{
+				var vsWidth = VerticalScrollbarWidth;
+				var hsHeight = HorizontalScrollbarHeight;
+
 				if (_horizontalScrollingOn && ShowHorizontalScrollBar)
 				{
-					availableSize.Y -= HorizontalScrollKnob.Size.Y;
+					availableSize.Y -= hsHeight;
 
 					if (availableSize.Y < 0)
 					{
@@ -544,7 +585,7 @@ namespace Myra.Graphics2D.UI
 
 				if (_verticalScrollingOn && ShowVerticalScrollBar)
 				{
-					availableSize.X -= VerticalScrollKnob.Size.X;
+					availableSize.X -= vsWidth;
 
 					if (availableSize.X < 0)
 					{
@@ -554,9 +595,6 @@ namespace Myra.Graphics2D.UI
 
 				// Remeasure with scrollbars
 				var measureSize = InternalChild.Measure(availableSize);
-
-				var vsWidth = VerticalScrollBackground != null ? VerticalScrollBackground.Size.X : VerticalScrollKnob.Size.X;
-				var hsHeight = HorizontalScrollBackground != null ? HorizontalScrollBackground.Size.Y : HorizontalScrollKnob.Size.Y;
 
 				var bw = bounds.Width - (_verticalScrollingOn && ShowVerticalScrollBar ? vsWidth : 0);
 
