@@ -3,7 +3,6 @@ using System.Linq;
 using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
-using System.ComponentModel;
 
 #if !XENKO
 using Microsoft.Xna.Framework;

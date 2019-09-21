@@ -3,7 +3,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.ComponentModel;
 
 namespace Myra.Graphics2D.UI
 {

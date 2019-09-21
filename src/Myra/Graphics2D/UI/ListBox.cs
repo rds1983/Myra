@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
-using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using static Myra.Graphics2D.UI.Grid;
 

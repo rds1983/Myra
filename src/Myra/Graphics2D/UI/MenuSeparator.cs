@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.ComponentModel;
 using System.Xml.Serialization;
 
 namespace Myra.Graphics2D.UI

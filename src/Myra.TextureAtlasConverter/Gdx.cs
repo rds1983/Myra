@@ -80,8 +80,6 @@ namespace Myra.Tools.ToMyraAtlasConverter
 
 		public static TextureRegionAtlas FromGDX(string data, Func<string, Texture2D> textureLoader)
 		{
-			var mode = GDXMode.PageHeader;
-
 			GDXPageData pageData = null;
 			var spriteDatas = new Dictionary<string, GDXSpriteData>();
 
@@ -113,7 +111,6 @@ namespace Myra.Tools.ToMyraAtlasConverter
 						}
 
 						pageData = new GDXPageData {Texture = texture};
-						mode = GDXMode.PageHeader;
 						continue;
 					}
 
@@ -126,7 +123,6 @@ namespace Myra.Tools.ToMyraAtlasConverter
 						};
 
 						spriteDatas[s] = spriteData;
-						mode = GDXMode.Sprite;
 						continue;
 					}
 

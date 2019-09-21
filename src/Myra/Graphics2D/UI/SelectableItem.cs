@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System;
-using System.ComponentModel;
 using System.Text;
 using System.Xml.Serialization;
 
