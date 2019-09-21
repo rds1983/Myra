@@ -903,9 +903,15 @@ namespace Myra.Graphics2D.UI
 			}
 
 #if !XENKO
-			UpdateTouch();
+            try
+            {
+                UpdateTouch();
+            }
+            catch(Exception)
+            {
+            }
 #endif
-		}
+        }
 
 		public void OnKeyDown(Keys key)
 		{
