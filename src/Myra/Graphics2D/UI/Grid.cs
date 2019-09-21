@@ -34,7 +34,7 @@ namespace Myra.Graphics2D.UI
 
 		public class Proportion
 		{
-			private static readonly Proportion _default = new Proportion(ProportionType.Auto);
+			private static readonly Proportion _default = new Proportion(ProportionType.Part, 1.0f);
 
 			private ProportionType _type;
 			private float _value = 1.0f;
