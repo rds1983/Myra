@@ -387,6 +387,11 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnTouchDown();
 
+			if (Desktop == null)
+			{
+				return;
+			}
+
 			var touchPosition = Desktop.TouchPosition;
 
 			var r = _verticalScrollbarThumb;

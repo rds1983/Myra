@@ -327,12 +327,14 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_isTouchDown = value;
-				var activeWidget = GetActiveWidget();
 				if (_isTouchDown)
 				{
 					InputOnTouchDown();
 
 					TouchDown.Invoke(this);
+
+					// Only top widget can receive touch down
+					var activeWidget = GetActiveWidget(true, true);
 					if (activeWidget != null)
 					{
 						activeWidget.HandleTouchDown();
@@ -341,6 +343,9 @@ namespace Myra.Graphics2D.UI
 				else
 				{
 					TouchUp.Invoke(this);
+
+					// Any widget can receive touch up
+					var activeWidget = GetActiveWidget(true, false);
 					if (activeWidget != null)
 					{
 						activeWidget.HandleTouchUp();
@@ -712,7 +717,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			// Update Active
-			var activeWidget = GetActiveWidget(false);
+			var activeWidget = GetActiveWidget(false, true);
 			foreach (var w in _widgets)
 			{
 				var active = activeWidget == w;
@@ -755,7 +760,7 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		private Widget GetActiveWidget(bool containsTouch = true)
+		private Widget GetActiveWidget(bool containsTouch = true, bool onlyTop = false)
 		{
 			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
 			{
@@ -765,6 +770,11 @@ namespace Myra.Graphics2D.UI
 					!containsTouch))
 				{
 					return w;
+				}
+
+				if (onlyTop)
+				{
+					return null;
 				}
 			}
 
