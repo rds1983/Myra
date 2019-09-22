@@ -31,11 +31,6 @@ namespace Myra.Graphics2D.UI.File
 
 			set
 			{
-				if (value == _textFieldPath.Text)
-				{
-					return;
-				}
-
 				SetFolder(value, true);
 			}
 		}
@@ -333,18 +328,12 @@ namespace Myra.Graphics2D.UI.File
 			_listBoxPlaces.SelectedIndex = null;
 
 			var path = _paths[_gridFiles.SelectedRowIndex.Value];
-
-			if (!System.IO.File.Exists(path))
-			{
-				return;
-			}
-
 			var fi = new FileInfo(path);
-
-			var choose = (fi.Attributes.HasFlag(FileAttributes.Directory) && _mode == FileDialogMode.ChooseFolder) ||
-						 (!fi.Attributes.HasFlag(FileAttributes.Directory) && _mode != FileDialogMode.ChooseFolder);
-
-			if (choose)
+			if (fi.Attributes.HasFlag(FileAttributes.Directory) && _mode == FileDialogMode.ChooseFolder)
+			{
+				_textFieldPath.Text = path;
+			}
+			else if (!fi.Attributes.HasFlag(FileAttributes.Directory) && _mode != FileDialogMode.ChooseFolder)
 			{
 				FileName = Path.GetFileName(path);
 			}
