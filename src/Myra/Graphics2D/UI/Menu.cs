@@ -129,6 +129,21 @@ namespace Myra.Graphics2D.UI
 
 				return hoverIndex;
 			}
+
+			set
+			{
+				if (value != null)
+				{
+					var button = InternalChild.Widgets[value.Value] as MenuItemButton;
+					if (button != null)
+					{
+						KeyboardHoverButton = button;
+					}
+				} else
+				{
+					KeyboardHoverButton = null;
+				}
+			}
 		}
 
 		[Browsable(false)]
