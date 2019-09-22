@@ -6,7 +6,7 @@ using Myra.Graphics2D.UI.File;
 
 namespace Myra.Samples.AllWidgets
 {
-	public partial class AllWidgets : Grid
+	public partial class AllWidgets
 	{
 		public AllWidgets()
 		{

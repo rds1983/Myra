@@ -44,7 +44,7 @@
         <TextBlock Text="Tree" GridRow="8" />
       </Grid>
     </ScrollPane>
-    <VerticalSplitPane GridColumn="2">
+    <VerticalSplitPane>
       <Grid RowSpacing="8">
         <ColumnsProportions>
           <Proportion Type="Fill" />
@@ -56,7 +56,7 @@
         <TextBlock Text="Vertical Slider:" />
         <VerticalSlider HorizontalAlignment="Center" GridRow="1" />
       </Grid>
-      <Grid RowSpacing="8" GridRow="2">
+      <Grid RowSpacing="8">
         <ColumnsProportions>
           <Proportion Type="Fill" />
         </ColumnsProportions>

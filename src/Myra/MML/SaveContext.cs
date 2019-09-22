@@ -86,7 +86,7 @@ namespace Myra.MML
 					{
 						var collectionRoot = el;
 
-						if (property.FindAttribute<ContentAttribute>() == null)
+						if (property.FindAttribute<ContentAttribute>() == null && asList.Count > 0)
 						{
 							collectionRoot = new XElement(property.Name);
 							el.Add(collectionRoot);

@@ -1,12 +1,11 @@
 <Project>
   <ExportOptions Namespace="Myra.Samples.Notepad" Class="Notepad" OutputPath="D:\Projects\Myra\samples\Myra.Samples.Notepad" />
-  <Grid Id="Root">
-    <ColumnsProportions />
-    <RowsProportions>
+  <VerticalBox HorizontalAlignment="Stretch">
+    <Proportions>
       <Proportion />
       <Proportion />
       <Proportion Type="Fill" />
-    </RowsProportions>
+    </Proportions>
     <HorizontalMenu VerticalAlignment="Stretch" Id="mainMenu">
       <MenuItem Id="menuItemFile" Text="File">
         <MenuItem Id="menuItemNew" Text="New" />
@@ -22,9 +21,9 @@
         <MenuItem Id="menuItemAbout" Text="About" />
       </MenuItem>
     </HorizontalMenu>
-    <HorizontalSeparator GridRow="1" />
-    <ScrollPane GridRow="2">
+    <HorizontalSeparator />
+    <ScrollPane>
       <TextField Text="" Multiline="True" Wrap="True" Id="textArea" VerticalAlignment="Stretch" />
     </ScrollPane>
-  </Grid>
+  </VerticalBox>
 </Project>

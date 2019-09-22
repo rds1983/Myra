@@ -108,6 +108,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[Browsable(false)]
+		[XmlIgnore]
 		public int? HoverIndex
 		{
 			get

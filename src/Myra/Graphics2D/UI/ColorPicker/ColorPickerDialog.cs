@@ -10,7 +10,7 @@ using ColorHSV = Myra.Utility.ColorHSV;
 
 namespace Myra.Graphics2D.UI.ColorPicker
 {
-	public partial class ColorPickerDialog : Dialog
+	public partial class ColorPickerDialog
 	{
 		private const string HexChars = "1234567890ABCDEFabcdef";
 		public static readonly Color[] UserColors = new []

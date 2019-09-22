@@ -1,24 +1,14 @@
 <Project>
   <ExportOptions Namespace="MyraPad.UI" Class="NewProjectWizard" OutputPath="D:\Projects\Myra\src\MyraPad\UI" />
-  <Dialog Title="Choose Root Container" Left="381" Top="78">
-    <Grid GridRow="1">
-      <ColumnsProportions />
-      <RowsProportions>
-        <Proportion />
-        <Proportion />
-        <Proportion />
-        <Proportion />
-        <Proportion />
-        <Proportion />
-        <Proportion />
-      </RowsProportions>
+  <Dialog Title="Choose Root Container" Left="425" Top="76">
+    <VerticalBox HorizontalAlignment="Stretch">
       <RadioButton Text="Grid" Id="_radioButtonGrid" />
-      <RadioButton Text="Panel" Id="_radioButtonPanel" GridRow="1" />
-      <RadioButton Text="ScrollPane" Id="_radioButtonScrollPane" GridRow="2" />
-      <RadioButton Text="HorizontalSplitPane" Id="_radioButtonHorizontalSplitPane" GridRow="3" />
-      <RadioButton Text="VerticalSplitPane" Id="_radioButtonVerticalSplitPane" GridRow="4" />
-      <RadioButton Text="Window" Id="_radioButtonWindow" GridRow="5" />
-      <RadioButton Text="Dialog" Id="_radioButtonDialog" GridRow="6" />
-    </Grid>
+      <RadioButton Text="Panel" Id="_radioButtonPanel" />
+      <RadioButton Text="ScrollPane" Id="_radioButtonScrollPane" />
+      <RadioButton Text="HorizontalSplitPane" Id="_radioButtonHorizontalSplitPane" />
+      <RadioButton Text="VerticalSplitPane" Id="_radioButtonVerticalSplitPane" />
+      <RadioButton Text="Window" Id="_radioButtonWindow" />
+      <RadioButton Text="Dialog" Id="_radioButtonDialog" />
+    </VerticalBox>
   </Dialog>
 </Project>

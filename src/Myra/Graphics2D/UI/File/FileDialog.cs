@@ -10,7 +10,7 @@ using Xenko.Core.Mathematics;
 
 namespace Myra.Graphics2D.UI.File
 {
-	public partial class FileDialog : Dialog
+	public partial class FileDialog
 	{
 		private const int ImageTextSpacing = 4;
 

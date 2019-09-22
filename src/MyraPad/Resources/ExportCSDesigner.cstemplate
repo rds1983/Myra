@@ -9,7 +9,7 @@ using Xenko.Core.Mathematics;
 
 namespace $namespace$
 {
-	partial class $class$
+	partial class $class$: $parentClass$
 	{
 		private void BuildUI()
 		{

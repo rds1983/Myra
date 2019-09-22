@@ -18,7 +18,7 @@ using Xenko.Input;
 
 namespace Myra.Graphics2D.UI
 {
-	public class Window : SingleItemContainer<Grid>, IContent
+	public class Window : SingleItemContainer<VerticalBox>, IContent
 	{
 		private Point? _startPos;
 		private readonly Grid _titleGrid;
@@ -121,8 +121,7 @@ namespace Myra.Graphics2D.UI
 
 				if (value != null)
 				{
-					value.GridRow = 1;
-					InternalChild.Widgets.Add(value);
+					InternalChild.Widgets.Insert(1, value);
 				}
 
 				_content = value;
@@ -197,15 +196,19 @@ namespace Myra.Graphics2D.UI
 
 		public Window(WindowStyle style)
 		{
-			InternalChild = new Grid();
+			InternalChild = new VerticalBox
+			{
+				HorizontalAlignment = HorizontalAlignment.Stretch
+			};
+
 			Result = false;
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
 
-			InternalChild.RowSpacing = 8;
+			InternalChild.Spacing = 8;
 
-			InternalChild.RowsProportions.Add(new Proportion(ProportionType.Auto));
-			InternalChild.RowsProportions.Add(new Proportion(ProportionType.Fill));
+			InternalChild.Proportions.Add(new Proportion(ProportionType.Auto));
+			InternalChild.Proportions.Add(new Proportion(ProportionType.Fill));
 
 			_titleGrid = new Grid
 			{

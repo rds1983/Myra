@@ -65,12 +65,6 @@ namespace Myra.Graphics2D.UI
 					onDisabled();
 				}
 			};
-			optionsCheckBox.GridRow = Root.RowsProportions.Count;
-
-			Root.RowsProportions.Add(new Proportion
-			{
-				Type = ProportionType.Auto
-			});
 
 			Root.Widgets.Add(optionsCheckBox);
 		}

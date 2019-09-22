@@ -67,6 +67,19 @@ namespace Myra.Graphics2D.UI
 			{
 				ShouldSerializeProperty = (o, p) =>
 				{
+					var asWidget = o as Widget;
+					if (asWidget != null && asWidget.Parent != null && asWidget.Parent is Grid)
+					{
+						var container = asWidget.Parent.Parent;
+						if (container != null &&
+						   (container is Box || container is SplitPane) &&
+						   (p.Name == "GridRow" || p.Name == "GridColumn"))
+						{
+							// Skip serializing auto-assigned GridRow/GridColumn for SplitPane and Box containers
+							return false;
+						}
+					}
+
 					return !SaveContext.HasDefaultValue(o, p) &&
 						(!(o is Widget) ||
 						!HasStylesheetValue((Widget)o, p, stylesheet));

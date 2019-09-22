@@ -36,21 +36,21 @@ namespace Myra.Samples.GridContainer
 				//				DrawLines = true
 			};
 
-			grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-			grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-			grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part, 1.0f));
-			grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part, 2.0f));
-			grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Pixels, 150.0f));
-			grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-			grid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill));
+			grid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
+			grid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
+			grid.ColumnsProportions.Add(new Proportion(ProportionType.Part, 1.0f));
+			grid.ColumnsProportions.Add(new Proportion(ProportionType.Part, 2.0f));
+			grid.ColumnsProportions.Add(new Proportion(ProportionType.Pixels, 150.0f));
+			grid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
+			grid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
 
-			grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-			grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-			grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part, 1.0f));
-			grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Part, 1.0f));
-			grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Pixels, 200.0f));
-			grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-			grid.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill));
+			grid.RowsProportions.Add(new Proportion(ProportionType.Auto));
+			grid.RowsProportions.Add(new Proportion(ProportionType.Auto));
+			grid.RowsProportions.Add(new Proportion(ProportionType.Part, 1.0f));
+			grid.RowsProportions.Add(new Proportion(ProportionType.Part, 1.0f));
+			grid.RowsProportions.Add(new Proportion(ProportionType.Pixels, 200.0f));
+			grid.RowsProportions.Add(new Proportion(ProportionType.Auto));
+			grid.RowsProportions.Add(new Proportion(ProportionType.Fill));
 
 			// Create headers
 			for (var i = 1; i < grid.ColumnsProportions.Count; ++i)

@@ -1,13 +1,11 @@
 <Project>
   <ExportOptions Namespace="Myra.Graphics2D.UI.File" Class="FileDialog" OutputPath="D:/Projects/Myra/src/Myra/Graphics2D/UI/File" />
-  <Dialog Title="Open File..." Left="174" Width="600" Height="400">
-    <Grid RowSpacing="4" GridRow="1">
-      <ColumnsProportions />
-      <RowsProportions>
+  <Dialog Title="Open File..." Left="218" Width="600" Height="400">
+    <VerticalBox Spacing="4" HorizontalAlignment="Stretch" >
+      <Proportions>
         <Proportion />
         <Proportion Type="Fill" />
-        <Proportion />
-      </RowsProportions>
+      </Proportions>
       <Grid ColumnSpacing="4">
         <ColumnsProportions>
           <Proportion />
@@ -21,9 +19,9 @@
         <TextField Text="" Readonly="True" Id="_textFieldPath" VerticalAlignment="Center" GridColumn="2" />
         <ImageButton Id="_buttonParent" HorizontalAlignment="Center" VerticalAlignment="Center" GridColumn="3" />
       </Grid>
-      <HorizontalSplitPane Id="_splitPane" GridRow="1">
+      <HorizontalSplitPane Id="_splitPane">
         <ListBox Id="_listBoxPlaces" HorizontalAlignment="Stretch" ClipToBounds="True" />
-        <ScrollPane ShowHorizontalScrollBar="False" Id="_scrollPane" GridColumn="2">
+        <ScrollPane ShowHorizontalScrollBar="False" Id="_scrollPane">
           <Grid ColumnSpacing="4" RowSpacing="4" GridSelectionMode="Row" Id="_gridFiles">
             <ColumnsProportions>
               <Proportion />
@@ -33,7 +31,7 @@
           </Grid>
         </ScrollPane>
       </HorizontalSplitPane>
-      <Grid ColumnSpacing="4" GridRow="2">
+      <Grid ColumnSpacing="4">
         <ColumnsProportions>
           <Proportion />
           <Proportion Type="Fill" />
@@ -42,6 +40,6 @@
         <TextBlock Text="File name" Id="_textBlockFileName" />
         <TextField Text="" Id="_textFieldFileName" GridColumn="1" />
       </Grid>
-    </Grid>
+    </VerticalBox>
   </Dialog>
 </Project>

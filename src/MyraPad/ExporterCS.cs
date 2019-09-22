@@ -43,7 +43,6 @@ namespace MyraPad
 
 			template = template.Replace("$namespace$", _project.ExportOptions.Namespace);
 			template = template.Replace("$class$", _project.ExportOptions.Class);
-			template = template.Replace("$parentClass$", _project.Root.GetType().Name);
 			template = template.Replace("$generationDate$", DateTime.Now.ToString());
 
 			File.WriteAllText(path, template);
@@ -199,6 +198,7 @@ namespace MyraPad
 
 			template = template.Replace("$namespace$", _project.ExportOptions.Namespace);
 			template = template.Replace("$class$", _project.ExportOptions.Class);
+			template = template.Replace("$parentClass$", _project.Root.GetType().Name);
 			template = template.Replace("$generationDate$", DateTime.Now.ToString());
 
 			ids.Clear();

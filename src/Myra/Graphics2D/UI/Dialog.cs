@@ -22,17 +22,11 @@ namespace Myra.Graphics2D.UI
 
 		public Dialog(DialogStyle style) : base(style)
 		{
-			InternalChild.RowsProportions.Add(new Proportion());
-
-			var buttonsGrid = new Grid()
+			var buttonsGrid = new HorizontalBox()
 			{
-				ColumnSpacing = 8,
-				HorizontalAlignment = HorizontalAlignment.Right,
-				GridRow = 2
+				Spacing = 8,
+				HorizontalAlignment = HorizontalAlignment.Right
 			};
-
-			buttonsGrid.ColumnsProportions.Add(new Proportion());
-			buttonsGrid.ColumnsProportions.Add(new Proportion());
 
 			ButtonOk = new ImageTextButton
 			{

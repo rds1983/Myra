@@ -194,7 +194,10 @@ namespace Myra.Graphics2D.UI
 
 		public ImageTextButton(ImageTextButtonStyle style)
 		{
-			InternalChild = new HorizontalBox();
+			InternalChild = new HorizontalBox
+			{
+				VerticalAlignment = VerticalAlignment.Stretch
+			};
 
 			_image = new Image
 			{

@@ -15,10 +15,6 @@ namespace Myra.Graphics2D.UI
 			get;
 		}
 
-		[Browsable(false)]
-		[Content]
-		public ObservableCollection<Widget> Widgets => InternalChild.Widgets;
-
 		[Category("Box")]
 		[DefaultValue(false)]
 		public bool ShowGridLines
@@ -50,6 +46,10 @@ namespace Myra.Graphics2D.UI
 		{
 			get => Orientation == Orientation.Horizontal ? InternalChild.ColumnsProportions : InternalChild.RowsProportions;
 		}
+
+		[Browsable(false)]
+		[Content]
+		public ObservableCollection<Widget> Widgets => InternalChild.Widgets;
 
 		protected Box()
 		{
