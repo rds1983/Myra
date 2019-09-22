@@ -3,6 +3,7 @@ using System.Linq;
 using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
+using Myra.Utility;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -57,30 +58,38 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public bool IsExpanded
 		{
-			get { return Desktop.ContextMenu == _itemsContainerScroll; }
+			get { return InternalChild.IsPressed; }
+		}
 
-			private set
+		public override Desktop Desktop
+		{
+			get
 			{
-				if (value == IsExpanded)
+				return base.Desktop;
+			}
+			set
+			{
+				if (Desktop != null)
 				{
-					return;
+					Desktop.ContextMenuClosing -= DesktopOnContextMenuClosing;
+					Desktop.ContextMenuClosed -= DesktopOnContextMenuClosed;
 				}
 
-				if (IsExpanded)
-				{
-					Desktop.HideContextMenu();
-				}
-				else
-				{
-					_itemsContainer.Width = Bounds.Width;
+				base.Desktop = value;
 
-					Desktop.ShowContextMenu(_itemsContainerScroll, new Point(Bounds.X, Bounds.Bottom));
+				if (Desktop != null)
+				{
+					Desktop.ContextMenuClosing += DesktopOnContextMenuClosing;
+					Desktop.ContextMenuClosed += DesktopOnContextMenuClosed;
 				}
 			}
 		}
 
 		public ComboBox(ComboBoxStyle style) : base(new ImageTextButton((ImageTextButtonStyle)null))
 		{
+			InternalChild.Toggleable = true;
+			InternalChild.PressedChanged += InternalChild_PressedChanged;
+
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
 
@@ -116,6 +125,38 @@ namespace Myra.Graphics2D.UI
 
 		public ComboBox() : this(Stylesheet.Current)
 		{
+		}
+
+		private void DesktopOnContextMenuClosing(object sender, ContextMenuClosingEventArgs args)
+		{
+			// Prevent autoclosing of the context menu if mouse is over combobox button
+			// It'll be manually closed in the InternalChild_PressedChanged
+			if (Bounds.Contains(Desktop.TouchPosition))
+			{
+				args.Cancel = true;
+			}
+		}
+
+		private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Widget> genericEventArgs)
+		{
+			InternalChild.IsPressed = false;
+		}
+
+		private void InternalChild_PressedChanged(object sender, EventArgs e)
+		{
+			if (_itemsContainer.Widgets.Count == 0)
+			{
+				return;
+			}
+
+			if (InternalChild.IsPressed)
+			{
+				_itemsContainer.Width = Bounds.Width;
+				Desktop.ShowContextMenu(_itemsContainerScroll, new Point(Bounds.X, Bounds.Bottom));
+			} else
+			{
+				Desktop.HideContextMenu();
+			}
 		}
 
 		private void ItemOnChanged(object sender, EventArgs eventArgs)
@@ -191,7 +232,7 @@ namespace Myra.Graphics2D.UI
 			var widget = (ImageTextButton)sender;
 			SelectedItem = (ListItem)widget.Tag;
 
-			IsExpanded = false;
+			Desktop.HideContextMenu();
 		}
 
 		private void UpdateSelectedItem()
@@ -207,18 +248,6 @@ namespace Myra.Graphics2D.UI
 			{
 				InternalChild.Text = string.Empty;
 			}
-		}
-
-		public override void OnTouchDown()
-		{
-			base.OnTouchDown();
-
-			if (_itemsContainer.Widgets.Count == 0)
-			{
-				return;
-			}
-
-			IsExpanded = !IsExpanded;
 		}
 
 		public void ApplyComboBoxStyle(ComboBoxStyle style)

@@ -760,7 +760,7 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		private Widget GetActiveWidget(bool containsTouch = true, bool onlyTop = false)
+		private Widget GetActiveWidget(bool containsTouch = true, bool accountModality = false)
 		{
 			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
 			{
@@ -772,7 +772,7 @@ namespace Myra.Graphics2D.UI
 					return w;
 				}
 
-				if (onlyTop)
+				if (w is Window && accountModality)
 				{
 					return null;
 				}
