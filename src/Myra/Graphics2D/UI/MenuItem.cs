@@ -14,7 +14,27 @@ namespace Myra.Graphics2D.UI
 {
 	public class MenuItem : SelectableItem, IMenuItemsContainer, IMenuItem
 	{
+		private bool _toggleable;
 		private readonly ObservableCollection<IMenuItem> _items = new ObservableCollection<IMenuItem>();
+
+		public bool Toggleable
+		{
+			get
+			{
+				return _toggleable;
+			}
+
+			set
+			{
+				if (value == _toggleable)
+				{
+					return;
+				}
+
+				_toggleable = value;
+				FireChanged();
+			}
+		}
 
 		[Browsable(false)]
 		[XmlIgnore]

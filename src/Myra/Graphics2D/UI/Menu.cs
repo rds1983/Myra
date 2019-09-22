@@ -264,7 +264,7 @@ namespace Myra.Graphics2D.UI
 				menuItemButton.MouseEntered += MouseOnEntered;
 				menuItemButton.MouseLeft += MouseOnLeft;
 				menuItemButton.SubMenu.Items = menuItem.Items;
-				menuItemButton.Toggleable = menuItem.Items.Count > 0;
+				menuItemButton.Toggleable = menuItem.Items.Count > 0 || menuItem.Toggleable;
 
 				if (menuItemButton.Toggleable)
 				{
@@ -396,12 +396,13 @@ namespace Myra.Graphics2D.UI
 
 			if (menuItemButton.IsPressed)
 			{
+				((MenuItem)menuItemButton.Tag).FireSelected();
 				if (menuItemButton.CanOpen)
 				{
 					ShowSubMenu(menuItemButton);
 				}
 			}
-			else
+			else if (menuItemButton.CanOpen)
 			{
 				Close();
 			}
