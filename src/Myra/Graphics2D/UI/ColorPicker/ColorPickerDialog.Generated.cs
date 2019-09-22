@@ -105,20 +105,20 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			var grid1 = new Grid();
 			grid1.ColumnSpacing = 8;
 			grid1.RowSpacing = 4;
-			grid1.ColumnsProportions.Add(new Grid.Proportion());
-			grid1.ColumnsProportions.Add(new Grid.Proportion
+			grid1.ColumnsProportions.Add(new Proportion());
+			grid1.ColumnsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Pixels,
+				Type = Myra.Graphics2D.UI.ProportionType.Pixels,
 				Value = 50,
 			});
-			grid1.ColumnsProportions.Add(new Grid.Proportion
+			grid1.ColumnsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Fill,
+				Type = Myra.Graphics2D.UI.ProportionType.Fill,
 			});
-			grid1.RowsProportions.Add(new Grid.Proportion());
-			grid1.RowsProportions.Add(new Grid.Proportion());
-			grid1.RowsProportions.Add(new Grid.Proportion());
-			grid1.RowsProportions.Add(new Grid.Proportion());
+			grid1.RowsProportions.Add(new Proportion());
+			grid1.RowsProportions.Add(new Proportion());
+			grid1.RowsProportions.Add(new Proportion());
+			grid1.RowsProportions.Add(new Proportion());
 			grid1.PaddingTop = 4;
 			grid1.PaddingBottom = 4;
 			grid1.Widgets.Add(textBlock1);
@@ -208,20 +208,20 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			var grid2 = new Grid();
 			grid2.ColumnSpacing = 8;
 			grid2.RowSpacing = 5;
-			grid2.ColumnsProportions.Add(new Grid.Proportion());
-			grid2.ColumnsProportions.Add(new Grid.Proportion
+			grid2.ColumnsProportions.Add(new Proportion());
+			grid2.ColumnsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Pixels,
+				Type = Myra.Graphics2D.UI.ProportionType.Pixels,
 				Value = 50,
 			});
-			grid2.ColumnsProportions.Add(new Grid.Proportion
+			grid2.ColumnsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Fill,
+				Type = Myra.Graphics2D.UI.ProportionType.Fill,
 			});
-			grid2.RowsProportions.Add(new Grid.Proportion());
-			grid2.RowsProportions.Add(new Grid.Proportion());
-			grid2.RowsProportions.Add(new Grid.Proportion());
-			grid2.RowsProportions.Add(new Grid.Proportion());
+			grid2.RowsProportions.Add(new Proportion());
+			grid2.RowsProportions.Add(new Proportion());
+			grid2.RowsProportions.Add(new Proportion());
+			grid2.RowsProportions.Add(new Proportion());
 			grid2.PaddingTop = 4;
 			grid2.PaddingBottom = 4;
 			grid2.GridColumn = 2;
@@ -238,16 +238,16 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			grid2.Widgets.Add(_textFieldHex);
 
 			var grid3 = new Grid();
-			grid3.ColumnsProportions.Add(new Grid.Proportion
+			grid3.ColumnsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Part,
+				Type = Myra.Graphics2D.UI.ProportionType.Part,
 			});
-			grid3.ColumnsProportions.Add(new Grid.Proportion());
-			grid3.ColumnsProportions.Add(new Grid.Proportion
+			grid3.ColumnsProportions.Add(new Proportion());
+			grid3.ColumnsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Part,
+				Type = Myra.Graphics2D.UI.ProportionType.Part,
 			});
-			grid3.RowsProportions.Add(new Grid.Proportion());
+			grid3.RowsProportions.Add(new Proportion());
 			grid3.GridRow = 2;
 			grid3.Widgets.Add(grid1);
 			grid3.Widgets.Add(verticalSeparator1);
@@ -260,37 +260,37 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_gridUserColors = new Grid();
 			_gridUserColors.ColumnSpacing = 4;
 			_gridUserColors.RowSpacing = 4;
-			_gridUserColors.ColumnsProportions.Add(new Grid.Proportion
+			_gridUserColors.ColumnsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Part,
+				Type = Myra.Graphics2D.UI.ProportionType.Part,
 			});
-			_gridUserColors.ColumnsProportions.Add(new Grid.Proportion
+			_gridUserColors.ColumnsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Part,
+				Type = Myra.Graphics2D.UI.ProportionType.Part,
 			});
-			_gridUserColors.ColumnsProportions.Add(new Grid.Proportion
+			_gridUserColors.ColumnsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Part,
+				Type = Myra.Graphics2D.UI.ProportionType.Part,
 			});
-			_gridUserColors.ColumnsProportions.Add(new Grid.Proportion
+			_gridUserColors.ColumnsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Part,
+				Type = Myra.Graphics2D.UI.ProportionType.Part,
 			});
-			_gridUserColors.ColumnsProportions.Add(new Grid.Proportion
+			_gridUserColors.ColumnsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Part,
+				Type = Myra.Graphics2D.UI.ProportionType.Part,
 			});
-			_gridUserColors.ColumnsProportions.Add(new Grid.Proportion
+			_gridUserColors.ColumnsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Part,
+				Type = Myra.Graphics2D.UI.ProportionType.Part,
 			});
-			_gridUserColors.RowsProportions.Add(new Grid.Proportion
+			_gridUserColors.RowsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Part,
+				Type = Myra.Graphics2D.UI.ProportionType.Part,
 			});
-			_gridUserColors.RowsProportions.Add(new Grid.Proportion
+			_gridUserColors.RowsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Part,
+				Type = Myra.Graphics2D.UI.ProportionType.Part,
 			});
 			_gridUserColors.GridSelectionMode = Myra.Graphics2D.UI.GridSelectionMode.Cell;
 			_gridUserColors.Id = "_gridUserColors";
@@ -304,8 +304,8 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 			var grid4 = new Grid();
 			grid4.RowSpacing = 4;
-			grid4.RowsProportions.Add(new Grid.Proportion());
-			grid4.RowsProportions.Add(new Grid.Proportion());
+			grid4.RowsProportions.Add(new Proportion());
+			grid4.RowsProportions.Add(new Proportion());
 			grid4.GridRow = 4;
 			grid4.Widgets.Add(_gridUserColors);
 			grid4.Widgets.Add(_buttonSaveColor);
@@ -316,16 +316,16 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 			var grid5 = new Grid();
 			grid5.RowSpacing = -1;
-			grid5.RowsProportions.Add(new Grid.Proportion
+			grid5.RowsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Fill,
+				Type = Myra.Graphics2D.UI.ProportionType.Fill,
 				Value = 100,
 			});
-			grid5.RowsProportions.Add(new Grid.Proportion());
-			grid5.RowsProportions.Add(new Grid.Proportion());
-			grid5.RowsProportions.Add(new Grid.Proportion());
-			grid5.RowsProportions.Add(new Grid.Proportion());
-			grid5.RowsProportions.Add(new Grid.Proportion());
+			grid5.RowsProportions.Add(new Proportion());
+			grid5.RowsProportions.Add(new Proportion());
+			grid5.RowsProportions.Add(new Proportion());
+			grid5.RowsProportions.Add(new Proportion());
+			grid5.RowsProportions.Add(new Proportion());
 			grid5.GridRow = 1;
 			grid5.Widgets.Add(_imageColor);
 			grid5.Widgets.Add(horizontalSeparator1);

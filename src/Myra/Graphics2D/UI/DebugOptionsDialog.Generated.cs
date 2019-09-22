@@ -32,11 +32,11 @@ namespace Myra.Graphics2D.UI
 			_checkBoxDisableClipping.GridRow = 4;
 
 			Root = new Grid();
-			Root.RowsProportions.Add(new Grid.Proportion());
-			Root.RowsProportions.Add(new Grid.Proportion());
-			Root.RowsProportions.Add(new Grid.Proportion());
-			Root.RowsProportions.Add(new Grid.Proportion());
-			Root.RowsProportions.Add(new Grid.Proportion());
+			Root.RowsProportions.Add(new Proportion());
+			Root.RowsProportions.Add(new Proportion());
+			Root.RowsProportions.Add(new Proportion());
+			Root.RowsProportions.Add(new Proportion());
+			Root.RowsProportions.Add(new Proportion());
 			Root.Id = "Root";
 			Root.GridRow = 1;
 			Root.Widgets.Add(_checkBoxWidgetFrames);

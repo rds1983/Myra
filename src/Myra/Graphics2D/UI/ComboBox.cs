@@ -35,7 +35,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		private readonly CustomScrollPane _itemsContainerScroll;
-		private readonly Grid _itemsContainer;
+		private readonly VerticalBox _itemsContainer;
 		private ImageTextButtonStyle _dropDownItemStyle;
 
 		[Category("Behavior")]
@@ -84,7 +84,11 @@ namespace Myra.Graphics2D.UI
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
 
-			_itemsContainer = new Grid();
+			_itemsContainer = new VerticalBox
+			{
+				HorizontalAlignment = HorizontalAlignment.Stretch
+			};
+
 			_itemsContainerScroll = new CustomScrollPane
 			{
 				Content = _itemsContainer
@@ -148,11 +152,9 @@ namespace Myra.Graphics2D.UI
 
 			button.HorizontalAlignment = HorizontalAlignment.Stretch;
 			button.VerticalAlignment = VerticalAlignment.Stretch;
-			_itemsContainer.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
 			_itemsContainer.Widgets.Insert(index, button);
 
 			UpdateSelectedItem();
-			UpdateGridPositions();
 		}
 
 		protected override void RemoveItem(ListItem item)
@@ -160,7 +162,6 @@ namespace Myra.Graphics2D.UI
 			item.Changed -= ItemOnChanged;
 
 			var index = _itemsContainer.Widgets.IndexOf(item.Widget);
-			_itemsContainer.RowsProportions.RemoveAt(index);
 			_itemsContainer.Widgets.RemoveAt(index);
 
 			if (SelectedItem == item)
@@ -169,7 +170,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			UpdateSelectedItem();
-			UpdateGridPositions();
 		}
 
 		protected override void OnSelectedItemChanged()
@@ -183,15 +183,6 @@ namespace Myra.Graphics2D.UI
 			while (_itemsContainer.Widgets.Count > 0)
 			{
 				RemoveItem((ListItem)_itemsContainer.Widgets[0].Tag);
-			}
-		}
-
-
-		private void UpdateGridPositions()
-		{
-			for (var i = 0; i < _itemsContainer.Widgets.Count; ++i)
-			{
-				_itemsContainer.Widgets[i].GridRow = i;
 			}
 		}
 

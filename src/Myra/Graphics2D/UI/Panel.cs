@@ -6,7 +6,7 @@ using Xenko.Core.Mathematics;
 
 namespace Myra.Graphics2D.UI
 {
-	public class Panel : MultipleItemsContainer
+	public class Panel : MultipleItemsContainerBase
 	{
 		public override void Arrange()
 		{

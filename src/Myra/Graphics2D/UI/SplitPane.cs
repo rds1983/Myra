@@ -99,7 +99,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var handleIndex = InternalChild.Widgets.IndexOf(_handleDown);
-			Grid.Proportion firstProportion, secondProportion;
+			Proportion firstProportion, secondProportion;
 			float fp;
 
 			var position = Desktop.TouchPosition;
@@ -174,8 +174,8 @@ namespace Myra.Graphics2D.UI
 		}
 
 		private void GetProportions(int leftWidgetIndex,
-			out Grid.Proportion leftProportion,
-			out Grid.Proportion rightProportion)
+			out Proportion leftProportion,
+			out Proportion rightProportion)
 		{
 			var baseIndex = leftWidgetIndex*2;
 			leftProportion = Orientation == Orientation.Horizontal
@@ -188,7 +188,7 @@ namespace Myra.Graphics2D.UI
 
 		public float GetSplitterPosition(int leftWidgetIndex)
 		{
-			Grid.Proportion leftProportion, rightProportion;
+			Proportion leftProportion, rightProportion;
 			GetProportions(leftWidgetIndex, out leftProportion, out rightProportion);
 
 			var total = leftProportion.Value + rightProportion.Value;
@@ -198,7 +198,7 @@ namespace Myra.Graphics2D.UI
 
 		public void SetSplitterPosition(int leftWidgetIndex, float proportion)
 		{
-			Grid.Proportion leftProportion, rightProportion;
+			Proportion leftProportion, rightProportion;
 			GetProportions(leftWidgetIndex, out leftProportion, out rightProportion);
 
 			var total = leftProportion.Value + rightProportion.Value;
@@ -227,7 +227,7 @@ namespace Myra.Graphics2D.UI
 
 			foreach (var w in _widgets)
 			{
-				Grid.Proportion proportion;
+				Proportion proportion;
 				if (i > 0)
 				{
 					// Add splitter
@@ -242,7 +242,7 @@ namespace Myra.Graphics2D.UI
 
 					handle.PressedChanged += HandleOnPressedChanged;
 
-					proportion = new Grid.Proportion(Grid.ProportionType.Auto);
+					proportion = new Proportion(ProportionType.Auto);
 
 					if (Orientation == Orientation.Horizontal)
 					{
@@ -262,8 +262,8 @@ namespace Myra.Graphics2D.UI
 				}
 
 				proportion = i < _widgets.Count - 1
-					? new Grid.Proportion(Grid.ProportionType.Part, 1.0f)
-					: new Grid.Proportion(Grid.ProportionType.Fill, 1.0f);
+					? new Proportion(ProportionType.Part, 1.0f)
+					: new Proportion(ProportionType.Fill, 1.0f);
 
 				// Set grid coord and add widget itself
 				if (Orientation == Orientation.Horizontal)

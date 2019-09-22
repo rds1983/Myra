@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
-using static Myra.Graphics2D.UI.Grid;
 using System.Xml.Serialization;
 using Myra.Attributes;
 
@@ -18,7 +17,7 @@ using Xenko.Input;
 
 namespace Myra.Graphics2D.UI
 {
-	public abstract class Menu : SingleItemContainer<Grid>, IMenuItemsContainer
+	public abstract class Menu : SingleItemContainer<Box>, IMenuItemsContainer
 	{
 		private ObservableCollection<IMenuItem> _items;
 
@@ -136,7 +135,13 @@ namespace Myra.Graphics2D.UI
 
 		protected Menu(MenuStyle style)
 		{
-			InternalChild = new Grid();
+			if (Orientation == Orientation.Horizontal)
+			{
+				InternalChild = new HorizontalBox();
+			} else
+			{
+				InternalChild = new VerticalBox();
+			}
 
 			OpenMenuItem = null;
 
@@ -196,38 +201,15 @@ namespace Myra.Graphics2D.UI
 			return null;
 		}
 
-		private void UpdateGridPositions()
-		{
-			for (var i = 0; i < InternalChild.Widgets.Count; ++i)
-			{
-				var widget = InternalChild.Widgets[i];
-				if (Orientation == Orientation.Horizontal)
-				{
-					widget.GridColumn = i;
-				}
-				else
-				{
-					widget.GridRow = i;
-				}
-			}
-		}
-
 		private void AddItem(Widget menuItem, int index)
 		{
-			if (Orientation == Orientation.Horizontal)
-			{
-				InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
-			}
-			else
+			if (Orientation == Orientation.Vertical)
 			{
 				menuItem.HorizontalAlignment = HorizontalAlignment.Stretch;
 				menuItem.VerticalAlignment = VerticalAlignment.Stretch;
-				InternalChild.RowsProportions.Add(new Proportion(ProportionType.Auto));
 			}
 
 			InternalChild.Widgets.Insert(index, menuItem);
-
-			UpdateGridPositions();
 		}
 
 		private void MenuItemOnChanged(object sender, EventArgs eventArgs)
@@ -293,7 +275,6 @@ namespace Myra.Graphics2D.UI
 			iMenuItem.Widget = widget;
 
 			AddItem(widget, index);
-			UpdateGridPositions();
 		}
 
 		private void AddItem(IMenuItem item)
@@ -325,17 +306,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var index = InternalChild.Widgets.IndexOf(widget);
-			if (Orientation == Orientation.Horizontal)
-			{
-				InternalChild.ColumnsProportions.RemoveAt(index);
-			}
-			else
-			{
-				InternalChild.RowsProportions.RemoveAt(index);
-			}
-
 			InternalChild.Widgets.RemoveAt(index);
-			UpdateGridPositions();
 		}
 
 		public void Close()

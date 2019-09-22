@@ -147,7 +147,7 @@ namespace Myra.Graphics2D.UI
 			}
 			else
 			{
-				itemType = typeof(Grid.Proportion);
+				itemType = typeof(Proportion);
 			}
 
 			if (itemType == null)

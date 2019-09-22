@@ -59,6 +59,7 @@ namespace MyraPad
 
 		private const string RowsProportionsName = "RowsProportions";
 		private const string ColumnsProportionsName = "ColumnsProportions";
+		private const string ProportionsName = "Proportions";
 		private const string ProportionName = "Proportion";
 		private const string MenuItemName = "MenuItem";
 		private const string ListItemName = "ListItem";
@@ -89,7 +90,9 @@ namespace MyraPad
 			"Panel",
 			"ScrollPane",
 			"VerticalSplitPane",
-			"HorizontalSplitPane"
+			"HorizontalSplitPane",
+			"VerticalBox",
+			"HorizontalBox"
 		};
 
 		private static readonly string[] SpecialContainers = new[]
@@ -804,7 +807,7 @@ namespace MyraPad
 				result.AddRange(Containers);
 				result.AddRange(SpecialContainers);
 			}
-			else if (_parentTag == RowsProportionsName || _parentTag == ColumnsProportionsName)
+			else if (_parentTag == RowsProportionsName || _parentTag == ColumnsProportionsName || _parentTag == ProportionsName)
 			{
 				result.Add(ProportionName);
 			}
@@ -825,6 +828,11 @@ namespace MyraPad
 			{
 				result.Add(ColumnsProportionsName);
 				result.Add(RowsProportionsName);
+			}
+
+			if (_parentTag == "VerticalBox" || _parentTag == "HorizontalBox")
+			{
+				result.Add(ProportionsName);
 			}
 
 			result = result.OrderBy(s => s).ToList();

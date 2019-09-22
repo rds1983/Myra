@@ -13,7 +13,7 @@ using Xenko.Graphics;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ImageTextButton : ButtonBase<Grid>
+	public class ImageTextButton : ButtonBase<HorizontalBox>
 	{
 		private readonly Image _image;
 		private readonly TextBlock _textBlock;
@@ -157,12 +157,12 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return InternalChild.ColumnSpacing;
+				return InternalChild.Spacing;
 			}
 
 			set
 			{
-				InternalChild.ColumnSpacing = value;
+				InternalChild.Spacing = value;
 			}
 		}
 
@@ -194,10 +194,7 @@ namespace Myra.Graphics2D.UI
 
 		public ImageTextButton(ImageTextButtonStyle style)
 		{
-			InternalChild = new Grid();
-
-			InternalChild.ColumnsProportions.Add(new Grid.Proportion());
-			InternalChild.ColumnsProportions.Add(new Grid.Proportion());
+			InternalChild = new HorizontalBox();
 
 			_image = new Image
 			{
@@ -210,7 +207,6 @@ namespace Myra.Graphics2D.UI
 			_textBlock = new TextBlock(style != null ? style.LabelStyle : null)
 			{
 				HorizontalAlignment = HorizontalAlignment.Stretch,
-				GridColumn = 1,
 				Wrap = true
 			};
 

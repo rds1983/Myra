@@ -1,5 +1,4 @@
 using System;
-using static Myra.Graphics2D.UI.Grid;
 
 namespace Myra.Graphics2D.UI
 {

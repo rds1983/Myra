@@ -33,11 +33,11 @@ namespace Myra.Samples.SplitPaneContainer
 			_root = new Grid();
 
 			// Top row is buttons
-			_root.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
+			_root.RowsProportions.Add(new Proportion(ProportionType.Auto));
 
 			var topRow = new Grid();
-			topRow.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-			topRow.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
+			topRow.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
+			topRow.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
 
 			var buttonSwitchOrientation = new ImageTextButton
 			{

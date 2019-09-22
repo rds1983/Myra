@@ -22,100 +22,8 @@ namespace Myra.Graphics2D.UI
 		Cell
 	}
 
-	public class Grid : MultipleItemsContainer
+	public class Grid : MultipleItemsContainerBase
 	{
-		public enum ProportionType
-		{
-			Auto,
-			Part,
-			Fill,
-			Pixels
-		}
-
-		public class Proportion
-		{
-			private static readonly Proportion _default = new Proportion(ProportionType.Part, 1.0f);
-
-			private ProportionType _type;
-			private float _value = 1.0f;
-
-			public static Proportion Default
-			{
-				get { return _default; }
-			}
-
-			[DefaultValue(ProportionType.Auto)]
-			public ProportionType Type
-			{
-				get { return _type; }
-
-				set
-				{
-					if (value == _type) return;
-					_type = value;
-					FireChanged();
-				}
-			}
-
-			[DefaultValue(1.0f)]
-			public float Value
-			{
-				get { return _value; }
-				set
-				{
-					if (value.EpsilonEquals(_value))
-					{
-						return;
-					}
-
-					_value = value;
-					FireChanged();
-				}
-			}
-
-			public event EventHandler Changed;
-
-			public Proportion()
-			{
-			}
-
-			public Proportion(ProportionType type)
-			{
-				_type = type;
-			}
-
-			public Proportion(ProportionType type, float value)
-				: this(type)
-			{
-				_value = value;
-			}
-
-			public override string ToString()
-			{
-				if (_type == ProportionType.Auto || _type == ProportionType.Fill)
-				{
-					return _type.ToString();
-				}
-
-				if (_type == ProportionType.Part)
-				{
-					return string.Format("{0}: {1:0.00}", _type, _value);
-				}
-
-				// Pixels
-				return string.Format("{0}: {1}", _type, (int)_value);
-			}
-
-			private void FireChanged()
-			{
-				var ev = Changed;
-				if (ev != null)
-				{
-					ev(this, EventArgs.Empty);
-				}
-			}
-		}
-
 		private int _columnSpacing;
 		private int _rowSpacing;
 		private readonly ObservableCollection<Proportion> _columnsProportions = new ObservableCollection<Proportion>();
@@ -180,13 +88,13 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[Category("Grid")]
+		[Browsable(false)]
 		public ObservableCollection<Proportion> ColumnsProportions
 		{
 			get { return _columnsProportions; }
 		}
 
-		[Category("Grid")]
+		[Browsable(false)]
 		public ObservableCollection<Proportion> RowsProportions
 		{
 			get { return _rowsProportions; }
@@ -358,6 +266,14 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[Browsable(false)]
+		[XmlIgnore]
+		public Proportion DefaultColumnProportion { get; set; } = Proportion.Default;
+
+		[Browsable(false)]
+		[XmlIgnore]
+		public Proportion DefaultRowProportion { get; set; } = Proportion.Default;
+
 		public event EventHandler SelectedIndexChanged = null;
 		public event EventHandler HoverIndexChanged = null;
 
@@ -454,7 +370,7 @@ namespace Myra.Graphics2D.UI
 		{
 			if (col < 0 || col >= ColumnsProportions.Count)
 			{
-				return Proportion.Default;
+				return DefaultColumnProportion;
 			}
 
 			return ColumnsProportions[col];
@@ -464,7 +380,7 @@ namespace Myra.Graphics2D.UI
 		{
 			if (row < 0 || row >= RowsProportions.Count)
 			{
-				return Proportion.Default;
+				return DefaultRowProportion;
 			}
 
 			return RowsProportions[row];

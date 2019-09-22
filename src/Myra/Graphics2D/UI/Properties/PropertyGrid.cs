@@ -7,7 +7,6 @@ using System.Reflection;
 using Myra.Graphics2D.UI.ColorPicker;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
-using static Myra.Graphics2D.UI.Grid;
 using System.Xml.Serialization;
 using Myra.Attributes;
 

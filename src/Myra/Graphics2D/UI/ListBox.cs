@@ -3,13 +3,12 @@ using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
 using Myra.Graphics2D.UI.Styles;
-using static Myra.Graphics2D.UI.Grid;
 
 namespace Myra.Graphics2D.UI
 {
 	public class ListBox : Selector<ScrollPane, ListItem>
 	{
-		private readonly Grid _grid;
+		private readonly VerticalBox _box;
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -35,8 +34,12 @@ namespace Myra.Graphics2D.UI
 
 		public ListBox(ListBoxStyle style) : base(new ScrollPane())
 		{
-			_grid = new Grid();
-			InternalChild.Content = _grid;
+			_box = new VerticalBox
+			{
+				HorizontalAlignment = HorizontalAlignment.Stretch
+			};
+			
+			InternalChild.Content = _box;
 			if (style != null)
 			{
 				ApplyListBoxStyle(style);
@@ -70,15 +73,6 @@ namespace Myra.Graphics2D.UI
 			InvalidateMeasure();
 		}
 
-		private void UpdateGridPositions()
-		{
-			for (var i = 0; i < Items.Count; ++i)
-			{
-				var widget = _grid.Widgets[i];
-				widget.GridRow = i;
-			}
-		}
-
 		protected override void InsertItem(ListItem item, int index)
 		{
 			item.Changed += ItemOnChanged;
@@ -105,35 +99,29 @@ namespace Myra.Graphics2D.UI
 				widget = new HorizontalSeparator(ListBoxStyle.SeparatorStyle);
 			}
 
-			_grid.RowsProportions.Insert(index, new Proportion(ProportionType.Auto));
-			_grid.Widgets.Insert(index, widget);
+			_box.Widgets.Insert(index, widget);
 
 			item.Widget = widget;
-
-			UpdateGridPositions();
 		}
 
 		protected override void RemoveItem(ListItem item)
 		{
 			item.Changed -= ItemOnChanged;
 
-			var index = _grid.Widgets.IndexOf(item.Widget);
-			_grid.RowsProportions.RemoveAt(index);
-			_grid.Widgets.RemoveAt(index);
+			var index = _box.Widgets.IndexOf(item.Widget);
+			_box.Widgets.RemoveAt(index);
 
 			if (SelectedItem == item)
 			{
 				SelectedItem = null;
 			}
-
-			UpdateGridPositions();
 		}
 
 		protected override void Reset()
 		{
-			while (_grid.Widgets.Count > 0)
+			while (_box.Widgets.Count > 0)
 			{
-				RemoveItem((ListItem)_grid.Widgets[0].Tag);
+				RemoveItem((ListItem)_box.Widgets[0].Tag);
 			}
 		}
 

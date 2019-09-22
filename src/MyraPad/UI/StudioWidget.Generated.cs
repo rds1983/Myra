@@ -134,12 +134,12 @@ namespace MyraPad.UI
 			_textStatus.GridRow = 2;
 
 			var grid1 = new Grid();
-			grid1.RowsProportions.Add(new Grid.Proportion
+			grid1.RowsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Fill,
+				Type = Myra.Graphics2D.UI.ProportionType.Fill,
 			});
-			grid1.RowsProportions.Add(new Grid.Proportion());
-			grid1.RowsProportions.Add(new Grid.Proportion());
+			grid1.RowsProportions.Add(new Proportion());
+			grid1.RowsProportions.Add(new Proportion());
 			grid1.Widgets.Add(_leftSplitPane);
 			grid1.Widgets.Add(horizontalSeparator1);
 			grid1.Widgets.Add(_textStatus);
@@ -157,12 +157,12 @@ namespace MyraPad.UI
 			_textLocation.GridRow = 2;
 
 			var grid2 = new Grid();
-			grid2.RowsProportions.Add(new Grid.Proportion
+			grid2.RowsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Fill,
+				Type = Myra.Graphics2D.UI.ProportionType.Fill,
 			});
-			grid2.RowsProportions.Add(new Grid.Proportion());
-			grid2.RowsProportions.Add(new Grid.Proportion());
+			grid2.RowsProportions.Add(new Proportion());
+			grid2.RowsProportions.Add(new Proportion());
 			grid2.GridColumn = 2;
 			grid2.Widgets.Add(_propertyGridPane);
 			grid2.Widgets.Add(horizontalSeparator2);
@@ -175,10 +175,10 @@ namespace MyraPad.UI
 			_topSplitPane.Widgets.Add(grid2);
 
 			
-			RowsProportions.Add(new Grid.Proportion());
-			RowsProportions.Add(new Grid.Proportion
+			RowsProportions.Add(new Proportion());
+			RowsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Fill,
+				Type = Myra.Graphics2D.UI.ProportionType.Fill,
 			});
 			Id = "Root";
 			Widgets.Add(horizontalMenu1);

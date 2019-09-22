@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 namespace Myra.Graphics2D.UI
 {
-	public abstract class MultipleItemsContainer : Container
+	public abstract class MultipleItemsContainerBase : Container, IMultipleItemsContainer
 	{
 		protected readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
 
@@ -39,7 +39,7 @@ namespace Myra.Graphics2D.UI
 			set { base.VerticalAlignment = value; }
 		}
 
-		public MultipleItemsContainer()
+		public MultipleItemsContainerBase()
 		{
 			_widgets.CollectionChanged += WidgetsOnCollectionChanged;
 

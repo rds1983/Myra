@@ -17,9 +17,9 @@ namespace MyraPad
 			{
 				widgets = ((SplitPane)w).Widgets;
 			}
-			else if (w is MultipleItemsContainer)
+			else if (w is IMultipleItemsContainer)
 			{
-				var container = w as MultipleItemsContainer;
+				var container = w as IMultipleItemsContainer;
 				widgets = container.Widgets;
 			}
 

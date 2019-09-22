@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Linq;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
-using static Myra.Graphics2D.UI.Grid;
 
 namespace Myra.Graphics2D.UI
 {

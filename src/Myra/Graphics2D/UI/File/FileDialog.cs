@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using static Myra.Graphics2D.UI.Grid;
 
 #if !XENKO
 using Microsoft.Xna.Framework;

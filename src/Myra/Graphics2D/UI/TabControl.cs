@@ -3,7 +3,6 @@ using Myra.Graphics2D.UI.Styles;
 using System;
 using System.Linq;
 using System.Xml.Serialization;
-using static Myra.Graphics2D.UI.Grid;
 
 namespace Myra.Graphics2D.UI
 {

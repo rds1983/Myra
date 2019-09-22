@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using Myra.Graphics2D.UI;
 
 namespace Myra.Graphics2D.UI.Properties
 {
@@ -30,11 +29,11 @@ namespace Myra.Graphics2D.UI.Properties
 				RowSpacing = 8
 			};
 
-			InternalChild.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-			InternalChild.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill));
+			InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
+			InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
 
-			InternalChild.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Fill));
-			InternalChild.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
+			InternalChild.RowsProportions.Add(new Proportion(ProportionType.Fill));
+			InternalChild.RowsProportions.Add(new Proportion(ProportionType.Auto));
 
 			_listItems = new ListBox
 			{
@@ -63,10 +62,10 @@ namespace Myra.Graphics2D.UI.Properties
 				ColumnSpacing = 4
 			};
 
-			buttonsGrid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-			buttonsGrid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-			buttonsGrid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-			buttonsGrid.ColumnsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
+			buttonsGrid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
+			buttonsGrid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
+			buttonsGrid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
+			buttonsGrid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
 
 			var buttonNew = new ImageTextButton { Text = "New" };
 			buttonNew.Click += ButtonNewOnUp;

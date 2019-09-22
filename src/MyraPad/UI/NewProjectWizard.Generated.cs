@@ -48,13 +48,13 @@ namespace MyraPad.UI
 			_radioButtonDialog.GridRow = 6;
 
 			var grid1 = new Grid();
-			grid1.RowsProportions.Add(new Grid.Proportion());
-			grid1.RowsProportions.Add(new Grid.Proportion());
-			grid1.RowsProportions.Add(new Grid.Proportion());
-			grid1.RowsProportions.Add(new Grid.Proportion());
-			grid1.RowsProportions.Add(new Grid.Proportion());
-			grid1.RowsProportions.Add(new Grid.Proportion());
-			grid1.RowsProportions.Add(new Grid.Proportion());
+			grid1.RowsProportions.Add(new Proportion());
+			grid1.RowsProportions.Add(new Proportion());
+			grid1.RowsProportions.Add(new Proportion());
+			grid1.RowsProportions.Add(new Proportion());
+			grid1.RowsProportions.Add(new Proportion());
+			grid1.RowsProportions.Add(new Proportion());
+			grid1.RowsProportions.Add(new Proportion());
 			grid1.GridRow = 1;
 			grid1.Widgets.Add(_radioButtonGrid);
 			grid1.Widgets.Add(_radioButtonPanel);

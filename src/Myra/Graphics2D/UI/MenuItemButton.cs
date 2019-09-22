@@ -13,10 +13,10 @@ using Xenko.Graphics;
 
 namespace Myra.Graphics2D.UI
 {
-	internal class MenuItemButton : ButtonBase<Grid>
+	internal class MenuItemButton : ButtonBase<HorizontalBox>
 	{
-		private readonly Grid.Proportion _imageProportion;
-		private readonly Grid.Proportion _shortcutProportion;
+		private readonly Proportion _imageProportion;
+		private readonly Proportion _shortcutProportion;
 
 		private readonly Image _image;
 		private readonly TextBlock _textBlock;
@@ -139,14 +139,14 @@ namespace Myra.Graphics2D.UI
 		internal MenuItemButton(Menu menu, MenuItemStyle style)
 		{
 			Menu = menu;
-			InternalChild = new Grid();
+			InternalChild = new HorizontalBox();
 
-			_imageProportion = new Grid.Proportion();
-			InternalChild.ColumnsProportions.Add(_imageProportion);
-			var textProportion = new Grid.Proportion();
-			InternalChild.ColumnsProportions.Add(textProportion);
-			_shortcutProportion = new Grid.Proportion();
-			InternalChild.ColumnsProportions.Add(_shortcutProportion);
+			_imageProportion = new Proportion();
+			InternalChild.Proportions.Add(_imageProportion);
+			var textProportion = new Proportion();
+			InternalChild.Proportions.Add(textProportion);
+			_shortcutProportion = new Proportion();
+			InternalChild.Proportions.Add(_shortcutProportion);
 
 			_image = new Image();
 			InternalChild.Widgets.Add(_image);
@@ -170,13 +170,13 @@ namespace Myra.Graphics2D.UI
 
 			if (style.IconWidth.HasValue)
 			{
-				_imageProportion.Type = Grid.ProportionType.Pixels;
+				_imageProportion.Type = ProportionType.Pixels;
 				_imageProportion.Value = style.IconWidth.Value;
 			}
 
 			if (style.ShortcutWidth.HasValue)
 			{
-				_shortcutProportion.Type = Grid.ProportionType.Pixels;
+				_shortcutProportion.Type = ProportionType.Pixels;
 				_shortcutProportion.Value = style.ShortcutWidth.Value;
 			}
 

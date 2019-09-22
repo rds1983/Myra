@@ -39,13 +39,13 @@ namespace Myra.Graphics2D.UI.File
 
 			var grid1 = new Grid();
 			grid1.ColumnSpacing = 4;
-			grid1.ColumnsProportions.Add(new Grid.Proportion());
-			grid1.ColumnsProportions.Add(new Grid.Proportion());
-			grid1.ColumnsProportions.Add(new Grid.Proportion
+			grid1.ColumnsProportions.Add(new Proportion());
+			grid1.ColumnsProportions.Add(new Proportion());
+			grid1.ColumnsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Fill,
+				Type = Myra.Graphics2D.UI.ProportionType.Fill,
 			});
-			grid1.ColumnsProportions.Add(new Grid.Proportion());
+			grid1.ColumnsProportions.Add(new Proportion());
 			grid1.Widgets.Add(_buttonBack);
 			grid1.Widgets.Add(_buttonForward);
 			grid1.Widgets.Add(_textFieldPath);
@@ -59,10 +59,10 @@ namespace Myra.Graphics2D.UI.File
 			_gridFiles = new Grid();
 			_gridFiles.ColumnSpacing = 4;
 			_gridFiles.RowSpacing = 4;
-			_gridFiles.ColumnsProportions.Add(new Grid.Proportion());
-			_gridFiles.ColumnsProportions.Add(new Grid.Proportion
+			_gridFiles.ColumnsProportions.Add(new Proportion());
+			_gridFiles.ColumnsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Fill,
+				Type = Myra.Graphics2D.UI.ProportionType.Fill,
 			});
 			_gridFiles.GridSelectionMode = Myra.Graphics2D.UI.GridSelectionMode.Row;
 			_gridFiles.Id = "_gridFiles";
@@ -90,10 +90,10 @@ namespace Myra.Graphics2D.UI.File
 
 			var grid2 = new Grid();
 			grid2.ColumnSpacing = 4;
-			grid2.ColumnsProportions.Add(new Grid.Proportion());
-			grid2.ColumnsProportions.Add(new Grid.Proportion
+			grid2.ColumnsProportions.Add(new Proportion());
+			grid2.ColumnsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Fill,
+				Type = Myra.Graphics2D.UI.ProportionType.Fill,
 			});
 			grid2.GridRow = 2;
 			grid2.Widgets.Add(_textBlockFileName);
@@ -101,12 +101,12 @@ namespace Myra.Graphics2D.UI.File
 
 			var grid3 = new Grid();
 			grid3.RowSpacing = 4;
-			grid3.RowsProportions.Add(new Grid.Proportion());
-			grid3.RowsProportions.Add(new Grid.Proportion
+			grid3.RowsProportions.Add(new Proportion());
+			grid3.RowsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Fill,
+				Type = Myra.Graphics2D.UI.ProportionType.Fill,
 			});
-			grid3.RowsProportions.Add(new Grid.Proportion());
+			grid3.RowsProportions.Add(new Proportion());
 			grid3.GridRow = 1;
 			grid3.Widgets.Add(grid1);
 			grid3.Widgets.Add(_splitPane);

@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
-using static Myra.Graphics2D.UI.Grid;
 using System.Xml.Serialization;
 
 #if !XENKO

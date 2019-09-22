@@ -51,15 +51,15 @@ namespace MyraPad.UI
 			Root = new Grid();
 			Root.ColumnSpacing = 8;
 			Root.RowSpacing = 8;
-			Root.ColumnsProportions.Add(new Grid.Proportion());
-			Root.ColumnsProportions.Add(new Grid.Proportion
+			Root.ColumnsProportions.Add(new Proportion());
+			Root.ColumnsProportions.Add(new Proportion
 			{
-				Type = Myra.Graphics2D.UI.Grid.ProportionType.Fill,
+				Type = Myra.Graphics2D.UI.ProportionType.Fill,
 			});
-			Root.ColumnsProportions.Add(new Grid.Proportion());
-			Root.RowsProportions.Add(new Grid.Proportion());
-			Root.RowsProportions.Add(new Grid.Proportion());
-			Root.RowsProportions.Add(new Grid.Proportion());
+			Root.ColumnsProportions.Add(new Proportion());
+			Root.RowsProportions.Add(new Proportion());
+			Root.RowsProportions.Add(new Proportion());
+			Root.RowsProportions.Add(new Proportion());
 			Root.Id = "Root";
 			Root.Width = 800;
 			Root.GridRow = 1;
