@@ -1274,6 +1274,16 @@ namespace MyraPad
 
 				var rootType = "Grid";
 
+				if (dlg._radioButtonHorizontalBox.IsPressed)
+				{
+					rootType = "HorizontalBox";
+				}
+				else
+				if (dlg._radioButtonVerticalBox.IsPressed)
+				{
+					rootType = "VerticalBox";
+				}
+				else
 				if (dlg._radioButtonPanel.IsPressed)
 				{
 					rootType = "Panel";

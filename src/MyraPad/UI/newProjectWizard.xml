@@ -3,6 +3,8 @@
   <Dialog Title="Choose Root Container" Left="425" Top="76">
     <VerticalBox>
       <RadioButton Text="Grid" Id="_radioButtonGrid" />
+      <RadioButton Text="HorizontalBox" Id="_radioButtonHorizontalBox" />
+      <RadioButton Text="VerticalBox" Id="_radioButtonVerticalBox" />
       <RadioButton Text="Panel" Id="_radioButtonPanel" />
       <RadioButton Text="ScrollPane" Id="_radioButtonScrollPane" />
       <RadioButton Text="HorizontalSplitPane" Id="_radioButtonHorizontalSplitPane" />
