@@ -1,6 +1,6 @@
 <Project>
   <ExportOptions Namespace="Myra.Samples.Notepad" Class="Notepad" OutputPath="D:\Projects\Myra\samples\Myra.Samples.Notepad" />
-  <VerticalBox HorizontalAlignment="Stretch">
+  <VerticalBox>
     <Proportions>
       <Proportion />
       <Proportion />

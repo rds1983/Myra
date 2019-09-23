@@ -1,6 +1,6 @@
 <Project>
   <ExportOptions Namespace="MyraPad.UI" Class="StudioWidget" OutputPath="D:/Projects/Myra/src/MyraPad/UI" />
-  <VerticalBox HorizontalAlignment="Stretch">
+  <VerticalBox>
     <Proportions>
       <Proportion />
       <Proportion Type="Fill" />
@@ -30,7 +30,7 @@
       </MenuItem>
     </HorizontalMenu>
     <HorizontalSplitPane Id="_topSplitPane">
-      <VerticalBox HorizontalAlignment="Stretch">
+      <VerticalBox>
         <Proportions>
           <Proportion Type="Fill" />
         </Proportions>

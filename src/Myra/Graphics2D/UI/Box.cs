@@ -51,8 +51,37 @@ namespace Myra.Graphics2D.UI
 		[Content]
 		public ObservableCollection<Widget> Widgets => InternalChild.Widgets;
 
+		[DefaultValue(HorizontalAlignment.Stretch)]
+		public override HorizontalAlignment HorizontalAlignment
+		{
+			get
+			{
+				return base.HorizontalAlignment;
+			}
+			set
+			{
+				base.HorizontalAlignment = value;
+			}
+		}
+
+		[DefaultValue(VerticalAlignment.Stretch)]
+		public override VerticalAlignment VerticalAlignment
+		{
+			get
+			{
+				return base.VerticalAlignment;
+			}
+			set
+			{
+				base.VerticalAlignment = value;
+			}
+		}
+
 		protected Box()
 		{
+			HorizontalAlignment = HorizontalAlignment.Stretch;
+			VerticalAlignment = VerticalAlignment.Stretch;
+
 			InternalChild = new Grid();
 			if (Orientation == Orientation.Horizontal)
 			{

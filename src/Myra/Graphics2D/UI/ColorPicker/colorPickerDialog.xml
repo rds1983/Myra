@@ -1,7 +1,10 @@
 <Project>
   <ExportOptions Namespace="Myra.Graphics2D.UI.ColorPicker" Class="ColorPickerDialog" OutputPath="D:\Projects\Myra\src\Myra\Graphics2D\UI\ColorPicker" />
   <Dialog Title="Color Picker" Left="293" Width="450">
-    <VerticalBox Spacing="-1" HorizontalAlignment="Stretch">
+    <VerticalBox Spacing="-1">
+      <Proportions>
+        <Proportion Type="Fill" Value="100" />
+      </Proportions>
       <Image Id="_imageColor" Height="50" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
       <HorizontalSeparator Height="4" />
       <Grid>
@@ -66,7 +69,6 @@
       </Grid>
       <HorizontalSeparator Height="4" />
       <Grid RowSpacing="4">
-        <ColumnsProportions />
         <RowsProportions>
           <Proportion />
           <Proportion />
@@ -88,9 +90,6 @@
         <TextButton Text="Save Color" Id="_buttonSaveColor" HorizontalAlignment="Right" GridRow="1" />
       </Grid>
       <HorizontalSeparator Height="4" />
-      <Proportions>
-        <Proportion Type="Fill" Value="100" />
-      </Proportions>
     </VerticalBox>
   </Dialog>
 </Project>

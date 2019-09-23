@@ -1,7 +1,7 @@
 <Project>
   <ExportOptions Namespace="Myra.Graphics2D.UI.File" Class="FileDialog" OutputPath="D:/Projects/Myra/src/Myra/Graphics2D/UI/File" />
   <Dialog Title="Open File..." Left="218" Width="600" Height="400">
-    <VerticalBox Spacing="4" HorizontalAlignment="Stretch" >
+    <VerticalBox Spacing="4">
       <Proportions>
         <Proportion />
         <Proportion Type="Fill" />
@@ -13,7 +13,6 @@
           <Proportion Type="Fill" />
           <Proportion />
         </ColumnsProportions>
-        <RowsProportions />
         <ImageButton Id="_buttonBack" HorizontalAlignment="Center" VerticalAlignment="Center" />
         <ImageButton Id="_buttonForward" HorizontalAlignment="Center" VerticalAlignment="Center" GridColumn="1" />
         <TextField Text="" Readonly="True" Id="_textFieldPath" VerticalAlignment="Center" GridColumn="2" />
@@ -27,7 +26,6 @@
               <Proportion />
               <Proportion Type="Fill" />
             </ColumnsProportions>
-            <RowsProportions />
           </Grid>
         </ScrollPane>
       </HorizontalSplitPane>
@@ -36,7 +34,6 @@
           <Proportion />
           <Proportion Type="Fill" />
         </ColumnsProportions>
-        <RowsProportions />
         <TextBlock Text="File name" Id="_textBlockFileName" />
         <TextField Text="" Id="_textFieldFileName" GridColumn="1" />
       </Grid>

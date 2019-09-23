@@ -17,6 +17,7 @@ namespace Myra.Graphics2D.UI
 		private bool _toggleable;
 		private readonly ObservableCollection<IMenuItem> _items = new ObservableCollection<IMenuItem>();
 
+		[DefaultValue(false)]
 		public bool Toggleable
 		{
 			get

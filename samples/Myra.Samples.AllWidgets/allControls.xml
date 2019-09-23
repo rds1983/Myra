@@ -1,11 +1,10 @@
 <Project>
   <ExportOptions Namespace="Myra.Samples.AllWidgets" Class="AllWidgets" OutputPath="D:\Projects\Myra\samples\Myra.Samples.AllWidgets" />
-  <Grid RowSpacing="8" Id="Root">
-    <ColumnsProportions />
-    <RowsProportions>
+  <VerticalBox Spacing="8" >
+    <Proportions>
       <Proportion />
       <Proportion Type="Fill" />
-    </RowsProportions>
+    </Proportions>
     <HorizontalMenu VerticalAlignment="Stretch">
       <MenuItem Id="" Text="&amp;File">
         <MenuItem Id="_menuItemNew" Text="&amp;New" />
@@ -26,7 +25,7 @@
         <MenuItem Id="_menuItemAbout" Text="&amp;About" />
       </MenuItem>
     </HorizontalMenu>
-    <HorizontalSplitPane GridRow="1">
+    <HorizontalSplitPane>
       <ScrollPane>
         <Grid ColumnSpacing="8" RowSpacing="8" Id="_gridRight">
           <ColumnsProportions>
@@ -117,5 +116,5 @@
         </Grid>
       </VerticalSplitPane>
     </HorizontalSplitPane>
-  </Grid>
+  </VerticalBox>
 </Project>
