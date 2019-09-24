@@ -61,29 +61,44 @@ namespace Myra.Graphics2D.UI
 			Stylesheet = Stylesheet.Current;
 		}
 
+		public static bool ShouldSerializeProperty(Stylesheet stylesheet, object o, PropertyInfo p)
+		{
+			var asWidget = o as Widget;
+			if (asWidget != null && asWidget.Parent != null && asWidget.Parent is Grid)
+			{
+				var container = asWidget.Parent.Parent;
+				if (container != null &&
+				   (container is Box || container is SplitPane) &&
+				   (p.Name == "GridRow" || p.Name == "GridColumn"))
+				{
+					// Skip serializing auto-assigned GridRow/GridColumn for SplitPane and Box containers
+					return false;
+				}
+			}
+
+			if (SaveContext.HasDefaultValue(o, p))
+			{
+				return false;
+			}
+
+			if(asWidget != null && HasStylesheetValue(asWidget, p, stylesheet))
+			{
+				return false;
+			}
+
+			return true;
+		}
+
+		public bool ShouldSerializeProperty(object o, PropertyInfo p)
+		{
+			return ShouldSerializeProperty(Stylesheet, o, p);
+		}
+
 		internal static SaveContext CreateSaveContext(Stylesheet stylesheet)
 		{
 			return new SaveContext
 			{
-				ShouldSerializeProperty = (o, p) =>
-				{
-					var asWidget = o as Widget;
-					if (asWidget != null && asWidget.Parent != null && asWidget.Parent is Grid)
-					{
-						var container = asWidget.Parent.Parent;
-						if (container != null &&
-						   (container is Box || container is SplitPane) &&
-						   (p.Name == "GridRow" || p.Name == "GridColumn"))
-						{
-							// Skip serializing auto-assigned GridRow/GridColumn for SplitPane and Box containers
-							return false;
-						}
-					}
-
-					return !SaveContext.HasDefaultValue(o, p) &&
-						(!(o is Widget) ||
-						!HasStylesheetValue((Widget)o, p, stylesheet));
-				}
+				ShouldSerializeProperty = (o, p) => ShouldSerializeProperty(stylesheet, o, p)
 			};
 		}
 
@@ -209,23 +224,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			return Activator.CreateInstance(type);
-		}
-
-		public bool ShouldSerializeProperty(object w, PropertyInfo property)
-		{
-			var value = property.GetValue(w);
-			if (property.HasDefaultValue(value))
-			{
-				return false;
-			}
-
-			var asWidget = w as Widget;
-			if (asWidget != null && HasStylesheetValue(asWidget, property, Stylesheet))
-			{
-				return false;
-			}
-
-			return true;
 		}
 
 		private static bool HasStylesheetValue(Widget w, PropertyInfo property, Stylesheet stylesheet)
