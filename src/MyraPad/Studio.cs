@@ -370,24 +370,8 @@ namespace MyraPad
 		{
 			try
 			{
-				var doc = new XmlDocument();
-				doc.LoadXml(_ui._textSource.Text);
-
-				var sb = new StringBuilder();
-				var settings = new XmlWriterSettings
-				{
-					OmitXmlDeclaration = true,
-					Indent = _options.AutoIndent,
-					IndentChars = new string(' ', _options.IndentSpacesSize),
-					NewLineChars = "\n",
-					NewLineHandling = NewLineHandling.Replace
-				};
-				using (var writer = XmlWriter.Create(sb, settings))
-				{
-					doc.Save(writer);
-				}
-
-				_ui._textSource.Text = sb.ToString();
+				var project = Project.LoadFromXml(_ui._textSource.Text, _project.Stylesheet);
+				_ui._textSource.Text = _project.Save();
 			}
 			catch (Exception ex)
 			{

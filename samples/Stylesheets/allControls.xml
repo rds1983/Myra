@@ -16,7 +16,7 @@
           <Proportion />
         </RowsProportions>
         <TextBlock Text="Button:" Id="" />
-        <Button Text="Button" Id="_button" GridColumn="1" />
+        <ImageTextButton Text="Button" Id="_button" GridColumn="1" />
         <CheckBox Text="This is checkbox" GridRow="1" GridColumnSpan="2" />
         <TextBlock Text="Slider:" Id="" GridRow="2" />
         <HorizontalSlider GridColumn="1" GridRow="2" />
@@ -36,7 +36,7 @@
         </ListBox>
       </Grid>
     </ScrollPane>
-    <VerticalSplitPane GridColumn="2">
+    <VerticalSplitPane>
       <Grid RowSpacing="8">
         <ColumnsProportions>
           <Proportion Type="Fill" />
@@ -48,7 +48,7 @@
         <TextBlock Text="Vertical Slider:" />
         <VerticalSlider HorizontalAlignment="Center" GridRow="1" />
       </Grid>
-      <Grid RowSpacing="8" GridRow="2">
+      <Grid RowSpacing="8">
         <ColumnsProportions>
           <Proportion Type="Fill" />
         </ColumnsProportions>

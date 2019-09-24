@@ -1,6 +1,6 @@
 <Project>
   <ExportOptions Namespace="Myra.Samples.AllWidgets" Class="AllWidgets" OutputPath="D:\Projects\Myra\samples\Myra.Samples.AllWidgets" />
-  <VerticalBox Spacing="8" >
+  <VerticalBox Spacing="8">
     <Proportions>
       <Proportion />
       <Proportion Type="Fill" />
