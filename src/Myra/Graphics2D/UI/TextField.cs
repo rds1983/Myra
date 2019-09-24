@@ -681,12 +681,11 @@ namespace Myra.Graphics2D.UI
 				case Keys.Back:
 					if (!Readonly)
 					{
-
 						if (SelectStart == SelectEnd)
 						{
 							if (Delete(CursorPosition - 1, 1))
 							{
-								UserSetCursorPosition(CursorPosition - 1);
+								UserSetCursorPosition(CursorPosition - 1, true);
 							}
 						}
 						else
@@ -1039,6 +1038,70 @@ namespace Myra.Graphics2D.UI
 			return new Point(x, y);
 		}
 
+		private void RenderSelection(RenderContext context)
+		{
+			var bounds = ActualBounds;
+
+			if (string.IsNullOrEmpty(Text) || Selection == null)
+			{
+				return;
+			}
+
+			var selectStart = Math.Min(SelectStart, SelectEnd);
+			var selectEnd = Math.Max(SelectStart, SelectEnd);
+
+			if (selectStart >= selectEnd)
+			{
+				return;
+			}
+
+			var startGlyph = _formattedText.GetGlyphInfoByIndex(selectStart);
+			if (startGlyph == null)
+			{
+				return;
+			}
+
+			var lineIndex = startGlyph.TextLine.LineIndex;
+			var i = selectStart;
+
+			while (true)
+			{
+				startGlyph = _formattedText.GetGlyphInfoByIndex(i);
+				var startPosition = GetRenderPositionByIndex(i);
+
+				if (selectEnd < i + startGlyph.TextLine.Count)
+				{
+					var endPosition = GetRenderPositionByIndex(selectEnd);
+
+					context.Draw(Selection,
+						new Rectangle(startPosition.X - _internalScrolling.X,
+							startPosition.Y - _internalScrolling.Y,
+							endPosition.X - startPosition.X,
+							CrossEngineStuff.LineSpacing(_formattedText.Font)));
+
+					break;
+				}
+
+				context.Draw(Selection,
+					new Rectangle(startPosition.X - _internalScrolling.X,
+						startPosition.Y - _internalScrolling.Y,
+						bounds.Left + startGlyph.TextLine.Size.X - startPosition.X,
+						CrossEngineStuff.LineSpacing(_formattedText.Font)));
+
+				++lineIndex;
+				if (lineIndex >= _formattedText.Strings.Length)
+				{
+					break;
+				}
+
+				i = 0;
+				for (var k = 0; k < lineIndex; ++k)
+				{
+					i += _formattedText.Strings[k].Count;
+				}
+			}
+		}
+
 		public override void InternalRender(RenderContext context)
 		{
 			if (_formattedText.Font == null)
@@ -1047,58 +1110,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var bounds = ActualBounds;
-
-			if (Selection != null && !string.IsNullOrEmpty(Text))
-			{
-				var selectStart = Math.Min(SelectStart, SelectEnd);
-				var selectEnd = Math.Max(SelectStart, SelectEnd);
-
-				if (selectStart < selectEnd)
-				{
-					//					Debug.WriteLine("{0} - {1}", selectStart, selectEnd);
-
-					var startGlyph = _formattedText.GetGlyphInfoByIndex(selectStart);
-					var lineIndex = startGlyph.TextLine.LineIndex;
-					var i = selectStart;
-
-					while (true)
-					{
-						startGlyph = _formattedText.GetGlyphInfoByIndex(i);
-						var startPosition = GetRenderPositionByIndex(i);
-
-						if (selectEnd < i + startGlyph.TextLine.Count)
-						{
-							var endPosition = GetRenderPositionByIndex(selectEnd);
-
-							context.Draw(Selection,
-								new Rectangle(startPosition.X - _internalScrolling.X,
-									startPosition.Y - _internalScrolling.Y,
-									endPosition.X - startPosition.X,
-									CrossEngineStuff.LineSpacing(_formattedText.Font)));
-
-							break;
-						}
-
-						context.Draw(Selection,
-							new Rectangle(startPosition.X - _internalScrolling.X,
-								startPosition.Y - _internalScrolling.Y,
-								bounds.Left + startGlyph.TextLine.Size.X - startPosition.X,
-								CrossEngineStuff.LineSpacing(_formattedText.Font)));
-
-						++lineIndex;
-						if (lineIndex >= _formattedText.Strings.Length)
-						{
-							break;
-						}
-
-						i = 0;
-						for (var k = 0; k < lineIndex; ++k)
-						{
-							i += _formattedText.Strings[k].Count;
-						}
-					}
-				}
-			}
+			RenderSelection(context);
 
 			var textColor = TextColor;
 			if (!Enabled && DisabledTextColor != null)
