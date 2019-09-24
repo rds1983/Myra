@@ -404,14 +404,16 @@ namespace Myra.Graphics2D.UI
 					_visibleWidgets.Add(child);
 
 					var gridPosition = GetActualGridPosition(child);
-					if (gridPosition.X + child.GridColumnSpan > columns)
+					var c = gridPosition.X + Math.Max(child.GridColumnSpan, 1);
+					if (c > columns)
 					{
-						columns = gridPosition.X + child.GridColumnSpan;
+						columns = c;
 					}
 
-					if (gridPosition.Y + child.GridRowSpan > rows)
+					var r = gridPosition.Y + Math.Max(child.GridRowSpan, 1);
+					if (r > rows)
 					{
-						rows = gridPosition.Y + child.GridRowSpan;
+						rows = r;
 					}
 				}
 			}
