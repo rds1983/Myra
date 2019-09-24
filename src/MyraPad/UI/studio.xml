@@ -43,16 +43,14 @@
         <HorizontalSeparator />
         <TextBlock Text="Reloading..." Id="_textStatus" />
       </VerticalBox>
-      <Grid>
-        <RowsProportions>
+      <VerticalBox>
+        <Proportions>
           <Proportion Type="Fill" />
-          <Proportion />
-          <Proportion />
-        </RowsProportions>
+        </Proportions>
         <ScrollPane Id="_propertyGridPane" />
-        <HorizontalSeparator GridRow="1" />
-        <TextBlock Text="Line: 1, Column: 2, Indent: 3" Id="_textLocation" GridRow="2" />
-      </Grid>
+        <HorizontalSeparator />
+        <TextBlock Text="Line: 1, Column: 2, Indent: 3" Id="_textLocation" />
+      </VerticalBox>
     </HorizontalSplitPane>
   </VerticalBox>
 </Project>
