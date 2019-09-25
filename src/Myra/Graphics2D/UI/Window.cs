@@ -196,10 +196,7 @@ namespace Myra.Graphics2D.UI
 
 		public Window(WindowStyle style)
 		{
-			InternalChild = new VerticalBox
-			{
-				HorizontalAlignment = HorizontalAlignment.Stretch
-			};
+			InternalChild = new VerticalBox();
 
 			Result = false;
 			HorizontalAlignment = HorizontalAlignment.Left;

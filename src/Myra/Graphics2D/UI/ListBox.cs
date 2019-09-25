@@ -34,11 +34,7 @@ namespace Myra.Graphics2D.UI
 
 		public ListBox(ListBoxStyle style) : base(new ScrollPane())
 		{
-			_box = new VerticalBox
-			{
-				HorizontalAlignment = HorizontalAlignment.Stretch
-			};
-			
+			_box = new VerticalBox();
 			InternalChild.Content = _box;
 			if (style != null)
 			{

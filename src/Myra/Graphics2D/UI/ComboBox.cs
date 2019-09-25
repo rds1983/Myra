@@ -93,11 +93,7 @@ namespace Myra.Graphics2D.UI
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
 
-			_itemsContainer = new VerticalBox
-			{
-				HorizontalAlignment = HorizontalAlignment.Stretch
-			};
-
+			_itemsContainer = new VerticalBox();
 			_itemsContainerScroll = new CustomScrollPane
 			{
 				Content = _itemsContainer
