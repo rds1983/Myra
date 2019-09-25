@@ -17,8 +17,6 @@ using Myra;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework.Input;
 using System.Threading;
-using System.Xml;
-using System.Text;
 using System.Xml.Linq;
 using SpriteFontPlus;
 
@@ -531,7 +529,7 @@ namespace MyraPad
 			}
 		}
 
-		private static readonly Regex TagResolver = new Regex("<([A-Za-z0-9]+)");
+		private static readonly Regex TagResolver = new Regex("<([A-Za-z0-9\\.]+)");
 
 		private static string ExtractTag(string source)
 		{
@@ -795,7 +793,7 @@ namespace MyraPad
 				result.AddRange(Containers);
 				result.AddRange(SpecialContainers);
 			}
-			else if (_parentTag == RowsProportionsName || _parentTag == ColumnsProportionsName || _parentTag == ProportionsName)
+			else if (_parentTag.EndsWith(RowsProportionsName) || _parentTag.EndsWith(ColumnsProportionsName) || _parentTag.EndsWith(ProportionsName))
 			{
 				result.Add(Project.ProportionName);
 			}
@@ -814,19 +812,19 @@ namespace MyraPad
 
 			if (_parentTag == "Grid")
 			{
-				result.Add(ColumnsProportionsName);
-				result.Add(RowsProportionsName);
-				result.Add(Project.DefaultColumnProportionName);
-				result.Add(Project.DefaultRowProportionName);
+				result.Add(_parentTag + "." + ColumnsProportionsName);
+				result.Add(_parentTag + "." + RowsProportionsName);
+				result.Add(_parentTag + "." + Project.DefaultColumnProportionName);
+				result.Add(_parentTag + "." + Project.DefaultRowProportionName);
 			}
 
 			if (_parentTag == "VerticalBox" || _parentTag == "HorizontalBox")
 			{
-					result.Add(Project.DefaultProportionName);
-					result.Add(ProportionsName);
+					result.Add(_parentTag + "." + Project.DefaultProportionName);
+					result.Add(_parentTag + "." + ProportionsName);
 			}
 
-			result = result.OrderBy(s => s).ToList();
+			result = result.OrderBy(s => !s.Contains('.')).ThenBy(s => s).ToList();
 
 			return result;
 		}

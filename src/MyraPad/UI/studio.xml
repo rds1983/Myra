@@ -1,10 +1,10 @@
 <Project>
-  <ExportOptions Namespace="MyraPad.UI" Class="StudioWidget" OutputPath="D:/Projects/Myra/src/MyraPad/UI" />
+  <Project.ExportOptions Namespace="MyraPad.UI" Class="StudioWidget" OutputPath="D:/Projects/Myra/src/MyraPad/UI" />
   <VerticalBox>
-    <Proportions>
+    <VerticalBox.Proportions>
       <Proportion Type="Auto" />
       <Proportion Type="Fill" />
-    </Proportions>
+    </VerticalBox.Proportions>
     <HorizontalMenu Id="">
       <MenuItem Id="" Text="&amp;File">
         <MenuItem Id="_menuFileNew" Text="&amp;New" />
@@ -31,9 +31,9 @@
     </HorizontalMenu>
     <HorizontalSplitPane Id="_topSplitPane">
       <VerticalBox>
-        <Proportions>
+        <VerticalBox.Proportions>
           <Proportion Type="Fill" />
-        </Proportions>
+        </VerticalBox.Proportions>
         <VerticalSplitPane Id="_leftSplitPane">
           <Panel Id="_projectHolder" />
           <ScrollPane>
@@ -44,9 +44,9 @@
         <TextBlock Text="Reloading..." Id="_textStatus" />
       </VerticalBox>
       <VerticalBox>
-        <Proportions>
+        <VerticalBox.Proportions>
           <Proportion Type="Fill" />
-        </Proportions>
+        </VerticalBox.Proportions>
         <ScrollPane Id="_propertyGridPane" />
         <HorizontalSeparator />
         <TextBlock Text="Line: 1, Column: 2, Indent: 3" Id="_textLocation" />

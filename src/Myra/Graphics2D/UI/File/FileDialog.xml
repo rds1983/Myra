@@ -1,18 +1,18 @@
 <Project>
-  <ExportOptions Namespace="Myra.Graphics2D.UI.File" Class="FileDialog" OutputPath="D:/Projects/Myra/src/Myra/Graphics2D/UI/File" />
-  <Dialog Title="Open File..." Left="218" Width="600" Height="400">
+  <Project.ExportOptions Namespace="Myra.Graphics2D.UI.File" Class="FileDialog" OutputPath="D:/Projects/Myra/src/Myra/Graphics2D/UI/File" />
+  <Dialog Title="Open File..." Left="224" Top="5" Width="600" Height="400">
     <VerticalBox Spacing="4">
-      <Proportions>
-        <Proportion />
+      <VerticalBox.Proportions>
+        <Proportion Type="Auto" />
         <Proportion Type="Fill" />
-      </Proportions>
+      </VerticalBox.Proportions>
       <Grid ColumnSpacing="4">
-        <ColumnsProportions>
-          <Proportion />
-          <Proportion />
+        <Grid.ColumnsProportions>
+          <Proportion Type="Auto" />
+          <Proportion Type="Auto" />
           <Proportion Type="Fill" />
-          <Proportion />
-        </ColumnsProportions>
+          <Proportion Type="Auto" />
+        </Grid.ColumnsProportions>
         <ImageButton Id="_buttonBack" HorizontalAlignment="Center" VerticalAlignment="Center" />
         <ImageButton Id="_buttonForward" HorizontalAlignment="Center" VerticalAlignment="Center" GridColumn="1" />
         <TextField Text="" Readonly="True" Id="_textFieldPath" VerticalAlignment="Center" GridColumn="2" />
@@ -22,18 +22,18 @@
         <ListBox Id="_listBoxPlaces" HorizontalAlignment="Stretch" ClipToBounds="True" />
         <ScrollPane ShowHorizontalScrollBar="False" Id="_scrollPane">
           <Grid ColumnSpacing="4" RowSpacing="4" GridSelectionMode="Row" Id="_gridFiles">
-            <ColumnsProportions>
-              <Proportion />
+            <Grid.ColumnsProportions>
+              <Proportion Type="Auto" />
               <Proportion Type="Fill" />
-            </ColumnsProportions>
+            </Grid.ColumnsProportions>
           </Grid>
         </ScrollPane>
       </HorizontalSplitPane>
       <Grid ColumnSpacing="4">
-        <ColumnsProportions>
-          <Proportion />
+        <Grid.ColumnsProportions>
+          <Proportion Type="Auto" />
           <Proportion Type="Fill" />
-        </ColumnsProportions>
+        </Grid.ColumnsProportions>
         <TextBlock Text="File name" Id="_textBlockFileName" />
         <TextField Text="" Id="_textFieldFileName" GridColumn="1" />
       </Grid>

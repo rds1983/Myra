@@ -68,10 +68,10 @@ namespace Myra.Graphics2D.UI
 
 		public static bool IsProportionName(string s)
 		{
-			return s == ProportionName ||
-				s == DefaultProportionName ||
-				s == DefaultColumnProportionName ||
-				s == DefaultRowProportionName;
+			return s.EndsWith(ProportionName) ||
+				s.EndsWith(DefaultProportionName) ||
+				s.EndsWith(DefaultColumnProportionName) ||
+				s.EndsWith(DefaultRowProportionName);
 		}
 
 		public static bool ShouldSerializeProperty(Stylesheet stylesheet, object o, PropertyInfo p)

@@ -1,10 +1,10 @@
 <Project>
-  <ExportOptions Namespace="Myra.Samples.AllWidgets" Class="AllWidgets" OutputPath="D:\Projects\Myra\samples\Myra.Samples.AllWidgets" />
+  <Project.ExportOptions Namespace="Myra.Samples.AllWidgets" Class="AllWidgets" OutputPath="D:\Projects\Myra\samples\Myra.Samples.AllWidgets" />
   <VerticalBox Spacing="8">
-    <Proportions>
+    <VerticalBox.Proportions>
       <Proportion Type="Auto" />
       <Proportion Type="Fill" />
-    </Proportions>
+    </VerticalBox.Proportions>
     <HorizontalMenu VerticalAlignment="Stretch">
       <MenuItem Id="" Text="&amp;File">
         <MenuItem Id="_menuItemNew" Text="&amp;New" />
@@ -28,12 +28,12 @@
     <HorizontalSplitPane>
       <ScrollPane>
         <Grid ColumnSpacing="8" RowSpacing="8" Id="_gridRight">
-          <DefaultRowProportion Type="Auto" />
-          <ColumnsProportions>
+          <Grid.DefaultRowProportion Type="Auto" />
+          <Grid.ColumnsProportions>
             <Proportion Type="Auto" />
             <Proportion Type="Auto" />
             <Proportion Type="Fill" />
-          </ColumnsProportions>
+          </Grid.ColumnsProportions>
           <TextBlock Text="Button:" Id="" />
           <ImageTextButton Text="Save File" Id="_buttonSaveFile" PaddingLeft="8" PaddingRight="8" GridColumn="1" />
           <TextField Text="" Id="_textSaveFile" GridColumn="2" />
@@ -77,25 +77,25 @@
       </ScrollPane>
       <VerticalSplitPane>
         <Grid RowSpacing="8">
-          <ColumnsProportions>
+          <Grid.ColumnsProportions>
             <Proportion Type="Fill" />
-          </ColumnsProportions>
-          <RowsProportions>
+          </Grid.ColumnsProportions>
+          <Grid.RowsProportions>
             <Proportion Type="Auto" />
             <Proportion Type="Fill" />
-          </RowsProportions>
+          </Grid.RowsProportions>
           <TextBlock Text="Vertical Slider:" />
           <VerticalSlider HorizontalAlignment="Center" GridRow="1" />
         </Grid>
         <Grid RowSpacing="8">
-          <ColumnsProportions>
+          <Grid.ColumnsProportions>
             <Proportion Type="Fill" />
-          </ColumnsProportions>
-          <RowsProportions>
+          </Grid.ColumnsProportions>
+          <Grid.RowsProportions>
             <Proportion Type="Auto" />
             <Proportion Type="Auto" />
             <Proportion Type="Fill" />
-          </RowsProportions>
+          </Grid.RowsProportions>
           <TextBlock Text="Progress Bars:" />
           <HorizontalProgressBar Id="_horizontalProgressBar" GridRow="1" />
           <VerticalProgressBar HorizontalAlignment="Center" Id="_verticalProgressBar" GridRow="2" />

@@ -108,6 +108,15 @@ namespace Myra.MML
 					continue;
 				}
 
+				var isProperty = false;
+				if (childName.Contains("."))
+				{
+					// Property name
+					var parts = childName.Split('.');
+					childName = parts[1];
+					isProperty = true;
+				}
+
 				// Find property
 				var property = (from p in complexProperties where p.Name == childName select p).FirstOrDefault();
 				if (property != null)
@@ -167,6 +176,11 @@ namespace Myra.MML
 				else
 				{
 					// Property not found
+					if (isProperty)
+					{
+						throw new Exception(string.Format("Class {0} doesnt have property {1}", type.Name, childName));
+					}
+
 					// Should be widget class name then
 					var widgetName = childName;
 					string newName;

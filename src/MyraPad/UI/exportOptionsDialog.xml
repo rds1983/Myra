@@ -1,13 +1,13 @@
 <Project>
-  <ExportOptions Namespace="MyraPad.UI" Class="ExportOptionsDialog" OutputPath="D:\Projects\Myra\src\MyraPad\UI" />
+  <Project.ExportOptions Namespace="MyraPad.UI" Class="ExportOptionsDialog" OutputPath="D:\Projects\Myra\src\MyraPad\UI" />
   <Dialog Title="Export" Left="124" Top="136">
     <Grid ColumnSpacing="8" RowSpacing="8" Id="Root" Width="800">
-      <DefaultRowProportion Type="Auto" />
-      <ColumnsProportions>
+      <Grid.DefaultRowProportion Type="Auto" />
+      <Grid.ColumnsProportions>
         <Proportion Type="Auto" />
         <Proportion Type="Fill" />
         <Proportion Type="Auto" />
-      </ColumnsProportions>
+      </Grid.ColumnsProportions>
       <TextBlock Text="Class Name:" Id="" GridRow="1" />
       <TextField Text="" Id="_textClassName" GridColumn="1" GridRow="1" />
       <TextBlock Text="Output Path:" GridRow="2" />

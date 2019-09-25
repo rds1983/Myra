@@ -86,11 +86,12 @@ namespace Myra.MML
 						continue;
 					}
 
+					var propertyName = type.Name + "." + property.Name;
 					var isContent = property == contentProperty;
 					var asList = value as IList;
 					if (asList == null)
 					{
-						el.Add(isContent?Save(value):Save(value, false, property.Name));
+						el.Add(isContent?Save(value):Save(value, false, propertyName));
 					}
 					else
 					{
@@ -98,7 +99,7 @@ namespace Myra.MML
 
 						if (property.FindAttribute<ContentAttribute>() == null && asList.Count > 0)
 						{
-							collectionRoot = new XElement(property.Name);
+							collectionRoot = new XElement(propertyName);
 							el.Add(collectionRoot);
 						}
 
