@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Xml.Linq;
 using Myra.Attributes;
+using System.Linq;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -19,14 +20,14 @@ namespace Myra.MML
 	{
 		public Func<object, PropertyInfo, bool> ShouldSerializeProperty = HasDefaultValue;
 
-		public XElement Save(object obj, bool skipComplex = false)
+		public XElement Save(object obj, bool skipComplex = false, string tagName = null)
 		{
 			var type = obj.GetType();
 
 			List<PropertyInfo> complexProperties, simpleProperties;
 			ParseProperties(type, out complexProperties, out simpleProperties);
 
-			var el = new XElement(type.Name);
+			var el = new XElement(tagName ?? type.Name);
 
 			foreach (var property in simpleProperties)
 			{
@@ -67,19 +68,29 @@ namespace Myra.MML
 
 			if (!skipComplex)
 			{
+				var contentProperty = (from p in complexProperties
+									   where p.FindAttribute<ContentAttribute>()
+									   != null
+									   select p).FirstOrDefault();
+
 				foreach (var property in complexProperties)
 				{
-					var value = property.GetValue(obj);
+					if (!ShouldSerializeProperty(obj, property))
+					{
+						continue;
+					}
 
+					var value = property.GetValue(obj);
 					if (value == null)
 					{
 						continue;
 					}
 
+					var isContent = property == contentProperty;
 					var asList = value as IList;
 					if (asList == null)
 					{
-						el.Add(Save(value));
+						el.Add(isContent?Save(value):Save(value, false, property.Name));
 					}
 					else
 					{

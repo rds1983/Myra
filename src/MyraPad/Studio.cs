@@ -60,7 +60,6 @@ namespace MyraPad
 		private const string RowsProportionsName = "RowsProportions";
 		private const string ColumnsProportionsName = "ColumnsProportions";
 		private const string ProportionsName = "Proportions";
-		private const string ProportionName = "Proportion";
 		private const string MenuItemName = "MenuItem";
 		private const string ListItemName = "ListItem";
 
@@ -721,7 +720,7 @@ namespace MyraPad
 							var needsClose = false;
 
 							if (SimpleWidgets.Contains(menuItem.Text) ||
-								menuItem.Text == ProportionName ||
+								Project.IsProportionName(menuItem.Text) ||
 								menuItem.Text == MenuItemName ||
 								menuItem.Text == ListItemName)
 							{
@@ -798,7 +797,7 @@ namespace MyraPad
 			}
 			else if (_parentTag == RowsProportionsName || _parentTag == ColumnsProportionsName || _parentTag == ProportionsName)
 			{
-				result.Add(ProportionName);
+				result.Add(Project.ProportionName);
 			}
 			else if (_parentTag.EndsWith("Menu"))
 			{
@@ -817,11 +816,14 @@ namespace MyraPad
 			{
 				result.Add(ColumnsProportionsName);
 				result.Add(RowsProportionsName);
+				result.Add(Project.DefaultColumnProportionName);
+				result.Add(Project.DefaultRowProportionName);
 			}
 
 			if (_parentTag == "VerticalBox" || _parentTag == "HorizontalBox")
 			{
-				result.Add(ProportionsName);
+					result.Add(Project.DefaultProportionName);
+					result.Add(ProportionsName);
 			}
 
 			result = result.OrderBy(s => s).ToList();
@@ -1186,7 +1188,7 @@ namespace MyraPad
 		{
 			IsDirty = true;
 
-			var xml = _project.SaveObjectToXml(_propertyGrid.Object);
+			var xml = _project.SaveObjectToXml(_propertyGrid.Object, ExtractTag(CurrentTag));
 
 			if (_needsCloseTag)
 			{

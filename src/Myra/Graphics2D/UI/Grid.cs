@@ -89,6 +89,12 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Browsable(false)]
+		public Proportion DefaultColumnProportion { get; set; } = Proportion.GridDefault;
+
+		[Browsable(false)]
+		public Proportion DefaultRowProportion { get; set; } = Proportion.GridDefault;
+
+		[Browsable(false)]
 		public ObservableCollection<Proportion> ColumnsProportions
 		{
 			get { return _columnsProportions; }
@@ -265,14 +271,6 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 		}
-
-		[Browsable(false)]
-		[XmlIgnore]
-		public Proportion DefaultColumnProportion { get; set; } = Proportion.Default;
-
-		[Browsable(false)]
-		[XmlIgnore]
-		public Proportion DefaultRowProportion { get; set; } = Proportion.Default;
 
 		public event EventHandler SelectedIndexChanged = null;
 		public event EventHandler HoverIndexChanged = null;

@@ -42,6 +42,23 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Browsable(false)]
+		public Proportion DefaultProportion
+		{
+			get => Orientation == Orientation.Horizontal ? InternalChild.DefaultColumnProportion : InternalChild.DefaultRowProportion;
+			set
+			{
+				if (Orientation == Orientation.Horizontal)
+				{
+					InternalChild.DefaultColumnProportion = value;
+				}
+				else
+				{
+					InternalChild.DefaultRowProportion = value;
+				}
+			}
+		}
+
+		[Browsable(false)]
 		public ObservableCollection<Proportion> Proportions
 		{
 			get => Orientation == Orientation.Horizontal ? InternalChild.ColumnsProportions : InternalChild.RowsProportions;
@@ -83,15 +100,7 @@ namespace Myra.Graphics2D.UI
 			VerticalAlignment = VerticalAlignment.Stretch;
 
 			InternalChild = new Grid();
-			if (Orientation == Orientation.Horizontal)
-			{
-				InternalChild.DefaultColumnProportion = Proportion.Auto;
-			}
-			else
-			{
-				InternalChild.DefaultRowProportion = Proportion.Auto;
-			}
-
+			DefaultProportion = Proportion.BoxDefault;
 			Widgets.CollectionChanged += Widgets_CollectionChanged;
 		}
 

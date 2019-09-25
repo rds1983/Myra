@@ -3,21 +3,11 @@
   <HorizontalSplitPane GridRow="1">
     <ScrollPane>
       <Grid ColumnSpacing="8" RowSpacing="8" Id="_gridRight">
+        <DefaultRowProportion Type="Auto" />
         <ColumnsProportions>
-          <Proportion />
+          <Proportion Type="Auto" />
           <Proportion Type="Fill" />
         </ColumnsProportions>
-        <RowsProportions>
-          <Proportion />
-          <Proportion />
-          <Proportion />
-          <Proportion />
-          <Proportion />
-          <Proportion />
-          <Proportion />
-          <Proportion />
-          <Proportion />
-        </RowsProportions>
         <TextBlock Text="Button:" Id="" />
         <ImageTextButton Text="Button" Id="_button" PaddingLeft="8" PaddingRight="8" GridColumn="1" />
         <TextBlock Text="Text Button:" Id="_textButtonLabel" GridRow="1" />
@@ -50,7 +40,7 @@
           <Proportion Type="Fill" />
         </ColumnsProportions>
         <RowsProportions>
-          <Proportion />
+          <Proportion Type="Auto" />
           <Proportion Type="Fill" />
         </RowsProportions>
         <TextBlock Text="Vertical Slider:" />
@@ -61,8 +51,8 @@
           <Proportion Type="Fill" />
         </ColumnsProportions>
         <RowsProportions>
-          <Proportion />
-          <Proportion />
+          <Proportion Type="Auto" />
+          <Proportion Type="Auto" />
           <Proportion Type="Fill" />
         </RowsProportions>
         <TextBlock Text="Progress Bars:" />

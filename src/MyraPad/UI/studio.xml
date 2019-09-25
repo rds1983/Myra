@@ -2,7 +2,7 @@
   <ExportOptions Namespace="MyraPad.UI" Class="StudioWidget" OutputPath="D:/Projects/Myra/src/MyraPad/UI" />
   <VerticalBox>
     <Proportions>
-      <Proportion />
+      <Proportion Type="Auto" />
       <Proportion Type="Fill" />
     </Proportions>
     <HorizontalMenu Id="">

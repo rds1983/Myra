@@ -2,7 +2,7 @@
   <ExportOptions Namespace="Myra.Samples.AllWidgets" Class="AllWidgets" OutputPath="D:\Projects\Myra\samples\Myra.Samples.AllWidgets" />
   <VerticalBox Spacing="8">
     <Proportions>
-      <Proportion />
+      <Proportion Type="Auto" />
       <Proportion Type="Fill" />
     </Proportions>
     <HorizontalMenu VerticalAlignment="Stretch">
@@ -28,26 +28,12 @@
     <HorizontalSplitPane>
       <ScrollPane>
         <Grid ColumnSpacing="8" RowSpacing="8" Id="_gridRight">
+          <DefaultRowProportion Type="Auto" />
           <ColumnsProportions>
-            <Proportion />
-            <Proportion />
+            <Proportion Type="Auto" />
+            <Proportion Type="Auto" />
             <Proportion Type="Fill" />
           </ColumnsProportions>
-          <RowsProportions>
-            <Proportion />
-            <Proportion />
-            <Proportion />
-            <Proportion />
-            <Proportion />
-            <Proportion />
-            <Proportion />
-            <Proportion />
-            <Proportion />
-            <Proportion />
-            <Proportion />
-            <Proportion />
-            <Proportion />
-          </RowsProportions>
           <TextBlock Text="Button:" Id="" />
           <ImageTextButton Text="Save File" Id="_buttonSaveFile" PaddingLeft="8" PaddingRight="8" GridColumn="1" />
           <TextField Text="" Id="_textSaveFile" GridColumn="2" />
@@ -95,7 +81,7 @@
             <Proportion Type="Fill" />
           </ColumnsProportions>
           <RowsProportions>
-            <Proportion />
+            <Proportion Type="Auto" />
             <Proportion Type="Fill" />
           </RowsProportions>
           <TextBlock Text="Vertical Slider:" />
@@ -106,8 +92,8 @@
             <Proportion Type="Fill" />
           </ColumnsProportions>
           <RowsProportions>
-            <Proportion />
-            <Proportion />
+            <Proportion Type="Auto" />
+            <Proportion Type="Auto" />
             <Proportion Type="Fill" />
           </RowsProportions>
           <TextBlock Text="Progress Bars:" />

@@ -27,6 +27,11 @@ namespace Myra.Graphics2D.UI
 
 	public class Project
 	{
+		public const string ProportionName = "Proportion";
+		public const string DefaultProportionName = "DefaultProportion";
+		public const string DefaultColumnProportionName = "DefaultColumnProportion";
+		public const string DefaultRowProportionName = "DefaultRowProportion";
+
 		private static readonly Dictionary<string, string> LegacyNames = new Dictionary<string, string>();
 
 		private readonly ExportOptions _exportOptions = new ExportOptions();
@@ -61,6 +66,14 @@ namespace Myra.Graphics2D.UI
 			Stylesheet = Stylesheet.Current;
 		}
 
+		public static bool IsProportionName(string s)
+		{
+			return s == ProportionName ||
+				s == DefaultProportionName ||
+				s == DefaultColumnProportionName ||
+				s == DefaultRowProportionName;
+		}
+
 		public static bool ShouldSerializeProperty(Stylesheet stylesheet, object o, PropertyInfo p)
 		{
 			var asWidget = o as Widget;
@@ -72,6 +85,27 @@ namespace Myra.Graphics2D.UI
 				   (p.Name == "GridRow" || p.Name == "GridColumn"))
 				{
 					// Skip serializing auto-assigned GridRow/GridColumn for SplitPane and Box containers
+					return false;
+				}
+			}
+
+			var asGrid = o as Grid;
+			if (asGrid != null)
+			{
+				var value = p.GetValue(o);
+				if ((p.Name == DefaultColumnProportionName || p.Name == DefaultRowProportionName) &&
+					value == Proportion.GridDefault)
+				{
+					return false;
+				}
+			}
+
+			var asBox = o as Box;
+			if (asBox != null)
+			{
+				var value = p.GetValue(o);
+				if (p.Name == DefaultProportionName && value == Proportion.BoxDefault)
+				{
 					return false;
 				}
 			}
@@ -160,7 +194,7 @@ namespace Myra.Graphics2D.UI
 			XDocument xDoc = XDocument.Parse(data);
 
 			Type itemType;
-			if (xDoc.Root.Name != "Proportion")
+			if (!IsProportionName(xDoc.Root.Name.ToString()))
 			{
 				var itemNamespace = typeof(Widget).Namespace;
 
@@ -195,10 +229,10 @@ namespace Myra.Graphics2D.UI
 			return LoadObjectFromXml(data, Stylesheet.Current);
 		}
 
-		public string SaveObjectToXml(object obj)
+		public string SaveObjectToXml(object obj, string tagName)
 		{
 			var saveContext = CreateSaveContext(Stylesheet);
-			return saveContext.Save(obj, true).ToString();
+			return saveContext.Save(obj, true, tagName).ToString();
 		}
 
 		private static object CreateItem(Type type, Stylesheet stylesheet)

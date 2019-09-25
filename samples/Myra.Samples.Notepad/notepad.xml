@@ -2,8 +2,8 @@
   <ExportOptions Namespace="Myra.Samples.Notepad" Class="Notepad" OutputPath="D:\Projects\Myra\samples\Myra.Samples.Notepad" />
   <VerticalBox>
     <Proportions>
-      <Proportion />
-      <Proportion />
+      <Proportion Type="Auto" />
+      <Proportion Type="Auto" />
       <Proportion Type="Fill" />
     </Proportions>
     <HorizontalMenu VerticalAlignment="Stretch" Id="mainMenu">
