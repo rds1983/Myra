@@ -91,5 +91,7 @@ namespace Myra
 				return name.Version.ToString();
 			}
 		}
+
+        internal static string InternalClipboard;
 	}
 }
