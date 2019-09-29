@@ -252,6 +252,16 @@ namespace MyraPad
 
 			BuildUI();
 
+			// Inform Myra that external text input is available
+			// So it stops translating Keys to chars
+			_desktop.HasExternalTextInput = true;
+
+			// Provide that text input
+			Window.TextInput += (s, a) =>
+			{
+				_desktop.OnChar(a.Character);
+			};
+
 			if (_state != null && !string.IsNullOrEmpty(_state.EditedFile))
 			{
 				Load(_state.EditedFile);
