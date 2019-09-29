@@ -729,11 +729,13 @@ namespace Myra.Graphics2D.UI
 
 				case Keys.Home:
 				{
-					if (!Desktop.IsControlDown)
+					if (!Desktop.IsControlDown && !string.IsNullOrEmpty(Text))
 					{
 						var newPosition = CursorPosition;
 
-						while (newPosition > 0 && Text[newPosition - 1] != '\n')
+						while (newPosition > 0 &&
+							(newPosition - 1 >= Text.Length ||
+							Text[newPosition - 1] != '\n'))
 						{
 							--newPosition;
 						}
