@@ -12,6 +12,8 @@ namespace Myra.Graphics2D.UI.ColorPicker
 {
 	public partial class ColorPickerDialog
 	{
+		private const int ColorsPerRow = 6;
+
 		private const string HexChars = "1234567890ABCDEFabcdef";
 		public static readonly Color[] UserColors = new []
 		{
@@ -111,7 +113,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 				{
 					return null;
 				}
-				var index = _gridUserColors.SelectedRowIndex.Value * _gridUserColors.ColumnsProportions.Count + _gridUserColors.SelectedColumnIndex.Value;
+				var index = _gridUserColors.SelectedRowIndex.Value * ColorsPerRow + _gridUserColors.SelectedColumnIndex.Value;
 
 				return index;
 			}
@@ -122,9 +124,9 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			BuildUI();
 
 			// Users colors
-			for(var row = 0; row < _gridUserColors.RowsProportions.Count; ++row)
+			for(var row = 0; row < 2; ++row)
 			{
-				for (var col = 0; col < _gridUserColors.ColumnsProportions.Count; ++col)
+				for (var col = 0; col < ColorsPerRow; ++col)
 				{
 					var image = new Image
 					{
