@@ -56,6 +56,8 @@ namespace Myra.Graphics2D.UI
 		private readonly List<Widget> _widgetsCopy = new List<Widget>();
 		protected readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
 		private DateTime _lastTouchDown;
+		private DateTime? _lastKeyDown;
+		private int _keyDownCount = 0;
 		private MouseInfo _lastMouseInfo;
 		private IReadOnlyCollection<Keys> _downKeys, _lastDownKeys;
 		private Widget _previousKeyboardFocus;
@@ -353,6 +355,10 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 		}
+
+		public int RepeatKeyDownStartInMs { get; set; } = 500;
+
+		public int RepeatKeyDownInternalInMs { get; set; } = 50;
 
 		public Action<Keys> KeyDownHandler;
 
@@ -883,6 +889,7 @@ namespace Myra.Graphics2D.UI
 
 					if (_lastDownKeys != null)
 					{
+						var now = DateTime.Now;
 						foreach (var key in _downKeys)
 						{
 							if (!_lastDownKeys.Contains(key))
@@ -891,6 +898,9 @@ namespace Myra.Graphics2D.UI
 								{
 									KeyDownHandler(key);
 								}
+
+								_lastKeyDown = now;
+								_keyDownCount = 0;
 							}
 						}
 
@@ -904,6 +914,21 @@ namespace Myra.Graphics2D.UI
 								{
 									_focusedKeyboardWidget.OnKeyUp(key);
 								}
+
+								_lastKeyDown = null;
+								_keyDownCount = 0;
+							} else if (_lastKeyDown != null && 
+								((_keyDownCount == 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownStartInMs) ||
+								(_keyDownCount > 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownInternalInMs)))
+							{
+
+								if (KeyDownHandler != null)
+								{
+									KeyDownHandler(key);
+								}
+
+								_lastKeyDown = now;
+								++_keyDownCount;
 							}
 						}
 					}
