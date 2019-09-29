@@ -4,6 +4,7 @@ using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using SpriteFontPlus;
 using System.IO;
+using System.Reflection;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -26,10 +27,6 @@ namespace Myra
 		private const string DefaultAtlasName = "default_ui_skin_atlas.xml";
 		private const string DefaultAtlasImageName = "default_ui_skin_atlas.png";
 
-		private static readonly ResourceAssetResolver _assetResolver = new ResourceAssetResolver(
-			typeof(DefaultAssets).Assembly,
-			"Myra.Resources.");
-
 		private static SpriteFont _font;
 		private static SpriteFont _fontSmall;
 		private static TextureRegionAtlas _uiSpritesheet;
@@ -38,6 +35,14 @@ namespace Myra
 		private static RasterizerState _uiRasterizerState;
 		private static Texture2D _white;
 		private static TextureRegion _whiteRegion;
+
+		private static Assembly Assembly
+		{
+			get
+			{
+				return typeof(DefaultAssets).Assembly;
+			}
+		}
 
 		public static Texture2D White
 		{
@@ -76,8 +81,7 @@ namespace Myra
 				}
 
 				var region = UISpritesheet.Regions["default"];
-				_font = BMFontLoader.LoadText(
-					_assetResolver.ReadAsString(DefaultFontName),
+				_font = BMFontLoader.LoadText(ReadResourceAsString(DefaultFontName),
 					s => new TextureWithOffset(region.Texture, region.Bounds.Location));
 
 				return _font;
@@ -94,8 +98,7 @@ namespace Myra
 				}
 
 				var region = UISpritesheet.Regions["font-small"];
-				_fontSmall = BMFontLoader.LoadText(
-					_assetResolver.ReadAsString(DefaultSmallFontName),
+				_fontSmall = BMFontLoader.LoadText(ReadResourceAsString(DefaultSmallFontName),
 					s => new TextureWithOffset(region.Texture, region.Bounds.Location));
 
 				return _fontSmall;
@@ -108,7 +111,7 @@ namespace Myra
 			{
 				if (_uiSpritesheet != null) return _uiSpritesheet;
 
-				_uiSpritesheet = TextureRegionAtlas.FromXml(_assetResolver.ReadAsString(DefaultAtlasName), UIBitmap);
+				_uiSpritesheet = TextureRegionAtlas.FromXml(ReadResourceAsString(DefaultAtlasName), UIBitmap);
 
 				return _uiSpritesheet;
 			}
@@ -123,8 +126,7 @@ namespace Myra
 					return _uiStylesheet;
 				}
 
-				_uiStylesheet = Stylesheet.LoadFromSource(
-					_assetResolver.ReadAsString(DefaultStylesheetName),
+				_uiStylesheet = Stylesheet.LoadFromSource(ReadResourceAsString(DefaultStylesheetName),
 					s => string.IsNullOrEmpty(s) ? null : UISpritesheet.Regions[s],
 					f => f == "default-font" ? Font : FontSmall);
 
@@ -141,7 +143,7 @@ namespace Myra
 					return _uiBitmap;
 				}
 
-				using (var stream = _assetResolver.Open(DefaultAtlasImageName))
+				using (var stream = OpenResourceStream(DefaultAtlasImageName))
 				{
 					_uiBitmap = CrossEngineStuff.LoadTexture2D(stream);
 				}
@@ -172,6 +174,16 @@ namespace Myra
 #if XENKO
 			BMFontLoader.GraphicsDevice = MyraEnvironment.GraphicsDevice;
 #endif
+		}
+
+		private static string ReadResourceAsString(string name)
+		{
+			return Assembly.ReadResourceAsString("Resources." + name);
+		}
+
+		private static Stream OpenResourceStream(string name)
+		{
+			return Assembly.OpenResourceStream("Resources." + name);
 		}
 
 		internal static void Dispose()

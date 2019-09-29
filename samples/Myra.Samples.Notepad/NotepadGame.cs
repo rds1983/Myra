@@ -111,8 +111,7 @@ namespace Myra.Samples.Notepad
 
 			_textField = ui.textArea;
 
-			var resources = new ResourceAssetResolver(typeof(NotepadGame).Assembly, "Myra.Samples.Notepad.");
-			_textField.Text = resources.ReadAsString("hobbits.txt");
+			_textField.Text = typeof(NotepadGame).Assembly.ReadResourceAsString("hobbits.txt");
 			_desktop.FocusedKeyboardWidget = _textField;
 
 			_textField.TextChanged += TextFieldOnTextChanged;

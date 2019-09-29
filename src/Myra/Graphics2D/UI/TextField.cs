@@ -607,35 +607,35 @@ namespace Myra.Graphics2D.UI
 				case Keys.C:
 					if (Desktop.IsControlDown)
 					{
-                        if (SelectEnd != SelectStart)
-                        {
-                            var selectStart = Math.Min(SelectStart, SelectEnd);
-                            var selectEnd = Math.Max(SelectStart, SelectEnd);
+						if (SelectEnd != SelectStart)
+						{
+							var selectStart = Math.Min(SelectStart, SelectEnd);
+							var selectEnd = Math.Max(SelectStart, SelectEnd);
 
-                            var clipboardText = Text.Substring(selectStart, selectEnd - selectStart);
-                            try
-                            {
-                                Clipboard.SetText(clipboardText);
-                            }
-                            catch (Exception)
-                            {
-                                MyraEnvironment.InternalClipboard = clipboardText;
-                            }
+							var clipboardText = Text.Substring(selectStart, selectEnd - selectStart);
+							try
+							{
+								Clipboard.SetText(clipboardText);
+							}
+							catch (Exception)
+							{
+								MyraEnvironment.InternalClipboard = clipboardText;
+							}
 						}
 					}
 					break;
 				case Keys.V:
 					if (!Readonly && Desktop.IsControlDown)
 					{
-                        string clipboardText;
-                        try
-                        {
-                            clipboardText = Clipboard.GetText();
-                        }
-                        catch (Exception)
-                        {
-                            clipboardText = MyraEnvironment.InternalClipboard;
-                        }
+						string clipboardText;
+						try
+						{
+							clipboardText = Clipboard.GetText();
+						}
+						catch (Exception)
+						{
+							clipboardText = MyraEnvironment.InternalClipboard;
+						}
 
 						if (!string.IsNullOrEmpty(clipboardText))
 						{

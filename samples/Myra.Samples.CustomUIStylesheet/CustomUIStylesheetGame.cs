@@ -34,18 +34,17 @@ namespace Myra.Samples.CustomUIStylesheet
 
 			MyraEnvironment.Game = this;
 
-			// Create resource asset resolver
-			var assetResolver = new ResourceAssetResolver(GetType().Assembly, "Myra.Samples.CustomUIStylesheet.Resources.");
+			var assembly = typeof(CustomUIStylesheetGame).Assembly;
 
 			// Load image containing font & ui spritesheet
 			Texture2D texture;
-			using (var stream = assetResolver.Open("ui_stylesheet_atlas.png"))
+			using (var stream = assembly.OpenResourceStream("Resources.ui_stylesheet_atlas.png"))
 			{
 				texture = Texture2D.FromStream(GraphicsDevice, stream);
 			}
 
 			// Load ui text atlas
-			var textureAtlas = TextureRegionAtlas.FromXml(assetResolver.ReadAsString("ui_stylesheet_atlas.xml"), texture);
+			var textureAtlas = TextureRegionAtlas.FromXml(assembly.ReadResourceAsString("Resources.ui_stylesheet_atlas.xml"), texture);
 
 			// Load ui font(s)
 			var region = textureAtlas["commodore-64"];
@@ -53,14 +52,14 @@ namespace Myra.Samples.CustomUIStylesheet
 			{
 				["commodore-64"] = 
 					BMFontLoader.LoadText(
-						assetResolver.ReadAsString("commodore-64.fnt"),
+						assembly.ReadResourceAsString("Resources.commodore-64.fnt"),
 						s => new TextureWithOffset(region.Texture, region.Bounds.Location)
 					)
 			};
 
 			// Load stylesheet
 			var stylesheet = Stylesheet.LoadFromSource(
-				assetResolver.ReadAsString("ui_stylesheet.xml"),
+				assembly.ReadResourceAsString("Resources.ui_stylesheet.xml"),
 				s => textureAtlas[s],
 				s => fonts[s]);
 

@@ -1,12 +1,19 @@
 ﻿using Myra.Utility;
+using System.Reflection;
 
 namespace MyraPad
 {
 	public static class Resources
 	{
-		private static readonly ResourceAssetResolver _assetResolver = new ResourceAssetResolver(typeof(Resources).Assembly, "MyraPad.Resources.");
-
 		private static string _exportCsDesigner, _exportCsMain, _newProjectTemplate;
+
+		private static Assembly Assembly
+		{
+			get
+			{
+				return typeof(Resources).Assembly;
+			}
+		}
 
 		public static string ExportCSDesigner
 		{
@@ -14,7 +21,7 @@ namespace MyraPad
 			{
 				if (string.IsNullOrEmpty(_exportCsDesigner))
 				{
-					_exportCsDesigner = _assetResolver.ReadAsString("ExportCSDesigner.cstemplate");
+					_exportCsDesigner = Assembly.ReadResourceAsString("Resources.ExportCSDesigner.cstemplate");
 				}
 
 				return _exportCsDesigner;
@@ -27,7 +34,7 @@ namespace MyraPad
 			{
 				if (string.IsNullOrEmpty(_exportCsMain))
 				{
-					_exportCsMain = _assetResolver.ReadAsString("ExportCSMain.cstemplate");
+					_exportCsMain = Assembly.ReadResourceAsString("Resources.ExportCSMain.cstemplate");
 				}
 
 				return _exportCsMain;
@@ -40,7 +47,7 @@ namespace MyraPad
 			{
 				if (string.IsNullOrEmpty(_newProjectTemplate))
 				{
-					_newProjectTemplate = _assetResolver.ReadAsString("NewProject.xmltemplate");
+					_newProjectTemplate = Assembly.ReadResourceAsString("Resources.NewProject.xmltemplate");
 				}
 
 				return _newProjectTemplate;
