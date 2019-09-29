@@ -30,9 +30,17 @@ namespace MyraPad
 			_project = project;
 		}
 
+		private string ExportPath
+		{
+			get
+			{
+				return Environment.ExpandEnvironmentVariables(_project.ExportOptions.OutputPath);
+			}
+		}
+
 		public string ExportMain()
 		{
-			var path = Path.Combine(_project.ExportOptions.OutputPath, _project.ExportOptions.Class + ".cs");
+			var path = Path.Combine(ExportPath, _project.ExportOptions.Class + ".cs");
 			if (File.Exists(path))
 			{
 				// Do not overwrite main
@@ -212,7 +220,7 @@ namespace MyraPad
 			template = template.Replace("$build$", sbBuild.ToString());
 
 
-			var path = Path.Combine(_project.ExportOptions.OutputPath, _project.ExportOptions.Class + ".Generated.cs");
+			var path = Path.Combine(ExportPath, _project.ExportOptions.Class + ".Generated.cs");
 			File.WriteAllText(path, template);
 
 			return path;
