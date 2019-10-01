@@ -14,7 +14,7 @@ Myra is UI Library for [MonoGame](http://www.monogame.net/), [FNA](https://githu
 
 ## Support
 Use following resources if you need help with Myra or have other questions:
-* [Myra Discord](https://discord.gg/u6cCgf)
+* [Myra Discord](https://discord.gg/ZeHxhCY)
 * [Myra Topic at MonoGame Community Forum](http://community.monogame.net/t/myra-ui-library-for-the-monogame)
 * [Myra Topic at gamedev.ru (Russian)](https://gamedev.ru/code/forum/?id=241617)
 
