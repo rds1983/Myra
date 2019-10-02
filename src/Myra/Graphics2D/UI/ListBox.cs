@@ -2,7 +2,10 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Myra.Graphics2D.UI.Styles;
+using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
 {
@@ -32,8 +35,22 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[DefaultValue(true)]
+		public override bool AcceptsKeyboardFocus
+		{
+			get
+			{
+				return base.AcceptsKeyboardFocus;
+			}
+			set
+			{
+				base.AcceptsKeyboardFocus = value;
+			}
+		}
+
 		public ListBox(ListBoxStyle style) : base(new ScrollPane())
 		{
+			AcceptsKeyboardFocus = true;
 			_box = new VerticalBox();
 			InternalChild.Content = _box;
 			if (style != null)
@@ -134,6 +151,62 @@ namespace Myra.Graphics2D.UI
 			{
 				SelectedItem = listItem;
 			}
+		}
+
+		public override void OnKeyDown(Keys k)
+		{
+			base.OnKeyDown(k);
+
+			switch(k)
+			{
+				case Keys.Up:
+					if (SelectedIndex != null && SelectedIndex.Value > 0)
+					{
+						SelectedIndex = SelectedIndex.Value - 1;
+						UpdateScrolling();
+					}
+					break;
+				case Keys.Down:
+					if (SelectedIndex != null && SelectedIndex.Value < Items.Count - 1)
+					{
+						SelectedIndex = SelectedIndex.Value + 1;
+						UpdateScrolling();
+					}
+					break;
+			}
+		}
+
+		private void UpdateScrolling()
+		{
+			if (SelectedItem == null)
+			{
+				return;
+			}
+
+			var p = SelectedItem.Widget.Bounds;
+
+			var bounds = _box.ActualBounds;
+			InternalChild.UpdateLayout();
+			var sz = new Point(InternalChild.Bounds.Width, InternalChild.Bounds.Height);
+			var maximum = InternalChild.ScrollMaximum;
+
+			p.X -= bounds.X;
+			p.Y -= bounds.Y;
+
+			var lineHeight = CrossEngineStuff.LineSpacing(ListBoxStyle.ListItemStyle.LabelStyle.Font);
+
+			var sp = InternalChild.ScrollPosition;
+
+			if (p.Y < sp.Y)
+			{
+				sp.Y = p.Y;
+			}
+			else if (p.Y + lineHeight > sp.Y + sz.Y)
+			{
+				sp.Y = (p.Y + lineHeight - sz.Y);
+			}
+
+			InternalChild.ScrollPosition = sp;
 		}
 
 		public void ApplyListBoxStyle(ListBoxStyle style)
