@@ -1,5 +1,5 @@
-﻿using Myra.Attributes;
-using System.Collections.Generic;
+﻿using Microsoft.Xna.Framework;
+using Myra.Attributes;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Xml.Serialization;
@@ -8,6 +8,8 @@ namespace Myra.Graphics2D.UI
 {
 	public abstract class Box: SingleItemContainer<Grid>, IMultipleItemsContainer
 	{
+		private bool _dirty = true;
+
 		[Browsable(false)]
 		[XmlIgnore]
 		public abstract Orientation Orientation
@@ -104,8 +106,13 @@ namespace Myra.Graphics2D.UI
 			Widgets.CollectionChanged += Widgets_CollectionChanged;
 		}
 
-		private void Widgets_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		private void UpdateGrid()
 		{
+			if (!_dirty)
+			{
+				return;
+			}
+
 			var index = 0;
 			foreach (var widget in Widgets)
 			{
@@ -120,6 +127,27 @@ namespace Myra.Graphics2D.UI
 
 				++index;
 			}
+
+			_dirty = false;
+		}
+
+		private void Widgets_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		{
+			_dirty = true;
+		}
+
+		protected override Point InternalMeasure(Point availableSize)
+		{
+			UpdateGrid();
+
+			return base.InternalMeasure(availableSize);
+		}
+
+		public override void Arrange()
+		{
+			UpdateGrid();
+
+			base.Arrange();
 		}
 	}
 }
