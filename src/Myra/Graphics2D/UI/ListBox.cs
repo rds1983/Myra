@@ -2,10 +2,15 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
+
+#if !XENKO
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+#else
+using Xenko.Core.Mathematics;
+#endif
 
 namespace Myra.Graphics2D.UI
 {
@@ -153,6 +158,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+#if !XENKO
 		public override void OnKeyDown(Keys k)
 		{
 			base.OnKeyDown(k);
@@ -175,6 +181,7 @@ namespace Myra.Graphics2D.UI
 					break;
 			}
 		}
+#endif
 
 		private void UpdateScrolling()
 		{

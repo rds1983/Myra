@@ -1,4 +1,4 @@
-version: 0.9.4.{build}
+version: 0.9.5.{build}
 configuration: Release
 dotnet_csproj:
   patch: true
