@@ -69,16 +69,16 @@ namespace Myra.Graphics2D.UI.File
 				{
 					foreach (var widget in _gridFiles.Widgets)
 					{
-						var asTextBlock = widget as TextBlock;
+						var asLabel = widget as Label;
 
-						if (asTextBlock == null)
+						if (asLabel == null)
 						{
 							continue;
 						}
 
-						if (asTextBlock.Text == FileName)
+						if (asLabel.Text == FileName)
 						{
-							_gridFiles.SelectedRowIndex = asTextBlock.GridRow;
+							_gridFiles.SelectedRowIndex = asLabel.GridRow;
 							break;
 						}
 					}
@@ -386,7 +386,7 @@ namespace Myra.Graphics2D.UI.File
 
 				_gridFiles.Widgets.Add(image);
 
-				var name = new TextBlock
+				var name = new Label
 				{
 					Text = Path.GetFileName(f),
 					GridColumn = 1,
@@ -436,7 +436,7 @@ namespace Myra.Graphics2D.UI.File
 
 				_gridFiles.RowsProportions.Add(prop);
 
-				var name = new TextBlock
+				var name = new Label
 				{
 					Text = Path.GetFileName(f),
 					GridColumn = 1,

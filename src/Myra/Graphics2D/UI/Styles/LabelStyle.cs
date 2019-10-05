@@ -8,7 +8,7 @@ using Xenko.Core.Mathematics;
 
 namespace Myra.Graphics2D.UI.Styles
 {
-	public class TextBlockStyle: WidgetStyle
+	public class LabelStyle: ControlStyle
 	{
 		public Color TextColor { get; set; }
 		public Color? DisabledTextColor { get; set; }
@@ -16,11 +16,11 @@ namespace Myra.Graphics2D.UI.Styles
 		public Color? PressedTextColor { get; set; }
 		public SpriteFont Font { get; set; }
 
-		public TextBlockStyle()
+		public LabelStyle()
 		{
 		}
 
-		public TextBlockStyle(TextBlockStyle style) : base(style)
+		public LabelStyle(LabelStyle style) : base(style)
 		{
 			TextColor = style.TextColor;
 			DisabledTextColor = style.DisabledTextColor;
@@ -29,9 +29,9 @@ namespace Myra.Graphics2D.UI.Styles
 			Font = style.Font;
 		}
 
-		public override WidgetStyle Clone()
+		public override ControlStyle Clone()
 		{
-			return new TextBlockStyle(this);
+			return new LabelStyle(this);
 		}
 	}
 }

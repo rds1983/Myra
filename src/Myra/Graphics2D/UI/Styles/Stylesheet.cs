@@ -40,8 +40,8 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private readonly Dictionary<string, TextBlockStyle> _textBlockStyles = new Dictionary<string, TextBlockStyle>();
-		private readonly Dictionary<string, TextFieldStyle> _textFieldStyles = new Dictionary<string, TextFieldStyle>();
+		private readonly Dictionary<string, LabelStyle> _labelStyles = new Dictionary<string, LabelStyle>();
+		private readonly Dictionary<string, TextBoxStyle> _textBoxStyles = new Dictionary<string, TextBoxStyle>();
 		private readonly Dictionary<string, ButtonStyle> _buttonStyles = new Dictionary<string, ButtonStyle>();
 		private readonly Dictionary<string, ImageTextButtonStyle> _checkBoxStyles = new Dictionary<string, ImageTextButtonStyle>();
 		private readonly Dictionary<string, ImageTextButtonStyle> _radioButtonStyles = new Dictionary<string, ImageTextButtonStyle>();
@@ -64,7 +64,7 @@ namespace Myra.Graphics2D.UI.Styles
 			new Dictionary<string, SplitPaneStyle>();
 		private readonly Dictionary<string, SplitPaneStyle> _verticalSplitPaneStyles =
 			new Dictionary<string, SplitPaneStyle>();
-		private readonly Dictionary<string, ScrollPaneStyle> _scrollPaneStyles = new Dictionary<string, ScrollPaneStyle>();
+		private readonly Dictionary<string, ScrollViewerStyle> _scrollViewerStyles = new Dictionary<string, ScrollViewerStyle>();
 		private readonly Dictionary<string, MenuStyle> _horizontalMenuStyles = new Dictionary<string, MenuStyle>();
 		private readonly Dictionary<string, MenuStyle> _verticalMenuStyles = new Dictionary<string, MenuStyle>();
 		private readonly Dictionary<string, WindowStyle> _windowStyles = new Dictionary<string, WindowStyle>();
@@ -76,28 +76,28 @@ namespace Myra.Graphics2D.UI.Styles
 		}
 
 		[XmlIgnore]
-		public TextBlockStyle TextBlockStyle
+		public LabelStyle LabelStyle
 		{
 			get
 			{
-				return GetDefaultStyle(_textBlockStyles);
+				return GetDefaultStyle(_labelStyles);
 			}
 			set
 			{
-				SetDefaultStyle(_textBlockStyles, value);
+				SetDefaultStyle(_labelStyles, value);
 			}
 		}
 
 		[XmlIgnore]
-		public TextFieldStyle TextFieldStyle
+		public TextBoxStyle TextBoxStyle
 		{
 			get
 			{
-				return GetDefaultStyle(_textFieldStyles);
+				return GetDefaultStyle(_textBoxStyles);
 			}
 			set
 			{
-				SetDefaultStyle(_textFieldStyles, value);
+				SetDefaultStyle(_textBoxStyles, value);
 			}
 		}
 
@@ -310,15 +310,15 @@ namespace Myra.Graphics2D.UI.Styles
 		}
 
 		[XmlIgnore]
-		public ScrollPaneStyle ScrollPaneStyle
+		public ScrollViewerStyle ScrollViewerStyle
 		{
 			get
 			{
-				return GetDefaultStyle(_scrollPaneStyles);
+				return GetDefaultStyle(_scrollViewerStyles);
 			}
 			set
 			{
-				SetDefaultStyle(_scrollPaneStyles, value);
+				SetDefaultStyle(_scrollViewerStyles, value);
 			}
 		}
 
@@ -374,19 +374,19 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		public Dictionary<string, TextBlockStyle> TextBlockStyles
+		public Dictionary<string, LabelStyle> LabelStyles
 		{
 			get
 			{
-				return _textBlockStyles;
+				return _labelStyles;
 			}
 		}
 
-		public Dictionary<string, TextFieldStyle> TextFieldStyles
+		public Dictionary<string, TextBoxStyle> TextBoxStyles
 		{
 			get
 			{
-				return _textFieldStyles;
+				return _textBoxStyles;
 			}
 		}
 
@@ -518,11 +518,11 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		public Dictionary<string, ScrollPaneStyle> ScrollPaneStyles
+		public Dictionary<string, ScrollViewerStyle> ScrollViewerStyles
 		{
 			get
 			{
-				return _scrollPaneStyles;
+				return _scrollViewerStyles;
 			}
 		}
 
@@ -558,14 +558,14 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private static T GetDefaultStyle<T>(Dictionary<string, T> styles) where T : WidgetStyle
+		private static T GetDefaultStyle<T>(Dictionary<string, T> styles) where T : ControlStyle
 		{
 			T result = null;
 			styles.TryGetValue(DefaultStyleName, out result);
 			return result;
 		}
 
-		private static void SetDefaultStyle<T>(Dictionary<string, T> styles, T value) where T : WidgetStyle
+		private static void SetDefaultStyle<T>(Dictionary<string, T> styles, T value) where T : ControlStyle
 		{
 			styles[DefaultStyleName] = value;
 		}
@@ -594,10 +594,17 @@ namespace Myra.Graphics2D.UI.Styles
 
 			var loadContext = new LoadContext
 			{
-				Namespace = typeof(WidgetStyle).Namespace,
+				Namespace = typeof(ControlStyle).Namespace,
 				TextureGetter = textureGetter,
 				FontGetter = fontGetter,
 				NodesToIgnore = new HashSet<string>(new[] { "Designer", "Colors" }),
+				LegacyPropertyNames = new Dictionary<string, string>
+				{
+					["TextBlockStyles"] = "LabelStyles",
+					["TextFieldStyles"] = "TextBoxStyles",
+					["ScrollPaneStyles"] = "ScrollViewerStyles",
+
+				},
 				Colors = colors
 			};
 

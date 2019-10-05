@@ -167,7 +167,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			SubscribeHSV(_spinButtonV, _sliderV);
 
 			_textFieldHex.Tag = false;
-			_textFieldHex.TextChangedByUser += TextFieldHexTextChangedByUser;
+			_textFieldHex.TextChangedByUser += TextBoxHexTextChangedByUser;
 			_textFieldHex.InputFilter = s =>
 			{
 				if (s == null || s.Length > 8)
@@ -228,7 +228,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_buttonSaveColor.Enabled = SelectedUserColorIndex != null;
 		}
 
-		private void TextFieldHexTextChangedByUser(object sender, EventArgs e)
+		private void TextBoxHexTextChangedByUser(object sender, EventArgs e)
 		{
 			if (string.IsNullOrEmpty(_textFieldHex.Text))
 			{

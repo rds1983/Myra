@@ -18,7 +18,7 @@ namespace Myra.Graphics2D.UI
 		private readonly Tree _topTree;
 		private readonly Grid _childNodesGrid;
 		private readonly ImageButton _mark;
-		private readonly TextBlock _label;
+		private readonly Label _label;
 
 		public bool IsExpanded
 		{
@@ -27,7 +27,7 @@ namespace Myra.Graphics2D.UI
 			set { _mark.IsPressed = value; }
 		}
 
-		public TextBlock Label
+		public Label Label
 		{
 			get
 			{
@@ -118,7 +118,7 @@ namespace Myra.Graphics2D.UI
 
 			InternalChild.Widgets.Add(_mark);
 
-			_label = new TextBlock
+			_label = new Label
 			{
 				GridColumn = 1
 			};
@@ -218,7 +218,7 @@ namespace Myra.Graphics2D.UI
 			if (style.MarkStyle != null)
 			{
 				_mark.ApplyImageButtonStyle(style.MarkStyle);
-				_label.ApplyTextBlockStyle(style.LabelStyle);
+				_label.ApplyLabelStyle(style.LabelStyle);
 			}
 
 			TreeStyle = style;

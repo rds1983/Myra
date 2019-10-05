@@ -1,6 +1,6 @@
 ﻿namespace Myra.Graphics2D.UI.Styles
 {
-	public class ButtonStyle: WidgetStyle
+	public class ButtonStyle: ControlStyle
 	{
 		public IRenderable PressedBackground { get; set; }
 
@@ -13,7 +13,7 @@
 			PressedBackground = style.PressedBackground;
 		}
 
-		public override WidgetStyle Clone()
+		public override ControlStyle Clone()
 		{
 			return new ButtonStyle(this);
 		}

@@ -13,22 +13,22 @@ namespace MyraPad.UI
 	{
 		private void BuildUI()
 		{
-			var textBlock1 = new TextBlock();
+			var textBlock1 = new Label();
 			textBlock1.Text = "Class Name:";
 			textBlock1.Id = "";
 			textBlock1.GridRow = 1;
 
-			_textClassName = new TextField();
+			_textClassName = new TextBox();
 			_textClassName.Text = "";
 			_textClassName.Id = "_textClassName";
 			_textClassName.GridColumn = 1;
 			_textClassName.GridRow = 1;
 
-			var textBlock2 = new TextBlock();
+			var textBlock2 = new Label();
 			textBlock2.Text = "Output Path:";
 			textBlock2.GridRow = 2;
 
-			_textOutputPath = new TextField();
+			_textOutputPath = new TextBox();
 			_textOutputPath.Text = "";
 			_textOutputPath.Id = "_textOutputPath";
 			_textOutputPath.GridColumn = 1;
@@ -40,10 +40,10 @@ namespace MyraPad.UI
 			_buttonChangeOutputPath.GridColumn = 2;
 			_buttonChangeOutputPath.GridRow = 2;
 
-			var textBlock3 = new TextBlock();
+			var textBlock3 = new Label();
 			textBlock3.Text = "Namespace:";
 
-			_textNamespace = new TextField();
+			_textNamespace = new TextBox();
 			_textNamespace.Text = "";
 			_textNamespace.Id = "_textNamespace";
 			_textNamespace.GridColumn = 1;
@@ -85,10 +85,10 @@ namespace MyraPad.UI
 		}
 
 		
-		public TextField _textClassName;
-		public TextField _textOutputPath;
+		public TextBox _textClassName;
+		public TextBox _textOutputPath;
 		public TextButton _buttonChangeOutputPath;
-		public TextField _textNamespace;
+		public TextBox _textNamespace;
 		public Grid Root;
 	}
 }

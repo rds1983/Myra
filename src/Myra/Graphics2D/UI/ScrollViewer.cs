@@ -14,7 +14,7 @@ using Xenko.Core.Mathematics;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ScrollPane : SingleItemContainer<Widget>, IContent
+	public class ScrollViewer : SingleItemContainer<Control>, IContent
 	{
 		private Orientation _scrollbarOrientation;
 		internal bool _horizontalScrollingOn, _verticalScrollingOn;
@@ -139,7 +139,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[Content]
-		public Widget Content
+		public Control Content
 		{
 			get
 			{
@@ -155,7 +155,7 @@ namespace Myra.Graphics2D.UI
 		[Browsable(false)]
 		[XmlIgnore]
 		[Obsolete("Use Content instead")]
-		public Widget Child
+		public Control Child
 		{
 			get
 			{
@@ -324,7 +324,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ScrollPane(ScrollPaneStyle style)
+		public ScrollViewer(ScrollViewerStyle style)
 		{
 			ClipToBounds = true;
 			AcceptsMouseWheelFocus = true;
@@ -337,23 +337,23 @@ namespace Myra.Graphics2D.UI
 
 			if (style != null)
 			{
-				ApplyScrollPaneStyle(style);
+				ApplyScrollViewerStyle(style);
 			}
 		}
 
-		public ScrollPane(Stylesheet stylesheet, string style) : this(stylesheet.ScrollPaneStyles[style])
+		public ScrollViewer(Stylesheet stylesheet, string style) : this(stylesheet.ScrollViewerStyles[style])
 		{
 		}
 
-		public ScrollPane(Stylesheet stylesheet) : this(stylesheet.ScrollPaneStyle)
+		public ScrollViewer(Stylesheet stylesheet) : this(stylesheet.ScrollViewerStyle)
 		{
 		}
 
-		public ScrollPane(string style) : this(Stylesheet.Current, style)
+		public ScrollViewer(string style) : this(Stylesheet.Current, style)
 		{
 		}
 
-		public ScrollPane() : this(Stylesheet.Current)
+		public ScrollViewer() : this(Stylesheet.Current)
 		{
 		}
 
@@ -508,7 +508,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public void ApplyScrollPaneStyle(ScrollPaneStyle style)
+		public void ApplyScrollViewerStyle(ScrollViewerStyle style)
 		{
 			HorizontalScrollBackground = style.HorizontalScrollBackground;
 			HorizontalScrollKnob = style.HorizontalScrollKnob;
@@ -716,12 +716,12 @@ namespace Myra.Graphics2D.UI
 
 		protected override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
-			ApplyScrollPaneStyle(stylesheet.ScrollPaneStyles[name]);
+			ApplyScrollViewerStyle(stylesheet.ScrollViewerStyles[name]);
 		}
 
 		internal override string[] GetStyleNames(Stylesheet stylesheet)
 		{
-			return stylesheet.ScrollPaneStyles.Keys.ToArray();
+			return stylesheet.ScrollViewerStyles.Keys.ToArray();
 		}
 	}
 }

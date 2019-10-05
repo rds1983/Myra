@@ -28,7 +28,7 @@
 			CancelButtonStyle = style.CancelButtonStyle != null ? new ImageTextButtonStyle(style.CancelButtonStyle) : null;
 		}
 
-		public override WidgetStyle Clone()
+		public override ControlStyle Clone()
 		{
 			return new DialogStyle(this);
 		}

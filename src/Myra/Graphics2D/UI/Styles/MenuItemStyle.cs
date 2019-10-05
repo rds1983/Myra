@@ -15,7 +15,7 @@
 			ShortcutWidth = style.ShortcutWidth;
 		}
 
-		public override WidgetStyle Clone()
+		public override ControlStyle Clone()
 		{
 			return new MenuItemStyle(this);
 		}

@@ -14,7 +14,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public Widget Widget { get; set; }
+		public Control Widget { get; set; }
 
 		[Browsable(false)]
 		[XmlIgnore]

@@ -17,21 +17,21 @@ namespace MyraPad.UI
 			_radioButtonGrid.Text = "Grid";
 			_radioButtonGrid.Id = "_radioButtonGrid";
 
-			_radioButtonHorizontalBox = new RadioButton();
-			_radioButtonHorizontalBox.Text = "HorizontalBox";
-			_radioButtonHorizontalBox.Id = "_radioButtonHorizontalBox";
+			_radioButtonHorizontalStackPanel = new RadioButton();
+			_radioButtonHorizontalStackPanel.Text = "HorizontalStackPanel";
+			_radioButtonHorizontalStackPanel.Id = "_radioButtonHorizontalStackPanel";
 
-			_radioButtonVerticalBox = new RadioButton();
-			_radioButtonVerticalBox.Text = "VerticalBox";
-			_radioButtonVerticalBox.Id = "_radioButtonVerticalBox";
+			_radioButtonVerticalStackPanel = new RadioButton();
+			_radioButtonVerticalStackPanel.Text = "VerticalStackPanel";
+			_radioButtonVerticalStackPanel.Id = "_radioButtonVerticalStackPanel";
 
 			_radioButtonPanel = new RadioButton();
 			_radioButtonPanel.Text = "Panel";
 			_radioButtonPanel.Id = "_radioButtonPanel";
 
-			_radioButtonScrollPane = new RadioButton();
-			_radioButtonScrollPane.Text = "ScrollPane";
-			_radioButtonScrollPane.Id = "_radioButtonScrollPane";
+			_radioButtonScrollViewer = new RadioButton();
+			_radioButtonScrollViewer.Text = "ScrollViewer";
+			_radioButtonScrollViewer.Id = "_radioButtonScrollViewer";
 
 			_radioButtonHorizontalSplitPane = new RadioButton();
 			_radioButtonHorizontalSplitPane.Text = "HorizontalSplitPane";
@@ -49,12 +49,12 @@ namespace MyraPad.UI
 			_radioButtonDialog.Text = "Dialog";
 			_radioButtonDialog.Id = "_radioButtonDialog";
 
-			var verticalBox1 = new VerticalBox();
+			var verticalBox1 = new VerticalStackPanel();
 			verticalBox1.Widgets.Add(_radioButtonGrid);
-			verticalBox1.Widgets.Add(_radioButtonHorizontalBox);
-			verticalBox1.Widgets.Add(_radioButtonVerticalBox);
+			verticalBox1.Widgets.Add(_radioButtonHorizontalStackPanel);
+			verticalBox1.Widgets.Add(_radioButtonVerticalStackPanel);
 			verticalBox1.Widgets.Add(_radioButtonPanel);
-			verticalBox1.Widgets.Add(_radioButtonScrollPane);
+			verticalBox1.Widgets.Add(_radioButtonScrollViewer);
 			verticalBox1.Widgets.Add(_radioButtonHorizontalSplitPane);
 			verticalBox1.Widgets.Add(_radioButtonVerticalSplitPane);
 			verticalBox1.Widgets.Add(_radioButtonWindow);
@@ -69,10 +69,10 @@ namespace MyraPad.UI
 
 		
 		public RadioButton _radioButtonGrid;
-		public RadioButton _radioButtonHorizontalBox;
-		public RadioButton _radioButtonVerticalBox;
+		public RadioButton _radioButtonHorizontalStackPanel;
+		public RadioButton _radioButtonVerticalStackPanel;
 		public RadioButton _radioButtonPanel;
-		public RadioButton _radioButtonScrollPane;
+		public RadioButton _radioButtonScrollViewer;
 		public RadioButton _radioButtonHorizontalSplitPane;
 		public RadioButton _radioButtonVerticalSplitPane;
 		public RadioButton _radioButtonWindow;

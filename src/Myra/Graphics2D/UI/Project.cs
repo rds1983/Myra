@@ -32,7 +32,7 @@ namespace Myra.Graphics2D.UI
 		public const string DefaultColumnProportionName = "DefaultColumnProportion";
 		public const string DefaultRowProportionName = "DefaultRowProportion";
 
-		private static readonly Dictionary<string, string> LegacyNames = new Dictionary<string, string>();
+		private static readonly Dictionary<string, string> LegacyClassNames = new Dictionary<string, string>();
 
 		private readonly ExportOptions _exportOptions = new ExportOptions();
 
@@ -44,7 +44,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[Content]
-		public Widget Root { get; set; }
+		public Control Root { get; set; }
 
 		[Browsable(false)]
 		public string StylesheetPath
@@ -58,7 +58,12 @@ namespace Myra.Graphics2D.UI
 
 		static Project()
 		{
-			LegacyNames["Button"] = "ImageTextButton";
+			LegacyClassNames["Button"] = "ImageTextButton";
+			LegacyClassNames["VerticalBox"] = "VerticalStackPanel";
+			LegacyClassNames["HorizontalBox"] = "HorizontalStackPanel";
+			LegacyClassNames["TextField"] = "TextBox";
+			LegacyClassNames["TextBlock"] = "Label";
+			LegacyClassNames["ScrollPane"] = "ScrollViewer";
 		}
 
 		public Project()
@@ -76,7 +81,7 @@ namespace Myra.Graphics2D.UI
 
 		public static bool ShouldSerializeProperty(Stylesheet stylesheet, object o, PropertyInfo p)
 		{
-			var asWidget = o as Widget;
+			var asWidget = o as Control;
 			if (asWidget != null && asWidget.Parent != null && asWidget.Parent is Grid)
 			{
 				var container = asWidget.Parent.Parent;
@@ -145,9 +150,9 @@ namespace Myra.Graphics2D.UI
 		{
 			return new LoadContext
 			{
-				LegacyNames = LegacyNames,
+				LegacyClassNames = LegacyClassNames,
 				ObjectCreator = t => CreateItem(t, stylesheet),
-				Namespace = typeof(Widget).Namespace
+				Namespace = typeof(Control).Namespace
 			};
 		}
 
@@ -196,16 +201,16 @@ namespace Myra.Graphics2D.UI
 			Type itemType;
 			if (!IsProportionName(xDoc.Root.Name.ToString()))
 			{
-				var itemNamespace = typeof(Widget).Namespace;
+				var itemNamespace = typeof(Control).Namespace;
 
 				var widgetName = xDoc.Root.Name.ToString();
 				string newName;
-				if (LegacyNames.TryGetValue(widgetName, out newName))
+				if (LegacyClassNames.TryGetValue(widgetName, out newName))
 				{
 					widgetName = newName;
 				}
 
-				itemType = typeof(Widget).Assembly.GetType(itemNamespace + "." + widgetName);
+				itemType = typeof(Control).Assembly.GetType(itemNamespace + "." + widgetName);
 			}
 			else
 			{
@@ -260,7 +265,7 @@ namespace Myra.Graphics2D.UI
 			return Activator.CreateInstance(type);
 		}
 
-		private static bool HasStylesheetValue(Widget w, PropertyInfo property, Stylesheet stylesheet)
+		private static bool HasStylesheetValue(Control w, PropertyInfo property, Stylesheet stylesheet)
 		{
 			if (stylesheet == null)
 			{

@@ -3,7 +3,7 @@
 	public interface IMenuItem : IItemWithId
 	{
 		Menu Menu { get; set; }
-		Widget Widget { get; set; }
+		Control Widget { get; set; }
 		char? UnderscoreChar { get; }
 	}
 }

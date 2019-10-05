@@ -9,9 +9,9 @@ using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ListBox : Selector<ScrollPane, ListItem>
+	public class ListBox : Selector<ScrollViewer, ListItem>
 	{
-		private readonly VerticalBox _box;
+		private readonly VerticalStackPanel _box;
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -48,10 +48,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ListBox(ListBoxStyle style) : base(new ScrollPane())
+		public ListBox(ListBoxStyle style) : base(new ScrollViewer())
 		{
 			AcceptsKeyboardFocus = true;
-			_box = new VerticalBox();
+			_box = new VerticalStackPanel();
 			InternalChild.Content = _box;
 			if (style != null)
 			{
@@ -90,7 +90,7 @@ namespace Myra.Graphics2D.UI
 		{
 			item.Changed += ItemOnChanged;
 
-			Widget widget = null;
+			Control widget = null;
 
 			if (!item.IsSeparator)
 			{

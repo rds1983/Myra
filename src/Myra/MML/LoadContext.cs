@@ -24,12 +24,13 @@ namespace Myra.MML
 {
 	internal class LoadContext: BaseContext
 	{
-		public Dictionary<string, string> LegacyNames = new Dictionary<string, string>();
+		public Dictionary<string, string> LegacyClassNames = null;
+		public Dictionary<string, string> LegacyPropertyNames = null;
 		public Dictionary<string, Color> Colors;
 		public HashSet<string> NodesToIgnore = null;
 		public Func<Type, object> ObjectCreator = (type) => Activator.CreateInstance(type);
 		public string Namespace;
-		public Assembly Assembly = typeof(Widget).Assembly;
+		public Assembly Assembly = typeof(Control).Assembly;
 		public Func<string, IRenderable> TextureGetter = null;
 		public Func<string, SpriteFont> FontGetter = null;
 
@@ -40,9 +41,16 @@ namespace Myra.MML
 			List<PropertyInfo> complexProperties, simpleProperties;
 			ParseProperties(type, out complexProperties, out simpleProperties);
 
+			string newName;
 			foreach (var attr in el.Attributes())
 			{
-				var property = (from p in simpleProperties where p.Name == attr.Name select p).FirstOrDefault();
+				var propertyName = attr.Name.ToString();
+				if (LegacyPropertyNames != null && LegacyPropertyNames.TryGetValue(propertyName, out newName))
+				{
+					propertyName = newName;
+				}
+
+				var property = (from p in simpleProperties where p.Name == propertyName select p).FirstOrDefault();
 
 				if (property != null)
 				{
@@ -115,6 +123,11 @@ namespace Myra.MML
 					var parts = childName.Split('.');
 					childName = parts[1];
 					isProperty = true;
+
+					if (LegacyPropertyNames != null && LegacyPropertyNames.TryGetValue(childName, out newName))
+					{
+						childName = newName;
+					}
 				}
 
 				// Find property
@@ -183,8 +196,7 @@ namespace Myra.MML
 
 					// Should be widget class name then
 					var widgetName = childName;
-					string newName;
-					if (LegacyNames.TryGetValue(widgetName, out newName))
+					if (LegacyClassNames != null && LegacyClassNames.TryGetValue(widgetName, out newName))
 					{
 						widgetName = newName;
 					}

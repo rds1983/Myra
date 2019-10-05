@@ -22,7 +22,7 @@ namespace Myra.Graphics2D.UI
 
 		public Dialog(DialogStyle style) : base(style)
 		{
-			var buttonsGrid = new HorizontalBox()
+			var buttonsGrid = new HorizontalStackPanel()
 			{
 				Spacing = 8,
 				HorizontalAlignment = HorizontalAlignment.Right
@@ -99,7 +99,7 @@ namespace Myra.Graphics2D.UI
 			return true;
 		}
 
-		public static Dialog CreateMessageBox(string title, Widget content)
+		public static Dialog CreateMessageBox(string title, Control content)
 		{
 			var w = new Dialog
 			{
@@ -112,7 +112,7 @@ namespace Myra.Graphics2D.UI
 
 		public static Dialog CreateMessageBox(string title, string message)
 		{
-			var messageLabel = new TextBlock
+			var messageLabel = new Label
 			{
 				Text = message,
 				Wrap = true

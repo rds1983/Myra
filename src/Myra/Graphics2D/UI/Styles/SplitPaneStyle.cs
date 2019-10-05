@@ -1,6 +1,6 @@
 ﻿namespace Myra.Graphics2D.UI.Styles
 {
-	public class SplitPaneStyle: WidgetStyle
+	public class SplitPaneStyle: ControlStyle
 	{
 		public ButtonStyle HandleStyle { get; set; }
 
@@ -13,7 +13,7 @@
 			HandleStyle = style.HandleStyle != null ? new ButtonStyle(style.HandleStyle) : null;
 		}
 
-		public override WidgetStyle Clone()
+		public override ControlStyle Clone()
 		{
 			return new SplitPaneStyle(this);
 		}

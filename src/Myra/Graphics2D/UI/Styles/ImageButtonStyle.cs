@@ -17,7 +17,7 @@
 		{
 		}
 
-		public override WidgetStyle Clone()
+		public override ControlStyle Clone()
 		{
 			return new ImageButtonStyle(this);
 		}

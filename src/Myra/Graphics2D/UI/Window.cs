@@ -18,15 +18,15 @@ using Xenko.Input;
 
 namespace Myra.Graphics2D.UI
 {
-	public class Window : SingleItemContainer<VerticalBox>, IContent
+	public class Window : SingleItemContainer<VerticalStackPanel>, IContent
 	{
 		private Point? _startPos;
 		private readonly Grid _titleGrid;
-		private readonly TextBlock _titleLabel;
+		private readonly Label _titleLabel;
 		private readonly ImageButton _closeButton;
-		private Widget _content;
-		private Widget _previousKeyboardFocus;
-		private Widget _previousMouseWheelFocus;
+		private Control _content;
+		private Control _previousKeyboardFocus;
+		private Control _previousMouseWheelFocus;
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -99,7 +99,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[Content]
-		public Widget Content
+		public Control Content
 		{
 			get
 			{
@@ -196,7 +196,7 @@ namespace Myra.Graphics2D.UI
 
 		public Window(WindowStyle style)
 		{
-			InternalChild = new VerticalBox();
+			InternalChild = new VerticalStackPanel();
 
 			Result = false;
 			HorizontalAlignment = HorizontalAlignment.Left;
@@ -215,7 +215,7 @@ namespace Myra.Graphics2D.UI
 			_titleGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
 			_titleGrid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
 
-			_titleLabel = new TextBlock();
+			_titleLabel = new Label();
 			_titleGrid.Widgets.Add(_titleLabel);
 
 			_closeButton = new ImageButton
@@ -378,7 +378,7 @@ namespace Myra.Graphics2D.UI
 
 			if (style.TitleStyle != null)
 			{
-				_titleLabel.ApplyTextBlockStyle(style.TitleStyle);
+				_titleLabel.ApplyLabelStyle(style.TitleStyle);
 			}
 
 			if (style.CloseButtonStyle != null)

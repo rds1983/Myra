@@ -10,7 +10,7 @@ using Xenko.Core.Mathematics;
 
 namespace Myra.Graphics2D.UI
 {
-	public class SingleItemContainer<T> : Container where T : Widget
+	public class SingleItemContainer<T> : Container where T : Control
 	{
 		private T _internalChild;
 
@@ -65,7 +65,7 @@ namespace Myra.Graphics2D.UI
 			InvalidateMeasure();
 		}
 
-		public override Widget GetChild(int index)
+		public override Control GetChild(int index)
 		{
 			if (index < 0 ||
 				InternalChild == null ||
@@ -101,7 +101,7 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public override void RemoveChild(Widget widget)
+		public override void RemoveChild(Control widget)
 		{
 			if (widget != InternalChild)
 			{

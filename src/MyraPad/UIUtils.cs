@@ -6,12 +6,12 @@ namespace MyraPad
 {
 	public static class UIUtils
 	{
-		public static IEnumerable<Widget> GetRealChildren(this object w)
+		public static IEnumerable<Control> GetRealChildren(this object w)
 		{
-			IEnumerable<Widget> widgets = null;
+			IEnumerable<Control> widgets = null;
 			if (w is IContent)
 			{
-				widgets = new Widget[] { ((IContent)w).Content };
+				widgets = new Control[] { ((IContent)w).Content };
 			}
 			else if (w is SplitPane)
 			{

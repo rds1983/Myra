@@ -21,7 +21,7 @@ using Xenko.Input;
 
 namespace Myra.Graphics2D.UI
 {
-	public class TextField : Widget
+	public class TextBox : Control
 	{
 		private DateTime _lastBlinkStamp = DateTime.Now;
 		private bool _cursorOn = true;
@@ -316,7 +316,7 @@ namespace Myra.Graphics2D.UI
 
 		public event EventHandler CursorPositionChanged;
 
-		public TextField(TextFieldStyle style)
+		public TextBox(TextBoxStyle style)
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Top;
@@ -326,25 +326,25 @@ namespace Myra.Graphics2D.UI
 
 			if (style != null)
 			{
-				ApplyTextFieldStyle(style);
+				ApplyTextBoxStyle(style);
 			}
 
 			BlinkIntervalInMs = 450;
 		}
 
-		public TextField(Stylesheet stylesheet, string style) : this(stylesheet.TextFieldStyles[style])
+		public TextBox(Stylesheet stylesheet, string style) : this(stylesheet.TextBoxStyles[style])
 		{
 		}
 
-		public TextField(Stylesheet stylesheet) : this(stylesheet.TextFieldStyle)
+		public TextBox(Stylesheet stylesheet) : this(stylesheet.TextBoxStyle)
 		{
 		}
 
-		public TextField(string style) : this(Stylesheet.Current, style)
+		public TextBox(string style) : this(Stylesheet.Current, style)
 		{
 		}
 
-		public TextField() : this(Stylesheet.Current)
+		public TextBox() : this(Stylesheet.Current)
 		{
 		}
 
@@ -852,15 +852,15 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var asScrollPane = Parent as ScrollPane;
+			var asScrollViewer = Parent as ScrollViewer;
 
 			Point sz, maximum;
 			var bounds = ActualBounds;
-			if (asScrollPane != null)
+			if (asScrollViewer != null)
 			{
-				asScrollPane.UpdateLayout();
-				sz = new Point(asScrollPane.Bounds.Width, asScrollPane.Bounds.Height);
-				maximum = asScrollPane.ScrollMaximum;
+				asScrollViewer.UpdateLayout();
+				sz = new Point(asScrollViewer.Bounds.Width, asScrollViewer.Bounds.Height);
+				maximum = asScrollViewer.ScrollMaximum;
 			}
 			else
 			{
@@ -892,9 +892,9 @@ namespace Myra.Graphics2D.UI
 			var lineHeight = CrossEngineStuff.LineSpacing(_formattedText.Font);
 
 			Point sp;
-			if (asScrollPane != null)
+			if (asScrollViewer != null)
 			{
-				sp = asScrollPane.ScrollPosition;
+				sp = asScrollViewer.ScrollPosition;
 			}
 			else
 			{
@@ -919,9 +919,9 @@ namespace Myra.Graphics2D.UI
 				sp.X = p.X + CursorWidth - sz.X;
 			}
 
-			if (asScrollPane != null)
+			if (asScrollViewer != null)
 			{
-				asScrollPane.ScrollPosition = sp;
+				asScrollViewer.ScrollPosition = sp;
 			}
 			else
 			{
@@ -1218,7 +1218,7 @@ namespace Myra.Graphics2D.UI
 			_formattedText.Width = _wrap ? ActualBounds.Width : default(int?);
 		}
 
-		public void ApplyTextFieldStyle(TextFieldStyle style)
+		public void ApplyTextBoxStyle(TextBoxStyle style)
 		{
 			ApplyWidgetStyle(style);
 
@@ -1234,12 +1234,12 @@ namespace Myra.Graphics2D.UI
 
 		protected override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
-			ApplyTextFieldStyle(stylesheet.TextFieldStyles[name]);
+			ApplyTextBoxStyle(stylesheet.TextBoxStyles[name]);
 		}
 
 		internal override string[] GetStyleNames(Stylesheet stylesheet)
 		{
-			return stylesheet.TextFieldStyles.Keys.ToArray();
+			return stylesheet.TextBoxStyles.Keys.ToArray();
 		}
 
 		public float GetWidth(int index)

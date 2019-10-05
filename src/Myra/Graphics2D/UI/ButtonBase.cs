@@ -13,7 +13,7 @@ using Xenko.Input;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ButtonBase<T> : SingleItemContainer<T> where T : Widget
+	public class ButtonBase<T> : SingleItemContainer<T> where T : Control
 	{
 		private bool _isPressed = false;
 

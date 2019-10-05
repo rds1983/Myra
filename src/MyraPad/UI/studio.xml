@@ -1,10 +1,10 @@
 <Project>
   <Project.ExportOptions Namespace="MyraPad.UI" Class="StudioWidget" OutputPath="D:/Projects/Myra/src/MyraPad/UI" />
-  <VerticalBox>
-    <VerticalBox.Proportions>
+  <VerticalStackPanel>
+    <VerticalStackPanel.Proportions>
       <Proportion Type="Auto" />
       <Proportion Type="Fill" />
-    </VerticalBox.Proportions>
+    </VerticalStackPanel.Proportions>
     <HorizontalMenu Id="">
       <MenuItem Id="" Text="&amp;File">
         <MenuItem Id="_menuFileNew" Text="&amp;New" />
@@ -30,27 +30,27 @@
       </MenuItem>
     </HorizontalMenu>
     <HorizontalSplitPane Id="_topSplitPane">
-      <VerticalBox>
-        <VerticalBox.Proportions>
+      <VerticalStackPanel>
+        <VerticalStackPanel.Proportions>
           <Proportion Type="Fill" />
-        </VerticalBox.Proportions>
+        </VerticalStackPanel.Proportions>
         <VerticalSplitPane Id="_leftSplitPane">
           <Panel Id="_projectHolder" />
-          <ScrollPane>
-            <TextField Text="" Multiline="True" Wrap="True" Id="_textSource" VerticalAlignment="Stretch" GridRow="2" />
-          </ScrollPane>
+          <ScrollViewer>
+            <TextBox Text="" Multiline="True" Wrap="True" Id="_textSource" VerticalAlignment="Stretch" GridRow="2" />
+          </ScrollViewer>
         </VerticalSplitPane>
         <HorizontalSeparator />
-        <TextBlock Text="Reloading..." Id="_textStatus" />
-      </VerticalBox>
-      <VerticalBox>
-        <VerticalBox.Proportions>
+        <Label Text="Reloading..." Id="_textStatus" />
+      </VerticalStackPanel>
+      <VerticalStackPanel>
+        <VerticalStackPanel.Proportions>
           <Proportion Type="Fill" />
-        </VerticalBox.Proportions>
-        <ScrollPane Id="_propertyGridPane" />
+        </VerticalStackPanel.Proportions>
+        <ScrollViewer Id="_propertyGridPane" />
         <HorizontalSeparator />
-        <TextBlock Text="Line: 1, Column: 2, Indent: 3" Id="_textLocation" />
-      </VerticalBox>
+        <Label Text="Line: 1, Column: 2, Indent: 3" Id="_textLocation" />
+      </VerticalStackPanel>
     </HorizontalSplitPane>
-  </VerticalBox>
+  </VerticalStackPanel>
 </Project>

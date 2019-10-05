@@ -1,6 +1,6 @@
 ﻿namespace Myra.Graphics2D.UI.Styles
 {
-	public class ListBoxStyle: WidgetStyle
+	public class ListBoxStyle: ControlStyle
 	{
 		public ImageTextButtonStyle ListItemStyle { get; set; }
 		public SeparatorStyle SeparatorStyle { get; set; }
@@ -15,7 +15,7 @@
 			SeparatorStyle = style.SeparatorStyle != null ? new SeparatorStyle(style.SeparatorStyle) : null;
 		}
 
-		public override WidgetStyle Clone()
+		public override ControlStyle Clone()
 		{
 			return new ListBoxStyle(this);
 		}

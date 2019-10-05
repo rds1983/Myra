@@ -8,7 +8,7 @@ using Xenko.Core.Mathematics;
 
 namespace Myra.Graphics2D.UI.Styles
 {
-	public class TextFieldStyle: WidgetStyle
+	public class TextBoxStyle: ControlStyle
 	{
 		public Color TextColor { get; set; }
 		public Color? DisabledTextColor { get; set; }
@@ -20,11 +20,11 @@ namespace Myra.Graphics2D.UI.Styles
 		public IRenderable Cursor { get; set; }
 		public IRenderable Selection { get; set; }
 
-		public TextFieldStyle()
+		public TextBoxStyle()
 		{
 		}
 
-		public TextFieldStyle(TextFieldStyle style) : base(style)
+		public TextBoxStyle(TextBoxStyle style) : base(style)
 		{
 			TextColor = style.TextColor;
 			DisabledTextColor = style.DisabledTextColor;
@@ -37,9 +37,9 @@ namespace Myra.Graphics2D.UI.Styles
 			Selection = style.Selection;
 		}
 
-		public override WidgetStyle Clone()
+		public override ControlStyle Clone()
 		{
-			return new TextFieldStyle(this);
+			return new TextBoxStyle(this);
 		}
 	}
 }

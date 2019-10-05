@@ -145,7 +145,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			int index = 0;
-			IList<Widget> parentWidgets = null;
+			IList<Control> parentWidgets = null;
 			if (SelectedRow.ParentNode != null)
 			{
 				parentWidgets = SelectedRow.ParentNode.ChildNodesGrid.Widgets;

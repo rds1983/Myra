@@ -76,8 +76,8 @@ namespace MyraPad
 			"HorizontalSlider",
 			"VerticalSlider",
 			"Image",
-			"TextBlock",
-			"TextField",
+			"Label",
+			"TextBox",
 		};
 
 		private static readonly string[] Containers = new[]
@@ -85,11 +85,11 @@ namespace MyraPad
 			"Window",
 			"Grid",
 			"Panel",
-			"ScrollPane",
+			"ScrollViewer",
 			"VerticalSplitPane",
 			"HorizontalSplitPane",
-			"VerticalBox",
-			"HorizontalBox"
+			"VerticalStackPanel",
+			"HorizontalStackPanel"
 		};
 
 		private static readonly string[] SpecialContainers = new[]
@@ -352,7 +352,7 @@ namespace MyraPad
 			UpdateMenuFile();
 		}
 
-		private void _desktop_ContextMenuClosed(object sender, GenericEventArgs<Widget> e)
+		private void _desktop_ContextMenuClosed(object sender, GenericEventArgs<Control> e)
 		{
 			if (e.Data != _autoCompleteMenu)
 			{
@@ -828,7 +828,7 @@ namespace MyraPad
 				result.Add(_parentTag + "." + Project.DefaultRowProportionName);
 			}
 
-			if (_parentTag == "VerticalBox" || _parentTag == "HorizontalBox")
+			if (_parentTag == "VerticalStackPanel" || _parentTag == "HorizontalStackPanel")
 			{
 					result.Add(_parentTag + "." + Project.DefaultProportionName);
 					result.Add(_parentTag + "." + ProportionsName);
@@ -983,7 +983,7 @@ namespace MyraPad
 			return stylesheet;
 		}
 
-		private static void IterateWidget(Widget w, Action<Widget> a)
+		private static void IterateWidget(Control w, Action<Control> a)
 		{
 			a(w);
 
@@ -1268,14 +1268,14 @@ namespace MyraPad
 
 				var rootType = "Grid";
 
-				if (dlg._radioButtonHorizontalBox.IsPressed)
+				if (dlg._radioButtonHorizontalStackPanel.IsPressed)
 				{
-					rootType = "HorizontalBox";
+					rootType = "HorizontalStackPanel";
 				}
 				else
-				if (dlg._radioButtonVerticalBox.IsPressed)
+				if (dlg._radioButtonVerticalStackPanel.IsPressed)
 				{
-					rootType = "VerticalBox";
+					rootType = "VerticalStackPanel";
 				}
 				else
 				if (dlg._radioButtonPanel.IsPressed)
@@ -1283,9 +1283,9 @@ namespace MyraPad
 					rootType = "Panel";
 				}
 				else
-				if (dlg._radioButtonScrollPane.IsPressed)
+				if (dlg._radioButtonScrollViewer.IsPressed)
 				{
-					rootType = "ScrollPane";
+					rootType = "ScrollViewer";
 				}
 				else
 				if (dlg._radioButtonHorizontalSplitPane.IsPressed)

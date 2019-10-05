@@ -1,6 +1,6 @@
 ﻿namespace Myra.Graphics2D.UI.Styles
 {
-	public class MenuStyle: WidgetStyle
+	public class MenuStyle: ControlStyle
 	{
 		public MenuItemStyle MenuItemStyle { get; set; }
 		public SeparatorStyle SeparatorStyle { get; set; }
@@ -15,7 +15,7 @@
 			SeparatorStyle = style.SeparatorStyle != null ? new SeparatorStyle(style.SeparatorStyle) : null;
 		}
 
-		public override WidgetStyle Clone()
+		public override ControlStyle Clone()
 		{
 			return new MenuStyle(this);
 		}

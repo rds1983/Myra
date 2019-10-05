@@ -13,7 +13,7 @@
 			PressedImage = style.PressedImage;
 		}
 
-		public override WidgetStyle Clone()
+		public override ControlStyle Clone()
 		{
 			return new PressableImageStyle(this);
 		}

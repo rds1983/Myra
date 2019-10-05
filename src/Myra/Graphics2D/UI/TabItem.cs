@@ -78,7 +78,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[Content]
-		public Widget Content
+		public Control Content
 		{
 			get; set;
 		}
@@ -139,7 +139,7 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
-		public TabItem(string text, Color? color = null, object tag = null, Widget content = null)
+		public TabItem(string text, Color? color = null, object tag = null, Control content = null)
 		{
 			Text = text;
 			Color = color;
@@ -147,7 +147,7 @@ namespace Myra.Graphics2D.UI
 			Content = content;
 		}
 
-		public TabItem(string text, Widget content): this(text, null, null, content)
+		public TabItem(string text, Control content): this(text, null, null, content)
 		{
 		}
 

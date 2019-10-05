@@ -15,7 +15,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class ComboBox : Selector<ImageTextButton, ListItem>
 	{
-		private class CustomScrollPane : ScrollPane
+		private class CustomScrollViewer : ScrollViewer
 		{
 			public int? MaximumHeight
 			{
@@ -35,8 +35,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private readonly CustomScrollPane _itemsContainerScroll;
-		private readonly VerticalBox _itemsContainer;
+		private readonly CustomScrollViewer _itemsContainerScroll;
+		private readonly VerticalStackPanel _itemsContainer;
 		private ImageTextButtonStyle _dropDownItemStyle;
 
 		[Category("Behavior")]
@@ -93,8 +93,8 @@ namespace Myra.Graphics2D.UI
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
 
-			_itemsContainer = new VerticalBox();
-			_itemsContainerScroll = new CustomScrollPane
+			_itemsContainer = new VerticalStackPanel();
+			_itemsContainerScroll = new CustomScrollViewer
 			{
 				Content = _itemsContainer
 			};
@@ -133,7 +133,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Widget> genericEventArgs)
+		private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Control> genericEventArgs)
 		{
 			InternalChild.IsPressed = false;
 		}

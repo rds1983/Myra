@@ -13,10 +13,10 @@ using Xenko.Graphics;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ImageTextButton : ButtonBase<HorizontalBox>
+	public class ImageTextButton : ButtonBase<HorizontalStackPanel>
 	{
 		private readonly Image _image;
-		private readonly TextBlock _textBlock;
+		private readonly Label _textBlock;
 
 		[Category("Appearance")]
 		public virtual string Text
@@ -32,7 +32,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
-		[StylePropertyPath("/TextBlockStyle/TextColor")]
+		[StylePropertyPath("/LabelStyle/TextColor")]
 		public virtual Color TextColor
 		{
 			get
@@ -194,7 +194,7 @@ namespace Myra.Graphics2D.UI
 
 		public ImageTextButton(ImageTextButtonStyle style)
 		{
-			InternalChild = new HorizontalBox
+			InternalChild = new HorizontalStackPanel
 			{
 				VerticalAlignment = VerticalAlignment.Stretch
 			};
@@ -207,7 +207,7 @@ namespace Myra.Graphics2D.UI
 
 			InternalChild.Widgets.Add(_image);
 
-			_textBlock = new TextBlock(style != null ? style.LabelStyle : null)
+			_textBlock = new Label(style != null ? style.LabelStyle : null)
 			{
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				Wrap = true
@@ -222,12 +222,12 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public ImageTextButton(Stylesheet stylesheet, string style) :
-			this(stylesheet.ButtonStyles[style].ToImageTextButtonStyle(stylesheet.TextBlockStyle))
+			this(stylesheet.ButtonStyles[style].ToImageTextButtonStyle(stylesheet.LabelStyle))
 		{
 		}
 
 		public ImageTextButton(Stylesheet stylesheet) :
-			this(stylesheet.ButtonStyle.ToImageTextButtonStyle(stylesheet.TextBlockStyle))
+			this(stylesheet.ButtonStyle.ToImageTextButtonStyle(stylesheet.LabelStyle))
 		{
 		}
 
@@ -245,7 +245,7 @@ namespace Myra.Graphics2D.UI
 
 			if (style.LabelStyle != null)
 			{
-				_textBlock.ApplyTextBlockStyle(style.LabelStyle);
+				_textBlock.ApplyLabelStyle(style.LabelStyle);
 			}
 
 			if (style.ImageStyle != null)
@@ -272,7 +272,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
-			ApplyImageTextButtonStyle(new ImageTextButtonStyle(stylesheet.ButtonStyles[name], stylesheet.TextBlockStyle));
+			ApplyImageTextButtonStyle(new ImageTextButtonStyle(stylesheet.ButtonStyles[name], stylesheet.LabelStyle));
 		}
 	}
 }

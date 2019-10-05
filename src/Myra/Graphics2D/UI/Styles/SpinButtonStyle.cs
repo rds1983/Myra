@@ -1,6 +1,6 @@
 ﻿namespace Myra.Graphics2D.UI.Styles
 {
-	public class SpinButtonStyle : WidgetStyle
+	public class SpinButtonStyle : ControlStyle
 	{
 		public ImageButtonStyle UpButtonStyle
 		{
@@ -10,7 +10,7 @@
 		{
 			get; set;
 		}
-		public TextFieldStyle TextFieldStyle
+		public TextBoxStyle TextBoxStyle
 		{
 			get; set;
 		}
@@ -23,10 +23,10 @@
 		{
 			UpButtonStyle = style.UpButtonStyle != null ? new ImageButtonStyle(style.UpButtonStyle) : null;
 			DownButtonStyle = style.DownButtonStyle != null ? new ImageButtonStyle(style.DownButtonStyle) : null;
-			TextFieldStyle = style.TextFieldStyle != null ? new TextFieldStyle(style.TextFieldStyle) : null;
+			TextBoxStyle = style.TextBoxStyle != null ? new TextBoxStyle(style.TextBoxStyle) : null;
 		}
 
-		public override WidgetStyle Clone()
+		public override ControlStyle Clone()
 		{
 			return new SpinButtonStyle(this);
 		}

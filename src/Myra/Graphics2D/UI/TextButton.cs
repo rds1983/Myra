@@ -13,7 +13,7 @@ using Xenko.Graphics;
 
 namespace Myra.Graphics2D.UI
 {
-	public class TextButton : ButtonBase<TextBlock>
+	public class TextButton : ButtonBase<Label>
 	{
 		[Category("Appearance")]
 		public string Text
@@ -29,7 +29,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
-		[StylePropertyPath("/TextBlockStyle/TextColor")]
+		[StylePropertyPath("/LabelStyle/TextColor")]
 		public Color TextColor
 		{
 			get
@@ -59,7 +59,7 @@ namespace Myra.Graphics2D.UI
 
 		public TextButton(TextButtonStyle style)
 		{
-			InternalChild = new TextBlock(style != null ? style.LabelStyle : null)
+			InternalChild = new Label(style != null ? style.LabelStyle : null)
 			{
 				VerticalAlignment = VerticalAlignment.Center,
 				HorizontalAlignment = HorizontalAlignment.Center,
@@ -73,12 +73,12 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public TextButton(Stylesheet stylesheet, string style) :
-			this(stylesheet.ButtonStyles[style].ToTextButtonStyle(stylesheet.TextBlockStyle))
+			this(stylesheet.ButtonStyles[style].ToTextButtonStyle(stylesheet.LabelStyle))
 		{
 		}
 
 		public TextButton(Stylesheet stylesheet) :
-			this(stylesheet.ButtonStyle.ToTextButtonStyle(stylesheet.TextBlockStyle))
+			this(stylesheet.ButtonStyle.ToTextButtonStyle(stylesheet.LabelStyle))
 		{
 		}
 
@@ -96,7 +96,7 @@ namespace Myra.Graphics2D.UI
 
 			if (style.LabelStyle != null)
 			{
-				InternalChild.ApplyTextBlockStyle(style.LabelStyle);
+				InternalChild.ApplyLabelStyle(style.LabelStyle);
 			}
 		}
 
@@ -109,7 +109,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
-			ApplyTextButtonStyle(new TextButtonStyle(stylesheet.ButtonStyles[name], stylesheet.TextBlockStyle));
+			ApplyTextButtonStyle(new TextButtonStyle(stylesheet.ButtonStyles[name], stylesheet.LabelStyle));
 		}
 	}
 }

@@ -13,13 +13,13 @@ using Xenko.Graphics;
 
 namespace Myra.Graphics2D.UI
 {
-	internal class MenuItemButton : ButtonBase<HorizontalBox>
+	internal class MenuItemButton : ButtonBase<HorizontalStackPanel>
 	{
 		private readonly Proportion _imageProportion;
 		private readonly Proportion _shortcutProportion;
 
 		private readonly Image _image;
-		private readonly TextBlock _textBlock;
+		private readonly Label _textBlock;
 		private readonly Menu _subMenu = new VerticalMenu();
 		private char? _underscoreChar;
 		private string _text;
@@ -139,7 +139,7 @@ namespace Myra.Graphics2D.UI
 		internal MenuItemButton(Menu menu, MenuItemStyle style)
 		{
 			Menu = menu;
-			InternalChild = new HorizontalBox();
+			InternalChild = new HorizontalStackPanel();
 
 			_imageProportion = new Proportion();
 			InternalChild.Proportions.Add(_imageProportion);
@@ -151,7 +151,7 @@ namespace Myra.Graphics2D.UI
 			_image = new Image();
 			InternalChild.Widgets.Add(_image);
 
-			_textBlock = new TextBlock
+			_textBlock = new Label
 			{
 				GridColumn = 1,
 			};
@@ -182,7 +182,7 @@ namespace Myra.Graphics2D.UI
 
 			if (style.LabelStyle != null)
 			{
-				_textBlock.ApplyTextBlockStyle(style.LabelStyle);
+				_textBlock.ApplyLabelStyle(style.LabelStyle);
 			}
 		}
 

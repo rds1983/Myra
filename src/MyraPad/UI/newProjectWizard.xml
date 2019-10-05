@@ -1,16 +1,16 @@
 <Project>
   <Project.ExportOptions Namespace="MyraPad.UI" Class="NewProjectWizard" OutputPath="D:\Projects\Myra\src\MyraPad\UI" />
   <Dialog Title="Choose Root Container" Left="431" Top="81">
-    <VerticalBox>
+    <VerticalStackPanel>
       <RadioButton Text="Grid" Id="_radioButtonGrid" />
-      <RadioButton Text="HorizontalBox" Id="_radioButtonHorizontalBox" />
-      <RadioButton Text="VerticalBox" Id="_radioButtonVerticalBox" />
+      <RadioButton Text="HorizontalStackPanel" Id="_radioButtonHorizontalStackPanel" />
+      <RadioButton Text="VerticalStackPanel" Id="_radioButtonVerticalStackPanel" />
       <RadioButton Text="Panel" Id="_radioButtonPanel" />
-      <RadioButton Text="ScrollPane" Id="_radioButtonScrollPane" />
+      <RadioButton Text="ScrollViewer" Id="_radioButtonScrollViewer" />
       <RadioButton Text="HorizontalSplitPane" Id="_radioButtonHorizontalSplitPane" />
       <RadioButton Text="VerticalSplitPane" Id="_radioButtonVerticalSplitPane" />
       <RadioButton Text="Window" Id="_radioButtonWindow" />
       <RadioButton Text="Dialog" Id="_radioButtonDialog" />
-    </VerticalBox>
+    </VerticalStackPanel>
   </Dialog>
 </Project>

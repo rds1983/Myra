@@ -13,7 +13,7 @@
 		}
 
 		public static ImageTextButtonStyle ToImageTextButtonStyle(this ButtonStyle buttonStyle,
-			TextBlockStyle textBlockStyle)
+			LabelStyle textBlockStyle)
 		{
 			if (buttonStyle == null)
 			{
@@ -24,7 +24,7 @@
 		}
 
 		public static TextButtonStyle ToTextButtonStyle(this ButtonStyle buttonStyle, 
-			TextBlockStyle textBlockStyle)
+			LabelStyle textBlockStyle)
 		{
 			if (buttonStyle == null)
 			{

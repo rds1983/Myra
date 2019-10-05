@@ -2,7 +2,7 @@
 {
 	public class TextButtonStyle : ButtonStyle
 	{
-		public TextBlockStyle LabelStyle { get; set; }
+		public LabelStyle LabelStyle { get; set; }
 
 		public TextButtonStyle()
 		{
@@ -11,15 +11,15 @@
 		public TextButtonStyle(TextButtonStyle style)
 			: base(style)
 		{
-			LabelStyle = style.LabelStyle != null ? new TextBlockStyle(style.LabelStyle) : null;
+			LabelStyle = style.LabelStyle != null ? new LabelStyle(style.LabelStyle) : null;
 		}
 
-		public TextButtonStyle(ButtonStyle buttonStyle, TextBlockStyle textBlockStyle): base(buttonStyle)
+		public TextButtonStyle(ButtonStyle buttonStyle, LabelStyle textBlockStyle): base(buttonStyle)
 		{
-			LabelStyle = textBlockStyle != null ? new TextBlockStyle(textBlockStyle) : null;
+			LabelStyle = textBlockStyle != null ? new LabelStyle(textBlockStyle) : null;
 		}
 
-		public override WidgetStyle Clone()
+		public override ControlStyle Clone()
 		{
 			return new TextButtonStyle(this);
 		}

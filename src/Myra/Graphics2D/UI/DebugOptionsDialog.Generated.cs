@@ -33,7 +33,7 @@ namespace Myra.Graphics2D.UI
 			_checkBoxDisableClipping.Text = "Disable clipping";
 			_checkBoxDisableClipping.Id = "_checkBoxDisableClipping";
 
-			Root = new VerticalBox();
+			Root = new VerticalStackPanel();
 			Root.Id = "Root";
 			Root.Widgets.Add(_checkBoxWidgetFrames);
 			Root.Widgets.Add(_checkBoxKeyboardFocusedWidgetFrame);
@@ -54,6 +54,6 @@ namespace Myra.Graphics2D.UI
 		public CheckBox _checkBoxMouseWheelFocusedWidgetFrame;
 		public CheckBox _checkBoxGlyphFrames;
 		public CheckBox _checkBoxDisableClipping;
-		public VerticalBox Root;
+		public VerticalStackPanel Root;
 	}
 }

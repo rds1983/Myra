@@ -22,7 +22,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			var horizontalSeparator1 = new HorizontalSeparator();
 			horizontalSeparator1.Height = 4;
 
-			var textBlock1 = new TextBlock();
+			var textBlock1 = new Label();
 			textBlock1.Text = "R";
 			textBlock1.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
 
@@ -40,7 +40,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_sliderR.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
 			_sliderR.GridColumn = 2;
 
-			var textBlock2 = new TextBlock();
+			var textBlock2 = new Label();
 			textBlock2.Text = "G";
 			textBlock2.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
 			textBlock2.GridRow = 1;
@@ -61,7 +61,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_sliderG.GridColumn = 2;
 			_sliderG.GridRow = 1;
 
-			var textBlock3 = new TextBlock();
+			var textBlock3 = new Label();
 			textBlock3.Text = "B";
 			textBlock3.GridRow = 2;
 
@@ -81,7 +81,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_sliderB.GridColumn = 2;
 			_sliderB.GridRow = 2;
 
-			var textBlock4 = new TextBlock();
+			var textBlock4 = new Label();
 			textBlock4.Text = "A";
 			textBlock4.GridRow = 3;
 
@@ -140,7 +140,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			verticalSeparator1.Width = 3;
 			verticalSeparator1.GridColumn = 1;
 
-			var textBlock5 = new TextBlock();
+			var textBlock5 = new Label();
 			textBlock5.Text = "H";
 
 			_spinButtonH = new SpinButton();
@@ -157,7 +157,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_sliderH.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
 			_sliderH.GridColumn = 2;
 
-			var textBlock6 = new TextBlock();
+			var textBlock6 = new Label();
 			textBlock6.Text = "S";
 			textBlock6.GridRow = 1;
 
@@ -176,7 +176,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_sliderS.GridColumn = 2;
 			_sliderS.GridRow = 1;
 
-			var textBlock7 = new TextBlock();
+			var textBlock7 = new Label();
 			textBlock7.Text = "V";
 			textBlock7.GridRow = 2;
 
@@ -195,11 +195,11 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_sliderV.GridColumn = 2;
 			_sliderV.GridRow = 2;
 
-			var textBlock8 = new TextBlock();
+			var textBlock8 = new Label();
 			textBlock8.Text = "#";
 			textBlock8.GridRow = 3;
 
-			_textFieldHex = new TextField();
+			_textFieldHex = new TextBox();
 			_textFieldHex.Text = "";
 			_textFieldHex.Id = "_textFieldHex";
 			_textFieldHex.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
@@ -299,7 +299,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			var horizontalSeparator3 = new HorizontalSeparator();
 			horizontalSeparator3.Height = 4;
 
-			var verticalBox1 = new VerticalBox();
+			var verticalBox1 = new VerticalStackPanel();
 			verticalBox1.Spacing = -1;
 			verticalBox1.Proportions.Add(new Proportion
 			{
@@ -337,7 +337,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 		public HorizontalSlider _sliderS;
 		public SpinButton _spinButtonV;
 		public HorizontalSlider _sliderV;
-		public TextField _textFieldHex;
+		public TextBox _textFieldHex;
 		public Grid _gridUserColors;
 		public TextButton _buttonSaveColor;
 	}

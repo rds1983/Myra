@@ -9,7 +9,7 @@ using Xenko.Core.Mathematics;
 
 namespace Myra.Graphics2D.UI
 {
-	public class Image : Widget
+	public class Image : Control
 	{
 		private IRenderable _image, _overImage, _pressedImage;
 		private Color _color = Color.White;

@@ -177,7 +177,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 				_mark.IsPressed = true;
 
-				var label = new TextBlock(parent.PropertyGridStyle.LabelStyle)
+				var label = new Label(parent.PropertyGridStyle.LabelStyle)
 				{
 					Text = header,
 					GridColumn = 1
@@ -333,7 +333,7 @@ namespace Myra.Graphics2D.UI.Properties
 			}
 		}
 
-		private static void UpdateLabelCount(TextBlock textBlock, int count)
+		private static void UpdateLabelCount(Label textBlock, int count)
 		{
 			textBlock.Text = string.Format("{0} Items", count);
 		}
@@ -351,7 +351,7 @@ namespace Myra.Graphics2D.UI.Properties
 				}
 
 				var value = record.GetValue(_object);
-				Widget valueWidget = null;
+				Control valueWidget = null;
 
 				var oldY = y;
 
@@ -596,7 +596,7 @@ namespace Myra.Graphics2D.UI.Properties
 				}
 				else if (propertyType == typeof(string) || propertyType.IsPrimitive || propertyType.IsNullablePrimitive())
 				{
-					var tf = new TextField
+					var tf = new TextBox
 					{
 						Text = value != null ? value.ToString() : string.Empty
 					};
@@ -681,7 +681,7 @@ namespace Myra.Graphics2D.UI.Properties
 								subGrid.ColumnsProportions.Add(new Proportion());
 								subGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
 
-								var label = new TextBlock
+								var label = new Label
 								{
 									VerticalAlignment = VerticalAlignment.Center,
 								};
@@ -739,8 +739,8 @@ namespace Myra.Graphics2D.UI.Properties
 						continue;
 					}
 
-					var tb = new TextBlock();
-					tb.ApplyTextBlockStyle(PropertyGridStyle.LabelStyle);
+					var tb = new Label();
+					tb.ApplyLabelStyle(PropertyGridStyle.LabelStyle);
 					tb.Text = "null";
 
 					valueWidget = tb;
@@ -751,7 +751,7 @@ namespace Myra.Graphics2D.UI.Properties
 					continue;
 				}
 
-				var nameLabel = new TextBlock
+				var nameLabel = new Label
 				{
 					Text = record.Name,
 					VerticalAlignment = VerticalAlignment.Center,

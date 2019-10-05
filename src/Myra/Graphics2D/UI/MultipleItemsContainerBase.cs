@@ -8,7 +8,7 @@ namespace Myra.Graphics2D.UI
 {
 	public abstract class MultipleItemsContainerBase : Container, IMultipleItemsContainer
 	{
-		protected readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
+		protected readonly ObservableCollection<Control> _widgets = new ObservableCollection<Control>();
 
 		public override int ChildrenCount
 		{
@@ -20,7 +20,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[Content]
-		public virtual ObservableCollection<Widget> Widgets
+		public virtual ObservableCollection<Control> Widgets
 		{
 			get { return _widgets; }
 		}
@@ -47,7 +47,7 @@ namespace Myra.Graphics2D.UI
 			VerticalAlignment = VerticalAlignment.Stretch;
 		}
 
-		public override Widget GetChild(int index)
+		public override Control GetChild(int index)
 		{
 			return _widgets[index];
 		}
@@ -56,7 +56,7 @@ namespace Myra.Graphics2D.UI
 		{
 			if (args.Action == NotifyCollectionChangedAction.Add)
 			{
-				foreach (Widget w in args.NewItems)
+				foreach (Control w in args.NewItems)
 				{
 					w.Desktop = Desktop;
 					w.Parent = this;
@@ -66,7 +66,7 @@ namespace Myra.Graphics2D.UI
 			}
 			else if (args.Action == NotifyCollectionChangedAction.Remove)
 			{
-				foreach (Widget w in args.OldItems)
+				foreach (Control w in args.OldItems)
 				{
 					w.Desktop = null;
 					w.Parent = null;
@@ -81,7 +81,7 @@ namespace Myra.Graphics2D.UI
 
 		private void ChildOnMeasureChanged(object sender, EventArgs eventArgs)
 		{
-			var widget = (Widget) sender;
+			var widget = (Control) sender;
 			if (widget.Visible)
 			{
 				InvalidateMeasure();
@@ -93,7 +93,7 @@ namespace Myra.Graphics2D.UI
 			InvalidateMeasure();
 		}
 
-		public override void RemoveChild(Widget widget)
+		public override void RemoveChild(Control widget)
 		{
 			_widgets.Remove(widget);
 		}

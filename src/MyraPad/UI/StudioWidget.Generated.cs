@@ -9,7 +9,7 @@ using Xenko.Core.Mathematics;
 
 namespace MyraPad.UI
 {
-	partial class StudioWidget: VerticalBox
+	partial class StudioWidget: VerticalStackPanel
 	{
 		private void BuildUI()
 		{
@@ -108,7 +108,7 @@ namespace MyraPad.UI
 			_projectHolder = new Panel();
 			_projectHolder.Id = "_projectHolder";
 
-			_textSource = new TextField();
+			_textSource = new TextBox();
 			_textSource.Text = "";
 			_textSource.Multiline = true;
 			_textSource.Wrap = true;
@@ -116,7 +116,7 @@ namespace MyraPad.UI
 			_textSource.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;
 			_textSource.GridRow = 2;
 
-			var scrollPane1 = new ScrollPane();
+			var scrollPane1 = new ScrollViewer();
 			scrollPane1.Content = _textSource;
 
 			_leftSplitPane = new VerticalSplitPane();
@@ -126,11 +126,11 @@ namespace MyraPad.UI
 
 			var horizontalSeparator1 = new HorizontalSeparator();
 
-			_textStatus = new TextBlock();
+			_textStatus = new Label();
 			_textStatus.Text = "Reloading...";
 			_textStatus.Id = "_textStatus";
 
-			var verticalBox1 = new VerticalBox();
+			var verticalBox1 = new VerticalStackPanel();
 			verticalBox1.Proportions.Add(new Proportion
 			{
 				Type = Myra.Graphics2D.UI.ProportionType.Fill,
@@ -139,17 +139,17 @@ namespace MyraPad.UI
 			verticalBox1.Widgets.Add(horizontalSeparator1);
 			verticalBox1.Widgets.Add(_textStatus);
 
-			_propertyGridPane = new ScrollPane();
+			_propertyGridPane = new ScrollViewer();
 			_propertyGridPane.Content = null;
 			_propertyGridPane.Id = "_propertyGridPane";
 
 			var horizontalSeparator2 = new HorizontalSeparator();
 
-			_textLocation = new TextBlock();
+			_textLocation = new Label();
 			_textLocation.Text = "Line: 1, Column: 2, Indent: 3";
 			_textLocation.Id = "_textLocation";
 
-			var verticalBox2 = new VerticalBox();
+			var verticalBox2 = new VerticalStackPanel();
 			verticalBox2.Proportions.Add(new Proportion
 			{
 				Type = Myra.Graphics2D.UI.ProportionType.Fill,
@@ -191,11 +191,11 @@ namespace MyraPad.UI
 		public MenuItem _menuEditFormatSource;
 		public MenuItem _menuHelpAbout;
 		public Panel _projectHolder;
-		public TextField _textSource;
+		public TextBox _textSource;
 		public VerticalSplitPane _leftSplitPane;
-		public TextBlock _textStatus;
-		public ScrollPane _propertyGridPane;
-		public TextBlock _textLocation;
+		public Label _textStatus;
+		public ScrollViewer _propertyGridPane;
+		public Label _textLocation;
 		public HorizontalSplitPane _topSplitPane;
 	}
 }

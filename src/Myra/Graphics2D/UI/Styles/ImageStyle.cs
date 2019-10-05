@@ -1,6 +1,6 @@
 ﻿namespace Myra.Graphics2D.UI.Styles
 {
-	public class ImageStyle: WidgetStyle
+	public class ImageStyle: ControlStyle
 	{
 		public IRenderable Image { get; set; }
 		public IRenderable OverImage { get; set; }
@@ -15,7 +15,7 @@
 			OverImage = style.OverImage;
 		}
 
-		public override WidgetStyle Clone()
+		public override ControlStyle Clone()
 		{
 			return new ImageStyle(this);
 		}

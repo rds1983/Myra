@@ -16,7 +16,7 @@ using Xenko.Graphics;
 
 namespace Myra.Graphics2D.UI
 {
-	public class TextBlock : Widget
+	public class Label : Control
 	{
 		private readonly FormattedText _formattedText = new FormattedText();
 		private bool _wrap = false;
@@ -156,27 +156,27 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
-		public TextBlock(TextBlockStyle style)
+		public Label(LabelStyle style)
 		{
 			if (style != null)
 			{
-				ApplyTextBlockStyle(style);
+				ApplyLabelStyle(style);
 			}
 		}
 
-		public TextBlock(Stylesheet stylesheet, string style) : this(stylesheet.TextBlockStyles[style])
+		public Label(Stylesheet stylesheet, string style) : this(stylesheet.LabelStyles[style])
 		{
 		}
 
-		public TextBlock(Stylesheet stylesheet) : this(stylesheet.TextBlockStyle)
+		public Label(Stylesheet stylesheet) : this(stylesheet.LabelStyle)
 		{
 		}
 
-		public TextBlock(string style) : this(Stylesheet.Current, style)
+		public Label(string style) : this(Stylesheet.Current, style)
 		{
 		}
 
-		public TextBlock() : this(Stylesheet.Current)
+		public Label() : this(Stylesheet.Current)
 		{
 		}
 
@@ -336,7 +336,7 @@ namespace Myra.Graphics2D.UI
 			_formattedText.Width = _wrap ? Bounds.Width : default(int?);
 		}
 
-		public void ApplyTextBlockStyle(TextBlockStyle style)
+		public void ApplyLabelStyle(LabelStyle style)
 		{
 			ApplyWidgetStyle(style);
 
@@ -349,12 +349,12 @@ namespace Myra.Graphics2D.UI
 
 		protected override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
-			ApplyTextBlockStyle(stylesheet.TextBlockStyles[name]);
+			ApplyLabelStyle(stylesheet.LabelStyles[name]);
 		}
 
 		internal override string[] GetStyleNames(Stylesheet stylesheet)
 		{
-			return stylesheet.TextBlockStyles.Keys.ToArray();
+			return stylesheet.LabelStyles.Keys.ToArray();
 		}
 	}
 

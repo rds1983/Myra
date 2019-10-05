@@ -8,7 +8,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class SpinButton : SingleItemContainer<Grid>
 	{
-		private readonly TextField _textField;
+		private readonly TextBox _textField;
 		private readonly ImageButton _upButton;
 		private readonly ImageButton _downButton;
 		private bool _integer = false;
@@ -264,7 +264,7 @@ namespace Myra.Graphics2D.UI
 			InternalChild.RowsProportions.Add(new Proportion());
 			InternalChild.RowsProportions.Add(new Proportion());
 
-			_textField = new TextField
+			_textField = new TextBox
 			{
 				GridRowSpan = 2,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -273,8 +273,8 @@ namespace Myra.Graphics2D.UI
 				TextVerticalAlignment = VerticalAlignment.Center
 			};
 
-			_textField.TextChanged += TextFieldOnTextChanged;
-			_textField.TextChangedByUser += TextFieldOnTextChangedByUser;
+			_textField.TextChanged += TextBoxOnTextChanged;
+			_textField.TextChangedByUser += TextBoxOnTextChangedByUser;
 
 			InternalChild.Widgets.Add(_textField);
 
@@ -332,7 +332,7 @@ namespace Myra.Graphics2D.UI
 			return float.Parse(s);
 		}
 
-		private void TextFieldOnTextChanged(object sender, ValueChangedEventArgs<string> eventArgs)
+		private void TextBoxOnTextChanged(object sender, ValueChangedEventArgs<string> eventArgs)
 		{
 			var ev = ValueChanged;
 			if (ev != null)
@@ -341,7 +341,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void TextFieldOnTextChangedByUser(object sender, ValueChangedEventArgs<string> eventArgs)
+		private void TextBoxOnTextChangedByUser(object sender, ValueChangedEventArgs<string> eventArgs)
 		{
 			var ev = ValueChangedByUser;
 			if (ev != null)
@@ -397,9 +397,9 @@ namespace Myra.Graphics2D.UI
 		{
 			ApplyWidgetStyle(style);
 
-			if (style.TextFieldStyle != null)
+			if (style.TextBoxStyle != null)
 			{
-				_textField.ApplyTextFieldStyle(style.TextFieldStyle);
+				_textField.ApplyTextBoxStyle(style.TextBoxStyle);
 			}
 
 			if (style.UpButtonStyle != null)

@@ -24,7 +24,7 @@ namespace Myra.Graphics2D.UI.File
 			_buttonForward.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
 			_buttonForward.GridColumn = 1;
 
-			_textFieldPath = new TextField();
+			_textFieldPath = new TextBox();
 			_textFieldPath.Text = "";
 			_textFieldPath.Readonly = true;
 			_textFieldPath.Id = "_textFieldPath";
@@ -67,7 +67,7 @@ namespace Myra.Graphics2D.UI.File
 			_gridFiles.GridSelectionMode = Myra.Graphics2D.UI.GridSelectionMode.Row;
 			_gridFiles.Id = "_gridFiles";
 
-			_scrollPane = new ScrollPane();
+			_scrollPane = new ScrollViewer();
 			_scrollPane.ShowHorizontalScrollBar = false;
 			_scrollPane.Id = "_scrollPane";
 			_scrollPane.Content = _gridFiles;
@@ -77,11 +77,11 @@ namespace Myra.Graphics2D.UI.File
 			_splitPane.Widgets.Add(_listBoxPlaces);
 			_splitPane.Widgets.Add(_scrollPane);
 
-			_textBlockFileName = new TextBlock();
+			_textBlockFileName = new Label();
 			_textBlockFileName.Text = "File name";
 			_textBlockFileName.Id = "_textBlockFileName";
 
-			_textFieldFileName = new TextField();
+			_textFieldFileName = new TextBox();
 			_textFieldFileName.Text = "";
 			_textFieldFileName.Id = "_textFieldFileName";
 			_textFieldFileName.GridColumn = 1;
@@ -96,7 +96,7 @@ namespace Myra.Graphics2D.UI.File
 			grid2.Widgets.Add(_textBlockFileName);
 			grid2.Widgets.Add(_textFieldFileName);
 
-			var verticalBox1 = new VerticalBox();
+			var verticalBox1 = new VerticalStackPanel();
 			verticalBox1.Spacing = 4;
 			verticalBox1.Proportions.Add(new Proportion());
 			verticalBox1.Proportions.Add(new Proportion
@@ -118,13 +118,13 @@ namespace Myra.Graphics2D.UI.File
 		
 		public ImageButton _buttonBack;
 		public ImageButton _buttonForward;
-		public TextField _textFieldPath;
+		public TextBox _textFieldPath;
 		public ImageButton _buttonParent;
 		public ListBox _listBoxPlaces;
 		public Grid _gridFiles;
-		public ScrollPane _scrollPane;
+		public ScrollViewer _scrollPane;
 		public HorizontalSplitPane _splitPane;
-		public TextBlock _textBlockFileName;
-		public TextField _textFieldFileName;
+		public Label _textBlockFileName;
+		public TextBox _textFieldFileName;
 	}
 }

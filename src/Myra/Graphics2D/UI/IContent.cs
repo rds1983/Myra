@@ -4,7 +4,7 @@ namespace Myra.Graphics2D
 {
 	public interface IContent
 	{
-		Widget Content
+		Control Content
 		{
 			get; set;
 		}

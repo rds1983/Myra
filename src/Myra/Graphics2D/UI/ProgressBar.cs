@@ -12,7 +12,7 @@ using Xenko.Core.Mathematics;
 
 namespace Myra.Graphics2D.UI
 {
-	public abstract class ProgressBar : Widget
+	public abstract class ProgressBar : Control
 	{
 		private IRenderable _filler;
 		private float _value;

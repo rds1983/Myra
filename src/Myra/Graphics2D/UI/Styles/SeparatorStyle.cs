@@ -1,6 +1,6 @@
 ﻿namespace Myra.Graphics2D.UI.Styles
 {
-	public class SeparatorStyle: WidgetStyle
+	public class SeparatorStyle: ControlStyle
 	{
 		public IRenderable Image { get; set; }
 		public int Thickness { get; set; }
@@ -15,7 +15,7 @@
 			Thickness = style.Thickness;
 		}
 
-		public override WidgetStyle Clone()
+		public override ControlStyle Clone()
 		{
 			return new SeparatorStyle(this);
 		}

@@ -154,10 +154,10 @@ namespace Myra.Graphics2D.UI
 		{
 			if (Orientation == Orientation.Horizontal)
 			{
-				InternalChild = new HorizontalBox();
+				InternalChild = new HorizontalStackPanel();
 			} else
 			{
-				InternalChild = new VerticalBox();
+				InternalChild = new VerticalStackPanel();
 			}
 
 			OpenMenuItem = null;
@@ -218,7 +218,7 @@ namespace Myra.Graphics2D.UI
 			return null;
 		}
 
-		private void AddItem(Widget menuItem, int index)
+		private void AddItem(Control menuItem, int index)
 		{
 			if (Orientation == Orientation.Vertical)
 			{
@@ -246,7 +246,7 @@ namespace Myra.Graphics2D.UI
 		private void InsertItem(IMenuItem iMenuItem, int index)
 		{
 			var menuItem = iMenuItem as MenuItem;
-			Widget widget;
+			Control widget;
 			if (menuItem != null)
 			{
 				menuItem.Changed += MenuItemOnChanged;
@@ -359,7 +359,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Widget> genericEventArgs)
+		private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Control> genericEventArgs)
 		{
 			if (OpenMenuItem == null) return;
 

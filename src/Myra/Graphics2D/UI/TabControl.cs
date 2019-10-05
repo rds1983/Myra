@@ -9,7 +9,7 @@ namespace Myra.Graphics2D.UI
 	public class TabControl : Selector<Grid, TabItem>
 	{
 		private Grid _gridButtons;
-		private SingleItemContainer<Widget> _panelContent;
+		private SingleItemContainer<Control> _panelContent;
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -55,7 +55,7 @@ namespace Myra.Graphics2D.UI
 			// Second row contains content
 			InternalChild.RowsProportions.Add(new Proportion(ProportionType.Fill));
 
-			_panelContent = new SingleItemContainer<Widget>()
+			_panelContent = new SingleItemContainer<Control>()
 			{
 				GridRow = 1,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
