@@ -10,16 +10,16 @@ using Xenko.Core.Mathematics;
 
 namespace Myra.Graphics2D.UI
 {
-	public abstract class Container : Control
+	public abstract class Container : Widget
 	{
 		private bool _childrenDirty = true;
-		private readonly List<Control> _childrenCopy = new List<Control>();
+		private readonly List<Widget> _childrenCopy = new List<Widget>();
 
 		[XmlIgnore]
 		[Browsable(false)]
 		public abstract int ChildrenCount { get; }
 
-		internal List<Control> ChildrenCopy
+		internal List<Widget> ChildrenCopy
 		{
 			get
 			{
@@ -68,7 +68,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public abstract Control GetChild(int index);
+		public abstract Widget GetChild(int index);
 
 		private void UpdateWidgets()
 		{
@@ -243,6 +243,6 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public abstract void RemoveChild(Control widget);
+		public abstract void RemoveChild(Widget widget);
 	}
 }

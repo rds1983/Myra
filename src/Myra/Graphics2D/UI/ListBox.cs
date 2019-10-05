@@ -90,7 +90,7 @@ namespace Myra.Graphics2D.UI
 		{
 			item.Changed += ItemOnChanged;
 
-			Control widget = null;
+			Widget widget = null;
 
 			if (!item.IsSeparator)
 			{

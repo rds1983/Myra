@@ -21,7 +21,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void LayoutControl(Control control)
+		private void LayoutControl(Widget control)
 		{
 			control.Layout(ActualBounds);
 		}

@@ -68,7 +68,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[Content]
-		public ObservableCollection<Control> Widgets => InternalChild.Widgets;
+		public ObservableCollection<Widget> Widgets => InternalChild.Widgets;
 
 		[DefaultValue(HorizontalAlignment.Stretch)]
 		public override HorizontalAlignment HorizontalAlignment

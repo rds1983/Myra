@@ -25,7 +25,7 @@ namespace Myra.Samples.Notepad
 		private string _filePath;
 		private bool _dirty = true;
 		private Desktop _desktop;
-		private TextField _textField;
+		private TextBox _textField;
 
 		public string FilePath
 		{
@@ -114,7 +114,7 @@ namespace Myra.Samples.Notepad
 			_textField.Text = typeof(NotepadGame).Assembly.ReadResourceAsString("hobbits.txt");
 			_desktop.FocusedKeyboardWidget = _textField;
 
-			_textField.TextChanged += TextFieldOnTextChanged;
+			_textField.TextChanged += TextBoxOnTextChanged;
 
 			_desktop.Widgets.Add(ui);
 
@@ -151,7 +151,7 @@ namespace Myra.Samples.Notepad
 			return _filePath + " *";
 		}
 
-		private void TextFieldOnTextChanged(object sender, EventArgs eventArgs)
+		private void TextBoxOnTextChanged(object sender, EventArgs eventArgs)
 		{
 			Dirty = true;
 		}

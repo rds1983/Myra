@@ -99,7 +99,7 @@ namespace Myra.Graphics2D.UI
 			return true;
 		}
 
-		public static Dialog CreateMessageBox(string title, Control content)
+		public static Dialog CreateMessageBox(string title, Widget content)
 		{
 			var w = new Dialog
 			{

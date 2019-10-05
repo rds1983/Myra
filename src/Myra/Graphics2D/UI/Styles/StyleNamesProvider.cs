@@ -8,7 +8,7 @@ namespace Myra.Graphics2D.UI.Styles
 	{
 		public object[] Items { get; private set; }
 
-		public StyleNamesProvider(Control widget)
+		public StyleNamesProvider(Widget widget)
 		{
 			if (widget == null)
 			{

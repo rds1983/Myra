@@ -88,7 +88,7 @@ namespace Myra.Samples.SplitPaneContainer
 
 			for (var i = 0; i < Labels; ++i)
 			{
-				var label = new TextBlock
+				var label = new Label
 				{
 					Text = "Proportion"
 				};
@@ -110,7 +110,7 @@ namespace Myra.Samples.SplitPaneContainer
 		{
 			for (var i = 0; i < _splitPane.Widgets.Count; ++i)
 			{
-				var label = (TextBlock)_splitPane.Widgets[i];
+				var label = (Label)_splitPane.Widgets[i];
 
 				label.Text = _splitPane.GetProportion(i).ToString(CultureInfo.InvariantCulture);
 			}

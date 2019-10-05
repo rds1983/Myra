@@ -2,7 +2,7 @@
 {
 	public class ComboBoxStyle : ImageTextButtonStyle
 	{
-		public ControlStyle ItemsContainerStyle { get; set; }
+		public WidgetStyle ItemsContainerStyle { get; set; }
 		public ImageTextButtonStyle ListItemStyle { get; set; }
 
 		public ComboBoxStyle()
@@ -11,11 +11,11 @@
 
 		public ComboBoxStyle(ComboBoxStyle style) : base(style)
 		{
-			ItemsContainerStyle = style.ItemsContainerStyle != null ? new ControlStyle(style.ItemsContainerStyle) : null;
+			ItemsContainerStyle = style.ItemsContainerStyle != null ? new WidgetStyle(style.ItemsContainerStyle) : null;
 			ListItemStyle = style.ListItemStyle != null ? new ImageTextButtonStyle(style.ListItemStyle) : null;
 		}
 
-		public override ControlStyle Clone()
+		public override WidgetStyle Clone()
 		{
 			return new ComboBoxStyle(this);
 		}

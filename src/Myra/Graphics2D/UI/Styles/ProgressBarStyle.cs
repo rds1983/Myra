@@ -1,6 +1,6 @@
 ﻿namespace Myra.Graphics2D.UI.Styles
 {
-	public class ProgressBarStyle: ControlStyle
+	public class ProgressBarStyle: WidgetStyle
 	{
 		public IRenderable Filled { get; set; }
 
@@ -13,7 +13,7 @@
 			Filled = style.Filled;
 		}
 
-		public override ControlStyle Clone()
+		public override WidgetStyle Clone()
 		{
 			return new ProgressBarStyle(this);
 		}

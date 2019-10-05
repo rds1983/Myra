@@ -4,15 +4,15 @@
     <Color Id="white" Value="#FFFFFFFF" />
     <Color Id="grey" Value="#AAAAAAFF" />
   </Colors>
-  <TextBlockStyles>
-    <TextBlockStyle Font="default-font" TextColor="white" DisabledTextColor="grey" />
-  </TextBlockStyles>
-  <TextFieldStyles>
-    <TextFieldStyle Background="textfield" TextColor="white" DisabledTextColor="grey" Font="default-font" Cursor="cursor" Selection="selection" />
-  </TextFieldStyles>
-  <ScrollPaneStyles>
-    <ScrollPaneStyle HorizontalScrollBackground="scroll-horizontal" HorizontalScrollKnob="scroll-knob-horizontal" VerticalScrollBackground="scroll" VerticalScrollKnob="scroll-knob-vertical" />
-  </ScrollPaneStyles>
+  <LabelStyles>
+    <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" />
+  </LabelStyles>
+  <TextBoxStyles>
+    <TextBoxStyle Background="textfield" TextColor="white" DisabledTextColor="grey" Font="default-font" Cursor="cursor" Selection="selection" />
+  </TextBoxStyles>
+  <ScrollViewerStyles>
+    <ScrollViewerStyle HorizontalScrollBackground="scroll-horizontal" HorizontalScrollKnob="scroll-knob-horizontal" VerticalScrollBackground="scroll" VerticalScrollKnob="scroll-knob-vertical" />
+  </ScrollViewerStyles>
   <ButtonStyles>
     <ButtonStyle Background="button" OverBackground="button-over" PressedBackground="button-down" />
     <ButtonStyle Id="blue" Background="button-blue" OverBackground="button-blue-down" PressedBackground="button-blue-down" />
@@ -31,7 +31,7 @@
   </RadioButtonStyles>
   <SpinButtonStyles>
     <SpinButtonStyle Background="textfield">
-      <TextFieldStyle TextColor="white" DisabledTextColor="grey" Font="default-font" Cursor="cursor" Selection="selection" />
+      <TextBoxStyle TextColor="white" DisabledTextColor="grey" Font="default-font" Cursor="cursor" Selection="selection" />
       <UpButtonStyle Width="12" Height="12" Background="button" OverBackground="button-over" PressedBackground="button-down">
         <ImageStyle Image="select-up" />
       </UpButtonStyle>

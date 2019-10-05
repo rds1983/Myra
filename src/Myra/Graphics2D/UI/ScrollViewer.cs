@@ -14,7 +14,7 @@ using Xenko.Core.Mathematics;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ScrollViewer : SingleItemContainer<Control>, IContent
+	public class ScrollViewer : SingleItemContainer<Widget>, IContent
 	{
 		private Orientation _scrollbarOrientation;
 		internal bool _horizontalScrollingOn, _verticalScrollingOn;
@@ -139,7 +139,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[Content]
-		public Control Content
+		public Widget Content
 		{
 			get
 			{
@@ -155,7 +155,7 @@ namespace Myra.Graphics2D.UI
 		[Browsable(false)]
 		[XmlIgnore]
 		[Obsolete("Use Content instead")]
-		public Control Child
+		public Widget Child
 		{
 			get
 			{

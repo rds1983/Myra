@@ -17,7 +17,7 @@ namespace Myra.Graphics2D.UI
 {
 	public abstract class SplitPane : SingleItemContainer<Grid>
 	{
-		private readonly ObservableCollection<Control> _widgets = new ObservableCollection<Control>();
+		private readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
 		private readonly List<ImageButton> _handles = new List<ImageButton>();
 		private ImageButton _handleDown;
 		private int? _mouseCoord;
@@ -29,7 +29,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[Content]
-		public ObservableCollection<Control> Widgets
+		public ObservableCollection<Widget> Widgets
 		{
 			get { return _widgets; }
 		}

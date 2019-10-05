@@ -1,5 +1,5 @@
 <Project>
   <Panel>
-    <TextField Text="" HorizontalAlignment="Center" Width="100" VerticalAlignment="Center" />
+    <TextBox Text="" HorizontalAlignment="Center" Width="100" VerticalAlignment="Center" />
   </Panel>
 </Project>

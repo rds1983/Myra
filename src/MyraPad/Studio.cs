@@ -352,7 +352,7 @@ namespace MyraPad
 			UpdateMenuFile();
 		}
 
-		private void _desktop_ContextMenuClosed(object sender, GenericEventArgs<Control> e)
+		private void _desktop_ContextMenuClosed(object sender, GenericEventArgs<Widget> e)
 		{
 			if (e.Data != _autoCompleteMenu)
 			{
@@ -983,7 +983,7 @@ namespace MyraPad
 			return stylesheet;
 		}
 
-		private static void IterateWidget(Control w, Action<Control> a)
+		private static void IterateWidget(Widget w, Action<Widget> a)
 		{
 			a(w);
 

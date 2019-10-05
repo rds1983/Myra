@@ -1,6 +1,6 @@
 <Project>
   <Project.ExportOptions Namespace="MyraPad.UI" Class="ExportOptionsDialog" OutputPath="D:\Projects\Myra\src\MyraPad\UI" />
-  <Dialog Title="Export" Left="124" Top="136">
+  <Dialog Title="Export" Left="124" Top="138">
     <Grid ColumnSpacing="8" RowSpacing="8" Id="Root" Width="800">
       <Grid.DefaultRowProportion Type="Auto" />
       <Grid.ColumnsProportions>

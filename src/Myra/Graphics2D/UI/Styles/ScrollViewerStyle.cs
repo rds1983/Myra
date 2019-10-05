@@ -1,6 +1,6 @@
 ﻿namespace Myra.Graphics2D.UI.Styles
 {
-	public class ScrollViewerStyle : ControlStyle
+	public class ScrollViewerStyle : WidgetStyle
 	{
 		public IRenderable HorizontalScrollBackground { get; set; }
 		public IRenderable HorizontalScrollKnob { get; set; }
@@ -19,7 +19,7 @@
 			VerticalScrollKnob = style.VerticalScrollKnob;
 		}
 
-		public override ControlStyle Clone()
+		public override WidgetStyle Clone()
 		{
 			return new ScrollViewerStyle(this);
 		}

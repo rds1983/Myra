@@ -15,7 +15,7 @@ using Xenko.Input;
 
 namespace Myra.Graphics2D.UI
 {
-	public class Control : IItemWithId
+	public class Widget : IItemWithId
 	{
 		internal enum LayoutState
 		{
@@ -686,7 +686,7 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler<GenericEventArgs<Keys>> KeyDown;
 		public event EventHandler<GenericEventArgs<char>> Char;
 
-		public Control()
+		public Widget()
 		{
 			Visible = true;
 			Enabled = true;
@@ -948,7 +948,7 @@ namespace Myra.Graphics2D.UI
 			LayoutUpdated.Invoke(this);
 		}
 
-		private Control FindWidgetBy(Func<Control, bool> finder)
+		private Widget FindWidgetBy(Func<Widget, bool> finder)
 		{
 			if (finder(this))
 			{
@@ -977,7 +977,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-		public Control FindWidgetById(string id)
+		public Widget FindWidgetById(string id)
 		{
 			return FindWidgetBy(w => w.Id == id);
 		}
@@ -988,7 +988,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-		public Control EnsureWidgetById(string id)
+		public Widget EnsureWidgetById(string id)
 		{
 			var result = FindWidgetById(id);
 			if (result == null)
@@ -1008,7 +1008,7 @@ namespace Myra.Graphics2D.UI
 			MeasureChanged.Invoke(this);
 		}
 
-		public void ApplyWidgetStyle(ControlStyle style)
+		public void ApplyWidgetStyle(WidgetStyle style)
 		{
 			Width = style.Width;
 			Height = style.Height;

@@ -1,6 +1,6 @@
 ﻿namespace Myra.Graphics2D.UI.Styles
 {
-	public class TreeStyle : ControlStyle
+	public class TreeStyle : WidgetStyle
 	{
 		public ImageButtonStyle MarkStyle { get; set; }
 		public LabelStyle LabelStyle { get; set; }
@@ -25,7 +25,7 @@
 			SelectionHoverBackground = style.SelectionHoverBackground;
 		}
 
-		public override ControlStyle Clone()
+		public override WidgetStyle Clone()
 		{
 			return new TreeStyle(this);
 		}

@@ -37,14 +37,14 @@ namespace Myra.Graphics2D.UI
 
 		private readonly List<int> _measureColWidths = new List<int>();
 		private readonly List<int> _measureRowHeights = new List<int>();
-		private readonly List<Control> _visibleWidgets = new List<Control>();
+		private readonly List<Widget> _visibleWidgets = new List<Widget>();
 		private readonly List<int> _colWidths = new List<int>();
 		private readonly List<int> _rowHeights = new List<int>();
 		private int? _hoverRowIndex = null;
 		private int? _hoverColumnIndex = null;
 		private int? _selectedRowIndex = null;
 		private int? _selectedColumnIndex = null;
-		private List<Control>[,] _widgetsByGridPosition;
+		private List<Widget>[,] _widgetsByGridPosition;
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
@@ -384,7 +384,7 @@ namespace Myra.Graphics2D.UI
 			return RowsProportions[row];
 		}
 
-		private Point GetActualGridPosition(Control child)
+		private Point GetActualGridPosition(Widget child)
 		{
 			return new Point(child.GridColumn, child.GridRow);
 		}
@@ -444,7 +444,7 @@ namespace Myra.Graphics2D.UI
 				_widgetsByGridPosition.GetLength(0) < rows ||
 				_widgetsByGridPosition.GetLength(1) < columns)
 			{
-				_widgetsByGridPosition = new List<Control>[rows, columns];
+				_widgetsByGridPosition = new List<Widget>[rows, columns];
 			}
 
 			for (var row = 0; row < rows; ++row)
@@ -453,7 +453,7 @@ namespace Myra.Graphics2D.UI
 				{
 					if (_widgetsByGridPosition[row, col] == null)
 					{
-						_widgetsByGridPosition[row, col] = new List<Control>();
+						_widgetsByGridPosition[row, col] = new List<Widget>();
 					}
 
 					_widgetsByGridPosition[row, col].Clear();
@@ -719,7 +719,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void LayoutControl(Control control)
+		private void LayoutControl(Widget control)
 		{
 			var gridPosition = GetActualGridPosition(control);
 			var col = gridPosition.X;

@@ -4,6 +4,6 @@ namespace Myra.Graphics2D.UI
 {
 	public interface IMultipleItemsContainer
 	{
-		ObservableCollection<Control> Widgets { get; }
+		ObservableCollection<Widget> Widgets { get; }
 	}
 }

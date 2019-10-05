@@ -44,7 +44,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[Content]
-		public Control Root { get; set; }
+		public Widget Root { get; set; }
 
 		[Browsable(false)]
 		public string StylesheetPath
@@ -61,9 +61,9 @@ namespace Myra.Graphics2D.UI
 			LegacyClassNames["Button"] = "ImageTextButton";
 			LegacyClassNames["VerticalBox"] = "VerticalStackPanel";
 			LegacyClassNames["HorizontalBox"] = "HorizontalStackPanel";
-			LegacyClassNames["TextField"] = "TextBox";
-			LegacyClassNames["TextBlock"] = "Label";
-			LegacyClassNames["ScrollPane"] = "ScrollViewer";
+			LegacyClassNames["TextBox"] = "TextBox";
+			LegacyClassNames["Label"] = "Label";
+			LegacyClassNames["ScrollViewer"] = "ScrollViewer";
 		}
 
 		public Project()
@@ -81,7 +81,7 @@ namespace Myra.Graphics2D.UI
 
 		public static bool ShouldSerializeProperty(Stylesheet stylesheet, object o, PropertyInfo p)
 		{
-			var asWidget = o as Control;
+			var asWidget = o as Widget;
 			if (asWidget != null && asWidget.Parent != null && asWidget.Parent is Grid)
 			{
 				var container = asWidget.Parent.Parent;
@@ -152,7 +152,7 @@ namespace Myra.Graphics2D.UI
 			{
 				LegacyClassNames = LegacyClassNames,
 				ObjectCreator = t => CreateItem(t, stylesheet),
-				Namespace = typeof(Control).Namespace
+				Namespace = typeof(Widget).Namespace
 			};
 		}
 
@@ -201,7 +201,7 @@ namespace Myra.Graphics2D.UI
 			Type itemType;
 			if (!IsProportionName(xDoc.Root.Name.ToString()))
 			{
-				var itemNamespace = typeof(Control).Namespace;
+				var itemNamespace = typeof(Widget).Namespace;
 
 				var widgetName = xDoc.Root.Name.ToString();
 				string newName;
@@ -210,7 +210,7 @@ namespace Myra.Graphics2D.UI
 					widgetName = newName;
 				}
 
-				itemType = typeof(Control).Assembly.GetType(itemNamespace + "." + widgetName);
+				itemType = typeof(Widget).Assembly.GetType(itemNamespace + "." + widgetName);
 			}
 			else
 			{
@@ -265,7 +265,7 @@ namespace Myra.Graphics2D.UI
 			return Activator.CreateInstance(type);
 		}
 
-		private static bool HasStylesheetValue(Control w, PropertyInfo property, Stylesheet stylesheet)
+		private static bool HasStylesheetValue(Widget w, PropertyInfo property, Stylesheet stylesheet)
 		{
 			if (stylesheet == null)
 			{

@@ -21,7 +21,7 @@ using Xenko.Input;
 
 namespace Myra.Graphics2D.UI
 {
-	public class TextBox : Control
+	public class TextBox : Widget
 	{
 		private DateTime _lastBlinkStamp = DateTime.Now;
 		private bool _cursorOn = true;

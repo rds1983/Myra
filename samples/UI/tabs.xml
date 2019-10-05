@@ -1,29 +1,21 @@
 <Project>
-  <ExportOptions />
+  <Project.ExportOptions />
   <Panel>
     <TabControl HorizontalAlignment="Center" VerticalAlignment="Center" Width="280" Height="260" GridRow="1">
       <TabItem Text="Character">
         <Grid ColumnSpacing="8" RowSpacing="8">
-          <ColumnsProportions>
-            <Proportion />
-            <Proportion />
-          </ColumnsProportions>
-          <RowsProportions>
-            <Proportion />
-            <Proportion />
-            <Proportion />
-            <Proportion />
-          </RowsProportions>
-          <TextBlock Text="Name" />
-          <TextField Text="" Width="200" GridColumn="1" />
-          <TextBlock Text="Race" GridRow="1" />
+          <Grid.DefaultColumnProportion Type="Auto" />
+          <Grid.DefaultRowProportion Type="Auto" />
+          <Label Text="Name" />
+          <TextBox Text="" Width="200" GridColumn="1" />
+          <Label Text="Race" GridRow="1" />
           <ComboBox Width="200" GridColumn="1" GridRow="1">
             <ListItem Text="Human" />
             <ListItem Text="Dwarf" />
             <ListItem Text="Elf" />
             <ListItem Text="Hobbit" />
           </ComboBox>
-          <TextBlock Text="Class" GridRow="2" />
+          <Label Text="Class" GridRow="2" />
           <ComboBox Width="200" GridColumn="1" GridRow="2">
             <ListItem Text="Warrior" />
             <ListItem Text="Mage" />
@@ -34,53 +26,32 @@
       </TabItem>
       <TabItem Text="Skills">
         <Grid ColumnSpacing="8" RowSpacing="8">
-          <ColumnsProportions>
-            <Proportion />
-            <Proportion />
-          </ColumnsProportions>
-          <RowsProportions>
-            <Proportion />
-            <Proportion />
-            <Proportion />
-            <Proportion />
-            <Proportion />
-            <Proportion />
-            <Proportion />
-          </RowsProportions>
-          <TextBlock Text="You have 10 points left to distribute" GridColumnSpan="2" />
-          <TextBlock Text="Strength" GridRow="1" />
+          <Grid.DefaultColumnProportion Type="Auto" />
+          <Grid.DefaultRowProportion Type="Auto" />
+          <Label Text="You have 10 points left to distribute" GridColumnSpan="2" />
+          <Label Text="Strength" GridRow="1" />
           <SpinButton Value="5" Width="50" GridColumn="1" GridRow="1" />
-          <TextBlock Text="Dexterity" GridRow="2" />
+          <Label Text="Dexterity" GridRow="2" />
           <SpinButton Value="5" Width="50" GridColumn="1" GridRow="2" />
-          <TextBlock Text="Constitution" GridRow="3" />
+          <Label Text="Constitution" GridRow="3" />
           <SpinButton Value="5" Width="50" GridColumn="1" GridRow="3" />
-          <TextBlock Text="Intelligence" GridRow="4" />
+          <Label Text="Intelligence" GridRow="4" />
           <SpinButton Value="5" Width="50" GridColumn="1" GridRow="4" />
-          <TextBlock Text="Wisdom" GridRow="5" />
+          <Label Text="Wisdom" GridRow="5" />
           <SpinButton Value="5" Width="50" GridColumn="1" GridRow="5" />
-          <TextBlock Text="Charisma" GridRow="6" />
+          <Label Text="Charisma" GridRow="6" />
           <SpinButton Value="5" Width="50" GridColumn="1" GridRow="6" />
         </Grid>
       </TabItem>
       <TabItem Text="Feats">
-        <Grid ColumnSpacing="8" RowSpacing="8">
-          <ColumnsProportions>
-            <Proportion Type="Fill" />
-          </ColumnsProportions>
-          <RowsProportions>
-            <Proportion />
-            <Proportion />
-            <Proportion />
-            <Proportion />
-            <Proportion />
-          </RowsProportions>
-          <TextBlock Text="You have 2 feats left to choose" />
+        <VerticalStackPanel Spacing="8" >
+          <Label Text="You have 2 feats left to choose" />
           <ImageTextButton Text="Swordsman" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="1" />
           <ImageTextButton Text="Salesman" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="2" />
           <ImageTextButton Text="Trapsmith" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="3" />
           <ImageTextButton Text="Cunning" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="4" />
           <ImageTextButton Text="Empathy" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="5" />
-        </Grid>
+        </VerticalStackPanel>
       </TabItem>
     </TabControl>
   </Panel>

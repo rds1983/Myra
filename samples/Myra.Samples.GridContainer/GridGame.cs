@@ -55,7 +55,7 @@ namespace Myra.Samples.GridContainer
 			// Create headers
 			for (var i = 1; i < grid.ColumnsProportions.Count; ++i)
 			{
-				var header = new TextBlock
+				var header = new Label
 				{
 					Text = grid.ColumnsProportions[i].ToString(),
 					GridColumn = i,
@@ -115,7 +115,7 @@ namespace Myra.Samples.GridContainer
 			};
 			grid.Widgets.Add(button2);
 
-			var label = new TextBlock
+			var label = new Label
 			{
 				Text =
 					"Lorem ipsum [Green]dolor sit amet, [Red]consectetur adipisicing elit, sed do eiusmod [#AAAAAAAA]tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. [white]Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum!",
@@ -124,7 +124,7 @@ namespace Myra.Samples.GridContainer
 				Wrap = true
 			};
 
-			var pane = new ScrollPane
+			var pane = new ScrollViewer
 			{
 				Content = label,
 				Width = 200,
@@ -160,7 +160,7 @@ namespace Myra.Samples.GridContainer
 			grid.Widgets.Add(hslider);
 
 			// Horizontal slider value
-			var hsliderValue = new TextBlock
+			var hsliderValue = new Label
 			{
 				GridColumn = 4,
 				GridRow = 2,
@@ -174,7 +174,7 @@ namespace Myra.Samples.GridContainer
 
 			grid.Widgets.Add(hsliderValue);
 
-			var textBlock = new TextBlock
+			var textBlock = new Label
 			{
 				Width = 125,
 				Text = "This is textblock which spans for several lines to demonstrate row proportion set to Auto",
@@ -193,7 +193,7 @@ namespace Myra.Samples.GridContainer
 			grid.Widgets.Add(checkBox);
 
 			// Spin buttons
-			var textField = new TextField
+			var textField = new TextBox
 			{
 				GridColumn = 5,
 				GridRow = 1,
@@ -248,7 +248,7 @@ namespace Myra.Samples.GridContainer
 			grid.Widgets.Add(vslider);
 
 			// Vertical slider value
-			var vsliderValue = new TextBlock
+			var vsliderValue = new Label
 			{
 				GridColumn = 4,
 				GridRow = 4,
@@ -277,7 +277,7 @@ namespace Myra.Samples.GridContainer
 
 			grid.Widgets.Add(tree);
 
-			var textBlock2 = new TextBlock
+			var textBlock2 = new Label
 			{
 				Text = "This is long textblock",
 				GridColumn = 1,
@@ -290,12 +290,12 @@ namespace Myra.Samples.GridContainer
 				GridColumn = 1,
 				GridRow = 5
 			};
-			var hsplitPaneLabel1 = new TextBlock
+			var hsplitPaneLabel1 = new Label
 			{
 				Text = "Left"
 			};
 			hsplitPane.Widgets.Add(hsplitPaneLabel1);
-			var hsplitPaneLabel2 = new TextBlock
+			var hsplitPaneLabel2 = new Label
 			{
 				Text = "Right"
 			};
@@ -307,12 +307,12 @@ namespace Myra.Samples.GridContainer
 				GridColumn = 6,
 				GridRow = 4
 			};
-			var vsplitPaneLabel1 = new TextBlock
+			var vsplitPaneLabel1 = new Label
 			{
 				Text = "Top"
 			};
 			vsplitPane.Widgets.Add(vsplitPaneLabel1);
-			var vsplitPaneLabel2 = new TextBlock
+			var vsplitPaneLabel2 = new Label
 			{
 				Text = "Bottom"
 			};
@@ -321,7 +321,7 @@ namespace Myra.Samples.GridContainer
 
 			for (var i = 1; i < grid.RowsProportions.Count; ++i)
 			{
-				var header = new TextBlock
+				var header = new Label
 				{
 					Text = grid.RowsProportions[i].ToString(),
 					GridColumn = 0,

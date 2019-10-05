@@ -4,10 +4,10 @@ namespace Myra.Graphics2D.UI
 {
 	public class ContextMenuClosingEventArgs : EventArgs
 	{
-		public Control ContextMenu { get; private set; }
+		public Widget ContextMenu { get; private set; }
 		public bool Cancel { get; set; }
 
-		public ContextMenuClosingEventArgs(Control contextMenu)
+		public ContextMenuClosingEventArgs(Widget contextMenu)
 		{
 			ContextMenu = contextMenu;
 		}

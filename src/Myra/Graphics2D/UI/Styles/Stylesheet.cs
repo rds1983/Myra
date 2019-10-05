@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Myra.Graphics2D.TextureAtlases;
 using System.Xml.Serialization;
 using System.Xml.Linq;
 using Myra.MML;
@@ -558,14 +557,14 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		private static T GetDefaultStyle<T>(Dictionary<string, T> styles) where T : ControlStyle
+		private static T GetDefaultStyle<T>(Dictionary<string, T> styles) where T : WidgetStyle
 		{
 			T result = null;
 			styles.TryGetValue(DefaultStyleName, out result);
 			return result;
 		}
 
-		private static void SetDefaultStyle<T>(Dictionary<string, T> styles, T value) where T : ControlStyle
+		private static void SetDefaultStyle<T>(Dictionary<string, T> styles, T value) where T : WidgetStyle
 		{
 			styles[DefaultStyleName] = value;
 		}
@@ -594,16 +593,25 @@ namespace Myra.Graphics2D.UI.Styles
 
 			var loadContext = new LoadContext
 			{
-				Namespace = typeof(ControlStyle).Namespace,
+				Namespace = typeof(WidgetStyle).Namespace,
 				TextureGetter = textureGetter,
 				FontGetter = fontGetter,
 				NodesToIgnore = new HashSet<string>(new[] { "Designer", "Colors" }),
+				LegacyClassNames = new Dictionary<string, string>
+				{
+					["LabelStyle"] = "LabelStyle",
+					["TextBoxStyle"] = "TextBoxStyle",
+					["ScrollViewerStyle"] = "ScrollViewerStyle",
+
+				},
 				LegacyPropertyNames = new Dictionary<string, string>
 				{
-					["TextBlockStyles"] = "LabelStyles",
-					["TextFieldStyles"] = "TextBoxStyles",
-					["ScrollPaneStyles"] = "ScrollViewerStyles",
-
+					["LabelStyle"] = "LabelStyle",
+					["TextBoxStyle"] = "TextBoxStyle",
+					["ScrollViewerStyle"] = "ScrollViewerStyle",
+					["LabelStyles"] = "LabelStyles",
+					["TextBoxStyles"] = "TextBoxStyles",
+					["ScrollViewerStyles"] = "ScrollViewerStyles",
 				},
 				Colors = colors
 			};

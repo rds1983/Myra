@@ -82,8 +82,8 @@ namespace Myra.Samples.AllWidgets
 #if ANDROID
 			_desktop.WidgetGotKeyboardFocus += (s, a) =>
 			{
-				var asTextField = a.Data as TextField;
-				if (asTextField == null)
+				var asTextBox = a.Data as TextBox;
+				if (asTextBox == null)
 				{
 					return;
 				}
@@ -91,11 +91,11 @@ namespace Myra.Samples.AllWidgets
 				Guide.BeginShowKeyboardInput(PlayerIndex.One,
 					"Title",
 					"Description",
-					asTextField.Text,
+					asTextBox.Text,
 					new AsyncCallback(r =>
 					{
 						var text = Guide.EndShowKeyboardInput(r);
-						asTextField.Text = text;
+						asTextBox.Text = text;
 					}),
 					null);
 			};

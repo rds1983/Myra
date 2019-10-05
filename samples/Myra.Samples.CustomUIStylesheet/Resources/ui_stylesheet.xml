@@ -12,15 +12,15 @@
     <Color Id="black" Value="#000000FF" />
   </Colors>
   <DesktopStyle Background="blue" />
-  <TextBlockStyles>
-    <TextBlockStyle Font="commodore-64" TextColor="white" />
-  </TextBlockStyles>
-  <TextFieldStyles>
-    <TextFieldStyle Background="white" TextColor="black" Font="commodore-64" Cursor="cursor-black" Selection="light-blue" />
-  </TextFieldStyles>
-  <ScrollPaneStyles>
-    <ScrollPaneStyle HorizontalScrollBackground="scroll-bar" HorizontalScrollKnob="scroll-bar-horizontal-knob" VerticalScrollBackground="scroll-bar" VerticalScrollKnob="scroll-bar-vertical-knob" />
-  </ScrollPaneStyles>
+  <LabelStyles>
+    <LabelStyle Font="commodore-64" TextColor="white" />
+  </LabelStyles>
+  <TextBoxStyles>
+    <TextBoxStyle Background="white" TextColor="black" Font="commodore-64" Cursor="cursor-black" Selection="light-blue" />
+  </TextBoxStyles>
+  <ScrollViewerStyles>
+    <ScrollViewerStyle HorizontalScrollBackground="scroll-bar" HorizontalScrollKnob="scroll-bar-horizontal-knob" VerticalScrollBackground="scroll-bar" VerticalScrollKnob="scroll-bar-vertical-knob" />
+  </ScrollViewerStyles>
   <ButtonStyles>
     <ButtonStyle Background="button" PaddingLeft="8" PaddingRight="8" PaddingTop="5" PaddingBottom="5" PressedBackground="button-down" />
   </ButtonStyles>

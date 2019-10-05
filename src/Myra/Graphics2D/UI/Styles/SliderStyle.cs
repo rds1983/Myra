@@ -1,6 +1,6 @@
 ﻿namespace Myra.Graphics2D.UI.Styles
 {
-	public class SliderStyle: ControlStyle
+	public class SliderStyle: WidgetStyle
 	{
 		public ImageButtonStyle KnobStyle { get; set; }
 
@@ -13,7 +13,7 @@
 			KnobStyle = style.KnobStyle != null ? new ImageButtonStyle(style.KnobStyle) : null;
 		}
 
-		public override ControlStyle Clone()
+		public override WidgetStyle Clone()
 		{
 			return new SliderStyle(this);
 		}

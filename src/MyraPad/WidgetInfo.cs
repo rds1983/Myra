@@ -7,6 +7,6 @@ namespace MyraPad
 	{
 		public int Start;
 		public int End;
-		public Control Widget;
+		public Widget Widget;
 	}
 }

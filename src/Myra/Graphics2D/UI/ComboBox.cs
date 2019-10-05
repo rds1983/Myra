@@ -133,7 +133,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Control> genericEventArgs)
+		private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Widget> genericEventArgs)
 		{
 			InternalChild.IsPressed = false;
 		}

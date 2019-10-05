@@ -12,7 +12,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class ListItem : SelectableItem, ISelectorItem
 	{
-		private Control _widget;
+		private Widget _widget;
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -28,7 +28,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public Control Widget
+		public Widget Widget
 		{
 			get
 			{

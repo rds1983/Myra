@@ -30,7 +30,7 @@ namespace Myra.MML
 		public HashSet<string> NodesToIgnore = null;
 		public Func<Type, object> ObjectCreator = (type) => Activator.CreateInstance(type);
 		public string Namespace;
-		public Assembly Assembly = typeof(Control).Assembly;
+		public Assembly Assembly = typeof(Widget).Assembly;
 		public Func<string, IRenderable> TextureGetter = null;
 		public Func<string, SpriteFont> FontGetter = null;
 
@@ -123,11 +123,11 @@ namespace Myra.MML
 					var parts = childName.Split('.');
 					childName = parts[1];
 					isProperty = true;
+				}
 
-					if (LegacyPropertyNames != null && LegacyPropertyNames.TryGetValue(childName, out newName))
-					{
-						childName = newName;
-					}
+				if (LegacyPropertyNames != null && LegacyPropertyNames.TryGetValue(childName, out newName))
+				{
+					childName = newName;
 				}
 
 				// Find property

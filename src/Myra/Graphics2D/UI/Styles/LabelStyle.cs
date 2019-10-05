@@ -8,7 +8,7 @@ using Xenko.Core.Mathematics;
 
 namespace Myra.Graphics2D.UI.Styles
 {
-	public class LabelStyle: ControlStyle
+	public class LabelStyle: WidgetStyle
 	{
 		public Color TextColor { get; set; }
 		public Color? DisabledTextColor { get; set; }
@@ -29,7 +29,7 @@ namespace Myra.Graphics2D.UI.Styles
 			Font = style.Font;
 		}
 
-		public override ControlStyle Clone()
+		public override WidgetStyle Clone()
 		{
 			return new LabelStyle(this);
 		}

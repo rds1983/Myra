@@ -1,6 +1,6 @@
 ﻿namespace Myra.Graphics2D.UI.Styles
 {
-	public class WindowStyle : ControlStyle
+	public class WindowStyle : WidgetStyle
 	{
 		public LabelStyle TitleStyle { get; set; }
 		public ImageButtonStyle CloseButtonStyle { get; set; }
@@ -15,7 +15,7 @@
 			CloseButtonStyle = style.CloseButtonStyle != null ? new ImageButtonStyle(style.CloseButtonStyle) : null;
 		}
 
-		public override ControlStyle Clone()
+		public override WidgetStyle Clone()
 		{
 			return new WindowStyle(this);
 		}

@@ -1,13 +1,13 @@
 ﻿namespace Myra.Graphics2D.UI.Styles
 {
-	public class TabControlStyle : ControlStyle
+	public class TabControlStyle : WidgetStyle
 	{
 		public ImageTextButtonStyle TabItemStyle
 		{
 			get; set;
 		}
 
-		public ControlStyle ContentStyle
+		public WidgetStyle ContentStyle
 		{
 			get; set;
 		}
@@ -29,13 +29,13 @@
 		public TabControlStyle(TabControlStyle style) : base(style)
 		{
 			TabItemStyle = style.TabItemStyle != null ? new ImageTextButtonStyle(style.TabItemStyle) : null;
-			ContentStyle = style.ContentStyle != null ? new ControlStyle(style.ContentStyle) : null;
+			ContentStyle = style.ContentStyle != null ? new WidgetStyle(style.ContentStyle) : null;
 
 			ButtonSpacing = style.ButtonSpacing;
 			HeaderSpacing = style.HeaderSpacing;
 		}
 
-		public override ControlStyle Clone()
+		public override WidgetStyle Clone()
 		{
 			return new TabControlStyle(this);
 		}

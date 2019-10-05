@@ -52,20 +52,20 @@ namespace Myra.Graphics2D.UI
 		private bool _layoutDirty = true;
 		private Rectangle _bounds;
 		private bool _widgetsDirty = true;
-		private Control _focusedKeyboardWidget;
-		private readonly List<Control> _widgetsCopy = new List<Control>();
-		protected readonly ObservableCollection<Control> _widgets = new ObservableCollection<Control>();
+		private Widget _focusedKeyboardWidget;
+		private readonly List<Widget> _widgetsCopy = new List<Widget>();
+		protected readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
 		private DateTime _lastTouchDown;
 		private DateTime? _lastKeyDown;
 		private int _keyDownCount = 0;
 		private MouseInfo _lastMouseInfo;
 		private IReadOnlyCollection<Keys> _downKeys, _lastDownKeys;
-		private Control _previousKeyboardFocus;
-		private Control _previousMouseWheelFocus;
+		private Widget _previousKeyboardFocus;
+		private Widget _previousMouseWheelFocus;
 #if !XENKO
 		private TouchCollection _oldTouchState;
 #endif
-		private Control _scheduleMouseWheelFocus;
+		private Widget _scheduleMouseWheelFocus;
 		private bool _isTouchDown;
 		private Point _mousePosition, _touchPosition;
 		private Point _lastMousePosition, _lastTouchPosition;
@@ -180,7 +180,7 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
-		internal List<Control> ChildrenCopy
+		internal List<Widget> ChildrenCopy
 		{
 			get
 			{
@@ -189,7 +189,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ObservableCollection<Control> Widgets
+		public ObservableCollection<Widget> Widgets
 		{
 			get { return _widgets; }
 		}
@@ -204,9 +204,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public Control ContextMenu { get; private set; }
+		public Widget ContextMenu { get; private set; }
 
-		public Control FocusedKeyboardWidget
+		public Widget FocusedKeyboardWidget
 		{
 			get { return _focusedKeyboardWidget; }
 
@@ -220,7 +220,7 @@ namespace Myra.Graphics2D.UI
 				if (_focusedKeyboardWidget != null)
 				{
 					_focusedKeyboardWidget.OnLostKeyboardFocus();
-					WidgetLostKeyboardFocus?.Invoke(this, new GenericEventArgs<Control>(_focusedKeyboardWidget));
+					WidgetLostKeyboardFocus?.Invoke(this, new GenericEventArgs<Widget>(_focusedKeyboardWidget));
 				}
 
 				_focusedKeyboardWidget = value;
@@ -228,12 +228,12 @@ namespace Myra.Graphics2D.UI
 				if (_focusedKeyboardWidget != null)
 				{
 					_focusedKeyboardWidget.OnGotKeyboardFocus();
-					WidgetGotKeyboardFocus?.Invoke(this, new GenericEventArgs<Control>(_focusedKeyboardWidget));
+					WidgetGotKeyboardFocus?.Invoke(this, new GenericEventArgs<Widget>(_focusedKeyboardWidget));
 				}
 			}
 		}
 
-		public Control FocusedMouseWheelWidget
+		public Widget FocusedMouseWheelWidget
 		{
 			get; set;
 		}
@@ -376,10 +376,10 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler<GenericEventArgs<char>> Char;
 
 		public event EventHandler<ContextMenuClosingEventArgs> ContextMenuClosing;
-		public event EventHandler<GenericEventArgs<Control>> ContextMenuClosed;
+		public event EventHandler<GenericEventArgs<Widget>> ContextMenuClosed;
 
-		public event EventHandler<GenericEventArgs<Control>> WidgetLostKeyboardFocus;
-		public event EventHandler<GenericEventArgs<Control>> WidgetGotKeyboardFocus;
+		public event EventHandler<GenericEventArgs<Widget>> WidgetLostKeyboardFocus;
+		public event EventHandler<GenericEventArgs<Widget>> WidgetGotKeyboardFocus;
 
 		public Desktop()
 		{
@@ -447,7 +447,7 @@ namespace Myra.Graphics2D.UI
 		}
 #endif
 
-		public Control GetChild(int index)
+		public Widget GetChild(int index)
 		{
 			return ChildrenCopy[index];
 		}
@@ -500,7 +500,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			// Widgets at the bottom of tree become focused
-			Control focusedWidget = null;
+			Widget focusedWidget = null;
 			ProcessWidgets(activeWidget, s =>
 			{
 				if (s.Enabled && s.IsTouchOver && s.AcceptsKeyboardFocus)
@@ -525,7 +525,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public void ShowContextMenu(Control menu, Point position)
+		public void ShowContextMenu(Widget menu, Point position)
 		{
 			if (menu == null)
 			{
@@ -600,7 +600,7 @@ namespace Myra.Graphics2D.UI
 		{
 			if (args.Action == NotifyCollectionChangedAction.Add)
 			{
-				foreach (Control w in args.NewItems)
+				foreach (Widget w in args.NewItems)
 				{
 					w.Desktop = this;
 					w.MeasureChanged += WOnMeasureChanged;
@@ -608,7 +608,7 @@ namespace Myra.Graphics2D.UI
 			}
 			else if (args.Action == NotifyCollectionChangedAction.Remove)
 			{
-				foreach (Control w in args.OldItems)
+				foreach (Widget w in args.OldItems)
 				{
 					w.MeasureChanged -= WOnMeasureChanged;
 					w.Desktop = null;
@@ -766,7 +766,7 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		private Control GetActiveWidget(bool containsTouch = true, bool accountModality = false)
+		private Widget GetActiveWidget(bool containsTouch = true, bool accountModality = false)
 		{
 			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
 			{
@@ -1008,7 +1008,7 @@ namespace Myra.Graphics2D.UI
 			Char.Invoke(this, c);
 		}
 
-		private void ProcessWidgets(Control root, Action<Control> operation)
+		private void ProcessWidgets(Widget root, Action<Widget> operation)
 		{
 			if (!root.Visible)
 			{
@@ -1040,7 +1040,7 @@ namespace Myra.Graphics2D.UI
 			_widgetsDirty = false;
 		}
 
-		private bool InternalIsPointOverGUI(Point p, Control w)
+		private bool InternalIsPointOverGUI(Point p, Widget w)
 		{
 			if (!w.Visible || !w.ActualBounds.Contains(p))
 			{

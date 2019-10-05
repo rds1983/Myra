@@ -8,7 +8,7 @@ using Myra.Attributes;
 namespace Myra.Graphics2D.UI
 {
 	public abstract class Selector<WidgetType, ItemType> : SingleItemContainer<WidgetType>, ISelector
-		where WidgetType : Control
+		where WidgetType : Widget
 		where ItemType : class, ISelectorItem
 	{
 		private ItemType _selectedItem;

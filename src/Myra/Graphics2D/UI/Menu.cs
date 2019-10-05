@@ -218,7 +218,7 @@ namespace Myra.Graphics2D.UI
 			return null;
 		}
 
-		private void AddItem(Control menuItem, int index)
+		private void AddItem(Widget menuItem, int index)
 		{
 			if (Orientation == Orientation.Vertical)
 			{
@@ -246,7 +246,7 @@ namespace Myra.Graphics2D.UI
 		private void InsertItem(IMenuItem iMenuItem, int index)
 		{
 			var menuItem = iMenuItem as MenuItem;
-			Control widget;
+			Widget widget;
 			if (menuItem != null)
 			{
 				menuItem.Changed += MenuItemOnChanged;
@@ -359,7 +359,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Control> genericEventArgs)
+		private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Widget> genericEventArgs)
 		{
 			if (OpenMenuItem == null) return;
 

@@ -351,7 +351,7 @@ namespace Myra.Graphics2D.UI.Properties
 				}
 
 				var value = record.GetValue(_object);
-				Control valueWidget = null;
+				Widget valueWidget = null;
 
 				var oldY = y;
 

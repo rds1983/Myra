@@ -24,9 +24,9 @@ namespace Myra.Graphics2D.UI
 		private readonly Grid _titleGrid;
 		private readonly Label _titleLabel;
 		private readonly ImageButton _closeButton;
-		private Control _content;
-		private Control _previousKeyboardFocus;
-		private Control _previousMouseWheelFocus;
+		private Widget _content;
+		private Widget _previousKeyboardFocus;
+		private Widget _previousMouseWheelFocus;
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -99,7 +99,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[Content]
-		public Control Content
+		public Widget Content
 		{
 			get
 			{

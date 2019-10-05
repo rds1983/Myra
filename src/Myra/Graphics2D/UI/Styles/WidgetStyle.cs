@@ -1,6 +1,6 @@
 ﻿namespace Myra.Graphics2D.UI.Styles
 {
-	public class ControlStyle: IItemWithId
+	public class WidgetStyle: IItemWithId
 	{
 		public string Id { get; set; }
 
@@ -22,11 +22,11 @@
 		public int? PaddingTop { get; set; }
 		public int? PaddingBottom { get; set; }
 
-		public ControlStyle()
+		public WidgetStyle()
 		{
 		}
 
-		public ControlStyle(ControlStyle style)
+		public WidgetStyle(WidgetStyle style)
 		{
 			Width = style.Width;
 			Height = style.Height;
@@ -44,9 +44,9 @@
 			PaddingBottom = style.PaddingBottom;
 		}
 
-		public virtual ControlStyle Clone()
+		public virtual WidgetStyle Clone()
 		{
-			return new ControlStyle(this);
+			return new WidgetStyle(this);
 		}
 	}
 }

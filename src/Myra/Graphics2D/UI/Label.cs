@@ -16,7 +16,7 @@ using Xenko.Graphics;
 
 namespace Myra.Graphics2D.UI
 {
-	public class Label : Control
+	public class Label : Widget
 	{
 		private readonly FormattedText _formattedText = new FormattedText();
 		private bool _wrap = false;

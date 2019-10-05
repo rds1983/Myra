@@ -19,7 +19,7 @@
 			LabelStyle = textBlockStyle != null ? new LabelStyle(textBlockStyle) : null;
 		}
 
-		public override ControlStyle Clone()
+		public override WidgetStyle Clone()
 		{
 			return new TextButtonStyle(this);
 		}
