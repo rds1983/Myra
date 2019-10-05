@@ -1,56 +1,63 @@
 <Project StylesheetPath="commodore-64/ui_stylesheet.xml">
-  <Project.ExportOptions Namespace="Myra.Samples.CustomUIStylesheet" Class="AllWidgets" OutputPath="D:\Projects\Hebron\Myra\Source\Samples\Myra.Samples.CustomUIStylesheet" />
+  <ExportOptions Namespace="Myra.Samples.CustomUIStylesheet" Class="AllWidgets" OutputPath="D:\Projects\Hebron\Myra\Source\Samples\Myra.Samples.CustomUIStylesheet" />
   <HorizontalSplitPane GridRow="1">
-    <ScrollViewer>
+    <ScrollPane>
       <Grid ColumnSpacing="8" RowSpacing="8" Id="_gridRight">
-        <Grid.ColumnsProportions>
-          <Proportion Type="Auto" />
+        <ColumnsProportions>
+          <Proportion />
           <Proportion Type="Fill" />
-        </Grid.ColumnsProportions>
-        <Grid.DefaultRowProportion Type="Auto" /> 
-        <Label Text="Button:" Id="" />
+        </ColumnsProportions>
+        <RowsProportions>
+          <Proportion />
+          <Proportion />
+          <Proportion />
+          <Proportion />
+          <Proportion />
+          <Proportion />
+        </RowsProportions>
+        <TextBlock Text="Button:" Id="" />
         <ImageTextButton Text="Button" Id="_button" GridColumn="1" />
         <CheckBox Text="This is checkbox" GridRow="1" GridColumnSpan="2" />
-        <Label Text="Slider:" Id="" GridRow="2" />
+        <TextBlock Text="Slider:" Id="" GridRow="2" />
         <HorizontalSlider GridColumn="1" GridRow="2" />
-        <Label Text="Combo Box:" GridRow="3" />
+        <TextBlock Text="Combo Box:" GridRow="3" />
         <ComboBox GridColumn="1" GridRow="3">
           <ListItem Text="Item 1" />
           <ListItem Text="Item 2" />
           <ListItem Text="Item 3" />
         </ComboBox>
-        <Label Text="Text Field:" GridRow="4" />
-        <TextBox Text="" GridColumn="1" GridRow="4" />
-        <Label Text="List Box:" GridRow="5" />
+        <TextBlock Text="Text Field:" GridRow="4" />
+        <TextField Text="" GridColumn="1" GridRow="4" />
+        <TextBlock Text="List Box:" GridRow="5" />
         <ListBox GridColumn="1" GridRow="5">
           <ListItem Text="Item 1" />
           <ListItem Text="Item 2" />
           <ListItem Text="Item 3" />
         </ListBox>
       </Grid>
-    </ScrollViewer>
+    </ScrollPane>
     <VerticalSplitPane>
       <Grid RowSpacing="8">
-        <Grid.ColumnsProportions>
+        <ColumnsProportions>
           <Proportion Type="Fill" />
-        </Grid.ColumnsProportions>
-        <Grid.RowsProportions>
-          <Proportion Type="Auto" />
+        </ColumnsProportions>
+        <RowsProportions>
+          <Proportion />
           <Proportion Type="Fill" />
-        </Grid.RowsProportions>
-        <Label Text="Vertical Slider:" />
+        </RowsProportions>
+        <TextBlock Text="Vertical Slider:" />
         <VerticalSlider HorizontalAlignment="Center" GridRow="1" />
       </Grid>
       <Grid RowSpacing="8">
-        <Grid.ColumnsProportions>
+        <ColumnsProportions>
           <Proportion Type="Fill" />
-        </Grid.ColumnsProportions>
-        <Grid.RowsProportions>
-          <Proportion Type="Auto" />
-          <Proportion Type="Auto" />
+        </ColumnsProportions>
+        <RowsProportions>
+          <Proportion />
+          <Proportion />
           <Proportion Type="Fill" />
-        </Grid.RowsProportions>
-        <Label Text="Progress Bars:" />
+        </RowsProportions>
+        <TextBlock Text="Progress Bars:" />
         <HorizontalProgressBar Id="_horizontalProgressBar" GridRow="1" />
         <VerticalProgressBar HorizontalAlignment="Center" Id="_verticalProgressBar" GridRow="2" />
       </Grid>
