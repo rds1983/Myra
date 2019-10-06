@@ -110,7 +110,7 @@ namespace Myra.Graphics2D.UI
 			if (asBox != null)
 			{
 				var value = p.GetValue(o);
-				if (p.Name == DefaultProportionName && value == Proportion.BoxDefault)
+				if (p.Name == DefaultProportionName && value == Proportion.StackPanelDefault)
 				{
 					return false;
 				}

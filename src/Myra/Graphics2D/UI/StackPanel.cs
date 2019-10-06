@@ -22,7 +22,7 @@ namespace Myra.Graphics2D.UI
 			get;
 		}
 
-		[Category("Box")]
+		[Category("StackPanel")]
 		[DefaultValue(false)]
 		public bool ShowGridLines
 		{
@@ -30,7 +30,7 @@ namespace Myra.Graphics2D.UI
 			set => InternalChild.ShowGridLines = value;
 		}
 
-		[Category("Box")]
+		[Category("StackPanel")]
 		[DefaultValue(0)]
 		public int Spacing
 		{
@@ -107,7 +107,7 @@ namespace Myra.Graphics2D.UI
 			VerticalAlignment = VerticalAlignment.Stretch;
 
 			InternalChild = new Grid();
-			DefaultProportion = Proportion.BoxDefault;
+			DefaultProportion = Proportion.StackPanelDefault;
 			Widgets.CollectionChanged += Widgets_CollectionChanged;
 		}
 
