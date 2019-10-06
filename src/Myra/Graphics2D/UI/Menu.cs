@@ -263,7 +263,6 @@ namespace Myra.Graphics2D.UI
 
 				menuItemButton.MouseEntered += MouseOnMovement;
 				menuItemButton.MouseMoved += MouseOnMovement;
-				menuItemButton.MouseLeft += MouseOnLeft;
 				menuItemButton.SubMenu.Items = menuItem.Items;
 				menuItemButton.Toggleable = menuItem.Items.Count > 0 || menuItem.Toggleable;
 
@@ -321,7 +320,6 @@ namespace Myra.Graphics2D.UI
 				asMenuItemButton.Click -= ButtonOnClick;
 				asMenuItemButton.MouseEntered -= MouseOnMovement;
 				asMenuItemButton.MouseMoved -= MouseOnMovement;
-				asMenuItemButton.MouseLeft -= MouseOnLeft;
 			}
 
 			var index = InternalChild.Widgets.IndexOf(widget);
@@ -381,10 +379,6 @@ namespace Myra.Graphics2D.UI
 			{
 				menuItemButton.IsPressed = true;
 			}
-		}
-
-		private void MouseOnLeft(object sender, EventArgs eventArgs)
-		{
 		}
 
 		private void ButtonOnPressedChanged(object sender, EventArgs eventArgs)
