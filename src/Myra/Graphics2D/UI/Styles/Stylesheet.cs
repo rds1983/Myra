@@ -4,6 +4,8 @@ using System.Xml.Serialization;
 using System.Xml.Linq;
 using Myra.MML;
 using Myra.Utility;
+using System.Collections;
+using System.Linq;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -622,6 +624,32 @@ namespace Myra.Graphics2D.UI.Styles
 			loadContext.Load(result, xDoc.Root);
 
 			return result;
+		}
+
+		public string[] GetStylesByWidgetName(string name)
+		{
+			// Special case
+			if (name.Contains("Button"))
+			{
+				name = "Button";
+			}
+
+			var propertyName = name + "Styles";
+			var property = GetType().GetProperty(propertyName);
+			if (property == null)
+			{
+				return null;
+			}
+
+			var dict = (IDictionary)property.GetValue(this);
+
+			var result = new List<string>();
+			foreach(var k in dict.Keys)
+			{
+				result.Add((string)k);
+			}
+
+			return result.ToArray();
 		}
 	}
 }

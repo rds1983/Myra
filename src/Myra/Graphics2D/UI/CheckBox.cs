@@ -38,14 +38,9 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
-		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		public override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
 			ApplyImageTextButtonStyle(stylesheet.CheckBoxStyles[name]);
-		}
-
-		internal override string[] GetStyleNames(Stylesheet stylesheet)
-		{
-			return stylesheet.CheckBoxStyles.Keys.ToArray();
 		}
 	}
 }

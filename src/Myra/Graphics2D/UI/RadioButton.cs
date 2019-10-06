@@ -69,14 +69,9 @@ namespace Myra.Graphics2D.UI
 			return !IsPressed;
 		}
 
-		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		public override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
 			ApplyImageTextButtonStyle(stylesheet.RadioButtonStyles[name]);
-		}
-
-		internal override string[] GetStyleNames(Stylesheet stylesheet)
-		{
-			return stylesheet.RadioButtonStyles.Keys.ToArray();
 		}
 	}
 }

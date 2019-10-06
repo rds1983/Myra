@@ -83,14 +83,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		public override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
 			ApplyMenuStyle(stylesheet.VerticalMenuStyles[name]);
-		}
-
-		internal override string[] GetStyleNames(Stylesheet stylesheet)
-		{
-			return stylesheet.VerticalMenuStyles.Keys.ToArray();
 		}
 	}
 }

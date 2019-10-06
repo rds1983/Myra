@@ -288,14 +288,9 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		public override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
 			ApplyComboBoxStyle(stylesheet.ComboBoxStyles[name]);
-		}
-
-		internal override string[] GetStyleNames(Stylesheet stylesheet)
-		{
-			return stylesheet.ComboBoxStyles.Keys.ToArray();
 		}
 	}
 }

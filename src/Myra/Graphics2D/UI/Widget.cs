@@ -48,26 +48,14 @@ namespace Myra.Graphics2D.UI
 		private float _opacity = 1.0f;
 
 		private bool _enabled;
-		private string _styleName;
 
 		[DefaultValue(null)]
 		public string Id { get; set; }
 
-		[Selection(typeof(StyleNamesProvider))]
-		public string StyleName
-		{
-			get { return _styleName; }
-			set
-			{
-				if (value == _styleName)
-				{
-					return;
-				}
-
-				_styleName = value;
-				SetStyleByName(Stylesheet.Current, value);
-			}
-		}
+		/// <summary>
+		/// Internal use only. (MyraPad)
+		/// </summary>
+		public string StyleName { get; set; }
 
 		[Category("Layout")]
 		[DefaultValue(0)]
@@ -1041,20 +1029,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		protected virtual void SetStyleByName(Stylesheet stylesheet, string name)
+		public virtual void SetStyleByName(Stylesheet stylesheet, string name)
 		{
-		}
-
-		internal virtual string[] GetStyleNames(Stylesheet stylesheet)
-		{
-			return null;
-		}
-
-		public virtual void ApplyStylesheet(Stylesheet stylesheet)
-		{
-			var styleName = string.IsNullOrEmpty(StyleName) ? Stylesheet.DefaultStyleName : StyleName;
-
-			SetStyleByName(stylesheet, styleName);
 		}
 
 		public virtual void OnMouseLeft()

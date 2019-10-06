@@ -227,14 +227,9 @@ namespace Myra.Graphics2D.UI
 			IsPressed = false;
 		}
 
-		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		public override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
 			ApplyButtonStyle(stylesheet.ButtonStyles[name]);
-		}
-
-		internal override string[] GetStyleNames(Stylesheet stylesheet)
-		{
-			return stylesheet.ButtonStyles.Keys.ToArray();
 		}
 	}
 }

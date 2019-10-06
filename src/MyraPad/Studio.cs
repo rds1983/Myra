@@ -19,6 +19,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Threading;
 using System.Xml.Linq;
 using SpriteFontPlus;
+using System.Reflection;
 
 namespace MyraPad
 {
@@ -341,6 +342,8 @@ namespace MyraPad
 				IgnoreCollections = true
 			};
 			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
+			_propertyGrid.CustomValuesProvider = RecordValuesProvider;
+			_propertyGrid.CustomSetter = RecordSetter;
 
 			_ui._propertyGridPane.Content = _propertyGrid;
 
@@ -350,6 +353,50 @@ namespace MyraPad
 			_desktop.Widgets.Add(_ui);
 
 			UpdateMenuFile();
+		}
+
+		private object[] RecordValuesProvider(Record record)
+		{
+			if (record.Name != "StyleName")
+			{
+				// Default processing
+				return null;
+			}
+
+			var widget = _propertyGrid.Object as Widget;
+			if (widget == null)
+			{
+				return null;
+			}
+
+			var styleNames = Project.Stylesheet.GetStylesByWidgetName(widget.GetType().Name);
+			if (styleNames == null || styleNames.Length < 2)
+			{
+				// Dont show this property if there's only one style(Default) or less
+				styleNames = new string[0];
+			}
+
+			return (from s in styleNames select (object)s).ToArray();
+		}
+
+		private bool RecordSetter(Record record, object obj, object value)
+		{
+			if (record.Name != "StyleName")
+			{
+				// Default processing
+				return false;
+			}
+
+			var widget = obj as Widget;
+			if (widget == null)
+			{
+				return false;
+			}
+
+			widget.SetStyleByName(Project.Stylesheet, (string)value);
+			widget.StyleName = (string)value;
+
+			return true;
 		}
 
 		private void _desktop_ContextMenuClosed(object sender, GenericEventArgs<Widget> e)
@@ -995,25 +1042,6 @@ namespace MyraPad
 				{
 					IterateWidget(child, a);
 				}
-			}
-		}
-
-		private void SetStylesheet(Project project, Stylesheet stylesheet)
-		{
-			if (project.Root != null)
-			{
-				IterateWidget(project.Root, w => w.ApplyStylesheet(stylesheet));
-			}
-
-			project.Stylesheet = stylesheet;
-
-			if (stylesheet != null && stylesheet.DesktopStyle != null)
-			{
-				_ui._projectHolder.Background = stylesheet.DesktopStyle.Background;
-			}
-			else
-			{
-				_ui._projectHolder.Background = null;
 			}
 		}
 

@@ -347,14 +347,9 @@ namespace Myra.Graphics2D.UI
 			Font = style.Font;
 		}
 
-		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		public override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
 			ApplyLabelStyle(stylesheet.LabelStyles[name]);
-		}
-
-		internal override string[] GetStyleNames(Stylesheet stylesheet)
-		{
-			return stylesheet.LabelStyles.Keys.ToArray();
 		}
 	}
 

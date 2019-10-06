@@ -8,7 +8,6 @@ using Myra.Graphics2D.UI.ColorPicker;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Serialization;
-using Myra.Attributes;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -23,79 +22,6 @@ namespace Myra.Graphics2D.UI.Properties
 	public class PropertyGrid : SingleItemContainer<Grid>
 	{
 		private const string DefaultCategoryName = "Miscellaneous";
-
-		private abstract class Record
-		{
-			public bool HasSetter { get; set; }
-			public IItemsProvider ItemsProvider { get; set; }
-
-			public abstract string Name { get; }
-			public abstract Type Type { get; }
-			public string Category { get; set; }
-
-			public abstract object GetValue(object obj);
-			public abstract void SetValue(object obj, object value);
-		}
-
-		private class PropertyRecord : Record
-		{
-			private readonly PropertyInfo _propertyInfo;
-
-			public override string Name
-			{
-				get { return _propertyInfo.Name; }
-			}
-
-			public override Type Type
-			{
-				get { return _propertyInfo.PropertyType; }
-			}
-
-			public PropertyRecord(PropertyInfo propertyInfo)
-			{
-				_propertyInfo = propertyInfo;
-			}
-
-			public override object GetValue(object obj)
-			{
-				return _propertyInfo.GetValue(obj, new object[0]);
-			}
-
-			public override void SetValue(object obj, object value)
-			{
-				_propertyInfo.SetValue(obj, value);
-			}
-		}
-
-		private class FieldRecord : Record
-		{
-			private readonly FieldInfo _fieldInfo;
-
-			public override string Name
-			{
-				get { return _fieldInfo.Name; }
-			}
-
-			public override Type Type
-			{
-				get { return _fieldInfo.FieldType; }
-			}
-
-			public FieldRecord(FieldInfo fieldInfo)
-			{
-				_fieldInfo = fieldInfo;
-			}
-
-			public override object GetValue(object obj)
-			{
-				return _fieldInfo.GetValue(obj);
-			}
-
-			public override void SetValue(object obj, object value)
-			{
-				_fieldInfo.SetValue(obj, value);
-			}
-		}
 
 		private class SubGrid : SingleItemContainer<Grid>
 		{
@@ -280,6 +206,9 @@ namespace Myra.Graphics2D.UI.Properties
 			}
 		}
 
+		public Func<Record, object[]> CustomValuesProvider;
+		public Func<Record, object, object, bool> CustomSetter;
+
 		public event EventHandler<GenericEventArgs<string>> PropertyChanged;
 
 		private PropertyGrid(TreeStyle style, string category, Record parentProperty, PropertyGrid parentGrid = null)
@@ -338,6 +267,16 @@ namespace Myra.Graphics2D.UI.Properties
 			textBlock.Text = string.Format("{0} Items", count);
 		}
 
+		private void SetValue(Record record, object obj, object value)
+		{
+			if (CustomSetter != null && CustomSetter(record, obj, value))
+			{
+				return;
+			}
+
+			record.SetValue(obj, value);
+		}
+
 		private void FillSubGrid(ref int y, IReadOnlyList<Record> records)
 		{
 			for (var i = 0; i < records.Count; ++i)
@@ -358,24 +297,27 @@ namespace Myra.Graphics2D.UI.Properties
 				var propertyType = record.Type;
 
 				Proportion rowProportion;
-				if (record.ItemsProvider != null)
+				object[] customValues = null;
+				if (CustomValuesProvider != null && (customValues = CustomValuesProvider(record)) != null)
 				{
-					var values = record.ItemsProvider.Items;
+					if (customValues.Length == 0)
+					{
+						continue;
+					}
 
 					var cb = new ComboBox();
-					foreach (var v in values)
+					foreach (var v in customValues)
 					{
 						cb.Items.Add(new ListItem(v.ToString(), null, v));
 					}
 
-
-					cb.SelectedIndex = Array.IndexOf(values, value);
+					cb.SelectedIndex = Array.IndexOf(customValues, value);
 					if (hasSetter)
 					{
 						cb.SelectedIndexChanged += (sender, args) =>
 						{
-							var item = cb.SelectedIndex != null ? values[cb.SelectedIndex.Value] : null;
-							record.SetValue(_object, item);
+							var item = cb.SelectedIndex != null ? customValues[cb.SelectedIndex.Value] : null;
+							SetValue(record, _object, item);
 							FireChanged(propertyType.Name);
 						};
 					}
@@ -398,7 +340,7 @@ namespace Myra.Graphics2D.UI.Properties
 					{
 						cb.Click += (sender, args) =>
 						{
-							record.SetValue(_object, cb.IsPressed);
+							SetValue(record, _object, cb.IsPressed);
 							FireChanged(propertyType.Name);
 						};
 					}
@@ -472,7 +414,7 @@ namespace Myra.Graphics2D.UI.Properties
 								}
 
 								image.Color = dlg.Color;
-								record.SetValue(_object, dlg.Color);
+								SetValue(record, _object, dlg.Color);
 
 								FireChanged(propertyType.Name);
 							};
@@ -508,7 +450,7 @@ namespace Myra.Graphics2D.UI.Properties
 						{
 							if (cb.SelectedIndex != -1)
 							{
-								record.SetValue(_object, cb.SelectedIndex);
+								SetValue(record, _object, cb.SelectedIndex);
 								FireChanged(propertyType.Name);
 							}
 						};
@@ -553,7 +495,7 @@ namespace Myra.Graphics2D.UI.Properties
 									result = null;
 								}
 
-								record.SetValue(_object, result);
+								SetValue(record, _object, result);
 
 								if (record.Type.IsValueType)
 								{
@@ -625,7 +567,7 @@ namespace Myra.Graphics2D.UI.Properties
 									result = Convert.ChangeType(tf.Text, record.Type);
 								}
 
-								record.SetValue(_object, result);
+								SetValue(record, _object, result);
 
 								if (record.Type.IsValueType)
 								{
@@ -816,12 +758,6 @@ namespace Myra.Graphics2D.UI.Properties
 				{
 					HasSetter = hasSetter
 				};
-
-				var selectionAttr = property.FindAttribute<SelectionAttribute>();
-				if (selectionAttr != null)
-				{
-					record.ItemsProvider = (IItemsProvider)Activator.CreateInstance(selectionAttr.ItemsProviderType, _object);
-				}
 
 				var categoryAttr = property.FindAttribute<CategoryAttribute>();
 				record.Category = categoryAttr != null ? categoryAttr.Category : DefaultCategoryName;

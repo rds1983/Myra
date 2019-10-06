@@ -9,6 +9,7 @@ using System;
 using Myra.MML;
 using System.Collections.Generic;
 using Myra.Attributes;
+using System.Linq;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -151,7 +152,7 @@ namespace Myra.Graphics2D.UI
 			return new LoadContext
 			{
 				LegacyClassNames = LegacyClassNames,
-				ObjectCreator = t => CreateItem(t, stylesheet),
+				ObjectCreator = (t, el) => CreateItem(t, el, stylesheet),
 				Namespace = typeof(Widget).Namespace
 			};
 		}
@@ -222,16 +223,16 @@ namespace Myra.Graphics2D.UI
 				return null;
 			}
 
-			var item = CreateItem(itemType, stylesheet);
+			var item = CreateItem(itemType, xDoc.Root, stylesheet);
 			var loadContext = CreateLoadContext(stylesheet);
 			loadContext.Load(item, xDoc.Root);
 
 			return item;
 		}
 
-		public static object LoadObjectFromXml(string data)
+		public object LoadObjectFromXml(string data)
 		{
-			return LoadObjectFromXml(data, Stylesheet.Current);
+			return LoadObjectFromXml(data, Stylesheet);
 		}
 
 		public string SaveObjectToXml(object obj, string tagName)
@@ -240,7 +241,7 @@ namespace Myra.Graphics2D.UI
 			return saveContext.Save(obj, true, tagName).ToString();
 		}
 
-		private static object CreateItem(Type type, Stylesheet stylesheet)
+		private static object CreateItem(Type type, XElement element, Stylesheet stylesheet)
 		{
 			// Check whether item has constructor with stylesheet param
 			var acceptsStylesheet = false;
@@ -259,6 +260,22 @@ namespace Myra.Graphics2D.UI
 
 			if (acceptsStylesheet)
 			{
+				// Determine style name
+				var styleNameAttr = element.Attribute("StyleName");
+				if (styleNameAttr != null)
+				{
+					var styleName = styleNameAttr.Value;
+
+					var stylesNames = stylesheet.GetStylesByWidgetName(type.Name);
+					if (stylesNames != null && stylesNames.Contains(styleName))
+					{
+						return Activator.CreateInstance(type, stylesheet, styleName);
+					}
+
+					// Remove property with absent value
+					styleNameAttr.Remove();
+				}
+
 				return Activator.CreateInstance(type, stylesheet);
 			}
 
@@ -301,7 +318,12 @@ namespace Myra.Graphics2D.UI
 			}
 
 			// Fetch style from the dict
-			object obj = stylesDict[styleName];
+			if (!stylesDict.Contains(styleName))
+			{
+				styleName = Stylesheet.DefaultStyleName;
+			}
+
+			object obj =  stylesDict[styleName];
 
 			// Now find corresponding property
 			PropertyInfo styleProperty = null;

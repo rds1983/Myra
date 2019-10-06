@@ -446,14 +446,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		public override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
 			ApplyTreeStyle(stylesheet.TreeStyles[name]);
-		}
-
-		internal override string[] GetStyleNames(Stylesheet stylesheet)
-		{
-			return stylesheet.TreeStyles.Keys.ToArray();
 		}
 	}
 }

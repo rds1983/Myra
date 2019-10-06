@@ -421,14 +421,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		public override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
 			ApplyWindowStyle(stylesheet.WindowStyles[name]);
-		}
-
-		internal override string[] GetStyleNames(Stylesheet stylesheet)
-		{
-			return stylesheet.WindowStyles.Keys.ToArray();
 		}
 	}
 }

@@ -413,14 +413,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		public override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
 			ApplySpinButtonStyle(stylesheet.SpinButtonStyles[name]);
-		}
-
-		internal override string[] GetStyleNames(Stylesheet stylesheet)
-		{
-			return stylesheet.SpinButtonStyles.Keys.ToArray();
 		}
 
 		private void UpButtonOnUp(object sender, EventArgs eventArgs)

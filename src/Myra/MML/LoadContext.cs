@@ -28,7 +28,7 @@ namespace Myra.MML
 		public Dictionary<string, string> LegacyPropertyNames = null;
 		public Dictionary<string, Color> Colors;
 		public HashSet<string> NodesToIgnore = null;
-		public Func<Type, object> ObjectCreator = (type) => Activator.CreateInstance(type);
+		public Func<Type, XElement, object> ObjectCreator = (type, el) => Activator.CreateInstance(type);
 		public string Namespace;
 		public Assembly Assembly = typeof(Widget).Assembly;
 		public Func<string, IRenderable> TextureGetter = null;
@@ -143,7 +143,7 @@ namespace Myra.MML
 							// List
 							foreach (var child2 in child.Elements())
 							{
-								var item = ObjectCreator(property.PropertyType.GenericTypeArguments[0]);
+								var item = ObjectCreator(property.PropertyType.GenericTypeArguments[0], child2);
 								Load(item, child2);
 								asList.Add(item);
 							}
@@ -157,7 +157,7 @@ namespace Myra.MML
 							// Dict
 							foreach (var child2 in child.Elements())
 							{
-								var item = ObjectCreator(property.PropertyType.GenericTypeArguments[1]);
+								var item = ObjectCreator(property.PropertyType.GenericTypeArguments[1], child2);
 								Load(item, child2);
 
 								var id = string.Empty;
@@ -179,7 +179,7 @@ namespace Myra.MML
 						}
 						else
 						{
-							var newValue = ObjectCreator(property.PropertyType);
+							var newValue = ObjectCreator(property.PropertyType, child);
 							Load(newValue, child);
 							property.SetValue(obj, newValue);
 						}
@@ -204,7 +204,7 @@ namespace Myra.MML
 					var itemType = Assembly.GetType(Namespace + "." + widgetName);
 					if (itemType != null)
 					{
-						var item = ObjectCreator(itemType);
+						var item = ObjectCreator(itemType, child);
 						Load(item, child);
 
 						if (contentProperty == null)

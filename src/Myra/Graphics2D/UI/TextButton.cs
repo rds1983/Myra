@@ -107,7 +107,7 @@ namespace Myra.Graphics2D.UI
 			InternalChild.IsPressed = IsPressed;
 		}
 
-		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		public override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
 			ApplyTextButtonStyle(new TextButtonStyle(stylesheet.ButtonStyles[name], stylesheet.LabelStyle));
 		}

@@ -18,9 +18,9 @@
   <DesktopStyle Background="blue" />
   <TextBlockStyles>
     <TextBlockStyle Font="commodore-64" TextColor="white" />
-    <TextBlockStyle Id="optional" Font="commodore-64" />
-    <TextBlockStyle Id="error" Font="commodore-64" />
-    <TextBlockStyle Id="title" Font="commodore-64" />
+    <TextBlockStyle Id="optional" Font="commodore-64" TextColor="green" />
+    <TextBlockStyle Id="error" Font="commodore-64" TextColor="light_grey" />
+    <TextBlockStyle Id="title" Font="commodore-64" TextColor="light_blue" />
   </TextBlockStyles>
   <TextFieldStyles>
     <TextFieldStyle Background="white" TextColor="black" Font="commodore-64" Cursor="cursor-black" Selection="light-blue" />
@@ -75,7 +75,7 @@
     </ListBoxStyle>
     <ListBoxStyle Id="dimmed">
       <ListItemStyle PressedBackground="light-blue">
-        <LabelStyle Font="commodore-64" />
+        <LabelStyle Font="commodore-64" TextColor="green" PressedTextColor="light_grey" />
       </ListItemStyle>
     </ListBoxStyle>
   </ListBoxStyles>
@@ -101,22 +101,10 @@
     <WindowStyle Background="window" PaddingLeft="25" PaddingRight="25" PaddingTop="25" PaddingBottom="25">
       <TitleStyle Font="commodore-64" TextColor="white" />
     </WindowStyle>
-    <WindowStyle Id="dialog" Background="dialog">
-      <TitleStyle Font="commodore-64" />
-    </WindowStyle>
-    <WindowStyle Id="dialog-modal" Background="dialog">
-      <TitleStyle Font="commodore-64" />
-    </WindowStyle>
   </WindowStyles>
   <DialogStyles>
-    <DialogStyle Background="window" PaddingLeft="25" PaddingRight="25" PaddingTop="25" PaddingBottom="25">
+    <DialogStyle Background="dialog" PaddingLeft="25" PaddingRight="25" PaddingTop="25" PaddingBottom="25">
       <TitleStyle Font="commodore-64" TextColor="white" />
-    </DialogStyle>
-    <DialogStyle Id="dialog" Background="dialog">
-      <TitleStyle Font="commodore-64" />
-    </DialogStyle>
-    <DialogStyle Id="dialog-modal" Background="dialog">
-      <TitleStyle Font="commodore-64" />
     </DialogStyle>
   </DialogStyles>
 </Stylesheet>

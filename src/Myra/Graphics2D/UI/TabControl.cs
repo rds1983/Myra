@@ -197,14 +197,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		public override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
 			ApplyTabControlStyle(stylesheet.TabControlStyles[name]);
-		}
-
-		internal override string[] GetStyleNames(Stylesheet stylesheet)
-		{
-			return stylesheet.TabControlStyles.Keys.ToArray();
 		}
 	}
 }

@@ -714,14 +714,9 @@ namespace Myra.Graphics2D.UI
 			_startBoundsPos = null;
 		}
 
-		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		public override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
 			ApplyScrollViewerStyle(stylesheet.ScrollViewerStyles[name]);
-		}
-
-		internal override string[] GetStyleNames(Stylesheet stylesheet)
-		{
-			return stylesheet.ScrollViewerStyles.Keys.ToArray();
 		}
 	}
 }

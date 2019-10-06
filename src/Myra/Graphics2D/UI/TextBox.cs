@@ -1232,14 +1232,9 @@ namespace Myra.Graphics2D.UI
 			Font = style.Font;
 		}
 
-		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		public override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
 			ApplyTextBoxStyle(stylesheet.TextBoxStyles[name]);
-		}
-
-		internal override string[] GetStyleNames(Stylesheet stylesheet)
-		{
-			return stylesheet.TextBoxStyles.Keys.ToArray();
 		}
 
 		public float GetWidth(int index)

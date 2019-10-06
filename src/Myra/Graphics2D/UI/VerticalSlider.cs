@@ -64,14 +64,9 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
-		protected override void SetStyleByName(Stylesheet stylesheet, string name)
+		public override void SetStyleByName(Stylesheet stylesheet, string name)
 		{
 			ApplySliderStyle(stylesheet.VerticalSliderStyles[name]);
-		}
-
-		internal override string[] GetStyleNames(Stylesheet stylesheet)
-		{
-			return stylesheet.VerticalSliderStyles.Keys.ToArray();
 		}
 	}
 }
