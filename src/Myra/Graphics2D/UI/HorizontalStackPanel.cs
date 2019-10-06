@@ -1,6 +1,6 @@
 ﻿namespace Myra.Graphics2D.UI
 {
-	public class HorizontalStackPanel : Box
+	public class HorizontalStackPanel : StackPanel
 	{
 		public override Orientation Orientation => Orientation.Horizontal;
 	}

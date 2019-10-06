@@ -17,7 +17,7 @@ using Xenko.Input;
 
 namespace Myra.Graphics2D.UI
 {
-	public abstract class Menu : SingleItemContainer<Box>, IMenuItemsContainer
+	public abstract class Menu : SingleItemContainer<StackPanel>, IMenuItemsContainer
 	{
 		private ObservableCollection<IMenuItem> _items;
 

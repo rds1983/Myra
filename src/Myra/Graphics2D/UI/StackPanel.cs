@@ -11,7 +11,7 @@ using Xenko.Core.Mathematics;
 
 namespace Myra.Graphics2D.UI
 {
-	public abstract class Box: SingleItemContainer<Grid>, IMultipleItemsContainer
+	public abstract class StackPanel: SingleItemContainer<Grid>, IMultipleItemsContainer
 	{
 		private bool _dirty = true;
 
@@ -101,7 +101,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		protected Box()
+		protected StackPanel()
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;

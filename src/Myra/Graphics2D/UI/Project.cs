@@ -87,7 +87,7 @@ namespace Myra.Graphics2D.UI
 			{
 				var container = asWidget.Parent.Parent;
 				if (container != null &&
-				   (container is Box || container is SplitPane) &&
+				   (container is StackPanel || container is SplitPane) &&
 				   (p.Name == "GridRow" || p.Name == "GridColumn"))
 				{
 					// Skip serializing auto-assigned GridRow/GridColumn for SplitPane and Box containers
@@ -106,7 +106,7 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			var asBox = o as Box;
+			var asBox = o as StackPanel;
 			if (asBox != null)
 			{
 				var value = p.GetValue(o);

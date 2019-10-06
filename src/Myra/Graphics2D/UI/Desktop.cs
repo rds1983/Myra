@@ -1056,7 +1056,7 @@ namespace Myra.Graphics2D.UI
 
 			// Not real containers are solid as well
 			if (!(w is Grid ||
-				w is Box ||
+				w is StackPanel ||
 				w is Panel ||
 				w is SplitPane ||
 				w is ScrollViewer))
