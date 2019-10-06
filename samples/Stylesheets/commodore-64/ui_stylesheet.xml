@@ -24,7 +24,7 @@
   </TextBlockStyles>
   <TextFieldStyles>
     <TextFieldStyle Background="white" TextColor="black" Font="commodore-64" Cursor="cursor-black" Selection="light-blue" />
-    <TextFieldStyle Id="nobg" Font="commodore-64" Cursor="cursor" Selection="white" />
+    <TextFieldStyle Id="nobg" Font="commodore-64" TextColor="green" Cursor="cursor" Selection="white" />
   </TextFieldStyles>
   <ScrollPaneStyles>
     <ScrollPaneStyle HorizontalScrollBackground="scroll-bar" HorizontalScrollKnob="scroll-bar-horizontal-knob" VerticalScrollBackground="scroll-bar" VerticalScrollKnob="scroll-bar-vertical-knob" />
