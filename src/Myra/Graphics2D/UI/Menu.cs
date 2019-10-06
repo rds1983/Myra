@@ -120,7 +120,7 @@ namespace Myra.Graphics2D.UI
 				{
 					var widget = InternalChild.Widgets[i];
 					if ((KeyboardHoverButton != null && KeyboardHoverButton == widget) ||
-						(KeyboardHoverButton == null && widget.IsMouseOver))
+						(widget is MenuItemButton && ((MenuItemButton)widget).IsPressed))
 					{
 						hoverIndex = i;
 						break;
@@ -261,7 +261,8 @@ namespace Myra.Graphics2D.UI
 					menuItemButton.TextColor = menuItem.Color.Value;
 				}
 
-				menuItemButton.MouseEntered += MouseOnEntered;
+				menuItemButton.MouseEntered += MouseOnMovement;
+				menuItemButton.MouseMoved += MouseOnMovement;
 				menuItemButton.MouseLeft += MouseOnLeft;
 				menuItemButton.SubMenu.Items = menuItem.Items;
 				menuItemButton.Toggleable = menuItem.Items.Count > 0 || menuItem.Toggleable;
@@ -318,7 +319,8 @@ namespace Myra.Graphics2D.UI
 			{
 				asMenuItemButton.PressedChanged -= ButtonOnPressedChanged;
 				asMenuItemButton.Click -= ButtonOnClick;
-				asMenuItemButton.MouseEntered -= MouseOnEntered;
+				asMenuItemButton.MouseEntered -= MouseOnMovement;
+				asMenuItemButton.MouseMoved -= MouseOnMovement;
 				asMenuItemButton.MouseLeft -= MouseOnLeft;
 			}
 
@@ -367,7 +369,7 @@ namespace Myra.Graphics2D.UI
 			OpenMenuItem = null;
 		}
 
-		private void MouseOnEntered(object sender, EventArgs eventArgs)
+		private void MouseOnMovement(object sender, EventArgs eventArgs)
 		{
 			if (!IsOpen)
 			{

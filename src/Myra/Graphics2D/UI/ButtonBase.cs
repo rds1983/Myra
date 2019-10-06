@@ -199,7 +199,7 @@ namespace Myra.Graphics2D.UI
 				{
 					result = PressedBackground;
 				}
-				else if (Active && UseHoverRenderable && OverBackground != null)
+				else if (UseHoverRenderable && OverBackground != null)
 				{
 					result = OverBackground;
 				}

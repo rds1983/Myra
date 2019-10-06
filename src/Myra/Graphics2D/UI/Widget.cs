@@ -645,7 +645,7 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return IsMouseOver;
+				return IsMouseOver && Active;
 			}
 		}
 
@@ -692,7 +692,7 @@ namespace Myra.Graphics2D.UI
 			{
 				result = FocusedBackground;
 			}
-			else if (Active && UseHoverRenderable && OverBackground != null)
+			else if (UseHoverRenderable && OverBackground != null)
 			{
 				if (!Enabled && DisabledOverBackground != null)
 				{
