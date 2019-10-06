@@ -23,7 +23,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{869736F8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.StylesheetConverter", "..\..\src\Myra.StylesheetConverter\Myra.StylesheetConverter.csproj", "{A24DDA25-F639-4EE1-B71A-B97DDD647706}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.TextureAtlasConverter", "..\..\src\Myra.TextureAtlasConverter\Myra.TextureAtlasConverter.csproj", "{77935B44-15AE-4A3E-8D2B-79CC947648A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.TextureAtlasConverter", "..\..\src\Myra.TextureAtlasConverter\Myra.TextureAtlasConverter.csproj", "{77935B44-15AE-4A3E-8D2B-79CC947648A7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.CustomWidgets", "..\..\samples\Myra.Samples.CustomWidgets\Myra.Samples.CustomWidgets.csproj", "{9E05B57F-EB02-420F-9CD5-7BA0CB14D99C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,10 @@ Global
 		{77935B44-15AE-4A3E-8D2B-79CC947648A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77935B44-15AE-4A3E-8D2B-79CC947648A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77935B44-15AE-4A3E-8D2B-79CC947648A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E05B57F-EB02-420F-9CD5-7BA0CB14D99C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E05B57F-EB02-420F-9CD5-7BA0CB14D99C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E05B57F-EB02-420F-9CD5-7BA0CB14D99C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E05B57F-EB02-420F-9CD5-7BA0CB14D99C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,6 +86,7 @@ Global
 		{78E5B206-FC8A-42A3-A0DB-FB82D12183B6} = {869736F8-E5A4-4A51-BC70-0433C6ACE5D4}
 		{A24DDA25-F639-4EE1-B71A-B97DDD647706} = {869736F8-E5A4-4A51-BC70-0433C6ACE5D4}
 		{77935B44-15AE-4A3E-8D2B-79CC947648A7} = {869736F8-E5A4-4A51-BC70-0433C6ACE5D4}
+		{9E05B57F-EB02-420F-9CD5-7BA0CB14D99C} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35ACDF4E-2CE2-46B1-A19F-35DC131069A1}

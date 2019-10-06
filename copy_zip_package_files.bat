@@ -15,6 +15,7 @@ copy "src\Myra\bin\MonoGame\%CONFIGURATION%\Myra.dll" ZipPackage /Y
 copy "src\Myra\bin\MonoGame\%CONFIGURATION%\Myra.pdb" ZipPackage /Y
 copy "samples\Myra.Samples.AllWidgets\bin\MonoGame\%CONFIGURATION%\Myra.Samples.AllWidgets.exe" ZipPackage /Y
 copy "samples\Myra.Samples.CustomUIStylesheet\bin\MonoGame\%CONFIGURATION%\Myra.Samples.CustomUIStylesheet.exe" ZipPackage /Y
+copy "samples\Myra.Samples.CustomWidgets\bin\MonoGame\%CONFIGURATION%\Myra.Samples.CustomWidgets.exe" ZipPackage /Y
 copy "samples\Myra.Samples.GridContainer\bin\MonoGame\%CONFIGURATION%\Myra.Samples.GridContainer.exe" ZipPackage /Y
 copy "samples\Myra.Samples.SplitPaneContainer\bin\MonoGame\%CONFIGURATION%\Myra.Samples.SplitPaneContainer.exe" ZipPackage /Y
 copy "samples\Myra.Samples.Notepad\bin\MonoGame\%CONFIGURATION%\Myra.Samples.Notepad.exe" ZipPackage /Y
