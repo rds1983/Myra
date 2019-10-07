@@ -58,10 +58,11 @@ namespace Myra.Graphics2D.UI.Properties
 
 			public SubGrid(PropertyGrid parent, object value, string header, string category, Record parentProperty)
 			{
-				InternalChild = new Grid();
-
-				InternalChild.ColumnSpacing = 4;
-				InternalChild.RowSpacing = 4;
+				InternalChild = new Grid
+				{
+					ColumnSpacing = 4,
+					RowSpacing = 4
+				};
 
 				InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
 				InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
@@ -78,12 +79,13 @@ namespace Myra.Graphics2D.UI.Properties
 				};
 
 				// Mark
-				_mark = new ImageButton(parent.PropertyGridStyle.MarkStyle)
+				_mark = new ImageButton(null)
 				{
 					Toggleable = true,
 					HorizontalAlignment = HorizontalAlignment.Left,
 					VerticalAlignment = VerticalAlignment.Center
 				};
+				_mark.ApplyImageButtonStyle(parent.PropertyGridStyle.MarkStyle);
 
 				InternalChild.Widgets.Add(_mark);
 
@@ -103,11 +105,12 @@ namespace Myra.Graphics2D.UI.Properties
 
 				_mark.IsPressed = true;
 
-				var label = new Label(parent.PropertyGridStyle.LabelStyle)
+				var label = new Label(null)
 				{
 					Text = header,
 					GridColumn = 1
 				};
+				label.ApplyLabelStyle(parent.PropertyGridStyle.LabelStyle);
 
 				InternalChild.Widgets.Add(label);
 				InternalChild.Widgets.Add(_propertyGrid);

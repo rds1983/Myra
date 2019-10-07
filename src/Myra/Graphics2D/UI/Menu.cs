@@ -150,7 +150,7 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		internal MenuItemButton KeyboardHoverButton;
 
-		protected Menu(MenuStyle style)
+		protected Menu(string styleName)
 		{
 			if (Orientation == Orientation.Horizontal)
 			{
@@ -165,12 +165,9 @@ namespace Myra.Graphics2D.UI
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 
-			if (style != null)
-			{
-				ApplyMenuStyle(style);
-			}
-
 			Items = new ObservableCollection<IMenuItem>();
+
+			SetStyle(styleName);
 		}
 
 		private void ItemsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
@@ -279,13 +276,17 @@ namespace Myra.Graphics2D.UI
 			}
 			else
 			{
+				SeparatorWidget separator;
 				if (Orientation == Orientation.Horizontal)
 				{
-					widget = new VerticalSeparator(SeparatorStyle);
+					separator = new VerticalSeparator(null);
 				} else
 				{
-					widget = new HorizontalSeparator(SeparatorStyle);
+					separator = new HorizontalSeparator(null);
 				}
+
+				separator.ApplySeparatorStyle(SeparatorStyle);
+				widget = separator;
 			}
 
 			iMenuItem.Menu = this;

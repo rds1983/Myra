@@ -192,7 +192,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ImageTextButton(ImageTextButtonStyle style)
+		public ImageTextButton(string styleName = Stylesheet.DefaultStyleName)
 		{
 			InternalChild = new HorizontalStackPanel
 			{
@@ -207,7 +207,7 @@ namespace Myra.Graphics2D.UI
 
 			InternalChild.Widgets.Add(_image);
 
-			_textBlock = new Label(style != null ? style.LabelStyle : null)
+			_textBlock = new Label(null)
 			{
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				Wrap = true
@@ -215,28 +215,7 @@ namespace Myra.Graphics2D.UI
 
 			InternalChild.Widgets.Add(_textBlock);
 
-			if (style != null)
-			{
-				ApplyImageTextButtonStyle(style);
-			}
-		}
-
-		public ImageTextButton(Stylesheet stylesheet, string style) :
-			this(stylesheet.ButtonStyles[style].ToImageTextButtonStyle(stylesheet.LabelStyle))
-		{
-		}
-
-		public ImageTextButton(Stylesheet stylesheet) :
-			this(stylesheet.ButtonStyle.ToImageTextButtonStyle(stylesheet.LabelStyle))
-		{
-		}
-
-		public ImageTextButton(string style) : this(Stylesheet.Current, style)
-		{
-		}
-
-		public ImageTextButton() : this(Stylesheet.Current)
-		{
+			SetStyle(styleName);
 		}
 
 		public void ApplyImageTextButtonStyle(ImageTextButtonStyle style)
@@ -270,7 +249,7 @@ namespace Myra.Graphics2D.UI
 			_textBlock.IsPressed = IsPressed;
 		}
 
-		public override void SetStyleByName(Stylesheet stylesheet, string name)
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplyImageTextButtonStyle(new ImageTextButtonStyle(stylesheet.ButtonStyles[name], stylesheet.LabelStyle));
 		}

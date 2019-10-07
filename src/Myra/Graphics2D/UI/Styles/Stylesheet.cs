@@ -22,7 +22,7 @@ namespace Myra.Graphics2D.UI.Styles
 		private static readonly Dictionary<string, string> LegacyClassNames = new Dictionary<string, string>();
 		private static readonly Dictionary<string, string> LegacyPropertyNames = new Dictionary<string, string>();
 
-		public static readonly string DefaultStyleName = string.Empty;
+		public const string DefaultStyleName = "";
 
 		private static Stylesheet _current;
 

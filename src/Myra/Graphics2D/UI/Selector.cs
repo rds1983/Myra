@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Xml.Serialization;
 using Myra.Attributes;
+using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
 {
@@ -90,7 +91,7 @@ namespace Myra.Graphics2D.UI
 
 		public event EventHandler SelectedIndexChanged;
 
-		public Selector(WidgetType widget)
+		protected Selector(WidgetType widget)
 		{
 			InternalChild = widget;
 			widget.HorizontalAlignment = HorizontalAlignment.Stretch;

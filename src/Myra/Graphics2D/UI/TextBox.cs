@@ -316,7 +316,7 @@ namespace Myra.Graphics2D.UI
 
 		public event EventHandler CursorPositionChanged;
 
-		public TextBox(TextBoxStyle style)
+		public TextBox(string styleName = Stylesheet.DefaultStyleName)
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Top;
@@ -324,28 +324,9 @@ namespace Myra.Graphics2D.UI
 			AcceptsKeyboardFocus = true;
 			ClipToBounds = true;
 
-			if (style != null)
-			{
-				ApplyTextBoxStyle(style);
-			}
+			SetStyle(styleName);
 
 			BlinkIntervalInMs = 450;
-		}
-
-		public TextBox(Stylesheet stylesheet, string style) : this(stylesheet.TextBoxStyles[style])
-		{
-		}
-
-		public TextBox(Stylesheet stylesheet) : this(stylesheet.TextBoxStyle)
-		{
-		}
-
-		public TextBox(string style) : this(Stylesheet.Current, style)
-		{
-		}
-
-		public TextBox() : this(Stylesheet.Current)
-		{
 		}
 
 		private void DeleteChars(int pos, int l)
@@ -1232,7 +1213,7 @@ namespace Myra.Graphics2D.UI
 			Font = style.Font;
 		}
 
-		public override void SetStyleByName(Stylesheet stylesheet, string name)
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplyTextBoxStyle(stylesheet.TextBoxStyles[name]);
 		}

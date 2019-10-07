@@ -40,29 +40,13 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public HorizontalProgressBar(ProgressBarStyle style) : base(style)
+		public HorizontalProgressBar(string styleName = Stylesheet.DefaultStyleName) : base(styleName)
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Top;
 		}
 
-		public HorizontalProgressBar(Stylesheet stylesheet, string style) : this(stylesheet.HorizontalProgressBarStyles[style])
-		{
-		}
-
-		public HorizontalProgressBar(Stylesheet stylesheet) : this(stylesheet.HorizontalProgressBarStyle)
-		{
-		}
-
-		public HorizontalProgressBar(string style) : this(Stylesheet.Current, style)
-		{
-		}
-
-		public HorizontalProgressBar() : this(Stylesheet.Current)
-		{
-		}
-
-		public override void SetStyleByName(Stylesheet stylesheet, string name)
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplyProgressBarStyle(stylesheet.HorizontalProgressBarStyles[name]);
 		}

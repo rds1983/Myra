@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
@@ -85,7 +84,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ComboBox(ComboBoxStyle style) : base(new ImageTextButton((ImageTextButtonStyle)null))
+		public ComboBox(string styleName = Stylesheet.DefaultStyleName) : base(new ImageTextButton(null))
 		{
 			InternalChild.Toggleable = true;
 			InternalChild.PressedChanged += InternalChild_PressedChanged;
@@ -101,26 +100,7 @@ namespace Myra.Graphics2D.UI
 
 			DropdownMaximumHeight = 300;
 
-			if (style != null)
-			{
-				ApplyComboBoxStyle(style);
-			}
-		}
-
-		public ComboBox(Stylesheet stylesheet, string style) : this(stylesheet.ComboBoxStyles[style])
-		{
-		}
-
-		public ComboBox(Stylesheet stylesheet) : this(stylesheet.ComboBoxStyle)
-		{
-		}
-
-		public ComboBox(string style) : this(Stylesheet.Current, style)
-		{
-		}
-
-		public ComboBox() : this(Stylesheet.Current)
-		{
+			SetStyle(styleName);
 		}
 
 		private void DesktopOnContextMenuClosing(object sender, ContextMenuClosingEventArgs args)
@@ -288,7 +268,7 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public override void SetStyleByName(Stylesheet stylesheet, string name)
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplyComboBoxStyle(stylesheet.ComboBoxStyles[name]);
 		}

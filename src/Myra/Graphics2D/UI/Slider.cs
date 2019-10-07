@@ -144,17 +144,14 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		public event EventHandler<ValueChangedEventArgs<float>> ValueChangedByUser;
 
-		protected Slider(SliderStyle sliderStyle)
+		protected Slider(string styleName)
 		{
-			InternalChild = new ImageButton((ImageButtonStyle)null)
+			InternalChild = new ImageButton(null)
 			{
 				ReleaseOnTouchLeft = false
 			};
 
-			if (sliderStyle != null)
-			{
-				ApplySliderStyle(sliderStyle);
-			}
+			SetStyle(styleName);
 
 			Maximum = 100;
 		}

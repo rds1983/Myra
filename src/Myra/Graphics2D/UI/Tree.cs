@@ -93,29 +93,9 @@ namespace Myra.Graphics2D.UI
 
 		public event EventHandler SelectionChanged;
 
-		public Tree(TreeStyle style) : base(style, null)
+		public Tree(string styleName = Stylesheet.DefaultStyleName) : base(null, styleName)
 		{
 			AcceptsKeyboardFocus = true;
-			if (style != null)
-			{
-				ApplyTreeStyle(style);
-			}
-		}
-
-		public Tree(Stylesheet stylesheet, string style) : this(stylesheet.TreeStyles[style])
-		{
-		}
-
-		public Tree(Stylesheet stylesheet) : this(stylesheet.TreeStyle)
-		{
-		}
-
-		public Tree(string style) : this(Stylesheet.Current, style)
-		{
-		}
-
-		public Tree() : this(Stylesheet.Current)
-		{
 		}
 
 		private void UpdateHasRoot()
@@ -391,11 +371,6 @@ namespace Myra.Graphics2D.UI
 			base.UpdateMark();
 		}
 
-		public void ApplyTreeStyle(TreeStyle style)
-		{
-			ApplyTreeNodeStyle(style);
-		}
-
 		private static bool FindPath(Stack<TreeNode> path, TreeNode node)
 		{
 			var top = path.Peek();
@@ -444,11 +419,6 @@ namespace Myra.Graphics2D.UI
 				var p = path.Pop();
 				p.IsExpanded = true;
 			}
-		}
-
-		public override void SetStyleByName(Stylesheet stylesheet, string name)
-		{
-			ApplyTreeStyle(stylesheet.TreeStyles[name]);
 		}
 	}
 }

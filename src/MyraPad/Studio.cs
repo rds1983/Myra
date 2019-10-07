@@ -393,8 +393,7 @@ namespace MyraPad
 				return false;
 			}
 
-			widget.SetStyleByName(Project.Stylesheet, (string)value);
-			widget.StyleName = (string)value;
+			widget.SetStyle(Project.Stylesheet, (string)value);
 
 			return true;
 		}

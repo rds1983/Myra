@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using System;
-using System.Linq;
 using System.Xml.Serialization;
 
 namespace Myra.Graphics2D.UI
@@ -44,7 +43,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public TabControl(TabControlStyle style) : base(new Grid())
+		public TabControl(string styleName = Stylesheet.DefaultStyleName) : base(new Grid())
 		{
 			// First row contains button
 			InternalChild.RowsProportions.Add(new Proportion());
@@ -66,26 +65,7 @@ namespace Myra.Graphics2D.UI
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
 
-			if (style != null)
-			{
-				ApplyTabControlStyle(style);
-			}
-		}
-
-		public TabControl(Stylesheet stylesheet, string style) : this(stylesheet.TabControlStyles[style])
-		{
-		}
-
-		public TabControl(Stylesheet stylesheet) : this(stylesheet.TabControlStyle)
-		{
-		}
-
-		public TabControl(string style) : this(Stylesheet.Current, style)
-		{
-		}
-
-		public TabControl() : this(Stylesheet.Current)
-		{
+			SetStyle(styleName);
 		}
 
 		private void ItemOnChanged(object sender, EventArgs eventArgs)
@@ -197,7 +177,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void SetStyleByName(Stylesheet stylesheet, string name)
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplyTabControlStyle(stylesheet.TabControlStyles[name]);
 		}

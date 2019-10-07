@@ -54,7 +54,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ImageButton(ImageButtonStyle style)
+		public ImageButton(string styleName = Stylesheet.DefaultStyleName)
 		{
 			InternalChild = new Image
 			{
@@ -62,28 +62,7 @@ namespace Myra.Graphics2D.UI
 				VerticalAlignment = VerticalAlignment.Center
 			};
 
-			if (style != null)
-			{
-				ApplyImageButtonStyle(style);
-			}
-		}
-
-		public ImageButton(Stylesheet stylesheet, string style) :
-			this(stylesheet.ButtonStyles[style].ToImageButtonStyle())
-		{
-		}
-
-		public ImageButton(Stylesheet stylesheet) :
-			this(stylesheet.ButtonStyle.ToImageButtonStyle())
-		{
-		}
-
-		public ImageButton(string style) : this(Stylesheet.Current, style)
-		{
-		}
-
-		public ImageButton() : this(Stylesheet.Current)
-		{
+			SetStyle(styleName);
 		}
 
 		public void ApplyImageButtonStyle(ImageButtonStyle style)

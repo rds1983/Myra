@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Linq;
 using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
@@ -40,30 +39,13 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public VerticalProgressBar(ProgressBarStyle style) : base(style)
+		public VerticalProgressBar(string styleName = Stylesheet.DefaultStyleName) : base(styleName)
 		{
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Stretch;
 		}
 
-		public VerticalProgressBar(Stylesheet stylesheet, string style) :
-			this(stylesheet.VerticalProgressBarStyles[style])
-		{
-		}
-
-		public VerticalProgressBar(Stylesheet stylesheet) : this(stylesheet.VerticalProgressBarStyle)
-		{
-		}
-
-		public VerticalProgressBar(string style) : this(Stylesheet.Current, style)
-		{
-		}
-
-		public VerticalProgressBar() : this(Stylesheet.Current)
-		{
-		}
-
-		public override void SetStyleByName(Stylesheet stylesheet, string name)
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplyProgressBarStyle(stylesheet.VerticalProgressBarStyles[name]);
 		}

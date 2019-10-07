@@ -1,4 +1,4 @@
-﻿using Myra.Graphics2D.UI.Styles;
+﻿ using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
 {
@@ -6,10 +6,12 @@ namespace Myra.Graphics2D.UI
 	{
 		private readonly ISelector _selector;
 
-		public ListButton(ImageTextButtonStyle bs, ISelector selector) : base(bs)
+		public ListButton(ImageTextButtonStyle bs, ISelector selector) : base(null)
 		{
 			_selector = selector;
 			Toggleable = true;
+
+			ApplyImageTextButtonStyle(bs);
 		}
 
 		protected override bool CanChangeToggleable(bool value)

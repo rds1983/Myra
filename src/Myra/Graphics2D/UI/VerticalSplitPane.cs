@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Myra.Graphics2D.UI.Styles;
+﻿using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
 {
@@ -13,28 +12,11 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public VerticalSplitPane(SplitPaneStyle style) : base(style)
+		public VerticalSplitPane(string styleName = Stylesheet.DefaultStyleName) : base(styleName)
 		{
 		}
 
-		public VerticalSplitPane(Stylesheet stylesheet, string style) :
-			this(stylesheet.VerticalSplitPaneStyles[style])
-		{
-		}
-
-		public VerticalSplitPane(Stylesheet stylesheet) : this(stylesheet.VerticalSplitPaneStyle)
-		{
-		}
-
-		public VerticalSplitPane(string style) : this(Stylesheet.Current, style)
-		{
-		}
-
-		public VerticalSplitPane() : this(Stylesheet.Current)
-		{
-		}
-
-		public override void SetStyleByName(Stylesheet stylesheet, string name)
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplySplitPaneStyle(stylesheet.VerticalSplitPaneStyles[name]);
 		}

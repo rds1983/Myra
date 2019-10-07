@@ -57,37 +57,16 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public TextButton(TextButtonStyle style)
+		public TextButton(string styleName = Stylesheet.DefaultStyleName)
 		{
-			InternalChild = new Label(style != null ? style.LabelStyle : null)
+			InternalChild = new Label(null)
 			{
 				VerticalAlignment = VerticalAlignment.Center,
 				HorizontalAlignment = HorizontalAlignment.Center,
 				Wrap = true
 			};
 
-			if (style != null)
-			{
-				ApplyTextButtonStyle(style);
-			}
-		}
-
-		public TextButton(Stylesheet stylesheet, string style) :
-			this(stylesheet.ButtonStyles[style].ToTextButtonStyle(stylesheet.LabelStyle))
-		{
-		}
-
-		public TextButton(Stylesheet stylesheet) :
-			this(stylesheet.ButtonStyle.ToTextButtonStyle(stylesheet.LabelStyle))
-		{
-		}
-
-		public TextButton(string style) : this(Stylesheet.Current, style)
-		{
-		}
-
-		public TextButton() : this(Stylesheet.Current)
-		{
+			SetStyle(styleName);
 		}
 
 		public void ApplyTextButtonStyle(TextButtonStyle style)
@@ -107,7 +86,7 @@ namespace Myra.Graphics2D.UI
 			InternalChild.IsPressed = IsPressed;
 		}
 
-		public override void SetStyleByName(Stylesheet stylesheet, string name)
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplyTextButtonStyle(new TextButtonStyle(stylesheet.ButtonStyles[name], stylesheet.LabelStyle));
 		}

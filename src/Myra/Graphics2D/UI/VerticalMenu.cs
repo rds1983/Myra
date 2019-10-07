@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Linq;
 using Myra.Graphics2D.UI.Styles;
 
 #if !XENKO
@@ -46,26 +45,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public VerticalMenu(MenuStyle style) : base(style)
+		public VerticalMenu(string styleName = Stylesheet.DefaultStyleName) : base(styleName)
 		{
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
-		}
-
-		public VerticalMenu(Stylesheet stylesheet, string style) : this(stylesheet.VerticalMenuStyles[style])
-		{
-		}
-
-		public VerticalMenu(Stylesheet stylesheet) : this(stylesheet.VerticalMenuStyle)
-		{
-		}
-
-		public VerticalMenu(string style) : this(Stylesheet.Current, style)
-		{
-		}
-
-		public VerticalMenu() : this(Stylesheet.Current)
-		{
 		}
 
 		public override void OnKeyDown(Keys k)
@@ -83,7 +66,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void SetStyleByName(Stylesheet stylesheet, string name)
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplyMenuStyle(stylesheet.VerticalMenuStyles[name]);
 		}

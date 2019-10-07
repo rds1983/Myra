@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
-using System.Linq;
 using Myra.Utility;
 
 #if !XENKO
@@ -227,7 +226,7 @@ namespace Myra.Graphics2D.UI
 			IsPressed = false;
 		}
 
-		public override void SetStyleByName(Stylesheet stylesheet, string name)
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplyButtonStyle(stylesheet.ButtonStyles[name]);
 		}

@@ -54,7 +54,7 @@ namespace Myra.Graphics2D.UI
 			set { base.VerticalAlignment = value; }
 		}
 
-		protected SplitPane(SplitPaneStyle style)
+		protected SplitPane(string styleName)
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
@@ -63,10 +63,7 @@ namespace Myra.Graphics2D.UI
 
 			_widgets.CollectionChanged += WidgetsOnCollectionChanged;
 
-			if (style != null)
-			{
-				ApplySplitPaneStyle(style);
-			}
+			SetStyle(styleName);
 		}
 
 		public float GetProportion(int widgetIndex)
@@ -231,7 +228,7 @@ namespace Myra.Graphics2D.UI
 				if (i > 0)
 				{
 					// Add splitter
-					var handle = new ImageButton((ImageButtonStyle)null)
+					var handle = new ImageButton(null)
 					{
 						HorizontalAlignment = HorizontalAlignment.Stretch,
 						VerticalAlignment = VerticalAlignment.Stretch,

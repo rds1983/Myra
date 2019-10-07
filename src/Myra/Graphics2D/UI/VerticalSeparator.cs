@@ -31,27 +31,12 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public VerticalSeparator(SeparatorStyle style) : base(Orientation.Vertical, style)
+		public override Orientation Orientation => Orientation.Vertical;
+
+		public VerticalSeparator(string styleName = Stylesheet.DefaultStyleName) : base(styleName)
 		{
 			HorizontalAlignment = HorizontalAlignment.Center;
 			VerticalAlignment = VerticalAlignment.Stretch;
-		}
-
-		public VerticalSeparator(Stylesheet stylesheet, string style) :
-			this(stylesheet.VerticalSeparatorStyles[style])
-		{
-		}
-
-		public VerticalSeparator(Stylesheet stylesheet) : this(stylesheet.VerticalSeparatorStyle)
-		{
-		}
-
-		public VerticalSeparator(string style) : this(Stylesheet.Current, style)
-		{
-		}
-
-		public VerticalSeparator() : this(Stylesheet.Current)
-		{
 		}
 	}
 }

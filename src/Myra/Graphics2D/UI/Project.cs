@@ -243,40 +243,49 @@ namespace Myra.Graphics2D.UI
 
 		private static object CreateItem(Type type, XElement element, Stylesheet stylesheet)
 		{
-			// Check whether item has constructor with stylesheet param
-			var acceptsStylesheet = false;
-			foreach (var c in type.GetConstructors())
+			if (typeof(Widget).IsAssignableFrom(type))
 			{
-				var p = c.GetParameters();
-				if (p != null && p.Length == 1)
+				// Check whether it accepts style name parameter
+				var acceptsStyleName = false;
+				foreach (var c in type.GetConstructors())
 				{
-					if (p[0].ParameterType == typeof(Stylesheet))
+					var p = c.GetParameters();
+					if (p != null && p.Length == 1)
 					{
-						acceptsStylesheet = true;
-						break;
+						if (p[0].ParameterType == typeof(string))
+						{
+							acceptsStyleName = true;
+							break;
+						}
 					}
 				}
-			}
 
-			if (acceptsStylesheet)
-			{
-				// Determine style name
-				var styleNameAttr = element.Attribute("StyleName");
-				if (styleNameAttr != null)
+				if (acceptsStyleName)
 				{
-					var styleName = styleNameAttr.Value;
+					var result = (Widget)Activator.CreateInstance(type, (string)null);
 
-					var stylesNames = stylesheet.GetStylesByWidgetName(type.Name);
-					if (stylesNames != null && stylesNames.Contains(styleName))
+					// Determine style name
+					var styleName = Stylesheet.DefaultStyleName;
+					var styleNameAttr = element.Attribute("StyleName");
+					if (styleNameAttr != null)
 					{
-						return Activator.CreateInstance(type, stylesheet, styleName);
+						var stylesNames = stylesheet.GetStylesByWidgetName(type.Name);
+						if (stylesNames != null && stylesNames.Contains(styleNameAttr.Value))
+						{
+							styleName = styleNameAttr.Value;
+						}
+						else
+						{
+							// Remove property with absent value
+							styleNameAttr.Remove();
+						}
 					}
 
-					// Remove property with absent value
-					styleNameAttr.Remove();
-				}
+					// Set style
+					result.SetStyle(stylesheet, styleName);
 
-				return Activator.CreateInstance(type, stylesheet);
+					return result;
+				}
 			}
 
 			return Activator.CreateInstance(type);

@@ -194,7 +194,7 @@ namespace Myra.Graphics2D.UI
 
 		public event EventHandler Closed;
 
-		public Window(WindowStyle style)
+		public Window(string styleName = Stylesheet.DefaultStyleName)
 		{
 			InternalChild = new VerticalStackPanel();
 
@@ -232,26 +232,7 @@ namespace Myra.Graphics2D.UI
 
 			InternalChild.Widgets.Add(_titleGrid);
 
-			if (style != null)
-			{
-				ApplyWindowStyle(style);
-			}
-		}
-
-		public Window(Stylesheet stylesheet, string style) : this(stylesheet.WindowStyles[style])
-		{
-		}
-
-		public Window(Stylesheet stylesheet) : this(stylesheet.WindowStyle)
-		{
-		}
-
-		public Window(string style) : this(Stylesheet.Current, style)
-		{
-		}
-
-		public Window() : this(Stylesheet.Current)
-		{
+			SetStyle(styleName);
 		}
 
 		public override void UpdateLayout()
@@ -421,7 +402,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void SetStyleByName(Stylesheet stylesheet, string name)
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplyWindowStyle(stylesheet.WindowStyles[name]);
 		}

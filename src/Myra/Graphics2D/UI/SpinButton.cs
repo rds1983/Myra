@@ -249,7 +249,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		public event EventHandler<ValueChangedEventArgs<float?>> ValueChangedByUser;
 
-		public SpinButton(SpinButtonStyle style)
+		public SpinButton(string styleName = Stylesheet.DefaultStyleName)
 		{
 			AcceptsKeyboardFocus = AcceptsMouseWheelFocus = true;
 
@@ -298,28 +298,9 @@ namespace Myra.Graphics2D.UI
 			_downButton.Click += DownButtonOnUp;
 			InternalChild.Widgets.Add(_downButton);
 
-			if (style != null)
-			{
-				ApplySpinButtonStyle(style);
-			}
+			SetStyle(styleName);
 
 			Value = 0;
-		}
-
-		public SpinButton(Stylesheet stylesheet, string style) : this(stylesheet.SpinButtonStyles[style])
-		{
-		}
-
-		public SpinButton(Stylesheet stylesheet) : this(stylesheet.SpinButtonStyle)
-		{
-		}
-
-		public SpinButton(string style) : this(Stylesheet.Current, style)
-		{
-		}
-
-		public SpinButton() : this(Stylesheet.Current)
-		{
 		}
 
 		private static float? StringToFloat(string s)
@@ -413,7 +394,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void SetStyleByName(Stylesheet stylesheet, string name)
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplySpinButtonStyle(stylesheet.SpinButtonStyles[name]);
 		}

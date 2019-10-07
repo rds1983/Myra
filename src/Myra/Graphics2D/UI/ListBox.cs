@@ -53,31 +53,13 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ListBox(ListBoxStyle style) : base(new ScrollViewer())
+		public ListBox(string styleName = Stylesheet.DefaultStyleName) : base(new ScrollViewer())
 		{
 			AcceptsKeyboardFocus = true;
 			_box = new VerticalStackPanel();
 			InternalChild.Content = _box;
-			if (style != null)
-			{
-				ApplyListBoxStyle(style);
-			}
-		}
 
-		public ListBox(Stylesheet stylesheet, string style) : this(stylesheet.ListBoxStyles[style])
-		{
-		}
-
-		public ListBox(Stylesheet stylesheet) : this(stylesheet.ListBoxStyle)
-		{
-		}
-
-		public ListBox(string style) : this(Stylesheet.Current, style)
-		{
-		}
-
-		public ListBox() : this(Stylesheet.Current)
-		{
+			SetStyle(styleName);
 		}
 
 		private void ItemOnChanged(object sender, EventArgs eventArgs)
@@ -114,7 +96,9 @@ namespace Myra.Graphics2D.UI
 			}
 			else
 			{
-				widget = new HorizontalSeparator(ListBoxStyle.SeparatorStyle);
+				var separator = new HorizontalSeparator(null);
+				separator.ApplySeparatorStyle(ListBoxStyle.SeparatorStyle);
+				widget = separator;
 			}
 
 			_box.Widgets.Insert(index, widget);
@@ -237,12 +221,12 @@ namespace Myra.Graphics2D.UI
 				var asSeparator = item.Widget as SeparatorWidget;
 				if (asSeparator != null)
 				{
-					asSeparator.ApplyMenuSeparatorStyle(style.SeparatorStyle);
+					asSeparator.ApplySeparatorStyle(style.SeparatorStyle);
 				}
 			}
 		}
 
-		public override void SetStyleByName(Stylesheet stylesheet, string name)
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplyListBoxStyle(stylesheet.ListBoxStyles[name]);
 		}

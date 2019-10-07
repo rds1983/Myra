@@ -43,26 +43,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public HorizontalMenu(MenuStyle style) : base(style)
+		public HorizontalMenu(string styleName = Stylesheet.DefaultStyleName) : base(styleName)
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Top;
-		}
-
-		public HorizontalMenu(Stylesheet stylesheet, string style) : this(stylesheet.HorizontalMenuStyles[style])
-		{
-		}
-
-		public HorizontalMenu(Stylesheet stylesheet) : this(stylesheet.HorizontalMenuStyle)
-		{
-		}
-
-		public HorizontalMenu(string style) : this(Stylesheet.Current, style)
-		{
-		}
-
-		public HorizontalMenu() : this(Stylesheet.Current)
-		{
 		}
 
 		public override void OnKeyDown(Keys k)
@@ -80,7 +64,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void SetStyleByName(Stylesheet stylesheet, string name)
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplyMenuStyle(stylesheet.HorizontalMenuStyles[name]);
 		}

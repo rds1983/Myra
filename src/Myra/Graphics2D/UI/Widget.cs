@@ -1029,7 +1029,22 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public virtual void SetStyleByName(Stylesheet stylesheet, string name)
+		public void SetStyle(Stylesheet stylesheet, string name)
+		{
+			StyleName = name;
+
+			if (StyleName != null)
+			{
+				InternalSetStyle(stylesheet, StyleName);
+			}
+		}
+
+		public void SetStyle(string name)
+		{
+			SetStyle(Stylesheet.Current, name);
+		}
+
+		protected virtual void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 		}
 

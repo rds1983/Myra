@@ -13,27 +13,11 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public HorizontalSplitPane(SplitPaneStyle style) : base(style)
+		public HorizontalSplitPane(string styleName = Stylesheet.DefaultStyleName) : base(styleName)
 		{
 		}
 
-		public HorizontalSplitPane(Stylesheet stylesheet, string style) : this(stylesheet.HorizontalSplitPaneStyles[style])
-		{
-		}
-
-		public HorizontalSplitPane(Stylesheet stylesheet) : this(stylesheet.HorizontalSplitPaneStyle)
-		{
-		}
-
-		public HorizontalSplitPane(string style) : this(Stylesheet.Current, style)
-		{
-		}
-
-		public HorizontalSplitPane() : this(Stylesheet.Current)
-		{
-		}
-
-		public override void SetStyleByName(Stylesheet stylesheet, string name)
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplySplitPaneStyle(stylesheet.HorizontalSplitPaneStyles[name]);
 		}

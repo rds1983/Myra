@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Linq;
 using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
@@ -40,31 +39,13 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public VerticalSlider(SliderStyle style)
-			: base(style)
+		public VerticalSlider(string styleName = Stylesheet.DefaultStyleName): base(styleName)
 		{
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Stretch;
 		}
 
-		public VerticalSlider(Stylesheet stylesheet, string style) :
-			this(stylesheet.VerticalSliderStyles[style])
-		{
-		}
-
-		public VerticalSlider(Stylesheet stylesheet) : this(stylesheet.VerticalSliderStyle)
-		{
-		}
-
-		public VerticalSlider(string style) : this(Stylesheet.Current, style)
-		{
-		}
-
-		public VerticalSlider() : this(Stylesheet.Current)
-		{
-		}
-
-		public override void SetStyleByName(Stylesheet stylesheet, string name)
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplySliderStyle(stylesheet.VerticalSliderStyles[name]);
 		}

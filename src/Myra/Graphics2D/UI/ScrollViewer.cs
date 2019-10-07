@@ -324,7 +324,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ScrollViewer(ScrollViewerStyle style)
+		public ScrollViewer(string styleName = Stylesheet.DefaultStyleName)
 		{
 			ClipToBounds = true;
 			AcceptsMouseWheelFocus = true;
@@ -335,26 +335,7 @@ namespace Myra.Graphics2D.UI
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 
-			if (style != null)
-			{
-				ApplyScrollViewerStyle(style);
-			}
-		}
-
-		public ScrollViewer(Stylesheet stylesheet, string style) : this(stylesheet.ScrollViewerStyles[style])
-		{
-		}
-
-		public ScrollViewer(Stylesheet stylesheet) : this(stylesheet.ScrollViewerStyle)
-		{
-		}
-
-		public ScrollViewer(string style) : this(Stylesheet.Current, style)
-		{
-		}
-
-		public ScrollViewer() : this(Stylesheet.Current)
-		{
+			SetStyle(styleName);
 		}
 
 		private void MoveThumb(int delta)
@@ -714,7 +695,7 @@ namespace Myra.Graphics2D.UI
 			_startBoundsPos = null;
 		}
 
-		public override void SetStyleByName(Stylesheet stylesheet, string name)
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplyScrollViewerStyle(stylesheet.ScrollViewerStyles[name]);
 		}

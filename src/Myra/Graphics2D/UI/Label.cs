@@ -156,28 +156,9 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
-		public Label(LabelStyle style)
+		public Label(string styleName = Stylesheet.DefaultStyleName)
 		{
-			if (style != null)
-			{
-				ApplyLabelStyle(style);
-			}
-		}
-
-		public Label(Stylesheet stylesheet, string style) : this(stylesheet.LabelStyles[style])
-		{
-		}
-
-		public Label(Stylesheet stylesheet) : this(stylesheet.LabelStyle)
-		{
-		}
-
-		public Label(string style) : this(Stylesheet.Current, style)
-		{
-		}
-
-		public Label() : this(Stylesheet.Current)
-		{
+			SetStyle(styleName);
 		}
 
 		public override void InternalRender(RenderContext context)
@@ -347,7 +328,7 @@ namespace Myra.Graphics2D.UI
 			Font = style.Font;
 		}
 
-		public override void SetStyleByName(Stylesheet stylesheet, string name)
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplyLabelStyle(stylesheet.LabelStyles[name]);
 		}

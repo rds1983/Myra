@@ -23,25 +23,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public RadioButton(ImageTextButtonStyle bs) : base(bs)
+		public RadioButton(string styleName = Stylesheet.DefaultStyleName): base(styleName)
 		{
 			Toggleable = true;
-		}
-
-		public RadioButton(Stylesheet stylesheet, string style) : this(stylesheet.RadioButtonStyles[style])
-		{
-		}
-
-		public RadioButton(Stylesheet stylesheet) : this(stylesheet.RadioButtonStyle)
-		{
-		}
-
-		public RadioButton(string style) : this(Stylesheet.Current, style)
-		{
-		}
-
-		public RadioButton() : this(Stylesheet.Current)
-		{
 		}
 
 		public override void OnPressedChanged()
@@ -69,7 +53,7 @@ namespace Myra.Graphics2D.UI
 			return !IsPressed;
 		}
 
-		public override void SetStyleByName(Stylesheet stylesheet, string name)
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplyImageTextButtonStyle(stylesheet.RadioButtonStyles[name]);
 		}

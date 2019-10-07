@@ -77,14 +77,10 @@ namespace Myra.Graphics2D.UI
 
 		public event EventHandler ValueChanged;
 
-		protected ProgressBar(ProgressBarStyle style)
+		protected ProgressBar(string styleName)
 		{
-			if (style != null)
-			{
-				ApplyProgressBarStyle(style);
-			}
-
 			Maximum = 100;
+			SetStyle(styleName);
 		}
 
 		public void ApplyProgressBarStyle(ProgressBarStyle style)

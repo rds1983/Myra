@@ -90,7 +90,7 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
-		public TreeNode(TreeStyle style, Tree topTree)
+		public TreeNode(Tree topTree, string styleName = Stylesheet.DefaultStyleName)
 		{
 			InternalChild = new Grid();
 
@@ -104,7 +104,7 @@ namespace Myra.Graphics2D.UI
 				_topTree.AllNodes.Add(this);
 			}
 
-			_mark = new ImageButton((ImageButtonStyle)null)
+			_mark = new ImageButton(null)
 			{
 				Toggleable = true,
 				HorizontalAlignment = HorizontalAlignment.Left,
@@ -144,10 +144,7 @@ namespace Myra.Graphics2D.UI
 
 			InternalChild.Widgets.Add(_childNodesGrid);
 
-			if (style != null)
-			{
-				ApplyTreeNodeStyle(style);
-			}
+			SetStyle(styleName);
 
 			UpdateMark();
 		}
@@ -172,7 +169,7 @@ namespace Myra.Graphics2D.UI
 
 		public TreeNode AddSubNode(string text)
 		{
-			var result = new TreeNode(TreeStyle, _topTree ?? (Tree) this)
+			var result = new TreeNode(_topTree ?? (Tree) this, StyleName)
 			{
 				Text = text,
 				GridRow = _childNodesGrid.Widgets.Count,
@@ -225,6 +222,11 @@ namespace Myra.Graphics2D.UI
 
 			SelectionBackground = style.SelectionBackground;
 			SelectionHoverBackground = style.SelectionHoverBackground;
+		}
+
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
+		{
+			ApplyTreeNodeStyle(stylesheet.TreeStyles[name]);
 		}
 	}
 }

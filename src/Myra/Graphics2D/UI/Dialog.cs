@@ -20,7 +20,7 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public ImageTextButton ButtonCancel { get; private set; }
 
-		public Dialog(DialogStyle style) : base(style)
+		public Dialog(string styleName = Stylesheet.DefaultStyleName) : base(styleName)
 		{
 			var buttonsGrid = new HorizontalStackPanel()
 			{
@@ -61,22 +61,6 @@ namespace Myra.Graphics2D.UI
 			buttonsGrid.Widgets.Add(ButtonCancel);
 
 			InternalChild.Widgets.Add(buttonsGrid);
-		}
-
-		public Dialog(Stylesheet stylesheet, string style) : this(stylesheet.DialogStyles[style])
-		{
-		}
-
-		public Dialog(Stylesheet stylesheet) : this(stylesheet.DialogStyle)
-		{
-		}
-
-		public Dialog(string style) : this(Stylesheet.Current, style)
-		{
-		}
-
-		public Dialog() : this(Stylesheet.Current)
-		{
 		}
 
 		public override void OnKeyDown(Keys k)

@@ -1,4 +1,6 @@
 ﻿using Myra.Graphics2D.UI.Styles;
+using System.ComponentModel;
+using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -8,26 +10,23 @@ using Xenko.Core.Mathematics;
 
 namespace Myra.Graphics2D.UI
 {
-	public class SeparatorWidget : Image
+	public abstract class SeparatorWidget : Image
 	{
-		private readonly Orientation _orientation;
-
 		public int Thickness
 		{
 			get; set;
 		}
 
-		internal SeparatorWidget(Orientation orientation, SeparatorStyle style)
-		{
-			_orientation = orientation;
+		[Browsable(false)]
+		[XmlIgnore]
+		public abstract Orientation Orientation { get; }
 
-			if (style != null)
-			{
-				ApplyMenuSeparatorStyle(style);
-			}
+		protected SeparatorWidget(string styleName)
+		{
+			SetStyle(styleName);
 		}
 
-		public void ApplyMenuSeparatorStyle(SeparatorStyle style)
+		public void ApplySeparatorStyle(SeparatorStyle style)
 		{
 			ApplyWidgetStyle(style);
 
@@ -39,7 +38,7 @@ namespace Myra.Graphics2D.UI
 		{
 			var result = Point.Zero;
 
-			if (_orientation == Orientation.Horizontal)
+			if (Orientation == Orientation.Horizontal)
 			{
 				result.Y = Thickness;
 			}
