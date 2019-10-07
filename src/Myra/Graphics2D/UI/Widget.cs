@@ -726,7 +726,7 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public virtual void Render(RenderContext context)
+		public void Render(RenderContext context)
 		{
 			if (!Visible)
 			{
