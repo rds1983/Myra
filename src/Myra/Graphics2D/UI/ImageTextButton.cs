@@ -222,20 +222,14 @@ namespace Myra.Graphics2D.UI
 		{
 			ApplyButtonStyle(style);
 
+			if (style.ImageStyle != null)
+			{
+				_image.ApplyPressableImageStyle(style.ImageStyle);
+			}
+
 			if (style.LabelStyle != null)
 			{
 				_textBlock.ApplyLabelStyle(style.LabelStyle);
-			}
-
-			if (style.ImageStyle != null)
-			{
-				var imageStyle = style.ImageStyle;
-
-				_image.ApplyWidgetStyle(imageStyle);
-
-				Image = imageStyle.Image;
-				OverImage = imageStyle.OverImage;
-				PressedImage = imageStyle.PressedImage;
 			}
 
 			ImageTextSpacing = style.ImageTextSpacing;

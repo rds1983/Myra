@@ -112,15 +112,16 @@
   <HorizontalMenuStyles>
     <HorizontalMenuStyle Background="button">
       <MenuItemStyle OverBackground="button-over" PaddingLeft="5" PaddingRight="5" PaddingBottom="2" PressedBackground="button-down">
-        <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" />
+        <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey"  PaddingLeft="5" PaddingRight="5" />
       </MenuItemStyle>
       <SeparatorStyle Image="separator" Thickness="3" />
     </HorizontalMenuStyle>
   </HorizontalMenuStyles>
   <VerticalMenuStyles>
     <VerticalMenuStyle Background="button" Border="border">
-      <MenuItemStyle OverBackground="button-over" PaddingLeft="5" PaddingRight="5" PressedBackground="button-down" IconWidth="22" ShortcutWidth="22">
-        <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" />
+      <MenuItemStyle OverBackground="button-over" PaddingLeft="10" PaddingRight="10" PressedBackground="button-down">
+        <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" PaddingRight="15" />
+        <ShortcutStyle Font="default-font" TextColor="white" DisabledTextColor="grey" />
       </MenuItemStyle>
       <SeparatorStyle PaddingTop="2" PaddingBottom="2" Image="separator-menu" Thickness="4" />
     </VerticalMenuStyle>

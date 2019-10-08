@@ -12,10 +12,52 @@ using Xenko.Core.Mathematics;
 
 namespace Myra.Graphics2D.UI
 {
-	public class MenuItem : SelectableItem, IMenuItemsContainer, IMenuItem
+	public class MenuItem : SelectableItem, IMenuItem
 	{
+		private string _shortcutText;
+		private Color? _shortcutColor;
 		private bool _toggleable;
 		private readonly ObservableCollection<IMenuItem> _items = new ObservableCollection<IMenuItem>();
+
+		[DefaultValue(null)]
+		public string ShortcutText
+		{
+			get
+			{
+				return _shortcutText;
+			}
+
+			set
+			{
+				if (value == _shortcutText)
+				{
+					return;
+				}
+
+				_shortcutText = value;
+				FireChanged();
+			}
+		}
+
+		[DefaultValue(null)]
+		public Color? ShortcutColor
+		{
+			get
+			{
+				return _shortcutColor;
+			}
+
+			set
+			{
+				if (value == _shortcutColor)
+				{
+					return;
+				}
+
+				_shortcutColor = value;
+				FireChanged();
+			}
+		}
 
 		[DefaultValue(false)]
 		public bool Toggleable

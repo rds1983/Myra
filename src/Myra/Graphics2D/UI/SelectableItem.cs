@@ -36,6 +36,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[DefaultValue(null)]
 		public string Text
 		{
 			get

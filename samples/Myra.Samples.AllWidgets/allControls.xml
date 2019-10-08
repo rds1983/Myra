@@ -7,10 +7,10 @@
     </VerticalStackPanel.Proportions>
     <HorizontalMenu VerticalAlignment="Stretch">
       <MenuItem Id="" Text="&amp;File">
-        <MenuItem Id="_menuItemNew" Text="&amp;New" />
-        <MenuItem Id="_menuItemOpen" Text="&amp;Open" />
-        <MenuItem Id="_menuItemSave" Text="&amp;Save" />
-        <MenuItem Id="_menuItemSaveAs" Text="Save &amp;As..." />
+        <MenuItem ShortcutText="Ctrl+N" Id="_menuItemNew" Text="&amp;New" />
+        <MenuItem ShortcutText="Ctrl+O" Id="_menuItemOpen" Text="&amp;Open" />
+        <MenuItem ShortcutText="Ctrl+S" Id="_menuItemSave" Text="&amp;Save" />
+        <MenuItem ShortcutText="Ctrl+A" Id="_menuItemSaveAs" Text="Save &amp;As..." />
         <MenuSeparator />
         <MenuItem Id="_menuItemQuit" Text="&amp;Quit" />
       </MenuItem>

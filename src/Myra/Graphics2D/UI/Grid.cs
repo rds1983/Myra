@@ -154,6 +154,10 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(GridSelectionMode.None)]
 		public GridSelectionMode GridSelectionMode { get; set; }
 
+		[Category("Behavior")]
+		[DefaultValue(false)]
+		public bool CanSelectNothing { get; set; }
+
 		[Browsable(false)]
 		[XmlIgnore]
 		public List<int> GridLinesX
@@ -282,6 +286,7 @@ namespace Myra.Graphics2D.UI
 
 			ShowGridLines = false;
 			GridLinesColor = Color.White;
+			CanSelectNothing = false;
 		}
 
 		public int GetColumnWidth(int index)
@@ -975,12 +980,24 @@ namespace Myra.Graphics2D.UI
 
 			if (HoverRowIndex != null)
 			{
-				SelectedRowIndex = HoverRowIndex;
+				if (SelectedRowIndex != HoverRowIndex)
+				{
+					SelectedRowIndex = HoverRowIndex;
+				} else if (CanSelectNothing)
+				{
+					SelectedRowIndex = null;
+				}
 			}
 
 			if (HoverColumnIndex != null)
 			{
-				SelectedColumnIndex = HoverColumnIndex;
+				if (SelectedColumnIndex != HoverColumnIndex)
+				{
+					SelectedColumnIndex = HoverColumnIndex;
+				} else if (CanSelectNothing)
+				{
+					SelectedColumnIndex = null;
+				}
 			}
 		}
 	}

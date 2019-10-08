@@ -24,8 +24,6 @@ namespace Myra.Graphics2D.UI
 			Invalid
 		}
 
-		public const string DefaultStyleName = "default";
-
 		private int _left, _top;
 		private int? _width, _height;
 		private int _gridColumn, _gridRow, _gridColumnSpan = 1, _gridRowSpan = 1;
@@ -55,6 +53,7 @@ namespace Myra.Graphics2D.UI
 		/// <summary>
 		/// Internal use only. (MyraPad)
 		/// </summary>
+		[DefaultValue(Stylesheet.DefaultStyleName)]
 		public string StyleName { get; set; }
 
 		[Category("Layout")]

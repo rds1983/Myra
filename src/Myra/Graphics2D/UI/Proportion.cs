@@ -14,6 +14,9 @@ namespace Myra.Graphics2D.UI
 
 	public class Proportion
 	{
+		public static readonly Proportion Auto = new Proportion(ProportionType.Auto);
+		public static readonly Proportion Fill = new Proportion(ProportionType.Fill);
+
 		public static readonly Proportion GridDefault = new Proportion(ProportionType.Part, 1.0f);
 		public static readonly Proportion StackPanelDefault = new Proportion(ProportionType.Auto);
 

@@ -3,6 +3,7 @@ using System.Xml.Serialization;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
+using Myra.Graphics2D.UI.Styles;
 #else
 using Xenko.Core.Mathematics;
 #endif
@@ -146,6 +147,15 @@ namespace Myra.Graphics2D.UI
 				var bounds = ActualBounds;
 				context.Draw(image, bounds, Color);
 			}
+		}
+
+		public void ApplyPressableImageStyle(PressableImageStyle imageStyle)
+		{
+			ApplyWidgetStyle(imageStyle);
+
+			Renderable = imageStyle.Image;
+			OverRenderable = imageStyle.OverImage;
+			PressedRenderable = imageStyle.PressedImage;
 		}
 	}
 }

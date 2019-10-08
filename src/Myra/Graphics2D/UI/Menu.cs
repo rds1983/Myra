@@ -17,7 +17,7 @@ using Xenko.Input;
 
 namespace Myra.Graphics2D.UI
 {
-	public abstract class Menu : SingleItemContainer<StackPanel>, IMenuItemsContainer
+	public abstract class Menu : SingleItemContainer<StackPanel>
 	{
 		private ObservableCollection<IMenuItem> _items;
 
@@ -238,6 +238,9 @@ namespace Myra.Graphics2D.UI
 
 			asMenuItemButton.Text = menuItem.Text;
 			asMenuItemButton.TextColor = menuItem.Color ?? MenuItemStyle.LabelStyle.TextColor;
+
+			asMenuItemButton.ShortcutText = menuItem.ShortcutText;
+			asMenuItemButton.ShortcutTextColor = menuItem.ShortcutColor ?? MenuItemStyle.ShortcutStyle.TextColor;
 		}
 
 		private void InsertItem(IMenuItem iMenuItem, int index)
@@ -250,12 +253,18 @@ namespace Myra.Graphics2D.UI
 				var menuItemButton = new MenuItemButton(this, MenuItemStyle)
 				{
 					Text = menuItem.Text,
+					ShortcutText = menuItem.ShortcutText,
 					Tag = menuItem
 				};
 
 				if (menuItem.Color.HasValue)
 				{
 					menuItemButton.TextColor = menuItem.Color.Value;
+				}
+
+				if (menuItem.ShortcutColor != null)
+				{
+					menuItemButton.ShortcutTextColor = menuItem.ShortcutColor.Value;
 				}
 
 				menuItemButton.MouseEntered += MouseOnMovement;
@@ -546,6 +555,38 @@ namespace Myra.Graphics2D.UI
 			base.OnMouseMoved();
 
 			KeyboardHoverButton = null;
+		}
+
+		public override void Arrange()
+		{
+			base.Arrange();
+
+			var maxWidth = 0;
+			foreach(var widget in InternalChild.Widgets)
+			{
+				var asMenuItemButton = widget as MenuItemButton;
+				if (asMenuItemButton == null)
+				{
+					continue;
+				}
+
+				if (asMenuItemButton.LabelWidth > maxWidth)
+				{
+					maxWidth = asMenuItemButton.LabelWidth;
+				}
+			}
+
+			// Implicity set that width for all labels
+			foreach (var widget in InternalChild.Widgets)
+			{
+				var asMenuItemButton = widget as MenuItemButton;
+				if (asMenuItemButton == null)
+				{
+					continue;
+				}
+
+				asMenuItemButton.LabelSetWidth = maxWidth;
+			}
 		}
 
 		public void ApplyMenuStyle(MenuStyle style)
