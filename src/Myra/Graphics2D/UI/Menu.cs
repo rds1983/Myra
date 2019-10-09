@@ -557,38 +557,6 @@ namespace Myra.Graphics2D.UI
 			KeyboardHoverButton = null;
 		}
 
-		public override void Arrange()
-		{
-			base.Arrange();
-
-			var maxWidth = 0;
-			foreach(var widget in InternalChild.Widgets)
-			{
-				var asMenuItemButton = widget as MenuItemButton;
-				if (asMenuItemButton == null)
-				{
-					continue;
-				}
-
-				if (asMenuItemButton.LabelWidth > maxWidth)
-				{
-					maxWidth = asMenuItemButton.LabelWidth;
-				}
-			}
-
-			// Implicity set that width for all labels
-			foreach (var widget in InternalChild.Widgets)
-			{
-				var asMenuItemButton = widget as MenuItemButton;
-				if (asMenuItemButton == null)
-				{
-					continue;
-				}
-
-				asMenuItemButton.LabelSetWidth = maxWidth;
-			}
-		}
-
 		public void ApplyMenuStyle(MenuStyle style)
 		{
 			ApplyWidgetStyle(style);

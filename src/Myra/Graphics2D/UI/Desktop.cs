@@ -335,9 +335,9 @@ namespace Myra.Graphics2D.UI
 
 					TouchDown.Invoke(this);
 
-					// Only top widget can receive touch down
-					var activeWidget = GetActiveWidget(true, true);
-					if (activeWidget != null)
+					// Only top active widget can receive touch down
+					var activeWidget = GetTopWidget(true);
+					if (activeWidget != null && activeWidget.Active)
 					{
 						activeWidget.HandleTouchDown();
 					}
@@ -346,8 +346,8 @@ namespace Myra.Graphics2D.UI
 				{
 					TouchUp.Invoke(this);
 
-					// Any widget can receive touch up
-					var activeWidget = GetActiveWidget(true, false);
+					// Top widget can receive touch up
+					var activeWidget = GetTopWidget(true);
 					if (activeWidget != null)
 					{
 						activeWidget.HandleTouchUp();
@@ -458,8 +458,8 @@ namespace Myra.Graphics2D.UI
 			{
 				TouchDoubleClick.Invoke(this);
 
-				var activeWidget = GetActiveWidget();
-				if (activeWidget != null)
+				var activeWidget = GetTopWidget(true);
+				if (activeWidget != null && activeWidget.Active)
 				{
 					activeWidget.HandleTouchDoubleClick();
 				}
@@ -493,7 +493,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			// Handle focus
-			var activeWidget = GetActiveWidget();
+			var activeWidget = GetTopWidget(true);
 			if (activeWidget == null)
 			{
 				return;
@@ -507,6 +507,8 @@ namespace Myra.Graphics2D.UI
 				{
 					focusedWidget = s;
 				}
+
+				return true;
 			});
 			FocusedKeyboardWidget = focusedWidget;
 
@@ -517,6 +519,8 @@ namespace Myra.Graphics2D.UI
 				{
 					focusedWidget = s;
 				}
+
+				return true;
 			});
 
 			if (focusedWidget != null)
@@ -677,7 +681,7 @@ namespace Myra.Graphics2D.UI
 			_renderContext.View = _bounds;
 			_renderContext.Opacity = Opacity;
 
-			if (Stylesheet.Current.DesktopStyle != null && 
+			if (Stylesheet.Current.DesktopStyle != null &&
 				Stylesheet.Current.DesktopStyle.Background != null)
 			{
 				_renderContext.Draw(Stylesheet.Current.DesktopStyle.Background, _bounds);
@@ -711,26 +715,30 @@ namespace Myra.Graphics2D.UI
 			// Find MenuBar
 			MenuBar = null;
 
-			foreach (var w in _widgets)
+			// Update Active and set MenuBar
+			var active = true;
+			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
 			{
-				ProcessWidgets(w, widget =>
-				{
-					if (MenuBar == null && widget is HorizontalMenu)
-					{
-						MenuBar = (HorizontalMenu)widget;
-					}
-				});
-			}
-
-			// Update Active
-			var activeWidget = GetActiveWidget(false, true);
-			foreach (var w in _widgets)
-			{
-				var active = activeWidget == w;
+				var w = ChildrenCopy[i];
 				ProcessWidgets(w, widget =>
 				{
 					widget.Active = active;
+
+					if (active && MenuBar == null && widget is HorizontalMenu)
+					{
+						// Found MenuBar
+						MenuBar = (HorizontalMenu)widget;
+					}
+
+					// Continue
+					return true;
 				});
+
+				if (w is Window)
+				{
+					// Everything after modal is not active
+					active = false;
+				}
 			}
 
 			foreach (var widget in ChildrenCopy)
@@ -766,21 +774,16 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		private Widget GetActiveWidget(bool containsTouch = true, bool accountModality = false)
+		private Widget GetTopWidget(bool containsTouch)
 		{
 			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
 			{
 				var w = ChildrenCopy[i];
 				if (w.Visible && w.Enabled &&
-					((containsTouch && w.Bounds.Contains(TouchPosition)) ||
-					!containsTouch))
+					(!containsTouch ||
+					(containsTouch && w.Bounds.Contains(TouchPosition))))
 				{
 					return w;
-				}
-
-				if (w is Window && accountModality)
-				{
-					return null;
 				}
 			}
 
@@ -822,7 +825,8 @@ namespace Myra.Graphics2D.UI
 				// Down
 				IsTouchDown = true;
 				HandleDoubleClick();
-			} else if (touchState.Count == 0 && _oldTouchState.Count > 0)
+			}
+			else if (touchState.Count == 0 && _oldTouchState.Count > 0)
 			{
 				// Up
 				IsTouchDown = false;
@@ -917,9 +921,10 @@ namespace Myra.Graphics2D.UI
 
 								_lastKeyDown = null;
 								_keyDownCount = 0;
-							} else if (_lastKeyDown != null && 
-								((_keyDownCount == 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownStartInMs) ||
-								(_keyDownCount > 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownInternalInMs)))
+							}
+							else if (_lastKeyDown != null &&
+							  ((_keyDownCount == 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownStartInMs) ||
+							  (_keyDownCount > 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownInternalInMs)))
 							{
 
 								if (KeyDownHandler != null)
@@ -938,15 +943,15 @@ namespace Myra.Graphics2D.UI
 			}
 
 #if !XENKO
-            try
-            {
-                UpdateTouch();
-            }
-            catch(Exception)
-            {
-            }
+			try
+			{
+				UpdateTouch();
+			}
+			catch (Exception)
+			{
+			}
 #endif
-        }
+		}
 
 		public void OnKeyDown(Keys key)
 		{
@@ -960,7 +965,7 @@ namespace Myra.Graphics2D.UI
 			{
 				// Small workaround: if key is escape  active widget is window
 				// Send it there
-				var asWindow = GetActiveWidget(false) as Window;
+				var asWindow = GetTopWidget(false) as Window;
 				if (asWindow != null && key == Keys.Escape && _focusedKeyboardWidget != asWindow)
 				{
 					asWindow.OnKeyDown(key);
@@ -1008,23 +1013,32 @@ namespace Myra.Graphics2D.UI
 			Char.Invoke(this, c);
 		}
 
-		private void ProcessWidgets(Widget root, Action<Widget> operation)
+		private bool ProcessWidgets(Widget root, Func<Widget, bool> operation)
 		{
 			if (!root.Visible)
 			{
-				return;
+				return true;
 			}
 
-			operation(root);
+			var result = operation(root);
+			if (!result)
+			{
+				return false;
+			}
 
 			var asContainer = root as Container;
 			if (asContainer != null)
 			{
 				foreach (var w in asContainer.ChildrenCopy)
 				{
-					ProcessWidgets(w, operation);
+					if (!ProcessWidgets(w, operation))
+					{
+						return false;
+					}
 				}
 			}
+
+			return true;
 		}
 
 		private void UpdateWidgetsCopy()

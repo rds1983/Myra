@@ -176,6 +176,9 @@ namespace Myra.Graphics2D.UI
 			Menu = menu;
 			InternalChild = new HorizontalStackPanel();
 
+			InternalChild.Proportions.Add(Proportion.Auto);
+			InternalChild.Proportions.Add(Proportion.Fill);
+
 			_image = new Image();
 			InternalChild.Widgets.Add(_image);
 
@@ -183,7 +186,6 @@ namespace Myra.Graphics2D.UI
 			InternalChild.Widgets.Add(_label);
 
 			_shortcut = new Label(null);
-			_shortcut.HorizontalAlignment = HorizontalAlignment.Left;
 			InternalChild.Widgets.Add(_shortcut);
 
 			if (style != null)
