@@ -119,9 +119,10 @@
   </HorizontalMenuStyles>
   <VerticalMenuStyles>
     <VerticalMenuStyle Background="button" Border="border">
-      <MenuItemStyle OverBackground="button-over" PaddingLeft="10" PaddingRight="10" PressedBackground="button-down">
-        <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" PaddingRight="15" />
-        <ShortcutStyle Font="default-font" TextColor="white" DisabledTextColor="grey" />
+      <MenuItemStyle OverBackground="button-over" PressedBackground="button-down" PaddingLeft="10" PaddingRight="10">
+        <ImageStyle PaddingRight="5" />
+        <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" />
+        <ShortcutStyle Font="default-font" TextColor="white" DisabledTextColor="grey" PaddingLeft="15" />
       </MenuItemStyle>
       <SeparatorStyle PaddingTop="2" PaddingBottom="2" Image="separator-menu" Thickness="4" />
     </VerticalMenuStyle>

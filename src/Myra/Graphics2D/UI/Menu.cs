@@ -226,21 +226,74 @@ namespace Myra.Graphics2D.UI
 			InternalChild.Widgets.Insert(index, menuItem);
 		}
 
-		private void MenuItemOnChanged(object sender, EventArgs eventArgs)
+		private void SetMenuItem(MenuItem menuItem)
 		{
-			var menuItem = (MenuItem)sender;
-
 			var asMenuItemButton = menuItem.Widget as MenuItemButton;
 			if (asMenuItemButton == null)
 			{
 				return;
 			}
 
+			asMenuItemButton.Image = menuItem.Image;
+
+
+			// Find widest image
+			int? maximumImageWidth = null;
+			foreach(var item in _items)
+			{
+				var asMenuItem = item as MenuItem;
+				if (asMenuItem != null && asMenuItem.Image != null)
+				{
+					var button = (MenuItemButton)asMenuItem.Widget;
+
+					var size = button.ImageWidget.Measure(new Point(10000, 10000));
+					if (maximumImageWidth == null || size.X > maximumImageWidth.Value)
+					{
+						maximumImageWidth = size.X;
+					}
+				}
+			}
+
+			// Update images widths
+			foreach (var item in _items)
+			{
+				var asButton = item.Widget as MenuItemButton;
+				if (asButton != null)
+				{
+					if (maximumImageWidth == null)
+					{
+						asButton.HasImage = false;
+					} else
+					{
+						asButton.HasImage = true;
+						asButton.ImageWidth = maximumImageWidth.Value;
+					}
+				}
+			}
+
 			asMenuItemButton.Text = menuItem.Text;
-			asMenuItemButton.TextColor = menuItem.Color ?? MenuItemStyle.LabelStyle.TextColor;
+			if (menuItem.Color != null)
+			{
+				asMenuItemButton.TextColor = menuItem.Color.Value;
+			} else if (MenuItemStyle != null && MenuItemStyle.LabelStyle != null)
+			{
+				asMenuItemButton.TextColor = MenuItemStyle.LabelStyle.TextColor;
+			}
 
 			asMenuItemButton.ShortcutText = menuItem.ShortcutText;
-			asMenuItemButton.ShortcutTextColor = menuItem.ShortcutColor ?? MenuItemStyle.ShortcutStyle.TextColor;
+			if (menuItem.ShortcutColor != null)
+			{
+				asMenuItemButton.ShortcutTextColor = menuItem.ShortcutColor.Value;
+			}
+			else if (MenuItemStyle != null && MenuItemStyle.ShortcutStyle != null)
+			{
+				asMenuItemButton.ShortcutTextColor = MenuItemStyle.ShortcutStyle.TextColor;
+			}
+		}
+
+		private void MenuItemOnChanged(object sender, EventArgs eventArgs)
+		{
+			SetMenuItem((MenuItem)sender);
 		}
 
 		private void InsertItem(IMenuItem iMenuItem, int index)
@@ -252,20 +305,8 @@ namespace Myra.Graphics2D.UI
 				menuItem.Changed += MenuItemOnChanged;
 				var menuItemButton = new MenuItemButton(this, MenuItemStyle)
 				{
-					Text = menuItem.Text,
-					ShortcutText = menuItem.ShortcutText,
 					Tag = menuItem
 				};
-
-				if (menuItem.Color.HasValue)
-				{
-					menuItemButton.TextColor = menuItem.Color.Value;
-				}
-
-				if (menuItem.ShortcutColor != null)
-				{
-					menuItemButton.ShortcutTextColor = menuItem.ShortcutColor.Value;
-				}
 
 				menuItemButton.MouseEntered += MouseOnMovement;
 				menuItemButton.MouseMoved += MouseOnMovement;
@@ -300,6 +341,11 @@ namespace Myra.Graphics2D.UI
 
 			iMenuItem.Menu = this;
 			iMenuItem.Widget = widget;
+
+			if (iMenuItem is MenuItem)
+			{
+				SetMenuItem((MenuItem)iMenuItem);
+			}
 
 			AddItem(widget, index);
 		}

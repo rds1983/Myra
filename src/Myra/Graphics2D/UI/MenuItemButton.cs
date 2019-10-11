@@ -15,12 +15,41 @@ namespace Myra.Graphics2D.UI
 {
 	internal class MenuItemButton : ButtonBase<HorizontalStackPanel>
 	{
+		private readonly Proportion _imageProportion = new Proportion(ProportionType.Pixels, 0);
+		private int _imageWidth = 0;
 		private readonly Image _image;
 		private readonly Label _label;
 		private readonly Label _shortcut;
 		private readonly Menu _subMenu = new VerticalMenu();
 		private char? _underscoreChar;
 		private string _text;
+
+		internal int ImageWidth
+		{
+			get
+			{
+				return _imageWidth;
+			}
+
+			set
+			{
+				if (_imageWidth == value)
+				{
+					return;
+				}
+
+				_imageWidth = value;
+				_imageProportion.Value = value;
+			}
+		}
+
+		internal Image ImageWidget
+		{
+			get
+			{
+				return _image;
+			}
+		}
 
 		public int LabelWidth
 		{
@@ -37,7 +66,6 @@ namespace Myra.Graphics2D.UI
 				_label.Width = value;
 			}
 		}
-
 
 		public string Text
 		{
@@ -92,7 +120,11 @@ namespace Myra.Graphics2D.UI
 		public string ShortcutText
 		{
 			get { return _shortcut.Text; }
-			set { _shortcut.Text = value; }
+			set
+			{
+				_shortcut.Text = value;
+				UpdateShortcut();
+			}
 		}
 
 		[Browsable(false)]
@@ -100,7 +132,19 @@ namespace Myra.Graphics2D.UI
 		public SpriteFont ShortcutFont
 		{
 			get { return _shortcut.Font; }
-			set { _shortcut.Font = value; }
+			set
+			{
+				_shortcut.Font = value;
+				UpdateShortcut();
+			}
+		}
+
+		private bool CanHaveShortcut
+		{
+			get
+			{
+				return !string.IsNullOrEmpty(ShortcutText) && ShortcutFont != null;
+			}
 		}
 
 		public Color ShortcutTextColor
@@ -171,16 +215,59 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
+		internal bool HasImage
+		{
+			get
+			{
+				return InternalChild.Widgets[0] == _image;
+			}
+
+			set
+			{
+				var hasImage = HasImage;
+				if (value == hasImage)
+				{
+					return;
+				}
+
+				if (hasImage && !value)
+				{
+					InternalChild.Proportions.RemoveAt(0);
+					InternalChild.Widgets.RemoveAt(0);
+				}
+				else if (!hasImage && value)
+				{
+					InternalChild.Proportions.Insert(0, _imageProportion);
+					InternalChild.Widgets.Insert(0, _image);
+				}
+			}
+		}
+
+		protected override bool UseHoverRenderable
+		{
+			get
+			{
+				if (Menu != null && Menu.KeyboardHoverButton != null)
+				{
+					return Menu.KeyboardHoverButton == this;
+				}
+
+				return base.UseHoverRenderable;
+			}
+		}
+
 		internal MenuItemButton(Menu menu, MenuItemStyle style)
 		{
 			Menu = menu;
 			InternalChild = new HorizontalStackPanel();
 
-			InternalChild.Proportions.Add(Proportion.Auto);
 			InternalChild.Proportions.Add(Proportion.Fill);
 
-			_image = new Image();
-			InternalChild.Widgets.Add(_image);
+			_image = new Image
+			{
+				HorizontalAlignment = HorizontalAlignment.Left,
+				VerticalAlignment = VerticalAlignment.Center
+			};
 
 			_label = new Label(null);
 			InternalChild.Widgets.Add(_label);
@@ -220,16 +307,14 @@ namespace Myra.Graphics2D.UI
 			_label.IsPressed = IsPressed;
 		}
 
-		protected override bool UseHoverRenderable
+		private void UpdateShortcut()
 		{
-			get
+			if (CanHaveShortcut && !InternalChild.Widgets.Contains(_shortcut))
 			{
-				if (Menu != null && Menu.KeyboardHoverButton != null)
-				{
-					return Menu.KeyboardHoverButton == this;
-				}
-
-				return base.UseHoverRenderable;
+				InternalChild.Widgets.Add(_shortcut);
+			} else if (!CanHaveShortcut && InternalChild.Widgets.Contains(_shortcut))
+			{
+				InternalChild.Widgets.Remove(_shortcut);
 			}
 		}
 	}

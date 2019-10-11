@@ -924,8 +924,8 @@ namespace Myra.Graphics2D.UI
 				var x = position.Value.X;
 				for (var i = 0; i < _cellLocationsX.Count; ++i)
 				{
-					var cx = _cellLocationsX[i] + bounds.Left;
-					if (x >= cx && x < cx + _colWidths[i])
+					var cx = _cellLocationsX[i] + bounds.Left - ColumnSpacing / 2;
+					if (x >= cx && x < cx + _colWidths[i] + ColumnSpacing / 2)
 					{
 						HoverColumnIndex = i;
 						break;
@@ -938,8 +938,8 @@ namespace Myra.Graphics2D.UI
 				var y = position.Value.Y;
 				for (var i = 0; i < _cellLocationsY.Count; ++i)
 				{
-					var cy = _cellLocationsY[i] + bounds.Top;
-					if (y >= cy && y < cy + _rowHeights[i])
+					var cy = _cellLocationsY[i] + bounds.Top - RowSpacing / 2;
+					if (y >= cy && y < cy + _rowHeights[i] + RowSpacing / 2)
 					{
 						HoverRowIndex = i;
 						break;

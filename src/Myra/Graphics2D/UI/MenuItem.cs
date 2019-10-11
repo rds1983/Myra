@@ -17,7 +17,29 @@ namespace Myra.Graphics2D.UI
 		private string _shortcutText;
 		private Color? _shortcutColor;
 		private bool _toggleable;
+		private IRenderable _image;
 		private readonly ObservableCollection<IMenuItem> _items = new ObservableCollection<IMenuItem>();
+
+		[Browsable(false)]
+		[XmlIgnore]
+		public IRenderable Image
+		{
+			get
+			{
+				return _image;
+			}
+
+			set
+			{
+				if (value == _image)
+				{
+					return;
+				}
+
+				_image = value;
+				FireChanged();
+			}
+		}
 
 		[DefaultValue(null)]
 		public string ShortcutText
