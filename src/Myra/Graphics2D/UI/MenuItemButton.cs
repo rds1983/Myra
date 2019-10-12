@@ -16,7 +16,8 @@ namespace Myra.Graphics2D.UI
 	internal class MenuItemButton : ButtonBase<HorizontalStackPanel>
 	{
 		private readonly Proportion _imageProportion = new Proportion(ProportionType.Pixels, 0);
-		private int _imageWidth = 0;
+		private readonly Proportion _shortcutProportion = new Proportion(ProportionType.Pixels, 0);
+		private int _imageWidth = 0, _shortcutWidth = 0;
 		private readonly Image _image;
 		private readonly Label _label;
 		private readonly Label _shortcut;
@@ -48,6 +49,33 @@ namespace Myra.Graphics2D.UI
 			get
 			{
 				return _image;
+			}
+		}
+
+		internal int ShortcutWidth
+		{
+			get
+			{
+				return _shortcutWidth;
+			}
+
+			set
+			{
+				if (_shortcutWidth == value)
+				{
+					return;
+				}
+
+				_shortcutWidth = value;
+				_shortcutProportion.Value = value;
+			}
+		}
+
+		internal Label ShortcutWidget
+		{
+			get
+			{
+				return _shortcut;
 			}
 		}
 
@@ -120,11 +148,7 @@ namespace Myra.Graphics2D.UI
 		public string ShortcutText
 		{
 			get { return _shortcut.Text; }
-			set
-			{
-				_shortcut.Text = value;
-				UpdateShortcut();
-			}
+			set { _shortcut.Text = value; }
 		}
 
 		[Browsable(false)]
@@ -132,11 +156,7 @@ namespace Myra.Graphics2D.UI
 		public SpriteFont ShortcutFont
 		{
 			get { return _shortcut.Font; }
-			set
-			{
-				_shortcut.Font = value;
-				UpdateShortcut();
-			}
+			set { _shortcut.Font = value; }
 		}
 
 		private bool CanHaveShortcut
@@ -243,6 +263,35 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		internal bool HasShortcut
+		{
+			get
+			{
+				return InternalChild.Widgets[InternalChild.Widgets.Count - 1] == _shortcut;
+			}
+
+			set
+			{
+				var hasShortcut = HasShortcut;
+				if (value == hasShortcut)
+				{
+					return;
+				}
+
+				var lastIndex = InternalChild.Widgets.Count - 1;
+				if (hasShortcut && !value)
+				{
+					InternalChild.Proportions.RemoveAt(lastIndex);
+					InternalChild.Widgets.RemoveAt(lastIndex);
+				}
+				else if (!hasShortcut && value)
+				{
+					InternalChild.Proportions.Add(_shortcutProportion);
+					InternalChild.Widgets.Add(_shortcut);
+				}
+			}
+		}
+
 		protected override bool UseHoverRenderable
 		{
 			get
@@ -273,7 +322,6 @@ namespace Myra.Graphics2D.UI
 			InternalChild.Widgets.Add(_label);
 
 			_shortcut = new Label(null);
-			InternalChild.Widgets.Add(_shortcut);
 
 			if (style != null)
 			{
@@ -305,17 +353,6 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnPressedChanged();
 			_label.IsPressed = IsPressed;
-		}
-
-		private void UpdateShortcut()
-		{
-			if (CanHaveShortcut && !InternalChild.Widgets.Contains(_shortcut))
-			{
-				InternalChild.Widgets.Add(_shortcut);
-			} else if (!CanHaveShortcut && InternalChild.Widgets.Contains(_shortcut))
-			{
-				InternalChild.Widgets.Remove(_shortcut);
-			}
 		}
 	}
 }

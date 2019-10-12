@@ -226,6 +226,69 @@ namespace Myra.Graphics2D.UI
 			InternalChild.Widgets.Insert(index, menuItem);
 		}
 
+		private void UpdateWidths()
+		{
+			// Find maximum widths
+			int? maximumImageWidth = null, maximumShortcutWidth = null;
+			foreach (var item in _items)
+			{
+				var button = item.Widget as MenuItemButton;
+				if (button == null)
+				{
+					continue;
+				}
+
+				var menuItem = (MenuItem)item;
+
+				if (menuItem.Image != null)
+				{
+					var size = button.ImageWidget.Measure(new Point(10000, 10000));
+					if (maximumImageWidth == null || size.X > maximumImageWidth.Value)
+					{
+						maximumImageWidth = size.X;
+					}
+				}
+
+				if (!string.IsNullOrEmpty(menuItem.ShortcutText))
+				{
+					var size = button.ShortcutWidget.Measure(new Point(10000, 10000));
+					if (maximumShortcutWidth == null || size.X > maximumShortcutWidth.Value)
+					{
+						maximumShortcutWidth = size.X;
+					}
+				}
+			}
+
+			// Update widths
+			foreach (var item in _items)
+			{
+				var asButton = item.Widget as MenuItemButton;
+				if (asButton == null)
+				{
+					continue;
+				}
+
+				if (maximumImageWidth == null)
+				{
+					asButton.HasImage = false;
+				}
+				else
+				{
+					asButton.HasImage = true;
+					asButton.ImageWidth = maximumImageWidth.Value;
+				}
+
+				if (maximumShortcutWidth == null)
+				{
+					asButton.HasShortcut = false;
+				} else
+				{
+					asButton.HasShortcut = true;
+					asButton.ShortcutWidth = maximumShortcutWidth.Value;
+				}
+			}
+		}
+
 		private void SetMenuItem(MenuItem menuItem)
 		{
 			var asMenuItemButton = menuItem.Widget as MenuItemButton;
@@ -235,40 +298,14 @@ namespace Myra.Graphics2D.UI
 			}
 
 			asMenuItemButton.Image = menuItem.Image;
-
-
-			// Find widest image
-			int? maximumImageWidth = null;
-			foreach(var item in _items)
+			asMenuItemButton.ShortcutText = menuItem.ShortcutText;
+			if (menuItem.ShortcutColor != null)
 			{
-				var asMenuItem = item as MenuItem;
-				if (asMenuItem != null && asMenuItem.Image != null)
-				{
-					var button = (MenuItemButton)asMenuItem.Widget;
-
-					var size = button.ImageWidget.Measure(new Point(10000, 10000));
-					if (maximumImageWidth == null || size.X > maximumImageWidth.Value)
-					{
-						maximumImageWidth = size.X;
-					}
-				}
+				asMenuItemButton.ShortcutTextColor = menuItem.ShortcutColor.Value;
 			}
-
-			// Update images widths
-			foreach (var item in _items)
+			else if (MenuItemStyle != null && MenuItemStyle.ShortcutStyle != null)
 			{
-				var asButton = item.Widget as MenuItemButton;
-				if (asButton != null)
-				{
-					if (maximumImageWidth == null)
-					{
-						asButton.HasImage = false;
-					} else
-					{
-						asButton.HasImage = true;
-						asButton.ImageWidth = maximumImageWidth.Value;
-					}
-				}
+				asMenuItemButton.ShortcutTextColor = MenuItemStyle.ShortcutStyle.TextColor;
 			}
 
 			asMenuItemButton.Text = menuItem.Text;
@@ -280,15 +317,7 @@ namespace Myra.Graphics2D.UI
 				asMenuItemButton.TextColor = MenuItemStyle.LabelStyle.TextColor;
 			}
 
-			asMenuItemButton.ShortcutText = menuItem.ShortcutText;
-			if (menuItem.ShortcutColor != null)
-			{
-				asMenuItemButton.ShortcutTextColor = menuItem.ShortcutColor.Value;
-			}
-			else if (MenuItemStyle != null && MenuItemStyle.ShortcutStyle != null)
-			{
-				asMenuItemButton.ShortcutTextColor = MenuItemStyle.ShortcutStyle.TextColor;
-			}
+			UpdateWidths();
 		}
 
 		private void MenuItemOnChanged(object sender, EventArgs eventArgs)

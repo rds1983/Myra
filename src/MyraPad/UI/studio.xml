@@ -6,24 +6,27 @@
       <Proportion Type="Fill" />
     </VerticalStackPanel.Proportions>
     <HorizontalMenu Id="">
-      <MenuItem Id="" Text="&amp;File">
-        <MenuItem Id="_menuFileNew" Text="&amp;New" />
-        <MenuItem Id="_menuFileOpen" Text="&amp;Open" />
-        <MenuItem Id="_menuFileReload" Text="&amp;Reload" />
-        <MenuItem Id="_menuFileSave" Text="&amp;Save" />
+      <MenuItem Id="_menuFile" Text="&amp;File">
+        <MenuItem ShortcutText="Ctrl+N" Id="_menuFileNew" Text="&amp;New" />
+        <MenuItem ShortcutText="Ctrl+O" Id="_menuFileOpen" Text="&amp;Open" />
+        <MenuItem ShortcutText="Ctrl+R" Id="_menuFileReload" Text="&amp;Reload" />
+        <MenuItem ShortcutText="Ctrl+S" Id="_menuFileSave" Text="&amp;Save" />
         <MenuItem Id="_menuFileSaveAs" Text="Save &amp;As..." />
-        <MenuItem Id="_menuFileExportToCS" Text="&amp;Export To C#..." />
+        <MenuItem ShortcutText="Ctrl+E" Id="_menuFileExportToCS" Text="&amp;Export To C#..." />
         <MenuSeparator />
         <MenuItem Id="_menuFileLoadStylesheet" Text="&amp;Load Stylesheet" />
-        <MenuItem Id="_menuFileReloadStylesheet" Text="Rel&amp;oad Stylesheet" />
+        <MenuItem ShortcutText="Ctrl+T" Id="_menuFileReloadStylesheet" Text="Rel&amp;oad Stylesheet" />
         <MenuItem Id="_menuFileResetStylesheet" Text="Rese&amp;t Stylesheet" />
         <MenuSeparator />
         <MenuItem Id="_menuFileDebugOptions" Text="&amp;UI Debug Options" />
         <MenuSeparator />
-        <MenuItem Id="_menuFileQuit" Text="&amp;Quit" />
+        <MenuItem ShortcutText="Ctrl+Q" Id="_menuFileQuit" Text="&amp;Quit" />
       </MenuItem>
       <MenuItem Id="" Text="&amp;Edit">
-        <MenuItem Id="_menuEditFormatSource" Text="&amp;Format Source" />
+        <MenuItem ShortcutText="Ctrl+Insert, Ctrl+C" Id="_menuItemCopy" Text="&amp;Copy" />
+        <MenuItem ShortcutText="Shift+Insert, Ctrl+V" Id="_menuItemPaste" Text="&amp;Paste" />
+        <MenuSeparator />
+        <MenuItem ShortcutText="Ctrl+F" Id="_menuEditFormatSource" Text="&amp;Format Source" />
       </MenuItem>
       <MenuItem Id="" Text="&amp;Help">
         <MenuItem Id="_menuHelpAbout" Text="&amp;About" />

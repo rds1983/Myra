@@ -311,6 +311,50 @@ namespace MyraPad
 				}
 			};
 
+			_desktop.KeyDown += (s, a) =>
+			{
+				if (_desktop.HasModalWindow)
+				{
+					return;
+				}
+
+				if (_desktop.DownKeys.Contains(Keys.LeftControl) || _desktop.DownKeys.Contains(Keys.RightControl))
+				{
+					if (_desktop.DownKeys.Contains(Keys.N))
+					{
+						NewItemOnClicked(this, EventArgs.Empty);
+					}
+					else if (_desktop.DownKeys.Contains(Keys.O))
+					{
+						OpenItemOnClicked(this, EventArgs.Empty);
+					}
+					else if (_desktop.DownKeys.Contains(Keys.R))
+					{
+						OnMenuFileReloadSelected(this, EventArgs.Empty);
+					}
+					else if (_desktop.DownKeys.Contains(Keys.S))
+					{
+						SaveItemOnClicked(this, EventArgs.Empty);
+					}
+					else if (_desktop.DownKeys.Contains(Keys.E))
+					{
+						ExportCsItemOnSelected(this, EventArgs.Empty);
+					}
+					else if (_desktop.DownKeys.Contains(Keys.T))
+					{
+						OnMenuFileReloadSelected(this, EventArgs.Empty);
+					}
+					else if (_desktop.DownKeys.Contains(Keys.Q))
+					{
+						Exit();
+					}
+					else if (_desktop.DownKeys.Contains(Keys.F))
+					{
+						_menuEditUpdateSource_Selected(this, EventArgs.Empty);
+					}
+				}
+			};
+
 			_ui = new StudioWidget();
 
 			_ui._menuFileNew.Selected += NewItemOnClicked;

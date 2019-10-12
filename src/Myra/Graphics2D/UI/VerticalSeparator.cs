@@ -38,5 +38,10 @@ namespace Myra.Graphics2D.UI
 			HorizontalAlignment = HorizontalAlignment.Center;
 			VerticalAlignment = VerticalAlignment.Stretch;
 		}
+
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
+		{
+			ApplySeparatorStyle(stylesheet.VerticalSeparatorStyles[name]);
+		}
 	}
 }
