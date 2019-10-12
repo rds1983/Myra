@@ -116,14 +116,34 @@ namespace Myra.Graphics2D.UI
 			{
 				int? hoverIndex = null;
 
-				for (var i = 0; i < InternalChild.Widgets.Count; ++i)
+				if (KeyboardHoverButton != null)
 				{
-					var widget = InternalChild.Widgets[i];
-					if ((KeyboardHoverButton != null && KeyboardHoverButton == widget) ||
-						(widget is MenuItemButton && ((MenuItemButton)widget).IsPressed))
+					for (var i = 0; i < InternalChild.Widgets.Count; ++i)
 					{
-						hoverIndex = i;
-						break;
+						var widget = InternalChild.Widgets[i];
+						if (KeyboardHoverButton == widget)
+						{
+							hoverIndex = i;
+							break;
+						}
+					}
+				}
+
+				if (hoverIndex == null)
+				{
+					for (var i = 0; i < InternalChild.Widgets.Count; ++i)
+					{
+						var button = InternalChild.Widgets[i] as MenuItemButton;
+						if (button == null)
+						{
+							continue;
+						}
+						
+						if(button.IsMouseOver || button.IsPressed)
+						{
+							hoverIndex = i;
+							break;
+						}
 					}
 				}
 

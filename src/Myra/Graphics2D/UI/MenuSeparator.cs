@@ -6,6 +6,8 @@ namespace Myra.Graphics2D.UI
 	public class MenuSeparator : IMenuItem
 	{
 		[DefaultValue(null)]
+		[Browsable(false)]
+		[XmlIgnore]
 		public string Id { get; set; }
 
 		[Browsable(false)]
