@@ -1,7 +1,9 @@
 ﻿using Myra.Graphics2D.UI;
+using System.Linq;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 #if ANDROID
 using System;
 using Microsoft.Xna.Framework.GamerServices;
@@ -24,9 +26,13 @@ namespace Myra.Samples.AllWidgets
 
 		private Desktop _desktop;
 		private AllWidgets _allWidgets;
+		
+		public static AllWidgetsGame Instance { get; private set; }
 
 		public AllWidgetsGame()
 		{
+			Instance = this;
+
 #if !XENKO
 			_graphics = new GraphicsDeviceManager(this)
 			{
@@ -64,6 +70,35 @@ namespace Myra.Samples.AllWidgets
 			_desktop = new Desktop();
 
 			_allWidgets = new AllWidgets();
+
+			_desktop.KeyDown += (s, a) =>
+			{
+				if (_desktop.HasModalWindow)
+				{
+					return;
+				}
+
+				if (_desktop.DownKeys.Contains(Keys.LeftControl) || _desktop.DownKeys.Contains(Keys.RightControl))
+				{
+					if (_desktop.DownKeys.Contains(Keys.O))
+					{
+						_allWidgets.OpenFile();
+					} else if (_desktop.DownKeys.Contains(Keys.S))
+					{
+						_allWidgets.SaveFile();
+					} else if (_desktop.DownKeys.Contains(Keys.F))
+					{
+						_allWidgets.ChooseFolder();
+					} else if (_desktop.DownKeys.Contains(Keys.L))
+					{
+						_allWidgets.ChooseColor();
+					}
+					else if (_desktop.DownKeys.Contains(Keys.Q))
+					{
+						Exit();
+					}
+				}
+			};
 
 			_desktop.Widgets.Add(_allWidgets);
 

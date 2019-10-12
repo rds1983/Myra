@@ -10,75 +10,36 @@ namespace Myra.Samples.AllWidgets
 		{
 			BuildUI();
 
-			_menuItemNew.Image = DefaultAssets.UISpritesheet["icon-folder-new"];
-			_menuItemOpen.Image = DefaultAssets.UISpritesheet["icon-folder"];
+			foreach (var item in _menuHelp.Items)
+			{
+				var asMenuItem = item as MenuItem;
+				if (asMenuItem == null)
+				{
+					continue;
+				}
+
+				asMenuItem.Widget.PaddingLeft = asMenuItem.Widget.PaddingRight = 20;
+			}
+
+			_menuItemOpenFile.Image = DefaultAssets.UISpritesheet["icon-folder"];
+			_menuItemSaveFile.Image = DefaultAssets.UISpritesheet["icon-folder-new"];
+
+			_menuItemOpenFile.Selected += (s, a) => OpenFile();
+			_menuItemSaveFile.Selected += (s, a) => SaveFile();
+			_menuItemChooseColor.Selected += (s, a) => ChooseColor();
+			_menuItemChooseFolder.Selected += (s, a) => ChooseFolder();
+			_menuItemQuit.Selected += (s, a) => Quit();
 
 			_buttonOpenFile.Image = DefaultAssets.UISpritesheet["icon-star"];
-			_buttonOpenFile.Click += (sender, args) =>
-			{
-				var fileDialog = new FileDialog(FileDialogMode.OpenFile);
-				fileDialog.ShowModal(Desktop);
-
-				fileDialog.Closed += (s, a) =>
-				{
-					if (!fileDialog.Result)
-					{
-						return;
-					}
-
-					_textOpenFile.Text = fileDialog.FilePath;
-				};
-			};
+			_buttonOpenFile.Click += (sender, args) => OpenFile();
 
 			_buttonSaveFile.Image = DefaultAssets.UISpritesheet["icon-star"];
-			_buttonSaveFile.Click += (sender, args) =>
-			{
-				var fileDialog = new FileDialog(FileDialogMode.SaveFile);
-				fileDialog.ShowModal(Desktop);
-
-				fileDialog.Closed += (s, a) =>
-				{
-					if (!fileDialog.Result)
-					{
-						return;
-					}
-
-					_textSaveFile.Text = fileDialog.FilePath;
-				};
-			};
+			_buttonSaveFile.Click += (sender, args) => SaveFile();
 
 			_buttonChooseFolder.Image = DefaultAssets.UISpritesheet["icon-star"];
-			_buttonChooseFolder.Click += (sender, args) =>
-			{
-				var fileDialog = new FileDialog(FileDialogMode.ChooseFolder);
-				fileDialog.ShowModal(Desktop);
+			_buttonChooseFolder.Click += (sender, args) => ChooseFolder();
 
-				fileDialog.Closed += (s, a) =>
-				{
-					if (!fileDialog.Result)
-					{
-						return;
-					}
-
-					_textChooseFolder.Text = fileDialog.FilePath;
-				};
-			};
-
-			_buttonChooseColor.Click += (sender, args) =>
-			{
-				var debugWindow = new ColorPickerDialog();
-				debugWindow.ShowModal(Desktop);
-
-				debugWindow.Closed += (s, a) =>
-				{
-					if (!debugWindow.Result)
-					{
-						return;
-					}
-
-					_textButtonLabel.TextColor = debugWindow.Color;
-				};
-			};
+			_buttonChooseColor.Click += (sender, args) => ChooseColor();
 
 			_imageButton.Image = DefaultAssets.UISpritesheet["icon-star-outline"];
 			_imageButton.Click += (sender, args) =>
@@ -120,6 +81,75 @@ namespace Myra.Samples.AllWidgets
 			node4.AddSubNode("node17");
 			node4.AddSubNode("node18");
 			_gridRight.Widgets.Add(tree);
+		}
+
+		public void OpenFile()
+		{
+			var fileDialog = new FileDialog(FileDialogMode.OpenFile);
+			fileDialog.ShowModal(Desktop);
+
+			fileDialog.Closed += (s, a) =>
+			{
+				if (!fileDialog.Result)
+				{
+					return;
+				}
+
+				_textOpenFile.Text = fileDialog.FilePath;
+			};
+		}
+
+		public void SaveFile()
+		{
+			var fileDialog = new FileDialog(FileDialogMode.SaveFile);
+			fileDialog.ShowModal(Desktop);
+
+			fileDialog.Closed += (s, a) =>
+			{
+				if (!fileDialog.Result)
+				{
+					return;
+				}
+
+				_textSaveFile.Text = fileDialog.FilePath;
+			};
+		}
+
+		public void ChooseFolder()
+		{
+			var fileDialog = new FileDialog(FileDialogMode.ChooseFolder);
+			fileDialog.ShowModal(Desktop);
+
+			fileDialog.Closed += (s, a) =>
+			{
+				if (!fileDialog.Result)
+				{
+					return;
+				}
+
+				_textChooseFolder.Text = fileDialog.FilePath;
+			};
+		}
+
+		public void ChooseColor()
+		{
+			var debugWindow = new ColorPickerDialog();
+			debugWindow.ShowModal(Desktop);
+
+			debugWindow.Closed += (s, a) =>
+			{
+				if (!debugWindow.Result)
+				{
+					return;
+				}
+
+				_textButtonLabel.TextColor = debugWindow.Color;
+			};
+		}
+
+		public void Quit()
+		{
+			AllWidgetsGame.Instance.Exit();
 		}
 	}
 }

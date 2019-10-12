@@ -360,6 +360,23 @@ namespace Myra.Graphics2D.UI
 
 		public int RepeatKeyDownInternalInMs { get; set; } = 50;
 
+		public bool HasModalWindow
+		{
+			get
+			{
+				for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
+				{
+					var w = ChildrenCopy[i];
+					if (w.Visible && w.Enabled && (w is Window) && ((Window)w).IsModal)
+					{
+						return true;
+					}
+				}
+
+				return false;
+			}
+		}
+
 		public Action<Keys> KeyDownHandler;
 
 		public event EventHandler MouseMoved;
