@@ -540,7 +540,7 @@ namespace Myra.Graphics2D.UI
 
 			if (menuItem.CanOpen && OpenMenuItem != menuItem)
 			{
-				InternalSetSelectedIndex(HoverIndex);
+				SelectedIndex = HoverIndex;
 			}
 		}
 
@@ -567,12 +567,9 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var menuItem = SelectedMenuItem;
-			if (menuItem != null)
+			if (menuItem != null && menuItem.CanOpen)
 			{
-				if (menuItem.CanOpen)
-				{
-					ShowSubMenu(menuItem);
-				}
+				ShowSubMenu(menuItem);
 			}
 		}
 
@@ -596,19 +593,6 @@ namespace Myra.Graphics2D.UI
 			return Items[index.Value] as MenuItem;
 		}
 
-		private void InternalSetSelectedIndex(int? index)
-		{
-			try
-			{
-				_internalSetSelectedIndex = true;
-				SelectedIndex = index;
-			}
-			finally
-			{
-				_internalSetSelectedIndex = false;
-			}
-		}
-
 		private void Click(int? index)
 		{
 			var menuItem = GetMenuItem(index);
@@ -623,7 +607,7 @@ namespace Myra.Graphics2D.UI
 				menuItem.FireSelected();
 			} else
 			{
-				InternalSetSelectedIndex(index);
+				SelectedIndex = index;
 			}
 		}
 
