@@ -1022,6 +1022,12 @@ namespace Myra.Graphics2D.UI
 
 		public void OnChar(char c)
 		{
+			if (MenuBar != null && MyraEnvironment.ShowUnderscores)
+			{
+				// Don't accept chars if menubar is open
+				return;
+			}
+
 			if (_focusedKeyboardWidget != null)
 			{
 				_focusedKeyboardWidget.OnChar(c);

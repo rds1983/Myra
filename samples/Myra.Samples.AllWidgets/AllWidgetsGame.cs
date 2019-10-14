@@ -73,7 +73,7 @@ namespace Myra.Samples.AllWidgets
 
 			_desktop.KeyDown += (s, a) =>
 			{
-				if (_desktop.HasModalWindow)
+				if (_desktop.HasModalWindow || _allWidgets._mainMenu.IsOpen)
 				{
 					return;
 				}

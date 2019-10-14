@@ -5,7 +5,7 @@
       <Proportion Type="Auto" />
       <Proportion Type="Fill" />
     </VerticalStackPanel.Proportions>
-    <HorizontalMenu VerticalAlignment="Stretch">
+    <HorizontalMenu VerticalAlignment="Stretch" Id="_mainMenu">
       <MenuItem Id="_menuFile" Text="&amp;File">
         <MenuItem Id="_menuItemOpenFile" Text="&amp;Open" ShortcutText="Ctrl+O" />
         <MenuItem Id="_menuItemSaveFile" Text="&amp;Save" ShortcutText="Ctrl+S" />

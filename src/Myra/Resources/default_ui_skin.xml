@@ -119,7 +119,7 @@
     <VerticalMenuStyle Background="button" Border="border" SelectionHoverBackground="button-over" SelectionBackground="button-down">
       <ImageStyle PaddingLeft="10" />
       <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" PaddingLeft="10" PaddingRight="10" />
-      <ShortcutStyle Font="default-font" TextColor="white" DisabledTextColor="grey" PaddingLeft="20" PaddingRight="10" />
+      <ShortcutStyle Font="default-font" TextColor="white" DisabledTextColor="grey" PaddingRight="10" />
       <SeparatorStyle PaddingTop="2" PaddingBottom="2" Image="separator-menu" Thickness="4" />
     </VerticalMenuStyle>
   </VerticalMenuStyles>

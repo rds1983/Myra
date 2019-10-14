@@ -313,7 +313,7 @@ namespace MyraPad
 
 			_desktop.KeyDown += (s, a) =>
 			{
-				if (_desktop.HasModalWindow)
+				if (_desktop.HasModalWindow || _ui._mainMenu.IsOpen)
 				{
 					return;
 				}
@@ -774,7 +774,10 @@ namespace MyraPad
 
 		private void HandleAutoComplete()
 		{
-			_desktop.HideContextMenu();
+			if (_desktop.ContextMenu == _autoCompleteMenu)
+			{
+				_desktop.HideContextMenu();
+			}
 
 			if (_currentTagStart == null || _currentTagEnd != null || string.IsNullOrEmpty(_parentTag))
 			{
