@@ -1,7 +1,7 @@
 <Project>
   <Project.ExportOptions Namespace="Myra.Graphics2D.UI.ColorPicker" Class="ColorPickerDialog" OutputPath="D:\Projects\Myra\src\Myra\Graphics2D\UI\ColorPicker" />
-  <Dialog Title="Color Picker" Left="299" Top="27" Width="450">
-    <VerticalStackPanel Spacing="-1">
+  <Dialog Title="Color Picker" Left="299" Top="26" Width="450">
+    <VerticalStackPanel>
       <VerticalStackPanel.Proportions>
         <Proportion Type="Fill" Value="100" />
       </VerticalStackPanel.Proportions>
