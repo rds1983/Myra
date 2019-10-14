@@ -17,9 +17,12 @@ using Xenko.Input;
 
 namespace Myra.Graphics2D.UI
 {
-	public abstract class Menu : SingleItemContainer<StackPanel>
+	public abstract class Menu : SingleItemContainer<Grid>
 	{
+		private Proportion _imageProportion = Proportion.Auto, _shortcutProportion = Proportion.Auto;
 		private ObservableCollection<IMenuItem> _items;
+		private bool _dirty = true;
+		private bool _internalSetSelectedIndex = false;
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -27,15 +30,11 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public MenuItemStyle MenuItemStyle { get; private set; }
+		public MenuStyle MenuStyle { get; private set; }
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public SeparatorStyle SeparatorStyle { get; private set; }
-
-		[Browsable(false)]
-		[XmlIgnore]
-		internal MenuItemButton OpenMenuItem { get; private set; }
+		internal MenuItem OpenMenuItem { get; private set; }
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -81,6 +80,8 @@ namespace Myra.Graphics2D.UI
 						AddItem(menuItem);
 					}
 				}
+
+				_dirty = true;
 			}
 		}
 
@@ -114,71 +115,162 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				int? hoverIndex = null;
-
-				if (KeyboardHoverButton != null)
+				if (Orientation == Orientation.Horizontal)
 				{
-					for (var i = 0; i < InternalChild.Widgets.Count; ++i)
-					{
-						var widget = InternalChild.Widgets[i];
-						if (KeyboardHoverButton == widget)
-						{
-							hoverIndex = i;
-							break;
-						}
-					}
+					return InternalChild.HoverColumnIndex;
 				}
 
-				if (hoverIndex == null)
-				{
-					for (var i = 0; i < InternalChild.Widgets.Count; ++i)
-					{
-						var button = InternalChild.Widgets[i] as MenuItemButton;
-						if (button == null)
-						{
-							continue;
-						}
-						
-						if(button.IsMouseOver || button.IsPressed)
-						{
-							hoverIndex = i;
-							break;
-						}
-					}
-				}
-
-				return hoverIndex;
+				return InternalChild.HoverRowIndex;
 			}
 
 			set
 			{
-				if (value != null)
+
+				if (Orientation == Orientation.Horizontal)
 				{
-					var button = InternalChild.Widgets[value.Value] as MenuItemButton;
-					if (button != null)
-					{
-						KeyboardHoverButton = button;
-					}
-				} else
+					InternalChild.HoverColumnIndex = value;
+				}
+				else
 				{
-					KeyboardHoverButton = null;
+					InternalChild.HoverRowIndex = value;
 				}
 			}
 		}
 
 		[Browsable(false)]
 		[XmlIgnore]
-		internal MenuItemButton KeyboardHoverButton;
+		public int? SelectedIndex
+		{
+			get
+			{
+				if (Orientation == Orientation.Horizontal)
+				{
+					return InternalChild.SelectedColumnIndex;
+				}
+
+				return InternalChild.SelectedRowIndex;
+			}
+
+			set
+			{
+
+				if (Orientation == Orientation.Horizontal)
+				{
+					InternalChild.SelectedColumnIndex = value;
+				}
+				else
+				{
+					InternalChild.SelectedRowIndex = value;
+				}
+			}
+		}
+
+		private MenuItem SelectedMenuItem
+		{
+			get
+			{
+				return GetMenuItem(SelectedIndex);
+			}
+		}
+
+		private bool HasImage
+		{
+			get
+			{
+				if (Orientation == Orientation.Horizontal)
+				{
+					return false;
+				}
+
+				return InternalChild.ColumnsProportions[0] == _imageProportion;
+			}
+
+			set
+			{
+				if (Orientation == Orientation.Horizontal)
+				{
+					return;
+				}
+
+				var hasImage = HasImage;
+				if (hasImage == value)
+				{
+					return;
+				}
+
+				if (hasImage && !value)
+				{
+					InternalChild.ColumnsProportions.RemoveAt(0);
+				} else if(!hasImage && value)
+				{
+					InternalChild.ColumnsProportions.Insert(0, _imageProportion);
+				}
+
+				_dirty = true;
+			}
+		}
+
+		private bool HasShortcut
+		{
+			get
+			{
+				if (Orientation == Orientation.Horizontal)
+				{
+					return false;
+				}
+
+				return InternalChild.ColumnsProportions[InternalChild.ColumnsProportions.Count - 1] == _shortcutProportion;
+			}
+
+			set
+			{
+				if (Orientation == Orientation.Horizontal)
+				{
+					return;
+				}
+
+				var hasShortcut = HasShortcut;
+				if (hasShortcut == value)
+				{
+					return;
+				}
+
+				if (hasShortcut && !value)
+				{
+					InternalChild.ColumnsProportions.RemoveAt(InternalChild.ColumnsProportions.Count - 1);
+				}
+				else if (!hasShortcut && value)
+				{
+					InternalChild.ColumnsProportions.Add(_shortcutProportion);
+				}
+
+				_dirty = true;
+			}
+		}
 
 		protected Menu(string styleName)
 		{
+			InternalChild = new Grid
+			{
+				CanSelectNothing = true
+			};
+
 			if (Orientation == Orientation.Horizontal)
 			{
-				InternalChild = new HorizontalStackPanel();
-			} else
-			{
-				InternalChild = new VerticalStackPanel();
+				InternalChild.GridSelectionMode = GridSelectionMode.Column;
+				InternalChild.DefaultColumnProportion = Proportion.Auto;
+				InternalChild.DefaultRowProportion = Proportion.Auto;
 			}
+			else
+			{
+				InternalChild.GridSelectionMode = GridSelectionMode.Row;
+				InternalChild.ColumnsProportions.Add(Proportion.Fill);
+				InternalChild.DefaultRowProportion = Proportion.Auto;
+			}
+
+			InternalChild.HoverIndexChanged += OnHoverIndexChanged;
+			InternalChild.SelectedIndexChanged += OnSelectedIndexChanged;
+			InternalChild.TouchUp += InternalChild_TouchUp;
 
 			OpenMenuItem = null;
 
@@ -208,6 +300,8 @@ namespace Myra.Graphics2D.UI
 					RemoveItem(item);
 				}
 			}
+
+			_dirty = true;
 		}
 
 		/// <summary>
@@ -246,98 +340,75 @@ namespace Myra.Graphics2D.UI
 			InternalChild.Widgets.Insert(index, menuItem);
 		}
 
-		private void UpdateWidths()
+		private void UpdateWidgets()
 		{
-			// Find maximum widths
-			int? maximumImageWidth = null, maximumShortcutWidth = null;
-			foreach (var item in _items)
+			var hasImage = false;
+			var hasShortcut = false;
+			foreach(var item in _items)
 			{
-				var button = item.Widget as MenuItemButton;
-				if (button == null)
+				var menuItem = item as MenuItem;
+				if (menuItem == null)
 				{
 					continue;
 				}
 
-				var menuItem = (MenuItem)item;
-
 				if (menuItem.Image != null)
 				{
-					var size = button.ImageWidget.Measure(new Point(10000, 10000));
-					if (maximumImageWidth == null || size.X > maximumImageWidth.Value)
-					{
-						maximumImageWidth = size.X;
-					}
+					hasImage = true;
 				}
 
 				if (!string.IsNullOrEmpty(menuItem.ShortcutText))
 				{
-					var size = button.ShortcutWidget.Measure(new Point(10000, 10000));
-					if (maximumShortcutWidth == null || size.X > maximumShortcutWidth.Value)
-					{
-						maximumShortcutWidth = size.X;
-					}
+					hasShortcut = true;
 				}
 			}
 
-			// Update widths
-			foreach (var item in _items)
-			{
-				var asButton = item.Widget as MenuItemButton;
-				if (asButton == null)
-				{
-					continue;
-				}
-
-				if (maximumImageWidth == null)
-				{
-					asButton.HasImage = false;
-				}
-				else
-				{
-					asButton.HasImage = true;
-					asButton.ImageWidth = maximumImageWidth.Value;
-				}
-
-				if (maximumShortcutWidth == null)
-				{
-					asButton.HasShortcut = false;
-				} else
-				{
-					asButton.HasShortcut = true;
-					asButton.ShortcutWidth = maximumShortcutWidth.Value;
-				}
-			}
+			HasImage = hasImage;
+			HasShortcut = hasShortcut;
 		}
 
 		private void SetMenuItem(MenuItem menuItem)
 		{
-			var asMenuItemButton = menuItem.Widget as MenuItemButton;
-			if (asMenuItemButton == null)
+			menuItem.ImageWidget.Renderable = menuItem.Image;
+			if (menuItem.ImageWidget.Renderable != null && !InternalChild.Widgets.Contains(menuItem.ImageWidget))
 			{
-				return;
+				InternalChild.Widgets.Add(menuItem.ImageWidget);
+			}
+			else if (menuItem.ImageWidget.Renderable == null && InternalChild.Widgets.Contains(menuItem.ImageWidget))
+			{
+				InternalChild.Widgets.Remove(menuItem.ImageWidget);
 			}
 
-			asMenuItemButton.Image = menuItem.Image;
-			asMenuItemButton.ShortcutText = menuItem.ShortcutText;
+			menuItem.Shortcut.Text = menuItem.ShortcutText;
 			if (menuItem.ShortcutColor != null)
 			{
-				asMenuItemButton.ShortcutTextColor = menuItem.ShortcutColor.Value;
+				menuItem.Shortcut.TextColor = menuItem.ShortcutColor.Value;
 			}
-			else if (MenuItemStyle != null && MenuItemStyle.ShortcutStyle != null)
+			else if (MenuStyle != null && MenuStyle.ShortcutStyle != null)
 			{
-				asMenuItemButton.ShortcutTextColor = MenuItemStyle.ShortcutStyle.TextColor;
+				menuItem.Shortcut.TextColor = MenuStyle.ShortcutStyle.TextColor;
 			}
 
-			asMenuItemButton.Text = menuItem.Text;
+			if (!string.IsNullOrEmpty(menuItem.ShortcutText) && !InternalChild.Widgets.Contains(menuItem.Shortcut))
+			{
+				InternalChild.Widgets.Add(menuItem.Shortcut);
+			}
+			else if (string.IsNullOrEmpty(menuItem.ShortcutText) && InternalChild.Widgets.Contains(menuItem.Shortcut))
+			{
+				InternalChild.Widgets.Remove(menuItem.Shortcut);
+			}
+
+			menuItem.Label.Text = menuItem.DisplayText;
 			if (menuItem.Color != null)
 			{
-				asMenuItemButton.TextColor = menuItem.Color.Value;
-			} else if (MenuItemStyle != null && MenuItemStyle.LabelStyle != null)
+				menuItem.Label.TextColor = menuItem.Color.Value;
+			}
+			else if (MenuStyle != null && MenuStyle.LabelStyle != null)
 			{
-				asMenuItemButton.TextColor = MenuItemStyle.LabelStyle.TextColor;
+				menuItem.Label.TextColor = MenuStyle.LabelStyle.TextColor;
 			}
 
-			UpdateWidths();
+			UpdateWidgets();
 		}
 
 		private void MenuItemOnChanged(object sender, EventArgs eventArgs)
@@ -345,33 +416,27 @@ namespace Myra.Graphics2D.UI
 			SetMenuItem((MenuItem)sender);
 		}
 
-		private void InsertItem(IMenuItem iMenuItem, int index)
+		private void InsertItem(IMenuItem item, int index)
 		{
-			var menuItem = iMenuItem as MenuItem;
-			Widget widget;
+			var menuItem = item as MenuItem;
 			if (menuItem != null)
 			{
 				menuItem.Changed += MenuItemOnChanged;
-				var menuItemButton = new MenuItemButton(this, MenuItemStyle)
-				{
-					Tag = menuItem
-				};
 
-				menuItemButton.MouseEntered += MouseOnMovement;
-				menuItemButton.MouseMoved += MouseOnMovement;
-				menuItemButton.SubMenu.Items = menuItem.Items;
-				menuItemButton.Toggleable = menuItem.Items.Count > 0 || menuItem.Toggleable;
-
-				if (menuItemButton.Toggleable)
+				if (Orientation == Orientation.Horizontal)
 				{
-					menuItemButton.PressedChanged += ButtonOnPressedChanged;
+					menuItem.Label.ApplyLabelStyle(MenuStyle.LabelStyle);
 				}
 				else
 				{
-					menuItemButton.Click += ButtonOnClick;
+					menuItem.ImageWidget.ApplyPressableImageStyle(MenuStyle.ImageStyle);
+					menuItem.Label.ApplyLabelStyle(MenuStyle.LabelStyle);
+					menuItem.Shortcut.ApplyLabelStyle(MenuStyle.ShortcutStyle);
 				}
 
-				widget = menuItemButton;
+				// Add only label, as other widgets(image and shortcut) would be optionally added by SetMenuItem
+				InternalChild.Widgets.Add(menuItem.Label);
+				SetMenuItem((MenuItem)item);
 			}
 			else
 			{
@@ -379,86 +444,70 @@ namespace Myra.Graphics2D.UI
 				if (Orientation == Orientation.Horizontal)
 				{
 					separator = new VerticalSeparator(null);
-				} else
+				}
+				else
 				{
 					separator = new HorizontalSeparator(null);
 				}
 
-				separator.ApplySeparatorStyle(SeparatorStyle);
-				widget = separator;
+				separator.ApplySeparatorStyle(MenuStyle.SeparatorStyle);
+
+				InternalChild.Widgets.Add(separator);
+
+				((MenuSeparator)item).Separator = separator;
 			}
 
-			iMenuItem.Menu = this;
-			iMenuItem.Widget = widget;
-
-			if (iMenuItem is MenuItem)
-			{
-				SetMenuItem((MenuItem)iMenuItem);
-			}
-
-			AddItem(widget, index);
+			item.Menu = this;
 		}
 
 		private void AddItem(IMenuItem item)
 		{
-			InsertItem(item, InternalChild.Widgets.Count);
+			InsertItem(item, Items.Count);
 		}
 
-		private void RemoveItem(IMenuItem iMenuItem)
+		private void RemoveItem(IMenuItem item)
 		{
-			var menuItem = iMenuItem as MenuItem;
+			var menuItem = item as MenuItem;
 			if (menuItem != null)
 			{
 				menuItem.Changed -= MenuItemOnChanged;
+				InternalChild.Widgets.Remove(menuItem.ImageWidget);
+				InternalChild.Widgets.Remove(menuItem.Label);
+				InternalChild.Widgets.Remove(menuItem.Shortcut);
 			}
-
-			var widget = iMenuItem.Widget;
-			if (widget == null)
+			else
 			{
-				return;
+				InternalChild.Widgets.Remove(((MenuSeparator)item).Separator);
 			}
-
-			var asMenuItemButton = widget as MenuItemButton;
-			if (asMenuItemButton != null)
-			{
-				asMenuItemButton.PressedChanged -= ButtonOnPressedChanged;
-				asMenuItemButton.Click -= ButtonOnClick;
-				asMenuItemButton.MouseEntered -= MouseOnMovement;
-				asMenuItemButton.MouseMoved -= MouseOnMovement;
-			}
-
-			var index = InternalChild.Widgets.IndexOf(widget);
-			InternalChild.Widgets.RemoveAt(index);
 		}
 
 		public void Close()
 		{
 			Desktop.HideContextMenu();
+			HoverIndex = SelectedIndex = null;
 		}
 
-		private void ShowSubMenu(MenuItemButton menuItem)
+		private Rectangle GetItemBounds(int index)
 		{
-			if (OpenMenuItem != null)
+			var bounds = InternalChild.Bounds;
+			if (Orientation == Orientation.Horizontal)
 			{
-				OpenMenuItem.IsPressed = false;
+				return new Rectangle(InternalChild.GetCellLocationX(index),
+					bounds.Y,
+					InternalChild.GetColumnWidth(index),
+					bounds.Height);
 			}
 
-			if (menuItem == null || !menuItem.CanOpen)
-			{
-				return;
-			}
-
-			menuItem.SubMenu.KeyboardHoverButton = null;
-			Desktop.ShowContextMenu(menuItem.SubMenu, new Point(menuItem.Bounds.X, Bounds.Bottom));
-			Desktop.ContextMenuClosed += DesktopOnContextMenuClosed;
-
-			OpenMenuItem = menuItem;
+			return new Rectangle(bounds.X,
+				InternalChild.GetCellLocationY(index),
+				bounds.Width,
+				InternalChild.GetRowHeight(index));
 		}
 
 		private void DesktopOnContextMenuClosing(object sender, ContextMenuClosingEventArgs args)
 		{
 			// Prevent closing/opening of the context menu
-			if (OpenMenuItem != null && OpenMenuItem.Bounds.Contains(Desktop.TouchPosition))
+			if (OpenMenuItem != null && GetItemBounds(OpenMenuItem.Index).Contains(Desktop.TouchPosition))
 			{
 				args.Cancel = true;
 			}
@@ -466,81 +515,115 @@ namespace Myra.Graphics2D.UI
 
 		private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Widget> genericEventArgs)
 		{
-			if (OpenMenuItem == null) return;
-
-			OpenMenuItem.IsPressed = false;
 			OpenMenuItem = null;
-		}
 
-		private void MouseOnMovement(object sender, EventArgs eventArgs)
+			if (!_internalSetSelectedIndex)
+			{
+				SelectedIndex = null;
+			}
+		}
+		
+		private void OnHoverIndexChanged(object sender, EventArgs eventArgs)
 		{
+			var menuItem = GetMenuItem(HoverIndex);
+			if (menuItem == null)
+			{
+				// Separators couldn't be selected
+				HoverIndex = null;
+				return;
+			}
+
 			if (!IsOpen)
 			{
 				return;
 			}
 
-			var menuItemButton = (MenuItemButton)sender;
-			if (menuItemButton.CanOpen && OpenMenuItem != menuItemButton)
+			if (menuItem.CanOpen && OpenMenuItem != menuItem)
 			{
-				menuItemButton.IsPressed = true;
+				InternalSetSelectedIndex(HoverIndex);
 			}
 		}
 
-		private void ButtonOnPressedChanged(object sender, EventArgs eventArgs)
+		private void ShowSubMenu(MenuItem menuItem)
 		{
-			if (Desktop == null)
-			{
-				return;
-			}
+			var bounds = GetItemBounds(menuItem.Index);
+			Desktop.ShowContextMenu(menuItem.SubMenu, new Point(bounds.X, bounds.Bottom));
+			OpenMenuItem = menuItem;
+		}
 
-			var menuItemButton = (MenuItemButton)sender;
-
-			if (menuItemButton.IsPressed)
+		private void OnSelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (OpenMenuItem != null)
 			{
-				((MenuItem)menuItemButton.Tag).FireSelected();
-				if (menuItemButton.CanOpen)
+				try
 				{
-					ShowSubMenu(menuItemButton);
+					_internalSetSelectedIndex = true;
+					Desktop.HideContextMenu();
+				}
+				finally
+				{
+					_internalSetSelectedIndex = false;
 				}
 			}
-			else if (menuItemButton.CanOpen)
+
+			var menuItem = SelectedMenuItem;
+			if (menuItem != null)
 			{
-				Close();
+				if (menuItem.CanOpen)
+				{
+					ShowSubMenu(menuItem);
+				}
 			}
 		}
 
-		private void ButtonOnClick(object sender, EventArgs eventArgs)
+		private void InternalChild_TouchUp(object sender, EventArgs e)
 		{
-			if (Desktop == null)
-			{
-				return;
-			}
-
-			Close();
-
-			var menuItem = (MenuItemButton)sender;
-			if (!menuItem.CanOpen)
-			{
-				((MenuItem)menuItem.Tag).FireSelected();
-			}
-		}
-
-		private void Click(MenuItemButton menuItemButton)
-		{
-			if (Desktop == null || !menuItemButton.Enabled)
-			{
-				return;
-			}
-
-			var menuItem = (MenuItem)menuItemButton.Tag;
-			if (!menuItemButton.CanOpen)
+			var menuItem = SelectedMenuItem;
+			if (menuItem != null && !menuItem.CanOpen)
 			{
 				Close();
 				menuItem.FireSelected();
 			}
-			else
+		}
+
+		private MenuItem GetMenuItem(int? index)
+		{
+			if (index == null)
 			{
-				menuItemButton.IsPressed = true;
+				return null;
+			}
+
+			return Items[index.Value] as MenuItem;
+		}
+
+		private void InternalSetSelectedIndex(int? index)
+		{
+			try
+			{
+				_internalSetSelectedIndex = true;
+				SelectedIndex = index;
+			}
+			finally
+			{
+				_internalSetSelectedIndex = false;
+			}
+		}
+
+		private void Click(int? index)
+		{
+			var menuItem = GetMenuItem(index);
+			if (menuItem == null)
+			{
+				return;
+			}
+
+			if (!menuItem.CanOpen)
+			{
+				Close();
+				menuItem.FireSelected();
+			} else
+			{
+				InternalSetSelectedIndex(index);
 			}
 		}
 
@@ -551,10 +634,10 @@ namespace Myra.Graphics2D.UI
 				int? selectedIndex = HoverIndex;
 				if (selectedIndex != null)
 				{
-					var button = InternalChild.Widgets[selectedIndex.Value] as MenuItemButton;
-					if (button != null && !button.CanOpen)
+					var menuItem = Items[selectedIndex.Value] as MenuItem;
+					if (menuItem != null && !menuItem.CanOpen)
 					{
-						Click(button);
+						Click(menuItem.Index);
 						return;
 					}
 				}
@@ -566,17 +649,17 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var ch = k.ToChar(false);
-			foreach (var w in InternalChild.Widgets)
+			foreach (var w in Items)
 			{
-				var button = w as MenuItemButton;
-				if (button == null)
+				var menuItem = w as MenuItem;
+				if (menuItem == null)
 				{
 					continue;
 				}
 
-				if (ch != null && button.UnderscoreChar == ch)
+				if (ch != null && menuItem.UnderscoreChar == ch)
 				{
-					Click(button);
+					Click(menuItem.Index);
 					return;
 				}
 			}
@@ -589,20 +672,24 @@ namespace Myra.Graphics2D.UI
 
 		public void MoveHover(int delta)
 		{
-			if (InternalChild.Widgets.Count == 0)
+			if (Items.Count == 0)
 			{
 				return;
 			}
 
 			// First step - determine index of currently selected item
-			var si = HoverIndex;
-			var hoverIndex = si != null?si.Value:-1;
+			var si = SelectedIndex;
+			if (si == null)
+			{
+				si = HoverIndex;
+			}
+			var hoverIndex = si != null ? si.Value : -1;
 			var oldHover = hoverIndex;
 
 			var iterations = 0;
 			while (true)
 			{
-				if (iterations > InternalChild.Widgets.Count)
+				if (iterations > Items.Count)
 				{
 					return;
 				}
@@ -611,15 +698,15 @@ namespace Myra.Graphics2D.UI
 
 				if (hoverIndex < 0)
 				{
-					hoverIndex = InternalChild.Widgets.Count - 1;
+					hoverIndex = Items.Count - 1;
 				}
 
-				if (hoverIndex >= InternalChild.Widgets.Count)
+				if (hoverIndex >= Items.Count)
 				{
 					hoverIndex = 0;
 				}
 
-				if (InternalChild.Widgets[hoverIndex] is MenuItemButton)
+				if (Items[hoverIndex] is MenuItem)
 				{
 					break;
 				}
@@ -627,37 +714,101 @@ namespace Myra.Graphics2D.UI
 				++iterations;
 			}
 
-			var button = InternalChild.Widgets[hoverIndex] as MenuItemButton;
-			if (button != null)
+			var menuItem = Items[hoverIndex] as MenuItem;
+			if (menuItem != null)
 			{
-				KeyboardHoverButton = button;
-				if (button.CanOpen)
-				{
-					button.IsPressed = true;
-				}
+				HoverIndex = menuItem.Index;
 			}
 		}
 
-		public override void OnVisibleChanged()
+		private void UpdateGrid()
 		{
-			base.OnVisibleChanged();
+			if (!_dirty)
+			{
+				return;
+			}
 
-			KeyboardHoverButton = null;
+			var index = 0;
+			var hasImage = HasImage;
+			var hasShortcut = HasShortcut;
+
+			var separatorSpan = 1;
+			if (hasImage)
+			{
+				++separatorSpan;
+			}
+			if (hasShortcut)
+			{
+				++separatorSpan;
+			}
+
+			foreach (var item in Items)
+			{
+				var menuItem = item as MenuItem;
+				if (menuItem != null)
+				{
+					if (Orientation == Orientation.Horizontal)
+					{
+						menuItem.Label.GridColumn = index;
+						menuItem.Label.GridRow = 0;
+					}
+					else
+					{
+						var colIndex = 0;
+						if (hasImage)
+						{
+							menuItem.ImageWidget.GridColumn = colIndex++;
+							menuItem.ImageWidget.GridRow = index;
+						}
+
+						menuItem.Label.GridColumn = colIndex++;
+						menuItem.Label.GridRow = index;
+
+						if (hasShortcut)
+						{
+							menuItem.Shortcut.GridColumn = colIndex++;
+							menuItem.Shortcut.GridRow = index;
+						}
+					}
+				} else
+				{
+					var separator = (MenuSeparator)item;
+					if (Orientation == Orientation.Horizontal)
+					{
+						separator.Separator.GridColumn = index;
+						separator.Separator.GridRow = 0;
+					}
+					else
+					{
+						separator.Separator.GridColumn = 0;
+						separator.Separator.GridColumnSpan = separatorSpan;
+						separator.Separator.GridRow = index;
+					}
+				}
+
+				item.Index = index;
+
+				++index;
+			}
+
+			_dirty = false;
 		}
 
-		public override void OnMouseMoved()
+		protected override Point InternalMeasure(Point availableSize)
 		{
-			base.OnMouseMoved();
+			UpdateGrid();
 
-			KeyboardHoverButton = null;
+			return base.InternalMeasure(availableSize);
 		}
 
 		public void ApplyMenuStyle(MenuStyle style)
 		{
 			ApplyWidgetStyle(style);
 
-			MenuItemStyle = style.MenuItemStyle;
-			SeparatorStyle = style.SeparatorStyle;
+			MenuStyle = style;
+
+			InternalChild.SelectionHoverBackground = style.SelectionHoverBackground;
+			InternalChild.SelectionBackground = style.SelectionBackground;
 		}
 	}
 }

@@ -12,13 +12,116 @@ using Xenko.Core.Mathematics;
 
 namespace Myra.Graphics2D.UI
 {
-	public class MenuItem : SelectableItem, IMenuItem
+	public class MenuItem : IMenuItem
 	{
 		private string _shortcutText;
 		private Color? _shortcutColor;
 		private bool _toggleable;
 		private IRenderable _image;
-		private readonly ObservableCollection<IMenuItem> _items = new ObservableCollection<IMenuItem>();
+		private char? _underscoreChar;
+		private string _id, _text, _displayText;
+		private Color? _color;
+
+		internal readonly Image ImageWidget = new Image
+		{
+			VerticalAlignment = VerticalAlignment.Center
+		};
+
+		internal readonly Label Label = new Label(null)
+		{
+			VerticalAlignment = VerticalAlignment.Center
+		};
+
+		internal readonly Label Shortcut = new Label(null)
+		{
+			VerticalAlignment = VerticalAlignment.Center
+		};
+
+
+		internal readonly Menu SubMenu = new VerticalMenu();
+
+		public string Id
+		{
+			get
+			{
+				return _id;
+			}
+
+			set
+			{
+				if (value == _id)
+				{
+					return;
+				}
+
+				_id = value;
+				FireChanged();
+			}
+		}
+
+		[DefaultValue(null)]
+		public string Text
+		{
+			get { return _text; }
+			set
+			{
+				if (value == _text)
+				{
+					return;
+				}
+
+				_text = value;
+
+				string text = _text;
+				_underscoreChar = null;
+				if (value != null)
+				{
+					var underscoreIndex = value.IndexOf('&');
+					if (underscoreIndex >= 0 && underscoreIndex + 1 < value.Length)
+					{
+						_underscoreChar = char.ToLower(value[underscoreIndex + 1]);
+						text = value.Substring(0, underscoreIndex) + value.Substring(underscoreIndex + 1);
+					}
+				}
+
+				_displayText = text;
+			}
+		}
+
+		internal string DisplayText
+		{
+			get
+			{
+				return _displayText;
+			}
+		}
+
+		[DefaultValue(null)]
+		public Color? Color
+		{
+			get
+			{
+				return _color;
+			}
+
+			set
+			{
+				if (value == _color)
+				{
+					return;
+				}
+
+				_color = value;
+				FireChanged();
+			}
+		}
+
+		[Browsable(false)]
+		[XmlIgnore]
+		public object Tag
+		{
+			get; set;
+		}
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -109,23 +212,19 @@ namespace Myra.Graphics2D.UI
 		[Content]
 		public ObservableCollection<IMenuItem> Items
 		{
-			get { return _items; }
+			get { return SubMenu.Items; }
 		}
 
 		[Browsable(false)]
 		[XmlIgnore]
 		public bool Enabled
 		{
-			get { return Widget != null && Widget.Enabled; }
+			get { return ImageWidget.Enabled; }
 
-			set { Widget.Enabled = value; }
-		}
-
-		[Browsable(false)]
-		[XmlIgnore]
-		public Widget Widget
-		{
-			get; set;
+			set
+			{
+				ImageWidget.Enabled = Label.Enabled = Shortcut.Enabled = value;
+			}
 		}
 
 		[Browsable(false)]
@@ -134,18 +233,33 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				var button = (MenuItemButton)Widget;
-				return button.UnderscoreChar;
+				return _underscoreChar;
 			}
 		}
 
-		public event EventHandler Selected;
+		[Browsable(false)]
+		[XmlIgnore]
+		public bool CanOpen
+		{
+			get
+			{
+				return Items.Count > 0;
+			}
+		}
 
-		public MenuItem(string id, string text, Color? color, object tag) : base(text, color, tag)
+		[Browsable(false)]
+		[XmlIgnore]
+		public int Index { get; set; }
+
+		public event EventHandler Selected;
+		public event EventHandler Changed;
+
+		public MenuItem(string id, string text, Color? color, object tag)
 		{
 			Id = id;
 			Text = text;
-
+			Color = color;
+			Tag = tag;
 		}
 
 		public MenuItem(string id, string text, Color? color) : this(id, text, color, null)
@@ -171,7 +285,7 @@ namespace Myra.Graphics2D.UI
 				return this;
 			}
 
-			foreach (var item in _items)
+			foreach (var item in SubMenu.Items)
 			{
 				var asMenuItem = item as MenuItem;
 				if (asMenuItem == null)
@@ -193,6 +307,15 @@ namespace Myra.Graphics2D.UI
 		{
 			var ev = Selected;
 
+			if (ev != null)
+			{
+				ev(this, EventArgs.Empty);
+			}
+		}
+
+		protected void FireChanged()
+		{
+			var ev = Changed;
 			if (ev != null)
 			{
 				ev(this, EventArgs.Empty);

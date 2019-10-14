@@ -110,20 +110,16 @@
     </VerticalSplitPaneStyle>
   </VerticalSplitPaneStyles>
   <HorizontalMenuStyles>
-    <HorizontalMenuStyle Background="button">
-      <MenuItemStyle OverBackground="button-over" PaddingLeft="5" PaddingRight="5" PaddingBottom="2" PressedBackground="button-down">
-        <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey"  PaddingLeft="5" PaddingRight="5" />
-      </MenuItemStyle>
+    <HorizontalMenuStyle Background="button" SelectionHoverBackground="button-over" SelectionBackground="button-down">
+      <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" PaddingLeft="10" PaddingRight="10" />
       <SeparatorStyle Image="separator" Thickness="3" />
     </HorizontalMenuStyle>
   </HorizontalMenuStyles>
   <VerticalMenuStyles>
-    <VerticalMenuStyle Background="button" Border="border">
-      <MenuItemStyle OverBackground="button-over" PressedBackground="button-down" PaddingLeft="10" PaddingRight="10">
-        <ImageStyle PaddingRight="5" />
-        <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" />
-        <ShortcutStyle Font="default-font" TextColor="white" DisabledTextColor="grey" PaddingLeft="15" />
-      </MenuItemStyle>
+    <VerticalMenuStyle Background="button" Border="border" SelectionHoverBackground="button-over" SelectionBackground="button-down">
+      <ImageStyle PaddingLeft="10" />
+      <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" PaddingLeft="10" PaddingRight="10" />
+      <ShortcutStyle Font="default-font" TextColor="white" DisabledTextColor="grey" PaddingLeft="20" PaddingRight="10" />
       <SeparatorStyle PaddingTop="2" PaddingBottom="2" Image="separator-menu" Thickness="4" />
     </VerticalMenuStyle>
   </VerticalMenuStyles>

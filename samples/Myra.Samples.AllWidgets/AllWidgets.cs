@@ -10,17 +10,6 @@ namespace Myra.Samples.AllWidgets
 		{
 			BuildUI();
 
-			foreach (var item in _menuHelp.Items)
-			{
-				var asMenuItem = item as MenuItem;
-				if (asMenuItem == null)
-				{
-					continue;
-				}
-
-				asMenuItem.Widget.PaddingLeft = asMenuItem.Widget.PaddingRight = 20;
-			}
-
 			_menuItemOpenFile.Image = DefaultAssets.UISpritesheet["icon-folder"];
 			_menuItemSaveFile.Image = DefaultAssets.UISpritesheet["icon-folder-new"];
 

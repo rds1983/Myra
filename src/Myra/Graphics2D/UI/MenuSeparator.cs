@@ -5,6 +5,8 @@ namespace Myra.Graphics2D.UI
 {
 	public class MenuSeparator : IMenuItem
 	{
+		internal SeparatorWidget Separator;
+
 		[DefaultValue(null)]
 		[Browsable(false)]
 		[XmlIgnore]
@@ -16,10 +18,10 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public Widget Widget { get; set; }
+		public char? UnderscoreChar { get { return null; } }
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public char? UnderscoreChar { get { return null; } }
+		public int Index { get; set; }
 	}
 }

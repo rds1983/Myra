@@ -7,19 +7,19 @@
     </VerticalStackPanel.Proportions>
     <HorizontalMenu VerticalAlignment="Stretch">
       <MenuItem Id="_menuFile" Text="&amp;File">
-        <MenuItem ShortcutText="Ctrl+O" Id="_menuItemOpenFile" Text="&amp;Open" />
-        <MenuItem ShortcutText="Ctrl+S" Id="_menuItemSaveFile" Text="&amp;Save" />
-        <MenuItem ShortcutText="Ctrl+F" Id="_menuItemChooseFolder" Text="&amp;Choose Folder" />
-        <MenuItem ShortcutText="Ctrl+L" Id="_menuItemChooseColor" Text="C&amp;hoose Color" />
+        <MenuItem Id="_menuItemOpenFile" Text="&amp;Open" ShortcutText="Ctrl+O" />
+        <MenuItem Id="_menuItemSaveFile" Text="&amp;Save" ShortcutText="Ctrl+S" />
+        <MenuItem Id="_menuItemChooseFolder" Text="&amp;Choose Folder" ShortcutText="Ctrl+F" />
+        <MenuItem Id="_menuItemChooseColor" Text="C&amp;hoose Color" ShortcutText="Ctrl+L" />
         <MenuSeparator />
-        <MenuItem ShortcutText="Ctrl+Q" Id="_menuItemQuit" Text="&amp;Quit" />
+        <MenuItem Id="_menuItemQuit" Text="&amp;Quit" ShortcutText="Ctrl+Q" />
       </MenuItem>
       <MenuItem Id="_menuEdit" Text="&amp;Edit">
-        <MenuItem ShortcutText="Ctrl+Insert, Ctrl+C" Id="_menuItemCopy" Text="&amp;Copy" />
-        <MenuItem ShortcutText="Shift+Insert, Ctrl+V" Id="_menuItemPaste" Text="&amp;Paste" />
+        <MenuItem Id="_menuItemCopy" Text="&amp;Copy" ShortcutText="Ctrl+Insert, Ctrl+C" />
+        <MenuItem Id="_menuItemPaste" Text="&amp;Paste" ShortcutText="Shift+Insert, Ctrl+V" />
         <MenuSeparator />
-        <MenuItem ShortcutText="Ctrl+Z" Id="_menuItemUndo" Text="&amp;Undo" />
-        <MenuItem ShortcutText="Ctrl+Y" Id="_menuItemRedo" Text="&amp;Redo" />
+        <MenuItem Id="_menuItemUndo" Text="&amp;Undo" ShortcutText="Ctrl+Z" />
+        <MenuItem Id="_menuItemRedo" Text="&amp;Redo" ShortcutText="Ctrl+Y" />
       </MenuItem>
       <MenuItem Id="_menuHelp" Text="&amp;Help">
         <MenuItem Id="_menuItemAbout" Text="&amp;About" />
