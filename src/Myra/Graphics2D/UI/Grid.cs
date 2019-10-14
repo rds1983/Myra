@@ -801,20 +801,20 @@ namespace Myra.Graphics2D.UI
 					{
 						if (HoverRowIndex != null && HoverRowIndex != SelectedRowIndex && SelectionHoverBackground != null)
 						{
-							var rect = new Rectangle(bounds.Left,
+							var rect = Rectangle.Intersect(new Rectangle(bounds.Left,
 								_cellLocationsY[HoverRowIndex.Value] + bounds.Top - RowSpacing / 2,
 								bounds.Width,
-								_rowHeights[HoverRowIndex.Value] + RowSpacing / 2);
+								_rowHeights[HoverRowIndex.Value] + RowSpacing), context.View);
 
 							context.Draw(SelectionHoverBackground, rect);
 						}
 
 						if (SelectedRowIndex != null && SelectionBackground != null)
 						{
-							var rect = new Rectangle(bounds.Left,
+							var rect = Rectangle.Intersect(new Rectangle(bounds.Left,
 								_cellLocationsY[SelectedRowIndex.Value] + bounds.Top - RowSpacing / 2,
 								bounds.Width,
-								_rowHeights[SelectedRowIndex.Value] + RowSpacing / 2);
+								_rowHeights[SelectedRowIndex.Value] + RowSpacing), context.View);
 
 							context.Draw(SelectionBackground, rect);
 						}
@@ -824,20 +824,20 @@ namespace Myra.Graphics2D.UI
 					{
 						if (HoverColumnIndex != null && HoverColumnIndex != SelectedColumnIndex && SelectionHoverBackground != null)
 						{
-							var rect = new Rectangle(_cellLocationsX[HoverColumnIndex.Value] + bounds.Left - ColumnSpacing / 2,
+							var rect = Rectangle.Intersect(new Rectangle(_cellLocationsX[HoverColumnIndex.Value] + bounds.Left - ColumnSpacing / 2,
 								bounds.Top,
-								_colWidths[HoverColumnIndex.Value] + ColumnSpacing / 2,
-								bounds.Height);
+								_colWidths[HoverColumnIndex.Value] + ColumnSpacing,
+								bounds.Height), context.View);
 
 							context.Draw(SelectionHoverBackground, rect);
 						}
 
 						if (SelectedColumnIndex != null && SelectionBackground != null)
 						{
-							var rect = new Rectangle(_cellLocationsX[SelectedColumnIndex.Value] + bounds.Left - ColumnSpacing / 2,
+							var rect = Rectangle.Intersect(new Rectangle(_cellLocationsX[SelectedColumnIndex.Value] + bounds.Left - ColumnSpacing / 2,
 								bounds.Top,
-								_colWidths[SelectedColumnIndex.Value] + ColumnSpacing / 2,
-								bounds.Height);
+								_colWidths[SelectedColumnIndex.Value] + ColumnSpacing,
+								bounds.Height), context.View);
 
 							context.Draw(SelectionBackground, rect);
 						}
@@ -849,20 +849,20 @@ namespace Myra.Graphics2D.UI
 							(HoverRowIndex != SelectedRowIndex || HoverColumnIndex != SelectedColumnIndex) &&
 							SelectionHoverBackground != null)
 						{
-							var rect = new Rectangle(_cellLocationsX[HoverColumnIndex.Value] + bounds.Left - ColumnSpacing / 2,
+							var rect = Rectangle.Intersect(new Rectangle(_cellLocationsX[HoverColumnIndex.Value] + bounds.Left - ColumnSpacing / 2,
 								_cellLocationsY[HoverRowIndex.Value] + bounds.Top - RowSpacing / 2,
-								_colWidths[HoverColumnIndex.Value] + ColumnSpacing / 2,
-								_rowHeights[HoverRowIndex.Value] + RowSpacing / 2);
+								_colWidths[HoverColumnIndex.Value] + ColumnSpacing,
+								_rowHeights[HoverRowIndex.Value] + RowSpacing), context.View);
 
 							context.Draw(SelectionHoverBackground, rect);
 						}
 
 						if (SelectedRowIndex != null && SelectedColumnIndex != null && SelectionBackground != null)
 						{
-							var rect = new Rectangle(_cellLocationsX[SelectedColumnIndex.Value] + bounds.Left - ColumnSpacing / 2,
+							var rect = Rectangle.Intersect(new Rectangle(_cellLocationsX[SelectedColumnIndex.Value] + bounds.Left - ColumnSpacing / 2,
 								_cellLocationsY[SelectedRowIndex.Value] + bounds.Top - RowSpacing / 2,
-								_colWidths[SelectedColumnIndex.Value] + ColumnSpacing / 2,
-								_rowHeights[SelectedRowIndex.Value] + RowSpacing / 2);
+								_colWidths[SelectedColumnIndex.Value] + ColumnSpacing,
+								_rowHeights[SelectedRowIndex.Value] + RowSpacing), context.View);
 
 							context.Draw(SelectionBackground, rect);
 						}
