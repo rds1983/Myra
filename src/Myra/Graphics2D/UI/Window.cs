@@ -374,7 +374,9 @@ namespace Myra.Graphics2D.UI
 			_previousKeyboardFocus = desktop.FocusedKeyboardWidget;
 			_previousMouseWheelFocus = desktop.FocusedMouseWheelWidget;
 			desktop.FocusedKeyboardWidget = this;
-			desktop.FocusedMouseWheelWidget = this;
+
+			// Force mouse wheel focused to be set to the first appropriate widget in the next Desktop.UpdateLayout
+			desktop.FocusedMouseWheelWidget = null;
 			IsModal = true;
 		}
 

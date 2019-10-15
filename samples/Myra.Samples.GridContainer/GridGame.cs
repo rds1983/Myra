@@ -148,7 +148,6 @@ namespace Myra.Samples.GridContainer
 			button3.Click += (sender, args) =>
 			{
 				_window.ShowModal(_desktop);
-				_desktop.FocusedMouseWheelWidget = pane;
 			};
 
 			// Horizontal slider

@@ -579,35 +579,17 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Browsable(false)]
-		[DefaultValue(false)]
-		[Obsolete("Use AcceptsKeyboardFocus instead")]
-		public virtual bool CanFocus
+		[XmlIgnore]
+		internal protected virtual bool AcceptsKeyboardFocus
 		{
-			get
-			{
-				return AcceptsKeyboardFocus;
-			}
-
-			set
-			{
-				AcceptsKeyboardFocus = false;
-			}
+			get { return false; }
 		}
 
 		[Browsable(false)]
-		[Category("Behavior")]
-		[DefaultValue(false)]
-		public virtual bool AcceptsKeyboardFocus
+		[XmlIgnore]
+		internal protected virtual bool AcceptsMouseWheelFocus
 		{
-			get; set;
-		}
-
-		[Browsable(false)]
-		[Category("Behavior")]
-		[DefaultValue(false)]
-		public virtual bool AcceptsMouseWheelFocus
-		{
-			get; set;
+			get { return false; }
 		}
 
 		[Browsable(false)]

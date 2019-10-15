@@ -40,22 +40,13 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[DefaultValue(true)]
-		public override bool AcceptsKeyboardFocus
+		internal protected override bool AcceptsKeyboardFocus
 		{
-			get
-			{
-				return base.AcceptsKeyboardFocus;
-			}
-			set
-			{
-				base.AcceptsKeyboardFocus = value;
-			}
+			get { return true; }
 		}
 
 		public ListBox(string styleName = Stylesheet.DefaultStyleName) : base(new ScrollViewer())
 		{
-			AcceptsKeyboardFocus = true;
 			_box = new VerticalStackPanel();
 			InternalChild.Content = _box;
 

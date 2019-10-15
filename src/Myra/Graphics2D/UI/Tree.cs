@@ -58,17 +58,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[DefaultValue(true)]
-		public override bool AcceptsKeyboardFocus
+		internal protected override bool AcceptsKeyboardFocus
 		{
-			get
-			{
-				return base.AcceptsKeyboardFocus;
-			}
-			set
-			{
-				base.AcceptsKeyboardFocus = value;
-			}
+			get { return base.AcceptsKeyboardFocus; }
 		}
 
 		[DefaultValue(true)]
@@ -95,7 +87,6 @@ namespace Myra.Graphics2D.UI
 
 		public Tree(string styleName = Stylesheet.DefaultStyleName) : base(null, styleName)
 		{
-			AcceptsKeyboardFocus = true;
 		}
 
 		private void UpdateHasRoot()

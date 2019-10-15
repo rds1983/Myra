@@ -23,7 +23,6 @@ namespace Myra.Graphics2D.UI.File
 		private readonly List<string> _history = new List<string>();
 		private int _historyPosition;
 		private readonly FileDialogMode _mode;
-		private bool _firstRender = true;
 
 		public string Folder
 		{
@@ -448,17 +447,6 @@ namespace Myra.Graphics2D.UI.File
 				_paths.Add(f);
 
 				++gridY;
-			}
-		}
-
-		public override void InternalRender(RenderContext context)
-		{
-			base.InternalRender(context);
-
-			if (_firstRender)
-			{
-				Desktop.FocusedMouseWheelWidget = _scrollPane;
-				_firstRender = false;
 			}
 		}
 

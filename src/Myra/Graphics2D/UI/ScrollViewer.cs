@@ -249,17 +249,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[DefaultValue(true)]
-		public override bool AcceptsMouseWheelFocus
+		internal protected override bool AcceptsMouseWheelFocus
 		{
-			get
-			{
-				return base.AcceptsMouseWheelFocus;
-			}
-			set
-			{
-				base.AcceptsMouseWheelFocus = value;
-			}
+			get { return _verticalScrollingOn; }
 		}
 
 		public override Desktop Desktop
@@ -327,7 +319,6 @@ namespace Myra.Graphics2D.UI
 		public ScrollViewer(string styleName = Stylesheet.DefaultStyleName)
 		{
 			ClipToBounds = true;
-			AcceptsMouseWheelFocus = true;
 			_horizontalScrollingOn = _verticalScrollingOn = false;
 
 			ShowVerticalScrollBar = ShowHorizontalScrollBar = true;

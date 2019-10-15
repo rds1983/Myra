@@ -729,10 +729,16 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			// Find MenuBar
-			MenuBar = null;
+			foreach (var widget in ChildrenCopy)
+			{
+				if (widget.Visible)
+				{
+					widget.Layout(_bounds);
+				}
+			}
 
-			// Update Active and set MenuBar
+			// Rest processing
+			MenuBar = null;
 			var active = true;
 			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
 			{
@@ -747,6 +753,12 @@ namespace Myra.Graphics2D.UI
 						MenuBar = (HorizontalMenu)widget;
 					}
 
+					if (FocusedMouseWheelWidget == null && widget is ScrollViewer && widget.AcceptsMouseWheelFocus && active)
+					{
+						// If focused mouse wheel widget unset, then set first that accepts such focus
+						FocusedMouseWheelWidget = widget;
+					}
+
 					// Continue
 					return true;
 				});
@@ -755,14 +767,6 @@ namespace Myra.Graphics2D.UI
 				{
 					// Everything after modal is not active
 					active = false;
-				}
-			}
-
-			foreach (var widget in ChildrenCopy)
-			{
-				if (widget.Visible)
-				{
-					widget.Layout(_bounds);
 				}
 			}
 

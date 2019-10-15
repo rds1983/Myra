@@ -213,30 +213,14 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(1f)]
 		public float Mul_Increment { get; set; } = 1f;
 
-		[DefaultValue(true)]
-		public override bool AcceptsKeyboardFocus
+		internal protected override bool AcceptsKeyboardFocus
 		{
-			get
-			{
-				return base.AcceptsKeyboardFocus;
-			}
-			set
-			{
-				base.AcceptsKeyboardFocus = value;
-			}
+			get { return true; }
 		}
 
-		[DefaultValue(true)]
-		public override bool AcceptsMouseWheelFocus
+		internal protected override bool AcceptsMouseWheelFocus
 		{
-			get
-			{
-				return base.AcceptsMouseWheelFocus;
-			}
-			set
-			{
-				base.AcceptsMouseWheelFocus = value;
-			}
+			get { return true; }
 		}
 
 		/// <summary>
@@ -251,8 +235,6 @@ namespace Myra.Graphics2D.UI
 
 		public SpinButton(string styleName = Stylesheet.DefaultStyleName)
 		{
-			AcceptsKeyboardFocus = AcceptsMouseWheelFocus = true;
-
 			InternalChild = new Grid();
 
 			HorizontalAlignment = HorizontalAlignment.Left;

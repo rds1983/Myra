@@ -217,17 +217,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[DefaultValue(true)]
-		public override bool AcceptsKeyboardFocus
+		internal protected override bool AcceptsKeyboardFocus
 		{
-			get
-			{
-				return base.AcceptsKeyboardFocus;
-			}
-			set
-			{
-				base.AcceptsKeyboardFocus = value;
-			}
+			get { return true; }
 		}
 
 		[DefaultValue(HorizontalAlignment.Stretch)]
@@ -321,7 +313,6 @@ namespace Myra.Graphics2D.UI
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Top;
 
-			AcceptsKeyboardFocus = true;
 			ClipToBounds = true;
 
 			SetStyle(styleName);
