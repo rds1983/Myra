@@ -6,18 +6,18 @@
       <Proportion Type="Auto" />
       <Proportion Type="Fill" />
     </VerticalStackPanel.Proportions>
-    <HorizontalMenu VerticalAlignment="Stretch" Id="mainMenu">
-      <MenuItem Id="menuItemFile" Text="File">
-        <MenuItem Id="menuItemNew" Text="New" />
-        <MenuItem Id="menuItemOpen" Text="Open..." />
-        <MenuItem Id="menuItemSave" Text="Save" />
-        <MenuItem Id="menuItemSaveAs" Text="Save As..." />
+    <HorizontalMenu VerticalAlignment="Stretch" Id="_mainMenu">
+      <MenuItem Id="menuItemFile" Text="&amp;File">
+        <MenuItem Id="menuItemNew" Text="&amp;New" ShortcutText="Ctrl+N" />
+        <MenuItem Id="menuItemOpen" Text="&amp;Open..." ShortcutText="Ctrl+O" />
+        <MenuItem Id="menuItemSave" Text="&amp;Save" ShortcutText="Ctrl+S" />
+        <MenuItem Id="menuItemSaveAs" Text="Save &amp;As..." ShortcutText="Ctrl+A" />
         <MenuSeparator />
         <MenuItem Id="menuItemDebugOptions" Text="Debug Options" />
         <MenuSeparator />
-        <MenuItem Id="menuItemQuit" Text="Quit" />
+        <MenuItem Id="menuItemQuit" Text="&amp;Quit" ShortcutText="Ctrl+Q" />
       </MenuItem>
-      <MenuItem Id="menuItemHelp" Text="Help">
+      <MenuItem Id="menuItemHelp" Text="&amp;Help">
         <MenuItem Id="menuItemAbout" Text="About" />
       </MenuItem>
     </HorizontalMenu>

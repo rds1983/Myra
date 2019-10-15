@@ -633,18 +633,22 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var ch = k.ToChar(false);
-			foreach (var w in Items)
+			if (ch != null)
 			{
-				var menuItem = w as MenuItem;
-				if (menuItem == null)
+				var c = char.ToLower(ch.Value);
+				foreach (var w in Items)
 				{
-					continue;
-				}
+					var menuItem = w as MenuItem;
+					if (menuItem == null)
+					{
+						continue;
+					}
 
-				if (ch != null && menuItem.UnderscoreChar == ch)
-				{
-					Click(menuItem.Index);
-					return;
+					if (menuItem.UnderscoreChar == c)
+					{
+						Click(menuItem.Index);
+						return;
+					}
 				}
 			}
 

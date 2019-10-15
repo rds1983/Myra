@@ -9,8 +9,8 @@
       <MenuItem Id="_menuFile" Text="&amp;File">
         <MenuItem Id="_menuItemOpenFile" Text="&amp;Open" ShortcutText="Ctrl+O" />
         <MenuItem Id="_menuItemSaveFile" Text="&amp;Save" ShortcutText="Ctrl+S" />
-        <MenuItem Id="_menuItemChooseFolder" Text="&amp;Choose Folder" ShortcutText="Ctrl+F" />
-        <MenuItem Id="_menuItemChooseColor" Text="C&amp;hoose Color" ShortcutText="Ctrl+L" />
+        <MenuItem Id="_menuItemChooseFolder" Text="Choose Fol&amp;der" ShortcutText="Ctrl+D" />
+        <MenuItem Id="_menuItemChooseColor" Text="Choose Co&amp;lor" ShortcutText="Ctrl+L" />
         <MenuSeparator />
         <MenuItem Id="_menuItemQuit" Text="&amp;Quit" ShortcutText="Ctrl+Q" />
       </MenuItem>

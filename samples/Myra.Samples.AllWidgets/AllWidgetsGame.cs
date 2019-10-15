@@ -86,7 +86,7 @@ namespace Myra.Samples.AllWidgets
 					} else if (_desktop.DownKeys.Contains(Keys.S))
 					{
 						_allWidgets.SaveFile();
-					} else if (_desktop.DownKeys.Contains(Keys.F))
+					} else if (_desktop.DownKeys.Contains(Keys.D))
 					{
 						_allWidgets.ChooseFolder();
 					} else if (_desktop.DownKeys.Contains(Keys.L))

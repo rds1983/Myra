@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.File;
 using Myra.Utility;
+using System.Linq;
+using Microsoft.Xna.Framework.Input;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -117,6 +119,38 @@ namespace Myra.Samples.Notepad
 			_textField.TextChanged += TextBoxOnTextChanged;
 
 			_desktop.Widgets.Add(ui);
+
+			_desktop.KeyDown += (s, a) =>
+			{
+				if (_desktop.HasModalWindow || ui._mainMenu.IsOpen)
+				{
+					return;
+				}
+
+				if (_desktop.DownKeys.Contains(Keys.LeftControl) || _desktop.DownKeys.Contains(Keys.RightControl))
+				{
+					if (_desktop.DownKeys.Contains(Keys.N))
+					{
+						NewItemOnDown(this, EventArgs.Empty);
+					}
+					else if (_desktop.DownKeys.Contains(Keys.O))
+					{
+						OpenItemOnDown(this, EventArgs.Empty);
+					}
+					else if (_desktop.DownKeys.Contains(Keys.S))
+					{
+						SaveItemOnDown(this, EventArgs.Empty);
+					}
+					else if (_desktop.DownKeys.Contains(Keys.A))
+					{
+						SaveAsItemOnDown(this, EventArgs.Empty);
+					}
+					else if (_desktop.DownKeys.Contains(Keys.Q))
+					{
+						Exit();
+					}
+				}
+			};
 
 #if XENKO
 			return base.LoadContent();
