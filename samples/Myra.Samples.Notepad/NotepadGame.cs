@@ -1,28 +1,17 @@
 ﻿using System;
 using System.IO;
-using System.Threading.Tasks;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.File;
 using Myra.Utility;
 using System.Linq;
-using Microsoft.Xna.Framework.Input;
-
-#if !XENKO
 using Microsoft.Xna.Framework;
-#else
-using Xenko.Core.Mathematics;
-using Xenko.Engine;
-using Xenko.Games;
-using Xenko.Graphics;
-#endif
+using Microsoft.Xna.Framework.Input;
 
 namespace Myra.Samples.Notepad
 {
 	public class NotepadGame : Game
 	{
-#if !XENKO
 		private readonly GraphicsDeviceManager graphics;
-#endif
 
 		private string _filePath;
 		private bool _dirty = true;
@@ -64,17 +53,11 @@ namespace Myra.Samples.Notepad
 
 		public NotepadGame()
 		{
-#if !XENKO
 			graphics = new GraphicsDeviceManager(this);
-#endif
 			IsMouseVisible = true;
 		}
 
-#if !XENKO
 		protected override void LoadContent()
-#else
-		protected override Task LoadContent()
-#endif
 		{
 			base.LoadContent();
 
@@ -151,10 +134,6 @@ namespace Myra.Samples.Notepad
 					}
 				}
 			};
-
-#if XENKO
-			return base.LoadContent();
-#endif
 		}
 
 
@@ -297,9 +276,8 @@ namespace Myra.Samples.Notepad
 		{
 			base.Draw(gameTime);
 
-#if !XENKO
 			if (graphics.PreferredBackBufferWidth != Window.ClientBounds.Width ||
-			    graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
+				graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
 			{
 				graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
 				graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
@@ -308,17 +286,7 @@ namespace Myra.Samples.Notepad
 
 			GraphicsDevice.Clear(Color.Black);
 
-#else
-			// Clear screen
-			GraphicsContext.CommandList.Clear(GraphicsDevice.Presenter.BackBuffer, Color.Black);
-			GraphicsContext.CommandList.Clear(GraphicsDevice.Presenter.DepthStencilBuffer, DepthStencilClearOptions.DepthBuffer | DepthStencilClearOptions.Stencil);
-
-			// Set render target
-			GraphicsContext.CommandList.SetRenderTargetAndViewport(GraphicsDevice.Presenter.DepthStencilBuffer, GraphicsDevice.Presenter.BackBuffer);
-#endif
-
 			_desktop.Render();
 		}
-
 	}
 }

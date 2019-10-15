@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Xml.Serialization;
+using Myra.Graphics2D.UI.Styles;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
-using Myra.Graphics2D.UI.Styles;
 #else
 using Xenko.Core.Mathematics;
 #endif

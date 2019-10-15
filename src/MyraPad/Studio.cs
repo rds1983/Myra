@@ -19,7 +19,6 @@ using Microsoft.Xna.Framework.Input;
 using System.Threading;
 using System.Xml.Linq;
 using SpriteFontPlus;
-using System.Reflection;
 
 namespace MyraPad
 {
@@ -342,7 +341,7 @@ namespace MyraPad
 					}
 					else if (_desktop.DownKeys.Contains(Keys.T))
 					{
-						OnMenuFileReloadSelected(this, EventArgs.Empty);
+						OnMenuFileReloadStylesheet(this, EventArgs.Empty);
 					}
 					else if (_desktop.DownKeys.Contains(Keys.Q))
 					{

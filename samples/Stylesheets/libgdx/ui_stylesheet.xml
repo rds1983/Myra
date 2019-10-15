@@ -92,18 +92,14 @@
     </VerticalSplitPaneStyle>
   </VerticalSplitPaneStyles>
   <HorizontalMenuStyles>
-    <HorizontalMenuStyle Background="default-round">
-      <MenuItemStyle PaddingLeft="5" PaddingRight="5" PaddingBottom="2" PressedBackground="default-round-down">
-        <LabelStyle Font="ui_font" TextColor="white" DisabledTextColor="grey" />
-      </MenuItemStyle>
+    <HorizontalMenuStyle Background="default-round" SelectionBackground="default-round-down">
+      <LabelStyle PaddingLeft="5" PaddingRight="5" PaddingBottom="2" Font="ui_font" TextColor="white" DisabledTextColor="grey" />
       <SeparatorStyle Image="default-round" Thickness="3" />
     </HorizontalMenuStyle>
   </HorizontalMenuStyles>
   <VerticalMenuStyles>
-    <VerticalMenuStyle Background="default-round">
-      <MenuItemStyle PaddingLeft="5" PaddingRight="5" PaddingTop="2" PaddingBottom="2" PressedBackground="default-round-down" IconWidth="22" ShortcutWidth="22">
-        <LabelStyle Font="ui_font" TextColor="white" DisabledTextColor="grey" />
-      </MenuItemStyle>
+    <VerticalMenuStyle Background="default-round" SelectionBackground="default-round-down">
+      <LabelStyle PaddingLeft="5" PaddingRight="5" PaddingTop="2" PaddingBottom="2" Font="ui_font" TextColor="white" DisabledTextColor="grey" />
       <SeparatorStyle PaddingTop="2" PaddingBottom="2" Image="default-round" Thickness="4" />
     </VerticalMenuStyle>
   </VerticalMenuStyles>

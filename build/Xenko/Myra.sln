@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra", "..\..\src\Myra\Myra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.AllWidgets", "..\..\samples\Myra.Samples.AllWidgets\Myra.Samples.AllWidgets.csproj", "{9F5D8FED-C555-48E7-AA65-ABD66B008909}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.Notepad", "..\..\samples\Myra.Samples.Notepad\Myra.Samples.Notepad.csproj", "{3A09D7E6-A62D-4CB6-8B09-64EDF99A1319}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{48936873-B1E0-48E9-939A-BA4C2BD1B0EE}"
 EndProject
 Global
@@ -45,25 +43,12 @@ Global
 		{9F5D8FED-C555-48E7-AA65-ABD66B008909}.Release|x64.Build.0 = Release|Any CPU
 		{9F5D8FED-C555-48E7-AA65-ABD66B008909}.Release|x86.ActiveCfg = Release|Any CPU
 		{9F5D8FED-C555-48E7-AA65-ABD66B008909}.Release|x86.Build.0 = Release|Any CPU
-		{3A09D7E6-A62D-4CB6-8B09-64EDF99A1319}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A09D7E6-A62D-4CB6-8B09-64EDF99A1319}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3A09D7E6-A62D-4CB6-8B09-64EDF99A1319}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{3A09D7E6-A62D-4CB6-8B09-64EDF99A1319}.Debug|x64.Build.0 = Debug|Any CPU
-		{3A09D7E6-A62D-4CB6-8B09-64EDF99A1319}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{3A09D7E6-A62D-4CB6-8B09-64EDF99A1319}.Debug|x86.Build.0 = Debug|Any CPU
-		{3A09D7E6-A62D-4CB6-8B09-64EDF99A1319}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3A09D7E6-A62D-4CB6-8B09-64EDF99A1319}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3A09D7E6-A62D-4CB6-8B09-64EDF99A1319}.Release|x64.ActiveCfg = Release|Any CPU
-		{3A09D7E6-A62D-4CB6-8B09-64EDF99A1319}.Release|x64.Build.0 = Release|Any CPU
-		{3A09D7E6-A62D-4CB6-8B09-64EDF99A1319}.Release|x86.ActiveCfg = Release|Any CPU
-		{3A09D7E6-A62D-4CB6-8B09-64EDF99A1319}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9F5D8FED-C555-48E7-AA65-ABD66B008909} = {48936873-B1E0-48E9-939A-BA4C2BD1B0EE}
-		{3A09D7E6-A62D-4CB6-8B09-64EDF99A1319} = {48936873-B1E0-48E9-939A-BA4C2BD1B0EE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A9C9D369-EE58-4E9D-B9FE-63023B644741}
