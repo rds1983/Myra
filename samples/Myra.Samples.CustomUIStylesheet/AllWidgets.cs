@@ -11,26 +11,6 @@ namespace Myra.Samples.CustomUIStylesheet
 		{
 			BuildUI();
 
-			_button.Click += (sender, args) =>
-			{
-			};
-
-			_textButton.Click += (sender, args) =>
-			{
-				var debugWindow = new ColorPickerDialog();
-				debugWindow.ShowModal(Desktop);
-
-				debugWindow.Closed += (s, a) =>
-				{
-					if (!debugWindow.Result)
-					{
-						return;
-					}
-
-					_textButtonLabel.TextColor = debugWindow.Color;
-				};
-			};
-
 			_imageButton.Click += (sender, args) =>
 			{
 				var debugWindow = new DebugOptionsDialog();
@@ -43,12 +23,26 @@ namespace Myra.Samples.CustomUIStylesheet
 				GridColumn = 1,
 				GridRow = 8
 			};
+
 			var node1 = tree.AddSubNode("node1");
 			var node2 = node1.AddSubNode("node2");
 			var node3 = node2.AddSubNode("node3");
 			node3.AddSubNode("node4");
 			node3.AddSubNode("node5");
-			node2.AddSubNode("node6");
+			node3.AddSubNode("node7");
+			node3.AddSubNode("node8");
+			node3.AddSubNode("node9");
+			node3.AddSubNode("node10");
+
+			var node4 = node2.AddSubNode("node6");
+			node4.AddSubNode("node11");
+			node4.AddSubNode("node12");
+			node4.AddSubNode("node13");
+			node4.AddSubNode("node14");
+			node4.AddSubNode("node15");
+			node4.AddSubNode("node16");
+			node4.AddSubNode("node17");
+			node4.AddSubNode("node18");
 			_gridRight.Widgets.Add(tree);
 		}
 	}

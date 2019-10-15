@@ -11,7 +11,7 @@
         <Label Text="Button:" Id="" />
         <ImageTextButton Text="Button" Id="_button" PaddingLeft="8" PaddingRight="8" GridColumn="1" />
         <Label Text="Text Button:" Id="_textButtonLabel" GridRow="1" />
-        <TextButton Text="Choose Color" Id="_textButton" PaddingLeft="8" PaddingRight="8" GridColumn="1" GridRow="1" />
+        <TextButton Text="Button 2" Id="_textButton" PaddingLeft="8" PaddingRight="8" GridColumn="1" GridRow="1" />
         <Label Text="Image Button:" Id="" GridRow="2" />
         <ImageButton Id="_imageButton" PaddingLeft="8" PaddingRight="8" GridColumn="1" GridRow="2" />
         <CheckBox Text="This is checkbox" ImageWidth="10" ImageHeight="10" GridRow="3" GridColumnSpan="2" />
