@@ -23,6 +23,7 @@
         <MenuItem Id="_menuFileQuit" Text="&amp;Quit" ShortcutText="Ctrl+Q" />
       </MenuItem>
       <MenuItem Id="" Text="&amp;Edit">
+        <MenuItem Id="_menuItemSelectAll" Text="Select &amp;All" ShortcutText="Ctrl+A" />
         <MenuItem Id="_menuItemCopy" Text="&amp;Copy" ShortcutText="Ctrl+Insert, Ctrl+C" />
         <MenuItem Id="_menuItemPaste" Text="&amp;Paste" ShortcutText="Shift+Insert, Ctrl+V" />
         <MenuSeparator />

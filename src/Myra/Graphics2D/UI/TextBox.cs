@@ -566,6 +566,13 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public void SelectAll()
+		{
+			// Select all
+			SelectStart = 0;
+			SelectEnd = Length;
+		}
+
 		public override void OnKeyDown(Keys k)
 		{
 			base.OnKeyDown(k);
@@ -639,9 +646,7 @@ namespace Myra.Graphics2D.UI
 				case Keys.A:
 					if (Desktop.IsControlDown)
 					{
-						// Select all
-						SelectStart = 0;
-						SelectEnd = Length;
+						SelectAll();
 					}
 					break;
 

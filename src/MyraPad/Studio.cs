@@ -368,6 +368,7 @@ namespace MyraPad
 			_ui._menuFileDebugOptions.Selected += DebugOptionsItemOnSelected;
 			_ui._menuFileQuit.Selected += QuitItemOnDown;
 
+			_ui._menuItemSelectAll.Selected += (s, a) => { _ui._textSource.SelectAll(); };
 			_ui._menuEditFormatSource.Selected += _menuEditUpdateSource_Selected;
 
 			_ui._menuHelpAbout.Selected += AboutItemOnClicked;
