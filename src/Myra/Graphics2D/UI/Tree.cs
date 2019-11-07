@@ -339,12 +339,12 @@ namespace Myra.Graphics2D.UI
 				_rowInfosDirty = false;
 			}
 
-			if (HoverRow != null && HoverRow != SelectedRow && SelectionHoverBackground != null)
+			if (Active && HoverRow != null && HoverRow != SelectedRow && SelectionHoverBackground != null)
 			{
 				context.Draw(SelectionHoverBackground, HoverRow.RowBounds);
 			}
 
-			if (SelectedRow != null && SelectedRow.RowVisible && SelectionBackground != null)
+			if (Active && SelectedRow != null && SelectedRow.RowVisible && SelectionBackground != null)
 			{
 				context.Draw(SelectionBackground, SelectedRow.RowBounds);
 			}

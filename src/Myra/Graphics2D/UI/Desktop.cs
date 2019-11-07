@@ -763,11 +763,8 @@ namespace Myra.Graphics2D.UI
 					return true;
 				});
 
-				if (w is Window)
-				{
-					// Everything after modal is not active
-					active = false;
-				}
+				// Everything after top widget is not active
+				active = false;
 			}
 
 			_layoutDirty = false;
