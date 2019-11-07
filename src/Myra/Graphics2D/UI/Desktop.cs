@@ -747,7 +747,7 @@ namespace Myra.Graphics2D.UI
 				{
 					widget.Active = active;
 
-					if (active && MenuBar == null && widget is HorizontalMenu)
+					if (MenuBar == null && widget is HorizontalMenu)
 					{
 						// Found MenuBar
 						MenuBar = (HorizontalMenu)widget;

@@ -344,7 +344,7 @@ namespace Myra.Graphics2D.UI
 				context.Draw(SelectionHoverBackground, HoverRow.RowBounds);
 			}
 
-			if (Active && SelectedRow != null && SelectedRow.RowVisible && SelectionBackground != null)
+			if (SelectedRow != null && SelectedRow.RowVisible && SelectionBackground != null)
 			{
 				context.Draw(SelectionBackground, SelectedRow.RowBounds);
 			}
