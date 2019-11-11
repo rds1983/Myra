@@ -26,7 +26,11 @@ namespace Myra.Graphics2D.UI
 		private DateTime _lastBlinkStamp = DateTime.Now;
 		private bool _cursorOn = true;
 		private bool _wrap = false;
-		private readonly FormattedTextWithGlyphs _formattedText = new FormattedTextWithGlyphs();
+		private readonly FormattedText _formattedText = new FormattedText
+		{
+			CalculateGlyphs = true
+		};
+
 		private readonly StringBuilder _stringBuilder = new StringBuilder();
 		private bool _isTouchDown;
 		private Point? _lastCursorPosition;
