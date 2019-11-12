@@ -1066,12 +1066,15 @@ namespace Myra.Graphics2D.UI
 			var lineIndex = startGlyph.TextChunk.LineIndex;
 			var i = selectStart;
 
+			var lineHeight = CrossEngineStuff.LineSpacing(_formattedText.Font);
 			while (true)
 			{
 				startGlyph = _formattedText.GetGlyphInfoByIndex(i);
 				var startPosition = GetRenderPositionByIndex(i);
 
-				if (selectEnd < i + startGlyph.TextChunk.Count)
+				var line = _formattedText.Strings[startGlyph.TextChunk.LineIndex];
+
+				if (selectEnd < line.TextStartIndex + line.Count)
 				{
 					var endPosition = GetRenderPositionByIndex(selectEnd);
 
@@ -1079,7 +1082,7 @@ namespace Myra.Graphics2D.UI
 						new Rectangle(startPosition.X - _internalScrolling.X,
 							startPosition.Y - _internalScrolling.Y,
 							endPosition.X - startPosition.X,
-							CrossEngineStuff.LineSpacing(_formattedText.Font)));
+							lineHeight));
 
 					break;
 				}
@@ -1088,7 +1091,7 @@ namespace Myra.Graphics2D.UI
 					new Rectangle(startPosition.X - _internalScrolling.X,
 						startPosition.Y - _internalScrolling.Y,
 						bounds.Left + startGlyph.TextChunk.Size.X - startPosition.X,
-						CrossEngineStuff.LineSpacing(_formattedText.Font)));
+						lineHeight));
 
 				++lineIndex;
 				if (lineIndex >= _formattedText.Strings.Length)
@@ -1096,11 +1099,7 @@ namespace Myra.Graphics2D.UI
 					break;
 				}
 
-				i = 0;
-				for (var k = 0; k < lineIndex; ++k)
-				{
-					i += _formattedText.Strings[k].Count;
-				}
+				i = _formattedText.Strings[lineIndex].TextStartIndex;
 			}
 		}
 
