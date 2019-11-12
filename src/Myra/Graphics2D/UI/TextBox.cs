@@ -28,7 +28,8 @@ namespace Myra.Graphics2D.UI
 		private bool _wrap = false;
 		private readonly FormattedText _formattedText = new FormattedText
 		{
-			CalculateGlyphs = true
+			CalculateGlyphs = true,
+			SupportsCommands = false
 		};
 
 		private readonly StringBuilder _stringBuilder = new StringBuilder();
@@ -566,7 +567,7 @@ namespace Myra.Graphics2D.UI
 			var glyphIndex = newString.GetGlyphIndexByX(preferredX);
 			if (glyphIndex != null)
 			{
-				UserSetCursorPosition(newString.LineStart + glyphIndex.Value);
+				UserSetCursorPosition(newString.TextStartIndex + glyphIndex.Value);
 			}
 		}
 
@@ -968,7 +969,7 @@ namespace Myra.Graphics2D.UI
 				var glyphIndex = line.GetGlyphIndexByX(mousePos.X);
 				if (glyphIndex != null)
 				{
-					UserSetCursorPosition(line.LineStart + glyphIndex.Value);
+					UserSetCursorPosition(line.TextStartIndex + glyphIndex.Value);
 				}
 			}
 		}
@@ -1019,7 +1020,7 @@ namespace Myra.Graphics2D.UI
 					if (glyphRender != null)
 					{
 						x += glyphRender.Bounds.Left;
-						y += glyphRender.TextLine.Top;
+						y += glyphRender.TextChunk.Top;
 					}
 				}
 				else if (_formattedText.Strings != null && _formattedText.Strings.Length > 0)
@@ -1031,7 +1032,7 @@ namespace Myra.Graphics2D.UI
 						var glyphRender = lastLine.GetGlyphInfoByIndex(lastLine.Count - 1);
 
 						x += glyphRender.Bounds.Right;
-						y += glyphRender.TextLine.Top;
+						y += glyphRender.TextChunk.Top;
 					}
 				}
 			}
@@ -1062,7 +1063,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var lineIndex = startGlyph.TextLine.LineIndex;
+			var lineIndex = startGlyph.TextChunk.LineIndex;
 			var i = selectStart;
 
 			while (true)
@@ -1070,7 +1071,7 @@ namespace Myra.Graphics2D.UI
 				startGlyph = _formattedText.GetGlyphInfoByIndex(i);
 				var startPosition = GetRenderPositionByIndex(i);
 
-				if (selectEnd < i + startGlyph.TextLine.Count)
+				if (selectEnd < i + startGlyph.TextChunk.Count)
 				{
 					var endPosition = GetRenderPositionByIndex(selectEnd);
 
@@ -1086,7 +1087,7 @@ namespace Myra.Graphics2D.UI
 				context.Draw(Selection,
 					new Rectangle(startPosition.X - _internalScrolling.X,
 						startPosition.Y - _internalScrolling.Y,
-						bounds.Left + startGlyph.TextLine.Size.X - startPosition.X,
+						bounds.Left + startGlyph.TextChunk.Size.X - startPosition.X,
 						CrossEngineStuff.LineSpacing(_formattedText.Font)));
 
 				++lineIndex;

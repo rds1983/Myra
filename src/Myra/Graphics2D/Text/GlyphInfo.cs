@@ -11,6 +11,6 @@ namespace Myra.Graphics2D.Text
 		public int Index;
 		public char Character;
 		public Rectangle Bounds;
-		public TextLine TextLine;
+		public TextChunk TextChunk;
 	}
 }

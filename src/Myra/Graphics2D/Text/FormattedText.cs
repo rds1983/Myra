@@ -23,6 +23,7 @@ namespace Myra.Graphics2D.Text
 		private int _verticalSpacing;
 		private int? _width;
 		private TextLine[] _strings;
+		private bool _calculateGlyphs, _supportsCommands;
 		private Point _size;
 		private bool _dirty = true;
 		private StringBuilder _stringBuilder = new StringBuilder();
@@ -124,11 +125,50 @@ namespace Myra.Graphics2D.Text
 			}
 		}
 
-		internal bool CalculateGlyphs;
-
-		internal TextEditRow LayoutRow(int startIndex, int? width)
+		public bool CalculateGlyphs
 		{
-			var r = new TextEditRow();
+			get
+			{
+				return _calculateGlyphs;
+			}
+
+			set
+			{
+				if (value == _calculateGlyphs)
+				{
+					return;
+				}
+
+				_calculateGlyphs = value;
+				InvalidateLayout();
+			}
+		}
+
+		public bool SupportsCommands
+		{
+			get
+			{
+				return _supportsCommands;
+			}
+
+			set
+			{
+				if (value == _supportsCommands)
+				{
+					return;
+				}
+
+				_supportsCommands = value;
+				InvalidateLayout();
+			}
+		}
+
+		internal ChunkInfo LayoutRow(int startIndex, int? width)
+		{
+			var r = new ChunkInfo
+			{
+				LineEnd = true
+			};
 
 			if (string.IsNullOrEmpty(_text))
 			{
@@ -202,21 +242,21 @@ namespace Myra.Graphics2D.Text
 				var y = 0;
 				while (i < _text.Length)
 				{
-					var r = LayoutRow(i, width);
+					var chunkInfo = LayoutRow(i, width);
 
-					if (r.CharsCount == 0)
+					if (chunkInfo.CharsCount == 0)
 					{
 						break;
 					}
 
-					if (r.X > result.X)
+					if (chunkInfo.X > result.X)
 					{
-						result.X = r.X;
+						result.X = chunkInfo.X;
 					}
 
-					i += r.CharsCount;
+					i += chunkInfo.CharsCount;
 
-					y += r.Y;
+					y += chunkInfo.Y;
 					y += _verticalSpacing;
 				}
 
@@ -248,22 +288,45 @@ namespace Myra.Graphics2D.Text
 			var lines = new List<TextLine>();
 
 			var i = 0;
+			var line = new TextLine
+			{
+				TextStartIndex = i
+			};
+
 			while (i < _text.Length)
 			{
-				var r = LayoutRow(i, Width);
-
-				if (r.CharsCount == 0)
+				var c = LayoutRow(i, Width);
+				if (c.CharsCount == 0)
 				{
 					break;
 				}
 
-				var line = new TextLine(_font, _displayText.Substring(i, r.CharsCount), new Point(r.X, r.Y), CalculateGlyphs)
+				var chunk = new TextChunk(_font, _displayText.Substring(i, c.CharsCount), new Point(c.X, c.Y), CalculateGlyphs)
 				{
-					LineStart = i
+					TextStartIndex = i
 				};
-				lines.Add(line);
 
-				i += r.CharsCount;
+				i += c.CharsCount;
+
+				line.Chunks.Add(chunk);
+				line.Count += chunk.Count;
+
+				line.Size.X += chunk.Size.X;
+				if (chunk.Size.Y > line.Size.Y)
+				{
+					line.Size.Y = chunk.Size.Y;
+				}
+
+				if (c.LineEnd)
+				{
+					// New line
+					lines.Add(line);
+
+					line = new TextLine
+					{
+						TextStartIndex = i
+					};
+				}
 			}
 
 			_strings = lines.ToArray();
@@ -272,10 +335,18 @@ namespace Myra.Graphics2D.Text
 			_size = Point.Zero;
 			for (i = 0; i < _strings.Length; ++i)
 			{
-				var line = _strings[i];
+				line = _strings[i];
 
 				line.LineIndex = i;
 				line.Top = _size.Y;
+
+				for(var j = 0; j < line.Chunks.Count; ++j)
+				{
+					var chunk = line.Chunks[j];
+					chunk.LineIndex = line.LineIndex;
+					chunk.ChunkIndex = j;
+					chunk.Top = line.Top;
+				}
 
 				if (line.Size.X > _size.X)
 				{
@@ -310,7 +381,7 @@ namespace Myra.Graphics2D.Text
 			for(var i = 0; i < _strings.Length; ++i)
 			{
 				var s = _strings[i];
-				if (s.LineStart <= cursorPosition && cursorPosition < s.LineStart + s.Text.Length())
+				if (s.TextStartIndex <= cursorPosition && cursorPosition < s.TextStartIndex + s.Count)
 				{
 					return s;
 				}

@@ -18,7 +18,12 @@ namespace Myra.Graphics2D.UI
 {
 	public class Label : Widget
 	{
-		private readonly FormattedText _formattedText = new FormattedText();
+		private readonly FormattedText _formattedText = new FormattedText
+		{
+			CalculateGlyphs = false,
+			SupportsCommands = true
+		};
+
 		private bool _wrap = false;
 
 		private AutoEllipsisMethod _autoEllipsisMethod = AutoEllipsisMethod.None;
@@ -239,7 +244,9 @@ namespace Myra.Graphics2D.UI
 				Font = _formattedText.Font,
 				IsPassword = _formattedText.IsPassword,
 				VerticalSpacing = _formattedText.VerticalSpacing,
-				Width = _formattedText.Width
+				Width = _formattedText.Width,
+				CalculateGlyphs = _formattedText.CalculateGlyphs,
+				SupportsCommands = _formattedText.SupportsCommands
 			};
 			string result;
 
