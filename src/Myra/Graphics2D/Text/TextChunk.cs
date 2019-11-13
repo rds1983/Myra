@@ -27,6 +27,7 @@ namespace Myra.Graphics2D.Text
 		public int ChunkIndex { get; internal set; }
 		public int Top { get; internal set; }
 		public int TextStartIndex { get; internal set; }
+		public Color? Color;
 
 		public TextChunk(SpriteFont font, string text, Point size, bool calculateGlyps)
 		{
@@ -176,7 +177,7 @@ namespace Myra.Graphics2D.Text
 						pos.Y + g.Bounds.Y,
 						g.Bounds.Width, g.Bounds.Height);
 
-					batch.DrawRectangle(r, Color.White);
+					batch.DrawRectangle(r, Microsoft.Xna.Framework.Color.White);
 				}
 			}
 		}

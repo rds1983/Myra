@@ -163,10 +163,11 @@ namespace Myra.Graphics2D.Text
 			}
 		}
 
-		internal ChunkInfo LayoutRow(int startIndex, int? width)
+		internal ChunkInfo LayoutRow(int startIndex, int? width, bool parseCommands)
 		{
 			var r = new ChunkInfo
 			{
+				StartIndex = startIndex,
 				LineEnd = true
 			};
 
@@ -179,9 +180,39 @@ namespace Myra.Graphics2D.Text
 			int? lastBreakPosition = null;
 			Point? lastBreakMeasure = null;
 
-			for (var i = startIndex; i < _text.Length; ++i)
+			for (var i = r.StartIndex; i < _text.Length; ++i)
 			{
 				var c = _displayText[i];
+
+				if (SupportsCommands && c == '\\')
+				{
+					if (i < _text.Length - 2 && _text[i + 1] == 'c' && _text[i + 2] == '{')
+					{
+						// Find end
+						var startPos = i + 3;
+						var j = _text.IndexOf('}', startPos);
+
+						if (j != -1)
+						{
+							// Found
+							if (i > r.StartIndex)
+							{
+								// Break right here, as next chunk has another color
+								r.LineEnd = false;
+								return r;
+							}
+
+							if (parseCommands)
+							{
+								r.Color = _text.Substring(startPos, j - startPos).FromName();
+							}
+
+							r.StartIndex = j + 1;
+							i = j;
+							continue;
+						}
+					}
+				}
 
 				_stringBuilder.Append(c);
 
@@ -207,7 +238,7 @@ namespace Myra.Graphics2D.Text
 				{
 					if (lastBreakPosition != null)
 					{
-						r.CharsCount = lastBreakPosition.Value - startIndex;
+						r.CharsCount = lastBreakPosition.Value - r.StartIndex;
 					}
 
 					if (lastBreakMeasure != null)
@@ -240,24 +271,41 @@ namespace Myra.Graphics2D.Text
 			{
 				var i = 0;
 				var y = 0;
+
+				var remainingWidth = width;
+				var lineWidth = 0;
 				while (i < _text.Length)
 				{
-					var chunkInfo = LayoutRow(i, width);
+					var chunkInfo = LayoutRow(i, remainingWidth, false);
 
 					if (chunkInfo.CharsCount == 0)
 					{
 						break;
 					}
 
-					if (chunkInfo.X > result.X)
+					lineWidth += chunkInfo.X;
+					i = chunkInfo.StartIndex + chunkInfo.CharsCount;
+
+					if (remainingWidth.HasValue)
 					{
-						result.X = chunkInfo.X;
+						remainingWidth = remainingWidth.Value - chunkInfo.X;
 					}
 
-					i += chunkInfo.CharsCount;
+					if (chunkInfo.LineEnd)
+					{
+						if (lineWidth > result.X)
+						{
+							result.X = lineWidth;
+						}
 
-					y += chunkInfo.Y;
-					y += _verticalSpacing;
+						lineWidth = 0;
+						remainingWidth = width;
+
+						y += chunkInfo.Y;
+						y += _verticalSpacing;
+					}
+
+
 				}
 
 				result.Y = y;
@@ -293,20 +341,24 @@ namespace Myra.Graphics2D.Text
 				TextStartIndex = i
 			};
 
+			var width = Width;
 			while (i < _text.Length)
 			{
-				var c = LayoutRow(i, Width);
+				var c = LayoutRow(i, width, true);
 				if (c.CharsCount == 0)
 				{
 					break;
 				}
 
-				var chunk = new TextChunk(_font, _displayText.Substring(i, c.CharsCount), new Point(c.X, c.Y), CalculateGlyphs)
+				var chunk = new TextChunk(_font, _displayText.Substring(c.StartIndex, c.CharsCount), new Point(c.X, c.Y), CalculateGlyphs)
 				{
-					TextStartIndex = i
+					TextStartIndex = i,
+					Color = c.Color
 				};
 
-				i += c.CharsCount;
+				width -= chunk.Size.X;
+
+				i = c.StartIndex + c.CharsCount;
 
 				line.Chunks.Add(chunk);
 				line.Count += chunk.Count;
@@ -326,6 +378,8 @@ namespace Myra.Graphics2D.Text
 					{
 						TextStartIndex = i
 					};
+
+					width = Width;
 				}
 			}
 
@@ -446,7 +500,7 @@ namespace Myra.Graphics2D.Text
 			{
 				if (y + si.Size.Y >= clip.Top && y <= clip.Bottom)
 				{
-					si.Draw(batch, new Point(position.X, y), textColor, opacity);
+					textColor = si.Draw(batch, new Point(position.X, y), textColor, opacity);
 				}
 
 				y += si.Size.Y;

@@ -79,14 +79,24 @@ namespace Myra.Utility
 					// Parsed value contains color in RGBA form
 					// Extract color components
 
-					byte r, g, b, a;
+					byte r = 0, g = 0, b = 0, a = 0;
 
 					unchecked
 					{
-						r = (byte) (u >> 24);
-						g = (byte) (u >> 16);
-						b = (byte) (u >> 8);
-						a = (byte) u;
+						if (name.Length == 6)
+						{
+							r = (byte)(u >> 16);
+							g = (byte)(u >> 8);
+							b = (byte)u;
+							a = 255;
+						}
+						else if (name.Length == 8)
+						{
+							r = (byte)(u >> 24);
+							g = (byte)(u >> 16);
+							b = (byte)(u >> 8);
+							a = (byte)u;
+						}
 					}
 
 					return new Color(r, g, b, a);

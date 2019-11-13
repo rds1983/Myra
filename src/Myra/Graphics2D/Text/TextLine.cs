@@ -81,13 +81,20 @@ namespace Myra.Graphics2D.Text
 			return Chunks[Chunks.Count - 1].GetGlyphIndexByX(x);
 		}
 
-		public virtual void Draw(SpriteBatch batch, Point pos, Color color, float opacity = 1.0f)
+		public virtual Color Draw(SpriteBatch batch, Point pos, Color color, float opacity = 1.0f)
 		{
 			foreach (var si in Chunks)
 			{
+				if (si.Color != null)
+				{
+					color = si.Color.Value;
+				}
+
 				si.Draw(batch, pos, color, opacity);
 				pos.X += si.Size.X;
 			}
+
+			return color;
 		}
 	}
 }
