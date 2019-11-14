@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Stylesheet>
   <Colors>
-    <Color Id="white" Value="#FFFFFFFF" />
-    <Color Id="grey" Value="#AAAAAAFF" />
+    <Color Id="white" Value="#FFFFFF" />
+    <Color Id="grey" Value="#AAAAAA" />
+    <Color Id="red" Value="#FF0000" />
   </Colors>
   <LabelStyles>
     <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" />
@@ -110,13 +111,13 @@
     </VerticalSplitPaneStyle>
   </VerticalSplitPaneStyles>
   <HorizontalMenuStyles>
-    <HorizontalMenuStyle Background="button" SelectionHoverBackground="button-over" SelectionBackground="button-down">
+    <HorizontalMenuStyle Background="button" SelectionHoverBackground="button-over" SelectionBackground="button-down" SpecialCharColor="red">
       <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" PaddingLeft="10" PaddingRight="10" />
       <SeparatorStyle Image="separator" Thickness="3" />
     </HorizontalMenuStyle>
   </HorizontalMenuStyles>
   <VerticalMenuStyles>
-    <VerticalMenuStyle Background="button" Border="border" SelectionHoverBackground="button-over" SelectionBackground="button-down">
+    <VerticalMenuStyle Background="button" Border="border" SelectionHoverBackground="button-over" SelectionBackground="button-down" SpecialCharColor="red">
       <ImageStyle PaddingLeft="10" />
       <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" PaddingLeft="10" PaddingRight="10" />
       <ShortcutStyle Font="default-font" TextColor="white" DisabledTextColor="grey" PaddingRight="10" />

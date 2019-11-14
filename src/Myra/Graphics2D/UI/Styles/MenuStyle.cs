@@ -1,4 +1,6 @@
-﻿namespace Myra.Graphics2D.UI.Styles
+﻿using Microsoft.Xna.Framework;
+
+namespace Myra.Graphics2D.UI.Styles
 {
 	public class MenuStyle : WidgetStyle
 	{
@@ -8,6 +10,7 @@
 		public SeparatorStyle SeparatorStyle { get; set; }
 		public IRenderable SelectionHoverBackground { get; set; }
 		public IRenderable SelectionBackground { get; set; }
+		public Color? SpecialCharColor { get; set; }
 
 		public MenuStyle()
 		{
@@ -19,6 +22,7 @@
 			LabelStyle = style.LabelStyle != null ? new LabelStyle(style.LabelStyle) : null;
 			ShortcutStyle = style.ShortcutStyle != null ? new LabelStyle(style.ShortcutStyle) : null;
 			SeparatorStyle = style.SeparatorStyle != null ? new SeparatorStyle(style.SeparatorStyle) : null;
+			SpecialCharColor = style.SpecialCharColor;
 		}
 
 		public override WidgetStyle Clone()

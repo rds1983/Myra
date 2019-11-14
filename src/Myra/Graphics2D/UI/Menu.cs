@@ -418,6 +418,8 @@ namespace Myra.Graphics2D.UI
 
 		private void InsertItem(IMenuItem item, int index)
 		{
+			item.Menu = this;
+
 			var menuItem = item as MenuItem;
 			if (menuItem != null)
 			{
@@ -456,8 +458,6 @@ namespace Myra.Graphics2D.UI
 
 				((MenuSeparator)item).Separator = separator;
 			}
-
-			item.Menu = this;
 		}
 
 		private void AddItem(IMenuItem item)

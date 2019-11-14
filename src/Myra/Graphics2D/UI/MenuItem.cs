@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.Xml.Serialization;
 using System;
 using Myra.Attributes;
+using Myra.Graphics2D.UI.Styles;
+using Myra.Utility;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -18,9 +20,10 @@ namespace Myra.Graphics2D.UI
 		private Color? _shortcutColor;
 		private bool _toggleable;
 		private IRenderable _image;
-		private char? _underscoreChar;
-		private string _id, _text, _displayText;
+		private string _id, _text;
 		private Color? _color;
+		private bool _displayTextDirty = true;
+		private string _displayText;
 
 		internal readonly Image ImageWidget = new Image
 		{
@@ -71,20 +74,18 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_text = value;
+				_displayTextDirty = true;
 
-				string text = _text;
-				_underscoreChar = null;
+				var specialCharColor = Stylesheet.Current.HorizontalMenuStyle.SpecialCharColor;
+				UnderscoreChar = null;
 				if (value != null)
 				{
 					var underscoreIndex = value.IndexOf('&');
 					if (underscoreIndex >= 0 && underscoreIndex + 1 < value.Length)
 					{
-						_underscoreChar = char.ToLower(value[underscoreIndex + 1]);
-						text = value.Substring(0, underscoreIndex) + value.Substring(underscoreIndex + 1);
+						UnderscoreChar = char.ToLower(value[underscoreIndex + 1]);
 					}
 				}
-
-				_displayText = text;
 			}
 		}
 
@@ -92,6 +93,47 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
+				if (!_displayTextDirty)
+				{
+					return _displayText;
+				}
+
+				if (UnderscoreChar == null)
+				{
+					_displayText = Text;
+				}
+				else
+				{
+					var originalColor = Menu.Orientation == Orientation.Horizontal ?
+						Stylesheet.Current.HorizontalMenuStyle.LabelStyle.TextColor :
+						Stylesheet.Current.VerticalMenuStyle.LabelStyle.TextColor;
+					if (Color != null)
+					{
+						originalColor = Color.Value;
+					}
+
+					var specialCharColor = Menu.Orientation == Orientation.Horizontal ?
+						Stylesheet.Current.HorizontalMenuStyle.SpecialCharColor :
+						Stylesheet.Current.VerticalMenuStyle.SpecialCharColor;
+					var underscoreIndex = Text.IndexOf('&');
+
+					var underscoreChar = Text[underscoreIndex + 1];
+					if (specialCharColor != null)
+					{
+						_displayText = Text.Substring(0, underscoreIndex) +
+							@"\c{" + specialCharColor.Value.ToHexString() + "}" +
+							underscoreChar.ToString() + 
+							@"\c{" + originalColor.ToHexString() + "}" +
+							Text.Substring(underscoreIndex + 2);
+					} else
+					{
+						_displayText = Text.Substring(0, underscoreIndex) +
+							Text.Substring(underscoreIndex + 1);
+					}
+				}
+
+				_displayTextDirty = false;
+
 				return _displayText;
 			}
 		}
@@ -229,13 +271,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public char? UnderscoreChar
-		{
-			get
-			{
-				return _underscoreChar;
-			}
-		}
+		public char? UnderscoreChar { get; private set; }
 
 		[Browsable(false)]
 		[XmlIgnore]
