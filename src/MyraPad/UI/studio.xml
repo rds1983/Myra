@@ -15,7 +15,7 @@
         <MenuItem Id="_menuFileExportToCS" Text="&amp;Export To C#..." ShortcutText="Ctrl+E" />
         <MenuSeparator />
         <MenuItem Id="_menuFileLoadStylesheet" Text="&amp;Load Stylesheet" />
-        <MenuItem Id="_menuFileReloadStylesheet" Text="Rel&amp;oad Stylesheet" ShortcutText="Ctrl+T" />
+        <MenuItem Id="_menuFileReloadStylesheet" Text="Reloa&amp;d Stylesheet" ShortcutText="Ctrl+D" />
         <MenuItem Id="_menuFileResetStylesheet" Text="Rese&amp;t Stylesheet" />
         <MenuSeparator />
         <MenuItem Id="_menuFileDebugOptions" Text="&amp;UI Debug Options" />

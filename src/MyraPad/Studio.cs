@@ -339,7 +339,7 @@ namespace MyraPad
 					{
 						ExportCsItemOnSelected(this, EventArgs.Empty);
 					}
-					else if (_desktop.DownKeys.Contains(Keys.T))
+					else if (_desktop.DownKeys.Contains(Keys.D))
 					{
 						OnMenuFileReloadStylesheet(this, EventArgs.Empty);
 					}

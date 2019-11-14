@@ -191,7 +191,7 @@ namespace Myra.Graphics2D.UI
 
 			var textToDraw = (_autoEllipsisMethod == AutoEllipsisMethod.None) 
 				? _formattedText : _autoEllipsisText;
-			textToDraw.Draw(context.Batch, bounds.Location, context.View, color, context.Opacity);
+			textToDraw.Draw(context.Batch, bounds.Location, context.View, color, Enabled, context.Opacity);
 		}
 
 		protected override Point InternalMeasure(Point availableSize)

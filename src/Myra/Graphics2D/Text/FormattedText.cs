@@ -485,7 +485,7 @@ namespace Myra.Graphics2D.Text
 			return null;
 		}
 
-		public void Draw(SpriteBatch batch, Point position, Rectangle clip, Color textColor, float opacity = 1.0f)
+		public void Draw(SpriteBatch batch, Point position, Rectangle clip, Color textColor, bool useChunkColor, float opacity = 1.0f)
 		{
 			var strings = Strings;
 
@@ -500,7 +500,7 @@ namespace Myra.Graphics2D.Text
 			{
 				if (y + si.Size.Y >= clip.Top && y <= clip.Bottom)
 				{
-					textColor = si.Draw(batch, new Point(position.X, y), textColor, opacity);
+					textColor = si.Draw(batch, new Point(position.X, y), textColor, useChunkColor, opacity);
 				}
 
 				y += si.Size.Y;

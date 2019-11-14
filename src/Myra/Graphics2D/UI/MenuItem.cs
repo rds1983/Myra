@@ -23,7 +23,7 @@ namespace Myra.Graphics2D.UI
 		private string _id, _text;
 		private Color? _color;
 		private bool _displayTextDirty = true;
-		private string _displayText;
+		private string _displayText, _disabledDisplayText;
 
 		internal readonly Image ImageWidget = new Image
 		{
@@ -93,48 +93,17 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				if (!_displayTextDirty)
-				{
-					return _displayText;
-				}
-
-				if (UnderscoreChar == null)
-				{
-					_displayText = Text;
-				}
-				else
-				{
-					var originalColor = Menu.Orientation == Orientation.Horizontal ?
-						Stylesheet.Current.HorizontalMenuStyle.LabelStyle.TextColor :
-						Stylesheet.Current.VerticalMenuStyle.LabelStyle.TextColor;
-					if (Color != null)
-					{
-						originalColor = Color.Value;
-					}
-
-					var specialCharColor = Menu.Orientation == Orientation.Horizontal ?
-						Stylesheet.Current.HorizontalMenuStyle.SpecialCharColor :
-						Stylesheet.Current.VerticalMenuStyle.SpecialCharColor;
-					var underscoreIndex = Text.IndexOf('&');
-
-					var underscoreChar = Text[underscoreIndex + 1];
-					if (specialCharColor != null)
-					{
-						_displayText = Text.Substring(0, underscoreIndex) +
-							@"\c{" + specialCharColor.Value.ToHexString() + "}" +
-							underscoreChar.ToString() + 
-							@"\c{" + originalColor.ToHexString() + "}" +
-							Text.Substring(underscoreIndex + 2);
-					} else
-					{
-						_displayText = Text.Substring(0, underscoreIndex) +
-							Text.Substring(underscoreIndex + 1);
-					}
-				}
-
-				_displayTextDirty = false;
-
+				UpdateDisplayText();
 				return _displayText;
+			}
+		}
+
+		internal string DisabledDisplayText
+		{
+			get
+			{
+				UpdateDisplayText();
+				return _disabledDisplayText;
 			}
 		}
 
@@ -312,6 +281,53 @@ namespace Myra.Graphics2D.UI
 
 		public MenuItem() : this(string.Empty)
 		{
+		}
+
+		private void UpdateDisplayText()
+		{
+			if (!_displayTextDirty)
+			{
+				return;
+			}
+
+			if (UnderscoreChar == null)
+			{
+				_disabledDisplayText = _displayText = Text;
+			}
+			else
+			{
+				var originalColor = Menu.Orientation == Orientation.Horizontal ?
+					Stylesheet.Current.HorizontalMenuStyle.LabelStyle.TextColor :
+					Stylesheet.Current.VerticalMenuStyle.LabelStyle.TextColor;
+				if (Color != null)
+				{
+					originalColor = Color.Value;
+				}
+
+				var specialCharColor = Menu.Orientation == Orientation.Horizontal ?
+					Stylesheet.Current.HorizontalMenuStyle.SpecialCharColor :
+					Stylesheet.Current.VerticalMenuStyle.SpecialCharColor;
+				var underscoreIndex = Text.IndexOf('&');
+
+				var underscoreChar = Text[underscoreIndex + 1];
+
+				_disabledDisplayText = Text.Substring(0, underscoreIndex) + Text.Substring(underscoreIndex + 1);
+
+				if (specialCharColor != null)
+				{
+					_displayText = Text.Substring(0, underscoreIndex) +
+						@"\c{" + specialCharColor.Value.ToHexString() + "}" +
+						underscoreChar.ToString() +
+						@"\c{" + originalColor.ToHexString() + "}" +
+						Text.Substring(underscoreIndex + 2);
+				}
+				else
+				{
+					_displayText = _disabledDisplayText;
+				}
+			}
+
+			_displayTextDirty = false;
 		}
 
 		internal MenuItem FindMenuItemById(string id)
