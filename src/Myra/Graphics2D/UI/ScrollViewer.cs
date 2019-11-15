@@ -30,6 +30,11 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
+				if (InternalChild == null)
+				{
+					return Point.Zero;
+				}
+
 				var bounds = ActualBounds;
 
 				return new Point(InternalChild.Bounds.Width - bounds.Width + ((_verticalScrollingOn && ShowVerticalScrollBar) ? _verticalScrollbarThumb.Width : 0),
@@ -253,6 +258,8 @@ namespace Myra.Graphics2D.UI
 		{
 			get { return _verticalScrollingOn; }
 		}
+
+		protected internal override bool MouseWheelFocusCanBeNull => false;
 
 		public override Desktop Desktop
 		{

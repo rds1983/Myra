@@ -594,6 +594,14 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		internal protected virtual bool MouseWheelFocusCanBeNull
+		{
+			get { return true; }
+		}
+
+
+		[Browsable(false)]
+		[XmlIgnore]
 		public virtual bool IsKeyboardFocused
 		{
 			get

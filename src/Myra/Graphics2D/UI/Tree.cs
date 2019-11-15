@@ -58,10 +58,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		internal protected override bool AcceptsKeyboardFocus
-		{
-			get { return base.AcceptsKeyboardFocus; }
-		}
+		protected internal override bool AcceptsKeyboardFocus => true;
 
 		[DefaultValue(true)]
 		public bool HasRoot

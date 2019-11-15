@@ -540,7 +540,8 @@ namespace Myra.Graphics2D.UI
 				return true;
 			});
 
-			if (focusedWidget != null)
+			if (focusedWidget != null ||
+				(FocusedMouseWheelWidget != null && FocusedMouseWheelWidget.MouseWheelFocusCanBeNull))
 			{
 				FocusedMouseWheelWidget = focusedWidget;
 			}
