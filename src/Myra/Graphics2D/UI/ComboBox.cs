@@ -5,6 +5,7 @@ using System.Xml.Serialization;
 using Myra.Utility;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using Microsoft.Xna.Framework.Input;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -65,6 +66,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		protected internal override bool AcceptsKeyboardFocus => true;
+
 		public override ObservableCollection<ListItem> Items => _listBox.Items;
 
 		public override ListItem SelectedItem { get => _listBox.SelectedItem; set => _listBox.SelectedItem = value; }
@@ -83,7 +86,6 @@ namespace Myra.Graphics2D.UI
 				_listBox.SelectedIndexChanged -= value;
 			}
 		}
-
 
 		public ComboBox(string styleName = Stylesheet.DefaultStyleName)
 		{
@@ -243,6 +245,13 @@ namespace Myra.Graphics2D.UI
 			result.X += 32;
 
 			return result;
+		}
+
+		public override void OnKeyDown(Keys k)
+		{
+			base.OnKeyDown(k);
+
+			_listBox.OnKeyDown(k);
 		}
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)

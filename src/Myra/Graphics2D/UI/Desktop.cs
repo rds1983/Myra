@@ -345,9 +345,9 @@ namespace Myra.Graphics2D.UI
 				{
 					TouchUp.Invoke(this);
 
-					// Top widget can receive touch up
+					// Only top active widget can receive touch up
 					var activeWidget = GetTopWidget(true);
-					if (activeWidget != null)
+					if (activeWidget != null && activeWidget.Active)
 					{
 						activeWidget.HandleTouchUp();
 					}
@@ -359,14 +359,14 @@ namespace Myra.Graphics2D.UI
 
 		public int RepeatKeyDownInternalInMs { get; set; } = 50;
 
-		public bool HasModalWindow
+		public bool HasModalWidget
 		{
 			get
 			{
 				for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
 				{
 					var w = ChildrenCopy[i];
-					if (w.Visible && w.Enabled && (w is Window) && ((Window)w).IsModal)
+					if (w.Visible && w.Enabled && w.IsModal)
 					{
 						return true;
 					}
@@ -763,8 +763,11 @@ namespace Myra.Graphics2D.UI
 					return true;
 				});
 
-				// Everything after top widget is not active
-				active = false;
+				// Everything after first modal widget is not active
+				if (w.IsModal)
+				{
+					active = false;
+				}
 			}
 
 			_layoutDirty = false;
@@ -984,7 +987,7 @@ namespace Myra.Graphics2D.UI
 				// Small workaround: if key is escape  active widget is window
 				// Send it there
 				var asWindow = GetTopWidget(false) as Window;
-				if (asWindow != null && key == Keys.Escape && _focusedKeyboardWidget != asWindow)
+				if (asWindow != null && key == Keys.Escape)
 				{
 					asWindow.OnKeyDown(key);
 				}

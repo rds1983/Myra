@@ -29,6 +29,7 @@ namespace Myra.Graphics2D.UI
 		private HorizontalAlignment _horizontalAlignment = HorizontalAlignment.Left;
 		private VerticalAlignment _verticalAlignment = VerticalAlignment.Top;
 		private LayoutState _layoutState = LayoutState.Invalid;
+		private bool _isModal = false;
 		private bool _measureDirty = true;
 
 		private Point _lastMeasureSize;
@@ -458,6 +459,24 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[XmlIgnore]
+		[Browsable(false)]
+		public bool IsModal
+		{
+			get { return _isModal; }
+
+			set
+			{
+				if (_isModal == value)
+				{
+					return;
+				}
+
+				_isModal = value;
+				InvalidateMeasure();
+			}
+		}
+
 		internal bool Active
 		{
 			get; set;
@@ -678,6 +697,16 @@ namespace Myra.Graphics2D.UI
 			get { return true; }
 		}
 
+		/// <summary>
+		/// When Width/Height is set and HorizontalAlignment/VerticalAlignment is set to Stretch
+		/// This property determines what to use for layout
+		/// </summary>
+		[Browsable(false)]
+		[XmlIgnore]
+		internal protected virtual bool PrioritizeStrethOverSize
+		{
+			get { return true; }
+		}
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -892,7 +921,7 @@ namespace Myra.Graphics2D.UI
 			else
 			{
 				// Lerp available size by Width/Height or MaxWidth/MaxHeight
-				if (HorizontalAlignment != HorizontalAlignment.Stretch)
+				if (!PrioritizeStrethOverSize || HorizontalAlignment != HorizontalAlignment.Stretch)
 				{
 					if (Width != null && availableSize.X > Width.Value)
 					{
@@ -904,7 +933,7 @@ namespace Myra.Graphics2D.UI
 					}
 				}
 
-				if (VerticalAlignment != VerticalAlignment.Stretch)
+				if (!PrioritizeStrethOverSize || VerticalAlignment != VerticalAlignment.Stretch)
 				{
 					if (Height != null && availableSize.Y > Height.Value)
 					{
@@ -920,7 +949,7 @@ namespace Myra.Graphics2D.UI
 				result = InternalMeasure(availableSize);
 
 				// Result lerp
-				if (HorizontalAlignment != HorizontalAlignment.Stretch)
+				if (!PrioritizeStrethOverSize || HorizontalAlignment != HorizontalAlignment.Stretch)
 				{
 					if (Width.HasValue)
 					{
@@ -940,7 +969,7 @@ namespace Myra.Graphics2D.UI
 					}
 				}
 
-				if (VerticalAlignment != VerticalAlignment.Stretch)
+				if (!PrioritizeStrethOverSize || VerticalAlignment != VerticalAlignment.Stretch)
 				{
 					if (Height.HasValue)
 					{
@@ -1039,8 +1068,24 @@ namespace Myra.Graphics2D.UI
 					size.Y = _containerBounds.Height;
 				}
 
+				// Resolve possible conflict beetween Alignment set to Streth and Size explicitly set
+				var containerSize = _containerBounds.Size();
+
+				if (!PrioritizeStrethOverSize)
+				{
+					if (HorizontalAlignment == HorizontalAlignment.Stretch && Width != null && Width.Value < containerSize.X)
+					{
+						containerSize.X = Width.Value;
+					}
+
+					if (VerticalAlignment == VerticalAlignment.Stretch && Height != null && Height.Value < containerSize.Y)
+					{
+						containerSize.Y = Height.Value;
+					}
+				}
+
 				// Align
-				var controlBounds = LayoutUtils.Align(_containerBounds.Size(), size, HorizontalAlignment, VerticalAlignment);
+				var controlBounds = LayoutUtils.Align(containerSize, size, HorizontalAlignment, VerticalAlignment);
 				controlBounds.Offset(_containerBounds.Location);
 
 				controlBounds.Offset(Left, Top);

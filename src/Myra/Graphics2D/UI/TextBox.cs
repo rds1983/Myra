@@ -1200,7 +1200,10 @@ namespace Myra.Graphics2D.UI
 		{
 			base.Arrange();
 
-			_formattedText.Width = _wrap ? ActualBounds.Width : default(int?);
+			var width = ActualBounds.Width;
+			width -= CursorWidth;
+
+			_formattedText.Width = _wrap ? width : default(int?);
 		}
 
 		public void ApplyTextBoxStyle(TextBoxStyle style)

@@ -105,7 +105,7 @@ namespace Myra.Samples.Notepad
 
 			_desktop.KeyDown += (s, a) =>
 			{
-				if (_desktop.HasModalWindow || ui._mainMenu.IsOpen)
+				if (_desktop.HasModalWidget || ui._mainMenu.IsOpen)
 				{
 					return;
 				}

@@ -1,11 +1,11 @@
 <Project>
   <Project.ExportOptions Namespace="Myra.Graphics2D.UI.ColorPicker" Class="ColorPickerDialog" OutputPath="D:\Projects\Myra\src\Myra\Graphics2D\UI\ColorPicker" />
-  <Dialog Title="Color Picker" Left="299" Top="26" Width="450">
+  <Dialog Title="Color Picker" Left="297" Top="21" Width="450">
     <VerticalStackPanel>
       <VerticalStackPanel.Proportions>
         <Proportion Type="Fill" Value="100" />
       </VerticalStackPanel.Proportions>
-      <Image Id="_imageColor" Height="50" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+      <Image Id="_imageColor" Height="50" HorizontalAlignment="Stretch" />
       <HorizontalSeparator Height="4" />
       <Grid>
         <Grid.ColumnsProportions>

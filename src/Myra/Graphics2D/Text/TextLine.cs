@@ -59,20 +59,22 @@ namespace Myra.Graphics2D.Text
 				return null;
 			}
 
-			if (Chunks.Count == 1)
-			{
-				return Chunks[0].GetGlyphIndexByX(x);
-			}
-
 			for(var i = 0; i < Chunks.Count; ++i)
 			{
 				var chunk = Chunks[i];
+
 				if (x >= chunk.Size.X)
 				{
 					x -= chunk.Size.X;
 				}
 				else
 				{
+					if (chunk.Glyphs.Count > 0 && x < chunk.Glyphs[0].Bounds.X)
+					{
+						// Before first glyph
+						return 0;
+					}
+
 					return chunk.GetGlyphIndexByX(x);
 				}
 			}

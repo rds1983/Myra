@@ -21,19 +21,9 @@ namespace Myra.Graphics2D.UI
 	public class Window : SingleItemContainer<VerticalStackPanel>, IContent
 	{
 		private Point? _startPos;
-		private readonly Grid _titleGrid;
 		private readonly Label _titleLabel;
-		private readonly ImageButton _closeButton;
 		private Widget _content;
-		private Widget _previousKeyboardFocus;
 		private Widget _previousMouseWheelFocus;
-
-		[Browsable(false)]
-		[XmlIgnore]
-		public bool IsModal
-		{
-			get; set;
-		}
 
 		[Category("Appearance")]
 		public string Title
@@ -79,23 +69,11 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public Grid TitleGrid
-		{
-			get
-			{
-				return _titleGrid;
-			}
-		}
+		public Grid TitleGrid { get; private set; }
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public ImageButton CloseButton
-		{
-			get
-			{
-				return _closeButton;
-			}
-		}
+		public ImageButton CloseButton { get; private set; }
 
 		[Browsable(false)]
 		[Content]
@@ -196,6 +174,8 @@ namespace Myra.Graphics2D.UI
 
 		public Window(string styleName = Stylesheet.DefaultStyleName)
 		{
+			IsModal = true;
+
 			InternalChild = new VerticalStackPanel();
 
 			Result = false;
@@ -207,30 +187,30 @@ namespace Myra.Graphics2D.UI
 			InternalChild.Proportions.Add(new Proportion(ProportionType.Auto));
 			InternalChild.Proportions.Add(new Proportion(ProportionType.Fill));
 
-			_titleGrid = new Grid
+			TitleGrid = new Grid
 			{
 				ColumnSpacing = 8
 			};
 
-			_titleGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
-			_titleGrid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
+			TitleGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+			TitleGrid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
 
 			_titleLabel = new Label();
-			_titleGrid.Widgets.Add(_titleLabel);
+			TitleGrid.Widgets.Add(_titleLabel);
 
-			_closeButton = new ImageButton
+			CloseButton = new ImageButton
 			{
 				GridColumn = 1
 			};
 
-			_closeButton.Click += (sender, args) =>
+			CloseButton.Click += (sender, args) =>
 			{
 				Close();
 			};
 
-			_titleGrid.Widgets.Add(_closeButton);
+			TitleGrid.Widgets.Add(CloseButton);
 
-			InternalChild.Widgets.Add(_titleGrid);
+			InternalChild.Widgets.Add(TitleGrid);
 
 			SetStyle(styleName);
 		}
@@ -331,8 +311,8 @@ namespace Myra.Graphics2D.UI
 			var x = Bounds.X;
 			var y = Bounds.Y;
 			var bounds = new Rectangle(x, y,
-				_titleGrid.Bounds.Right - x,
-				_titleGrid.Bounds.Bottom - y);
+				TitleGrid.Bounds.Right - x,
+				TitleGrid.Bounds.Bottom - y);
 			var touchPos = Desktop.TouchPosition;
 			if (bounds.Contains(touchPos))
 			{
@@ -364,20 +344,18 @@ namespace Myra.Graphics2D.UI
 
 			if (style.CloseButtonStyle != null)
 			{
-				_closeButton.ApplyImageButtonStyle(style.CloseButtonStyle);
+				CloseButton.ApplyImageButtonStyle(style.CloseButtonStyle);
 			}
 		}
 
 		public void ShowModal(Desktop desktop)
 		{
+			IsModal = true;
 			desktop.Widgets.Add(this);
-			_previousKeyboardFocus = desktop.FocusedKeyboardWidget;
 			_previousMouseWheelFocus = desktop.FocusedMouseWheelWidget;
-			desktop.FocusedKeyboardWidget = this;
 
 			// Force mouse wheel focused to be set to the first appropriate widget in the next Desktop.UpdateLayout
 			desktop.FocusedMouseWheelWidget = null;
-			IsModal = true;
 		}
 
 		public virtual void Close()
@@ -391,16 +369,9 @@ namespace Myra.Graphics2D.UI
 
 				var desktop = Desktop;
 				Desktop.Widgets.Remove(this);
-				desktop.FocusedKeyboardWidget = _previousKeyboardFocus;
 				desktop.FocusedMouseWheelWidget = _previousMouseWheelFocus;
 
-				var ev = Closed;
-				if (ev != null)
-				{
-					ev(this, EventArgs.Empty);
-				}
-
-				IsModal = false;
+				Closed?.Invoke(this, EventArgs.Empty);
 			}
 		}
 

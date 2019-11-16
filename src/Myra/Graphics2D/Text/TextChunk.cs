@@ -17,7 +17,8 @@ namespace Myra.Graphics2D.Text
 		protected string _text;
 		protected readonly SpriteFont _font;
 		protected Point _size;
-		private List<GlyphInfo> _glyphs;
+
+		public List<GlyphInfo> Glyphs { get; private set; }
 
 		public int Count { get { return _text.Length(); } }
 		public string Text { get { return _text; } }
@@ -53,11 +54,11 @@ namespace Myra.Graphics2D.Text
 				return;
 			}
 
-			_glyphs = new List<GlyphInfo>();
+			Glyphs = new List<GlyphInfo>();
 
 			for (var i = 0; i < _text.Length; ++i)
 			{
-				_glyphs.Add(new GlyphInfo
+				Glyphs.Add(new GlyphInfo
 				{
 					TextChunk = this,
 					Character = _text[i],
@@ -99,7 +100,7 @@ namespace Myra.Graphics2D.Text
 
 				var result = new Rectangle((int)p.X, (int)p.Y, (int)(g.Width + g.RightSideBearing), g.BoundsInTexture.Height);
 
-				_glyphs[i].Bounds = result;
+				Glyphs[i].Bounds = result;
 
 				offset.X += g.Width + g.RightSideBearing;
 			}
@@ -124,24 +125,24 @@ namespace Myra.Graphics2D.Text
 				return null;
 			}
 
-			return _glyphs[index];
+			return Glyphs[index];
 		}
 
 		public int? GetGlyphIndexByX(int x)
 		{
-			if (_glyphs.Count == 0 || x < 0)
+			if (Glyphs.Count == 0 || x < 0)
 			{
 				return null;
 			}
 
 			var i = 0;
-			for (; i < _glyphs.Count; ++i)
+			for (; i < Glyphs.Count; ++i)
 			{
-				var glyph = _glyphs[i];
+				var glyph = Glyphs[i];
 				var right = glyph.Bounds.Right;
-				if (i < _glyphs.Count - 1)
+				if (i < Glyphs.Count - 1)
 				{
-					right = _glyphs[i + 1].Bounds.X;
+					right = Glyphs[i + 1].Bounds.X;
 				}
 
 				if (glyph.Bounds.X <= x && x <= right)
@@ -155,7 +156,7 @@ namespace Myra.Graphics2D.Text
 				}
 			}
 
-			if (i - 1 >= 0 && i - 1 < _glyphs.Count && _glyphs[i - 1].Character == '\n')
+			if (i - 1 >= 0 && i - 1 < Glyphs.Count && Glyphs[i - 1].Character == '\n')
 			{
 				--i;
 			}
@@ -167,11 +168,11 @@ namespace Myra.Graphics2D.Text
 		{
 			batch.DrawString(_font, _text, new Vector2(pos.X, pos.Y), color * opacity);
 
-			if (MyraEnvironment.DrawTextGlyphsFrames && !string.IsNullOrEmpty(_text) && _glyphs != null)
+			if (MyraEnvironment.DrawTextGlyphsFrames && !string.IsNullOrEmpty(_text) && Glyphs != null)
 			{
-				for (var i = 0; i < _glyphs.Count; ++i)
+				for (var i = 0; i < Glyphs.Count; ++i)
 				{
-					var g = _glyphs[i];
+					var g = Glyphs[i];
 
 					var r = new Rectangle(pos.X + g.Bounds.X,
 						pos.Y + g.Bounds.Y,
