@@ -892,59 +892,71 @@ namespace Myra.Graphics2D.UI
 			else
 			{
 				// Lerp available size by Width/Height or MaxWidth/MaxHeight
-				if (Width != null && availableSize.X > Width.Value)
+				if (HorizontalAlignment != HorizontalAlignment.Stretch)
 				{
-					availableSize.X = Width.Value;
-				}
-				else if (MaxWidth != null && availableSize.X > MaxWidth.Value)
-				{
-					availableSize.X = MaxWidth.Value;
+					if (Width != null && availableSize.X > Width.Value)
+					{
+						availableSize.X = Width.Value;
+					}
+					else if (MaxWidth != null && availableSize.X > MaxWidth.Value)
+					{
+						availableSize.X = MaxWidth.Value;
+					}
 				}
 
-				if (Height != null && availableSize.Y > Height.Value)
+				if (VerticalAlignment != VerticalAlignment.Stretch)
 				{
-					availableSize.Y = Height.Value;
-				}
-				else if (MaxHeight != null && availableSize.Y > MaxHeight.Value)
-				{
-					availableSize.Y = MaxHeight.Value;
+					if (Height != null && availableSize.Y > Height.Value)
+					{
+						availableSize.Y = Height.Value;
+					}
+					else if (MaxHeight != null && availableSize.Y > MaxHeight.Value)
+					{
+						availableSize.Y = MaxHeight.Value;
+					}
 				}
 
 				// Do the actual measure
 				result = InternalMeasure(availableSize);
 
 				// Result lerp
-				if (Width.HasValue)
+				if (HorizontalAlignment != HorizontalAlignment.Stretch)
 				{
-					result.X = Width.Value;
-				}
-				else
-				{
-					if (MinWidth.HasValue && result.X < MinWidth.Value)
+					if (Width.HasValue)
 					{
-						result.X = MinWidth.Value;
+						result.X = Width.Value;
 					}
-
-					if (MaxWidth.HasValue && result.X > MaxWidth.Value)
+					else
 					{
-						result.X = MaxWidth.Value;
+						if (MinWidth.HasValue && result.X < MinWidth.Value)
+						{
+							result.X = MinWidth.Value;
+						}
+
+						if (MaxWidth.HasValue && result.X > MaxWidth.Value)
+						{
+							result.X = MaxWidth.Value;
+						}
 					}
 				}
 
-				if (Height.HasValue)
+				if (VerticalAlignment != VerticalAlignment.Stretch)
 				{
-					result.Y = Height.Value;
-				}
-				else
-				{
-					if (MinHeight.HasValue && result.Y < MinHeight.Value)
+					if (Height.HasValue)
 					{
-						result.Y = MinHeight.Value;
+						result.Y = Height.Value;
 					}
-
-					if (MaxHeight.HasValue && result.Y > MaxHeight.Value)
+					else
 					{
-						result.Y = MaxHeight.Value;
+						if (MinHeight.HasValue && result.Y < MinHeight.Value)
+						{
+							result.Y = MinHeight.Value;
+						}
+
+						if (MaxHeight.HasValue && result.Y > MaxHeight.Value)
+						{
+							result.Y = MaxHeight.Value;
+						}
 					}
 				}
 			}

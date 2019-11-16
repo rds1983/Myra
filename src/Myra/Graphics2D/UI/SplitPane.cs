@@ -230,10 +230,16 @@ namespace Myra.Graphics2D.UI
 					// Add splitter
 					var handle = new ImageButton(null)
 					{
-						HorizontalAlignment = HorizontalAlignment.Stretch,
-						VerticalAlignment = VerticalAlignment.Stretch,
 						ReleaseOnTouchLeft = false
 					};
+
+					if (Orientation == Orientation.Horizontal)
+					{
+						handle.VerticalAlignment = VerticalAlignment.Stretch;
+					} else
+					{
+						handle.HorizontalAlignment = HorizontalAlignment.Stretch;
+					}
 
 					handle.ApplyButtonStyle(HandleStyle);
 

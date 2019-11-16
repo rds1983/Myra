@@ -232,6 +232,7 @@ namespace Myra.Graphics2D.UI
 			// Measure by the longest string
 			var result = base.InternalMeasure(availableSize);
 
+			_listBox.Width = null;
 			var listResult = _listBox.Measure(new Point(10000, 10000));
 			if (listResult.X > result.X)
 			{

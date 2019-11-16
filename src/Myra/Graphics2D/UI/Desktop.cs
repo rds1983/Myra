@@ -5,7 +5,6 @@ using System.Collections.Specialized;
 using System.Linq;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
-using System.Reflection;
 
 #if !XENKO
 using Microsoft.Xna.Framework;

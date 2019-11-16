@@ -204,11 +204,6 @@ namespace Myra.Graphics2D.UI
 			var height = availableSize.Y;
 			var ellipsisEnabled = _autoEllipsisMethod != AutoEllipsisMethod.None;
 
-			if (Width != null && Width.Value < width)
-			{
-				width = Width.Value;
-			}
-
 			var result = Point.Zero;
 			if (ellipsisEnabled)
 			{

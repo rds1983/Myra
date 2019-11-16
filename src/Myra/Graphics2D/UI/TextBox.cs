@@ -1174,11 +1174,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var width = availableSize.X;
-			if (Width != null && Width.Value < width)
-			{
-				width = Width.Value;
-			}
-
 			width -= CursorWidth;
 
 			var result = Point.Zero;
