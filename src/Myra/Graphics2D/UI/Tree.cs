@@ -133,7 +133,7 @@ namespace Myra.Graphics2D.UI
 				{
 					if (parentWidgets != null)
 					{
-						if (index == 0)
+						if (index == 0 && SelectedRow.ParentNode != this)
 						{
 							SelectedRow = SelectedRow.ParentNode;
 						}

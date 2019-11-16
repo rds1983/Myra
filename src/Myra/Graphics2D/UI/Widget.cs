@@ -3,7 +3,6 @@ using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Serialization;
-using Myra.Attributes;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -25,7 +24,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		private int _left, _top;
-		private int? _width, _height;
+		private int? _minWidth, _minHeight, _maxWidth, _maxHeight, _width, _height;
 		private int _gridColumn, _gridRow, _gridColumnSpan = 1, _gridRowSpan = 1;
 		private HorizontalAlignment _horizontalAlignment = HorizontalAlignment.Left;
 		private VerticalAlignment _verticalAlignment = VerticalAlignment.Top;
@@ -104,9 +103,49 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Layout")]
 		[DefaultValue(null)]
+		public int? MinWidth
+		{
+			get { return _minWidth; }
+			set
+			{
+				if (value == _minWidth)
+				{
+					return;
+				}
+
+				_minWidth = value;
+				InvalidateMeasure();
+				FireSizeChanged();
+			}
+		}
+
+		[Category("Layout")]
+		[DefaultValue(null)]
+		public int? MaxWidth
+		{
+			get { return _maxWidth; }
+			set
+			{
+				if (value == _maxWidth)
+				{
+					return;
+				}
+
+				_maxWidth = value;
+				InvalidateMeasure();
+				FireSizeChanged();
+			}
+		}
+
+		[Category("Layout")]
+		[DefaultValue(null)]
 		public int? Width
 		{
-			get { return _width; }
+			get
+			{
+				return _width;
+			}
+
 			set
 			{
 				if (value == _width)
@@ -122,9 +161,49 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Layout")]
 		[DefaultValue(null)]
+		public int? MinHeight
+		{
+			get { return _minHeight; }
+			set
+			{
+				if (value == _minHeight)
+				{
+					return;
+				}
+
+				_minHeight = value;
+				InvalidateMeasure();
+				FireSizeChanged();
+			}
+		}
+
+		[Category("Layout")]
+		[DefaultValue(null)]
+		public int? MaxHeight
+		{
+			get { return _maxHeight; }
+			set
+			{
+				if (value == _maxHeight)
+				{
+					return;
+				}
+
+				_maxHeight = value;
+				InvalidateMeasure();
+				FireSizeChanged();
+			}
+		}
+
+		[Category("Layout")]
+		[DefaultValue(null)]
 		public int? Height
 		{
-			get { return _height; }
+			get
+			{
+				return _height;
+			}
+
 			set
 			{
 				if (value == _height)
@@ -813,14 +892,39 @@ namespace Myra.Graphics2D.UI
 			else
 			{
 				result = InternalMeasure(availableSize);
+
 				if (Width.HasValue)
 				{
 					result.X = Width.Value;
+				}
+				else
+				{
+					if (MinWidth.HasValue && result.X < MinWidth.Value)
+					{
+						result.X = MinWidth.Value;
+					}
+
+					if (MaxWidth.HasValue && result.X > MaxWidth.Value)
+					{
+						result.X = MaxWidth.Value;
+					}
 				}
 
 				if (Height.HasValue)
 				{
 					result.Y = Height.Value;
+				}
+				else
+				{
+					if (MinHeight.HasValue && result.Y < MinHeight.Value)
+					{
+						result.Y = MinHeight.Value;
+					}
+
+					if (MaxHeight.HasValue && result.Y > MaxHeight.Value)
+					{
+						result.Y = MaxHeight.Value;
+					}
 				}
 			}
 
@@ -989,6 +1093,10 @@ namespace Myra.Graphics2D.UI
 		{
 			Width = style.Width;
 			Height = style.Height;
+			MinWidth = style.MinWidth;
+			MinHeight = style.MinHeight;
+			MaxWidth = style.MaxWidth;
+			MaxHeight = style.MaxHeight;
 
 			Background = style.Background;
 			OverBackground = style.OverBackground;

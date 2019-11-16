@@ -7,6 +7,12 @@
 		public int? Width { get; set; }
 		public int? Height { get; set; }
 
+		public int? MinWidth { get; set; }
+		public int? MinHeight { get; set; }
+
+		public int? MaxWidth { get; set; }
+		public int? MaxHeight { get; set; }
+
 		public IRenderable Background { get; set; }
 		public IRenderable OverBackground { get; set; }
 		public IRenderable DisabledBackground { get; set; }
@@ -30,6 +36,10 @@
 		{
 			Width = style.Width;
 			Height = style.Height;
+			MinWidth = style.MinWidth;
+			MinHeight = style.MinHeight;
+			MaxWidth = style.MaxWidth;
+			MaxHeight = style.MaxHeight;
 			Background = style.Background;
 			OverBackground = style.OverBackground;
 			DisabledBackground = style.DisabledBackground;
