@@ -504,15 +504,7 @@ namespace Myra.Graphics2D.UI
 				return Point.Zero;
 			}
 
-			if (Width != null)
-			{
-				availableSize.X = Width.Value;
-			}
-
-			if (Height != null)
-			{
-				availableSize.Y = Height.Value;
-			}
+			LerpAvailableSize(ref availableSize);
 
 			var measureSize = InternalChild.Measure(availableSize);
 

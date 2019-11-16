@@ -3,6 +3,8 @@ using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
 using Myra.Utility;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -12,30 +14,9 @@ using Xenko.Core.Mathematics;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ComboBox : Selector<ImageTextButton, ListItem>
+	public class ComboBox : SelectorBase<ImageTextButton, ListItem>
 	{
-		private class CustomScrollViewer : ScrollViewer
-		{
-			public int? MaximumHeight
-			{
-				get; set;
-			}
-
-			protected override Point InternalMeasure(Point availableSize)
-			{
-				var result = base.InternalMeasure(availableSize);
-
-				if (MaximumHeight != null && result.Y > MaximumHeight.Value)
-				{
-					result.Y = MaximumHeight.Value;
-				}
-
-				return result;
-			}
-		}
-
-		private readonly CustomScrollViewer _itemsContainerScroll;
-		private readonly VerticalStackPanel _itemsContainer;
+		private readonly ListBox _listBox = new ListBox();
 		private ImageTextButtonStyle _dropDownItemStyle;
 
 		[Category("Behavior")]
@@ -44,12 +25,12 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return _itemsContainerScroll.MaximumHeight;
+				return _listBox.MaxHeight;
 			}
 
 			set
 			{
-				_itemsContainerScroll.MaximumHeight = value;
+				_listBox.MaxHeight = value;
 			}
 		}
 
@@ -84,19 +65,41 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ComboBox(string styleName = Stylesheet.DefaultStyleName) : base(new ImageTextButton(null))
+		public override ObservableCollection<ListItem> Items => _listBox.Items;
+
+		public override ListItem SelectedItem { get => _listBox.SelectedItem; set => _listBox.SelectedItem = value; }
+		public override SelectionMode SelectionMode { get => _listBox.SelectionMode; set => _listBox.SelectionMode = value; }
+		public override int? SelectedIndex { get => _listBox.SelectedIndex; set => _listBox.SelectedIndex = value; }
+
+		public override event EventHandler SelectedIndexChanged
 		{
-			InternalChild.Toggleable = true;
+			add
+			{
+				_listBox.SelectedIndexChanged += value;
+			}
+
+			remove
+			{
+				_listBox.SelectedIndexChanged -= value;
+			}
+		}
+
+
+		public ComboBox(string styleName = Stylesheet.DefaultStyleName)
+		{
+			InternalChild = new ImageTextButton(null)
+			{
+				Toggleable = true,
+				HorizontalAlignment = HorizontalAlignment.Stretch
+			};
+
 			InternalChild.PressedChanged += InternalChild_PressedChanged;
+
+			_listBox.Items.CollectionChanged += Items_CollectionChanged;
+			_listBox.SelectedIndexChanged += _listBox_SelectedIndexChanged;
 
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
-
-			_itemsContainer = new VerticalStackPanel();
-			_itemsContainerScroll = new CustomScrollViewer
-			{
-				Content = _itemsContainer
-			};
 
 			DropdownMaximumHeight = 300;
 
@@ -120,15 +123,15 @@ namespace Myra.Graphics2D.UI
 
 		private void InternalChild_PressedChanged(object sender, EventArgs e)
 		{
-			if (_itemsContainer.Widgets.Count == 0)
+			if (_listBox.Items.Count == 0)
 			{
 				return;
 			}
 
 			if (InternalChild.IsPressed)
 			{
-				_itemsContainer.Width = Bounds.Width;
-				Desktop.ShowContextMenu(_itemsContainerScroll, new Point(Bounds.X, Bounds.Bottom));
+				_listBox.Width = Bounds.Width;
+				Desktop.ShowContextMenu(_listBox, new Point(Bounds.X, Bounds.Bottom));
 			} else
 			{
 				Desktop.HideContextMenu();
@@ -138,77 +141,53 @@ namespace Myra.Graphics2D.UI
 		private void ItemOnChanged(object sender, EventArgs eventArgs)
 		{
 			var item = (ListItem)sender;
-			var widget = (ImageTextButton)item.Widget;
-
-			widget.Text = item.Text;
-			widget.TextColor = item.Color ?? _dropDownItemStyle.LabelStyle.TextColor;
 
 			if (SelectedItem == item)
 			{
 				InternalChild.Text = item.Text;
+
+				var widget = (ListButton)item.Tag;
 				InternalChild.TextColor = widget.TextColor;
 			}
 
 			InvalidateMeasure();
 		}
 
-		protected override void InsertItem(ListItem item, int index)
+		private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
 		{
-			item.Changed += ItemOnChanged;
-
-			var button = new ListButton(_dropDownItemStyle, this)
+			switch (args.Action)
 			{
-				Text = item.Text,
-				TextColor = item.Color ?? _dropDownItemStyle.LabelStyle.TextColor,
-				Tag = item
-			};
+				case NotifyCollectionChangedAction.Add:
+				{
+					foreach (ListItem item in args.NewItems)
+					{
+						item.Changed += ItemOnChanged;
+					}
+					break;
+				}
 
-			item.Widget = button;
+				case NotifyCollectionChangedAction.Remove:
+				{
+					foreach (ListItem item in args.OldItems)
+					{
+						item.Changed -= ItemOnChanged;
+					}
 
-			button.Click += ItemOnClick;
-
-			button.HorizontalAlignment = HorizontalAlignment.Stretch;
-			button.VerticalAlignment = VerticalAlignment.Stretch;
-			_itemsContainer.Widgets.Insert(index, button);
-
-			UpdateSelectedItem();
-		}
-
-		protected override void RemoveItem(ListItem item)
-		{
-			item.Changed -= ItemOnChanged;
-
-			var index = _itemsContainer.Widgets.IndexOf(item.Widget);
-			_itemsContainer.Widgets.RemoveAt(index);
-
-			if (SelectedItem == item)
-			{
-				SelectedItem = null;
-			}
-
-			UpdateSelectedItem();
-		}
-
-		protected override void OnSelectedItemChanged()
-		{
-			base.OnSelectedItemChanged();
-			UpdateSelectedItem();
-		}
-
-		protected override void Reset()
-		{
-			while (_itemsContainer.Widgets.Count > 0)
-			{
-				RemoveItem((ListItem)_itemsContainer.Widgets[0].Tag);
+					UpdateSelectedItem();
+					break;
+				}
 			}
 		}
 
-		private void ItemOnClick(object sender, EventArgs eventArgs)
-		{
-			var widget = (ImageTextButton)sender;
-			SelectedItem = (ListItem)widget.Tag;
 
-			Desktop.HideContextMenu();
+		private void _listBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (Desktop != null)
+			{
+				Desktop.HideContextMenu();
+			}
+
+			UpdateSelectedItem();
 		}
 
 		private void UpdateSelectedItem()
@@ -230,7 +209,7 @@ namespace Myra.Graphics2D.UI
 		{
 			if (style.ItemsContainerStyle != null)
 			{
-				_itemsContainer.ApplyWidgetStyle(style.ItemsContainerStyle);
+				_listBox.ApplyWidgetStyle(style.ItemsContainerStyle);
 			}
 
 			_dropDownItemStyle = style.ListItemStyle;
@@ -253,13 +232,10 @@ namespace Myra.Graphics2D.UI
 			// Measure by the longest string
 			var result = base.InternalMeasure(availableSize);
 
-			foreach (var item in _itemsContainer.Widgets)
+			var listResult = _listBox.Measure(new Point(10000, 10000));
+			if (listResult.X > result.X)
 			{
-				var childSize = item.Measure(new Point(10000, 10000));
-				if (childSize.X > result.X)
-				{
-					result.X = childSize.X;
-				}
+				result.X = listResult.X;
 			}
 
 			// Add some x space

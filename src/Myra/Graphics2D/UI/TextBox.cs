@@ -482,7 +482,6 @@ namespace Myra.Graphics2D.UI
 			try
 			{
 				_suppressRedoStackReset = true;
-				DeleteSelection();
 				switch (record.OperationType)
 				{
 					case OperationType.Insert:

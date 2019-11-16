@@ -29,6 +29,8 @@ namespace Myra.Graphics2D.UI
 		protected override Point InternalMeasure(Point availableSize)
 		{
 			Point result = Point.Zero;
+
+			LerpAvailableSize(ref availableSize);
 			foreach (var control in _widgets)
 			{
 				if (!control.Visible)

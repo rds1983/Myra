@@ -243,6 +243,26 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
+		protected void LerpAvailableSize(ref Point availableSize)
+		{
+			if (Width != null)
+			{
+				availableSize.X = Width.Value;
+			} else if (MaxWidth != null && availableSize.X > MaxWidth.Value)
+			{
+				availableSize.X = MaxWidth.Value;
+			}
+
+			if (Height != null)
+			{
+				availableSize.Y = Height.Value;
+			}
+			else if (MaxHeight != null && availableSize.Y > MaxHeight.Value)
+			{
+				availableSize.Y = MaxHeight.Value;
+			}
+		}
+
 		public abstract void RemoveChild(Widget widget);
 	}
 }

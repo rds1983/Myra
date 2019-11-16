@@ -900,6 +900,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override Point InternalMeasure(Point availableSize)
 		{
+			LerpAvailableSize(ref availableSize);
 			return LayoutProcessFixed(availableSize);
 		}
 

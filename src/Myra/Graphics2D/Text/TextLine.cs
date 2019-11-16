@@ -83,15 +83,15 @@ namespace Myra.Graphics2D.Text
 
 		public virtual Color Draw(SpriteBatch batch, Point pos, Color color, bool useChunkColor, float opacity = 1.0f)
 		{
-			foreach (var si in Chunks)
+			foreach (var chunk in Chunks)
 			{
-				if (useChunkColor && si.Color != null)
+				if (useChunkColor && chunk.Color != null)
 				{
-					color = si.Color.Value;
+					color = chunk.Color.Value;
 				}
 
-				si.Draw(batch, pos, color, opacity);
-				pos.X += si.Size.X;
+				chunk.Draw(batch, pos, color, opacity);
+				pos.X += chunk.Size.X;
 			}
 
 			return color;

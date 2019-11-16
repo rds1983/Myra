@@ -278,11 +278,6 @@ namespace Myra.Graphics2D.Text
 				{
 					var chunkInfo = LayoutRow(i, remainingWidth, false);
 
-					if (chunkInfo.CharsCount == 0)
-					{
-						break;
-					}
-
 					lineWidth += chunkInfo.X;
 					i = chunkInfo.StartIndex + chunkInfo.CharsCount;
 
@@ -345,10 +340,6 @@ namespace Myra.Graphics2D.Text
 			while (i < _text.Length)
 			{
 				var c = LayoutRow(i, width, true);
-				if (c.CharsCount == 0)
-				{
-					break;
-				}
 
 				var chunk = new TextChunk(_font, _displayText.Substring(c.StartIndex, c.CharsCount), new Point(c.X, c.Y), CalculateGlyphs)
 				{
@@ -501,6 +492,15 @@ namespace Myra.Graphics2D.Text
 				if (y + si.Size.Y >= clip.Top && y <= clip.Bottom)
 				{
 					textColor = si.Draw(batch, new Point(position.X, y), textColor, useChunkColor, opacity);
+				} else
+				{
+					foreach (var chunk in si.Chunks)
+					{
+						if (useChunkColor && chunk.Color != null)
+						{
+							textColor = chunk.Color.Value;
+						}
+					}
 				}
 
 				y += si.Size.Y;

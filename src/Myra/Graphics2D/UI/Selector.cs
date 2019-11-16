@@ -1,38 +1,44 @@
-﻿using System.ComponentModel;
+﻿using Myra.Attributes;
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Xml.Serialization;
-using Myra.Attributes;
-using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
 {
-	public abstract class Selector<WidgetType, ItemType> : SingleItemContainer<WidgetType>, ISelector
+	public abstract class SelectorBase<WidgetType, ItemType> : SingleItemContainer<WidgetType>, ISelectorT<ItemType>
+		where WidgetType : Widget
+		where ItemType : class, ISelectorItem
+	{
+		public abstract SelectionMode SelectionMode { get; set; }
+
+		[Category("Data")]
+		[Content]
+		public abstract ObservableCollection<ItemType> Items { get; }
+
+		[Browsable(false)]
+		[XmlIgnore]
+		public abstract int? SelectedIndex { get; set; }
+
+		[Browsable(false)]
+		[XmlIgnore]
+		public abstract ItemType SelectedItem { get; set; }
+
+		public abstract event EventHandler SelectedIndexChanged;
+	}
+
+	public abstract class Selector<WidgetType, ItemType> : SelectorBase<WidgetType, ItemType>
 		where WidgetType : Widget
 		where ItemType : class, ISelectorItem
 	{
 		private ItemType _selectedItem;
-		private readonly ObservableCollection<ItemType> _items = new ObservableCollection<ItemType>();
 
-		SelectionMode ISelector.SelectionMode
-		{
-			get; set;
-		}
+		public override SelectionMode SelectionMode { get; set; }
 
-		[Category("Data")]
-		[Content]
-		public ObservableCollection<ItemType> Items
-		{
-			get
-			{
-				return _items;
-			}
-		}
+		public override ObservableCollection<ItemType> Items { get; } = new ObservableCollection<ItemType>();
 
-		[Browsable(false)]
-		[XmlIgnore]
-		public int? SelectedIndex
+		public override int? SelectedIndex
 		{
 			get
 			{
@@ -41,7 +47,7 @@ namespace Myra.Graphics2D.UI
 					return null;
 				}
 
-				return _items.IndexOf(_selectedItem);
+				return Items.IndexOf(_selectedItem);
 			}
 
 			set
@@ -56,9 +62,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
-		public ItemType SelectedItem
+		public override ItemType SelectedItem
 		{
 			get
 			{
@@ -72,7 +76,7 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
-				if (((ISelector)this).SelectionMode == SelectionMode.Single && _selectedItem != null)
+				if (SelectionMode == SelectionMode.Single && _selectedItem != null)
 				{
 					_selectedItem.IsSelected = false;
 				}
@@ -89,7 +93,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public event EventHandler SelectedIndexChanged;
+		public override event EventHandler SelectedIndexChanged;
 
 		protected Selector(WidgetType widget)
 		{
@@ -100,7 +104,7 @@ namespace Myra.Graphics2D.UI
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
 
-			_items.CollectionChanged += ItemsOnCollectionChanged;
+			Items.CollectionChanged += ItemsOnCollectionChanged;
 		}
 
 		private void ItemsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
@@ -143,11 +147,7 @@ namespace Myra.Graphics2D.UI
 
 		private void FireSelectedIndexChanged()
 		{
-			var ev = SelectedIndexChanged;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
+			SelectedIndexChanged?.Invoke(this, EventArgs.Empty);
 		}
 
 		protected abstract void Reset();
