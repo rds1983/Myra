@@ -30,7 +30,6 @@ namespace Myra.Graphics2D.UI
 			SupportsCommands = false
 		};
 
-		private bool _isTouchDown;
 		private Point? _lastCursorPosition;
 		private int _cursorIndex;
 		private Point _internalScrolling = Point.Zero;
@@ -533,7 +532,7 @@ namespace Myra.Graphics2D.UI
 
 			CursorPosition = newPosition;
 
-			if (forceChangeOnly || (!Desktop.IsShiftDown && !_isTouchDown))
+			if (forceChangeOnly || (!Desktop.IsShiftDown && (!Desktop.IsTouchDown || !IsTouchOver)))
 			{
 				SelectStart = SelectEnd = CursorPosition;
 			}
@@ -966,7 +965,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void SetCursorByTouch()
+		private void SetCursorByTouch(bool forceChangeOnly = false)
 		{
 			var bounds = ActualBounds;
 			var mousePos = Desktop.TouchPosition;
@@ -980,7 +979,7 @@ namespace Myra.Graphics2D.UI
 				var glyphIndex = line.GetGlyphIndexByX(mousePos.X);
 				if (glyphIndex != null)
 				{
-					UserSetCursorPosition(line.TextStartIndex + glyphIndex.Value);
+					UserSetCursorPosition(line.TextStartIndex + glyphIndex.Value, forceChangeOnly);
 				}
 			}
 		}
@@ -999,21 +998,70 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			SetCursorByTouch();
-
-			_isTouchDown = true;
-		}
-
-		public override void OnTouchUp()
-		{
-			base.OnTouchUp();
-			_isTouchDown = false;
+			SetCursorByTouch(true);
 		}
 
 		public override void OnTouchMoved()
 		{
 			base.OnTouchMoved();
 			SetCursorByTouch();
+		}
+
+		public override void OnTouchDoubleClick()
+		{
+			base.OnTouchDoubleClick();
+
+			var position = CursorPosition;
+			if (string.IsNullOrEmpty(Text) || position < 0 || position >= Text.Length)
+			{
+				return;
+			}
+
+			if (char.IsWhiteSpace(Text[position]))
+			{
+				if (position == 0)
+				{
+					return;
+				}
+
+				--position;
+				if (char.IsWhiteSpace(Text[position]))
+				{
+					return;
+				}
+			}
+
+			int start, end;
+			start = end = position;
+
+			while(start > 0)
+			{
+				if (char.IsWhiteSpace(Text[start]))
+				{
+					++start;
+					break;
+				}
+
+				--start;
+			}
+
+			while(end < Text.Length)
+			{
+				if (char.IsWhiteSpace(Text[end]))
+				{
+					break;
+				}
+
+				++end;
+			}
+
+			if (start == end)
+			{
+				return;
+			}
+
+			SelectStart = start;
+			SelectEnd = end;
 		}
 
 		private Point GetRenderPositionByIndex(int index)

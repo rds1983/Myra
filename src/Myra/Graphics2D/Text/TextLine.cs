@@ -52,13 +52,14 @@ namespace Myra.Graphics2D.Text
 			return null;
 		}
 
-		public int? GetGlyphIndexByX(int x)
+		public int? GetGlyphIndexByX(int startX)
 		{
 			if (Chunks.Count == 0)
 			{
 				return null;
 			}
 
+			var x = startX;
 			for(var i = 0; i < Chunks.Count; ++i)
 			{
 				var chunk = Chunks[i];
@@ -80,7 +81,8 @@ namespace Myra.Graphics2D.Text
 			}
 
 			// Use last chunk
-			return Chunks[Chunks.Count - 1].GetGlyphIndexByX(x);
+			x = startX;
+			return Chunks[Chunks.Count - 1].GetGlyphIndexByX(startX);
 		}
 
 		public virtual Color Draw(SpriteBatch batch, Point pos, Color color, bool useChunkColor, float opacity = 1.0f)
