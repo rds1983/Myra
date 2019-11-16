@@ -70,10 +70,12 @@
   <ComboBoxStyles>
     <ComboBoxStyle Background="default-select">
       <LabelStyle Font="default-font" TextColor="white" />
-      <ItemsContainerStyle Background="select-box-list-bg" />
-      <ListItemStyle OverBackground="button-over" PressedBackground="button-down">
-        <LabelStyle Font="default-font" TextColor="white" />
-      </ListItemStyle>
+      <ListBoxStyle Background="select-box-list-bg">
+        <ListItemStyle OverBackground="button-over" PressedBackground="button-down">
+          <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" />
+        </ListItemStyle>
+        <SeparatorStyle PaddingTop="2" PaddingBottom="2" Image="separator-menu" Thickness="4" />
+      </ListBoxStyle>
     </ComboBoxStyle>
   </ComboBoxStyles>
   <ListBoxStyles>

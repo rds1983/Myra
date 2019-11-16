@@ -60,10 +60,11 @@
   <ComboBoxStyles>
     <ComboBoxStyle Background="default-select">
       <LabelStyle Font="ui_font" TextColor="white" />
-      <ItemsContainerStyle Background="default-rect" />
-      <ListItemStyle PressedBackground="default-select-selection">
-        <LabelStyle Font="ui_font" TextColor="white" />
-      </ListItemStyle>
+      <ListBoxStyle Background="default-rect">
+        <ListItemStyle PressedBackground="default-select-selection">
+          <LabelStyle Font="ui_font" TextColor="white" />
+        </ListItemStyle>
+      </ListBoxStyle>
     </ComboBoxStyle>
   </ComboBoxStyles>
   <ListBoxStyles>

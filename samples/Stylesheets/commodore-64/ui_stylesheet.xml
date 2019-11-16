@@ -61,10 +61,12 @@
   <ComboBoxStyles>
     <ComboBoxStyle Background="list">
       <LabelStyle Font="commodore-64" TextColor="white" />
-      <ItemsContainerStyle Background="blue" />
-      <ListItemStyle OverBackground="white" PaddingLeft="8" PaddingRight="8" PaddingTop="5" PaddingBottom="5" PressedBackground="button-down">
-        <LabelStyle Font="commodore-64" TextColor="white" OverTextColor="blue" PressedTextColor="blue" />
-      </ListItemStyle>
+      <ListBoxStyle Background="blue">
+          <ListItemStyle OverBackground="white" PaddingLeft="8" PaddingRight="8" 
+                         PaddingTop="5" PaddingBottom="5" PressedBackground="button-down">
+            <LabelStyle Font="commodore-64" TextColor="white" OverTextColor="blue" PressedTextColor="blue" />
+          </ListItemStyle>
+      </ListBoxStyle>
     </ComboBoxStyle>
   </ComboBoxStyles>
   <ListBoxStyles>

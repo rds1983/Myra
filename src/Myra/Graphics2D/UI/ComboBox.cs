@@ -17,8 +17,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class ComboBox : SelectorBase<ImageTextButton, ListItem>
 	{
-		private readonly ListBox _listBox = new ListBox();
-		private ImageTextButtonStyle _dropDownItemStyle;
+		private readonly ListBox _listBox = new ListBox(null);
 
 		[Category("Behavior")]
 		[DefaultValue(300)]
@@ -181,7 +180,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-
 		private void _listBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (Desktop != null)
@@ -198,7 +196,7 @@ namespace Myra.Graphics2D.UI
 			if (item != null)
 			{
 				InternalChild.Text = item.Text;
-				InternalChild.TextColor = item.Color ?? _dropDownItemStyle.LabelStyle.TextColor;
+				InternalChild.TextColor = item.Color ?? _listBox.ListBoxStyle.ListItemStyle.LabelStyle.TextColor;
 				((ImageTextButton)item.Widget).IsPressed = true;
 			}
 			else
@@ -209,21 +207,9 @@ namespace Myra.Graphics2D.UI
 
 		public void ApplyComboBoxStyle(ComboBoxStyle style)
 		{
-			if (style.ItemsContainerStyle != null)
+			if (style.ListBoxStyle != null)
 			{
-				_listBox.ApplyWidgetStyle(style.ItemsContainerStyle);
-			}
-
-			_dropDownItemStyle = style.ListItemStyle;
-
-			foreach (var item in Items)
-			{
-				var button = (ImageTextButton)item.Widget;
-				button.ApplyImageTextButtonStyle(_dropDownItemStyle);
-				if (item.Color != null)
-				{
-					button.TextColor = item.Color.Value;
-				}
+				_listBox.ApplyListBoxStyle(style.ListBoxStyle);
 			}
 
 			InternalChild.ApplyImageTextButtonStyle(style);
