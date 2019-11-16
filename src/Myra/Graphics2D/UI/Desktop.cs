@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
+using System.Diagnostics;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -111,8 +112,7 @@ namespace Myra.Graphics2D.UI
 					var w = ChildrenCopy[i];
 					if (w.Visible && w.Enabled)
 					{
-						var asWindow = w as Window;
-						if (w.HandleMouseMovement() || (asWindow != null && asWindow.IsModal))
+						if (w.HandleMouseMovement() || w.IsModal)
 						{
 							break;
 						}
@@ -157,8 +157,7 @@ namespace Myra.Graphics2D.UI
 					var w = ChildrenCopy[i];
 					if (w.Visible && w.Enabled)
 					{
-						var asWindow = w as Window;
-						if (w.HandleTouchMovement() || (asWindow != null && asWindow.IsModal))
+						if (w.HandleTouchMovement() || w.IsModal)
 						{
 							break;
 						}
@@ -376,6 +375,14 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		private bool IsMenuBarActive
+		{
+			get
+			{
+				return (MenuBar != null && (MenuBar.OpenMenuItem != null || IsAltDown));
+			}
+		}
+		
 		public Action<Keys> KeyDownHandler;
 
 		public event EventHandler MouseMoved;
@@ -743,6 +750,11 @@ namespace Myra.Graphics2D.UI
 			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
 			{
 				var w = ChildrenCopy[i];
+				if (!w.Visible)
+				{
+					continue;
+				}
+
 				ProcessWidgets(w, widget =>
 				{
 					widget.Active = active;
@@ -906,56 +918,42 @@ namespace Myra.Graphics2D.UI
 			{
 				_downKeys = DownKeysGetter();
 
-				if (_downKeys != null)
+				if (_downKeys != null && _lastDownKeys != null)
 				{
-					MyraEnvironment.ShowUnderscores = (MenuBar != null && MenuBar.OpenMenuItem != null) ||
-													  _downKeys.Contains(Keys.LeftAlt) ||
-													  _downKeys.Contains(Keys.RightAlt);
-
-					if (_lastDownKeys != null)
+					var now = DateTime.Now;
+					foreach (var key in _downKeys)
 					{
-						var now = DateTime.Now;
-						foreach (var key in _downKeys)
+						if (!_lastDownKeys.Contains(key))
 						{
-							if (!_lastDownKeys.Contains(key))
-							{
-								if (KeyDownHandler != null)
-								{
-									KeyDownHandler(key);
-								}
+							KeyDownHandler?.Invoke(key);
 
-								_lastKeyDown = now;
-								_keyDownCount = 0;
-							}
+							_lastKeyDown = now;
+							_keyDownCount = 0;
 						}
+					}
 
-						foreach (var key in _lastDownKeys)
+					foreach (var key in _lastDownKeys)
+					{
+						if (!_downKeys.Contains(key))
 						{
-							if (!_downKeys.Contains(key))
+							// Key had been released
+							KeyUp.Invoke(this, key);
+							if (_focusedKeyboardWidget != null && _focusedKeyboardWidget.Active)
 							{
-								// Key had been released
-								KeyUp.Invoke(this, key);
-								if (_focusedKeyboardWidget != null)
-								{
-									_focusedKeyboardWidget.OnKeyUp(key);
-								}
-
-								_lastKeyDown = null;
-								_keyDownCount = 0;
+								_focusedKeyboardWidget.OnKeyUp(key);
 							}
-							else if (_lastKeyDown != null &&
-							  ((_keyDownCount == 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownStartInMs) ||
-							  (_keyDownCount > 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownInternalInMs)))
-							{
 
-								if (KeyDownHandler != null)
-								{
-									KeyDownHandler(key);
-								}
+							_lastKeyDown = null;
+							_keyDownCount = 0;
+						}
+						else if (_lastKeyDown != null &&
+						  ((_keyDownCount == 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownStartInMs) ||
+						  (_keyDownCount > 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownInternalInMs)))
+						{
+							KeyDownHandler?.Invoke(key);
 
-								_lastKeyDown = now;
-								++_keyDownCount;
-							}
+							_lastKeyDown = now;
+							++_keyDownCount;
 						}
 					}
 				}
@@ -978,7 +976,7 @@ namespace Myra.Graphics2D.UI
 		{
 			KeyDown.Invoke(this, key);
 
-			if (MenuBar != null && MyraEnvironment.ShowUnderscores)
+			if (IsMenuBarActive)
 			{
 				MenuBar.OnKeyDown(key);
 			}
@@ -992,7 +990,7 @@ namespace Myra.Graphics2D.UI
 					asWindow.OnKeyDown(key);
 				}
 
-				if (_focusedKeyboardWidget != null)
+				if (_focusedKeyboardWidget != null && _focusedKeyboardWidget.Active)
 				{
 					_focusedKeyboardWidget.OnKeyDown(key);
 
@@ -1026,13 +1024,13 @@ namespace Myra.Graphics2D.UI
 
 		public void OnChar(char c)
 		{
-			if (MenuBar != null && MyraEnvironment.ShowUnderscores)
+			if (IsMenuBarActive)
 			{
 				// Don't accept chars if menubar is open
 				return;
 			}
 
-			if (_focusedKeyboardWidget != null)
+			if (_focusedKeyboardWidget != null && _focusedKeyboardWidget.Active)
 			{
 				_focusedKeyboardWidget.OnChar(c);
 			}

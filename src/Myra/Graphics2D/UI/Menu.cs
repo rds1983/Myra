@@ -627,11 +627,6 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			if (!MyraEnvironment.ShowUnderscores)
-			{
-				return;
-			}
-
 			var ch = k.ToChar(false);
 			if (ch != null)
 			{

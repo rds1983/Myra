@@ -53,14 +53,10 @@ namespace Myra
 
 		public static bool DrawWidgetsFrames { get; set; }
 		public static bool DrawKeyboardFocusedWidgetFrame { get; set; }
-		public static bool DrawMouseWheelFocusedWidgetFrame
-		{
-			get; set;
-		}
+		public static bool DrawMouseWheelFocusedWidgetFrame { get; set; }
 		public static bool DrawTextGlyphsFrames { get; set; }
 		public static bool DisableClipping { get; set; }
 		public static bool DrawPartialLastSymbol { get; set; }
-		internal static bool ShowUnderscores { get; set; }
 
 		private static void GameOnDisposed(object sender, EventArgs eventArgs)
 		{
@@ -92,6 +88,6 @@ namespace Myra
 			}
 		}
 
-        internal static string InternalClipboard;
+		internal static string InternalClipboard;
 	}
 }
