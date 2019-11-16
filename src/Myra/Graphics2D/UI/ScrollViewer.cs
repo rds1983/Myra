@@ -504,8 +504,6 @@ namespace Myra.Graphics2D.UI
 				return Point.Zero;
 			}
 
-			LerpAvailableSize(ref availableSize);
-
 			var measureSize = InternalChild.Measure(availableSize);
 
 			var horizontalScrollbarVisible = ShowHorizontalScrollBar && measureSize.X > availableSize.X;

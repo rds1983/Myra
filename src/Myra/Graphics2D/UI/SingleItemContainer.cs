@@ -95,7 +95,6 @@ namespace Myra.Graphics2D.UI
 
 			if (InternalChild != null)
 			{
-				LerpAvailableSize(ref availableSize);
 				result = InternalChild.Measure(availableSize);
 			}
 

@@ -30,7 +30,6 @@ namespace Myra.Graphics2D.UI
 		{
 			Point result = Point.Zero;
 
-			LerpAvailableSize(ref availableSize);
 			foreach (var control in _widgets)
 			{
 				if (!control.Visible)

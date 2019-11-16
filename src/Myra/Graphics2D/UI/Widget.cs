@@ -891,8 +891,29 @@ namespace Myra.Graphics2D.UI
 			}
 			else
 			{
+				// Lerp available size by Width/Height or MaxWidth/MaxHeight
+				if (Width != null && availableSize.X > Width.Value)
+				{
+					availableSize.X = Width.Value;
+				}
+				else if (MaxWidth != null && availableSize.X > MaxWidth.Value)
+				{
+					availableSize.X = MaxWidth.Value;
+				}
+
+				if (Height != null && availableSize.Y > Height.Value)
+				{
+					availableSize.Y = Height.Value;
+				}
+				else if (MaxHeight != null && availableSize.Y > MaxHeight.Value)
+				{
+					availableSize.Y = MaxHeight.Value;
+				}
+
+				// Do the actual measure
 				result = InternalMeasure(availableSize);
 
+				// Result lerp
 				if (Width.HasValue)
 				{
 					result.X = Width.Value;

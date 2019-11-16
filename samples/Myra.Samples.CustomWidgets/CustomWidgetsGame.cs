@@ -39,16 +39,20 @@ namespace Myra.Samples.AllWidgets
 				VerticalAlignment = VerticalAlignment.Center
 			};
 
+			var scrollViewer = new ScrollViewer();
+
 			_propertyGrid = new PropertyGrid
 			{
 				Object = arrow
 			};
 
+			scrollViewer.Content = _propertyGrid;
+
 			var topPanel = new HorizontalSplitPane();
 
 
 			topPanel.Widgets.Add(arrow);
-			topPanel.Widgets.Add(_propertyGrid);
+			topPanel.Widgets.Add(scrollViewer);
 
 			topPanel.SetSplitterPosition(0, 0.75f);
 
