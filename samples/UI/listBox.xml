@@ -1,6 +1,6 @@
 <Project>
   <Panel>
-    <ListBox MaxHeight="200" >
+    <ListBox MaxHeight="150" >
       <ListItem Text="ItemItemItem0" />
       <ListItem Text="ItemItemItem1" />
       <ListItem Text="ItemItemItem2" />

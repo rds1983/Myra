@@ -9,7 +9,7 @@
     <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" />
   </LabelStyles>
   <TextBoxStyles>
-    <TextBoxStyle Background="textfield" TextColor="white" DisabledTextColor="grey" Font="default-font" Cursor="cursor" Selection="selection" />
+    <TextBoxStyle Background="textfield" TextColor="white" DisabledTextColor="grey" Font="default-font" Cursor="cursor" Selection="selection" Width="100" />
   </TextBoxStyles>
   <ScrollViewerStyles>
     <ScrollViewerStyle HorizontalScrollBackground="scroll-horizontal" HorizontalScrollKnob="scroll-knob-horizontal" VerticalScrollBackground="scroll" VerticalScrollKnob="scroll-knob-vertical" />

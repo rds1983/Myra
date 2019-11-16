@@ -241,7 +241,6 @@ namespace Myra.Graphics2D.UI
 			{
 				Text = _formattedText.Text,
 				Font = _formattedText.Font,
-				IsPassword = _formattedText.IsPassword,
 				VerticalSpacing = _formattedText.VerticalSpacing,
 				Width = _formattedText.Width,
 				CalculateGlyphs = _formattedText.CalculateGlyphs,
@@ -305,7 +304,6 @@ namespace Myra.Graphics2D.UI
 			{
 				Text = result + AutoEllipsisString,
 				Font = _formattedText.Font,
-				IsPassword = _formattedText.IsPassword,
 				VerticalSpacing =_formattedText.VerticalSpacing,
 				Width = _formattedText.Width
 			};

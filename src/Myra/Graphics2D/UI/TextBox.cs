@@ -1,11 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Serialization;
 using Myra.Graphics2D.Text;
-using System.Text;
 using TextCopy;
 using Myra.Graphics2D.UI.TextEdit;
 
@@ -32,12 +30,13 @@ namespace Myra.Graphics2D.UI
 			SupportsCommands = false
 		};
 
-		private readonly StringBuilder _stringBuilder = new StringBuilder();
 		private bool _isTouchDown;
 		private Point? _lastCursorPosition;
 		private int _cursorIndex;
 		private Point _internalScrolling = Point.Zero;
 		private bool _suppressRedoStackReset = false;
+		private string _text;
+		private bool _passwordField;
 
 		private readonly UndoRedoStack UndoStack = new UndoRedoStack();
 		private readonly UndoRedoStack RedoStack = new UndoRedoStack();
@@ -62,7 +61,7 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return _formattedText.Text;
+				return _text;
 			}
 			set
 			{
@@ -81,7 +80,7 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return _formattedText.Text;
+				return _text;
 			}
 
 			set
@@ -94,7 +93,7 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return _formattedText.Text.Length();
+				return _text.Length();
 			}
 		}
 
@@ -194,11 +193,12 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return _formattedText.IsPassword;
+				return _passwordField;
 			}
 			set
 			{
-				_formattedText.IsPassword = value;
+				_passwordField = value;
+				UpdateFormattedText();
 			}
 		}
 
@@ -595,7 +595,7 @@ namespace Myra.Graphics2D.UI
 							var selectStart = Math.Min(SelectStart, SelectEnd);
 							var selectEnd = Math.Max(SelectStart, SelectEnd);
 
-							var clipboardText = Text.Substring(selectStart, selectEnd - selectStart);
+							var clipboardText = _formattedText.Text.Substring(selectStart, selectEnd - selectStart);
 							try
 							{
 								Clipboard.SetText(clipboardText);
@@ -775,8 +775,7 @@ namespace Myra.Graphics2D.UI
 		private bool SetText(string value, bool byUser)
 		{
 			value = Process(value);
-
-			if (value == _formattedText.Text)
+			if (value == _text)
 			{
 				return false;
 			}
@@ -792,8 +791,10 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			var oldValue = _formattedText.Text;
-			_formattedText.Text = value;
+			var oldValue = _text;
+			_text = value;
+
+			UpdateFormattedText();
 
 			if (!byUser)
 			{
@@ -823,6 +824,17 @@ namespace Myra.Graphics2D.UI
 			}
 
 			return true;
+		}
+
+		private void UpdateFormattedText()
+		{
+			if (string.IsNullOrEmpty(_text))
+			{
+				_formattedText.Text = _text;
+				return;
+			}
+
+			_formattedText.Text = PasswordField ? new string('*', _text.Length) : _text;
 		}
 
 		private void UpdateScrolling()
