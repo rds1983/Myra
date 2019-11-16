@@ -454,6 +454,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_visible = value;
+				IsMouseInside = false;
 
 				OnVisibleChanged();
 			}
@@ -614,13 +615,21 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		public bool IsMouseInside { get; private set; }
+
+		[Browsable(false)]
+		[XmlIgnore]
 		public virtual Desktop Desktop
 		{
-			get { return _desktop; }
+			get
+			{
+				return _desktop;
+			}
 
 			set
 			{
 				_desktop = value;
+				IsMouseInside = false;
 			}
 		}
 
@@ -742,7 +751,7 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return IsMouseOver && Active;
+				return IsMouseInside && Active;
 			}
 		}
 
@@ -1225,16 +1234,19 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnMouseLeft()
 		{
+			IsMouseInside = false;
 			MouseLeft.Invoke(this);
 		}
 
 		public virtual void OnMouseEntered()
 		{
+			IsMouseInside = true;
 			MouseEntered.Invoke(this);
 		}
 
 		public virtual void OnMouseMoved()
 		{
+			IsMouseInside = true;
 			MouseMoved.Invoke(this);
 		}
 
