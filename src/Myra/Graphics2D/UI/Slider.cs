@@ -69,11 +69,7 @@ namespace Myra.Graphics2D.UI
 
 				SyncHintWithValue();
 
-				var ev = ValueChanged;
-				if (ev != null)
-				{
-					ev(this, new ValueChangedEventArgs<float>(oldValue, value));
-				}
+				ValueChanged?.Invoke(this, new ValueChangedEventArgs<float>(oldValue, value));
 			}
 		}
 
@@ -222,19 +218,12 @@ namespace Myra.Graphics2D.UI
 			if (valueChanged)
 			{
 				var ev = ValueChanged;
-				if (ev != null)
-				{
-					ev(this, new ValueChangedEventArgs<float>(oldValue, _value));
-				}
+				ev?.Invoke(this, new ValueChangedEventArgs<float>(oldValue, _value));
 
 				ev = ValueChangedByUser;
-				if (ev != null)
-				{
-					ev(this, new ValueChangedEventArgs<float>(oldValue, _value));
-				}
+				ev?.Invoke(this, new ValueChangedEventArgs<float>(oldValue, _value));
 			}
 		}
-
 
 		private void DesktopTouchMoved(object sender, EventArgs args)
 		{

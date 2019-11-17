@@ -31,6 +31,7 @@ namespace Myra.Graphics2D.UI
 		private LayoutState _layoutState = LayoutState.Invalid;
 		private bool _isModal = false;
 		private bool _measureDirty = true;
+		private bool _active = false;
 
 		private Point _lastMeasureSize;
 		private Point _lastMeasureAvailableSize;
@@ -478,9 +479,23 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		internal bool Active
+		protected internal bool Active
 		{
-			get; set;
+			get
+			{
+				return _active;
+			}
+
+			set
+			{
+				if (_active == value)
+				{
+					return;
+				}
+
+				_active = value;
+				OnActiveChanged();
+			}
 		}
 
 		[Category("Appearance")]
@@ -1316,6 +1331,10 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public virtual void OnGotKeyboardFocus()
+		{
+		}
+
+		protected internal virtual void OnActiveChanged()
 		{
 		}
 

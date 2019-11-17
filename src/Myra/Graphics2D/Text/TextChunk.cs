@@ -5,10 +5,13 @@ using System.Collections.Generic;
 #if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Clr = Microsoft.Xna.Framework.Color;
 #else
 using Xenko.Core.Mathematics;
 using Xenko.Graphics;
+using Clr = Xenko.Core.Mathematics.Color;
 #endif
+
 
 namespace Myra.Graphics2D.Text
 {
@@ -108,10 +111,10 @@ namespace Myra.Graphics2D.Text
 				var offset = Vector2.Zero;
 				for (var i = 0; i < _text.Length; ++i)
 				{
-					Vector2 v = _spriteFont.MeasureString(_text[i].ToString());
+					Vector2 v = _font.MeasureString(_text[i].ToString());
 					var result = new Rectangle((int)offset.X, (int)offset.Y, (int)v.X, (int)v.Y);
 
-					_glyphs[i].Bounds = result;
+					Glyphs[i].Bounds = result;
 
 					offset.X += v.X;
 				}
@@ -178,7 +181,7 @@ namespace Myra.Graphics2D.Text
 						pos.Y + g.Bounds.Y,
 						g.Bounds.Width, g.Bounds.Height);
 
-					batch.DrawRectangle(r, Microsoft.Xna.Framework.Color.White);
+					batch.DrawRectangle(r, Clr.White);
 				}
 			}
 		}

@@ -89,6 +89,16 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		protected internal override void OnActiveChanged()
+		{
+			base.OnActiveChanged();
+
+			if (!Active && IsPressed && !Toggleable)
+			{
+				IsPressed = false;
+			}
+		}
+
 		public event EventHandler Click;
 		public event EventHandler PressedChanged;
 

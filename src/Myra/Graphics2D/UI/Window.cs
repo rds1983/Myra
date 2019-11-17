@@ -314,6 +314,12 @@ namespace Myra.Graphics2D.UI
 				TitleGrid.Bounds.Right - x,
 				TitleGrid.Bounds.Bottom - y);
 			var touchPos = Desktop.TouchPosition;
+
+			if (CloseButton.Visible && CloseButton.Bounds.Contains(touchPos))
+			{
+				return;
+			}
+
 			if (bounds.Contains(touchPos))
 			{
 				_startPos = new Point(touchPos.X - ActualBounds.Location.X,

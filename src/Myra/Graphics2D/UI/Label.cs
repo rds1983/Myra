@@ -175,22 +175,26 @@ namespace Myra.Graphics2D.UI
 			var bounds = ActualBounds;
 
 			var color = TextColor;
+			var useChunkColor = true;
 			if (!Enabled && DisabledTextColor != null)
 			{
 				color = DisabledTextColor.Value;
+				useChunkColor = false;
 			}
 			else if (IsPressed && PressedTextColor != null)
 			{
 				color = PressedTextColor.Value;
+				useChunkColor = false;
 			}
 			else if (UseHoverRenderable && OverTextColor != null)
 			{
 				color = OverTextColor.Value;
+				useChunkColor = false;
 			}
 
 			var textToDraw = (_autoEllipsisMethod == AutoEllipsisMethod.None) 
 				? _formattedText : _autoEllipsisText;
-			textToDraw.Draw(context.Batch, bounds.Location, context.View, color, Enabled, context.Opacity);
+			textToDraw.Draw(context.Batch, bounds.Location, context.View, color, useChunkColor, context.Opacity);
 		}
 
 		protected override Point InternalMeasure(Point availableSize)
