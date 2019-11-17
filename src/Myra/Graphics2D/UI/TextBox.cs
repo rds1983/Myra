@@ -36,6 +36,7 @@ namespace Myra.Graphics2D.UI
 		private bool _suppressRedoStackReset = false;
 		private string _text;
 		private bool _passwordField;
+		private bool _isTouchDown;
 
 		private readonly UndoRedoStack UndoStack = new UndoRedoStack();
 		private readonly UndoRedoStack RedoStack = new UndoRedoStack();
@@ -300,6 +301,28 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public override Desktop Desktop
+		{
+			get
+			{
+				return base.Desktop;
+			}
+			set
+			{
+				if (Desktop != null)
+				{
+					Desktop.TouchUp -= DesktopTouchUp;
+				}
+
+				base.Desktop = value;
+
+				if (Desktop != null)
+				{
+					Desktop.TouchUp += DesktopTouchUp;
+				}
+			}
+		}
+
 		/// <summary>
 		/// Fires every time when the text had been changed
 		/// </summary>
@@ -532,7 +555,7 @@ namespace Myra.Graphics2D.UI
 
 			CursorPosition = newPosition;
 
-			if (forceChangeOnly || (!Desktop.IsShiftDown && (!Desktop.IsTouchDown || !IsTouchOver)))
+			if (forceChangeOnly || (!Desktop.IsShiftDown && !_isTouchDown))
 			{
 				SelectStart = SelectEnd = CursorPosition;
 			}
@@ -998,12 +1021,15 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
+			_isTouchDown = true;
+
 			SetCursorByTouch(true);
 		}
 
 		public override void OnTouchMoved()
 		{
 			base.OnTouchMoved();
+
 			SetCursorByTouch();
 		}
 
@@ -1288,6 +1314,11 @@ namespace Myra.Graphics2D.UI
 			}
 
 			return glyph.Bounds.Width;
+		}
+
+		private void DesktopTouchUp(object sender, EventArgs args)
+		{
+			_isTouchDown = false;
 		}
 	}
 }
