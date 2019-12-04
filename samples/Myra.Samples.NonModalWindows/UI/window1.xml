@@ -1,0 +1,24 @@
+<Project>
+  <Project.ExportOptions Namespace="Myra.Samples.NonModalWindows.UI" Class="Window1" OutputPath="D:\Projects\Myra\samples\Myra.Samples.NonModalWindows\UI" />
+  <Window Title="Window 1" Left="398" Top="80">
+    <VerticalStackPanel Spacing="8">
+      <Label Text="You have 10 points left to distribute" />
+      <Grid ColumnSpacing="8" RowSpacing="8">
+        <Grid.DefaultColumnProportion Type="Auto" />
+        <Grid.DefaultRowProportion Type="Auto" />
+        <Label Text="Strength" />
+        <SpinButton Value="5" Width="50" GridColumn="1" />
+        <Label Text="Dexterity" GridRow="1" />
+        <SpinButton Value="5" Width="50" GridColumn="1" GridRow="1" />
+        <Label Text="Constitution" GridRow="2" />
+        <SpinButton Value="5" Width="50" GridColumn="1" GridRow="2" />
+        <Label Text="Intelligence" GridRow="3" />
+        <SpinButton Value="5" Width="50" GridColumn="1" GridRow="3" />
+        <Label Text="Wisdom" GridRow="4" />
+        <SpinButton Value="5" Width="50" GridColumn="1" GridRow="4" />
+        <Label Text="Charisma" GridRow="5" />
+        <SpinButton Value="5" Width="50" GridColumn="1" GridRow="5" />
+      </Grid>
+    </VerticalStackPanel>
+  </Window>
+</Project>

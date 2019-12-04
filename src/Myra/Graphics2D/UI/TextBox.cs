@@ -479,7 +479,8 @@ namespace Myra.Graphics2D.UI
 				DeleteChars(CursorPosition, 1);
 				if (InsertChar(CursorPosition, ch))
 				{
-					UserSetCursorPosition(CursorPosition + 1, true);
+					UserSetCursorPosition(CursorPosition + 1);
+
 				}
 			}
 			else
@@ -488,9 +489,11 @@ namespace Myra.Graphics2D.UI
 				if (InsertChar(CursorPosition, ch))
 				{
 					UndoStack.MakeInsert(CursorPosition, 1);
-					UserSetCursorPosition(CursorPosition + 1, true);
+					UserSetCursorPosition(CursorPosition + 1);
 				}
 			}
+
+			ResetSelection();
 		}
 
 		private void UndoRedo(UndoRedoStack undoStack, UndoRedoStack redoStack)
@@ -529,6 +532,8 @@ namespace Myra.Graphics2D.UI
 			{
 				_suppressRedoStackReset = false;
 			}
+
+			ResetSelection();
 		}
 
 		private void Undo()
@@ -541,7 +546,7 @@ namespace Myra.Graphics2D.UI
 			UndoRedo(RedoStack, UndoStack);
 		}
 
-		private void UserSetCursorPosition(int newPosition, bool forceChangeOnly = false)
+		private void UserSetCursorPosition(int newPosition)
 		{
 			if (newPosition > Length)
 			{
@@ -554,14 +559,26 @@ namespace Myra.Graphics2D.UI
 			}
 
 			CursorPosition = newPosition;
+		}
 
-			if (forceChangeOnly || (!Desktop.IsShiftDown && !_isTouchDown))
+		private void ResetSelection()
+		{
+			SelectStart = SelectEnd = CursorPosition;
+		}
+
+		private void UpdateSelection()
+		{
+			SelectEnd = CursorPosition;
+		}
+
+		private void UpdateSelectionIfShiftDown()
+		{
+			if (Desktop.IsShiftDown)
 			{
-				SelectStart = SelectEnd = CursorPosition;
-			}
-			else
+				UpdateSelection();
+			} else
 			{
-				SelectEnd = CursorPosition;
+				ResetSelection();
 			}
 		}
 
@@ -589,6 +606,7 @@ namespace Myra.Graphics2D.UI
 			if (glyphIndex != null)
 			{
 				UserSetCursorPosition(newString.TextStartIndex + glyphIndex.Value);
+				UpdateSelectionIfShiftDown();
 			}
 		}
 
@@ -680,6 +698,7 @@ namespace Myra.Graphics2D.UI
 					if (CursorPosition > 0)
 					{
 						UserSetCursorPosition(CursorPosition - 1);
+						UpdateSelectionIfShiftDown();
 					}
 					break;
 
@@ -687,6 +706,7 @@ namespace Myra.Graphics2D.UI
 					if (CursorPosition < Length)
 					{
 						UserSetCursorPosition(CursorPosition + 1);
+						UpdateSelectionIfShiftDown();
 					}
 
 					break;
@@ -706,7 +726,8 @@ namespace Myra.Graphics2D.UI
 						{
 							if (Delete(CursorPosition - 1, 1))
 							{
-								UserSetCursorPosition(CursorPosition - 1, true);
+								UserSetCursorPosition(CursorPosition - 1);
+								ResetSelection();
 							}
 						}
 						else
@@ -750,6 +771,8 @@ namespace Myra.Graphics2D.UI
 						UserSetCursorPosition(0);
 					}
 
+					UpdateSelectionIfShiftDown();
+
 					break;
 				}
 
@@ -770,6 +793,8 @@ namespace Myra.Graphics2D.UI
 					{
 						UserSetCursorPosition(Length);
 					}
+
+					UpdateSelectionIfShiftDown();
 
 					break;
 				}
@@ -970,7 +995,7 @@ namespace Myra.Graphics2D.UI
 		{
 			UpdateScrolling();
 
-			CursorPositionChanged?.Invoke(this, EventArgs.Empty);
+			CursorPositionChanged.Invoke(this);
 		}
 
 		public override void OnChar(char c)
@@ -988,7 +1013,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void SetCursorByTouch(bool forceChangeOnly = false)
+		private void SetCursorByTouch()
 		{
 			var bounds = ActualBounds;
 			var mousePos = Desktop.TouchPosition;
@@ -1002,7 +1027,14 @@ namespace Myra.Graphics2D.UI
 				var glyphIndex = line.GetGlyphIndexByX(mousePos.X);
 				if (glyphIndex != null)
 				{
-					UserSetCursorPosition(line.TextStartIndex + glyphIndex.Value, forceChangeOnly);
+					UserSetCursorPosition(line.TextStartIndex + glyphIndex.Value);
+					if (_isTouchDown || Desktop.IsShiftDown)
+					{
+						UpdateSelection();
+					} else
+					{
+						ResetSelection();
+					}
 				}
 			}
 		}
@@ -1021,9 +1053,9 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			_isTouchDown = true;
+			SetCursorByTouch();
 
-			SetCursorByTouch(true);
+			_isTouchDown = true;
 		}
 
 		public override void OnTouchMoved()
@@ -1038,7 +1070,7 @@ namespace Myra.Graphics2D.UI
 			base.OnTouchDoubleClick();
 
 			var position = CursorPosition;
-			if (string.IsNullOrEmpty(Text) || position < 0 || position >= Text.Length)
+			if (string.IsNullOrEmpty(Text) || position < 0 || position >= Text.Length || Desktop.IsShiftDown)
 			{
 				return;
 			}

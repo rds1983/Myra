@@ -217,7 +217,7 @@ namespace Myra.Graphics2D.UI
 				if (_focusedKeyboardWidget != null)
 				{
 					_focusedKeyboardWidget.OnLostKeyboardFocus();
-					WidgetLostKeyboardFocus?.Invoke(this, new GenericEventArgs<Widget>(_focusedKeyboardWidget));
+					WidgetLostKeyboardFocus.Invoke(this, _focusedKeyboardWidget);
 				}
 
 				_focusedKeyboardWidget = value;
@@ -225,7 +225,7 @@ namespace Myra.Graphics2D.UI
 				if (_focusedKeyboardWidget != null)
 				{
 					_focusedKeyboardWidget.OnGotKeyboardFocus();
-					WidgetGotKeyboardFocus?.Invoke(this, new GenericEventArgs<Widget>(_focusedKeyboardWidget));
+					WidgetGotKeyboardFocus.Invoke(this, _focusedKeyboardWidget);
 				}
 			}
 		}
@@ -336,6 +336,21 @@ namespace Myra.Graphics2D.UI
 					var activeWidget = GetTopWidget(true);
 					if (activeWidget != null && activeWidget.Active)
 					{
+						var lastWidget = Widgets[Widgets.Count - 1];
+						if (activeWidget is Window && lastWidget != activeWidget)
+						{
+							// Make active window top
+							var activeIndex = Widgets.IndexOf(activeWidget);
+							var lastIndex = Widgets.IndexOf(lastWidget);
+
+							for(var i = activeIndex; i < lastIndex; ++i)
+							{
+								Widgets[i] = Widgets[i + 1];
+							}
+
+							Widgets[lastIndex] = activeWidget;
+						}
+
 						activeWidget.HandleTouchDown();
 					}
 				}

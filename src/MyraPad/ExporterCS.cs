@@ -300,6 +300,8 @@ namespace MyraPad
 			var asString = value as string;
 			if (asString != null)
 			{
+				// Escape backslash and double quote
+				asString = asString.Replace(@"\", @"\\").Replace("\"", "\\\"");
 				return "\"" + asString + "\"";
 			}
 

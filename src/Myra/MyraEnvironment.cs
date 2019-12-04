@@ -23,6 +23,11 @@ namespace Myra
 		{
 			get
 			{
+				if (_game == null)
+				{
+					throw new Exception("MyraEnvironment.Game is null. Please, set it to the Game instance before using Myra.");
+				}
+
 				return _game;
 			}
 
@@ -56,7 +61,6 @@ namespace Myra
 		public static bool DrawMouseWheelFocusedWidgetFrame { get; set; }
 		public static bool DrawTextGlyphsFrames { get; set; }
 		public static bool DisableClipping { get; set; }
-		public static bool DrawPartialLastSymbol { get; set; }
 
 		private static void GameOnDisposed(object sender, EventArgs eventArgs)
 		{

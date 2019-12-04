@@ -1,0 +1,19 @@
+<Project>
+  <Project.ExportOptions Namespace="Myra.Samples.NonModalWindows.UI" Class="Window3" OutputPath="D:\Projects\Myra\samples\Myra.Samples.NonModalWindows\UI" />
+  <Window Title="Window 3" Left="457" Top="112">
+    <Panel>
+      <ListBox MaxHeight="150">
+        <ListItem Text="ItemItemItem0" />
+        <ListItem Text="ItemItemItem1" />
+        <ListItem Text="ItemItemItem2" />
+        <ListItem Text="ItemItemItem3" />
+        <ListItem Text="ItemItemItem4" />
+        <ListItem Text="ItemItemItem5" />
+        <ListItem Text="ItemItemItem6" />
+        <ListItem Text="ItemItemItem7" />
+        <ListItem Text="ItemItemItem8" />
+        <ListItem Text="ItemItemItem9" />
+      </ListBox>
+    </Panel>
+  </Window>
+</Project>

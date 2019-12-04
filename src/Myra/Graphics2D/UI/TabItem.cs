@@ -3,6 +3,7 @@ using System;
 using System.Text;
 using System.Xml.Serialization;
 using Myra.Attributes;
+using Myra.Utility;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -172,20 +173,12 @@ namespace Myra.Graphics2D.UI
 
 		protected void FireChanged()
 		{
-			var ev = Changed;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
+			Changed.Invoke(this);
 		}
 
 		public void FireSelected()
 		{
-			var ev = SelectedChanged;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
+			SelectedChanged.Invoke(this);
 		}
 	}
 }

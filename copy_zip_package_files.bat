@@ -19,6 +19,7 @@ copy "samples\Myra.Samples.CustomWidgets\bin\MonoGame\%CONFIGURATION%\Myra.Sampl
 copy "samples\Myra.Samples.GridContainer\bin\MonoGame\%CONFIGURATION%\Myra.Samples.GridContainer.exe" ZipPackage /Y
 copy "samples\Myra.Samples.SplitPaneContainer\bin\MonoGame\%CONFIGURATION%\Myra.Samples.SplitPaneContainer.exe" ZipPackage /Y
 copy "samples\Myra.Samples.Notepad\bin\MonoGame\%CONFIGURATION%\Myra.Samples.Notepad.exe" ZipPackage /Y
+copy "samples\Myra.Samples.NonModalWindows\bin\MonoGame\%CONFIGURATION%\Myra.Samples.NonModalWindows.exe" ZipPackage /Y
 copy "src\Myra.StylesheetConverter\bin\%CONFIGURATION%\Newtonsoft.Json.dll" ZipPackage /Y
 copy "src\Myra.StylesheetConverter\bin\%CONFIGURATION%\Myra.StylesheetConverter.exe" ZipPackage /Y
 copy "src\Myra.TextureAtlasConverter\bin\%CONFIGURATION%\Myra.TextureAtlasConverter.exe" ZipPackage /Y

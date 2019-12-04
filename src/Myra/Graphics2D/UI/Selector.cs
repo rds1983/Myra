@@ -1,4 +1,5 @@
 ﻿using Myra.Attributes;
+using Myra.Utility;
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -147,7 +148,7 @@ namespace Myra.Graphics2D.UI
 
 		private void FireSelectedIndexChanged()
 		{
-			SelectedIndexChanged?.Invoke(this, EventArgs.Empty);
+			SelectedIndexChanged.Invoke(this);
 		}
 
 		protected abstract void Reset();

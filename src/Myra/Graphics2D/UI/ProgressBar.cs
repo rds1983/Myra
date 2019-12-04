@@ -56,7 +56,7 @@ namespace Myra.Graphics2D.UI
 
 				_value = value;
 
-				ValueChanged?.Invoke(this, EventArgs.Empty);
+				ValueChanged.Invoke(this);
 			}
 		}
 

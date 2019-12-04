@@ -354,14 +354,33 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public void ShowModal(Desktop desktop)
+		private void InternalShow(Desktop desktop, Point? position = null)
 		{
-			IsModal = true;
 			desktop.Widgets.Add(this);
-			_previousMouseWheelFocus = desktop.FocusedMouseWheelWidget;
 
 			// Force mouse wheel focused to be set to the first appropriate widget in the next Desktop.UpdateLayout
 			desktop.FocusedMouseWheelWidget = null;
+
+			if (position != null)
+			{
+				Left = position.Value.X;
+				Top = position.Value.Y;
+				IsWindowPlaced = true;
+			}
+		}
+
+		public void Show(Desktop desktop, Point? position = null)
+		{
+			IsModal = false;
+			InternalShow(desktop, position);
+		}
+
+		public void ShowModal(Desktop desktop, Point? position = null)
+		{
+			IsModal = true;
+			_previousMouseWheelFocus = desktop.FocusedMouseWheelWidget;
+
+			InternalShow(desktop, position);
 		}
 
 		public virtual void Close()
@@ -377,7 +396,7 @@ namespace Myra.Graphics2D.UI
 				Desktop.Widgets.Remove(this);
 				desktop.FocusedMouseWheelWidget = _previousMouseWheelFocus;
 
-				Closed?.Invoke(this, EventArgs.Empty);
+				Closed.Invoke(this);
 			}
 		}
 

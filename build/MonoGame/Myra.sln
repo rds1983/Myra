@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.TextureAtlasConverter"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.CustomWidgets", "..\..\samples\Myra.Samples.CustomWidgets\Myra.Samples.CustomWidgets.csproj", "{9E05B57F-EB02-420F-9CD5-7BA0CB14D99C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.NonModalWindows", "..\..\samples\Myra.Samples.NonModalWindows\Myra.Samples.NonModalWindows.csproj", "{4DA7A6EB-1A4F-4966-A534-2C52F01E4411}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{9E05B57F-EB02-420F-9CD5-7BA0CB14D99C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E05B57F-EB02-420F-9CD5-7BA0CB14D99C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E05B57F-EB02-420F-9CD5-7BA0CB14D99C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DA7A6EB-1A4F-4966-A534-2C52F01E4411}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DA7A6EB-1A4F-4966-A534-2C52F01E4411}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DA7A6EB-1A4F-4966-A534-2C52F01E4411}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DA7A6EB-1A4F-4966-A534-2C52F01E4411}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,6 +93,7 @@ Global
 		{A24DDA25-F639-4EE1-B71A-B97DDD647706} = {869736F8-E5A4-4A51-BC70-0433C6ACE5D4}
 		{77935B44-15AE-4A3E-8D2B-79CC947648A7} = {869736F8-E5A4-4A51-BC70-0433C6ACE5D4}
 		{9E05B57F-EB02-420F-9CD5-7BA0CB14D99C} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{4DA7A6EB-1A4F-4966-A534-2C52F01E4411} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35ACDF4E-2CE2-46B1-A19F-35DC131069A1}
