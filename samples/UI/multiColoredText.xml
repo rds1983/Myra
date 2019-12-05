@@ -1,5 +1,3 @@
 <Project>
-  <Panel>
-    <Label Text="This is \c{red}colored \c{#00f0fa}text, \c{white}color could be set either \c{lightGreen}by name or \c{#fa9000}by hex code" />
-  </Panel>
+  <Label Text="This is \c{red}colored \c{#00f0fa}text, \c{white}color could be set either \c{lightGreen}by name or \c{#fa9000}by hex code" />
 </Project>

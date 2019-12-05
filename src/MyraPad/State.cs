@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
-using Myra.Utility;
+using Myra;
 
 namespace MyraPad
 {
