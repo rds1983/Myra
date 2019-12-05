@@ -14,7 +14,7 @@ namespace Myra.Samples.CustomUIStylesheet
 			_imageButton.Click += (sender, args) =>
 			{
 				var debugWindow = new DebugOptionsDialog();
-				debugWindow.ShowModal(Desktop);
+				debugWindow.ShowModal();
 			};
 
 			var tree = new Tree

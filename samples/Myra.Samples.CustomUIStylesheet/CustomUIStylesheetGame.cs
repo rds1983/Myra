@@ -13,7 +13,6 @@ namespace Myra.Samples.CustomUIStylesheet
 	{
 		private readonly GraphicsDeviceManager _graphics;
 
-		private Desktop _desktop;
 		private AllWidgets _allWidgets;
 
 		public CustomUIStylesheetGame()
@@ -65,13 +64,11 @@ namespace Myra.Samples.CustomUIStylesheet
 
 			Stylesheet.Current = stylesheet;
 
-			_desktop = new Desktop();
-
 			_allWidgets = new AllWidgets();
 			_allWidgets._button.Image = textureAtlas["music-off"];
 			_allWidgets._imageButton.Image = textureAtlas["sound-off"];
 
-			_desktop.Widgets.Add(_allWidgets);
+			Desktop.Widgets.Add(_allWidgets);
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -105,7 +102,7 @@ namespace Myra.Samples.CustomUIStylesheet
 
 			GraphicsDevice.Clear(Color.Black);
 
-			_desktop.Render();
+			Desktop.Render();
 		}
 	}
 }

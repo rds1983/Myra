@@ -85,23 +85,24 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override Desktop Desktop
+		public override bool IsPlaced
 		{
 			get
 			{
-				return base.Desktop;
+				return base.IsPlaced;
 			}
-			set
+
+			internal set
 			{
-				if (Desktop != null)
+				if (IsPlaced)
 				{
 					Desktop.ContextMenuClosing -= DesktopOnContextMenuClosing;
 					Desktop.ContextMenuClosed -= DesktopOnContextMenuClosed;
 				}
 
-				base.Desktop = value;
+				base.IsPlaced = value;
 
-				if (Desktop != null)
+				if (IsPlaced)
 				{
 					Desktop.ContextMenuClosing += DesktopOnContextMenuClosing;
 					Desktop.ContextMenuClosed += DesktopOnContextMenuClosed;

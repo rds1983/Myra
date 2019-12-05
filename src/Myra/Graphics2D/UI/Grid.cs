@@ -973,10 +973,7 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnTouchDown();
 
-			if (Desktop != null)
-			{
-				UpdateHoverPosition(Desktop.TouchPosition);
-			}
+			UpdateHoverPosition(Desktop.TouchPosition);
 
 			if (HoverRowIndex != null)
 			{

@@ -7,7 +7,6 @@ namespace Myra.Samples.GridContainer
 	{
 		private readonly GraphicsDeviceManager graphics;
 
-		private Desktop _desktop;
 		private Window _window;
 		private HorizontalProgressBar _horizontalProgressBar;
 		private VerticalProgressBar _verticalProgressBar;
@@ -27,8 +26,6 @@ namespace Myra.Samples.GridContainer
 			MyraEnvironment.Game = this;
 
 			// Widget.DrawFrames = true;
-			_desktop = new Desktop();
-
 			var grid = new Grid
 			{
 				RowSpacing = 3,
@@ -91,7 +88,7 @@ namespace Myra.Samples.GridContainer
 			button.Click += (s, a) =>
 			{
 				var messageBox = Dialog.CreateMessageBox("2C", "2 Columns Button pushed!");
-				messageBox.ShowModal(_desktop);
+				messageBox.ShowModal();
 			};
 
 			grid.Widgets.Add(button);
@@ -111,7 +108,7 @@ namespace Myra.Samples.GridContainer
 			button2.Click += (s, a) =>
 			{
 				var messageBox = Dialog.CreateMessageBox("2R", "2 Rows Button pushed!");
-				messageBox.ShowModal(_desktop);
+				messageBox.ShowModal();
 			};
 			grid.Widgets.Add(button2);
 
@@ -147,7 +144,7 @@ namespace Myra.Samples.GridContainer
 
 			button3.Click += (sender, args) =>
 			{
-				_window.ShowModal(_desktop);
+				_window.ShowModal();
 			};
 
 			// Horizontal slider
@@ -330,7 +327,7 @@ namespace Myra.Samples.GridContainer
 				grid.Widgets.Add(header);
 			}
 
-			_desktop.Widgets.Add(grid);
+			Desktop.Widgets.Add(grid);
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -364,7 +361,7 @@ namespace Myra.Samples.GridContainer
 
 			GraphicsDevice.Clear(Color.Black);
 
-			_desktop.Render();
+			Desktop.Render();
 		}
 	}
 }

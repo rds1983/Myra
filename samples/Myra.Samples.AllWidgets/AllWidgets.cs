@@ -34,13 +34,13 @@ namespace Myra.Samples.AllWidgets
 			_imageButton.Click += (sender, args) =>
 			{
 				var debugWindow = new DebugOptionsDialog();
-				debugWindow.ShowModal(Desktop);
+				debugWindow.ShowModal();
 			};
 
 			_menuItemAbout.Selected += (sender, args) =>
 			{
 				var messageBox = Dialog.CreateMessageBox("AllWidgets", "Myra AllWidgets Sample " + MyraEnvironment.Version);
-				messageBox.ShowModal(Desktop);
+				messageBox.ShowModal();
 			};
 
 			var tree = new Tree
@@ -75,7 +75,7 @@ namespace Myra.Samples.AllWidgets
 		public void OpenFile()
 		{
 			var fileDialog = new FileDialog(FileDialogMode.OpenFile);
-			fileDialog.ShowModal(Desktop);
+			fileDialog.ShowModal();
 
 			fileDialog.Closed += (s, a) =>
 			{
@@ -91,7 +91,7 @@ namespace Myra.Samples.AllWidgets
 		public void SaveFile()
 		{
 			var fileDialog = new FileDialog(FileDialogMode.SaveFile);
-			fileDialog.ShowModal(Desktop);
+			fileDialog.ShowModal();
 
 			fileDialog.Closed += (s, a) =>
 			{
@@ -107,7 +107,7 @@ namespace Myra.Samples.AllWidgets
 		public void ChooseFolder()
 		{
 			var fileDialog = new FileDialog(FileDialogMode.ChooseFolder);
-			fileDialog.ShowModal(Desktop);
+			fileDialog.ShowModal();
 
 			fileDialog.Closed += (s, a) =>
 			{
@@ -123,7 +123,7 @@ namespace Myra.Samples.AllWidgets
 		public void ChooseColor()
 		{
 			var debugWindow = new ColorPickerDialog();
-			debugWindow.ShowModal(Desktop);
+			debugWindow.ShowModal();
 
 			debugWindow.Closed += (s, a) =>
 			{

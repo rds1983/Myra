@@ -8,7 +8,6 @@ namespace Myra.Samples.NonModalWindows
 	{
 		private readonly GraphicsDeviceManager _graphics;
 
-		private Desktop _desktop;
 		public static NonModalWindowsGame Instance { get; private set; }
 
 		public NonModalWindowsGame()
@@ -30,20 +29,18 @@ namespace Myra.Samples.NonModalWindows
 
 			MyraEnvironment.Game = this;
 
-			_desktop = new Desktop();
-
 			// Inform Myra that external text input is available
 			// So it stops translating Keys to chars
-			_desktop.HasExternalTextInput = true;
+			Desktop.HasExternalTextInput = true;
 
 			// Provide that text input
 			Window.TextInput += (s, a) =>
 			{
-				_desktop.OnChar(a.Character);
+				Desktop.OnChar(a.Character);
 			};
 
 			var mainPanel = new MainPanel();
-			_desktop.Widgets.Add(mainPanel);
+			Desktop.Widgets.Add(mainPanel);
 
 			mainPanel.ShowWindows();
 		}
@@ -62,7 +59,7 @@ namespace Myra.Samples.NonModalWindows
 				_graphics.ApplyChanges();
 			}
 
-			_desktop.Render();
+			Desktop.Render();
 		}
 	}
 }

@@ -24,7 +24,7 @@ namespace Myra.Graphics2D.UI
 				if (_internalChild != null)
 				{
 					_internalChild.Parent = null;
-					_internalChild.Desktop = null;
+					_internalChild.IsPlaced = false;
 
 					_internalChild.VisibleChanged -= ChildOnVisibleChanged;
 					_internalChild.MeasureChanged -= ChildOnMeasureChanged;
@@ -37,7 +37,7 @@ namespace Myra.Graphics2D.UI
 				if (_internalChild != null)
 				{
 					_internalChild.Parent = this;
-					_internalChild.Desktop = Desktop;
+					_internalChild.IsPlaced = IsPlaced;
 
 					_internalChild.VisibleChanged += ChildOnVisibleChanged;
 					_internalChild.MeasureChanged += ChildOnMeasureChanged;

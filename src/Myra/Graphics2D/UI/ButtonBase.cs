@@ -65,24 +65,25 @@ namespace Myra.Graphics2D.UI
 
 		internal bool ReleaseOnTouchLeft;
 
-		public override Desktop Desktop
+		public override bool IsPlaced
 		{
 			get
 			{
-				return base.Desktop;
+				return base.IsPlaced;
 			}
-			set
+
+			internal set
 			{
 				// If we're not releasing the button on touch left,
 				// we have to do it on touch up
-				if (!ReleaseOnTouchLeft && Desktop != null)
+				if (!ReleaseOnTouchLeft && IsPlaced)
 				{
 					Desktop.TouchUp -= DesktopTouchUp;
 				}
 
-				base.Desktop = value;
+				base.IsPlaced = value;
 
-				if (!ReleaseOnTouchLeft && Desktop != null)
+				if (!ReleaseOnTouchLeft && IsPlaced)
 				{
 					Desktop.TouchUp += DesktopTouchUp;
 				}

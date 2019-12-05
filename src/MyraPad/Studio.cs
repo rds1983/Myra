@@ -36,7 +36,6 @@ namespace MyraPad
 		private bool _suppressProjectRefresh = false;
 		private readonly GraphicsDeviceManager _graphicsDeviceManager;
 		private readonly State _state;
-		private Desktop _desktop;
 		private StudioWidget _ui;
 		private PropertyGrid _propertyGrid;
 		private string _filePath;
@@ -254,12 +253,12 @@ namespace MyraPad
 
 			// Inform Myra that external text input is available
 			// So it stops translating Keys to chars
-			_desktop.HasExternalTextInput = true;
+			Desktop.HasExternalTextInput = true;
 
 			// Provide that text input
 			Window.TextInput += (s, a) =>
 			{
-				_desktop.OnChar(a.Character);
+				Desktop.OnChar(a.Character);
 			};
 
 			if (_state != null && !string.IsNullOrEmpty(_state.EditedFile))
@@ -289,15 +288,13 @@ namespace MyraPad
 				}
 			};
 
-			mb.ShowModal(_desktop);
+			mb.ShowModal();
 		}
 
 		private void BuildUI()
 		{
-			_desktop = new Desktop();
-
-			_desktop.ContextMenuClosed += _desktop_ContextMenuClosed;
-			_desktop.KeyDownHandler = key =>
+			Desktop.ContextMenuClosed += Desktop_ContextMenuClosed;
+			Desktop.KeyDownHandler = key =>
 			{
 				if (_autoCompleteMenu != null &&
 					(key == Keys.Up || key == Keys.Down || key == Keys.Enter))
@@ -306,48 +303,48 @@ namespace MyraPad
 				}
 				else
 				{
-					_desktop.OnKeyDown(key);
+					Desktop.OnKeyDown(key);
 				}
 			};
 
-			_desktop.KeyDown += (s, a) =>
+			Desktop.KeyDown += (s, a) =>
 			{
-				if (_desktop.HasModalWidget || _ui._mainMenu.IsOpen)
+				if (Desktop.HasModalWidget || _ui._mainMenu.IsOpen)
 				{
 					return;
 				}
 
-				if (_desktop.DownKeys.Contains(Keys.LeftControl) || _desktop.DownKeys.Contains(Keys.RightControl))
+				if (Desktop.DownKeys.Contains(Keys.LeftControl) || Desktop.DownKeys.Contains(Keys.RightControl))
 				{
-					if (_desktop.DownKeys.Contains(Keys.N))
+					if (Desktop.DownKeys.Contains(Keys.N))
 					{
 						NewItemOnClicked(this, EventArgs.Empty);
 					}
-					else if (_desktop.DownKeys.Contains(Keys.O))
+					else if (Desktop.DownKeys.Contains(Keys.O))
 					{
 						OpenItemOnClicked(this, EventArgs.Empty);
 					}
-					else if (_desktop.DownKeys.Contains(Keys.R))
+					else if (Desktop.DownKeys.Contains(Keys.R))
 					{
 						OnMenuFileReloadSelected(this, EventArgs.Empty);
 					}
-					else if (_desktop.DownKeys.Contains(Keys.S))
+					else if (Desktop.DownKeys.Contains(Keys.S))
 					{
 						SaveItemOnClicked(this, EventArgs.Empty);
 					}
-					else if (_desktop.DownKeys.Contains(Keys.E))
+					else if (Desktop.DownKeys.Contains(Keys.E))
 					{
 						ExportCsItemOnSelected(this, EventArgs.Empty);
 					}
-					else if (_desktop.DownKeys.Contains(Keys.D))
+					else if (Desktop.DownKeys.Contains(Keys.D))
 					{
 						OnMenuFileReloadStylesheet(this, EventArgs.Empty);
 					}
-					else if (_desktop.DownKeys.Contains(Keys.Q))
+					else if (Desktop.DownKeys.Contains(Keys.Q))
 					{
 						Exit();
 					}
-					else if (_desktop.DownKeys.Contains(Keys.F))
+					else if (Desktop.DownKeys.Contains(Keys.F))
 					{
 						_menuEditUpdateSource_Selected(this, EventArgs.Empty);
 					}
@@ -394,7 +391,7 @@ namespace MyraPad
 			_ui._topSplitPane.SetSplitterPosition(0, _state != null ? _state.TopSplitterPosition : 0.75f);
 			_ui._leftSplitPane.SetSplitterPosition(0, _state != null ? _state.LeftSplitterPosition : 0.5f);
 
-			_desktop.Widgets.Add(_ui);
+			Desktop.Widgets.Add(_ui);
 
 			UpdateMenuFile();
 		}
@@ -442,7 +439,7 @@ namespace MyraPad
 			return true;
 		}
 
-		private void _desktop_ContextMenuClosed(object sender, GenericEventArgs<Widget> e)
+		private void Desktop_ContextMenuClosed(object sender, GenericEventArgs<Widget> e)
 		{
 			if (e.Data != _autoCompleteMenu)
 			{
@@ -473,7 +470,7 @@ namespace MyraPad
 			catch (Exception ex)
 			{
 				var messageBox = Dialog.CreateMessageBox("Error", ex.Message);
-				messageBox.ShowModal(_desktop);
+				messageBox.ShowModal();
 			}
 		}
 
@@ -612,7 +609,7 @@ namespace MyraPad
 							catch (Exception ex)
 							{
 								var dialog = Dialog.CreateMessageBox("Stylesheet Error", ex.ToString());
-								dialog.ShowModal(_desktop);
+								dialog.ShowModal();
 							}
 						}
 
@@ -774,9 +771,9 @@ namespace MyraPad
 
 		private void HandleAutoComplete()
 		{
-			if (_desktop.ContextMenu == _autoCompleteMenu)
+			if (Desktop.ContextMenu == _autoCompleteMenu)
 			{
-				_desktop.HideContextMenu();
+				Desktop.HideContextMenu();
 			}
 
 			if (_currentTagStart == null || _currentTagEnd != null || string.IsNullOrEmpty(_parentTag))
@@ -870,7 +867,7 @@ namespace MyraPad
 						_autoCompleteMenu.HoverIndex = 0;
 					}
 
-					_desktop.ShowContextMenu(_autoCompleteMenu, screen);
+					Desktop.ShowContextMenu(_autoCompleteMenu, screen);
 					_refreshInitiated = null;
 				}
 			}
@@ -1113,7 +1110,7 @@ namespace MyraPad
 			catch (Exception ex)
 			{
 				var dialog = Dialog.CreateMessageBox("Error", ex.ToString());
-				dialog.ShowModal(_desktop);
+				dialog.ShowModal();
 			}
 		}
 
@@ -1169,7 +1166,7 @@ namespace MyraPad
 				catch(Exception ex)
 				{
 					var msg = Dialog.CreateMessageBox("Stylesheet Error", ex.Message);
-					msg.ShowModal(_desktop);
+					msg.ShowModal();
 					return;
 				}
 
@@ -1196,7 +1193,7 @@ namespace MyraPad
 				UpdateMenuFile();
 			};
 
-			dlg.ShowModal(_desktop);
+			dlg.ShowModal();
 		}
 
 		private void OnMenuFileReloadStylesheet(object sender, EventArgs e)
@@ -1224,13 +1221,13 @@ namespace MyraPad
 		{
 			var dlg = new DebugOptionsDialog();
 
-			dlg.ShowModal(_desktop);
+			dlg.ShowModal();
 		}
 
 		private void ExportCsItemOnSelected(object sender1, EventArgs eventArgs)
 		{
 			var dlg = new ExportOptionsDialog();
-			dlg.ShowModal(_desktop);
+			dlg.ShowModal();
 
 			dlg.Closed += (s, a) =>
 			{
@@ -1256,12 +1253,12 @@ namespace MyraPad
 					strings.AddRange(export.Export());
 
 					var msg = Dialog.CreateMessageBox("Export To C#", string.Join("\n", strings));
-					msg.ShowModal(_desktop);
+					msg.ShowModal();
 				}
 				catch (Exception ex)
 				{
 					var msg = Dialog.CreateMessageBox("Error", ex.Message);
-					msg.ShowModal(_desktop);
+					msg.ShowModal();
 				}
 			};
 		}
@@ -1310,13 +1307,13 @@ namespace MyraPad
 				}
 			};
 
-			mb.ShowModal(_desktop);
+			mb.ShowModal();
 		}
 
 		private void AboutItemOnClicked(object sender, EventArgs eventArgs)
 		{
 			var messageBox = Dialog.CreateMessageBox("About", "MyraPad " + MyraEnvironment.Version);
-			messageBox.ShowModal(_desktop);
+			messageBox.ShowModal();
 		}
 
 		private void SaveAsItemOnClicked(object sender, EventArgs eventArgs)
@@ -1385,7 +1382,7 @@ namespace MyraPad
 				New(rootType);
 			};
 
-			dlg.ShowModal(_desktop);
+			dlg.ShowModal();
 		}
 
 		private void OpenItemOnClicked(object sender, EventArgs eventArgs)
@@ -1420,7 +1417,7 @@ namespace MyraPad
 				Load(filePath);
 			};
 
-			dlg.ShowModal(_desktop);
+			dlg.ShowModal();
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -1465,7 +1462,7 @@ namespace MyraPad
 
 			GraphicsDevice.Clear(Color.Black);
 
-			_desktop.Render();
+			Desktop.Render();
 		}
 
 		protected override void EndRun()
@@ -1505,7 +1502,7 @@ namespace MyraPad
 			}
 
 			_ui._textSource.CursorPosition = pos;
-			_desktop.FocusedKeyboardWidget = _ui._textSource;
+			Desktop.FocusedKeyboardWidget = _ui._textSource;
 
 
 			FilePath = string.Empty;
@@ -1544,7 +1541,7 @@ namespace MyraPad
 					dlg.Folder = _lastFolder;
 				}
 
-				dlg.ShowModal(_desktop);
+				dlg.ShowModal();
 
 				dlg.Closed += (s, a) =>
 				{
@@ -1571,14 +1568,14 @@ namespace MyraPad
 				_ui._textSource.Text = data;
 				_ui._textSource.CursorPosition = 0;
 				UpdateCursor();
-				_desktop.FocusedKeyboardWidget = _ui._textSource;
+				Desktop.FocusedKeyboardWidget = _ui._textSource;
 
 				IsDirty = false;
 			}
 			catch (Exception ex)
 			{
 				var dialog = Dialog.CreateMessageBox("Error", ex.ToString());
-				dialog.ShowModal(_desktop);
+				dialog.ShowModal();
 			}
 		}
 

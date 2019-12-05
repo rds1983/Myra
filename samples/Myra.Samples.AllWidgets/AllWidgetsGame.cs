@@ -24,7 +24,6 @@ namespace Myra.Samples.AllWidgets
 		private readonly GraphicsDeviceManager _graphics;
 #endif
 
-		private Desktop _desktop;
 		private AllWidgets _allWidgets;
 		
 		public static AllWidgetsGame Instance { get; private set; }
@@ -52,11 +51,11 @@ namespace Myra.Samples.AllWidgets
 
 			MyraEnvironment.Game = this;
 
-			_desktop = new Desktop();
+			Desktop = new Desktop();
 
 			_allWidgets = new AllWidgets();
 
-			_desktop.Widgets.Add(_allWidgets);
+			Desktop.Widgets.Add(_allWidgets);
 
 			return base.LoadContent();
 		}
@@ -67,55 +66,53 @@ namespace Myra.Samples.AllWidgets
 
 			MyraEnvironment.Game = this;
 
-			_desktop = new Desktop();
-
 			_allWidgets = new AllWidgets();
 
-			_desktop.KeyDown += (s, a) =>
+			Desktop.KeyDown += (s, a) =>
 			{
-				if (_desktop.HasModalWidget || _allWidgets._mainMenu.IsOpen)
+				if (Desktop.HasModalWidget || _allWidgets._mainMenu.IsOpen)
 				{
 					return;
 				}
 
-				if (_desktop.DownKeys.Contains(Keys.LeftControl) || _desktop.DownKeys.Contains(Keys.RightControl))
+				if (Desktop.DownKeys.Contains(Keys.LeftControl) || Desktop.DownKeys.Contains(Keys.RightControl))
 				{
-					if (_desktop.DownKeys.Contains(Keys.O))
+					if (Desktop.DownKeys.Contains(Keys.O))
 					{
 						_allWidgets.OpenFile();
-					} else if (_desktop.DownKeys.Contains(Keys.S))
+					} else if (Desktop.DownKeys.Contains(Keys.S))
 					{
 						_allWidgets.SaveFile();
-					} else if (_desktop.DownKeys.Contains(Keys.D))
+					} else if (Desktop.DownKeys.Contains(Keys.D))
 					{
 						_allWidgets.ChooseFolder();
-					} else if (_desktop.DownKeys.Contains(Keys.L))
+					} else if (Desktop.DownKeys.Contains(Keys.L))
 					{
 						_allWidgets.ChooseColor();
 					}
-					else if (_desktop.DownKeys.Contains(Keys.Q))
+					else if (Desktop.DownKeys.Contains(Keys.Q))
 					{
 						Exit();
 					}
 				}
 			};
 
-			_desktop.Widgets.Add(_allWidgets);
+			Desktop.Widgets.Add(_allWidgets);
 
 #if MONOGAME
 			// Inform Myra that external text input is available
 			// So it stops translating Keys to chars
-			_desktop.HasExternalTextInput = true;
+			Desktop.HasExternalTextInput = true;
 
 			// Provide that text input
 			Window.TextInput += (s, a) =>
 			{
-				_desktop.OnChar(a.Character);
+				Desktop.OnChar(a.Character);
 			};
 #endif
 
 #if ANDROID
-			_desktop.WidgetGotKeyboardFocus += (s, a) =>
+			Desktop.WidgetGotKeyboardFocus += (s, a) =>
 			{
 				var asTextBox = a.Data as TextBox;
 				if (asTextBox == null)
@@ -178,7 +175,7 @@ namespace Myra.Samples.AllWidgets
 			// Set render target
 			GraphicsContext.CommandList.SetRenderTargetAndViewport(GraphicsDevice.Presenter.DepthStencilBuffer, GraphicsDevice.Presenter.BackBuffer);
 #endif
-			_desktop.Render();
+			Desktop.Render();
 		}
 	}
 }

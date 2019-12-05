@@ -422,7 +422,7 @@ namespace Myra.Graphics2D.UI.Properties
 								FireChanged(propertyType.Name);
 							};
 
-							dlg.ShowModal(Desktop);
+							dlg.ShowModal();
 						};
 					}
 					else
@@ -528,7 +528,7 @@ namespace Myra.Graphics2D.UI.Properties
 							{
 								spinButton.Value = args.OldValue;
 								var dialog = Dialog.CreateMessageBox("Error", ex.ToString());
-								dialog.ShowModal(Desktop);
+								dialog.ShowModal();
 							}
 						};
 					}
@@ -655,7 +655,7 @@ namespace Myra.Graphics2D.UI.Properties
 										UpdateLabelCount(label, items.Count);
 									};
 
-									dialog.ShowModal(Desktop);
+									dialog.ShowModal();
 								};
 
 								subGrid.Widgets.Add(button);

@@ -144,29 +144,28 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
-		public override Desktop Desktop
+		public override bool IsPlaced
 		{
 			get
 			{
-				return base.Desktop;
+				return base.IsPlaced;
 			}
-			set
+
+			internal set
 			{
-				if (Desktop != null)
+				if (IsPlaced)
 				{
 					Desktop.TouchMoved -= DesktopOnTouchMoved;
 					Desktop.TouchUp -= DesktopTouchUp;
 				}
 
-				base.Desktop = value;
+				base.IsPlaced = value;
 
-				if (Desktop != null)
+				if (IsPlaced)
 				{
 					Desktop.TouchMoved += DesktopOnTouchMoved;
 					Desktop.TouchUp += DesktopTouchUp;
 				}
-
-				IsWindowPlaced = false;
 			}
 		}
 
@@ -228,11 +227,6 @@ namespace Myra.Graphics2D.UI
 
 		public void CenterOnDesktop()
 		{
-			if (Desktop == null)
-			{
-				return;
-			}
-
 			var size = Bounds.Size();
 			Left = (ContainerBounds.Width - size.X) / 2;
 			Top = (ContainerBounds.Height - size.Y) / 2;
@@ -260,7 +254,7 @@ namespace Myra.Graphics2D.UI
 					position.X = Parent.Bounds.Right - Bounds.Width;
 				}
 			}
-			else if (Desktop != null)
+			else
 			{
 				if (position.X + Bounds.Width > Desktop.InternalBounds.Right)
 				{
@@ -280,7 +274,7 @@ namespace Myra.Graphics2D.UI
 					position.Y = Parent.Bounds.Bottom - Bounds.Height;
 				}
 			}
-			else if (Desktop != null)
+			else
 			{
 				if (position.Y + Bounds.Height > Desktop.InternalBounds.Bottom)
 				{
@@ -354,12 +348,12 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void InternalShow(Desktop desktop, Point? position = null)
+		private void InternalShow(Point? position = null)
 		{
-			desktop.Widgets.Add(this);
+			Desktop.Widgets.Add(this);
 
 			// Force mouse wheel focused to be set to the first appropriate widget in the next Desktop.UpdateLayout
-			desktop.FocusedMouseWheelWidget = null;
+			Desktop.FocusedMouseWheelWidget = null;
 
 			if (position != null)
 			{
@@ -369,32 +363,31 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public void Show(Desktop desktop, Point? position = null)
+		public void Show(Point? position = null)
 		{
 			IsModal = false;
-			InternalShow(desktop, position);
+			InternalShow(position);
 		}
 
-		public void ShowModal(Desktop desktop, Point? position = null)
+		public void ShowModal(Point? position = null)
 		{
 			IsModal = true;
-			_previousMouseWheelFocus = desktop.FocusedMouseWheelWidget;
+			_previousMouseWheelFocus = Desktop.FocusedMouseWheelWidget;
 
-			InternalShow(desktop, position);
+			InternalShow(position);
 		}
 
 		public virtual void Close()
 		{
-			if (Desktop != null && Desktop.Widgets.Contains(this))
+			if (Desktop.Widgets.Contains(this))
 			{
 				if (Desktop.FocusedKeyboardWidget == this)
 				{
 					Desktop.FocusedKeyboardWidget = null;
 				}
 
-				var desktop = Desktop;
 				Desktop.Widgets.Remove(this);
-				desktop.FocusedMouseWheelWidget = _previousMouseWheelFocus;
+				Desktop.FocusedMouseWheelWidget = _previousMouseWheelFocus;
 
 				Closed.Invoke(this);
 			}

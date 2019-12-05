@@ -58,7 +58,7 @@ namespace Myra.Graphics2D.UI
 			{
 				foreach (Widget w in args.NewItems)
 				{
-					w.Desktop = Desktop;
+					w.IsPlaced = IsPlaced;
 					w.Parent = this;
 					w.MeasureChanged += ChildOnMeasureChanged;
 					w.VisibleChanged += ChildOnVisibleChanged;
@@ -68,7 +68,7 @@ namespace Myra.Graphics2D.UI
 			{
 				foreach (Widget w in args.OldItems)
 				{
-					w.Desktop = null;
+					w.IsPlaced = false;
 					w.Parent = null;
 					w.VisibleChanged -= ChildOnVisibleChanged;
 					w.MeasureChanged -= ChildOnMeasureChanged;

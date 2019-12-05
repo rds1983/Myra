@@ -40,7 +40,6 @@ namespace Myra.Graphics2D.UI
 		private Rectangle _containerBounds;
 		private Rectangle _bounds;
 		private Rectangle _actualBounds;
-		private Desktop _desktop;
 		private bool _visible;
 
 		private int _paddingLeft, _paddingRight, _paddingTop, _paddingBottom;
@@ -443,7 +442,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(true)]
-		public virtual bool Visible
+		public bool Visible
 		{
 			get { return _visible; }
 
@@ -459,6 +458,16 @@ namespace Myra.Graphics2D.UI
 
 				OnVisibleChanged();
 			}
+		}
+
+		/// <summary>
+		/// Determines whether a widget had been placed on Desktop
+		/// </summary>
+		[XmlIgnore]
+		[Browsable(false)]
+		public virtual bool IsPlaced
+		{
+			get; internal set;
 		}
 
 		[XmlIgnore]
@@ -578,11 +587,6 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				if (Desktop == null)
-				{
-					return false;
-				}
-
 				return Bounds.Contains(Desktop.MousePosition);
 			}
 		}
@@ -591,11 +595,6 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				if (Desktop == null)
-				{
-					return false;
-				}
-
 				return Bounds.Contains(Desktop.LastMousePosition);
 			}
 		}
@@ -606,11 +605,6 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				if (Desktop == null)
-				{
-					return false;
-				}
-
 				return Bounds.Contains(Desktop.TouchPosition);
 			}
 		}
@@ -619,11 +613,6 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				if (Desktop == null)
-				{
-					return false;
-				}
-
 				return Bounds.Contains(Desktop.LastTouchPosition);
 			}
 		}
@@ -631,22 +620,6 @@ namespace Myra.Graphics2D.UI
 		[Browsable(false)]
 		[XmlIgnore]
 		public bool IsMouseInside { get; private set; }
-
-		[Browsable(false)]
-		[XmlIgnore]
-		public virtual Desktop Desktop
-		{
-			get
-			{
-				return _desktop;
-			}
-
-			set
-			{
-				_desktop = value;
-				IsMouseInside = false;
-			}
-		}
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -738,11 +711,6 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				if (Desktop == null)
-				{
-					return false;
-				}
-
 				return Desktop.FocusedKeyboardWidget == this;
 			}
 		}
@@ -753,11 +721,6 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				if (Desktop == null)
-				{
-					return false;
-				}
-
 				return Desktop.FocusedMouseWheelWidget == this;
 			}
 		}
@@ -1370,11 +1333,6 @@ namespace Myra.Graphics2D.UI
 
 		public void RemoveFromDesktop()
 		{
-			if (Desktop == null)
-			{
-				return;
-			}
-
 			Desktop.Widgets.Remove(this);
 		}
 

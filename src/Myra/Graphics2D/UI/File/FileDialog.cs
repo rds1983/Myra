@@ -491,7 +491,7 @@ namespace Myra.Graphics2D.UI.File
 					Close();
 				};
 
-				dlg.ShowModal(Desktop);
+				dlg.ShowModal();
 			}
 			else
 			{

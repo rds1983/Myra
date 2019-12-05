@@ -51,19 +51,20 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override Desktop Desktop
+		public override bool IsPlaced
 		{
 			get
 			{
-				return base.Desktop;
+				return base.IsPlaced;
 			}
-			set
+
+			internal set
 			{
-				base.Desktop = value;
+				base.IsPlaced = value;
 
 				foreach (var child in ChildrenCopy)
 				{
-					child.Desktop = Desktop;
+					child.IsPlaced = value;
 				}
 			}
 		}
