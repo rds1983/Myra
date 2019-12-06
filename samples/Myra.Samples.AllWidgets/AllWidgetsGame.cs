@@ -48,13 +48,9 @@ namespace Myra.Samples.AllWidgets
 #if XENKO
 		protected override Task LoadContent()
 		{
-
 			MyraEnvironment.Game = this;
 
-			Desktop = new Desktop();
-
 			_allWidgets = new AllWidgets();
-
 			Desktop.Widgets.Add(_allWidgets);
 
 			return base.LoadContent();
