@@ -679,36 +679,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public static void Render()
+		public static void RenderVisual()
 		{
-			var newBounds = BoundsFetcher();
-
-			if (_bounds != newBounds)
-			{
-				InvalidateLayout();
-			}
-
-			_bounds = newBounds;
-
-			if (_bounds.IsEmpty)
-			{
-				return;
-			}
-
-			UpdateInput();
-			UpdateLayout();
-
-			if (_scheduleMouseWheelFocus != null)
-			{
-				if (_scheduleMouseWheelFocus.AcceptsMouseWheelFocus)
-				{
-					_previousMouseWheelFocus = FocusedMouseWheelWidget;
-					FocusedMouseWheelWidget = _scheduleMouseWheelFocus;
-				}
-
-				_scheduleMouseWheelFocus = null;
-			}
-
 			EnsureRenderContext();
 
 			var oldScissorRectangle = CrossEngineStuff.GetScissor();
@@ -738,6 +710,13 @@ namespace Myra.Graphics2D.UI
 			CrossEngineStuff.SetScissor(oldScissorRectangle);
 		}
 
+		public static void Render()
+		{
+			UpdateInput();
+			UpdateLayout();
+			RenderVisual();
+		}
+
 		public static void InvalidateLayout()
 		{
 			_layoutDirty = true;
@@ -745,6 +724,20 @@ namespace Myra.Graphics2D.UI
 
 		public static void UpdateLayout()
 		{
+			var newBounds = BoundsFetcher();
+
+			if (_bounds != newBounds)
+			{
+				InvalidateLayout();
+			}
+
+			_bounds = newBounds;
+
+			if (_bounds.IsEmpty)
+			{
+				return;
+			}
+
 			if (!_layoutDirty)
 			{
 				return;
@@ -852,10 +845,9 @@ namespace Myra.Graphics2D.UI
 		}
 
 #if !XENKO
-		private static  void UpdateTouch()
+		public static  void UpdateTouch()
 		{
 			var touchState = TouchPanel.GetState();
-
 			if (!touchState.IsConnected)
 			{
 				return;
@@ -883,97 +875,121 @@ namespace Myra.Graphics2D.UI
 		}
 #endif
 
-		public static void UpdateInput()
+		public static void UpdateMouseInput()
 		{
-			if (MouseInfoGetter != null)
+			if (_scheduleMouseWheelFocus != null)
 			{
-				var mouseInfo = MouseInfoGetter();
-				var mousePosition = mouseInfo.Position;
-
-				if (SpriteBatchBeginParams.TransformMatrix != null)
+				if (_scheduleMouseWheelFocus.AcceptsMouseWheelFocus)
 				{
-					// Apply transform
-					var t = Vector2.Transform(
-						new Vector2(mousePosition.X, mousePosition.Y),
-						SpriteBatchBeginParams.InverseTransform);
-
-					mousePosition = new Point((int)t.X, (int)t.Y);
+					_previousMouseWheelFocus = FocusedMouseWheelWidget;
+					FocusedMouseWheelWidget = _scheduleMouseWheelFocus;
 				}
 
-				MousePosition = mousePosition;
+				_scheduleMouseWheelFocus = null;
+			}
 
-				HandleButton(mouseInfo.IsLeftButtonDown, _lastMouseInfo.IsLeftButtonDown, MouseButtons.Left);
-				HandleButton(mouseInfo.IsMiddleButtonDown, _lastMouseInfo.IsMiddleButtonDown, MouseButtons.Middle);
-				HandleButton(mouseInfo.IsRightButtonDown, _lastMouseInfo.IsRightButtonDown, MouseButtons.Right);
+			if (MouseInfoGetter == null)
+			{
+				return;
+			}
+
+			var mouseInfo = MouseInfoGetter();
+			var mousePosition = mouseInfo.Position;
+
+			if (SpriteBatchBeginParams.TransformMatrix != null)
+			{
+				// Apply transform
+				var t = Vector2.Transform(
+					new Vector2(mousePosition.X, mousePosition.Y),
+					SpriteBatchBeginParams.InverseTransform);
+
+				mousePosition = new Point((int)t.X, (int)t.Y);
+			}
+
+			MousePosition = mousePosition;
+
+			HandleButton(mouseInfo.IsLeftButtonDown, _lastMouseInfo.IsLeftButtonDown, MouseButtons.Left);
+			HandleButton(mouseInfo.IsMiddleButtonDown, _lastMouseInfo.IsMiddleButtonDown, MouseButtons.Middle);
+			HandleButton(mouseInfo.IsRightButtonDown, _lastMouseInfo.IsRightButtonDown, MouseButtons.Right);
 #if XENKO
 				var handleWheel = mouseInfo.Wheel != 0;
 #else
-				var handleWheel = mouseInfo.Wheel != _lastMouseInfo.Wheel;
+			var handleWheel = mouseInfo.Wheel != _lastMouseInfo.Wheel;
 #endif
 
-				if (handleWheel)
-				{
-					var delta = mouseInfo.Wheel;
-#if !XENKO
-					delta -= _lastMouseInfo.Wheel;
-#endif
-					MouseWheelChanged.Invoke(delta);
-
-					if (FocusedMouseWheelWidget != null)
-					{
-						FocusedMouseWheelWidget.OnMouseWheel(delta);
-					}
-				}
-
-				_lastMouseInfo = mouseInfo;
-			}
-
-			if (DownKeysGetter != null)
+			if (handleWheel)
 			{
-				_downKeys = DownKeysGetter();
+				var delta = mouseInfo.Wheel;
+#if !XENKO
+				delta -= _lastMouseInfo.Wheel;
+#endif
+				MouseWheelChanged.Invoke(delta);
 
-				if (_downKeys != null && _lastDownKeys != null)
+				if (FocusedMouseWheelWidget != null)
 				{
-					var now = DateTime.Now;
-					foreach (var key in _downKeys)
+					FocusedMouseWheelWidget.OnMouseWheel(delta);
+				}
+			}
+
+			_lastMouseInfo = mouseInfo;
+		}
+
+		public static void UpdateKeyboardInput()
+		{
+			if (DownKeysGetter == null)
+			{
+				return;
+			}
+
+			_downKeys = DownKeysGetter();
+
+			if (_downKeys != null && _lastDownKeys != null)
+			{
+				var now = DateTime.Now;
+				foreach (var key in _downKeys)
+				{
+					if (!_lastDownKeys.Contains(key))
 					{
-						if (!_lastDownKeys.Contains(key))
-						{
-							KeyDownHandler?.Invoke(key);
+						KeyDownHandler?.Invoke(key);
 
-							_lastKeyDown = now;
-							_keyDownCount = 0;
-						}
-					}
-
-					foreach (var key in _lastDownKeys)
-					{
-						if (!_downKeys.Contains(key))
-						{
-							// Key had been released
-							KeyUp.Invoke(key);
-							if (_focusedKeyboardWidget != null && _focusedKeyboardWidget.Active)
-							{
-								_focusedKeyboardWidget.OnKeyUp(key);
-							}
-
-							_lastKeyDown = null;
-							_keyDownCount = 0;
-						}
-						else if (_lastKeyDown != null &&
-						  ((_keyDownCount == 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownStartInMs) ||
-						  (_keyDownCount > 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownInternalInMs)))
-						{
-							KeyDownHandler?.Invoke(key);
-
-							_lastKeyDown = now;
-							++_keyDownCount;
-						}
+						_lastKeyDown = now;
+						_keyDownCount = 0;
 					}
 				}
 
-				_lastDownKeys = _downKeys.ToArray();
+				foreach (var key in _lastDownKeys)
+				{
+					if (!_downKeys.Contains(key))
+					{
+						// Key had been released
+						KeyUp.Invoke(key);
+						if (_focusedKeyboardWidget != null && _focusedKeyboardWidget.Active)
+						{
+							_focusedKeyboardWidget.OnKeyUp(key);
+						}
+
+						_lastKeyDown = null;
+						_keyDownCount = 0;
+					}
+					else if (_lastKeyDown != null &&
+					  ((_keyDownCount == 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownStartInMs) ||
+					  (_keyDownCount > 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownInternalInMs)))
+					{
+						KeyDownHandler?.Invoke(key);
+
+						_lastKeyDown = now;
+						++_keyDownCount;
+					}
+				}
 			}
+
+			_lastDownKeys = _downKeys.ToArray();
+		}
+
+		public static void UpdateInput()
+		{
+			UpdateMouseInput();
+			UpdateKeyboardInput();
 
 #if !XENKO
 			try
