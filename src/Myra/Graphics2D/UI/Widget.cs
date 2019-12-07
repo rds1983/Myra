@@ -456,6 +456,7 @@ namespace Myra.Graphics2D.UI
 
 				_visible = value;
 				IsMouseInside = false;
+				IsTouchInside = false;
 
 				OnVisibleChanged();
 			}
@@ -477,6 +478,7 @@ namespace Myra.Graphics2D.UI
 			{
 				_isPlaced = value;
 				IsMouseInside = false;
+				IsTouchInside = false;
 			}
 		}
 
@@ -593,43 +595,11 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public bool IsMouseOver
-		{
-			get
-			{
-				return Bounds.Contains(Desktop.MousePosition);
-			}
-		}
-
-		internal bool WasMouseOver
-		{
-			get
-			{
-				return Bounds.Contains(Desktop.LastMousePosition);
-			}
-		}
-
-		[Browsable(false)]
-		[XmlIgnore]
-		public bool IsTouchOver
-		{
-			get
-			{
-				return Bounds.Contains(Desktop.TouchPosition);
-			}
-		}
-
-		internal bool WasTouchOver
-		{
-			get
-			{
-				return Bounds.Contains(Desktop.LastTouchPosition);
-			}
-		}
-
-		[Browsable(false)]
-		[XmlIgnore]
 		public bool IsMouseInside { get; private set; }
+
+		[Browsable(false)]
+		[XmlIgnore]
+		public bool IsTouchInside { get; private set; }
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -1250,16 +1220,19 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnTouchLeft()
 		{
+			IsTouchInside = false;
 			TouchLeft.Invoke(this);
 		}
 
 		public virtual void OnTouchEntered()
 		{
+			IsTouchInside = true;
 			TouchEntered.Invoke(this);
 		}
 
 		public virtual void OnTouchMoved()
 		{
+			IsTouchInside = true;
 			TouchMoved.Invoke(this);
 		}
 
@@ -1270,6 +1243,7 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnTouchUp()
 		{
+			IsTouchInside = false;
 			TouchUp.Invoke(this);
 		}
 
@@ -1363,7 +1337,8 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			if (IsTouchOver)
+			var isTouchOver = Bounds.Contains(Desktop.TouchPosition);
+			if (isTouchOver)
 			{
 				OnTouchDoubleClick();
 			}
@@ -1371,8 +1346,8 @@ namespace Myra.Graphics2D.UI
 
 		internal bool HandleMouseMovement()
 		{
-			var isMouseOver = IsMouseOver;
-			var wasMouseOver = WasMouseOver;
+			var isMouseOver = Bounds.Contains(Desktop.MousePosition);
+			var wasMouseOver = Bounds.Contains(Desktop.LastMousePosition);
 
 			if (isMouseOver && !wasMouseOver)
 			{
@@ -1389,7 +1364,7 @@ namespace Myra.Graphics2D.UI
 				OnMouseMoved();
 			}
 
-			return IsMouseOver;
+			return isMouseOver;
 		}
 
 		internal void HandleTouchDown()
@@ -1399,7 +1374,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			if (IsTouchOver)
+			if (IsTouchInside)
 			{
 				OnTouchDown();
 			}
@@ -1412,7 +1387,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			if (IsTouchOver)
+			if (IsTouchInside)
 			{
 				OnTouchUp();
 			}
@@ -1420,8 +1395,8 @@ namespace Myra.Graphics2D.UI
 
 		internal bool HandleTouchMovement()
 		{
-			var isTouchOver = IsTouchOver;
-			var wasTouchOver = WasTouchOver;
+			var isTouchOver = Bounds.Contains(Desktop.TouchPosition);
+			var wasTouchOver = Bounds.Contains(Desktop.LastTouchPosition);
 
 			if (isTouchOver && !wasTouchOver)
 			{
@@ -1438,7 +1413,7 @@ namespace Myra.Graphics2D.UI
 				OnTouchMoved();
 			}
 
-			return IsTouchOver;
+			return isTouchOver;
 		}
 	}
 }

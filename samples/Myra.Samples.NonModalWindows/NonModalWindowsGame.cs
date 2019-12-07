@@ -7,6 +7,7 @@ namespace Myra.Samples.NonModalWindows
 	public class NonModalWindowsGame : Game
 	{
 		private readonly GraphicsDeviceManager _graphics;
+		private MainPanel _mainPanel;
 
 		public static NonModalWindowsGame Instance { get; private set; }
 
@@ -39,10 +40,10 @@ namespace Myra.Samples.NonModalWindows
 				Desktop.OnChar(a.Character);
 			};
 
-			var mainPanel = new MainPanel();
-			Desktop.Widgets.Add(mainPanel);
+			_mainPanel = new MainPanel();
+			Desktop.Widgets.Add(_mainPanel);
 
-			mainPanel.ShowWindows();
+			_mainPanel.ShowWindows();
 		}
 
 		protected override void Draw(GameTime gameTime)
@@ -58,6 +59,8 @@ namespace Myra.Samples.NonModalWindows
 				_graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
 				_graphics.ApplyChanges();
 			}
+
+			_mainPanel._labelOverGui.Text = "Is mouse over GUI: " + Desktop.IsMouseOverGUI;
 
 			Desktop.Render();
 		}
