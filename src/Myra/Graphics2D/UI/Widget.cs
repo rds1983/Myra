@@ -32,6 +32,7 @@ namespace Myra.Graphics2D.UI
 		private bool _isModal = false;
 		private bool _measureDirty = true;
 		private bool _active = false;
+		private bool _isPlaced = false;
 
 		private Point _lastMeasureSize;
 		private Point _lastMeasureAvailableSize;
@@ -467,7 +468,16 @@ namespace Myra.Graphics2D.UI
 		[Browsable(false)]
 		public virtual bool IsPlaced
 		{
-			get; internal set;
+			get
+			{
+				return _isPlaced;
+			}
+
+			internal set
+			{
+				_isPlaced = value;
+				IsMouseInside = false;
+			}
 		}
 
 		[XmlIgnore]
