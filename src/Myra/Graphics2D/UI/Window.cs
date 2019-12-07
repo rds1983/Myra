@@ -18,6 +18,15 @@ using Xenko.Input;
 
 namespace Myra.Graphics2D.UI
 {
+	public class WindowClosingEventArgs : EventArgs
+	{
+		public bool Cancel { get; set; }
+
+		public WindowClosingEventArgs()
+		{
+		}
+	}
+
 	public class Window : SingleItemContainer<VerticalStackPanel>, IContent
 	{
 		private Point? _startPos;
@@ -169,6 +178,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public event EventHandler<WindowClosingEventArgs> Closing;
 		public event EventHandler Closed;
 
 		public Window(string styleName = Stylesheet.DefaultStyleName)
@@ -328,7 +338,10 @@ namespace Myra.Graphics2D.UI
 			switch (k)
 			{
 				case Keys.Escape:
-					Close();
+					if (CloseButton.Visible)
+					{
+						Close();
+					}
 					break;
 			}
 		}
@@ -379,6 +392,17 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void Close()
 		{
+			var ev = Closing;
+			if (ev != null)
+			{
+				var args = new WindowClosingEventArgs();
+				ev(this, args);
+				if (args.Cancel)
+				{
+					return;
+				}
+			}
+
 			if (Desktop.Widgets.Contains(this))
 			{
 				if (Desktop.FocusedKeyboardWidget == this)
