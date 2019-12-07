@@ -13,7 +13,7 @@ namespace Myra.Samples.CustomUIStylesheet
 
 			_imageButton.Click += (sender, args) =>
 			{
-				var debugWindow = new DebugOptionsDialog();
+				var debugWindow = new DebugOptionsWindow();
 				debugWindow.ShowModal();
 			};
 

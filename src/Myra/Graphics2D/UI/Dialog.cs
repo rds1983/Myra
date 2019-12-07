@@ -70,10 +70,16 @@ namespace Myra.Graphics2D.UI
 			switch (k)
 			{
 				case Keys.Escape:
-					ButtonCancel.DoClick();
+					if (ButtonCancel.Visible)
+					{
+						ButtonCancel.DoClick();
+					}
 					break;
 				case Keys.Enter:
-					ButtonOk.DoClick();
+					if (ButtonOk.Visible)
+					{
+						ButtonOk.DoClick();
+					}
 					break;
 			}
 		}

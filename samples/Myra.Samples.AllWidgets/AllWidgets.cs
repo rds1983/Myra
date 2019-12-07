@@ -33,7 +33,7 @@ namespace Myra.Samples.AllWidgets
 			_imageButton.Image = DefaultAssets.UISpritesheet["icon-star-outline"];
 			_imageButton.Click += (sender, args) =>
 			{
-				var debugWindow = new DebugOptionsDialog();
+				var debugWindow = new DebugOptionsWindow();
 				debugWindow.ShowModal();
 			};
 

@@ -1,5 +1,5 @@
 <Project>
-  <Project.ExportOptions Namespace="Myra.Graphics2D.UI" Class="DebugOptionsDialog" OutputPath="D:/Projects/Myra/src/Myra/Graphics2D/UI" />
+  <Project.ExportOptions Namespace="Myra.Graphics2D.UI" Class="DebugOptionsWindow" OutputPath="D:/Projects/Myra/src/Myra/Graphics2D/UI" />
   <Dialog Title="Debug Options" Left="311" Top="120">
     <VerticalStackPanel Id="Root">
       <CheckBox Text="Draw green frame around every widget" Id="_checkBoxWidgetFrames" />

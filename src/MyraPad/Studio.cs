@@ -1219,9 +1219,8 @@ namespace MyraPad
 
 		private void DebugOptionsItemOnSelected(object sender1, EventArgs eventArgs)
 		{
-			var dlg = new DebugOptionsDialog();
-
-			dlg.ShowModal();
+			var debugOptions = new DebugOptionsWindow();
+			debugOptions.ShowModal();
 		}
 
 		private void ExportCsItemOnSelected(object sender1, EventArgs eventArgs)

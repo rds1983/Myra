@@ -136,7 +136,7 @@ namespace Myra.Samples.Notepad
 
 		private void DebugOptionsOnDown(object sender, EventArgs e)
 		{
-			var dlg = new DebugOptionsDialog();
+			var dlg = new DebugOptionsWindow();
 
 			dlg.ShowModal();
 		}
