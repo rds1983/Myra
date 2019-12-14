@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Stylesheet>
+<Stylesheet TextureRegionAtlas="ui_stylesheet_atlas.xml">
   <Colors>
     <Color Id="green" Value="#00FF00FF" />
     <Color Id="light_grey" Value="#CCCCCCFF" />
@@ -11,6 +11,9 @@
     <Color Id="blue" Value="#4242E7FF" />
     <Color Id="black" Value="#000000FF" />
   </Colors>
+  <Fonts>
+    <Font Id="commodore-64" File="commodore-64.fnt"/>
+  </Fonts>
   <DesktopStyle Background="blue" />
   <LabelStyles>
     <LabelStyle Font="commodore-64" TextColor="white" />

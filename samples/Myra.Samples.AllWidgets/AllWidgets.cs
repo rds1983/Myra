@@ -10,8 +10,8 @@ namespace Myra.Samples.AllWidgets
 		{
 			BuildUI();
 
-			_menuItemOpenFile.Image = DefaultAssets.UISpritesheet["icon-folder"];
-			_menuItemSaveFile.Image = DefaultAssets.UISpritesheet["icon-folder-new"];
+			_menuItemOpenFile.Image = DefaultAssets.UITextureRegionAtlas["icon-folder"];
+			_menuItemSaveFile.Image = DefaultAssets.UITextureRegionAtlas["icon-folder-new"];
 
 			_menuItemOpenFile.Selected += (s, a) => OpenFile();
 			_menuItemSaveFile.Selected += (s, a) => SaveFile();
@@ -19,18 +19,18 @@ namespace Myra.Samples.AllWidgets
 			_menuItemChooseFolder.Selected += (s, a) => ChooseFolder();
 			_menuItemQuit.Selected += (s, a) => Quit();
 
-			_buttonOpenFile.Image = DefaultAssets.UISpritesheet["icon-star"];
+			_buttonOpenFile.Image = DefaultAssets.UITextureRegionAtlas["icon-star"];
 			_buttonOpenFile.Click += (sender, args) => OpenFile();
 
-			_buttonSaveFile.Image = DefaultAssets.UISpritesheet["icon-star"];
+			_buttonSaveFile.Image = DefaultAssets.UITextureRegionAtlas["icon-star"];
 			_buttonSaveFile.Click += (sender, args) => SaveFile();
 
-			_buttonChooseFolder.Image = DefaultAssets.UISpritesheet["icon-star"];
+			_buttonChooseFolder.Image = DefaultAssets.UITextureRegionAtlas["icon-star"];
 			_buttonChooseFolder.Click += (sender, args) => ChooseFolder();
 
 			_buttonChooseColor.Click += (sender, args) => ChooseColor();
 
-			_imageButton.Image = DefaultAssets.UISpritesheet["icon-star-outline"];
+			_imageButton.Image = DefaultAssets.UITextureRegionAtlas["icon-star-outline"];
 			_imageButton.Click += (sender, args) =>
 			{
 				var debugWindow = new DebugOptionsWindow();

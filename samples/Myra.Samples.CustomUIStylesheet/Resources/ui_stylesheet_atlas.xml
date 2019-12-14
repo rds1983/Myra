@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TextureAtlas>
+<TextureAtlas Image="ui_stylesheet_atlas.png">
   <TextureRegion Id="blue" Left="106" Top="137" Width="2" Height="2" />
   <NinePatchRegion Id="button" Left="715" Top="139" Width="36" Height="24" NinePatchLeft="18" NinePatchTop="11" NinePatchRight="17" NinePatchBottom="12" />
   <NinePatchRegion Id="button-down" Left="106" Top="140" Width="36" Height="24" NinePatchLeft="18" NinePatchTop="12" NinePatchRight="17" NinePatchBottom="11" />

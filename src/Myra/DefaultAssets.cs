@@ -1,10 +1,8 @@
-﻿using Myra.Graphics2D.Text;
-using Myra.Graphics2D.TextureAtlases;
+﻿using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
-using SpriteFontPlus;
-using System.IO;
 using System.Reflection;
+using Myra.Assets;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -21,15 +19,12 @@ namespace Myra
 {
 	public static class DefaultAssets
 	{
-		private const string DefaultFontName = "default_font.fnt";
-		private const string DefaultSmallFontName = "default_font_small.fnt";
 		private const string DefaultStylesheetName = "default_ui_skin.xml";
-		private const string DefaultAtlasName = "default_ui_skin_atlas.xml";
-		private const string DefaultAtlasImageName = "default_ui_skin_atlas.png";
 
+		private static readonly AssetManager _assetManager = new AssetManager(new ResourceAssetResolver(typeof(DefaultAssets).Assembly, "Resources."));
 		private static SpriteFont _font;
 		private static SpriteFont _fontSmall;
-		private static TextureRegionAtlas _uiSpritesheet;
+		private static TextureRegionAtlas _uiTextureRegionAtlas;
 		private static Stylesheet _uiStylesheet;
 		private static Texture2D _uiBitmap;
 		private static RasterizerState _uiRasterizerState;
@@ -80,10 +75,7 @@ namespace Myra
 					return _font;
 				}
 
-				var region = UISpritesheet.Regions["default"];
-				_font = BMFontLoader.LoadText(ReadResourceAsString(DefaultFontName),
-					s => new TextureWithOffset(region.Texture, region.Bounds.Location));
-
+				_font = _assetManager.Load<SpriteFont>("default_font.fnt");
 				return _font;
 			}
 		}
@@ -97,23 +89,22 @@ namespace Myra
 					return _fontSmall;
 				}
 
-				var region = UISpritesheet.Regions["font-small"];
-				_fontSmall = BMFontLoader.LoadText(ReadResourceAsString(DefaultSmallFontName),
-					s => new TextureWithOffset(region.Texture, region.Bounds.Location));
-
+				_fontSmall = _assetManager.Load<SpriteFont>("default_font_small.fnt");
 				return _fontSmall;
 			}
 		}
 
-		public static TextureRegionAtlas UISpritesheet
+		public static TextureRegionAtlas UITextureRegionAtlas
 		{
 			get
 			{
-				if (_uiSpritesheet != null) return _uiSpritesheet;
+				if (_uiTextureRegionAtlas != null)
+				{
+					return _uiTextureRegionAtlas;
+				}
 
-				_uiSpritesheet = TextureRegionAtlas.FromXml(ReadResourceAsString(DefaultAtlasName), UIBitmap);
-
-				return _uiSpritesheet;
+				_uiTextureRegionAtlas = _assetManager.Load<TextureRegionAtlas>("default_ui_skin_atlas.xml");
+				return _uiTextureRegionAtlas;
 			}
 		}
 
@@ -126,10 +117,7 @@ namespace Myra
 					return _uiStylesheet;
 				}
 
-				_uiStylesheet = Stylesheet.LoadFromSource(ReadResourceAsString(DefaultStylesheetName),
-					s => string.IsNullOrEmpty(s) ? null : UISpritesheet.Regions[s],
-					f => f == "default-font" ? Font : FontSmall);
-
+				_uiStylesheet = _assetManager.Load<Stylesheet>("default_ui_skin.xml");
 				return _uiStylesheet;
 			}
 		}
@@ -143,11 +131,7 @@ namespace Myra
 					return _uiBitmap;
 				}
 
-				using (var stream = OpenResourceStream(DefaultAtlasImageName))
-				{
-					_uiBitmap = CrossEngineStuff.LoadTexture2D(stream);
-				}
-
+				_uiBitmap = _assetManager.Load<Texture2D>("default_ui_skin_atlas.png");
 				return _uiBitmap;
 			}
 		}
@@ -176,23 +160,15 @@ namespace Myra
 #endif
 		}
 
-		private static string ReadResourceAsString(string name)
-		{
-			return Assembly.ReadResourceAsString("Resources." + name);
-		}
-
-		private static Stream OpenResourceStream(string name)
-		{
-			return Assembly.OpenResourceStream("Resources." + name);
-		}
-
 		internal static void Dispose()
 		{	
 			_font = null;
 			_fontSmall = null;
-			_uiSpritesheet = null;
+			_uiTextureRegionAtlas = null;
 			_uiStylesheet = null;
 			Stylesheet.Current = null;
+
+			_assetManager.Unload();
 
 			_whiteRegion = null;
 			if (_white != null)
@@ -201,12 +177,6 @@ namespace Myra
 				_white = null;
 			}
 		
-			if (_uiBitmap != null)
-			{
-				_uiBitmap.Dispose();
-				_uiBitmap = null;
-			}
-
 #if !XENKO
 			if (_uiRasterizerState != null)
 			{

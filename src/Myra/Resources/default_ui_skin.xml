@@ -1,10 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Stylesheet>
+<Stylesheet TextureRegionAtlas="default_ui_skin_atlas.xml">
   <Colors>
     <Color Id="white" Value="#FFFFFF" />
     <Color Id="grey" Value="#AAAAAA" />
     <Color Id="red" Value="#FF0000" />
   </Colors>
+  <Fonts>
+    <Font Id="default-font" File="default_font.fnt"/>
+    <Font Id="default-font-small" File="default_font_small.fnt"/>
+  </Fonts>
   <LabelStyles>
     <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" />
   </LabelStyles>

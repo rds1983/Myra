@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TextureAtlas>
+<TextureAtlas Image="default_ui_skin_atlas.png">
   <NinePatchRegion Id="border" Left="278" Top="136" Width="3" Height="3" NinePatchLeft="1" NinePatchTop="1" NinePatchRight="1" NinePatchBottom="1" />
   <TextureRegion Id="border-circle" Left="407" Top="241" Width="14" Height="14" />
   <TextureRegion Id="border-circle-error" Left="422" Top="241" Width="14" Height="14" />

@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.Xml.Linq;
 using Myra.MML;
-using Myra.Utility;
 using System.Collections;
-using System.Linq;
+using Myra.Assets;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -17,6 +16,7 @@ using Xenko.Graphics;
 
 namespace Myra.Graphics2D.UI.Styles
 {
+	[AssetLoader(typeof(StylesheetLoader))]
 	public class Stylesheet
 	{
 		private static readonly Dictionary<string, string> LegacyClassNames = new Dictionary<string, string>();
@@ -615,7 +615,7 @@ namespace Myra.Graphics2D.UI.Styles
 				Namespace = typeof(WidgetStyle).Namespace,
 				TextureGetter = textureGetter,
 				FontGetter = fontGetter,
-				NodesToIgnore = new HashSet<string>(new[] { "Designer", "Colors" }),
+				NodesToIgnore = new HashSet<string>(new[] { "Designer", "Colors", "Fonts" }),
 				LegacyClassNames = LegacyClassNames,
 				LegacyPropertyNames = LegacyPropertyNames,
 				Colors = colors

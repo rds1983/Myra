@@ -122,16 +122,16 @@ namespace Myra.Graphics2D.UI.File
 
 			_listBoxPlaces.Background = null;
 
-			_buttonBack.Image = DefaultAssets.UISpritesheet["icon-arrow-left"];
-			_buttonForward.Image = DefaultAssets.UISpritesheet["icon-arrow-right"];
-			_buttonParent.Image = DefaultAssets.UISpritesheet["icon-folder-parent"];
+			_buttonBack.Image = DefaultAssets.UITextureRegionAtlas["icon-arrow-left"];
+			_buttonForward.Image = DefaultAssets.UITextureRegionAtlas["icon-arrow-right"];
+			_buttonParent.Image = DefaultAssets.UITextureRegionAtlas["icon-folder-parent"];
 
 			var homePath = (Environment.OSVersion.Platform == PlatformID.Unix ||
 							Environment.OSVersion.Platform == PlatformID.MacOSX)
 				? Environment.GetEnvironmentVariable("HOME")
 				: Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
 
-			var iconFolder = DefaultAssets.UISpritesheet["icon-folder"];
+			var iconFolder = DefaultAssets.UITextureRegionAtlas["icon-folder"];
 
 			var places = new List<string>
 			{
@@ -169,7 +169,7 @@ namespace Myra.Graphics2D.UI.File
 
 			var drives = DriveInfo.GetDrives();
 
-			var iconDrive = DefaultAssets.UISpritesheet["icon-drive"];
+			var iconDrive = DefaultAssets.UITextureRegionAtlas["icon-drive"];
 			foreach (var d in drives)
 			{
 				if (d.DriveType == DriveType.Ram)
@@ -199,8 +199,8 @@ namespace Myra.Graphics2D.UI.File
 
 			_listBoxPlaces.SelectedIndexChanged += OnPlacesSelectedIndexChanged;
 
-			_gridFiles.SelectionBackground = DefaultAssets.UISpritesheet["tree-selection"];
-			_gridFiles.SelectionHoverBackground = DefaultAssets.UISpritesheet["button-over"];
+			_gridFiles.SelectionBackground = DefaultAssets.UITextureRegionAtlas["tree-selection"];
+			_gridFiles.SelectionHoverBackground = DefaultAssets.UITextureRegionAtlas["button-over"];
 			_gridFiles.SelectedIndexChanged += OnGridFilesSelectedIndexChanged;
 			_gridFiles.TouchDoubleClick += OnGridFilesDoubleClick;
 
@@ -360,7 +360,7 @@ namespace Myra.Graphics2D.UI.File
 			var path = _textFieldPath.Text;
 			var folders = Directory.EnumerateDirectories(path);
 
-			var iconFolder = DefaultAssets.UISpritesheet["icon-folder"];
+			var iconFolder = DefaultAssets.UITextureRegionAtlas["icon-folder"];
 
 			var gridY = 0;
 			foreach (var f in folders)

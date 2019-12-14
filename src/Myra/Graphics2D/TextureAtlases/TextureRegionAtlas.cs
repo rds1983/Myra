@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Linq;
 using Myra.MML;
+using Myra.Assets;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -13,9 +14,11 @@ using Texture2D = Xenko.Graphics.Texture;
 
 namespace Myra.Graphics2D.TextureAtlases
 {
+	[AssetLoader(typeof(TextureRegionAtlasLoader))]
 	public partial class TextureRegionAtlas
 	{
 		private const string TextureAtlasName = "TextureAtlas";
+		private const string ImageName = "Image";
 		private const string TextureRegionName = "TextureRegion";
 		private const string NinePatchRegionName = "NinePatchRegion";
 		private const string LeftName = "Left";
@@ -27,32 +30,26 @@ namespace Myra.Graphics2D.TextureAtlases
 		private const string NinePatchRightName = "NinePatchRight";
 		private const string NinePatchBottomName = "NinePatchBottom";
 
-		private readonly Dictionary<string, TextureRegion> _regions;
+		public string Image { get; set; }
 
-		public Dictionary<string, TextureRegion> Regions
-		{
-			get { return _regions; }
-		}
+		public Dictionary<string, TextureRegion> Regions { get; } = new Dictionary<string, TextureRegion>();
 
 		public TextureRegion this[string name]
 		{
-			get { return Regions[name]; }
-		}
-
-		public TextureRegionAtlas(Dictionary<string, TextureRegion> regions)
-		{
-			if (regions == null)
+			get
 			{
-				throw new ArgumentNullException("regions");
+				return Regions[name];
 			}
-
-			_regions = regions;
+			set
+			{
+				Regions[name] = value;
+			}
 		}
 
 		public TextureRegion EnsureRegion(string id)
 		{
 			TextureRegion result;
-			if (!_regions.TryGetValue(id, out result))
+			if (!Regions.TryGetValue(id, out result))
 			{
 				throw new ArgumentNullException(string.Format("Could not resolve region '{0}'", id));
 			}
@@ -64,9 +61,10 @@ namespace Myra.Graphics2D.TextureAtlases
 		{
 			var doc = new XDocument();
 			var root = new XElement(TextureAtlasName);
+			root.SetAttributeValue(ImageName, Image);
 			doc.Add(root);
 
-			foreach(var pair in _regions)
+			foreach(var pair in Regions)
 			{
 				var region = pair.Value;
 				var asNinePatch = region as NinePatchRegion;
@@ -93,13 +91,21 @@ namespace Myra.Graphics2D.TextureAtlases
 			return doc.ToString();
 		}
 
-		public static TextureRegionAtlas FromXml(string xml, Texture2D texture)
+		public static TextureRegionAtlas FromXml(string xml, Func<string, Texture2D> textureGetter)
 		{
 			var doc = XDocument.Parse(xml);
 			var root = doc.Root;
 
-			var regions = new Dictionary<string, TextureRegion>();
+			var result = new TextureRegionAtlas();
+			var imageFileAttr = root.Attribute(ImageName);
+			if (imageFileAttr == null)
+			{
+				throw new Exception("Mandatory attribute 'ImageFile' doesnt exist");
+			}
 
+			result.Image = imageFileAttr.Value;
+
+			var texture = textureGetter(result.Image);
 			foreach(XElement entry in root.Elements())
 			{
 				var id = entry.Attribute(BaseContext.IdName).Value;
@@ -130,10 +136,10 @@ namespace Myra.Graphics2D.TextureAtlases
 					region = new NinePatchRegion(texture, bounds, padding);
 				}
 
-				regions[id] = region;
+				result[id] = region;
 			}
 
-			return new TextureRegionAtlas(regions);
+			return result;
 		}
 	}
 }

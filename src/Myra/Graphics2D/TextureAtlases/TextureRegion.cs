@@ -3,6 +3,7 @@
 #if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Myra.Assets;
 #else
 using Xenko.Core.Mathematics;
 using Xenko.Graphics;
@@ -11,6 +12,7 @@ using Texture2D = Xenko.Graphics.Texture;
 
 namespace Myra.Graphics2D.TextureAtlases
 {
+	[AssetLoader(typeof(TextureRegionLoader))]
 	public class TextureRegion: IRenderable
 	{
 		private readonly Texture2D _texture;

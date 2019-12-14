@@ -1009,7 +1009,7 @@ namespace MyraPad
 						{
 							var texture = Texture2D.FromStream(GraphicsDevice, stream);
 							var atlasData = File.ReadAllText(atlasPath);
-							textureAtlases[Path.GetFileName(atlasPath)] = TextureRegionAtlas.FromXml(atlasData, texture);
+							textureAtlases[Path.GetFileName(atlasPath)] = TextureRegionAtlas.FromXml(atlasData, name => texture);
 						}
 					}
 					else if (element.Name == "Font")
