@@ -15,7 +15,7 @@ namespace Myra.Samples.DebugConsole
 			_buttonModalDebugPanel.Click += _buttonModalDebugPanel_Click;
 		}
 
-		private void CreateDebugPanel(bool isModal)
+		private void ShowDebugPanel(bool isModal)
 		{
 			var debugPanel = new DebugPanel
 			{
@@ -38,13 +38,13 @@ namespace Myra.Samples.DebugConsole
 
 		private void _buttonDebugPanel_Click(object sender, System.EventArgs e)
 		{
-			CreateDebugPanel(false);
+			ShowDebugPanel(false);
 
 		}
 
 		private void _buttonModalDebugPanel_Click(object sender, System.EventArgs e)
 		{
-			CreateDebugPanel(true);
+			ShowDebugPanel(true);
 		}
 	}
 }
