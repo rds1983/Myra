@@ -15,12 +15,13 @@ namespace Myra.Samples.DebugConsole
 			_buttonModalDebugPanel.Click += _buttonModalDebugPanel_Click;
 		}
 
-		private DebugPanel CreateDebugPanel()
+		private void CreateDebugPanel(bool isModal)
 		{
 			var debugPanel = new DebugPanel
 			{
 				Opacity = 0.75f,
-				Background = new ColoredRegion(DefaultAssets.WhiteRegion, Color.Blue)
+				Background = new ColoredRegion(DefaultAssets.WhiteRegion, Color.Blue),
+				IsModal = isModal
 			};
 
 			_buttonDebugPanel.Enabled = false;
@@ -33,20 +34,17 @@ namespace Myra.Samples.DebugConsole
 			};
 
 			Desktop.Widgets.Add(debugPanel);
-
-			return debugPanel;
 		}
 
 		private void _buttonDebugPanel_Click(object sender, System.EventArgs e)
 		{
-			CreateDebugPanel();
+			CreateDebugPanel(false);
 
 		}
 
 		private void _buttonModalDebugPanel_Click(object sender, System.EventArgs e)
 		{
-			var debugPanel = CreateDebugPanel();
-			debugPanel.IsModal = true;
+			CreateDebugPanel(true);
 		}
 	}
 }
