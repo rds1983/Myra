@@ -10,7 +10,6 @@ namespace Myra.Assets
 		private readonly static Dictionary<Type, LoaderInfo> _loaders = new Dictionary<Type, LoaderInfo>();
 		private readonly Dictionary<Type, Dictionary<string, object>> _cache = new Dictionary<Type, Dictionary<string, object>>();
 		private IAssetResolver _assetResolver;
-		private FileAssetResolver fileAssetResolver;
 
 		public IAssetResolver AssetResolver
 		{
@@ -42,11 +41,6 @@ namespace Myra.Assets
 			AssetResolver = assetResolver ?? throw new ArgumentNullException(nameof(assetResolver));
 		}
 
-		public AssetManager(FileAssetResolver fileAssetResolver)
-		{
-			this.fileAssetResolver = fileAssetResolver;
-		}
-
 		private static void RegisterDefaultLoaders()
 		{
 			SetAssetLoader(new SoundEffectLoader());
@@ -57,7 +51,7 @@ namespace Myra.Assets
 
 		public static void SetAssetLoader<T>(IAssetLoader<T> loader, bool storeInCache = true)
 		{
-			_loaders[typeof (T)] = new LoaderInfo(loader, storeInCache);
+			_loaders[typeof(T)] = new LoaderInfo(loader, storeInCache);
 		}
 
 		public void Unload()
@@ -82,10 +76,10 @@ namespace Myra.Assets
 
 			return stream;
 		}
-		
+
 		public T Load<T>(string assetName)
 		{
-			var type = typeof (T);
+			var type = typeof(T);
 			assetName = assetName.Replace('\\', '/');
 
 			Dictionary<string, object> cache;
@@ -117,12 +111,12 @@ namespace Myra.Assets
 				_loaders[type] = loaderBase;
 			}
 
-			var loader = (IAssetLoader<T>) loaderBase.Loader;
+			var loader = (IAssetLoader<T>)loaderBase.Loader;
 
 			var baseFolder = string.Empty;
 			var assetFileName = assetName;
 
-			var separatorIndex = assetName.IndexOf('/');
+			var separatorIndex = assetName.LastIndexOf('/');
 			if (separatorIndex != -1)
 			{
 				baseFolder = assetName.Substring(0, separatorIndex);

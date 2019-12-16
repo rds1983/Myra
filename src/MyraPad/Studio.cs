@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.ColorPicker;
 using Myra.Graphics2D.UI.File;
@@ -18,7 +17,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework.Input;
 using System.Threading;
 using System.Xml.Linq;
-using SpriteFontPlus;
+using Myra.Assets;
 
 namespace MyraPad
 {
@@ -31,8 +30,6 @@ namespace MyraPad
 		private readonly ConcurrentQueue<Project> _newProjectsQueue = new ConcurrentQueue<Project>();
 		private readonly AutoResetEvent _refreshProjectEvent = new AutoResetEvent(false);
 
-		private readonly ConcurrentDictionary<string, Stylesheet> _stylesheetCache = new ConcurrentDictionary<string, Stylesheet>();
-
 		private bool _suppressProjectRefresh = false;
 		private readonly GraphicsDeviceManager _graphicsDeviceManager;
 		private readonly State _state;
@@ -42,6 +39,7 @@ namespace MyraPad
 		private string _lastFolder;
 		private bool _isDirty;
 		private Project _project;
+		private readonly AssetManager _stylesheetAssetManager = new AssetManager(new FileAssetResolver("..."));
 		private bool _needsCloseTag;
 		private string _parentTag;
 		private int? _currentTagStart, _currentTagEnd;
@@ -981,96 +979,7 @@ namespace MyraPad
 				path = Path.Combine(Path.GetDirectoryName(FilePath), path);
 			}
 
-			Stylesheet stylesheet;
-			if (_stylesheetCache.TryGetValue(path, out stylesheet))
-			{
-				return stylesheet;
-			}
-
-			var data = File.ReadAllText(path);
-			var doc = XDocument.Parse(data);
-			var root = doc.Root;
-
-			var textureAtlases = new Dictionary<string, TextureRegionAtlas>();
-			var fonts = new Dictionary<string, SpriteFont>();
-
-			var designer = root.Element("Designer");
-			if (designer != null)
-			{
-				var folder = Path.GetDirectoryName(path);
-
-				foreach(var element in designer.Elements())
-				{
-					if (element.Name == "TextureAtlas")
-					{
-						var atlasPath = BuildPath(folder, element.Attribute("Atlas").Value);
-						var imagePath = BuildPath(folder, element.Attribute("Image").Value);
-						using (var stream = File.OpenRead(imagePath))
-						{
-							var texture = Texture2D.FromStream(GraphicsDevice, stream);
-							var atlasData = File.ReadAllText(atlasPath);
-							textureAtlases[Path.GetFileName(atlasPath)] = TextureRegionAtlas.FromXml(atlasData, name => texture);
-						}
-					}
-					else if (element.Name == "Font")
-					{
-						var id = element.Attribute("Id").Value;
-						var fontPath = BuildPath(folder, element.Attribute("File").Value);
-
-						var fontData = File.ReadAllText(fontPath);
-						fonts[id] = BMFontLoader.LoadText(fontData,
-							s =>
-							{
-								if (s.Contains("#"))
-								{
-									var parts = s.Split('#');
-									var region = textureAtlases[parts[0]][parts[1]];
-
-									return new TextureWithOffset(region.Texture, region.Bounds.Location);
-								}
-
-								var imagePath = BuildPath(folder, s);
-								using (var stream = File.OpenRead(imagePath))
-								{
-									var texture = Texture2D.FromStream(GraphicsDevice, stream);
-
-									return new TextureWithOffset(texture);
-								}
-							});
-					}
-				}
-			}
-
-			stylesheet = Stylesheet.LoadFromSource(data,
-				s =>
-				{
-					TextureRegion result;
-					foreach (var pair in textureAtlases)
-					{
-						if (pair.Value.Regions.TryGetValue(s, out result))
-						{
-							return result;
-						}
-					}
-
-					throw new Exception(string.Format("Could not find texture region '{0}'", s));
-				},
-				s =>
-				{
-					SpriteFont result;
-
-					if (fonts.TryGetValue(s, out result))
-					{
-						return result;
-					}
-
-					throw new Exception(string.Format("Could not find font '{0}'", s));
-				}
-			);
-
-			_stylesheetCache[path] = stylesheet;
-
-			return stylesheet;
+			return _stylesheetAssetManager.Load<Stylesheet>(path);
 		}
 
 		private static void IterateWidget(Widget w, Action<Widget> a)
@@ -1114,14 +1023,10 @@ namespace MyraPad
 			}
 		}
 
-		private void ResetStylesheetCache()
-		{
-			_stylesheetCache.Clear();
-		}
-
 		private void OnMenuFileLoadStylesheet(object sender, EventArgs e)
 		{
-			ResetStylesheetCache();
+			_stylesheetAssetManager.Unload();
+
 			var dlg = new FileDialog(FileDialogMode.OpenFile)
 			{
 				Filter = "*.xml"
@@ -1198,7 +1103,7 @@ namespace MyraPad
 
 		private void OnMenuFileReloadStylesheet(object sender, EventArgs e)
 		{
-			ResetStylesheetCache();
+			_stylesheetAssetManager.Unload();
 
 			if (string.IsNullOrEmpty(Project.StylesheetPath))
 			{
@@ -1210,7 +1115,7 @@ namespace MyraPad
 
 		private void OnMenuFileResetStylesheetSelected(object sender, EventArgs e)
 		{
-			ResetStylesheetCache();
+			_stylesheetAssetManager.Unload();
 
 			Project.StylesheetPath = null;
 			UpdateSource();

@@ -12,7 +12,7 @@ namespace Myra.Graphics2D.UI.Styles
 	{
 		public Stylesheet Load(AssetLoaderContext context, string assetName)
 		{
-			var xml = context.AssetManager.Load<string>(assetName);
+			var xml = context.Load<string>(assetName);
 
 			var xDoc = XDocument.Parse(xml);
 			var attr = xDoc.Root.Attribute("TextureRegionAtlas");
@@ -21,7 +21,7 @@ namespace Myra.Graphics2D.UI.Styles
 				throw new Exception("Mandatory attribute 'TextureRegionAtlas' doesnt exist");
 			}
 
-			var textureRegionAtlas = context.AssetManager.Load<TextureRegionAtlas>(attr.Value);
+			var textureRegionAtlas = context.Load<TextureRegionAtlas>(attr.Value);
 
 			// Load fonts
 			var fonts = new Dictionary<string, SpriteFont>();
@@ -29,7 +29,7 @@ namespace Myra.Graphics2D.UI.Styles
 			foreach (var el in fontsNode.Elements())
 			{
 				var font = el.Attribute("File").Value;
-				fonts[el.Attribute(BaseContext.IdName).Value] = context.AssetManager.Load<SpriteFont>(font);
+				fonts[el.Attribute(BaseContext.IdName).Value] = context.Load<SpriteFont>(font);
 			}
 
 			return Stylesheet.LoadFromSource(xml,

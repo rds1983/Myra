@@ -18,7 +18,7 @@ namespace Myra.Assets
 
 		public Stream Open(string assetName)
 		{
-			if (!string.IsNullOrEmpty(BaseFolder))
+			if (!Path.IsPathRooted(assetName) && !string.IsNullOrEmpty(BaseFolder))
 			{
 				assetName = Path.Combine(BaseFolder, assetName);
 			}

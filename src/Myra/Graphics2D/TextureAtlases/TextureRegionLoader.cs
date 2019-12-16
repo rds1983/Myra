@@ -12,12 +12,12 @@ namespace Myra.Graphics2D.TextureAtlases
 				// First part is texture region atlas name
 				// Second part is texture region name
 				var parts = assetName.Split(':');
-				var textureRegionAtlas = context.AssetManager.Load<TextureRegionAtlas>(parts[0]);
+				var textureRegionAtlas = context.Load<TextureRegionAtlas>(parts[0]);
 				return textureRegionAtlas[parts[1]];
 			}
 
 			// Ordinary texture
-			var texture = context.AssetManager.Load<Texture2D>(assetName);
+			var texture = context.Load<Texture2D>(assetName);
 			return new TextureRegion(texture);
 		}
 	}

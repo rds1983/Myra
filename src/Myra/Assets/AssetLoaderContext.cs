@@ -8,14 +8,6 @@ namespace Myra.Assets
 		private readonly AssetManager _assetManager;
 		private readonly string _baseFolder;
 
-		public AssetManager AssetManager
-		{
-			get
-			{
-				return _assetManager;
-			}
-		}
-
 		internal AssetLoaderContext(AssetManager assetManager, string baseFolder)
 		{
 			if (assetManager == null)

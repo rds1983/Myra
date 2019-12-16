@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TextureAtlas>
+<TextureAtlas Image="ui_stylesheet_atlas.png">
   <TextureRegion Id="default" Left="1" Top="50" Width="254" Height="77" />
   <NinePatchRegion Id="default-window" Left="1" Top="20" Width="27" Height="29" NinePatchLeft="4" NinePatchTop="20" NinePatchRight="3" NinePatchBottom="3" />
   <NinePatchRegion Id="default-select" Left="29" Top="29" Width="27" Height="20" NinePatchLeft="4" NinePatchTop="4" NinePatchRight="14" NinePatchBottom="4" />

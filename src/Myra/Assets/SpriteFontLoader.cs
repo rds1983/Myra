@@ -8,14 +8,14 @@ namespace Myra.Assets
 	{
 		public SpriteFont Load(AssetLoaderContext context, string assetName)
 		{
-			var fontData = context.AssetManager.Load<string>(assetName);
+			var fontData = context.Load<string>(assetName);
 
 			return BMFontLoader.Load(fontData, name => TextureGetter(context, name));
 		}
 
 		private TextureWithOffset TextureGetter(AssetLoaderContext context, string name)
 		{
-			var textureRegion = context.AssetManager.Load<TextureRegion>(name);
+			var textureRegion = context.Load<TextureRegion>(name);
 			return new TextureWithOffset(textureRegion.Texture, textureRegion.Bounds.Location);
 		}
 	}

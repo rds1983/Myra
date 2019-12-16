@@ -237,6 +237,5 @@ namespace Myra.Tools.ToMyraAtlasConverter
 
 			return new TextureRegionAtlas(regions);
 		}
-
 	}
 }

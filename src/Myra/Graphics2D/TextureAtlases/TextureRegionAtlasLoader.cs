@@ -7,8 +7,8 @@ namespace Myra.Graphics2D.TextureAtlases
 	{
 		public TextureRegionAtlas Load(AssetLoaderContext context, string assetName)
 		{
-			var xml = context.AssetManager.Load<string>(assetName);
-			return TextureRegionAtlas.FromXml(xml, name => context.AssetManager.Load<Texture2D>(name));
+			var xml = context.Load<string>(assetName);
+			return TextureRegionAtlas.FromXml(xml, name => context.Load<Texture2D>(name));
 		}
 	}
 }

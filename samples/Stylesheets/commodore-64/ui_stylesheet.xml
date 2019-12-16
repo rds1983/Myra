@@ -1,9 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Stylesheet>
-  <Designer>
-    <TextureAtlas Atlas="ui_stylesheet_atlas.xml" Image="ui_stylesheet_atlas.png" />
-    <Font Id="commodore-64" File="commodore-64.fnt" />
-  </Designer>
+<Stylesheet TextureRegionAtlas="ui_stylesheet_atlas.xml">
   <Colors>
     <Color Id="green" Value="#00FF00FF" />
     <Color Id="light_grey" Value="#CCCCCCFF" />
@@ -15,20 +11,19 @@
     <Color Id="blue" Value="#4242E7FF" />
     <Color Id="black" Value="#000000FF" />
   </Colors>
+  <Fonts>
+    <Font Id="commodore-64" File="commodore-64.fnt"/>
+  </Fonts>
   <DesktopStyle Background="blue" />
-  <TextBlockStyles>
-    <TextBlockStyle Font="commodore-64" TextColor="white" />
-    <TextBlockStyle Id="optional" Font="commodore-64" TextColor="green" />
-    <TextBlockStyle Id="error" Font="commodore-64" TextColor="light_grey" />
-    <TextBlockStyle Id="title" Font="commodore-64" TextColor="light_blue" />
-  </TextBlockStyles>
-  <TextFieldStyles>
-    <TextFieldStyle Background="white" TextColor="black" Font="commodore-64" Cursor="cursor-black" Selection="light-blue" />
-    <TextFieldStyle Id="nobg" Font="commodore-64" TextColor="green" Cursor="cursor" Selection="white" />
-  </TextFieldStyles>
-  <ScrollPaneStyles>
-    <ScrollPaneStyle HorizontalScrollBackground="scroll-bar" HorizontalScrollKnob="scroll-bar-horizontal-knob" VerticalScrollBackground="scroll-bar" VerticalScrollKnob="scroll-bar-vertical-knob" />
-  </ScrollPaneStyles>
+  <LabelStyles>
+    <LabelStyle Font="commodore-64" TextColor="white" />
+  </LabelStyles>
+  <TextBoxStyles>
+    <TextBoxStyle Background="white" TextColor="black" Font="commodore-64" Cursor="cursor-black" Selection="light-blue" />
+  </TextBoxStyles>
+  <ScrollViewerStyles>
+    <ScrollViewerStyle HorizontalScrollBackground="scroll-bar" HorizontalScrollKnob="scroll-bar-horizontal-knob" VerticalScrollBackground="scroll-bar" VerticalScrollKnob="scroll-bar-vertical-knob" />
+  </ScrollViewerStyles>
   <ButtonStyles>
     <ButtonStyle Background="button" PaddingLeft="8" PaddingRight="8" PaddingTop="5" PaddingBottom="5" PressedBackground="button-down" />
   </ButtonStyles>
@@ -62,10 +57,9 @@
     <ComboBoxStyle Background="list">
       <LabelStyle Font="commodore-64" TextColor="white" />
       <ListBoxStyle Background="blue">
-          <ListItemStyle OverBackground="white" PaddingLeft="8" PaddingRight="8" 
-                         PaddingTop="5" PaddingBottom="5" PressedBackground="button-down">
-            <LabelStyle Font="commodore-64" TextColor="white" OverTextColor="blue" PressedTextColor="blue" />
-          </ListItemStyle>
+        <ListItemStyle OverBackground="white" PaddingLeft="8" PaddingRight="8" PaddingTop="5" PaddingBottom="5" PressedBackground="button-down">
+          <LabelStyle Font="commodore-64" TextColor="white" OverTextColor="blue" PressedTextColor="blue" />
+        </ListItemStyle>
       </ListBoxStyle>
     </ComboBoxStyle>
   </ComboBoxStyles>
@@ -73,11 +67,6 @@
     <ListBoxStyle>
       <ListItemStyle PressedBackground="white">
         <LabelStyle Font="commodore-64" TextColor="white" PressedTextColor="blue" />
-      </ListItemStyle>
-    </ListBoxStyle>
-    <ListBoxStyle Id="dimmed">
-      <ListItemStyle PressedBackground="light-blue">
-        <LabelStyle Font="commodore-64" TextColor="green" PressedTextColor="light_grey" />
       </ListItemStyle>
     </ListBoxStyle>
   </ListBoxStyles>

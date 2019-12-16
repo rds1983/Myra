@@ -1,9 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Stylesheet>
-  <Designer>
-    <TextureAtlas Atlas="ui_stylesheet_atlas.xml" Image="ui_stylesheet_atlas.png" />
-    <Font Id="ui_font" File="ui_font.fnt" />
-  </Designer>
+<Stylesheet TextureRegionAtlas="ui_stylesheet_atlas.xml">
+  <Fonts>
+    <Font Id="ui_font" File="ui_font.fnt"/>
+  </Fonts>
   <Colors>
     <Color Id="white" Value="#FFFFFFFF" />
     <Color Id="grey" Value="#AAAAAAFF" />
