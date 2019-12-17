@@ -16,7 +16,6 @@ namespace Myra.Graphics2D.UI
 		private Color _color = Color.White;
 
 		[Browsable(false)]
-		[XmlIgnore]
 		public IRenderable Renderable
 		{
 			get

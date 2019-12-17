@@ -38,8 +38,9 @@ namespace MyraPad
 		private string _filePath;
 		private string _lastFolder;
 		private bool _isDirty;
-		private Project _project;
 		private readonly AssetManager _stylesheetAssetManager = new AssetManager(new FileAssetResolver("..."));
+		private AssetManager _assetManager;
+		private Project _project;
 		private bool _needsCloseTag;
 		private string _parentTag;
 		private int? _currentTagStart, _currentTagEnd;
@@ -462,7 +463,7 @@ namespace MyraPad
 		{
 			try
 			{
-				var project = Project.LoadFromXml(_ui._textSource.Text, _project.Stylesheet);
+				var project = Project.LoadFromXml(_ui._textSource.Text, _project.Stylesheet, _assetManager);
 				_ui._textSource.Text = _project.Save();
 			}
 			catch (Exception ex)
@@ -611,7 +612,7 @@ namespace MyraPad
 							}
 						}
 
-						var newProject = Project.LoadFromXml(xDoc, stylesheet);
+						var newProject = Project.LoadFromXml(xDoc, stylesheet, _assetManager);
 						_newProjectsQueue.Enqueue(newProject);
 
 						_ui._textStatus.Text = string.Empty;
@@ -932,7 +933,7 @@ namespace MyraPad
 			try
 			{
 				var xml = (string)state;
-				_newObject = Project.LoadObjectFromXml(xml);
+				_newObject = Project.LoadObjectFromXml(xml, _assetManager);
 			}
 			catch (Exception)
 			{
@@ -1421,6 +1422,7 @@ namespace MyraPad
 				return;
 			}
 
+			_assetManager = new AssetManager(new FileAssetResolver(Path.GetDirectoryName(filePath)));
 			File.WriteAllText(filePath, _ui._textSource.Text);
 
 			FilePath = filePath;
@@ -1465,6 +1467,8 @@ namespace MyraPad
 		{
 			try
 			{
+				_assetManager = new AssetManager(new FileAssetResolver(Path.GetDirectoryName(filePath)));
+
 				var data = File.ReadAllText(filePath);
 
 				FilePath = filePath;

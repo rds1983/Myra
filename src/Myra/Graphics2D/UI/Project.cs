@@ -10,6 +10,7 @@ using Myra.MML;
 using System.Collections.Generic;
 using Myra.Attributes;
 using System.Linq;
+using Myra.Assets;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -147,19 +148,20 @@ namespace Myra.Graphics2D.UI
 			return CreateSaveContext(Stylesheet);
 		}
 
-		internal static LoadContext CreateLoadContext(Stylesheet stylesheet)
+		internal static LoadContext CreateLoadContext(Stylesheet stylesheet, IAssetManager assetManager)
 		{
 			return new LoadContext
 			{
 				LegacyClassNames = LegacyClassNames,
 				ObjectCreator = (t, el) => CreateItem(t, el, stylesheet),
-				Namespace = typeof(Widget).Namespace
+				Namespace = typeof(Widget).Namespace,
+				AssetManager = assetManager
 			};
 		}
 
-		internal LoadContext CreateLoadContext()
+		internal LoadContext CreateLoadContext(IAssetManager assetManager)
 		{
-			return CreateLoadContext(Stylesheet);
+			return CreateLoadContext(Stylesheet, assetManager);
 		}
 
 		public string Save()
@@ -172,30 +174,30 @@ namespace Myra.Graphics2D.UI
 			return xDoc.ToString();
 		}
 
-		public static Project LoadFromXml(XDocument xDoc, Stylesheet stylesheet)
+		public static Project LoadFromXml(XDocument xDoc, Stylesheet stylesheet, IAssetManager assetManager)
 		{
 			var result = new Project
 			{
 				Stylesheet = stylesheet
 			};
 
-			var loadContext = result.CreateLoadContext();
+			var loadContext = result.CreateLoadContext(assetManager);
 			loadContext.Load(result, xDoc.Root);
 
 			return result;
 		}
 
-		public static Project LoadFromXml(string data, Stylesheet stylesheet)
+		public static Project LoadFromXml(string data, Stylesheet stylesheet, IAssetManager assetManager)
 		{
-			return LoadFromXml(XDocument.Parse(data), stylesheet);
+			return LoadFromXml(XDocument.Parse(data), stylesheet, assetManager);
 		}
 
 		public static Project LoadFromXml(string data)
 		{
-			return LoadFromXml(data, Stylesheet.Current);
+			return LoadFromXml(data, Stylesheet.Current, null);
 		}
 
-		public static object LoadObjectFromXml(string data, Stylesheet stylesheet)
+		public static object LoadObjectFromXml(string data, Stylesheet stylesheet, IAssetManager assetManager)
 		{
 			XDocument xDoc = XDocument.Parse(data);
 
@@ -224,15 +226,15 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var item = CreateItem(itemType, xDoc.Root, stylesheet);
-			var loadContext = CreateLoadContext(stylesheet);
+			var loadContext = CreateLoadContext(stylesheet, assetManager);
 			loadContext.Load(item, xDoc.Root);
 
 			return item;
 		}
 
-		public object LoadObjectFromXml(string data)
+		public object LoadObjectFromXml(string data, IAssetManager assetManager)
 		{
-			return LoadObjectFromXml(data, Stylesheet);
+			return LoadObjectFromXml(data, Stylesheet, assetManager);
 		}
 
 		public string SaveObjectToXml(object obj, string tagName)

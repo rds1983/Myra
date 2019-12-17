@@ -1,0 +1,5 @@
+<Project>
+  <Panel>
+    <Image Renderable="LogoOnly_64px.png" HorizontalAlignment="Center" VerticalAlignment="Center" />
+  </Panel>
+</Project>
