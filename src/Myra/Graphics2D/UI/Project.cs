@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using Myra.Attributes;
 using System.Linq;
 using Myra.Assets;
+using Myra.Graphics2D.TextureAtlases;
+using Microsoft.Xna.Framework.Graphics;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -148,20 +150,21 @@ namespace Myra.Graphics2D.UI
 			return CreateSaveContext(Stylesheet);
 		}
 
-		internal static LoadContext CreateLoadContext(Stylesheet stylesheet, IAssetManager assetManager)
+		internal static LoadContext CreateLoadContext(IAssetManager assetManager, Stylesheet stylesheet)
 		{
 			return new LoadContext
 			{
 				LegacyClassNames = LegacyClassNames,
 				ObjectCreator = (t, el) => CreateItem(t, el, stylesheet),
 				Namespace = typeof(Widget).Namespace,
-				AssetManager = assetManager
+				TextureGetter = name => assetManager.Load<TextureRegion>(name),
+				FontGetter = name => assetManager.Load<SpriteFont>(name)
 			};
 		}
 
 		internal LoadContext CreateLoadContext(IAssetManager assetManager)
 		{
-			return CreateLoadContext(Stylesheet, assetManager);
+			return CreateLoadContext(assetManager, Stylesheet);
 		}
 
 		public string Save()
@@ -174,7 +177,7 @@ namespace Myra.Graphics2D.UI
 			return xDoc.ToString();
 		}
 
-		public static Project LoadFromXml(XDocument xDoc, Stylesheet stylesheet, IAssetManager assetManager)
+		public static Project LoadFromXml(XDocument xDoc, IAssetManager assetManager, Stylesheet stylesheet)
 		{
 			var result = new Project
 			{
@@ -187,17 +190,17 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public static Project LoadFromXml(string data, Stylesheet stylesheet, IAssetManager assetManager)
+		public static Project LoadFromXml(string data, IAssetManager assetManager, Stylesheet stylesheet)
 		{
-			return LoadFromXml(XDocument.Parse(data), stylesheet, assetManager);
+			return LoadFromXml(XDocument.Parse(data), assetManager, stylesheet);
 		}
 
 		public static Project LoadFromXml(string data)
 		{
-			return LoadFromXml(data, Stylesheet.Current, null);
+			return LoadFromXml(data, null, Stylesheet.Current);
 		}
 
-		public static object LoadObjectFromXml(string data, Stylesheet stylesheet, IAssetManager assetManager)
+		public static object LoadObjectFromXml(string data, IAssetManager assetManager, Stylesheet stylesheet)
 		{
 			XDocument xDoc = XDocument.Parse(data);
 
@@ -226,7 +229,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var item = CreateItem(itemType, xDoc.Root, stylesheet);
-			var loadContext = CreateLoadContext(stylesheet, assetManager);
+			var loadContext = CreateLoadContext(assetManager, stylesheet);
 			loadContext.Load(item, xDoc.Root);
 
 			return item;
@@ -234,7 +237,7 @@ namespace Myra.Graphics2D.UI
 
 		public object LoadObjectFromXml(string data, IAssetManager assetManager)
 		{
-			return LoadObjectFromXml(data, Stylesheet, assetManager);
+			return LoadObjectFromXml(data, assetManager, Stylesheet);
 		}
 
 		public string SaveObjectToXml(object obj, string tagName)

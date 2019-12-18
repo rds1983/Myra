@@ -463,7 +463,7 @@ namespace MyraPad
 		{
 			try
 			{
-				var project = Project.LoadFromXml(_ui._textSource.Text, _project.Stylesheet, _assetManager);
+				var project = Project.LoadFromXml(_ui._textSource.Text, _assetManager, _project.Stylesheet);
 				_ui._textSource.Text = _project.Save();
 			}
 			catch (Exception ex)
@@ -612,7 +612,7 @@ namespace MyraPad
 							}
 						}
 
-						var newProject = Project.LoadFromXml(xDoc, stylesheet, _assetManager);
+						var newProject = Project.LoadFromXml(xDoc, _assetManager, stylesheet);
 						_newProjectsQueue.Enqueue(newProject);
 
 						_ui._textStatus.Text = string.Empty;

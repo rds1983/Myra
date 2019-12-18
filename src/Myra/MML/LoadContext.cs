@@ -34,7 +34,6 @@ namespace Myra.MML
 		public Assembly Assembly = typeof(Widget).Assembly;
 		public Func<string, IRenderable> TextureGetter = null;
 		public Func<string, SpriteFont> FontGetter = null;
-		public IAssetManager AssetManager = null;
 
 		public void Load(object obj, XElement el)
 		{
@@ -92,10 +91,6 @@ namespace Myra.MML
 							throw new Exception(string.Format("Could not find font '{0}'", attr.Value));
 						}
 						value = font;
-					}
-					else if (propertyType == typeof(IRenderable) && AssetManager != null)
-					{
-						value = AssetManager.Load<TextureRegion>(attr.Value);
 					}
 					else
 					{
