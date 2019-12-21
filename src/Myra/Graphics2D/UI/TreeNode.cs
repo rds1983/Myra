@@ -78,14 +78,14 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public IRenderable SelectionBackground
+		public IBrush SelectionBackground
 		{
 			get; set;
 		}
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public IRenderable SelectionHoverBackground
+		public IBrush SelectionHoverBackground
 		{
 			get; set;
 		}

@@ -14,7 +14,7 @@ namespace Myra.Graphics2D.UI
 {
 	public abstract class ProgressBar : Widget
 	{
-		private IRenderable _filler;
+		private IBrush _filler;
 		private float _value;
 
 		[Browsable(false)]
@@ -62,7 +62,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public IRenderable Filler
+		public IBrush Filler
 		{
 			get
 			{

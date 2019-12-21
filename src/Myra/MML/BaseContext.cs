@@ -49,7 +49,7 @@ namespace Myra.MML
 					propertyType == typeof(string) ||
 					propertyType == typeof(Color) ||
 					propertyType == typeof(Color?) ||
-					propertyType == typeof(IRenderable) ||
+					propertyType == typeof(IBrush) ||
 					propertyType == typeof(SpriteFont))
 				{
 					simpleProperties.Add(property);

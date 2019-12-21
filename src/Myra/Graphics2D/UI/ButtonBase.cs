@@ -35,7 +35,7 @@ namespace Myra.Graphics2D.UI
 		[Browsable(false)]
 		[XmlIgnore]
 		[Category("Appearance")]
-		public virtual IRenderable PressedBackground { get; set; }
+		public virtual IBrush PressedBackground { get; set; }
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
@@ -199,7 +199,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override IRenderable GetCurrentBackground()
+		public override IBrush GetCurrentBackground()
 		{
 			var result = Background;
 

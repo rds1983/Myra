@@ -8,7 +8,7 @@ using Xenko.Graphics;
 
 namespace Myra.Graphics2D
 {
-	public interface IRenderable
+	public interface IBrush
 	{
 		Point Size { get; }
 

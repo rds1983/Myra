@@ -19,7 +19,7 @@ namespace Myra.Graphics2D.UI
 		private string _shortcutText;
 		private Color? _shortcutColor;
 		private bool _toggleable;
-		private IRenderable _image;
+		private IBrush _image;
 		private string _id, _text;
 		private Color? _color;
 		private bool _displayTextDirty = true;
@@ -136,7 +136,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public IRenderable Image
+		public IBrush Image
 		{
 			get
 			{

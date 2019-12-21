@@ -112,7 +112,7 @@ namespace Myra.Graphics2D.UI
 		[Browsable(false)]
 		[XmlIgnore]
 		[Category("Appearance")]
-		public IRenderable HorizontalScrollBackground
+		public IBrush HorizontalScrollBackground
 		{
 			get; set;
 		}
@@ -120,7 +120,7 @@ namespace Myra.Graphics2D.UI
 		[Browsable(false)]
 		[XmlIgnore]
 		[Category("Appearance")]
-		public IRenderable HorizontalScrollKnob
+		public IBrush HorizontalScrollKnob
 		{
 			get; set;
 		}
@@ -128,7 +128,7 @@ namespace Myra.Graphics2D.UI
 		[Browsable(false)]
 		[XmlIgnore]
 		[Category("Appearance")]
-		public IRenderable VerticalScrollBackground
+		public IBrush VerticalScrollBackground
 		{
 			get; set;
 		}
@@ -136,7 +136,7 @@ namespace Myra.Graphics2D.UI
 		[Browsable(false)]
 		[XmlIgnore]
 		[Category("Appearance")]
-		public IRenderable VerticalScrollKnob
+		public IBrush VerticalScrollKnob
 		{
 			get; set;
 		}

@@ -32,12 +32,14 @@ namespace Myra.MML
 		public Func<Type, XElement, object> ObjectCreator = (type, el) => Activator.CreateInstance(type);
 		public string Namespace;
 		public Assembly Assembly = typeof(Widget).Assembly;
-		public Func<string, IRenderable> TextureGetter = null;
+		public Func<string, IBrush> TextureGetter = null;
 		public Func<string, SpriteFont> FontGetter = null;
 
 		public void Load(object obj, XElement el)
 		{
 			var type = obj.GetType();
+
+			var hasResources = obj as IHasResources;
 
 			List<PropertyInfo> complexProperties, simpleProperties;
 			ParseProperties(type, out complexProperties, out simpleProperties);
@@ -74,7 +76,7 @@ namespace Myra.MML
 							value = attr.Value.FromName();
 						}
 					}
-					else if (propertyType == typeof(IRenderable) && TextureGetter != null)
+					else if (propertyType == typeof(IBrush) && TextureGetter != null)
 					{
 						var texture = TextureGetter(attr.Value);
 						if (texture == null)
@@ -82,6 +84,11 @@ namespace Myra.MML
 							throw new Exception(string.Format("Could not find renderable '{0}'", attr.Value));
 						}
 						value = texture;
+
+						if (hasResources != null)
+						{
+							hasResources.Resources[property.Name] = attr.Value;
+						}
 					}
 					else if (propertyType == typeof(SpriteFont) && FontGetter != null)
 					{
@@ -91,6 +98,11 @@ namespace Myra.MML
 							throw new Exception(string.Format("Could not find font '{0}'", attr.Value));
 						}
 						value = font;
+
+						if (hasResources != null)
+						{
+							hasResources.Resources[property.Name] = attr.Value;
+						}
 					}
 					else
 					{

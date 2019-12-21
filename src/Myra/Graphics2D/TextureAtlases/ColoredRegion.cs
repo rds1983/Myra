@@ -10,7 +10,7 @@ using Xenko.Graphics;
 
 namespace Myra.Graphics2D.TextureAtlases
 {
-	public class ColoredRegion: IRenderable
+	public class ColoredRegion: IBrush
 	{
 		private Color _color = Color.White;
 

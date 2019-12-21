@@ -160,7 +160,7 @@ namespace Myra.Graphics2D.UI
 		[Browsable(false)]
 		[XmlIgnore]
 		[Category("Appearance")]
-		public IRenderable Cursor
+		public IBrush Cursor
 		{
 			get; set;
 		}
@@ -168,7 +168,7 @@ namespace Myra.Graphics2D.UI
 		[Browsable(false)]
 		[XmlIgnore]
 		[Category("Appearance")]
-		public IRenderable Selection
+		public IBrush Selection
 		{
 			get; set;
 		}

@@ -12,8 +12,8 @@ namespace Myra.Graphics2D.UI.Styles
 		public LabelStyle LabelStyle { get; set; }
 		public LabelStyle ShortcutStyle { get; set; }
 		public SeparatorStyle SeparatorStyle { get; set; }
-		public IRenderable SelectionHoverBackground { get; set; }
-		public IRenderable SelectionBackground { get; set; }
+		public IBrush SelectionHoverBackground { get; set; }
+		public IBrush SelectionBackground { get; set; }
 		public Color? SpecialCharColor { get; set; }
 
 		public MenuStyle()

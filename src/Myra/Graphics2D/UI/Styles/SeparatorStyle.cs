@@ -2,7 +2,7 @@
 {
 	public class SeparatorStyle: WidgetStyle
 	{
-		public IRenderable Image { get; set; }
+		public IBrush Image { get; set; }
 		public int Thickness { get; set; }
 
 		public SeparatorStyle()

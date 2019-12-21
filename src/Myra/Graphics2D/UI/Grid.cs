@@ -144,11 +144,11 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public IRenderable SelectionBackground { get; set; }
+		public IBrush SelectionBackground { get; set; }
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public IRenderable SelectionHoverBackground { get; set; }
+		public IBrush SelectionHoverBackground { get; set; }
 
 		[Category("Behavior")]
 		[DefaultValue(GridSelectionMode.None)]

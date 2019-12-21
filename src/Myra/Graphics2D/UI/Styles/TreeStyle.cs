@@ -4,11 +4,11 @@
 	{
 		public ImageButtonStyle MarkStyle { get; set; }
 		public LabelStyle LabelStyle { get; set; }
-		public IRenderable SelectionBackground
+		public IBrush SelectionBackground
 		{
 			get; set;
 		}
-		public IRenderable SelectionHoverBackground
+		public IBrush SelectionHoverBackground
 		{
 			get; set;
 		}

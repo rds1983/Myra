@@ -7,9 +7,11 @@ using System.Reflection;
 using System.Xml.Linq;
 using Myra.Attributes;
 using System.Linq;
+using Myra.Graphics2D;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 #else
 using Xenko.Core.Mathematics;
 #endif
@@ -23,6 +25,8 @@ namespace Myra.MML
 		public XElement Save(object obj, bool skipComplex = false, string tagName = null)
 		{
 			var type = obj.GetType();
+
+			var hasResources = obj as IHasResources;
 
 			List<PropertyInfo> complexProperties, simpleProperties;
 			ParseProperties(type, out complexProperties, out simpleProperties);
@@ -56,6 +60,14 @@ namespace Myra.MML
 					if (property.PropertyType == typeof(Color))
 					{
 						str = ((Color)value).ToHexString();
+					}
+					else if (property.PropertyType == typeof(IBrush) || property.PropertyType == typeof(SpriteFont))
+					{
+						str = string.Empty;
+						if (hasResources != null)
+						{
+							hasResources.Resources.TryGetValue(property.Name, out str);
+						}
 					}
 					else
 					{

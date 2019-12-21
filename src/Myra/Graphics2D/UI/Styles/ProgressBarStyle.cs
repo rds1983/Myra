@@ -2,7 +2,7 @@
 {
 	public class ProgressBarStyle: WidgetStyle
 	{
-		public IRenderable Filled { get; set; }
+		public IBrush Filled { get; set; }
 
 		public ProgressBarStyle()
 		{

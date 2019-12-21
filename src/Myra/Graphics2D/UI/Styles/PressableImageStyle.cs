@@ -2,7 +2,7 @@
 {
 	public class PressableImageStyle: ImageStyle
 	{
-		public IRenderable PressedImage { get; set; }
+		public IBrush PressedImage { get; set; }
 
 		public PressableImageStyle()
 		{

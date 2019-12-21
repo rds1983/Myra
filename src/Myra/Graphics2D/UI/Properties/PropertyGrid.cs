@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using Myra.Graphics2D.UI.ColorPicker;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Serialization;
+using Myra.MML;
+using Myra.Graphics2D.UI.File;
+using Myra.Graphics2D.TextureAtlases;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -280,6 +282,468 @@ namespace Myra.Graphics2D.UI.Properties
 			record.SetValue(obj, value);
 		}
 
+		private ComboBox CreateCustomValuesEditor(Record record, object[] customValues, bool hasSetter)
+		{
+			var propertyType = record.Type;
+			var value = record.GetValue(_object);
+
+			var cb = new ComboBox();
+			foreach (var v in customValues)
+			{
+				cb.Items.Add(new ListItem(v.ToString(), null, v));
+			}
+
+			cb.SelectedIndex = Array.IndexOf(customValues, value);
+			if (hasSetter)
+			{
+				cb.SelectedIndexChanged += (sender, args) =>
+				{
+					var item = cb.SelectedIndex != null ? customValues[cb.SelectedIndex.Value] : null;
+					SetValue(record, _object, item);
+					FireChanged(propertyType.Name);
+				};
+			}
+			else
+			{
+				cb.Enabled = false;
+			}
+
+			return cb;
+		}
+
+		private CheckBox CreateBooleanEditor(Record record, bool hasSetter)
+		{
+			var propertyType = record.Type;
+			var value = record.GetValue(_object);
+
+			var isChecked = (bool)value;
+			var cb = new CheckBox
+			{
+				IsPressed = isChecked
+			};
+
+			if (hasSetter)
+			{
+				cb.Click += (sender, args) =>
+				{
+					SetValue(record, _object, cb.IsPressed);
+					FireChanged(propertyType.Name);
+				};
+			}
+			else
+			{
+				cb.Enabled = false;
+			}
+
+			return cb;
+		}
+
+		private Grid CreateColorEditor(Record record, bool hasSetter)
+		{
+			var propertyType = record.Type;
+			var value = record.GetValue(_object);
+
+			var subGrid = new Grid
+			{
+				ColumnSpacing = 8,
+				HorizontalAlignment = HorizontalAlignment.Stretch
+			};
+
+			var isColor = propertyType == typeof(Color);
+
+			subGrid.ColumnsProportions.Add(new Proportion());
+			subGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+
+			var color = Color.Transparent;
+			if (isColor)
+			{
+				color = (Color)value;
+			}
+			else if (value != null)
+			{
+				color = ((Color?)value).Value;
+			}
+
+			var image = new Image
+			{
+				Renderable = DefaultAssets.WhiteRegion,
+				VerticalAlignment = VerticalAlignment.Center,
+				Width = 32,
+				Height = 16,
+				Color = color
+			};
+
+			subGrid.Widgets.Add(image);
+
+			var button = new ImageTextButton
+			{
+				Text = "Change...",
+				ContentHorizontalAlignment = HorizontalAlignment.Center,
+				Tag = value,
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				GridColumn = 1
+			};
+
+			subGrid.Widgets.Add(button);
+
+			if (hasSetter)
+			{
+				button.Click += (sender, args) =>
+				{
+					var dlg = new ColorPickerDialog()
+					{
+						Color = image.Color
+					};
+
+					dlg.Closed += (s, a) =>
+					{
+						if (!dlg.Result)
+						{
+							return;
+						}
+
+						image.Color = dlg.Color;
+						SetValue(record, _object, dlg.Color);
+
+						FireChanged(propertyType.Name);
+					};
+
+					dlg.ShowModal();
+				};
+			}
+			else
+			{
+				button.Enabled = false;
+			}
+
+			return subGrid;
+		}
+
+		private ComboBox CreateEnumEditor(Record record, bool hasSetter)
+		{
+			var propertyType = record.Type;
+			var value = record.GetValue(_object);
+
+			var values = Enum.GetValues(propertyType);
+
+			var cb = new ComboBox();
+			foreach (var v in values)
+			{
+				cb.Items.Add(new ListItem(v.ToString(), null, v));
+			}
+
+			cb.SelectedIndex = Array.IndexOf(values, value);
+
+			if (hasSetter)
+			{
+				cb.SelectedIndexChanged += (sender, args) =>
+				{
+					if (cb.SelectedIndex != -1)
+					{
+						SetValue(record, _object, cb.SelectedIndex);
+						FireChanged(propertyType.Name);
+					}
+				};
+			}
+			else
+			{
+				cb.Enabled = false;
+			}
+
+			return cb;
+		}
+
+		private SpinButton CreateNumericEditor(Record record, bool hasSetter)
+		{
+			var propertyType = record.Type;
+			var value = record.GetValue(_object);
+
+			var numericType = propertyType;
+			if (propertyType.IsNullablePrimitive())
+			{
+				numericType = propertyType.GetNullableType();
+			}
+
+			var spinButton = new SpinButton
+			{
+				Integer = numericType.IsNumericInteger(),
+				Nullable = propertyType.IsNullablePrimitive(),
+				Value = value != null ? (float)Convert.ChangeType(value, typeof(float)) : default(float?)
+			};
+
+			if (hasSetter)
+			{
+				spinButton.ValueChanged += (sender, args) =>
+				{
+					try
+					{
+						object result;
+
+						if (spinButton.Value != null)
+						{
+							result = Convert.ChangeType(spinButton.Value.Value, numericType);
+						}
+						else
+						{
+							result = null;
+						}
+
+						SetValue(record, _object, result);
+
+						if (record.Type.IsValueType)
+						{
+							var tg = this;
+							var pg = tg._parentGrid;
+							while (pg != null && tg._parentProperty != null)
+							{
+								tg._parentProperty.SetValue(pg._object, tg._object);
+
+								if (!tg._parentProperty.Type.IsValueType)
+								{
+									break;
+								}
+
+								tg = pg;
+								pg = tg._parentGrid;
+							}
+						}
+
+						FireChanged(record.Name);
+					}
+					catch (InvalidCastException)
+					{
+						// TODO: Rework this ugly type conversion solution
+					}
+					catch (Exception ex)
+					{
+						spinButton.Value = args.OldValue;
+						var dialog = Dialog.CreateMessageBox("Error", ex.ToString());
+						dialog.ShowModal();
+					}
+				};
+			}
+			else
+			{
+				spinButton.Enabled = false;
+			}
+
+			return spinButton;
+		}
+
+		private TextBox CreateStringEditor(Record record, bool hasSetter)
+		{
+			var propertyType = record.Type;
+			var value = record.GetValue(_object);
+
+			var tf = new TextBox
+			{
+				Text = value != null ? value.ToString() : string.Empty
+			};
+
+			if (hasSetter)
+			{
+				tf.TextChanged += (sender, args) =>
+				{
+					try
+					{
+						object result;
+
+						if (propertyType.IsNullablePrimitive())
+						{
+							if (string.IsNullOrEmpty(tf.Text))
+							{
+								result = null;
+							}
+							else
+							{
+								result = Convert.ChangeType(tf.Text, record.Type.GetNullableType());
+							}
+						}
+						else
+						{
+							result = Convert.ChangeType(tf.Text, record.Type);
+						}
+
+						SetValue(record, _object, result);
+
+						if (record.Type.IsValueType)
+						{
+							var tg = this;
+							var pg = tg._parentGrid;
+							while (pg != null && tg._parentProperty != null)
+							{
+								tg._parentProperty.SetValue(pg._object, tg._object);
+
+								if (!tg._parentProperty.Type.IsValueType)
+								{
+									break;
+								}
+
+								tg = pg;
+								pg = tg._parentGrid;
+							}
+						}
+
+						FireChanged(record.Name);
+					}
+					catch (Exception)
+					{
+						// TODO: Rework this ugly type conversion solution
+					}
+				};
+			}
+			else
+			{
+				tf.Enabled = false;
+			}
+
+			return tf;
+		}
+
+		private Grid CreateCollectionEditor(Record record, Type itemType)
+		{
+			var value = record.GetValue(_object);
+
+			var items = (IList)value;
+
+			var subGrid = new Grid
+			{
+				ColumnSpacing = 8,
+				HorizontalAlignment = HorizontalAlignment.Stretch
+			};
+
+			subGrid.ColumnsProportions.Add(new Proportion());
+			subGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+
+			var label = new Label
+			{
+				VerticalAlignment = VerticalAlignment.Center,
+			};
+			UpdateLabelCount(label, items.Count);
+
+			subGrid.Widgets.Add(label);
+
+			var button = new ImageTextButton
+			{
+				Text = "Change...",
+				ContentHorizontalAlignment = HorizontalAlignment.Center,
+				Tag = value,
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				GridColumn = 1
+			};
+
+			button.Click += (sender, args) =>
+			{
+				var collectionEditor = new CollectionEditor(items, itemType);
+
+				var dialog = Dialog.CreateMessageBox("Edit", collectionEditor);
+
+				dialog.ButtonOk.Click += (o, eventArgs) =>
+				{
+					collectionEditor.SaveChanges();
+					UpdateLabelCount(label, items.Count);
+				};
+
+				dialog.ShowModal();
+			};
+
+			subGrid.Widgets.Add(button);
+
+			return subGrid;
+		}
+
+		private Grid CreateImageEditor(Record record, bool hasSetter)
+		{
+			var propertyType = record.Type;
+			var value = record.GetValue(_object);
+
+			var subGrid = new Grid
+			{
+				ColumnSpacing = 8,
+				HorizontalAlignment = HorizontalAlignment.Stretch
+			};
+
+			subGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+			subGrid.ColumnsProportions.Add(new Proportion());
+
+			var hasResources = _object as IHasResources;
+			var path = string.Empty;
+			if (hasResources != null)
+			{
+				hasResources.Resources.TryGetValue(record.Name, out path);
+			}
+
+			var textBox = new TextBox
+			{
+				Text = path
+			};
+
+			subGrid.Widgets.Add(textBox);
+
+			var button = new ImageTextButton
+			{
+				Text = "Change...",
+				ContentHorizontalAlignment = HorizontalAlignment.Center,
+				Tag = value,
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				GridColumn = 1
+			};
+
+			subGrid.Widgets.Add(button);
+
+			if (hasSetter)
+			{
+				button.Click += (sender, args) =>
+				{
+					var dlg = new FileDialog(FileDialogMode.OpenFile)
+					{
+						Filter = "*.png|*.jpg|*.bmp|*.gif"
+					};
+
+					dlg.FilePath = textBox.Text;
+
+					dlg.Closed += (s, a) =>
+					{
+						if (!dlg.Result)
+						{
+							return;
+						}
+
+						try
+						{
+							Texture2D texture = null;
+							using (var stream = System.IO.File.OpenRead(dlg.FilePath))
+							{
+								texture = Texture2D.FromStream(MyraEnvironment.GraphicsDevice, stream);
+							}
+
+							textBox.Text = dlg.FilePath;
+							var newValue = new TextureRegion(texture);
+							SetValue(record, _object, newValue);
+							if (hasResources != null)
+							{
+								hasResources.Resources[record.Name] = dlg.FilePath;
+							}
+
+							FireChanged(propertyType.Name);
+						}
+						catch(Exception)
+						{
+
+						}
+					};
+
+					dlg.ShowModal();
+				};
+			}
+			else
+			{
+				button.Enabled = false;
+			}
+
+			return subGrid;
+		}
+
 		private void FillSubGrid(ref int y, IReadOnlyList<Record> records)
 		{
 			for (var i = 0; i < records.Count; ++i)
@@ -308,302 +772,30 @@ namespace Myra.Graphics2D.UI.Properties
 						continue;
 					}
 
-					var cb = new ComboBox();
-					foreach (var v in customValues)
-					{
-						cb.Items.Add(new ListItem(v.ToString(), null, v));
-					}
-
-					cb.SelectedIndex = Array.IndexOf(customValues, value);
-					if (hasSetter)
-					{
-						cb.SelectedIndexChanged += (sender, args) =>
-						{
-							var item = cb.SelectedIndex != null ? customValues[cb.SelectedIndex.Value] : null;
-							SetValue(record, _object, item);
-							FireChanged(propertyType.Name);
-						};
-					}
-					else
-					{
-						cb.Enabled = false;
-					}
-
-					valueWidget = cb;
+					valueWidget = CreateCustomValuesEditor(record, customValues, hasSetter);
 				}
 				else if (propertyType == typeof(bool))
 				{
-					var isChecked = (bool)value;
-					var cb = new CheckBox
-					{
-						IsPressed = isChecked
-					};
-
-					if (hasSetter)
-					{
-						cb.Click += (sender, args) =>
-						{
-							SetValue(record, _object, cb.IsPressed);
-							FireChanged(propertyType.Name);
-						};
-					}
-					else
-					{
-						cb.Enabled = false;
-					}
-
-					valueWidget = cb;
-
+					valueWidget = CreateBooleanEditor(record, hasSetter);
 				}
 				else if (propertyType == typeof(Color) || propertyType == typeof(Color?))
 				{
-					var subGrid = new Grid
-					{
-						ColumnSpacing = 8,
-						HorizontalAlignment = HorizontalAlignment.Stretch
-					};
-
-					var isColor = propertyType == typeof(Color);
-
-					subGrid.ColumnsProportions.Add(new Proportion());
-					subGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
-
-					var color = Color.Transparent;
-					if (isColor)
-					{
-						color = (Color)value;
-					}
-					else if (value != null)
-					{
-						color = ((Color?)value).Value;
-					}
-
-					var image = new Image
-					{
-						Renderable = DefaultAssets.WhiteRegion,
-						VerticalAlignment = VerticalAlignment.Center,
-						Width = 32,
-						Height = 16,
-						Color = color
-					};
-
-					subGrid.Widgets.Add(image);
-
-					var button = new ImageTextButton
-					{
-						Text = "Change...",
-						ContentHorizontalAlignment = HorizontalAlignment.Center,
-						Tag = value,
-						HorizontalAlignment = HorizontalAlignment.Stretch,
-						GridColumn = 1
-					};
-
-					subGrid.Widgets.Add(button);
-
-					if (hasSetter)
-					{
-						button.Click += (sender, args) =>
-						{
-							var dlg = new ColorPickerDialog()
-							{
-								Color = image.Color
-							};
-
-							dlg.Closed += (s, a) =>
-							{
-								if (!dlg.Result)
-								{
-									return;
-								}
-
-								image.Color = dlg.Color;
-								SetValue(record, _object, dlg.Color);
-
-								FireChanged(propertyType.Name);
-							};
-
-							dlg.ShowModal();
-						};
-					}
-					else
-					{
-						button.Enabled = false;
-					}
-
-					valueWidget = subGrid;
-				}
-				else if (propertyType.IsAssignableFrom(typeof(IRenderable)))
-				{
+					valueWidget = CreateColorEditor(record, hasSetter);
 				}
 				else if (propertyType.IsEnum)
 				{
-					var values = Enum.GetValues(propertyType);
 
-					var cb = new ComboBox();
-					foreach (var v in values)
-					{
-						cb.Items.Add(new ListItem(v.ToString(), null, v));
-					}
-
-					cb.SelectedIndex = Array.IndexOf(values, value);
-
-					if (hasSetter)
-					{
-						cb.SelectedIndexChanged += (sender, args) =>
-						{
-							if (cb.SelectedIndex != -1)
-							{
-								SetValue(record, _object, cb.SelectedIndex);
-								FireChanged(propertyType.Name);
-							}
-						};
-					}
-					else
-					{
-						cb.Enabled = false;
-					}
-
-					valueWidget = cb;
+					valueWidget = CreateEnumEditor(record, hasSetter);
 				}
 				else if (propertyType.IsNumericType() ||
 						 (propertyType.IsNullablePrimitive() && propertyType.GetNullableType().IsNumericType()))
 				{
-					var numericType = propertyType;
-					if (propertyType.IsNullablePrimitive())
-					{
-						numericType = propertyType.GetNullableType();
-					}
 
-					var spinButton = new SpinButton
-					{
-						Integer = numericType.IsNumericInteger(),
-						Nullable = propertyType.IsNullablePrimitive(),
-						Value = value != null ? (float)Convert.ChangeType(value, typeof(float)) : default(float?)
-					};
-
-					if (hasSetter)
-					{
-						spinButton.ValueChanged += (sender, args) =>
-						{
-							try
-							{
-								object result;
-
-								if (spinButton.Value != null)
-								{
-									result = Convert.ChangeType(spinButton.Value.Value, numericType);
-								}
-								else
-								{
-									result = null;
-								}
-
-								SetValue(record, _object, result);
-
-								if (record.Type.IsValueType)
-								{
-									var tg = this;
-									var pg = tg._parentGrid;
-									while (pg != null && tg._parentProperty != null)
-									{
-										tg._parentProperty.SetValue(pg._object, tg._object);
-
-										if (!tg._parentProperty.Type.IsValueType)
-										{
-											break;
-										}
-
-										tg = pg;
-										pg = tg._parentGrid;
-									}
-								}
-
-								FireChanged(record.Name);
-							}
-							catch (InvalidCastException)
-							{
-								// TODO: Rework this ugly type conversion solution
-							}
-							catch (Exception ex)
-							{
-								spinButton.Value = args.OldValue;
-								var dialog = Dialog.CreateMessageBox("Error", ex.ToString());
-								dialog.ShowModal();
-							}
-						};
-					}
-					else
-					{
-						spinButton.Enabled = false;
-					}
-
-					valueWidget = spinButton;
+					valueWidget = CreateNumericEditor(record, hasSetter);
 				}
 				else if (propertyType == typeof(string) || propertyType.IsPrimitive || propertyType.IsNullablePrimitive())
 				{
-					var tf = new TextBox
-					{
-						Text = value != null ? value.ToString() : string.Empty
-					};
-
-					if (hasSetter)
-					{
-						tf.TextChanged += (sender, args) =>
-						{
-							try
-							{
-								object result;
-
-								if (propertyType.IsNullablePrimitive())
-								{
-									if (string.IsNullOrEmpty(tf.Text))
-									{
-										result = null;
-									}
-									else
-									{
-										result = Convert.ChangeType(tf.Text, record.Type.GetNullableType());
-									}
-								}
-								else
-								{
-									result = Convert.ChangeType(tf.Text, record.Type);
-								}
-
-								SetValue(record, _object, result);
-
-								if (record.Type.IsValueType)
-								{
-									var tg = this;
-									var pg = tg._parentGrid;
-									while (pg != null && tg._parentProperty != null)
-									{
-										tg._parentProperty.SetValue(pg._object, tg._object);
-
-										if (!tg._parentProperty.Type.IsValueType)
-										{
-											break;
-										}
-
-										tg = pg;
-										pg = tg._parentGrid;
-									}
-								}
-
-								FireChanged(record.Name);
-							}
-							catch (Exception)
-							{
-								// TODO: Rework this ugly type conversion solution
-							}
-						};
-					}
-					else
-					{
-						tf.Enabled = false;
-					}
-
-					valueWidget = tf;
+					valueWidget = CreateStringEditor(record, hasSetter);
 				}
 				else if (typeof(IList).IsAssignableFrom(propertyType))
 				{
@@ -615,56 +807,19 @@ namespace Myra.Graphics2D.UI.Properties
 							var itemType = it.GenericTypeArguments[0];
 							if (value != null)
 							{
-								var items = (IList)value;
-
-								var subGrid = new Grid
-								{
-									ColumnSpacing = 8,
-									HorizontalAlignment = HorizontalAlignment.Stretch
-								};
-
-								subGrid.ColumnsProportions.Add(new Proportion());
-								subGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
-
-								var label = new Label
-								{
-									VerticalAlignment = VerticalAlignment.Center,
-								};
-								UpdateLabelCount(label, items.Count);
-
-								subGrid.Widgets.Add(label);
-
-								var button = new ImageTextButton
-								{
-									Text = "Change...",
-									ContentHorizontalAlignment = HorizontalAlignment.Center,
-									Tag = value,
-									HorizontalAlignment = HorizontalAlignment.Stretch,
-									GridColumn = 1
-								};
-
-								button.Click += (sender, args) =>
-								{
-									var collectionEditor = new CollectionEditor(items, itemType);
-
-									var dialog = Dialog.CreateMessageBox("Edit", collectionEditor);
-
-									dialog.ButtonOk.Click += (o, eventArgs) =>
-									{
-										collectionEditor.SaveChanges();
-										UpdateLabelCount(label, items.Count);
-									};
-
-									dialog.ShowModal();
-								};
-
-								subGrid.Widgets.Add(button);
-								valueWidget = subGrid;
+								valueWidget = CreateCollectionEditor(record, itemType);
 							}
 						}
 					}
 				}
-				else if (!(value is SpriteFont) && !(value is IRenderable))
+				else if (propertyType == typeof(SpriteFont))
+				{
+				}
+				else if (propertyType == typeof(IBrush))
+				{
+					valueWidget = CreateImageEditor(record, hasSetter);
+				}
+				else
 				{
 					// Subgrid
 					if (value != null)

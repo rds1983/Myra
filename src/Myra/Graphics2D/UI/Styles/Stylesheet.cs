@@ -589,7 +589,7 @@ namespace Myra.Graphics2D.UI.Styles
 		}
 
 		public static Stylesheet LoadFromSource(string stylesheetXml,
-			Func<string, IRenderable> textureGetter,
+			Func<string, IBrush> textureGetter,
 			Func<string, SpriteFont> fontGetter)
 		{
 			var xDoc = XDocument.Parse(stylesheetXml);

@@ -12,11 +12,11 @@ namespace Myra.Graphics2D.UI
 {
 	public class Image : Widget
 	{
-		private IRenderable _image, _overImage, _pressedImage;
+		private IBrush _image, _overImage, _pressedImage;
 		private Color _color = Color.White;
 
-		[Browsable(false)]
-		public IRenderable Renderable
+		[Category("Appearance")]
+		public IBrush Renderable
 		{
 			get
 			{
@@ -35,9 +35,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
-		public IRenderable OverRenderable
+		[Category("Appearance")]
+		public IBrush OverRenderable
 		{
 			get
 			{
@@ -56,9 +55,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
-		public IRenderable PressedRenderable
+		[Category("Appearance")]
+		public IBrush PressedRenderable
 		{
 			get
 			{

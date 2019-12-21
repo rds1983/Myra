@@ -2,10 +2,10 @@
 {
 	public class ScrollViewerStyle : WidgetStyle
 	{
-		public IRenderable HorizontalScrollBackground { get; set; }
-		public IRenderable HorizontalScrollKnob { get; set; }
-		public IRenderable VerticalScrollBackground { get; set; }
-		public IRenderable VerticalScrollKnob { get; set; }
+		public IBrush HorizontalScrollBackground { get; set; }
+		public IBrush HorizontalScrollKnob { get; set; }
+		public IBrush VerticalScrollBackground { get; set; }
+		public IBrush VerticalScrollKnob { get; set; }
 
 		public ScrollViewerStyle()
 		{

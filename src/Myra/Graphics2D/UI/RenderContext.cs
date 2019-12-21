@@ -66,7 +66,7 @@ namespace Myra.Graphics2D.UI
 		/// <param name="renderable"></param>
 		/// <param name="rectangle"></param>
 		/// <param name="color"></param>
-		public void Draw(IRenderable renderable, Rectangle rectangle, Color? color = null)
+		public void Draw(IBrush renderable, Rectangle rectangle, Color? color = null)
 		{
 			var c = color != null ? color.Value : Color.White;
 			renderable.Draw(Batch, rectangle, c * Opacity);
@@ -78,7 +78,7 @@ namespace Myra.Graphics2D.UI
 		/// <param name="renderable"></param>
 		/// <param name="rectangle"></param>
 		/// <param name="color"></param>
-		public void Draw(IRenderable renderable, Point location, Color? color = null)
+		public void Draw(IBrush renderable, Point location, Color? color = null)
 		{
 			var c = color != null ? color.Value : Color.White;
 			renderable.Draw(Batch, new Rectangle(location.X, location.Y, renderable.Size.X, renderable.Size.Y), c * Opacity);

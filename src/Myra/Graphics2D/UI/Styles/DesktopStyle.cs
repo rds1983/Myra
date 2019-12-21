@@ -2,7 +2,7 @@
 {
 	public class DesktopStyle
 	{
-		public IRenderable Background
+		public IBrush Background
 		{
 			get; set;
 		}

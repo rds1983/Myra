@@ -3,6 +3,8 @@ using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Serialization;
+using System.Collections.Generic;
+using Myra.MML;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -14,7 +16,7 @@ using Xenko.Input;
 
 namespace Myra.Graphics2D.UI
 {
-	public class Widget : IItemWithId
+	public class Widget : IItemWithId, IHasResources
 	{
 		internal enum LayoutState
 		{
@@ -500,6 +502,13 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// External files used by this widget
+		/// </summary>
+		[XmlIgnore]
+		[Browsable(false)]
+		public Dictionary<string, string> Resources { get; private set; } = new Dictionary<string, string>();
+
 		protected internal bool Active
 		{
 			get
@@ -539,55 +548,29 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
 		[Category("Appearance")]
-		public IRenderable Background { get; set; }
+		public IBrush Background { get; set; }
 
-		[Browsable(false)]
-		[XmlIgnore]
 		[Category("Appearance")]
-		public IRenderable OverBackground { get; set; }
+		public IBrush OverBackground { get; set; }
 
-		[Browsable(false)]
-		[XmlIgnore]
 		[Category("Appearance")]
-		public IRenderable DisabledBackground { get; set; }
+		public IBrush DisabledBackground { get; set; }
 
-		[Browsable(false)]
-		[XmlIgnore]
 		[Category("Appearance")]
-		public IRenderable FocusedBackground { get; set; }
+		public IBrush FocusedBackground { get; set; }
 
-		[Browsable(false)]
-		[XmlIgnore]
 		[Category("Appearance")]
-		public IRenderable DisabledOverBackground { get; set; }
+		public IBrush Border { get; set; }
 
-		[Browsable(false)]
-		[XmlIgnore]
 		[Category("Appearance")]
-		public IRenderable OverrideBackground { get; set; }
+		public IBrush OverBorder { get; set; }
 
-		[Browsable(false)]
-		[XmlIgnore]
 		[Category("Appearance")]
-		public IRenderable Border { get; set; }
+		public IBrush DisabledBorder { get; set; }
 
-		[Browsable(false)]
-		[XmlIgnore]
 		[Category("Appearance")]
-		public IRenderable OverBorder { get; set; }
-
-		[Browsable(false)]
-		[XmlIgnore]
-		[Category("Appearance")]
-		public IRenderable DisabledBorder { get; set; }
-
-		[Browsable(false)]
-		[XmlIgnore]
-		[Category("Appearance")]
-		public IRenderable FocusedBorder { get; set; }
+		public IBrush FocusedBorder { get; set; }
 
 		[Category("Appearance")]
 		[DefaultValue(false)]
@@ -744,7 +727,7 @@ namespace Myra.Graphics2D.UI
 			Enabled = true;
 		}
 
-		public virtual IRenderable GetCurrentBackground()
+		public virtual IBrush GetCurrentBackground()
 		{
 			var result = Background;
 
@@ -758,20 +741,13 @@ namespace Myra.Graphics2D.UI
 			}
 			else if (UseHoverRenderable && OverBackground != null)
 			{
-				if (!Enabled && DisabledOverBackground != null)
-				{
-					result = DisabledOverBackground;
-				}
-				else if (Enabled && OverBackground != null)
-				{
-					result = OverBackground;
-				}
+				result = OverBackground;
 			}
 
 			return result;
 		}
 
-		public virtual IRenderable GetCurrentBorder()
+		public virtual IBrush GetCurrentBorder()
 		{
 			var result = Border;
 			if (!Enabled && DisabledBorder != null)

@@ -9,7 +9,7 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		[Browsable(false)]
 		[Category("Appearance")]
-		public IRenderable Image
+		public IBrush Image
 		{
 			get
 			{
@@ -25,7 +25,7 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		[Browsable(false)]
 		[Category("Appearance")]
-		public IRenderable OverImage
+		public IBrush OverImage
 		{
 			get
 			{
@@ -41,7 +41,7 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		[Browsable(false)]
 		[Category("Appearance")]
-		public IRenderable PressedImage
+		public IBrush PressedImage
 		{
 			get
 			{

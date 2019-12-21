@@ -2,7 +2,7 @@
 {
 	public class ButtonStyle: WidgetStyle
 	{
-		public IRenderable PressedBackground { get; set; }
+		public IBrush PressedBackground { get; set; }
 
 		public ButtonStyle()
 		{
