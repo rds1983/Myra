@@ -152,13 +152,30 @@ namespace Myra.Graphics2D.UI
 
 		internal static LoadContext CreateLoadContext(IAssetManager assetManager, Stylesheet stylesheet)
 		{
+			Func<Type, string, object> resourceGetter = (t, name) =>
+			{
+				if (t == typeof(IBrush))
+				{
+					return assetManager.Load<IBrush>(name);
+				}
+				else if (t == typeof(IImage))
+				{
+					return assetManager.Load<TextureRegion>(name);
+				}
+				else if (t == typeof(SpriteFont))
+				{
+					return assetManager.Load<SpriteFont>(name);
+				}
+
+				throw new Exception(string.Format("Type {0} isn't supported", t.Name));
+			};
+
 			return new LoadContext
 			{
 				LegacyClassNames = LegacyClassNames,
 				ObjectCreator = (t, el) => CreateItem(t, el, stylesheet),
 				Namespace = typeof(Widget).Namespace,
-				TextureGetter = name => assetManager.Load<TextureRegion>(name),
-				FontGetter = name => assetManager.Load<SpriteFont>(name)
+				ResourceGetter = resourceGetter
 			};
 		}
 

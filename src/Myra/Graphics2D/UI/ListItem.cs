@@ -20,7 +20,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public IBrush Image { get; set; }
+		public IImage Image { get; set; }
 
 		[Browsable(false)]
 		[XmlIgnore]

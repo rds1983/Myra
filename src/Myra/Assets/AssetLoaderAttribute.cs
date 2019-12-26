@@ -2,7 +2,7 @@
 
 namespace Myra.Assets
 {
-	[AttributeUsage(AttributeTargets.Class)]
+	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class)]
 	public class AssetLoaderAttribute : Attribute
 	{
 		public Type AssetLoaderType { get; private set; }

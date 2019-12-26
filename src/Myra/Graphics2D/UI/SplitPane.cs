@@ -218,9 +218,14 @@ namespace Myra.Graphics2D.UI
 
 			var i = 0;
 
-			var handleSize = Orientation == Orientation.Horizontal
-				? HandleStyle.Background.Size.X
-				: HandleStyle.Background.Size.Y;
+			var handleSize = 0;
+			var asImage = HandleStyle.Background as IImage;
+			if (asImage != null)
+			{
+				handleSize = Orientation == Orientation.Horizontal
+					? asImage.Size.X
+					: asImage.Size.Y;
+			}
 
 			foreach (var w in _widgets)
 			{

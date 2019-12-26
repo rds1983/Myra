@@ -2,7 +2,7 @@
 
 namespace Myra.Assets
 {
-	public class Texture2DLoader : IAssetLoader<Texture2D>
+	internal class Texture2DLoader : IAssetLoader<Texture2D>
 	{
 		public Texture2D Load(AssetLoaderContext context, string assetName)
 		{

@@ -13,7 +13,7 @@ using Texture2D = Xenko.Graphics.Texture;
 namespace Myra.Graphics2D.TextureAtlases
 {
 	[AssetLoader(typeof(TextureRegionLoader))]
-	public class TextureRegion: IBrush
+	public class TextureRegion: IImage
 	{
 		private readonly Texture2D _texture;
 		private readonly Rectangle _bounds;

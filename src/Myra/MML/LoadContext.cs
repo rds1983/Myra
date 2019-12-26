@@ -32,8 +32,7 @@ namespace Myra.MML
 		public Func<Type, XElement, object> ObjectCreator = (type, el) => Activator.CreateInstance(type);
 		public string Namespace;
 		public Assembly Assembly = typeof(Widget).Assembly;
-		public Func<string, IBrush> TextureGetter = null;
-		public Func<string, SpriteFont> FontGetter = null;
+		public Func<Type, string, object> ResourceGetter = null;
 
 		public void Load(object obj, XElement el)
 		{
@@ -76,28 +75,15 @@ namespace Myra.MML
 							value = attr.Value.FromName();
 						}
 					}
-					else if (propertyType == typeof(IBrush) && TextureGetter != null)
+					else if ((typeof(IBrush).IsAssignableFrom(propertyType) ||
+							 propertyType == typeof(SpriteFont)) && ResourceGetter != null)
 					{
-						var texture = TextureGetter(attr.Value);
+						var texture = ResourceGetter(propertyType, attr.Value);
 						if (texture == null)
 						{
-							throw new Exception(string.Format("Could not find renderable '{0}'", attr.Value));
+							throw new Exception(string.Format("Could not find resource '{0}'", attr.Value));
 						}
 						value = texture;
-
-						if (hasResources != null)
-						{
-							hasResources.Resources[property.Name] = attr.Value;
-						}
-					}
-					else if (propertyType == typeof(SpriteFont) && FontGetter != null)
-					{
-						var font = FontGetter(attr.Value);
-						if (font == null)
-						{
-							throw new Exception(string.Format("Could not find font '{0}'", attr.Value));
-						}
-						value = font;
 
 						if (hasResources != null)
 						{

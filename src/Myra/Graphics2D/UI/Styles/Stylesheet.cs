@@ -608,13 +608,25 @@ namespace Myra.Graphics2D.UI.Styles
 				}
 			}
 
+			Func<Type, string, object> resourceGetter = (t, s) =>
+			{
+				if (typeof(IBrush).IsAssignableFrom(t))
+				{
+					return textureGetter(s);
+				} else if (t == typeof(SpriteFont))
+				{
+					return fontGetter(s);
+				}
+
+				throw new Exception(string.Format("Type {0} isn't supported", t.Name));
+			};
+
 			var result = new Stylesheet();
 
 			var loadContext = new LoadContext
 			{
 				Namespace = typeof(WidgetStyle).Namespace,
-				TextureGetter = textureGetter,
-				FontGetter = fontGetter,
+				ResourceGetter = resourceGetter,
 				NodesToIgnore = new HashSet<string>(new[] { "Designer", "Colors", "Fonts" }),
 				LegacyClassNames = LegacyClassNames,
 				LegacyPropertyNames = LegacyPropertyNames,

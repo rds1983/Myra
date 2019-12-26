@@ -3,7 +3,7 @@ using Myra.Assets;
 
 namespace Myra.Graphics2D.TextureAtlases
 {
-	public class TextureRegionAtlasLoader : IAssetLoader<TextureRegionAtlas>
+	internal class TextureRegionAtlasLoader : IAssetLoader<TextureRegionAtlas>
 	{
 		public TextureRegionAtlas Load(AssetLoaderContext context, string assetName)
 		{

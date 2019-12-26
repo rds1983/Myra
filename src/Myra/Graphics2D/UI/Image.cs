@@ -12,11 +12,10 @@ namespace Myra.Graphics2D.UI
 {
 	public class Image : Widget
 	{
-		private IBrush _image, _overImage, _pressedImage;
-		private Color _color = Color.White;
+		private IImage _image, _overImage, _pressedImage;
 
 		[Category("Appearance")]
-		public IBrush Renderable
+		public IImage Renderable
 		{
 			get
 			{
@@ -36,7 +35,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
-		public IBrush OverRenderable
+		public IImage OverRenderable
 		{
 			get
 			{
@@ -56,7 +55,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
-		public IBrush PressedRenderable
+		public IImage PressedRenderable
 		{
 			get
 			{
@@ -83,18 +82,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[DefaultValue("#FFFFFFFF")]
-		public Color Color
-		{
-			get
-			{
-				return _color;
-			}
-
-			set
-			{
-				_color = value;
-			}
-		}
+		public Color Color { get; set; } = Color.White;
 
 		protected override Point InternalMeasure(Point availableSize)
 		{

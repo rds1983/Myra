@@ -1,6 +1,6 @@
 ﻿namespace Myra.Assets
 {
-	public class StringLoader: IAssetLoader<string>
+	internal class StringLoader: IAssetLoader<string>
 	{
 		public string Load(AssetLoaderContext context, string assetName)
 		{

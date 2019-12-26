@@ -93,7 +93,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public IBrush Image
+		public IImage Image
 		{
 			get; set;
 		}

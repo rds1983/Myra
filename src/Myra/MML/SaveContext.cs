@@ -61,7 +61,7 @@ namespace Myra.MML
 					{
 						str = ((Color)value).ToHexString();
 					}
-					else if (property.PropertyType == typeof(IBrush) || property.PropertyType == typeof(SpriteFont))
+					else if (typeof(IBrush).IsAssignableFrom(property.PropertyType) || property.PropertyType == typeof(SpriteFont))
 					{
 						str = string.Empty;
 						if (hasResources != null)

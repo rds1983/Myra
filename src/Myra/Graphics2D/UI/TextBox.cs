@@ -160,7 +160,7 @@ namespace Myra.Graphics2D.UI
 		[Browsable(false)]
 		[XmlIgnore]
 		[Category("Appearance")]
-		public IBrush Cursor
+		public IImage Cursor
 		{
 			get; set;
 		}

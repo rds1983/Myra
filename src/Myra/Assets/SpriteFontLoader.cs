@@ -4,7 +4,7 @@ using SpriteFontPlus;
 
 namespace Myra.Assets
 {
-	public class SpriteFontLoader : IAssetLoader<SpriteFont>
+	internal class SpriteFontLoader : IAssetLoader<SpriteFont>
 	{
 		public SpriteFont Load(AssetLoaderContext context, string assetName)
 		{

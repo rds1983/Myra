@@ -17,7 +17,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public SpriteFont Font { get; set; }
 		public SpriteFont MessageFont { get; set; }
 
-		public IBrush Cursor { get; set; }
+		public IImage Cursor { get; set; }
 		public IBrush Selection { get; set; }
 
 		public TextBoxStyle()

@@ -817,6 +817,10 @@ namespace Myra.Graphics2D.UI.Properties
 				}
 				else if (propertyType == typeof(IBrush))
 				{
+//					valueWidget = CreateImageEditor(record, hasSetter);
+				}
+				else if (propertyType == typeof(IImage))
+				{
 					valueWidget = CreateImageEditor(record, hasSetter);
 				}
 				else

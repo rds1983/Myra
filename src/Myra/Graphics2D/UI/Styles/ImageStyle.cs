@@ -2,8 +2,8 @@
 {
 	public class ImageStyle: WidgetStyle
 	{
-		public IBrush Image { get; set; }
-		public IBrush OverImage { get; set; }
+		public IImage Image { get; set; }
+		public IImage OverImage { get; set; }
 
 		public ImageStyle()
 		{

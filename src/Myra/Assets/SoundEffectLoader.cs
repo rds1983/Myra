@@ -2,7 +2,7 @@
 
 namespace Myra.Assets
 {
-	public class SoundEffectLoader: IAssetLoader<SoundEffect>
+	internal class SoundEffectLoader: IAssetLoader<SoundEffect>
 	{
 		public SoundEffect Load(AssetLoaderContext context, string assetName)
 		{
