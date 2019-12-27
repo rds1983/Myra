@@ -10,6 +10,7 @@ using System.Xml.Serialization;
 using Myra.MML;
 using Myra.Graphics2D.UI.File;
 using Myra.Graphics2D.TextureAtlases;
+using Myra.Assets;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -155,6 +156,7 @@ namespace Myra.Graphics2D.UI.Properties
 		private readonly HashSet<string> _expandedCategories = new HashSet<string>();
 		private object _object;
 		private bool _ignoreCollections;
+		private IAssetManager _assetManager;
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -208,6 +210,30 @@ namespace Myra.Graphics2D.UI.Properties
 			get
 			{
 				return InternalChild.Widgets.Count == 0;
+			}
+		}
+
+		public IAssetManager AssetManager
+		{
+			get
+			{
+				if (_parentGrid != null)
+				{
+					return _parentGrid.AssetManager;
+				}
+
+				return _assetManager;
+			}
+
+			set
+			{
+				if (_parentGrid != null)
+				{
+					_parentGrid.AssetManager = value;
+				} else
+				{
+					_assetManager = value;
+				}
 			}
 		}
 
@@ -405,6 +431,85 @@ namespace Myra.Graphics2D.UI.Properties
 						image.Color = dlg.Color;
 						SetValue(record, _object, dlg.Color);
 
+						FireChanged(propertyType.Name);
+					};
+
+					dlg.ShowModal();
+				};
+			}
+			else
+			{
+				button.Enabled = false;
+			}
+
+			return subGrid;
+		}
+
+		private Grid CreateBrushEditor(Record record, bool hasSetter)
+		{
+			var propertyType = record.Type;
+			var value = (SolidBrush)record.GetValue(_object);
+
+			var subGrid = new Grid
+			{
+				ColumnSpacing = 8,
+				HorizontalAlignment = HorizontalAlignment.Stretch
+			};
+
+			subGrid.ColumnsProportions.Add(new Proportion());
+			subGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+
+			var color = Color.Transparent;
+			if (value != null)
+			{
+				color = value.Color;
+			}
+
+			var image = new Image
+			{
+				Renderable = DefaultAssets.WhiteRegion,
+				VerticalAlignment = VerticalAlignment.Center,
+				Width = 32,
+				Height = 16,
+				Color = color
+			};
+
+			subGrid.Widgets.Add(image);
+
+			var button = new ImageTextButton
+			{
+				Text = "Change...",
+				ContentHorizontalAlignment = HorizontalAlignment.Center,
+				Tag = value,
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				GridColumn = 1
+			};
+
+			subGrid.Widgets.Add(button);
+
+			if (hasSetter)
+			{
+				button.Click += (sender, args) =>
+				{
+					var dlg = new ColorPickerDialog()
+					{
+						Color = image.Color
+					};
+
+					dlg.Closed += (s, a) =>
+					{
+						if (!dlg.Result)
+						{
+							return;
+						}
+
+						image.Color = dlg.Color;
+						SetValue(record, _object, new SolidBrush(dlg.Color));
+						var hasResources = _object as IHasResources;
+						if (hasResources != null)
+						{
+							hasResources.Resources[record.Name] = dlg.Color.ToHexString();
+						}
 						FireChanged(propertyType.Name);
 					};
 
@@ -652,8 +757,13 @@ namespace Myra.Graphics2D.UI.Properties
 			return subGrid;
 		}
 
-		private Grid CreateImageEditor(Record record, bool hasSetter)
+		private Grid CreateFileEditor<T>(Record record, bool hasSetter, string filter)
 		{
+			if (AssetManager == null)
+			{
+				return null;
+			}
+
 			var propertyType = record.Type;
 			var value = record.GetValue(_object);
 
@@ -697,7 +807,7 @@ namespace Myra.Graphics2D.UI.Properties
 				{
 					var dlg = new FileDialog(FileDialogMode.OpenFile)
 					{
-						Filter = "*.png|*.jpg|*.bmp|*.gif"
+						Filter = filter
 					};
 
 					dlg.FilePath = textBox.Text;
@@ -711,14 +821,9 @@ namespace Myra.Graphics2D.UI.Properties
 
 						try
 						{
-							Texture2D texture = null;
-							using (var stream = System.IO.File.OpenRead(dlg.FilePath))
-							{
-								texture = Texture2D.FromStream(MyraEnvironment.GraphicsDevice, stream);
-							}
+							var newValue = AssetManager.Load<T>(dlg.FilePath);
 
 							textBox.Text = dlg.FilePath;
-							var newValue = new TextureRegion(texture);
 							SetValue(record, _object, newValue);
 							if (hasResources != null)
 							{
@@ -814,14 +919,15 @@ namespace Myra.Graphics2D.UI.Properties
 				}
 				else if (propertyType == typeof(SpriteFont))
 				{
+					valueWidget = CreateFileEditor<SpriteFont>(record, hasSetter, "*.fnt");
 				}
 				else if (propertyType == typeof(IBrush))
 				{
-//					valueWidget = CreateImageEditor(record, hasSetter);
+					valueWidget = CreateBrushEditor(record, hasSetter);
 				}
 				else if (propertyType == typeof(IImage))
 				{
-					valueWidget = CreateImageEditor(record, hasSetter);
+					valueWidget = CreateFileEditor<TextureRegion>(record, hasSetter, "*.png|*.jpg|*.bmp|*.gif");
 				}
 				else
 				{

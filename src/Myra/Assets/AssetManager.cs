@@ -54,7 +54,7 @@ namespace Myra.Assets
 			_loaders[typeof(T)] = new LoaderInfo(loader, storeInCache);
 		}
 
-		public void Unload()
+		public void ClearCache()
 		{
 			// TODO: resources disposal
 			_cache.Clear();

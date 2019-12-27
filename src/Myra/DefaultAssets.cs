@@ -168,7 +168,7 @@ namespace Myra
 			_uiStylesheet = null;
 			Stylesheet.Current = null;
 
-			_assetManager.Unload();
+			_assetManager.ClearCache();
 
 			_whiteRegion = null;
 			if (_white != null)

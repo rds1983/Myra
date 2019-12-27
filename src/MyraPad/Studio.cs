@@ -39,7 +39,6 @@ namespace MyraPad
 		private string _lastFolder;
 		private bool _isDirty;
 		private readonly AssetManager _stylesheetAssetManager = new AssetManager(new FileAssetResolver("..."));
-		private AssetManager _assetManager;
 		private Project _project;
 		private bool _needsCloseTag;
 		private string _parentTag;
@@ -196,6 +195,19 @@ namespace MyraPad
 				}
 
 				return _ui._textSource.Text.Substring(_currentTagStart.Value, _currentTagEnd.Value - _currentTagStart.Value + 1);
+			}
+		}
+
+		private IAssetManager _assetManager
+		{
+			get
+			{
+				return _propertyGrid.AssetManager;
+			}
+
+			set
+			{
+				_propertyGrid.AssetManager = value;
 			}
 		}
 
@@ -1026,7 +1038,7 @@ namespace MyraPad
 
 		private void OnMenuFileLoadStylesheet(object sender, EventArgs e)
 		{
-			_stylesheetAssetManager.Unload();
+			_stylesheetAssetManager.ClearCache();
 
 			var dlg = new FileDialog(FileDialogMode.OpenFile)
 			{
@@ -1104,7 +1116,7 @@ namespace MyraPad
 
 		private void OnMenuFileReloadStylesheet(object sender, EventArgs e)
 		{
-			_stylesheetAssetManager.Unload();
+			_stylesheetAssetManager.ClearCache();
 
 			if (string.IsNullOrEmpty(Project.StylesheetPath))
 			{
@@ -1116,7 +1128,7 @@ namespace MyraPad
 
 		private void OnMenuFileResetStylesheetSelected(object sender, EventArgs e)
 		{
-			_stylesheetAssetManager.Unload();
+			_stylesheetAssetManager.ClearCache();
 
 			Project.StylesheetPath = null;
 			UpdateSource();

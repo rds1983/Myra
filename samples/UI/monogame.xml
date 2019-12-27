@@ -1,5 +1,6 @@
 <Project>
-  <Panel>
+  <Panel Background="#FFFFFFFF" >
     <Image Renderable="LogoOnly_64px.png" HorizontalAlignment="Center" VerticalAlignment="Center" />
+    <Label Text="My Game" TextColor="#0000FFFF" HorizontalAlignment="Center" />
   </Panel>
 </Project>
