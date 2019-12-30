@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Reflection;
 
 #if !XENKO
 using Microsoft.Xna.Framework;

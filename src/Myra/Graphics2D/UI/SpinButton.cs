@@ -292,7 +292,13 @@ namespace Myra.Graphics2D.UI
 				return null;
 			}
 
-			return float.Parse(s);
+			float f;
+			if (!float.TryParse(s, out f))
+			{
+				return null;
+			}
+
+			return f;
 		}
 
 		private void TextBoxOnTextChanged(object sender, ValueChangedEventArgs<string> eventArgs)

@@ -198,16 +198,19 @@ namespace MyraPad
 			}
 		}
 
-		private IAssetManager _assetManager
+		private PropertyGridSettings PropertyGridSettings
 		{
 			get
 			{
-				return _propertyGrid.AssetManager;
+				return _propertyGrid.Settings;
 			}
+		}
 
-			set
+		private IAssetManager AssetManager
+		{
+			get
 			{
-				_propertyGrid.AssetManager = value;
+				return PropertyGridSettings.AssetManager;
 			}
 		}
 
@@ -475,7 +478,7 @@ namespace MyraPad
 		{
 			try
 			{
-				var project = Project.LoadFromXml(_ui._textSource.Text, _assetManager, _project.Stylesheet);
+				var project = Project.LoadFromXml(_ui._textSource.Text, AssetManager, _project.Stylesheet);
 				_ui._textSource.Text = _project.Save();
 			}
 			catch (Exception ex)
@@ -624,7 +627,7 @@ namespace MyraPad
 							}
 						}
 
-						var newProject = Project.LoadFromXml(xDoc, _assetManager, stylesheet);
+						var newProject = Project.LoadFromXml(xDoc, AssetManager, stylesheet);
 						_newProjectsQueue.Enqueue(newProject);
 
 						_ui._textStatus.Text = string.Empty;
@@ -945,7 +948,7 @@ namespace MyraPad
 			try
 			{
 				var xml = (string)state;
-				_newObject = Project.LoadObjectFromXml(xml, _assetManager);
+				_newObject = Project.LoadObjectFromXml(xml, AssetManager);
 			}
 			catch (Exception)
 			{
@@ -1089,22 +1092,7 @@ namespace MyraPad
 				}
 
 				// Try to make stylesheet path relative to project folder
-				try
-				{
-					var fullPathUri = new Uri(filePath, UriKind.Absolute);
-
-					var folderPath = Path.GetDirectoryName(FilePath);
-					if (!folderPath.EndsWith(Path.DirectorySeparatorChar.ToString()))
-					{
-						folderPath += Path.DirectorySeparatorChar;
-					}
-					var folderPathUri = new Uri(folderPath, UriKind.Absolute);
-
-					filePath = folderPathUri.MakeRelativeUri(fullPathUri).ToString();
-				}
-				catch (Exception)
-				{
-				}
+				filePath = PathUtils.TryToMakePathRelativeTo(filePath, Path.GetDirectoryName(FilePath));
 
 				Project.StylesheetPath = filePath;
 				UpdateSource();
@@ -1434,7 +1422,10 @@ namespace MyraPad
 				return;
 			}
 
-			_assetManager = new AssetManager(new FileAssetResolver(Path.GetDirectoryName(filePath)));
+			var folder = Path.GetDirectoryName(filePath);
+			PropertyGridSettings.BasePath = folder;
+			PropertyGridSettings.AssetManager = new AssetManager(new FileAssetResolver(folder));
+
 			File.WriteAllText(filePath, _ui._textSource.Text);
 
 			FilePath = filePath;
@@ -1479,14 +1470,26 @@ namespace MyraPad
 		{
 			try
 			{
-				_assetManager = new AssetManager(new FileAssetResolver(Path.GetDirectoryName(filePath)));
+				var folder = Path.GetDirectoryName(filePath);
+				PropertyGridSettings.BasePath = folder;
+				PropertyGridSettings.AssetManager = new AssetManager(new FileAssetResolver(folder));
 
 				var data = File.ReadAllText(filePath);
 
 				FilePath = filePath;
 
-				_ui._textSource.Text = data;
-				_ui._textSource.CursorPosition = 0;
+				try
+				{
+					_suppressProjectRefresh = true;
+					_ui._textSource.Text = data;
+					_ui._textSource.CursorPosition = 0;
+				}
+				finally
+				{
+					_suppressProjectRefresh = false;
+				}
+
+				QueueRefreshProject();
 				UpdateCursor();
 				Desktop.FocusedKeyboardWidget = _ui._textSource;
 

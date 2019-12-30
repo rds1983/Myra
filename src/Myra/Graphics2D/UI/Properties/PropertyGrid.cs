@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 using Myra.MML;
 using Myra.Graphics2D.UI.File;
 using Myra.Graphics2D.TextureAtlases;
-using Myra.Assets;
+using System.IO;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -156,7 +156,7 @@ namespace Myra.Graphics2D.UI.Properties
 		private readonly HashSet<string> _expandedCategories = new HashSet<string>();
 		private object _object;
 		private bool _ignoreCollections;
-		private IAssetManager _assetManager;
+		private readonly PropertyGridSettings _settings = new PropertyGridSettings();
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -213,27 +213,16 @@ namespace Myra.Graphics2D.UI.Properties
 			}
 		}
 
-		public IAssetManager AssetManager
+		public PropertyGridSettings Settings
 		{
 			get
 			{
 				if (_parentGrid != null)
 				{
-					return _parentGrid.AssetManager;
+					return _parentGrid.Settings;
 				}
 
-				return _assetManager;
-			}
-
-			set
-			{
-				if (_parentGrid != null)
-				{
-					_parentGrid.AssetManager = value;
-				} else
-				{
-					_assetManager = value;
-				}
+				return _settings;
 			}
 		}
 
@@ -448,7 +437,8 @@ namespace Myra.Graphics2D.UI.Properties
 		private Grid CreateBrushEditor(Record record, bool hasSetter)
 		{
 			var propertyType = record.Type;
-			var value = (SolidBrush)record.GetValue(_object);
+
+			var value = record.GetValue(_object) as SolidBrush;
 
 			var subGrid = new Grid
 			{
@@ -759,7 +749,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 		private Grid CreateFileEditor<T>(Record record, bool hasSetter, string filter)
 		{
-			if (AssetManager == null)
+			if (Settings.AssetManager == null)
 			{
 				return null;
 			}
@@ -810,7 +800,18 @@ namespace Myra.Graphics2D.UI.Properties
 						Filter = filter
 					};
 
-					dlg.FilePath = textBox.Text;
+					if (!string.IsNullOrEmpty(textBox.Text))
+					{
+						var filePath = textBox.Text;
+						if (!Path.IsPathRooted(filePath) && !string.IsNullOrEmpty(Settings.BasePath))
+						{
+							filePath = Path.Combine(Settings.BasePath, filePath);
+						}
+						dlg.FilePath = filePath;
+					} else if (!string.IsNullOrEmpty(Settings.BasePath))
+					{
+						dlg.Folder = Settings.BasePath;
+					}
 
 					dlg.Closed += (s, a) =>
 					{
@@ -821,13 +822,19 @@ namespace Myra.Graphics2D.UI.Properties
 
 						try
 						{
-							var newValue = AssetManager.Load<T>(dlg.FilePath);
+							var newValue = Settings.AssetManager.Load<T>(dlg.FilePath);
 
-							textBox.Text = dlg.FilePath;
+							var filePath = dlg.FilePath;
+							if (!string.IsNullOrEmpty(Settings.BasePath))
+							{
+								filePath = PathUtils.TryToMakePathRelativeTo(filePath, Settings.BasePath);
+							}
+
+							textBox.Text = filePath;
 							SetValue(record, _object, newValue);
 							if (hasResources != null)
 							{
-								hasResources.Resources[record.Name] = dlg.FilePath;
+								hasResources.Resources[record.Name] = filePath;
 							}
 
 							FireChanged(propertyType.Name);

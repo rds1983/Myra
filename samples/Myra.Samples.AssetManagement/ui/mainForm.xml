@@ -1,0 +1,13 @@
+<Project>
+  <Project.ExportOptions />
+  <Panel Background="#C78100FF" >
+    <Label Text="My Game" Font="fonts/arial64.fnt" TextColor="#ADD8E6FF" HorizontalAlignment="Center" />
+    <VerticalMenu HorizontalAlignment="Center" VerticalAlignment="Center" >
+      <MenuItem Id="" Text="Start New Game" />
+      <MenuItem Id="" Text="Options" />
+      <MenuItem Id="" Text="Quit" />
+    </VerticalMenu>
+    <Image Renderable="images/LogoOnly_64px.png" Left="10" Top="-10" VerticalAlignment="Bottom" />
+    <Label Text="Version 0.6" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+  </Panel>
+</Project>

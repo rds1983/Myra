@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.NonModalWindow
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.DebugConsole", "..\..\samples\Myra.Samples.DebugConsole\Myra.Samples.DebugConsole.csproj", "{CA9509A6-31B2-44F4-A13D-01A794ABDD74}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.AssetManagement", "..\..\samples\Myra.Samples.AssetManagement\Myra.Samples.AssetManagement.csproj", "{9C71BE95-55A4-4DD6-8EE6-815D7ECE76BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{CA9509A6-31B2-44F4-A13D-01A794ABDD74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA9509A6-31B2-44F4-A13D-01A794ABDD74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA9509A6-31B2-44F4-A13D-01A794ABDD74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C71BE95-55A4-4DD6-8EE6-815D7ECE76BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C71BE95-55A4-4DD6-8EE6-815D7ECE76BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C71BE95-55A4-4DD6-8EE6-815D7ECE76BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C71BE95-55A4-4DD6-8EE6-815D7ECE76BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,6 +100,7 @@ Global
 		{9E05B57F-EB02-420F-9CD5-7BA0CB14D99C} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{4DA7A6EB-1A4F-4966-A534-2C52F01E4411} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{CA9509A6-31B2-44F4-A13D-01A794ABDD74} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{9C71BE95-55A4-4DD6-8EE6-815D7ECE76BB} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35ACDF4E-2CE2-46B1-A19F-35DC131069A1}

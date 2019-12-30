@@ -78,16 +78,22 @@ namespace Myra.MML
 					else if ((typeof(IBrush).IsAssignableFrom(propertyType) ||
 							 propertyType == typeof(SpriteFont)) && ResourceGetter != null)
 					{
-						var texture = ResourceGetter(propertyType, attr.Value);
-						if (texture == null)
+						try
 						{
-							throw new Exception(string.Format("Could not find resource '{0}'", attr.Value));
-						}
-						value = texture;
+							var texture = ResourceGetter(propertyType, attr.Value);
+							if (texture == null)
+							{
+								throw new Exception(string.Format("Could not find resource '{0}'", attr.Value));
+							}
+							value = texture;
 
-						if (hasResources != null)
+							if (hasResources != null)
+							{
+								hasResources.Resources[property.Name] = attr.Value;
+							}
+						}
+						catch(Exception)
 						{
-							hasResources.Resources[property.Name] = attr.Value;
 						}
 					}
 					else
