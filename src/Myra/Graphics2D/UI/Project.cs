@@ -12,12 +12,12 @@ using Myra.Attributes;
 using System.Linq;
 using Myra.Assets;
 using Myra.Graphics2D.TextureAtlases;
-using Microsoft.Xna.Framework.Graphics;
 
 #if !XENKO
-using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 #else
 using Xenko.Core.Mathematics;
+using Xenko.Graphics;
 #endif
 
 namespace Myra.Graphics2D.UI

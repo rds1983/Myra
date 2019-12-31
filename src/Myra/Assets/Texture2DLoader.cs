@@ -1,4 +1,10 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Myra.Utility;
+
+#if !XENKO
+using Microsoft.Xna.Framework.Graphics;
+#else
+using Texture2D = Xenko.Graphics.Texture;
+#endif
 
 namespace Myra.Assets
 {
@@ -8,7 +14,7 @@ namespace Myra.Assets
 		{
 			using (var stream = context.Open(assetName))
 			{
-				return Texture2D.FromStream(MyraEnvironment.GraphicsDevice, stream);
+				return CrossEngineStuff.LoadTexture2D(stream);
 			}
 		}
 	}

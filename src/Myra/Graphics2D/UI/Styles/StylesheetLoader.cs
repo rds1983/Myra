@@ -1,10 +1,15 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Myra.Assets;
+﻿using Myra.Assets;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.MML;
 using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
+
+#if !XENKO
+using Microsoft.Xna.Framework.Graphics;
+#else
+using Xenko.Graphics;
+#endif
 
 namespace Myra.Graphics2D.UI.Styles
 {

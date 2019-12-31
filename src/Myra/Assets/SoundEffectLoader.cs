@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework.Audio;
+﻿#if !XENKO
+
+using Microsoft.Xna.Framework.Audio;
 
 namespace Myra.Assets
 {
@@ -13,3 +15,5 @@ namespace Myra.Assets
 		}
 	}
 }
+
+#endif

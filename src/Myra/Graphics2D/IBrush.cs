@@ -1,7 +1,8 @@
-﻿#if !XENKO
+﻿using Myra.Assets;
+
+#if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Assets;
 #else
 using Xenko.Core.Mathematics;
 using Xenko.Graphics;

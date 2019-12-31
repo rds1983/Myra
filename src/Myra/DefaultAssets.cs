@@ -3,6 +3,7 @@ using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Reflection;
 using Myra.Assets;
+using SpriteFontPlus;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -10,7 +11,6 @@ using Microsoft.Xna.Framework.Graphics;
 #else
 using Xenko.Core.Mathematics;
 using Xenko.Graphics;
-using Xenko.Graphics.Font;
 using Texture2D = Xenko.Graphics.Texture;
 using RasterizerState = Xenko.Graphics.RasterizerStateDescription;
 #endif
@@ -19,8 +19,6 @@ namespace Myra
 {
 	public static class DefaultAssets
 	{
-		private const string DefaultStylesheetName = "default_ui_skin.xml";
-
 		private static readonly AssetManager _assetManager = new AssetManager(new ResourceAssetResolver(typeof(DefaultAssets).Assembly, "Resources."));
 		private static SpriteFont _font;
 		private static SpriteFont _fontSmall;

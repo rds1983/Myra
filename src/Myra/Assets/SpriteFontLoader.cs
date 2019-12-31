@@ -1,6 +1,11 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Myra.Graphics2D.TextureAtlases;
+﻿using Myra.Graphics2D.TextureAtlases;
 using SpriteFontPlus;
+
+#if !XENKO
+using Microsoft.Xna.Framework.Graphics;
+#else
+using Xenko.Graphics;
+#endif
 
 namespace Myra.Assets
 {

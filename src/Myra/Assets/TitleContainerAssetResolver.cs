@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿#if !XENKO
+
+using System.IO;
 using Microsoft.Xna.Framework;
 
 namespace Myra.Assets
@@ -28,3 +30,5 @@ namespace Myra.Assets
 		}
 	}
 }
+
+#endif

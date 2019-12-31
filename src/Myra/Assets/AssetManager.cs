@@ -43,7 +43,9 @@ namespace Myra.Assets
 
 		private static void RegisterDefaultLoaders()
 		{
+#if !XENKO
 			SetAssetLoader(new SoundEffectLoader());
+#endif
 			SetAssetLoader(new StringLoader());
 			SetAssetLoader(new Texture2DLoader());
 			SetAssetLoader(new SpriteFontLoader());

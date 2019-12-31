@@ -8,6 +8,6 @@
       <MenuItem Id="" Text="Quit" />
     </VerticalMenu>
     <Image Renderable="images/LogoOnly_64px.png" Left="10" Top="-10" VerticalAlignment="Bottom" />
-    <Label Text="Version 0.6" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+    <Label Text="Version 0.6" Left="-10" Top="-10" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
   </Panel>
 </Project>

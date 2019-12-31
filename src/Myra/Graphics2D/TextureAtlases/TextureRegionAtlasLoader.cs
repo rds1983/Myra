@@ -1,5 +1,10 @@
-using Microsoft.Xna.Framework.Graphics;
 using Myra.Assets;
+
+#if !XENKO
+using Microsoft.Xna.Framework.Graphics;
+#else
+using Texture2D = Xenko.Graphics.Texture;
+#endif
 
 namespace Myra.Graphics2D.TextureAtlases
 {

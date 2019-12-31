@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 #else
 using Xenko.Core.Mathematics;
+using Xenko.Graphics;
 #endif
 
 namespace Myra.MML
