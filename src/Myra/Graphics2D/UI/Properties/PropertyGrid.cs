@@ -11,6 +11,7 @@ using Myra.MML;
 using Myra.Graphics2D.UI.File;
 using Myra.Graphics2D.TextureAtlases;
 using System.IO;
+using Myra.Graphics2D.Brushes;
 
 #if !XENKO
 using Microsoft.Xna.Framework;

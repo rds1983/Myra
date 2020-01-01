@@ -6,11 +6,6 @@ namespace Myra.Assets
 	{
 		public string BaseFolder { get; set; }
 
-		public FileAssetResolver()
-		{
-			BaseFolder = string.Empty;
-		}
-
 		public FileAssetResolver(string baseFolder)
 		{
 			BaseFolder = baseFolder;

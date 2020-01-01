@@ -7,8 +7,11 @@ using System.Reflection;
 using System.Text;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Myra;
+using Myra.Graphics2D;
 using Myra.Graphics2D.UI;
+using Myra.MML;
 using Myra.Utility;
 
 namespace MyraPad
@@ -187,7 +190,11 @@ namespace MyraPad
 					continue;
 				}
 
-				sbBuild.Append(BuildPropertyCode(property, w, idPrefix));
+				var propertyCode = BuildPropertyCode(property, w, idPrefix);
+				if (!string.IsNullOrEmpty(propertyCode))
+				{
+					sbBuild.Append(propertyCode);
+				}
 			}
 
 			foreach (var subItem in subItems)
@@ -267,9 +274,35 @@ namespace MyraPad
 			var asList = value as IList;
 			if (asList == null)
 			{
+				string strValue = null;
+				if (typeof(IBrush).IsAssignableFrom(property.PropertyType) || property.PropertyType == typeof(SpriteFont))
+				{
+					var hasResources = o as IHasResources;
+					string s;
+					if (hasResources != null && hasResources.Resources.TryGetValue(property.Name, out s))
+					{
+						var typeName = property.PropertyType.Name;
+						if (typeof(IImage).IsAssignableFrom(property.PropertyType))
+						{
+							typeName = "TextureRegion";
+						}
+
+						strValue = "AssetManager.Default.Load<" + typeName + ">(\"" + s + "\")";
+					}
+				}
+				else
+				{
+					strValue = BuildValue(value);
+				}
+
+				if (strValue == null)
+				{
+					return null;
+				}
+
 				sb.Append("\n\t\t\t" + idPrefix + property.Name);
 				sb.Append(" = ");
-				sb.Append(BuildValue(value));
+				sb.Append(strValue);
 				sb.Append(";");
 			}
 			else

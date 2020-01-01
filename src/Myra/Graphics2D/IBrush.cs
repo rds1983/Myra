@@ -1,4 +1,5 @@
 ﻿using Myra.Assets;
+using Myra.Graphics2D.Brushes;
 
 #if !XENKO
 using Microsoft.Xna.Framework;

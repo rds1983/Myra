@@ -1,10 +1,10 @@
-﻿namespace Myra.Samples.DebugConsole
+﻿namespace Myra.Samples.AssetManagement
 {
 	class Program
 	{
 		static void Main(string[] args)
 		{
-			using (var game = new DebugConsoleGame())
+			using (var game = new AssetManagementGame())
 				game.Run();
 		}
 	}

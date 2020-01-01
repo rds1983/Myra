@@ -6,7 +6,7 @@ using Xenko.Core.Mathematics;
 using Xenko.Graphics;
 #endif
 
-namespace Myra.Graphics2D
+namespace Myra.Graphics2D.Brushes
 {
 	public class SolidBrush : IBrush
 	{

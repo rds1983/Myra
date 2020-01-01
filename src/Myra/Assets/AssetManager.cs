@@ -7,6 +7,8 @@ namespace Myra.Assets
 {
 	public class AssetManager: IAssetManager
 	{
+		public static readonly AssetManager Default = new AssetManager(new FileAssetResolver(PathUtils.ExecutingAssemblyDirectory));
+
 		private readonly static Dictionary<Type, LoaderInfo> _loaders = new Dictionary<Type, LoaderInfo>();
 		private readonly Dictionary<Type, Dictionary<string, object>> _cache = new Dictionary<Type, Dictionary<string, object>>();
 		private IAssetResolver _assetResolver;

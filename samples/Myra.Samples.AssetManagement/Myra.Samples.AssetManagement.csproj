@@ -30,5 +30,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Myra\Myra.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="UI\**\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>  
 </Project>

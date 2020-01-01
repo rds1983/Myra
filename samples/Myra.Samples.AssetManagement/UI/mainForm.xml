@@ -1,5 +1,5 @@
 <Project>
-  <Project.ExportOptions />
+  <Project.ExportOptions Namespace="Myra.Samples.AssetManagement.UI" Class="MainForm" OutputPath="D:\Projects\Myra\samples\Myra.Samples.AssetManagement\UI" />
   <Panel Background="#C78100FF">
     <Label Text="My Game" Font="fonts/arial64.fnt" TextColor="#ADD8E6FF" HorizontalAlignment="Center" />
     <VerticalMenu HorizontalAlignment="Center" VerticalAlignment="Center" LabelFont="fonts/comicSans48.fnt" LabelColor="#4B0082FF" SelectionHoverBackground="#808000FF" SelectionBackground="#FFA500FF" Background="#00000000">

@@ -1,7 +1,7 @@
 ﻿using Myra.Assets;
 using System;
 
-namespace Myra.Graphics2D
+namespace Myra.Graphics2D.Brushes
 {
 	internal class BrushLoader : IAssetLoader<IBrush>
 	{
