@@ -18,11 +18,6 @@
 		public IBrush DisabledBackground { get; set; }
 		public IBrush FocusedBackground { get; set; }
 
-		public IBrush Border { get; set; }
-		public IBrush OverBorder { get; set; }
-		public IBrush DisabledBorder { get; set; }
-		public IBrush FocusedBorder { get; set; }
-
 		public int? PaddingLeft { get; set; }
 		public int? PaddingRight { get; set; }
 		public int? PaddingTop { get; set; }
@@ -44,10 +39,6 @@
 			OverBackground = style.OverBackground;
 			DisabledBackground = style.DisabledBackground;
 			FocusedBackground = style.FocusedBackground;
-			Border = style.Border;
-			OverBorder = style.OverBorder;
-			DisabledBorder = style.DisabledBorder;
-			FocusedBorder = style.FocusedBorder;
 			PaddingLeft = style.PaddingLeft;
 			PaddingRight = style.PaddingRight;
 			PaddingTop = style.PaddingTop;

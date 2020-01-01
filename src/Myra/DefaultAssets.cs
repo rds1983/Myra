@@ -57,7 +57,7 @@ namespace Myra
 			{
 				if (_whiteRegion == null)
 				{
-					_whiteRegion = new TextureRegion(White);
+					_whiteRegion = UITextureRegionAtlas["white"];
 				}
 
 				return _whiteRegion;

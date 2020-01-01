@@ -123,7 +123,7 @@
     </HorizontalMenuStyle>
   </HorizontalMenuStyles>
   <VerticalMenuStyles>
-    <VerticalMenuStyle Background="button" Border="border" SelectionHoverBackground="button-over" SelectionBackground="button-down" SpecialCharColor="red">
+    <VerticalMenuStyle Background="button" SelectionHoverBackground="button-over" SelectionBackground="button-down" SpecialCharColor="red">
       <ImageStyle PaddingLeft="10" />
       <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" PaddingLeft="10" PaddingRight="10" />
       <ShortcutStyle Font="default-font" TextColor="white" DisabledTextColor="grey" PaddingRight="10" />

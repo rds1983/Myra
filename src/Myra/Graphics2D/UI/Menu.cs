@@ -6,6 +6,7 @@ using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Serialization;
 using Myra.Attributes;
+using Microsoft.Xna.Framework.Graphics;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -82,6 +83,63 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_dirty = true;
+			}
+		}
+
+		[Category("Appearance")]
+		public SpriteFont LabelFont
+		{
+			get
+			{
+				return MenuStyle.LabelStyle.Font;
+			}
+
+			set
+			{
+				MenuStyle.LabelStyle.Font = value;
+			}
+		}
+
+		[Category("Appearance")]
+		[StylePropertyPath("/LabelStyle/TextColor")]
+		public Color LabelColor
+		{
+			get
+			{
+				return MenuStyle.LabelStyle.TextColor;
+			}
+
+			set
+			{
+				MenuStyle.LabelStyle.TextColor = value;
+			}
+		}
+
+		[Category("Appearance")]
+		public IBrush SelectionHoverBackground
+		{
+			get
+			{
+				return InternalChild.SelectionHoverBackground;
+			}
+
+			set
+			{
+				InternalChild.SelectionHoverBackground = value;
+			}
+		}
+
+		[Category("Appearance")]
+		public IBrush SelectionBackground
+		{
+			get
+			{
+				return InternalChild.SelectionBackground;
+			}
+
+			set
+			{
+				InternalChild.SelectionBackground = value;
 			}
 		}
 
@@ -787,9 +845,11 @@ namespace Myra.Graphics2D.UI
 
 		public void ApplyMenuStyle(MenuStyle style)
 		{
-			ApplyWidgetStyle(style);
+			var clone = new MenuStyle(style);
 
-			MenuStyle = style;
+			ApplyWidgetStyle(clone);
+
+			MenuStyle = clone;
 
 			InternalChild.SelectionHoverBackground = style.SelectionHoverBackground;
 			InternalChild.SelectionBackground = style.SelectionBackground;

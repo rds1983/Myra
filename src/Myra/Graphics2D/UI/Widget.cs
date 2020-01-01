@@ -561,18 +561,6 @@ namespace Myra.Graphics2D.UI
 		public IBrush FocusedBackground { get; set; }
 
 		[Category("Appearance")]
-		public IBrush Border { get; set; }
-
-		[Category("Appearance")]
-		public IBrush OverBorder { get; set; }
-
-		[Category("Appearance")]
-		public IBrush DisabledBorder { get; set; }
-
-		[Category("Appearance")]
-		public IBrush FocusedBorder { get; set; }
-
-		[Category("Appearance")]
 		[DefaultValue(false)]
 		public virtual bool ClipToBounds { get; set; }
 
@@ -747,25 +735,6 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public virtual IBrush GetCurrentBorder()
-		{
-			var result = Border;
-			if (!Enabled && DisabledBorder != null)
-			{
-				result = DisabledBorder;
-			}
-			else if (Enabled && IsKeyboardFocused && FocusedBorder != null)
-			{
-				result = FocusedBorder;
-			}
-			else if (UseHoverRenderable && OverBorder != null)
-			{
-				result = OverBorder;
-			}
-
-			return result;
-		}
-
 		public void Render(RenderContext context)
 		{
 			if (!Visible)
@@ -812,13 +781,6 @@ namespace Myra.Graphics2D.UI
 			context.View = view;
 			InternalRender(context);
 			context.View = oldView;
-
-			// Border
-			var border = GetCurrentBorder();
-			if (border != null)
-			{
-				context.Draw(border, Bounds);
-			}
 
 			if (MyraEnvironment.DrawWidgetsFrames)
 			{
@@ -1123,11 +1085,6 @@ namespace Myra.Graphics2D.UI
 			OverBackground = style.OverBackground;
 			DisabledBackground = style.DisabledBackground;
 			FocusedBackground = style.FocusedBackground;
-
-			Border = style.Border;
-			OverBorder = style.OverBorder;
-			DisabledBorder = style.DisabledBorder;
-			FocusedBorder = style.FocusedBorder;
 
 			if (style.PaddingLeft != null)
 			{

@@ -14,7 +14,7 @@ namespace Myra.Assets
 		{
 			using (var stream = context.Open(assetName))
 			{
-				return CrossEngineStuff.LoadTexture2D(stream);
+				return Texture2DExtensions.FromStream(MyraEnvironment.GraphicsDevice, stream, true);
 			}
 		}
 	}

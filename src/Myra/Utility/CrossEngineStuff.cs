@@ -13,34 +13,12 @@ namespace Myra.Utility
 {
 	internal static class CrossEngineStuff
 	{
-		public static Texture2D LoadTexture2D(Stream stream)
-		{
-#if !XENKO
-			return Texture2D.FromStream(MyraEnvironment.GraphicsDevice, stream);
-#else
-			return Texture2D.Load(MyraEnvironment.GraphicsDevice, stream);
-#endif
-		}
-
 		public static Texture2D CreateTexture2D(int width, int height)
 		{
 #if !XENKO
 			return new Texture2D(MyraEnvironment.GraphicsDevice, width, height, false, SurfaceFormat.Color);
 #else
 			return Texture2D.New2D(MyraEnvironment.GraphicsDevice, width, height, false, PixelFormat.R8G8B8A8_UNorm, TextureFlags.ShaderResource);
-#endif
-		}
-
-		public static Color[] GetData(Texture2D texture)
-		{
-#if !XENKO
-			var result = new Color[texture.Width * texture.Height];
-			texture.GetData(result);
-			return result;
-#else
-			var commandList = MyraEnvironment.Game.GraphicsContext.CommandList;
-
-			return texture.GetData<Color>(commandList);
 #endif
 		}
 

@@ -76,7 +76,9 @@ namespace Myra.MML
 						}
 					}
 					else if ((typeof(IBrush).IsAssignableFrom(propertyType) ||
-							 propertyType == typeof(SpriteFont)) && ResourceGetter != null)
+							 propertyType == typeof(SpriteFont)) &&
+							 !string.IsNullOrEmpty(attr.Value) &&
+							 ResourceGetter != null)
 					{
 						try
 						{

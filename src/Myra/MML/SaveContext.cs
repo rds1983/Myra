@@ -51,7 +51,7 @@ namespace Myra.MML
 				var value = property.GetValue(obj);
 				if (value != null)
 				{
-					string str;
+					string str = null;
 
 					if (property.PropertyType == typeof(Color?))
 					{
@@ -64,7 +64,6 @@ namespace Myra.MML
 					}
 					else if (typeof(IBrush).IsAssignableFrom(property.PropertyType) || property.PropertyType == typeof(SpriteFont))
 					{
-						str = string.Empty;
 						if (hasResources != null)
 						{
 							hasResources.Resources.TryGetValue(property.Name, out str);
@@ -75,7 +74,10 @@ namespace Myra.MML
 						str = Convert.ToString(value, CultureInfo.InvariantCulture);
 					}
 
-					el.Add(new XAttribute(property.Name, str));
+					if (!string.IsNullOrEmpty(str))
+					{
+						el.Add(new XAttribute(property.Name, str));
+					}
 				}
 			}
 
