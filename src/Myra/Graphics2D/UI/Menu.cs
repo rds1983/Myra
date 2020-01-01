@@ -144,6 +144,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[Category("Appearance")]
+		public HorizontalAlignment LabelHorizontalAlignment { get; set; }
+
 		public override bool IsPlaced
 		{
 			get
@@ -467,6 +470,8 @@ namespace Myra.Graphics2D.UI
 			{
 				menuItem.Label.TextColor = MenuStyle.LabelStyle.TextColor;
 			}
+
+			menuItem.Label.HorizontalAlignment = LabelHorizontalAlignment;
 
 			UpdateWidgets();
 		}
