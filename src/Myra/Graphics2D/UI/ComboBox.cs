@@ -109,7 +109,7 @@ namespace Myra.Graphics2D.UI
 			SetStyle(styleName);
 		}
 
-		private void DesktopOnContextMenuClosing(object sender, ContextMenuClosingEventArgs args)
+		private void DesktopOnContextMenuClosing(object sender, CancellableEventArgs<Widget> args)
 		{
 			// Prevent autoclosing of the context menu if mouse is over combobox button
 			// It'll be manually closed in the InternalChild_PressedChanged

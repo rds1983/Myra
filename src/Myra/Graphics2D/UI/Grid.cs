@@ -155,6 +155,10 @@ namespace Myra.Graphics2D.UI
 		public GridSelectionMode GridSelectionMode { get; set; }
 
 		[Category("Behavior")]
+		[DefaultValue(true)]
+		public bool HoverIndexCanBeNull { get; set; }
+
+		[Category("Behavior")]
 		[DefaultValue(false)]
 		public bool CanSelectNothing { get; set; }
 
@@ -286,6 +290,7 @@ namespace Myra.Graphics2D.UI
 
 			ShowGridLines = false;
 			GridLinesColor = Color.White;
+			HoverIndexCanBeNull = true;
 			CanSelectNothing = false;
 		}
 
@@ -912,8 +917,11 @@ namespace Myra.Graphics2D.UI
 
 			if (position == null)
 			{
-				HoverRowIndex = null;
-				HoverColumnIndex = null;
+				if (HoverIndexCanBeNull)
+				{
+					HoverRowIndex = null;
+					HoverColumnIndex = null;
+				}
 				return;
 			}
 

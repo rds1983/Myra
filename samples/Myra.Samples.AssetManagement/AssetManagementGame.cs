@@ -32,9 +32,17 @@ namespace Myra.Samples.AssetManagement
 			AssetManager.Default.AssetResolver = new FileAssetResolver(Path.Combine(PathUtils.ExecutingAssemblyDirectory, "UI"));
 
 			_mainForm = new MainForm();
+			_mainForm._mainMenu.HoverIndex = 0;
+			_mainForm._menuItemQuit.Selected += (s, a) => Exit();
 
+			Desktop.FocusedKeyboardWidget = _mainForm._mainMenu;
+
+			// Make main menu permanently hold keyboard focus
+			Desktop.WidgetLosingKeyboardFocus += (s, a) =>
+			{
+				a.Cancel = true;
+			};
 			Desktop.Widgets.Add(_mainForm);
-
 #if MONOGAME
 			// Inform Myra that external text input is available
 			// So it stops translating Keys to chars

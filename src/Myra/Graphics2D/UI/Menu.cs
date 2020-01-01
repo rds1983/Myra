@@ -147,6 +147,21 @@ namespace Myra.Graphics2D.UI
 		[Category("Appearance")]
 		public HorizontalAlignment LabelHorizontalAlignment { get; set; }
 
+		[Category("Behavior")]
+		[DefaultValue(true)]
+		public bool HoverIndexCanBeNull
+		{
+			get
+			{
+				return InternalChild.HoverIndexCanBeNull;
+			}
+
+			set
+			{
+				InternalChild.HoverIndexCanBeNull = value;
+			}
+		}
+
 		public override bool IsPlaced
 		{
 			get
@@ -311,6 +326,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		protected internal override bool AcceptsKeyboardFocus => true;
+
 		protected Menu(string styleName)
 		{
 			InternalChild = new Grid
@@ -339,6 +356,7 @@ namespace Myra.Graphics2D.UI
 
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
+			HoverIndexCanBeNull = true;
 
 			Items = new ObservableCollection<IMenuItem>();
 
@@ -569,7 +587,7 @@ namespace Myra.Graphics2D.UI
 				InternalChild.GetRowHeight(index));
 		}
 
-		private void DesktopOnContextMenuClosing(object sender, ContextMenuClosingEventArgs args)
+		private void DesktopOnContextMenuClosing(object sender, CancellableEventArgs<Widget> args)
 		{
 			// Prevent closing/opening of the context menu
 			if (OpenMenuItem != null && GetItemBounds(OpenMenuItem.Index).Contains(Desktop.TouchPosition))
@@ -591,7 +609,7 @@ namespace Myra.Graphics2D.UI
 		private void OnHoverIndexChanged(object sender, EventArgs eventArgs)
 		{
 			var menuItem = GetMenuItem(HoverIndex);
-			if (menuItem == null)
+			if (menuItem == null && HoverIndexCanBeNull)
 			{
 				// Separators couldn't be selected
 				HoverIndex = null;

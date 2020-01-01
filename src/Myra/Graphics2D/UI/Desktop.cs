@@ -214,13 +214,25 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
-				if (_focusedKeyboardWidget != null)
+				var oldValue = _focusedKeyboardWidget;
+				if (oldValue != null)
 				{
-					_focusedKeyboardWidget.OnLostKeyboardFocus();
-					WidgetLostKeyboardFocus.Invoke(_focusedKeyboardWidget);
+					if (WidgetLosingKeyboardFocus != null)
+					{
+						var args = new CancellableEventArgs<Widget>(oldValue);
+						WidgetLosingKeyboardFocus(null, args);
+						if (oldValue.IsPlaced && args.Cancel)
+						{
+							return;
+						}
+					}
 				}
 
 				_focusedKeyboardWidget = value;
+				if (oldValue != null)
+				{
+					oldValue.OnLostKeyboardFocus();
+				}
 
 				if (_focusedKeyboardWidget != null)
 				{
@@ -412,10 +424,10 @@ namespace Myra.Graphics2D.UI
 		public static event EventHandler<GenericEventArgs<Keys>> KeyDown;
 		public static event EventHandler<GenericEventArgs<char>> Char;
 
-		public static event EventHandler<ContextMenuClosingEventArgs> ContextMenuClosing;
+		public static event EventHandler<CancellableEventArgs<Widget>> ContextMenuClosing;
 		public static event EventHandler<GenericEventArgs<Widget>> ContextMenuClosed;
 
-		public static event EventHandler<GenericEventArgs<Widget>> WidgetLostKeyboardFocus;
+		public static event EventHandler<CancellableEventArgs<Widget>> WidgetLosingKeyboardFocus;
 		public static event EventHandler<GenericEventArgs<Widget>> WidgetGotKeyboardFocus;
 
 		static Desktop()
@@ -517,7 +529,7 @@ namespace Myra.Graphics2D.UI
 				var ev = ContextMenuClosing;
 				if (ev != null)
 				{
-					var args = new ContextMenuClosingEventArgs(ContextMenu);
+					var args = new CancellableEventArgs<Widget>(ContextMenu);
 					ev(null, args);
 
 					if (args.Cancel)

@@ -20,6 +20,8 @@ copy "samples\Myra.Samples.GridContainer\bin\MonoGame\%CONFIGURATION%\Myra.Sampl
 copy "samples\Myra.Samples.SplitPaneContainer\bin\MonoGame\%CONFIGURATION%\Myra.Samples.SplitPaneContainer.exe" ZipPackage /Y
 copy "samples\Myra.Samples.Notepad\bin\MonoGame\%CONFIGURATION%\Myra.Samples.Notepad.exe" ZipPackage /Y
 copy "samples\Myra.Samples.NonModalWindows\bin\MonoGame\%CONFIGURATION%\Myra.Samples.NonModalWindows.exe" ZipPackage /Y
+copy "samples\Myra.Samples.DebugConsole\bin\MonoGame\%CONFIGURATION%\Myra.Samples.DebugConsole.exe" ZipPackage /Y
+copy "samples\Myra.Samples.AssetManagement\bin\MonoGame\%CONFIGURATION%\Myra.Samples.AssetManagement.exe" ZipPackage /Y
 copy "src\MyraPad\bin\%CONFIGURATION%\MyraPad.exe" ZipPackage /Y
 copy "src\MyraPad\bin\%CONFIGURATION%\MonoGame.Framework.dll" "ZipPackage" /Y
 copy "src\MyraPad\bin\%CONFIGURATION%\MonoGame.Framework.dll.config" "ZipPackage" /Y
@@ -34,3 +36,5 @@ copy "src\MyraPad\bin\%CONFIGURATION%\x86\soft_oal.dll" "ZipPackage\x86" /Y
 copy "src\MyraPad\bin\%CONFIGURATION%\libSDL2-2.0.0.dylib" "ZipPackage" /Y
 copy "src\MyraPad\bin\%CONFIGURATION%\libopenal.1.dylib" "ZipPackage" /Y
 xcopy "samples\Stylesheets\*.*" "ZipPackage\Stylesheets\*.*" /s
+xcopy "samples\Myra.Samples.AssetManagement\UI\fonts\*.*" "ZipPackage\UI\fonts\*.*" /s
+xcopy "samples\Myra.Samples.AssetManagement\UI\images\*.*" "ZipPackage\UI\images\*.*" /s

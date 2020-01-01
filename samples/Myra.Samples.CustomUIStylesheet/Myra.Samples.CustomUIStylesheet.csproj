@@ -29,6 +29,5 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Myra\Myra.csproj" />
-  </ItemGroup>  
-
+  </ItemGroup>
 </Project>

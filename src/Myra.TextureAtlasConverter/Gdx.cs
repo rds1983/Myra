@@ -216,7 +216,8 @@ namespace Myra.Tools.ToMyraAtlasConverter
 				}
 			}
 
-			var regions = new Dictionary<string, TextureRegion>();
+			var result = new TextureRegionAtlas();
+			var regions = result.Regions;
 			foreach (var sd in spriteDatas)
 			{
 				var texture = sd.Value.PageData.Texture;
@@ -235,7 +236,7 @@ namespace Myra.Tools.ToMyraAtlasConverter
 				regions[sd.Key] = IRenderable;
 			}
 
-			return new TextureRegionAtlas(regions);
+			return result;
 		}
 	}
 }
