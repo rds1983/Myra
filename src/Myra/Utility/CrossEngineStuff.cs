@@ -22,14 +22,14 @@ namespace Myra.Utility
 #endif
 		}
 
-		public static void SetData(Texture2D texture, Color[] data)
+		public static void SetData<T>(Texture2D texture, T[] data) where T: struct
 		{
 #if !XENKO
 			texture.SetData(data);
 #else
 			var commandList = MyraEnvironment.Game.GraphicsContext.CommandList;
 
-			texture.SetData<Color>(commandList, data);
+			texture.SetData(commandList, data);
 #endif
 		}
 

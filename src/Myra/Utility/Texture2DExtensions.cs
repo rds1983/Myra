@@ -1,6 +1,12 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using StbImageSharp;
+﻿using StbImageSharp;
 using System.IO;
+
+#if !XENKO
+using Microsoft.Xna.Framework.Graphics;
+#else
+using Xenko.Graphics;
+using Texture2D = Xenko.Graphics.Texture;
+#endif
 
 namespace Myra.Utility
 {
@@ -29,7 +35,7 @@ namespace Myra.Utility
 		/// <param name="stream"></param>
 		/// <param name="premultiplyAlpha"></param>
 		/// <returns></returns>
-		public static unsafe Texture2D FromStream(GraphicsDevice graphicsDevice, Stream stream, bool premultiplyAlpha)
+		public static unsafe Texture2D FromStream(Stream stream, bool premultiplyAlpha)
 		{
 			byte[] bytes;
 
@@ -65,8 +71,8 @@ namespace Myra.Utility
 			}
 
 			Texture2D texture = null;
-			texture = new Texture2D(graphicsDevice, result.Width, result.Height);
-			texture.SetData(result.Data);
+			texture = CrossEngineStuff.CreateTexture2D(result.Width, result.Height);
+			CrossEngineStuff.SetData(texture, result.Data);
 
 			return texture;
 		}

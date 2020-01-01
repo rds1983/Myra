@@ -21,7 +21,7 @@ namespace Myra.Graphics2D.UI
 			SamplerState = SamplerState.PointClamp,
 			DepthStencilState = null
 #else
-			BlendState = BlendStates.NonPremultiplied,
+			BlendState = BlendStates.AlphaBlend,
 			SamplerState = MyraEnvironment.Game.GraphicsDevice.SamplerStates.PointClamp,
 			DepthStencilState = DepthStencilStates.Default
 #endif

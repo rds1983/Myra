@@ -6,14 +6,15 @@ using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Serialization;
 using Myra.Attributes;
-using Microsoft.Xna.Framework.Graphics;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Graphics;
 #else
 using Xenko.Core.Mathematics;
 using Xenko.Input;
+using Xenko.Graphics;
 #endif
 
 namespace Myra.Graphics2D.UI
