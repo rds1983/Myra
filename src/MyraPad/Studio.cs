@@ -882,6 +882,9 @@ namespace MyraPad
 					}
 
 					Desktop.ShowContextMenu(_autoCompleteMenu, screen);
+					// Keep focus at text field
+					Desktop.FocusedKeyboardWidget = _ui._textSource;
+
 					_refreshInitiated = null;
 				}
 			}
