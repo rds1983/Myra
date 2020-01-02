@@ -49,11 +49,9 @@ namespace Myra.Graphics2D.UI
 		private static RenderContext _renderContext;
 
 		private static bool _layoutDirty = true;
-		private static Rectangle _bounds;
 		private static bool _widgetsDirty = true;
 		private static Widget _focusedKeyboardWidget;
 		private static readonly List<Widget> _widgetsCopy = new List<Widget>();
-		private static readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
 		private static DateTime _lastTouchDown;
 		private static DateTime? _lastKeyDown;
 		private static int _keyDownCount = 0;
@@ -186,20 +184,11 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public static ObservableCollection<Widget> Widgets
-		{
-			get { return _widgets; }
-		}
+		public static ObservableCollection<Widget> Widgets { get; } = new ObservableCollection<Widget>();
 
 		public static Func<Rectangle> BoundsFetcher = DefaultBoundsFetcher;
 
-		internal static Rectangle InternalBounds
-		{
-			get
-			{
-				return _bounds;
-			}
-		}
+		internal static Rectangle InternalBounds { get; private set; }
 
 		public static Widget ContextMenu { get; private set; }
 
@@ -405,7 +394,7 @@ namespace Myra.Graphics2D.UI
 		static Desktop()
 		{
 			Opacity = 1.0f;
-			_widgets.CollectionChanged += WidgetsOnCollectionChanged;
+			Widgets.CollectionChanged += WidgetsOnCollectionChanged;
 
 			MouseInfoGetter = DefaultMouseInfoGetter;
 			DownKeysGetter = DefaultDownKeysGetter;
@@ -636,7 +625,7 @@ namespace Myra.Graphics2D.UI
 
 				ContextMenu.Visible = true;
 
-				_widgets.Add(ContextMenu);
+				Widgets.Add(ContextMenu);
 
 				if (ContextMenu.AcceptsKeyboardFocus)
 				{
@@ -655,7 +644,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			_widgets.Remove(ContextMenu);
+			Widgets.Remove(ContextMenu);
 			ContextMenu.Visible = false;
 
 			ContextMenuClosed.Invoke(ContextMenu);
@@ -723,14 +712,14 @@ namespace Myra.Graphics2D.UI
 
 			_renderContext.Begin();
 
-			CrossEngineStuff.SetScissor(_bounds);
-			_renderContext.View = _bounds;
+			CrossEngineStuff.SetScissor(InternalBounds);
+			_renderContext.View = InternalBounds;
 			_renderContext.Opacity = Opacity;
 
 			if (Stylesheet.Current.DesktopStyle != null &&
 				Stylesheet.Current.DesktopStyle.Background != null)
 			{
-				_renderContext.Draw(Stylesheet.Current.DesktopStyle.Background, _bounds);
+				_renderContext.Draw(Stylesheet.Current.DesktopStyle.Background, InternalBounds);
 			}
 
 			foreach (var widget in ChildrenCopy)
@@ -762,14 +751,14 @@ namespace Myra.Graphics2D.UI
 		{
 			var newBounds = BoundsFetcher();
 
-			if (_bounds != newBounds)
+			if (InternalBounds != newBounds)
 			{
 				InvalidateLayout();
 			}
 
-			_bounds = newBounds;
+			InternalBounds = newBounds;
 
-			if (_bounds.IsEmpty)
+			if (InternalBounds.IsEmpty)
 			{
 				return;
 			}
@@ -783,7 +772,7 @@ namespace Myra.Graphics2D.UI
 			{
 				if (widget.Visible)
 				{
-					widget.Layout(_bounds);
+					widget.Layout(InternalBounds);
 				}
 			}
 
@@ -831,7 +820,7 @@ namespace Myra.Graphics2D.UI
 		public static int CalculateTotalWidgets(bool visibleOnly)
 		{
 			var result = 0;
-			foreach (var w in _widgets)
+			foreach (var w in Widgets)
 			{
 				if (visibleOnly && !w.Visible)
 				{
@@ -1151,7 +1140,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			_widgetsCopy.Clear();
-			_widgetsCopy.AddRange(_widgets);
+			_widgetsCopy.AddRange(Widgets);
 
 			_widgetsDirty = false;
 		}
