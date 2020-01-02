@@ -340,9 +340,6 @@ namespace Myra.Graphics2D.UI
 				_isTouchDown = value;
 				if (_isTouchDown)
 				{
-					InputOnTouchDown();
-
-					TouchDown.Invoke();
 
 					// Only top active widget can receive touch down
 					var activeWidget = GetTopWidget(true);
@@ -355,7 +352,7 @@ namespace Myra.Graphics2D.UI
 							var activeIndex = Widgets.IndexOf(activeWidget);
 							var lastIndex = Widgets.IndexOf(lastWidget);
 
-							for(var i = activeIndex; i < lastIndex; ++i)
+							for (var i = activeIndex; i < lastIndex; ++i)
 							{
 								Widgets[i] = Widgets[i + 1];
 							}
@@ -365,17 +362,21 @@ namespace Myra.Graphics2D.UI
 
 						activeWidget.HandleTouchDown();
 					}
+
+					InputOnTouchDown();
+
+					TouchDown.Invoke();
 				}
 				else
 				{
-					TouchUp.Invoke();
-
 					// Only top active widget can receive touch up
 					var activeWidget = GetTopWidget(true);
 					if (activeWidget != null && activeWidget.Active)
 					{
 						activeWidget.HandleTouchUp();
 					}
+
+					TouchUp.Invoke();
 				}
 			}
 		}

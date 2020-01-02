@@ -1171,6 +1171,7 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnTouchDown()
 		{
+			IsTouchInside = true;
 			TouchDown.Invoke(this);
 		}
 
@@ -1307,7 +1308,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			if (IsTouchInside)
+			if (Bounds.Contains(Desktop.TouchPosition))
 			{
 				OnTouchDown();
 			}
