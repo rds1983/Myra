@@ -39,6 +39,8 @@ namespace Myra.Assets
 
 		public Stream Open(string assetName)
 		{
+			assetName = assetName.Replace(AssetManager.SeparatorSymbol, '.');
+
 			return Res.OpenResourceStream(Assembly, Prefix + assetName);
 		}
 	}

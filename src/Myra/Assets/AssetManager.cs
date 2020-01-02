@@ -7,6 +7,7 @@ namespace Myra.Assets
 {
 	public class AssetManager: IAssetManager
 	{
+		public const char SeparatorSymbol = '/';
 		public static readonly AssetManager Default = new AssetManager(new FileAssetResolver(PathUtils.ExecutingAssemblyDirectory));
 
 		private readonly static Dictionary<Type, LoaderInfo> _loaders = new Dictionary<Type, LoaderInfo>();
@@ -36,6 +37,26 @@ namespace Myra.Assets
 		static AssetManager()
 		{
 			RegisterDefaultLoaders();
+		}
+
+		public static string CombinePath(string _base, string url)
+		{
+			if (string.IsNullOrEmpty(_base))
+			{
+				return url;
+			}
+
+			if (string.IsNullOrEmpty(url))
+			{
+				return _base;
+			}
+
+			if (_base[_base.Length - 1] == SeparatorSymbol)
+			{
+				return _base + url;
+			}
+
+			return _base + SeparatorSymbol + url;
 		}
 
 		public AssetManager(IAssetResolver assetResolver)
@@ -84,7 +105,7 @@ namespace Myra.Assets
 		public T Load<T>(string assetName)
 		{
 			var type = typeof(T);
-			assetName = assetName.Replace('\\', '/');
+			assetName = assetName.Replace('\\', SeparatorSymbol);
 
 			Dictionary<string, object> cache;
 			if (_cache.TryGetValue(type, out cache))
@@ -120,7 +141,7 @@ namespace Myra.Assets
 			var baseFolder = string.Empty;
 			var assetFileName = assetName;
 
-			var separatorIndex = assetName.LastIndexOf('/');
+			var separatorIndex = assetName.LastIndexOf(SeparatorSymbol);
 			if (separatorIndex != -1)
 			{
 				baseFolder = assetName.Substring(0, separatorIndex);

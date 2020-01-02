@@ -25,7 +25,6 @@ namespace MyraPad
 	{
 		private static Studio _instance;
 
-		private readonly List<WidgetInfo> _projectInfo = new List<WidgetInfo>();
 		private readonly ConcurrentQueue<string> _loadQueue = new ConcurrentQueue<string>();
 		private readonly ConcurrentQueue<Project> _newProjectsQueue = new ConcurrentQueue<Project>();
 		private readonly AutoResetEvent _refreshProjectEvent = new AutoResetEvent(false);
@@ -999,21 +998,6 @@ namespace MyraPad
 			}
 
 			return _stylesheetAssetManager.Load<Stylesheet>(path);
-		}
-
-		private static void IterateWidget(Widget w, Action<Widget> a)
-		{
-			a(w);
-
-			var children = w.GetRealChildren();
-
-			if (children != null)
-			{
-				foreach (var child in children)
-				{
-					IterateWidget(child, a);
-				}
-			}
 		}
 
 		private void LoadStylesheet(string filePath)

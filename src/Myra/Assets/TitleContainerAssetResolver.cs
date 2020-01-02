@@ -21,6 +21,11 @@ namespace Myra.Assets
 
 		public Stream Open(string assetName)
 		{
+			if (AssetManager.SeparatorSymbol != Path.DirectorySeparatorChar)
+			{
+				assetName = assetName.Replace(AssetManager.SeparatorSymbol, Path.DirectorySeparatorChar);
+			}
+
 			if (!string.IsNullOrEmpty(BaseFolder))
 			{
 				assetName = Path.Combine(BaseFolder, assetName);

@@ -27,7 +27,7 @@ namespace Myra.Assets
 		/// <returns></returns>
 		public Stream Open(string assetName)
 		{
-			return _assetManager.Open(Path.Combine(_baseFolder, assetName));
+			return _assetManager.Open(AssetManager.CombinePath(_baseFolder, assetName));
 		}
 
 		/// <summary>
@@ -51,7 +51,7 @@ namespace Myra.Assets
 
 		public T Load<T>(string assetName)
 		{
-			return _assetManager.Load<T>(Path.Combine(_baseFolder, assetName));
+			return _assetManager.Load<T>(AssetManager.CombinePath(_baseFolder, assetName));
 		}
 	}
 }

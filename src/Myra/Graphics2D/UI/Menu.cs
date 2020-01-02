@@ -145,6 +145,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[DefaultValue(HorizontalAlignment.Left)]
 		public HorizontalAlignment LabelHorizontalAlignment { get; set; }
 
 		[Category("Behavior")]
