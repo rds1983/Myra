@@ -341,41 +341,12 @@ namespace Myra.Graphics2D.UI
 				if (_isTouchDown)
 				{
 
-					// Only top active widget can receive touch down
-					var activeWidget = GetTopWidget(true);
-					if (activeWidget != null && activeWidget.Active)
-					{
-						var lastWidget = Widgets[Widgets.Count - 1];
-						if (activeWidget is Window && lastWidget != activeWidget)
-						{
-							// Make active window top
-							var activeIndex = Widgets.IndexOf(activeWidget);
-							var lastIndex = Widgets.IndexOf(lastWidget);
-
-							for (var i = activeIndex; i < lastIndex; ++i)
-							{
-								Widgets[i] = Widgets[i + 1];
-							}
-
-							Widgets[lastIndex] = activeWidget;
-						}
-
-						activeWidget.HandleTouchDown();
-					}
-
 					InputOnTouchDown();
-
 					TouchDown.Invoke();
 				}
 				else
 				{
-					// Only top active widget can receive touch up
-					var activeWidget = GetTopWidget(true);
-					if (activeWidget != null && activeWidget.Active)
-					{
-						activeWidget.HandleTouchUp();
-					}
-
+					InputOnTouchUp();
 					TouchUp.Invoke();
 				}
 			}
@@ -522,26 +493,66 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private static  void InputOnTouchDown()
+		private static void UpdateActiveWindow(Widget activeWidget)
 		{
-			// Handle context menu
-			if (ContextMenu != null && !ContextMenu.Bounds.Contains(TouchPosition))
+			var lastWidget = Widgets[Widgets.Count - 1];
+			if (activeWidget is Window && lastWidget != activeWidget)
 			{
-				var ev = ContextMenuClosing;
-				if (ev != null)
-				{
-					var args = new CancellableEventArgs<Widget>(ContextMenu);
-					ev(null, args);
+				// Make active window top
+				var activeIndex = Widgets.IndexOf(activeWidget);
+				var lastIndex = Widgets.IndexOf(lastWidget);
 
-					if (args.Cancel)
-					{
-						return;
-					}
+				for (var i = activeIndex; i < lastIndex; ++i)
+				{
+					Widgets[i] = Widgets[i + 1];
 				}
 
-				HideContextMenu();
+				Widgets[lastIndex] = activeWidget;
+			}
+		}
+
+		private static void UpdateIsTouchInside(bool isTouchInside)
+		{
+			// Only top active widget can receive touch
+			var activeWidget = GetTopWidget(true);
+			if (activeWidget != null && activeWidget.Active)
+			{
+				if (isTouchInside)
+				{
+					UpdateActiveWindow(activeWidget);
+					activeWidget.HandleTouchDown();
+				}
+				else
+				{
+					activeWidget.HandleTouchUp();
+				}
+			}
+		}
+
+		private static void ContextMenuOnTouchDown()
+		{
+			if (ContextMenu == null || ContextMenu.Bounds.Contains(TouchPosition))
+			{
+				return;
 			}
 
+			var ev = ContextMenuClosing;
+			if (ev != null)
+			{
+				var args = new CancellableEventArgs<Widget>(ContextMenu);
+				ev(null, args);
+
+				if (args.Cancel)
+				{
+					return;
+				}
+			}
+
+			HideContextMenu();
+		}
+
+		private static void FocusOnTouchDown()
+		{
 			// Handle focus
 			var activeWidget = GetTopWidget(true);
 			if (activeWidget == null)
@@ -578,6 +589,18 @@ namespace Myra.Graphics2D.UI
 			{
 				FocusedMouseWheelWidget = focusedWidget;
 			}
+		}
+
+		private static  void InputOnTouchDown()
+		{
+			UpdateIsTouchInside(true);
+			ContextMenuOnTouchDown();
+			FocusOnTouchDown();
+		}
+
+		private static void InputOnTouchUp()
+		{
+			UpdateIsTouchInside(false);
 		}
 
 		public static void ShowContextMenu(Widget menu, Point position)
