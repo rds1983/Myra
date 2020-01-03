@@ -72,7 +72,7 @@ namespace Myra.MML
 						}
 						else
 						{
-							value = attr.Value.FromName();
+							value = ColorStorage.FromName(attr.Value);
 						}
 					}
 					else if ((typeof(IBrush).IsAssignableFrom(propertyType) ||

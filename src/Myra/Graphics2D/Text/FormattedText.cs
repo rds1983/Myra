@@ -197,7 +197,7 @@ namespace Myra.Graphics2D.Text
 
 							if (parseCommands)
 							{
-								r.Color = _text.Substring(startPos, j - startPos).FromName();
+								r.Color = ColorStorage.FromName(_text.Substring(startPos, j - startPos));
 							}
 
 							r.StartIndex = j + 1;

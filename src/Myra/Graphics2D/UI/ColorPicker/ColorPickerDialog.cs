@@ -237,7 +237,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 			var s = "#" + _textFieldHex.Text;
 
-			var color = s.FromName();
+			var color = ColorStorage.FromName(s);
 			if (color == null)
 			{
 				return;

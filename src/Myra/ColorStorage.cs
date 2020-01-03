@@ -65,7 +65,7 @@ namespace Myra
 			return null;
 		}
 
-		public static Color? FromName(this string name)
+		public static Color? FromName(string name)
 		{
 			if (name.StartsWith("#"))
 			{

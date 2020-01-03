@@ -18,6 +18,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Threading;
 using System.Xml.Linq;
 using Myra.Assets;
+using Myra.Graphics2D;
 
 namespace MyraPad
 {
@@ -37,7 +38,6 @@ namespace MyraPad
 		private string _filePath;
 		private string _lastFolder;
 		private bool _isDirty;
-		private readonly AssetManager _stylesheetAssetManager = new AssetManager(new FileAssetResolver("..."));
 		private Project _project;
 		private bool _needsCloseTag;
 		private string _parentTag;
@@ -119,18 +119,20 @@ namespace MyraPad
 					return;
 				}
 
+				var oldPath = value;
 				_filePath = value;
 
 				if (!string.IsNullOrEmpty(_filePath))
 				{
-					// Store last folder
-					try
-					{
-						_lastFolder = Path.GetDirectoryName(_filePath);
-					}
-					catch (Exception)
-					{
-					}
+					var folder = Path.GetDirectoryName(_filePath);
+					PropertyGridSettings.BasePath = folder;
+					PropertyGridSettings.AssetManager = new AssetManager(new FileAssetResolver(folder));
+					_lastFolder = folder;
+				} else
+				{
+					PropertyGridSettings.BasePath = string.Empty;
+					PropertyGridSettings.AssetManager = Myra.Assets.AssetManager.Default;
+					PropertyGridSettings.AssetManager.ClearCache();
 				}
 
 				UpdateTitle();
@@ -349,10 +351,6 @@ namespace MyraPad
 					{
 						ExportCsItemOnSelected(this, EventArgs.Empty);
 					}
-					else if (Desktop.DownKeys.Contains(Keys.D))
-					{
-						OnMenuFileReloadStylesheet(this, EventArgs.Empty);
-					}
 					else if (Desktop.DownKeys.Contains(Keys.Q))
 					{
 						Exit();
@@ -373,7 +371,6 @@ namespace MyraPad
 			_ui._menuFileSaveAs.Selected += SaveAsItemOnClicked;
 			_ui._menuFileExportToCS.Selected += ExportCsItemOnSelected;
 			_ui._menuFileLoadStylesheet.Selected += OnMenuFileLoadStylesheet;
-			_ui._menuFileReloadStylesheet.Selected += OnMenuFileReloadStylesheet;
 			_ui._menuFileResetStylesheet.Selected += OnMenuFileResetStylesheetSelected;
 			_ui._menuFileDebugOptions.Selected += DebugOptionsItemOnSelected;
 			_ui._menuFileQuit.Selected += QuitItemOnDown;
@@ -398,6 +395,7 @@ namespace MyraPad
 			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
 			_propertyGrid.CustomValuesProvider = RecordValuesProvider;
 			_propertyGrid.CustomSetter = RecordSetter;
+			_propertyGrid.Settings.AssetManager = Myra.Assets.AssetManager.Default;
 
 			_ui._propertyGridPane.Content = _propertyGrid;
 
@@ -495,6 +493,127 @@ namespace MyraPad
 		private void _textSource_KeyDown(object sender, GenericEventArgs<Keys> e)
 		{
 			_applyAutoIndent = e.Data == Keys.Enter;
+		}
+
+		private static void ProcessResourcesPaths(Widget w, Func<string, bool> resourceProcessor)
+		{
+			var type = w.GetType();
+			foreach (var res in w.Resources)
+			{
+				var propertyInfo = type.GetProperty(res.Key);
+				if (propertyInfo == null)
+				{
+					continue;
+				}
+
+				// Skip brushes for now
+				if (propertyInfo.PropertyType == typeof(IBrush))
+				{
+					continue;
+				}
+
+				var result = resourceProcessor(res.Key);
+				if (!result)
+				{
+					break;
+				}
+			}
+		}
+
+		private void UpdateResourcesPaths(string oldPath, string newPath, Action onFinished)
+		{
+			try
+			{
+				// For now only empty old path is allowed
+				if (!string.IsNullOrEmpty(oldPath))
+				{
+					onFinished();
+					return;
+				}
+				
+				// Check whether project has external assets
+				var hasExternalResources = false;
+
+				UIUtils.ProcessWidgets(Project.Root, w =>
+				{
+					ProcessResourcesPaths(w, k =>
+					{
+						// Found
+						hasExternalResources = true;
+						return false;
+					});
+
+					// Continue iteration depending whether hasExternalResources had been set
+					return !hasExternalResources;
+				});
+
+				if (!hasExternalResources)
+				{
+					onFinished();
+					return;
+				}
+
+				var dialog = Dialog.CreateMessageBox("Resources Paths Update", "Would you like to update resources paths so it become relative to the project location?");
+				dialog.Closed += (s, a) =>
+				{
+					if (dialog.Result)
+					{
+						var updated = false;
+
+						var folder = Path.GetDirectoryName(newPath);
+						UIUtils.ProcessWidgets(Project.Root, widget =>
+						{
+							var newResources = new Dictionary<string, string>();
+
+							ProcessResourcesPaths(widget, key =>
+							{
+								try
+								{
+									var path = widget.Resources[key];
+
+									if (Path.IsPathRooted(path))
+									{
+										path = PathUtils.TryToMakePathRelativeTo(path, folder);
+										newResources[key] = path;
+									}
+								}
+								catch (Exception)
+								{
+								}
+
+								// Continue iteration
+								return true;
+							});
+
+							// Update resources
+							foreach(var pair in newResources)
+							{
+								if (widget.Resources[pair.Key] != pair.Value)
+								{
+									updated = true;
+									widget.Resources[pair.Key] = pair.Value;
+								}
+							}
+
+							// Continue iteration
+							return true;
+						});
+
+						if (updated)
+						{
+							UpdateSource();
+						}
+					}
+
+					onFinished();
+				};
+
+				dialog.ShowModal();
+			}
+			catch (Exception)
+			{
+				onFinished();
+			}
 		}
 
 		private void ApplyAutoIndent()
@@ -977,7 +1096,13 @@ namespace MyraPad
 
 		private void OnMenuFileReloadSelected(object sender, EventArgs e)
 		{
-			Load(FilePath);
+			if (string.IsNullOrEmpty(Project.StylesheetPath))
+			{
+				return;
+			}
+
+			AssetManager.ClearCache();
+			QueueRefreshProject();
 		}
 
 		private static string BuildPath(string folder, string fileName)
@@ -997,7 +1122,7 @@ namespace MyraPad
 				path = Path.Combine(Path.GetDirectoryName(FilePath), path);
 			}
 
-			return _stylesheetAssetManager.Load<Stylesheet>(path);
+			return AssetManager.Load<Stylesheet>(path);
 		}
 
 		private void LoadStylesheet(string filePath)
@@ -1028,7 +1153,7 @@ namespace MyraPad
 
 		private void OnMenuFileLoadStylesheet(object sender, EventArgs e)
 		{
-			_stylesheetAssetManager.ClearCache();
+			AssetManager.ClearCache();
 
 			var dlg = new FileDialog(FileDialogMode.OpenFile)
 			{
@@ -1089,22 +1214,9 @@ namespace MyraPad
 			dlg.ShowModal();
 		}
 
-		private void OnMenuFileReloadStylesheet(object sender, EventArgs e)
-		{
-			_stylesheetAssetManager.ClearCache();
-
-			if (string.IsNullOrEmpty(Project.StylesheetPath))
-			{
-				return;
-			}
-
-			QueueRefreshProject();
-		}
-
 		private void OnMenuFileResetStylesheetSelected(object sender, EventArgs e)
 		{
-			_stylesheetAssetManager.ClearCache();
-
+			AssetManager.ClearCache();
 			Project.StylesheetPath = null;
 			UpdateSource();
 			UpdateMenuFile();
@@ -1396,7 +1508,6 @@ namespace MyraPad
 			_ui._textSource.CursorPosition = pos;
 			Desktop.FocusedKeyboardWidget = _ui._textSource;
 
-
 			FilePath = string.Empty;
 			IsDirty = false;
 			_ui._projectHolder.Background = null;
@@ -1409,14 +1520,13 @@ namespace MyraPad
 				return;
 			}
 
-			var folder = Path.GetDirectoryName(filePath);
-			PropertyGridSettings.BasePath = folder;
-			PropertyGridSettings.AssetManager = new AssetManager(new FileAssetResolver(folder));
+			UpdateResourcesPaths(FilePath, filePath, () =>
+			{
+				File.WriteAllText(filePath, _ui._textSource.Text);
 
-			File.WriteAllText(filePath, _ui._textSource.Text);
-
-			FilePath = filePath;
-			IsDirty = false;
+				FilePath = filePath;
+				IsDirty = false;
+			});
 		}
 
 		private void Save(bool setFileName)
@@ -1457,10 +1567,6 @@ namespace MyraPad
 		{
 			try
 			{
-				var folder = Path.GetDirectoryName(filePath);
-				PropertyGridSettings.BasePath = folder;
-				PropertyGridSettings.AssetManager = new AssetManager(new FileAssetResolver(folder));
-
 				var data = File.ReadAllText(filePath);
 
 				FilePath = filePath;
@@ -1504,7 +1610,6 @@ namespace MyraPad
 		private void UpdateMenuFile()
 		{
 			_ui._menuFileReload.Enabled = !string.IsNullOrEmpty(FilePath);
-			_ui._menuFileReloadStylesheet.Enabled = _project != null && !string.IsNullOrEmpty(_project.StylesheetPath);
 		}
 	}
 }

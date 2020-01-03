@@ -15,21 +15,20 @@
         <MenuItem Id="_menuFileExportToCS" Text="&amp;Export To C#..." ShortcutText="Ctrl+E" />
         <MenuSeparator />
         <MenuItem Id="_menuFileLoadStylesheet" Text="&amp;Load Stylesheet" />
-        <MenuItem Id="_menuFileReloadStylesheet" Text="Reloa&amp;d Stylesheet" ShortcutText="Ctrl+D" />
         <MenuItem Id="_menuFileResetStylesheet" Text="Rese&amp;t Stylesheet" />
         <MenuSeparator />
         <MenuItem Id="_menuFileDebugOptions" Text="&amp;UI Debug Options" />
         <MenuSeparator />
         <MenuItem Id="_menuFileQuit" Text="&amp;Quit" ShortcutText="Ctrl+Q" />
       </MenuItem>
-      <MenuItem Id="" Text="&amp;Edit">
+      <MenuItem Text="&amp;Edit">
         <MenuItem Id="_menuItemSelectAll" Text="Select &amp;All" ShortcutText="Ctrl+A" />
         <MenuItem Id="_menuItemCopy" Text="&amp;Copy" ShortcutText="Ctrl+Insert, Ctrl+C" />
         <MenuItem Id="_menuItemPaste" Text="&amp;Paste" ShortcutText="Shift+Insert, Ctrl+V" />
         <MenuSeparator />
         <MenuItem Id="_menuEditFormatSource" Text="&amp;Format Source" ShortcutText="Ctrl+F" />
       </MenuItem>
-      <MenuItem Id="" Text="&amp;Help">
+      <MenuItem Text="&amp;Help">
         <MenuItem Id="_menuHelpAbout" Text="&amp;About" />
       </MenuItem>
     </HorizontalMenu>
@@ -41,7 +40,7 @@
         <VerticalSplitPane Id="_leftSplitPane">
           <Panel Id="_projectHolder" />
           <ScrollViewer>
-            <TextBox Text="" Multiline="True" Wrap="True" Id="_textSource" VerticalAlignment="Stretch" GridRow="2" />
+            <TextBox Multiline="True" Wrap="True" Id="_textSource" VerticalAlignment="Stretch" GridRow="2" />
           </ScrollViewer>
         </VerticalSplitPane>
         <HorizontalSeparator />

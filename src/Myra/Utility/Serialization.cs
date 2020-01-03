@@ -53,7 +53,7 @@ namespace Myra.Utility
 				// If property is of Color type, than DefaultValueAttribute should contain its name or hex
 				if (property.PropertyType == typeof(Color))
 				{
-					defaultAttributeValue = defaultAttributeValue.ToString().FromName().Value;
+					defaultAttributeValue = ColorStorage.FromName(defaultAttributeValue.ToString()).Value;
 				}
 			}
 

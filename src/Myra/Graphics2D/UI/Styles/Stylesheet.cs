@@ -600,7 +600,7 @@ namespace Myra.Graphics2D.UI.Styles
 			{
 				foreach(var el in colorsNode.Elements())
 				{
-					var color = el.Attribute("Value").Value.FromName();
+					var color = ColorStorage.FromName(el.Attribute("Value").Value);
 					if (color != null)
 					{
 						colors[el.Attribute(BaseContext.IdName).Value] = color.Value;

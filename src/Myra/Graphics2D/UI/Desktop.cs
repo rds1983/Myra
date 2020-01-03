@@ -551,7 +551,7 @@ namespace Myra.Graphics2D.UI
 
 			// Widgets at the bottom of tree become focused
 			Widget focusedWidget = null;
-			ProcessWidgets(activeWidget, s =>
+			UIUtils.ProcessWidgets(activeWidget, s =>
 			{
 				if (s.Enabled && s.IsTouchInside && s.Active && s.AcceptsKeyboardFocus)
 				{
@@ -563,7 +563,7 @@ namespace Myra.Graphics2D.UI
 			FocusedKeyboardWidget = focusedWidget;
 
 			focusedWidget = null;
-			ProcessWidgets(activeWidget, s =>
+			UIUtils.ProcessWidgets(activeWidget, s =>
 			{
 				if (s.Enabled && s.IsTouchInside && s.Active && s.AcceptsMouseWheelFocus)
 				{
@@ -787,7 +787,7 @@ namespace Myra.Graphics2D.UI
 					continue;
 				}
 
-				ProcessWidgets(w, widget =>
+				UIUtils.ProcessWidgets(w, widget =>
 				{
 					widget.Active = active;
 
@@ -1102,34 +1102,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			Char.Invoke(c);
-		}
-
-		private static  bool ProcessWidgets(Widget root, Func<Widget, bool> operation)
-		{
-			if (!root.Visible)
-			{
-				return true;
-			}
-
-			var result = operation(root);
-			if (!result)
-			{
-				return false;
-			}
-
-			var asContainer = root as Container;
-			if (asContainer != null)
-			{
-				foreach (var w in asContainer.ChildrenCopy)
-				{
-					if (!ProcessWidgets(w, operation))
-					{
-						return false;
-					}
-				}
-			}
-
-			return true;
 		}
 
 		private static  void UpdateWidgetsCopy()

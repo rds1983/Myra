@@ -7,7 +7,7 @@ namespace Myra.Graphics2D.Brushes
 	{
 		public IBrush Load(AssetLoaderContext context, string assetName)
 		{
-			var color = assetName.FromName();
+			var color = ColorStorage.FromName(assetName);
 			if (color == null)
 			{
 				throw new Exception(string.Format("Unable to resolve color '{0}'", assetName));
