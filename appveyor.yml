@@ -17,14 +17,11 @@ artifacts:
   - path: src/Myra/bin/MonoGame/Release/Myra.$(appveyor_build_version).nupkg
     name: Myra.nupkg
 
-  - path: src/Myra/bin/FNA/Release/Myra.FNA.$(appveyor_build_version).nupkg
-    name: Myra.FNA.nupkg
-    
   - path: src/Myra/bin/Xenko/Release/Myra.Xenko.$(appveyor_build_version).nupkg
     name: Myra.Xenko.nupkg
     
   - path: Myra.$(appveyor_build_version).zip
-    name: ZipPackage    
+    name: ZipPackage
 deploy:
   - provider: GitHub
     release: $(appveyor_build_version)
