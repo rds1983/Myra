@@ -496,10 +496,10 @@ namespace Myra.Graphics2D.UI.Properties
 
 						image.Color = dlg.Color;
 						SetValue(record, _object, new SolidBrush(dlg.Color));
-						var hasResources = _object as IHasResources;
-						if (hasResources != null)
+						var baseObject = _object as BaseObject;
+						if (baseObject != null)
 						{
-							hasResources.Resources[record.Name] = dlg.Color.ToHexString();
+							baseObject.Resources[record.Name] = dlg.Color.ToHexString();
 						}
 						FireChanged(propertyType.Name);
 					};
@@ -767,11 +767,11 @@ namespace Myra.Graphics2D.UI.Properties
 			subGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
 			subGrid.ColumnsProportions.Add(new Proportion());
 
-			var hasResources = _object as IHasResources;
+			var baseObject = _object as BaseObject;
 			var path = string.Empty;
-			if (hasResources != null)
+			if (baseObject != null)
 			{
-				hasResources.Resources.TryGetValue(record.Name, out path);
+				baseObject.Resources.TryGetValue(record.Name, out path);
 			}
 
 			var textBox = new TextBox
@@ -833,9 +833,9 @@ namespace Myra.Graphics2D.UI.Properties
 
 							textBox.Text = filePath;
 							SetValue(record, _object, newValue);
-							if (hasResources != null)
+							if (baseObject != null)
 							{
-								hasResources.Resources[record.Name] = filePath;
+								baseObject.Resources[record.Name] = filePath;
 							}
 
 							FireChanged(propertyType.Name);

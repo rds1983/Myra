@@ -16,6 +16,7 @@ namespace Myra.Graphics2D.UI
 	public class TextButton : ButtonBase<Label>
 	{
 		[Category("Appearance")]
+		[DefaultValue(null)]
 		public string Text
 		{
 			get
@@ -42,8 +43,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[XmlIgnore]
-		[Browsable(false)]
 		[Category("Appearance")]
 		public SpriteFont Font
 		{

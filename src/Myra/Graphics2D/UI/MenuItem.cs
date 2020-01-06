@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 using System;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
-using Myra.Utility;
+using Myra.MML;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -14,13 +14,13 @@ using Xenko.Core.Mathematics;
 
 namespace Myra.Graphics2D.UI
 {
-	public class MenuItem : IMenuItem
+	public class MenuItem : BaseObject, IMenuItem
 	{
 		private string _shortcutText;
 		private Color? _shortcutColor;
 		private bool _toggleable;
 		private IImage _image;
-		private string _id, _text;
+		private string _text;
 		private Color? _color;
 		private bool _displayTextDirty = true;
 		private string _displayText, _disabledDisplayText;
@@ -42,25 +42,6 @@ namespace Myra.Graphics2D.UI
 
 
 		internal readonly Menu SubMenu = new VerticalMenu();
-
-		public string Id
-		{
-			get
-			{
-				return _id;
-			}
-
-			set
-			{
-				if (value == _id)
-				{
-					return;
-				}
-
-				_id = value;
-				FireChanged();
-			}
-		}
 
 		[DefaultValue(null)]
 		public string Text
@@ -134,8 +115,6 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
 		public IImage Image
 		{
 			get
@@ -363,6 +342,13 @@ namespace Myra.Graphics2D.UI
 			{
 				ev(this, EventArgs.Empty);
 			}
+		}
+
+		protected internal override void OnIdChanged()
+		{
+			base.OnIdChanged();
+
+			FireChanged();
 		}
 
 		protected void FireChanged()

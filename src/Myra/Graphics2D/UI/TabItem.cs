@@ -4,6 +4,7 @@ using System.Text;
 using System.Xml.Serialization;
 using Myra.Attributes;
 using Myra.Utility;
+using Myra.MML;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -13,30 +14,10 @@ using Xenko.Core.Mathematics;
 
 namespace Myra.Graphics2D.UI
 {
-	public class TabItem : ISelectorItem, IContent
+	public class TabItem : BaseObject, ISelectorItem, IContent
 	{
-		private string _id;
 		private string _text;
 		private Color? _color;
-
-		public string Id
-		{
-			get
-			{
-				return _id;
-			}
-
-			set
-			{
-				if (value == _id)
-				{
-					return;
-				}
-
-				_id = value;
-				FireChanged();
-			}
-		}
 
 		public string Text
 		{
@@ -169,6 +150,13 @@ namespace Myra.Graphics2D.UI
 				sb.Append(")");
 			}
 			return sb.ToString();
+		}
+
+		protected internal override void OnIdChanged()
+		{
+			base.OnIdChanged();
+
+			FireChanged();
 		}
 
 		protected void FireChanged()

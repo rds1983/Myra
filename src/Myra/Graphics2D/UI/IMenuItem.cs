@@ -1,9 +1,10 @@
-﻿using System.ComponentModel;
+﻿using Myra.MML;
+using System.ComponentModel;
 using System.Xml.Serialization;
 
 namespace Myra.Graphics2D.UI
 {
-	public interface IMenuItem : IItemWithId
+	public interface IMenuItem: IItemWithId
 	{
 		[Browsable(false)]
 		[XmlIgnore]

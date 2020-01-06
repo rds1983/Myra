@@ -56,6 +56,16 @@ namespace Myra.Graphics2D.UI.File
 		{
 			get
 			{
+				if (string.IsNullOrEmpty(Folder))
+				{
+					return FileName;
+				}
+
+				if (string.IsNullOrEmpty(FileName))
+				{
+					return Folder;
+				}
+
 				return Path.Combine(Folder, FileName);
 			}
 
@@ -308,13 +318,14 @@ namespace Myra.Graphics2D.UI.File
 
 			var path = _paths[_gridFiles.SelectedRowIndex.Value];
 
-			if (!Directory.Exists(path))
+			if (Directory.Exists(path))
 			{
-				return;
+				_listBoxPlaces.SelectedIndex = null;
+				Folder = path;
+			} else
+			{
+				OnOk();
 			}
-
-			_listBoxPlaces.SelectedIndex = null;
-			Folder = path;
 		}
 
 		private void OnGridFilesSelectedIndexChanged(object sender, EventArgs args)
@@ -450,7 +461,7 @@ namespace Myra.Graphics2D.UI.File
 			}
 		}
 
-		protected override bool CanCloseByOk()
+		protected internal override bool CanCloseByOk()
 		{
 			if (_mode != FileDialogMode.SaveFile)
 			{

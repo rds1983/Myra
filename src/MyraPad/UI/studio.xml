@@ -6,30 +6,30 @@
       <Proportion Type="Fill" />
     </VerticalStackPanel.Proportions>
     <HorizontalMenu Id="_mainMenu">
-      <MenuItem Id="_menuFile" Text="&amp;File">
-        <MenuItem Id="_menuFileNew" Text="&amp;New" ShortcutText="Ctrl+N" />
-        <MenuItem Id="_menuFileOpen" Text="&amp;Open" ShortcutText="Ctrl+O" />
-        <MenuItem Id="_menuFileReload" Text="&amp;Reload" ShortcutText="Ctrl+R" />
-        <MenuItem Id="_menuFileSave" Text="&amp;Save" ShortcutText="Ctrl+S" />
-        <MenuItem Id="_menuFileSaveAs" Text="Save &amp;As..." />
-        <MenuItem Id="_menuFileExportToCS" Text="&amp;Export To C#..." ShortcutText="Ctrl+E" />
+      <MenuItem Text="&amp;File" Id="_menuFile">
+        <MenuItem Text="&amp;New" ShortcutText="Ctrl+N" Id="_menuFileNew" />
+        <MenuItem Text="&amp;Open" ShortcutText="Ctrl+O" Id="_menuFileOpen" />
+        <MenuItem Text="&amp;Reload" ShortcutText="Ctrl+R" Id="_menuFileReload" />
+        <MenuItem Text="&amp;Save" ShortcutText="Ctrl+S" Id="_menuFileSave" />
+        <MenuItem Text="Save &amp;As..." Id="_menuFileSaveAs" />
+        <MenuItem Text="&amp;Export To C#..." ShortcutText="Ctrl+E" Id="_menuFileExportToCS" />
         <MenuSeparator />
-        <MenuItem Id="_menuFileLoadStylesheet" Text="&amp;Load Stylesheet" />
-        <MenuItem Id="_menuFileResetStylesheet" Text="Rese&amp;t Stylesheet" />
+        <MenuItem Text="&amp;Load Stylesheet" Id="_menuFileLoadStylesheet" />
+        <MenuItem Text="Rese&amp;t Stylesheet" Id="_menuFileResetStylesheet" />
         <MenuSeparator />
-        <MenuItem Id="_menuFileDebugOptions" Text="&amp;UI Debug Options" />
+        <MenuItem Text="&amp;UI Debug Options" Id="_menuFileDebugOptions" />
         <MenuSeparator />
-        <MenuItem Id="_menuFileQuit" Text="&amp;Quit" ShortcutText="Ctrl+Q" />
+        <MenuItem Text="&amp;Quit" ShortcutText="Ctrl+Q" Id="_menuFileQuit" />
       </MenuItem>
-      <MenuItem Text="&amp;Edit">
-        <MenuItem Id="_menuItemSelectAll" Text="Select &amp;All" ShortcutText="Ctrl+A" />
-        <MenuItem Id="_menuItemCopy" Text="&amp;Copy" ShortcutText="Ctrl+Insert, Ctrl+C" />
-        <MenuItem Id="_menuItemPaste" Text="&amp;Paste" ShortcutText="Shift+Insert, Ctrl+V" />
+      <MenuItem Text="&amp;Edit" Id="">
+        <MenuItem Text="Select &amp;All" ShortcutText="Ctrl+A" Id="_menuItemSelectAll" />
+        <MenuItem Text="&amp;Copy" ShortcutText="Ctrl+Insert, Ctrl+C" Id="_menuItemCopy" />
+        <MenuItem Text="&amp;Paste" ShortcutText="Shift+Insert, Ctrl+V" Id="_menuItemPaste" />
         <MenuSeparator />
-        <MenuItem Id="_menuEditFormatSource" Text="&amp;Format Source" ShortcutText="Ctrl+F" />
+        <MenuItem Text="&amp;Format Source" ShortcutText="Ctrl+F" Id="_menuEditFormatSource" />
       </MenuItem>
-      <MenuItem Text="&amp;Help">
-        <MenuItem Id="_menuHelpAbout" Text="&amp;About" />
+      <MenuItem Text="&amp;Help" Id="">
+        <MenuItem Text="&amp;About" Id="_menuHelpAbout" />
       </MenuItem>
     </HorizontalMenu>
     <HorizontalSplitPane Id="_topSplitPane">
@@ -40,7 +40,7 @@
         <VerticalSplitPane Id="_leftSplitPane">
           <Panel Id="_projectHolder" />
           <ScrollViewer>
-            <TextBox Multiline="True" Wrap="True" Id="_textSource" VerticalAlignment="Stretch" GridRow="2" />
+            <TextBox Multiline="True" Wrap="True" VerticalAlignment="Stretch" GridRow="2" Id="_textSource" />
           </ScrollViewer>
         </VerticalSplitPane>
         <HorizontalSeparator />

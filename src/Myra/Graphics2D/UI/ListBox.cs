@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Xml.Serialization;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;

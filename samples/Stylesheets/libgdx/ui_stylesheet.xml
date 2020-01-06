@@ -51,10 +51,10 @@
     </VerticalSliderStyle>
   </VerticalSliderStyles>
   <HorizontalProgressBarStyles>
-    <HorizontalProgressBarStyle Background="default-round" Filled="default-round-down" />
+    <HorizontalProgressBarStyle Background="default-round" Filler="default-round-down" />
   </HorizontalProgressBarStyles>
   <VerticalProgressBarStyles>
-    <VerticalProgressBarStyle Background="default-round" Filled="default-round-down" />
+    <VerticalProgressBarStyle Background="default-round" Filler="default-round-down" />
   </VerticalProgressBarStyles>
   <ComboBoxStyles>
     <ComboBoxStyle Background="default-select">

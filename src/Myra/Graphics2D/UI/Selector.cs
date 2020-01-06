@@ -12,6 +12,7 @@ namespace Myra.Graphics2D.UI
 		where WidgetType : Widget
 		where ItemType : class, ISelectorItem
 	{
+		[DefaultValue(SelectionMode.Single)]
 		public abstract SelectionMode SelectionMode { get; set; }
 
 		[Category("Data")]

@@ -27,7 +27,7 @@ namespace Myra.MML
 		{
 			var type = obj.GetType();
 
-			var hasResources = obj as IHasResources;
+			var baseObject = obj as BaseObject;
 
 			List<PropertyInfo> complexProperties, simpleProperties;
 			ParseProperties(type, out complexProperties, out simpleProperties);
@@ -64,9 +64,9 @@ namespace Myra.MML
 					}
 					else if (typeof(IBrush).IsAssignableFrom(property.PropertyType) || property.PropertyType == typeof(SpriteFont))
 					{
-						if (hasResources != null)
+						if (baseObject != null)
 						{
-							hasResources.Resources.TryGetValue(property.Name, out str);
+							baseObject.Resources.TryGetValue(property.Name, out str);
 						}
 					}
 					else
@@ -74,7 +74,7 @@ namespace Myra.MML
 						str = Convert.ToString(value, CultureInfo.InvariantCulture);
 					}
 
-					if (!string.IsNullOrEmpty(str))
+					if (str != null)
 					{
 						el.Add(new XAttribute(property.Name, str));
 					}

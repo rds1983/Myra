@@ -62,8 +62,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
+		[Category("Appearance")]
 		public SpriteFont TitleFont
 		{
 			get

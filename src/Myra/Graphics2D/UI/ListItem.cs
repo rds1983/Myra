@@ -18,8 +18,6 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public bool IsSeparator { get; set; }
 
-		[Browsable(false)]
-		[XmlIgnore]
 		public IImage Image { get; set; }
 
 		[Browsable(false)]
@@ -73,7 +71,6 @@ namespace Myra.Graphics2D.UI
 				asButton.IsPressed = value;
 			}
 		}
-
 
 		public event EventHandler SelectedChanged;
 

@@ -55,12 +55,20 @@ namespace Myra.Utility
 				{
 					defaultAttributeValue = ColorStorage.FromName(defaultAttributeValue.ToString()).Value;
 				}
-			}
 
-			if ((defaultAttribute != null && Equals(value, defaultAttributeValue)))
-			{
-				// Skip default
-				return true;
+				if (property.PropertyType == typeof(string) && 
+					string.IsNullOrEmpty((string)defaultAttributeValue) && 
+					string.IsNullOrEmpty((string)value))
+				{
+					// Skip empty/null string
+					return true;
+				}
+
+				if (Equals(value, defaultAttributeValue))
+				{
+					// Skip default
+					return true;
+				}
 			}
 
 			return false;

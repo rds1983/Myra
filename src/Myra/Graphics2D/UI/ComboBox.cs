@@ -207,7 +207,9 @@ namespace Myra.Graphics2D.UI
 		{
 			if (style.ListBoxStyle != null)
 			{
+				var dropdownMaximumHeight = DropdownMaximumHeight;
 				_listBox.ApplyListBoxStyle(style.ListBoxStyle);
+				DropdownMaximumHeight = dropdownMaximumHeight;
 			}
 
 			InternalChild.ApplyImageTextButtonStyle(style);

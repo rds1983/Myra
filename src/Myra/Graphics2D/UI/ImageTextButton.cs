@@ -19,6 +19,7 @@ namespace Myra.Graphics2D.UI
 		private readonly Label _textBlock;
 
 		[Category("Appearance")]
+		[DefaultValue(null)]
 		public virtual string Text
 		{
 			get
@@ -45,8 +46,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[XmlIgnore]
-		[Browsable(false)]
 		[Category("Appearance")]
 		public SpriteFont Font
 		{
@@ -60,8 +59,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[XmlIgnore]
-		[Browsable(false)]
 		[Category("Appearance")]
 		public IImage Image
 		{
@@ -76,8 +73,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[XmlIgnore]
-		[Browsable(false)]
 		[Category("Appearance")]
 		public IImage OverImage
 		{
@@ -92,8 +87,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[XmlIgnore]
-		[Browsable(false)]
 		[Category("Appearance")]
 		public IImage PressedImage
 		{
@@ -210,6 +203,7 @@ namespace Myra.Graphics2D.UI
 			_textBlock = new Label(null)
 			{
 				HorizontalAlignment = HorizontalAlignment.Stretch,
+				VerticalAlignment = VerticalAlignment.Center,
 				Wrap = true
 			};
 

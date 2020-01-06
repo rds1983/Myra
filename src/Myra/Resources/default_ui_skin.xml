@@ -60,10 +60,10 @@
     </VerticalSliderStyle>
   </VerticalSliderStyles>
   <HorizontalProgressBarStyles>
-    <HorizontalProgressBarStyle Background="progressbar" Filled="progressbar-filled" />
+    <HorizontalProgressBarStyle Background="progressbar" Filler="progressbar-filled" />
   </HorizontalProgressBarStyles>
   <VerticalProgressBarStyles>
-    <VerticalProgressBarStyle Background="progressbar-vertical" Filled="progressbar-filled-vertical" />
+    <VerticalProgressBarStyle Background="progressbar-vertical" Filler="progressbar-filled-vertical" />
   </VerticalProgressBarStyles>
   <HorizontalSeparatorStyles>
     <HorizontalSeparatorStyle Image="separator-menu" Thickness="4" />

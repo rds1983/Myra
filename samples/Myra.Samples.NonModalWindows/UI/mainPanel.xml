@@ -6,6 +6,6 @@
       <TextButton Text="Window 2" Toggleable="True" Id="_button2" />
       <TextButton Text="Window 3" Toggleable="True" Id="_button3" />
     </HorizontalStackPanel>
-    <Label Text="Is mouse over GUI: true" Id="_labelOverGui" VerticalAlignment="Bottom" />
+    <Label Text="Is mouse over GUI: true" VerticalAlignment="Bottom" Id="_labelOverGui" />
   </Panel>
 </Project>

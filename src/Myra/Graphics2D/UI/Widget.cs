@@ -3,7 +3,6 @@ using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Serialization;
-using System.Collections.Generic;
 using Myra.MML;
 
 #if !XENKO
@@ -16,7 +15,7 @@ using Xenko.Input;
 
 namespace Myra.Graphics2D.UI
 {
-	public class Widget : IItemWithId, IHasResources
+	public class Widget : BaseObject
 	{
 		internal enum LayoutState
 		{
@@ -49,9 +48,6 @@ namespace Myra.Graphics2D.UI
 		private float _opacity = 1.0f;
 
 		private bool _enabled;
-
-		[DefaultValue(null)]
-		public string Id { get; set; }
 
 		/// <summary>
 		/// Internal use only. (MyraPad)
@@ -501,13 +497,6 @@ namespace Myra.Graphics2D.UI
 				InvalidateMeasure();
 			}
 		}
-
-		/// <summary>
-		/// External files used by this widget
-		/// </summary>
-		[XmlIgnore]
-		[Browsable(false)]
-		public Dictionary<string, string> Resources { get; private set; } = new Dictionary<string, string>();
 
 		protected internal bool Active
 		{

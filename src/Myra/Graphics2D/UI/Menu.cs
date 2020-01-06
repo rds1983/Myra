@@ -603,7 +603,7 @@ namespace Myra.Graphics2D.UI
 
 			if (!_internalSetSelectedIndex)
 			{
-				SelectedIndex = null;
+				SelectedIndex = HoverIndex = null;
 			}
 		}
 		
@@ -691,7 +691,7 @@ namespace Myra.Graphics2D.UI
 				menuItem.FireSelected();
 			} else
 			{
-				SelectedIndex = index;
+				SelectedIndex = HoverIndex = index;
 			}
 		}
 

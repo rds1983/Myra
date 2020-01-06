@@ -1,6 +1,6 @@
 ﻿namespace Myra.Graphics2D.UI.Styles
 {
-	public class WidgetStyle: IItemWithId
+	public class WidgetStyle
 	{
 		public string Id { get; set; }
 

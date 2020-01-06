@@ -45,6 +45,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[DefaultValue(null)]
 		public string Text
 		{
 			get
@@ -137,8 +138,7 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
+		[Category("Appearance")]
 		public Color? OverTextColor
 		{
 			get; set;

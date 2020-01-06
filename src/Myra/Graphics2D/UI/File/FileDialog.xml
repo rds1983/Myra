@@ -1,6 +1,6 @@
 <Project>
   <Project.ExportOptions Namespace="Myra.Graphics2D.UI.File" Class="FileDialog" OutputPath="D:/Projects/Myra/src/Myra/Graphics2D/UI/File" />
-  <Dialog Title="Open File..." Left="224" Top="5" Width="600" Height="400">
+  <Dialog Title="Open File..." Left="196" Top="1" Width="600" Height="400">
     <VerticalStackPanel Spacing="4">
       <VerticalStackPanel.Proportions>
         <Proportion Type="Auto" />
@@ -13,13 +13,13 @@
           <Proportion Type="Fill" />
           <Proportion Type="Auto" />
         </Grid.ColumnsProportions>
-        <ImageButton Id="_buttonBack" HorizontalAlignment="Center" VerticalAlignment="Center" />
-        <ImageButton Id="_buttonForward" HorizontalAlignment="Center" VerticalAlignment="Center" GridColumn="1" />
-        <TextBox Text="" Readonly="True" Id="_textFieldPath" VerticalAlignment="Center" GridColumn="2" />
-        <ImageButton Id="_buttonParent" HorizontalAlignment="Center" VerticalAlignment="Center" GridColumn="3" />
+        <ImageButton HorizontalAlignment="Center" VerticalAlignment="Center" Id="_buttonBack" />
+        <ImageButton HorizontalAlignment="Center" VerticalAlignment="Center" GridColumn="1" Id="_buttonForward" />
+        <TextBox Readonly="True" VerticalAlignment="Center" GridColumn="2" Id="_textFieldPath" />
+        <ImageButton HorizontalAlignment="Center" VerticalAlignment="Center" GridColumn="3" Id="_buttonParent" />
       </Grid>
       <HorizontalSplitPane Id="_splitPane">
-        <ListBox Id="_listBoxPlaces" HorizontalAlignment="Stretch" ClipToBounds="True" />
+        <ListBox HorizontalAlignment="Stretch" ClipToBounds="True" Id="_listBoxPlaces" />
         <ScrollViewer ShowHorizontalScrollBar="False" Id="_scrollPane">
           <Grid ColumnSpacing="4" RowSpacing="4" GridSelectionMode="Row" Id="_gridFiles">
             <Grid.ColumnsProportions>
@@ -35,7 +35,7 @@
           <Proportion Type="Fill" />
         </Grid.ColumnsProportions>
         <Label Text="File name" Id="_textBlockFileName" />
-        <TextBox Text="" Id="_textFieldFileName" GridColumn="1" />
+        <TextBox GridColumn="1" Id="_textFieldFileName" />
       </Grid>
     </VerticalStackPanel>
   </Dialog>

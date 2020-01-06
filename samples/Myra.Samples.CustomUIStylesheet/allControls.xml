@@ -1,4 +1,4 @@
-<Project>
+<Project StylesheetPath="Resources/ui_stylesheet.xml">
   <Project.ExportOptions Namespace="Myra.Samples.CustomUIStylesheet" Class="AllWidgets" OutputPath="D:\Projects\Myra\samples\Myra.Samples.CustomUIStylesheet" />
   <HorizontalSplitPane GridRow="1">
     <ScrollViewer>
@@ -8,23 +8,23 @@
           <Proportion Type="Auto" />
           <Proportion Type="Fill" />
         </Grid.ColumnsProportions>
-        <Label Text="Button:" Id="" />
-        <ImageTextButton Text="Button" Id="_button" PaddingLeft="8" PaddingRight="8" GridColumn="1" />
-        <Label Text="Text Button:" Id="_textButtonLabel" GridRow="1" />
-        <TextButton Text="Button 2" Id="_textButton" PaddingLeft="8" PaddingRight="8" GridColumn="1" GridRow="1" />
-        <Label Text="Image Button:" Id="" GridRow="2" />
-        <ImageButton Id="_imageButton" PaddingLeft="8" PaddingRight="8" GridColumn="1" GridRow="2" />
+        <Label Text="Button:" />
+        <ImageTextButton Text="Button" GridColumn="1" Id="_button" />
+        <Label Text="Text Button:" GridRow="1" Id="_textButtonLabel" />
+        <TextButton Text="Button 2" GridColumn="1" GridRow="1" Id="_textButton" />
+        <Label Text="Image Button:" GridRow="2" />
+        <ImageButton GridColumn="1" GridRow="2" Id="_imageButton" />
         <CheckBox Text="This is checkbox" ImageWidth="10" ImageHeight="10" GridRow="3" GridColumnSpan="2" />
-        <Label Text="Horizontal Slider:" Id="" GridRow="4" />
+        <Label Text="Horizontal Slider:" GridRow="4" />
         <HorizontalSlider GridColumn="1" GridRow="4" />
         <Label Text="Combo Box:" GridRow="5" />
         <ComboBox Width="200" GridColumn="1" GridRow="5">
-          <ListItem Id="" Text="Red" Color="#FF0000FF" />
+          <ListItem Text="Red" Color="#FF0000FF" />
           <ListItem Text="Green" Color="#00FF00FF" />
           <ListItem Text="Blue" Color="#0080FFFF" />
         </ComboBox>
         <Label Text="Text Field:" GridRow="6" />
-        <TextBox Text="" GridColumn="1" GridRow="6" />
+        <TextBox GridColumn="1" GridRow="6" />
         <Label Text="List Box:" GridRow="7" />
         <ListBox Width="200" GridColumn="1" GridRow="7">
           <ListItem Text="Red" Color="#FF0000FF" />
@@ -56,8 +56,8 @@
           <Proportion Type="Fill" />
         </Grid.RowsProportions>
         <Label Text="Progress Bars:" />
-        <HorizontalProgressBar Id="_horizontalProgressBar" GridRow="1" />
-        <VerticalProgressBar HorizontalAlignment="Center" Id="_verticalProgressBar" GridRow="2" />
+        <HorizontalProgressBar GridRow="1" Id="_horizontalProgressBar" />
+        <VerticalProgressBar HorizontalAlignment="Center" GridRow="2" Id="_verticalProgressBar" />
       </Grid>
     </VerticalSplitPane>
   </HorizontalSplitPane>

@@ -32,8 +32,6 @@ namespace Myra.Graphics2D.UI
 			set { InternalChild.VerticalAlignment = value; }
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
 		[Category("Appearance")]
 		public virtual IBrush PressedBackground { get; set; }
 

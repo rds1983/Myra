@@ -35,13 +35,7 @@ namespace Myra.Graphics2D.UI
 
 			ButtonOk.Click += (sender, args) =>
 			{
-				if (!CanCloseByOk())
-				{
-					return;
-				}
-
-				Result = true;
-				Close();
+				OnOk();
 			};
 
 			buttonsGrid.Widgets.Add(ButtonOk);
@@ -84,7 +78,18 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		protected virtual bool CanCloseByOk()
+		protected internal virtual void OnOk()
+		{
+			if (!CanCloseByOk())
+			{
+				return;
+			}
+
+			Result = true;
+			Close();
+		}
+
+		protected internal virtual bool CanCloseByOk()
 		{
 			return true;
 		}

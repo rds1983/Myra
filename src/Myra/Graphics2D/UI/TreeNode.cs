@@ -76,15 +76,13 @@ namespace Myra.Graphics2D.UI
 
 		public TreeStyle TreeStyle { get; private set; }
 
-		[Browsable(false)]
-		[XmlIgnore]
+		[Category("Appearance")]
 		public IBrush SelectionBackground
 		{
 			get; set;
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
+		[Category("Appearance")]
 		public IBrush SelectionHoverBackground
 		{
 			get; set;

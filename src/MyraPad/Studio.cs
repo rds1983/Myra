@@ -520,14 +520,14 @@ namespace MyraPad
 			}
 		}
 
-		private void UpdateResourcesPaths(string oldPath, string newPath, Action onFinished)
+		private void UpdateResourcesPaths(string oldPath, string newPath, Action<bool> onFinished)
 		{
 			try
 			{
 				// For now only empty old path is allowed
 				if (!string.IsNullOrEmpty(oldPath))
 				{
-					onFinished();
+					onFinished(false);
 					return;
 				}
 				
@@ -549,7 +549,7 @@ namespace MyraPad
 
 				if (!hasExternalResources)
 				{
-					onFinished();
+					onFinished(false);
 					return;
 				}
 
@@ -601,18 +601,26 @@ namespace MyraPad
 
 						if (updated)
 						{
-							UpdateSource();
+							try
+							{
+								_suppressProjectRefresh = true;
+								UpdateSource();
+							}
+							finally
+							{
+								_suppressProjectRefresh = false;
+							}
 						}
 					}
 
-					onFinished();
+					onFinished(true);
 				};
 
 				dialog.ShowModal();
 			}
 			catch (Exception)
 			{
-				onFinished();
+				onFinished(false);
 			}
 		}
 
@@ -1096,11 +1104,6 @@ namespace MyraPad
 
 		private void OnMenuFileReloadSelected(object sender, EventArgs e)
 		{
-			if (string.IsNullOrEmpty(Project.StylesheetPath))
-			{
-				return;
-			}
-
 			AssetManager.ClearCache();
 			QueueRefreshProject();
 		}
@@ -1520,12 +1523,17 @@ namespace MyraPad
 				return;
 			}
 
-			UpdateResourcesPaths(FilePath, filePath, () =>
+			UpdateResourcesPaths(FilePath, filePath, updated =>
 			{
 				File.WriteAllText(filePath, _ui._textSource.Text);
 
 				FilePath = filePath;
 				IsDirty = false;
+
+				if (updated)
+				{
+					QueueRefreshProject();
+				}
 			});
 		}
 

@@ -109,32 +109,24 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
 		[Category("Appearance")]
 		public IImage HorizontalScrollBackground
 		{
 			get; set;
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
 		[Category("Appearance")]
 		public IImage HorizontalScrollKnob
 		{
 			get; set;
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
 		[Category("Appearance")]
 		public IImage VerticalScrollBackground
 		{
 			get; set;
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
 		[Category("Appearance")]
 		public IImage VerticalScrollKnob
 		{

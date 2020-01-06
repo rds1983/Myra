@@ -48,10 +48,10 @@
     </VerticalSliderStyle>
   </VerticalSliderStyles>
   <HorizontalProgressBarStyles>
-    <HorizontalProgressBarStyle Background="progress-bar" Filled="progress-bar-knob" />
+    <HorizontalProgressBarStyle Background="progress-bar" Filler="progress-bar-knob" />
   </HorizontalProgressBarStyles>
   <VerticalProgressBarStyles>
-    <VerticalProgressBarStyle Background="progress-bar" Filled="progress-bar-knob" />
+    <VerticalProgressBarStyle Background="progress-bar" Filler="progress-bar-knob" />
   </VerticalProgressBarStyles>
   <ComboBoxStyles>
     <ComboBoxStyle Background="list">

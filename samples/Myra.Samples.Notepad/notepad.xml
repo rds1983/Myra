@@ -7,23 +7,23 @@
       <Proportion Type="Fill" />
     </VerticalStackPanel.Proportions>
     <HorizontalMenu VerticalAlignment="Stretch" Id="_mainMenu">
-      <MenuItem Id="menuItemFile" Text="&amp;File">
-        <MenuItem Id="menuItemNew" Text="&amp;New" ShortcutText="Ctrl+N" />
-        <MenuItem Id="menuItemOpen" Text="&amp;Open..." ShortcutText="Ctrl+O" />
-        <MenuItem Id="menuItemSave" Text="&amp;Save" ShortcutText="Ctrl+S" />
-        <MenuItem Id="menuItemSaveAs" Text="Save &amp;As..." ShortcutText="Ctrl+A" />
+      <MenuItem Text="&amp;File" Id="menuItemFile">
+        <MenuItem Text="&amp;New" ShortcutText="Ctrl+N" Id="menuItemNew" />
+        <MenuItem Text="&amp;Open..." ShortcutText="Ctrl+O" Id="menuItemOpen" />
+        <MenuItem Text="&amp;Save" ShortcutText="Ctrl+S" Id="menuItemSave" />
+        <MenuItem Text="Save &amp;As..." ShortcutText="Ctrl+A" Id="menuItemSaveAs" />
         <MenuSeparator />
-        <MenuItem Id="menuItemDebugOptions" Text="Debug Options" />
+        <MenuItem Text="Debug Options" Id="menuItemDebugOptions" />
         <MenuSeparator />
-        <MenuItem Id="menuItemQuit" Text="&amp;Quit" ShortcutText="Ctrl+Q" />
+        <MenuItem Text="&amp;Quit" ShortcutText="Ctrl+Q" Id="menuItemQuit" />
       </MenuItem>
-      <MenuItem Id="menuItemHelp" Text="&amp;Help">
-        <MenuItem Id="menuItemAbout" Text="About" />
+      <MenuItem Text="&amp;Help" Id="menuItemHelp">
+        <MenuItem Text="About" Id="menuItemAbout" />
       </MenuItem>
     </HorizontalMenu>
     <HorizontalSeparator />
     <ScrollViewer>
-      <TextBox Text="" Multiline="True" Wrap="True" Id="textArea" VerticalAlignment="Stretch" />
+      <TextBox Multiline="True" Wrap="True" VerticalAlignment="Stretch" Id="textArea" />
     </ScrollViewer>
   </VerticalStackPanel>
 </Project>

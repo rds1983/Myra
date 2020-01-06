@@ -38,7 +38,7 @@ namespace Myra.MML
 		{
 			var type = obj.GetType();
 
-			var hasResources = obj as IHasResources;
+			var baseObject = obj as BaseObject;
 
 			List<PropertyInfo> complexProperties, simpleProperties;
 			ParseProperties(type, out complexProperties, out simpleProperties);
@@ -89,9 +89,9 @@ namespace Myra.MML
 							}
 							value = texture;
 
-							if (hasResources != null)
+							if (baseObject != null)
 							{
-								hasResources.Resources[property.Name] = attr.Value;
+								baseObject.Resources[property.Name] = attr.Value;
 							}
 						}
 						catch(Exception)

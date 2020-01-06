@@ -6,6 +6,7 @@ mkdir "ZipPackage"
 mkdir "ZipPackage\x64"
 mkdir "ZipPackage\x86"
 mkdir "ZipPackage\Stylesheets"
+mkdir "ZipPackage\Assets"
 
 set "CONFIGURATION=Release\net45"
 set "CONFIGURATION_XENKO=Release\netstandard2.0"
@@ -36,5 +37,5 @@ copy "src\MyraPad\bin\%CONFIGURATION%\x86\soft_oal.dll" "ZipPackage\x86" /Y
 copy "src\MyraPad\bin\%CONFIGURATION%\libSDL2-2.0.0.dylib" "ZipPackage" /Y
 copy "src\MyraPad\bin\%CONFIGURATION%\libopenal.1.dylib" "ZipPackage" /Y
 xcopy "samples\Stylesheets\*.*" "ZipPackage\Stylesheets\*.*" /s
-xcopy "samples\Myra.Samples.AssetManagement\UI\fonts\*.*" "ZipPackage\UI\fonts\*.*" /s
-xcopy "samples\Myra.Samples.AssetManagement\UI\images\*.*" "ZipPackage\UI\images\*.*" /s
+xcopy "samples\Myra.Samples.AssetManagement\Assets\fonts\*.*" "ZipPackage\Assets\fonts\*.*" /s
+xcopy "samples\Myra.Samples.AssetManagement\Assets\images\*.*" "ZipPackage\Assets\images\*.*" /s

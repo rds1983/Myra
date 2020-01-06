@@ -2,16 +2,16 @@
   <Project.ExportOptions Namespace="Myra.Samples.DebugConsole" Class="DebugPanel" OutputPath="D:\Projects\Myra\samples\Myra.Samples.DebugConsole" />
   <VerticalStackPanel Spacing="8" Height="300">
     <HorizontalMenu>
-      <MenuItem Id="" Text="&amp;Units">
-        <MenuItem Id="" Text="Add &amp;Orc" />
-        <MenuItem Id="" Text="Add &amp;Peasant" />
-        <MenuItem Id="" Text="Add &amp;Knight" />
-        <MenuItem Id="" Text="Add &amp;Priest" />
-        <MenuItem Id="" Text="Add &amp;Wizard" />
+      <MenuItem Text="&amp;Units">
+        <MenuItem Text="Add &amp;Orc" />
+        <MenuItem Text="Add &amp;Peasant" />
+        <MenuItem Text="Add &amp;Knight" />
+        <MenuItem Text="Add &amp;Priest" />
+        <MenuItem Text="Add &amp;Wizard" />
       </MenuItem>
-      <MenuItem Id="" Text="&amp;Operations">
-        <MenuItem Id="" Text="Add 10000 &amp;Gold" />
-        <MenuItem Id="" Text="Add 10000 &amp;Wood" />
+      <MenuItem Text="&amp;Operations">
+        <MenuItem Text="Add 10000 &amp;Gold" />
+        <MenuItem Text="Add 10000 &amp;Wood" />
       </MenuItem>
     </HorizontalMenu>
     <HorizontalStackPanel Spacing="8">
@@ -22,6 +22,6 @@
       <Label Text="Command:" />
       <TextBox />
     </HorizontalStackPanel>
-    <TextButton Text="Hide Debug Panel" Id="_buttonHideDebug" HorizontalAlignment="Center" />
+    <TextButton Text="Hide Debug Panel" HorizontalAlignment="Center" Id="_buttonHideDebug" />
   </VerticalStackPanel>
 </Project>

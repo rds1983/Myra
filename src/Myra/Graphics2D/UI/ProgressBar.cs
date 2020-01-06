@@ -14,7 +14,7 @@ namespace Myra.Graphics2D.UI
 {
 	public abstract class ProgressBar : Widget
 	{
-		private IImage _filler;
+		private IBrush _filler;
 		private float _value;
 
 		[Browsable(false)]
@@ -60,9 +60,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
-		public IImage Filler
+		[Category("Appearance")]
+		public IBrush Filler
 		{
 			get
 			{
@@ -87,10 +86,10 @@ namespace Myra.Graphics2D.UI
 		{
 			ApplyWidgetStyle(style);
 
-			if (style.Filled == null)
+			if (style.Filler == null)
 				return;
 
-			_filler = style.Filled;
+			_filler = style.Filler;
 		}
 
 		protected override Point InternalMeasure(Point availableSize)
@@ -99,13 +98,17 @@ namespace Myra.Graphics2D.UI
 
 			if (_filler != null)
 			{
-				if (Orientation == Orientation.Horizontal)
+				var asImage = _filler as IImage;
+				if (asImage != null)
 				{
-					result.Y = _filler.Size.Y;
-				}
-				else
-				{
-					result.X = _filler.Size.X;
+					if (Orientation == Orientation.Horizontal)
+					{
+						result.Y = asImage.Size.Y;
+					}
+					else
+					{
+						result.X = asImage.Size.X;
+					}
 				}
 			}
 

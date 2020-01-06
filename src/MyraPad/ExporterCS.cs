@@ -277,9 +277,9 @@ namespace MyraPad
 				string strValue = null;
 				if (typeof(IBrush).IsAssignableFrom(property.PropertyType) || property.PropertyType == typeof(SpriteFont))
 				{
-					var hasResources = o as IHasResources;
+					var baseObject = o as BaseObject;
 					string s;
-					if (hasResources != null && hasResources.Resources.TryGetValue(property.Name, out s))
+					if (baseObject != null && baseObject.Resources.TryGetValue(property.Name, out s))
 					{
 						var typeName = property.PropertyType.Name;
 						if (typeof(IImage).IsAssignableFrom(property.PropertyType))
@@ -287,7 +287,13 @@ namespace MyraPad
 							typeName = "TextureRegion";
 						}
 
-						strValue = "AssetManager.Default.Load<" + typeName + ">(\"" + s + "\")";
+						if (property.PropertyType != typeof(IBrush))
+						{
+							strValue = "AssetManager.Default.Load<" + typeName + ">(\"" + s + "\")";
+						} else
+						{
+							strValue = "new SolidBrush(ColorStorage.FromName(\"" + s + "\").Value)";
+						}
 					}
 				}
 				else

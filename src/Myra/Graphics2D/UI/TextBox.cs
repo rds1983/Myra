@@ -57,6 +57,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[DefaultValue(null)]
 		public string Text
 		{
 			get
@@ -102,8 +103,6 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
 		[Category("Appearance")]
 		public SpriteFont Font
 		{
@@ -157,16 +156,12 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
 		[Category("Appearance")]
 		public IImage Cursor
 		{
 			get; set;
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
 		[Category("Appearance")]
 		public IBrush Selection
 		{

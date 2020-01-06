@@ -1,6 +1,6 @@
 ﻿namespace Myra.Graphics2D.UI
 {
-	public interface ISelectorItem: IItemWithId
+	public interface ISelectorItem
 	{
 		bool IsSelected
 		{

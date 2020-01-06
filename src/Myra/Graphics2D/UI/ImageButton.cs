@@ -6,8 +6,6 @@ namespace Myra.Graphics2D.UI
 {
 	public class ImageButton : ButtonBase<Image>
 	{
-		[XmlIgnore]
-		[Browsable(false)]
 		[Category("Appearance")]
 		public IImage Image
 		{
@@ -22,8 +20,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[XmlIgnore]
-		[Browsable(false)]
 		[Category("Appearance")]
 		public IImage OverImage
 		{
@@ -38,8 +34,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[XmlIgnore]
-		[Browsable(false)]
 		[Category("Appearance")]
 		public IImage PressedImage
 		{
