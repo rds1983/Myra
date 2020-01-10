@@ -121,10 +121,6 @@ namespace Myra.Samples.Notepad
 					{
 						SaveItemOnDown(this, EventArgs.Empty);
 					}
-					else if (Desktop.DownKeys.Contains(Keys.A))
-					{
-						SaveAsItemOnDown(this, EventArgs.Empty);
-					}
 					else if (Desktop.DownKeys.Contains(Keys.Q))
 					{
 						Exit();

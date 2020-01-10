@@ -21,14 +21,14 @@
         <MenuSeparator />
         <MenuItem Text="&amp;Quit" ShortcutText="Ctrl+Q" Id="_menuFileQuit" />
       </MenuItem>
-      <MenuItem Text="&amp;Edit" Id="">
+      <MenuItem Text="&amp;Edit">
         <MenuItem Text="Select &amp;All" ShortcutText="Ctrl+A" Id="_menuItemSelectAll" />
         <MenuItem Text="&amp;Copy" ShortcutText="Ctrl+Insert, Ctrl+C" Id="_menuItemCopy" />
         <MenuItem Text="&amp;Paste" ShortcutText="Shift+Insert, Ctrl+V" Id="_menuItemPaste" />
         <MenuSeparator />
         <MenuItem Text="&amp;Format Source" ShortcutText="Ctrl+F" Id="_menuEditFormatSource" />
       </MenuItem>
-      <MenuItem Text="&amp;Help" Id="">
+      <MenuItem Text="&amp;Help">
         <MenuItem Text="&amp;About" Id="_menuHelpAbout" />
       </MenuItem>
     </HorizontalMenu>

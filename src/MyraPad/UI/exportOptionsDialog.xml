@@ -1,20 +1,20 @@
 <Project>
   <Project.ExportOptions Namespace="MyraPad.UI" Class="ExportOptionsDialog" OutputPath="D:\Projects\Myra\src\MyraPad\UI" />
-  <Dialog Title="Export" Left="124" Top="138">
-    <Grid ColumnSpacing="8" RowSpacing="8" Id="Root" Width="800">
+  <Dialog Title="Export" Left="96" Top="133">
+    <Grid ColumnSpacing="8" RowSpacing="8" Width="800" Id="Root">
       <Grid.DefaultRowProportion Type="Auto" />
       <Grid.ColumnsProportions>
         <Proportion Type="Auto" />
         <Proportion Type="Fill" />
         <Proportion Type="Auto" />
       </Grid.ColumnsProportions>
-      <Label Text="Class Name:" Id="" GridRow="1" />
-      <TextBox Text="" Id="_textClassName" GridColumn="1" GridRow="1" />
+      <Label Text="Class Name:" GridRow="1" />
+      <TextBox GridColumn="1" GridRow="1" Id="_textClassName" />
       <Label Text="Output Path:" GridRow="2" />
-      <TextBox Text="" Id="_textOutputPath" GridColumn="1" GridRow="2" />
-      <TextButton Text="Change..." Id="_buttonChangeOutputPath" GridColumn="2" GridRow="2" />
+      <TextBox GridColumn="1" GridRow="2" Id="_textOutputPath" />
+      <TextButton Text="Change..." GridColumn="2" GridRow="2" Id="_buttonChangeOutputPath" />
       <Label Text="Namespace:" />
-      <TextBox Text="" Id="_textNamespace" GridColumn="1" />
+      <TextBox GridColumn="1" Id="_textNamespace" />
     </Grid>
   </Dialog>
 </Project>

@@ -11,7 +11,7 @@
         <MenuItem Text="&amp;New" ShortcutText="Ctrl+N" Id="menuItemNew" />
         <MenuItem Text="&amp;Open..." ShortcutText="Ctrl+O" Id="menuItemOpen" />
         <MenuItem Text="&amp;Save" ShortcutText="Ctrl+S" Id="menuItemSave" />
-        <MenuItem Text="Save &amp;As..." ShortcutText="Ctrl+A" Id="menuItemSaveAs" />
+        <MenuItem Text="Save &amp;As..." Id="menuItemSaveAs" />
         <MenuSeparator />
         <MenuItem Text="Debug Options" Id="menuItemDebugOptions" />
         <MenuSeparator />
