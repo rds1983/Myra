@@ -576,14 +576,14 @@ namespace Myra.Graphics2D.UI
 			var bounds = InternalChild.Bounds;
 			if (Orientation == Orientation.Horizontal)
 			{
-				return new Rectangle(InternalChild.GetCellLocationX(index),
+				return new Rectangle(bounds.X + InternalChild.GetCellLocationX(index),
 					bounds.Y,
 					InternalChild.GetColumnWidth(index),
 					bounds.Height);
 			}
 
 			return new Rectangle(bounds.X,
-				InternalChild.GetCellLocationY(index),
+				bounds.Y + InternalChild.GetCellLocationY(index),
 				bounds.Width,
 				InternalChild.GetRowHeight(index));
 		}
