@@ -50,7 +50,7 @@ namespace Myra.Graphics2D.UI
 
 		private static bool _layoutDirty = true;
 		private static bool _widgetsDirty = true;
-		private static Widget _focusedKeyboardWidget;
+		private static Widget _focusedKeyboardWidget, _focusedMouseWheelWidget;
 		private static readonly List<Widget> _widgetsCopy = new List<Widget>();
 		private static DateTime _lastTouchDown;
 		private static DateTime? _lastKeyDown;
@@ -67,6 +67,8 @@ namespace Myra.Graphics2D.UI
 		private static Point _mousePosition, _touchPosition;
 		private static Point _lastMousePosition, _lastTouchPosition;
 		private static bool _contextMenuShown = false;
+		private static bool _keyboardFocusSet = false;
+		private static bool _mouseWheelFocusSet = false;
 #if MONOGAME
 		public static bool HasExternalTextInput = false;
 #endif
@@ -199,6 +201,11 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
+				if (value != null)
+				{
+					_keyboardFocusSet = true;
+				}
+
 				if (value == _focusedKeyboardWidget)
 				{
 					return;
@@ -234,7 +241,20 @@ namespace Myra.Graphics2D.UI
 
 		public static Widget FocusedMouseWheelWidget
 		{
-			get; set;
+			get
+			{
+				return _focusedMouseWheelWidget;
+			}
+
+			set
+			{
+				if (value != null)
+				{
+					_mouseWheelFocusSet = true;
+				}
+
+				_focusedMouseWheelWidget = value;
+			}
 		}
 
 		private static  RenderContext RenderContext
@@ -541,55 +561,29 @@ namespace Myra.Graphics2D.UI
 			HideContextMenu();
 		}
 
-		private static void FocusOnTouchDown()
-		{
-			// Handle focus
-			var activeWidget = GetTopWidget(true);
-			if (activeWidget == null)
-			{
-				return;
-			}
-
-			// Widgets at the bottom of tree become focused
-			Widget focusedWidget = null;
-			UIUtils.ProcessWidgets(activeWidget, s =>
-			{
-				if (s.Enabled && s.IsTouchInside && s.Active && s.AcceptsKeyboardFocus)
-				{
-					focusedWidget = s;
-				}
-
-				return true;
-			});
-			FocusedKeyboardWidget = focusedWidget;
-
-			focusedWidget = null;
-			UIUtils.ProcessWidgets(activeWidget, s =>
-			{
-				if (s.Enabled && s.IsTouchInside && s.Active && s.AcceptsMouseWheelFocus)
-				{
-					focusedWidget = s;
-				}
-
-				return true;
-			});
-
-			if (focusedWidget != null ||
-				(FocusedMouseWheelWidget != null && FocusedMouseWheelWidget.MouseWheelFocusCanBeNull))
-			{
-				FocusedMouseWheelWidget = focusedWidget;
-			}
-		}
-
 		private static  void InputOnTouchDown()
 		{
 			_contextMenuShown = false;
+			_keyboardFocusSet = false;
+			_mouseWheelFocusSet = false;
 			UpdateIsTouchInside(true);
+
+			if (!_keyboardFocusSet && FocusedKeyboardWidget != null)
+			{
+				// Nullify keyboard focus
+				FocusedKeyboardWidget = null;
+			}
+
+			if (!_mouseWheelFocusSet && FocusedMouseWheelWidget != null && FocusedMouseWheelWidget.MouseWheelFocusCanBeNull)
+			{
+				// Nullify mouse wheel focus
+				FocusedMouseWheelWidget = null;
+			}
+
 			if (!_contextMenuShown)
 			{
 				ContextMenuOnTouchDown();
 			}
-			FocusOnTouchDown();
 		}
 
 		private static void InputOnTouchUp()

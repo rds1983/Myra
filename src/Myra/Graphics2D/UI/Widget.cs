@@ -1161,6 +1161,17 @@ namespace Myra.Graphics2D.UI
 		public virtual void OnTouchDown()
 		{
 			IsTouchInside = true;
+
+			if (Enabled && AcceptsKeyboardFocus)
+			{
+				Desktop.FocusedKeyboardWidget = this;
+			}
+
+			if (Enabled && AcceptsMouseWheelFocus)
+			{
+				Desktop.FocusedMouseWheelWidget = this;
+			}
+
 			TouchDown.Invoke(this);
 		}
 
