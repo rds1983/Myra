@@ -998,6 +998,8 @@ namespace Myra.Graphics2D.UI
 			_lastLocationHint = new Point(Left, Top);
 			_layoutState = LayoutState.Normal;
 
+			HandleMouseMovement();
+
 			LayoutUpdated.Invoke(this);
 		}
 
@@ -1281,7 +1283,7 @@ namespace Myra.Graphics2D.UI
 		internal bool HandleMouseMovement()
 		{
 			var isMouseOver = Bounds.Contains(Desktop.MousePosition);
-			var wasMouseOver = Bounds.Contains(Desktop.LastMousePosition);
+			var wasMouseOver = IsMouseInside;
 
 			if (isMouseOver && !wasMouseOver)
 			{
@@ -1330,7 +1332,7 @@ namespace Myra.Graphics2D.UI
 		internal bool HandleTouchMovement()
 		{
 			var isTouchOver = Bounds.Contains(Desktop.TouchPosition);
-			var wasTouchOver = Bounds.Contains(Desktop.LastTouchPosition);
+			var wasTouchOver = IsTouchInside;
 
 			if (isTouchOver && !wasTouchOver)
 			{

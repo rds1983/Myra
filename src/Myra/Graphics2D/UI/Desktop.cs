@@ -65,7 +65,6 @@ namespace Myra.Graphics2D.UI
 		private static Widget _scheduleMouseWheelFocus;
 		private static bool _isTouchDown;
 		private static Point _mousePosition, _touchPosition;
-		private static Point _lastMousePosition, _lastTouchPosition;
 		private static bool _contextMenuShown = false;
 		private static bool _keyboardFocusSet = false;
 		private static bool _mouseWheelFocusSet = false;
@@ -78,14 +77,6 @@ namespace Myra.Graphics2D.UI
 			get
 			{
 				return _downKeys;
-			}
-		}
-
-		internal static Point LastMousePosition
-		{
-			get
-			{
-				return _lastMousePosition;
 			}
 		}
 
@@ -103,7 +94,6 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
-				_lastMousePosition = _mousePosition;
 				_mousePosition = value;
 				MouseMoved.Invoke();
 
@@ -126,14 +116,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		internal static Point LastTouchPosition
-		{
-			get
-			{
-				return _lastTouchPosition;
-			}
-		}
-
 		public static Point TouchPosition
 		{
 			get
@@ -148,7 +130,6 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
-				_lastTouchPosition = _touchPosition;
 				_touchPosition = value;
 				TouchMoved.Invoke();
 
