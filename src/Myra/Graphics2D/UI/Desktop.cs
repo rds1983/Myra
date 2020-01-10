@@ -66,6 +66,7 @@ namespace Myra.Graphics2D.UI
 		private static bool _isTouchDown;
 		private static Point _mousePosition, _touchPosition;
 		private static Point _lastMousePosition, _lastTouchPosition;
+		private static bool _contextMenuShown = false;
 #if MONOGAME
 		public static bool HasExternalTextInput = false;
 #endif
@@ -582,8 +583,12 @@ namespace Myra.Graphics2D.UI
 
 		private static  void InputOnTouchDown()
 		{
+			_contextMenuShown = false;
 			UpdateIsTouchInside(true);
-			ContextMenuOnTouchDown();
+			if (!_contextMenuShown)
+			{
+				ContextMenuOnTouchDown();
+			}
 			FocusOnTouchDown();
 		}
 
@@ -602,39 +607,42 @@ namespace Myra.Graphics2D.UI
 			HideContextMenu();
 
 			ContextMenu = menu;
-
-			if (ContextMenu != null)
+			if (ContextMenu == null)
 			{
-				ContextMenu.HorizontalAlignment = HorizontalAlignment.Left;
-				ContextMenu.VerticalAlignment = VerticalAlignment.Top;
-
-				var measure = ContextMenu.Measure(InternalBounds.Size());
-
-				if (position.X + measure.X > InternalBounds.Right)
-				{
-					position.X = InternalBounds.Right - measure.X;
-				}
-
-				if (position.Y + measure.Y > InternalBounds.Bottom)
-				{
-					position.Y = InternalBounds.Bottom - measure.Y;
-				}
-
-				ContextMenu.Left = position.X;
-				ContextMenu.Top = position.Y;
-
-				ContextMenu.Visible = true;
-
-				Widgets.Add(ContextMenu);
-
-				if (ContextMenu.AcceptsKeyboardFocus)
-				{
-					_previousKeyboardFocus = FocusedKeyboardWidget;
-					FocusedKeyboardWidget = ContextMenu;
-				}
-
-				_scheduleMouseWheelFocus = ContextMenu;
+				return;
 			}
+
+			ContextMenu.HorizontalAlignment = HorizontalAlignment.Left;
+			ContextMenu.VerticalAlignment = VerticalAlignment.Top;
+
+			var measure = ContextMenu.Measure(InternalBounds.Size());
+
+			if (position.X + measure.X > InternalBounds.Right)
+			{
+				position.X = InternalBounds.Right - measure.X;
+			}
+
+			if (position.Y + measure.Y > InternalBounds.Bottom)
+			{
+				position.Y = InternalBounds.Bottom - measure.Y;
+			}
+
+			ContextMenu.Left = position.X;
+			ContextMenu.Top = position.Y;
+
+			ContextMenu.Visible = true;
+
+			Widgets.Add(ContextMenu);
+
+			if (ContextMenu.AcceptsKeyboardFocus)
+			{
+				_previousKeyboardFocus = FocusedKeyboardWidget;
+				FocusedKeyboardWidget = ContextMenu;
+			}
+
+			_scheduleMouseWheelFocus = ContextMenu;
+
+			_contextMenuShown = true;
 		}
 
 		public static void HideContextMenu()

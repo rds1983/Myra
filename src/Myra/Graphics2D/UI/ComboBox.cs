@@ -53,7 +53,6 @@ namespace Myra.Graphics2D.UI
 			{
 				if (IsPlaced)
 				{
-					Desktop.ContextMenuClosing -= DesktopOnContextMenuClosing;
 					Desktop.ContextMenuClosed -= DesktopOnContextMenuClosed;
 				}
 
@@ -61,7 +60,6 @@ namespace Myra.Graphics2D.UI
 
 				if (IsPlaced)
 				{
-					Desktop.ContextMenuClosing += DesktopOnContextMenuClosing;
 					Desktop.ContextMenuClosed += DesktopOnContextMenuClosed;
 				}
 			}
@@ -109,16 +107,6 @@ namespace Myra.Graphics2D.UI
 			SetStyle(styleName);
 		}
 
-		private void DesktopOnContextMenuClosing(object sender, CancellableEventArgs<Widget> args)
-		{
-			// Prevent autoclosing of the context menu if mouse is over combobox button
-			// It'll be manually closed in the InternalChild_PressedChanged
-			if (Bounds.Contains(Desktop.TouchPosition))
-			{
-				args.Cancel = true;
-			}
-		}
-
 		private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Widget> genericEventArgs)
 		{
 			InternalChild.IsPressed = false;
@@ -135,9 +123,6 @@ namespace Myra.Graphics2D.UI
 			{
 				_listBox.Width = Bounds.Width;
 				Desktop.ShowContextMenu(_listBox, new Point(Bounds.X, Bounds.Bottom));
-			} else
-			{
-				Desktop.HideContextMenu();
 			}
 		}
 

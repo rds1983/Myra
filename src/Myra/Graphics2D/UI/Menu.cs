@@ -174,7 +174,6 @@ namespace Myra.Graphics2D.UI
 			{
 				if (IsPlaced)
 				{
-					Desktop.ContextMenuClosing -= DesktopOnContextMenuClosing;
 					Desktop.ContextMenuClosed -= DesktopOnContextMenuClosed;
 				}
 
@@ -182,7 +181,6 @@ namespace Myra.Graphics2D.UI
 
 				if (IsPlaced)
 				{
-					Desktop.ContextMenuClosing += DesktopOnContextMenuClosing;
 					Desktop.ContextMenuClosed += DesktopOnContextMenuClosed;
 				}
 			}
@@ -586,15 +584,6 @@ namespace Myra.Graphics2D.UI
 				bounds.Y + InternalChild.GetCellLocationY(index),
 				bounds.Width,
 				InternalChild.GetRowHeight(index));
-		}
-
-		private void DesktopOnContextMenuClosing(object sender, CancellableEventArgs<Widget> args)
-		{
-			// Prevent closing/opening of the context menu
-			if (OpenMenuItem != null && GetItemBounds(OpenMenuItem.Index).Contains(Desktop.TouchPosition))
-			{
-				args.Cancel = true;
-			}
 		}
 
 		private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Widget> genericEventArgs)
