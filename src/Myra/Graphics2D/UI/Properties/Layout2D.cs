@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Myra.Graphics2D.UI.Properties
 {
@@ -114,9 +115,9 @@ namespace Myra.Graphics2D.UI.Properties
 
         private void ParseLayoutOnExpressions(string expression)
         {
-            var ex= expression.Replace(" ", "");
             Nullable = false;
-            ex.Split(';').ToList().ForEach(
+
+            expression.Split(';').ToList().ForEach(
                 i => {
                     //if height size expression
                     if (i.Contains("this.h") || i.Contains("this.height"))
