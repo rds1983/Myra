@@ -39,13 +39,15 @@ namespace Myra.Samples.NonModalWindows.UI
 			horizontalStackPanel1.Widgets.Add(_button2);
 			horizontalStackPanel1.Widgets.Add(_button3);
 
-			_labelOverGui = new Label();
+
+            _labelOverGui = new Label();
 			_labelOverGui.Text = "Is mouse over GUI: true";
 			_labelOverGui.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Bottom;
 			_labelOverGui.Id = "_labelOverGui";
 
-			
-			Widgets.Add(horizontalStackPanel1);
+            this.Layout2d = new Graphics2D.UI.Properties.Layout2D("this.X = &.w * 50%;this.Y = &.h / '2'");
+
+            Widgets.Add(horizontalStackPanel1);
 			Widgets.Add(_labelOverGui);
 		}
 

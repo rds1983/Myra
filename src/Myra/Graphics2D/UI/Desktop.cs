@@ -238,7 +238,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private static  RenderContext RenderContext
+		private static RenderContext RenderContext
 		{
 			get
 			{
@@ -364,14 +364,14 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private static  bool IsMenuBarActive
+		private static bool IsMenuBarActive
 		{
 			get
 			{
 				return (MenuBar != null && (MenuBar.OpenMenuItem != null || IsAltDown));
 			}
 		}
-		
+
 		public static Action<Keys> KeyDownHandler;
 
 		public static event EventHandler MouseMoved;
@@ -464,7 +464,7 @@ namespace Myra.Graphics2D.UI
 			return ChildrenCopy[index];
 		}
 
-		private static  void HandleDoubleClick()
+		private static void HandleDoubleClick()
 		{
 			if ((DateTime.Now - _lastTouchDown).TotalMilliseconds < DoubleClickIntervalInMs)
 			{
@@ -542,7 +542,7 @@ namespace Myra.Graphics2D.UI
 			HideContextMenu();
 		}
 
-		private static  void InputOnTouchDown()
+		private static void InputOnTouchDown()
 		{
 			_contextMenuShown = false;
 			_keyboardFocusSet = false;
@@ -646,7 +646,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private static  void WidgetsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+		private static void WidgetsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
 		{
 			if (args.Action == NotifyCollectionChangedAction.Add)
 			{
@@ -654,6 +654,7 @@ namespace Myra.Graphics2D.UI
 				{
 					w.IsPlaced = true;
 					w.MeasureChanged += WOnMeasureChanged;
+
 				}
 			}
 			else if (args.Action == NotifyCollectionChangedAction.Remove)
@@ -665,17 +666,16 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			InvalidateLayout();
-
+			_layoutDirty = true;
 			_widgetsDirty = true;
 		}
 
-		private static  void WOnMeasureChanged(object sender, EventArgs eventArgs)
+		private static void WOnMeasureChanged(object sender, EventArgs eventArgs)
 		{
-			InvalidateLayout();
+			_layoutDirty = true;
 		}
 
-		private static  void EnsureRenderContext()
+		private static void EnsureRenderContext()
 		{
 			if (_renderContext == null)
 			{
@@ -717,7 +717,7 @@ namespace Myra.Graphics2D.UI
 
 			CrossEngineStuff.SetScissor(oldScissorRectangle);
 		}
-
+		//отрисовка всех виджетов
 		public static void Render()
 		{
 			UpdateInput();
@@ -725,18 +725,20 @@ namespace Myra.Graphics2D.UI
 			RenderVisual();
 		}
 
-		public static void InvalidateLayout()
+		static public void InvalidateLayout()
 		{
 			_layoutDirty = true;
 		}
 
 		public static void UpdateLayout()
 		{
+			///TODO
+			///widget
 			var newBounds = BoundsFetcher();
 
 			if (InternalBounds != newBounds)
 			{
-				InvalidateLayout();
+				_layoutDirty = true;
 			}
 
 			InternalBounds = newBounds;
@@ -751,13 +753,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			foreach (var widget in ChildrenCopy)
-			{
-				if (widget.Visible)
-				{
-					widget.Layout(InternalBounds);
-				}
-			}
+			UpdateRecursiveLayout(ChildrenCopy);
 
 			// Rest processing
 			MenuBar = null;
@@ -800,6 +796,42 @@ namespace Myra.Graphics2D.UI
 			_layoutDirty = false;
 		}
 
+		static private void UpdateRecursiveLayout(List<Widget> widgets)
+		{
+			widgets.ForEach(
+				i =>
+				{
+					if (i.Visible)
+					{
+						i.Layout(InternalBounds);
+					}
+					if (!i.Layout2d.Nullable)
+					{
+						ExpressionParser.Parse(i, ChildrenCopy);
+					}
+					if (i is IMultipleItemsContainer)
+					{
+						UpdateRecursiveLayout((i as IMultipleItemsContainer).Widgets.ToList());
+					}
+				}
+				);
+		}
+
+		#region Finders
+		static public Widget GetWidget(Func<Widget, bool> Filter)
+		{
+			Root root = new Root();
+			Widgets.ToList().ForEach(i => { root.Widgets.Add(i); });
+			return root.FindWidget(Filter);
+		}
+		static public Widget GetWidgetByID(string ID)
+		{
+			Root root = new Root();
+			Widgets.ToList().ForEach(i => { root.Widgets.Add(i); });
+			return root.FindWidgetById(ID);
+		}
+		#endregion
+
 		public static int CalculateTotalWidgets(bool visibleOnly)
 		{
 			var result = 0;
@@ -822,7 +854,7 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		private static  Widget GetTopWidget(bool containsTouch)
+		private static Widget GetTopWidget(bool containsTouch)
 		{
 			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
 			{
@@ -853,7 +885,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 #if !XENKO
-		public static  void UpdateTouch()
+		public static void UpdateTouch()
 		{
 			var touchState = TouchPanel.GetState();
 			if (!touchState.IsConnected)
@@ -1087,7 +1119,7 @@ namespace Myra.Graphics2D.UI
 			Char.Invoke(c);
 		}
 
-		private static  void UpdateWidgetsCopy()
+		private static void UpdateWidgetsCopy()
 		{
 			if (!_widgetsDirty)
 			{
@@ -1100,7 +1132,7 @@ namespace Myra.Graphics2D.UI
 			_widgetsDirty = false;
 		}
 
-		private static  bool InternalIsPointOverGUI(Point p, Widget w)
+		private static bool InternalIsPointOverGUI(Point p, Widget w)
 		{
 			if (!w.Visible || !w.ActualBounds.Contains(p))
 			{
