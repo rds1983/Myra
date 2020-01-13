@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.DebugConsole",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.AssetManagement", "..\..\samples\Myra.Samples.AssetManagement\Myra.Samples.AssetManagement.csproj", "{9C71BE95-55A4-4DD6-8EE6-815D7ECE76BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.Layout2D", "D:\source\Myra.Samples.Layout2D\Myra.Samples.Layout2D.csproj", "{C5251EC7-58F7-4F71-B3BB-B28C982AF777}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.Layout2D", "..\..\samples\Myra.Samples.Layout2D\Myra.Samples.Layout2D.csproj", "{C5251EC7-58F7-4F71-B3BB-B28C982AF777}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,7 +141,8 @@ Global
 		{C5251EC7-58F7-4F71-B3BB-B28C982AF777}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5251EC7-58F7-4F71-B3BB-B28C982AF777}.Debug|x86.ActiveCfg = Debug|x86
 		{C5251EC7-58F7-4F71-B3BB-B28C982AF777}.Debug|x86.Build.0 = Debug|x86
-		{C5251EC7-58F7-4F71-B3BB-B28C982AF777}.Release|Any CPU.ActiveCfg = Release|x86
+		{C5251EC7-58F7-4F71-B3BB-B28C982AF777}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5251EC7-58F7-4F71-B3BB-B28C982AF777}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C5251EC7-58F7-4F71-B3BB-B28C982AF777}.Release|x86.ActiveCfg = Release|x86
 		{C5251EC7-58F7-4F71-B3BB-B28C982AF777}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
