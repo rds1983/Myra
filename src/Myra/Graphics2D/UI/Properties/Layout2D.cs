@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Myra.Graphics2D.UI.Properties
@@ -7,11 +8,6 @@ namespace Myra.Graphics2D.UI.Properties
          Знак для разделения условий :
          ';' - пример : " this.h = &.h * 10% ; this.t = [btn].l * 5% "
          
-        (non work)
-         Тильда для округления :
-         ~M - по правилам математики
-         ~D - отбросить знаки после запятой 
-
          поддержка знаков :
          '*' - умножение 
          '/' - деление
@@ -34,10 +30,7 @@ namespace Myra.Graphics2D.UI.Properties
          &.h - высота родителя
 
          Поддержка получения виджета по _id: 
-         [_id] - для получения данных о виджете в соответствии с его _id
-
-         Задавать числа в условии :
-         '10' -число 10 (float) '10'
+         [_id] - для получения данных о виджете в соответствии с его _id     
 
          Значение NULL - не задано (не вычеслять)
 
@@ -63,6 +56,9 @@ namespace Myra.Graphics2D.UI.Properties
         #endregion
 
         #region Data acessor
+        /// <summary>
+        /// Expression for Left point
+        /// </summary>
         public string PositionXExpression
         {
             get { return _expressionXpoxition; }
@@ -72,6 +68,9 @@ namespace Myra.Graphics2D.UI.Properties
                 Nullable = false;
             }
         }
+        /// <summary>
+        /// Expression for Top point
+        /// </summary>
         public string PositionYExpression
         {
             get { return _expressionYpoxition; }
@@ -81,6 +80,9 @@ namespace Myra.Graphics2D.UI.Properties
                 Nullable = false;
             }
         }
+        /// <summary>
+        /// Expresion for Width
+        /// </summary>
         public string SizeXExpression
         {
             get { return _expressionXsize; }
@@ -90,6 +92,9 @@ namespace Myra.Graphics2D.UI.Properties
                 Nullable = false;
             }
         }
+        /// <summary>
+        /// Expression for Height
+        /// </summary>
         public string SizeYExpression
         {
             get { return _expressionYsize; }
@@ -99,25 +104,42 @@ namespace Myra.Graphics2D.UI.Properties
                 Nullable = false;
             }
         }
+        /// <summary>
+        /// Get or set multiply expression
+        /// </summary>
         public string Expresion { get { return $"this.X = {PositionXExpression} ; this.Y = {PositionYExpression} ; this.w = {SizeXExpression} ; this.h = {SizeYExpression}"; } set { ParseLayoutOnExpressions(value); } }
         #endregion
 
         #region Props
+        /// <summary>
+        /// Is any condition specified
+        /// </summary>
         public bool Nullable { get; set; } = true;
+        /// <summary>
+        /// Is firs calculateion done
+        /// </summary>
         public bool Calculated { get; set; } = false;
         #endregion
 
+        /// <summary>
+        /// default ctor.
+        /// </summary>
+        /// <param name="Expression">valid expression| Default value = "NULL"</param>
         public Layout2D(string Expression = "NULL")
         {
             if (Expression != "NULL")
                 ParseLayoutOnExpressions(Expression);
         }
-
+        /// <summary>
+        /// papre and write expressions
+        /// </summary>
+        /// <param name="expression"></param>
         private void ParseLayoutOnExpressions(string expression)
         {
+            if (expression.ToList().Count <= 0)
+                throw new Exception($"Invalid Layout2D expression : { expression }");
             Nullable = false;
-
-            expression.Split(';').ToList().ForEach(
+            expression.Replace(" ","").Split(';').ToList().ForEach(
                 i => {
                     //if height size expression
                     if (i.Contains("this.h") || i.Contains("this.height"))

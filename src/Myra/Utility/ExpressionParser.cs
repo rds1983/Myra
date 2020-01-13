@@ -1,116 +1,102 @@
-﻿using Microsoft.Xna.Framework;
+﻿using info.lundin.math;
+using Microsoft.Xna.Framework;
 using Myra.Graphics2D.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Myra.Utility
 {
     static class ExpressionParser
     {
         static public int DepthOfCalculations { get; set; } = 10;
-        static private Widget cWidget;
+        static private List<Widget> _widgets;
         public static void Parse(Widget widget, List<Widget> widgets, int level = 0)
         {
+            _widgets = widgets;
+            #region Check
+            ///check on depths
             if (level > DepthOfCalculations)
             {
                 return;
             }
-            cWidget = widget;
-            var Parent = widget.Parent;
+            ///check parent on dynamic layout
+            if (widget.Parent!=null&&!widget.Parent.Layout2d.Nullable)
+            {
+                Parse(widget.Parent, widgets, ++level);
+            }
+            #endregion
+            ///expresion parser
+            info.lundin.math.ExpressionParser parser = new info.lundin.math.ExpressionParser();
+            parser.ImplicitMultiplication = false;
 
+            #region Calculation
+            /// if X exp not null
             if (widget.Layout2d.PositionXExpression != "NULL")
-                widget.Left = GetValueByExpression(widget.Layout2d.PositionXExpression, widgets, Parent, level);
+                widget.Left = (int)parser.Parse(CheckAndAddRef(widget.Layout2d.PositionXExpression,parser, widget));
+            /// if Y exp not null
             if (widget.Layout2d.PositionYExpression != "NULL")
-                widget.Top = GetValueByExpression(widget.Layout2d.PositionYExpression, widgets, Parent, level);
+                widget.Top = (int)parser.Parse(CheckAndAddRef(widget.Layout2d.PositionYExpression, parser, widget));
+            /// if H exp not null
             if (widget.Layout2d.SizeYExpression != "NULL")
-                widget.Height = GetValueByExpression(widget.Layout2d.SizeYExpression, widgets, Parent, level);
+                widget.Height = (int)parser.Parse(CheckAndAddRef(widget.Layout2d.SizeYExpression, parser, widget));
+            /// if W exp not null
             if (widget.Layout2d.SizeXExpression != "NULL")
-                widget.Width = GetValueByExpression(widget.Layout2d.SizeXExpression, widgets, Parent, level);
+                widget.Width = (int)parser.Parse(CheckAndAddRef(widget.Layout2d.SizeXExpression, parser,widget));
+            #endregion
             widget.Layout2d.Calculated = true;
         }
 
-        static private int GetValueByExpression(string Expression, List<Widget> widgets, Widget parent, int level)
-        {
-            /*Example (&.h * 10% - '10' + [btn].l * 5% )*/
+        static private string CheckAndAddRef(string Expression, info.lundin.math.ExpressionParser parser,Widget widget) {
+            string expression = Expression;
 
-            List<string> operators = Expression.Split(' ').ToList();
-
-            float val = ParseOperator(operators[1], widgets, parent, level);
-
-            for (int i = 0; i < operators.Count; i++)
+            /*replace to values*/
+            ///add this. values pos
+            expression = expression.Replace("this.X", $"{widget.Left}");
+            expression = expression.Replace("this.Y", $"{widget.Top}");
+            expression = expression.Replace("this.l", $"{widget.Left}");
+            expression = expression.Replace("this.t", $"{widget.Top}");
+            expression = expression.Replace("this.left", $"{widget.Left}");
+            expression = expression.Replace("this.top", $"{widget.Top}");
+            ///add this.size
+            expression = expression.Replace("this.w", $"{widget.Width ?? 0}");
+            expression = expression.Replace("this.h", $"{widget.Height ?? 0}");
+            expression = expression.Replace("this.width", $"{widget.Width ?? 0}");
+            expression = expression.Replace("this.height", $"{widget.Height ?? 0}");
+            ///add parent values pos
+            expression = expression.Replace("&.X", $"{widget.Parent.Left}");
+            expression = expression.Replace("&.Y", $"{widget.Parent.Top}");
+            expression = expression.Replace("&.l", $"{widget.Parent.Left}");
+            expression = expression.Replace("&.t", $"{widget.Parent.Top}");
+            expression = expression.Replace("&.left", $"{widget.Parent.Left}");
+            expression = expression.Replace("&.top", $"{widget.Parent.Top}");
+            ///add parent values size
+            expression = expression.Replace("&.w", $"{widget.Parent.Width ?? 0}");
+            expression = expression.Replace("&.h", $"{widget.Parent.Height ?? 0}");
+            expression = expression.Replace("&.width", $"{widget.Parent.Width ?? 0}");
+            expression = expression.Replace("&.height", $"{widget.Parent.Height ?? 0}");
+            ///add window walues
+            expression = expression.Replace("W.h", $"{MyraEnvironment.Game.Window.ClientBounds.Height}");
+            expression = expression.Replace("W.height", $"{MyraEnvironment.Game.Window.ClientBounds.Height}");
+            expression = expression.Replace("W.w", $"{MyraEnvironment.Game.Window.ClientBounds.Width}");
+            expression = expression.Replace("W.width", $"{MyraEnvironment.Game.Window.ClientBounds.Width}");
+            ///
+            if (expression.Contains("["))
             {
-                if (operators[i].Contains("*") || operators[i].Contains("/") || operators[i].Contains("+") || operators[i].Contains("-"))
-                    val = Calc(val, ParseOperator(operators[i + 1], widgets, parent, level), operators[i]);
-            }
-
-            return (int)val;
-        }
-
-        static private float ParseOperator(string Expression, List<Widget> widgets, Widget parent, int level)
-        {
-            //получить значение у родителя
-            if (Expression.Contains("&."))
-            {
-                if (parent!=null)
+                Regex regex = new Regex(@"\[.+].\w*");
+                MatchCollection matches = regex.Matches(expression);
+                foreach (var item in matches)
                 {
-
-                    if (!parent.Layout2d.Nullable && !parent.Layout2d.Calculated)
-                    {
-                        Parse(parent, widgets, level++);
-                    }
-                    return (float)GetValue(Expression.Split('.')[1], parent.Bounds);
+                    string Id = item.ToString().Split('[')[1].ToString().Split(']')[0].ToString();
+                    var w = GetByID(Id, _widgets);
+                    var valueForReg = GetValue(item.ToString().Substring(item.ToString().IndexOf(']') + 1, 1), w.Bounds);
+                    expression = expression.Replace(item as string, $"{valueForReg ?? 0}");
                 }
-                return (float)GetValue(Expression.Split('.')[1], new Rectangle());
             }
-            if (Expression.Contains("this."))
-                return (float)GetValue(Expression.Split('.')[1], cWidget.Bounds);
-            //замена знака процента
-            if (Expression.Contains("%"))
-                return float.Parse(Expression.Replace("%", "")) / 100;
-            //получение цифрового значения
-            if (Expression.Contains("'"))
-                return float.Parse(Expression.Replace("'", ""));
-            //получить по ID
-            if (Expression.Contains("["))
-            {
-                var widget = GetByID(Expression.Replace("[", "").Replace("]", "").Split('.')[0], widgets);
-                if (!widget.Layout2d.Nullable && !widget.Layout2d.Calculated)
-                {
-                    Parse(parent, widgets, level++);
-                }
-                return (float)GetValue(Expression.Split('.')[1], widget.Bounds);
-            }
-            return 0;
+            return expression;
         }
-
-        /*поддержка знаков :
-         '*' - умножение 
-         '/' - деление
-         '-' - вычитание 
-         '+' - сложение 
-         '()' - порядок выполнения 
-         '%' - процент от чего либо Пример 10% -> 0.1
-         '=' - знак присвоения*/
-        static private float Calc(float val1, float val2, string act)
-        {
-            switch (act)
-            {
-                case "*":
-                    return val1 * val2;
-                case "/":
-                    return val1 / val2;
-                case "-":
-                    return val1 - val2;
-                case "+":
-                    return val1 + val2;
-
-                default:
-                    return 0;
-            }
-        }
-
         /*[btn]*/
         static private Widget GetByID(string Id, List<Widget> widgets)
         {
@@ -154,14 +140,6 @@ namespace Myra.Utility
                 default:
                     return 0;
             }
-        }
-        static private float Round(float val, string ex)
-        {
-            if (ex.Contains("~D"))
-                return (float)Math.Round(val, MidpointRounding.AwayFromZero);
-            if (ex.Contains("~M"))
-                return (float)Math.Round(val, MidpointRounding.ToEven);
-            return 0;
         }
     }
 }

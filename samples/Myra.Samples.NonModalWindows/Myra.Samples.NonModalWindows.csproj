@@ -2,7 +2,7 @@
   <Import Project="$(SolutionDir)SolutionDefines.targets" />
   
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <ApplicationIcon />
     <StartupObject />
     <AssemblyName>Myra.Samples.NonModalWindows</AssemblyName>

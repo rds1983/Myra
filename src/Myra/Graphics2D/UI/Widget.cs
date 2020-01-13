@@ -543,7 +543,9 @@ namespace Myra.Graphics2D.UI
         #endregion
 
         #region Prop
-
+        /// <summary>
+        /// Dynamic layout expression
+        /// </summary>
         public Layout2D Layout2d { get; set; } = Layout2D.NullLayout;
 
         [Category("Appearance")]
@@ -1060,7 +1062,7 @@ namespace Myra.Graphics2D.UI
 			var result = FindWidgetById(id);
 			if (result == null)
 			{
-				throw new Exception(string.Format("Could not find widget with id {0}", id));
+                throw new Exception(string.Format($"Could not find widget with id {id}"));
 			}
 
 			return result;

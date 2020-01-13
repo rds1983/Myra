@@ -725,6 +725,11 @@ namespace Myra.Graphics2D.UI
             RenderVisual();
         }
 
+        static public void InvalidateLayout()
+        {
+            _layoutDirty = true;
+        }
+
         public static void UpdateLayout()
         {
             ///TODO
@@ -748,18 +753,7 @@ namespace Myra.Graphics2D.UI
                 return;
             }
 
-            foreach (var widget in ChildrenCopy)
-            {
-                if (widget.Visible)
-                {
-                    widget.Layout(InternalBounds);
-
-                    if (!widget.Layout2d.Nullable)
-                    {
-                        ExpressionParser.Parse(widget, ChildrenCopy);
-                    }
-                }
-            }
+            UpdateRecursiveLayout(ChildrenCopy);
 
             // Rest processing
             MenuBar = null;
@@ -802,6 +796,39 @@ namespace Myra.Graphics2D.UI
             _layoutDirty = false;
         }
 
+        static private void UpdateRecursiveLayout(List<Widget> widgets)
+        {
+            widgets.ForEach(
+                i => 
+                {
+                    if (i.Visible)
+                    {
+                        i.Layout(InternalBounds);
+                    }
+                    if (!i.Layout2d.Nullable)
+                    {
+                        ExpressionParser.Parse(i, ChildrenCopy);
+                    }
+                    if (i is IMultipleItemsContainer)
+                    {
+                        UpdateRecursiveLayout((i as IMultipleItemsContainer).Widgets.ToList());
+                    }
+                }
+                );
+        }
+        #region Finders
+        static public Widget GetWidget(Func<Widget,bool> Filter) {
+            Root root = new Root();
+            Widgets.ToList().ForEach(i=> { root.Widgets.Add(i); });
+            return root.FindWidget(Filter);
+        }
+        static public Widget GetWidgetByID(string ID)
+        {
+            Root root = new Root();
+            Widgets.ToList().ForEach(i => { root.Widgets.Add(i); });
+            return root.FindWidgetById(ID);
+        }
+        #endregion
         public static int CalculateTotalWidgets(bool visibleOnly)
         {
             var result = 0;
