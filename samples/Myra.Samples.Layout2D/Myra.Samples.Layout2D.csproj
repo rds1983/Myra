@@ -93,7 +93,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="C:\Users\Paradise\Desktop\Descktop\myraDevelop\src\Myra\Myra.csproj">
+    <ProjectReference Include="..\..\src\Myra\Myra.csproj">
       <Project>{4DCBB001-9C79-4F6B-996D-D654062D93E0}</Project>
       <Name>Myra</Name>
     </ProjectReference>

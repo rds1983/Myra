@@ -45,6 +45,7 @@ namespace Myra.Samples.NonModalWindows.UI
 			_labelOverGui.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Bottom;
 			_labelOverGui.Id = "_labelOverGui";
 
+            this.Layout2d = new Graphics2D.UI.Properties.Layout2D("this.X = &.w * 50%;this.Y = &.h / '2'");
 
             Widgets.Add(horizontalStackPanel1);
 			Widgets.Add(_labelOverGui);
