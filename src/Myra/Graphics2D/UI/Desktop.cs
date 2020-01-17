@@ -753,47 +753,57 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			UpdateRecursiveLayout(ChildrenCopy);
+            ChildrenCopy.ForEach(
+                i =>
+                {
+                    if (i.Visible)
+                    {
+                        i.Layout(InternalBounds);
+                    }
+                });
 
-			// Rest processing
-			MenuBar = null;
-			var active = true;
-			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
-			{
-				var w = ChildrenCopy[i];
-				if (!w.Visible)
-				{
-					continue;
-				}
+            // Rest processing
+            MenuBar = null;
+            var active = true;
+            for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
+            {
+                var w = ChildrenCopy[i];
+                if (!w.Visible)
+                {
+                    continue;
+                }
 
-				UIUtils.ProcessWidgets(w, widget =>
-				{
-					widget.Active = active;
+                UIUtils.ProcessWidgets(w, widget =>
+                {
+                    widget.Active = active;
 
-					if (MenuBar == null && widget is HorizontalMenu)
-					{
-						// Found MenuBar
-						MenuBar = (HorizontalMenu)widget;
-					}
+                    if (MenuBar == null && widget is HorizontalMenu)
+                    {
+                        // Found MenuBar
+                        MenuBar = (HorizontalMenu)widget;
+                    }
 
-					if (FocusedMouseWheelWidget == null && widget is ScrollViewer && widget.AcceptsMouseWheelFocus && active)
-					{
-						// If focused mouse wheel widget unset, then set first that accepts such focus
-						FocusedMouseWheelWidget = widget;
-					}
+                    if (FocusedMouseWheelWidget == null && widget is ScrollViewer && widget.AcceptsMouseWheelFocus && active)
+                    {
+                        // If focused mouse wheel widget unset, then set first that accepts such focus
+                        FocusedMouseWheelWidget = widget;
+                    }
 
-					// Continue
-					return true;
-				});
+                    // Continue
+                    return true;
+                });
 
-				// Everything after first modal widget is not active
-				if (w.IsModal)
-				{
-					active = false;
-				}
-			}
+                // Everything after first modal widget is not active
+                if (w.IsModal)
+                {
+                    active = false;
+                }
+            }
 
-			_layoutDirty = false;
+
+            UpdateRecursiveLayout(ChildrenCopy);
+
+            _layoutDirty = false;
 		}
 
 		static private void UpdateRecursiveLayout(List<Widget> widgets)
@@ -801,10 +811,7 @@ namespace Myra.Graphics2D.UI
 			widgets.ForEach(
 				i =>
 				{
-					if (i.Visible)
-					{
-						i.Layout(InternalBounds);
-					}
+					
 					if (!i.Layout2d.Nullable)
 					{
 						ExpressionParser.Parse(i, ChildrenCopy);

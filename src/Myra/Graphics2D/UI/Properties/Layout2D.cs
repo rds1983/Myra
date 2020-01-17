@@ -45,7 +45,7 @@ namespace Myra.Graphics2D.UI.Properties
         /// Set default layout
         /// </summary>
         /// <returns>Default layout</returns>
-        static public Layout2D NullLayout { get { return new Layout2D();} }
+        static public Layout2D NullLayout { get { return new Layout2D() { Nullable = true, Calculated = false };} }
 
         #region Data
         private string _expressionXpoxition = "NULL";
