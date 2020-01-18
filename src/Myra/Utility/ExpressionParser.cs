@@ -1,11 +1,12 @@
-﻿using info.lundin.math;
-using Microsoft.Xna.Framework;
-using Myra.Graphics2D.UI;
-using System;
+﻿using Myra.Graphics2D.UI;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
+
+#if !XENKO
+using Microsoft.Xna.Framework;
+#else
+using Xenko.Core.Mathematics;
+#endif
 
 namespace Myra.Utility
 {
@@ -162,14 +163,14 @@ namespace Myra.Utility
                 case "width":
                     if (widgets.IsEmpty)
                     {
-                        return MyraEnvironment.Game.GraphicsDevice.Viewport.Width;
+                        return MyraEnvironment.Game.GraphicsDevice.ViewSize().X;
                     }
                     return widgets.Width;
                 case "h":
                 case "height":
                     if (widgets.IsEmpty)
                     {
-                        return MyraEnvironment.Game.GraphicsDevice.Viewport.Height;
+                        return MyraEnvironment.Game.GraphicsDevice.ViewSize().Y;
                     }
                     return widgets.Height;
                 default:

@@ -351,14 +351,6 @@ namespace Myra.Samples.GridContainer
 		{
 			base.Draw(gameTime);
 
-			if (graphics.PreferredBackBufferWidth != Window.ClientBounds.Width ||
-				graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
-			{
-				graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
-				graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
-				graphics.ApplyChanges();
-			}
-
 			GraphicsDevice.Clear(Color.Black);
 
 			Desktop.Render();

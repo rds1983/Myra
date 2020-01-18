@@ -66,14 +66,6 @@ namespace Myra.Samples.CustomUIStylesheet
 		{
 			base.Draw(gameTime);
 
-			if (_graphics.PreferredBackBufferWidth != Window.ClientBounds.Width ||
-			    _graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
-			{
-				_graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
-				_graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
-				_graphics.ApplyChanges();
-			}
-
 			GraphicsDevice.Clear(Color.Black);
 
 			Desktop.Render();

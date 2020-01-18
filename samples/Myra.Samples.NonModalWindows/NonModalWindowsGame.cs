@@ -52,16 +52,7 @@ namespace Myra.Samples.NonModalWindows
 
 			GraphicsDevice.Clear(Color.Black);
 
-			if (_graphics.PreferredBackBufferWidth != Window.ClientBounds.Width ||
-			    _graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
-			{
-				_graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
-				_graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
-				_graphics.ApplyChanges();
-			}
-
 			_mainPanel._labelOverGui.Text = "Is mouse over GUI: " + Desktop.IsMouseOverGUI;
-
 			Desktop.Render();
 		}
 	}

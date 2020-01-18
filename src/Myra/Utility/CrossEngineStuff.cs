@@ -66,5 +66,14 @@ namespace Myra.Utility
 			MyraEnvironment.Game.GraphicsContext.CommandList.SetScissorRectangle(rect);
 #endif
 		}
+
+		public static Point ViewSize(this GraphicsDevice device)
+		{
+#if !XENKO
+			return new Point(device.Viewport.Width, device.Viewport.Height);
+#else
+			return new Point(device.Presenter.BackBuffer.Width, device.Presenter.BackBuffer.Height);
+#endif
+		}
 	}
 }

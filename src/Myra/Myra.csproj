@@ -36,9 +36,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\**\*.*" />
-    <Compile Include="..\..\deps\MiniJson\**\*.cs" LinkBase="ThirdParty\MiniJson" />
     <Compile Include="..\..\deps\BMFontToSpriteFont\**\*.cs" LinkBase="ThirdParty\BMFontToSpriteFont" />
-    <Compile Include="..\..\deps\StbImageSharp\src\StbImageSharp\**\*.cs" LinkBase="ThirdParty\StbImageSharp" />
   </ItemGroup>  
 
   <ItemGroup Condition="$(DefineConstants.Contains('MONOGAME'))">
@@ -56,5 +54,6 @@
   
   <ItemGroup>
     <PackageReference Include="info.lundin.math.dll" Version="1.2.6" />
+    <PackageReference Include="StbImageSharp" Version="2.22.2" />
   </ItemGroup>  
 </Project>

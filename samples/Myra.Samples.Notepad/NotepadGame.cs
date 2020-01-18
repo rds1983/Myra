@@ -54,6 +54,7 @@ namespace Myra.Samples.Notepad
 		{
 			graphics = new GraphicsDeviceManager(this);
 			IsMouseVisible = true;
+			Window.AllowUserResizing = true;
 		}
 
 		protected override void LoadContent()
@@ -268,14 +269,6 @@ namespace Myra.Samples.Notepad
 		protected override void Draw(GameTime gameTime)
 		{
 			base.Draw(gameTime);
-
-			if (graphics.PreferredBackBufferWidth != Window.ClientBounds.Width ||
-				graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
-			{
-				graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
-				graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
-				graphics.ApplyChanges();
-			}
 
 			GraphicsDevice.Clear(Color.Black);
 

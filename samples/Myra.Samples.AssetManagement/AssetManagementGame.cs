@@ -60,15 +60,6 @@ namespace Myra.Samples.AssetManagement
 			base.Draw(gameTime);
 
 			GraphicsDevice.Clear(Color.Black);
-
-			if (_graphics.PreferredBackBufferWidth != Window.ClientBounds.Width ||
-			    _graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
-			{
-				_graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
-				_graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
-				_graphics.ApplyChanges();
-			}
-
 			Desktop.Render();
 		}
 	}

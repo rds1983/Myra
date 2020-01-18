@@ -10,8 +10,14 @@
     <projectUrl>https://github.com/rds1983/Myra</projectUrl>
     <description>UI Library for MonoGame, FNA and Xenko</description>
     <dependencies>
-      <group targetFramework=".NETFramework4.5" />
-      <group targetFramework=".NETStandard2.0" />
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="StbImageSharp" version="2.22.2" exclude="Build,Analyzers" />
+        <dependency id="info.lundin.math.dll" version="1.2.6" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="StbImageSharp" version="2.22.2" exclude="Build,Analyzers" />
+        <dependency id="info.lundin.math.dll" version="1.2.6" exclude="Build,Analyzers" />
+      </group>
     </dependencies>
   </metadata>
   <files>

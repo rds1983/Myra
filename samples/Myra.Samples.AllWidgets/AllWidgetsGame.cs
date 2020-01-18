@@ -154,15 +154,6 @@ namespace Myra.Samples.AllWidgets
 
 #if !XENKO
 			GraphicsDevice.Clear(Color.Black);
-
-			if (_graphics.PreferredBackBufferWidth != Window.ClientBounds.Width ||
-			    _graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
-			{
-				_graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
-				_graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
-				_graphics.ApplyChanges();
-			}
-
 #else
 			// Clear screen
 			GraphicsContext.CommandList.Clear(GraphicsDevice.Presenter.BackBuffer, Color.Black);

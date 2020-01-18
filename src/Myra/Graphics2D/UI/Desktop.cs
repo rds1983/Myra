@@ -34,16 +34,8 @@ namespace Myra.Graphics2D.UI
 
 		public static Func<Rectangle> DefaultBoundsFetcher = () =>
 		{
-			var device = MyraEnvironment.GraphicsDevice;
-#if !XENKO
-			return new Rectangle(0, 0,
-				device.PresentationParameters.BackBufferWidth,
-				device.PresentationParameters.BackBufferHeight);
-#else
-			return new Rectangle(0, 0,
-				device.Presenter.BackBuffer.ViewWidth, 
-				device.Presenter.BackBuffer.ViewHeight);
-#endif
+			var size = MyraEnvironment.GraphicsDevice.ViewSize();
+			return new Rectangle(0, 0, size.X, size.Y);
 		};
 
 		private static RenderContext _renderContext;

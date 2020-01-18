@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Myra.Graphics2D.UI
 {
-    public class Root : Grid
+    internal class Root : Grid
     {
         public Widget FindWidget(Func<Widget, bool> Filter)
         {

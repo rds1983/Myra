@@ -3,12 +3,12 @@ using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Reflection;
 using Myra.Assets;
-using SpriteFontPlus;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 #else
+using SpriteFontPlus;
 using Xenko.Core.Mathematics;
 using Xenko.Graphics;
 using Texture2D = Xenko.Graphics.Texture;
