@@ -666,13 +666,13 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			_layoutDirty = true;
+			InvalidateLayout();
 			_widgetsDirty = true;
 		}
 
 		private static void WOnMeasureChanged(object sender, EventArgs eventArgs)
 		{
-			_layoutDirty = true;
+			InvalidateLayout();
 		}
 
 		private static void EnsureRenderContext()
@@ -717,7 +717,7 @@ namespace Myra.Graphics2D.UI
 
 			CrossEngineStuff.SetScissor(oldScissorRectangle);
 		}
-		//отрисовка всех виджетов
+
 		public static void Render()
 		{
 			UpdateInput();
@@ -732,13 +732,10 @@ namespace Myra.Graphics2D.UI
 
 		public static void UpdateLayout()
 		{
-			///TODO
-			///widget
 			var newBounds = BoundsFetcher();
-
 			if (InternalBounds != newBounds)
 			{
-				_layoutDirty = true;
+				InvalidateLayout();
 			}
 
 			InternalBounds = newBounds;
@@ -753,78 +750,74 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-            ChildrenCopy.ForEach(
-                i =>
-                {
-                    if (i.Visible)
-                    {
-                        i.Layout(InternalBounds);
-                    }
-                });
-
-            // Rest processing
-            MenuBar = null;
-            var active = true;
-            for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
-            {
-                var w = ChildrenCopy[i];
-                if (!w.Visible)
-                {
-                    continue;
-                }
-
-                UIUtils.ProcessWidgets(w, widget =>
-                {
-                    widget.Active = active;
-
-                    if (MenuBar == null && widget is HorizontalMenu)
-                    {
-                        // Found MenuBar
-                        MenuBar = (HorizontalMenu)widget;
-                    }
-
-                    if (FocusedMouseWheelWidget == null && widget is ScrollViewer && widget.AcceptsMouseWheelFocus && active)
-                    {
-                        // If focused mouse wheel widget unset, then set first that accepts such focus
-                        FocusedMouseWheelWidget = widget;
-                    }
-
-                    // Continue
-                    return true;
-                });
-
-                // Everything after first modal widget is not active
-                if (w.IsModal)
-                {
-                    active = false;
-                }
-            }
-
-
-            UpdateRecursiveLayout(ChildrenCopy);
-
-            _layoutDirty = false;
-		}
-
-		static private void UpdateRecursiveLayout(List<Widget> widgets)
-		{
-			widgets.ForEach(
-				i =>
+			foreach (var i in ChildrenCopy)
+			{
+				if (i.Visible)
 				{
-					
-					if (!i.Layout2d.Nullable)
-					{
-						ExpressionParser.Parse(i, ChildrenCopy);
-					}
-					if (i is IMultipleItemsContainer)
-					{
-						UpdateRecursiveLayout((i as IMultipleItemsContainer).Widgets.ToList());
-					}
+					i.Layout(InternalBounds);
 				}
-				);
+			}
+
+			// Rest processing
+			MenuBar = null;
+			var active = true;
+			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
+			{
+				var w = ChildrenCopy[i];
+				if (!w.Visible)
+				{
+					continue;
+				}
+
+				UIUtils.ProcessWidgets(w, widget =>
+				{
+					widget.Active = active;
+
+					if (MenuBar == null && widget is HorizontalMenu)
+					{
+						// Found MenuBar
+						MenuBar = (HorizontalMenu)widget;
+					}
+
+					if (FocusedMouseWheelWidget == null && widget is ScrollViewer && widget.AcceptsMouseWheelFocus && active)
+					{
+						// If focused mouse wheel widget unset, then set first that accepts such focus
+						FocusedMouseWheelWidget = widget;
+					}
+
+					// Continue
+					return true;
+				});
+
+				// Everything after first modal widget is not active
+				if (w.IsModal)
+				{
+					active = false;
+				}
+			}
+
+			UpdateRecursiveLayout(ChildrenCopy);
+
+			_layoutDirty = false;
 		}
 
-		#region Finders
+		static private void UpdateRecursiveLayout(IEnumerable<Widget> widgets)
+		{
+			foreach (var i in widgets)
+			{
+				if (!i.Layout2d.Nullable)
+				{
+					ExpressionParser.Parse(i, ChildrenCopy);
+				}
+
+				var c = i as Container;
+				if (c != null)
+				{
+					UpdateRecursiveLayout(c.ChildrenCopy);
+				}
+			}
+		}
+
 		static public Widget GetWidget(Func<Widget, bool> Filter)
 		{
 			Root root = new Root();
@@ -837,7 +830,6 @@ namespace Myra.Graphics2D.UI
 			Widgets.ToList().ForEach(i => { root.Widgets.Add(i); });
 			return root.FindWidgetById(ID);
 		}
-		#endregion
 
 		public static int CalculateTotalWidgets(bool visibleOnly)
 		{

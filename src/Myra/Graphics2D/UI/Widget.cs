@@ -24,9 +24,9 @@ namespace Myra.Graphics2D.UI
 			LocationInvalid,
 			Invalid
 		}
-        #region PrivateData
+		#region PrivateData
 
-        private int _left, _top;
+		private int _left, _top;
 		private int? _minWidth, _minHeight, _maxWidth, _maxHeight, _width, _height;
 		private int _gridColumn, _gridRow, _gridColumnSpan = 1, _gridRowSpan = 1;
 		private HorizontalAlignment _horizontalAlignment = HorizontalAlignment.Left;
@@ -51,12 +51,12 @@ namespace Myra.Graphics2D.UI
 
 		private bool _enabled;
 
-        #endregion
-        #region Data acsessor
-        /// <summary>
-        /// Internal use only. (MyraPad)
-        /// </summary>
-        [DefaultValue(Stylesheet.DefaultStyleName)]
+		#endregion
+		#region Data acsessor
+		/// <summary>
+		/// Internal use only. (MyraPad)
+		/// </summary>
+		[DefaultValue(Stylesheet.DefaultStyleName)]
 		public string StyleName { get; set; }
 
 		[Category("Layout")]
@@ -540,15 +540,17 @@ namespace Myra.Graphics2D.UI
 				_opacity = value;
 			}
 		}
-        #endregion
+		#endregion
 
-        #region Prop
-        /// <summary>
-        /// Dynamic layout expression
-        /// </summary>
-        public Layout2D Layout2d { get; set; } = Layout2D.NullLayout;
+		#region Prop
+		/// <summary>
+		/// Dynamic layout expression
+		/// </summary>
+		[XmlIgnore]
+		[Browsable(false)]
+		public Layout2D Layout2d { get; set; } = Layout2D.NullLayout;
 
-        [Category("Appearance")]
+		[Category("Appearance")]
 		public IBrush Background { get; set; }
 
 		[Category("Appearance")]
@@ -683,9 +685,9 @@ namespace Myra.Graphics2D.UI
 				return IsMouseInside && Active;
 			}
 		}
-        #endregion
-        #region Events
-        public event EventHandler VisibleChanged;
+		#endregion
+		#region Events
+		public event EventHandler VisibleChanged;
 		public event EventHandler MeasureChanged;
 		public event EventHandler EnabledChanged;
 
@@ -709,16 +711,16 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler<GenericEventArgs<Keys>> KeyUp;
 		public event EventHandler<GenericEventArgs<Keys>> KeyDown;
 		public event EventHandler<GenericEventArgs<char>> Char;
-        #endregion
+		#endregion
 
-        public Widget()
+		public Widget()
 		{
 			Visible = true;
 			Enabled = true;
 		}
 
-        #region Functions
-        public virtual IBrush GetCurrentBackground()
+		#region Functions
+		public virtual IBrush GetCurrentBackground()
 		{
 			var result = Background;
 
@@ -1062,7 +1064,7 @@ namespace Myra.Graphics2D.UI
 			var result = FindWidgetById(id);
 			if (result == null)
 			{
-                throw new Exception(string.Format($"Could not find widget with id {id}"));
+				throw new Exception(string.Format($"Could not find widget with id {id}"));
 			}
 
 			return result;
@@ -1366,5 +1368,5 @@ namespace Myra.Graphics2D.UI
 			return isTouchOver;
 		}
 	}
-    #endregion
+	#endregion
 }

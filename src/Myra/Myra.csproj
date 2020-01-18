@@ -56,7 +56,5 @@
   
   <ItemGroup>
     <PackageReference Include="info.lundin.math.dll" Version="1.2.6" />
-    <PackageReference Include="SpriteFontPlus" Version="0.7.1.25" />
-    <PackageReference Include="StbImageSharp" Version="2.22.2" />
   </ItemGroup>  
 </Project>
