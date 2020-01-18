@@ -23,7 +23,7 @@ namespace Myra.Utility
                 return;
             }
             ///check parent on dynamic layout
-            if (widget.Parent!=null&&!widget.Parent.Layout2d.Nullable)
+            if (widget.Parent != null && !widget.Parent.Layout2d.Nullable)
             {
                 Parse(widget.Parent, widgets, ++level);
             }
@@ -35,7 +35,7 @@ namespace Myra.Utility
             #region Calculation
             /// if X exp not null
             if (widget.Layout2d.PositionXExpression != "NULL")
-                widget.Left = (int)parser.Parse(CheckAndAddRef(widget.Layout2d.PositionXExpression,parser, widget));
+                widget.Left = (int)parser.Parse(CheckAndAddRef(widget.Layout2d.PositionXExpression, parser, widget));
             /// if Y exp not null
             if (widget.Layout2d.PositionYExpression != "NULL")
                 widget.Top = (int)parser.Parse(CheckAndAddRef(widget.Layout2d.PositionYExpression, parser, widget));
@@ -44,12 +44,13 @@ namespace Myra.Utility
                 widget.Height = (int)parser.Parse(CheckAndAddRef(widget.Layout2d.SizeYExpression, parser, widget));
             /// if W exp not null
             if (widget.Layout2d.SizeXExpression != "NULL")
-                widget.Width = (int)parser.Parse(CheckAndAddRef(widget.Layout2d.SizeXExpression, parser,widget));
+                widget.Width = (int)parser.Parse(CheckAndAddRef(widget.Layout2d.SizeXExpression, parser, widget));
             #endregion
             widget.Layout2d.Calculated = true;
         }
 
-        static private string CheckAndAddRef(string Expression, info.lundin.math.ExpressionParser parser,Widget widget) {
+        static private string CheckAndAddRef(string Expression, info.lundin.math.ExpressionParser parser, Widget widget)
+        {
             string expression = Expression;
 
             /*replace to values*/
@@ -65,18 +66,21 @@ namespace Myra.Utility
             expression = expression.Replace("this.h", $"{widget.Height ?? 0}");
             expression = expression.Replace("this.width", $"{widget.Width ?? 0}");
             expression = expression.Replace("this.height", $"{widget.Height ?? 0}");
-            ///add parent values pos
-            expression = expression.Replace("&.X", $"{widget.Parent.Left}");
-            expression = expression.Replace("&.Y", $"{widget.Parent.Top}");
-            expression = expression.Replace("&.l", $"{widget.Parent.Left}");
-            expression = expression.Replace("&.t", $"{widget.Parent.Top}");
-            expression = expression.Replace("&.left", $"{widget.Parent.Left}");
-            expression = expression.Replace("&.top", $"{widget.Parent.Top}");
-            ///add parent values size
-            expression = expression.Replace("&.w", $"{widget.Parent.Width ?? 0}");
-            expression = expression.Replace("&.h", $"{widget.Parent.Height ?? 0}");
-            expression = expression.Replace("&.width", $"{widget.Parent.Width ?? 0}");
-            expression = expression.Replace("&.height", $"{widget.Parent.Height ?? 0}");
+            if (widget.Parent != null)
+            {
+                ///add parent values pos
+                expression = expression.Replace("&.X", GerParrentValue(widget,"&.X"));
+                expression = expression.Replace("&.Y", GerParrentValue(widget, "&.Y"));
+                expression = expression.Replace("&.l", GerParrentValue(widget, "&.X"));
+                expression = expression.Replace("&.t", GerParrentValue(widget, "&.Y"));
+                expression = expression.Replace("&.left", GerParrentValue(widget, "&.X"));
+                expression = expression.Replace("&.top", GerParrentValue(widget, "&.Y"));
+                ///add parent values size
+                expression = expression.Replace("&.w", GerParrentValue(widget, "&.w"));
+                expression = expression.Replace("&.h", GerParrentValue(widget, "&.h"));
+                expression = expression.Replace("&.width", GerParrentValue(widget, "&.w"));
+                expression = expression.Replace("&.height", GerParrentValue(widget, "&.h"));
+            }
             ///add window walues
             expression = expression.Replace("W.h", $"{MyraEnvironment.Game.Window.ClientBounds.Height}");
             expression = expression.Replace("W.height", $"{MyraEnvironment.Game.Window.ClientBounds.Height}");
@@ -103,6 +107,37 @@ namespace Myra.Utility
             return widgets.Find(i => { return i.Id == Id; });
         }
         /*.h*/
+
+        static private string GerParrentValue(Widget widget , string ValueKey) {
+            if (widget.Parent == null)
+            {
+                switch (ValueKey)
+                {
+                    case "&.X":
+                    case "&.Y":
+                        return "0";
+                    case "&.w":
+                        return $"{MyraEnvironment.Game.Window.ClientBounds.Width}";
+                    case "&.h":
+                        return $"{MyraEnvironment.Game.Window.ClientBounds.Height}";
+                }
+            }
+            else
+            {
+                switch (ValueKey)
+                {
+                    case "&.X":
+                        return $"{widget.Parent.Left}";
+                    case "&.Y":
+                        return $"{widget.Parent.Top}";
+                    case "&.w":
+                        return $"{widget.Parent.Width}";
+                    case "&.h":
+                        return $"{widget.Parent.Height}";
+                }
+            }
+            return "0";
+        }
         static private int? GetValue(string WalueName, Rectangle widgets)
         {
             switch (WalueName)
