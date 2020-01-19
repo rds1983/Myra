@@ -43,10 +43,6 @@ namespace Myra.Samples.NonModalWindows
 			_mainPanel = new MainPanel();
 			Desktop.Widgets.Add(_mainPanel);
 
-            var Panel = new Panel();
-            Panel.Widgets.Add(new Window() { Title = "Test" });
-            Desktop.Widgets.Add(Panel);
-
 			_mainPanel.ShowWindows();
 		}
 
