@@ -163,17 +163,32 @@ namespace Myra.Graphics2D.UI
 			{
 				if (IsPlaced)
 				{
-					Desktop.TouchMoved -= DesktopOnTouchMoved;
-					Desktop.TouchUp -= DesktopTouchUp;
+                    if (Parent != null) {
+                        Parent.TouchMoved -= DesktopOnTouchMoved;
+                        Parent.TouchUp -= DesktopTouchUp;
+                    }
+                    else
+                    {
+                        Desktop.TouchMoved -= DesktopOnTouchMoved;
+					    Desktop.TouchUp -= DesktopTouchUp;
+                    }
 				}
 
 				base.IsPlaced = value;
 
 				if (IsPlaced)
 				{
-					Desktop.TouchMoved += DesktopOnTouchMoved;
-					Desktop.TouchUp += DesktopTouchUp;
-				}
+                    if (Parent != null)
+                    {
+                        Parent.TouchMoved += DesktopOnTouchMoved;
+                        Parent.TouchUp += DesktopTouchUp;
+                    }
+                    else
+                    {
+                        Desktop.TouchMoved += DesktopOnTouchMoved;
+                        Desktop.TouchUp += DesktopTouchUp;
+                    }
+                }
 			}
 		}
 
@@ -402,21 +417,26 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			if (Desktop.Widgets.Contains(this))
-			{
-				if (Desktop.FocusedKeyboardWidget == this)
-				{
-					Desktop.FocusedKeyboardWidget = null;
-				}
+            if (Desktop.FocusedKeyboardWidget == this)
+            {
+                Desktop.FocusedKeyboardWidget = null;
+            }
 
+            if (Desktop.Widgets.Contains(this))
+			{
 				Desktop.Widgets.Remove(this);
 				Desktop.FocusedMouseWheelWidget = _previousMouseWheelFocus;
+            }
+            else
+            {
+                //todo fix remove error. DONE
+                Parent.RemoveChild(this);
+            }
+            Closed.Invoke(this);
 
-				Closed.Invoke(this);
-			}
-		}
+        }
 
-		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
+        protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplyWindowStyle(stylesheet.WindowStyles[name]);
 		}
