@@ -24,7 +24,7 @@ copy "samples\Myra.Samples.NonModalWindows\bin\MonoGame\%CONFIGURATION%\Myra.Sam
 copy "samples\Myra.Samples.DebugConsole\bin\MonoGame\%CONFIGURATION%\Myra.Samples.DebugConsole.exe" ZipPackage /Y
 copy "samples\Myra.Samples.AssetManagement\bin\MonoGame\%CONFIGURATION%\Myra.Samples.AssetManagement.exe" ZipPackage /Y
 copy "src\MyraPad\bin\%CONFIGURATION%\MyraPad.exe" ZipPackage /Y
-copy "src\MyraPad\bin\%CONFIGURATION%\StbImageSharp.dll" "ZipPackage" /Y
+copy "src\MyraPad\bin\%CONFIGURATION%\XNAssets.dll" "ZipPackage" /Y
 copy "src\MyraPad\bin\%CONFIGURATION%\info.lundin.math.dll" "ZipPackage" /Y
 copy "src\MyraPad\bin\%CONFIGURATION%\MonoGame.Framework.dll" "ZipPackage" /Y
 copy "src\MyraPad\bin\%CONFIGURATION%\MonoGame.Framework.dll.config" "ZipPackage" /Y
