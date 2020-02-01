@@ -2,7 +2,6 @@
 using System.Reflection;
 using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
-using Myra.Utility;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using System;
@@ -158,7 +157,7 @@ namespace Myra.Graphics2D.UI
 			{
 				if (t == typeof(IBrush))
 				{
-					return new SolidBrush(ColorStorage.FromName(name).Value);
+					return new SolidBrush(name);
 				}
 				else if (t == typeof(IImage))
 				{

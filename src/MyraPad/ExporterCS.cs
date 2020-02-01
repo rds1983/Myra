@@ -293,7 +293,7 @@ namespace MyraPad
 							strValue = "MyraEnvironment.DefaultAssetManager.Load<" + typeName + ">(\"" + s + "\")";
 						} else
 						{
-							strValue = "new SolidBrush(ColorStorage.FromName(\"" + s + "\").Value)";
+							strValue = "new SolidBrush(\"" + s + "\")";
 						}
 					}
 				}

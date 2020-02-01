@@ -1,6 +1,7 @@
 ﻿#if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 #else
 using Xenko.Core.Mathematics;
 using Xenko.Graphics;
@@ -28,6 +29,17 @@ namespace Myra.Graphics2D.Brushes
 		public SolidBrush(Color color)
 		{
 			Color = color;
+		}
+
+		public SolidBrush(string color)
+		{
+			var c = ColorStorage.FromName(color);
+			if (c == null)
+			{
+				throw new ArgumentException(string.Format("Could not recognize color '{0}'", color));
+			}
+
+			Color = c.Value;
 		}
 
 		public void Draw(SpriteBatch batch, Rectangle dest, Color color)
