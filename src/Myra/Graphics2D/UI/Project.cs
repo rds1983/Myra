@@ -10,8 +10,10 @@ using Myra.MML;
 using System.Collections.Generic;
 using Myra.Attributes;
 using System.Linq;
-using Myra.Assets;
 using Myra.Graphics2D.TextureAtlases;
+using XNAssets.Assets;
+using XNAssets.Utility;
+using Myra.Graphics2D.Brushes;
 
 #if !XENKO
 using Microsoft.Xna.Framework.Graphics;
@@ -156,7 +158,7 @@ namespace Myra.Graphics2D.UI
 			{
 				if (t == typeof(IBrush))
 				{
-					return assetManager.Load<IBrush>(name);
+					return new SolidBrush(ColorStorage.FromName(name).Value);
 				}
 				else if (t == typeof(IImage))
 				{

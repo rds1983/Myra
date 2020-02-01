@@ -2,7 +2,7 @@
 using System.IO;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.File;
-using Myra.Utility;
+using XNAssets.Utility;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;

@@ -9,22 +9,11 @@ using Texture2D = Xenko.Graphics.Texture;
 
 namespace Myra.Utility
 {
-	public static class GraphicsExtension
+	internal static class GraphicsExtension
 	{
 		public static Point Size(this Rectangle r)
 		{
 			return new Point(r.Width, r.Height);
-		}
-
-		public static void SetSize(ref Rectangle r, Point size)
-		{
-			r.Width = size.X;
-			r.Height = size.Y;
-		}
-
-		public static Rectangle Add(this Rectangle r, Point p)
-		{
-			return new Rectangle(r.X + p.X, r.Y + p.Y, r.Width, r.Height);
 		}
 
 		/// <summary>

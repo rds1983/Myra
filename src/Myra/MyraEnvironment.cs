@@ -1,20 +1,24 @@
 ﻿using System;
 using System.Reflection;
+using XNAssets.Assets;
+using Myra.Assets;
+using XNAssets.Utility;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 #else
-using Xenko.Core.Mathematics;
 using Xenko.Engine;
 using Xenko.Graphics;
 #endif
 
 namespace Myra
 {
-
 	public static class MyraEnvironment
 	{
+		private static AssetManager _defaultAssetManager;
+
+		private static bool _assetsLoadersUpdated = false;
 		private static Game _game;
 
 		public static event EventHandler GameDisposed;
@@ -33,6 +37,11 @@ namespace Myra
 
 			set
 			{
+				if (value == null)
+				{
+					throw new ArgumentNullException(nameof(value));
+				}
+
 				if (_game == value)
 				{
 					return;
@@ -53,6 +62,30 @@ namespace Myra
 					_game.Disposed += GameOnDisposed;
 				}
 #endif
+
+				if (!_assetsLoadersUpdated)
+				{
+					// Use our own SpriteFontLoader that can use TextureRegion as backing image
+					AssetManager.SetAssetLoader(new SpriteFontLoader());
+
+					_assetsLoadersUpdated = true;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Default Assets Manager
+		/// </summary>
+		public static AssetManager DefaultAssetManager
+		{
+			get
+			{
+				if (_defaultAssetManager == null)
+				{
+					_defaultAssetManager = new AssetManager(GraphicsDevice, new FileAssetResolver(PathUtils.ExecutingAssemblyDirectory));
+				}
+
+				return _defaultAssetManager;
 			}
 		}
 

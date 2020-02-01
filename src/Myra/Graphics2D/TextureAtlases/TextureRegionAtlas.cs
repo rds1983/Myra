@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Linq;
 using Myra.MML;
-using Myra.Assets;
+using XNAssets.Assets;
 
 #if !XENKO
 using Microsoft.Xna.Framework;

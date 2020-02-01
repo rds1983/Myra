@@ -1,6 +1,6 @@
 ﻿namespace Myra.Utility
 {
-	public struct ColorHSV
+	internal struct ColorHSV
 	{
 		public int H { get; set; }
 		public int S { get; set; }

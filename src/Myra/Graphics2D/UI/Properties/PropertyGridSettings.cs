@@ -1,4 +1,4 @@
-﻿using Myra.Assets;
+﻿using XNAssets.Assets;
 
 namespace Myra.Graphics2D.UI.Properties
 {

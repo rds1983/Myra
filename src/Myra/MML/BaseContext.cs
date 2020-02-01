@@ -1,9 +1,9 @@
 ﻿using Myra.Graphics2D;
-using Myra.Utility;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Xml.Serialization;
+using XNAssets.Utility;
 
 #if !XENKO
 using Microsoft.Xna.Framework;

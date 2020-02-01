@@ -2,7 +2,7 @@
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Reflection;
-using Myra.Assets;
+using XNAssets.Assets;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -19,7 +19,7 @@ namespace Myra
 {
 	public static class DefaultAssets
 	{
-		private static readonly AssetManager _assetManager = new AssetManager(new ResourceAssetResolver(typeof(DefaultAssets).Assembly, "Resources."));
+		private static readonly AssetManager _assetManager = new AssetManager(MyraEnvironment.GraphicsDevice, new ResourceAssetResolver(typeof(DefaultAssets).Assembly, "Resources."));
 		private static SpriteFont _font;
 		private static SpriteFont _fontSmall;
 		private static TextureRegionAtlas _uiTextureRegionAtlas;

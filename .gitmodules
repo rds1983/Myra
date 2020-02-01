@@ -1,6 +1,3 @@
-[submodule "deps/FNA"]
-	path = deps/FNA
-	url = https://github.com/rds1983/FNA.git
-[submodule "deps/BMFontToSpriteFont"]
-	path = deps/BMFontToSpriteFont
-	url = https://github.com/rds1983/BMFontToSpriteFont.git
+[submodule "deps/XNAssets"]
+	path = deps/XNAssets
+	url = https://github.com/rds1983/XNAssets.git

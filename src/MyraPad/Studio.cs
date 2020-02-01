@@ -17,8 +17,9 @@ using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework.Input;
 using System.Threading;
 using System.Xml.Linq;
-using Myra.Assets;
 using Myra.Graphics2D;
+using XNAssets.Assets;
+using XNAssets.Utility;
 
 namespace MyraPad
 {
@@ -126,12 +127,12 @@ namespace MyraPad
 				{
 					var folder = Path.GetDirectoryName(_filePath);
 					PropertyGridSettings.BasePath = folder;
-					PropertyGridSettings.AssetManager = new AssetManager(new FileAssetResolver(folder));
+					PropertyGridSettings.AssetManager = new AssetManager(GraphicsDevice, new FileAssetResolver(folder));
 					_lastFolder = folder;
 				} else
 				{
 					PropertyGridSettings.BasePath = string.Empty;
-					PropertyGridSettings.AssetManager = Myra.Assets.AssetManager.Default;
+					PropertyGridSettings.AssetManager = MyraEnvironment.DefaultAssetManager;
 					PropertyGridSettings.AssetManager.ClearCache();
 				}
 
@@ -395,7 +396,7 @@ namespace MyraPad
 			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
 			_propertyGrid.CustomValuesProvider = RecordValuesProvider;
 			_propertyGrid.CustomSetter = RecordSetter;
-			_propertyGrid.Settings.AssetManager = Myra.Assets.AssetManager.Default;
+			_propertyGrid.Settings.AssetManager = MyraEnvironment.DefaultAssetManager;
 
 			_ui._propertyGridPane.Content = _propertyGrid;
 

@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.DebugConsole",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.AssetManagement", "..\..\samples\Myra.Samples.AssetManagement\Myra.Samples.AssetManagement.csproj", "{9C71BE95-55A4-4DD6-8EE6-815D7ECE76BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.Layout2D", "..\..\samples\Myra.Samples.Layout2D\Myra.Samples.Layout2D.csproj", "{C5251EC7-58F7-4F71-B3BB-B28C982AF777}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.Layout2D", "..\..\samples\Myra.Samples.Layout2D\Myra.Samples.Layout2D.csproj", "{C5251EC7-58F7-4F71-B3BB-B28C982AF777}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

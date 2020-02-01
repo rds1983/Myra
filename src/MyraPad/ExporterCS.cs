@@ -13,6 +13,7 @@ using Myra.Graphics2D;
 using Myra.Graphics2D.UI;
 using Myra.MML;
 using Myra.Utility;
+using XNAssets.Utility;
 
 namespace MyraPad
 {
@@ -289,7 +290,7 @@ namespace MyraPad
 
 						if (property.PropertyType != typeof(IBrush))
 						{
-							strValue = "AssetManager.Default.Load<" + typeName + ">(\"" + s + "\")";
+							strValue = "MyraEnvironment.DefaultAssetManager.Load<" + typeName + ">(\"" + s + "\")";
 						} else
 						{
 							strValue = "new SolidBrush(ColorStorage.FromName(\"" + s + "\").Value)";

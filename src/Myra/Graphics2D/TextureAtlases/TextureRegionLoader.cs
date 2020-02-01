@@ -1,4 +1,4 @@
-﻿using Myra.Assets;
+﻿using XNAssets.Assets;
 
 #if !XENKO
 using Microsoft.Xna.Framework.Graphics;

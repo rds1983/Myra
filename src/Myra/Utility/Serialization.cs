@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
+using XNAssets.Utility;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -12,7 +13,7 @@ namespace Myra.Utility
 {
 	public static class Serialization
 	{
-		public static bool GetStyle(this Dictionary<string, object> styles, string name, out string result)
+		internal static bool GetStyle(this Dictionary<string, object> styles, string name, out string result)
 		{
 			result = null;
 
@@ -27,7 +28,7 @@ namespace Myra.Utility
 			return true;
 		}
 
-		public static bool GetStyle(this Dictionary<string, object> styles, string name, out Dictionary<string, object> result)
+		internal static bool GetStyle(this Dictionary<string, object> styles, string name, out Dictionary<string, object> result)
 		{
 			result = null;
 

@@ -1,7 +1,4 @@
-﻿using Myra.Assets;
-using Myra.Graphics2D.Brushes;
-
-#if !XENKO
+﻿#if !XENKO
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 #else
@@ -11,7 +8,6 @@ using Xenko.Graphics;
 
 namespace Myra.Graphics2D
 {
-	[AssetLoader(typeof(BrushLoader))]
 	public interface IBrush
 	{
 		void Draw(SpriteBatch batch, Rectangle dest, Color color);

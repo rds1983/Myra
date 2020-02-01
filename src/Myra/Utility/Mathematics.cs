@@ -2,7 +2,7 @@
 
 namespace Myra.Utility
 {
-	public static class Mathematics
+	internal static class Mathematics
 	{
 		/// <summary>
 		/// The value for which all absolute numbers smaller than are considered equal to zero.
