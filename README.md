@@ -9,6 +9,9 @@ Myra is UI Library for [MonoGame](http://www.monogame.net/), [FNA](https://githu
 * **Skinning.**  The default skin(it had been borrowed from [VisUI](https://github.com/kotcrab/vis-ui)) could be replaced with a custom skin loaded from the XML ([example](/samples/Myra.Samples.CustomUIStylesheet/Resources/ui_stylesheet.xml)).
 * **MyraPad.** Standalone WYSIWYG MML based UI designer.
 
+## Demo
+If you would like to see Myra in action, download latest binary release(Myra.v.v.v.v.zip from the latest release at [Releases](https://github.com/rds1983/Myra/releases)), unpack it and run samples(should be runnable at Linux through Mono too).
+
 ## Documentation
 [https://github.com/rds1983/Myra/wiki](https://github.com/rds1983/Myra/wiki)
 
