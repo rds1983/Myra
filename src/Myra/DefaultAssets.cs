@@ -2,7 +2,7 @@
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Reflection;
-using XNAssets.Assets;
+using XNAssets;
 
 #if !XENKO
 using Microsoft.Xna.Framework;

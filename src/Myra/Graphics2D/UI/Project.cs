@@ -10,9 +10,9 @@ using System.Collections.Generic;
 using Myra.Attributes;
 using System.Linq;
 using Myra.Graphics2D.TextureAtlases;
-using XNAssets.Assets;
 using XNAssets.Utility;
 using Myra.Graphics2D.Brushes;
+using XNAssets;
 
 #if !XENKO
 using Microsoft.Xna.Framework.Graphics;

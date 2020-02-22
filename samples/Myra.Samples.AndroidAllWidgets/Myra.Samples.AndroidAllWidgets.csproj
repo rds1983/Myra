@@ -65,8 +65,8 @@
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Android\MonoGame.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="XNAssets, Version=0.5.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\build\MonoGame.Android\packages\XNAssets.0.5.0.1\lib\netstandard2.0\XNAssets.dll</HintPath>
+    <Reference Include="XNAssets, Version=0.5.0.6, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\build\packages\XNAssets.0.5.0.6\lib\netstandard2.0\XNAssets.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

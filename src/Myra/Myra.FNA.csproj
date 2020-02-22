@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Authors>MyraTeam</Authors>
     <Product>Myra</Product>
@@ -8,18 +8,22 @@
     <AssemblyName>Myra</AssemblyName>
     <RootNamespace>Myra</RootNamespace>
     <Version>1.0.0.0</Version>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <DefineConstants>TRACE;MONOGAME;ANDROID</DefineConstants>
+    <DefineConstants>$(DefineConstants);FNA</DefineConstants>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <PackageId>Myra.FNA</PackageId>
+    <OutputPath>bin\FNA\$(Configuration)</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\**\*.*" />
-    <Compile Include="..\..\deps\BMFontToSpriteFont\**\*.cs" LinkBase="ThirdParty\BMFontToSpriteFont" />
   </ItemGroup>  
-
+  
   <ItemGroup>
-    <PackageReference Include="MonoGame.Framework.Portable" PrivateAssets="All" Version="3.6.0.1625" />
-    <PackageReference Include="XNAssets" Version="0.5.0.6" />
     <PackageReference Include="info.lundin.math.dll" Version="1.2.6" />
+  </ItemGroup>  
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\FNA\FNA.Core.csproj" />
+    <ProjectReference Include="..\..\..\XNAssets\src\XNAssets.FNA.csproj" />
   </ItemGroup>
 </Project>

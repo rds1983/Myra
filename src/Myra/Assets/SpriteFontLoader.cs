@@ -1,5 +1,5 @@
 ﻿using Myra.Graphics2D.TextureAtlases;
-using XNAssets.Assets;
+using XNAssets;
 using SpriteFontPlus;
 
 #if !XENKO

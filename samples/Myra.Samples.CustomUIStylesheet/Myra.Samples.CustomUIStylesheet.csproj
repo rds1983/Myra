@@ -1,33 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="$(SolutionDir)SolutionDefines.targets" />
-
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <ApplicationIcon />
     <StartupObject />
     <AssemblyName>Myra.Samples.CustomUIStylesheet</AssemblyName>
     <RootNamespace>Myra.Samples.CustomUIStylesheet</RootNamespace>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="$(DefineConstants.Contains('MONOGAME'))">
     <TargetFramework>net45</TargetFramework>
     <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
   </PropertyGroup>
-
-  <PropertyGroup Condition="$(DefineConstants.Contains('FNA'))">
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <OutputPath>bin\FNA\$(Configuration)</OutputPath>
-  </PropertyGroup>  
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\**\*.*" />
   </ItemGroup>
 
-  <ItemGroup Condition="$(DefineConstants.Contains('MONOGAME'))">
+  <ItemGroup>
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.7.1.189" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Myra\Myra.csproj" />
+    <ProjectReference Include="..\..\src\Myra\Myra.MonoGame.csproj" />
   </ItemGroup>
 </Project>

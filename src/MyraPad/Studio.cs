@@ -18,7 +18,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Threading;
 using System.Xml.Linq;
 using Myra.Graphics2D;
-using XNAssets.Assets;
+using XNAssets;
 using XNAssets.Utility;
 
 namespace MyraPad

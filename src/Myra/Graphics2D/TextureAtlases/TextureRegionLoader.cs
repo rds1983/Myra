@@ -1,4 +1,4 @@
-﻿using XNAssets.Assets;
+﻿using XNAssets;
 
 #if !XENKO
 using Microsoft.Xna.Framework.Graphics;

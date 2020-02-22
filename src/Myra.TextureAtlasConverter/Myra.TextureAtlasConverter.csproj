@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net45</TargetFramework>
@@ -11,6 +10,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\Myra\Myra.csproj" />
+    <ProjectReference Include="..\Myra\Myra.MonoGame.csproj" />
   </ItemGroup>
 </Project>

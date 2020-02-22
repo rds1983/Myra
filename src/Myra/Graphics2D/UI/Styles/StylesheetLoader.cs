@@ -4,7 +4,7 @@ using Myra.MML;
 using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
-using XNAssets.Assets;
+using XNAssets;
 
 #if !XENKO
 using Microsoft.Xna.Framework.Graphics;

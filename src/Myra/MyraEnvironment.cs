@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using XNAssets.Assets;
+using XNAssets;
 using Myra.Assets;
 using XNAssets.Utility;
 

@@ -1,34 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="$(SolutionDir)SolutionDefines.targets" />
-  
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <ApplicationIcon />
     <StartupObject />
     <AssemblyName>Myra.Samples.CustomWidgets</AssemblyName>
     <RootNamespace>Myra.Samples.CustomWidgets</RootNamespace>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="$(DefineConstants.Contains('MONOGAME')) AND !$(DefineConstants.Contains('ANDROID'))">
     <TargetFramework>net45</TargetFramework>
     <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
   </PropertyGroup>
-
-  <PropertyGroup Condition="$(DefineConstants.Contains('FNA'))">
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <OutputPath>bin\FNA\$(Configuration)</OutputPath>
-  </PropertyGroup>
   
-  <PropertyGroup Condition="$(DefineConstants.Contains('XENKO'))">
-    <TargetFramework>net461</TargetFramework>
-    <OutputPath>bin\Xenko\$(Configuration)</OutputPath>
-  </PropertyGroup>
-
-  <ItemGroup Condition="$(DefineConstants.Contains('MONOGAME')) AND !$(DefineConstants.Contains('ANDROID'))">
+  <ItemGroup>
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.7.1.189" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Myra\Myra.csproj" />
+    <ProjectReference Include="..\..\src\Myra\Myra.MonoGame.csproj" />
   </ItemGroup>  
 </Project>

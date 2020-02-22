@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{48936873-B1E0-48E9-939A-BA4C2BD1B0EE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Xenko", "..\src\Myra\Myra.Xenko.csproj", "{FDD6ED2F-2A04-470F-B5BA-EBF41FCFE19F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.AllWidgets.Xenko", "..\samples\Myra.Samples.AllWidgets\Myra.Samples.AllWidgets.Xenko.csproj", "{C3520861-289A-4390-A7F1-5C35D8F5524A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FDD6ED2F-2A04-470F-B5BA-EBF41FCFE19F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDD6ED2F-2A04-470F-B5BA-EBF41FCFE19F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDD6ED2F-2A04-470F-B5BA-EBF41FCFE19F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FDD6ED2F-2A04-470F-B5BA-EBF41FCFE19F}.Debug|x64.Build.0 = Debug|Any CPU
+		{FDD6ED2F-2A04-470F-B5BA-EBF41FCFE19F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FDD6ED2F-2A04-470F-B5BA-EBF41FCFE19F}.Debug|x86.Build.0 = Debug|Any CPU
+		{FDD6ED2F-2A04-470F-B5BA-EBF41FCFE19F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDD6ED2F-2A04-470F-B5BA-EBF41FCFE19F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDD6ED2F-2A04-470F-B5BA-EBF41FCFE19F}.Release|x64.ActiveCfg = Release|Any CPU
+		{FDD6ED2F-2A04-470F-B5BA-EBF41FCFE19F}.Release|x64.Build.0 = Release|Any CPU
+		{FDD6ED2F-2A04-470F-B5BA-EBF41FCFE19F}.Release|x86.ActiveCfg = Release|Any CPU
+		{FDD6ED2F-2A04-470F-B5BA-EBF41FCFE19F}.Release|x86.Build.0 = Release|Any CPU
+		{C3520861-289A-4390-A7F1-5C35D8F5524A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3520861-289A-4390-A7F1-5C35D8F5524A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3520861-289A-4390-A7F1-5C35D8F5524A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C3520861-289A-4390-A7F1-5C35D8F5524A}.Debug|x64.Build.0 = Debug|Any CPU
+		{C3520861-289A-4390-A7F1-5C35D8F5524A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C3520861-289A-4390-A7F1-5C35D8F5524A}.Debug|x86.Build.0 = Debug|Any CPU
+		{C3520861-289A-4390-A7F1-5C35D8F5524A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3520861-289A-4390-A7F1-5C35D8F5524A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3520861-289A-4390-A7F1-5C35D8F5524A}.Release|x64.ActiveCfg = Release|Any CPU
+		{C3520861-289A-4390-A7F1-5C35D8F5524A}.Release|x64.Build.0 = Release|Any CPU
+		{C3520861-289A-4390-A7F1-5C35D8F5524A}.Release|x86.ActiveCfg = Release|Any CPU
+		{C3520861-289A-4390-A7F1-5C35D8F5524A}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C3520861-289A-4390-A7F1-5C35D8F5524A} = {48936873-B1E0-48E9-939A-BA4C2BD1B0EE}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A9C9D369-EE58-4E9D-B9FE-63023B644741}
+	EndGlobalSection
+EndGlobal

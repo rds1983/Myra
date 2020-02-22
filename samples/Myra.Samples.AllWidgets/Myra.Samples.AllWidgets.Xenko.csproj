@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <ApplicationIcon />
+    <StartupObject />
+    <AssemblyName>Myra.Samples.AllWidgets</AssemblyName>
+    <RootNamespace>Myra.Samples.AllWidgets</RootNamespace>
+    <TargetFramework>net461</TargetFramework>
+    <OutputPath>bin\Xenko\$(Configuration)</OutputPath>
+    <DefineConstants>$(DefineConstants);XENKO</DefineConstants>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Myra\Myra.Xenko.csproj" />
+  </ItemGroup>  
+</Project>

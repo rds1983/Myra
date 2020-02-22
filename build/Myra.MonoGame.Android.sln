@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{EAB0AA24-7185-4897-A866-AE87AF3F2E0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.AndroidAllWidgets", "..\..\samples\Myra.Samples.AndroidAllWidgets\Myra.Samples.AndroidAllWidgets.csproj", "{36C4B1CF-4E3C-4EFE-8B4D-1F2B398BF55D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.AndroidAllWidgets", "..\samples\Myra.Samples.AndroidAllWidgets\Myra.Samples.AndroidAllWidgets.csproj", "{36C4B1CF-4E3C-4EFE-8B4D-1F2B398BF55D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Android", "..\..\src\Myra\Myra.Android.csproj", "{B0300DD0-C044-405F-B2FB-D1BCC93E633C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Android", "..\src\Myra\Myra.Android.csproj", "{B0300DD0-C044-405F-B2FB-D1BCC93E633C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,8 +34,5 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35ACDF4E-2CE2-46B1-A19F-35DC131069A1}
-	EndGlobalSection
-	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Myra.UIEditor\Myra.UIEditor.csproj
 	EndGlobalSection
 EndGlobal

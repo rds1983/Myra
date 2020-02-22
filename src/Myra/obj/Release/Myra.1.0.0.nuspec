@@ -11,11 +11,11 @@
     <description>UI Library for MonoGame, FNA and Xenko</description>
     <dependencies>
       <group targetFramework=".NETFramework4.5">
-        <dependency id="XNAssets" version="0.5.0.1" exclude="Build,Analyzers" />
+        <dependency id="XNAssets" version="0.5.0.6" exclude="Build,Analyzers" />
         <dependency id="info.lundin.math.dll" version="1.2.6" exclude="Build,Analyzers" />
       </group>
       <group targetFramework=".NETStandard2.0">
-        <dependency id="XNAssets" version="0.5.0.1" exclude="Build,Analyzers" />
+        <dependency id="XNAssets" version="0.5.0.6" exclude="Build,Analyzers" />
         <dependency id="info.lundin.math.dll" version="1.2.6" exclude="Build,Analyzers" />
       </group>
     </dependencies>

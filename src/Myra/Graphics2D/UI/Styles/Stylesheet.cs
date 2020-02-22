@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 using System.Xml.Linq;
 using Myra.MML;
 using System.Collections;
-using XNAssets.Assets;
+using XNAssets;
 
 #if !XENKO
 using Microsoft.Xna.Framework;

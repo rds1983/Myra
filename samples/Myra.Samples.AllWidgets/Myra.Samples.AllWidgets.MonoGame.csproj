@@ -3,10 +3,11 @@
     <OutputType>WinExe</OutputType>
     <ApplicationIcon />
     <StartupObject />
-    <AssemblyName>Myra.Samples.AssetManagement</AssemblyName>
-    <RootNamespace>Myra.Samples.AssetManagement</RootNamespace>
+    <AssemblyName>Myra.Samples.AllWidgets</AssemblyName>
+    <RootNamespace>Myra.Samples.AllWidgets</RootNamespace>
     <TargetFramework>net45</TargetFramework>
     <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
+    <DefineConstants>$(DefineConstants);MONOGAME</DefineConstants>
   </PropertyGroup>
   
   <ItemGroup>
@@ -15,15 +16,5 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Myra\Myra.MonoGame.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System.Windows.Forms" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Assets\**\*.*">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>  
 </Project>
