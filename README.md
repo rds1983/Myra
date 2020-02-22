@@ -23,8 +23,7 @@ Use following resources if you need help with Myra or have other questions:
 
 ## Building From Source Code
 1. Clone this repo.
-2. `git submodule update --init --recursive`
-3. Open a solution from the "build" folder.
+2. Open a solution from the "build" folder.
 
 ## Gallery
 All Widgets Sample
