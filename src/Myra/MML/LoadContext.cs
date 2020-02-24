@@ -91,7 +91,17 @@ namespace Myra.MML
 								baseObject.Resources[property.Name] = attr.Value;
 							}
 						}
-						catch(Exception)
+						catch (Exception)
+						{
+						}
+					}
+					else if (propertyType == typeof(Thickness))
+					{
+						try
+						{
+							value = Thickness.FromString(attr.Value);
+						}
+						catch (Exception)
 						{
 						}
 					}
@@ -104,6 +114,7 @@ namespace Myra.MML
 
 						value = Convert.ChangeType(attr.Value, propertyType, CultureInfo.InvariantCulture);
 					}
+
 					property.SetValue(obj, value);
 				}
 			}

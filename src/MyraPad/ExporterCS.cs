@@ -276,7 +276,8 @@ namespace MyraPad
 			if (asList == null)
 			{
 				string strValue = null;
-				if (typeof(IBrush).IsAssignableFrom(property.PropertyType) || property.PropertyType == typeof(SpriteFont))
+				if (typeof(IBrush).IsAssignableFrom(property.PropertyType) || 
+					property.PropertyType == typeof(SpriteFont))
 				{
 					var baseObject = o as BaseObject;
 					string s;
@@ -291,11 +292,17 @@ namespace MyraPad
 						if (property.PropertyType != typeof(IBrush))
 						{
 							strValue = "MyraEnvironment.DefaultAssetManager.Load<" + typeName + ">(\"" + s + "\")";
-						} else
+						}
+						else
 						{
 							strValue = "new SolidBrush(\"" + s + "\")";
 						}
 					}
+				}
+				else if (property.PropertyType == typeof(Thickness))
+				{
+					var thickness = (Thickness)value;
+					strValue = "new Thickness(" + thickness.ToString() + ")";
 				}
 				else
 				{

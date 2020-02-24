@@ -1,10 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Stylesheet TextureRegionAtlas="default_ui_skin_atlas.xml">
-  <Colors>
-    <Color Id="white" Value="#FFFFFF" />
-    <Color Id="grey" Value="#AAAAAA" />
-    <Color Id="red" Value="#FF0000" />
-  </Colors>
   <Fonts>
     <Font Id="default-font" File="default_font.fnt"/>
     <Font Id="default-font-small" File="default_font_small.fnt"/>
@@ -78,24 +73,24 @@
         <ListItemStyle OverBackground="button-over" PressedBackground="button-down">
           <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" />
         </ListItemStyle>
-        <SeparatorStyle PaddingTop="2" PaddingBottom="2" Image="separator-menu" Thickness="4" />
+        <SeparatorStyle Padding="0, 2" Image="separator-menu" Thickness="4" />
       </ListBoxStyle>
     </ComboBoxStyle>
   </ComboBoxStyles>
   <ListBoxStyles>
     <ListBoxStyle Background="button">
-      <ListItemStyle OverBackground="button-over" PaddingLeft="5" PaddingRight="5" PressedBackground="list-selection">
+      <ListItemStyle OverBackground="button-over" Padding="5, 0" PressedBackground="list-selection">
         <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" />
       </ListItemStyle>
-      <SeparatorStyle PaddingTop="2" PaddingBottom="2" Image="separator-menu" Thickness="4" />
+      <SeparatorStyle Padding="0, 2" Image="separator-menu" Thickness="4" />
     </ListBoxStyle>
   </ListBoxStyles>
   <TabControlStyles>
     <TabControlStyle ButtonSpacing="0">
-      <TabItemStyle OverBackground="button-over" PaddingLeft="5" PaddingRight="5" PressedBackground="list-selection">
+      <TabItemStyle OverBackground="button-over" Padding="5, 0" PressedBackground="list-selection">
         <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" />
       </TabItemStyle>
-      <ContentStyle Background="window" PaddingLeft="5" PaddingRight="5" PaddingTop="5" PaddingBottom="5" />
+      <ContentStyle Background="window" Padding="5" />
     </TabControlStyle>
   </TabControlStyles>
   <TreeStyles>
@@ -118,32 +113,26 @@
   </VerticalSplitPaneStyles>
   <HorizontalMenuStyles>
     <HorizontalMenuStyle Background="button" SelectionHoverBackground="button-over" SelectionBackground="button-down" SpecialCharColor="red">
-      <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" PaddingLeft="10" PaddingRight="10" />
+      <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" Padding="10, 0" />
       <SeparatorStyle Image="separator" Thickness="3" />
     </HorizontalMenuStyle>
   </HorizontalMenuStyles>
   <VerticalMenuStyles>
-    <VerticalMenuStyle Background="button" SelectionHoverBackground="button-over" SelectionBackground="button-down" SpecialCharColor="red">
-      <ImageStyle PaddingLeft="10" />
-      <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" PaddingLeft="10" PaddingRight="10" />
-      <ShortcutStyle Font="default-font" TextColor="white" DisabledTextColor="grey" PaddingRight="10" />
-      <SeparatorStyle PaddingTop="2" PaddingBottom="2" Image="separator-menu" Thickness="4" />
+    <VerticalMenuStyle Background="button" Border="#1BA1E2" BorderThickness="1"
+                       SelectionHoverBackground="button-over" SelectionBackground="button-down"
+                       SpecialCharColor="red">
+      <ImageStyle Padding="10, 0, 0, 0" />
+      <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" Padding="10, 0" />
+      <ShortcutStyle Font="default-font" TextColor="white" DisabledTextColor="grey" Padding="0, 0, 10, 0" />
+      <SeparatorStyle Padding="0, 2" Image="separator-menu" Thickness="4" />
     </VerticalMenuStyle>
   </VerticalMenuStyles>
   <WindowStyles>
-    <WindowStyle Background="window" PaddingLeft="5" PaddingRight="5" PaddingTop="5" PaddingBottom="5">
+    <WindowStyle Background="window" Padding="5">
       <TitleStyle Font="default-font" TextColor="white" />
-      <CloseButtonStyle OverBackground="button-over" PaddingLeft="5" PaddingRight="5" PaddingTop="5" PaddingBottom="5" PressedBackground="button-red">
+      <CloseButtonStyle OverBackground="button-over" Padding="5" PressedBackground="button-red">
         <ImageStyle Image="icon-close" />
       </CloseButtonStyle>
     </WindowStyle>
   </WindowStyles>
-  <DialogStyles>
-    <DialogStyle Background="window" PaddingLeft="5" PaddingRight="5" PaddingTop="5" PaddingBottom="5">
-      <TitleStyle Font="default-font" TextColor="white" />
-      <CloseButtonStyle OverBackground="button-over" PaddingLeft="5" PaddingRight="5" PaddingTop="5" PaddingBottom="5" PressedBackground="button-red">
-        <ImageStyle Image="icon-close" />
-      </CloseButtonStyle>
-    </DialogStyle>
-  </DialogStyles>
 </Stylesheet>

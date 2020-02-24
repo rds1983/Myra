@@ -37,7 +37,7 @@ namespace Myra.Tools.ToMyraAtlasConverter
 			public string Name { get; set; }
 			public Rectangle SourceRectangle;
 			public bool IsRotated { get; set; }
-			public PaddingInfo? Split;
+			public Thickness? Split;
 			public Point OriginalSize;
 			public Point Offset;
 		}
@@ -202,7 +202,7 @@ namespace Myra.Tools.ToMyraAtlasConverter
 							break;
 						case "split":
 							parts = value.Split(',');
-							var split = new PaddingInfo
+							var split = new Thickness
 							{
 								Left = int.Parse(parts[0].Trim()),
 								Right = int.Parse(parts[1].Trim()),

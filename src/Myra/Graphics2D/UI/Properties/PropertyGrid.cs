@@ -13,6 +13,7 @@ using Myra.Graphics2D.TextureAtlases;
 using System.IO;
 using Myra.Graphics2D.Brushes;
 using XNAssets.Utility;
+using Myra.Attributes;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -108,7 +109,16 @@ namespace Myra.Graphics2D.UI.Properties
 					}
 				};
 
-				_mark.IsPressed = true;
+				var expanded = true;
+				if (parentProperty != null && parentProperty.FindAttribute<DesignerFoldedAttribute>() != null)
+				{
+					expanded = false;
+				}
+
+				if (expanded)
+				{
+					_mark.IsPressed = true;
+				}
 
 				var label = new Label(null)
 				{

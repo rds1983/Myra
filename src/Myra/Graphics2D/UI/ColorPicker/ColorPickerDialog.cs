@@ -135,10 +135,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 						GridColumn = col,
 						GridRow = row,
 						Renderable = DefaultAssets.WhiteRegion,
-						PaddingLeft = 8,
-						PaddingRight = 8,
-						PaddingTop = 8,
-						PaddingBottom = 8
+						Margin = new Thickness(8)
 					};
 
 					_gridUserColors.Widgets.Add(image);

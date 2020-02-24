@@ -21,10 +21,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 			InternalChild = new Grid
 			{
-				PaddingLeft = 8,
-				PaddingRight = 8,
-				PaddingBottom = 8,
-				PaddingTop = 8,
+				Margin = new Thickness(8),
 				ColumnSpacing = 8,
 				RowSpacing = 8
 			};

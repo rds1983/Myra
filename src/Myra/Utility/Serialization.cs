@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Reflection;
 using XNAssets.Utility;
+using Myra.Graphics2D;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -45,6 +46,13 @@ namespace Myra.Utility
 
 		public static bool HasDefaultValue(this PropertyInfo property, object value)
 		{
+			if (property.PropertyType == typeof(Thickness) &&
+				value.Equals(Thickness.Zero))
+			{
+				// Skip empty Thickness
+				return true;
+			}
+
 			var defaultAttribute = property.FindAttribute<DefaultValueAttribute>();
 
 			object defaultAttributeValue = null;

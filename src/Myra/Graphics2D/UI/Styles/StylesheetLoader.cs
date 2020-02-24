@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using XNAssets;
+using Myra.Graphics2D.Brushes;
 
 #if !XENKO
 using Microsoft.Xna.Framework.Graphics;
@@ -39,7 +40,24 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 
 			return Stylesheet.LoadFromSource(xml,
-				name => textureRegionAtlas[name],
+				name =>
+				{
+					TextureRegion region;
+
+					if (!textureRegionAtlas.Regions.TryGetValue(name, out region))
+					{
+						var color = ColorStorage.FromName(name);
+						if (color != null)
+						{
+							return new SolidBrush(color.Value);
+						}
+					} else
+					{
+						return region;
+					}
+
+					throw new Exception(string.Format("Could not find parse IBrush '{0}'", name));
+				},
 				name => fonts[name]);
 		}
 	}

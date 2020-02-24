@@ -11,7 +11,7 @@ namespace Myra.Graphics2D.TextureAtlases
 {
 	public class NinePatchRegion : TextureRegion
 	{
-		private readonly PaddingInfo _info;
+		private readonly Thickness _info;
 
 		private readonly TextureRegion _topLeft,
 			_topCenter,
@@ -23,12 +23,12 @@ namespace Myra.Graphics2D.TextureAtlases
 			_bottomCenter,
 			_bottomRight;
 
-		public PaddingInfo Info
+		public Thickness Info
 		{
 			get { return _info; }
 		}
 
-		public NinePatchRegion(Texture2D texture, Rectangle bounds, PaddingInfo info) : base(texture, bounds)
+		public NinePatchRegion(Texture2D texture, Rectangle bounds, Thickness info) : base(texture, bounds)
 		{
 			_info = info;
 

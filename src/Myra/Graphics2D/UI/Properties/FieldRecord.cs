@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using XNAssets.Utility;
 
 namespace Myra.Graphics2D.UI.Properties
 {
@@ -30,6 +31,11 @@ namespace Myra.Graphics2D.UI.Properties
 		public override void SetValue(object obj, object value)
 		{
 			_fieldInfo.SetValue(obj, value);
+		}
+
+		public override T FindAttribute<T>()
+		{
+			return _fieldInfo.FindAttribute<T>();
 		}
 	}
 }

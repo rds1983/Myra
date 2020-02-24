@@ -72,7 +72,6 @@ namespace Myra.Graphics2D.UI.Styles
 		private readonly Dictionary<string, MenuStyle> _horizontalMenuStyles = new Dictionary<string, MenuStyle>();
 		private readonly Dictionary<string, MenuStyle> _verticalMenuStyles = new Dictionary<string, MenuStyle>();
 		private readonly Dictionary<string, WindowStyle> _windowStyles = new Dictionary<string, WindowStyle>();
-		private readonly Dictionary<string, DialogStyle> _dialogStyles = new Dictionary<string, DialogStyle>();
 
 		public DesktopStyle DesktopStyle
 		{
@@ -365,19 +364,6 @@ namespace Myra.Graphics2D.UI.Styles
 			}
 		}
 
-		[XmlIgnore]
-		public DialogStyle DialogStyle
-		{
-			get
-			{
-				return GetDefaultStyle(_dialogStyles);
-			}
-			set
-			{
-				SetDefaultStyle(_dialogStyles, value);
-			}
-		}
-
 		public Dictionary<string, LabelStyle> LabelStyles
 		{
 			get
@@ -551,14 +537,6 @@ namespace Myra.Graphics2D.UI.Styles
 			get
 			{
 				return _windowStyles;
-			}
-		}
-
-		public Dictionary<string, DialogStyle> DialogStyles
-		{
-			get
-			{
-				return _dialogStyles;
 			}
 		}
 

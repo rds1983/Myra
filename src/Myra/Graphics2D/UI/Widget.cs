@@ -5,6 +5,7 @@ using Myra.Utility;
 using System.Xml.Serialization;
 using Myra.MML;
 using Myra.Graphics2D.UI.Properties;
+using Myra.Attributes;
 
 #if !XENKO
 using Microsoft.Xna.Framework;
@@ -24,8 +25,10 @@ namespace Myra.Graphics2D.UI
 			LocationInvalid,
 			Invalid
 		}
+
 		#region PrivateData
 
+		private Thickness _margin, _borderThickness, _padding;
 		private int _left, _top;
 		private int? _minWidth, _minHeight, _maxWidth, _maxHeight, _width, _height;
 		private int _gridColumn, _gridRow, _gridColumnSpan = 1, _gridRowSpan = 1;
@@ -46,12 +49,12 @@ namespace Myra.Graphics2D.UI
 		private Rectangle _actualBounds;
 		private bool _visible;
 
-		private int _paddingLeft, _paddingRight, _paddingTop, _paddingBottom;
 		private float _opacity = 1.0f;
 
 		private bool _enabled;
 
 		#endregion
+
 		#region Data acsessor
 		/// <summary>
 		/// Internal use only. (MyraPad)
@@ -221,74 +224,134 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[Category("Layout")]
-		[DefaultValue(0)]
+		[Obsolete("Use Padding")]
+		[Browsable(false)]
 		public int PaddingLeft
 		{
-			get { return _paddingLeft; }
+			get
+			{
+				return Padding.Left;
+			}
 
 			set
 			{
-				if (value == _paddingLeft)
-				{
-					return;
-				}
-
-				_paddingLeft = value;
-				InvalidateMeasure();
+				var p = Padding;
+				p.Left = value;
+				Padding = p;
 			}
 		}
 
-		[Category("Layout")]
-		[DefaultValue(0)]
+
+		[Obsolete("Use Padding")]
+		[Browsable(false)]
 		public int PaddingRight
 		{
-			get { return _paddingRight; }
+			get
+			{
+				return Padding.Right;
+			}
 
 			set
 			{
-				if (value == _paddingRight)
-				{
-					return;
-				}
-
-				_paddingRight = value;
-				InvalidateMeasure();
+				var p = Padding;
+				p.Right = value;
+				Padding = p;
 			}
 		}
 
-		[Category("Layout")]
-		[DefaultValue(0)]
+		[Obsolete("Use Padding")]
+		[Browsable(false)]
 		public int PaddingTop
 		{
-			get { return _paddingTop; }
+			get
+			{
+				return Padding.Top;
+			}
 
 			set
 			{
-				if (value == _paddingTop)
+				var p = Padding;
+				p.Top = value;
+				Padding = p;
+			}
+		}
+
+		[Obsolete("Use Padding")]
+		[Browsable(false)]
+		public int PaddingBottom
+		{
+			get
+			{
+				return Padding.Top;
+			}
+
+			set
+			{
+				var p = Padding;
+				p.Bottom = value;
+				Padding = p;
+			}
+		}
+
+		[Category("Layout")]
+		[DesignerFolded]
+		public Thickness Margin
+		{
+			get
+			{
+				return _margin;
+			}
+
+			set
+			{
+				if (_margin == value)
 				{
 					return;
 				}
 
-				_paddingTop = value;
+				_margin = value;
+				InvalidateMeasure();
+			}
+		}
+
+		[Category("Appearance")]
+		[DesignerFolded]
+		public Thickness BorderThickness
+		{
+			get
+			{
+				return _borderThickness;
+			}
+
+			set
+			{
+				if (_borderThickness == value)
+				{
+					return;
+				}
+
+				_borderThickness = value;
 				InvalidateMeasure();
 			}
 		}
 
 		[Category("Layout")]
-		[DefaultValue(0)]
-		public int PaddingBottom
+		[DesignerFolded]
+		public Thickness Padding
 		{
-			get { return _paddingBottom; }
+			get
+			{
+				return _padding;
+			}
 
 			set
 			{
-				if (value == _paddingBottom)
+				if (_padding == value)
 				{
 					return;
 				}
 
-				_paddingBottom = value;
+				_padding = value;
 				InvalidateMeasure();
 			}
 		}
@@ -563,6 +626,30 @@ namespace Myra.Graphics2D.UI
 		public IBrush FocusedBackground { get; set; }
 
 		[Category("Appearance")]
+		public IBrush Border
+		{
+			get; set;
+		}
+
+		[Category("Appearance")]
+		public IBrush OverBorder
+		{
+			get; set;
+		}
+
+		[Category("Appearance")]
+		public IBrush DisabledBorder
+		{
+			get; set;
+		}
+
+		[Category("Appearance")]
+		public IBrush FocusedBorder
+		{
+			get; set;
+		}
+
+		[Category("Appearance")]
 		[DefaultValue(false)]
 		public virtual bool ClipToBounds { get; set; }
 
@@ -592,6 +679,22 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		protected Rectangle BorderBounds
+		{
+			get
+			{
+				return _bounds - _margin;
+			}
+		}
+
+		protected Rectangle BackgroundBounds
+		{
+			get
+			{
+				return BorderBounds - _borderThickness;
+			}
+		}
+
 		[Browsable(false)]
 		[XmlIgnore]
 		public Rectangle ActualBounds
@@ -614,16 +717,26 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public int PaddingWidth
+		public int MBPWidth
 		{
-			get { return _paddingLeft + _paddingRight; }
+			get
+			{
+				return Margin.Left + Margin.Right +
+				  BorderThickness.Left + BorderThickness.Right +
+				  Padding.Left + Padding.Right;
+			}
 		}
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public int PaddingHeight
+		public int MBPHeight
 		{
-			get { return _paddingTop + _paddingBottom; }
+			get
+			{
+				return Margin.Top + Margin.Bottom +
+				  BorderThickness.Top + BorderThickness.Bottom +
+				  Padding.Top + Padding.Bottom;
+			}
 		}
 
 		[Browsable(false)]
@@ -685,7 +798,9 @@ namespace Myra.Graphics2D.UI
 				return IsMouseInside && Active;
 			}
 		}
+
 		#endregion
+
 		#region Events
 		public event EventHandler VisibleChanged;
 		public event EventHandler MeasureChanged;
@@ -720,6 +835,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		#region Functions
+
 		public virtual IBrush GetCurrentBackground()
 		{
 			var result = Background;
@@ -735,6 +851,26 @@ namespace Myra.Graphics2D.UI
 			else if (UseHoverRenderable && OverBackground != null)
 			{
 				result = OverBackground;
+			}
+
+			return result;
+		}
+
+		public virtual IBrush GetCurrentBorder()
+		{
+			var result = Border;
+
+			if (!Enabled && DisabledBorder != null)
+			{
+				result = DisabledBorder;
+			}
+			else if (Enabled && IsKeyboardFocused && FocusedBorder != null)
+			{
+				result = FocusedBorder;
+			}
+			else if (UseHoverRenderable && OverBorder != null)
+			{
+				result = OverBorder;
 			}
 
 			return result;
@@ -779,7 +915,33 @@ namespace Myra.Graphics2D.UI
 			var background = GetCurrentBackground();
 			if (background != null)
 			{
-				context.Draw(background, Bounds);
+				context.Draw(background, BackgroundBounds);
+			}
+
+			// Borders
+			var border = GetCurrentBorder();
+			if (border != null)
+			{
+				var borderBounds = BorderBounds;
+				if (BorderThickness.Left > 0)
+				{
+					context.Draw(border, new Rectangle(borderBounds.X, borderBounds.Y, BorderThickness.Left, borderBounds.Height));
+				}
+
+				if (BorderThickness.Top > 0)
+				{
+					context.Draw(border, new Rectangle(borderBounds.X, borderBounds.Y, borderBounds.Width, BorderThickness.Top));
+				}
+
+				if (BorderThickness.Right > 0)
+				{
+					context.Draw(border, new Rectangle(borderBounds.Right - BorderThickness.Right, borderBounds.Y, BorderThickness.Right, borderBounds.Height));
+				}
+
+				if (BorderThickness.Bottom > 0)
+				{
+					context.Draw(border, new Rectangle(borderBounds.X, borderBounds.Bottom - BorderThickness.Bottom, borderBounds.Width, BorderThickness.Bottom));
+				}
 			}
 
 			var oldView = context.View;
@@ -900,8 +1062,8 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			result.X += PaddingWidth;
-			result.Y += PaddingHeight;
+			result.X += MBPWidth;
+			result.Y += MBPHeight;
 
 			_lastMeasureSize = result;
 			_lastMeasureAvailableSize = availableSize;
@@ -1093,22 +1255,14 @@ namespace Myra.Graphics2D.UI
 			DisabledBackground = style.DisabledBackground;
 			FocusedBackground = style.FocusedBackground;
 
-			if (style.PaddingLeft != null)
-			{
-				PaddingLeft = style.PaddingLeft.Value;
-			}
-			if (style.PaddingRight != null)
-			{
-				PaddingRight = style.PaddingRight.Value;
-			}
-			if (style.PaddingTop != null)
-			{
-				PaddingTop = style.PaddingTop.Value;
-			}
-			if (style.PaddingBottom != null)
-			{
-				PaddingBottom = style.PaddingBottom.Value;
-			}
+			Border = style.Border;
+			OverBorder = style.OverBorder;
+			DisabledBorder = style.DisabledBorder;
+			FocusedBorder = style.FocusedBorder;
+
+			Margin = style.Margin;
+			BorderThickness = style.BorderThickness;
+			Padding = style.Padding;
 		}
 
 		public void SetStyle(Stylesheet stylesheet, string name)
@@ -1239,22 +1393,7 @@ namespace Myra.Graphics2D.UI
 
 		internal Rectangle CalculateClientBounds(Rectangle clientBounds)
 		{
-			clientBounds.X += _paddingLeft;
-			clientBounds.Y += _paddingTop;
-
-			clientBounds.Width -= PaddingWidth;
-			if (clientBounds.Width < 0)
-			{
-				clientBounds.Width = 0;
-			}
-
-			clientBounds.Height -= PaddingHeight;
-			if (clientBounds.Height < 0)
-			{
-				clientBounds.Height = 0;
-			}
-
-			return clientBounds;
+			return clientBounds - Margin - BorderThickness - Padding;
 		}
 
 		public void RemoveFromParent()

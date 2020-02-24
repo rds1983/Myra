@@ -12,5 +12,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 		public abstract object GetValue(object obj);
 		public abstract void SetValue(object obj, object value);
+
+		public abstract T FindAttribute<T>() where T : Attribute;
 	}
 }
