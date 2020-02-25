@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Myra.Samples.ObjectEditor
 {
-	public class DebugConsoleGame : Game
+	public class ObjectEditorGame : Game
 	{
 		private readonly GraphicsDeviceManager _graphics;
 		private readonly Player _player = new Player();
@@ -16,9 +16,9 @@ namespace Myra.Samples.ObjectEditor
 
 		private SpriteBatch _spriteBatch;
 		
-		public static DebugConsoleGame Instance { get; private set; }
+		public static ObjectEditorGame Instance { get; private set; }
 
-		public DebugConsoleGame()
+		public ObjectEditorGame()
 		{
 			Instance = this;
 
