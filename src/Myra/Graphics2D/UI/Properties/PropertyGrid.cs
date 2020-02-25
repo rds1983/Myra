@@ -238,6 +238,19 @@ namespace Myra.Graphics2D.UI.Properties
 			}
 		}
 
+		public int FirstColumnWidth
+		{
+			get
+			{
+				return (int)InternalChild.ColumnsProportions[0].Value;
+			}
+
+			set
+			{
+				InternalChild.ColumnsProportions[0].Value = value;
+			}
+		}
+
 		public Func<Record, object[]> CustomValuesProvider;
 		public Func<Record, object, object, bool> CustomSetter;
 
@@ -599,9 +612,10 @@ namespace Myra.Graphics2D.UI.Properties
 
 						if (record.Type.IsValueType)
 						{
+							// Handle structs
 							var tg = this;
 							var pg = tg._parentGrid;
-							while (pg != null && tg._parentProperty != null)
+							while (pg != null && tg._parentProperty != null && tg._parentProperty.Type.IsValueType)
 							{
 								tg._parentProperty.SetValue(pg._object, tg._object);
 
@@ -875,7 +889,7 @@ namespace Myra.Graphics2D.UI.Properties
 				var record = records[i];
 
 				var hasSetter = record.HasSetter;
-				if (_parentProperty != null && !_parentProperty.HasSetter)
+				if (_parentProperty != null && _parentProperty.Type.IsValueType && !_parentProperty.HasSetter)
 				{
 					hasSetter = false;
 				}
@@ -980,9 +994,17 @@ namespace Myra.Graphics2D.UI.Properties
 					continue;
 				}
 
+				var name = record.Name;
+				var dn = record.FindAttribute<DisplayNameAttribute>();
+
+				if (dn != null)
+				{
+					name = dn.DisplayName;
+				}
+
 				var nameLabel = new Label
 				{
-					Text = record.Name,
+					Text = name,
 					VerticalAlignment = VerticalAlignment.Center,
 					GridColumn = 0,
 					GridRow = oldY

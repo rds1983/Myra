@@ -1,0 +1,92 @@
+﻿using Microsoft.Xna.Framework;
+using Myra.Attributes;
+using Myra.Graphics2D;
+using System.ComponentModel;
+
+namespace Myra.Samples.ObjectEditor
+{
+	public enum State
+	{
+		Sleeping,
+		Moving,
+		Attacking
+	}
+
+	public class Player
+	{
+		public string Name;
+
+		public bool Visible
+		{
+			get; set;
+		}
+
+		public State State;
+
+		[Category("Appearance")]
+		public Color Color;
+
+		[Category("Appearance")]
+		public IBrush Background;
+
+		[Category("Layout")]
+		public int X
+		{
+			get; set;
+		}
+
+		[Category("Layout")]
+		public int Y
+		{
+			get; set;
+		}
+
+		[Category("Layout")]
+		public int Width;
+
+		[Category("Layout")]
+		public int Height;
+
+		[Category("Data")]
+		[DisplayName("Attack (ReadOnly)")]
+		public int Attack
+		{
+			get; private set;
+		}
+
+		[Category("Data")]
+		[DisplayName("Defense (ReadOnly)")]
+		public int Defense
+		{
+			get; private set;
+		}
+
+		[Category("Data")]
+		public HitPoints HitPoints
+		{
+			get;
+		} = new HitPoints();
+
+		[Browsable(false)]
+		public int Ignored;
+
+		public Player()
+		{
+			Name = "Player";
+
+			Color = Color.White;
+
+			X = Y = 300;
+			Width = 100;
+			Height = 100;
+
+			Visible = true;
+
+			Attack = 100;
+			Defense = 200;
+
+			HitPoints.Current = 100;
+			HitPoints.Maximum = 150;
+		}
+	}
+}

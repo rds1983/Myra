@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.MonoGame", "..\src\Myr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.AllWidgets.MonoGame", "..\samples\Myra.Samples.AllWidgets\Myra.Samples.AllWidgets.MonoGame.csproj", "{86685C49-7408-4E47-9B34-AC93812CB3EC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.ObjectEditor", "..\samples\Myra.Samples.ObjectEditor\Myra.Samples.ObjectEditor.csproj", "{7A6283C5-C2CF-4CE0-877A-B8A95D391007}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +93,10 @@ Global
 		{86685C49-7408-4E47-9B34-AC93812CB3EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86685C49-7408-4E47-9B34-AC93812CB3EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86685C49-7408-4E47-9B34-AC93812CB3EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A6283C5-C2CF-4CE0-877A-B8A95D391007}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A6283C5-C2CF-4CE0-877A-B8A95D391007}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A6283C5-C2CF-4CE0-877A-B8A95D391007}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A6283C5-C2CF-4CE0-877A-B8A95D391007}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,6 +114,7 @@ Global
 		{9C71BE95-55A4-4DD6-8EE6-815D7ECE76BB} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{C5251EC7-58F7-4F71-B3BB-B28C982AF777} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{86685C49-7408-4E47-9B34-AC93812CB3EC} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{7A6283C5-C2CF-4CE0-877A-B8A95D391007} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35ACDF4E-2CE2-46B1-A19F-35DC131069A1}

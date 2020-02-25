@@ -23,6 +23,7 @@ copy "samples\Myra.Samples.Notepad\bin\MonoGame\%CONFIGURATION%\Myra.Samples.Not
 copy "samples\Myra.Samples.NonModalWindows\bin\MonoGame\%CONFIGURATION%\Myra.Samples.NonModalWindows.exe" ZipPackage /Y
 copy "samples\Myra.Samples.DebugConsole\bin\MonoGame\%CONFIGURATION%\Myra.Samples.DebugConsole.exe" ZipPackage /Y
 copy "samples\Myra.Samples.AssetManagement\bin\MonoGame\%CONFIGURATION%\Myra.Samples.AssetManagement.exe" ZipPackage /Y
+copy "samples\Myra.Samples.ObjectEditor\bin\MonoGame\%CONFIGURATION%\Myra.Samples.ObjectEditor.exe" ZipPackage /Y
 copy "src\MyraPad\bin\%CONFIGURATION%\MyraPad.exe" ZipPackage /Y
 copy "src\MyraPad\bin\%CONFIGURATION%\XNAssets.dll" "ZipPackage" /Y
 copy "src\MyraPad\bin\%CONFIGURATION%\info.lundin.math.dll" "ZipPackage" /Y
@@ -41,3 +42,4 @@ copy "src\MyraPad\bin\%CONFIGURATION%\libopenal.1.dylib" "ZipPackage" /Y
 xcopy "samples\Stylesheets\*.*" "ZipPackage\Stylesheets\*.*" /s
 xcopy "samples\Myra.Samples.AssetManagement\Assets\fonts\*.*" "ZipPackage\Assets\fonts\*.*" /s
 xcopy "samples\Myra.Samples.AssetManagement\Assets\images\*.*" "ZipPackage\Assets\images\*.*" /s
+copy "samples\Myra.Samples.ObjectEditor\image.png" ZipPackage /Y
