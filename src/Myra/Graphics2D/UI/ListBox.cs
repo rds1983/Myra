@@ -16,6 +16,9 @@ namespace Myra.Graphics2D.UI
 	public class ListBox : Selector<ScrollViewer, ListItem>
 	{
 		private readonly VerticalStackPanel _box;
+		internal ComboBox _parentComboBox;
+		private bool _suppressHide = false;
+
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -132,6 +135,27 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		private void ComboHideDropdown()
+		{
+			if (_parentComboBox == null || _suppressHide)
+			{
+				return;
+			}
+
+			_parentComboBox.HideDropdown();
+		}
+
+		protected override void OnSelectedItemChanged()
+		{
+			base.OnSelectedItemChanged();
+
+			ComboHideDropdown();
+			if (_parentComboBox != null)
+			{
+				_parentComboBox.UpdateSelectedItem();
+			}
+		}
+
 #if !XENKO
 		public override void OnKeyDown(Keys k)
 		{
@@ -142,15 +166,37 @@ namespace Myra.Graphics2D.UI
 				case Keys.Up:
 					if (SelectedIndex != null && SelectedIndex.Value > 0)
 					{
-						SelectedIndex = SelectedIndex.Value - 1;
+						try
+						{
+							_suppressHide = true;
+							SelectedIndex = SelectedIndex.Value - 1;
+						}
+						finally
+						{
+							_suppressHide = false;
+						}
 						UpdateScrolling();
 					}
 					break;
 				case Keys.Down:
 					if (SelectedIndex != null && SelectedIndex.Value < Items.Count - 1)
 					{
-						SelectedIndex = SelectedIndex.Value + 1;
+						try
+						{
+							_suppressHide = true;
+							SelectedIndex = SelectedIndex.Value + 1;
+						}
+						finally
+						{
+							_suppressHide = false;
+						}
 						UpdateScrolling();
+					}
+					break;
+				case Keys.Enter:
+					if (_parentComboBox != null)
+					{
+						_parentComboBox.HideDropdown();
 					}
 					break;
 			}

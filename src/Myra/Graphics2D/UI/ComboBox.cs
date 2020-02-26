@@ -96,8 +96,8 @@ namespace Myra.Graphics2D.UI
 
 			InternalChild.PressedChanged += InternalChild_PressedChanged;
 
+			_listBox._parentComboBox = this;
 			_listBox.Items.CollectionChanged += Items_CollectionChanged;
-			_listBox.SelectedIndexChanged += _listBox_SelectedIndexChanged;
 
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
@@ -105,6 +105,14 @@ namespace Myra.Graphics2D.UI
 			DropdownMaximumHeight = 300;
 
 			SetStyle(styleName);
+		}
+
+		internal void HideDropdown()
+		{
+			if (Desktop.ContextMenu == _listBox)
+			{
+				Desktop.HideContextMenu();
+			}
 		}
 
 		private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Widget> genericEventArgs)
@@ -122,6 +130,11 @@ namespace Myra.Graphics2D.UI
 			if (InternalChild.IsPressed)
 			{
 				_listBox.Width = Bounds.Width;
+				if (_listBox.SelectedIndex == null && Items.Count > 0)
+				{
+					_listBox.SelectedIndex = 0;
+				}
+
 				Desktop.ShowContextMenu(_listBox, new Point(Bounds.X, Bounds.Bottom));
 			}
 		}
@@ -167,13 +180,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void _listBox_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			Desktop.HideContextMenu();
-			UpdateSelectedItem();
-		}
-
-		private void UpdateSelectedItem()
+		internal void UpdateSelectedItem()
 		{
 			var item = SelectedItem;
 			if (item != null)
@@ -205,7 +212,6 @@ namespace Myra.Graphics2D.UI
 			// Measure by the longest string
 			var result = base.InternalMeasure(availableSize);
 
-			_listBox.Width = null;
 			var listResult = _listBox.Measure(new Point(10000, 10000));
 			if (listResult.X > result.X)
 			{
