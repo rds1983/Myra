@@ -9,7 +9,7 @@
     <RootNamespace>Myra</RootNamespace>
     <Version>1.0.0.0</Version>
     <DefineConstants>$(DefineConstants);FNA</DefineConstants>
-    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <TargetFramework>net45</TargetFramework>
     <PackageId>Myra.FNA</PackageId>
     <OutputPath>bin\FNA\$(Configuration)</OutputPath>
   </PropertyGroup>
@@ -20,10 +20,10 @@
   
   <ItemGroup>
     <PackageReference Include="info.lundin.math.dll" Version="1.2.6" />
-  </ItemGroup>  
+  </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\..\..\FNA\FNA.Core.csproj" />
+    <ProjectReference Include="..\..\..\FNA\FNA.csproj" />
     <ProjectReference Include="..\..\..\XNAssets\src\XNAssets.FNA.csproj" />
   </ItemGroup>
 </Project>
