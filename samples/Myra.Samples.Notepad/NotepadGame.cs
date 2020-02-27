@@ -99,7 +99,7 @@ namespace Myra.Samples.Notepad
 
 			_textField.TextChanged += TextBoxOnTextChanged;
 
-			Desktop.Widgets.Add(ui);
+			Desktop.Root = ui;
 
 			Desktop.KeyDown += (s, a) =>
 			{

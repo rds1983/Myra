@@ -31,7 +31,7 @@ namespace Myra.Samples.DebugConsole
 
 			_gamePanel = new GamePanel();
 
-			Desktop.Widgets.Add(_gamePanel);
+			Desktop.Root = _gamePanel;
 
 #if MONOGAME
 			// Inform Myra that external text input is available

@@ -93,7 +93,7 @@ namespace Myra.Samples.AllWidgets
 				}
 			};
 
-			Desktop.Widgets.Add(_allWidgets);
+			Desktop.Root = _allWidgets;
 
 #if MONOGAME
 			// Inform Myra that external text input is available

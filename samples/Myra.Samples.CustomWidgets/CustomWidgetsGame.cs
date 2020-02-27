@@ -53,7 +53,7 @@ namespace Myra.Samples.AllWidgets
 
 			topPanel.SetSplitterPosition(0, 0.75f);
 
-			Desktop.Widgets.Add(topPanel);
+			Desktop.Root = topPanel;
 
 			// Inform Myra that external text input is available
 			// So it stops translating Keys to chars

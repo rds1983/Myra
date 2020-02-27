@@ -42,7 +42,7 @@ namespace Myra.Samples.CustomUIStylesheet
 			_allWidgets._button.Image = textureAtlas["music-off"];
 			_allWidgets._imageButton.Image = textureAtlas["sound-off"];
 
-			Desktop.Widgets.Add(_allWidgets);
+			Desktop.Root = _allWidgets;
 		}
 
 		protected override void Update(GameTime gameTime)

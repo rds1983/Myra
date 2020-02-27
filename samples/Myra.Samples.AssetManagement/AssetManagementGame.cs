@@ -41,7 +41,8 @@ namespace Myra.Samples.AssetManagement
 			{
 				a.Cancel = true;
 			};
-			Desktop.Widgets.Add(_mainForm);
+
+			Desktop.Root = _mainForm;
 #if MONOGAME
 			// Inform Myra that external text input is available
 			// So it stops translating Keys to chars

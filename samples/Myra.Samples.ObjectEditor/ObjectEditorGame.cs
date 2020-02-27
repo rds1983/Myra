@@ -62,7 +62,7 @@ namespace Myra.Samples.ObjectEditor
 			};
 			root.Widgets.Add(_labelOverGui);
 
-			Desktop.Widgets.Add(root);
+			Desktop.Root = root;
 
 			var propertyGrid = new PropertyGrid
 			{

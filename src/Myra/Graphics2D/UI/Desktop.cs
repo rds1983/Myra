@@ -64,6 +64,38 @@ namespace Myra.Graphics2D.UI
 		public static bool HasExternalTextInput = false;
 #endif
 
+		/// <summary>
+		/// Root Widget
+		/// </summary>
+		public static Widget Root
+		{
+			get
+			{
+				if (Widgets.Count == 0)
+				{
+					return null;
+				}
+
+				return Widgets[0];
+			}
+
+			set
+			{
+				if (Root == value)
+				{
+					return;
+				}
+
+				HideContextMenu();
+				Widgets.Clear();
+
+				if (value != null)
+				{
+					Widgets.Add(value);
+				}
+			}
+		}
+
 		public static IReadOnlyCollection<Keys> DownKeys
 		{
 			get

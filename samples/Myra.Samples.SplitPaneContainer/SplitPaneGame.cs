@@ -66,7 +66,7 @@ namespace Myra.Samples.SplitPaneContainer
 
 			RebuildSplitPane(Orientation.Horizontal);
 
-			Desktop.Widgets.Add(_root);
+			Desktop.Root = _root;
 		}
 
 		private void RebuildSplitPane(Orientation orientation)

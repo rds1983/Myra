@@ -327,7 +327,7 @@ namespace Myra.Samples.GridContainer
 				grid.Widgets.Add(header);
 			}
 
-			Desktop.Widgets.Add(grid);
+			Desktop.Root = grid;
 		}
 
 		protected override void Update(GameTime gameTime)

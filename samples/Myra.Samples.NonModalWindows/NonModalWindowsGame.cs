@@ -41,7 +41,8 @@ namespace Myra.Samples.NonModalWindows
 			};
 
 			_mainPanel = new MainPanel();
-			Desktop.Widgets.Add(_mainPanel);
+
+			Desktop.Root = _mainPanel;
 
 			_mainPanel.ShowWindows();
 		}

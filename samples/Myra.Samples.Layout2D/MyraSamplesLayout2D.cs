@@ -68,7 +68,8 @@ namespace Myra.Samples.Layout2D
 
             g.Widgets.Add(panel);
             g.Widgets.Add(btnB);
-            Desktop.Widgets.Add(g);
+
+			Desktop.Root = g;
             // TODO: use this.Content to load your game content here
         }
 
