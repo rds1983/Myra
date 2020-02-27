@@ -1,9 +1,10 @@
-﻿using System.Xml.Serialization;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
 {
+	[StyleTypeName("Button")]
 	public class ImageButton : ButtonBase<Image>
 	{
 		[Category("Appearance")]

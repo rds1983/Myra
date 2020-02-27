@@ -1,6 +1,6 @@
 <Project>
   <Project.ExportOptions Namespace="Myra.Graphics2D.UI.ColorPicker" Class="ColorPickerDialog" OutputPath="D:\Projects\Myra\src\Myra\Graphics2D\UI\ColorPicker" />
-  <Dialog Title="Color Picker" Left="271" Top="21" Width="450">
+  <Dialog Title="Color Picker" Left="251" Top="38" Width="450">
     <VerticalStackPanel>
       <VerticalStackPanel.Proportions>
         <Proportion Type="Fill" Value="100" />
@@ -16,7 +16,7 @@
         <Grid.RowsProportions>
           <Proportion Type="Auto" />
         </Grid.RowsProportions>
-        <Grid ColumnSpacing="8" RowSpacing="4" PaddingTop="4" PaddingBottom="4">
+        <Grid ColumnSpacing="8" RowSpacing="4" Padding="0, 4">
           <Grid.DefaultRowProportion Type="Auto" />
           <Grid.ColumnsProportions>
             <Proportion Type="Auto" />
@@ -37,7 +37,7 @@
           <HorizontalSlider Maximum="255" VerticalAlignment="Center" GridColumn="2" GridRow="3" Id="_sliderA" />
         </Grid>
         <VerticalSeparator Width="3" GridColumn="1" />
-        <Grid ColumnSpacing="8" RowSpacing="5" PaddingTop="4" PaddingBottom="4" GridColumn="2">
+        <Grid ColumnSpacing="8" RowSpacing="5" Padding="0, 4" GridColumn="2">
           <Grid.DefaultRowProportion Type="Auto" />
           <Grid.ColumnsProportions>
             <Proportion Type="Auto" />

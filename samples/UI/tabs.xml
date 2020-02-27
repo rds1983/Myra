@@ -7,7 +7,7 @@
           <Grid.DefaultColumnProportion Type="Auto" />
           <Grid.DefaultRowProportion Type="Auto" />
           <Label Text="Name" />
-          <TextBox Text="" Width="200" GridColumn="1" />
+          <TextBox Width="200" GridColumn="1" />
           <Label Text="Race" GridRow="1" />
           <ComboBox Width="200" GridColumn="1" GridRow="1">
             <ListItem Text="Human" />
@@ -44,13 +44,13 @@
         </Grid>
       </TabItem>
       <TabItem Text="Feats">
-        <VerticalStackPanel Spacing="8" >
+        <VerticalStackPanel Spacing="8">
           <Label Text="You have 2 feats left to choose" />
-          <ImageTextButton Text="Swordsman" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="1" />
-          <ImageTextButton Text="Salesman" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="2" />
-          <ImageTextButton Text="Trapsmith" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="3" />
-          <ImageTextButton Text="Cunning" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="4" />
-          <ImageTextButton Text="Empathy" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" GridRow="5" />
+          <ImageTextButton Text="Swordsman" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" />
+          <ImageTextButton Text="Salesman" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" />
+          <ImageTextButton Text="Trapsmith" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" />
+          <ImageTextButton Text="Cunning" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" />
+          <ImageTextButton Text="Empathy" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" />
         </VerticalStackPanel>
       </TabItem>
     </TabControl>

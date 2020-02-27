@@ -1,6 +1,6 @@
 <Project>
   <Project.ExportOptions Namespace="Myra.Samples.NonModalWindows.UI" Class="Window3" OutputPath="D:\Projects\Myra\samples\Myra.Samples.NonModalWindows\UI" />
-  <Window Title="Window 3" Left="431" Top="112">
+  <Window Title="Window 3" Left="411" Top="129">
     <Panel>
       <ListBox MaxHeight="150">
         <ListItem Text="ItemItemItem0" />

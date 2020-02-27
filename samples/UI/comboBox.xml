@@ -1,6 +1,7 @@
 <Project>
+  <Project.ExportOptions />
   <Panel>
-    <ComboBox DropdownMaximumHeight="150" SelectionMode="Single" >
+    <ComboBox DropdownMaximumHeight="150">
       <ListItem Text="ItemItemItem0" />
       <ListItem Text="ItemItemItem1" />
       <ListItem Text="ItemItemItem2" />

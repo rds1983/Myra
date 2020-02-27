@@ -329,11 +329,10 @@ namespace Myra.Graphics2D.UI
 
 			// Find styles dict of that widget
 			var typeName = w.GetType().Name;
-			if (typeName == "ImageTextButton" || typeName == "ImageButton" || typeName == "TextButton")
+			var styleTypeNameAttribute = w.GetType().FindAttribute<StyleTypeNameAttribute>();
+			if (styleTypeNameAttribute != null)
 			{
-				// Small hack
-				// ImageTextButton styles are stored in Stylesheet.ButtonStyles
-				typeName = "Button";
+				typeName = styleTypeNameAttribute.Name;
 			}
 
 			var stylesDictPropertyName = typeName + "Styles";

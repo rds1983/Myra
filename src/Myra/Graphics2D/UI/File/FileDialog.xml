@@ -1,6 +1,6 @@
 <Project>
   <Project.ExportOptions Namespace="Myra.Graphics2D.UI.File" Class="FileDialog" OutputPath="D:/Projects/Myra/src/Myra/Graphics2D/UI/File" />
-  <Dialog Title="Open File..." Left="196" Top="1" Width="600" Height="400">
+  <Dialog Title="Open File..." Left="176" Top="18" Width="600" Height="400">
     <VerticalStackPanel Spacing="4">
       <VerticalStackPanel.Proportions>
         <Proportion Type="Auto" />

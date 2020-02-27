@@ -1,6 +1,6 @@
 <Project>
   <Project.ExportOptions Namespace="Myra.Samples.NonModalWindows.UI" Class="Window1" OutputPath="D:\Projects\Myra\samples\Myra.Samples.NonModalWindows\UI" />
-  <Window Title="Window 1" Left="372" Top="80">
+  <Window Title="Window 1" Left="353" Top="97">
     <VerticalStackPanel Spacing="8">
       <Label Text="You have 10 points left to distribute" />
       <Grid ColumnSpacing="8" RowSpacing="8">

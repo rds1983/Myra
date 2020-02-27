@@ -760,17 +760,6 @@ namespace Myra.Graphics2D.UI
 			get { return true; }
 		}
 
-		/// <summary>
-		/// When Width/Height is set and HorizontalAlignment/VerticalAlignment is set to Stretch
-		/// This property determines what to use for layout
-		/// </summary>
-		[Browsable(false)]
-		[XmlIgnore]
-		internal protected virtual bool PrioritizeStrethOverSize
-		{
-			get { return true; }
-		}
-
 		[Browsable(false)]
 		[XmlIgnore]
 		public virtual bool IsKeyboardFocused
@@ -993,71 +982,59 @@ namespace Myra.Graphics2D.UI
 			else
 			{
 				// Lerp available size by Width/Height or MaxWidth/MaxHeight
-				if (!PrioritizeStrethOverSize || HorizontalAlignment != HorizontalAlignment.Stretch)
+				if (Width != null && availableSize.X > Width.Value)
 				{
-					if (Width != null && availableSize.X > Width.Value)
-					{
-						availableSize.X = Width.Value;
-					}
-					else if (MaxWidth != null && availableSize.X > MaxWidth.Value)
-					{
-						availableSize.X = MaxWidth.Value;
-					}
+					availableSize.X = Width.Value;
+				}
+				else if (MaxWidth != null && availableSize.X > MaxWidth.Value)
+				{
+					availableSize.X = MaxWidth.Value;
 				}
 
-				if (!PrioritizeStrethOverSize || VerticalAlignment != VerticalAlignment.Stretch)
+				if (Height != null && availableSize.Y > Height.Value)
 				{
-					if (Height != null && availableSize.Y > Height.Value)
-					{
-						availableSize.Y = Height.Value;
-					}
-					else if (MaxHeight != null && availableSize.Y > MaxHeight.Value)
-					{
-						availableSize.Y = MaxHeight.Value;
-					}
+					availableSize.Y = Height.Value;
+				}
+				else if (MaxHeight != null && availableSize.Y > MaxHeight.Value)
+				{
+					availableSize.Y = MaxHeight.Value;
 				}
 
 				// Do the actual measure
 				result = InternalMeasure(availableSize);
 
 				// Result lerp
-				if (!PrioritizeStrethOverSize || HorizontalAlignment != HorizontalAlignment.Stretch)
+				if (Width.HasValue)
 				{
-					if (Width.HasValue)
+					result.X = Width.Value;
+				}
+				else
+				{
+					if (MinWidth.HasValue && result.X < MinWidth.Value)
 					{
-						result.X = Width.Value;
+						result.X = MinWidth.Value;
 					}
-					else
-					{
-						if (MinWidth.HasValue && result.X < MinWidth.Value)
-						{
-							result.X = MinWidth.Value;
-						}
 
-						if (MaxWidth.HasValue && result.X > MaxWidth.Value)
-						{
-							result.X = MaxWidth.Value;
-						}
+					if (MaxWidth.HasValue && result.X > MaxWidth.Value)
+					{
+						result.X = MaxWidth.Value;
 					}
 				}
 
-				if (!PrioritizeStrethOverSize || VerticalAlignment != VerticalAlignment.Stretch)
+				if (Height.HasValue)
 				{
-					if (Height.HasValue)
+					result.Y = Height.Value;
+				}
+				else
+				{
+					if (MinHeight.HasValue && result.Y < MinHeight.Value)
 					{
-						result.Y = Height.Value;
+						result.Y = MinHeight.Value;
 					}
-					else
-					{
-						if (MinHeight.HasValue && result.Y < MinHeight.Value)
-						{
-							result.Y = MinHeight.Value;
-						}
 
-						if (MaxHeight.HasValue && result.Y > MaxHeight.Value)
-						{
-							result.Y = MaxHeight.Value;
-						}
+					if (MaxHeight.HasValue && result.Y > MaxHeight.Value)
+					{
+						result.Y = MaxHeight.Value;
 					}
 				}
 			}
@@ -1143,17 +1120,14 @@ namespace Myra.Graphics2D.UI
 				// Resolve possible conflict beetween Alignment set to Streth and Size explicitly set
 				var containerSize = _containerBounds.Size();
 
-				if (!PrioritizeStrethOverSize)
+				if (HorizontalAlignment == HorizontalAlignment.Stretch && Width != null && Width.Value < containerSize.X)
 				{
-					if (HorizontalAlignment == HorizontalAlignment.Stretch && Width != null && Width.Value < containerSize.X)
-					{
-						containerSize.X = Width.Value;
-					}
+					containerSize.X = Width.Value;
+				}
 
-					if (VerticalAlignment == VerticalAlignment.Stretch && Height != null && Height.Value < containerSize.Y)
-					{
-						containerSize.Y = Height.Value;
-					}
+				if (VerticalAlignment == VerticalAlignment.Stretch && Height != null && Height.Value < containerSize.Y)
+				{
+					containerSize.Y = Height.Value;
 				}
 
 				// Align

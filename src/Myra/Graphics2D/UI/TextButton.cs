@@ -13,6 +13,7 @@ using Xenko.Graphics;
 
 namespace Myra.Graphics2D.UI
 {
+	[StyleTypeName("Button")]
 	public class TextButton : ButtonBase<Label>
 	{
 		[Category("Appearance")]

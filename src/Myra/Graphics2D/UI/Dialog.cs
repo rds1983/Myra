@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
+using Myra.Attributes;
 
 #if !XENKO
 using Microsoft.Xna.Framework.Input;
@@ -10,6 +11,7 @@ using Xenko.Input;
 
 namespace Myra.Graphics2D.UI
 {
+	[StyleTypeName("Window")]
 	public class Dialog : Window
 	{
 		[Browsable(false)]

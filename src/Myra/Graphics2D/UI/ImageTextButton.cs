@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
-using System.Xml.Serialization;
 using Myra.Attributes;
 
 #if !XENKO
@@ -13,6 +12,7 @@ using Xenko.Graphics;
 
 namespace Myra.Graphics2D.UI
 {
+	[StyleTypeName("Button")]
 	public class ImageTextButton : ButtonBase<HorizontalStackPanel>
 	{
 		private readonly Image _image;

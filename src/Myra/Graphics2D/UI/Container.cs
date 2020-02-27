@@ -69,8 +69,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		protected internal override bool PrioritizeStrethOverSize => false;
-
 		public abstract Widget GetChild(int index);
 
 		private void UpdateWidgets()
