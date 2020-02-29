@@ -185,11 +185,11 @@ namespace Myra.Graphics2D.Text
 
 				if (SupportsCommands && c == '\\')
 				{
-					if (i < _text.Length - 2 && _text[i + 1] == 'c' && _text[i + 2] == '{')
+					if (i < _text.Length - 2 && _text[i + 1] == 'c' && _text[i + 2] == '[')
 					{
 						// Find end
 						var startPos = i + 3;
-						var j = _text.IndexOf('}', startPos);
+						var j = _text.IndexOf(']', startPos);
 
 						if (j != -1)
 						{
