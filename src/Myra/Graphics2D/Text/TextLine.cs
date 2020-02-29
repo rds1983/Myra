@@ -85,7 +85,7 @@ namespace Myra.Graphics2D.Text
 			return Chunks[Chunks.Count - 1].GetGlyphIndexByX(startX);
 		}
 
-		public virtual Color Draw(SpriteBatch batch, Point pos, Color color, bool useChunkColor, float opacity = 1.0f)
+		public Color Draw(SpriteBatch batch, Point pos, Color color, bool useChunkColor, float opacity = 1.0f)
 		{
 			foreach (var chunk in Chunks)
 			{

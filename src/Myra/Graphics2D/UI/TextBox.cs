@@ -587,7 +587,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var newLine = line.LineIndex + delta;
-			if (newLine < 0 || newLine >= _formattedText.Strings.Length)
+			if (newLine < 0 || newLine >= _formattedText.Lines.Count)
 			{
 				return;
 			}
@@ -597,7 +597,7 @@ namespace Myra.Graphics2D.UI
 			var preferredX = pos.X - bounds.X;
 
 			// Find closest glyph
-			var newString = _formattedText.Strings[newLine];
+			var newString = _formattedText.Lines[newLine];
 			var glyphIndex = newString.GetGlyphIndexByX(preferredX);
 			if (glyphIndex != null)
 			{
@@ -1136,10 +1136,10 @@ namespace Myra.Graphics2D.UI
 						y += glyphRender.TextChunk.Top;
 					}
 				}
-				else if (_formattedText.Strings != null && _formattedText.Strings.Length > 0)
+				else if (_formattedText.Lines != null && _formattedText.Lines.Count > 0)
 				{
 					// After last glyph
-					var lastLine = _formattedText.Strings[_formattedText.Strings.Length - 1];
+					var lastLine = _formattedText.Lines[_formattedText.Lines.Count - 1];
 					if (lastLine.Count > 0)
 					{
 						var glyphRender = lastLine.GetGlyphInfoByIndex(lastLine.Count - 1);
@@ -1185,7 +1185,7 @@ namespace Myra.Graphics2D.UI
 				startGlyph = _formattedText.GetGlyphInfoByIndex(i);
 				var startPosition = GetRenderPositionByIndex(i);
 
-				var line = _formattedText.Strings[startGlyph.TextChunk.LineIndex];
+				var line = _formattedText.Lines[startGlyph.TextChunk.LineIndex];
 
 				if (selectEnd < line.TextStartIndex + line.Count)
 				{
@@ -1207,12 +1207,12 @@ namespace Myra.Graphics2D.UI
 						lineHeight));
 
 				++lineIndex;
-				if (lineIndex >= _formattedText.Strings.Length)
+				if (lineIndex >= _formattedText.Lines.Count)
 				{
 					break;
 				}
 
-				i = _formattedText.Strings[lineIndex].TextStartIndex;
+				i = _formattedText.Lines[lineIndex].TextStartIndex;
 			}
 		}
 

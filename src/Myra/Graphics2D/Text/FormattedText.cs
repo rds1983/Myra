@@ -21,11 +21,12 @@ namespace Myra.Graphics2D.Text
 		private string _text = string.Empty;
 		private int _verticalSpacing;
 		private int? _width;
-		private TextLine[] _strings;
+		private readonly List<TextLine> _lines = new List<TextLine>();
 		private bool _calculateGlyphs, _supportsCommands;
 		private Point _size;
 		private bool _dirty = true;
 		private StringBuilder _stringBuilder = new StringBuilder();
+		private readonly Dictionary<int, Point> _measures = new Dictionary<int, Point>();
 
 		public SpriteFont Font
 		{
@@ -42,6 +43,7 @@ namespace Myra.Graphics2D.Text
 
 				_font = value;
 				InvalidateLayout();
+				InvalidateMeasures();
 			}
 		}
 
@@ -60,6 +62,7 @@ namespace Myra.Graphics2D.Text
 
 				_text = value;
 				InvalidateLayout();
+				InvalidateMeasures();
 			}
 		}
 
@@ -79,6 +82,7 @@ namespace Myra.Graphics2D.Text
 
 				_verticalSpacing = value;
 				InvalidateLayout();
+				InvalidateMeasures();
 			}
 		}
 
@@ -100,12 +104,12 @@ namespace Myra.Graphics2D.Text
 			}
 		}
 
-		public TextLine[] Strings
+		public List<TextLine> Lines
 		{
 			get
 			{
 				Update();
-				return _strings;
+				return _lines;
 			}
 		}
 
@@ -134,6 +138,7 @@ namespace Myra.Graphics2D.Text
 
 				_calculateGlyphs = value;
 				InvalidateLayout();
+				InvalidateMeasures();
 			}
 		}
 
@@ -153,6 +158,7 @@ namespace Myra.Graphics2D.Text
 
 				_supportsCommands = value;
 				InvalidateLayout();
+				InvalidateMeasures();
 			}
 		}
 
@@ -257,10 +263,22 @@ namespace Myra.Graphics2D.Text
 			return r;
 		}
 
+		private static int GetMeasureKey(int? width)
+		{
+			return width != null ? width.Value : -1;
+		}
+
 		public Point Measure(int? width)
 		{
 			var result = Point.Zero;
-			if (_text != null)
+
+			var key = GetMeasureKey(width);
+			if (_measures.TryGetValue(key, out result))
+			{
+				return result;
+			}
+
+			if (!string.IsNullOrEmpty(_text))
 			{
 				var i = 0;
 				var y = 0;
@@ -304,6 +322,8 @@ namespace Myra.Graphics2D.Text
 				result.Y = CrossEngineStuff.LineSpacing(_font);
 			}
 
+			_measures[key] = result;
+
 			return result;
 		}
 
@@ -314,14 +334,13 @@ namespace Myra.Graphics2D.Text
 				return;
 			}
 
+			_lines.Clear();
+
 			if (string.IsNullOrEmpty(_text))
 			{
-				_strings = new TextLine[0];
 				_dirty = false;
 				return;
 			}
-
-			var lines = new List<TextLine>();
 
 			var i = 0;
 			var line = new TextLine
@@ -358,7 +377,7 @@ namespace Myra.Graphics2D.Text
 				if (c.LineEnd)
 				{
 					// New line
-					lines.Add(line);
+					_lines.Add(line);
 
 					line = new TextLine
 					{
@@ -369,13 +388,11 @@ namespace Myra.Graphics2D.Text
 				}
 			}
 
-			_strings = lines.ToArray();
-
 			// Calculate size
 			_size = Point.Zero;
-			for (i = 0; i < _strings.Length; ++i)
+			for (i = 0; i < _lines.Count; ++i)
 			{
-				line = _strings[i];
+				line = _lines[i];
 
 				line.LineIndex = i;
 				line.Top = _size.Y;
@@ -395,11 +412,14 @@ namespace Myra.Graphics2D.Text
 
 				_size.Y += line.Size.Y;
 
-				if (i < _strings.Length - 1)
+				if (i < _lines.Count - 1)
 				{
 					_size.Y += _verticalSpacing;
 				}
 			}
+
+			var key = GetMeasureKey(Width);
+			_measures[key] = _size;
 
 			_dirty = false;
 		}
@@ -408,26 +428,26 @@ namespace Myra.Graphics2D.Text
 		{
 			Update();
 
-			if (_strings.Length == 0)
+			if (_lines.Count == 0)
 			{
 				return null;
 			}
 
 			if (cursorPosition < 0)
 			{
-				return _strings[0];
+				return _lines[0];
 			}
 
-			for(var i = 0; i < _strings.Length; ++i)
+			for(var i = 0; i < _lines.Count; ++i)
 			{
-				var s = _strings[i];
+				var s = _lines[i];
 				if (s.TextStartIndex <= cursorPosition && cursorPosition < s.TextStartIndex + s.Count)
 				{
 					return s;
 				}
 			}
 
-			return _strings[_strings.Length - 1];
+			return _lines[_lines.Count - 1];
 		}
 
 		public TextLine GetLineByY(int y)
@@ -439,9 +459,9 @@ namespace Myra.Graphics2D.Text
 
 			Update();
 
-			for (var i = 0; i < _strings.Length; ++i)
+			for (var i = 0; i < _lines.Count; ++i)
 			{
-				var s = _strings[i];
+				var s = _lines[i];
 
 				if (s.Top <= y && y < s.Top + s.Size.Y)
 				{
@@ -454,7 +474,7 @@ namespace Myra.Graphics2D.Text
 
 		public GlyphInfo GetGlyphInfoByIndex(int charIndex)
 		{
-			var strings = Strings;
+			var strings = Lines;
 
 			foreach (var si in strings)
 			{
@@ -473,23 +493,15 @@ namespace Myra.Graphics2D.Text
 
 		public void Draw(SpriteBatch batch, Point position, Rectangle clip, Color textColor, bool useChunkColor, float opacity = 1.0f)
 		{
-			var strings = Strings;
-
-			if (strings == null || strings.Length == 0)
-			{
-				return;
-			}
-
 			var y = position.Y;
-
-			foreach (var si in strings)
+			foreach (var line in Lines)
 			{
-				if (y + si.Size.Y >= clip.Top && y <= clip.Bottom)
+				if (y + line.Size.Y >= clip.Top && y <= clip.Bottom)
 				{
-					textColor = si.Draw(batch, new Point(position.X, y), textColor, useChunkColor, opacity);
+					textColor = line.Draw(batch, new Point(position.X, y), textColor, useChunkColor, opacity);
 				} else
 				{
-					foreach (var chunk in si.Chunks)
+					foreach (var chunk in line.Chunks)
 					{
 						if (useChunkColor && chunk.Color != null)
 						{
@@ -498,7 +510,7 @@ namespace Myra.Graphics2D.Text
 					}
 				}
 
-				y += si.Size.Y;
+				y += line.Size.Y;
 				y += _verticalSpacing;
 			}
 		}
@@ -506,6 +518,11 @@ namespace Myra.Graphics2D.Text
 		private void InvalidateLayout()
 		{
 			_dirty = true;
+		}
+
+		private void InvalidateMeasures()
+		{
+			_measures.Clear();
 		}
 	}
 }

@@ -167,7 +167,7 @@ namespace Myra.Graphics2D.Text
 			return i;
 		}
 
-		public virtual void Draw(SpriteBatch batch, Point pos, Color color, float opacity = 1.0f)
+		public void Draw(SpriteBatch batch, Point pos, Color color, float opacity = 1.0f)
 		{
 			batch.DrawString(_font, _text, new Vector2(pos.X, pos.Y), color * opacity);
 
