@@ -1,0 +1,7 @@
+<Project>
+  <Panel Background="#ADD8E6FF">
+    <Panel Margin="36" BorderThickness="12, 0" Padding="20, 20, 0, 0" Background="#FFA500FF" Border="#008000" OverBorder="#808000FF" >
+      <Label Text="Some Text" TextColor="Red" />
+    </Panel>
+  </Panel>
+</Project>

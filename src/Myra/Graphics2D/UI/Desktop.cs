@@ -1157,7 +1157,7 @@ namespace Myra.Graphics2D.UI
 
 		private static bool InternalIsPointOverGUI(Point p, Widget w)
 		{
-			if (!w.Visible || !w.Bounds.Contains(p))
+			if (!w.Visible || !w.BorderBounds.Contains(p))
 			{
 				return false;
 			}

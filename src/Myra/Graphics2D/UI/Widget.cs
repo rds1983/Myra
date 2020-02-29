@@ -679,7 +679,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		protected Rectangle BorderBounds
+		internal Rectangle BorderBounds
 		{
 			get
 			{
@@ -1402,7 +1402,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var isTouchOver = Bounds.Contains(Desktop.TouchPosition);
+			var isTouchOver = BorderBounds.Contains(Desktop.TouchPosition);
 			if (isTouchOver)
 			{
 				OnTouchDoubleClick();
@@ -1411,7 +1411,7 @@ namespace Myra.Graphics2D.UI
 
 		internal bool HandleMouseMovement()
 		{
-			var isMouseOver = Bounds.Contains(Desktop.MousePosition);
+			var isMouseOver = BorderBounds.Contains(Desktop.MousePosition);
 			var wasMouseOver = IsMouseInside;
 
 			if (isMouseOver && !wasMouseOver)
@@ -1439,7 +1439,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			if (Bounds.Contains(Desktop.TouchPosition))
+			if (BorderBounds.Contains(Desktop.TouchPosition))
 			{
 				OnTouchDown();
 			}
@@ -1460,7 +1460,7 @@ namespace Myra.Graphics2D.UI
 
 		internal bool HandleTouchMovement()
 		{
-			var isTouchOver = Bounds.Contains(Desktop.TouchPosition);
+			var isTouchOver = BorderBounds.Contains(Desktop.TouchPosition);
 			var wasTouchOver = IsTouchInside;
 
 			if (isTouchOver && !wasTouchOver)
