@@ -129,7 +129,6 @@ namespace Myra.Graphics2D.UI
 
 			if (InternalChild.IsPressed)
 			{
-				_listBox.Width = Bounds.Width;
 				if (_listBox.SelectedIndex == null && Items.Count > 0)
 				{
 					_listBox.SelectedIndex = 0;
@@ -212,6 +211,9 @@ namespace Myra.Graphics2D.UI
 			// Measure by the longest string
 			var result = base.InternalMeasure(availableSize);
 
+			// Reset ListBox Width so it wont be return by ListBox.Measure
+			_listBox.Width = null;
+
 			var listResult = _listBox.Measure(new Point(10000, 10000));
 			if (listResult.X > result.X)
 			{
@@ -222,6 +224,13 @@ namespace Myra.Graphics2D.UI
 			result.X += 32;
 
 			return result;
+		}
+
+		public override void Arrange()
+		{
+			base.Arrange();
+
+			_listBox.Width = BorderBounds.Width;
 		}
 
 		public override void OnKeyDown(Keys k)
