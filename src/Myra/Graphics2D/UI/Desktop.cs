@@ -689,6 +689,14 @@ namespace Myra.Graphics2D.UI
 					w.IsPlaced = false;
 				}
 			}
+			else if (args.Action == NotifyCollectionChangedAction.Reset)
+			{
+				foreach (Widget w in ChildrenCopy)
+				{
+					w.MeasureChanged -= WOnMeasureChanged;
+					w.IsPlaced = false;
+				}
+			}
 
 			InvalidateLayout();
 			_widgetsDirty = true;

@@ -74,6 +74,16 @@ namespace Myra.Graphics2D.UI
 					w.MeasureChanged -= ChildOnMeasureChanged;
 				}
 			}
+			else if (args.Action == NotifyCollectionChangedAction.Reset)
+			{
+				foreach (Widget w in ChildrenCopy)
+				{
+					w.IsPlaced = false;
+					w.Parent = null;
+					w.VisibleChanged -= ChildOnVisibleChanged;
+					w.MeasureChanged -= ChildOnMeasureChanged;
+				}
+			}
 
 			InvalidateMeasure();
 			InvalidateChildren();
