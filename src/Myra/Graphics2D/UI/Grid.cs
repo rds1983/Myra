@@ -28,7 +28,6 @@ namespace Myra.Graphics2D.UI
 		private int _rowSpacing;
 		private readonly ObservableCollection<Proportion> _columnsProportions = new ObservableCollection<Proportion>();
 		private readonly ObservableCollection<Proportion> _rowsProportions = new ObservableCollection<Proportion>();
-		private float? _totalColumnsPart, _totalRowsPart;
 		private readonly List<int> _cellLocationsX = new List<int>();
 		private readonly List<int> _cellLocationsY = new List<int>();
 		private readonly List<int> _gridLinesX = new List<int>();
@@ -104,42 +103,6 @@ namespace Myra.Graphics2D.UI
 		public ObservableCollection<Proportion> RowsProportions
 		{
 			get { return _rowsProportions; }
-		}
-
-		[Category("Grid")]
-		[DefaultValue(null)]
-		public float? TotalRowsPart
-		{
-			get { return _totalRowsPart; }
-
-			set
-			{
-				if (value == _totalRowsPart)
-				{
-					return;
-				}
-
-				_totalRowsPart = value;
-				InvalidateLayout();
-			}
-		}
-
-		[Category("Grid")]
-		[DefaultValue(null)]
-		public float? TotalColumnsPart
-		{
-			get { return _totalColumnsPart; }
-
-			set
-			{
-				if (value == _totalColumnsPart)
-				{
-					return;
-				}
-
-				_totalColumnsPart = value;
-				InvalidateLayout();
-			}
 		}
 
 		[Category("Appearance")]
@@ -397,6 +360,67 @@ namespace Myra.Graphics2D.UI
 			return new Point(child.GridColumn, child.GridRow);
 		}
 
+		private void LayoutProcessFixedPart()
+		{
+			int i = 0, size = 0;
+
+			// First run - find maximum size
+			for (i = 0; i < _measureColWidths.Count; ++i)
+			{
+				var prop = GetColumnProportion(i);
+				if (prop.Type != ProportionType.Part)
+				{
+					continue;
+				}
+
+				if (_measureColWidths[i] > size)
+				{
+					size = _measureColWidths[i];
+				}
+			}
+
+			// Second run - update
+			for (i = 0; i < _measureColWidths.Count; ++i)
+			{
+				var prop = GetColumnProportion(i);
+				if (prop.Type != ProportionType.Part)
+				{
+					continue;
+				}
+
+				_measureColWidths[i] = (int)(size * prop.Value);
+			}
+
+			size = 0;
+
+			// First run - find maximum size
+			for (i = 0; i < _measureRowHeights.Count; ++i)
+			{
+				var prop = GetRowProportion(i);
+				if (prop.Type != ProportionType.Part)
+				{
+					continue;
+				}
+
+				if (_measureRowHeights[i] > size)
+				{
+					size = _measureRowHeights[i];
+				}
+			}
+
+			// Second run - update
+			for (i = 0; i < _measureRowHeights.Count; ++i)
+			{
+				var prop = GetRowProportion(i);
+				if (prop.Type != ProportionType.Part)
+				{
+					continue;
+				}
+
+				_measureRowHeights[i] = (int)(size * prop.Value);
+			}
+		}
+
 		private Point LayoutProcessFixed(Point availableSize)
 		{
 			var rows = 0;
@@ -528,8 +552,10 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			var result = Point.Zero;
+			// #181: All Part proportions must have maximum size
+			LayoutProcessFixedPart();
 
+			var result = Point.Zero;
 			for (i = 0; i < _measureColWidths.Count; ++i)
 			{
 				var w = _measureColWidths[i];
@@ -596,11 +622,6 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			if (TotalColumnsPart.HasValue)
-			{
-				totalPart = TotalColumnsPart.Value;
-			}
-
 			if (!totalPart.IsZero())
 			{
 				// Second run update dynamic widths
@@ -647,11 +668,6 @@ namespace Myra.Graphics2D.UI
 				{
 					totalPart += prop.Value;
 				}
-			}
-
-			if (TotalRowsPart.HasValue)
-			{
-				totalPart = TotalRowsPart.Value;
 			}
 
 			if (!totalPart.IsZero())
