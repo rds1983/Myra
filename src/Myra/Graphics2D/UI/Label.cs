@@ -54,6 +54,11 @@ namespace Myra.Graphics2D.UI
 			}
 			set
 			{
+				if (_formattedText.Text == value)
+				{
+					return;
+				}
+
 				_formattedText.Text = value;
 				InvalidateMeasure();
 			}

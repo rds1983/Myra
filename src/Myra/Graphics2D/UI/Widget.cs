@@ -544,6 +544,11 @@ namespace Myra.Graphics2D.UI
 				_isPlaced = value;
 				IsMouseInside = false;
 				IsTouchInside = false;
+
+				if (_isPlaced)
+				{
+					InvalidateLayout();
+				}
 			}
 		}
 
