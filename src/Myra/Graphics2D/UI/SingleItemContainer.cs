@@ -26,9 +26,6 @@ namespace Myra.Graphics2D.UI
 					_internalChild.Parent = null;
 					_internalChild.IsPlaced = false;
 
-					_internalChild.VisibleChanged -= ChildOnVisibleChanged;
-					_internalChild.MeasureChanged -= ChildOnMeasureChanged;
-
 					_internalChild = null;
 				}
 
@@ -38,9 +35,6 @@ namespace Myra.Graphics2D.UI
 				{
 					_internalChild.Parent = this;
 					_internalChild.IsPlaced = IsPlaced;
-
-					_internalChild.VisibleChanged += ChildOnVisibleChanged;
-					_internalChild.MeasureChanged += ChildOnMeasureChanged;
 				}
 
 				InvalidateChildren();
@@ -53,16 +47,6 @@ namespace Myra.Graphics2D.UI
 			{
 				return InternalChild != null ? 1 : 0;
 			}
-		}
-
-		private void ChildOnVisibleChanged(object sender, EventArgs eventArgs)
-		{
-			InvalidateMeasure();
-		}
-
-		private void ChildOnMeasureChanged(object sender, EventArgs eventArgs)
-		{
-			InvalidateMeasure();
 		}
 
 		public override Widget GetChild(int index)

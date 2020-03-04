@@ -677,15 +677,12 @@ namespace Myra.Graphics2D.UI
 				foreach (Widget w in args.NewItems)
 				{
 					w.IsPlaced = true;
-					w.MeasureChanged += WOnMeasureChanged;
-
 				}
 			}
 			else if (args.Action == NotifyCollectionChangedAction.Remove)
 			{
 				foreach (Widget w in args.OldItems)
 				{
-					w.MeasureChanged -= WOnMeasureChanged;
 					w.IsPlaced = false;
 				}
 			}
@@ -693,18 +690,12 @@ namespace Myra.Graphics2D.UI
 			{
 				foreach (Widget w in ChildrenCopy)
 				{
-					w.MeasureChanged -= WOnMeasureChanged;
 					w.IsPlaced = false;
 				}
 			}
 
 			InvalidateLayout();
 			_widgetsDirty = true;
-		}
-
-		private static void WOnMeasureChanged(object sender, EventArgs eventArgs)
-		{
-			InvalidateLayout();
 		}
 
 		private static void EnsureRenderContext()

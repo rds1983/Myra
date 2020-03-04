@@ -796,8 +796,8 @@ namespace Myra.Graphics2D.UI
 		#endregion
 
 		#region Events
+
 		public event EventHandler VisibleChanged;
-		public event EventHandler MeasureChanged;
 		public event EventHandler EnabledChanged;
 
 		public event EventHandler LocationChanged;
@@ -820,6 +820,7 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler<GenericEventArgs<Keys>> KeyUp;
 		public event EventHandler<GenericEventArgs<Keys>> KeyDown;
 		public event EventHandler<GenericEventArgs<char>> Char;
+
 		#endregion
 
 		public Widget()
@@ -1217,7 +1218,13 @@ namespace Myra.Graphics2D.UI
 
 			InvalidateLayout();
 
-			MeasureChanged.Invoke(this);
+			if (Parent != null)
+			{
+				Parent.InvalidateMeasure();
+			} else
+			{
+				Desktop.InvalidateLayout();
+			}
 		}
 
 		public void ApplyWidgetStyle(WidgetStyle style)
