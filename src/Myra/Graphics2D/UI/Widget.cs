@@ -19,7 +19,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class Widget : BaseObject
 	{
-		internal enum LayoutState
+		private enum LayoutState
 		{
 			Normal,
 			LocationInvalid,
