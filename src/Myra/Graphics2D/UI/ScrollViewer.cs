@@ -25,7 +25,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		internal Point ScrollMaximum
+		public Point ScrollMaximum
 		{
 			get
 			{
