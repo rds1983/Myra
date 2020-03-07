@@ -36,8 +36,21 @@ namespace Myra.Graphics2D.UI
 
 				var bounds = ActualBounds;
 
-				return new Point(InternalChild.Bounds.Width - bounds.Width + ((_verticalScrollingOn && ShowVerticalScrollBar) ? _verticalScrollbarThumb.Width : 0),
+				var result = new Point(InternalChild.Bounds.Width - bounds.Width + ((_verticalScrollingOn && ShowVerticalScrollBar) ? _verticalScrollbarThumb.Width : 0),
 								 InternalChild.Bounds.Height - bounds.Height + ((_horizontalScrollingOn && ShowHorizontalScrollBar) ? _horizontalScrollbarThumb.Height : 0));
+
+				if (result.X < 0)
+				{
+					result.X = 0;
+				}
+
+				if (result.Y < 0)
+				{
+					result.Y = 0;
+				}
+
+				return result;
+
 			}
 		}
 
@@ -59,27 +72,6 @@ namespace Myra.Graphics2D.UI
 				if (InternalChild == null)
 				{
 					return;
-				}
-
-				var maximum = ScrollMaximum;
-				if (value.X < 0)
-				{
-					value.X = 0;
-				}
-
-				if (maximum.X >= 0 && value.X > maximum.X)
-				{
-					value.X = maximum.X;
-				}
-
-				if (value.Y < 0)
-				{
-					value.Y = 0;
-				}
-
-				if (maximum.Y >= 0 && value.Y > maximum.Y)
-				{
-					value.Y = maximum.Y;
 				}
 
 				InternalChild.Left = -value.X;
