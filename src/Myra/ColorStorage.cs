@@ -24,12 +24,11 @@ namespace Myra
 		{
 			var type = typeof(Color);
 
+#if !XENKO
 			var colors = type.GetRuntimeProperties();
-
 			foreach (var c in colors)
 			{
-				if (!c.GetMethod.IsStatic &&
-					c.PropertyType != typeof(Color))
+				if (c.PropertyType != typeof(Color))
 				{
 					continue;
 				}
@@ -41,6 +40,23 @@ namespace Myra
 					Name = c.Name
 				};
 			}
+#else
+			var colors = type.GetRuntimeFields();
+			foreach (var c in colors)
+			{
+				if (c.FieldType != typeof(Color))
+				{
+					continue;
+				}
+
+				var value = (Color)c.GetValue(null);
+				Colors[c.Name.ToLower()] = new ColorInfo
+				{
+					Color = value,
+					Name = c.Name
+				};
+			}
+#endif
 		}
 
 		public static string ToHexString(this Color c)
