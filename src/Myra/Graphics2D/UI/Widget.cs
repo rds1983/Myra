@@ -26,8 +26,6 @@ namespace Myra.Graphics2D.UI
 			Invalid
 		}
 
-		#region PrivateData
-
 		private Thickness _margin, _borderThickness, _padding;
 		private int _left, _top;
 		private int? _minWidth, _minHeight, _maxWidth, _maxHeight, _width, _height;
@@ -53,9 +51,6 @@ namespace Myra.Graphics2D.UI
 
 		private bool _enabled;
 
-		#endregion
-
-		#region Data acsessor
 		/// <summary>
 		/// Internal use only. (MyraPad)
 		/// </summary>
@@ -608,9 +603,7 @@ namespace Myra.Graphics2D.UI
 				_opacity = value;
 			}
 		}
-		#endregion
 
-		#region Prop
 		/// <summary>
 		/// Dynamic layout expression
 		/// </summary>
@@ -793,10 +786,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		#endregion
-
-		#region Events
-
 		public event EventHandler VisibleChanged;
 		public event EventHandler EnabledChanged;
 
@@ -821,15 +810,11 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler<GenericEventArgs<Keys>> KeyDown;
 		public event EventHandler<GenericEventArgs<char>> Char;
 
-		#endregion
-
 		public Widget()
 		{
 			Visible = true;
 			Enabled = true;
 		}
-
-		#region Functions
 
 		public virtual IBrush GetCurrentBackground()
 		{
@@ -1492,6 +1477,15 @@ namespace Myra.Graphics2D.UI
 
 			return isTouchOver;
 		}
+
+		public void SetKeyboardFocus()
+		{
+			Desktop.FocusedKeyboardWidget = this;
+		}
+
+		public void SetMouseWheelFocus()
+		{
+			Desktop.FocusedMouseWheelWidget = this;
+		}
 	}
-	#endregion
 }
