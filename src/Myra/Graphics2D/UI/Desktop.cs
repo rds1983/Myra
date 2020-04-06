@@ -121,17 +121,7 @@ namespace Myra.Graphics2D.UI
 				_mousePosition = value;
 				MouseMoved.Invoke();
 
-				for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
-				{
-					var w = ChildrenCopy[i];
-					if (w.Visible && w.Enabled)
-					{
-						if (w.HandleMouseMovement() || w.IsModal)
-						{
-							break;
-						}
-					}
-				}
+				ChildrenCopy.ProcessMouseMovement();
 
 				if (IsTouchDown)
 				{
@@ -157,17 +147,7 @@ namespace Myra.Graphics2D.UI
 				_touchPosition = value;
 				TouchMoved.Invoke();
 
-				for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
-				{
-					var w = ChildrenCopy[i];
-					if (w.Visible && w.Enabled)
-					{
-						if (w.HandleTouchMovement() || w.IsModal)
-						{
-							break;
-						}
-					}
-				}
+				ChildrenCopy.ProcessTouchMovement();
 			}
 		}
 
@@ -494,53 +474,13 @@ namespace Myra.Graphics2D.UI
 			{
 				TouchDoubleClick.Invoke();
 
-				var activeWidget = GetTopWidget(true);
-				if (activeWidget != null && activeWidget.Active)
-				{
-					activeWidget.HandleTouchDoubleClick();
-				}
+				ChildrenCopy.ProcessTouchDoubleClick();
 
 				_lastTouchDown = DateTime.MinValue;
 			}
 			else
 			{
 				_lastTouchDown = DateTime.Now;
-			}
-		}
-
-		private static void UpdateActiveWindow(Widget activeWidget)
-		{
-			var lastWidget = Widgets[Widgets.Count - 1];
-			if (activeWidget is Window && lastWidget != activeWidget)
-			{
-				// Make active window top
-				var activeIndex = Widgets.IndexOf(activeWidget);
-				var lastIndex = Widgets.IndexOf(lastWidget);
-
-				for (var i = activeIndex; i < lastIndex; ++i)
-				{
-					Widgets[i] = Widgets[i + 1];
-				}
-
-				Widgets[lastIndex] = activeWidget;
-			}
-		}
-
-		private static void UpdateIsTouchInside(bool isTouchInside)
-		{
-			// Only top active widget can receive touch
-			var activeWidget = GetTopWidget(true);
-			if (activeWidget != null && activeWidget.Active)
-			{
-				if (isTouchInside)
-				{
-					UpdateActiveWindow(activeWidget);
-					activeWidget.HandleTouchDown();
-				}
-				else
-				{
-					activeWidget.HandleTouchUp();
-				}
 			}
 		}
 
@@ -571,7 +511,8 @@ namespace Myra.Graphics2D.UI
 			_contextMenuShown = false;
 			_keyboardFocusSet = false;
 			_mouseWheelFocusSet = false;
-			UpdateIsTouchInside(true);
+
+			ChildrenCopy.ProcessTouchDown();
 
 			if (!_keyboardFocusSet && FocusedKeyboardWidget != null)
 			{
@@ -593,7 +534,7 @@ namespace Myra.Graphics2D.UI
 
 		private static void InputOnTouchUp()
 		{
-			UpdateIsTouchInside(false);
+			ChildrenCopy.ProcessTouchUp();
 		}
 
 		public static void ShowContextMenu(Widget menu, Point position)
@@ -821,6 +762,8 @@ namespace Myra.Graphics2D.UI
 
 			UpdateRecursiveLayout(ChildrenCopy);
 
+			ChildrenCopy.ProcessMouseMovement();
+
 			_layoutDirty = false;
 		}
 
@@ -876,14 +819,12 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		private static Widget GetTopWidget(bool containsTouch)
+		private static Widget GetTopWidget()
 		{
 			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
 			{
 				var w = ChildrenCopy[i];
-				if (w.Visible && w.Enabled &&
-					(!containsTouch ||
-					(containsTouch && w.Bounds.Contains(TouchPosition))))
+				if (w.Visible && w.Enabled && w.Active)
 				{
 					return w;
 				}
@@ -1076,7 +1017,7 @@ namespace Myra.Graphics2D.UI
 			{
 				// Small workaround: if key is escape  active widget is window
 				// Send it there
-				var topWidget = GetTopWidget(false);
+				var topWidget = GetTopWidget();
 				var asWindow = topWidget as Window;
 				if (asWindow != null)
 				{

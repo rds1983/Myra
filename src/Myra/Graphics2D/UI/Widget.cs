@@ -685,6 +685,23 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		internal bool ContainsMouse
+		{
+			get
+			{
+				return BorderBounds.Contains(Desktop.MousePosition);
+			}
+		}
+
+		internal bool ContainsTouch
+		{
+			get
+			{
+				return BorderBounds.Contains(Desktop.TouchPosition);
+			}
+		}
+
+
 		protected Rectangle BackgroundBounds
 		{
 			get
@@ -1141,8 +1158,6 @@ namespace Myra.Graphics2D.UI
 			_lastLocationHint = new Point(Left, Top);
 			_layoutState = LayoutState.Normal;
 
-			HandleMouseMovement();
-
 			LayoutUpdated.Invoke(this);
 		}
 
@@ -1390,92 +1405,6 @@ namespace Myra.Graphics2D.UI
 		private void FireSizeChanged()
 		{
 			SizeChanged.Invoke(this);
-		}
-
-		internal void HandleTouchDoubleClick()
-		{
-			if (!Visible)
-			{
-				return;
-			}
-
-			var isTouchOver = BorderBounds.Contains(Desktop.TouchPosition);
-			if (isTouchOver)
-			{
-				OnTouchDoubleClick();
-			}
-		}
-
-		internal bool HandleMouseMovement()
-		{
-			var isMouseOver = BorderBounds.Contains(Desktop.MousePosition);
-			var wasMouseOver = IsMouseInside;
-
-			if (isMouseOver && !wasMouseOver)
-			{
-				OnMouseEntered();
-			}
-
-			if (!isMouseOver && wasMouseOver)
-			{
-				OnMouseLeft();
-			}
-
-			if (isMouseOver && wasMouseOver)
-			{
-				OnMouseMoved();
-			}
-
-			return isMouseOver;
-		}
-
-		internal void HandleTouchDown()
-		{
-			if (!Visible)
-			{
-				return;
-			}
-
-			if (BorderBounds.Contains(Desktop.TouchPosition))
-			{
-				OnTouchDown();
-			}
-		}
-
-		internal void HandleTouchUp()
-		{
-			if (!Visible)
-			{
-				return;
-			}
-
-			if (IsTouchInside)
-			{
-				OnTouchUp();
-			}
-		}
-
-		internal bool HandleTouchMovement()
-		{
-			var isTouchOver = BorderBounds.Contains(Desktop.TouchPosition);
-			var wasTouchOver = IsTouchInside;
-
-			if (isTouchOver && !wasTouchOver)
-			{
-				OnTouchEntered();
-			}
-
-			if (!isTouchOver && wasTouchOver)
-			{
-				OnTouchLeft();
-			}
-
-			if (isTouchOver && wasTouchOver)
-			{
-				OnTouchMoved();
-			}
-
-			return isTouchOver;
 		}
 
 		public void SetKeyboardFocus()
