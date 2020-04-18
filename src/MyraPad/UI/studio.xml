@@ -46,7 +46,7 @@
         <HorizontalSeparator />
         <Label Text="Reloading..." Id="_textStatus" />
       </VerticalStackPanel>
-      <VerticalStackPanel>
+      <VerticalStackPanel Background="#000000FF" >
         <VerticalStackPanel.Proportions>
           <Proportion Type="Fill" />
         </VerticalStackPanel.Proportions>
