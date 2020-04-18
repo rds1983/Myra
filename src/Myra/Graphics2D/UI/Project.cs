@@ -28,6 +28,8 @@ namespace Myra.Graphics2D.UI
 		public string Namespace { get; set; }
 		public string Class { get; set; }
 		public string OutputPath { get; set; }
+        public string TemplateDesigner { get; set; }
+		public string TemplateMain { get; set; }
 	}
 
 	public class Project
