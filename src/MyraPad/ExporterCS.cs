@@ -52,7 +52,9 @@ namespace MyraPad
 				return string.Empty;
 			}
 
-			var template = Resources.ExportCSMain;
+			var template = string.IsNullOrWhiteSpace(_project.ExportOptions.TemplateMain) ? 
+                Resources.ExportCSMain : 
+                File.ReadAllText(_project.ExportOptions.TemplateMain);
 
 			template = template.Replace("$namespace$", _project.ExportOptions.Namespace);
 			template = template.Replace("$class$", _project.ExportOptions.Class);
@@ -211,8 +213,10 @@ namespace MyraPad
 
 		public string ExportDesigner()
 		{
-			var template = Resources.ExportCSDesigner;
-
+            var template = string.IsNullOrWhiteSpace(_project.ExportOptions.TemplateDesigner) ?
+                Resources.ExportCSDesigner :
+                File.ReadAllText(_project.ExportOptions.TemplateDesigner);
+            
 			template = template.Replace("$namespace$", _project.ExportOptions.Namespace);
 			template = template.Replace("$class$", _project.ExportOptions.Class);
 			template = template.Replace("$parentClass$", _project.Root.GetType().Name);
