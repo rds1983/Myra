@@ -1102,39 +1102,13 @@ namespace Myra.Graphics2D.UI
 				return false;
 			}
 
-			// Non containers are completely solid
-			var asContainer = w as Container;
-			if (asContainer == null)
+			if (!w.FallsThrough(p))
 			{
 				return true;
 			}
 
-			// Not real containers are solid as well
-			if (!(w is Grid ||
-				w is StackPanel ||
-				w is Panel ||
-				w is SplitPane ||
-				w is ScrollViewer))
-			{
-				return true;
-			}
-
-			// Real containers are solid only if backround is set
-			if (w.Background != null)
-			{
-				return true;
-			}
-
-			var asScrollViewer = w as ScrollViewer;
-			if (asScrollViewer != null)
-			{
-				// Special case
-				if (asScrollViewer._horizontalScrollingOn && asScrollViewer._horizontalScrollbarFrame.Contains(p) ||
-					asScrollViewer._verticalScrollingOn && asScrollViewer._verticalScrollbarFrame.Contains(p))
-				{
-					return true;
-				}
-			}
+			// If widget fell through, then it is Container for sure
+			var asContainer = (Container)w;
 
 			// Or if any child is solid
 			foreach (var ch in asContainer.ChildrenCopy)

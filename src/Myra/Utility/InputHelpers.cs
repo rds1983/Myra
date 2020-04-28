@@ -1,4 +1,5 @@
-﻿using Myra.Graphics2D.UI;
+﻿using Microsoft.Xna.Framework;
+using Myra.Graphics2D.UI;
 using System.Collections.Generic;
 
 namespace Myra.Utility
@@ -10,6 +11,38 @@ namespace Myra.Utility
 			return w.Visible && w.Active && w.Enabled && w.ContainsMouse;
 		}
 
+		public static bool FallsThrough(this Widget w, Point p)
+		{
+			// Only containers can fall through
+			if (!(w is Grid ||
+				w is StackPanel ||
+				w is Panel ||
+				w is SplitPane ||
+				w is ScrollViewer))
+			{
+				return false;
+			}
+
+			// Real containers are solid only if backround is set
+			if (w.Background != null)
+			{
+				return false;
+			}
+
+			var asScrollViewer = w as ScrollViewer;
+			if (asScrollViewer != null)
+			{
+				// Special case
+				if (asScrollViewer._horizontalScrollingOn && asScrollViewer._horizontalScrollbarFrame.Contains(p) ||
+					asScrollViewer._verticalScrollingOn && asScrollViewer._verticalScrollbarFrame.Contains(p))
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+
 		public static void ProcessTouchDown(this List<Widget> widgets)
 		{
 			for (var i = widgets.Count - 1; i >= 0; --i)
@@ -19,7 +52,10 @@ namespace Myra.Utility
 				if (w.CommonTouchCheck())
 				{
 					w.OnTouchDown();
-					break;
+					if (!w.FallsThrough(Desktop.TouchPosition))
+					{
+						break;
+					}
 				}
 
 				if (w.IsModal)
@@ -51,7 +87,10 @@ namespace Myra.Utility
 				if (w.CommonTouchCheck())
 				{
 					w.OnTouchDoubleClick();
-					break;
+					if (!w.FallsThrough(Desktop.TouchPosition))
+					{
+						break;
+					}
 				}
 
 				if (w.IsModal)
@@ -93,7 +132,10 @@ namespace Myra.Utility
 						w.OnMouseMoved();
 					}
 
-					break;
+					if (!w.FallsThrough(Desktop.MousePosition))
+					{
+						break;
+					}
 				}
 
 				if (w.IsModal)
@@ -135,7 +177,10 @@ namespace Myra.Utility
 						w.OnTouchMoved();
 					}
 
-					break;
+					if (!w.FallsThrough(Desktop.TouchPosition))
+					{
+						break;
+					}
 				}
 
 				if (w.IsModal)
