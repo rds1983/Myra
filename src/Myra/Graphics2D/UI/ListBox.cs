@@ -40,6 +40,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		protected internal override bool AcceptsMouseWheelFocus => InternalChild.AcceptsMouseWheelFocus;
+
 		internal protected override bool AcceptsKeyboardFocus
 		{
 			get { return true; }
@@ -185,7 +187,10 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnTouchDown();
 
-			ComboHideDropdown();
+			if (!InternalChild._verticalScrollingOn || !InternalChild._verticalScrollbarFrame.Contains(Desktop.TouchPosition))
+			{
+				ComboHideDropdown();
+			}
 		}
 
 		private void UpdateScrolling()
@@ -219,6 +224,13 @@ namespace Myra.Graphics2D.UI
 			}
 
 			InternalChild.ScrollPosition = sp;
+		}
+
+		public override void OnMouseWheel(float delta)
+		{
+			base.OnMouseWheel(delta);
+
+			InternalChild.OnMouseWheel(delta);
 		}
 
 		public void ApplyListBoxStyle(ListBoxStyle style)

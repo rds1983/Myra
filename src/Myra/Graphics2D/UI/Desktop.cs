@@ -539,11 +539,6 @@ namespace Myra.Graphics2D.UI
 
 		public static void ShowContextMenu(Widget menu, Point position)
 		{
-			if (menu == null)
-			{
-				throw new ArgumentNullException("menu");
-			}
-
 			HideContextMenu();
 
 			ContextMenu = menu;
