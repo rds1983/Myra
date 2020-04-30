@@ -458,6 +458,7 @@ namespace Myra.Graphics2D.UI
 			{
 				UndoStack.MakeInsert(CursorPosition, text.Length());
 				CursorPosition += text.Length;
+				ResetSelection();
 				return true;
 			}
 
