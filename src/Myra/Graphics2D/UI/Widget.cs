@@ -1008,6 +1008,9 @@ namespace Myra.Graphics2D.UI
 					availableSize.Y = MaxHeight.Value;
 				}
 
+				availableSize.X -= MBPWidth;
+				availableSize.Y -= MBPHeight;
+
 				// Do the actual measure
 				result = InternalMeasure(availableSize);
 
