@@ -1,10 +1,10 @@
 ﻿using System;
 
-#if !XENKO
+#if !STRIDE
 using Microsoft.Xna.Framework;
 #else
-using Xenko.Core.Mathematics;
-using Texture2D = Xenko.Graphics.Texture;
+using Stride.Core.Mathematics;
+using Texture2D = Stride.Graphics.Texture;
 #endif
 
 namespace Myra.Utility

@@ -1,10 +1,10 @@
 ﻿// This code had been borrowed from the MonoGame.Extended project: https://github.com/craftworkgames/MonoGame.Extended
 
 
-#if !XENKO
+#if !STRIDE
 using Microsoft.Xna.Framework.Input;
 #else
-using Xenko.Input;
+using Stride.Input;
 #endif
 
 namespace Myra.Utility

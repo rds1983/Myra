@@ -2,17 +2,17 @@
   <PropertyGroup>
     <Authors>MyraTeam</Authors>
     <Product>Myra</Product>
-    <Description>UI Library for MonoGame, FNA and Xenko</Description>
+    <Description>UI Library for MonoGame, FNA and Stride</Description>
     <PackageLicenseUrl>https://en.wikipedia.org/wiki/MIT_License</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/rds1983/Myra</PackageProjectUrl>
     <AssemblyName>Myra</AssemblyName>
     <RootNamespace>Myra</RootNamespace>
     <Version>1.0.0.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <DefineConstants>$(DefineConstants);XENKO</DefineConstants>
+    <DefineConstants>$(DefineConstants);STRIDE</DefineConstants>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageId>Myra.Xenko</PackageId>
-    <OutputPath>bin\Xenko\$(Configuration)</OutputPath>
+    <PackageId>Myra.Stride</PackageId>
+    <OutputPath>bin\Stride\$(Configuration)</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,9 +20,7 @@
   </ItemGroup>  
  
   <ItemGroup>
-    <PackageReference Include="Xenko.Engine" Version="3.1.0.1" PrivateAssets="contentfiles;analyzers" />
-    <PackageReference Include="Xenko.Core" Version="3.1.0.1" PrivateAssets="contentfiles;analyzers" />
-    <PackageReference Include="XNAssets.Xenko" Version="0.5.0.6" />
+    <PackageReference Include="XNAssets.Stride" Version="0.5.0.9" />
     <PackageReference Include="info.lundin.math.dll" Version="1.2.6" />
   </ItemGroup>
 </Project>

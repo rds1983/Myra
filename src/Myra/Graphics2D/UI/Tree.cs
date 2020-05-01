@@ -4,12 +4,12 @@ using System.ComponentModel;
 using System.Linq;
 using Myra.Graphics2D.UI.Styles;
 
-#if !XENKO
+#if !STRIDE
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 #else
-using Xenko.Core.Mathematics;
-using Xenko.Input;
+using Stride.Core.Mathematics;
+using Stride.Input;
 #endif
 
 namespace Myra.Graphics2D.UI

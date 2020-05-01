@@ -5,12 +5,12 @@ using Myra.Utility;
 using System.Xml.Serialization;
 using System;
 
-#if !XENKO
+#if !STRIDE
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 #else
-using Xenko.Core.Mathematics;
-using Xenko.Graphics;
+using Stride.Core.Mathematics;
+using Stride.Graphics;
 #endif
 
 namespace Myra.Graphics2D.UI

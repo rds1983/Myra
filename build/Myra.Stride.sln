@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{48936873-B1E0-48E9-939A-BA4C2BD1B0EE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Stride", "..\src\Myra\Myra.Stride.csproj", "{C20EBF4B-5E9B-4B8D-AB00-8E2BE81A3D5E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.AllWidgets.Stride", "..\samples\Myra.Samples.AllWidgets\Myra.Samples.AllWidgets.Stride.csproj", "{212B22D8-819F-48B6-91D7-BBAA2ADD040F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C20EBF4B-5E9B-4B8D-AB00-8E2BE81A3D5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C20EBF4B-5E9B-4B8D-AB00-8E2BE81A3D5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C20EBF4B-5E9B-4B8D-AB00-8E2BE81A3D5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C20EBF4B-5E9B-4B8D-AB00-8E2BE81A3D5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{212B22D8-819F-48B6-91D7-BBAA2ADD040F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{212B22D8-819F-48B6-91D7-BBAA2ADD040F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{212B22D8-819F-48B6-91D7-BBAA2ADD040F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{212B22D8-819F-48B6-91D7-BBAA2ADD040F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{212B22D8-819F-48B6-91D7-BBAA2ADD040F} = {48936873-B1E0-48E9-939A-BA4C2BD1B0EE}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A9C9D369-EE58-4E9D-B9FE-63023B644741}
+	EndGlobalSection
+EndGlobal

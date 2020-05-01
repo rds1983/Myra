@@ -17,8 +17,8 @@ artifacts:
   - path: src/Myra/bin/MonoGame/Release/Myra.$(appveyor_build_version).nupkg
     name: Myra.nupkg
 
-  - path: src/Myra/bin/Xenko/Release/Myra.Xenko.$(appveyor_build_version).nupkg
-    name: Myra.Xenko.nupkg
+  - path: src/Myra/bin/Stride/Release/Myra.Stride.$(appveyor_build_version).nupkg
+    name: Myra.Stride.nupkg
     
   - path: Myra.$(appveyor_build_version).zip
     name: ZipPackage

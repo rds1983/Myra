@@ -1,10 +1,10 @@
 using Myra.Utility;
 using System;
 
-#if !XENKO
+#if !STRIDE
 using Microsoft.Xna.Framework;
 #else
-using Xenko.Core.Mathematics;
+using Stride.Core.Mathematics;
 using ColorHSV = Myra.Utility.ColorHSV;
 #endif
 

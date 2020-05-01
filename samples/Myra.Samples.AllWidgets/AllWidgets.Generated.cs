@@ -4,11 +4,11 @@ using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.Brushes;
 
-#if !XENKO
+#if !STRIDE
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 #else
-using Xenko.Core.Mathematics;
+using Stride.Core.Mathematics;
 #endif
 
 namespace Myra.Samples.AllWidgets

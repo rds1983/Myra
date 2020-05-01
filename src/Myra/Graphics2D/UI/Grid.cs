@@ -6,10 +6,10 @@ using System.ComponentModel;
 using Myra.Utility;
 using System.Xml.Serialization;
 
-#if !XENKO
+#if !STRIDE
 using Microsoft.Xna.Framework;
 #else
-using Xenko.Core.Mathematics;
+using Stride.Core.Mathematics;
 #endif
 
 namespace Myra.Graphics2D.UI

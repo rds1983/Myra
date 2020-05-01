@@ -2,10 +2,10 @@
 using XNAssets;
 using SpriteFontPlus;
 
-#if !XENKO
+#if !STRIDE
 using Microsoft.Xna.Framework.Graphics;
 #else
-using Xenko.Graphics;
+using Stride.Graphics;
 #endif
 
 namespace Myra.Assets

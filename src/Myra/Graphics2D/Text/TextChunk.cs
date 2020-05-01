@@ -2,14 +2,14 @@
 using System;
 using System.Collections.Generic;
 
-#if !XENKO
+#if !STRIDE
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Clr = Microsoft.Xna.Framework.Color;
 #else
-using Xenko.Core.Mathematics;
-using Xenko.Graphics;
-using Clr = Xenko.Core.Mathematics.Color;
+using Stride.Core.Mathematics;
+using Stride.Graphics;
+using Clr = Stride.Core.Mathematics.Color;
 #endif
 
 

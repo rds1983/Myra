@@ -7,10 +7,10 @@ using System.Xml.Linq;
 using XNAssets;
 using Myra.Graphics2D.Brushes;
 
-#if !XENKO
+#if !STRIDE
 using Microsoft.Xna.Framework.Graphics;
 #else
-using Xenko.Graphics;
+using Stride.Graphics;
 #endif
 
 namespace Myra.Graphics2D.UI.Styles

@@ -2,10 +2,10 @@
 using System.Xml.Serialization;
 using Myra.Graphics2D.UI.Styles;
 
-#if !XENKO
+#if !STRIDE
 using Microsoft.Xna.Framework;
 #else
-using Xenko.Core.Mathematics;
+using Stride.Core.Mathematics;
 #endif
 
 namespace Myra.Graphics2D.UI

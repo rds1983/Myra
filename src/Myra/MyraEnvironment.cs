@@ -4,12 +4,12 @@ using XNAssets;
 using Myra.Assets;
 using XNAssets.Utility;
 
-#if !XENKO
+#if !STRIDE
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 #else
-using Xenko.Engine;
-using Xenko.Graphics;
+using Stride.Engine;
+using Stride.Graphics;
 #endif
 
 namespace Myra
@@ -47,7 +47,7 @@ namespace Myra
 					return;
 				}
 
-#if !XENKO
+#if !STRIDE
 				if (_game != null)
 				{
 					_game.Disposed -= GameOnDisposed;
@@ -56,7 +56,7 @@ namespace Myra
 
 				_game = value;
 
-#if !XENKO
+#if !STRIDE
 				if (_game != null)
 				{
 					_game.Disposed += GameOnDisposed;

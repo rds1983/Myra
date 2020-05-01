@@ -4,11 +4,11 @@ using System.Xml.Serialization;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 
-#if !XENKO
+#if !STRIDE
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 #else
-using Xenko.Core.Mathematics;
+using Stride.Core.Mathematics;
 #endif
 
 namespace Myra.Graphics2D.UI
@@ -155,7 +155,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-#if !XENKO
+#if !STRIDE
 		public override void OnKeyDown(Keys k)
 		{
 			base.OnKeyDown(k);

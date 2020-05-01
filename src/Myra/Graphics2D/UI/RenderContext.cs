@@ -1,11 +1,11 @@
 using System;
 
-#if !XENKO
+#if !STRIDE
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 #else
-using Xenko.Core.Mathematics;
-using Xenko.Graphics;
+using Stride.Core.Mathematics;
+using Stride.Graphics;
 #endif
 
 namespace Myra.Graphics2D.UI
@@ -15,7 +15,7 @@ namespace Myra.Graphics2D.UI
 		private SpriteBatchBeginParams _spriteBatchBeginParams = new SpriteBatchBeginParams
 		{
 			SpriteSortMode = SpriteSortMode.Deferred,
-#if !XENKO
+#if !STRIDE
 			RasterizerState = DefaultAssets.UIRasterizerState,
 			BlendState = BlendState.AlphaBlend,
 			SamplerState = SamplerState.PointClamp,
@@ -49,7 +49,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-#if XENKO
+#if STRIDE
 		internal RenderContext()
 		{
 			var rs = new RasterizerStateDescription();
@@ -123,7 +123,7 @@ namespace Myra.Graphics2D.UI
 				SpriteBatchBeginParams.RasterizerState,
 				SpriteBatchBeginParams.Effect,
 				SpriteBatchBeginParams.TransformMatrix != null ? SpriteBatchBeginParams.TransformMatrix.Value : Matrix.Identity);
-#elif XENKO
+#elif STRIDE
 			Batch.Begin(MyraEnvironment.Game.GraphicsContext,
 				SpriteBatchBeginParams.SpriteSortMode,
 				SpriteBatchBeginParams.BlendState,

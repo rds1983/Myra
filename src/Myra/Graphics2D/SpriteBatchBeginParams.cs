@@ -1,12 +1,12 @@
-﻿#if !XENKO
+﻿#if !STRIDE
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 #else
-using Xenko.Core.Mathematics;
-using Xenko.Graphics;
-using BlendState = Xenko.Graphics.BlendStateDescription;
-using DepthStencilState = Xenko.Graphics.DepthStencilStateDescription;
-using RasterizerState = Xenko.Graphics.RasterizerStateDescription;
+using Stride.Core.Mathematics;
+using Stride.Graphics;
+using BlendState = Stride.Graphics.BlendStateDescription;
+using DepthStencilState = Stride.Graphics.DepthStencilStateDescription;
+using RasterizerState = Stride.Graphics.RasterizerStateDescription;
 #endif
 
 namespace Myra.Graphics2D

@@ -6,15 +6,15 @@ using System.Linq;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 
-#if !XENKO
+#if !STRIDE
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 #else
-using Xenko.Core.Mathematics;
-using Xenko.Graphics;
-using Xenko.Input;
+using Stride.Core.Mathematics;
+using Stride.Graphics;
+using Stride.Input;
 #endif
 
 namespace Myra.Graphics2D.UI
@@ -51,7 +51,7 @@ namespace Myra.Graphics2D.UI
 		private static IReadOnlyCollection<Keys> _downKeys, _lastDownKeys;
 		private static Widget _previousKeyboardFocus;
 		private static Widget _previousMouseWheelFocus;
-#if !XENKO
+#if !STRIDE
 		private static TouchCollection _oldTouchState;
 #endif
 		private static Widget _scheduleMouseWheelFocus;
@@ -298,7 +298,7 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-#if !XENKO
+#if !STRIDE
 				return _downKeys.Contains(Keys.LeftControl) || _downKeys.Contains(Keys.RightControl);
 #else
 				return _downKeys.Contains(Keys.LeftCtrl) || _downKeys.Contains(Keys.RightCtrl);
@@ -310,7 +310,7 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-#if !XENKO
+#if !STRIDE
 				return _downKeys.Contains(Keys.LeftAlt) || _downKeys.Contains(Keys.RightAlt);
 #else
 				return _downKeys.Contains(Keys.LeftAlt) || _downKeys.Contains(Keys.RightAlt);
@@ -415,7 +415,7 @@ namespace Myra.Graphics2D.UI
 #endif
 		}
 
-#if !XENKO
+#if !STRIDE
 		public static MouseInfo DefaultMouseInfoGetter()
 		{
 			var state = Mouse.GetState();
@@ -874,7 +874,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-#if !XENKO
+#if !STRIDE
 		public static void UpdateTouch()
 		{
 			var touchState = TouchPanel.GetState();
@@ -941,7 +941,7 @@ namespace Myra.Graphics2D.UI
 			HandleButton(mouseInfo.IsLeftButtonDown, _lastMouseInfo.IsLeftButtonDown, MouseButtons.Left);
 			HandleButton(mouseInfo.IsMiddleButtonDown, _lastMouseInfo.IsMiddleButtonDown, MouseButtons.Middle);
 			HandleButton(mouseInfo.IsRightButtonDown, _lastMouseInfo.IsRightButtonDown, MouseButtons.Right);
-#if XENKO
+#if STRIDE
 				var handleWheel = mouseInfo.Wheel != 0;
 #else
 			var handleWheel = mouseInfo.Wheel != _lastMouseInfo.Wheel;
@@ -950,7 +950,7 @@ namespace Myra.Graphics2D.UI
 			if (handleWheel)
 			{
 				var delta = mouseInfo.Wheel;
-#if !XENKO
+#if !STRIDE
 				delta -= _lastMouseInfo.Wheel;
 #endif
 				MouseWheelChanged.Invoke(delta);
@@ -1021,7 +1021,7 @@ namespace Myra.Graphics2D.UI
 			UpdateMouseInput();
 			UpdateKeyboardInput();
 
-#if !XENKO
+#if !STRIDE
 			try
 			{
 				UpdateTouch();
@@ -1065,7 +1065,7 @@ namespace Myra.Graphics2D.UI
 				{
 					_focusedKeyboardWidget.OnKeyDown(key);
 
-#if XENKO
+#if STRIDE
 					var ch = key.ToChar(_downKeys.Contains(Keys.LeftShift) ||
 										_downKeys.Contains(Keys.RightShift));
 					if (ch != null)

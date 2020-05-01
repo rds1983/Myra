@@ -1,7 +1,7 @@
 ﻿using Myra.Graphics2D.UI;
 using System.Linq;
 
-#if !XENKO
+#if !STRIDE
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 #if ANDROID
@@ -10,17 +10,17 @@ using Microsoft.Xna.Framework.GamerServices;
 #endif
 #else
 using System.Threading.Tasks;
-using Xenko.Engine;
-using Xenko.Games;
-using Xenko.Graphics;
-using Xenko.Core.Mathematics;
+using Stride.Engine;
+using Stride.Games;
+using Stride.Graphics;
+using Stride.Core.Mathematics;
 #endif
 
 namespace Myra.Samples.AllWidgets
 {
 	public class AllWidgetsGame : Game
 	{
-#if !XENKO
+#if !STRIDE
 		private readonly GraphicsDeviceManager _graphics;
 #endif
 
@@ -32,7 +32,7 @@ namespace Myra.Samples.AllWidgets
 		{
 			Instance = this;
 
-#if !XENKO
+#if !STRIDE
 			_graphics = new GraphicsDeviceManager(this)
 			{
 				PreferredBackBufferWidth = 1200,
@@ -45,7 +45,7 @@ namespace Myra.Samples.AllWidgets
 			IsMouseVisible = true;
 		}
 
-#if XENKO
+#if STRIDE
 		protected override Task LoadContent()
 		{
 			MyraEnvironment.Game = this;
@@ -152,7 +152,7 @@ namespace Myra.Samples.AllWidgets
 		{
 			base.Draw(gameTime);
 
-#if !XENKO
+#if !STRIDE
 			GraphicsDevice.Clear(Color.Black);
 #else
 			// Clear screen

@@ -4,15 +4,15 @@ using Myra.Utility;
 using System.Reflection;
 using XNAssets;
 
-#if !XENKO
+#if !STRIDE
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 #else
 using SpriteFontPlus;
-using Xenko.Core.Mathematics;
-using Xenko.Graphics;
-using Texture2D = Xenko.Graphics.Texture;
-using RasterizerState = Xenko.Graphics.RasterizerStateDescription;
+using Stride.Core.Mathematics;
+using Stride.Graphics;
+using Texture2D = Stride.Graphics.Texture;
+using RasterizerState = Stride.Graphics.RasterizerStateDescription;
 #endif
 
 namespace Myra
@@ -153,7 +153,7 @@ namespace Myra
 
 		static DefaultAssets()
 		{
-#if XENKO
+#if STRIDE
 			BMFontLoader.GraphicsDevice = MyraEnvironment.GraphicsDevice;
 #endif
 		}
@@ -175,7 +175,7 @@ namespace Myra
 				_white = null;
 			}
 		
-#if !XENKO
+#if !STRIDE
 			if (_uiRasterizerState != null)
 			{
 				_uiRasterizerState.Dispose();

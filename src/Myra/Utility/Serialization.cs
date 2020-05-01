@@ -4,10 +4,10 @@ using System.Reflection;
 using XNAssets.Utility;
 using Myra.Graphics2D;
 
-#if !XENKO
+#if !STRIDE
 using Microsoft.Xna.Framework;
 #else
-using Xenko.Core.Mathematics;
+using Stride.Core.Mathematics;
 #endif
 
 namespace Myra.Utility

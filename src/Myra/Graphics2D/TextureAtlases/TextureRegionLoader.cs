@@ -1,9 +1,9 @@
 ﻿using XNAssets;
 
-#if !XENKO
+#if !STRIDE
 using Microsoft.Xna.Framework.Graphics;
 #else
-using Texture2D = Xenko.Graphics.Texture;
+using Texture2D = Stride.Graphics.Texture;
 #endif
 
 namespace Myra.Graphics2D.TextureAtlases

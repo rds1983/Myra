@@ -21,7 +21,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="D:\Projects\Myra\src\Myra\bin\MonoGame\Release\net45\Myra.dll" target="lib\net45\Myra.dll" />
-    <file src="D:\Projects\Myra\src\Myra\bin\MonoGame\Release\netstandard2.0\Myra.dll" target="lib\netstandard2.0\Myra.dll" />
+    <file src="C:\Projects\Myra\src\Myra\bin\MonoGame\Release\net45\Myra.dll" target="lib\net45\Myra.dll" />
+    <file src="C:\Projects\Myra\src\Myra\bin\MonoGame\Release\netstandard2.0\Myra.dll" target="lib\netstandard2.0\Myra.dll" />
   </files>
 </package>

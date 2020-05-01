@@ -7,14 +7,14 @@ using Myra.Utility;
 using System.Xml.Serialization;
 using Myra.Attributes;
 
-#if !XENKO
+#if !STRIDE
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 #else
-using Xenko.Core.Mathematics;
-using Xenko.Input;
-using Xenko.Graphics;
+using Stride.Core.Mathematics;
+using Stride.Input;
+using Stride.Graphics;
 #endif
 
 namespace Myra.Graphics2D.UI

@@ -2,10 +2,10 @@
 using System.Globalization;
 using System.Reflection;
 
-#if !XENKO
+#if !STRIDE
 using Microsoft.Xna.Framework;
 #else
-using Xenko.Core.Mathematics;
+using Stride.Core.Mathematics;
 #endif
 
 namespace Myra
@@ -24,7 +24,7 @@ namespace Myra
 		{
 			var type = typeof(Color);
 
-#if !XENKO
+#if !STRIDE
 			var colors = type.GetRuntimeProperties();
 			foreach (var c in colors)
 			{

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <ApplicationIcon />
@@ -6,11 +6,11 @@
     <AssemblyName>Myra.Samples.AllWidgets</AssemblyName>
     <RootNamespace>Myra.Samples.AllWidgets</RootNamespace>
     <TargetFramework>net461</TargetFramework>
-    <OutputPath>bin\Xenko\$(Configuration)</OutputPath>
-    <DefineConstants>$(DefineConstants);XENKO</DefineConstants>
+    <OutputPath>bin\Stride\$(Configuration)</OutputPath>
+    <DefineConstants>$(DefineConstants);STRIDE</DefineConstants>
   </PropertyGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Myra\Myra.Xenko.csproj" />
+    <ProjectReference Include="..\..\src\Myra\Myra.Stride.csproj" />
   </ItemGroup>  
 </Project>
