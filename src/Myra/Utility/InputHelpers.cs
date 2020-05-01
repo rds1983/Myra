@@ -1,6 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using Myra.Graphics2D.UI;
+﻿using Myra.Graphics2D.UI;
 using System.Collections.Generic;
+
+#if !XENKO
+using Microsoft.Xna.Framework;
+#else
+using Xenko.Core.Mathematics;
+#endif
 
 namespace Myra.Utility
 {
