@@ -1119,6 +1119,14 @@ namespace Myra.Graphics2D.UI
 			SelectEnd = end;
 		}
 
+		public override void OnGotKeyboardFocus()
+		{
+			base.OnGotKeyboardFocus();
+
+			_lastBlinkStamp = DateTime.Now;
+			_cursorOn = true;
+		}
+
 		private Point GetRenderPositionByIndex(int index)
 		{
 			var bounds = ActualBounds;
