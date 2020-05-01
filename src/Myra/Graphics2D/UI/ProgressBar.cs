@@ -92,29 +92,6 @@ namespace Myra.Graphics2D.UI
 			_filler = style.Filler;
 		}
 
-		protected override Point InternalMeasure(Point availableSize)
-		{
-			var result = Point.Zero;
-
-			if (_filler != null)
-			{
-				var asImage = _filler as IImage;
-				if (asImage != null)
-				{
-					if (Orientation == Orientation.Horizontal)
-					{
-						result.Y = asImage.Size.Y;
-					}
-					else
-					{
-						result.X = asImage.Size.X;
-					}
-				}
-			}
-
-			return result;
-		}
-
 		public override void InternalRender(RenderContext context)
 		{
 			base.InternalRender(context);
