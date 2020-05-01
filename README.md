@@ -1,7 +1,7 @@
 ## Overview
 [![Nuget](https://img.shields.io/nuget/dt/Myra)](https://www.nuget.org/packages/Myra/) [![Build status](https://ci.appveyor.com/api/projects/status/ec4fpr4v0gn9moi7?svg=true)](https://ci.appveyor.com/project/RomanShapiro/myra) [![Chat](https://img.shields.io/discord/628186029488340992.svg)](https://discord.gg/ZeHxhCY)
 
-Myra is UI Library for [MonoGame](http://www.monogame.net/), [FNA](https://github.com/FNA-XNA/FNA) and [Xenko](https://github.com/xenko3d/xenko).  
+Myra is UI Library for [MonoGame](http://www.monogame.net/), [FNA](https://github.com/FNA-XNA/FNA) and [Stride](https://github.com/stride3d/stride).  
 
 ## Features
 * **Rich Set of Widgets.** Myra has following widgets: Button, CheckBox, ComboBox, ListBox, TabControl, Grid, Image, Menu, ProgressBar, ScrollPane, SplitPane(with arbitrary number of splitters), Slider, TextBlock, TextField, SpinButton, Tree, Window, Dialog, FileDialog, ColorPickerDialog and PropertyGrid.
@@ -38,7 +38,7 @@ MyraPad
 ## Credits
 * [MonoGame](http://www.monogame.net/)
 * [FNA](https://github.com/FNA-XNA/FNA)
-* [Xenko](https://github.com/xenko3d/xenko)
+* [Stride](https://github.com/stride3d/stride)
 * [MonoGame.Extended](https://github.com/craftworkgames/MonoGame.Extended)
 * [VisUI](https://github.com/kotcrab/vis-editor/wiki/VisUI)
 * [LibGDX](http://libgdx.badlogicgames.com/)
