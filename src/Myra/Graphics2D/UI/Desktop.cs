@@ -779,17 +779,49 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		static public Widget GetWidget(Func<Widget, bool> Filter)
+		private static Widget GetWidgetBy(Widget root, Func<Widget, bool> filter)
 		{
-			Root root = new Root();
-			Widgets.ToList().ForEach(i => { root.Widgets.Add(i); });
-			return root.FindWidget(Filter);
+			if (filter(root))
+			{
+				return root;
+			}
+
+			var asContainer = root as Container;
+			if (asContainer == null)
+			{
+				return null;
+			}
+
+			for (var i = 0; i < asContainer.ChildrenCount; ++i)
+			{
+				var w = asContainer.GetChild(i);
+				var result = GetWidgetBy(w, filter);
+				if (result != null)
+				{
+					return result;
+				}
+			}
+
+			return null;
 		}
+
+		public static Widget GetWidgetBy(Func<Widget, bool> filter)
+		{
+			foreach (var w in ChildrenCopy)
+			{
+				var result = GetWidgetBy(w, filter);
+				if (result != null)
+				{
+					return result;
+				}
+			}
+
+			return null;
+		}
+
 		static public Widget GetWidgetByID(string ID)
 		{
-			Root root = new Root();
-			Widgets.ToList().ForEach(i => { root.Widgets.Add(i); });
-			return root.FindWidgetById(ID);
+			return GetWidgetBy(w => w.Id == ID);
 		}
 
 		public static int CalculateTotalWidgets(bool visibleOnly)
