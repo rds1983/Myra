@@ -20,7 +20,7 @@
   </ItemGroup>  
  
   <ItemGroup>
-    <PackageReference Include="XNAssets.Stride" Version="0.5.0.9" />
+    <PackageReference Include="XNAssets.Stride" Version="0.5.0.10" />
     <PackageReference Include="info.lundin.math.dll" Version="1.2.6" />
-  </ItemGroup>
+  </ItemGroup>  
 </Project>

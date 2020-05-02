@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 #else
 using Stride.Core.Mathematics;
+using Stride.Input;
 #endif
 
 namespace Myra.Graphics2D.UI
@@ -155,7 +156,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-#if !STRIDE
 		public override void OnKeyDown(Keys k)
 		{
 			base.OnKeyDown(k);
@@ -181,7 +181,6 @@ namespace Myra.Graphics2D.UI
 					break;
 			}
 		}
-#endif
 
 		public override void OnTouchDown()
 		{
