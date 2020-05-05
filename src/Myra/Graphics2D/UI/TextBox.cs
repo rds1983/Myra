@@ -627,23 +627,10 @@ namespace Myra.Graphics2D.UI
 				case Keys.C:
 					if (Desktop.IsControlDown)
 					{
-						if (SelectEnd != SelectStart)
-						{
-							var selectStart = Math.Min(SelectStart, SelectEnd);
-							var selectEnd = Math.Max(SelectStart, SelectEnd);
-
-							var clipboardText = _formattedText.Text.Substring(selectStart, selectEnd - selectStart);
-							try
-							{
-								Clipboard.SetText(clipboardText);
-							}
-							catch (Exception)
-							{
-								MyraEnvironment.InternalClipboard = clipboardText;
-							}
-						}
+						Copy();
 					}
 					break;
+
 				case Keys.V:
 					if (!Readonly && Desktop.IsControlDown)
 					{
@@ -660,6 +647,50 @@ namespace Myra.Graphics2D.UI
 						if (!string.IsNullOrEmpty(clipboardText))
 						{
 							Paste(clipboardText);
+						}
+					}
+					break;
+
+				case Keys.X:
+					if (Desktop.IsControlDown)
+					{
+						Copy();
+						if (!Readonly && SelectStart != SelectEnd)
+						{
+							DeleteSelection();
+						}
+					}
+					break;
+
+				case Keys.D:
+					if (!Readonly && Desktop.IsControlDown)
+					{
+						// nothing selected -> duplicate current line
+						if (SelectStart == SelectEnd)
+						{
+							// get start of line
+							var searchStart = Math.Max(0, SelectStart - 1);
+							var lineStart = Text.LastIndexOf("\n", searchStart);
+							// special case: cursor is in first line
+							if (lineStart == -1) lineStart = 0;
+
+							// get end of line
+							var lineEnd = Text.IndexOf("\n", SelectEnd);
+							// special case: cursor is in last line
+							if (lineEnd == -1) lineEnd = Text.Length;
+
+							var line = Text.Substring(lineStart, lineEnd - lineStart);
+							if (lineStart == 0)
+								line = "\n" + line;
+							Insert(lineEnd, line);
+						} 
+						// duplicate selection
+						else
+						{
+							var start = Math.Min(SelectStart, SelectEnd);
+							var end = Math.Max(SelectStart, SelectEnd);
+							var text = Text.Substring(start, end - start);
+							Insert(end, text);
 						}
 					}
 					break;
@@ -684,6 +715,7 @@ namespace Myra.Graphics2D.UI
 						Redo();
 					}
 					break;
+
 				case Keys.A:
 					if (Desktop.IsControlDown)
 					{
@@ -705,7 +737,6 @@ namespace Myra.Graphics2D.UI
 						UserSetCursorPosition(CursorPosition + 1);
 						UpdateSelectionIfShiftDown();
 					}
-
 					break;
 
 				case Keys.Up:
@@ -802,6 +833,25 @@ namespace Myra.Graphics2D.UI
 						InputChar('\n');
 					}
 					break;
+			}
+		}
+
+		private void Copy()
+		{
+			if (SelectEnd != SelectStart)
+			{
+				var selectStart = Math.Min(SelectStart, SelectEnd);
+				var selectEnd = Math.Max(SelectStart, SelectEnd);
+
+				var clipboardText = _formattedText.Text.Substring(selectStart, selectEnd - selectStart);
+				try
+				{
+					Clipboard.SetText(clipboardText);
+				}
+				catch (Exception)
+				{
+					MyraEnvironment.InternalClipboard = clipboardText;
+				}
 			}
 		}
 
