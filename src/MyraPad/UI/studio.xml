@@ -1,5 +1,5 @@
 <Project>
-  <Project.ExportOptions Namespace="MyraPad.UI" Class="StudioWidget" OutputPath="D:/Projects/Myra/src/MyraPad/UI" />
+  <Project.ExportOptions Namespace="MyraPad.UI" Class="StudioWidget" OutputPath="C:/Projects/Myra/src/MyraPad/UI" />
   <VerticalStackPanel>
     <VerticalStackPanel.Proportions>
       <Proportion Type="Auto" />
@@ -25,6 +25,8 @@
         <MenuItem Text="Select &amp;All" ShortcutText="Ctrl+A" Id="_menuItemSelectAll" />
         <MenuItem Text="&amp;Copy" ShortcutText="Ctrl+Insert, Ctrl+C" Id="_menuItemCopy" />
         <MenuItem Text="&amp;Paste" ShortcutText="Shift+Insert, Ctrl+V" Id="_menuItemPaste" />
+        <MenuItem Text="Cu&amp;t" ShortcutText="Ctrl+X" Id="_menuItemCut" />
+        <MenuItem Text="Duplicate" ShortcutText="Ctrl+D" Id="_menuItemDuplicate" />
         <MenuSeparator />
         <MenuItem Text="&amp;Format Source" ShortcutText="Ctrl+F" Id="_menuEditFormatSource" />
       </MenuItem>
@@ -46,7 +48,7 @@
         <HorizontalSeparator />
         <Label Text="Reloading..." Id="_textStatus" />
       </VerticalStackPanel>
-      <VerticalStackPanel Background="#000000FF" >
+      <VerticalStackPanel Background="#000000FF">
         <VerticalStackPanel.Proportions>
           <Proportion Type="Fill" />
         </VerticalStackPanel.Proportions>
