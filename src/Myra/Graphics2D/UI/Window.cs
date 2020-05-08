@@ -122,7 +122,7 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
-		[Category("Appearance")]
+		[Category("Behavior")]
 		[DefaultValue(true)]
 		public bool IsMovable { get => _isMovable; set => _isMovable = value; }
 
