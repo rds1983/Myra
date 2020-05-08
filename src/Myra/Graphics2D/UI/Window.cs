@@ -33,6 +33,7 @@ namespace Myra.Graphics2D.UI
 		private readonly Label _titleLabel;
 		private Widget _content;
 		private Widget _previousMouseWheelFocus;
+		private bool _isMovable = false;
 
 		[Category("Appearance")]
 		public string Title
@@ -120,6 +121,10 @@ namespace Myra.Graphics2D.UI
 		{
 			get; set;
 		}
+
+		[Category("Behavior")]
+		[DefaultValue(true)]
+		public bool IsMovable { get => _isMovable; set => _isMovable = value; }
 
 		[DefaultValue(HorizontalAlignment.Left)]
 		public override HorizontalAlignment HorizontalAlignment
@@ -259,7 +264,7 @@ namespace Myra.Graphics2D.UI
 
 		private void DesktopOnTouchMoved(object sender, EventArgs args)
 		{
-			if (_startPos == null)
+			if (_startPos == null || !IsMovable)
 			{
 				return;
 			}
