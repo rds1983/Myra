@@ -47,8 +47,8 @@ namespace Myra.Graphics2D.UI
 	[Flags]
 	public enum DragDirection
 	{
-		All = 0,
 		Vertical = 1,
-		Horizontal = 2
+		Horizontal = 2,
+		Both = Vertical | Horizontal
 	}
 }

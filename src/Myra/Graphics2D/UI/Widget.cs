@@ -527,7 +527,8 @@ namespace Myra.Graphics2D.UI
 		public bool IsDraggable { get; set; }
 
 		[Category("Behavior")]
-		public DragDirection DragDirection { get; set; }
+		[DefaultValue(DragDirection.Both)]
+		public DragDirection DragDirection { get; set; } = DragDirection.Both;
 
 		[Category("Behavior")]
 		public Widget DragHandle { get; set; }
