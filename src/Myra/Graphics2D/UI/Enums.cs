@@ -1,3 +1,5 @@
+using System;
+
 namespace Myra.Graphics2D.UI
 {
 	public enum HorizontalAlignment
@@ -40,5 +42,13 @@ namespace Myra.Graphics2D.UI
 		/// Multiple items can be selected
 		/// </summary>
 		Multiple
+	}
+
+	[Flags]
+	public enum DragDirection
+	{
+		Vertical = 1,
+		Horizontal = 2,
+		Both = Vertical | Horizontal
 	}
 }
