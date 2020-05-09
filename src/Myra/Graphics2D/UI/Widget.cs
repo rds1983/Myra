@@ -26,6 +26,7 @@ namespace Myra.Graphics2D.UI
 			Invalid
 		}
 
+		private Point? _startPos;
 		private Thickness _margin, _borderThickness, _padding;
 		private int _left, _top;
 		private int? _minWidth, _minHeight, _maxWidth, _maxHeight, _width, _height;
@@ -522,6 +523,15 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[Category("Behavior")]
+		public bool IsDraggable { get; set; }
+
+		[Category("Behavior")]
+		public DragDirection DragDirection { get; set; }
+
+		[Category("Behavior")]
+		public Widget DragHandle { get; set; }
+
 		/// <summary>
 		/// Determines whether a widget had been placed on Desktop
 		/// </summary>
@@ -536,6 +546,20 @@ namespace Myra.Graphics2D.UI
 
 			internal set
 			{
+				if (IsPlaced)
+				{
+					if (Parent != null)
+					{
+						Parent.TouchMoved -= DesktopOnTouchMoved;
+						Parent.TouchUp -= DesktopTouchUp;
+					}
+					else
+					{
+						Desktop.TouchMoved -= DesktopOnTouchMoved;
+						Desktop.TouchUp -= DesktopTouchUp;
+					}
+				}
+
 				_isPlaced = value;
 				IsMouseInside = false;
 				IsTouchInside = false;
@@ -543,6 +567,20 @@ namespace Myra.Graphics2D.UI
 				if (_isPlaced)
 				{
 					InvalidateLayout();
+				}
+
+				if (IsPlaced)
+				{
+					if (Parent != null)
+					{
+						Parent.TouchMoved += DesktopOnTouchMoved;
+						Parent.TouchUp += DesktopTouchUp;
+					}
+					else
+					{
+						Desktop.TouchMoved += DesktopOnTouchMoved;
+						Desktop.TouchUp += DesktopTouchUp;
+					}
 				}
 			}
 		}
@@ -1333,11 +1371,31 @@ namespace Myra.Graphics2D.UI
 				Desktop.FocusedMouseWheelWidget = this;
 			}
 
+			var x = Bounds.X;
+			var y = Bounds.Y;
+
+			var bounds = DragHandle != null
+				? new Rectangle(
+					x, 
+					y,
+					DragHandle.Bounds.Right - x,
+					DragHandle.Bounds.Bottom - y
+				) : Rectangle.Empty;
+			
+			var touchPos = Desktop.TouchPosition;
+
+			if (bounds == Rectangle.Empty || bounds.Contains(touchPos))
+			{
+				_startPos = new Point(touchPos.X - ActualBounds.Location.X,
+					touchPos.Y - ActualBounds.Location.Y);
+			}
+
 			TouchDown.Invoke(this);
 		}
 
 		public virtual void OnTouchUp()
 		{
+			_startPos = null;
 			IsTouchInside = false;
 			TouchUp.Invoke(this);
 		}
@@ -1418,6 +1476,72 @@ namespace Myra.Graphics2D.UI
 		public void SetMouseWheelFocus()
 		{
 			Desktop.FocusedMouseWheelWidget = this;
+		}
+
+		private void DesktopOnTouchMoved(object sender, EventArgs args)
+		{
+			if (_startPos == null || !IsDraggable)
+			{
+				return;
+			}
+
+			var position = new Point(Desktop.TouchPosition.X - _startPos.Value.X,
+				Desktop.TouchPosition.Y - _startPos.Value.Y);
+
+			if (DragDirection.HasFlag(DragDirection.Horizontal))
+			{ 
+				if (position.X < 0)
+				{
+					position.X = 0;
+				}
+
+				if (Parent != null)
+				{
+					if (position.X + Bounds.Width > Parent.Bounds.Right)
+					{
+						position.X = Parent.Bounds.Right - Bounds.Width;
+					}
+				}
+				else
+				{
+					if (position.X + Bounds.Width > Desktop.InternalBounds.Right)
+					{
+						position.X = Desktop.InternalBounds.Right - Bounds.Width;
+					}
+				}
+
+				Left = position.X;
+			}
+
+			if (DragDirection.HasFlag(DragDirection.Vertical))
+			{ 
+				if (position.Y < 0)
+				{
+					position.Y = 0;
+				}
+
+				if (Parent != null)
+				{
+					if (position.Y + Bounds.Height > Parent.Bounds.Bottom)
+					{
+						position.Y = Parent.Bounds.Bottom - Bounds.Height;
+					}
+				}
+				else
+				{
+					if (position.Y + Bounds.Height > Desktop.InternalBounds.Bottom)
+					{
+						position.Y = Desktop.InternalBounds.Bottom - Bounds.Height;
+					}
+				}
+
+				Top = position.Y;
+			}
+		}
+
+		private void DesktopTouchUp(object sender, EventArgs args)
+		{
+			_startPos = null;
 		}
 	}
 }

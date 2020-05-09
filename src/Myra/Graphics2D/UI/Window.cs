@@ -29,12 +29,10 @@ namespace Myra.Graphics2D.UI
 
 	public class Window : SingleItemContainer<VerticalStackPanel>, IContent
 	{
-		private Point? _startPos;
 		private readonly Label _titleLabel;
 		private Widget _content;
-		private Widget _previousMouseWheelFocus;
-		private bool _isMovable = false;
-
+		private Widget _previousMouseWheelFocus; 
+		
 		[Category("Appearance")]
 		public string Title
 		{
@@ -122,10 +120,6 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
-		[Category("Behavior")]
-		[DefaultValue(true)]
-		public bool IsMovable { get => _isMovable; set => _isMovable = value; }
-
 		[DefaultValue(HorizontalAlignment.Left)]
 		public override HorizontalAlignment HorizontalAlignment
 		{
@@ -157,53 +151,13 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
-		public override bool IsPlaced
-		{
-			get
-			{
-				return base.IsPlaced;
-			}
-
-			internal set
-			{
-				if (IsPlaced)
-				{
-					if (Parent != null)
-					{
-						Parent.TouchMoved -= DesktopOnTouchMoved;
-						Parent.TouchUp -= DesktopTouchUp;
-					}
-					else
-					{
-						Desktop.TouchMoved -= DesktopOnTouchMoved;
-						Desktop.TouchUp -= DesktopTouchUp;
-					}
-				}
-
-				base.IsPlaced = value;
-
-				if (IsPlaced)
-				{
-					if (Parent != null)
-					{
-						Parent.TouchMoved += DesktopOnTouchMoved;
-						Parent.TouchUp += DesktopTouchUp;
-					}
-					else
-					{
-						Desktop.TouchMoved += DesktopOnTouchMoved;
-						Desktop.TouchUp += DesktopTouchUp;
-					}
-				}
-			}
-		}
-
 		public event EventHandler<WindowClosingEventArgs> Closing;
 		public event EventHandler Closed;
 
 		public Window(string styleName = Stylesheet.DefaultStyleName)
 		{
 			IsModal = true;
+			IsDraggable = true;
 
 			InternalChild = new VerticalStackPanel();
 
@@ -220,6 +174,7 @@ namespace Myra.Graphics2D.UI
 			{
 				ColumnSpacing = 8
 			};
+			DragHandle = TitleGrid;
 
 			TitleGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
 			TitleGrid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
@@ -262,65 +217,6 @@ namespace Myra.Graphics2D.UI
 			Top = (ContainerBounds.Height - size.Y) / 2;
 		}
 
-		private void DesktopOnTouchMoved(object sender, EventArgs args)
-		{
-			if (_startPos == null || !IsMovable)
-			{
-				return;
-			}
-
-			var position = new Point(Desktop.TouchPosition.X - _startPos.Value.X,
-				Desktop.TouchPosition.Y - _startPos.Value.Y);
-
-			if (position.X < 0)
-			{
-				position.X = 0;
-			}
-
-			if (Parent != null)
-			{
-				if (position.X + Bounds.Width > Parent.Bounds.Right)
-				{
-					position.X = Parent.Bounds.Right - Bounds.Width;
-				}
-			}
-			else
-			{
-				if (position.X + Bounds.Width > Desktop.InternalBounds.Right)
-				{
-					position.X = Desktop.InternalBounds.Right - Bounds.Width;
-				}
-			}
-
-			if (position.Y < 0)
-			{
-				position.Y = 0;
-			}
-
-			if (Parent != null)
-			{
-				if (position.Y + Bounds.Height > Parent.Bounds.Bottom)
-				{
-					position.Y = Parent.Bounds.Bottom - Bounds.Height;
-				}
-			}
-			else
-			{
-				if (position.Y + Bounds.Height > Desktop.InternalBounds.Bottom)
-				{
-					position.Y = Desktop.InternalBounds.Bottom - Bounds.Height;
-				}
-			}
-
-			Left = position.X;
-			Top = position.Y;
-		}
-
-		private void DesktopTouchUp(object sender, EventArgs args)
-		{
-			_startPos = null;
-		}
-
 		private void UpdateActiveWindow()
 		{
 			var widgets = Desktop.ChildrenCopy;
@@ -340,36 +236,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void OnTouchUp()
-		{
-			base.OnTouchUp();
-
-			_startPos = null;
-		}
-
 		public override void OnTouchDown()
 		{
 			UpdateActiveWindow();
-
 			base.OnTouchDown();
-
-			var x = Bounds.X;
-			var y = Bounds.Y;
-			var bounds = new Rectangle(x, y,
-				TitleGrid.Bounds.Right - x,
-				TitleGrid.Bounds.Bottom - y);
-			var touchPos = Desktop.TouchPosition;
-
-			if (CloseButton.Visible && CloseButton.Bounds.Contains(touchPos))
-			{
-				return;
-			}
-
-			if (bounds.Contains(touchPos))
-			{
-				_startPos = new Point(touchPos.X - ActualBounds.Location.X,
-					touchPos.Y - ActualBounds.Location.Y);
-			}
 		}
 
 		public override void OnKeyDown(Keys k)
