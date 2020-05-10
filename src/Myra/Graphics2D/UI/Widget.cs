@@ -6,6 +6,8 @@ using System.Xml.Serialization;
 using Myra.MML;
 using Myra.Graphics2D.UI.Properties;
 using Myra.Attributes;
+using System.Diagnostics.Contracts;
+using System.Linq;
 
 #if !STRIDE
 using Microsoft.Xna.Framework;
@@ -776,8 +778,8 @@ namespace Myra.Graphics2D.UI
 			get
 			{
 				return Margin.Left + Margin.Right +
-				  BorderThickness.Left + BorderThickness.Right +
-				  Padding.Left + Padding.Right;
+					BorderThickness.Left + BorderThickness.Right +
+					Padding.Left + Padding.Right;
 			}
 		}
 
@@ -788,8 +790,8 @@ namespace Myra.Graphics2D.UI
 			get
 			{
 				return Margin.Top + Margin.Bottom +
-				  BorderThickness.Top + BorderThickness.Bottom +
-				  Padding.Top + Padding.Bottom;
+					BorderThickness.Top + BorderThickness.Bottom +
+					Padding.Top + Padding.Bottom;
 			}
 		}
 
@@ -910,6 +912,36 @@ namespace Myra.Graphics2D.UI
 			}
 
 			return result;
+		}
+
+		public void BringToFront()
+		{
+			if (Parent != null && !(Parent is IMultipleItemsContainer))
+			{
+				return;
+			}
+
+			var widgets = (Parent as IMultipleItemsContainer)?.Widgets ?? Desktop.Widgets;
+
+			if (widgets[widgets.Count - 1] == this) return;
+
+			widgets.Remove(this);
+			widgets.Add(this);
+		}
+
+		public void BringToBack()
+		{
+			if (Parent != null && !(Parent is IMultipleItemsContainer))
+			{
+				return;
+			}
+
+			var widgets = (Parent as IMultipleItemsContainer)?.Widgets ?? Desktop.Widgets;
+
+			if (widgets[widgets.Count - 1] == this) return;
+
+			widgets.Remove(this);
+			widgets.Insert(0, this);
 		}
 
 		public void Render(RenderContext context)
@@ -1148,7 +1180,7 @@ namespace Myra.Graphics2D.UI
 				// Full rearrange
 				Point size;
 				if (HorizontalAlignment != HorizontalAlignment.Stretch ||
-					VerticalAlignment != VerticalAlignment.Stretch)
+						VerticalAlignment != VerticalAlignment.Stretch)
 				{
 					size = Measure(_containerBounds.Size());
 				}
@@ -1263,7 +1295,8 @@ namespace Myra.Graphics2D.UI
 			if (Parent != null)
 			{
 				Parent.InvalidateMeasure();
-			} else
+			}
+			else
 			{
 				Desktop.InvalidateLayout();
 			}
@@ -1376,19 +1409,19 @@ namespace Myra.Graphics2D.UI
 			var y = Bounds.Y;
 
 			var bounds = DragHandle != null
-				? new Rectangle(
-					x, 
-					y,
-					DragHandle.Bounds.Right - x,
-					DragHandle.Bounds.Bottom - y
-				) : Rectangle.Empty;
-			
+					? new Rectangle(
+							x,
+							y,
+							DragHandle.Bounds.Right - x,
+							DragHandle.Bounds.Bottom - y
+					) : Rectangle.Empty;
+
 			var touchPos = Desktop.TouchPosition;
 
 			if (bounds == Rectangle.Empty || bounds.Contains(touchPos))
 			{
 				_startPos = new Point(touchPos.X - ActualBounds.Location.X,
-					touchPos.Y - ActualBounds.Location.Y);
+						touchPos.Y - ActualBounds.Location.Y);
 			}
 
 			TouchDown.Invoke(this);
@@ -1487,10 +1520,10 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var position = new Point(Desktop.TouchPosition.X - _startPos.Value.X,
-				Desktop.TouchPosition.Y - _startPos.Value.Y);
+					Desktop.TouchPosition.Y - _startPos.Value.Y);
 
 			if (DragDirection.HasFlag(DragDirection.Horizontal))
-			{ 
+			{
 				if (position.X < 0)
 				{
 					position.X = 0;
@@ -1515,7 +1548,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			if (DragDirection.HasFlag(DragDirection.Vertical))
-			{ 
+			{
 				if (position.Y < 0)
 				{
 					position.Y = 0;
