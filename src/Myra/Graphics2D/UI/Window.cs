@@ -31,8 +31,8 @@ namespace Myra.Graphics2D.UI
 	{
 		private readonly Label _titleLabel;
 		private Widget _content;
-		private Widget _previousMouseWheelFocus; 
-		
+		private Widget _previousMouseWheelFocus;
+
 		[Category("Appearance")]
 		public string Title
 		{
@@ -217,28 +217,9 @@ namespace Myra.Graphics2D.UI
 			Top = (ContainerBounds.Height - size.Y) / 2;
 		}
 
-		private void UpdateActiveWindow()
-		{
-			var widgets = Desktop.ChildrenCopy;
-			var lastWidget = widgets[widgets.Count - 1];
-			if (lastWidget != this)
-			{
-				// Make active window top
-				var activeIndex = widgets.IndexOf(this);
-				var lastIndex = widgets.IndexOf(lastWidget);
-
-				for (var i = activeIndex; i < lastIndex; ++i)
-				{
-					widgets[i] = widgets[i + 1];
-				}
-
-				widgets[lastIndex] = this;
-			}
-		}
-
 		public override void OnTouchDown()
 		{
-			UpdateActiveWindow();
+			BringToFront();
 			base.OnTouchDown();
 		}
 
