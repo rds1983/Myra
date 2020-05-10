@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Myra.Utility;
+using Myra.Graphics2D.UI;
 
 #if !STRIDE
 using Microsoft.Xna.Framework;
@@ -397,7 +398,7 @@ namespace Myra.Graphics2D.Text
 				line.LineIndex = i;
 				line.Top = _size.Y;
 
-				for(var j = 0; j < line.Chunks.Count; ++j)
+				for (var j = 0; j < line.Chunks.Count; ++j)
 				{
 					var chunk = line.Chunks[j];
 					chunk.LineIndex = line.LineIndex;
@@ -438,7 +439,7 @@ namespace Myra.Graphics2D.Text
 				return _lines[0];
 			}
 
-			for(var i = 0; i < _lines.Count; ++i)
+			for (var i = 0; i < _lines.Count; ++i)
 			{
 				var s = _lines[i];
 				if (s.TextStartIndex <= cursorPosition && cursorPosition < s.TextStartIndex + s.Count)
@@ -491,15 +492,28 @@ namespace Myra.Graphics2D.Text
 			return null;
 		}
 
-		public void Draw(SpriteBatch batch, Point position, Rectangle clip, Color textColor, bool useChunkColor, float opacity = 1.0f)
+		public void Draw(SpriteBatch batch, TextAlign align, Rectangle bounds, Rectangle clip, Color textColor, bool useChunkColor, float opacity = 1.0f)
 		{
-			var y = position.Y;
+			var y = bounds.Y;
 			foreach (var line in Lines)
 			{
 				if (y + line.Size.Y >= clip.Top && y <= clip.Bottom)
 				{
-					textColor = line.Draw(batch, new Point(position.X, y), textColor, useChunkColor, opacity);
-				} else
+					int x = bounds.X;
+
+					switch (align)
+					{
+						case TextAlign.Center:
+							x = bounds.X + (bounds.Width / 2) - (line.Size.X / 2);
+							break;
+						case TextAlign.Right:
+							x = bounds.X + bounds.Width - line.Size.X;
+							break;
+					}
+
+					textColor = line.Draw(batch, new Point(x, y), textColor, useChunkColor, opacity);
+				}
+				else
 				{
 					foreach (var chunk in line.Chunks)
 					{

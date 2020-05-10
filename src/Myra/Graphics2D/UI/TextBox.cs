@@ -1300,7 +1300,8 @@ namespace Myra.Graphics2D.UI
 
 			var p = new Point(centeredBounds.Location.X - _internalScrolling.X,
 				centeredBounds.Location.Y - _internalScrolling.Y);
-			_formattedText.Draw(context.Batch, p, context.View, textColor, false, context.Opacity);
+
+			_formattedText.Draw(context.Batch, TextAlign.Left, bounds, context.View, textColor, false, context.Opacity);
 
 			if (!IsKeyboardFocused)
 			{

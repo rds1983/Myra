@@ -2,6 +2,13 @@ using System;
 
 namespace Myra.Graphics2D.UI
 {
+	public enum TextAlign
+	{
+		Left,
+		Center,
+		Right
+	}
+
 	public enum HorizontalAlignment
 	{
 		Left,
