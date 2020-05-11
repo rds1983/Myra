@@ -83,5 +83,22 @@ namespace Myra.Graphics2D.TextureAtlases
 				Vector2.Zero);
 #endif
 		}
+
+		public virtual void Draw(SpriteBatch batch, Vector2 pos, Color color)
+		{
+#if !STRIDE
+			batch.Draw(Texture,
+				pos,
+				Bounds,
+				color);
+#else
+			batch.Draw(Texture,
+				new RectangleF(dest.X, dest.Y, Bounds.Width, Bounds.Height),
+				new RectangleF(Bounds.X, Bounds.Y, Bounds.Width, Bounds.Height),
+				color,
+				0.0f,
+				Vector2.Zero);
+#endif
+		}
 	}
 }

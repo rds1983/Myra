@@ -91,6 +91,33 @@ namespace Myra.Graphics2D.TextureAtlases
 			return doc.ToString();
 		}
 
+		/// <summary>
+		/// Loads TextureAtlas from either LibGDX .atlas or Myra .xml format
+		/// </summary>
+		/// <param name="data"></param>
+		/// <param name="textureGetter"></param>
+		/// <returns></returns>
+		public static TextureRegionAtlas Load(string data, Func<string, Texture2D> textureGetter)
+		{
+			bool isXml;
+			try
+			{
+				var xDoc = XDocument.Parse(data);
+				isXml = true;
+			}
+			catch (Exception)
+			{
+				isXml = false;
+			}
+
+			if (isXml)
+			{
+				return FromXml(data, textureGetter);
+			}
+
+			return Gdx.FromGDX(data, textureGetter);
+		}
+
 		public static TextureRegionAtlas FromXml(string xml, Func<string, Texture2D> textureGetter)
 		{
 			var doc = XDocument.Parse(xml);

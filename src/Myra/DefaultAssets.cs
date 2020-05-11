@@ -1,7 +1,6 @@
 ﻿using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
-using System.Reflection;
 using XNAssets;
 
 #if !STRIDE
@@ -19,7 +18,7 @@ namespace Myra
 {
 	public static class DefaultAssets
 	{
-		private static readonly AssetManager _assetManager = new AssetManager(MyraEnvironment.GraphicsDevice, new ResourceAssetResolver(typeof(DefaultAssets).Assembly, "Resources."));
+		private static AssetManager _assetManager;
 		private static SpriteFont _font;
 		private static SpriteFont _fontSmall;
 		private static TextureRegionAtlas _uiTextureRegionAtlas;
@@ -29,11 +28,16 @@ namespace Myra
 		private static Texture2D _white;
 		private static TextureRegion _whiteRegion;
 
-		private static Assembly Assembly
+		private static AssetManager AssetManager
 		{
 			get
 			{
-				return typeof(DefaultAssets).Assembly;
+				if (_assetManager == null)
+				{
+					_assetManager = new AssetManager(MyraEnvironment.GraphicsDevice, new ResourceAssetResolver(typeof(DefaultAssets).Assembly, "Resources."));
+				}
+
+				return _assetManager;
 			}
 		}
 
@@ -73,7 +77,7 @@ namespace Myra
 					return _font;
 				}
 
-				_font = _assetManager.Load<SpriteFont>("default_font.fnt");
+				_font = AssetManager.Load<SpriteFont>("default_font.fnt");
 				return _font;
 			}
 		}
@@ -87,7 +91,7 @@ namespace Myra
 					return _fontSmall;
 				}
 
-				_fontSmall = _assetManager.Load<SpriteFont>("default_font_small.fnt");
+				_fontSmall = AssetManager.Load<SpriteFont>("default_font_small.fnt");
 				return _fontSmall;
 			}
 		}
@@ -101,7 +105,7 @@ namespace Myra
 					return _uiTextureRegionAtlas;
 				}
 
-				_uiTextureRegionAtlas = _assetManager.Load<TextureRegionAtlas>("default_ui_skin.atlas");
+				_uiTextureRegionAtlas = AssetManager.Load<TextureRegionAtlas>("default_ui_skin.atlas");
 				return _uiTextureRegionAtlas;
 			}
 		}
@@ -115,7 +119,7 @@ namespace Myra
 					return _uiStylesheet;
 				}
 
-				_uiStylesheet = _assetManager.Load<Stylesheet>("default_ui_skin.xml");
+				_uiStylesheet = AssetManager.Load<Stylesheet>("default_ui_skin.xml");
 				return _uiStylesheet;
 			}
 		}
@@ -129,7 +133,7 @@ namespace Myra
 					return _uiBitmap;
 				}
 
-				_uiBitmap = _assetManager.Load<Texture2D>("default_ui_skin_atlas.png");
+				_uiBitmap = AssetManager.Load<Texture2D>("default_ui_skin_atlas.png");
 				return _uiBitmap;
 			}
 		}
@@ -166,7 +170,11 @@ namespace Myra
 			_uiStylesheet = null;
 			Stylesheet.Current = null;
 
-			_assetManager.ClearCache();
+			if (_assetManager != null)
+			{
+				_assetManager.ClearCache();
+				_assetManager = null;
+			}
 
 			_whiteRegion = null;
 			if (_white != null)

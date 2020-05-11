@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Myra.Graphics2D;
-using Myra.Graphics2D.TextureAtlases;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Myra.Tools.ToMyraAtlasConverter
+namespace Myra.Graphics2D.TextureAtlases
 {
 	public static class Gdx
 	{
