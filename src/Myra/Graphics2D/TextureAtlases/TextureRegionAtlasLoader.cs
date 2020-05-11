@@ -1,4 +1,8 @@
 using XNAssets;
+using System.Xml.Linq;
+using System;
+using Myra.Tools.ToMyraAtlasConverter;
+using System.IO;
 
 #if !STRIDE
 using Microsoft.Xna.Framework.Graphics;
@@ -12,8 +16,24 @@ namespace Myra.Graphics2D.TextureAtlases
 	{
 		public TextureRegionAtlas Load(AssetLoaderContext context, string assetName)
 		{
-			var xml = context.Load<string>(assetName);
-			return TextureRegionAtlas.FromXml(xml, name => context.Load<Texture2D>(name));
+			var data = context.Load<string>(assetName);
+			bool isXml;
+			try
+			{
+				var xDoc = XDocument.Parse(data);
+				isXml = true;
+			}
+			catch(Exception)
+			{
+				isXml = false;
+			}
+
+			if (isXml)
+			{
+				return TextureRegionAtlas.FromXml(data, name => context.Load<Texture2D>(name));
+			}
+
+			return Gdx.FromGDX(data, name => context.Load<Texture2D>(name));
 		}
 	}
 }

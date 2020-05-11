@@ -137,7 +137,7 @@ namespace Myra.Tools.ToMyraAtlasConverter
 							SurfaceFormat format;
 							if (!Enum.TryParse(value, out format))
 							{
-#if !XENKO
+#if !STRIDE
 								format = SurfaceFormat.Color;
 #else
 								format = SurfaceFormat.R8G8B8A8_SNorm;
