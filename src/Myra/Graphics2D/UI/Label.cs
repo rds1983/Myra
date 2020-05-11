@@ -132,6 +132,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[DefaultValue(TextAlign.Left)]
 		public TextAlign TextAlign
 		{
 			get; set;

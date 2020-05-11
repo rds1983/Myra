@@ -146,6 +146,13 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[DefaultValue(true)]
+		public override bool IsDraggable
+		{
+			get => base.IsDraggable;
+			set => base.IsDraggable = value;
+		}
+
 		private bool IsWindowPlaced
 		{
 			get; set;

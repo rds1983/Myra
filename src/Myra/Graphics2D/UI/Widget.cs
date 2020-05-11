@@ -526,7 +526,8 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Behavior")]
-		public bool IsDraggable { get; set; }
+		[DefaultValue(false)]
+		public virtual bool IsDraggable { get; set; }
 
 		[Category("Behavior")]
 		[DefaultValue(DragDirection.Both)]
