@@ -1,72 +1,50 @@
 <Project>
   <Project.ExportOptions Namespace="Myra.Graphics2D.UI.ColorPicker" Class="ColorPickerDialog" OutputPath="D:\Projects\Myra\src\Myra\Graphics2D\UI\ColorPicker" />
-  <Dialog Title="Color Picker" Left="251" Top="38" Width="450">
-    <VerticalStackPanel>
-      <VerticalStackPanel.Proportions>
-        <Proportion Type="Fill" Value="100" />
-      </VerticalStackPanel.Proportions>
-      <Image Height="50" HorizontalAlignment="Stretch" Id="_imageColor" />
-      <HorizontalSeparator Height="4" />
-      <Grid>
-        <Grid.ColumnsProportions>
-          <Proportion Type="Part" />
+  <Dialog Title="Color Picker" Left="482" Top="70" Width="450">
+    <VerticalStackPanel Spacing="8" Padding="10, 0, 10, 5">
+      <HorizontalStackPanel Spacing="8">
+        <HorizontalStackPanel.Proportions>
           <Proportion Type="Auto" />
-          <Proportion Type="Part" />
-        </Grid.ColumnsProportions>
-        <Grid.RowsProportions>
           <Proportion Type="Auto" />
-        </Grid.RowsProportions>
-        <Grid ColumnSpacing="8" RowSpacing="4" Padding="0, 4">
-          <Grid.DefaultRowProportion Type="Auto" />
+          <Proportion Type="Fill" />
+        </HorizontalStackPanel.Proportions>
+        <Panel Width="147" Height="147">
+          <Image Id="_colorWheel" />
+          <Image BorderThickness="1" Padding="4" HorizontalAlignment="Center" VerticalAlignment="Center" Enabled="False" Background="#FFFFFFFF" Border="#000000" Id="_hsPicker" />
+        </Panel>
+        <Panel>
+          <Image Width="10" Height="147" BorderThickness="1" Border="#000000" Id="_gradient" />
+          <Image Margin="0, 1" BorderThickness="1" Padding="4" HorizontalAlignment="Center" Enabled="False" Background="#FFFFFFFF" Border="#000000" Id="_vPicker" />
+        </Panel>
+        <Grid ColumnSpacing="8" RowSpacing="6" VerticalAlignment="Top">
           <Grid.ColumnsProportions>
             <Proportion Type="Auto" />
-            <Proportion Type="Pixels" Value="50" />
             <Proportion Type="Fill" />
+            <Proportion Type="Pixels" Value="60" />
           </Grid.ColumnsProportions>
-          <Label Text="R" VerticalAlignment="Center" />
-          <SpinButton Maximum="255" Minimum="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" GridColumn="1" Id="_spinButtonR" />
-          <HorizontalSlider Maximum="255" VerticalAlignment="Center" GridColumn="2" Id="_sliderR" />
-          <Label Text="G" VerticalAlignment="Center" GridRow="1" />
-          <SpinButton Maximum="255" Minimum="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" GridColumn="1" GridRow="1" Id="_spinButtonG" />
-          <HorizontalSlider Maximum="255" VerticalAlignment="Center" GridColumn="2" GridRow="1" Id="_sliderG" />
-          <Label Text="B" GridRow="2" />
-          <SpinButton Maximum="255" Minimum="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" GridColumn="1" GridRow="2" Id="_spinButtonB" />
-          <HorizontalSlider Maximum="255" VerticalAlignment="Center" GridColumn="2" GridRow="2" Id="_sliderB" />
-          <Label Text="A" GridRow="3" />
-          <SpinButton Maximum="255" Minimum="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" GridColumn="1" GridRow="3" Id="_spinButtonA" />
-          <HorizontalSlider Maximum="255" VerticalAlignment="Center" GridColumn="2" GridRow="3" Id="_sliderA" />
-        </Grid>
-        <VerticalSeparator Width="3" GridColumn="1" />
-        <Grid ColumnSpacing="8" RowSpacing="5" Padding="0, 4" GridColumn="2">
-          <Grid.DefaultRowProportion Type="Auto" />
-          <Grid.ColumnsProportions>
+          <Grid.RowsProportions>
+            <Proportion Type="Pixels" Value="40" />
             <Proportion Type="Auto" />
-            <Proportion Type="Pixels" Value="50" />
-            <Proportion Type="Fill" />
-          </Grid.ColumnsProportions>
-          <Label Text="H" />
-          <SpinButton Maximum="360" Minimum="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" GridColumn="1" Id="_spinButtonH" />
-          <HorizontalSlider Maximum="360" VerticalAlignment="Center" GridColumn="2" Id="_sliderH" />
-          <Label Text="S" GridRow="1" />
-          <SpinButton Maximum="100" Minimum="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" GridColumn="1" GridRow="1" Id="_spinButtonS" />
-          <HorizontalSlider VerticalAlignment="Center" GridColumn="2" GridRow="1" Id="_sliderS" />
-          <Label Text="V" GridRow="2" />
-          <SpinButton Maximum="100" Minimum="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" GridColumn="1" GridRow="2" Id="_spinButtonV" />
-          <HorizontalSlider VerticalAlignment="Center" GridColumn="2" GridRow="2" Id="_sliderV" />
-          <Label Text="#" GridRow="3" />
-          <TextBox VerticalAlignment="Center" GridColumn="1" GridRow="3" GridColumnSpan="2" Id="_textFieldHex" />
+            <Proportion Type="Auto" />
+            <Proportion Type="Auto" />
+            <Proportion Type="Auto" />
+            <Proportion Type="Auto" />
+          </Grid.RowsProportions>
+          <Image Width="40" HorizontalAlignment="Center" VerticalAlignment="Stretch" GridColumnSpan="3" Background="#FFFFFFFF" Id="_colorBackground" />
+          <Image Width="40" HorizontalAlignment="Center" VerticalAlignment="Stretch" GridColumnSpan="3" Id="_colorDisplay" />
+          <Label Text="RGB" GridRow="1" />
+          <TextBox GridColumn="1" GridRow="1" GridColumnSpan="2" Id="_inputRGB" />
+          <Label Text="HSV" GridRow="2" />
+          <TextBox GridColumn="1" GridRow="2" GridColumnSpan="2" Id="_inputHSV" />
+          <Label Text="HEX" GridRow="3" />
+          <TextBox GridColumn="1" GridRow="3" GridColumnSpan="2" Id="_inputHEX" />
+          <Label Text="Alpha" GridRow="4" />
+          <TextBox GridColumn="2" GridRow="4" Id="_inputAlpha" />
+          <HorizontalSlider Maximum="255" Height="21" GridColumn="1" GridRow="4" Id="_sliderAlpha" />
+          <TextButton Text="Save Color" HorizontalAlignment="Right" GridRow="5" GridColumnSpan="3" Id="_saveColor" />
         </Grid>
-      </Grid>
-      <HorizontalSeparator Height="4" />
-      <Grid RowSpacing="4">
-        <Grid.DefaultRowProportion Type="Auto" />
-        <Grid ColumnSpacing="4" RowSpacing="4" GridSelectionMode="Cell" Height="100" Id="_gridUserColors">
-          <Grid.DefaultColumnProportion Type="Part" />
-          <Grid.DefaultRowProportion Type="Part" />
-        </Grid>
-        <TextButton Text="Save Color" HorizontalAlignment="Right" GridRow="1" Id="_buttonSaveColor" />
-      </Grid>
-      <HorizontalSeparator Height="4" />
+      </HorizontalStackPanel>
+      <Grid ColumnSpacing="8" RowSpacing="8" GridSelectionMode="Cell" Height="80" Padding="4" Id="_userColors" />
     </VerticalStackPanel>
   </Dialog>
 </Project>

@@ -143,6 +143,27 @@ check-on
   orig: 14, 14
   offset: 0, 0
   index: -1
+color-picker-wheel
+  rotate: false
+  xy: 365, 0
+  size: 147, 147
+  orig: 147, 147
+  offset: 0, 0
+  index: -1
+color-picker-gradient
+  rotate: false
+  xy: 354, 0
+  size: 10, 147
+  orig: 10, 147
+  offset: 0, 0
+  index: -1
+color-picker-checkerboard
+  rotate: false
+  xy: 313, 0
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
 color-picker-bar-selector
   rotate: false
   xy: 325, 183

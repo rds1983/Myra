@@ -12,44 +12,49 @@ namespace Myra.Graphics2D.UI.ColorPicker
 {
 	public partial class ColorPickerDialog
 	{
-		private const int ColorsPerRow = 6;
-
+		private const int Rows = 2;
+		private const int ColorsPerRow = 8;
+		private const int WheelHeight = 136;
+		private const float DegToRad = (float)Math.PI / 180;
+		private const float RadToDeg = 180 / (float)Math.PI;
+		private const string InputChars = "1234567890,";
 		private const string HexChars = "1234567890ABCDEFabcdef";
-		public static readonly Color[] UserColors = new []
-		{
-			Color.Red,
-			Color.Green,
-			Color.Blue,
-			Color.Cyan,
-			Color.White,
-			Color.Black,
-			Color.HotPink,
-			Color.Indigo,
-			Color.Orange,
-			Color.LightBlue,
-			Color.Olive,
-			Color.SkyBlue
-		};
 
-		private bool _suppressHSV = false;
+		public static readonly Color[] UserColors = new[]
+		{
+			new Color(255, 255, 255),
+			new Color(217, 217, 217),
+			new Color(178, 178, 178),
+			new Color(140, 140, 140),
+			new Color(102, 102, 102),
+			new Color(64, 64, 64),
+			new Color(32, 32, 32),
+			new Color(0, 0, 0),
+			new Color(254, 57, 48),
+			new Color(255, 149, 3),
+			new Color(255, 204, 1),
+			new Color(75, 217, 97),
+			new Color(91, 198, 250),
+			new Color(3, 121, 255),
+			new Color(87, 86, 213),
+			new Color(207, 86, 191)
+		};
 
 		public Color Color
 		{
 			get
 			{
-				return _imageColor.Color;
+				return _colorDisplay.Color;
 			}
 
 			set
 			{
-				if (value == _imageColor.Color)
+				if (value == _colorDisplay.Color)
 				{
 					return;
 				}
 
-				_imageColor.Color = value;
-
-				OnColorChanged();
+				OnColorChanged(value);
 			}
 		}
 
@@ -109,70 +114,69 @@ namespace Myra.Graphics2D.UI.ColorPicker
 		{
 			get
 			{
-				if (_gridUserColors.SelectedColumnIndex == null || _gridUserColors.SelectedRowIndex == null)
+				if (_userColors.SelectedColumnIndex == null || _userColors.SelectedRowIndex == null)
 				{
 					return null;
 				}
-				var index = _gridUserColors.SelectedRowIndex.Value * ColorsPerRow + _gridUserColors.SelectedColumnIndex.Value;
+				var index = _userColors.SelectedRowIndex.Value * ColorsPerRow + _userColors.SelectedColumnIndex.Value;
 
 				return index;
 			}
 		}
+
+		private ColorHSV colorHSV;
+		private bool hsPickerActive, vPickerActive;
 
 		public ColorPickerDialog()
 		{
 			BuildUI();
 
 			// Users colors
-			for(var row = 0; row < 2; ++row)
+			for (int row = 0; row < Rows; ++row)
 			{
-				for (var col = 0; col < ColorsPerRow; ++col)
+				for (int col = 0; col < ColorsPerRow; ++col)
 				{
-					var image = new Image
-					{
+					var image = new Image {
 						HorizontalAlignment = HorizontalAlignment.Stretch,
 						VerticalAlignment = VerticalAlignment.Stretch,
-						GridColumn = col,
 						GridRow = row,
-						Renderable = DefaultAssets.WhiteRegion,
-						Margin = new Thickness(8)
+						GridColumn = col,
+						Renderable = DefaultAssets.WhiteRegion
 					};
 
-					_gridUserColors.Widgets.Add(image);
+					_userColors.Widgets.Add(image);
 				}
 			}
-
-			for (var i = 0; i < UserColors.Length; ++i)
+			for (int i = 0; i < UserColors.Length; ++i)
 			{
 				SetUserColor(i, UserColors[i]);
 			}
 
-			_gridUserColors.SelectionHoverBackground = DefaultAssets.UITextureRegionAtlas["button-over"];
-			_gridUserColors.SelectionBackground = DefaultAssets.UITextureRegionAtlas["button-down"];
-			_gridUserColors.SelectedIndexChanged += GridUserColorsSelectedIndexChanged;
-			_buttonSaveColor.Click += ButtonSaveColorDown;
+			_userColors.SelectionHoverBackground = DefaultAssets.UITextureRegionAtlas["button-over"];
+			_userColors.SelectionBackground = DefaultAssets.UITextureRegionAtlas["button-down"];
+			_userColors.SelectedIndexChanged += GridUserColorsSelectedIndexChanged;
+			_saveColor.Click += ButtonSaveColorDown;
 			UpdateEnabled();
 
 			// Subscriptions
-			SubscribeRGB(_spinButtonR, _sliderR, value => R = value);
-			SubscribeRGB(_spinButtonG, _sliderG, value => G = value);
-			SubscribeRGB(_spinButtonB, _sliderB, value => B = value);
-			SubscribeRGB(_spinButtonA, _sliderA, value => A = value);
+			_inputRGB.Tag = false;
+			_inputRGB.TextChangedByUser += RgbInputChanged;
+			_inputRGB.InputFilter = InputFilter;
 
-			SubscribeHSV(_spinButtonH, _sliderH);
-			SubscribeHSV(_spinButtonS, _sliderS);
-			SubscribeHSV(_spinButtonV, _sliderV);
+			_inputHSV.Tag = false;
+			_inputHSV.TextChangedByUser += HsvInputChanged;
+			_inputHSV.InputFilter = InputFilter;
 
-			_textFieldHex.Tag = false;
-			_textFieldHex.TextChangedByUser += TextBoxHexTextChangedByUser;
-			_textFieldHex.InputFilter = s =>
+			_inputHEX.Tag = false;
+			_inputHEX.TextChangedByUser += HexInputChanged;
+			_inputHEX.InputFilter = s =>
 			{
-				if (s == null || s.Length > 8)
+				if (s == null || s.Length > 6)
 				{
 					return null;
 				}
 
-				for(var i = 0; i < s.Length; ++i)
+				for (var i = 0; i < s.Length; ++i)
 				{
 					if (HexChars.IndexOf(s[i]) == -1)
 					{
@@ -183,11 +187,110 @@ namespace Myra.Graphics2D.UI.ColorPicker
 				return s.ToUpper();
 			};
 
-			// Set default value
-			_imageColor.Renderable = DefaultAssets.WhiteRegion;
-			Color = Color.White;
+			_inputAlpha.Tag = false;
+			_inputAlpha.TextChangedByUser += AlphaInputChanged;
+			_inputAlpha.InputFilter = InputFilter;
 
-			OnColorChanged();
+			_sliderAlpha.Tag = false;
+			_sliderAlpha.ValueChangedByUser += AlphaSliderChanged;
+
+			_hsPicker.Tag = false;
+			_vPicker.Tag = false;
+
+			// Set default value
+			_colorDisplay.Renderable = DefaultAssets.WhiteRegion;
+			_colorBackground.Renderable = DefaultAssets.UITextureRegionAtlas["color-picker-checkerboard"];
+
+			_colorWheel.Renderable = DefaultAssets.UITextureRegionAtlas["color-picker-wheel"];
+			_colorWheel.TouchDown += (s, e) => hsPickerActive = true;
+
+			_gradient.Renderable = DefaultAssets.UITextureRegionAtlas["color-picker-gradient"];
+			_gradient.TouchDown += (s, e) => vPickerActive = true;
+
+			OnColorChanged(Color.White);
+		}
+
+		private string InputFilter(string s)
+		{
+			if (s == null)
+			{
+				return null;
+			}
+
+			for (var i = 0; i < s.Length; ++i)
+			{
+				if (InputChars.IndexOf(s[i]) == -1)
+				{
+					return null;
+				}
+			}
+
+			return s;
+		}
+
+		public override void UpdateLayout()
+		{
+			base.UpdateLayout();
+
+			if (!Desktop.DefaultMouseInfoGetter().IsLeftButtonDown)
+			{
+				hsPickerActive = false;
+				vPickerActive = false;
+			}
+			if (hsPickerActive)
+			{
+				HsPickerMove(Desktop.MousePosition);
+			}
+			if (vPickerActive)
+			{
+				VPickerMove(Desktop.MousePosition);
+			}
+		}
+
+		private void HsPickerMove(Point p)
+		{
+			int r = WheelHeight / 2;
+			int x = p.X - _colorWheel.Bounds.Location.X - r - _hsPicker.Bounds.Height / 2;
+			int y = p.Y - _colorWheel.Bounds.Location.Y - r - _hsPicker.Bounds.Width / 2;
+			float angle = (float)Math.Atan2(x, y);
+			float rsquared = Math.Min(x * x + y * y, r * r);
+			float radius = (float)Math.Sqrt(rsquared);
+			_hsPicker.Left = (int)(radius * Math.Sin(angle));
+			_hsPicker.Top = (int)(radius * Math.Cos(angle));
+
+			int h = (int)(angle * RadToDeg) + 90;
+			if (h < 0)
+			{
+				h += 360;
+			}
+			ColorHSV hsv = new ColorHSV()
+			{
+				H = h,
+				S = (int)(radius / r * 100),
+				V = colorHSV.V
+			};
+
+			_hsPicker.Tag = true;
+			OnColorChanged(hsv);
+			_hsPicker.Tag = false;
+		}
+
+		private void VPickerMove(Point p)
+		{
+			int x = p.Y - _gradient.Bounds.Location.Y - _hsPicker.Bounds.Height / 2;
+			x = Math.Max(0, Math.Min(x, WheelHeight));
+			_vPicker.Top = x;
+
+			ColorHSV hsv = new ColorHSV()
+			{
+				H = colorHSV.H,
+				S = colorHSV.S,
+				V = 100 * (WheelHeight - x) / WheelHeight
+			};
+
+			_vPicker.Tag = true;
+			OnColorChanged(hsv);
+			_vPicker.Tag = false;
 		}
 
 		private void ButtonSaveColorDown(object sender, EventArgs e)
@@ -212,227 +315,150 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 		private Color GetUserColor(int index)
 		{
-			return ((Image)_gridUserColors.Widgets[index]).Color;
+			return ((Image)_userColors.Widgets[index]).Color;
 		}
 
 		private void SetUserColor(int index, Color color)
 		{
-			((Image)_gridUserColors.Widgets[index]).Color = color;
+			((Image)_userColors.Widgets[index]).Color = color;
 		}
 
 		private void UpdateEnabled()
 		{
-			_buttonSaveColor.Enabled = SelectedUserColorIndex != null;
+			_saveColor.Enabled = SelectedUserColorIndex != null;
 		}
 
-		private void TextBoxHexTextChangedByUser(object sender, EventArgs e)
+		private void RgbInputChanged(object sender, EventArgs e)
 		{
-			if (string.IsNullOrEmpty(_textFieldHex.Text))
+			if (string.IsNullOrEmpty(_inputRGB.Text))
 			{
 				return;
 			}
 
-			var s = "#" + _textFieldHex.Text;
+			string[] st = _inputRGB.Text.Split(',');
+			if (st.Length != 3)
+			{
+				return;
+			}
+			if (byte.TryParse(st[0], out byte r) && byte.TryParse(st[1], out byte g) && byte.TryParse(st[2], out byte b))
+			{
+				_inputRGB.Tag = true;
+				OnColorChanged(new Color(r, g, b, A));
+				_inputRGB.Tag = false;
+			}
+		}
 
-			var color = ColorStorage.FromName(s);
-			if (color == null)
+		private void HsvInputChanged(object sender, EventArgs e)
+		{
+			if (string.IsNullOrEmpty(_inputHSV.Text))
 			{
 				return;
 			}
 
-			try
+			string[] st = _inputHSV.Text.Split(',');
+			if (st.Length != 3)
 			{
-				_textFieldHex.Tag = true;
-				Color = color.Value;
+				return;
 			}
-			finally
+			if (int.TryParse(st[0], out int h) && byte.TryParse(st[1], out byte s) && byte.TryParse(st[2], out byte v))
 			{
-				_textFieldHex.Tag = false;
-			}
-		}
-
-		private void SubscribeRGB(SpinButton spinButton, Slider slider, Action<byte> valueSetter)
-		{
-			spinButton.Tag = false;
-
-			spinButton.ValueChangedByUser += (s, a) =>
-			{
-				if (spinButton.Value == null)
+				if (h > 360 || s > 100 || v > 100)
 				{
 					return;
 				}
-
-				try
+				ColorHSV hsv = new ColorHSV()
 				{
-					spinButton.Tag = true;
-					valueSetter((byte)spinButton.Value.Value);
-				}
-
-				finally
-				{
-					spinButton.Tag = false;
-				}
-			};
-
-			slider.Tag = false;
-
-			slider.ValueChangedByUser += (s, a) =>
-			{
-				try
-				{
-					slider.Tag = true;
-					valueSetter((byte)slider.Value);
-				}
-
-				finally
-				{
-					slider.Tag = false;
-				}
-			};
-		}
-
-		private void SubscribeHSV(SpinButton spinButton, Slider slider)
-		{
-			spinButton.Tag = false;
-			slider.Tag = false;
-
-			spinButton.ValueChangedByUser += (s, a) =>
-			{
-				if (spinButton.Value == null)
-				{
-					return;
-				}
-
-				try
-				{
-					spinButton.Tag = true;
-
-					var hsv = new ColorHSV
-					{
-						H = (int)_sliderH.Value,
-						S = (int)_sliderS.Value,
-						V = (int)_sliderV.Value
-					};
-					SetHSV(hsv);
-
-					_suppressHSV = true;
-					var rgb = hsv.ToRGB();
-					Color = new Color(rgb.R, rgb.G, rgb.B, Color.A);
-				}
-				finally
-				{
-					spinButton.Tag = false;
-					_suppressHSV = false;
-				}
-			};
-
-			slider.ValueChangedByUser += (s, a) =>
-			{
-				try
-				{
-					slider.Tag = true;
-
-					var hsv = new ColorHSV
-					{
-						H = (int)_sliderH.Value,
-						S = (int)_sliderS.Value,
-						V = (int)_sliderV.Value
-					};
-					SetHSV(hsv);
-
-					_suppressHSV = true;
-					var rgb = hsv.ToRGB();
-					Color = new Color(rgb.R, rgb.G, rgb.B, Color.A);
-				}
-				finally
-				{
-					slider.Tag = false;
-					_suppressHSV = false;
-				}
-			};
-		}
-
-		private void OnColorChanged()
-		{
-			if (!(bool)_spinButtonR.Tag)
-			{
-				_spinButtonR.Value = R;
-			}
-
-			if (!(bool)_sliderR.Tag)
-			{
-				_sliderR.Value = R;
-			}
-
-			if (!(bool)_spinButtonG.Tag)
-			{
-				_spinButtonG.Value = G;
-			}
-
-			if (!(bool)_sliderG.Tag)
-			{
-				_sliderG.Value = G;
-			}
-
-			if (!(bool)_spinButtonB.Tag)
-			{
-				_spinButtonB.Value = B;
-			}
-
-			if (!(bool)_sliderB.Tag)
-			{
-				_sliderB.Value = B;
-			}
-
-			if (!(bool)_spinButtonA.Tag)
-			{
-				_spinButtonA.Value = A;
-			}
-
-			if (!(bool)_sliderA.Tag)
-			{
-				_sliderA.Value = A;
-			}
-
-			if (!(bool)_textFieldHex.Tag)
-			{
-				_textFieldHex.Text = Color.ToHexString().Substring(1);
-			}
-
-			if (!_suppressHSV)
-			{
-				SetHSV(Color.ToHSV());
+					H = h,
+					S = s,
+					V = v
+				};
+				_inputHSV.Tag = true;
+				OnColorChanged(hsv);
+				_inputHSV.Tag = false;
 			}
 		}
 
-		private void SetHSV(ColorHSV hsv)
+		private void HexInputChanged(object sender, EventArgs e)
 		{
-			if (!(bool)_spinButtonH.Tag)
+			if (string.IsNullOrEmpty(_inputHEX.Text) || _inputHEX.Text.Length < 6)
 			{
-				_spinButtonH.Value = hsv.H;
-			}
-			if (!(bool)_sliderH.Tag)
-			{
-				_sliderH.Value = hsv.H;
+				return;
 			}
 
-			if (!(bool)_spinButtonS.Tag)
+			var color = ColorStorage.FromName('#' + _inputHEX.Text);
+			if (color != null)
 			{
-				_spinButtonS.Value = hsv.S;
+				_inputHEX.Tag = true;
+				OnColorChanged(new Color(color.Value, A));
+				_inputHEX.Tag = false;
 			}
-			if (!(bool)_sliderS.Tag)
+		}
+
+		private void AlphaInputChanged(object sender, EventArgs e)
+		{
+			if (string.IsNullOrEmpty(_inputAlpha.Text))
 			{
-				_sliderS.Value = hsv.S;
+				return;
 			}
 
-			if (!(bool)_spinButtonV.Tag)
+			if (byte.TryParse(_inputAlpha.Text, out byte alpha))
 			{
-				_spinButtonV.Value = hsv.V;
+				_inputAlpha.Tag = true;
+				OnColorChanged(new Color(Color, alpha));
+				_inputAlpha.Tag = false;
 			}
-			if (!(bool)_sliderV.Tag)
+		}
+
+		private void AlphaSliderChanged(object sender, ValueChangedEventArgs<float> e)
+		{
+			OnColorChanged(new Color(Color, (byte)e.NewValue));
+		}
+
+		private void OnColorChanged(Color c)
+		{
+			OnColorChanged(c, c.ToHSV());
+		}
+
+		private void OnColorChanged(ColorHSV c)
+		{
+			OnColorChanged(new Color(c.ToRGB(), A), c);
+		}
+
+		private void OnColorChanged(Color rgb, ColorHSV hsv)
+		{
+			if (!(bool)_inputRGB.Tag)
 			{
-				_sliderV.Value = hsv.V;
+				_inputRGB.Text = string.Format("{0},{1},{2}", rgb.R, rgb.G, rgb.B);
 			}
+			if (!(bool)_inputHSV.Tag)
+			{
+				_inputHSV.Text = string.Format("{0},{1},{2}", hsv.H, hsv.S, hsv.V);
+			}
+			if (!(bool)_inputHEX.Tag)
+			{
+				_inputHEX.Text = rgb.ToHexString().Substring(1, 6);
+			}
+			if (!(bool)_inputAlpha.Tag)
+			{
+				_inputAlpha.Text = rgb.A.ToString();
+			}
+			if (!(bool)_sliderAlpha.Tag)
+			{
+				_sliderAlpha.Value = rgb.A;
+			}
+			if (!(bool)_hsPicker.Tag)
+			{
+				_hsPicker.Top = (int)(hsv.S / 200f * WheelHeight * Math.Sin(DegToRad * (-hsv.H + 180)));
+				_hsPicker.Left = (int)(hsv.S / 200f * WheelHeight * Math.Cos(DegToRad * (-hsv.H + 180)));
+			}
+			if (!(bool)_vPicker.Tag)
+			{
+				_vPicker.Top = (int)(hsv.V / -100f * WheelHeight) + WheelHeight;
+			}
+
+			_colorWheel.Color = new Color(hsv.V / 100f, hsv.V / 100f, hsv.V / 100f);
+			_colorDisplay.Color = rgb;
+			colorHSV = hsv;
 		}
 
 		public override void Close()
