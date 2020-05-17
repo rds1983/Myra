@@ -81,8 +81,13 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
+		[Category("Appearance")]
 		[DefaultValue("#FFFFFFFF")]
 		public Color Color { get; set; } = Color.White;
+
+		[Category("Behavior")]
+		[DefaultValue(ImageResizeMode.Stretch)]
+		public ImageResizeMode ResizeMode { get; set; }
 
 		protected override Point InternalMeasure(Point availableSize)
 		{
@@ -130,6 +135,13 @@ namespace Myra.Graphics2D.UI
 			if (image != null)
 			{
 				var bounds = ActualBounds;
+
+				if (ResizeMode == ImageResizeMode.KeepAspectRatio)
+				{
+					var aspect = (float)image.Size.X / image.Size.Y;
+					bounds.Height = (int)(bounds.Width * aspect);
+				}
+
 				context.Draw(image, bounds, Color);
 			}
 		}

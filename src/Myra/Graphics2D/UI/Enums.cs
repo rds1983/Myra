@@ -58,4 +58,17 @@ namespace Myra.Graphics2D.UI
 		Horizontal = 2,
 		Both = Vertical | Horizontal
 	}
+
+	public enum ImageResizeMode
+	{
+		/// <summary>
+		/// Simply Stretch
+		/// </summary>
+		Stretch,
+
+		/// <summary>
+		/// Keep Aspect Ratio
+		/// </summary>
+		KeepAspectRatio
+	}
 }

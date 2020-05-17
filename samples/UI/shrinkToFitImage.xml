@@ -1,0 +1,5 @@
+<Project>
+  <Panel>
+    <Image Renderable="LogoOnly_64px.png" Width="100" Height="200" />
+  </Panel>
+</Project>

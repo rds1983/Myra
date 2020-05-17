@@ -389,7 +389,8 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			if (color != null)
 			{
 				_inputHEX.Tag = true;
-				OnColorChanged(new Color(color.Value, A));
+				var c = color.Value;
+				OnColorChanged(new Color(c.R, c.G, c.B, A));
 				_inputHEX.Tag = false;
 			}
 		}
@@ -404,14 +405,16 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			if (byte.TryParse(_inputAlpha.Text, out byte alpha))
 			{
 				_inputAlpha.Tag = true;
-				OnColorChanged(new Color(Color, alpha));
+				var c = Color;
+				OnColorChanged(new Color(c.R, c.G, c.B, alpha));
 				_inputAlpha.Tag = false;
 			}
 		}
 
 		private void AlphaSliderChanged(object sender, ValueChangedEventArgs<float> e)
 		{
-			OnColorChanged(new Color(Color, (byte)e.NewValue));
+			var c = Color;
+			OnColorChanged(new Color(c.R, c.G, c.B, (byte)e.NewValue));
 		}
 
 		private void OnColorChanged(Color c)
@@ -419,9 +422,10 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			OnColorChanged(c, c.ToHSV());
 		}
 
-		private void OnColorChanged(ColorHSV c)
+		private void OnColorChanged(ColorHSV h)
 		{
-			OnColorChanged(new Color(c.ToRGB(), A), c);
+			var c = h.ToRGB();
+			OnColorChanged(new Color(c.R, c.G, c.B, A), h);
 		}
 
 		private void OnColorChanged(Color rgb, ColorHSV hsv)
