@@ -6,8 +6,6 @@ using System.Xml.Serialization;
 using Myra.MML;
 using Myra.Graphics2D.UI.Properties;
 using Myra.Attributes;
-using System.Diagnostics.Contracts;
-using System.Linq;
 
 #if !STRIDE
 using Microsoft.Xna.Framework;
@@ -40,6 +38,7 @@ namespace Myra.Graphics2D.UI
 		private bool _measureDirty = true;
 		private bool _active = false;
 		private bool _isPlaced = false;
+		private bool _isDraggable = false;
 
 		private Point _lastMeasureSize;
 		private Point _lastMeasureAvailableSize;
@@ -527,7 +526,24 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
-		public virtual bool IsDraggable { get; set; }
+		public virtual bool IsDraggable
+		{
+			get
+			{
+				return _isDraggable;
+			}
+
+			set
+			{
+				if (value == _isDraggable)
+				{
+					return;
+				}
+
+				_isDraggable = value;
+				SubscribeOnTouchMoved(IsPlaced && IsDraggable);
+			}
+		}
 
 		[Category("Behavior")]
 		[DefaultValue(DragDirection.Both)]
@@ -550,20 +566,6 @@ namespace Myra.Graphics2D.UI
 
 			internal set
 			{
-				if (IsPlaced)
-				{
-					if (Parent != null)
-					{
-						Parent.TouchMoved -= DesktopOnTouchMoved;
-						Parent.TouchUp -= DesktopTouchUp;
-					}
-					else
-					{
-						Desktop.TouchMoved -= DesktopOnTouchMoved;
-						Desktop.TouchUp -= DesktopTouchUp;
-					}
-				}
-
 				_isPlaced = value;
 				IsMouseInside = false;
 				IsTouchInside = false;
@@ -573,19 +575,7 @@ namespace Myra.Graphics2D.UI
 					InvalidateLayout();
 				}
 
-				if (IsPlaced)
-				{
-					if (Parent != null)
-					{
-						Parent.TouchMoved += DesktopOnTouchMoved;
-						Parent.TouchUp += DesktopTouchUp;
-					}
-					else
-					{
-						Desktop.TouchMoved += DesktopOnTouchMoved;
-						Desktop.TouchUp += DesktopTouchUp;
-					}
-				}
+				SubscribeOnTouchMoved(IsPlaced && IsDraggable);
 			}
 		}
 
@@ -742,7 +732,6 @@ namespace Myra.Graphics2D.UI
 				return BorderBounds.Contains(Desktop.TouchPosition);
 			}
 		}
-
 
 		protected Rectangle BackgroundBounds
 		{
@@ -1511,6 +1500,34 @@ namespace Myra.Graphics2D.UI
 		public void SetMouseWheelFocus()
 		{
 			Desktop.FocusedMouseWheelWidget = this;
+		}
+
+		private void SubscribeOnTouchMoved(bool subscribe)
+		{
+			if (Parent != null)
+			{
+				Parent.TouchMoved -= DesktopOnTouchMoved;
+				Parent.TouchUp -= DesktopTouchUp;
+			}
+			else
+			{
+				Desktop.TouchMoved -= DesktopOnTouchMoved;
+				Desktop.TouchUp -= DesktopTouchUp;
+			}
+
+			if (subscribe)
+			{
+				if (Parent != null)
+				{
+					Parent.TouchMoved += DesktopOnTouchMoved;
+					Parent.TouchUp += DesktopTouchUp;
+				}
+				else
+				{
+					Desktop.TouchMoved += DesktopOnTouchMoved;
+					Desktop.TouchUp += DesktopTouchUp;
+				}
+			}
 		}
 
 		private void DesktopOnTouchMoved(object sender, EventArgs args)
