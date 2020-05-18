@@ -1,0 +1,23 @@
+font.name=Vis Open Sans
+font.size=15
+font.bold=false
+font.italic=false
+
+font2.file=VisOpenSansKerned.ttf
+font2.use=true
+
+pad.top=0
+pad.right=0
+pad.bottom=0
+pad.left=0
+pad.advance.x=0
+pad.advance.y=0
+
+glyph.native.rendering=false
+glyph.page.width=256
+glyph.page.height=256
+glyph.text=ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz\n1234567890•\n"!`?¿'.,;:()[]{}<>|/@\^$€¥-%+=#_&~*\nñÑąćęłńóśźżĄĆĘŁŃÓŚŹŻÄäÖöÜüßĞğŞşİıÇç\náéíóúàèìòùÁÉÍÓÚÀÈÌÒÙ\nАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ\nабвгдеёжзийклмнопрстуфхцчшщъыьэюя\nΑΆΒΓΔΕΈΖΗΉΘΙΊΚΛΜΝΞΟΌΠΡΣΤΥΎΦΧΨΩΏ·\nαάβγδεέζηήθιίκλμνξοόπρστυύφχψωώ\nϊΐςϋΰ⌘⌥⇧
+
+effect.class=com.badlogic.gdx.tools.hiero.unicodefont.effects.ColorEffect
+effect.Color=ffffff
+
