@@ -988,7 +988,10 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnMouseMoved();
 
-			UpdateHoverPosition(Desktop.MousePosition);
+			if (Desktop.MousePosition != Desktop.PreviousMousePosition)
+			{
+				UpdateHoverPosition(Desktop.MousePosition);
+			}
 		}
 
 		public override void OnTouchDown()

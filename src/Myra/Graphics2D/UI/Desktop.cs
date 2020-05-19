@@ -56,7 +56,7 @@ namespace Myra.Graphics2D.UI
 #endif
 		private static Widget _scheduleMouseWheelFocus;
 		private static bool _isTouchDown;
-		private static Point _mousePosition, _touchPosition;
+		private static Point _previousMousePosition, _mousePosition, _touchPosition;
 		private static bool _contextMenuShown = false;
 		private static bool _keyboardFocusSet = false;
 		private static bool _mouseWheelFocusSet = false;
@@ -104,6 +104,14 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public static Point PreviousMousePosition
+		{
+			get
+			{
+				return _previousMousePosition;
+			}
+		}
+
 		public static Point MousePosition
 		{
 			get
@@ -118,6 +126,7 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
+				_previousMousePosition = _mousePosition;
 				_mousePosition = value;
 				MouseMoved.Invoke();
 
@@ -757,6 +766,8 @@ namespace Myra.Graphics2D.UI
 
 			UpdateRecursiveLayout(ChildrenCopy);
 
+			// Fire Mouse Movement without actual mouse movement in order to update Widget.IsMouseInside
+			_previousMousePosition = _mousePosition;
 			ChildrenCopy.ProcessMouseMovement();
 
 			_layoutDirty = false;
