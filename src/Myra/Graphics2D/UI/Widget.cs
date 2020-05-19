@@ -549,7 +549,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(DragDirection.Both)]
 		public DragDirection DragDirection { get; set; } = DragDirection.Both;
 
-		[Category("Behavior")]
+		[Browsable(false)]
 		public Widget DragHandle { get; set; }
 
 		/// <summary>

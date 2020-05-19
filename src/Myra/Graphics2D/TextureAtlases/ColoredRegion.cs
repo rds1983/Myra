@@ -10,7 +10,6 @@ using Stride.Graphics;
 
 namespace Myra.Graphics2D.TextureAtlases
 {
-	[Obsolete("Use SolidBrush instead")]
 	public class ColoredRegion: IImage
 	{
 		private Color _color = Color.White;
