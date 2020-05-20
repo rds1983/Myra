@@ -217,9 +217,11 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		internal bool InternalAcceptsKeyboardFocus = true;
+
 		internal protected override bool AcceptsKeyboardFocus
 		{
-			get { return true; }
+			get { return InternalAcceptsKeyboardFocus; }
 		}
 
 		[DefaultValue(HorizontalAlignment.Stretch)]

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using Microsoft.Xna.Framework.Input;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 
@@ -252,7 +253,8 @@ namespace Myra.Graphics2D.UI
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
 				InputFilter = InputFilter,
-				TextVerticalAlignment = VerticalAlignment.Center
+				TextVerticalAlignment = VerticalAlignment.Center,
+				InternalAcceptsKeyboardFocus = false
 			};
 
 			_textField.TextChanged += TextBoxOnTextChanged;
@@ -486,6 +488,13 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public override void OnGotKeyboardFocus()
+		{
+			base.OnGotKeyboardFocus();
+
+			_textField.OnGotKeyboardFocus();
+		}
+
 		public override void OnLostKeyboardFocus()
 		{
 			base.OnLostKeyboardFocus();
@@ -494,6 +503,22 @@ namespace Myra.Graphics2D.UI
 			{
 				_textField.Text = "0";
 			}
+
+			_textField.OnLostKeyboardFocus();
+		}
+
+		public override void OnKeyDown(Keys k)
+		{
+			base.OnKeyDown(k);
+
+			_textField.OnKeyDown(k);
+		}
+
+		public override void OnChar(char c)
+		{
+			base.OnChar(c);
+
+			_textField.OnChar(c);
 		}
 	}
 }

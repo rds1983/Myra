@@ -52,6 +52,7 @@ namespace Myra.Graphics2D.UI
 		private float _opacity = 1.0f;
 
 		private bool _enabled;
+		private bool _hasFocus = false;
 
 		/// <summary>
 		/// Internal use only. (MyraPad)
@@ -812,7 +813,7 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return Desktop.FocusedKeyboardWidget == this;
+				return _hasFocus;
 			}
 		}
 
@@ -1452,10 +1453,12 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnLostKeyboardFocus()
 		{
+			_hasFocus = false;
 		}
 
 		public virtual void OnGotKeyboardFocus()
 		{
+			_hasFocus = true;
 		}
 
 		protected internal virtual void OnActiveChanged()
