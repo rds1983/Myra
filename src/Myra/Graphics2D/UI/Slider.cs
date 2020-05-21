@@ -131,6 +131,16 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[XmlIgnore]
+		[Browsable(false)]
+		public ImageButton ImageButton
+		{
+			get
+			{
+				return InternalChild;
+			}
+		}
+
 		/// <summary>
 		/// Fires when the value had been changed
 		/// </summary>
