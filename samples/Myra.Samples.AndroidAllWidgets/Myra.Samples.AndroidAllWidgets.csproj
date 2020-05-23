@@ -49,7 +49,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="info.lundin.math, Version=1.2.6.0, Culture=neutral, PublicKeyToken=2f7fe9ec5efab85f, processorArchitecture=MSIL">
-      <HintPath>..\..\build\MonoGame.Android\packages\info.lundin.math.dll.1.2.6\lib\netstandard2.0\info.lundin.math.dll</HintPath>
+      <HintPath>..\..\build\packages\info.lundin.math.dll.1.2.6\lib\netstandard2.0\info.lundin.math.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="MonoGame.Framework.Net, Version=3.7.1.189, Culture=neutral, processorArchitecture=MSIL">
