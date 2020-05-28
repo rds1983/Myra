@@ -859,6 +859,8 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler<GenericEventArgs<Keys>> KeyDown;
 		public event EventHandler<GenericEventArgs<char>> Char;
 
+		public Action<RenderContext> BeforeRender, AfterRender;
+
 		public Widget()
 		{
 			Visible = true;
@@ -967,8 +969,12 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var oldOpacity = context.Opacity;
+			var oldView = context.View;
 
 			context.Opacity *= Opacity;
+			context.View = view;
+
+			BeforeRender?.Invoke(context);
 
 			// Background
 			var background = GetCurrentBackground();
@@ -1003,11 +1009,15 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			var oldView = context.View;
-			context.View = view;
 			InternalRender(context);
-			context.View = oldView;
 
+			AfterRender?.Invoke(context);
+
+			// Restore context settings
+			context.View = oldView;
+			context.Opacity = oldOpacity;
+
+			// Optional debug rendering
 			if (MyraEnvironment.DrawWidgetsFrames)
 			{
 				batch.DrawRectangle(Bounds, Color.LightGreen);
@@ -1025,11 +1035,11 @@ namespace Myra.Graphics2D.UI
 
 			if (ClipToBounds && !MyraEnvironment.DisableClipping)
 			{
+				// Restore scissor
 				context.Flush();
 				CrossEngineStuff.SetScissor(oldScissorRectangle);
 			}
 
-			context.Opacity = oldOpacity;
 		}
 
 		public virtual void InternalRender(RenderContext context)

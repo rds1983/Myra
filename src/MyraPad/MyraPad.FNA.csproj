@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net45</TargetFramework>
+    <ApplicationIcon />
+    <StartupObject />
+    <AssemblyName>MyraPad</AssemblyName>
+    <RootNamespace>MyraPad</RootNamespace>
+    <OutputPath>bin\FNA\$(Configuration)</OutputPath>
+    <DefineConstants>$(DefineConstants);FNA</DefineConstants>	
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\ExportCSDesigner.cstemplate" />
+    <None Remove="Resources\ExportCSMain.cstemplate" />
+    <None Remove="Resources\NewProject.xmltemplate" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ExportCSDesigner.cstemplate" />
+    <EmbeddedResource Include="Resources\ExportCSMain.cstemplate" />
+    <EmbeddedResource Include="Resources\NewProject.xmltemplate" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Myra\Myra.FNA.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+</Project>

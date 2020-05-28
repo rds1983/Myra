@@ -23,7 +23,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\..\..\FNA\FNA.csproj" />
     <ProjectReference Include="..\..\..\XNAssets\src\XNAssets.FNA.csproj" />
   </ItemGroup>
 </Project>
