@@ -13,10 +13,15 @@ namespace Myra.Utility
 	{
 		private static bool CommonTouchCheck(this Widget w)
 		{
-			return w.Visible && w.Active && w.Enabled && w.ContainsMouse;
+			return w.Visible && w.Active && w.Enabled && w.ContainsTouch;
 		}
 
-		public static bool FallsThrough(this Widget w, Point p)
+        private static bool CommonMouseCheck(this Widget w)
+        {
+            return w.Visible && w.Active && w.Enabled && w.ContainsMouse;
+        }
+
+        public static bool FallsThrough(this Widget w, Point p)
 		{
 			// Only containers can fall through
 			if (!(w is Grid ||
@@ -122,7 +127,7 @@ namespace Myra.Utility
 			{
 				var w = widgets[i];
 
-				if (w.CommonTouchCheck())
+				if (w.CommonMouseCheck())
 				{
 					var isMouseOver = w.ContainsMouse;
 					var wasMouseOver = w.IsMouseInside;
