@@ -81,6 +81,12 @@ namespace Myra.Graphics2D.UI
 			InvalidateChildren();
 		}
 
+		public T AddChild<T>(T widget) where T : Widget
+		{
+			Widgets.Add(widget);
+			return widget;
+		}
+
 		public override void RemoveChild(Widget widget)
 		{
 			_widgets.Remove(widget);
