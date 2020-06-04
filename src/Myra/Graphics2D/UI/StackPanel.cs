@@ -136,6 +136,12 @@ namespace Myra.Graphics2D.UI
 			_dirty = false;
 		}
 
+		public T AddChild<T>(T widget) where T : Widget
+		{
+			Widgets.Add(widget);
+			return widget;
+		}
+
 		private void Widgets_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
 		{
 			_dirty = true;
