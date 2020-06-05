@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Stylesheet TextureRegionAtlas="ui_stylesheet_atlas.xml">
+<Stylesheet TextureRegionAtlas="ui_stylesheet.atlas">
   <Fonts>
     <Font Id="commodore-64" File="commodore-64.fnt"/>
   </Fonts>

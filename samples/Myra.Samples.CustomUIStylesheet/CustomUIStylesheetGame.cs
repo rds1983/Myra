@@ -38,7 +38,7 @@ namespace Myra.Samples.CustomUIStylesheet
 			Stylesheet.Current = assetManager.Load<Stylesheet>("ui_stylesheet.xml");
 
 			_allWidgets = new AllWidgets();
-			var textureAtlas = assetManager.Load<TextureRegionAtlas>("ui_stylesheet_atlas.xml");
+			var textureAtlas = assetManager.Load<TextureRegionAtlas>("ui_stylesheet.atlas");
 			_allWidgets._button.Image = textureAtlas["music-off"];
 			_allWidgets._imageButton.Image = textureAtlas["sound-off"];
 

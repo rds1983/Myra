@@ -1,0 +1,48 @@
+<Project>
+  <Project.ExportOptions Namespace="Myra.Graphics2D.UI.ColorPicker" Class="ColorPickerPanel" OutputPath="C:\Projects\Myra\src\Myra\Graphics2D\UI\ColorPicker" />
+  <VerticalStackPanel Spacing="8" HorizontalAlignment="Center" Width="450" Padding="10, 0, 10, 5">
+    <HorizontalStackPanel Spacing="8">
+      <HorizontalStackPanel.Proportions>
+        <Proportion Type="Auto" />
+        <Proportion Type="Auto" />
+        <Proportion Type="Fill" />
+      </HorizontalStackPanel.Proportions>
+      <Panel Width="147" Height="147">
+        <Image Id="_colorWheel" />
+        <Image BorderThickness="1" Padding="4" HorizontalAlignment="Center" VerticalAlignment="Center" Enabled="False" Background="#FFFFFFFF" Border="#000000" Id="_hsPicker" />
+      </Panel>
+      <Panel>
+        <Image Width="10" Height="147" BorderThickness="1" Border="#000000" Id="_gradient" />
+        <Image Margin="0, 1" BorderThickness="1" Padding="4" HorizontalAlignment="Center" Enabled="False" Background="#FFFFFFFF" Border="#000000" Id="_vPicker" />
+      </Panel>
+      <Grid ColumnSpacing="8" RowSpacing="6" VerticalAlignment="Top">
+        <Grid.ColumnsProportions>
+          <Proportion Type="Auto" />
+          <Proportion Type="Fill" />
+          <Proportion Type="Pixels" Value="60" />
+        </Grid.ColumnsProportions>
+        <Grid.RowsProportions>
+          <Proportion Type="Pixels" Value="40" />
+          <Proportion Type="Auto" />
+          <Proportion Type="Auto" />
+          <Proportion Type="Auto" />
+          <Proportion Type="Auto" />
+          <Proportion Type="Auto" />
+        </Grid.RowsProportions>
+        <Image Width="40" HorizontalAlignment="Center" VerticalAlignment="Stretch" GridColumnSpan="3" Background="#FFFFFFFF" Id="_colorBackground" />
+        <Image Width="40" HorizontalAlignment="Center" VerticalAlignment="Stretch" GridColumnSpan="3" Id="_colorDisplay" />
+        <Label Text="RGB" GridRow="1" />
+        <TextBox GridColumn="1" GridRow="1" GridColumnSpan="2" Id="_inputRGB" />
+        <Label Text="HSV" GridRow="2" />
+        <TextBox GridColumn="1" GridRow="2" GridColumnSpan="2" Id="_inputHSV" />
+        <Label Text="HEX" GridRow="3" />
+        <TextBox GridColumn="1" GridRow="3" GridColumnSpan="2" Id="_inputHEX" />
+        <Label Text="Alpha" GridRow="4" />
+        <TextBox GridColumn="2" GridRow="4" Id="_inputAlpha" />
+        <HorizontalSlider Maximum="255" Height="21" GridColumn="1" GridRow="4" Id="_sliderAlpha" />
+        <TextButton Text="Save Color" HorizontalAlignment="Right" GridRow="5" GridColumnSpan="3" Id="_saveColor" />
+      </Grid>
+    </HorizontalStackPanel>
+    <Grid ColumnSpacing="8" RowSpacing="8" GridSelectionMode="Cell" Height="80" Padding="4" Id="_userColors" />
+  </VerticalStackPanel>
+</Project>

@@ -232,9 +232,9 @@ namespace MyraPad
 
 				if (_state.UserColors != null)
 				{
-					for (var i = 0; i < Math.Min(ColorPickerDialog.UserColors.Length, _state.UserColors.Length); ++i)
+					for (var i = 0; i < Math.Min(ColorPickerPanel.UserColors.Length, _state.UserColors.Length); ++i)
 					{
-						ColorPickerDialog.UserColors[i] = new Color(_state.UserColors[i]);
+						ColorPickerPanel.UserColors[i] = new Color(_state.UserColors[i]);
 					}
 				}
 
@@ -1485,7 +1485,7 @@ namespace MyraPad
 				LeftSplitterPosition = _ui._leftSplitPane.GetSplitterPosition(0),
 				EditedFile = FilePath,
 				LastFolder = _lastFolder,
-				UserColors = (from c in ColorPickerDialog.UserColors select c.PackedValue).ToArray()
+				UserColors = (from c in ColorPickerPanel.UserColors select c.PackedValue).ToArray()
 			};
 
 			state.Save();
