@@ -553,6 +553,24 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		[Browsable(false)]
 		public Widget DragHandle { get; set; }
+		
+		
+		[XmlIgnore]
+		[Browsable(false)]
+		public int RelativeLeft { get; set; }
+		
+		[XmlIgnore]
+		[Browsable(false)]
+		public int RelativeTop { get; set; }
+		
+		[XmlIgnore]
+		[Browsable(false)]
+		
+		public int RelativeRight { get; set; }
+		
+		[XmlIgnore]
+		[Browsable(false)]
+		public int RelativeBottom { get; set; }
 
 		/// <summary>
 		/// Determines whether a widget had been placed on Desktop
@@ -1224,6 +1242,8 @@ namespace Myra.Graphics2D.UI
 				_actualBounds = CalculateClientBounds(controlBounds);
 
 				Arrange();
+				
+				CalculateRelativePositions();
 			}
 			else
 			{
@@ -1235,6 +1255,23 @@ namespace Myra.Graphics2D.UI
 			_layoutState = LayoutState.Normal;
 
 			LayoutUpdated.Invoke(this);
+		}
+
+		private void CalculateRelativePositions()
+		{
+			RelativeLeft = Left - Bounds.X;
+			RelativeTop = Top - Bounds.Y;
+			
+			if (Parent != null)
+			{
+				RelativeRight = Left + Parent.Bounds.Width - Bounds.X;
+				RelativeBottom = Top + Parent.Bounds.Height - Bounds.Y;
+			}
+			else
+			{
+				RelativeRight = Desktop.InternalBounds.Width - Bounds.X;
+				RelativeBottom = Desktop.InternalBounds.Height - Bounds.Y;
+			}
 		}
 
 		private Widget FindWidgetBy(Func<Widget, bool> finder)
@@ -1422,8 +1459,8 @@ namespace Myra.Graphics2D.UI
 
 			if (bounds == Rectangle.Empty || bounds.Contains(touchPos))
 			{
-				_startPos = new Point(touchPos.X - ActualBounds.Location.X,
-						touchPos.Y - ActualBounds.Location.Y);
+				_startPos = new Point(touchPos.X - Left,
+						touchPos.Y - Top);
 			}
 
 			TouchDown.Invoke(this);
@@ -1552,56 +1589,47 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var position = new Point(Desktop.TouchPosition.X - _startPos.Value.X,
-					Desktop.TouchPosition.Y - _startPos.Value.Y);
+				Desktop.TouchPosition.Y - _startPos.Value.Y);
 
+			int newLeft = Left;
+			int newTop = Top;
+			
 			if (DragDirection.HasFlag(DragDirection.Horizontal))
 			{
-				if (position.X < 0)
-				{
-					position.X = 0;
-				}
-
-				if (Parent != null)
-				{
-					if (position.X + Bounds.Width > Parent.Bounds.Right)
-					{
-						position.X = Parent.Bounds.Right - Bounds.Width;
-					}
-				}
-				else
-				{
-					if (position.X + Bounds.Width > Desktop.InternalBounds.Right)
-					{
-						position.X = Desktop.InternalBounds.Right - Bounds.Width;
-					}
-				}
-
-				Left = position.X;
+				newLeft = position.X;
 			}
 
 			if (DragDirection.HasFlag(DragDirection.Vertical))
 			{
-				if (position.Y < 0)
-				{
-					position.Y = 0;
-				}
+				newTop = position.Y;
+			}
 
-				if (Parent != null)
-				{
-					if (position.Y + Bounds.Height > Parent.Bounds.Bottom)
-					{
-						position.Y = Parent.Bounds.Bottom - Bounds.Height;
-					}
-				}
-				else
-				{
-					if (position.Y + Bounds.Height > Desktop.InternalBounds.Bottom)
-					{
-						position.Y = Desktop.InternalBounds.Bottom - Bounds.Height;
-					}
-				}
+			ConstrainToBounds(ref newLeft, ref newTop);
 
-				Top = position.Y;
+			Left = newLeft;
+			Top = newTop;
+		}
+
+		private void ConstrainToBounds(ref int newLeft, ref int newTop)
+		{
+			if (newLeft < RelativeLeft)
+			{
+				newLeft = RelativeLeft;
+			}
+
+			if (newTop < RelativeTop)
+			{
+				newTop = RelativeTop;
+			}
+
+			if (newTop + Bounds.Height > RelativeBottom)
+			{
+				newTop = RelativeBottom - Bounds.Height;
+			}
+				
+			if (newLeft + Bounds.Width > RelativeRight)
+			{
+				newLeft = RelativeRight - Bounds.Width;
 			}
 		}
 
