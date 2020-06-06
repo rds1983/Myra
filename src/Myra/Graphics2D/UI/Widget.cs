@@ -52,7 +52,7 @@ namespace Myra.Graphics2D.UI
 		private float _opacity = 1.0f;
 
 		private bool _enabled;
-		private bool _hasFocus = false;
+		private bool _isKeyboardFocused = false;
 
 		/// <summary>
 		/// Internal use only. (MyraPad)
@@ -828,11 +828,26 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public virtual bool IsKeyboardFocused
+		public bool IsKeyboardFocused
 		{
 			get
 			{
-				return _hasFocus;
+				return _isKeyboardFocused;
+			}
+
+			set
+			{
+				if (value == _isKeyboardFocused)
+				{
+					return;
+				}
+
+				_isKeyboardFocused = value;
+				var ev = KeyboardFocusChanged;
+				if (ev != null)
+				{
+					ev(this, EventArgs.Empty);
+				}
 			}
 		}
 
@@ -871,6 +886,8 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler TouchDown;
 		public event EventHandler TouchUp;
 		public event EventHandler TouchDoubleClick;
+
+		public event EventHandler KeyboardFocusChanged;
 
 		public event EventHandler<GenericEventArgs<float>> MouseWheelChanged;
 
@@ -1501,12 +1518,12 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnLostKeyboardFocus()
 		{
-			_hasFocus = false;
+			IsKeyboardFocused = false;
 		}
 
 		public virtual void OnGotKeyboardFocus()
 		{
-			_hasFocus = true;
+			IsKeyboardFocused = true;
 		}
 
 		protected internal virtual void OnActiveChanged()
