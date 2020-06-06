@@ -106,6 +106,8 @@ namespace Myra.Graphics2D.UI.ColorPicker
 				_colorDisplay.Opacity = value;
 			}
 		}
+		
+		private int DisplayAlpha => (int) (A * 255f);
 
 		private int? SelectedUserColorIndex
 		{
@@ -486,13 +488,5 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			colorHSV = hsv;
 		}
 
-		public int DisplayAlpha
-		{
-			get
-			{
-				return (int) (A * 255f);
-			}
-		}
-		
 	}
 }
