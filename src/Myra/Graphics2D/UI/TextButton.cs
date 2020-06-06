@@ -69,7 +69,7 @@ namespace Myra.Graphics2D.UI
 			SetStyle(styleName);
 		}
 
-		public void ApplyTextButtonStyle(TextButtonStyle style)
+		public void ApplyTextButtonStyle(ButtonStyle style)
 		{
 			ApplyButtonStyle(style);
 
@@ -88,7 +88,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
-			ApplyTextButtonStyle(new TextButtonStyle(stylesheet.ButtonStyles[name], stylesheet.LabelStyle));
+			ApplyTextButtonStyle(stylesheet.ButtonStyles[name]);
 		}
 	}
 }

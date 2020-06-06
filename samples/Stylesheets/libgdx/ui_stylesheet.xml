@@ -13,7 +13,9 @@
     <ScrollPaneStyle Background="default-rect" HorizontalScrollBackground="default-scroll" HorizontalScrollKnob="default-round-large" VerticalScrollBackground="default-scroll" VerticalScrollKnob="default-round-large" />
   </ScrollPaneStyles>
   <ButtonStyles>
-    <ButtonStyle Background="default-round" Padding="5, 0" PressedBackground="default-round-down" />
+    <ButtonStyle Background="default-round" Padding="5, 0" PressedBackground="default-round-down">
+      <TextBlockStyle Font="ui_font" TextColor="white" DisabledTextColor="grey" />
+    </ButtonStyle>
   </ButtonStyles>
   <CheckBoxStyles>
     <CheckBoxStyle>

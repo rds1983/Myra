@@ -14,7 +14,9 @@
     <ScrollViewerStyle HorizontalScrollBackground="scroll-bar" HorizontalScrollKnob="scroll-bar-horizontal-knob" VerticalScrollBackground="scroll-bar" VerticalScrollKnob="scroll-bar-vertical-knob" />
   </ScrollViewerStyles>
   <ButtonStyles>
-    <ButtonStyle Background="button" Padding="8, 5" PressedBackground="button-down" />
+    <ButtonStyle Background="button" Padding="8, 5" PressedBackground="button-down">
+      <LabelStyle Font="commodore-64" TextColor="white" />
+    </ButtonStyle>
   </ButtonStyles>
   <CheckBoxStyles>
     <CheckBoxStyle>

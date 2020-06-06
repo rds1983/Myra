@@ -239,7 +239,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
-			ApplyImageTextButtonStyle(new ImageTextButtonStyle(stylesheet.ButtonStyles[name], stylesheet.LabelStyle));
+			ApplyImageTextButtonStyle(new ImageTextButtonStyle(stylesheet.ButtonStyles[name]));
 		}
 	}
 }
