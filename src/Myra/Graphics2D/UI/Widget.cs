@@ -557,20 +557,20 @@ namespace Myra.Graphics2D.UI
 		
 		[XmlIgnore]
 		[Browsable(false)]
-		public int RelativeLeft { get; set; }
+		private int RelativeLeft { get; set; }
 		
 		[XmlIgnore]
 		[Browsable(false)]
-		public int RelativeTop { get; set; }
+		private int RelativeTop { get; set; }
 		
 		[XmlIgnore]
 		[Browsable(false)]
-		
-		public int RelativeRight { get; set; }
+
+		private int RelativeRight { get; set; }
 		
 		[XmlIgnore]
 		[Browsable(false)]
-		public int RelativeBottom { get; set; }
+		private int RelativeBottom { get; set; }
 
 		/// <summary>
 		/// Determines whether a widget had been placed on Desktop
