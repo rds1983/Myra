@@ -1269,8 +1269,8 @@ namespace Myra.Graphics2D.UI
 			}
 			else
 			{
-				RelativeRight = Desktop.InternalBounds.Width - Bounds.X;
-				RelativeBottom = Desktop.InternalBounds.Height - Bounds.Y;
+				RelativeRight = Left + Desktop.InternalBounds.Width - Bounds.X;
+				RelativeBottom = Top + Desktop.InternalBounds.Height - Bounds.Y;
 			}
 		}
 
