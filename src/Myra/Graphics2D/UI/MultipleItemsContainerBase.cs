@@ -57,7 +57,7 @@ namespace Myra.Graphics2D.UI
 			{
 				foreach (Widget w in args.NewItems)
 				{
-					w.IsPlaced = IsPlaced;
+					w.Desktop = Desktop;
 					w.Parent = this;
 				}
 			}
@@ -65,7 +65,7 @@ namespace Myra.Graphics2D.UI
 			{
 				foreach (Widget w in args.OldItems)
 				{
-					w.IsPlaced = false;
+					w.Desktop = null;
 					w.Parent = null;
 				}
 			}
@@ -73,7 +73,7 @@ namespace Myra.Graphics2D.UI
 			{
 				foreach (Widget w in ChildrenCopy)
 				{
-					w.IsPlaced = false;
+					w.Desktop = null;
 					w.Parent = null;
 				}
 			}

@@ -62,7 +62,7 @@ namespace Myra.Utility
 				if (w.CommonTouchCheck())
 				{
 					w.OnTouchDown();
-					if (!w.FallsThrough(Desktop.TouchPosition))
+					if (w.Desktop != null && !w.FallsThrough(w.Desktop.TouchPosition))
 					{
 						break;
 					}
@@ -97,7 +97,7 @@ namespace Myra.Utility
 				if (w.CommonTouchCheck())
 				{
 					w.OnTouchDoubleClick();
-					if (!w.FallsThrough(Desktop.TouchPosition))
+					if (w.Desktop != null && !w.FallsThrough(w.Desktop.TouchPosition))
 					{
 						break;
 					}
@@ -142,7 +142,7 @@ namespace Myra.Utility
 						w.OnMouseMoved();
 					}
 
-					if (!w.FallsThrough(Desktop.MousePosition))
+					if (w.Desktop != null && !w.FallsThrough(w.Desktop.MousePosition))
 					{
 						break;
 					}
@@ -187,7 +187,7 @@ namespace Myra.Utility
 						w.OnTouchMoved();
 					}
 
-					if (!w.FallsThrough(Desktop.TouchPosition))
+					if (w.Desktop != null && !w.FallsThrough(w.Desktop.TouchPosition))
 					{
 						break;
 					}

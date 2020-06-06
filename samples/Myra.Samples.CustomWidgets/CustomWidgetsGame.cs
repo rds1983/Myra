@@ -9,6 +9,7 @@ namespace Myra.Samples.AllWidgets
 		private readonly GraphicsDeviceManager _graphics;
 
 		private PropertyGrid _propertyGrid;
+		private Desktop _desktop;
 
 		public CustomWidgetsGame()
 		{
@@ -53,16 +54,19 @@ namespace Myra.Samples.AllWidgets
 
 			topPanel.SetSplitterPosition(0, 0.75f);
 
-			Desktop.Root = topPanel;
+			_desktop = new Desktop
+			{
+				Root = topPanel,
 
-			// Inform Myra that external text input is available
-			// So it stops translating Keys to chars
-			Desktop.HasExternalTextInput = true;
+				// Inform Myra that external text input is available
+				// So it stops translating Keys to chars
+				HasExternalTextInput = true
+			};
 
 			// Provide that text input
 			Window.TextInput += (s, a) =>
 			{
-				Desktop.OnChar(a.Character);
+				_desktop.OnChar(a.Character);
 			};
 
 #if ANDROID
@@ -94,7 +98,7 @@ namespace Myra.Samples.AllWidgets
 
 			GraphicsDevice.Clear(Color.Black);
 
-			Desktop.Render();
+			_desktop.Render();
 		}
 	}
 }

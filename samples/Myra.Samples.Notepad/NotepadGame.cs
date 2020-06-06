@@ -16,6 +16,7 @@ namespace Myra.Samples.Notepad
 		private string _filePath;
 		private bool _dirty = true;
 		private TextBox _textField;
+		private Desktop _desktop;
 
 		public string FilePath
 		{
@@ -95,34 +96,37 @@ namespace Myra.Samples.Notepad
 			_textField = ui.textArea;
 
 			_textField.Text = typeof(NotepadGame).Assembly.ReadResourceAsString("hobbits.txt");
-			Desktop.FocusedKeyboardWidget = _textField;
 
 			_textField.TextChanged += TextBoxOnTextChanged;
 
-			Desktop.Root = ui;
-
-			Desktop.KeyDown += (s, a) =>
+			_desktop = new Desktop
 			{
-				if (Desktop.HasModalWidget || ui._mainMenu.IsOpen)
+				FocusedKeyboardWidget = _textField,
+				Root = ui
+			};
+
+			_desktop.KeyDown += (s, a) =>
+			{
+				if (_desktop.HasModalWidget || ui._mainMenu.IsOpen)
 				{
 					return;
 				}
 
-				if (Desktop.DownKeys.Contains(Keys.LeftControl) || Desktop.DownKeys.Contains(Keys.RightControl))
+				if (_desktop.DownKeys.Contains(Keys.LeftControl) || _desktop.DownKeys.Contains(Keys.RightControl))
 				{
-					if (Desktop.DownKeys.Contains(Keys.N))
+					if (_desktop.DownKeys.Contains(Keys.N))
 					{
 						NewItemOnDown(this, EventArgs.Empty);
 					}
-					else if (Desktop.DownKeys.Contains(Keys.O))
+					else if (_desktop.DownKeys.Contains(Keys.O))
 					{
 						OpenItemOnDown(this, EventArgs.Empty);
 					}
-					else if (Desktop.DownKeys.Contains(Keys.S))
+					else if (_desktop.DownKeys.Contains(Keys.S))
 					{
 						SaveItemOnDown(this, EventArgs.Empty);
 					}
-					else if (Desktop.DownKeys.Contains(Keys.Q))
+					else if (_desktop.DownKeys.Contains(Keys.Q))
 					{
 						Exit();
 					}
@@ -135,7 +139,7 @@ namespace Myra.Samples.Notepad
 		{
 			var dlg = new DebugOptionsWindow();
 
-			dlg.ShowModal();
+			dlg.ShowModal(_desktop);
 		}
 
 		private void UpdateTitle()
@@ -198,7 +202,7 @@ namespace Myra.Samples.Notepad
 					}
 				};
 
-				dlg.ShowModal();
+				dlg.ShowModal(_desktop);
 			}
 			else
 			{
@@ -209,7 +213,7 @@ namespace Myra.Samples.Notepad
 		private void AboutItemOnDown(object sender, EventArgs eventArgs)
 		{
 			var messageBox = Dialog.CreateMessageBox("Notepad", "Myra Notepad Sample " + MyraEnvironment.Version);
-			messageBox.ShowModal();
+			messageBox.ShowModal(_desktop);
 		}
 
 		private void SaveAsItemOnDown(object sender, EventArgs eventArgs)
@@ -252,7 +256,7 @@ namespace Myra.Samples.Notepad
 				Dirty = false;
 			};
 
-			dlg.ShowModal();
+			dlg.ShowModal(_desktop);
 		}
 
 		private void NewItemOnDown(object sender, EventArgs eventArgs)
@@ -272,7 +276,7 @@ namespace Myra.Samples.Notepad
 
 			GraphicsDevice.Clear(Color.Black);
 
-			Desktop.Render();
+			_desktop.Render();
 		}
 	}
 }

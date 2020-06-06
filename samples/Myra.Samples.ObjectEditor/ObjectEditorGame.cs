@@ -13,9 +13,8 @@ namespace Myra.Samples.ObjectEditor
 		private Label _labelOverGui;
 		private Window _windowEditor;
 		private Point _lastPosition = new Point(800, 100);
-
 		private SpriteBatch _spriteBatch;
-		
+		private Desktop _desktop;
 		public static ObjectEditorGame Instance { get; private set; }
 
 		public ObjectEditorGame()
@@ -62,7 +61,10 @@ namespace Myra.Samples.ObjectEditor
 			};
 			root.Widgets.Add(_labelOverGui);
 
-			Desktop.Root = root;
+			_desktop = new Desktop
+			{
+				Root = root
+			};
 
 			var propertyGrid = new PropertyGrid
 			{
@@ -101,7 +103,7 @@ namespace Myra.Samples.ObjectEditor
 			var button = (TextButton)sender;
 			if (button.IsPressed)
 			{
-				_windowEditor.Show(_lastPosition);
+				_windowEditor.Show(_desktop, _lastPosition);
 			}
 			else
 			{
@@ -142,9 +144,9 @@ namespace Myra.Samples.ObjectEditor
 				_spriteBatch.End();
 			}
 
-			_labelOverGui.Text = "Is mouse over GUI: " + Desktop.IsMouseOverGUI;
+			_labelOverGui.Text = "Is mouse over GUI: " + _desktop.IsMouseOverGUI;
 
-			Desktop.Render();
+			_desktop.Render();
 		}
 	}
 }

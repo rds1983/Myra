@@ -25,6 +25,7 @@ namespace Myra.Samples.AllWidgets
 #endif
 
 		private AllWidgets _allWidgets;
+		private Desktop _desktop;
 		
 		public static AllWidgetsGame Instance { get; private set; }
 
@@ -64,46 +65,47 @@ namespace Myra.Samples.AllWidgets
 
 			_allWidgets = new AllWidgets();
 
-			Desktop.KeyDown += (s, a) =>
+			_desktop = new Desktop();
+			_desktop.KeyDown += (s, a) =>
 			{
-				if (Desktop.HasModalWidget || _allWidgets._mainMenu.IsOpen)
+				if (_desktop.HasModalWidget || _allWidgets._mainMenu.IsOpen)
 				{
 					return;
 				}
 
-				if (Desktop.DownKeys.Contains(Keys.LeftControl) || Desktop.DownKeys.Contains(Keys.RightControl))
+				if (_desktop.DownKeys.Contains(Keys.LeftControl) || _desktop.DownKeys.Contains(Keys.RightControl))
 				{
-					if (Desktop.DownKeys.Contains(Keys.O))
+					if (_desktop.DownKeys.Contains(Keys.O))
 					{
 						_allWidgets.OpenFile();
-					} else if (Desktop.DownKeys.Contains(Keys.S))
+					} else if (_desktop.DownKeys.Contains(Keys.S))
 					{
 						_allWidgets.SaveFile();
-					} else if (Desktop.DownKeys.Contains(Keys.D))
+					} else if (_desktop.DownKeys.Contains(Keys.D))
 					{
 						_allWidgets.ChooseFolder();
-					} else if (Desktop.DownKeys.Contains(Keys.L))
+					} else if (_desktop.DownKeys.Contains(Keys.L))
 					{
 						_allWidgets.ChooseColor();
 					}
-					else if (Desktop.DownKeys.Contains(Keys.Q))
+					else if (_desktop.DownKeys.Contains(Keys.Q))
 					{
 						Exit();
 					}
 				}
 			};
 
-			Desktop.Root = _allWidgets;
+			_desktop.Root = _allWidgets;
 
 #if MONOGAME
 			// Inform Myra that external text input is available
 			// So it stops translating Keys to chars
-			Desktop.HasExternalTextInput = true;
+			_desktop.HasExternalTextInput = true;
 
 			// Provide that text input
 			Window.TextInput += (s, a) =>
 			{
-				Desktop.OnChar(a.Character);
+				_desktop.OnChar(a.Character);
 			};
 #endif
 
@@ -162,7 +164,7 @@ namespace Myra.Samples.AllWidgets
 			// Set render target
 			GraphicsContext.CommandList.SetRenderTargetAndViewport(GraphicsDevice.Presenter.DepthStencilBuffer, GraphicsDevice.Presenter.BackBuffer);
 #endif
-			Desktop.Render();
+			_desktop.Render();
 		}
 	}
 }

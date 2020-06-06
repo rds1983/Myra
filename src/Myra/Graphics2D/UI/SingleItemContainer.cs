@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Security.Cryptography;
 using System.Xml.Serialization;
 
 #if !STRIDE
@@ -24,7 +25,7 @@ namespace Myra.Graphics2D.UI
 				if (_internalChild != null)
 				{
 					_internalChild.Parent = null;
-					_internalChild.IsPlaced = false;
+					_internalChild.Desktop = null;
 
 					_internalChild = null;
 				}
@@ -34,7 +35,7 @@ namespace Myra.Graphics2D.UI
 				if (_internalChild != null)
 				{
 					_internalChild.Parent = this;
-					_internalChild.IsPlaced = IsPlaced;
+					_internalChild.Desktop = Desktop;
 				}
 
 				InvalidateChildren();

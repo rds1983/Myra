@@ -33,7 +33,7 @@ namespace MyraPad.UI
 				_textOutputPath.Text = dlg.Folder;
 			};
 
-			dlg.ShowModal();
+			dlg.ShowModal(Desktop);
 		}
 	}
 }

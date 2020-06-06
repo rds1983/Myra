@@ -7,6 +7,7 @@ namespace Myra.Samples.DebugConsole
 	{
 		private readonly GraphicsDeviceManager _graphics;
 		private GamePanel _gamePanel;
+		private Desktop _desktop;
 		
 		public static DebugConsoleGame Instance { get; private set; }
 
@@ -31,7 +32,10 @@ namespace Myra.Samples.DebugConsole
 
 			_gamePanel = new GamePanel();
 
-			Desktop.Root = _gamePanel;
+			_desktop = new Desktop
+			{
+				Root = _gamePanel
+			};
 
 #if MONOGAME
 			// Inform Myra that external text input is available
@@ -51,7 +55,7 @@ namespace Myra.Samples.DebugConsole
 			base.Draw(gameTime);
 
 			GraphicsDevice.Clear(Color.Black);
-			Desktop.Render();
+			_desktop.Render();
 		}
 	}
 }

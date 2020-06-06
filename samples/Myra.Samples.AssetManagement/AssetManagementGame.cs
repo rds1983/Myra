@@ -10,7 +10,8 @@ namespace Myra.Samples.AssetManagement
 	{
 		private readonly GraphicsDeviceManager _graphics;
 		private MainForm _mainForm;
-		
+		private Desktop _desktop;
+
 		public AssetManagementGame()
 		{
 			_graphics = new GraphicsDeviceManager(this)
@@ -34,15 +35,18 @@ namespace Myra.Samples.AssetManagement
 			_mainForm._mainMenu.HoverIndex = 0;
 			_mainForm._menuItemQuit.Selected += (s, a) => Exit();
 
-			Desktop.FocusedKeyboardWidget = _mainForm._mainMenu;
+			_desktop = new Desktop
+			{
+				FocusedKeyboardWidget = _mainForm._mainMenu
+			};
 
 			// Make main menu permanently hold keyboard focus
-			Desktop.WidgetLosingKeyboardFocus += (s, a) =>
+			_desktop.WidgetLosingKeyboardFocus += (s, a) =>
 			{
 				a.Cancel = true;
 			};
 
-			Desktop.Root = _mainForm;
+			_desktop.Root = _mainForm;
 #if MONOGAME
 			// Inform Myra that external text input is available
 			// So it stops translating Keys to chars
@@ -61,7 +65,7 @@ namespace Myra.Samples.AssetManagement
 			base.Draw(gameTime);
 
 			GraphicsDevice.Clear(Color.Black);
-			Desktop.Render();
+			_desktop.Render();
 		}
 	}
 }

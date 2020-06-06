@@ -14,6 +14,7 @@ namespace Myra.Samples.Layout2D
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Desktop _desktop;
 
         public MyraSamplesLayout2D()
         {
@@ -35,12 +36,15 @@ namespace Myra.Samples.Layout2D
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
 
-            Desktop.HasExternalTextInput = true;
+			_desktop = new Desktop
+			{
+				HasExternalTextInput = true
+			};
 
-            // Provide that text input
-            Window.TextInput += (s, a) =>
+			// Provide that text input
+			Window.TextInput += (s, a) =>
             {
-                Desktop.OnChar(a.Character);
+                _desktop.OnChar(a.Character);
             };
 
             base.Initialize();
@@ -63,13 +67,13 @@ namespace Myra.Samples.Layout2D
             btnB.Click += (object sender, EventArgs e) => { Console.WriteLine(btnB.Layout2d.Expresion);Console.ReadKey(); };
 
                 btnA.Text = "Calc";
-            btnA.Click += (object sender, EventArgs e) => { btnB.Layout2d.Expresion = (Desktop.GetWidgetByID("Expression") as TextBox).Text; Desktop.InvalidateLayout(); Desktop.UpdateLayout(); };
+            btnA.Click += (object sender, EventArgs e) => { btnB.Layout2d.Expresion = (_desktop.GetWidgetByID("Expression") as TextBox).Text; _desktop.InvalidateLayout(); _desktop.UpdateLayout(); };
                 panel.Widgets.Add(btnA);
 
             g.Widgets.Add(panel);
             g.Widgets.Add(btnB);
 
-			Desktop.Root = g;
+			_desktop.Root = g;
             // TODO: use this.Content to load your game content here
         }
 
@@ -91,7 +95,7 @@ namespace Myra.Samples.Layout2D
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            Console.WriteLine((Desktop.Widgets.ToList().Find((Widget w) => { return w.Id == "Expression"; }) as TextBox)?.Text);
+            Console.WriteLine((_desktop.Widgets.ToList().Find((Widget w) => { return w.Id == "Expression"; }) as TextBox)?.Text);
 
 
             // TODO: Add your update logic here
@@ -107,7 +111,7 @@ namespace Myra.Samples.Layout2D
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            Desktop.Render();
+            _desktop.Render();
 
             base.Draw(gameTime);
         }

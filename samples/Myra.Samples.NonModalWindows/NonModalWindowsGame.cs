@@ -1,6 +1,7 @@
 ﻿using Myra.Graphics2D.UI;
 using Microsoft.Xna.Framework;
 using Myra.Samples.NonModalWindows.UI;
+using System.Runtime.InteropServices;
 
 namespace Myra.Samples.NonModalWindows
 {
@@ -8,6 +9,7 @@ namespace Myra.Samples.NonModalWindows
 	{
 		private readonly GraphicsDeviceManager _graphics;
 		private MainPanel _mainPanel;
+		private Desktop _desktop;
 
 		public static NonModalWindowsGame Instance { get; private set; }
 
@@ -30,19 +32,22 @@ namespace Myra.Samples.NonModalWindows
 
 			MyraEnvironment.Game = this;
 
-			// Inform Myra that external text input is available
-			// So it stops translating Keys to chars
-			Desktop.HasExternalTextInput = true;
+			_desktop = new Desktop
+			{
+				// Inform Myra that external text input is available
+				// So it stops translating Keys to chars
+				HasExternalTextInput = true
+			};
 
 			// Provide that text input
 			Window.TextInput += (s, a) =>
 			{
-				Desktop.OnChar(a.Character);
+				_desktop.OnChar(a.Character);
 			};
 
 			_mainPanel = new MainPanel();
 
-			Desktop.Root = _mainPanel;
+			_desktop.Root = _mainPanel;
 
 			_mainPanel.ShowWindows();
 		}
@@ -53,8 +58,8 @@ namespace Myra.Samples.NonModalWindows
 
 			GraphicsDevice.Clear(Color.Black);
 
-			_mainPanel._labelOverGui.Text = "Is mouse over GUI: " + Desktop.IsMouseOverGUI;
-			Desktop.Render();
+			_mainPanel._labelOverGui.Text = "Is mouse over GUI: " + _desktop.IsMouseOverGUI;
+			_desktop.Render();
 		}
 	}
 }

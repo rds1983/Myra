@@ -13,6 +13,7 @@ namespace Myra.Samples.SplitPaneContainer
 
 		private Grid _root;
 		private SplitPane _splitPane;
+		private Desktop _desktop;
 
 		public SplitPaneGame()
 		{
@@ -66,7 +67,10 @@ namespace Myra.Samples.SplitPaneContainer
 
 			RebuildSplitPane(Orientation.Horizontal);
 
-			Desktop.Root = _root;
+			_desktop = new Desktop
+			{
+				Root = _root
+			};
 		}
 
 		private void RebuildSplitPane(Orientation orientation)
@@ -120,7 +124,7 @@ namespace Myra.Samples.SplitPaneContainer
 
 			GraphicsDevice.Clear(Color.Black);
 
-			Desktop.Render();
+			_desktop.Render();
 		}
 	}
 }

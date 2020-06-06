@@ -323,23 +323,23 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override bool IsPlaced
+		public override Desktop Desktop
 		{
 			get
 			{
-				return base.IsPlaced;
+				return base.Desktop;
 			}
 
 			internal set
 			{
-				if (IsPlaced)
+				if (Desktop != null)
 				{
 					Desktop.TouchUp -= DesktopTouchUp;
 				}
 
-				base.IsPlaced = value;
+				base.Desktop = value;
 
-				if (IsPlaced)
+				if (Desktop != null)
 				{
 					Desktop.TouchUp += DesktopTouchUp;
 				}

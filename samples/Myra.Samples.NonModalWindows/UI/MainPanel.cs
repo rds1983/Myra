@@ -44,7 +44,7 @@ namespace Myra.Samples.NonModalWindows.UI
 		{
 			if (_button1.IsPressed)
 			{
-				_window1.Show(new Point(100, 100));
+				_window1.Show(Desktop, new Point(100, 100));
 			}
 			else
 			{
@@ -56,7 +56,7 @@ namespace Myra.Samples.NonModalWindows.UI
 		{
 			if (_button2.IsPressed)
 			{
-				_window2.Show(new Point(400, 100));
+				_window2.Show(Desktop, new Point(400, 100));
 			}
 			else
 			{
@@ -68,7 +68,7 @@ namespace Myra.Samples.NonModalWindows.UI
 		{
 			if (_button3.IsPressed)
 			{
-				_window3.Show(new Point(200, 400));
+				_window3.Show(Desktop, new Point(200, 400));
 			}
 			else
 			{

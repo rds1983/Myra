@@ -502,7 +502,7 @@ namespace Myra.Graphics2D.UI.File
 					Close();
 				};
 
-				dlg.ShowModal();
+				dlg.ShowModal(Desktop);
 			}
 			else
 			{

@@ -37,7 +37,7 @@ namespace Myra.Graphics2D.UI
 		private bool _isModal = false;
 		private bool _measureDirty = true;
 		private bool _active = false;
-		private bool _isPlaced = false;
+		private Desktop _desktop;
 		private bool _isDraggable = false;
 
 		private Point _lastMeasureSize;
@@ -573,24 +573,34 @@ namespace Myra.Graphics2D.UI
 		private int RelativeBottom { get; set; }
 
 		/// <summary>
-		/// Determines whether a widget had been placed on Desktop
+		/// Determines whether the widget had been placed on Desktop
 		/// </summary>
 		[XmlIgnore]
 		[Browsable(false)]
-		public virtual bool IsPlaced
+		public bool IsPlaced
 		{
 			get
 			{
-				return _isPlaced;
+				return Desktop != null;
+			}
+		}
+
+		[XmlIgnore]
+		[Browsable(false)]
+		public virtual Desktop Desktop
+		{
+			get
+			{
+				return _desktop;
 			}
 
 			internal set
 			{
-				_isPlaced = value;
+				_desktop = value;
 				IsMouseInside = false;
 				IsTouchInside = false;
 
-				if (_isPlaced)
+				if (_desktop != null)
 				{
 					InvalidateLayout();
 				}
@@ -835,7 +845,7 @@ namespace Myra.Graphics2D.UI
 				return _isKeyboardFocused;
 			}
 
-			set
+			internal set
 			{
 				if (value == _isKeyboardFocused)
 				{
@@ -843,11 +853,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_isKeyboardFocused = value;
-				var ev = KeyboardFocusChanged;
-				if (ev != null)
-				{
-					ev(this, EventArgs.Empty);
-				}
+				KeyboardFocusChanged?.Invoke(this, EventArgs.Empty);
 			}
 		}
 
@@ -1352,7 +1358,7 @@ namespace Myra.Graphics2D.UI
 			{
 				Parent.InvalidateMeasure();
 			}
-			else
+			else if (Desktop != null)
 			{
 				Desktop.InvalidateLayout();
 			}
@@ -1577,7 +1583,7 @@ namespace Myra.Graphics2D.UI
 				Parent.TouchMoved -= DesktopOnTouchMoved;
 				Parent.TouchUp -= DesktopTouchUp;
 			}
-			else
+			else if (Desktop != null)
 			{
 				Desktop.TouchMoved -= DesktopOnTouchMoved;
 				Desktop.TouchUp -= DesktopTouchUp;
@@ -1590,7 +1596,7 @@ namespace Myra.Graphics2D.UI
 					Parent.TouchMoved += DesktopOnTouchMoved;
 					Parent.TouchUp += DesktopTouchUp;
 				}
-				else
+				else if (Desktop != null)
 				{
 					Desktop.TouchMoved += DesktopOnTouchMoved;
 					Desktop.TouchUp += DesktopTouchUp;

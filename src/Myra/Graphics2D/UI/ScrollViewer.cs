@@ -244,24 +244,24 @@ namespace Myra.Graphics2D.UI
 
 		protected internal override bool MouseWheelFocusCanBeNull => false;
 
-		public override bool IsPlaced
+		public override Desktop Desktop
 		{
 			get
 			{
-				return base.IsPlaced;
+				return base.Desktop;
 			}
 
 			internal set
 			{
-				if (IsPlaced)
+				if (Desktop != null)
 				{
 					Desktop.TouchMoved -= DesktopTouchMoved;
 					Desktop.TouchUp -= DesktopTouchUp;
 				}
 
-				base.IsPlaced = value;
+				base.Desktop = value;
 
-				if (IsPlaced)
+				if (Desktop != null)
 				{
 					Desktop.TouchMoved += DesktopTouchMoved;
 					Desktop.TouchUp += DesktopTouchUp;
