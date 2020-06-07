@@ -506,7 +506,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(true)]
-		public bool Visible
+		public virtual bool Visible
 		{
 			get { return _visible; }
 
