@@ -272,6 +272,8 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public float Opacity { get; set; }
+        public float ScaleX { get; set; }
+        public float ScaleY { get; set; }
 
 		public bool IsMouseOverGUI
 		{
@@ -403,6 +405,8 @@ namespace Myra.Graphics2D.UI
 		public Desktop()
 		{
 			Opacity = 1.0f;
+            ScaleX = 1.0f;
+            ScaleY = 1.0f;
 			Widgets.CollectionChanged += WidgetsOnCollectionChanged;
 
 			MouseInfoGetter = DefaultMouseInfoGetter;

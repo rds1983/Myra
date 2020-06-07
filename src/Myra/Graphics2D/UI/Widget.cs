@@ -68,18 +68,7 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (value == _left)
-				{
-					return;
-				}
-
-				_left = value;
-				if (_layoutState == LayoutState.Normal)
-				{
-					_layoutState = LayoutState.LocationInvalid;
-				}
-
-				FireLocationChanged();
+                SetLeftWithoutScaling((int)(Math.Round(value * Desktop.ScaleX)));
 			}
 		}
 
@@ -91,18 +80,7 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (value == _top)
-				{
-					return;
-				}
-
-				_top = value;
-				if (_layoutState == LayoutState.Normal)
-				{
-					_layoutState = LayoutState.LocationInvalid;
-				}
-
-				FireLocationChanged();
+                SetTopWithoutScaling((int)(Math.Round(value * Desktop.ScaleY)));
 			}
 		}
 
@@ -113,14 +91,14 @@ namespace Myra.Graphics2D.UI
 			get { return _minWidth; }
 			set
 			{
-				if (value == _minWidth)
-				{
-					return;
-				}
-
-				_minWidth = value;
-				InvalidateMeasure();
-				FireSizeChanged();
+                if (value.HasValue)
+                {
+                    SetMinWidthWithoutScaling((int)(Math.Round(value.Value * Desktop.ScaleX)));
+                }
+                else
+                {
+                    SetMinWidthWithoutScaling(null);
+                }
 			}
 		}
 
@@ -131,15 +109,15 @@ namespace Myra.Graphics2D.UI
 			get { return _maxWidth; }
 			set
 			{
-				if (value == _maxWidth)
-				{
-					return;
-				}
-
-				_maxWidth = value;
-				InvalidateMeasure();
-				FireSizeChanged();
-			}
+                if (value.HasValue)
+                {
+                    SetMaxWidthWithoutScaling((int)(Math.Round(value.Value * Desktop.ScaleX)));
+                }
+                else
+                {
+                    SetMaxWidthWithoutScaling(null);
+                }
+            }
 		}
 
 		[Category("Layout")]
@@ -153,14 +131,14 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (value == _width)
-				{
-					return;
-				}
-
-				_width = value;
-				InvalidateMeasure();
-				FireSizeChanged();
+                if (value.HasValue)
+                {
+                    SetWidthWithoutScaling((int)(Math.Round(value.Value * Desktop.ScaleX)));
+                }
+                else
+                {
+                    SetWidthWithoutScaling(null);
+                }
 			}
 		}
 
@@ -171,14 +149,14 @@ namespace Myra.Graphics2D.UI
 			get { return _minHeight; }
 			set
 			{
-				if (value == _minHeight)
-				{
-					return;
-				}
-
-				_minHeight = value;
-				InvalidateMeasure();
-				FireSizeChanged();
+                if (value.HasValue)
+                {
+                    SetMinHeightWithoutScaling((int)(Math.Round(value.Value * Desktop.ScaleY)));
+                }
+                else
+                {
+                    SetMinHeightWithoutScaling(null);
+                }
 			}
 		}
 
@@ -189,15 +167,15 @@ namespace Myra.Graphics2D.UI
 			get { return _maxHeight; }
 			set
 			{
-				if (value == _maxHeight)
-				{
-					return;
-				}
-
-				_maxHeight = value;
-				InvalidateMeasure();
-				FireSizeChanged();
-			}
+                if (value.HasValue)
+                {
+                    SetMaxHeightWithoutScaling((int)(Math.Round(value.Value * Desktop.ScaleY)));
+                }
+                else
+                {
+                    SetMaxHeightWithoutScaling(null);
+                }
+            }
 		}
 
 		[Category("Layout")]
@@ -211,14 +189,14 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (value == _height)
-				{
-					return;
-				}
-
-				_height = value;
-				InvalidateMeasure();
-				FireSizeChanged();
+                if (value.HasValue)
+                {
+                    SetHeightWithoutScaling((int)Math.Round(value.Value * Desktop.ScaleY));
+                }
+                else
+                {
+                    SetHeightWithoutScaling(null);
+                }
 			}
 		}
 
@@ -948,6 +926,110 @@ namespace Myra.Graphics2D.UI
 
 			return result;
 		}
+
+        public void SetLeftWithoutScaling(int value)
+        {
+            if (value == _left)
+            {
+                return;
+            }
+
+            _left = value;
+            if (_layoutState == LayoutState.Normal)
+            {
+                _layoutState = LayoutState.LocationInvalid;
+            }
+
+            FireLocationChanged();
+        }
+
+        public void SetTopWithoutScaling(int value)
+        {
+            if (value == _top)
+            {
+                return;
+            }
+
+            _top = value;
+            if (_layoutState == LayoutState.Normal)
+            {
+                _layoutState = LayoutState.LocationInvalid;
+            }
+
+            FireLocationChanged();
+        }
+
+        public void SetHeightWithoutScaling(int? value)
+        {
+            if (value == _height)
+            {
+                return;
+            }
+
+            _height = value;
+            InvalidateMeasure();
+            FireSizeChanged();
+        }
+
+        public void SetMinHeightWithoutScaling(int? value)
+        {
+            if (value == _minHeight)
+            {
+                return;
+            }
+
+            _minHeight = value;
+            InvalidateMeasure();
+            FireSizeChanged();
+        }
+
+        public void SetMaxHeightWithoutScaling(int? value)
+        {
+            if (value == _maxHeight)
+            {
+                return;
+            }
+
+            _maxHeight = value;
+            InvalidateMeasure();
+            FireSizeChanged();
+        }
+
+        public void SetWidthWithoutScaling(int? value)
+        {
+            if (value == _width)
+            {
+                return;
+            }
+
+            _width = value;
+            InvalidateMeasure();
+            FireSizeChanged();
+        }
+
+        public void SetMinWidthWithoutScaling(int? value)
+        {
+            if (value == _minWidth)
+            {
+                return;
+            }
+
+            _minWidth = value;
+            InvalidateMeasure();
+            FireSizeChanged();
+        }
+
+        public void SetMaxWidthWithoutScaling(int? value)
+        {
+            if (value == _maxWidth)
+            {
+                return;
+            }
+
+            _maxWidth = value;
+            InvalidateMeasure();
+            FireSizeChanged();
+        }
 
 		public void BringToFront()
 		{
