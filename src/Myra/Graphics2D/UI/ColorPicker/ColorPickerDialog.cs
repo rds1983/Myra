@@ -40,7 +40,10 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 			for (var i = 0; i < ColorPickerPanel.UserColors.Length; ++i)
 			{
-				ColorPickerPanel.UserColors[i] = ColorPickerPanel.GetUserColor(i);
+				var colorDisplay = ColorPickerPanel.GetUserColorImage(i);
+				var color = colorDisplay.Color;
+				var alpha = (int) (colorDisplay.Opacity * 255);
+				ColorPickerPanel.UserColors[i] = new Color(color.R, color.G, color.B, alpha);
 			}
 		}
 	}
