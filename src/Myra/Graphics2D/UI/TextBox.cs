@@ -244,7 +244,7 @@ namespace Myra.Graphics2D.UI
 
 		internal bool InternalAcceptsKeyboardFocus = true;
 
-		internal protected override bool AcceptsKeyboardFocus
+		public override bool AcceptsKeyboardFocus
 		{
 			get { return InternalAcceptsKeyboardFocus; }
 		}

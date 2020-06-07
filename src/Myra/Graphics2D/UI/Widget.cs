@@ -815,11 +815,19 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
-		internal protected virtual bool AcceptsKeyboardFocus
+		private bool _acceptsKeyboardFocus;
+		
+		[Category("Behavior")]
+		public virtual bool AcceptsKeyboardFocus
 		{
-			get { return false; }
+			get
+			{
+				return _acceptsKeyboardFocus;
+			}
+			set
+			{
+				_acceptsKeyboardFocus = value;
+			}
 		}
 
 		[Browsable(false)]
