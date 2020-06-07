@@ -199,7 +199,7 @@ namespace Myra.Graphics2D.UI
 
 		public override IBrush GetCurrentBackground()
 		{
-			var result = Background;
+			var result = base.GetCurrentBackground();
 
 			if (Enabled)
 			{
