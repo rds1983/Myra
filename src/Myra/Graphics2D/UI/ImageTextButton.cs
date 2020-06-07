@@ -32,6 +32,11 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		protected internal override bool AcceptsKeyboardFocus
+		{
+			get => true;
+		}
+
 		[Category("Appearance")]
 		[StylePropertyPath("/LabelStyle/TextColor")]
 		public virtual Color TextColor
