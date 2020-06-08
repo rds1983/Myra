@@ -244,7 +244,7 @@ namespace Myra.Graphics2D.UI
 
 		internal bool InternalAcceptsKeyboardFocus = true;
 
-		internal protected override bool AcceptsKeyboardFocus
+		public override bool AcceptsKeyboardFocus
 		{
 			get { return InternalAcceptsKeyboardFocus; }
 		}
@@ -368,6 +368,18 @@ namespace Myra.Graphics2D.UI
 			SetStyle(styleName);
 
 			BlinkIntervalInMs = 450;
+
+			KeyboardFocusChanged += (e, a) =>
+			{
+				if (IsKeyboardFocused)
+				{
+					OnGotKeyboardFocus();
+				}
+				else
+				{
+					OnLostKeyboardFocus();
+				}
+			};
 		}
 
 		private void DeleteChars(int pos, int l)

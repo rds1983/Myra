@@ -43,7 +43,7 @@ namespace Myra.Graphics2D.UI
 
 		protected internal override bool AcceptsMouseWheelFocus => InternalChild.AcceptsMouseWheelFocus;
 
-		internal protected override bool AcceptsKeyboardFocus
+		public override bool AcceptsKeyboardFocus
 		{
 			get { return true; }
 		}

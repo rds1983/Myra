@@ -214,7 +214,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(1f)]
 		public float Mul_Increment { get; set; } = 1f;
 
-		internal protected override bool AcceptsKeyboardFocus
+		public override bool AcceptsKeyboardFocus
 		{
 			get { return true; }
 		}

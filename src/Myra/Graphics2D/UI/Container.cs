@@ -52,6 +52,28 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public override bool Visible
+		{
+			get
+			{
+				return base.Visible;
+			}
+			set
+			{
+				if (base.Visible == value)
+				{
+					return;
+				}
+
+				base.Visible = value;
+
+				foreach (var item in ChildrenCopy)
+				{
+					item.Visible = value;
+				}
+			}
+		}
+
 		public override Desktop Desktop 
 		{
 			get

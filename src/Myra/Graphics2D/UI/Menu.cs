@@ -325,7 +325,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		protected internal override bool AcceptsKeyboardFocus => true;
+		public override bool AcceptsKeyboardFocus => true;
 
 		protected Menu(string styleName)
 		{

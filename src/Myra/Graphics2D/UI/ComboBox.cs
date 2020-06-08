@@ -65,7 +65,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		protected internal override bool AcceptsKeyboardFocus => true;
+		public override bool AcceptsKeyboardFocus => true;
 
 		public override ObservableCollection<ListItem> Items => _listBox.Items;
 
