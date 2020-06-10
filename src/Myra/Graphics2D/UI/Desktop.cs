@@ -58,6 +58,7 @@ namespace Myra.Graphics2D.UI
 #if MONOGAME
 		public bool HasExternalTextInput = false;
 #endif
+		private readonly List<ISystem> _systems = new List<ISystem>();
 
 		/// <summary>
 		/// Root Widget
@@ -178,7 +179,7 @@ namespace Myra.Graphics2D.UI
 
 		public ObservableCollection<Widget> Widgets { get; } = new ObservableCollection<Widget>();
 
-		public IList<ISystem> Systems { get; } = new List<ISystem>();
+		public IReadOnlyList<ISystem> Systems { get => _systems; }
 		
 		public Func<Rectangle> BoundsFetcher = DefaultBoundsFetcher;
 
@@ -619,9 +620,6 @@ namespace Myra.Graphics2D.UI
 				foreach (Widget w in args.NewItems)
 				{
 					w.Desktop = this;
-					
-					foreach(var system in Systems)
-						system.OnWidgetAddedToDesktop(w);
 				}
 			}
 			else if (args.Action == NotifyCollectionChangedAction.Remove)
@@ -689,6 +687,7 @@ namespace Myra.Graphics2D.UI
 		public void Render()
 		{
 			UpdateInput();
+			UpdateSystems();
 			UpdateLayout();
 			RenderVisual();
 		}
@@ -737,7 +736,7 @@ namespace Myra.Graphics2D.UI
 					continue;
 				}
 
-				UIUtils.ProcessWidgets(w, widget =>
+				w.ProcessWidgets(widget =>
 				{
 					widget.Active = active;
 
@@ -773,6 +772,19 @@ namespace Myra.Graphics2D.UI
 			_layoutDirty = false;
 		}
 
+		internal void ProcessWidgets(Func<Widget, bool> operation)
+		{
+			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
+			{
+				var w = ChildrenCopy[i];
+				var result = w.ProcessWidgets(operation);
+				if (!result)
+				{
+					return;
+				}
+			}
+		}
+
 		private void UpdateRecursiveLayout(IEnumerable<Widget> widgets)
 		{
 			foreach (var i in widgets)
@@ -793,7 +805,7 @@ namespace Myra.Graphics2D.UI
 		/// <summary>
 		/// Updates all of the systems attached to the Desktop.
 		/// </summary>
-		public void Update()
+		public void UpdateSystems()
 		{
 			foreach (var system in Systems)
 			{
@@ -1002,6 +1014,11 @@ namespace Myra.Graphics2D.UI
 				{
 					if (!_lastDownKeys.Contains(key))
 					{
+						if (key == Keys.Tab)
+						{
+							FocusNextWidget();
+						}
+
 						KeyDownHandler?.Invoke(key);
 
 						_lastKeyDown = now;
@@ -1037,6 +1054,58 @@ namespace Myra.Graphics2D.UI
 
 			_lastDownKeys = _downKeys.ToArray();
 		}
+
+		private void FocusNextWidget()
+		{
+			if (Widgets.Count == 0) return;
+
+			var isNull = FocusedKeyboardWidget == null;
+			var focusChanged = false;
+			ProcessWidgets(w =>
+			{
+				if (isNull)
+				{
+					if (CanFocusWidget(w))
+					{
+						w.SetKeyboardFocus();
+						focusChanged = true;
+						return false;
+					}
+				}
+				else
+				{
+					if (w == FocusedKeyboardWidget)
+					{
+						isNull = true;
+						// Next widget will be focused
+					}
+				}
+
+				return true;
+			});
+
+			if (focusChanged || FocusedKeyboardWidget == null)
+			{
+				// Either new focus had been set or there are no focusable widgets
+				return;
+			}
+
+			// Next run - try to focus first widget before focused one
+			ProcessWidgets(w =>
+			{
+				if (CanFocusWidget(w))
+				{
+					w.SetKeyboardFocus();
+					return false;
+				}
+
+				return true;
+			});
+		}
+
+		private static bool CanFocusWidget(Widget widget) =>
+			widget != null && widget.Visible && widget.Active &&
+			widget.Enabled && widget.AcceptsKeyboardFocus;
 
 		public void UpdateInput()
 		{
@@ -1193,7 +1262,7 @@ namespace Myra.Graphics2D.UI
 		public T AddSystem<T>(T system) where T : ISystem
 		{
 			system.Desktop = this;
-			Systems.Add(system);
+			_systems.Add(system);
 
 			var widgets = new Queue<Widget>();
 			widgets.Enqueue(Root);
@@ -1209,11 +1278,10 @@ namespace Myra.Graphics2D.UI
 						widgets.Enqueue(childWidget);
 					}
 				}
-				
+
 				system.OnWidgetAddedToDesktop(currentWidget);
 			}
-				
-			
+
 			return system;
 		}
 

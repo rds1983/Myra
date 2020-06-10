@@ -368,18 +368,6 @@ namespace Myra.Graphics2D.UI
 			SetStyle(styleName);
 
 			BlinkIntervalInMs = 450;
-
-			KeyboardFocusChanged += (e, a) =>
-			{
-				if (IsKeyboardFocused)
-				{
-					OnGotKeyboardFocus();
-				}
-				else
-				{
-					OnLostKeyboardFocus();
-				}
-			};
 		}
 
 		private void DeleteChars(int pos, int l)

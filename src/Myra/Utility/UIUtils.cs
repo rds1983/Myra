@@ -5,7 +5,7 @@ namespace Myra.Utility
 {
 	public static class UIUtils
 	{
-		public static bool ProcessWidgets(Widget root, Func<Widget, bool> operation)
+		public static bool ProcessWidgets(this Widget root, Func<Widget, bool> operation)
 		{
 			if (!root.Visible)
 			{
