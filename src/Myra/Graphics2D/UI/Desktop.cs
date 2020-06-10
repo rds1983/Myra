@@ -1068,6 +1068,10 @@ namespace Myra.Graphics2D.UI
 					if (CanFocusWidget(w))
 					{
 						w.SetKeyboardFocus();
+						if (w.AcceptsMouseWheelFocus)
+						{
+							w.SetMouseWheelFocus();
+						}
 						focusChanged = true;
 						return false;
 					}
