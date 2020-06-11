@@ -36,16 +36,16 @@ namespace Myra.Utility
             #region Calculation
             /// if X exp not null
             if (widget.Layout2d.PositionXExpression != "NULL")
-                widget.SetLeftWithoutScaling((int)parser.Parse(CheckAndAddRef(widget.Layout2d.PositionXExpression, parser, widget)));
+                widget.SetLeft((int)parser.Parse(CheckAndAddRef(widget.Layout2d.PositionXExpression, parser, widget)), false);
             /// if Y exp not null
             if (widget.Layout2d.PositionYExpression != "NULL")
-                widget.SetTopWithoutScaling((int)parser.Parse(CheckAndAddRef(widget.Layout2d.PositionYExpression, parser, widget)));
+                widget.SetTop((int)parser.Parse(CheckAndAddRef(widget.Layout2d.PositionYExpression, parser, widget)), false);
             /// if H exp not null
             if (widget.Layout2d.SizeYExpression != "NULL")
-                widget.SetHeightWithoutScaling((int)parser.Parse(CheckAndAddRef(widget.Layout2d.SizeYExpression, parser, widget)));
+                widget.SetHeight((int)parser.Parse(CheckAndAddRef(widget.Layout2d.SizeYExpression, parser, widget)), false);
             /// if W exp not null
             if (widget.Layout2d.SizeXExpression != "NULL")
-                widget.SetWidthWithoutScaling((int)parser.Parse(CheckAndAddRef(widget.Layout2d.SizeXExpression, parser, widget)));
+                widget.SetWidth((int)parser.Parse(CheckAndAddRef(widget.Layout2d.SizeXExpression, parser, widget)), false);
             #endregion
             widget.Layout2d.Calculated = true;
         }
