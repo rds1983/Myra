@@ -178,6 +178,8 @@ namespace Myra.Graphics2D.UI
 					break;
 				}
 			}
+
+			InvalidateMeasure();
 		}
 
 		internal void UpdateSelectedItem()

@@ -204,6 +204,13 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		protected override void OnItemCollectionChanged()
+		{
+			base.OnItemCollectionChanged();
+
+			InternalChild.ResetScroll();
+		}
+
 		private void UpdateScrolling()
 		{
 			if (SelectedItem == null)

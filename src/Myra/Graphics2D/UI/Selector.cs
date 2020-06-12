@@ -140,7 +140,12 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
+			OnItemCollectionChanged();
 			InvalidateMeasure();
+		}
+
+		protected virtual void OnItemCollectionChanged()
+		{
 		}
 
 		protected virtual void OnSelectedItemChanged()
