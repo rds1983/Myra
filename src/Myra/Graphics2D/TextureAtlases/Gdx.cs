@@ -1,8 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+
+#if !STRIDE
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+#else
+using Stride.Core.Mathematics;
+using Texture2D = Stride.Graphics.Texture;
+#endif
 
 namespace Myra.Graphics2D.TextureAtlases
 {
@@ -17,16 +23,6 @@ namespace Myra.Graphics2D.TextureAtlases
 		private class GDXPageData
 		{
 			public Texture2D Texture { get; set; }
-			public SurfaceFormat Format { get; set; }
-			public TextureFilter Filter { get; set; }
-			public TextureAddressMode UWrap { get; set; }
-			public TextureAddressMode VWrap { get; set; }
-
-			public GDXPageData()
-			{
-				UWrap = TextureAddressMode.Clamp;
-				VWrap = TextureAddressMode.Clamp;
-			}
 		}
 
 		private class GDXSpriteData
@@ -38,42 +34,6 @@ namespace Myra.Graphics2D.TextureAtlases
 			public Thickness? Split;
 			public Point OriginalSize;
 			public Point Offset;
-		}
-
-		private enum GDXTextureFilter
-		{
-			Nearest,
-			Linear,
-			MipMap,
-			MipMapNearestNearest,
-			MipMapLinearNearest,
-			MipMapNearestLinear,
-			MipMapLinearLinear
-		}
-
-		private static readonly Dictionary<string, TextureAddressMode> _gdxIdsToTextureWraps =
-			new Dictionary<string, TextureAddressMode>();
-
-		static Gdx()
-		{
-			_gdxIdsToTextureWraps["MirroredRepeat"] = TextureAddressMode.Mirror;
-			_gdxIdsToTextureWraps["ClampToEdge"] = TextureAddressMode.Clamp;
-			_gdxIdsToTextureWraps["Repeat"] = TextureAddressMode.Wrap;
-		}
-
-		private static TextureFilter FromGDXFilters(GDXTextureFilter min, GDXTextureFilter mag)
-		{
-			if (min == GDXTextureFilter.Nearest && mag == GDXTextureFilter.Nearest)
-			{
-				return TextureFilter.Point;
-			}
-
-			if (min == GDXTextureFilter.Linear && mag == GDXTextureFilter.Linear)
-			{
-				return TextureFilter.Linear;
-			}
-
-			throw new Exception("Not supported!");
 		}
 
 		public static TextureRegionAtlas FromGDX(string data, Func<string, Texture2D> textureLoader)
@@ -132,40 +92,10 @@ namespace Myra.Graphics2D.TextureAtlases
 					switch (key)
 					{
 						case "format":
-							SurfaceFormat format;
-							if (!Enum.TryParse(value, out format))
-							{
-#if !STRIDE
-								format = SurfaceFormat.Color;
-#else
-								format = SurfaceFormat.R8G8B8A8_SNorm;
-#endif
-							}
-
-							pageData.Format = format;
 							break;
 						case "filter":
-							parts = value.Split(',');
-							var minFilter = (GDXTextureFilter) Enum.Parse(typeof(GDXTextureFilter), parts[0].Trim());
-							var magFilter = (GDXTextureFilter) Enum.Parse(typeof(GDXTextureFilter), parts[1].Trim());
-
-							pageData.Filter = FromGDXFilters(minFilter, magFilter);
 							break;
 						case "repeat":
-							if (value == "x")
-							{
-								pageData.UWrap = TextureAddressMode.Wrap;
-							}
-							else if (value == "y")
-							{
-								pageData.VWrap = TextureAddressMode.Wrap;
-							}
-							else if (value == "xy")
-							{
-								pageData.UWrap = TextureAddressMode.Wrap;
-								pageData.VWrap = TextureAddressMode.Wrap;
-							}
-
 							break;
 						case "rotate":
 							bool isRotated;
@@ -221,17 +151,17 @@ namespace Myra.Graphics2D.TextureAtlases
 				var texture = sd.Value.PageData.Texture;
 				var bounds = sd.Value.SourceRectangle;
 
-				TextureRegion IRenderable;
+				TextureRegion region;
 				if (!sd.Value.Split.HasValue)
 				{
-					IRenderable = new TextureRegion(texture, bounds);
+					region = new TextureRegion(texture, bounds);
 				}
 				else
 				{
-					IRenderable = new NinePatchRegion(texture, bounds, sd.Value.Split.Value);
+					region = new NinePatchRegion(texture, bounds, sd.Value.Split.Value);
 				}
 
-				regions[sd.Key] = IRenderable;
+				regions[sd.Key] = region;
 			}
 
 			return result;

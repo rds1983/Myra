@@ -52,7 +52,9 @@ namespace Myra.Samples.AllWidgets
 			MyraEnvironment.Game = this;
 
 			_allWidgets = new AllWidgets();
-			Desktop.Widgets.Add(_allWidgets);
+
+			_desktop = new Desktop();
+			_desktop.Widgets.Add(_allWidgets);
 
 			return base.LoadContent();
 		}

@@ -93,7 +93,7 @@ namespace Myra.Graphics2D.TextureAtlases
 				color);
 #else
 			batch.Draw(Texture,
-				new RectangleF(dest.X, dest.Y, Bounds.Width, Bounds.Height),
+				pos,
 				new RectangleF(Bounds.X, Bounds.Y, Bounds.Width, Bounds.Height),
 				color,
 				0.0f,
