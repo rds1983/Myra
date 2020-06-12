@@ -751,7 +751,7 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return BorderBounds.Contains(Desktop.MousePosition);
+				return Desktop != null && BorderBounds.Contains(Desktop.MousePosition);
 			}
 		}
 
@@ -759,7 +759,7 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return BorderBounds.Contains(Desktop.TouchPosition);
+				return Desktop != null && BorderBounds.Contains(Desktop.TouchPosition);
 			}
 		}
 
@@ -871,7 +871,7 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return Desktop.FocusedMouseWheelWidget == this;
+				return Desktop != null && Desktop.FocusedMouseWheelWidget == this;
 			}
 		}
 
