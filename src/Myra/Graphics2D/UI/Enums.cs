@@ -71,4 +71,14 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		KeepAspectRatio
 	}
+
+    /// <summary>
+    /// Defines in which way the user is scrolling.
+    /// </summary>
+    public enum ScrollingType
+    {
+        Scrollbar,
+        MouseWheel,
+        Touch
+    }
 }

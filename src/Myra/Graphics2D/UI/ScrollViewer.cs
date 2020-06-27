@@ -15,7 +15,8 @@ namespace Myra.Graphics2D.UI
 {
 	public class ScrollViewer : SingleItemContainer<Widget>, IContent
 	{
-		private Orientation _scrollbarOrientation;
+		private DragDirection _dragDirection;
+        private ScrollingType _scrollingType;
 		internal bool _horizontalScrollingOn, _verticalScrollingOn;
 		private bool _showHorizontalScrollBar, _showVerticalScrollBar;
 		internal Rectangle _horizontalScrollbarFrame, _horizontalScrollbarThumb;
@@ -320,14 +321,14 @@ namespace Myra.Graphics2D.UI
 			SetStyle(styleName);
 		}
 
-		private void MoveThumb(int delta)
+		private void MoveThumb(Point delta)
 		{
 			var scrollPosition = ScrollPosition;
 
 			var maximum = ScrollMaximum;
-			if (_scrollbarOrientation == Orientation.Horizontal)
+			if (_dragDirection == DragDirection.Horizontal)
 			{
-				var newPos = delta + scrollPosition.X;
+				var newPos = delta.X + scrollPosition.X;
 				if (newPos < 0)
 				{
 					newPos = 0;
@@ -340,9 +341,9 @@ namespace Myra.Graphics2D.UI
 
 				scrollPosition.X = newPos;
 			}
-			else
+			if (_dragDirection == DragDirection.Vertical)
 			{
-				var newPos = delta + scrollPosition.Y;
+				var newPos = delta.Y + scrollPosition.Y;
 
 				if (newPos < 0)
 				{
@@ -390,23 +391,50 @@ namespace Myra.Graphics2D.UI
 
 			var touchPosition = Desktop.TouchPosition;
 
-			var r = _verticalScrollbarThumb;
+
+            Rectangle verticalScrollBarRect = _verticalScrollbarThumb;
 			var thumbPosition = ThumbPosition;
-			r.Y += thumbPosition.Y;
-			if (ShowVerticalScrollBar && _verticalScrollingOn && r.Contains(touchPosition))
+			verticalScrollBarRect.Y += thumbPosition.Y;
+			if (ShowVerticalScrollBar && _verticalScrollingOn && verticalScrollBarRect.Contains(touchPosition))
 			{
 				_startBoundsPos = touchPosition.Y;
-				_scrollbarOrientation = Orientation.Vertical;
+				_dragDirection = DragDirection.Vertical;
+                _scrollingType = ScrollingType.Scrollbar;
+                return;
 			}
 
-			r = _horizontalScrollbarThumb;
-			r.X += thumbPosition.X;
-			if (ShowHorizontalScrollBar && _horizontalScrollingOn && r.Contains(touchPosition))
+			Rectangle horizontalScrollBarRect = _horizontalScrollbarThumb;
+            horizontalScrollBarRect.X += thumbPosition.X;
+			if (ShowHorizontalScrollBar && _horizontalScrollingOn && horizontalScrollBarRect.Contains(touchPosition))
 			{
 				_startBoundsPos = touchPosition.X;
-				_scrollbarOrientation = Orientation.Horizontal;
+				_dragDirection = DragDirection.Horizontal;
+                _scrollingType = ScrollingType.Scrollbar;
+                return;
 			}
-		}
+
+            Rectangle viewerRect = ActualBounds;
+            viewerRect.X += thumbPosition.X;
+            if ((_verticalScrollingOn || _horizontalScrollingOn) && viewerRect.Contains(touchPosition))
+            {
+                _startBoundsPos = touchPosition.X;
+                if (_verticalScrollingOn && _horizontalScrollingOn)
+                {
+                    _dragDirection = DragDirection.Both;
+                }
+                else if (_verticalScrollingOn)
+                {
+                    _dragDirection = DragDirection.Vertical;
+                }
+                else if (_horizontalScrollingOn)
+                {
+                    _dragDirection = DragDirection.Horizontal;
+                }
+                _scrollingType = ScrollingType.Touch;
+
+                return;
+            }
+        }
 
 		public override void OnMouseWheel(float delta)
 		{
@@ -420,13 +448,17 @@ namespace Myra.Graphics2D.UI
 			var step = 10 * ScrollMaximum.Y / _thumbMaximumY;
 			if (delta < 0)
 			{
-				_scrollbarOrientation = Orientation.Vertical;
-				MoveThumb(step);
+				_dragDirection = DragDirection.Vertical;
+                _scrollingType = ScrollingType.MouseWheel;
+
+                MoveThumb(new Point(0, step));
 			}
 			else if (delta > 0)
 			{
-				_scrollbarOrientation = Orientation.Vertical;
-				MoveThumb(-step);
+				_dragDirection = DragDirection.Vertical;
+                _scrollingType = ScrollingType.MouseWheel;
+
+                MoveThumb(new Point(0, -step));
 			}
 		}
 
@@ -641,21 +673,27 @@ namespace Myra.Graphics2D.UI
 
 			var touchPosition = Desktop.TouchPosition;
 
-			int delta;
-			if (_scrollbarOrientation == Orientation.Horizontal)
+			Point delta = new Point();
+			if (_dragDirection == DragDirection.Horizontal)
 			{
-				delta = (touchPosition.X - _startBoundsPos.Value) * ScrollMaximum.X / _thumbMaximumX;
+				delta.X = (touchPosition.X - _startBoundsPos.Value) * ScrollMaximum.X / _thumbMaximumX;
 				_startBoundsPos = touchPosition.X;
 			}
-			else
+			if (_dragDirection == DragDirection.Vertical)
 			{
-				delta = (touchPosition.Y - _startBoundsPos.Value) * ScrollMaximum.Y / _thumbMaximumY;
+				delta.Y = (touchPosition.Y - _startBoundsPos.Value) * ScrollMaximum.Y / _thumbMaximumY;
 				_startBoundsPos = touchPosition.Y;
 			}
 
-			
-			MoveThumb(delta);
-		}
+			if (_scrollingType == ScrollingType.Touch)
+            {
+                MoveThumb(Point.Zero-delta);
+            }
+            else
+            {
+                MoveThumb(delta);
+            }
+        }
 
 		private void DesktopTouchUp(object sender, EventArgs args)
 		{
