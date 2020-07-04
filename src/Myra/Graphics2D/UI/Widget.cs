@@ -717,7 +717,16 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public bool IsMouseInside { get; private set; }
 
-		[Browsable(false)]
+        /// <summary>
+        /// Indicates whether the touch gesture stayed inside this widget so far.
+        /// Is set to <see langword="true"/> if the touch gesture starts inside this widget.
+        /// Is set to <see langword="false"/> as soon as the touch gesture ends or the current position leaves the widget.
+        /// </summary>
+        [Browsable(false)]
+        [XmlIgnore]
+        public bool TouchStayedInside { get; private set; }
+
+        [Browsable(false)]
 		[XmlIgnore]
 		public bool IsTouchInside { get; private set; }
 
@@ -1445,6 +1454,7 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnTouchLeft(HookableEventArgs args)
 		{
+            TouchStayedInside = false;
 			IsTouchInside = false;
 			TouchLeft?.Invoke(this, args);
 		}
@@ -1463,17 +1473,8 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnTouchDown()
 		{
+            TouchStayedInside = true;
 			IsTouchInside = true;
-
-			if (Enabled && AcceptsKeyboardFocus)
-			{
-				Desktop.FocusedKeyboardWidget = this;
-			}
-
-			if (Enabled && AcceptsMouseWheelFocus)
-			{
-				Desktop.FocusedMouseWheelWidget = this;
-			}
 
 			var x = Bounds.X;
 			var y = Bounds.Y;
@@ -1499,7 +1500,21 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnTouchUp()
 		{
+            if (TouchStayedInside)
+            {
+                if (Enabled && AcceptsKeyboardFocus)
+                {
+                    Desktop.FocusedKeyboardWidget = this;
+                }
+
+                if (Enabled && AcceptsMouseWheelFocus)
+                {
+                    Desktop.FocusedMouseWheelWidget = this;
+                }
+            }
+
 			_startPos = null;
+            TouchStayedInside = false;
 			IsTouchInside = false;
 			TouchUp.Invoke(this);
 		}
