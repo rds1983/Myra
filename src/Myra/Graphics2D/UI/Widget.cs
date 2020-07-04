@@ -894,9 +894,9 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler MouseEntered;
 		public event EventHandler MouseMoved;
 
-		public event EventHandler TouchLeft;
-		public event EventHandler TouchEntered;
-		public event EventHandler TouchMoved;
+		public event EventHandler<HookableEventArgs> TouchLeft;
+		public event EventHandler<HookableEventArgs> TouchEntered;
+		public event EventHandler<HookableEventArgs> TouchMoved;
 		public event EventHandler TouchDown;
 		public event EventHandler TouchUp;
 		public event EventHandler TouchDoubleClick;
@@ -1443,22 +1443,22 @@ namespace Myra.Graphics2D.UI
 			MouseWheelChanged.Invoke(this, delta);
 		}
 
-		public virtual void OnTouchLeft()
+		public virtual void OnTouchLeft(HookableEventArgs args)
 		{
 			IsTouchInside = false;
-			TouchLeft.Invoke(this);
+			TouchLeft?.Invoke(this, args);
 		}
 
-		public virtual void OnTouchEntered()
+		public virtual void OnTouchEntered(HookableEventArgs args)
 		{
 			IsTouchInside = true;
-			TouchEntered.Invoke(this);
+			TouchEntered?.Invoke(this, args);
 		}
 
-		public virtual void OnTouchMoved()
+		public virtual void OnTouchMoved(HookableEventArgs args)
 		{
 			IsTouchInside = true;
-			TouchMoved.Invoke(this);
+			TouchMoved?.Invoke(this, args);
 		}
 
 		public virtual void OnTouchDown()
@@ -1612,7 +1612,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void DesktopOnTouchMoved(object sender, EventArgs args)
+		private void DesktopOnTouchMoved(object sender, HookableEventArgs args)
 		{
 			if (_startPos == null || !IsDraggable)
 			{

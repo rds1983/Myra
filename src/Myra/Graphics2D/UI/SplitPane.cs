@@ -6,6 +6,7 @@ using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
 using Myra.Attributes;
+using Myra.Utility;
 
 #if !STRIDE
 using Microsoft.Xna.Framework;
@@ -80,9 +81,9 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public override void OnTouchMoved()
+		public override void OnTouchMoved(HookableEventArgs args)
 		{
-			base.OnTouchMoved();
+			base.OnTouchMoved(args);
 
 			if (_mouseCoord == null)
 			{
@@ -135,6 +136,7 @@ namespace Myra.Graphics2D.UI
 				firstProportion.Value = fp;
 				secondProportion.Value = fp2;
 				FireProportionsChanged();
+                args.SetHandledFlag();
 			}
 		}
 

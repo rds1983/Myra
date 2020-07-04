@@ -155,7 +155,7 @@ namespace Myra.Utility
 			}
 		}
 
-		public static void ProcessTouchMovement(this List<Widget> widgets)
+		public static void ProcessTouchMovement(this List<Widget> widgets, HookableEventArgs args)
 		{
 			// First run: call on OnTouchLeft on all widgets if it is required
 			for (var i = widgets.Count - 1; i >= 0; --i)
@@ -163,11 +163,11 @@ namespace Myra.Utility
 				var w = widgets[i];
 				if (!w.ContainsTouch && w.IsTouchInside)
 				{
-					w.OnTouchLeft();
+					w.OnTouchLeft(args);
 				}
 			}
 
-			// Second run: OnTouchEnter/OnTouchMoved
+            // Second run: OnTouchEnter/OnTouchMoved
 			for (var i = widgets.Count - 1; i >= 0; --i)
 			{
 				var w = widgets[i];
@@ -179,12 +179,12 @@ namespace Myra.Utility
 
 					if (isTouchOver && !wasTouchOver)
 					{
-						w.OnTouchEntered();
+						w.OnTouchEntered(args);
 					}
 
 					if (isTouchOver && wasTouchOver)
 					{
-						w.OnTouchMoved();
+						w.OnTouchMoved(args);
 					}
 
 					if (w.Desktop != null && !w.FallsThrough(w.Desktop.TouchPosition))

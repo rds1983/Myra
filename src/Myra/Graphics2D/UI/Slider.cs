@@ -236,13 +236,13 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void DesktopTouchMoved(object sender, EventArgs args)
+		private void DesktopTouchMoved(object sender, HookableEventArgs args)
 		{
 			if (!InternalChild.IsPressed)
 			{
 				return;
 			}
-
+            args.SetHandledFlag();
 			UpdateHint();
 		}
 	}

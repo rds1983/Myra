@@ -138,25 +138,25 @@ namespace Myra.Graphics2D.UI
 			ChildrenCopy.ProcessMouseMovement();
 		}
 
-		public override void OnTouchEntered()
+		public override void OnTouchEntered(HookableEventArgs args)
 		{
-			base.OnTouchEntered();
+			base.OnTouchEntered(args);
 
-			ChildrenCopy.ProcessTouchMovement();
+			ChildrenCopy.ProcessTouchMovement(args);
 		}
 
-		public override void OnTouchLeft()
+		public override void OnTouchLeft(HookableEventArgs args)
 		{
-			base.OnTouchLeft();
+			base.OnTouchLeft(args);
 
-			ChildrenCopy.ProcessTouchMovement();
+			ChildrenCopy.ProcessTouchMovement(args);
 		}
 
-		public override void OnTouchMoved()
+		public override void OnTouchMoved(HookableEventArgs args)
 		{
-			base.OnTouchMoved();
+			base.OnTouchMoved(args);
 
-			ChildrenCopy.ProcessTouchMovement();
+			ChildrenCopy.ProcessTouchMovement(args);
 		}
 
 		public override void OnTouchDown()

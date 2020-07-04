@@ -666,7 +666,7 @@ namespace Myra.Graphics2D.UI
 			ScrollPosition = Point.Zero;
 		}
 
-		private void DesktopTouchMoved(object sender, EventArgs args)
+		private void DesktopTouchMoved(object sender, HookableEventArgs args)
 		{
 			if (!_startBoundsPos.HasValue)
 				return;
@@ -687,11 +687,11 @@ namespace Myra.Graphics2D.UI
 
 			if (_scrollingType == ScrollingType.Touch)
             {
-                MoveThumb(Point.Zero-delta);
+                args.AddHook(()=>MoveThumb(Point.Zero-delta));
             }
             else
             {
-                MoveThumb(delta);
+                args.AddHook(()=>MoveThumb(delta));
             }
         }
 

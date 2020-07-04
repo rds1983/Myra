@@ -150,9 +150,10 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_touchPosition = value;
-				TouchMoved.Invoke();
-
-				ChildrenCopy.ProcessTouchMovement();
+                HookableEventArgs args = new HookableEventArgs();
+                TouchMoved.Invoke(this, args);
+				ChildrenCopy.ProcessTouchMovement(args);
+                args.InvokeHookIfNotHandled();
 			}
 		}
 
@@ -387,7 +388,7 @@ namespace Myra.Graphics2D.UI
 
 		public event EventHandler MouseMoved;
 
-		public event EventHandler TouchMoved;
+		public event EventHandler<HookableEventArgs> TouchMoved;
 		public event EventHandler TouchDown;
 		public event EventHandler TouchUp;
 		public event EventHandler TouchDoubleClick;
@@ -1121,7 +1122,7 @@ namespace Myra.Graphics2D.UI
 			{
 				UpdateTouch();
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
 			}
 #endif

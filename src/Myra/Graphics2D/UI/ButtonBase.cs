@@ -118,9 +118,9 @@ namespace Myra.Graphics2D.UI
 			PressedChanged.Invoke(this);
 		}
 
-		public override void OnTouchLeft()
+		public override void OnTouchLeft(HookableEventArgs args)
 		{
-			base.OnTouchLeft();
+			base.OnTouchLeft(args);
 
 			if (ReleaseOnTouchLeft && !Toggleable)
 			{
