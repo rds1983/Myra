@@ -151,7 +151,7 @@ namespace Myra.Graphics2D.UI
 
 				_touchPosition = value;
                 HookableEventArgs args = new HookableEventArgs();
-                TouchMoved.Invoke(this, args);
+                TouchMoved?.Invoke(this, args);
 				ChildrenCopy.ProcessTouchMovement(args);
                 args.InvokeHookIfNotHandled();
 			}
