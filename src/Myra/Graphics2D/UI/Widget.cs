@@ -908,6 +908,7 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler<HookableEventArgs> TouchMoved;
 		public event EventHandler TouchDown;
 		public event EventHandler TouchUp;
+        public event EventHandler Click;
 		public event EventHandler TouchDoubleClick;
 
 		public event EventHandler KeyboardFocusChanged;
@@ -1502,15 +1503,7 @@ namespace Myra.Graphics2D.UI
 		{
             if (TouchStayedInside)
             {
-                if (Enabled && AcceptsKeyboardFocus)
-                {
-                    Desktop.FocusedKeyboardWidget = this;
-                }
-
-                if (Enabled && AcceptsMouseWheelFocus)
-                {
-                    Desktop.FocusedMouseWheelWidget = this;
-                }
+                OnClick();
             }
 
 			_startPos = null;
@@ -1518,6 +1511,20 @@ namespace Myra.Graphics2D.UI
 			IsTouchInside = false;
 			TouchUp.Invoke(this);
 		}
+
+        public virtual void OnClick()
+        {
+            if (Enabled && AcceptsKeyboardFocus)
+            {
+                Desktop.FocusedKeyboardWidget = this;
+            }
+
+            if (Enabled && AcceptsMouseWheelFocus)
+            {
+                Desktop.FocusedMouseWheelWidget = this;
+            }
+            Click.Invoke(this);
+        }
 
 		protected void FireKeyDown(Keys k)
 		{
