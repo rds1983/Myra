@@ -87,7 +87,7 @@ namespace Myra.Graphics2D.UI
 
         public override void OnTouchUp()
         {
-            base.OnTouchDown();
+            base.OnTouchUp();
             InternalChild.IsPressed = false;
         }
 

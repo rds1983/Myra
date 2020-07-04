@@ -63,7 +63,7 @@ namespace Myra.Graphics2D.UI
 
         /// <summary>
         /// Indicates whether the current touch gesture started in this widget.
-        /// Similar to <see cref="Widget.TouchStayedInside"/> but keeps true also if the gesture leaves the widget's bounds.
+        /// Similar to <see cref="Widget.TouchStayedInside"/> but stays <see langword="true"/> also if the gesture leaves the widget's bounds.
         /// </summary>
         public bool IsPressed { get; set; }
 
