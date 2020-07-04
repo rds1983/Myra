@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
 using Myra.Graphics2D.UI.Styles;
@@ -194,17 +194,17 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void OnTouchDown()
-		{
-			base.OnTouchDown();
+        public override void OnClick()
+        {
+            base.OnClick();
 
-			if (!InternalChild._verticalScrollingOn || !InternalChild._verticalScrollbarFrame.Contains(Desktop.TouchPosition))
-			{
-				ComboHideDropdown();
-			}
-		}
+            if (!InternalChild._verticalScrollingOn || !InternalChild._verticalScrollbarFrame.Contains(Desktop.TouchPosition))
+            {
+                ComboHideDropdown();
+            }
+        }
 
-		private void UpdateScrolling()
+        private void UpdateScrolling()
 		{
 			if (SelectedItem == null)
 			{
