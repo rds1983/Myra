@@ -42,7 +42,7 @@ namespace Myra.Samples.NonModalWindows.UI
 
 		private void _button1_ToggledChanged(object sender, System.EventArgs e)
 		{
-			if (_button1.IsPressed)
+			if (_button1.IsToggled)
 			{
 				_window1.Show(Desktop, new Point(100, 100));
 			}
@@ -54,7 +54,7 @@ namespace Myra.Samples.NonModalWindows.UI
 
 		private void _button2_ToggledChanged(object sender, System.EventArgs e)
 		{
-			if (_button2.IsPressed)
+			if (_button2.IsToggled)
 			{
 				_window2.Show(Desktop, new Point(400, 100));
 			}
@@ -66,7 +66,7 @@ namespace Myra.Samples.NonModalWindows.UI
 
 		private void _button3_ToggledChanged(object sender, System.EventArgs e)
 		{
-			if (_button3.IsPressed)
+			if (_button3.IsToggled)
 			{
 				_window3.Show(Desktop, new Point(200, 400));
 			}
