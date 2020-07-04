@@ -14,7 +14,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class ButtonBase<T> : SingleItemContainer<T> where T : Widget
 	{
-		private bool _isPressed = false;
+		private bool _isToggled = false;
 
 		[Category("Appearance")]
 		[DefaultValue(HorizontalAlignment.Center)]
@@ -41,25 +41,31 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public bool IsPressed
+		public bool IsToggled
 		{
 			get
 			{
-				return _isPressed;
+				return _isToggled;
 			}
 
 			set
 			{
-				if (value == _isPressed)
+				if (value == _isToggled)
 				{
 					return;
 				}
 
-				_isPressed = value;
+				_isToggled = value;
 
-				OnPressedChanged();
+				OnToggledChanged();
 			}
 		}
+
+        /// <summary>
+        /// Indicates whether the current touch gesture started in this widget.
+        /// Similar to <see cref="Widget.TouchStayedInside"/> but keeps true also if the gesture leaves the widget's bounds.
+        /// </summary>
+        public bool IsPressed { get; set; }
 
 		internal bool ReleaseOnTouchLeft;
 
@@ -92,14 +98,13 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnActiveChanged();
 
-			if (!Active && IsPressed && !Toggleable)
+			if (!Active && IsToggled && !Toggleable)
 			{
-				IsPressed = false;
+				IsToggled = false;
 			}
 		}
 
-		public event EventHandler Click;
-		public event EventHandler PressedChanged;
+		public event EventHandler ToggledChanged;
 
 		public ButtonBase()
 		{
@@ -113,9 +118,9 @@ namespace Myra.Graphics2D.UI
 			OnTouchUp();
 		}
 
-		public virtual void OnPressedChanged()
+		public virtual void OnToggledChanged()
 		{
-			PressedChanged.Invoke(this);
+			ToggledChanged.Invoke(this);
 		}
 
 		public override void OnTouchLeft(HookableEventArgs args)
@@ -124,57 +129,35 @@ namespace Myra.Graphics2D.UI
 
 			if (ReleaseOnTouchLeft && !Toggleable)
 			{
-				IsPressed = false;
+				IsToggled = false;
 			}
 		}
 
-		public override void OnTouchUp()
+		public override void OnClick()
 		{
-			base.OnTouchUp();
+			base.OnClick();
 
-			if (!Enabled)
-			{
-				return;
-			}
-
-			var invokeClick = false;
-			if (!Toggleable)
-			{
-				invokeClick = IsPressed;
-				IsPressed = false;
-			}
-
-			if (invokeClick)
-			{
-				Click.Invoke(this);
-			}
+            if (Toggleable && CanChangeToggleable(!IsToggled))
+            {
+                IsToggled = !IsToggled;
+            }
 		}
 
-		public override void OnTouchDown()
-		{
-			base.OnTouchDown();
+        public override void OnTouchDown()
+        {
+            base.OnTouchDown();
 
-			if (!Enabled)
-			{
-				return;
-			}
+            IsPressed = true;
+        }
 
-			if (!Toggleable)
-			{
-				IsPressed = true;
-			}
-			else
-			{
-				var value = !IsPressed;
-				if (CanChangeToggleable(value))
-				{
-					IsPressed = value;
-					Click.Invoke(this);
-				}
-			}
-		}
+        public override void OnTouchUp()
+        {
+            base.OnTouchUp();
 
-		protected virtual bool CanChangeToggleable(bool value)
+            IsPressed = false;
+        }
+
+        protected virtual bool CanChangeToggleable(bool value)
 		{
 			return true;
 		}
@@ -192,7 +175,7 @@ namespace Myra.Graphics2D.UI
 				}
 				else
 				{
-					IsPressed = !IsPressed;
+					IsToggled = !IsToggled;
 				}
 			}
 		}
@@ -203,7 +186,7 @@ namespace Myra.Graphics2D.UI
 
 			if (Enabled)
 			{
-				if (IsPressed && PressedBackground != null)
+				if (IsToggled && PressedBackground != null)
 				{
 					result = PressedBackground;
 				}
@@ -232,7 +215,7 @@ namespace Myra.Graphics2D.UI
 
 		private void DesktopTouchUp(object sender, EventArgs args)
 		{
-			IsPressed = false;
+			IsToggled = false;
 		}
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)

@@ -79,12 +79,17 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void OnPressedChanged()
-		{
-			base.OnPressedChanged();
+        public override void OnTouchDown()
+        {
+            base.OnTouchDown();
+            InternalChild.IsPressed = true;
+        }
 
-			InternalChild.IsPressed = IsPressed;
-		}
+        public override void OnTouchUp()
+        {
+            base.OnTouchDown();
+            InternalChild.IsPressed = false;
+        }
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{

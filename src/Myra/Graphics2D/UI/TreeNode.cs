@@ -22,9 +22,9 @@ namespace Myra.Graphics2D.UI
 
 		public bool IsExpanded
 		{
-			get { return _mark.IsPressed; }
+			get { return _mark.IsToggled; }
 
-			set { _mark.IsPressed = value; }
+			set { _mark.IsToggled = value; }
 		}
 
 		public Label Label
@@ -109,9 +109,9 @@ namespace Myra.Graphics2D.UI
 				VerticalAlignment = VerticalAlignment.Center
 			};
 
-			_mark.PressedChanged += (s, a) =>
+			_mark.ToggledChanged += (s, a) =>
 			{
-				_childNodesGrid.Visible = _mark.IsPressed;
+				_childNodesGrid.Visible = _mark.IsToggled;
 			};
 
 			InternalChild.Widgets.Add(_mark);

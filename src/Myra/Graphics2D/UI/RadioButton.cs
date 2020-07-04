@@ -28,11 +28,11 @@ namespace Myra.Graphics2D.UI
 			Toggleable = true;
 		}
 
-		public override void OnPressedChanged()
+		public override void OnToggledChanged()
 		{
-			base.OnPressedChanged();
+			base.OnToggledChanged();
 
-			if (IsPressed)
+			if (IsToggled)
 			{
 				foreach (var child in Parent.ChildrenCopy)
 				{
@@ -43,14 +43,14 @@ namespace Myra.Graphics2D.UI
 						continue;
 					}
 
-					asRadio.IsPressed = false;
+					asRadio.IsToggled = false;
 				}
 			}
 		}
 
 		protected override bool CanChangeToggleable(bool value)
 		{
-			return !IsPressed;
+			return !IsToggled;
 		}
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)

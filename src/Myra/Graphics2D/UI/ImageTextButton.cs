@@ -229,12 +229,12 @@ namespace Myra.Graphics2D.UI
 			ImageTextSpacing = style.ImageTextSpacing;
 		}
 
-		public override void OnPressedChanged()
+		public override void OnToggledChanged()
 		{
-			base.OnPressedChanged();
+			base.OnToggledChanged();
 
-			_image.IsPressed = IsPressed;
-			_textBlock.IsPressed = IsPressed;
+			_image.IsPressed = IsToggled;
+			_textBlock.IsPressed = IsToggled;
 		}
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)

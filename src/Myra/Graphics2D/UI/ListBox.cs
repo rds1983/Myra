@@ -86,7 +86,7 @@ namespace Myra.Graphics2D.UI
 					ImageTextSpacing = item.ImageTextSpacing
 				};
 
-				((ImageTextButton)widget).PressedChanged += ButtonOnPressed;
+				((ImageTextButton)widget).ToggledChanged += ButtonOnToggleChanged;
 			}
 			else
 			{
@@ -121,10 +121,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void ButtonOnPressed(object sender, EventArgs eventArgs)
+		private void ButtonOnToggleChanged(object sender, EventArgs eventArgs)
 		{
 			var item = (ImageTextButton)sender;
-			if (!item.IsPressed)
+			if (!item.IsToggled)
 			{
 				return;
 			}

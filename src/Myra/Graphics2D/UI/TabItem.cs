@@ -99,7 +99,7 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return Button.IsPressed;
+				return Button.IsToggled;
 			}
 
 			set
@@ -109,7 +109,7 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
-				Button.IsPressed = value;
+				Button.IsToggled = value;
 				FireSelected();
 			}
 		}

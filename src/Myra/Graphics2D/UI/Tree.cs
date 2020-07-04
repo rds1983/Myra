@@ -92,13 +92,13 @@ namespace Myra.Graphics2D.UI
 			{
 				Mark.Visible = true;
 				Label.Visible = true;
-				ChildNodesGrid.Visible = Mark.IsPressed;
+				ChildNodesGrid.Visible = Mark.IsToggled;
 			}
 			else
 			{
 				Mark.Visible = false;
 				Label.Visible = false;
-				Mark.IsPressed = true;
+				Mark.IsToggled = true;
 				ChildNodesGrid.Visible = true;
 			}
 		}

@@ -39,7 +39,7 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public bool IsExpanded
 		{
-			get { return InternalChild.IsPressed; }
+			get { return InternalChild.IsToggled; }
 		}
 
 		public override Desktop Desktop
@@ -94,7 +94,7 @@ namespace Myra.Graphics2D.UI
 				HorizontalAlignment = HorizontalAlignment.Stretch
 			};
 
-			InternalChild.PressedChanged += InternalChild_PressedChanged;
+			InternalChild.ToggledChanged += InternalChild_ToggledChanged;
 
 			_listBox._parentComboBox = this;
 			_listBox.Items.CollectionChanged += Items_CollectionChanged;
@@ -117,17 +117,17 @@ namespace Myra.Graphics2D.UI
 
 		private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Widget> genericEventArgs)
 		{
-			InternalChild.IsPressed = false;
+			InternalChild.IsToggled = false;
 		}
 
-		private void InternalChild_PressedChanged(object sender, EventArgs e)
+		private void InternalChild_ToggledChanged(object sender, EventArgs e)
 		{
 			if (_listBox.Items.Count == 0)
 			{
 				return;
 			}
 
-			if (InternalChild.IsPressed)
+			if (InternalChild.IsToggled)
 			{
 				if (_listBox.SelectedIndex == null && Items.Count > 0)
 				{
@@ -187,7 +187,7 @@ namespace Myra.Graphics2D.UI
 			{
 				InternalChild.Text = item.Text;
 				InternalChild.TextColor = item.Color ?? _listBox.ListBoxStyle.ListItemStyle.LabelStyle.TextColor;
-				((ImageTextButton)item.Widget).IsPressed = true;
+				((ImageTextButton)item.Widget).IsToggled = true;
 			}
 			else
 			{

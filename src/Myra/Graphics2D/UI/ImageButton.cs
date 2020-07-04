@@ -76,11 +76,11 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void OnPressedChanged()
+		public override void OnToggledChanged()
 		{
-			base.OnPressedChanged();
+			base.OnToggledChanged();
 
-			InternalChild.IsPressed = IsPressed;
+			InternalChild.IsPressed = IsToggled;
 		}
 	}
 }

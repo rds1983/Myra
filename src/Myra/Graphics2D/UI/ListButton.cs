@@ -18,7 +18,7 @@ namespace Myra.Graphics2D.UI
 		{
 			// At least one list button should be pressed
 			return _selector.SelectionMode == SelectionMode.Multiple ||
-				!IsPressed;
+				!IsToggled;
 		}
 	}
 }

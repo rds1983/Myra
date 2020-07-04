@@ -40,7 +40,7 @@ namespace Myra.Graphics2D.UI
 				var asButton = _widget as ImageTextButton;
 				if (asButton != null)
 				{
-					asButton.PressedChanged += (s, a) => FireSelectedChanged();
+					asButton.ToggledChanged += (s, a) => FireSelectedChanged();
 				}
 			}
 		}
@@ -57,7 +57,7 @@ namespace Myra.Graphics2D.UI
 					return false;
 				}
 
-				return asButton.IsPressed;
+				return asButton.IsToggled;
 			}
 
 			set
@@ -68,7 +68,7 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
-				asButton.IsPressed = value;
+				asButton.IsToggled = value;
 			}
 		}
 

@@ -13,34 +13,34 @@ namespace Myra.Graphics2D.UI
 
 			BuildUI();
 
-			_checkBoxWidgetFrames.IsPressed = MyraEnvironment.DrawWidgetsFrames;
-			_checkBoxWidgetFrames.PressedChanged += (s, a) =>
+			_checkBoxWidgetFrames.IsToggled = MyraEnvironment.DrawWidgetsFrames;
+			_checkBoxWidgetFrames.ToggledChanged += (s, a) =>
 			{
-				MyraEnvironment.DrawWidgetsFrames = _checkBoxWidgetFrames.IsPressed;
+				MyraEnvironment.DrawWidgetsFrames = _checkBoxWidgetFrames.IsToggled;
 			};
 
-			_checkBoxKeyboardFocusedWidgetFrame.IsPressed = MyraEnvironment.DrawKeyboardFocusedWidgetFrame;
-			_checkBoxKeyboardFocusedWidgetFrame.PressedChanged += (s, a) =>
+			_checkBoxKeyboardFocusedWidgetFrame.IsToggled = MyraEnvironment.DrawKeyboardFocusedWidgetFrame;
+			_checkBoxKeyboardFocusedWidgetFrame.ToggledChanged += (s, a) =>
 			{
-				MyraEnvironment.DrawKeyboardFocusedWidgetFrame = _checkBoxKeyboardFocusedWidgetFrame.IsPressed;
+				MyraEnvironment.DrawKeyboardFocusedWidgetFrame = _checkBoxKeyboardFocusedWidgetFrame.IsToggled;
 			};
 
-			_checkBoxMouseWheelFocusedWidgetFrame.IsPressed = MyraEnvironment.DrawMouseWheelFocusedWidgetFrame;
-			_checkBoxMouseWheelFocusedWidgetFrame.PressedChanged += (s, a) =>
+			_checkBoxMouseWheelFocusedWidgetFrame.IsToggled = MyraEnvironment.DrawMouseWheelFocusedWidgetFrame;
+			_checkBoxMouseWheelFocusedWidgetFrame.ToggledChanged += (s, a) =>
 			{
-				MyraEnvironment.DrawMouseWheelFocusedWidgetFrame = _checkBoxMouseWheelFocusedWidgetFrame.IsPressed;
+				MyraEnvironment.DrawMouseWheelFocusedWidgetFrame = _checkBoxMouseWheelFocusedWidgetFrame.IsToggled;
 			};
 
-			_checkBoxGlyphFrames.IsPressed = MyraEnvironment.DrawTextGlyphsFrames;
-			_checkBoxGlyphFrames.PressedChanged += (s, a) =>
+			_checkBoxGlyphFrames.IsToggled = MyraEnvironment.DrawTextGlyphsFrames;
+			_checkBoxGlyphFrames.ToggledChanged += (s, a) =>
 			{
-				MyraEnvironment.DrawTextGlyphsFrames = _checkBoxGlyphFrames.IsPressed;
+				MyraEnvironment.DrawTextGlyphsFrames = _checkBoxGlyphFrames.IsToggled;
 			};
 
-			_checkBoxDisableClipping.IsPressed = MyraEnvironment.DisableClipping;
-			_checkBoxDisableClipping.PressedChanged += (s, a) =>
+			_checkBoxDisableClipping.IsToggled = MyraEnvironment.DisableClipping;
+			_checkBoxDisableClipping.ToggledChanged += (s, a) =>
 			{
-				MyraEnvironment.DisableClipping = _checkBoxDisableClipping.IsPressed;
+				MyraEnvironment.DisableClipping = _checkBoxDisableClipping.IsToggled;
 			};
 		}
 
@@ -58,9 +58,9 @@ namespace Myra.Graphics2D.UI
 				Visible = true
 			};
 
-			optionsCheckBox.PressedChanged += (s, a) =>
+			optionsCheckBox.ToggledChanged += (s, a) =>
 			{
-				if (optionsCheckBox.IsPressed)
+				if (optionsCheckBox.IsToggled)
 				{
 					onEnabled();
 				}
