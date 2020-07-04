@@ -112,7 +112,7 @@ namespace Myra.Samples.AllWidgets
 #endif
 
 #if ANDROID
-			Desktop.WidgetGotKeyboardFocus += (s, a) =>
+			_desktop.WidgetGotKeyboardFocus += (s, a) =>
 			{
 				var asTextBox = a.Data as TextBox;
 				if (asTextBox == null)

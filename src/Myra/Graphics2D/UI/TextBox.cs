@@ -1116,7 +1116,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void SetCursorByTouch()
+		private void SetCursorByTouch(HookableEventArgs args = null)
 		{
 			var bounds = ActualBounds;
 			var mousePos = Desktop.TouchPosition;
@@ -1131,6 +1131,7 @@ namespace Myra.Graphics2D.UI
 				if (glyphIndex != null)
 				{
 					UserSetCursorPosition(line.TextStartIndex + glyphIndex.Value);
+                    args?.SetHandledFlag();
 					if (_isTouchDown || Desktop.IsShiftDown)
 					{
 						UpdateSelection();
@@ -1146,26 +1147,27 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnTouchDown();
 
-			if (!Enabled)
-			{
-				return;
-			}
+            if (Enabled && Length != 0)
+            {
+                _isTouchDown = true;
+            }
+        }
 
-			if (Length == 0)
-			{
-				return;
-			}
+        public override void OnTouchUp()
+        {
+            base.OnTouchUp();
 
-			SetCursorByTouch();
+            if (_isTouchDown)
+            {
+                SetCursorByTouch();
+            }
+        }
 
-			_isTouchDown = true;
-		}
-
-		public override void OnTouchMoved()
+        public override void OnTouchMoved(HookableEventArgs args)
 		{
-			base.OnTouchMoved();
+			base.OnTouchMoved(args);
 
-			SetCursorByTouch();
+			SetCursorByTouch(args);
 		}
 
 		public override void OnTouchDoubleClick()
@@ -1476,7 +1478,7 @@ namespace Myra.Graphics2D.UI
 
 		private void DesktopTouchUp(object sender, EventArgs args)
 		{
-			_isTouchDown = false;
+            _isTouchDown = false;
 		}
 	}
 }
