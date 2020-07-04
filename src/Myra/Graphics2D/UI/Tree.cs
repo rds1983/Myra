@@ -179,9 +179,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void OnTouchDown()
+		public override void OnClick()
 		{
-			base.OnTouchDown();
+			base.OnClick();
 
 			SetHoverRow(Desktop.TouchPosition);
 
