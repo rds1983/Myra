@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
 
@@ -95,11 +95,7 @@ namespace Myra.Graphics2D.UI
 
 		public void FireSelectedChanged()
 		{
-			var ev = SelectedChanged;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
-		}
+            SelectedChanged?.Invoke(this, EventArgs.Empty);
+        }
 	}
 }

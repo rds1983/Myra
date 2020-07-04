@@ -149,23 +149,19 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void HandleOnPressedChanged(object sender, EventArgs args)
-		{
-			var handle = (ImageButton)sender;
+        private void HandleOnTouchDown(object sender, EventArgs args)
+        {
+            _handleDown = (ImageButton)sender;
+            _mouseCoord = Orientation == Orientation.Horizontal
+                ? Desktop.TouchPosition.X - _handleDown.Bounds.X
+                : Desktop.TouchPosition.Y - _handleDown.Bounds.Y;
+        }
 
-			if (!handle.IsPressed)
-			{
-				_handleDown = null;
-				_mouseCoord = null;
-			}
-			else
-			{
-				_handleDown = (ImageButton)sender;
-				_mouseCoord = Orientation == Orientation.Horizontal
-					? Desktop.TouchPosition.X - _handleDown.Bounds.X
-					: Desktop.TouchPosition.Y - _handleDown.Bounds.Y;
-			}
-		}
+        private void HandleOnTouchUp(object sender, EventArgs args)
+        {
+            _handleDown = null;
+            _mouseCoord = null;
+        }
 
 		private void WidgetsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
 		{
@@ -250,7 +246,8 @@ namespace Myra.Graphics2D.UI
 
 					handle.ApplyButtonStyle(HandleStyle);
 
-					handle.PressedChanged += HandleOnPressedChanged;
+                    handle.TouchDown += HandleOnTouchDown;
+                    handle.TouchUp += HandleOnTouchUp;
 
 					proportion = new Proportion(ProportionType.Auto);
 
