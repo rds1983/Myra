@@ -336,13 +336,8 @@ namespace Myra.Graphics2D.UI
 
 		public void FireSelected()
 		{
-			var ev = Selected;
-
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
-		}
+            Selected?.Invoke(this, EventArgs.Empty);
+        }
 
 		protected internal override void OnIdChanged()
 		{
@@ -353,11 +348,7 @@ namespace Myra.Graphics2D.UI
 
 		protected void FireChanged()
 		{
-			var ev = Changed;
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
-		}
+            Changed?.Invoke(this, EventArgs.Empty);
+        }
 	}
 }

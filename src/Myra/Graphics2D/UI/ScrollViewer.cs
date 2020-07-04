@@ -21,7 +21,7 @@ namespace Myra.Graphics2D.UI
 		private bool _showHorizontalScrollBar, _showVerticalScrollBar;
 		internal Rectangle _horizontalScrollbarFrame, _horizontalScrollbarThumb;
 		internal Rectangle _verticalScrollbarFrame, _verticalScrollbarThumb;
-		private int? _startBoundsPos;
+		private Point? _startBoundsPos;
 		private int _thumbMaximumX, _thumbMaximumY;
 
 		[Browsable(false)]
@@ -397,7 +397,7 @@ namespace Myra.Graphics2D.UI
 			verticalScrollBarRect.Y += thumbPosition.Y;
 			if (ShowVerticalScrollBar && _verticalScrollingOn && verticalScrollBarRect.Contains(touchPosition))
 			{
-				_startBoundsPos = touchPosition.Y;
+				_startBoundsPos = touchPosition;
 				_dragDirection = DragDirection.Vertical;
                 _scrollingType = ScrollingType.Scrollbar;
                 return;
@@ -407,7 +407,7 @@ namespace Myra.Graphics2D.UI
             horizontalScrollBarRect.X += thumbPosition.X;
 			if (ShowHorizontalScrollBar && _horizontalScrollingOn && horizontalScrollBarRect.Contains(touchPosition))
 			{
-				_startBoundsPos = touchPosition.X;
+				_startBoundsPos = touchPosition;
 				_dragDirection = DragDirection.Horizontal;
                 _scrollingType = ScrollingType.Scrollbar;
                 return;
@@ -417,7 +417,7 @@ namespace Myra.Graphics2D.UI
             viewerRect.X += thumbPosition.X;
             if ((_verticalScrollingOn || _horizontalScrollingOn) && viewerRect.Contains(touchPosition))
             {
-                _startBoundsPos = touchPosition.X;
+                _startBoundsPos = touchPosition;
                 if (_verticalScrollingOn && _horizontalScrollingOn)
                 {
                     _dragDirection = DragDirection.Both;
@@ -676,13 +676,13 @@ namespace Myra.Graphics2D.UI
 			Point delta = new Point();
 			if (_dragDirection == DragDirection.Horizontal)
 			{
-				delta.X = (touchPosition.X - _startBoundsPos.Value) * ScrollMaximum.X / _thumbMaximumX;
-				_startBoundsPos = touchPosition.X;
+				delta.X = (touchPosition.X - _startBoundsPos.Value.X) * ScrollMaximum.X / _thumbMaximumX;
+				_startBoundsPos = new Point(touchPosition.X, _startBoundsPos.Value.Y);
 			}
 			if (_dragDirection == DragDirection.Vertical)
 			{
-				delta.Y = (touchPosition.Y - _startBoundsPos.Value) * ScrollMaximum.Y / _thumbMaximumY;
-				_startBoundsPos = touchPosition.Y;
+				delta.Y = (touchPosition.Y - _startBoundsPos.Value.Y) * ScrollMaximum.Y / _thumbMaximumY;
+				_startBoundsPos = new Point(_startBoundsPos.Value.X, touchPosition.Y);
 			}
 
 			if (_scrollingType == ScrollingType.Touch)

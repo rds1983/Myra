@@ -120,14 +120,16 @@ namespace Myra.Graphics2D.UI
 				if (Desktop != null)
 				{
 					Desktop.TouchMoved -= DesktopTouchMoved;
-				}
+					Desktop.TouchUp -= DesktopTouchUp;
+                }
 
 				base.Desktop = value;
 
 				if (Desktop != null)
 				{
 					Desktop.TouchMoved += DesktopTouchMoved;
-				}
+                    Desktop.TouchUp += DesktopTouchUp;
+                }
 			}
 		}
 
@@ -196,7 +198,7 @@ namespace Myra.Graphics2D.UI
 			InternalChild.IsPressed = true;
 		}
 
-		private void UpdateHint()
+        private void UpdateHint()
 		{
 			var hint = GetHint();
 			if (hint < 0)
@@ -245,5 +247,10 @@ namespace Myra.Graphics2D.UI
             args.SetHandledFlag();
 			UpdateHint();
 		}
-	}
+
+        private void DesktopTouchUp(object sender, EventArgs args)
+        {
+            InternalChild.IsPressed = false;
+        }
+    }
 }

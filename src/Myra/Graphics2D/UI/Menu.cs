@@ -349,7 +349,7 @@ namespace Myra.Graphics2D.UI
 
 			InternalChild.HoverIndexChanged += OnHoverIndexChanged;
 			InternalChild.SelectedIndexChanged += OnSelectedIndexChanged;
-			InternalChild.TouchUp += InternalChild_TouchUp;
+			InternalChild.Click += InternalChild_Click;
 
 			OpenMenuItem = null;
 
@@ -646,7 +646,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void InternalChild_TouchUp(object sender, EventArgs e)
+		private void InternalChild_Click(object sender, EventArgs e)
 		{
 			var menuItem = SelectedMenuItem;
 			if (menuItem != null && !menuItem.CanOpen)
@@ -666,7 +666,7 @@ namespace Myra.Graphics2D.UI
 			return Items[index.Value] as MenuItem;
 		}
 
-		private void Click(int? index)
+		private void SelectMenuItem(int? index)
 		{
 			var menuItem = GetMenuItem(index);
 			if (menuItem == null)
@@ -694,7 +694,7 @@ namespace Myra.Graphics2D.UI
 					var menuItem = Items[selectedIndex.Value] as MenuItem;
 					if (menuItem != null && !menuItem.CanOpen)
 					{
-						Click(menuItem.Index);
+						SelectMenuItem(menuItem.Index);
 						return;
 					}
 				}
@@ -714,7 +714,7 @@ namespace Myra.Graphics2D.UI
 
 					if (menuItem.UnderscoreChar == c)
 					{
-						Click(menuItem.Index);
+						SelectMenuItem(menuItem.Index);
 						return;
 					}
 				}
