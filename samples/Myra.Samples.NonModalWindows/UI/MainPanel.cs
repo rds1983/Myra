@@ -13,9 +13,9 @@ namespace Myra.Samples.NonModalWindows.UI
 		{
 			BuildUI();
 
-			_button1.PressedChanged += _button1_PressedChanged;
-			_button2.PressedChanged += _button2_PressedChanged;
-			_button3.PressedChanged += _button3_PressedChanged;
+			_button1.ToggledChanged += _button1_ToggledChanged;
+			_button2.ToggledChanged += _button2_ToggledChanged;
+			_button3.ToggledChanged += _button3_ToggledChanged;
 
 			_window1.Closed += (s, a) =>
 			{
@@ -40,7 +40,7 @@ namespace Myra.Samples.NonModalWindows.UI
 			_button3.IsPressed = true;
 		}
 
-		private void _button1_PressedChanged(object sender, System.EventArgs e)
+		private void _button1_ToggledChanged(object sender, System.EventArgs e)
 		{
 			if (_button1.IsPressed)
 			{
@@ -52,7 +52,7 @@ namespace Myra.Samples.NonModalWindows.UI
 			}
 		}
 
-		private void _button2_PressedChanged(object sender, System.EventArgs e)
+		private void _button2_ToggledChanged(object sender, System.EventArgs e)
 		{
 			if (_button2.IsPressed)
 			{
@@ -64,7 +64,7 @@ namespace Myra.Samples.NonModalWindows.UI
 			}
 		}
 
-		private void _button3_PressedChanged(object sender, System.EventArgs e)
+		private void _button3_ToggledChanged(object sender, System.EventArgs e)
 		{
 			if (_button3.IsPressed)
 			{
