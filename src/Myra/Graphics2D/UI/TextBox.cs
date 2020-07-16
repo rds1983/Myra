@@ -242,13 +242,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		internal bool InternalAcceptsKeyboardFocus = true;
-
-		public override bool AcceptsKeyboardFocus
-		{
-			get { return InternalAcceptsKeyboardFocus; }
-		}
-
 		[DefaultValue(HorizontalAlignment.Stretch)]
 		public override HorizontalAlignment HorizontalAlignment
 		{
@@ -360,6 +353,8 @@ namespace Myra.Graphics2D.UI
 
 		public TextBox(string styleName = Stylesheet.DefaultStyleName)
 		{
+			AcceptsKeyboardFocus = true;
+
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Top;
 

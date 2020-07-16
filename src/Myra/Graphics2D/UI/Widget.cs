@@ -815,20 +815,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private bool _acceptsKeyboardFocus;
-		
-		[Category("Behavior")]
-		public virtual bool AcceptsKeyboardFocus
-		{
-			get
-			{
-				return _acceptsKeyboardFocus;
-			}
-			set
-			{
-				_acceptsKeyboardFocus = value;
-			}
-		}
+		[Browsable(false)]
+		[XmlIgnore]
+		public bool AcceptsKeyboardFocus { get; set; }
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -909,6 +898,8 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler<GenericEventArgs<Keys>> KeyDown;
 		public event EventHandler<GenericEventArgs<char>> Char;
 
+		[Browsable(false)]
+		[XmlIgnore]
 		public Action<RenderContext> BeforeRender, AfterRender;
 
 		public Widget()

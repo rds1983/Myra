@@ -325,10 +325,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override bool AcceptsKeyboardFocus => true;
-
 		protected Menu(string styleName)
 		{
+			AcceptsKeyboardFocus = true;
+
 			InternalChild = new Grid
 			{
 				CanSelectNothing = true

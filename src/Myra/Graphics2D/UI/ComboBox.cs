@@ -65,8 +65,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override bool AcceptsKeyboardFocus => true;
-
 		public override ObservableCollection<ListItem> Items => _listBox.Items;
 
 		public override ListItem SelectedItem { get => _listBox.SelectedItem; set => _listBox.SelectedItem = value; }
@@ -88,6 +86,8 @@ namespace Myra.Graphics2D.UI
 
 		public ComboBox(string styleName = Stylesheet.DefaultStyleName)
 		{
+			AcceptsKeyboardFocus = true;
+
 			InternalChild = new ImageTextButton(null)
 			{
 				Toggleable = true,

@@ -43,13 +43,10 @@ namespace Myra.Graphics2D.UI
 
 		protected internal override bool AcceptsMouseWheelFocus => InternalChild.AcceptsMouseWheelFocus;
 
-		public override bool AcceptsKeyboardFocus
-		{
-			get { return true; }
-		}
-
 		public ListBox(string styleName = Stylesheet.DefaultStyleName) : base(new ScrollViewer())
 		{
+			AcceptsKeyboardFocus = true;
+
 			_box = new VerticalStackPanel();
 			InternalChild.Content = _box;
 
