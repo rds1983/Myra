@@ -1110,17 +1110,7 @@ namespace MyraPad
 		private void OnMenuFileReloadSelected(object sender, EventArgs e)
 		{
 			AssetManager.ClearCache();
-			QueueRefreshProject();
-		}
-
-		private static string BuildPath(string folder, string fileName)
-		{
-			if (Path.IsPathRooted(fileName))
-			{
-				return fileName;
-			}
-
-			return Path.Combine(folder, fileName);
+			Load(FilePath);
 		}
 
 		private Stylesheet StylesheetFromFile(string path)
