@@ -475,6 +475,8 @@ namespace Myra.Graphics2D.UI
 
 		private bool Paste(string text)
 		{
+			text = Process(text);
+			
 			DeleteSelection();
 			if (InsertChars(CursorPosition, text))
 			{
