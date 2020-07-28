@@ -2,7 +2,6 @@
 <Stylesheet TextureRegionAtlas="default_ui_skin.atlas">
   <Fonts>
     <Font Id="default-font" File="default_font.fnt"/>
-    <Font Id="default-font-small" File="default_font_small.fnt"/>
   </Fonts>
   <LabelStyles>
     <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" />
