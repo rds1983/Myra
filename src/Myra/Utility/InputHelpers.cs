@@ -61,8 +61,10 @@ namespace Myra.Utility
 
 				if (w.CommonTouchCheck())
 				{
+					// Since OnTouchDown may reset Desktop, we need to save break condition before calling it
+					var doBreak = (w.Desktop != null && !w.FallsThrough(w.Desktop.TouchPosition));
 					w.OnTouchDown();
-					if (w.Desktop != null && !w.FallsThrough(w.Desktop.TouchPosition))
+					if (doBreak)
 					{
 						break;
 					}
