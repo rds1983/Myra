@@ -41,6 +41,7 @@ namespace Myra.Graphics2D.UI
 		{
 			get; set;
 		}
+
 		[DefaultValue(HorizontalAlignment.Left)]
 		public override HorizontalAlignment HorizontalAlignment
 		{
@@ -221,6 +222,10 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(1f)]
 		public float Mul_Increment { get; set; } = 1f;
 
+		[XmlIgnore]
+		[Browsable(false)]
+		public TextBox TextBox => _textField;
+
 		internal protected override bool AcceptsMouseWheelFocus
 		{
 			get { return true; }
@@ -298,6 +303,43 @@ namespace Myra.Graphics2D.UI
 			Value = 0;
 		}
 
+		private static float? StringToFloat(string s)
+		{
+			if (string.IsNullOrEmpty(s))
+			{
+				return null;
+			}
+
+			float f;
+			if (!float.TryParse(s, out f))
+			{
+				return null;
+			}
+
+			return f;
+		}
+
+		private string NumberToString(float? v)
+		{
+			if (v == null)
+			{
+				if (Nullable)
+				{
+					return string.Empty;
+				}
+
+				// Default value
+				return "0";
+			}
+
+			if (Integer)
+			{
+				return ((int)v.Value).ToString();
+			}
+
+			return v.Value.ToString();
+		}
+
 		private void _textField_ValueChanging(object sender, ValueChangingEventArgs<string> e)
 		{
 			var s = e.NewValue;
@@ -371,26 +413,10 @@ namespace Myra.Graphics2D.UI
 					}
 					else
 					{
-						e.NewValue = args.NewValue.HasValue ? args.NewValue.ToString() : null;
+						e.NewValue = args.NewValue.HasValue ? NumberToString(args.NewValue) : null;
 					}
 				}
 			}
-		}
-
-		private static float? StringToFloat(string s)
-		{
-			if (string.IsNullOrEmpty(s))
-			{
-				return null;
-			}
-
-			float f;
-			if (!float.TryParse(s, out f))
-			{
-				return null;
-			}
-
-			return f;
 		}
 
 		private void TextBoxOnTextChanged(object sender, ValueChangedEventArgs<string> eventArgs)
@@ -513,11 +539,7 @@ namespace Myra.Graphics2D.UI
 
 					if (changed)
 					{
-						var ev = ValueChangedByUser;
-						if (ev != null)
-						{
-							ev(this, new ValueChangedEventArgs<float?>(oldValue, value));
-						}
+						ValueChangedByUser?.Invoke(this, new ValueChangedEventArgs<float?>(oldValue, value));
 					}
 				}
 			}
@@ -532,11 +554,7 @@ namespace Myra.Graphics2D.UI
 
 					if (changed)
 					{
-						var ev = ValueChangedByUser;
-						if (ev != null)
-						{
-							ev(this, new ValueChangedEventArgs<float?>(oldValue, value));
-						}
+						ValueChangedByUser?.Invoke(this, new ValueChangedEventArgs<float?>(oldValue, value));
 					}
 				}
 			}
@@ -555,7 +573,16 @@ namespace Myra.Graphics2D.UI
 
 			if (string.IsNullOrEmpty(_textField.Text) && !Nullable)
 			{
-				_textField.Text = "0";
+				var defaultValue = "0";
+				if (Minimum != null && Minimum.Value > 0)
+				{
+					defaultValue = NumberToString(Minimum.Value);
+				} else if (Maximum != null && Maximum.Value < 0)
+				{
+					defaultValue = NumberToString(Maximum.Value);
+				}
+
+				_textField.Text = defaultValue;
 			}
 
 			_textField.OnLostKeyboardFocus();
