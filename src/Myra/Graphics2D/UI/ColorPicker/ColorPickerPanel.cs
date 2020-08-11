@@ -182,35 +182,19 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			// Subscriptions
 			_inputRGB.Tag = false;
 			_inputRGB.TextChangedByUser += RgbInputChanged;
-			_inputRGB.InputFilter = InputFilter;
+			_inputRGB.ValueChanging += _inputRGB_ValueChanging;
 
 			_inputHSV.Tag = false;
 			_inputHSV.TextChangedByUser += HsvInputChanged;
-			_inputHSV.InputFilter = InputFilter;
+			_inputHSV.ValueChanging += _inputRGB_ValueChanging;
 
 			_inputHEX.Tag = false;
 			_inputHEX.TextChangedByUser += HexInputChanged;
-			_inputHEX.InputFilter = s =>
-			{
-				if (s == null || s.Length > 6)
-				{
-					return null;
-				}
-
-				for (var i = 0; i < s.Length; ++i)
-				{
-					if (HexChars.IndexOf(s[i]) == -1)
-					{
-						return null;
-					}
-				}
-
-				return s.ToUpper();
-			};
+			_inputHEX.ValueChanging += _inputHEX_ValueChanging;
 
 			_inputAlpha.Tag = false;
 			_inputAlpha.TextChangedByUser += AlphaInputChanged;
-			_inputAlpha.InputFilter = InputFilter;
+			_inputAlpha.ValueChanging += _inputRGB_ValueChanging;
 
 			_sliderAlpha.Tag = false;
 			_sliderAlpha.ValueChangedByUser += AlphaSliderChanged;
@@ -231,22 +215,51 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			OnColorChanged(Color.White);
 		}
 
-		private string InputFilter(string s)
+		private void _inputHEX_ValueChanging(object sender, ValueChangingEventArgs<string> e)
 		{
+			var s = e.NewValue;
 			if (s == null)
 			{
-				return null;
+				return;
+			}
+
+			if (s.Length > 6)
+			{
+				e.Cancel = true;
+				return;
+			}
+
+			for (var i = 0; i < s.Length; ++i)
+			{
+				if (HexChars.IndexOf(s[i]) == -1)
+				{
+					e.Cancel = true;
+					break;
+				}
+			}
+
+			if (!e.Cancel)
+			{
+				e.NewValue = s.ToUpper();
+			}
+		}
+
+		private void _inputRGB_ValueChanging(object sender, ValueChangingEventArgs<string> e)
+		{
+			var s = e.NewValue;
+			if (s == null)
+			{
+				return;
 			}
 
 			for (var i = 0; i < s.Length; ++i)
 			{
 				if (InputChars.IndexOf(s[i]) == -1)
 				{
-					return null;
+					e.Cancel = true;
+					break;
 				}
 			}
-
-			return s;
 		}
 
 		public override void UpdateLayout()

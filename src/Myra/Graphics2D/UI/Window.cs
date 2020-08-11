@@ -1,11 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Serialization;
 using Myra.Attributes;
-using System.Security.Cryptography;
 
 #if !STRIDE
 using Microsoft.Xna.Framework.Input;
@@ -19,15 +17,6 @@ using Stride.Input;
 
 namespace Myra.Graphics2D.UI
 {
-	public class WindowClosingEventArgs : EventArgs
-	{
-		public bool Cancel { get; set; }
-
-		public WindowClosingEventArgs()
-		{
-		}
-	}
-
 	public class Window : SingleItemContainer<VerticalStackPanel>, IContent
 	{
 		private readonly Label _titleLabel;
@@ -159,7 +148,7 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
-		public event EventHandler<WindowClosingEventArgs> Closing;
+		public event EventHandler<CancellableEventArgs> Closing;
 		public event EventHandler Closed;
 
 		public Window(string styleName = Stylesheet.DefaultStyleName)
@@ -296,7 +285,7 @@ namespace Myra.Graphics2D.UI
 			var ev = Closing;
 			if (ev != null)
 			{
-				var args = new WindowClosingEventArgs();
+				var args = new CancellableEventArgs();
 				ev(this, args);
 				if (args.Cancel)
 				{

@@ -257,13 +257,6 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public Func<string, string> InputFilter
-		{
-			get; set;
-		}
-
-		[Browsable(false)]
-		[XmlIgnore]
 		public int CursorPosition
 		{
 			get
@@ -338,6 +331,13 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 		}
+
+
+		/// <summary>
+		/// Fires when the value is about to be changed
+		/// Set Cancel to true if you want to cancel the change
+		/// </summary>
+		public event EventHandler<ValueChangingEventArgs<string>> ValueChanging;
 
 		/// <summary>
 		/// Fires every time when the text had been changed
@@ -898,18 +898,19 @@ namespace Myra.Graphics2D.UI
 				return false;
 			}
 
-			// Filter check
-			var f = InputFilter;
-			if (f != null)
+			var oldValue = _text;
+			if (ValueChanging != null)
 			{
-				value = f(value);
-				if (value == null)
+				var args = new ValueChangingEventArgs<string>(oldValue, value);
+				ValueChanging(this, args);
+				if (args.Cancel)
 				{
 					return false;
 				}
+
+				value = args.NewValue;
 			}
 
-			var oldValue = _text;
 			_text = value;
 
 			UpdateFormattedText();
