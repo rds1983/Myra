@@ -4,17 +4,17 @@
     <Font Id="ui_font" File="ui_font.fnt"/>
   </Fonts>
   <TextBlockStyles>
-    <TextBlockStyle Font="ui_font" TextColor="white" DisabledTextColor="grey" />
+    <TextBlockStyle Font="ui_font" TextColor="white" DisabledTextColor="gray" />
   </TextBlockStyles>
   <TextFieldStyles>
-    <TextFieldStyle Background="textfield" TextColor="white" DisabledTextColor="grey" Font="ui_font" Cursor="cursor" Selection="selection" />
+    <TextFieldStyle Background="textfield" TextColor="white" DisabledTextColor="gray" Font="ui_font" Cursor="cursor" Selection="selection" />
   </TextFieldStyles>
   <ScrollPaneStyles>
     <ScrollPaneStyle Background="default-rect" HorizontalScrollBackground="default-scroll" HorizontalScrollKnob="default-round-large" VerticalScrollBackground="default-scroll" VerticalScrollKnob="default-round-large" />
   </ScrollPaneStyles>
   <ButtonStyles>
     <ButtonStyle Background="default-round" Padding="5, 0" PressedBackground="default-round-down">
-      <TextBlockStyle Font="ui_font" TextColor="white" DisabledTextColor="grey" />
+      <TextBlockStyle Font="ui_font" TextColor="white" DisabledTextColor="gray" />
     </ButtonStyle>
   </ButtonStyles>
   <CheckBoxStyles>
@@ -25,7 +25,7 @@
   </CheckBoxStyles>
   <SpinButtonStyles>
     <SpinButtonStyle Background="textfield">
-      <TextFieldStyle TextColor="white" DisabledTextColor="grey" Font="ui_font" Cursor="cursor" Selection="selection" />
+      <TextFieldStyle TextColor="white" DisabledTextColor="gray" Font="ui_font" Cursor="cursor" Selection="selection" />
       <UpButtonStyle Background="default-round" PressedBackground="default-round-down">
         <ImageStyle Image="tree-plus" />
       </UpButtonStyle>
@@ -67,7 +67,7 @@
   <ListBoxStyles>
     <ListBoxStyle Background="default-rect">
       <ListItemStyle Padding="5, 0" PressedBackground="default-select-selection">
-        <LabelStyle Font="ui_font" TextColor="white" DisabledTextColor="grey" />
+        <LabelStyle Font="ui_font" TextColor="white" DisabledTextColor="gray" />
       </ListItemStyle>
     </ListBoxStyle>
   </ListBoxStyles>
@@ -76,7 +76,7 @@
       <MarkStyle>
         <ImageStyle Image="tree-plus" PressedImage="tree-minus" />
       </MarkStyle>
-      <LabelStyle Font="ui_font" TextColor="white" DisabledTextColor="grey" />
+      <LabelStyle Font="ui_font" TextColor="white" DisabledTextColor="gray" />
     </TreeStyle>
   </TreeStyles>
   <HorizontalSplitPaneStyles>
@@ -91,13 +91,13 @@
   </VerticalSplitPaneStyles>
   <HorizontalMenuStyles>
     <HorizontalMenuStyle Background="default-round" SelectionBackground="default-round-down">
-      <LabelStyle Padding="5, 0, 5, 2" Font="ui_font" TextColor="white" DisabledTextColor="grey" />
+      <LabelStyle Padding="5, 0, 5, 2" Font="ui_font" TextColor="white" DisabledTextColor="gray" />
       <SeparatorStyle Image="default-round" Thickness="3" />
     </HorizontalMenuStyle>
   </HorizontalMenuStyles>
   <VerticalMenuStyles>
     <VerticalMenuStyle Background="default-round" SelectionBackground="default-round-down">
-      <LabelStyle Padding="5, 2" Font="ui_font" TextColor="white" DisabledTextColor="grey" />
+      <LabelStyle Padding="5, 2" Font="ui_font" TextColor="white" DisabledTextColor="gray" />
       <SeparatorStyle Padding="0, 0, 2, 2" Image="default-round" Thickness="4" />
     </VerticalMenuStyle>
   </VerticalMenuStyles>

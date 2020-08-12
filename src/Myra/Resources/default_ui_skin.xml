@@ -4,20 +4,20 @@
     <Font Id="default-font" File="default_font.fnt"/>
   </Fonts>
   <LabelStyles>
-    <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" />
+    <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="gray" />
   </LabelStyles>
   <TextBoxStyles>
-    <TextBoxStyle Background="textfield" TextColor="white" DisabledTextColor="grey" Font="default-font" Cursor="cursor" Selection="selection" />
+    <TextBoxStyle Background="textfield" TextColor="white" DisabledTextColor="gray" Font="default-font" Cursor="cursor" Selection="selection" />
   </TextBoxStyles>
   <ScrollViewerStyles>
     <ScrollViewerStyle HorizontalScrollBackground="scroll-horizontal" HorizontalScrollKnob="scroll-knob-horizontal" VerticalScrollBackground="scroll" VerticalScrollKnob="scroll-knob-vertical" />
   </ScrollViewerStyles>
   <ButtonStyles>
     <ButtonStyle Background="button" OverBackground="button-over" PressedBackground="button-down">
-      <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" />
+      <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="gray" />
     </ButtonStyle>
     <ButtonStyle Id="blue" Background="button-blue" OverBackground="button-blue-down" PressedBackground="button-blue-down">
-      <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" />
+      <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="gray" />
     </ButtonStyle>
   </ButtonStyles>
   <CheckBoxStyles>
@@ -34,7 +34,7 @@
   </RadioButtonStyles>
   <SpinButtonStyles>
     <SpinButtonStyle Background="textfield">
-      <TextBoxStyle TextColor="white" DisabledTextColor="grey" Font="default-font" Cursor="cursor" Selection="selection" />
+      <TextBoxStyle TextColor="white" DisabledTextColor="gray" Font="default-font" Cursor="cursor" Selection="selection" />
       <UpButtonStyle Width="12" Height="12" Background="button" OverBackground="button-over" PressedBackground="button-down">
         <ImageStyle Image="select-up" />
       </UpButtonStyle>
@@ -74,7 +74,7 @@
       <LabelStyle Font="default-font" TextColor="white" />
       <ListBoxStyle Background="select-box-list-bg">
         <ListItemStyle OverBackground="button-over" PressedBackground="button-down">
-          <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" />
+          <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="gray" />
         </ListItemStyle>
         <SeparatorStyle Padding="0, 2" Image="separator-menu" Thickness="4" />
       </ListBoxStyle>
@@ -83,7 +83,7 @@
   <ListBoxStyles>
     <ListBoxStyle Background="button">
       <ListItemStyle OverBackground="button-over" Padding="5, 0" PressedBackground="list-selection">
-        <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" />
+        <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="gray" />
       </ListItemStyle>
       <SeparatorStyle Padding="0, 2" Image="separator-menu" Thickness="4" />
     </ListBoxStyle>
@@ -91,7 +91,7 @@
   <TabControlStyles>
     <TabControlStyle ButtonSpacing="0">
       <TabItemStyle OverBackground="button-over" Padding="5, 0" PressedBackground="list-selection">
-        <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" />
+        <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="gray" />
       </TabItemStyle>
       <ContentStyle Background="window" Padding="5" />
     </TabControlStyle>
@@ -101,7 +101,7 @@
       <MarkStyle>
         <ImageStyle Image="tree-plus" PressedImage="tree-minus" />
       </MarkStyle>
-      <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" />
+      <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="gray" />
     </TreeStyle>
   </TreeStyles>
   <HorizontalSplitPaneStyles>
@@ -116,7 +116,7 @@
   </VerticalSplitPaneStyles>
   <HorizontalMenuStyles>
     <HorizontalMenuStyle Background="button" SelectionHoverBackground="button-over" SelectionBackground="button-down" SpecialCharColor="red">
-      <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" Padding="10, 0" />
+      <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="gray" Padding="10, 0" />
       <SeparatorStyle Image="separator" Thickness="3" />
     </HorizontalMenuStyle>
   </HorizontalMenuStyles>
@@ -125,8 +125,8 @@
                        SelectionHoverBackground="button-over" SelectionBackground="button-down"
                        SpecialCharColor="red">
       <ImageStyle Padding="10, 0, 0, 0" />
-      <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="grey" Padding="10, 0" />
-      <ShortcutStyle Font="default-font" TextColor="white" DisabledTextColor="grey" Padding="0, 0, 10, 0" />
+      <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="gray" Padding="10, 0" />
+      <ShortcutStyle Font="default-font" TextColor="white" DisabledTextColor="gray" Padding="0, 0, 10, 0" />
       <SeparatorStyle Padding="0, 2" Image="separator-menu" Thickness="4" />
     </VerticalMenuStyle>
   </VerticalMenuStyles>

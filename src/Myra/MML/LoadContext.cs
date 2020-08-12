@@ -70,6 +70,10 @@ namespace Myra.MML
 						else
 						{
 							value = ColorStorage.FromName(attr.Value);
+							if (value == null)
+							{
+								throw new Exception(string.Format("Could not find parse color '{0}'", attr.Value));
+							}
 						}
 					}
 					else if ((typeof(IBrush).IsAssignableFrom(propertyType) ||
