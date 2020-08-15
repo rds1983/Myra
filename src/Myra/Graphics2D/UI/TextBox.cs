@@ -36,6 +36,7 @@ namespace Myra.Graphics2D.UI
 		private bool _suppressRedoStackReset = false;
 		private string _text;
 		private string _hintText;
+		private bool _readOnly;
 		private bool _passwordField;
 		private bool _isTouchDown;
 
@@ -204,7 +205,19 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(false)]
 		public bool Readonly
 		{
-			get; set;
+			get
+			{
+				return _readOnly;
+			}
+			set
+			{
+				_readOnly = value;
+				AcceptsKeyboardFocus = !_readOnly;
+				if (!AcceptsKeyboardFocus && Desktop?.FocusedKeyboardWidget == this)
+				{
+					Desktop.FocusedKeyboardWidget = null;
+				}
+			}
 		}
 
 		[Category("Behavior")]
