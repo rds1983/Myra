@@ -920,6 +920,17 @@ namespace Myra.Graphics2D.UI
 			if (touchState.Count > 0)
 			{
 				var pos = touchState[0].Position;
+
+				if (SpriteBatchBeginParams.TransformMatrix != null)
+				{
+					// Apply transform
+					var t = Vector2.Transform(
+						new Vector2(pos.X, pos.Y),
+						SpriteBatchBeginParams.InverseTransform);
+
+					pos = new Vector2((int)t.X, (int)t.Y);
+				}
+
 				TouchPosition = new Point((int)pos.X, (int)pos.Y);
 			}
 
