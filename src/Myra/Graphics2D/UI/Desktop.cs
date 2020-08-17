@@ -650,6 +650,11 @@ namespace Myra.Graphics2D.UI
 				{
 					Batch = spriteBatch
 				};
+
+				if(MyraEnvironment.LayoutScale.HasValue)
+                {
+					_renderContext.SpriteBatchBeginParams.TransformMatrix = Matrix.CreateScale(MyraEnvironment.LayoutScale.Value);
+				}
 			}
 		}
 

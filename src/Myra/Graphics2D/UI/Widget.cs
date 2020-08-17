@@ -1255,7 +1255,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				// Align
-				var controlBounds = LayoutUtils.Align(containerSize, size, HorizontalAlignment, VerticalAlignment);
+				var controlBounds = LayoutUtils.Align(containerSize, size, HorizontalAlignment, VerticalAlignment, Parent == null);
 				controlBounds.Offset(_containerBounds.Location);
 
 				controlBounds.Offset(Left, Top);
