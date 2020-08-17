@@ -31,6 +31,13 @@ namespace Myra.MML
 		}
 
 		/// <summary>
+		/// Holds custom user attributes not mapped to the object
+		/// </summary>
+		[XmlIgnore]
+		[Browsable(false)]
+		public Dictionary<string, string> UserData { get; private set; } = new Dictionary<string, string>();
+
+		/// <summary>
 		/// External files used by this object
 		/// </summary>
 		[XmlIgnore]
