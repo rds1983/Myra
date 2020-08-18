@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using Myra.Graphics2D.UI.Styles;
-using Myra.Systems;
 using Myra.Utility;
 
 #if !STRIDE
@@ -58,7 +57,6 @@ namespace Myra.Graphics2D.UI
 #if MONOGAME
 		public bool HasExternalTextInput = false;
 #endif
-		private readonly List<ISystem> _systems = new List<ISystem>();
 
 		/// <summary>
 		/// Root Widget
@@ -179,8 +177,6 @@ namespace Myra.Graphics2D.UI
 
 		public ObservableCollection<Widget> Widgets { get; } = new ObservableCollection<Widget>();
 
-		public IReadOnlyList<ISystem> Systems { get => _systems; }
-		
 		public Func<Rectangle> BoundsFetcher = DefaultBoundsFetcher;
 
 		internal Rectangle InternalBounds { get; private set; }
@@ -687,7 +683,6 @@ namespace Myra.Graphics2D.UI
 		public void Render()
 		{
 			UpdateInput();
-			UpdateSystems();
 			UpdateLayout();
 			RenderVisual();
 		}
@@ -802,17 +797,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		/// <summary>
-		/// Updates all of the systems attached to the Desktop.
-		/// </summary>
-		public void UpdateSystems()
-		{
-			foreach (var system in Systems)
-			{
-				system.Update();
-			}
-		}
-		
 		private Widget GetWidgetBy(Widget root, Func<Widget, bool> filter)
 		{
 			if (filter(root))
@@ -1272,45 +1256,6 @@ namespace Myra.Graphics2D.UI
 		{
 			var size = MyraEnvironment.GraphicsDevice.ViewSize();
 			return new Rectangle(0, 0, size.X, size.Y);
-		}
-
-		public T AddSystem<T>(T system) where T : ISystem
-		{
-			system.Desktop = this;
-			_systems.Add(system);
-
-			var widgets = new Queue<Widget>();
-			widgets.Enqueue(Root);
-
-			while (widgets.Count > 0)
-			{
-				var currentWidget = widgets.Dequeue();
-
-				if (currentWidget is Container container)
-				{
-					foreach (var childWidget in container.ChildrenCopy)
-					{
-						widgets.Enqueue(childWidget);
-					}
-				}
-
-				system.OnWidgetAddedToDesktop(currentWidget);
-			}
-
-			return system;
-		}
-
-		public T GetSystem<T>() where T : ISystem
-		{
-			foreach (var system in Systems)
-			{
-				if (system.GetType() == typeof(T))
-				{
-					return (T) system;
-				}
-			}
-			
-			return default(T);
 		}
 	}
 }
