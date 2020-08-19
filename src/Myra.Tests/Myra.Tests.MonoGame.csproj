@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);MONOGAME</DefineConstants>
-    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net452</TargetFrameworks>
     <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
     <OutputType>Library</OutputType>
   </PropertyGroup>
