@@ -1,5 +1,6 @@
 version: 1.0.1.{build}
 configuration: Release
+test: off # Tests are off, since appveyor box can't create GraphicsDevice
 dotnet_csproj:
   patch: true
   file: '**\*.csproj'
