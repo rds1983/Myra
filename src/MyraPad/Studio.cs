@@ -121,7 +121,6 @@ namespace MyraPad
 					return;
 				}
 
-				var oldPath = value;
 				_filePath = value;
 
 				if (!string.IsNullOrEmpty(_filePath))

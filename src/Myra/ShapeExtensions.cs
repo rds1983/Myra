@@ -19,9 +19,11 @@ namespace Myra
 	/// </summary>
 	public static class ShapeExtensions
 	{
-		private static void Draw(this SpriteBatch spriteBatch, Texture2D texture, Vector2 offset, Color color, Vector2 scale, float rotation = 0.0f)
+		private static void Draw(this SpriteBatch spriteBatch, Texture2D texture, 
+			Vector2 offset, Color color, Vector2 scale, float rotation = 0.0f)
 		{
-			spriteBatch.Draw(texture, offset, null, color, rotation, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
+			spriteBatch.Draw(texture, offset, null, color, 
+				rotation, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
 		}
 
 		/// <summary>
@@ -60,7 +62,7 @@ namespace Myra
 			var length = Vector2.Distance(point1, point2);
 			var angle = (float) Math.Atan2(point2.Y - point1.Y, point2.X - point1.X);
 			var scale = new Vector2(length, thickness);
-			spriteBatch.Draw(texture, point1, color: color, rotation: angle, scale: scale);
+			spriteBatch.Draw(texture, point1, color, scale, angle);
 		}
 
 		/// <summary>
@@ -118,10 +120,10 @@ namespace Myra
 			var horizontalScale = new Vector2(rectangle.Width, thickness);
 			var verticalScale = new Vector2(thickness, rectangle.Height);
 
-			spriteBatch.Draw(texture, topLeft, scale: horizontalScale, color: color);
-			spriteBatch.Draw(texture, topLeft, scale: verticalScale, color: color);
-			spriteBatch.Draw(texture, topRight, scale: verticalScale, color: color);
-			spriteBatch.Draw(texture, bottomLeft, scale: horizontalScale, color: color);
+			spriteBatch.Draw(texture, topLeft, color, horizontalScale);
+			spriteBatch.Draw(texture, topLeft, color, verticalScale);
+			spriteBatch.Draw(texture, topRight, color, verticalScale);
+			spriteBatch.Draw(texture, bottomLeft, color, horizontalScale);
 		}
 
 		/// <summary>
@@ -207,7 +209,7 @@ namespace Myra
 		{
 			var scale = Vector2.One * size;
 			var offset = new Vector2(0.5f) - new Vector2(size * 0.5f);
-			spriteBatch.Draw(DefaultAssets.White, position + offset, color: color, scale: scale);
+			spriteBatch.Draw(DefaultAssets.White, position + offset, color, scale);
 		}
 
 		/// <summary>
