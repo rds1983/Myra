@@ -9,8 +9,11 @@ namespace Myra.Graphics2D.UI
 	public static class LayoutUtils
 	{
 		public static Rectangle Align(Point containerSize, Point controlSize, HorizontalAlignment horizontalAlignment,
-			VerticalAlignment verticalAlignment)
+			VerticalAlignment verticalAlignment, bool isTopLevel = false)
 		{
+			if (isTopLevel && MyraEnvironment.LayoutScale.HasValue)
+				containerSize = new Point((int) (containerSize.X / MyraEnvironment.LayoutScale), (int) (containerSize.Y / MyraEnvironment.LayoutScale));
+
 			var result = new Rectangle
 			{
 				Width = controlSize.X,

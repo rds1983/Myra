@@ -126,5 +126,10 @@ namespace Myra
 		}
 
 		internal static string InternalClipboard;
+
+		/// <summary>
+		/// Applies an overall scaling factor to adjust the size and spacing of widgets on devices with high definition displays
+		/// </summary>
+		public static float? LayoutScale { get; set; }
 	}
 }
