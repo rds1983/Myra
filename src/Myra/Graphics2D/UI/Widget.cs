@@ -1006,6 +1006,17 @@ namespace Myra.Graphics2D.UI
 
 				context.Flush();
 
+				if (context.SpriteBatchBeginParams.TransformMatrix.HasValue)
+				{
+					var pos = new Point(newScissorRectangle.X, newScissorRectangle.Y).ToVector2();
+					var size = new Point(newScissorRectangle.Width, newScissorRectangle.Height).ToVector2();
+
+					pos = Vector2.Transform(pos, context.SpriteBatchBeginParams.TransformMatrix.Value);
+					size = Vector2.Transform(size, context.SpriteBatchBeginParams.TransformMatrix.Value);
+
+					newScissorRectangle = new Rectangle(pos.ToPoint(), size.ToPoint());
+				}
+
 				CrossEngineStuff.SetScissor(newScissorRectangle);
 			}
 
