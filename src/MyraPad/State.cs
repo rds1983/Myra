@@ -25,7 +25,7 @@ namespace MyraPad
 		public float LeftSplitterPosition { get; set; }
 		public string EditedFile { get; set; }
 		public string LastFolder { get; set; }
-		public uint[] UserColors { get; set; }
+		public Color[] UserColors { get; set; }
 		public Options Options;
 
 		public State()
@@ -64,7 +64,7 @@ namespace MyraPad
 			var colors = string.Empty;
 			if (UserColors != null)
 			{
-				colors = string.Join(", ", from c in UserColors select new Color(c).ToHexString());
+				colors = string.Join(", ", from c in UserColors select c.ToHexString());
 			}
 			return string.Format("Size = {0}\n" +
 								 "TopSplitter = {1:0.##}\n" +

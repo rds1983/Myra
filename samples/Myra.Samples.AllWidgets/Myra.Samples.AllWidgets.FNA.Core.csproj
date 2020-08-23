@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <ApplicationIcon />
+    <StartupObject />
+    <AssemblyName>Myra.Samples.AllWidgets</AssemblyName>
+    <RootNamespace>Myra.Samples.AllWidgets</RootNamespace>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <OutputPath>bin\FNA.Core\$(Configuration)</OutputPath>
+    <DefineConstants>$(DefineConstants);FNA;</DefineConstants>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Myra\Myra.FNA.Core.csproj" />
+  </ItemGroup>  
+</Project>

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Forms;
 
 namespace MyraPad
 {
@@ -20,7 +19,9 @@ namespace MyraPad
 			}
 			catch (Exception ex)
 			{
+#if !CORE
 				MessageBox.Show(ex.ToString());
+#endif			
 				Console.WriteLine(ex.ToString());
 			}
 		}

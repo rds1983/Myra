@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Authors>MyraTeam</Authors>
+    <Product>Myra</Product>
+    <Description>UI Library for MonoGame, FNA and Xenko</Description>
+    <PackageLicenseUrl>https://en.wikipedia.org/wiki/MIT_License</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/rds1983/Myra</PackageProjectUrl>
+    <AssemblyName>Myra</AssemblyName>
+    <RootNamespace>Myra</RootNamespace>
+    <Version>1.0.0.0</Version>
+    <DefineConstants>$(DefineConstants);FNA</DefineConstants>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>Myra.FNA</PackageId>
+    <OutputPath>bin\FNA\$(Configuration)</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\**\*.*" />
+  </ItemGroup>  
+  
+  <ItemGroup>
+    <PackageReference Include="info.lundin.math.dll" Version="1.2.6" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\XNAssets\src\XNAssets.FNA.Core.csproj" />
+  </ItemGroup>
+</Project>

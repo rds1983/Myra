@@ -234,7 +234,7 @@ namespace MyraPad
 				{
 					for (var i = 0; i < Math.Min(ColorPickerPanel.UserColors.Length, _state.UserColors.Length); ++i)
 					{
-						ColorPickerPanel.UserColors[i] = new Color(_state.UserColors[i]);
+						ColorPickerPanel.UserColors[i] = _state.UserColors[i];
 					}
 				}
 
@@ -264,21 +264,24 @@ namespace MyraPad
 			base.LoadContent();
 
 			MyraEnvironment.Game = this;
-
-			_desktop = new Desktop
-			{
-				// Inform Myra that external text input is available
-				// So it stops translating Keys to chars
-				HasExternalTextInput = true
-			};
+			
+			_desktop = new Desktop();
 
 			BuildUI();
+			
+			#if MONOGAME
+			
+			// Inform Myra that external text input is available
+			// So it stops translating Keys to chars
+			_desktop.HasExternalTextInput = true;
 
 			// Provide that text input
 			Window.TextInput += (s, a) =>
 			{
 				_desktop.OnChar(a.Character);
 			};
+
+			#endif
 
 			if (_state != null && !string.IsNullOrEmpty(_state.EditedFile))
 			{
@@ -1478,7 +1481,7 @@ namespace MyraPad
 				LeftSplitterPosition = _ui._leftSplitPane.GetSplitterPosition(0),
 				EditedFile = FilePath,
 				LastFolder = _lastFolder,
-				UserColors = (from c in ColorPickerPanel.UserColors select c.PackedValue).ToArray()
+				UserColors = (from c in ColorPickerPanel.UserColors select c).ToArray()
 			};
 
 			state.Save();

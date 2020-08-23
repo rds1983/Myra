@@ -1,68 +1,20 @@
 {
-	// Use IntelliSense to learn about possible attributes.
-	// Hover to view descriptions of existing attributes.
-	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-	"version": "0.2.0",
-	"configurations": [
-		{
-			"name": "All Widgets Sample",
-			"type": "coreclr",
-			"request": "launch",
-			"preLaunchTask": "FNA Debug",
-			"program": "${workspaceFolder}/samples/Myra.Samples.AllWidgets/bin/FNA/Debug/netcoreapp2.1/Myra.Samples.AllWidgets.dll",
-			"args": [],
-			"cwd": "${workspaceFolder}/samples/Myra.Samples.AllWidgets/bin/FNA/Debug/netcoreapp2.1/",
-			"console": "internalConsole",
-			"stopAtEntry": false,
-			"internalConsoleOptions": "openOnSessionStart"
-		},
-		{
-			"name": "Custom Stylesheet Sample",
-			"type": "coreclr",
-			"request": "launch",
-			"preLaunchTask": "FNA Debug",
-			"program": "${workspaceFolder}/samples/Myra.Samples.CustomUIStylesheet/bin/FNA/Debug/netcoreapp2.1/Myra.Samples.CustomUIStylesheet.dll",
-			"args": [],
-			"cwd": "${workspaceFolder}/samples/Myra.Samples.CustomUIStylesheet/bin/FNA/Debug/netcoreapp2.1/",
-			"console": "internalConsole",
-			"stopAtEntry": false,
-			"internalConsoleOptions": "openOnSessionStart"
-		},
-		{
-			"name": "Grid Container Sample",
-			"type": "coreclr",
-			"request": "launch",
-			"preLaunchTask": "FNA Debug",
-			"program": "${workspaceFolder}/samples/Myra.Samples.GridContainer/bin/FNA/Debug/netcoreapp2.1/Myra.Samples.GridContainer.dll",
-			"args": [],
-			"cwd": "${workspaceFolder}/samples/Myra.Samples.GridContainer/bin/FNA/Debug/netcoreapp2.1/",
-			"console": "internalConsole",
-			"stopAtEntry": false,
-			"internalConsoleOptions": "openOnSessionStart"
-		},
-		{
-			"name": "Rogue Editor Sample",
-			"type": "coreclr",
-			"request": "launch",
-			"preLaunchTask": "FNA Debug",
-			"program": "${workspaceFolder}/samples/Myra.Samples.RogueEditor/bin/FNA/Debug/netcoreapp2.1/Myra.Samples.RogueEditor.dll",
-			"args": [],
-			"cwd": "${workspaceFolder}/samples/Myra.Samples.RogueEditor/bin/FNA/Debug/netcoreapp2.1/",
-			"console": "internalConsole",
-			"stopAtEntry": false,
-			"internalConsoleOptions": "openOnSessionStart"
-		},
-		{
-			"name": "SplitPane Sample",
-			"type": "coreclr",
-			"request": "launch",
-			"preLaunchTask": "FNA Debug",
-			"program": "${workspaceFolder}/samples/Myra.Samples.SplitPaneContainer/bin/FNA/Debug/netcoreapp2.1/Myra.Samples.SplitPaneContainer.dll",
-			"args": [],
-			"cwd": "${workspaceFolder}/samples/Myra.Samples.SplitPaneContainer/bin/FNA/Debug/netcoreapp2.1/",
-			"console": "internalConsole",
-			"stopAtEntry": false,
-			"internalConsoleOptions": "openOnSessionStart"
-		},
-	]
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "MyraPad FNA.Core",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "buildMyraPadFnaCore",
+            "program": "${workspaceFolder}/src/MyraPad/bin/FNA.Core/Debug/netcoreapp3.1/MyraPad.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        }
+
+    ]
 }

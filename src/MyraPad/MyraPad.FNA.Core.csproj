@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <ApplicationIcon />
+    <StartupObject />
+    <AssemblyName>MyraPad</AssemblyName>
+    <RootNamespace>MyraPad</RootNamespace>
+    <OutputPath>bin\FNA.Core\$(Configuration)</OutputPath>
+    <DefineConstants>$(DefineConstants);FNA;CORE</DefineConstants>	
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\ExportCSDesigner.cstemplate" />
+    <None Remove="Resources\ExportCSMain.cstemplate" />
+    <None Remove="Resources\NewProject.xmltemplate" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ExportCSDesigner.cstemplate" />
+    <EmbeddedResource Include="Resources\ExportCSMain.cstemplate" />
+    <EmbeddedResource Include="Resources\NewProject.xmltemplate" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Myra\Myra.FNA.Core.csproj" />
+  </ItemGroup>
+</Project>

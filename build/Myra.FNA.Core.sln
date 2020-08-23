@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{D17FD092-A553-4770-A7A5-822661193436}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FNA.Core", "..\..\FNA\FNA.Core.csproj", "{FB3FB9D6-52B2-464E-9C11-EF31B2573426}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNAssets.FNA.Core", "..\..\XNAssets\src\XNAssets.FNA.Core.csproj", "{A345E73D-4BEC-46A4-90D6-629F5A4AD062}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.FNA.Core", "..\src\Myra\Myra.FNA.Core.csproj", "{032CDE6F-256B-4545-BD4C-4396E90AF5CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Tests.FNA.Core", "..\src\Myra.Tests\Myra.Tests.FNA.Core.csproj", "{088FC617-30F8-4ED8-BB4E-076C3107E0B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.AllWidgets.FNA.Core", "..\samples\Myra.Samples.AllWidgets\Myra.Samples.AllWidgets.FNA.Core.csproj", "{08F5F0B8-6573-46DF-BBCB-AB8E22731880}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyraPad.FNA.Core", "..\src\MyraPad\MyraPad.FNA.Core.csproj", "{E4B28EE5-DE02-4A8D-BE0D-F0FA2D0832C1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB3FB9D6-52B2-464E-9C11-EF31B2573426}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{FB3FB9D6-52B2-464E-9C11-EF31B2573426}.Debug|Any CPU.Build.0 = Debug|x64
+		{FB3FB9D6-52B2-464E-9C11-EF31B2573426}.Release|Any CPU.ActiveCfg = Release|x64
+		{FB3FB9D6-52B2-464E-9C11-EF31B2573426}.Release|Any CPU.Build.0 = Release|x64
+		{A345E73D-4BEC-46A4-90D6-629F5A4AD062}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A345E73D-4BEC-46A4-90D6-629F5A4AD062}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A345E73D-4BEC-46A4-90D6-629F5A4AD062}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A345E73D-4BEC-46A4-90D6-629F5A4AD062}.Release|Any CPU.Build.0 = Release|Any CPU
+		{032CDE6F-256B-4545-BD4C-4396E90AF5CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{032CDE6F-256B-4545-BD4C-4396E90AF5CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{032CDE6F-256B-4545-BD4C-4396E90AF5CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{032CDE6F-256B-4545-BD4C-4396E90AF5CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{088FC617-30F8-4ED8-BB4E-076C3107E0B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{088FC617-30F8-4ED8-BB4E-076C3107E0B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{088FC617-30F8-4ED8-BB4E-076C3107E0B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{088FC617-30F8-4ED8-BB4E-076C3107E0B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08F5F0B8-6573-46DF-BBCB-AB8E22731880}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08F5F0B8-6573-46DF-BBCB-AB8E22731880}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08F5F0B8-6573-46DF-BBCB-AB8E22731880}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08F5F0B8-6573-46DF-BBCB-AB8E22731880}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4B28EE5-DE02-4A8D-BE0D-F0FA2D0832C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4B28EE5-DE02-4A8D-BE0D-F0FA2D0832C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4B28EE5-DE02-4A8D-BE0D-F0FA2D0832C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4B28EE5-DE02-4A8D-BE0D-F0FA2D0832C1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{08F5F0B8-6573-46DF-BBCB-AB8E22731880} = {D17FD092-A553-4770-A7A5-822661193436}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A9C9D369-EE58-4E9D-B9FE-63023B644741}
+	EndGlobalSection
+EndGlobal

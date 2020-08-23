@@ -4,64 +4,22 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "FNA Debug",
-            "command": "dotnet build",
+            "label": "buildMyraPadFnaCore",
+            "command": "dotnet",
             "type": "shell",
-            "group": "build",
             "args": [
-                "build/FNA/Myra.sln",
-                "/t:build",
-                "/p:Configuration=Debug"
+                "build",
+                "src/MyraPad/MyraPad.FNA.Core.csproj",
+                // Ask dotnet build to generate full paths for file names.
+                "/property:GenerateFullPaths=true",
+                // Do not generate summary otherwise it leads to duplicate errors in Problems panel
+                "/consoleloggerparameters:NoSummary"
             ],
+            "group": "build",
             "presentation": {
                 "reveal": "silent"
             },
             "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "FNA Release",
-            "command": "dotnet build",
-            "type": "shell",
-            "group": "build",
-            "args": [
-                "build/FNA/Myra.sln",
-                "/t:build",
-                "/p:Configuration=Release"
-            ],
-            "presentation": {
-                "reveal": "silent"
-            },
-            "problemMatcher": "$msCompile"
-		},
-        {
-            "label": "MonoGame Debug",
-            "command": "dotnet build",
-            "type": "shell",
-            "group": "build",
-            "args": [
-                "build/MonoGame/Myra.sln",
-                "/t:build",
-                "/p:Configuration=Debug"
-            ],
-            "presentation": {
-                "reveal": "silent"
-            },
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "MonoGame Release",
-            "command": "dotnet build",
-            "type": "shell",
-            "group": "build",
-            "args": [
-                "build/MonoGame/Myra.sln",
-                "/t:build",
-                "/p:Configuration=Release"
-            ],
-            "presentation": {
-                "reveal": "silent"
-            },
-            "problemMatcher": "$msCompile"
-        }		
+        }
     ]
 }

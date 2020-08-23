@@ -178,25 +178,24 @@ namespace Myra.Graphics2D.UI.File
 			});
 
 			var drives = DriveInfo.GetDrives();
-
 			var iconDrive = DefaultAssets.UITextureRegionAtlas["icon-drive"];
 			foreach (var d in drives)
 			{
-				if (d.DriveType == DriveType.Ram)
+				if (d.DriveType == DriveType.Ram || d.DriveType == DriveType.Unknown)
 				{
 					continue;
 				}
 
 				try
 				{
-					var s = d.RootDirectory.Name;
+					var s = d.RootDirectory.FullName;
 
-					if (!string.IsNullOrEmpty(d.VolumeLabel) && d.VolumeLabel != d.RootDirectory.Name)
+					if (!string.IsNullOrEmpty(d.VolumeLabel) && d.VolumeLabel != d.RootDirectory.FullName)
 					{
 						s += " (" + d.VolumeLabel + ")";
 					}
 
-					_listBoxPlaces.Items.Add(new ListItem(s, null, d.RootDirectory.Name)
+					_listBoxPlaces.Items.Add(new ListItem(s, null, d.RootDirectory.FullName)
 					{
 						Image = iconDrive,
 						ImageTextSpacing = ImageTextSpacing
