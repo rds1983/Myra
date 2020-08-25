@@ -1,5 +1,9 @@
 ﻿using System;
 
+#if !CORE
+using System.Windows.Forms;
+#endif
+
 namespace MyraPad
 {
 	static class Program
