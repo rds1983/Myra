@@ -68,6 +68,11 @@ namespace Myra.Graphics2D.UI
 			get { return _childNodesGrid.Widgets.Count; }
 		}
 
+		public Grid Grid
+		{
+			get { return InternalChild; }
+		}
+
 		internal Rectangle RowBounds { get; set; }
 
 		internal bool RowVisible { get; set; }
