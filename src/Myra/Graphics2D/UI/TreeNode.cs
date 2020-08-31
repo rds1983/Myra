@@ -68,6 +68,8 @@ namespace Myra.Graphics2D.UI
 			get { return _childNodesGrid.Widgets.Count; }
 		}
 
+		[XmlIgnore]
+		[Browsable(false)]
 		public Grid Grid
 		{
 			get { return InternalChild; }
