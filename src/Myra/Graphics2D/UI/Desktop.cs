@@ -1143,13 +1143,13 @@ namespace Myra.Graphics2D.UI
 				var asWindow = topWidget as Window;
 				if (asWindow != null)
 				{
-					if (key == Keys.Escape)
+					if (key == asWindow.CloseKey)
 					{
 						asWindow.OnKeyDown(key);
 					}
 
 					var asDialog = asWindow as Dialog;
-					if (asDialog != null && key == Keys.Enter)
+					if (asDialog != null && key == asDialog.ConfirmKey)
 					{
 						// Dialog also always receives Enter (Ok)
 						asWindow.OnKeyDown(key);

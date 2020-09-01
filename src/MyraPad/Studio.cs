@@ -1280,8 +1280,6 @@ namespace MyraPad
 
 			if (_currentTagStart != null && _currentTagEnd != null)
 			{
-				var t = _ui._textSource.Text;
-
 				try
 				{
 					_suppressProjectRefresh = true;

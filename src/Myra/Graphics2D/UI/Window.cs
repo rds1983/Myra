@@ -143,6 +143,10 @@ namespace Myra.Graphics2D.UI
 			set => base.IsDraggable = value;
 		}
 
+		[Category("Behavior")]
+		[DefaultValue(Keys.Escape)]
+		public Keys CloseKey { get; set; }
+
 		private bool IsWindowPlaced
 		{
 			get; set;
@@ -153,6 +157,8 @@ namespace Myra.Graphics2D.UI
 
 		public Window(string styleName = Stylesheet.DefaultStyleName)
 		{
+			CloseKey = Keys.Escape;
+
 			IsModal = true;
 			IsDraggable = true;
 
@@ -222,16 +228,11 @@ namespace Myra.Graphics2D.UI
 
 		public override void OnKeyDown(Keys k)
 		{
-			base.OnKeyDown(k);
+			base.OnKeyDown(k);	
 
-			switch (k)
+			if (k == CloseKey)
 			{
-				case Keys.Escape:
-					if (CloseButton.Visible)
-					{
-						Close();
-					}
-					break;
+				Close();
 			}
 		}
 

@@ -22,8 +22,14 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public ImageTextButton ButtonCancel { get; private set; }
 
+		[Category("Behavior")]
+		[DefaultValue(Keys.Enter)]
+		public Keys ConfirmKey { get; set; }
+
 		public Dialog(string styleName = Stylesheet.DefaultStyleName) : base(styleName)
 		{
+			ConfirmKey = Keys.Enter;
+
 			var buttonsGrid = new HorizontalStackPanel()
 			{
 				Spacing = 8,
@@ -63,20 +69,12 @@ namespace Myra.Graphics2D.UI
 		{
 			FireKeyDown(k);
 
-			switch (k)
+			if (k == CloseKey)
 			{
-				case Keys.Escape:
-					if (CloseButton.Visible)
-					{
-						CloseButton.DoClick();
-					}
-					break;
-				case Keys.Enter:
-					if (ButtonOk.Visible)
-					{
-						ButtonOk.DoClick();
-					}
-					break;
+				CloseButton.DoClick();
+			} else if (k == ConfirmKey)
+			{
+				ButtonOk.DoClick();
 			}
 		}
 
