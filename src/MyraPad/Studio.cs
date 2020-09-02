@@ -222,7 +222,18 @@ namespace MyraPad
 
 			// Restore state
 			_state = State.Load();
-
+			
+			//Load via program argument
+			if (args.Length > 0)
+			{
+				string filePathArg = args[0];
+				if (!string.IsNullOrEmpty(filePathArg))
+				{
+					_state.EditedFile = filePathArg;
+					_state.LastFolder =  Path.GetDirectoryName(filePathArg);
+				}
+			}
+			
 			_graphicsDeviceManager = new GraphicsDeviceManager(this);
 
 			if (_state != null)
