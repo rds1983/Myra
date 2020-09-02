@@ -216,7 +216,7 @@ namespace MyraPad
 			}
 		}
 
-		public Studio()
+		public Studio(string[] args)
 		{
 			_instance = this;
 
