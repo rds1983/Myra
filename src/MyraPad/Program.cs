@@ -12,11 +12,11 @@ namespace MyraPad
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		static void Main()
+		static void Main(string[] args)
 		{
 			try
 			{
-				using (var studio = new Studio())
+				using (var studio = new Studio(args))
 				{
 					studio.Run();
 				}
