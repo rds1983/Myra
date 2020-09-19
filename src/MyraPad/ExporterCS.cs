@@ -1,6 +1,9 @@
 ﻿using System;
+using System.CodeDom;
+using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -53,8 +56,8 @@ namespace MyraPad
 			}
 
 			var template = string.IsNullOrWhiteSpace(_project.ExportOptions.TemplateMain) ? 
-                Resources.ExportCSMain : 
-                File.ReadAllText(_project.ExportOptions.TemplateMain);
+				Resources.ExportCSMain : 
+				File.ReadAllText(_project.ExportOptions.TemplateMain);
 
 			template = template.Replace("$namespace$", _project.ExportOptions.Namespace);
 			template = template.Replace("$class$", _project.ExportOptions.Class);
@@ -113,7 +116,7 @@ namespace MyraPad
 					var asList = value as IList;
 
 					if (asList != null && type.IsGenericType &&
-					    typeof (IItemWithId).IsAssignableFrom(type.GetGenericArguments()[0]))
+						typeof (IItemWithId).IsAssignableFrom(type.GetGenericArguments()[0]))
 					{
 						foreach (var comp in asList)
 						{
@@ -174,7 +177,7 @@ namespace MyraPad
 			if (!string.IsNullOrEmpty(id))
 			{
 				sbBuild.Append(" = new " + typeName + "(" +
-				               (string.IsNullOrEmpty(styleName) ? string.Empty : ("\"" + styleName + "\"")) + ");");
+					(string.IsNullOrEmpty(styleName) ? string.Empty : ("\"" + styleName + "\"")) + ");");
 			}
 
 			if (!string.IsNullOrEmpty(w.Id) && _project.Root != w)
@@ -213,10 +216,10 @@ namespace MyraPad
 
 		public string ExportDesigner()
 		{
-            var template = string.IsNullOrWhiteSpace(_project.ExportOptions.TemplateDesigner) ?
-                Resources.ExportCSDesigner :
-                File.ReadAllText(_project.ExportOptions.TemplateDesigner);
-            
+			var template = string.IsNullOrWhiteSpace(_project.ExportOptions.TemplateDesigner) ?
+				Resources.ExportCSDesigner :
+				File.ReadAllText(_project.ExportOptions.TemplateDesigner);
+			
 			template = template.Replace("$namespace$", _project.ExportOptions.Namespace);
 			template = template.Replace("$class$", _project.ExportOptions.Class);
 			template = template.Replace("$parentClass$", _project.Root.GetType().Name);
@@ -246,8 +249,8 @@ namespace MyraPad
 			foreach (var property in properties)
 			{
 				if (property.GetGetMethod() == null ||
-				    !property.GetGetMethod().IsPublic ||
-				    property.GetGetMethod().IsStatic)
+					!property.GetGetMethod().IsPublic ||
+					property.GetGetMethod().IsStatic)
 				{
 					continue;
 				}
@@ -273,6 +276,7 @@ namespace MyraPad
 		private static string BuildPropertyCode(PropertyInfo property, object o, string idPrefix)
 		{
 			var sb = new StringBuilder();
+			var converter = new PrimitiveConverter();
 
 			var value = property.GetValue(o);
 
@@ -310,7 +314,7 @@ namespace MyraPad
 				}
 				else
 				{
-					strValue = BuildValue(value);
+					strValue = BuildValue(value, converter);
 				}
 
 				if (strValue == null)
@@ -329,32 +333,21 @@ namespace MyraPad
 				{
 					sb.Append("\n\t\t\t" + idPrefix + property.Name);
 					sb.Append(".Add(");
-					sb.Append(BuildValue(comp));
+					sb.Append(BuildValue(comp, converter));
 					sb.Append(");");
 				}
 			}
 
+			converter.Dispose();
+
 			return sb.ToString();
 		}
 
-		private static string BuildValue(object value)
+		private static string BuildValue(object value, PrimitiveConverter converter)
 		{
 			if (value == null)
 			{
 				return "null";
-			}
-
-			if (value is bool)
-			{
-				return (bool) value ? "true" : "false";
-			}
-
-			var asString = value as string;
-			if (asString != null)
-			{
-				// Escape backslash and double quote
-				asString = asString.Replace(@"\", @"\\").Replace("\"", "\\\"");
-				return "\"" + asString + "\"";
 			}
 
 			if (value is Color)
@@ -366,9 +359,9 @@ namespace MyraPad
 				}
 			}
 
-			if (value.GetType().IsPrimitive)
+			if (value is string || value.GetType().IsPrimitive)
 			{
-				return value.ToString();
+				return converter.PrimitiveToLiteral(value);
 			}
 
 			var sb = new StringBuilder();
@@ -387,9 +380,9 @@ namespace MyraPad
 			foreach (var property in properties)
 			{
 				if (property.GetGetMethod() == null ||
-				    property.GetSetMethod() == null ||
-				    !property.GetGetMethod().IsPublic ||
-				    property.GetGetMethod().IsStatic)
+					property.GetSetMethod() == null ||
+					!property.GetGetMethod().IsPublic ||
+					property.GetGetMethod().IsStatic)
 				{
 					continue;
 				}
@@ -421,7 +414,7 @@ namespace MyraPad
 
 				sb.Append("\n\t\t\t\t" + property.Name);
 				sb.Append(" = ");
-				sb.Append(BuildValue(subValue));
+				sb.Append(BuildValue(subValue, converter));
 				sb.Append(",");
 			}
 
@@ -470,5 +463,21 @@ namespace MyraPad
 
 			return result.ToArray();
 		}
+	}
+
+	class PrimitiveConverter : IDisposable
+	{
+		private readonly CodeDomProvider provider = CodeDomProvider.CreateProvider("CSharp");
+
+		public string PrimitiveToLiteral(object input)
+		{
+			using (var writer = new StringWriter())
+			{
+				provider.GenerateCodeFromExpression(new CodePrimitiveExpression(input), writer, null);
+				return writer.ToString();
+			}
+		}
+
+		public void Dispose() => provider.Dispose();
 	}
 }
