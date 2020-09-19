@@ -1259,16 +1259,17 @@ namespace MyraPad
 
 					UpdateSource();
 
-					var export = new ExporterCS(Instance.Project);
-
-					var strings = new List<string>
+					using (var export = new ExporterCS(Instance.Project))
 					{
-						"Success. Following files had been written:"
-					};
-					strings.AddRange(export.Export());
+						var strings = new List<string>
+						{
+							"Success. Following files had been written:"
+						};
+						strings.AddRange(export.Export());
 
-					var msg = Dialog.CreateMessageBox("Export To C#", string.Join("\n", strings));
-					msg.ShowModal(_desktop);
+						var msg = Dialog.CreateMessageBox("Export To C#", string.Join("\n", strings));
+						msg.ShowModal(_desktop);
+					}
 				}
 				catch (Exception ex)
 				{

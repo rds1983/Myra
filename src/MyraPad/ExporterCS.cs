@@ -20,12 +20,13 @@ using XNAssets.Utility;
 
 namespace MyraPad
 {
-	public class ExporterCS
+	public class ExporterCS : IDisposable
 	{
 		private readonly Project _project;
 		private readonly Dictionary<string, int> ids = new Dictionary<string, int>();
 		private readonly StringBuilder sbFields = new StringBuilder();
 		private readonly StringBuilder sbBuild = new StringBuilder();
+		private readonly PrimitiveConverter converter = new PrimitiveConverter();
 		private bool isFirst = true;
 
 		public ExporterCS(Project project)
@@ -273,10 +274,9 @@ namespace MyraPad
 			return result;
 		}
 
-		private static string BuildPropertyCode(PropertyInfo property, object o, string idPrefix)
+		private string BuildPropertyCode(PropertyInfo property, object o, string idPrefix)
 		{
 			var sb = new StringBuilder();
-			var converter = new PrimitiveConverter();
 
 			var value = property.GetValue(o);
 
@@ -337,8 +337,6 @@ namespace MyraPad
 					sb.Append(");");
 				}
 			}
-
-			converter.Dispose();
 
 			return sb.ToString();
 		}
@@ -463,7 +461,9 @@ namespace MyraPad
 
 			return result.ToArray();
 		}
-	}
+
+        public void Dispose() => converter.Dispose();
+    }
 
 	class PrimitiveConverter : IDisposable
 	{
