@@ -474,7 +474,19 @@ namespace MyraPad
 			using (var writer = new StringWriter())
 			{
 				provider.GenerateCodeFromExpression(new CodePrimitiveExpression(input), writer, null);
-				return writer.ToString();
+				var result = writer.ToString();
+
+				// Remove trailing 'f' from float
+				if (input is float && !string.IsNullOrEmpty(result))
+				{
+					result = result.ToLower();
+					if (result.EndsWith("f"))
+					{
+						result = result.Substring(0, result.Length - 1);
+					}
+				}
+
+				return result;
 			}
 		}
 

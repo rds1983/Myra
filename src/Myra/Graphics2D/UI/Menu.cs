@@ -565,7 +565,10 @@ namespace Myra.Graphics2D.UI
 
 		public void Close()
 		{
-			Desktop.HideContextMenu();
+			if (Desktop != null)
+			{
+				Desktop.HideContextMenu();
+			}
 			HoverIndex = SelectedIndex = null;
 		}
 
