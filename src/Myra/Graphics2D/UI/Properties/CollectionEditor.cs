@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Myra.Graphics2D.UI.Properties
 {
-	public class CollectionEditor : SingleItemContainer<Grid>
+	public class CollectionEditor : SingleItemContainer<VerticalStackPanel>
 	{
 		private readonly IList _collection;
 		private readonly Type _type;
@@ -19,18 +19,16 @@ namespace Myra.Graphics2D.UI.Properties
 			_collection = collection;
 			_type = type;
 
-			InternalChild = new Grid
-			{
-				Margin = new Thickness(8),
-				ColumnSpacing = 8,
-				RowSpacing = 8
-			};
+			InternalChild = new VerticalStackPanel();
 
-			InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
-			InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+			InternalChild.Proportions.Add(new Proportion(ProportionType.Auto));
+			InternalChild.Proportions.Add(new Proportion(ProportionType.Fill));
+			InternalChild.Proportions.Add(new Proportion(ProportionType.Auto));
+			InternalChild.Proportions.Add(new Proportion(ProportionType.Auto));
 
-			InternalChild.RowsProportions.Add(new Proportion(ProportionType.Fill));
-			InternalChild.RowsProportions.Add(new Proportion(ProportionType.Auto));
+			InternalChild.Widgets.Add(new HorizontalSeparator());
+
+			var splitPanel = new HorizontalSplitPane();
 
 			_listItems = new ListBox
 			{
@@ -46,12 +44,14 @@ namespace Myra.Graphics2D.UI.Properties
 				_listItems.Items.Add(new ListItem(BuildItemText(item), null, item));
 			}
 
-			InternalChild.Widgets.Add(_listItems);
+			splitPanel.Widgets.Add(_listItems);
 
 			_propertyGrid = new PropertyGrid { GridColumn = 1 };
 			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
+			splitPanel.Widgets.Add(_propertyGrid);
 
-			InternalChild.Widgets.Add(_propertyGrid);
+			InternalChild.Widgets.Add(splitPanel);
+			InternalChild.Widgets.Add(new HorizontalSeparator());
 
 			var buttonsGrid = new Grid
 			{

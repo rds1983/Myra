@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using Myra.Attributes;
 using Myra.Graphics2D;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Myra.Samples.ObjectEditor
@@ -69,6 +69,8 @@ namespace Myra.Samples.ObjectEditor
 
 		[Browsable(false)]
 		public int Ignored;
+
+		public List<CollectionItem> Collection { get; } = new List<CollectionItem>();
 
 		public Player()
 		{

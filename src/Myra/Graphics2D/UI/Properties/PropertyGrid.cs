@@ -264,8 +264,8 @@ namespace Myra.Graphics2D.UI.Properties
 			_parentProperty = parentProperty;
 			InternalChild.ColumnSpacing = 8;
 			InternalChild.RowSpacing = 8;
-			InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Pixels, 150));
-			InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+			InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Part, 1));
+			InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Part, 1));
 
 			Category = category;
 
