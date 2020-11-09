@@ -47,7 +47,7 @@ namespace MyraPad
 			{
 				if (string.IsNullOrEmpty(_newProjectTemplate))
 				{
-					_newProjectTemplate = Assembly.ReadResourceAsString("Resources.NewProject.xmltemplate");
+					_newProjectTemplate = Assembly.ReadResourceAsString("Resources.NewProject.xmmptemplate");
 				}
 
 				return _newProjectTemplate;

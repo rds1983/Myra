@@ -119,7 +119,7 @@ namespace Myra
 					return _uiStylesheet;
 				}
 
-				_uiStylesheet = AssetManager.Load<Stylesheet>("default_ui_skin.xml");
+				_uiStylesheet = AssetManager.Load<Stylesheet>("default_ui_skin.xmms");
 				return _uiStylesheet;
 			}
 		}
