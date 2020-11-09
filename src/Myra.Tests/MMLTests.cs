@@ -27,7 +27,7 @@ namespace Myra.Tests
 			ResourceAssetResolver assetResolver = new ResourceAssetResolver(typeof(MMLTests).Assembly, "Resources.");
 			AssetManager assetManager = new AssetManager(GraphicsDevice, assetResolver);
 
-			var mml = assetManager.Load<string>("GridWithExternalResources.xml");
+			var mml = assetManager.Load<string>("GridWithExternalResources.xmmp");
 
 			var project = Project.LoadFromXml(mml, assetManager);
 
