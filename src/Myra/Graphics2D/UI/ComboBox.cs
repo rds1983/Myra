@@ -177,6 +177,10 @@ namespace Myra.Graphics2D.UI
 					UpdateSelectedItem();
 					break;
 				}
+
+				case NotifyCollectionChangedAction.Reset:
+					UpdateSelectedItem();
+					break;
 			}
 
 			InvalidateMeasure();

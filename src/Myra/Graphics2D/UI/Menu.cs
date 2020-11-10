@@ -22,7 +22,6 @@ namespace Myra.Graphics2D.UI
 	public abstract class Menu : SingleItemContainer<Grid>
 	{
 		private Proportion _imageProportion = Proportion.Auto, _shortcutProportion = Proportion.Auto;
-		private ObservableCollection<IMenuItem> _items;
 		private bool _dirty = true;
 		private bool _internalSetSelectedIndex = false;
 
@@ -50,42 +49,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[Content]
-		public ObservableCollection<IMenuItem> Items
-		{
-			get { return _items; }
-
-			internal set
-			{
-				if (_items == value)
-				{
-					return;
-				}
-
-				if (_items != null)
-				{
-					_items.CollectionChanged -= ItemsOnCollectionChanged;
-
-					foreach (var menuItem in _items)
-					{
-						RemoveItem(menuItem);
-					}
-				}
-
-				_items = value;
-
-				if (_items != null)
-				{
-					_items.CollectionChanged += ItemsOnCollectionChanged;
-
-					foreach (var menuItem in _items)
-					{
-						AddItem(menuItem);
-					}
-				}
-
-				_dirty = true;
-			}
-		}
+		public ObservableCollection<IMenuItem> Items { get; } = new ObservableCollection<IMenuItem>();
 
 		[Category("Appearance")]
 		public SpriteFont LabelFont
@@ -327,6 +291,8 @@ namespace Myra.Graphics2D.UI
 
 		protected Menu(string styleName)
 		{
+			Items.CollectionChanged += ItemsOnCollectionChanged;
+
 			AcceptsKeyboardFocus = true;
 
 			InternalChild = new Grid
@@ -357,8 +323,6 @@ namespace Myra.Graphics2D.UI
 			VerticalAlignment = VerticalAlignment.Stretch;
 			HoverIndexCanBeNull = true;
 
-			Items = new ObservableCollection<IMenuItem>();
-
 			SetStyle(styleName);
 		}
 
@@ -380,6 +344,10 @@ namespace Myra.Graphics2D.UI
 					RemoveItem(item);
 				}
 			}
+			else if (args.Action == NotifyCollectionChangedAction.Reset)
+			{
+				InternalChild.Widgets.Clear();
+			}
 
 			_dirty = true;
 		}
@@ -391,7 +359,7 @@ namespace Myra.Graphics2D.UI
 		/// <returns>null if not found</returns>
 		public MenuItem FindMenuItemById(string id)
 		{
-			foreach (var item in _items)
+			foreach (var item in Items)
 			{
 				var asMenuItem = item as MenuItem;
 				if (asMenuItem == null)
@@ -409,22 +377,11 @@ namespace Myra.Graphics2D.UI
 			return null;
 		}
 
-		private void AddItem(Widget menuItem, int index)
-		{
-			if (Orientation == Orientation.Vertical)
-			{
-				menuItem.HorizontalAlignment = HorizontalAlignment.Stretch;
-				menuItem.VerticalAlignment = VerticalAlignment.Stretch;
-			}
-
-			InternalChild.Widgets.Insert(index, menuItem);
-		}
-
 		private void UpdateWidgets()
 		{
 			var hasImage = false;
 			var hasShortcut = false;
-			foreach(var item in _items)
+			foreach(var item in Items)
 			{
 				var menuItem = item as MenuItem;
 				if (menuItem == null)

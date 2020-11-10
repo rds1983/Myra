@@ -1107,70 +1107,66 @@ namespace Myra.Graphics2D.UI
 
 			Point result;
 
-			if (Width.HasValue && Height.HasValue)
+			// Lerp available size by Width/Height or MaxWidth/MaxHeight
+			if (Width != null && availableSize.X > Width.Value)
 			{
-				result = new Point(Width.Value, Height.Value);
+				availableSize.X = Width.Value;
+			}
+			else if (MaxWidth != null && availableSize.X > MaxWidth.Value)
+			{
+				availableSize.X = MaxWidth.Value;
+			}
+
+			if (Height != null && availableSize.Y > Height.Value)
+			{
+				availableSize.Y = Height.Value;
+			}
+			else if (MaxHeight != null && availableSize.Y > MaxHeight.Value)
+			{
+				availableSize.Y = MaxHeight.Value;
+			}
+
+			availableSize.X -= MBPWidth;
+			availableSize.Y -= MBPHeight;
+
+			// Do the actual measure
+			// Previously I skipped this step if both Width & Height were set
+			// However that raised an issue - custom InternalMeasure stuff(such as in Menu.InternalMeasure) was skipped as well
+			// So now InternalMeasure is called every time
+			result = InternalMeasure(availableSize);
+
+			// Result lerp
+			if (Width.HasValue)
+			{
+				result.X = Width.Value;
 			}
 			else
 			{
-				// Lerp available size by Width/Height or MaxWidth/MaxHeight
-				if (Width != null && availableSize.X > Width.Value)
+				if (MinWidth.HasValue && result.X < MinWidth.Value)
 				{
-					availableSize.X = Width.Value;
-				}
-				else if (MaxWidth != null && availableSize.X > MaxWidth.Value)
-				{
-					availableSize.X = MaxWidth.Value;
+					result.X = MinWidth.Value;
 				}
 
-				if (Height != null && availableSize.Y > Height.Value)
+				if (MaxWidth.HasValue && result.X > MaxWidth.Value)
 				{
-					availableSize.Y = Height.Value;
+					result.X = MaxWidth.Value;
 				}
-				else if (MaxHeight != null && availableSize.Y > MaxHeight.Value)
+			}
+
+			if (Height.HasValue)
+			{
+				result.Y = Height.Value;
+			}
+			else
+			{
+				if (MinHeight.HasValue && result.Y < MinHeight.Value)
 				{
-					availableSize.Y = MaxHeight.Value;
-				}
-
-				availableSize.X -= MBPWidth;
-				availableSize.Y -= MBPHeight;
-
-				// Do the actual measure
-				result = InternalMeasure(availableSize);
-
-				// Result lerp
-				if (Width.HasValue)
-				{
-					result.X = Width.Value;
-				}
-				else
-				{
-					if (MinWidth.HasValue && result.X < MinWidth.Value)
-					{
-						result.X = MinWidth.Value;
-					}
-
-					if (MaxWidth.HasValue && result.X > MaxWidth.Value)
-					{
-						result.X = MaxWidth.Value;
-					}
+					result.Y = MinHeight.Value;
 				}
 
-				if (Height.HasValue)
+				if (MaxHeight.HasValue && result.Y > MaxHeight.Value)
 				{
-					result.Y = Height.Value;
-				}
-				else
-				{
-					if (MinHeight.HasValue && result.Y < MinHeight.Value)
-					{
-						result.Y = MinHeight.Value;
-					}
-
-					if (MaxHeight.HasValue && result.Y > MaxHeight.Value)
-					{
-						result.Y = MaxHeight.Value;
-					}
+					result.Y = MaxHeight.Value;
 				}
 			}
 
