@@ -8,12 +8,19 @@ namespace Myra.Graphics2D.UI
 	{
 		[Browsable(false)]
 		[XmlIgnore]
-		[Category("Behavior")]
 		[DefaultValue(true)]
 		public override bool Toggleable
 		{
 			get { return base.Toggleable; }
 			set { base.Toggleable = value; }
+		}
+
+		[Category("Behavior")]
+		[DefaultValue(false)]
+		public bool IsChecked
+		{
+			get => IsPressed;
+			set => IsPressed = value;
 		}
 
 		public CheckBox(string styleName = Stylesheet.DefaultStyleName) : base(styleName)
