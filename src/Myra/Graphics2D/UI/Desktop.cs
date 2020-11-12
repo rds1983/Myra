@@ -31,6 +31,7 @@ namespace Myra.Graphics2D.UI
 	public class Desktop
 	{
 		public const int DoubleClickIntervalInMs = 500;
+		public const int DoubleClickRadius = 2;
 
 		private RenderContext _renderContext;
 
@@ -50,7 +51,7 @@ namespace Myra.Graphics2D.UI
 #endif
 		private Widget _scheduleMouseWheelFocus;
 		private bool _isTouchDown;
-		private Point _previousMousePosition, _mousePosition, _touchPosition;
+		private Point _previousMousePosition, _mousePosition, _previousTouchPosition, _touchPosition;
 		private bool _contextMenuShown = false;
 		private bool _keyboardFocusSet = false;
 		private bool _mouseWheelFocusSet = false;
@@ -142,6 +143,8 @@ namespace Myra.Graphics2D.UI
 
 			private set
 			{
+				_previousTouchPosition = _touchPosition;
+
 				if (value == _touchPosition)
 				{
 					return;
@@ -473,7 +476,9 @@ namespace Myra.Graphics2D.UI
 
 		private void HandleDoubleClick()
 		{
-			if ((DateTime.Now - _lastTouchDown).TotalMilliseconds < DoubleClickIntervalInMs)
+			if ((DateTime.Now - _lastTouchDown).TotalMilliseconds < DoubleClickIntervalInMs &&
+				Math.Abs(_touchPosition.X - _previousTouchPosition.X) <= DoubleClickRadius &&
+				Math.Abs(_touchPosition.Y - _previousTouchPosition.Y) <= DoubleClickRadius)
 			{
 				TouchDoubleClick.Invoke();
 
