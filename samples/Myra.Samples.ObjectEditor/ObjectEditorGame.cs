@@ -88,12 +88,12 @@ namespace Myra.Samples.ObjectEditor
 #if MONOGAME
 			// Inform Myra that external text input is available
 			// So it stops translating Keys to chars
-			Desktop.HasExternalTextInput = true;
+			_desktop.HasExternalTextInput = true;
 
 			// Provide that text input
 			Window.TextInput += (s, a) =>
 			{
-				Desktop.OnChar(a.Character);
+				_desktop.OnChar(a.Character);
 			};
 #endif
 		}

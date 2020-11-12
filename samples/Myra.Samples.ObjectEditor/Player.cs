@@ -70,6 +70,7 @@ namespace Myra.Samples.ObjectEditor
 		[Browsable(false)]
 		public int Ignored;
 
+		[Category("Data")]
 		public List<CollectionItem> Collection { get; } = new List<CollectionItem>();
 
 		public Player()
@@ -89,6 +90,20 @@ namespace Myra.Samples.ObjectEditor
 
 			HitPoints.Current = 100;
 			HitPoints.Maximum = 150;
+
+			Collection.Add(new CollectionItem
+			{
+				Text = "Item 1",
+				X = 10,
+				Y = 20
+			});
+
+			Collection.Add(new CollectionItem
+			{
+				Text = "Item 2",
+				X = 30,
+				Y = 40
+			});
 		}
 	}
 }
