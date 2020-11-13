@@ -1169,7 +1169,7 @@ namespace MyraPad
 
 			var dlg = new FileDialog(FileDialogMode.OpenFile)
 			{
-				Filter = "*.xmms"
+				Filter = "*.xmms|*.xml"
 			};
 
 			try
@@ -1404,7 +1404,7 @@ namespace MyraPad
 		{
 			var dlg = new FileDialog(FileDialogMode.OpenFile)
 			{
-				Filter = "*.xmmp"
+				Filter = "*.xmmp|*.xml"
 			};
 
 			if (!string.IsNullOrEmpty(FilePath))
