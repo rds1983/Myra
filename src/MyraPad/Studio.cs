@@ -48,6 +48,7 @@ namespace MyraPad
 			"Image",
 			"Label",
 			"TextBox",
+			"PropertyGrid",
 		};
 
 		private static readonly string[] Containers = new[]

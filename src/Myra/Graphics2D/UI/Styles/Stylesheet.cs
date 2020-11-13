@@ -576,7 +576,7 @@ namespace Myra.Graphics2D.UI.Styles
 			var colorsNode = xDoc.Root.Element("Colors");
 			if (colorsNode != null)
 			{
-				foreach(var el in colorsNode.Elements())
+				foreach (var el in colorsNode.Elements())
 				{
 					var color = ColorStorage.FromName(el.Attribute("Value").Value);
 					if (color != null)
@@ -591,7 +591,8 @@ namespace Myra.Graphics2D.UI.Styles
 				if (typeof(IBrush).IsAssignableFrom(t))
 				{
 					return textureGetter(s);
-				} else if (t == typeof(SpriteFont))
+				}
+				else if (t == typeof(SpriteFont))
 				{
 					return fontGetter(s);
 				}
@@ -603,7 +604,10 @@ namespace Myra.Graphics2D.UI.Styles
 
 			var loadContext = new LoadContext
 			{
-				Namespace = typeof(WidgetStyle).Namespace,
+				Namespaces = new[] 
+				{
+					typeof(WidgetStyle).Namespace
+				},
 				ResourceGetter = resourceGetter,
 				NodesToIgnore = new HashSet<string>(new[] { "Designer", "Colors", "Fonts" }),
 				LegacyClassNames = LegacyClassNames,
@@ -634,7 +638,7 @@ namespace Myra.Graphics2D.UI.Styles
 			var dict = (IDictionary)property.GetValue(this);
 
 			var result = new List<string>();
-			foreach(var k in dict.Keys)
+			foreach (var k in dict.Keys)
 			{
 				result.Add((string)k);
 			}

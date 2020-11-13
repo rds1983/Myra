@@ -54,6 +54,8 @@ namespace Myra.Graphics2D.UI.Properties
 				}
 			}
 
+			[Browsable(false)]
+			[XmlIgnore]
 			public bool IsEmpty
 			{
 				get
@@ -199,6 +201,8 @@ namespace Myra.Graphics2D.UI.Properties
 		[XmlIgnore]
 		public string Category { get; private set; }
 		
+		[Category("Behavior")]
+		[DefaultValue(false)]
 		public bool IgnoreCollections
 		{
 			get
@@ -217,6 +221,8 @@ namespace Myra.Graphics2D.UI.Properties
 			}
 		}
 
+		[Browsable(false)]
+		[XmlIgnore]
 		public bool IsEmpty
 		{
 			get
@@ -225,6 +231,8 @@ namespace Myra.Graphics2D.UI.Properties
 			}
 		}
 
+		[Browsable(false)]
+		[XmlIgnore]
 		public PropertyGridSettings Settings
 		{
 			get
@@ -238,6 +246,8 @@ namespace Myra.Graphics2D.UI.Properties
 			}
 		}
 
+		[Browsable(false)]
+		[XmlIgnore]
 		public int FirstColumnWidth
 		{
 			get
@@ -251,7 +261,26 @@ namespace Myra.Graphics2D.UI.Properties
 			}
 		}
 
+		[DefaultValue(HorizontalAlignment.Stretch)]
+		public override HorizontalAlignment HorizontalAlignment
+		{
+			get { return base.HorizontalAlignment; }
+			set { base.HorizontalAlignment = value; }
+		}
+
+		[DefaultValue(VerticalAlignment.Stretch)]
+		public override VerticalAlignment VerticalAlignment
+		{
+			get { return base.VerticalAlignment; }
+			set { base.VerticalAlignment = value; }
+		}
+
+		[Browsable(false)]
+		[XmlIgnore]
 		public Func<Record, object[]> CustomValuesProvider;
+
+		[Browsable(false)]
+		[XmlIgnore]
 		public Func<Record, object, object, bool> CustomSetter;
 
 		public event EventHandler<GenericEventArgs<string>> PropertyChanged;

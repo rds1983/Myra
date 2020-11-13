@@ -13,6 +13,7 @@ using Myra.Graphics2D.TextureAtlases;
 using XNAssets.Utility;
 using Myra.Graphics2D.Brushes;
 using XNAssets;
+using Myra.Graphics2D.UI.Properties;
 
 #if !STRIDE
 using Microsoft.Xna.Framework.Graphics;
@@ -175,9 +176,13 @@ namespace Myra.Graphics2D.UI
 
 			return new LoadContext
 			{
+				Namespaces = new[]
+				{ 
+					typeof(Widget).Namespace,
+					typeof(PropertyGrid).Namespace,
+				},
 				LegacyClassNames = LegacyClassNames,
 				ObjectCreator = (t, el) => CreateItem(t, el, stylesheet),
-				Namespace = typeof(Widget).Namespace,
 				ResourceGetter = resourceGetter
 			};
 		}
@@ -224,19 +229,22 @@ namespace Myra.Graphics2D.UI
 		{
 			XDocument xDoc = XDocument.Parse(data);
 
+			var name = xDoc.Root.Name.ToString();
 			Type itemType;
-			if (!IsProportionName(xDoc.Root.Name.ToString()))
-			{
-				var itemNamespace = typeof(Widget).Namespace;
 
-				var widgetName = xDoc.Root.Name.ToString();
+			if (name == "PropertyGrid")
+			{
+				itemType = typeof(PropertyGrid);
+			} else  if (!IsProportionName(name))
+			{
 				string newName;
-				if (LegacyClassNames.TryGetValue(widgetName, out newName))
+				if (LegacyClassNames.TryGetValue(name, out newName))
 				{
-					widgetName = newName;
+					name = newName;
 				}
 
-				itemType = typeof(Widget).Assembly.GetType(itemNamespace + "." + widgetName);
+				var itemNamespace = typeof(Widget).Namespace;
+				itemType = typeof(Widget).Assembly.GetType(itemNamespace + "." + name);
 			}
 			else
 			{
