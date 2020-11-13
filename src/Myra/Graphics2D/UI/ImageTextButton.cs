@@ -12,11 +12,21 @@ using Stride.Graphics;
 
 namespace Myra.Graphics2D.UI
 {
+
 	[StyleTypeName("Button")]
-	public class ImageTextButton : ButtonBase<HorizontalStackPanel>
+	public class ImageTextButton : ButtonBase<Grid>
 	{
+		public enum TextPositionEnum
+		{
+			Right,
+			Left,
+			OverlapsImage,
+			BehindImage
+		}
+
 		private readonly Image _image;
-		private readonly Label _textBlock;
+		private readonly Label _label;
+		private TextPositionEnum _textPosition;
 
 		[Category("Appearance")]
 		[DefaultValue(null)]
@@ -24,11 +34,11 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return _textBlock.Text;
+				return _label.Text;
 			}
 			set
 			{
-				_textBlock.Text = value;
+				_label.Text = value;
 			}
 		}
 
@@ -38,11 +48,11 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return _textBlock.TextColor;
+				return _label.TextColor;
 			}
 			set
 			{
-				_textBlock.TextColor = value;
+				_label.TextColor = value;
 			}
 		}
 
@@ -51,11 +61,11 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return _textBlock.Font;
+				return _label.Font;
 			}
 			set
 			{
-				_textBlock.Font = value;
+				_label.Font = value;
 			}
 		}
 
@@ -150,13 +160,65 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return InternalChild.Spacing;
+				return InternalChild.ColumnSpacing;
 			}
 
 			set
 			{
-				InternalChild.Spacing = value;
+				InternalChild.ColumnSpacing = value;
 			}
+		}
+
+		[Category("Appearance")]
+		[DefaultValue(TextPositionEnum.Right)]
+		public TextPositionEnum TextPosition
+		{
+			get
+			{
+				return _textPosition;
+			}
+
+			set
+			{
+				if (_textPosition == value)
+				{
+					return;
+				}
+
+				SetTextPosition(value);
+			}
+		}
+
+		[Category("Appearance")]
+		[DefaultValue(HorizontalAlignment.Left)]
+		public HorizontalAlignment LabelHorizontalAlignment
+		{
+			get => _label.HorizontalAlignment;
+			set => _label.HorizontalAlignment = value;
+		}
+
+		[Category("Appearance")]
+		[DefaultValue(VerticalAlignment.Center)]
+		public VerticalAlignment LabelVerticalAlignment
+		{
+			get => _label.VerticalAlignment;
+			set => _label.VerticalAlignment = value;
+		}
+
+		[Category("Appearance")]
+		[DefaultValue(HorizontalAlignment.Center)]
+		public HorizontalAlignment ImageHorizontalAlignment
+		{
+			get => _image.HorizontalAlignment;
+			set => _image.HorizontalAlignment = value;
+		}
+
+		[Category("Appearance")]
+		[DefaultValue(VerticalAlignment.Center)]
+		public VerticalAlignment ImageVerticalAlignment
+		{
+			get => _image.VerticalAlignment;
+			set => _image.VerticalAlignment = value;
 		}
 
 		[DefaultValue(HorizontalAlignment.Stretch)]
@@ -187,10 +249,8 @@ namespace Myra.Graphics2D.UI
 
 		public ImageTextButton(string styleName = Stylesheet.DefaultStyleName)
 		{
-			InternalChild = new HorizontalStackPanel
-			{
-				VerticalAlignment = VerticalAlignment.Stretch
-			};
+			InternalChild = new Grid();
+			InternalChild.RowsProportions.Add(Proportion.Auto);
 
 			_image = new Image
 			{
@@ -198,18 +258,59 @@ namespace Myra.Graphics2D.UI
 				VerticalAlignment = VerticalAlignment.Center
 			};
 
-			InternalChild.Widgets.Add(_image);
-
-			_textBlock = new Label(null)
+			_label = new Label(null)
 			{
-				HorizontalAlignment = HorizontalAlignment.Stretch,
+				HorizontalAlignment = HorizontalAlignment.Left,
 				VerticalAlignment = VerticalAlignment.Center,
 				Wrap = true
 			};
 
-			InternalChild.Widgets.Add(_textBlock);
-
 			SetStyle(styleName);
+			SetTextPosition(TextPositionEnum.Right);
+		}
+
+		private void SetTextPosition(TextPositionEnum value)
+		{
+			InternalChild.Widgets.Clear();
+			InternalChild.ColumnsProportions.Clear();
+
+			switch (value)
+			{
+				case TextPositionEnum.Right:
+					InternalChild.ColumnsProportions.Add(Proportion.Auto);
+					InternalChild.ColumnsProportions.Add(Proportion.Auto);
+					_image.GridColumn = 0;
+					_label.GridColumn = 1;
+					InternalChild.Widgets.Add(_image);
+					InternalChild.Widgets.Add(_label);
+					break;
+				case TextPositionEnum.Left:
+					InternalChild.ColumnsProportions.Add(Proportion.Auto);
+					InternalChild.ColumnsProportions.Add(Proportion.Auto);
+					_label.GridColumn = 0;
+					_image.GridColumn = 1;
+					InternalChild.Widgets.Add(_image);
+					InternalChild.Widgets.Add(_label);
+					break;
+				case TextPositionEnum.OverlapsImage:
+					InternalChild.ColumnsProportions.Add(Proportion.Auto);
+					InternalChild.ColumnsProportions.Add(Proportion.Auto);
+					_image.GridColumn = 0;
+					_label.GridColumn = 0;
+					InternalChild.Widgets.Add(_image);
+					InternalChild.Widgets.Add(_label);
+					break;
+				case TextPositionEnum.BehindImage:
+					InternalChild.ColumnsProportions.Add(Proportion.Auto);
+					InternalChild.ColumnsProportions.Add(Proportion.Auto);
+					_image.GridColumn = 0;
+					_label.GridColumn = 0;
+					InternalChild.Widgets.Add(_label);
+					InternalChild.Widgets.Add(_image);
+					break;
+			}
+
+			_textPosition = value;
 		}
 
 		public void ApplyImageTextButtonStyle(ImageTextButtonStyle style)
@@ -223,7 +324,7 @@ namespace Myra.Graphics2D.UI
 
 			if (style.LabelStyle != null)
 			{
-				_textBlock.ApplyLabelStyle(style.LabelStyle);
+				_label.ApplyLabelStyle(style.LabelStyle);
 			}
 
 			ImageTextSpacing = style.ImageTextSpacing;
@@ -234,7 +335,7 @@ namespace Myra.Graphics2D.UI
 			base.OnPressedChanged();
 
 			_image.IsPressed = IsPressed;
-			_textBlock.IsPressed = IsPressed;
+			_label.IsPressed = IsPressed;
 		}
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
