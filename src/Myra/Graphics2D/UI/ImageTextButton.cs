@@ -30,7 +30,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Appearance")]
 		[DefaultValue(null)]
-		public virtual string Text
+		public string Text
 		{
 			get
 			{
@@ -44,7 +44,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Appearance")]
 		[StylePropertyPath("/LabelStyle/TextColor")]
-		public virtual Color TextColor
+		public Color TextColor
 		{
 			get
 			{
@@ -53,6 +53,34 @@ namespace Myra.Graphics2D.UI
 			set
 			{
 				_label.TextColor = value;
+			}
+		}
+
+		[Category("Appearance")]
+		[StylePropertyPath("/LabelStyle/OverTextColor")]
+		public Color? OverTextColor
+		{
+			get
+			{
+				return _label.OverTextColor;
+			}
+			set
+			{
+				_label.OverTextColor = value;
+			}
+		}
+
+		[Category("Appearance")]
+		[StylePropertyPath("/LabelStyle/PressedTextColor")]
+		public Color? PressedTextColor
+		{
+			get
+			{
+				return _label.PressedTextColor;
+			}
+			set
+			{
+				_label.PressedTextColor = value;
 			}
 		}
 
@@ -113,7 +141,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Appearance")]
 		[DefaultValue(null)]
-		public virtual int? ImageWidth
+		public int? ImageWidth
 		{
 			get
 			{
@@ -127,7 +155,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Appearance")]
 		[DefaultValue(null)]
-		public virtual int? ImageHeight
+		public int? ImageHeight
 		{
 			get
 			{
@@ -141,7 +169,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Appearance")]
 		[DefaultValue(true)]
-		public virtual bool ImageVisible
+		public bool ImageVisible
 		{
 			get
 			{

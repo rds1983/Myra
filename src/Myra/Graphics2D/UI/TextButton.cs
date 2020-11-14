@@ -45,6 +45,34 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[StylePropertyPath("/LabelStyle/OverTextColor")]
+		public Color? OverTextColor
+		{
+			get
+			{
+				return InternalChild.OverTextColor;
+			}
+			set
+			{
+				InternalChild.OverTextColor = value;
+			}
+		}
+
+		[Category("Appearance")]
+		[StylePropertyPath("/LabelStyle/PressedTextColor")]
+		public Color? PressedTextColor
+		{
+			get
+			{
+				return InternalChild.PressedTextColor;
+			}
+			set
+			{
+				InternalChild.PressedTextColor = value;
+			}
+		}
+
+		[Category("Appearance")]
 		public SpriteFont Font
 		{
 			get

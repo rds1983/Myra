@@ -156,16 +156,12 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
-		public Color? PressedTextColor
+		internal Color? PressedTextColor
 		{
 			get; set;
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
-		public bool IsPressed
+		internal bool IsPressed
 		{
 			get; set;
 		}

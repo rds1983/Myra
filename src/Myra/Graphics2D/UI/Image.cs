@@ -54,8 +54,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[Category("Appearance")]
-		public IImage PressedRenderable
+		internal IImage PressedRenderable
 		{
 			get
 			{
@@ -74,9 +73,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
-		public bool IsPressed
+		internal bool IsPressed
 		{
 			get; set;
 		}

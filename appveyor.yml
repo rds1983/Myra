@@ -1,4 +1,4 @@
-version: 1.0.2.{build}
+version: 1.0.3.{build}
 configuration: Release
 test: off # Tests are off, since appveyor box can't create GraphicsDevice
 dotnet_csproj:
@@ -35,5 +35,5 @@ deploy:
     
   - provider: NuGet	
     api_key:
-      secure: o02Abc+1Pg/C7FVPnbCA9i4RIakmOUcKjMBBCHDCbEhS69b+N05mV0xBe0ne2/Y4
+      secure: jTYaQf3Hww/DtiO/b/gKQqFxHt8Cvblm8f7grDRyFV4NauxbLetMIVvXn9DdCbEV
     artifact: /.*\.nupkg/
