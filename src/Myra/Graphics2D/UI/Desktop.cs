@@ -652,9 +652,13 @@ namespace Myra.Graphics2D.UI
 					Batch = spriteBatch
 				};
 
-				if(MyraEnvironment.LayoutScale.HasValue)
-                {
+				if (MyraEnvironment.LayoutScale.HasValue)
+				{
+#if MONOGAME || FNA
 					_renderContext.SpriteBatchBeginParams.TransformMatrix = Matrix.CreateScale(MyraEnvironment.LayoutScale.Value);
+#elif STRIDE
+					_renderContext.SpriteBatchBeginParams.TransformMatrix = Matrix.Scaling(MyraEnvironment.LayoutScale.Value);
+#endif
 				}
 			}
 		}

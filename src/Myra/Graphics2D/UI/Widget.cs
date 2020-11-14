@@ -1011,8 +1011,13 @@ namespace Myra.Graphics2D.UI
 					var pos = new Vector2(newScissorRectangle.X, newScissorRectangle.Y);
 					var size = new Vector2(newScissorRectangle.Width, newScissorRectangle.Height);
 
+#if MONOGAME || FNA
 					pos = Vector2.Transform(pos, context.SpriteBatchBeginParams.TransformMatrix.Value);
 					size = Vector2.Transform(size, context.SpriteBatchBeginParams.TransformMatrix.Value);
+#elif STRIDE
+					pos = Vector2.TransformCoordinate(pos, context.SpriteBatchBeginParams.TransformMatrix.Value);
+					size = Vector2.TransformCoordinate(size, context.SpriteBatchBeginParams.TransformMatrix.Value);
+#endif
 
 					newScissorRectangle = new Rectangle((int) pos.X, (int) pos.Y, (int) size.X, (int) size.Y);  
 				}
