@@ -378,7 +378,7 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return (MenuBar != null && (MenuBar.OpenMenuItem != null || IsAltDown));
+				return MenuBar != null && (MenuBar.OpenMenuItem != null || IsAltDown);
 			}
 		}
 
@@ -1176,6 +1176,15 @@ namespace Myra.Graphics2D.UI
 					{
 						_focusedKeyboardWidget.OnChar(ch.Value);
 					}
+#elif MONOGAME
+					if (!HasExternalTextInput && !IsControlDown && !IsAltDown)
+					{
+						var c = key.ToChar(IsShiftDown);
+						if (c != null)
+						{
+							OnChar(c.Value);
+						}
+					}
 #endif
 				}
 			}
@@ -1184,17 +1193,6 @@ namespace Myra.Graphics2D.UI
 			{
 				HideContextMenu();
 			}
-
-#if MONOGAME
-			if (!HasExternalTextInput && !IsControlDown && !IsAltDown)
-			{
-				var c = key.ToChar(IsShiftDown);
-				if (c != null)
-				{
-					OnChar(c.Value);
-				}
-			}
-#endif
 		}
 
 		public void OnChar(char c)
