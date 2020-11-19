@@ -294,11 +294,6 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			if (Desktop.FocusedKeyboardWidget == this)
-			{
-				Desktop.FocusedKeyboardWidget = null;
-			}
-
 			if (Desktop.Widgets.Contains(this))
 			{
 				Desktop.FocusedMouseWheelWidget = _previousMouseWheelFocus;

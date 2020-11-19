@@ -596,6 +596,19 @@ namespace Myra.Graphics2D.UI
 
 			internal set
 			{
+				if (_desktop != null && value == null)
+				{
+					if (_desktop.FocusedKeyboardWidget == this)
+					{
+						_desktop.FocusedKeyboardWidget = null;
+					}
+
+					if (_desktop.FocusedMouseWheelWidget == this)
+					{
+						_desktop.FocusedMouseWheelWidget = null;
+					}
+				}
+
 				_desktop = value;
 				IsMouseInside = false;
 				IsTouchInside = false;
