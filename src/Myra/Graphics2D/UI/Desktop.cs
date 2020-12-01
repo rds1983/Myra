@@ -1146,25 +1146,6 @@ namespace Myra.Graphics2D.UI
 			}
 			else
 			{
-				// Small workaround: if key is escape  active widget is window
-				// Send it there
-				var topWidget = GetTopWidget();
-				var asWindow = topWidget as Window;
-				if (asWindow != null)
-				{
-					if (key == asWindow.CloseKey)
-					{
-						asWindow.OnKeyDown(key);
-					}
-
-					var asDialog = asWindow as Dialog;
-					if (asDialog != null && key == asDialog.ConfirmKey)
-					{
-						// Dialog also always receives Enter (Ok)
-						asWindow.OnKeyDown(key);
-					}
-				}
-
 				if (_focusedKeyboardWidget != null && _focusedKeyboardWidget.Active)
 				{
 					_focusedKeyboardWidget.OnKeyDown(key);
