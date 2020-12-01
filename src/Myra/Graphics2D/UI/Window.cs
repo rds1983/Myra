@@ -290,6 +290,12 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void Close()
 		{
+			if (Desktop == null)
+			{
+				// Is closed already
+				return;
+			}
+
 			var ev = Closing;
 			if (ev != null)
 			{
