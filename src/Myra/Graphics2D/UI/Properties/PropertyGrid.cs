@@ -14,10 +14,10 @@ using System.IO;
 using Myra.Graphics2D.Brushes;
 using XNAssets.Utility;
 using Myra.Attributes;
+using FontStashSharp;
 
 #if !STRIDE
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 #else
 using Stride.Core.Mathematics;
 using Stride.Graphics;
@@ -991,9 +991,9 @@ namespace Myra.Graphics2D.UI.Properties
 						}
 					}
 				}
-				else if (propertyType == typeof(SpriteFont))
+				else if (propertyType == typeof(DynamicSpriteFont))
 				{
-					valueWidget = CreateFileEditor<SpriteFont>(record, hasSetter, "*.fnt");
+					valueWidget = CreateFileEditor<DynamicSpriteFont>(record, hasSetter, "*.fnt");
 				}
 				else if (propertyType == typeof(IBrush))
 				{

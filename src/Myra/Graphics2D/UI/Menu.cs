@@ -6,11 +6,11 @@ using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Serialization;
 using Myra.Attributes;
+using FontStashSharp;
 
 #if !STRIDE
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Graphics;
 #else
 using Stride.Core.Mathematics;
 using Stride.Input;
@@ -52,7 +52,7 @@ namespace Myra.Graphics2D.UI
 		public ObservableCollection<IMenuItem> Items { get; } = new ObservableCollection<IMenuItem>();
 
 		[Category("Appearance")]
-		public SpriteFont LabelFont
+		public DynamicSpriteFont LabelFont
 		{
 			get
 			{

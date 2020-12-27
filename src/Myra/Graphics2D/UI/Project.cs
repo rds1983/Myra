@@ -14,10 +14,9 @@ using XNAssets.Utility;
 using Myra.Graphics2D.Brushes;
 using XNAssets;
 using Myra.Graphics2D.UI.Properties;
+using FontStashSharp;
 
-#if !STRIDE
-using Microsoft.Xna.Framework.Graphics;
-#else
+#if STRIDE
 using Stride.Core.Mathematics;
 using Stride.Graphics;
 #endif
@@ -166,9 +165,9 @@ namespace Myra.Graphics2D.UI
 				{
 					return assetManager.Load<TextureRegion>(name);
 				}
-				else if (t == typeof(SpriteFont))
+				else if (t == typeof(DynamicSpriteFont))
 				{
-					return assetManager.Load<SpriteFont>(name);
+					return assetManager.Load<DynamicSpriteFont>(name);
 				}
 
 				throw new Exception(string.Format("Type {0} isn't supported", t.Name));

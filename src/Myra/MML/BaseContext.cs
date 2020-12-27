@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Xml.Serialization;
 using XNAssets.Utility;
+using FontStashSharp;
 
 #if !STRIDE
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 #else
 using Stride.Core.Mathematics;
 using Stride.Graphics;
@@ -50,7 +50,7 @@ namespace Myra.MML
 					propertyType == typeof(Color) ||
 					propertyType == typeof(Color?) ||
 					typeof(IBrush).IsAssignableFrom(propertyType) ||
-					propertyType == typeof(SpriteFont) ||
+					propertyType == typeof(DynamicSpriteFont) ||
 					propertyType == typeof(Thickness))
 				{
 					simpleProperties.Add(property);

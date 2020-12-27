@@ -1019,7 +1019,7 @@ namespace MyraPad
 					}
 
 					var screen = _ui._textSource.CursorScreenPosition;
-					screen.Y += _ui._textSource.Font.LineSpacing;
+					screen.Y += _ui._textSource.Font.FontSize;
 
 					if (_autoCompleteMenu.Items.Count > 0)
 					{

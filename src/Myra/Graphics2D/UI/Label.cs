@@ -1,13 +1,11 @@
 ﻿using System.ComponentModel;
 using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
-using Myra.Utility;
-using System.Xml.Serialization;
 using System;
+using FontStashSharp;
 
 #if !STRIDE
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 #else
 using Stride.Core.Mathematics;
 using Stride.Graphics;
@@ -65,7 +63,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
-		public SpriteFont Font
+		public DynamicSpriteFont Font
 		{
 			get
 			{
@@ -225,9 +223,9 @@ namespace Myra.Graphics2D.UI
 				result = _formattedText.Measure(_wrap ? width : default(int?));
 			}
 
-			if (result.Y < CrossEngineStuff.LineSpacing(Font))
+			if (result.Y < Font.FontSize)
 			{
-				result.Y = CrossEngineStuff.LineSpacing(Font);
+				result.Y = Font.FontSize;
 			}
 
 			return result;

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Myra.Utility;
 using Myra.Graphics2D.UI;
+using FontStashSharp;
 
 #if !STRIDE
 using Microsoft.Xna.Framework;
@@ -18,7 +18,7 @@ namespace Myra.Graphics2D.Text
 	{
 		public const int NewLineWidth = 0;
 
-		private SpriteFont _font;
+		private DynamicSpriteFont _font;
 		private string _text = string.Empty;
 		private int _verticalSpacing;
 		private int? _width;
@@ -29,7 +29,7 @@ namespace Myra.Graphics2D.Text
 		private StringBuilder _stringBuilder = new StringBuilder();
 		private readonly Dictionary<int, Point> _measures = new Dictionary<int, Point>();
 
-		public SpriteFont Font
+		public DynamicSpriteFont Font
 		{
 			get
 			{
@@ -225,7 +225,7 @@ namespace Myra.Graphics2D.Text
 				}
 				else
 				{
-					sz = new Point(r.X + NewLineWidth, Math.Max(r.Y, CrossEngineStuff.LineSpacing(_font)));
+					sz = new Point(r.X + NewLineWidth, Math.Max(r.Y, _font.FontSize));
 
 					// Break right here
 					++r.CharsCount;
@@ -320,7 +320,7 @@ namespace Myra.Graphics2D.Text
 
 			if (result.Y == 0)
 			{
-				result.Y = CrossEngineStuff.LineSpacing(_font);
+				result.Y = _font.FontSize;
 			}
 
 			_measures[key] = result;

@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
-using System.Xml.Serialization;
 using Myra.Attributes;
+using FontStashSharp;
 
 #if !STRIDE
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 #else
 using Stride.Core.Mathematics;
 using Stride.Graphics;
@@ -73,7 +72,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
-		public SpriteFont Font
+		public DynamicSpriteFont Font
 		{
 			get
 			{

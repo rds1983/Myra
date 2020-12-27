@@ -1,6 +1,7 @@
-﻿#if !STRIDE
+﻿using FontStashSharp;
+
+#if !STRIDE
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 #else
 using Stride.Graphics;
 using Stride.Core.Mathematics;
@@ -14,7 +15,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public Color? DisabledTextColor { get; set; }
 		public Color? OverTextColor { get; set; }
 		public Color? PressedTextColor { get; set; }
-		public SpriteFont Font { get; set; }
+		public DynamicSpriteFont Font { get; set; }
 
 		public LabelStyle()
 		{

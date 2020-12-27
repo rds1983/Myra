@@ -9,10 +9,10 @@ using Myra.Attributes;
 using System.Linq;
 using Myra.Graphics2D;
 using XNAssets.Utility;
+using FontStashSharp;
 
 #if !STRIDE
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 #else
 using Stride.Core.Mathematics;
 using Stride.Graphics;
@@ -63,7 +63,7 @@ namespace Myra.MML
 					{
 						str = ((Color)value).ToHexString();
 					}
-					else if (typeof(IBrush).IsAssignableFrom(property.PropertyType) || property.PropertyType == typeof(SpriteFont))
+					else if (typeof(IBrush).IsAssignableFrom(property.PropertyType) || property.PropertyType == typeof(DynamicSpriteFont))
 					{
 						if (baseObject != null)
 						{

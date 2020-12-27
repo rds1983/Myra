@@ -2,10 +2,10 @@
 using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
+using FontStashSharp;
 
 #if !STRIDE
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 #else
 using Stride.Core.Mathematics;
 using Stride.Graphics;
@@ -51,7 +51,7 @@ namespace Myra.Graphics2D.UI
 			set { _label.Text = value; }
 		}
 
-		public SpriteFont Font
+		public DynamicSpriteFont Font
 		{
 			get { return _label.Font; }
 			set { _label.Font = value; }

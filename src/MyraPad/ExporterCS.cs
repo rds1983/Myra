@@ -3,14 +3,13 @@ using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Xml.Serialization;
+using FontStashSharp;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Myra;
 using Myra.Graphics2D;
 using Myra.Graphics2D.UI;
@@ -285,7 +284,7 @@ namespace MyraPad
 			{
 				string strValue = null;
 				if (typeof(IBrush).IsAssignableFrom(property.PropertyType) || 
-					property.PropertyType == typeof(SpriteFont))
+					property.PropertyType == typeof(DynamicSpriteFont))
 				{
 					var baseObject = o as BaseObject;
 					string s;

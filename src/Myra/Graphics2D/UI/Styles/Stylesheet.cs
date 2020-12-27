@@ -5,10 +5,12 @@ using System.Xml.Linq;
 using Myra.MML;
 using System.Collections;
 using XNAssets;
+using FontStashSharp;
+using Myra.Graphics2D.TextureAtlases;
+using Myra.Graphics2D.Brushes;
 
 #if !STRIDE
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 #else
 using Stride.Core.Mathematics;
 using Stride.Graphics;
@@ -567,8 +569,8 @@ namespace Myra.Graphics2D.UI.Styles
 		}
 
 		public static Stylesheet LoadFromSource(string stylesheetXml,
-			Func<string, IBrush> textureGetter,
-			Func<string, SpriteFont> fontGetter)
+			TextureRegionAtlas textureRegionAtlas,
+			Dictionary<string, DynamicSpriteFont> fonts)
 		{
 			var xDoc = XDocument.Parse(stylesheetXml);
 
@@ -586,15 +588,30 @@ namespace Myra.Graphics2D.UI.Styles
 				}
 			}
 
-			Func<Type, string, object> resourceGetter = (t, s) =>
+			Func<Type, string, object> resourceGetter = (t, name) =>
 			{
 				if (typeof(IBrush).IsAssignableFrom(t))
 				{
-					return textureGetter(s);
+					TextureRegion region;
+
+					if (!textureRegionAtlas.Regions.TryGetValue(name, out region))
+					{
+						var color = ColorStorage.FromName(name);
+						if (color != null)
+						{
+							return new SolidBrush(color.Value);
+						}
+					}
+					else
+					{
+						return region;
+					}
+
+					throw new Exception(string.Format("Could not find parse IBrush '{0}'", name));
 				}
-				else if (t == typeof(SpriteFont))
+				else if (t == typeof(DynamicSpriteFont))
 				{
-					return fontGetter(s);
+					return fonts[name];
 				}
 
 				throw new Exception(string.Format("Type {0} isn't supported", t.Name));

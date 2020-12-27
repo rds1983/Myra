@@ -7,7 +7,7 @@ using XNAssets;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 #else
-using SpriteFontPlus;
+using DynamicSpriteFontPlus;
 using Stride.Core.Mathematics;
 using Stride.Graphics;
 using Texture2D = Stride.Graphics.Texture;
@@ -19,8 +19,6 @@ namespace Myra
 	public static class DefaultAssets
 	{
 		private static AssetManager _assetManager;
-		private static SpriteFont _font;
-		private static SpriteFont _fontSmall;
 		private static TextureRegionAtlas _uiTextureRegionAtlas;
 		private static Stylesheet _uiStylesheet;
 		private static Texture2D _uiBitmap;
@@ -65,34 +63,6 @@ namespace Myra
 				}
 
 				return _whiteRegion;
-			}
-		}
-
-		public static SpriteFont Font
-		{
-			get
-			{
-				if (_font != null)
-				{
-					return _font;
-				}
-
-				_font = AssetManager.Load<SpriteFont>("default_font.fnt");
-				return _font;
-			}
-		}
-
-		public static SpriteFont FontSmall
-		{
-			get
-			{
-				if (_fontSmall != null)
-				{
-					return _fontSmall;
-				}
-
-				_fontSmall = AssetManager.Load<SpriteFont>("default_font_small.fnt");
-				return _fontSmall;
 			}
 		}
 
@@ -164,8 +134,6 @@ namespace Myra
 
 		internal static void Dispose()
 		{	
-			_font = null;
-			_fontSmall = null;
 			_uiTextureRegionAtlas = null;
 			_uiStylesheet = null;
 			Stylesheet.Current = null;

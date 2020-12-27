@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Myra.Graphics2D.UI.Properties;
 using Microsoft.Xna.Framework.Graphics;
+using FontStashSharp;
 
 namespace Myra.Samples.ObjectEditor
 {
@@ -122,7 +123,7 @@ namespace Myra.Samples.ObjectEditor
 			{
 				_spriteBatch.Begin();
 
-				var font = DefaultAssets.Font;
+				var font = DefaultAssets.FontSystem.GetFont(21);
 				if (!string.IsNullOrEmpty(_player.Name))
 				{
 					var size = font.MeasureString(_player.Name);

@@ -1,6 +1,7 @@
-﻿#if !STRIDE
+﻿using FontStashSharp;
+
+#if !STRIDE
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 #else
 using Stride.Graphics;
 using Stride.Core.Mathematics;
@@ -14,8 +15,8 @@ namespace Myra.Graphics2D.UI.Styles
 		public Color? DisabledTextColor { get; set; }
 		public Color? FocusedTextColor { get; set; }
 
-		public SpriteFont Font { get; set; }
-		public SpriteFont MessageFont { get; set; }
+		public DynamicSpriteFont Font { get; set; }
+		public DynamicSpriteFont MessageFont { get; set; }
 
 		public IImage Cursor { get; set; }
 		public IBrush Selection { get; set; }

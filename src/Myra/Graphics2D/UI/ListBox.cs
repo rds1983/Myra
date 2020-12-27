@@ -225,7 +225,7 @@ namespace Myra.Graphics2D.UI
 			p.X -= bounds.X;
 			p.Y -= bounds.Y;
 
-			var lineHeight = CrossEngineStuff.LineSpacing(ListBoxStyle.ListItemStyle.LabelStyle.Font);
+			var lineHeight = ListBoxStyle.ListItemStyle.LabelStyle.Font.FontSize;
 
 			var sp = InternalChild.ScrollPosition;
 

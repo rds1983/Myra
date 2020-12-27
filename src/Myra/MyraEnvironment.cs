@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using XNAssets;
-using Myra.Assets;
 using XNAssets.Utility;
 
 #if !STRIDE
@@ -18,7 +17,6 @@ namespace Myra
 	{
 		private static AssetManager _defaultAssetManager;
 
-		private static bool _assetsLoadersUpdated = false;
 		private static Game _game;
 
 		public static event EventHandler GameDisposed;
@@ -62,14 +60,6 @@ namespace Myra
 					_game.Disposed += GameOnDisposed;
 				}
 #endif
-
-				if (!_assetsLoadersUpdated)
-				{
-					// Use our own SpriteFontLoader that can use TextureRegion as backing image
-					AssetManager.SetAssetLoader(new SpriteFontLoader());
-
-					_assetsLoadersUpdated = true;
-				}
 			}
 		}
 

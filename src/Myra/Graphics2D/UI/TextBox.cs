@@ -6,10 +6,10 @@ using System.Xml.Serialization;
 using Myra.Graphics2D.Text;
 using TextCopy;
 using Myra.Graphics2D.UI.TextEdit;
+using FontStashSharp;
 
 #if !STRIDE
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 #else
 using Stride.Core.Mathematics;
@@ -129,7 +129,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
-		public SpriteFont Font
+		public DynamicSpriteFont Font
 		{
 			get
 			{
@@ -1030,7 +1030,7 @@ namespace Myra.Graphics2D.UI
 			p.X -= bounds.X;
 			p.Y -= bounds.Y;
 
-			var lineHeight = CrossEngineStuff.LineSpacing(_formattedText.Font);
+			var lineHeight = _formattedText.Font.FontSize;
 
 			Point sp;
 			if (asScrollViewer != null)
@@ -1301,7 +1301,7 @@ namespace Myra.Graphics2D.UI
 			var lineIndex = startGlyph.TextChunk.LineIndex;
 			var i = selectStart;
 
-			var lineHeight = CrossEngineStuff.LineSpacing(_formattedText.Font);
+			var lineHeight = _formattedText.Font.FontSize;
 			while (true)
 			{
 				startGlyph = _formattedText.GetGlyphInfoByIndex(i);
@@ -1392,7 +1392,7 @@ namespace Myra.Graphics2D.UI
 				context.Draw(Cursor,
 					new Rectangle(p.X, p.Y,
 						Cursor.Size.X,
-						CrossEngineStuff.LineSpacing(_formattedText.Font)));
+						_formattedText.Font.FontSize));
 			}
 		}
 
@@ -1412,9 +1412,9 @@ namespace Myra.Graphics2D.UI
 				result = _formattedText.Measure(_wrap ? width : default(int?));
 			}
 
-			if (result.Y < CrossEngineStuff.LineSpacing(Font))
+			if (result.Y < Font.FontSize)
 			{
-				result.Y = CrossEngineStuff.LineSpacing(Font);
+				result.Y = Font.FontSize;
 			}
 
 			if (Cursor != null)

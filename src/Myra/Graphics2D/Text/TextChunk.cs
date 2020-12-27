@@ -1,6 +1,7 @@
 ﻿using Myra.Utility;
 using System;
 using System.Collections.Generic;
+using FontStashSharp;
 
 #if !STRIDE
 using Microsoft.Xna.Framework;
@@ -12,13 +13,12 @@ using Stride.Graphics;
 using Clr = Stride.Core.Mathematics.Color;
 #endif
 
-
 namespace Myra.Graphics2D.Text
 {
 	public class TextChunk
 	{
 		protected string _text;
-		protected readonly SpriteFont _font;
+		protected readonly DynamicSpriteFont _font;
 		protected Point _size;
 
 		public List<GlyphInfo> Glyphs { get; private set; }
@@ -33,7 +33,7 @@ namespace Myra.Graphics2D.Text
 		public int TextStartIndex { get; internal set; }
 		public Color? Color;
 
-		public TextChunk(SpriteFont font, string text, Point size, bool calculateGlyps)
+		public TextChunk(DynamicSpriteFont font, string text, Point size, bool calculateGlyps)
 		{
 			if (font == null)
 			{
@@ -65,60 +65,20 @@ namespace Myra.Graphics2D.Text
 				{
 					TextChunk = this,
 					Character = _text[i],
-					Index = i
+					Index = i,
 				});
 			}
-#if MONOGAME
-			var fontGlyphs = _font.GetGlyphs();
 
 			var offset = Vector2.Zero;
-			var firstGlyphOfLine = true;
-
 			for (var i = 0; i < _text.Length; ++i)
 			{
-				var c = _text[i];
-
-				SpriteFont.Glyph g;
-				if (!fontGlyphs.TryGetValue(c, out g) && _font.DefaultCharacter != null && c != '\n' && c != '\r')
-				{
-					fontGlyphs.TryGetValue(_font.DefaultCharacter.Value, out g);
-				}
-
-				// The first character on a line might have a negative left side bearing.
-				// In this scenario, SpriteBatch/SpriteFont normally offset the text to the right,
-				//  so that text does not hang off the left side of its rectangle.
-				if (firstGlyphOfLine)
-				{
-					offset.X = Math.Max(g.LeftSideBearing, 0);
-					firstGlyphOfLine = false;
-				}
-				else
-				{
-					offset.X += _font.Spacing + g.LeftSideBearing;
-				}
-
-				var p = offset;
-
-				p += g.Cropping.Location.ToVector2();
-
-				var result = new Rectangle((int)p.X, (int)p.Y, (int)(g.Width + g.RightSideBearing), g.BoundsInTexture.Height);
+				Vector2 v = _font.MeasureString(_text[i].ToString());
+				var result = new Rectangle((int)offset.X, (int)offset.Y, (int)v.X, (int)v.Y);
 
 				Glyphs[i].Bounds = result;
 
-				offset.X += g.Width + g.RightSideBearing;
+				offset.X += v.X;
 			}
-#else
-				var offset = Vector2.Zero;
-				for (var i = 0; i < _text.Length; ++i)
-				{
-					Vector2 v = _font.MeasureString(_text[i].ToString());
-					var result = new Rectangle((int)offset.X, (int)offset.Y, (int)v.X, (int)v.Y);
-
-					Glyphs[i].Bounds = result;
-
-					offset.X += v.X;
-				}
-#endif
 		}
 
 		public GlyphInfo GetGlyphInfoByIndex(int index)

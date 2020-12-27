@@ -33,15 +33,6 @@ namespace Myra.Utility
 #endif
 		}
 
-		public static int LineSpacing(SpriteFont font)
-		{
-#if !STRIDE
-			return font.LineSpacing;
-#else
-			return (int)font.Size;
-#endif
-		}
-
 		public static Rectangle GetScissor()
 		{
 #if !STRIDE
