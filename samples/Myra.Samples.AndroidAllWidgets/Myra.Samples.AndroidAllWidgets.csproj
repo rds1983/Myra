@@ -48,6 +48,9 @@
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FontStashSharp.MonoGame, Version=0.8.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\build\packages\FontStashSharp.MonoGame.0.8.8\lib\netstandard2.0\FontStashSharp.MonoGame.dll</HintPath>
+    </Reference>
     <Reference Include="info.lundin.math, Version=1.2.6.0, Culture=neutral, PublicKeyToken=2f7fe9ec5efab85f, processorArchitecture=MSIL">
       <HintPath>..\..\build\packages\info.lundin.math.dll.1.2.6\lib\netstandard2.0\info.lundin.math.dll</HintPath>
     </Reference>

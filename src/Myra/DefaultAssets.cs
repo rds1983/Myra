@@ -7,9 +7,7 @@ using XNAssets;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 #else
-using DynamicSpriteFontPlus;
 using Stride.Core.Mathematics;
-using Stride.Graphics;
 using Texture2D = Stride.Graphics.Texture;
 using RasterizerState = Stride.Graphics.RasterizerStateDescription;
 #endif
@@ -123,13 +121,6 @@ namespace Myra
 				};
 				return _uiRasterizerState;
 			}
-		}
-
-		static DefaultAssets()
-		{
-#if STRIDE
-			BMFontLoader.GraphicsDevice = MyraEnvironment.GraphicsDevice;
-#endif
 		}
 
 		internal static void Dispose()

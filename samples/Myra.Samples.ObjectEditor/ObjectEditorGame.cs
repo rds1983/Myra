@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Myra.Graphics2D.UI.Properties;
 using Microsoft.Xna.Framework.Graphics;
 using FontStashSharp;
+using System.Linq;
 
 namespace Myra.Samples.ObjectEditor
 {
@@ -16,6 +17,8 @@ namespace Myra.Samples.ObjectEditor
 		private Point _lastPosition = new Point(800, 100);
 		private SpriteBatch _spriteBatch;
 		private Desktop _desktop;
+		private DynamicSpriteFont _font;
+
 		public static ObjectEditorGame Instance { get; private set; }
 
 		public ObjectEditorGame()
@@ -43,6 +46,8 @@ namespace Myra.Samples.ObjectEditor
 			}
 
 			MyraEnvironment.Game = this;
+
+			_font = DefaultAssets.UIStylesheet.Fonts.Values.First();
 
 			var root = new Panel();
 
@@ -123,11 +128,10 @@ namespace Myra.Samples.ObjectEditor
 			{
 				_spriteBatch.Begin();
 
-				var font = DefaultAssets.FontSystem.GetFont(21);
 				if (!string.IsNullOrEmpty(_player.Name))
 				{
-					var size = font.MeasureString(_player.Name);
-					_spriteBatch.DrawString(font, _player.Name, 
+					var size = _font.MeasureString(_player.Name);
+					_spriteBatch.DrawString(_font, _player.Name, 
 						new Vector2(_player.X, _player.Y - size.Y - 5), _player.Color);
 				}
 
@@ -137,7 +141,7 @@ namespace Myra.Samples.ObjectEditor
 					_player.Background.Draw(_spriteBatch, playerRect, _player.Color);
 				}
 
-				_spriteBatch.DrawString(font, 
+				_spriteBatch.DrawString(_font, 
 					string.Format("HP: {0}/{1}", _player.HitPoints.Current, _player.HitPoints.Maximum), 
 					new Vector2(playerRect.X, playerRect.Bottom + 5), _player.Color);
 

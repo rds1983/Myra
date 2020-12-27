@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{D17FD092-A553-4770-A7A5-822661193436}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.AllWidgets.FNA", "..\samples\Myra.Samples.AllWidgets\Myra.Samples.AllWidgets.FNA.csproj", "{D4231816-B63A-4230-8DF7-A4B4F96EFB38}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FNA", "..\..\FNA\FNA.csproj", "{35253CE1-C864-4CD3-8249-4D1319748E8F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FontStashSharp.FNA", "..\..\FontStashSharp\src\XNA\FontStashSharp.FNA.csproj", "{AFE1C8A6-ECD7-4F17-8EDE-E40633C35C04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{35253CE1-C864-4CD3-8249-4D1319748E8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35253CE1-C864-4CD3-8249-4D1319748E8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35253CE1-C864-4CD3-8249-4D1319748E8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFE1C8A6-ECD7-4F17-8EDE-E40633C35C04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFE1C8A6-ECD7-4F17-8EDE-E40633C35C04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFE1C8A6-ECD7-4F17-8EDE-E40633C35C04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFE1C8A6-ECD7-4F17-8EDE-E40633C35C04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

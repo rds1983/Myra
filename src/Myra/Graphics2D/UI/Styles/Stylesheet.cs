@@ -75,6 +75,9 @@ namespace Myra.Graphics2D.UI.Styles
 		private readonly Dictionary<string, MenuStyle> _verticalMenuStyles = new Dictionary<string, MenuStyle>();
 		private readonly Dictionary<string, WindowStyle> _windowStyles = new Dictionary<string, WindowStyle>();
 
+		public TextureRegionAtlas Atlas { get; private set; }
+		public Dictionary<string, DynamicSpriteFont> Fonts { get; private set; }
+
 		public DesktopStyle DesktopStyle
 		{
 			get; set;
@@ -617,7 +620,11 @@ namespace Myra.Graphics2D.UI.Styles
 				throw new Exception(string.Format("Type {0} isn't supported", t.Name));
 			};
 
-			var result = new Stylesheet();
+			var result = new Stylesheet
+			{
+				Atlas = textureRegionAtlas,
+				Fonts = fonts
+			};
 
 			var loadContext = new LoadContext
 			{
