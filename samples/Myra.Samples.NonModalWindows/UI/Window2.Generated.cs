@@ -18,7 +18,7 @@ namespace Myra.Samples.NonModalWindows.UI
 		private void BuildUI()
 		{
 			var label1 = new Label();
-			label1.Text = "Lorem ipsum \\c[green]dolor sit amet, \\c[red]consectetur adipisicing elit, sed do eiusmod \\c[#AAAAAA]tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. \\c{white}Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum!";
+			label1.Text = "Lorem ipsum \\c[green]dolor sit amet, \\c[red]consectetur adipisicing elit, sed do eiusmod \\c[#AAAAAA]tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. \\c[white]Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum!";
 			label1.Wrap = true;
 
 			var scrollViewer1 = new ScrollViewer();

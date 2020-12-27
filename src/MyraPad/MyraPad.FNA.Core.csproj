@@ -11,15 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\ExportCSDesigner.cstemplate" />
-    <None Remove="Resources\ExportCSMain.cstemplate" />
-    <None Remove="Resources\NewProject.xmltemplate" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\ExportCSDesigner.cstemplate" />
-    <EmbeddedResource Include="Resources\ExportCSMain.cstemplate" />
-    <EmbeddedResource Include="Resources\NewProject.xmltemplate" />
+    <EmbeddedResource Include="Resources\*.*" />
   </ItemGroup>
 
   <ItemGroup>
