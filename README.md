@@ -35,6 +35,9 @@ Commodore 64 Skin
 MyraPad
 ![](/images/MyraPad.png)
 
+## Code of Ethics
+https://sqlite.org/codeofethics.html
+
 ## Credits
 * [MonoGame](http://www.monogame.net/)
 * [FNA](https://github.com/FNA-XNA/FNA)
