@@ -26,6 +26,10 @@ copy "samples\Myra.Samples.AssetManagement\bin\MonoGame\%CONFIGURATION%\Myra.Sam
 copy "samples\Myra.Samples.ObjectEditor\bin\MonoGame\%CONFIGURATION%\Myra.Samples.ObjectEditor.exe" ZipPackage /Y
 copy "src\MyraPad\bin\%CONFIGURATION%\MyraPad.exe" ZipPackage /Y
 copy "src\MyraPad\bin\%CONFIGURATION%\XNAssets.dll" "ZipPackage" /Y
+copy "src\MyraPad\bin\%CONFIGURATION%\FontStashSharp.MonoGame.dll" "ZipPackage" /Y
+copy "src\MyraPad\bin\%CONFIGURATION%\StbImageSharp.dll" "ZipPackage" /Y
+copy "src\MyraPad\bin\%CONFIGURATION%\StbTrueTypeSharp.dll" "ZipPackage" /Y
+copy "src\MyraPad\bin\%CONFIGURATION%\Cyotek.Drawing.BitmapFont.dll" "ZipPackage" /Y
 copy "src\MyraPad\bin\%CONFIGURATION%\info.lundin.math.dll" "ZipPackage" /Y
 copy "src\MyraPad\bin\%CONFIGURATION%\MonoGame.Framework.dll" "ZipPackage" /Y
 copy "src\MyraPad\bin\%CONFIGURATION%\MonoGame.Framework.dll.config" "ZipPackage" /Y
