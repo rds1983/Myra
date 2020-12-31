@@ -15,7 +15,7 @@ namespace Myra.Graphics2D.UI.Styles
 		public Color? DisabledTextColor { get; set; }
 		public Color? OverTextColor { get; set; }
 		public Color? PressedTextColor { get; set; }
-		public DynamicSpriteFont Font { get; set; }
+		public SpriteFontBase Font { get; set; }
 
 		public LabelStyle()
 		{

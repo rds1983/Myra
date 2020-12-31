@@ -2,6 +2,7 @@
 using System.Reflection;
 using XNAssets;
 using XNAssets.Utility;
+using Myra.Assets;
 
 #if !STRIDE
 using Microsoft.Xna.Framework;
@@ -16,6 +17,7 @@ namespace Myra
 	public static class MyraEnvironment
 	{
 		private static AssetManager _defaultAssetManager;
+		private static bool _assetsLoadersUpdated = false;
 
 		private static Game _game;
 
@@ -60,6 +62,15 @@ namespace Myra
 					_game.Disposed += GameOnDisposed;
 				}
 #endif
+				if (!_assetsLoadersUpdated)
+				{
+					AssetManager.SetAssetLoader(new StaticSpriteFontLoader());
+					AssetManager.SetAssetLoader(new FontSystemLoader());
+					AssetManager.SetAssetLoader(new DynamicSpriteFontLoader());
+					AssetManager.SetAssetLoader(new SpriteFontBaseLoader());
+
+					_assetsLoadersUpdated = true;
+				}
 			}
 		}
 

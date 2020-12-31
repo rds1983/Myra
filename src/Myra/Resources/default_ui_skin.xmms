@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Stylesheet TextureRegionAtlas="default_ui_skin.atlas">
   <Fonts>
-    <Font Id="default-font" File="default_ui_font.ttf" Size="21" />
+    <Font Id="default-font" File="default_font.fnt"/>
   </Fonts>
   <LabelStyles>
     <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="gray" />

@@ -18,7 +18,7 @@ namespace Myra.Graphics2D.Text
 	public class TextChunk
 	{
 		protected string _text;
-		protected readonly DynamicSpriteFont _font;
+		protected readonly SpriteFontBase _font;
 		protected Point _size;
 
 		public List<GlyphInfo> Glyphs { get; private set; }
@@ -33,7 +33,7 @@ namespace Myra.Graphics2D.Text
 		public int TextStartIndex { get; internal set; }
 		public Color? Color;
 
-		public TextChunk(DynamicSpriteFont font, string text, Point size, bool calculateGlyps)
+		public TextChunk(SpriteFontBase font, string text, Point size, bool calculateGlyps)
 		{
 			if (font == null)
 			{

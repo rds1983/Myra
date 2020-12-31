@@ -76,7 +76,7 @@ namespace Myra.Graphics2D.UI.Styles
 		private readonly Dictionary<string, WindowStyle> _windowStyles = new Dictionary<string, WindowStyle>();
 
 		public TextureRegionAtlas Atlas { get; private set; }
-		public Dictionary<string, DynamicSpriteFont> Fonts { get; private set; }
+		public Dictionary<string, SpriteFontBase> Fonts { get; private set; }
 
 		public DesktopStyle DesktopStyle
 		{
@@ -573,7 +573,7 @@ namespace Myra.Graphics2D.UI.Styles
 
 		public static Stylesheet LoadFromSource(string stylesheetXml,
 			TextureRegionAtlas textureRegionAtlas,
-			Dictionary<string, DynamicSpriteFont> fonts)
+			Dictionary<string, SpriteFontBase> fonts)
 		{
 			var xDoc = XDocument.Parse(stylesheetXml);
 
@@ -612,7 +612,7 @@ namespace Myra.Graphics2D.UI.Styles
 
 					throw new Exception(string.Format("Could not find parse IBrush '{0}'", name));
 				}
-				else if (t == typeof(DynamicSpriteFont))
+				else if (t == typeof(SpriteFontBase))
 				{
 					return fonts[name];
 				}

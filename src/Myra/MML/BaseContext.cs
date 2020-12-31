@@ -50,7 +50,7 @@ namespace Myra.MML
 					propertyType == typeof(Color) ||
 					propertyType == typeof(Color?) ||
 					typeof(IBrush).IsAssignableFrom(propertyType) ||
-					propertyType == typeof(DynamicSpriteFont) ||
+					propertyType == typeof(SpriteFontBase) ||
 					propertyType == typeof(Thickness))
 				{
 					simpleProperties.Add(property);

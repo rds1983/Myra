@@ -165,9 +165,9 @@ namespace Myra.Graphics2D.UI
 				{
 					return assetManager.Load<TextureRegion>(name);
 				}
-				else if (t == typeof(DynamicSpriteFont))
+				else if (t == typeof(SpriteFontBase))
 				{
-					return assetManager.Load<DynamicSpriteFont>(name);
+					return assetManager.Load<SpriteFontBase>(name);
 				}
 
 				throw new Exception(string.Format("Type {0} isn't supported", t.Name));

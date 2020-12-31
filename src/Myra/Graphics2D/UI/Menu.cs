@@ -52,7 +52,7 @@ namespace Myra.Graphics2D.UI
 		public ObservableCollection<IMenuItem> Items { get; } = new ObservableCollection<IMenuItem>();
 
 		[Category("Appearance")]
-		public DynamicSpriteFont LabelFont
+		public SpriteFontBase LabelFont
 		{
 			get
 			{

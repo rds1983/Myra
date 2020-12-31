@@ -19,7 +19,7 @@ namespace Myra.Samples.AssetManagement
 		{
 			var label1 = new Label();
 			label1.Text = "My Game";
-			label1.Font = MyraEnvironment.DefaultAssetManager.Load<DynamicSpriteFont>("fonts/arial64.fnt");
+			label1.Font = MyraEnvironment.DefaultAssetManager.Load<SpriteFontBase>("fonts/arial64.fnt");
 			label1.TextColor = Color.LightBlue;
 			label1.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
 
@@ -38,7 +38,7 @@ namespace Myra.Samples.AssetManagement
 			_mainMenu = new VerticalMenu();
 			_mainMenu.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
 			_mainMenu.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
-			_mainMenu.LabelFont = MyraEnvironment.DefaultAssetManager.Load<DynamicSpriteFont>("fonts/comicSans48.fnt");
+			_mainMenu.LabelFont = MyraEnvironment.DefaultAssetManager.Load<SpriteFontBase>("fonts/comicSans48.fnt");
 			_mainMenu.LabelColor = Color.Indigo;
 			_mainMenu.SelectionHoverBackground = new SolidBrush("#808000FF");
 			_mainMenu.SelectionBackground = new SolidBrush("#FFA500FF");
@@ -59,7 +59,7 @@ namespace Myra.Samples.AssetManagement
 
 			var label2 = new Label();
 			label2.Text = "Version 0.6";
-			label2.Font = MyraEnvironment.DefaultAssetManager.Load<DynamicSpriteFont>("fonts/calibri32.fnt");
+			label2.Font = MyraEnvironment.DefaultAssetManager.Load<SpriteFontBase>("fonts/calibri32.fnt");
 			label2.Left = -10;
 			label2.Top = -10;
 			label2.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Right;

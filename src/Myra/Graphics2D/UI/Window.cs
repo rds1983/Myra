@@ -52,7 +52,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
-		public DynamicSpriteFont TitleFont
+		public SpriteFontBase TitleFont
 		{
 			get
 			{

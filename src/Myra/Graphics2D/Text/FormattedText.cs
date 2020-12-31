@@ -18,7 +18,7 @@ namespace Myra.Graphics2D.Text
 	{
 		public const int NewLineWidth = 0;
 
-		private DynamicSpriteFont _font;
+		private SpriteFontBase _font;
 		private string _text = string.Empty;
 		private int _verticalSpacing;
 		private int? _width;
@@ -29,7 +29,7 @@ namespace Myra.Graphics2D.Text
 		private StringBuilder _stringBuilder = new StringBuilder();
 		private readonly Dictionary<int, Point> _measures = new Dictionary<int, Point>();
 
-		public DynamicSpriteFont Font
+		public SpriteFontBase Font
 		{
 			get
 			{

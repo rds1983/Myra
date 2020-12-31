@@ -17,7 +17,7 @@ namespace Myra.Samples.ObjectEditor
 		private Point _lastPosition = new Point(800, 100);
 		private SpriteBatch _spriteBatch;
 		private Desktop _desktop;
-		private DynamicSpriteFont _font;
+		private SpriteFontBase _font;
 
 		public static ObjectEditorGame Instance { get; private set; }
 

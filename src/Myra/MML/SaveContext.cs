@@ -63,7 +63,7 @@ namespace Myra.MML
 					{
 						str = ((Color)value).ToHexString();
 					}
-					else if (typeof(IBrush).IsAssignableFrom(property.PropertyType) || property.PropertyType == typeof(DynamicSpriteFont))
+					else if (typeof(IBrush).IsAssignableFrom(property.PropertyType) || property.PropertyType == typeof(SpriteFontBase))
 					{
 						if (baseObject != null)
 						{

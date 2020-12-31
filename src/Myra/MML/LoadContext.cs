@@ -79,7 +79,7 @@ namespace Myra.MML
 						}
 					}
 					else if ((typeof(IBrush).IsAssignableFrom(propertyType) ||
-							 propertyType == typeof(DynamicSpriteFont)) &&
+							 propertyType == typeof(SpriteFontBase)) &&
 							 !string.IsNullOrEmpty(attr.Value) &&
 							 ResourceGetter != null)
 					{

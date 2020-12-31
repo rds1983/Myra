@@ -15,8 +15,8 @@ namespace Myra.Graphics2D.UI.Styles
 		public Color? DisabledTextColor { get; set; }
 		public Color? FocusedTextColor { get; set; }
 
-		public DynamicSpriteFont Font { get; set; }
-		public DynamicSpriteFont MessageFont { get; set; }
+		public SpriteFontBase Font { get; set; }
+		public SpriteFontBase MessageFont { get; set; }
 
 		public IImage Cursor { get; set; }
 		public IBrush Selection { get; set; }

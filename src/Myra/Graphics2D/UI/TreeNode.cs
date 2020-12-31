@@ -51,7 +51,7 @@ namespace Myra.Graphics2D.UI
 			set { _label.Text = value; }
 		}
 
-		public DynamicSpriteFont Font
+		public SpriteFontBase Font
 		{
 			get { return _label.Font; }
 			set { _label.Font = value; }

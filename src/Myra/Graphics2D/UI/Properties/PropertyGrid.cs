@@ -991,9 +991,9 @@ namespace Myra.Graphics2D.UI.Properties
 						}
 					}
 				}
-				else if (propertyType == typeof(DynamicSpriteFont))
+				else if (propertyType == typeof(SpriteFontBase))
 				{
-					valueWidget = CreateFileEditor<DynamicSpriteFont>(record, hasSetter, "*.fnt");
+					valueWidget = CreateFileEditor<SpriteFontBase>(record, hasSetter, "*.fnt");
 				}
 				else if (propertyType == typeof(IBrush))
 				{
