@@ -48,8 +48,11 @@
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FontStashSharp.MonoGame, Version=0.8.8.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\build\packages\FontStashSharp.MonoGame.0.8.8\lib\netstandard2.0\FontStashSharp.MonoGame.dll</HintPath>
+    <Reference Include="Cyotek.Drawing.BitmapFont, Version=1.0.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
+      <HintPath>..\..\build\packages\Cyotek.Drawing.BitmapFont.2.0.0\lib\netstandard2.1\Cyotek.Drawing.BitmapFont.dll</HintPath>
+    </Reference>
+    <Reference Include="FontStashSharp.MonoGame, Version=0.9.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\build\packages\FontStashSharp.MonoGame.0.9.0.1\lib\netstandard2.0\FontStashSharp.MonoGame.dll</HintPath>
     </Reference>
     <Reference Include="info.lundin.math, Version=1.2.6.0, Culture=neutral, PublicKeyToken=2f7fe9ec5efab85f, processorArchitecture=MSIL">
       <HintPath>..\..\build\packages\info.lundin.math.dll.1.2.6\lib\netstandard2.0\info.lundin.math.dll</HintPath>
@@ -61,15 +64,23 @@
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="OpenTK-1.0" />
+    <Reference Include="StbImageSharp, Version=2.22.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\build\packages\StbImageSharp.2.22.4\lib\netstandard2.0\StbImageSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="StbTrueTypeSharp, Version=1.24.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\build\packages\StbTrueTypeSharp.1.24.6\lib\netstandard1.1\StbTrueTypeSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Android\MonoGame.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="XNAssets, Version=0.5.0.6, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\build\packages\XNAssets.0.5.0.6\lib\netstandard2.0\XNAssets.dll</HintPath>
+    <Reference Include="XNAssets, Version=0.5.1.14, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\build\packages\XNAssets.0.5.1.14\lib\netstandard2.0\XNAssets.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
