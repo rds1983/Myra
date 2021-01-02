@@ -348,33 +348,33 @@ namespace MyraPad
 					return;
 				}
 
-				if (_desktop.DownKeys.Contains(Keys.LeftControl) || _desktop.DownKeys.Contains(Keys.RightControl))
+				if (_desktop.IsKeyDown(Keys.LeftControl) || _desktop.IsKeyDown(Keys.RightControl))
 				{
-					if (_desktop.DownKeys.Contains(Keys.N))
+					if (_desktop.IsKeyDown(Keys.N))
 					{
 						NewItemOnClicked(this, EventArgs.Empty);
 					}
-					else if (_desktop.DownKeys.Contains(Keys.O))
+					else if (_desktop.IsKeyDown(Keys.O))
 					{
 						OpenItemOnClicked(this, EventArgs.Empty);
 					}
-					else if (_desktop.DownKeys.Contains(Keys.R))
+					else if (_desktop.IsKeyDown(Keys.R))
 					{
 						OnMenuFileReloadSelected(this, EventArgs.Empty);
 					}
-					else if (_desktop.DownKeys.Contains(Keys.S))
+					else if (_desktop.IsKeyDown(Keys.S))
 					{
 						SaveItemOnClicked(this, EventArgs.Empty);
 					}
-					else if (_desktop.DownKeys.Contains(Keys.E))
+					else if (_desktop.IsKeyDown(Keys.E))
 					{
 						ExportCsItemOnSelected(this, EventArgs.Empty);
 					}
-					else if (_desktop.DownKeys.Contains(Keys.Q))
+					else if (_desktop.IsKeyDown(Keys.Q))
 					{
 						Exit();
 					}
-					else if (_desktop.DownKeys.Contains(Keys.F))
+					else if (_desktop.IsKeyDown(Keys.F))
 					{
 						_menuEditUpdateSource_Selected(this, EventArgs.Empty);
 					}

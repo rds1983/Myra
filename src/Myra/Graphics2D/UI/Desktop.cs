@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Linq;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
+using Myra.Platform;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -15,19 +15,11 @@ using Stride.Core.Mathematics;
 using Stride.Input;
 #else
 using System.Drawing;
+using Vector2 = System.Drawing.PointF;
 #endif
 
 namespace Myra.Graphics2D.UI
 {
-	public struct MouseInfo
-	{
-		public Point Position;
-		public bool IsLeftButtonDown;
-		public bool IsMiddleButtonDown;
-		public bool IsRightButtonDown;
-		public float Wheel;
-	}
-
 	public class Desktop
 	{
 		public const int DoubleClickIntervalInMs = 500;
@@ -43,7 +35,7 @@ namespace Myra.Graphics2D.UI
 		private DateTime? _lastKeyDown;
 		private int _keyDownCount = 0;
 		private MouseInfo _lastMouseInfo;
-		private IReadOnlyCollection<Keys> _downKeys, _lastDownKeys;
+		private readonly bool[] _downKeys = new bool[0xff], _lastDownKeys = new bool[0xff];
 		private Widget _previousKeyboardFocus;
 		private Widget _previousMouseWheelFocus;
 #if MONOGAME || FNA
@@ -91,7 +83,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public IReadOnlyCollection<Keys> DownKeys
+		public bool[] DownKeys
 		{
 			get
 			{
@@ -164,7 +156,7 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
-		public Func<IReadOnlyCollection<Keys>> DownKeysGetter
+		public Action<bool[]> DownKeysGetter
 		{
 			get; set;
 		}
@@ -280,7 +272,7 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return _downKeys.Contains(Keys.LeftShift) || _downKeys.Contains(Keys.RightShift);
+				return IsKeyDown(Keys.LeftShift) || IsKeyDown(Keys.RightShift);
 			}
 		}
 
@@ -289,9 +281,9 @@ namespace Myra.Graphics2D.UI
 			get
 			{
 #if !STRIDE
-				return _downKeys.Contains(Keys.LeftControl) || _downKeys.Contains(Keys.RightControl);
+				return IsKeyDown(Keys.LeftControl) || IsKeyDown(Keys.RightControl);
 #else
-				return _downKeys.Contains(Keys.LeftCtrl) || _downKeys.Contains(Keys.RightCtrl);
+				return IsKeyDown(Keys.LeftCtrl) || IsKeyDown(Keys.RightCtrl);
 #endif
 			}
 		}
@@ -301,9 +293,9 @@ namespace Myra.Graphics2D.UI
 			get
 			{
 #if !STRIDE
-				return _downKeys.Contains(Keys.LeftAlt) || _downKeys.Contains(Keys.RightAlt);
+				return IsKeyDown(Keys.LeftAlt) || IsKeyDown(Keys.RightAlt);
 #else
-				return _downKeys.Contains(Keys.LeftAlt) || _downKeys.Contains(Keys.RightAlt);
+				return IsKeyDown(Keys.LeftAlt) || IsKeyDown(Keys.RightAlt);
 #endif
 			}
 		}
@@ -405,53 +397,20 @@ namespace Myra.Graphics2D.UI
 #endif
 		}
 
-#if !STRIDE
+		public bool IsKeyDown(Keys keys)
+		{
+			return _downKeys[(int)keys];
+		}
+
 		public MouseInfo DefaultMouseInfoGetter()
 		{
-			var state = Mouse.GetState();
-
-			var result = new MouseInfo
-			{
-				Position = new Point(state.X, state.Y),
-				IsLeftButtonDown = state.LeftButton == ButtonState.Pressed,
-				IsMiddleButtonDown = state.MiddleButton == ButtonState.Pressed,
-				IsRightButtonDown = state.RightButton == ButtonState.Pressed,
-				Wheel = state.ScrollWheelValue
-			};
-
-			return result;
+			return MyraEnvironment.Platform.GetMouseInfo();
 		}
 
-		public IReadOnlyCollection<Keys> DefaultDownKeysGetter()
+		public void DefaultDownKeysGetter(bool[] keysDown)
 		{
-			return Keyboard.GetState().GetPressedKeys();
+			MyraEnvironment.Platform.SetKeysDown(keysDown);
 		}
-#else
-		public MouseInfo DefaultMouseInfoGetter()
-		{
-			var input = MyraEnvironment.Game.Input;
-
-			var v = input.AbsoluteMousePosition;
-
-			var result = new MouseInfo
-			{
-				Position = new Point((int)v.X, (int)v.Y),
-				IsLeftButtonDown = input.IsMouseButtonDown(MouseButton.Left),
-				IsMiddleButtonDown = input.IsMouseButtonDown(MouseButton.Middle),
-				IsRightButtonDown = input.IsMouseButtonDown(MouseButton.Right),
-				Wheel = input.MouseWheelDelta
-			};
-
-			return result;
-		}
-
-		public IReadOnlyCollection<Keys> DefaultDownKeysGetter()
-		{
-			var input = MyraEnvironment.Game.Input;
-
-			return input.Keyboard.DownKeys;
-		}
-#endif
 
 		public Widget GetChild(int index)
 		{
@@ -887,7 +846,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-#if !STRIDE
+#if MONOGAME || FNA
 		public void UpdateTouch()
 		{
 			var touchState = TouchPanel.GetState();
@@ -996,44 +955,39 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			_downKeys = DownKeysGetter();
+			DownKeysGetter(_downKeys);
 
-			if (_downKeys != null && _lastDownKeys != null)
+			var now = DateTime.Now;
+			for(var i = 0; i < _downKeys.Length; ++i)
 			{
-				var now = DateTime.Now;
-				foreach (var key in _downKeys)
+				var key = (Keys)i;
+				if (_downKeys[i] && !_lastDownKeys[i])
 				{
-					if (!_lastDownKeys.Contains(key))
+					if (key == Keys.Tab)
 					{
-						if (key == Keys.Tab)
-						{
-							FocusNextWidget();
-						}
-
-						KeyDownHandler?.Invoke(key);
-
-						_lastKeyDown = now;
-						_keyDownCount = 0;
+						FocusNextWidget();
 					}
-				}
 
-				foreach (var key in _lastDownKeys)
+					KeyDownHandler?.Invoke(key);
+
+					_lastKeyDown = now;
+					_keyDownCount = 0;
+				} else if (!_downKeys[i] && _lastDownKeys[i])
 				{
-					if (!_downKeys.Contains(key))
+					// Key had been released
+					KeyUp.Invoke(key);
+					if (_focusedKeyboardWidget != null && _focusedKeyboardWidget.Active)
 					{
-						// Key had been released
-						KeyUp.Invoke(key);
-						if (_focusedKeyboardWidget != null && _focusedKeyboardWidget.Active)
-						{
-							_focusedKeyboardWidget.OnKeyUp(key);
-						}
-
-						_lastKeyDown = null;
-						_keyDownCount = 0;
+						_focusedKeyboardWidget.OnKeyUp(key);
 					}
-					else if (_lastKeyDown != null &&
-					  ((_keyDownCount == 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownStartInMs) ||
-					  (_keyDownCount > 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownInternalInMs)))
+
+					_lastKeyDown = null;
+					_keyDownCount = 0;
+				} else if (_downKeys[i] && _lastDownKeys[i])
+				{
+					if (_lastKeyDown != null &&
+									  ((_keyDownCount == 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownStartInMs) ||
+									  (_keyDownCount > 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownInternalInMs)))
 					{
 						KeyDownHandler?.Invoke(key);
 
@@ -1043,7 +997,7 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			_lastDownKeys = _downKeys.ToArray();
+			Array.Copy(_downKeys, _lastDownKeys, _downKeys.Length);
 		}
 
 		private void FocusNextWidget()
@@ -1107,7 +1061,7 @@ namespace Myra.Graphics2D.UI
 			UpdateMouseInput();
 			UpdateKeyboardInput();
 
-#if !STRIDE
+#if MONOGAME || FNA
 			try
 			{
 				UpdateTouch();
@@ -1133,8 +1087,8 @@ namespace Myra.Graphics2D.UI
 					_focusedKeyboardWidget.OnKeyDown(key);
 
 #if STRIDE
-					var ch = key.ToChar(_downKeys.Contains(Keys.LeftShift) ||
-										_downKeys.Contains(Keys.RightShift));
+					var ch = key.ToChar(IsKeyDown(Keys.LeftShift) ||
+										IsKeyDown(Keys.RightShift));
 					if (ch != null)
 					{
 						_focusedKeyboardWidget.OnChar(ch.Value);

@@ -15,7 +15,7 @@ using Stride.Core.Mathematics;
 using Stride.Input;
 #else
 using System.Drawing;
-using Vector2 = System.Drawing.PointF;
+using Myra.Platform;
 #endif
 
 namespace Myra.Graphics2D.UI

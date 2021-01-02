@@ -75,22 +75,22 @@ namespace Myra.Samples.AllWidgets
 					return;
 				}
 
-				if (_desktop.DownKeys.Contains(Keys.LeftControl) || _desktop.DownKeys.Contains(Keys.RightControl))
+				if (_desktop.IsKeyDown(Keys.LeftControl) || _desktop.IsKeyDown(Keys.RightControl))
 				{
-					if (_desktop.DownKeys.Contains(Keys.O))
+					if (_desktop.IsKeyDown(Keys.O))
 					{
 						_allWidgets.OpenFile();
-					} else if (_desktop.DownKeys.Contains(Keys.S))
+					} else if (_desktop.IsKeyDown(Keys.S))
 					{
 						_allWidgets.SaveFile();
-					} else if (_desktop.DownKeys.Contains(Keys.D))
+					} else if (_desktop.IsKeyDown(Keys.D))
 					{
 						_allWidgets.ChooseFolder();
-					} else if (_desktop.DownKeys.Contains(Keys.L))
+					} else if (_desktop.IsKeyDown(Keys.L))
 					{
 						_allWidgets.ChooseColor();
 					}
-					else if (_desktop.DownKeys.Contains(Keys.Q))
+					else if (_desktop.IsKeyDown(Keys.Q))
 					{
 						Exit();
 					}

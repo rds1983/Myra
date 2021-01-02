@@ -15,5 +15,9 @@ namespace Myra.Platform
 		Point ViewSize { get; }
 
 		IMyraRenderer CreateRenderer();
+
+		MouseInfo GetMouseInfo();
+
+		void SetKeysDown(bool[] keys);
 	}
 }

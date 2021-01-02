@@ -3,9 +3,11 @@
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 #elif STRIDE
 using Stride.Core.Mathematics;
 using Stride.Graphics;
+using Stride.Input;
 #endif
 
 namespace Myra.Platform.XNA
@@ -75,6 +77,54 @@ namespace Myra.Platform.XNA
 		public IMyraRenderer CreateRenderer()
 		{
 			return new XNARenderer(_device);
+		}
+
+		public MouseInfo GetMouseInfo()
+		{
+#if !STRIDE
+			var state = Mouse.GetState();
+
+			var result = new MouseInfo
+			{
+				Position = new Point(state.X, state.Y),
+				IsLeftButtonDown = state.LeftButton == ButtonState.Pressed,
+				IsMiddleButtonDown = state.MiddleButton == ButtonState.Pressed,
+				IsRightButtonDown = state.RightButton == ButtonState.Pressed,
+				Wheel = state.ScrollWheelValue
+			};
+#else
+			var input = MyraEnvironment.Game.Input;
+
+			var v = input.AbsoluteMousePosition;
+
+			var result = new MouseInfo
+			{
+				Position = new Point((int)v.X, (int)v.Y),
+				IsLeftButtonDown = input.IsMouseButtonDown(MouseButton.Left),
+				IsMiddleButtonDown = input.IsMouseButtonDown(MouseButton.Middle),
+				IsRightButtonDown = input.IsMouseButtonDown(MouseButton.Right),
+				Wheel = input.MouseWheelDelta
+			};
+#endif
+
+			return result;
+		}
+
+		public void SetKeysDown(bool[] keys)
+		{
+#if !STRIDE
+			var state = Keyboard.GetState();
+#else
+			var input = MyraEnvironment.Game.Input;
+#endif
+			for (var i = 0; i < keys.Length; ++i)
+			{
+#if !STRIDE
+				keys[i] = state.IsKeyDown((Keys)i);
+#else
+				keys[i] = input.IsKeyDown((Keys)i);
+#endif
+			}
 		}
 	}
 }
