@@ -69,15 +69,6 @@ namespace Myra
 					_game.Disposed += GameOnDisposed;
 				}
 #endif
-				if (!_assetsLoadersUpdated)
-				{
-					AssetManager.SetAssetLoader(new StaticSpriteFontLoader());
-					AssetManager.SetAssetLoader(new FontSystemLoader());
-					AssetManager.SetAssetLoader(new DynamicSpriteFontLoader());
-					AssetManager.SetAssetLoader(new SpriteFontBaseLoader());
-
-					_assetsLoadersUpdated = true;
-				}
 			}
 		}
 #endif
@@ -88,15 +79,34 @@ namespace Myra
 			{
 				if (_platform == null)
 				{
+#if MONOGAME || FNA || STRIDE
 					throw new Exception("MyraEnvironment.Game is null. Please, set it to the Game instance before using Myra.");
+#else
+					throw new Exception("MyraEnvironment.Platform is null. Please, set it before using Myra.");
+#endif
 				}
 
 				return _platform;
 			}
 
-			private set
+			set
 			{
+				if (value == null)
+				{
+					throw new ArgumentNullException(nameof(value));
+				}
+
 				_platform = value;
+
+				if (!_assetsLoadersUpdated)
+				{
+					AssetManager.SetAssetLoader(new StaticSpriteFontLoader());
+					AssetManager.SetAssetLoader(new FontSystemLoader());
+					AssetManager.SetAssetLoader(new DynamicSpriteFontLoader());
+					AssetManager.SetAssetLoader(new SpriteFontBaseLoader());
+
+					_assetsLoadersUpdated = true;
+				}
 			}
 		}
 

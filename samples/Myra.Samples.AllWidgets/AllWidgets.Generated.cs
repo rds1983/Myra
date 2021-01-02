@@ -4,11 +4,12 @@ using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.Brushes;
 
-#if !STRIDE
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-#else
+#elif STRIDE
 using Stride.Core.Mathematics;
+#else
+using System.Drawing;
 #endif
 
 namespace Myra.Samples.AllWidgets
@@ -198,6 +199,8 @@ namespace Myra.Samples.AllWidgets
 
 			var listItem3 = new ListItem();
 			listItem3.Text = "Blue";
+
+#if MONOGAME || FNA || STRIDE
 			listItem3.Color = new Color
 			{
 				B = 255,
@@ -205,6 +208,9 @@ namespace Myra.Samples.AllWidgets
 				R = 0,
 				A = 255,
 			};
+#else
+			listItem3.Color = Color.FromArgb(255, 0, 128, 255);
+#endif
 
 			var comboBox1 = new ComboBox();
 			comboBox1.Width = 200;

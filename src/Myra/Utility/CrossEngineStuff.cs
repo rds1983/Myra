@@ -39,7 +39,7 @@ namespace Myra.Utility
 			return Color.FromArgb((int)(color.A * value),
 				(int)(color.R * value),
 				(int)(color.G * value),
-				(int)(color.G * value));
+				(int)(color.B * value));
 #endif
 		}
 	}

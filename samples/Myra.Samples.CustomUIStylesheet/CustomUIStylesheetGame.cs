@@ -1,9 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AssetManagementBase;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.Styles;
-using XNAssets;
 
 namespace Myra.Samples.CustomUIStylesheet
 {
@@ -33,7 +33,7 @@ namespace Myra.Samples.CustomUIStylesheet
 			MyraEnvironment.Game = this;
 
 			// Create asset manager
-			var assetManager = new AssetManager(GraphicsDevice, new ResourceAssetResolver(typeof(CustomUIStylesheetGame).Assembly, "Resources"));
+			var assetManager = new AssetManager(new ResourceAssetResolver(typeof(CustomUIStylesheetGame).Assembly, "Resources"));
 
 			// Load stylesheet
 			Stylesheet.Current = assetManager.Load<Stylesheet>("ui_stylesheet.xml");
