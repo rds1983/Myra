@@ -447,24 +447,24 @@ namespace Myra.Graphics2D.UI
 			{
 				if (HorizontalScrollBackground != null)
 				{
-					context.Draw(HorizontalScrollBackground, _horizontalScrollbarFrame);
+					HorizontalScrollBackground.Draw(context, _horizontalScrollbarFrame);
 				}
 
 				var r = _horizontalScrollbarThumb;
 				r.X += thumbPosition.X;
-				context.Draw(HorizontalScrollKnob, r);
+				HorizontalScrollKnob.Draw(context, r);
 			}
 
 			if (_verticalScrollingOn && ShowVerticalScrollBar)
 			{
 				if (VerticalScrollBackground != null)
 				{
-					context.Draw(VerticalScrollBackground, _verticalScrollbarFrame);
+					VerticalScrollBackground.Draw(context, _verticalScrollbarFrame);
 				}
 
 				var r = _verticalScrollbarThumb;
 				r.Y += thumbPosition.Y;
-				context.Draw(VerticalScrollKnob, r);
+				VerticalScrollKnob.Draw(context, r);
 			}
 		}
 

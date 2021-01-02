@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
-using XNAssets;
-using XNAssets.Utility;
+using AssetManagementBase;
+using AssetManagementBase.Utility;
 using Myra.Platform;
 using Myra.Assets;
 using Myra.Platform.XNA;
@@ -70,7 +70,6 @@ namespace Myra
 #endif
 				if (!_assetsLoadersUpdated)
 				{
-					AssetManager.SetAssetLoader(new Texture2DLoader());
 					AssetManager.SetAssetLoader(new StaticSpriteFontLoader());
 					AssetManager.SetAssetLoader(new FontSystemLoader());
 					AssetManager.SetAssetLoader(new DynamicSpriteFontLoader());
@@ -78,14 +77,6 @@ namespace Myra
 
 					_assetsLoadersUpdated = true;
 				}
-			}
-		}
-
-		public static GraphicsDevice GraphicsDevice
-		{
-			get
-			{
-				return Game.GraphicsDevice;
 			}
 		}
 #endif
@@ -117,11 +108,7 @@ namespace Myra
 			{
 				if (_defaultAssetManager == null)
 				{
-#if MONOGAME || FNA || STRIDE
-					_defaultAssetManager = new AssetManager(GraphicsDevice, new FileAssetResolver(PathUtils.ExecutingAssemblyDirectory));
-#else
 					_defaultAssetManager = new AssetManager(new FileAssetResolver(PathUtils.ExecutingAssemblyDirectory));
-#endif
 				}
 
 				return _defaultAssetManager;

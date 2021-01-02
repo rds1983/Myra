@@ -8,7 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 using Myra.Attributes;
-using XNAssets.Utility;
+using AssetManagementBase.Utility;
 using FontStashSharp;
 
 #if !STRIDE

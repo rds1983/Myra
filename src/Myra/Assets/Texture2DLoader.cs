@@ -1,7 +1,6 @@
 ﻿using StbImageSharp;
 using System.IO;
-using XNAssets;
-using Myra.Graphics2D;
+using AssetManagementBase;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -13,6 +12,7 @@ using System.Drawing;
 
 namespace Myra.Assets
 {
+	[AssetLoader(typeof(Texture2DLoader))]
 	internal class Texture2DWrapper
 	{
 		public int Width { get; private set; }

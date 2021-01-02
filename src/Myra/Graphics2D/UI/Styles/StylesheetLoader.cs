@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using FontStashSharp;
-using XNAssets;
+using AssetManagementBase;
 
 namespace Myra.Graphics2D.UI.Styles
 {

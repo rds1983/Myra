@@ -10,9 +10,9 @@ using System.Collections.Generic;
 using Myra.Attributes;
 using System.Linq;
 using Myra.Graphics2D.TextureAtlases;
-using XNAssets.Utility;
+using AssetManagementBase.Utility;
 using Myra.Graphics2D.Brushes;
-using XNAssets;
+using AssetManagementBase;
 using Myra.Graphics2D.UI.Properties;
 using FontStashSharp;
 

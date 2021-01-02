@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 using System.Xml.Linq;
 using Myra.MML;
 using System.Collections;
-using XNAssets;
+using AssetManagementBase;
 using FontStashSharp;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.Brushes;

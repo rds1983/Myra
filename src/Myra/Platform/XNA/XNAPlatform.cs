@@ -41,7 +41,7 @@ namespace Myra.Platform.XNA
 #if MONOGAME || FNA
 			var texture2d = new Texture2D(_device, width, height);
 #elif STRIDE
-			var texture2d = Texture.New2D(_device, width, height, false, PixelFormat.R8G8B8A8_UNorm, TextureFlags.ShaderResource);
+			var texture2d = Texture.New2D(_device, width, height, false, PixelFormat.R8G8B8A8_UNorm_SRgb, TextureFlags.ShaderResource);
 #endif
 
 			return texture2d;

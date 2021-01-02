@@ -1314,7 +1314,7 @@ namespace Myra.Graphics2D.UI
 				{
 					var endPosition = GetRenderPositionByIndex(selectEnd);
 
-					context.Draw(Selection,
+					Selection.Draw(context,
 						new Rectangle(startPosition.X - _internalScrolling.X,
 							startPosition.Y - _internalScrolling.Y,
 							endPosition.X - startPosition.X,
@@ -1323,7 +1323,7 @@ namespace Myra.Graphics2D.UI
 					break;
 				}
 
-				context.Draw(Selection,
+				Selection.Draw(context,
 					new Rectangle(startPosition.X - _internalScrolling.X,
 						startPosition.Y - _internalScrolling.Y,
 						bounds.Left + startGlyph.TextChunk.Size.X - startPosition.X,
@@ -1391,7 +1391,7 @@ namespace Myra.Graphics2D.UI
 				p = GetRenderPositionByIndex(CursorPosition);
 				p.X -= _internalScrolling.X;
 				p.Y -= _internalScrolling.Y;
-				context.Draw(Cursor,
+				Cursor.Draw(context,
 					new Rectangle(p.X, p.Y,
 						Cursor.Size.X,
 						_formattedText.Font.FontSize));

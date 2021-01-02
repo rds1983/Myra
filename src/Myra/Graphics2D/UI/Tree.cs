@@ -338,12 +338,12 @@ namespace Myra.Graphics2D.UI
 
 			if (Active && HoverRow != null && HoverRow != SelectedRow && SelectionHoverBackground != null)
 			{
-				context.Draw(SelectionHoverBackground, HoverRow.RowBounds);
+				SelectionHoverBackground.Draw(context, HoverRow.RowBounds);
 			}
 
 			if (SelectedRow != null && SelectedRow.RowVisible && SelectionBackground != null)
 			{
-				context.Draw(SelectionBackground, SelectedRow.RowBounds);
+				SelectionBackground.Draw(context, SelectedRow.RowBounds);
 			}
 
 			base.InternalRender(context);

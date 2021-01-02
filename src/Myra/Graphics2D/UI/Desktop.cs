@@ -659,7 +659,7 @@ namespace Myra.Graphics2D.UI
 			if (Stylesheet.Current.DesktopStyle != null &&
 				Stylesheet.Current.DesktopStyle.Background != null)
 			{
-				_renderContext.Draw(Stylesheet.Current.DesktopStyle.Background, InternalBounds);
+				Stylesheet.Current.DesktopStyle.Background.Draw(_renderContext, InternalBounds);
 			}
 
 			foreach (var widget in ChildrenCopy)

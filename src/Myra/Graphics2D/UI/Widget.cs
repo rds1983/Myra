@@ -1033,7 +1033,7 @@ namespace Myra.Graphics2D.UI
 			var background = GetCurrentBackground();
 			if (background != null)
 			{
-				context.Draw(background, BackgroundBounds);
+				background.Draw(context, BackgroundBounds);
 			}
 
 			// Borders
@@ -1043,22 +1043,22 @@ namespace Myra.Graphics2D.UI
 				var borderBounds = BorderBounds;
 				if (BorderThickness.Left > 0)
 				{
-					context.Draw(border, new Rectangle(borderBounds.X, borderBounds.Y, BorderThickness.Left, borderBounds.Height));
+					border.Draw(context, new Rectangle(borderBounds.X, borderBounds.Y, BorderThickness.Left, borderBounds.Height));
 				}
 
 				if (BorderThickness.Top > 0)
 				{
-					context.Draw(border, new Rectangle(borderBounds.X, borderBounds.Y, borderBounds.Width, BorderThickness.Top));
+					border.Draw(context, new Rectangle(borderBounds.X, borderBounds.Y, borderBounds.Width, BorderThickness.Top));
 				}
 
 				if (BorderThickness.Right > 0)
 				{
-					context.Draw(border, new Rectangle(borderBounds.Right - BorderThickness.Right, borderBounds.Y, BorderThickness.Right, borderBounds.Height));
+					border.Draw(context, new Rectangle(borderBounds.Right - BorderThickness.Right, borderBounds.Y, BorderThickness.Right, borderBounds.Height));
 				}
 
 				if (BorderThickness.Bottom > 0)
 				{
-					context.Draw(border, new Rectangle(borderBounds.X, borderBounds.Bottom - BorderThickness.Bottom, borderBounds.Width, BorderThickness.Bottom));
+					border.Draw(context, new Rectangle(borderBounds.X, borderBounds.Bottom - BorderThickness.Bottom, borderBounds.Width, BorderThickness.Bottom));
 				}
 			}
 

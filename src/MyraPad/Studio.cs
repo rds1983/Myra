@@ -18,8 +18,8 @@ using Microsoft.Xna.Framework.Input;
 using System.Threading;
 using System.Xml.Linq;
 using Myra.Graphics2D;
-using XNAssets;
-using XNAssets.Utility;
+using AssetManagementBase;
+using AssetManagementBase.Utility;
 
 namespace MyraPad
 {
@@ -128,7 +128,7 @@ namespace MyraPad
 				{
 					var folder = Path.GetDirectoryName(_filePath);
 					PropertyGridSettings.BasePath = folder;
-					PropertyGridSettings.AssetManager = new AssetManager(GraphicsDevice, new FileAssetResolver(folder));
+					PropertyGridSettings.AssetManager = new AssetManager(new FileAssetResolver(folder));
 					_lastFolder = folder;
 				} else
 				{

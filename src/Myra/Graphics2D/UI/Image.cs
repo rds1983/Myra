@@ -141,7 +141,7 @@ namespace Myra.Graphics2D.UI
 					bounds.Height = (int)(bounds.Width * aspect);
 				}
 
-				context.Draw(image, bounds, Color);
+				image.Draw(context, bounds, Color);
 			}
 		}
 

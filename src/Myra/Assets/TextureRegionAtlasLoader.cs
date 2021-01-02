@@ -1,4 +1,4 @@
-using XNAssets;
+using AssetManagementBase;
 using FontStashSharp.Interfaces;
 using Myra.Graphics2D.TextureAtlases;
 

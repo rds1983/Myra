@@ -85,10 +85,10 @@ namespace Myra.Utility
                 expression = expression.Replace("&.height", GerParrentValue(widget, "&.h"));
             }
             ///add window walues
-            expression = expression.Replace("W.h", $"{MyraEnvironment.Game.Window.ClientBounds.Height}");
-            expression = expression.Replace("W.height", $"{MyraEnvironment.Game.Window.ClientBounds.Height}");
-            expression = expression.Replace("W.w", $"{MyraEnvironment.Game.Window.ClientBounds.Width}");
-            expression = expression.Replace("W.width", $"{MyraEnvironment.Game.Window.ClientBounds.Width}");
+            expression = expression.Replace("W.h", $"{MyraEnvironment.Platform.ViewSize.Y}");
+            expression = expression.Replace("W.height", $"{MyraEnvironment.Platform.ViewSize.Y}");
+            expression = expression.Replace("W.w", $"{MyraEnvironment.Platform.ViewSize.X}");
+            expression = expression.Replace("W.width", $"{MyraEnvironment.Platform.ViewSize.X}");
             ///
             if (expression.Contains("["))
             {
@@ -120,9 +120,9 @@ namespace Myra.Utility
                     case "&.Y":
                         return "0";
                     case "&.w":
-                        return $"{MyraEnvironment.Game.Window.ClientBounds.Width}";
+                        return $"{MyraEnvironment.Platform.ViewSize.X}";
                     case "&.h":
-                        return $"{MyraEnvironment.Game.Window.ClientBounds.Height}";
+                        return $"{MyraEnvironment.Platform.ViewSize.Y}";
                 }
             }
             else

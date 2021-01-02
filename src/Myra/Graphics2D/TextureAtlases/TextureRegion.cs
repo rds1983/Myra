@@ -1,5 +1,5 @@
 ﻿using System;
-using XNAssets;
+using AssetManagementBase;
 using Myra.Assets;
 
 #if MONOGAME || FNA

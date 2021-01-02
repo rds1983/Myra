@@ -12,7 +12,7 @@ using Myra.Graphics2D.UI.File;
 using Myra.Graphics2D.TextureAtlases;
 using System.IO;
 using Myra.Graphics2D.Brushes;
-using XNAssets.Utility;
+using AssetManagementBase.Utility;
 using Myra.Attributes;
 using FontStashSharp;
 
@@ -157,7 +157,7 @@ namespace Myra.Graphics2D.UI.Properties
 					var headerBounds = HeaderBounds;
 					if (headerBounds.Contains(Desktop.MousePosition))
 					{
-						context.Draw(_propertyGrid.PropertyGridStyle.SelectionHoverBackground, headerBounds);
+						_propertyGrid.PropertyGridStyle.SelectionHoverBackground.Draw(context, headerBounds);
 					}
 				}
 

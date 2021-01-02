@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Xml.Serialization;
-using XNAssets.Utility;
+using AssetManagementBase.Utility;
 using FontStashSharp;
 
 #if !STRIDE

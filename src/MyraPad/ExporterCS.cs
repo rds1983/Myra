@@ -15,7 +15,7 @@ using Myra.Graphics2D;
 using Myra.Graphics2D.UI;
 using Myra.MML;
 using Myra.Utility;
-using XNAssets.Utility;
+using AssetManagementBase.Utility;
 
 namespace MyraPad
 {

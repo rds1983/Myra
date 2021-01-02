@@ -86,19 +86,9 @@ namespace Myra.Graphics2D
 			_renderer = renderer;
 		}
 
-		public void Draw(object texture, Rectangle dest, Rectangle src, Color color)
+		public void Draw(object texture, Rectangle dest, Rectangle? src, Color color)
 		{
 			_renderer.Draw(texture, dest, src, CrossEngineStuff.MultiplyColor(color, Opacity));
-		}
-
-		public void Draw(IBrush brush, Rectangle dest, Color color)
-		{
-			brush.Draw(this, dest, color);
-		}
-
-		public void Draw(IBrush brush, Rectangle dest)
-		{
-			Draw(brush, dest, Color.White);
 		}
 
 		public void DrawString(SpriteFontBase font, string text, Point pos, Color color)

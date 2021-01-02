@@ -1,6 +1,6 @@
 ﻿using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
-using XNAssets;
+using AssetManagementBase;
 using Myra.Assets;
 
 #if MONOGAME || FNA
@@ -28,7 +28,7 @@ namespace Myra
 			{
 				if (_assetManager == null)
 				{
-					_assetManager = new AssetManager(MyraEnvironment.GraphicsDevice, new ResourceAssetResolver(typeof(DefaultAssets).Assembly, "Resources."));
+					_assetManager = new AssetManager(new ResourceAssetResolver(typeof(DefaultAssets).Assembly, "Resources."));
 				}
 
 				return _assetManager;

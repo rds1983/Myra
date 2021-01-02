@@ -827,7 +827,7 @@ namespace Myra.Graphics2D.UI
 								bounds.Width,
 								_rowHeights[HoverRowIndex.Value] + RowSpacing), context.View);
 
-							context.Draw(SelectionHoverBackground, rect);
+							SelectionHoverBackground.Draw(context, rect);
 						}
 
 						if (SelectedRowIndex != null && SelectionBackground != null)
@@ -837,7 +837,7 @@ namespace Myra.Graphics2D.UI
 								bounds.Width,
 								_rowHeights[SelectedRowIndex.Value] + RowSpacing), context.View);
 
-							context.Draw(SelectionBackground, rect);
+							SelectionBackground.Draw(context, rect);
 						}
 					}
 					break;
@@ -850,7 +850,7 @@ namespace Myra.Graphics2D.UI
 								_colWidths[HoverColumnIndex.Value] + ColumnSpacing,
 								bounds.Height), context.View);
 
-							context.Draw(SelectionHoverBackground, rect);
+							SelectionHoverBackground.Draw(context, rect);
 						}
 
 						if (SelectedColumnIndex != null && SelectionBackground != null)
@@ -860,7 +860,7 @@ namespace Myra.Graphics2D.UI
 								_colWidths[SelectedColumnIndex.Value] + ColumnSpacing,
 								bounds.Height), context.View);
 
-							context.Draw(SelectionBackground, rect);
+							SelectionBackground.Draw(context, rect);
 						}
 					}
 					break;
@@ -875,7 +875,7 @@ namespace Myra.Graphics2D.UI
 								_colWidths[HoverColumnIndex.Value] + ColumnSpacing,
 								_rowHeights[HoverRowIndex.Value] + RowSpacing), context.View);
 
-							context.Draw(SelectionHoverBackground, rect);
+							SelectionHoverBackground.Draw(context, rect);
 						}
 
 						if (SelectedRowIndex != null && SelectedColumnIndex != null && SelectionBackground != null)
@@ -885,7 +885,7 @@ namespace Myra.Graphics2D.UI
 								_colWidths[SelectedColumnIndex.Value] + ColumnSpacing,
 								_rowHeights[SelectedRowIndex.Value] + RowSpacing), context.View);
 
-							context.Draw(SelectionBackground, rect);
+							SelectionBackground.Draw(context, rect);
 						}
 					}
 					break;

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
-using XNAssets.Utility;
+using AssetManagementBase.Utility;
 using Myra.Graphics2D;
 
 #if MONOGAME || FNA
