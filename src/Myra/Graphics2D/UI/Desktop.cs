@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 #elif STRIDE
 using Stride.Core.Mathematics;
+using Stride.Input;
 #else
 using System.Drawing;
 #endif
@@ -637,7 +638,7 @@ namespace Myra.Graphics2D.UI
 #if MONOGAME || FNA
 					_renderContext.Transform = Matrix.CreateScale(MyraEnvironment.LayoutScale.Value);
 #elif STRIDE
-					_renderContext.TransformMatrix = Matrix.Scaling(MyraEnvironment.LayoutScale.Value);
+					_renderContext.Transform = Matrix.Scaling(MyraEnvironment.LayoutScale.Value);
 #endif
 				}
 			}

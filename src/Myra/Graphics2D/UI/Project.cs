@@ -16,11 +16,6 @@ using XNAssets;
 using Myra.Graphics2D.UI.Properties;
 using FontStashSharp;
 
-#if STRIDE
-using Stride.Core.Mathematics;
-using Stride.Graphics;
-#endif
-
 namespace Myra.Graphics2D.UI
 {
 	public class ExportOptions

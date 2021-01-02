@@ -1,6 +1,14 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Myra.Utility;
+
+#if MONOGAME || FNA
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
+#elif STRIDE
+using Stride.Core.Mathematics;
+using Stride.Graphics;
+using Texture2D = Stride.Graphics.Texture;
+#endif
 
 namespace Myra.Platform.XNA
 {
@@ -27,6 +35,17 @@ namespace Myra.Platform.XNA
 				return _uiRasterizerState;
 			}
 		}
+#else
+		private static readonly RasterizerStateDescription _uiRasterizerState;
+
+		static XNARenderer()
+		{
+			var rs = new RasterizerStateDescription();
+			rs.SetDefault();
+			rs.ScissorTestEnable = true;
+			_uiRasterizerState = rs;
+		}
+
 #endif
 
 		private readonly GraphicsDevice _device;
@@ -82,16 +101,12 @@ namespace Myra.Platform.XNA
 				null,
 				UIRasterizerState);
 #elif STRIDE
-			var rs = new RasterizerStateDescription();
-			rs.SetDefault();
-			rs.ScissorTestEnable = true;
-
-			Batch.Begin(MyraEnvironment.Game.GraphicsContext,
+			_batch.Begin(MyraEnvironment.Game.GraphicsContext,
 				SpriteSortMode.Deferred,
 				BlendStates.AlphaBlend,
 				MyraEnvironment.Game.GraphicsDevice.SamplerStates.PointClamp,
 				DepthStencilStates.Default,
-				rs);
+				_uiRasterizerState);
 #endif
 
 			_beginCalled = true;
@@ -119,7 +134,7 @@ namespace Myra.Platform.XNA
 				SpriteEffects.None,
 				depth);
 #elif STRIDE
-			_batch.Draw(textureWrapper.Texture,
+			_batch.Draw(xnaTexture,
 				position,
 				sourceRectangle,
 				color,
@@ -142,16 +157,12 @@ namespace Myra.Platform.XNA
 				src,
 				color);
 #elif STRIDE
-			_batch.Draw(textureWrapper.Texture,
-				position,
-				sourceRectangle,
+			_batch.Draw(xnaTexture,
+				new RectangleF(dest.X, dest.Y, dest.Width, dest.Height),
+				new RectangleF(src.X, src.Y, src.Width, src.Height),
 				color,
-				rotation,
-				origin,
-				scale,
-				SpriteEffects.None,
-				ImageOrientation.AsIs,
-				depth);
+				0,
+				Mathematics.Vector2Zero);
 #endif
 		}
 

@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Xml.Linq;
 using Myra.MML;
 using XNAssets;
-using FontStashSharp.Interfaces;
 using Myra.Assets;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
 #elif STRIDE
 using Stride.Core.Mathematics;
-using Stride.Graphics;
 #else
 using System.Drawing;
 #endif

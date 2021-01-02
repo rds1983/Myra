@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 #elif STRIDE
 using Stride.Core.Mathematics;
-using Stride.Graphics;
+using Texture2D = Stride.Graphics.Texture;
 #else
 using System.Drawing;
 #endif

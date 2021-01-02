@@ -29,45 +29,57 @@ namespace Myra.Assets
 
 	internal class Texture2DLoader : IAssetLoader<Texture2DWrapper>
 	{
-		private static int PowerOfTwo(int x)
+		private static byte ApplyAlpha(byte color, byte alpha)
 		{
-			int power = 1;
-			while (power < x)
-				power *= 2;
-
-			return power;
+			var fc = color / 255.0f;
+			var fa = alpha / 255.0f;
+			var fr = (int)(255.0f * fc * fa);
+			if (fr < 0)
+			{
+				fr = 0;
+			}
+			if (fr > 255)
+			{
+				fr = 255;
+			}
+			return (byte)fr;
 		}
 
 		public Texture2DWrapper Load(AssetLoaderContext context, string assetName)
 		{
-			Stream stream = null;
-			try
+			ImageResult result = null;
+			using (var stream = context.Open(assetName))
 			{
-				stream = context.Open(assetName);
-				if (!stream.CanSeek)
+				if (stream.CanSeek)
 				{
-					// If stream isn't seekable, use MemoryStream instead
-					var ms = new MemoryStream();
-					stream.CopyTo(ms);
-					ms.Seek(0, SeekOrigin.Begin);
-					stream.Dispose();
-					stream = ms;
+					result = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
 				}
-
-				var image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
-
-				var width = PowerOfTwo(image.Width);
-				var height = PowerOfTwo(image.Height);
-
-				var texture = MyraEnvironment.Platform.CreateTexture(width, height);
-				MyraEnvironment.Platform.SetTextureData(texture, new Rectangle(0, 0, image.Width, image.Height), image.Data);
-
-				return new Texture2DWrapper(width, height, texture);
+				else
+				{
+					// If stream doesnt provide seek functionaly, use MemoryStream instead
+					using (var ms = new MemoryStream())
+					{
+						stream.CopyTo(ms);
+						ms.Seek(0, SeekOrigin.Begin);
+						result = ImageResult.FromStream(ms, ColorComponents.RedGreenBlueAlpha);
+					}
+				}
 			}
-			finally
+
+			// Premultiply Alpha
+			var b = result.Data;
+			for (var i = 0; i < result.Data.Length; i += 4)
 			{
-				stream.Dispose();
+				var a = b[i + 3];
+				b[i] = ApplyAlpha(b[i], a);
+				b[i + 1] = ApplyAlpha(b[i + 1], a);
+				b[i + 2] = ApplyAlpha(b[i + 2], a);
 			}
+
+			var texture = MyraEnvironment.Platform.CreateTexture(result.Width, result.Height);
+			MyraEnvironment.Platform.SetTextureData(texture, new Rectangle(0, 0, result.Width, result.Height), result.Data);
+
+			return new Texture2DWrapper(result.Width, result.Height, texture);
 		}
 	}
 }

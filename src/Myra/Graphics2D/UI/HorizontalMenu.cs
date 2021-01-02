@@ -4,6 +4,7 @@ using Myra.Graphics2D.UI.Styles;
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework.Input;
 #elif STRIDE
+using Stride.Input;
 #endif
 
 namespace Myra.Graphics2D.UI

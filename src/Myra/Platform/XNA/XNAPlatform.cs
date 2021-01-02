@@ -1,6 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+
+#if MONOGAME || FNA
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
+#elif STRIDE
+using Stride.Core.Mathematics;
+using Stride.Graphics;
+#endif
 
 namespace Myra.Platform.XNA
 {
@@ -35,7 +41,7 @@ namespace Myra.Platform.XNA
 #if MONOGAME || FNA
 			var texture2d = new Texture2D(_device, width, height);
 #elif STRIDE
-			var texture2d = Texture2D.New2D(_device, width, height, false, PixelFormat.R8G8B8A8_UNorm, TextureFlags.ShaderResource);
+			var texture2d = Texture.New2D(_device, width, height, false, PixelFormat.R8G8B8A8_UNorm, TextureFlags.ShaderResource);
 #endif
 
 			return texture2d;
@@ -60,8 +66,9 @@ namespace Myra.Platform.XNA
 				Array.Copy(data, temp, temp.Length);
 			}
 
-			var context = new GraphicsContext(Texture.GraphicsDevice);
-			Texture.SetData(context.CommandList, temp, 0, 0, new ResourceRegion(bounds.Left, bounds.Top, 0, bounds.Right, bounds.Bottom, 1));
+			var xnaTexture = (Texture)texture;
+			var context = MyraEnvironment.Game.GraphicsContext;
+			xnaTexture.SetData(context.CommandList, temp, 0, 0, new ResourceRegion(bounds.Left, bounds.Top, 0, bounds.Right, bounds.Bottom, 1));
 #endif
 		}
 

@@ -5,7 +5,6 @@ using Myra.Utility;
 using Microsoft.Xna.Framework;
 #elif STRIDE
 using Stride.Core.Mathematics;
-using Stride.Graphics;
 #else
 using System.Drawing;
 #endif

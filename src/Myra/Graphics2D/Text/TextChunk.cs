@@ -8,7 +8,6 @@ using Microsoft.Xna.Framework;
 using Clr = Microsoft.Xna.Framework.Color;
 #elif STRIDE
 using Stride.Core.Mathematics;
-using Stride.Graphics;
 using Clr = Stride.Core.Mathematics.Color;
 #else
 using System.Drawing;
