@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Authors>MyraTeam</Authors>
+    <Product>Myra.PlatformAgnostic</Product>
+    <Description>UI Library</Description>
+    <PackageLicenseUrl>https://en.wikipedia.org/wiki/MIT_License</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/rds1983/Myra</PackageProjectUrl>
+    <AssemblyName>Myra</AssemblyName>
+    <RootNamespace>Myra</RootNamespace>
+    <Version>1.0.0.0</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <PackageId>Myra.PlatformAgnostic</PackageId>
+    <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\**\*.*" />
+  </ItemGroup>  
+
+  <ItemGroup>
+    <PackageReference Include="info.lundin.math.dll" Version="1.2.6" />
+  </ItemGroup>  
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\FontStashSharp\src\FontStashSharp\FontStashSharp.csproj" />
+    <ProjectReference Include="..\..\..\XNAssets\src\XNAssets.csproj" />
+  </ItemGroup>
+</Project>

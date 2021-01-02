@@ -4,10 +4,12 @@ using System.Xml.Serialization;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 
-#if !STRIDE
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
-#else
+#elif STRIDE
 using Stride.Core.Mathematics;
+#else
+using System.Drawing;
 #endif
 
 namespace Myra.Graphics2D.UI
@@ -127,13 +129,13 @@ namespace Myra.Graphics2D.UI
 			var bounds = ActualBounds;
 			if (Orientation == Orientation.Horizontal)
 			{
-				_filler.Draw(context.Batch,
+				_filler.Draw(context,
 					new Rectangle(bounds.X, bounds.Y, (int)(filledPart * bounds.Width), bounds.Height),
 					Color.White);
 			}
 			else
 			{
-				_filler.Draw(context.Batch,
+				_filler.Draw(context,
 					new Rectangle(bounds.X, bounds.Y, bounds.Width, (int)(filledPart * bounds.Height)),
 					Color.White);
 			}

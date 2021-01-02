@@ -6,15 +6,14 @@ using System.Linq;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 
-#if !STRIDE
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
-#else
+#elif STRIDE
 using Stride.Core.Mathematics;
-using Stride.Graphics;
-using Stride.Input;
+#else
+using System.Drawing;
 #endif
 
 namespace Myra.Graphics2D.UI
@@ -46,7 +45,7 @@ namespace Myra.Graphics2D.UI
 		private IReadOnlyCollection<Keys> _downKeys, _lastDownKeys;
 		private Widget _previousKeyboardFocus;
 		private Widget _previousMouseWheelFocus;
-#if !STRIDE
+#if MONOGAME || FNA
 		private TouchCollection _oldTouchState;
 #endif
 		private Widget _scheduleMouseWheelFocus;
@@ -255,22 +254,6 @@ namespace Myra.Graphics2D.UI
 				EnsureRenderContext();
 
 				return _renderContext;
-			}
-		}
-
-		/// <summary>
-		/// Parameters passed to SpriteBatch.Begin
-		/// </summary>
-		public SpriteBatchBeginParams SpriteBatchBeginParams
-		{
-			get
-			{
-				return RenderContext.SpriteBatchBeginParams;
-			}
-
-			set
-			{
-				RenderContext.SpriteBatchBeginParams = value;
 			}
 		}
 
@@ -646,18 +629,15 @@ namespace Myra.Graphics2D.UI
 		{
 			if (_renderContext == null)
 			{
-				var spriteBatch = new SpriteBatch(MyraEnvironment.GraphicsDevice);
-				_renderContext = new RenderContext
-				{
-					Batch = spriteBatch
-				};
+				var renderer = MyraEnvironment.Platform.CreateRenderer();
+				_renderContext = new RenderContext(renderer);
 
 				if (MyraEnvironment.LayoutScale.HasValue)
 				{
 #if MONOGAME || FNA
-					_renderContext.SpriteBatchBeginParams.TransformMatrix = Matrix.CreateScale(MyraEnvironment.LayoutScale.Value);
+					_renderContext.Transform = Matrix.CreateScale(MyraEnvironment.LayoutScale.Value);
 #elif STRIDE
-					_renderContext.SpriteBatchBeginParams.TransformMatrix = Matrix.Scaling(MyraEnvironment.LayoutScale.Value);
+					_renderContext.TransformMatrix = Matrix.Scaling(MyraEnvironment.LayoutScale.Value);
 #endif
 				}
 			}
@@ -667,11 +647,11 @@ namespace Myra.Graphics2D.UI
 		{
 			EnsureRenderContext();
 
-			var oldScissorRectangle = CrossEngineStuff.GetScissor();
+			var oldScissorRectangle = _renderContext.Scissor;
 
 			_renderContext.Begin();
 
-			CrossEngineStuff.SetScissor(InternalBounds);
+			_renderContext.Scissor = InternalBounds;
 			_renderContext.View = InternalBounds;
 			_renderContext.Opacity = Opacity;
 
@@ -691,7 +671,7 @@ namespace Myra.Graphics2D.UI
 
 			_renderContext.End();
 
-			CrossEngineStuff.SetScissor(oldScissorRectangle);
+			_renderContext.Scissor = oldScissorRectangle;
 		}
 
 		public void Render()
@@ -919,12 +899,12 @@ namespace Myra.Graphics2D.UI
 			{
 				var pos = touchState[0].Position;
 
-				if (SpriteBatchBeginParams.TransformMatrix != null)
+				if (_renderContext.Transform != null)
 				{
 					// Apply transform
 					var t = Vector2.Transform(
 						new Vector2(pos.X, pos.Y),
-						SpriteBatchBeginParams.InverseTransform);
+						_renderContext.InverseTransform);
 
 					pos = new Vector2((int)t.X, (int)t.Y);
 				}
@@ -969,12 +949,13 @@ namespace Myra.Graphics2D.UI
 			var mouseInfo = MouseInfoGetter();
 			var mousePosition = mouseInfo.Position;
 
-			if (SpriteBatchBeginParams.TransformMatrix != null)
+			EnsureRenderContext();
+			if (_renderContext.Transform != null)
 			{
 				// Apply transform
 				var t = Vector2.Transform(
 					new Vector2(mousePosition.X, mousePosition.Y),
-					SpriteBatchBeginParams.InverseTransform);
+					_renderContext.InverseTransform);
 
 				mousePosition = new Point((int)t.X, (int)t.Y);
 			}
@@ -1247,7 +1228,7 @@ namespace Myra.Graphics2D.UI
 
 		public static Rectangle DefaultBoundsFetcher()
 		{
-			var size = MyraEnvironment.GraphicsDevice.ViewSize();
+			var size = MyraEnvironment.Platform.ViewSize;
 			return new Rectangle(0, 0, size.X, size.Y);
 		}
 	}

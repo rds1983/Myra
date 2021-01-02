@@ -5,12 +5,13 @@ using System.Xml.Serialization;
 using Myra.MML;
 using Myra.Utility;
 
-#if !STRIDE
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
-#else
+#elif STRIDE
 using Stride.Core.Mathematics;
+#else
+using System.Drawing;
 #endif
-
 
 namespace Myra.Graphics2D.UI
 {

@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Xml.Linq;
 using Myra.MML;
 using XNAssets;
+using FontStashSharp.Interfaces;
+using Myra.Assets;
 
-#if !STRIDE
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-#else
+#elif STRIDE
 using Stride.Core.Mathematics;
-using Texture2D = Stride.Graphics.Texture;
+using Stride.Graphics;
+#else
+using System.Drawing;
 #endif
 
 namespace Myra.Graphics2D.TextureAtlases
@@ -97,7 +100,7 @@ namespace Myra.Graphics2D.TextureAtlases
 		/// <param name="data"></param>
 		/// <param name="textureGetter"></param>
 		/// <returns></returns>
-		public static TextureRegionAtlas Load(string data, Func<string, Texture2D> textureGetter)
+		public static TextureRegionAtlas Load(string data, Func<string, object> textureGetter)
 		{
 			bool isXml;
 			try
@@ -118,7 +121,7 @@ namespace Myra.Graphics2D.TextureAtlases
 			return Gdx.FromGDX(data, textureGetter);
 		}
 
-		public static TextureRegionAtlas FromXml(string xml, Func<string, Texture2D> textureGetter)
+		public static TextureRegionAtlas FromXml(string xml, Func<string, object> textureGetter)
 		{
 			var doc = XDocument.Parse(xml);
 			var root = doc.Root;

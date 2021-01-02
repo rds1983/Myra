@@ -8,13 +8,13 @@ using TextCopy;
 using Myra.Graphics2D.UI.TextEdit;
 using FontStashSharp;
 
-#if !STRIDE
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-#else
+#elif STRIDE
 using Stride.Core.Mathematics;
-using Stride.Graphics;
-using Stride.Input;
+#else
+using System.Drawing;
 #endif
 
 namespace Myra.Graphics2D.UI
@@ -32,7 +32,7 @@ namespace Myra.Graphics2D.UI
 
 		private Point? _lastCursorPosition;
 		private int _cursorIndex;
-		private Point _internalScrolling = Point.Zero;
+		private Point _internalScrolling = Mathematics.PointZero;
 		private bool _suppressRedoStackReset = false;
 		private string _text;
 		private string _hintText;
@@ -1020,9 +1020,9 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			if (maximum == Point.Zero)
+			if (maximum == Mathematics.PointZero)
 			{
-				_internalScrolling = Point.Zero;
+				_internalScrolling = Mathematics.PointZero;
 				_lastCursorPosition = p;
 				return;
 			}
@@ -1349,12 +1349,13 @@ namespace Myra.Graphics2D.UI
 			RenderSelection(context);
 
 			var textColor = TextColor;
-			var opacity = context.Opacity;
+			var oldOpacity = context.Opacity;
 
 			if (HintTextEnabled)
 			{
-				opacity *= 0.5f;
-			} else if (!Enabled && DisabledTextColor != null)
+				context.Opacity *= 0.5f;
+			}
+			else if (!Enabled && DisabledTextColor != null)
 			{
 				textColor = DisabledTextColor.Value;
 			}
@@ -1369,7 +1370,7 @@ namespace Myra.Graphics2D.UI
 			var p = new Point(centeredBounds.Location.X - _internalScrolling.X,
 				centeredBounds.Location.Y - _internalScrolling.Y);
 
-			_formattedText.Draw(context.Batch, TextAlign.Left, new Rectangle(p.X, p.Y, bounds.Width, bounds.Height), context.View, textColor, false, opacity);
+			_formattedText.Draw(context, TextAlign.Left, new Rectangle(p.X, p.Y, bounds.Width, bounds.Height), context.View, textColor, false);
 
 			if (!IsKeyboardFocused)
 			{
@@ -1394,19 +1395,21 @@ namespace Myra.Graphics2D.UI
 						Cursor.Size.X,
 						_formattedText.Font.FontSize));
 			}
+
+			context.Opacity = oldOpacity;
 		}
 
 		protected override Point InternalMeasure(Point availableSize)
 		{
 			if (Font == null)
 			{
-				return Point.Zero;
+				return Mathematics.PointZero;
 			}
 
 			var width = availableSize.X;
 			width -= CursorWidth;
 
-			var result = Point.Zero;
+			var result = Mathematics.PointZero;
 			if (Font != null)
 			{
 				result = _formattedText.Measure(_wrap ? width : default(int?));

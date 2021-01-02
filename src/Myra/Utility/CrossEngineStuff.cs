@@ -1,69 +1,45 @@
-﻿using System.IO;
-
-#if !STRIDE
+﻿#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-#else
+#elif STRIDE
 using Stride.Core.Mathematics;
 using Stride.Graphics;
 using Texture2D = Stride.Graphics.Texture;
+#else
+using System.Drawing;
 #endif
 
 namespace Myra.Utility
 {
 	internal static class CrossEngineStuff
 	{
-		public static Texture2D CreateTexture2D(int width, int height)
+		public static Color CreateColor(int r, int g, int b, int a = 255)
 		{
-#if !STRIDE
-			return new Texture2D(MyraEnvironment.GraphicsDevice, width, height, false, SurfaceFormat.Color);
+#if MONOGAME || FNA || STRIDE
+			return new Color(r, g, b, a);
 #else
-			return Texture2D.New2D(MyraEnvironment.GraphicsDevice, width, height, false, PixelFormat.R8G8B8A8_UNorm_SRgb, TextureFlags.ShaderResource);
+			return Color.FromArgb(a, r, g, b);
 #endif
 		}
 
-		public static void SetData<T>(Texture2D texture, T[] data) where T: struct
+		public static Color MultiplyColor(Color color, float value)
 		{
-#if !STRIDE
-			texture.SetData(data);
+#if MONOGAME || FNA || STRIDE
+			return color * value;
 #else
-			var commandList = MyraEnvironment.Game.GraphicsContext.CommandList;
+			if (value < 0)
+			{
+				value = 0;
+			}
 
-			texture.SetData(commandList, data);
-#endif
-		}
+			if (value > 1)
+			{
+				value = 1;
+			}
 
-		public static Rectangle GetScissor()
-		{
-#if !STRIDE
-			var rect = MyraEnvironment.GraphicsDevice.ScissorRectangle;
-
-			rect.X -= MyraEnvironment.GraphicsDevice.Viewport.X;
-			rect.Y -= MyraEnvironment.GraphicsDevice.Viewport.Y;
-
-			return rect;
-#else
-			return MyraEnvironment.Game.GraphicsContext.CommandList.Scissor;
-#endif
-		}
-
-		public static void SetScissor(Rectangle rect)
-		{
-#if !STRIDE
-			rect.X += MyraEnvironment.GraphicsDevice.Viewport.X;
-			rect.Y += MyraEnvironment.GraphicsDevice.Viewport.Y;
-			MyraEnvironment.GraphicsDevice.ScissorRectangle = rect;
-#else
-			MyraEnvironment.Game.GraphicsContext.CommandList.SetScissorRectangle(rect);
-#endif
-		}
-
-		public static Point ViewSize(this GraphicsDevice device)
-		{
-#if !STRIDE
-			return new Point(device.Viewport.Width, device.Viewport.Height);
-#else
-			return new Point(device.Presenter.BackBuffer.Width, device.Presenter.BackBuffer.Height);
+			return Color.FromArgb((int)(color.A * value),
+				(int)(color.R * value),
+				(int)(color.G * value),
+				(int)(color.G * value));
 #endif
 		}
 	}

@@ -6,13 +6,13 @@ using System.Xml.Serialization;
 using Myra.Attributes;
 using FontStashSharp;
 
-#if !STRIDE
-using Microsoft.Xna.Framework.Input;
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
-#else
+using Microsoft.Xna.Framework.Input;
+#elif STRIDE
 using Stride.Core.Mathematics;
-using Stride.Graphics;
-using Stride.Input;
+#else
+using System.Drawing;
 #endif
 
 namespace Myra.Graphics2D.UI

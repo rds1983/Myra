@@ -1,13 +1,15 @@
 ﻿using System;
 using XNAssets;
+using Myra.Assets;
 
-#if !STRIDE
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-#else
+#elif STRIDE
 using Stride.Core.Mathematics;
 using Stride.Graphics;
-using Texture2D = Stride.Graphics.Texture;
+#else
+using System.Drawing;
 #endif
 
 namespace Myra.Graphics2D.TextureAtlases
@@ -15,10 +17,10 @@ namespace Myra.Graphics2D.TextureAtlases
 	[AssetLoader(typeof(TextureRegionLoader))]
 	public class TextureRegion: IImage
 	{
-		private readonly Texture2D _texture;
+		private readonly object _texture;
 		private readonly Rectangle _bounds;
 
-		public Texture2D Texture
+		public object Texture
 		{
 			get { return _texture; }
 		}
@@ -36,6 +38,7 @@ namespace Myra.Graphics2D.TextureAtlases
 			}
 		}
 
+#if MONOGAME || FNA || STRIDE
 		/// <summary>
 		/// Covers the whole texture
 		/// </summary>
@@ -43,8 +46,9 @@ namespace Myra.Graphics2D.TextureAtlases
 		public TextureRegion(Texture2D texture) : this(texture, new Rectangle(0, 0, texture.Width, texture.Height))
 		{
 		}
+#endif
 
-		public TextureRegion(Texture2D texture, Rectangle bounds)
+		public TextureRegion(object texture, Rectangle bounds)
 		{
 			if (texture == null)
 			{
@@ -67,38 +71,9 @@ namespace Myra.Graphics2D.TextureAtlases
 			_bounds = bounds;
 		}
 
-		public virtual void Draw(SpriteBatch batch, Rectangle dest, Color color)
+		public virtual void Draw(RenderContext context, Rectangle dest, Color color)
 		{
-#if !STRIDE
-			batch.Draw(Texture,
-				dest,
-				Bounds,
-				color);
-#else
-			batch.Draw(Texture,
-				new RectangleF(dest.X, dest.Y, dest.Width, dest.Height),
-				new RectangleF(Bounds.X, Bounds.Y, Bounds.Width, Bounds.Height),
-				color,
-				0.0f,
-				Vector2.Zero);
-#endif
-		}
-
-		public virtual void Draw(SpriteBatch batch, Vector2 pos, Color color)
-		{
-#if !STRIDE
-			batch.Draw(Texture,
-				pos,
-				Bounds,
-				color);
-#else
-			batch.Draw(Texture,
-				pos,
-				new RectangleF(Bounds.X, Bounds.Y, Bounds.Width, Bounds.Height),
-				color,
-				0.0f,
-				Vector2.Zero);
-#endif
+			context.Draw(Texture, dest, Bounds, color);
 		}
 	}
 }

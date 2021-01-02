@@ -18,7 +18,7 @@ namespace Myra.Assets
 		private TextureWithOffset TextureGetter(AssetLoaderContext context, string name)
 		{
 			var textureRegion = context.Load<TextureRegion>(name);
-			return new TextureWithOffset(new Texture2DWrapper(textureRegion.Texture), textureRegion.Bounds.Location);
+			return new TextureWithOffset(textureRegion.Texture, textureRegion.Bounds.Location);
 		}
 	}
 }

@@ -1,9 +1,25 @@
 ﻿using System;
 
+#if MONOGAME || FNA
+using Microsoft.Xna.Framework;
+#elif STRIDE
+using Stride.Core.Mathematics;
+#else
+using System.Drawing;
+using Vector2 = System.Drawing.PointF;
+#endif
+
 namespace Myra.Utility
 {
 	internal static class Mathematics
 	{
+		public static readonly Vector2 Vector2Zero = new Vector2(0, 0);
+		public static readonly Vector2 Vector2One = new Vector2(1, 1);
+
+		public static readonly Point PointZero = new Point(0, 0);
+
+		public static readonly Rectangle RectangleOne = new Rectangle(0, 0, 1, 1);
+
 		/// <summary>
 		/// The value for which all absolute numbers smaller than are considered equal to zero.
 		/// </summary>

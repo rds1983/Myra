@@ -2,12 +2,14 @@
 using System.Reflection;
 using XNAssets;
 using XNAssets.Utility;
+using Myra.Platform;
 using Myra.Assets;
+using Myra.Platform.XNA;
 
-#if !STRIDE
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-#else
+#elif STRIDE
 using Stride.Engine;
 using Stride.Graphics;
 #endif
@@ -17,11 +19,14 @@ namespace Myra
 	public static class MyraEnvironment
 	{
 		private static AssetManager _defaultAssetManager;
+		private static IMyraPlatform _platform;
 		private static bool _assetsLoadersUpdated = false;
 
-		private static Game _game;
-
 		public static event EventHandler GameDisposed;
+
+#if MONOGAME || FNA || STRIDE
+
+		private static Game _game;
 
 		public static Game Game
 		{
@@ -55,6 +60,7 @@ namespace Myra
 #endif
 
 				_game = value;
+				_platform = new XNAPlatform(_game.GraphicsDevice);
 
 #if !STRIDE
 				if (_game != null)
@@ -64,6 +70,7 @@ namespace Myra
 #endif
 				if (!_assetsLoadersUpdated)
 				{
+					AssetManager.SetAssetLoader(new Texture2DLoader());
 					AssetManager.SetAssetLoader(new StaticSpriteFontLoader());
 					AssetManager.SetAssetLoader(new FontSystemLoader());
 					AssetManager.SetAssetLoader(new DynamicSpriteFontLoader());
@@ -71,6 +78,33 @@ namespace Myra
 
 					_assetsLoadersUpdated = true;
 				}
+			}
+		}
+
+		public static GraphicsDevice GraphicsDevice
+		{
+			get
+			{
+				return Game.GraphicsDevice;
+			}
+		}
+#endif
+
+		public static IMyraPlatform Platform
+		{
+			get
+			{
+				if (_platform == null)
+				{
+					throw new Exception("MyraEnvironment.Game is null. Please, set it to the Game instance before using Myra.");
+				}
+
+				return _platform;
+			}
+
+			private set
+			{
+				_platform = value;
 			}
 		}
 
@@ -83,7 +117,11 @@ namespace Myra
 			{
 				if (_defaultAssetManager == null)
 				{
+#if MONOGAME || FNA || STRIDE
 					_defaultAssetManager = new AssetManager(GraphicsDevice, new FileAssetResolver(PathUtils.ExecutingAssemblyDirectory));
+#else
+					_defaultAssetManager = new AssetManager(new FileAssetResolver(PathUtils.ExecutingAssemblyDirectory));
+#endif
 				}
 
 				return _defaultAssetManager;
@@ -104,14 +142,6 @@ namespace Myra
 			if (ev != null)
 			{
 				ev(null, EventArgs.Empty);
-			}
-		}
-
-		public static GraphicsDevice GraphicsDevice
-		{
-			get
-			{
-				return Game.GraphicsDevice;
 			}
 		}
 

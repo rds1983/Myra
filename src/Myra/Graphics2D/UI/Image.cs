@@ -1,11 +1,13 @@
 ﻿using System.ComponentModel;
-using System.Xml.Serialization;
 using Myra.Graphics2D.UI.Styles;
+using Myra.Utility;
 
-#if !STRIDE
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
-#else
+#elif STRIDE
 using Stride.Core.Mathematics;
+#else
+using System.Drawing;
 #endif
 
 namespace Myra.Graphics2D.UI
@@ -88,9 +90,9 @@ namespace Myra.Graphics2D.UI
 
 		protected override Point InternalMeasure(Point availableSize)
 		{
-			var result = _image != null ? _image.Size : Point.Zero;
+			var result = _image != null ? _image.Size : Mathematics.PointZero;
 
-			var overSize = _overImage != null ? _overImage.Size : Point.Zero;
+			var overSize = _overImage != null ? _overImage.Size : Mathematics.PointZero;
 			if (overSize.X > result.X)
 			{
 				result.X = overSize.X;
@@ -101,7 +103,7 @@ namespace Myra.Graphics2D.UI
 				result.Y = overSize.Y;
 			}
 
-			var pressedSize = _pressedImage != null ? _pressedImage.Size : Point.Zero;
+			var pressedSize = _pressedImage != null ? _pressedImage.Size : Mathematics.PointZero;
 			if (pressedSize.X > result.X)
 			{
 				result.X = pressedSize.X;

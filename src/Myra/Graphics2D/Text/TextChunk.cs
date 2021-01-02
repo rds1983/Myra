@@ -3,14 +3,17 @@ using System;
 using System.Collections.Generic;
 using FontStashSharp;
 
-#if !STRIDE
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Clr = Microsoft.Xna.Framework.Color;
-#else
+#elif STRIDE
 using Stride.Core.Mathematics;
 using Stride.Graphics;
 using Clr = Stride.Core.Mathematics.Color;
+#else
+using System.Drawing;
+using Clr = System.Drawing.Color;
+using Vector2 = System.Drawing.PointF;
 #endif
 
 namespace Myra.Graphics2D.Text
@@ -69,7 +72,7 @@ namespace Myra.Graphics2D.Text
 				});
 			}
 
-			var offset = Vector2.Zero;
+			var offset = Mathematics.Vector2Zero;
 			for (var i = 0; i < _text.Length; ++i)
 			{
 				Vector2 v = _font.MeasureString(_text[i].ToString());
@@ -127,9 +130,9 @@ namespace Myra.Graphics2D.Text
 			return i;
 		}
 
-		public void Draw(SpriteBatch batch, Point pos, Color color, float opacity = 1.0f)
+		public void Draw(RenderContext context, Point pos, Color color)
 		{
-			batch.DrawString(_font, _text, new Vector2(pos.X, pos.Y), color * opacity);
+			context.DrawString(_font, _text, pos, color);
 
 			if (MyraEnvironment.DrawTextGlyphsFrames && !string.IsNullOrEmpty(_text) && Glyphs != null)
 			{
@@ -141,7 +144,7 @@ namespace Myra.Graphics2D.Text
 						pos.Y + g.Bounds.Y,
 						g.Bounds.Width, g.Bounds.Height);
 
-					batch.DrawRectangle(r, Clr.White);
+					context.DrawRectangle(r, Clr.White);
 				}
 			}
 		}

@@ -38,13 +38,13 @@ namespace Myra.Assets
 			switch (fontType)
 			{
 				case FontType.Regular:
-					fontSystem = FontSystemFactory.Create(context.GraphicsDevice, 1024, 1024);
+					fontSystem = new FontSystem(MyraEnvironment.Platform, 1024, 1024);
 					break;
 				case FontType.Blurry:
-					fontSystem = FontSystemFactory.CreateBlurry(context.GraphicsDevice, 1024, 1024, amount);
+					fontSystem = new FontSystem(MyraEnvironment.Platform, 1024, 1024, amount);
 					break;
 				case FontType.Stroked:
-					fontSystem = FontSystemFactory.CreateStroked(context.GraphicsDevice, 1024, 1024, amount);
+					fontSystem = new FontSystem(MyraEnvironment.Platform, 1024, 1024, 0, amount);
 					break;
 			}
 

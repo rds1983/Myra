@@ -4,13 +4,6 @@ using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.Brushes;
 
-#if !STRIDE
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-#else
-using Stride.Core.Mathematics;
-#endif
-
 namespace Myra.Graphics2D.UI
 {
 	partial class DebugOptionsWindow: Window

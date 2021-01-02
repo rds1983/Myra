@@ -10,7 +10,6 @@ namespace Myra.Graphics2D.UI.Styles
 {
 	public class StylesheetLoader : IAssetLoader<Stylesheet>
 	{
-
 		public Stylesheet Load(AssetLoaderContext context, string assetName)
 		{
 			var xml = context.Load<string>(assetName);

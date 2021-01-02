@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-#if !STRIDE
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
-#else
+#elif STRIDE
 using Stride.Core.Mathematics;
+#else
+using System.Drawing;
 #endif
 
 namespace Myra.Utility
@@ -163,14 +165,14 @@ namespace Myra.Utility
                 case "width":
                     if (widgets.IsEmpty)
                     {
-                        return MyraEnvironment.Game.GraphicsDevice.ViewSize().X;
+                        return MyraEnvironment.Platform.ViewSize.X;
                     }
                     return widgets.Width;
                 case "h":
                 case "height":
                     if (widgets.IsEmpty)
                     {
-                        return MyraEnvironment.Game.GraphicsDevice.ViewSize().Y;
+                        return MyraEnvironment.Platform.ViewSize.Y;
                     }
                     return widgets.Height;
                 default:

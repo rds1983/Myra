@@ -1,15 +1,14 @@
 ﻿using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
-using Myra.Utility;
 using XNAssets;
+using Myra.Assets;
 
-#if !STRIDE
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-#else
+#elif STRIDE
 using Stride.Core.Mathematics;
-using Texture2D = Stride.Graphics.Texture;
-using RasterizerState = Stride.Graphics.RasterizerStateDescription;
+#else
+using System.Drawing;
 #endif
 
 namespace Myra
@@ -19,9 +18,8 @@ namespace Myra
 		private static AssetManager _assetManager;
 		private static TextureRegionAtlas _uiTextureRegionAtlas;
 		private static Stylesheet _uiStylesheet;
-		private static Texture2D _uiBitmap;
-		private static RasterizerState _uiRasterizerState;
-		private static Texture2D _white;
+		private static object _uiBitmap;
+		private static object _whiteTexture;
 		private static TextureRegion _whiteRegion;
 
 		private static AssetManager AssetManager
@@ -37,17 +35,19 @@ namespace Myra
 			}
 		}
 
-		public static Texture2D White
+		public static object WhiteTexture
 		{
 			get
 			{
-				if (_white == null)
+				if (_whiteTexture == null)
 				{
-					_white = CrossEngineStuff.CreateTexture2D(1, 1);
-					CrossEngineStuff.SetData(_white, new[] {Color.White});
+					var texture = MyraEnvironment.Platform.CreateTexture(1, 1);
+					MyraEnvironment.Platform.SetTextureData(texture, new Rectangle(0, 0, 1, 1), new byte[] { 255, 255, 255, 255 });
+
+					_whiteTexture = texture;
 				}
 
-				return _white;
+				return _whiteTexture;
 			}
 		}
 
@@ -92,7 +92,7 @@ namespace Myra
 			}
 		}
 
-		public static Texture2D UIBitmap
+		public static object UIBitmap
 		{
 			get
 			{
@@ -101,25 +101,9 @@ namespace Myra
 					return _uiBitmap;
 				}
 
-				_uiBitmap = AssetManager.Load<Texture2D>("default_ui_skin_atlas.png");
+				var wrapper = AssetManager.Load<Texture2DWrapper>("default_ui_skin_atlas.png");
+				_uiBitmap = wrapper.Texture;
 				return _uiBitmap;
-			}
-		}
-
-		public static RasterizerState UIRasterizerState
-		{
-			get
-			{
-				if (_uiRasterizerState != null)
-				{
-					return _uiRasterizerState;
-				}
-
-				_uiRasterizerState = new RasterizerState
-				{
-					ScissorTestEnable = true
-				};
-				return _uiRasterizerState;
 			}
 		}
 
@@ -136,19 +120,7 @@ namespace Myra
 			}
 
 			_whiteRegion = null;
-			if (_white != null)
-			{
-				_white.Dispose();
-				_white = null;
-			}
-		
-#if !STRIDE
-			if (_uiRasterizerState != null)
-			{
-				_uiRasterizerState.Dispose();
-				_uiRasterizerState = null;
-			}
-#endif
+			_whiteTexture = null;
 		}
 	}
 }

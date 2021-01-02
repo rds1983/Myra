@@ -4,10 +4,12 @@ using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
 using Myra.Utility;
 
-#if !STRIDE
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework.Input;
+#elif STRIDE
+using Stride.Core.Mathematics;
 #else
-using Stride.Input;
+using System.Drawing;
 #endif
 
 namespace Myra.Graphics2D.UI

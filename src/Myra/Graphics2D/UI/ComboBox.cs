@@ -6,12 +6,13 @@ using Myra.Utility;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 
-#if !STRIDE
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-#else
+#elif STRIDE
 using Stride.Core.Mathematics;
-using Stride.Input;
+#else
+using System.Drawing;
 #endif
 
 namespace Myra.Graphics2D.UI

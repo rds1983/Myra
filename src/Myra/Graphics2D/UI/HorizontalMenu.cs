@@ -1,11 +1,9 @@
 ﻿using System.ComponentModel;
-using System.Linq;
 using Myra.Graphics2D.UI.Styles;
 
-#if !STRIDE
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework.Input;
-#else
-using Stride.Input;
+#elif STRIDE
 #endif
 
 namespace Myra.Graphics2D.UI

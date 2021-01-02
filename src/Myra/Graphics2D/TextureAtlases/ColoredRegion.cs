@@ -1,16 +1,18 @@
-﻿using System;
+﻿using Myra.Utility;
+using System;
 
-#if !STRIDE
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-#else
+#elif STRIDE
 using Stride.Core.Mathematics;
 using Stride.Graphics;
+#else
+using System.Drawing;
 #endif
 
 namespace Myra.Graphics2D.TextureAtlases
 {
-	public class ColoredRegion: IImage
+	public class ColoredRegion : IImage
 	{
 		private Color _color = Color.White;
 
@@ -48,19 +50,20 @@ namespace Myra.Graphics2D.TextureAtlases
 			Color = color;
 		}
 
-		public void Draw(SpriteBatch batch, Rectangle dest, Color color)
+		public void Draw(RenderContext context, Rectangle dest, Color color)
 		{
 			if (color == Color.White)
 			{
-				TextureRegion.Draw(batch, dest, Color);
-			} else
+				TextureRegion.Draw(context, dest, Color);
+			}
+			else
 			{
-				var c = new Color((int)(Color.R * color.R / 255.0f),
+				var c = CrossEngineStuff.CreateColor((int)(Color.R * color.R / 255.0f),
 					(int)(Color.G * color.G / 255.0f),
 					(int)(Color.B * color.B / 255.0f),
 					(int)(Color.A * color.A / 255.0f));
 
-				TextureRegion.Draw(batch, dest, c);
+				TextureRegion.Draw(context, dest, c);
 			}
 		}
 	}

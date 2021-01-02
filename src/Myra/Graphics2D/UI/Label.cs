@@ -3,12 +3,14 @@ using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
 using System;
 using FontStashSharp;
+using Myra.Utility;
 
-#if !STRIDE
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
-#else
+#elif STRIDE
 using Stride.Core.Mathematics;
-using Stride.Graphics;
+#else
+using System.Drawing;
 #endif
 
 namespace Myra.Graphics2D.UI
@@ -198,21 +200,21 @@ namespace Myra.Graphics2D.UI
 
 			var textToDraw = (_autoEllipsisMethod == AutoEllipsisMethod.None) 
 				? _formattedText : _autoEllipsisText;
-			textToDraw.Draw(context.Batch, TextAlign, bounds, context.View, color, useChunkColor, context.Opacity);
+			textToDraw.Draw(context, TextAlign, bounds, context.View, color, useChunkColor);
 		}
 
 		protected override Point InternalMeasure(Point availableSize)
 		{
 			if (Font == null)
 			{
-				return Point.Zero;
+				return Mathematics.PointZero;
 			}
 
 			var width = availableSize.X;
 			var height = availableSize.Y;
 			var ellipsisEnabled = _autoEllipsisMethod != AutoEllipsisMethod.None;
 
-			var result = Point.Zero;
+			var result = Mathematics.PointZero;
 			if (ellipsisEnabled)
 			{
 				_autoEllipsisText = ApplyAutoEllipsis(width, height);

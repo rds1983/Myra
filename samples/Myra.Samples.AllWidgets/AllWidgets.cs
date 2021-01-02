@@ -1,6 +1,7 @@
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.ColorPicker;
 using Myra.Graphics2D.UI.File;
+using System.IO;
 
 namespace Myra.Samples.AllWidgets
 {

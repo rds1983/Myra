@@ -1,10 +1,11 @@
 using Myra.Utility;
 
-#if !STRIDE
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
-#else
+#elif STRIDE
 using Stride.Core.Mathematics;
-using ColorHSV = Myra.Utility.ColorHSV;
+#else
+using System.Drawing;
 #endif
 
 namespace Myra.Graphics2D.UI.ColorPicker
@@ -43,7 +44,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 				var colorDisplay = ColorPickerPanel.GetUserColorImage(i);
 				var color = colorDisplay.Color;
 				var alpha = (int) (colorDisplay.Opacity * 255);
-				ColorPickerPanel.UserColors[i] = new Color(color.R, color.G, color.B, alpha);
+				ColorPickerPanel.UserColors[i] = CrossEngineStuff.CreateColor(color.R, color.G, color.B, alpha);
 			}
 		}
 	}

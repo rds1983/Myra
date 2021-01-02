@@ -1,19 +1,15 @@
 using XNAssets;
+using FontStashSharp.Interfaces;
+using Myra.Graphics2D.TextureAtlases;
 
-#if !STRIDE
-using Microsoft.Xna.Framework.Graphics;
-#else
-using Texture2D = Stride.Graphics.Texture;
-#endif
-
-namespace Myra.Graphics2D.TextureAtlases
+namespace Myra.Assets
 {
 	internal class TextureRegionAtlasLoader : IAssetLoader<TextureRegionAtlas>
 	{
 		public TextureRegionAtlas Load(AssetLoaderContext context, string assetName)
 		{
 			var data = context.Load<string>(assetName);
-			return TextureRegionAtlas.Load(data, name => context.Load<Texture2D>(name));
+			return TextureRegionAtlas.Load(data, name => context.Load<Texture2DWrapper>(name).Texture);
 		}
 	}
 }

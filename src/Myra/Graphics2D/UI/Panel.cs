@@ -1,7 +1,11 @@
-#if !STRIDE
+using Myra.Utility;
+
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
-#else
+#elif STRIDE
 using Stride.Core.Mathematics;
+#else
+using System.Drawing;
 #endif
 
 namespace Myra.Graphics2D.UI
@@ -28,7 +32,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override Point InternalMeasure(Point availableSize)
 		{
-			Point result = Point.Zero;
+			Point result = Mathematics.PointZero;
 
 			foreach (var control in _widgets)
 			{

@@ -4,12 +4,6 @@ using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Serialization;
 
-#if !STRIDE
-using Microsoft.Xna.Framework;
-#else
-using Stride.Core.Mathematics;
-#endif
-
 namespace Myra.Graphics2D.UI
 {
 	public abstract class Slider : SingleItemContainer<ImageButton>

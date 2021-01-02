@@ -7,12 +7,14 @@ using Myra.MML;
 using Myra.Graphics2D.UI.Properties;
 using Myra.Attributes;
 
-#if !STRIDE
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-#else
+#elif STRIDE
 using Stride.Core.Mathematics;
-using Stride.Input;
+#else
+using System.Drawing;
+using Vector2 = System.Drawing.PointF;
 #endif
 
 namespace Myra.Graphics2D.UI
@@ -1006,36 +1008,16 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var batch = context.Batch;
-			var oldScissorRectangle = CrossEngineStuff.GetScissor();
+			var oldScissorRectangle = context.Scissor;
 			if (ClipToBounds && !MyraEnvironment.DisableClipping)
 			{
 				var newScissorRectangle = Rectangle.Intersect(oldScissorRectangle, view);
-
 				if (newScissorRectangle.IsEmpty)
 				{
 					return;
 				}
 
-				context.Flush();
-
-				if (context.SpriteBatchBeginParams.TransformMatrix.HasValue)
-				{
-					var pos = new Vector2(newScissorRectangle.X, newScissorRectangle.Y);
-					var size = new Vector2(newScissorRectangle.Width, newScissorRectangle.Height);
-
-#if MONOGAME || FNA
-					pos = Vector2.Transform(pos, context.SpriteBatchBeginParams.TransformMatrix.Value);
-					size = Vector2.Transform(size, context.SpriteBatchBeginParams.TransformMatrix.Value);
-#elif STRIDE
-					pos = Vector2.TransformCoordinate(pos, context.SpriteBatchBeginParams.TransformMatrix.Value);
-					size = Vector2.TransformCoordinate(size, context.SpriteBatchBeginParams.TransformMatrix.Value);
-#endif
-
-					newScissorRectangle = new Rectangle((int) pos.X, (int) pos.Y, (int) size.X, (int) size.Y);  
-				}
-
-				CrossEngineStuff.SetScissor(newScissorRectangle);
+				context.Scissor = newScissorRectangle;
 			}
 
 			var oldOpacity = context.Opacity;
@@ -1090,26 +1072,24 @@ namespace Myra.Graphics2D.UI
 			// Optional debug rendering
 			if (MyraEnvironment.DrawWidgetsFrames)
 			{
-				batch.DrawRectangle(Bounds, Color.LightGreen);
+				context.DrawRectangle(Bounds, Color.LightGreen);
 			}
 
 			if (MyraEnvironment.DrawKeyboardFocusedWidgetFrame && IsKeyboardFocused)
 			{
-				batch.DrawRectangle(Bounds, Color.Red);
+				context.DrawRectangle(Bounds, Color.Red);
 			}
 
 			if (MyraEnvironment.DrawMouseWheelFocusedWidgetFrame && IsMouseWheelFocused)
 			{
-				batch.DrawRectangle(Bounds, Color.Yellow);
+				context.DrawRectangle(Bounds, Color.Yellow);
 			}
 
 			if (ClipToBounds && !MyraEnvironment.DisableClipping)
 			{
 				// Restore scissor
-				context.Flush();
-				CrossEngineStuff.SetScissor(oldScissorRectangle);
+				context.Scissor = oldScissorRectangle;
 			}
-
 		}
 
 		public virtual void InternalRender(RenderContext context)
@@ -1200,7 +1180,7 @@ namespace Myra.Graphics2D.UI
 
 		protected virtual Point InternalMeasure(Point availableSize)
 		{
-			return Point.Zero;
+			return Mathematics.PointZero;
 		}
 
 		public virtual void Arrange()

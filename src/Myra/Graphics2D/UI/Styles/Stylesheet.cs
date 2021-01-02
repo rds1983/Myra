@@ -9,11 +9,12 @@ using FontStashSharp;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.Brushes;
 
-#if !STRIDE
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
-#else
+#elif STRIDE
 using Stride.Core.Mathematics;
-using Stride.Graphics;
+#else
+using System.Drawing;
 #endif
 
 namespace Myra.Graphics2D.UI.Styles

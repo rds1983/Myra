@@ -1,12 +1,15 @@
 ﻿using XNAssets;
+using Myra.Graphics2D.TextureAtlases;
 
-#if !STRIDE
-using Microsoft.Xna.Framework.Graphics;
+#if MONOGAME || FNA
+using Microsoft.Xna.Framework;
+#elif STRIDE
+using Stride.Core.Mathematics;
 #else
-using Texture2D = Stride.Graphics.Texture;
+using System.Drawing;
 #endif
 
-namespace Myra.Graphics2D.TextureAtlases
+namespace Myra.Assets
 {
 	internal class TextureRegionLoader : IAssetLoader<TextureRegion>
 	{
@@ -22,8 +25,8 @@ namespace Myra.Graphics2D.TextureAtlases
 			}
 
 			// Ordinary texture
-			var texture = context.Load<Texture2D>(assetName);
-			return new TextureRegion(texture);
+			var texture = context.Load<Texture2DWrapper>(assetName);
+			return new TextureRegion(texture.Texture, new Rectangle(0, 0, texture.Width, texture.Height));
 		}
 	}
 }

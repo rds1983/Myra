@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Text;
 using Myra.Graphics2D.UI;
 using FontStashSharp;
+using Myra.Utility;
 
-#if !STRIDE
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-#else
+#elif STRIDE
 using Stride.Core.Mathematics;
 using Stride.Graphics;
+#else
+using System.Drawing;
 #endif
 
 namespace Myra.Graphics2D.Text
@@ -216,7 +218,7 @@ namespace Myra.Graphics2D.Text
 
 				_stringBuilder.Append(c);
 
-				var sz = Point.Zero;
+				var sz = Mathematics.PointZero;
 
 				if (c != '\n')
 				{
@@ -271,7 +273,7 @@ namespace Myra.Graphics2D.Text
 
 		public Point Measure(int? width)
 		{
-			var result = Point.Zero;
+			var result = Mathematics.PointZero;
 
 			var key = GetMeasureKey(width);
 			if (_measures.TryGetValue(key, out result))
@@ -390,7 +392,7 @@ namespace Myra.Graphics2D.Text
 			}
 
 			// Calculate size
-			_size = Point.Zero;
+			_size = Mathematics.PointZero;
 			for (i = 0; i < _lines.Count; ++i)
 			{
 				line = _lines[i];
@@ -492,7 +494,7 @@ namespace Myra.Graphics2D.Text
 			return null;
 		}
 
-		public void Draw(SpriteBatch batch, TextAlign align, Rectangle bounds, Rectangle clip, Color textColor, bool useChunkColor, float opacity = 1.0f)
+		public void Draw(RenderContext context, TextAlign align, Rectangle bounds, Rectangle clip, Color textColor, bool useChunkColor)
 		{
 			var y = bounds.Y;
 			foreach (var line in Lines)
@@ -511,7 +513,7 @@ namespace Myra.Graphics2D.Text
 							break;
 					}
 
-					textColor = line.Draw(batch, new Point(x, y), textColor, useChunkColor, opacity);
+					textColor = line.Draw(context, new Point(x, y), textColor, useChunkColor);
 				}
 				else
 				{

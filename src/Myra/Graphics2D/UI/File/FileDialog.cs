@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-
-#if !STRIDE
-using Microsoft.Xna.Framework;
-#else
-using Stride.Core.Mathematics;
-#endif
+using Myra.Utility;
 
 namespace Myra.Graphics2D.UI.File
 {
@@ -365,7 +360,7 @@ namespace Myra.Graphics2D.UI.File
 			_gridFiles.Widgets.Clear();
 			_paths.Clear();
 
-			_scrollPane.ScrollPosition = Point.Zero;
+			_scrollPane.ScrollPosition = Mathematics.PointZero;
 
 			var path = _textFieldPath.Text;
 			var folders = Directory.EnumerateDirectories(path);

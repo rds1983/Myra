@@ -7,12 +7,6 @@ using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
 using Myra.Attributes;
 
-#if !STRIDE
-using Microsoft.Xna.Framework;
-#else
-using Stride.Core.Mathematics;
-#endif
-
 namespace Myra.Graphics2D.UI
 {
 	public abstract class SplitPane : SingleItemContainer<Grid>
