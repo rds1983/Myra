@@ -11,10 +11,10 @@ using Myra.MML;
 using Myra.Graphics2D.UI.File;
 using Myra.Graphics2D.TextureAtlases;
 using System.IO;
-using Myra.Graphics2D.Brushes;
 using AssetManagementBase.Utility;
 using Myra.Attributes;
 using FontStashSharp;
+using Myra.Graphics2D.Brushes;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -22,6 +22,7 @@ using Microsoft.Xna.Framework;
 using Stride.Core.Mathematics;
 #else
 using System.Drawing;
+using SolidBrush = Myra.Graphics2D.Brushes.SolidBrush;
 #endif
 
 namespace Myra.Graphics2D.UI.Properties

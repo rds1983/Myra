@@ -466,7 +466,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 		private void OnColorChanged(ColorHSV h)
 		{
 			var c = h.ToRGB();
-			c.A = 255;
+			c = CrossEngineStuff.CreateColor(c.R, c.G, c.B, 255);
 			OnColorChanged(c, h);
 		}
 

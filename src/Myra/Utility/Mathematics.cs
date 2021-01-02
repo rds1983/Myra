@@ -41,5 +41,10 @@ namespace Myra.Utility
 		{
 			return a.EpsilonEquals(0.0f);
 		}
+
+		public static Vector2 Transform(this Vector2 position, Matrix matrix)
+		{
+			return new Vector2((position.X * matrix.M11) + (position.Y * matrix.M21) + matrix.M41, (position.X * matrix.M12) + (position.Y * matrix.M22) + matrix.M42);
+		}
 	}
 }

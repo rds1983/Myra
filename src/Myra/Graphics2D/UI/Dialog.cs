@@ -7,6 +7,8 @@ using Myra.Attributes;
 using Microsoft.Xna.Framework.Input;
 #elif STRIDE
 using Stride.Input;
+#else
+using Myra.Platform;
 #endif
 
 namespace Myra.Graphics2D.UI

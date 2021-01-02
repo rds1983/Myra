@@ -913,9 +913,7 @@ namespace Myra.Graphics2D.UI
 			if (_renderContext.Transform != null)
 			{
 				// Apply transform
-				var t = Vector2.Transform(
-					new Vector2(mousePosition.X, mousePosition.Y),
-					_renderContext.InverseTransform);
+				var t = new Vector2(mousePosition.X, mousePosition.Y).Transform(_renderContext.InverseTransform);
 
 				mousePosition = new Point((int)t.X, (int)t.Y);
 			}

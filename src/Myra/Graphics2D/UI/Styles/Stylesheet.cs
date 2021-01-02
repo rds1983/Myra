@@ -15,6 +15,7 @@ using Microsoft.Xna.Framework;
 using Stride.Core.Mathematics;
 #else
 using System.Drawing;
+using SolidBrush = Myra.Graphics2D.Brushes.SolidBrush;
 #endif
 
 namespace Myra.Graphics2D.UI.Styles

@@ -11,7 +11,8 @@ using Microsoft.Xna.Framework;
 using Stride.Core.Mathematics;
 #else
 using System.Drawing;
-using Point = System.Drawing.PointF;
+using Vector2 = System.Drawing.PointF;
+
 #endif
 
 namespace Myra.Graphics2D
@@ -57,13 +58,8 @@ namespace Myra.Graphics2D
 			{
 				if (Transform != null)
 				{
-#if MONOGAME || FNA
-					var pos = Vector2.Transform(new Vector2(value.X, value.Y), Transform.Value);
-					var size = Vector2.Transform(new Vector2(value.Width, value.Height), Transform.Value);
-#elif STRIDE
-					var pos = Vector2.TransformCoordinate(new Vector2(value.X, value.Y), Transform.Value);
-					var size = Vector2.TransformCoordinate(new Vector2(value.Width, value.Height), Transform.Value);
-#endif
+					var pos = new Vector2(value.X, value.Y).Transform(Transform.Value);
+					var size = new Vector2(value.Width, value.Height).Transform(Transform.Value);
 
 					value = new Rectangle((int)pos.X, (int)pos.Y, (int)size.X, (int)size.Y);
 				}

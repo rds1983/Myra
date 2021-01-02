@@ -14,6 +14,7 @@ using Stride.Core.Mathematics;
 using Stride.Input;
 #else
 using System.Drawing;
+using Myra.Platform;
 #endif
 
 namespace Myra.Graphics2D.UI

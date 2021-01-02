@@ -1,11 +1,14 @@
 ﻿// This code had been borrowed from the MonoGame.Extended project: https://github.com/craftworkgames/MonoGame.Extended
 
 
-#if !STRIDE
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework.Input;
-#else
+#elif STRIDE
 using Stride.Input;
+#else
+using Myra.Platform;
 #endif
+
 
 namespace Myra.Utility
 {

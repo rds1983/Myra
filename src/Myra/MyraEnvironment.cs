@@ -4,14 +4,15 @@ using AssetManagementBase;
 using AssetManagementBase.Utility;
 using Myra.Platform;
 using Myra.Assets;
-using Myra.Platform.XNA;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Myra.Platform.XNA;
 #elif STRIDE
 using Stride.Engine;
 using Stride.Graphics;
+using Myra.Platform.XNA;
 #endif
 
 namespace Myra
