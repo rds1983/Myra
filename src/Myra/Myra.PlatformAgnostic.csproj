@@ -9,9 +9,8 @@
     <RootNamespace>Myra</RootNamespace>
     <Version>1.0.0.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <DefineConstants>$(DefineConstants);PLATFORM_AGNOSTIC</DefineConstants>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
-    <PackageId>Myra.PlatformAgnostic</PackageId>
-    <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,11 +18,8 @@
   </ItemGroup>  
 
   <ItemGroup>
+    <PackageReference Include="AssetManagementBase" Version="0.5.2" />
+    <PackageReference Include="FontStashSharp" Version="0.9.1" />
     <PackageReference Include="info.lundin.math.dll" Version="1.2.6" />
-  </ItemGroup>  
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\FontStashSharp\src\FontStashSharp\FontStashSharp.csproj" />
-    <ProjectReference Include="..\..\..\XNAssets\src\XNAssets.csproj" />
   </ItemGroup>
 </Project>

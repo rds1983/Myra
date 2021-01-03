@@ -191,24 +191,59 @@ namespace Myra.Graphics2D
 		}
 #endif
 
-		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color color)
+		/// <summary>
+		/// Draws a text
+		/// </summary>
+		/// <param name="text">The text which will be drawn.</param>
+		/// <param name="position">The drawing location on screen.</param>
+		/// <param name="color">A color mask.</param>
+		/// <param name="rotation">A rotation of this text in radians.</param>
+		/// <param name="origin">Center of the rotation.</param>
+		/// <param name="scale">A scaling of this text.</param>
+		/// <param name="layerDepth">A depth of the layer of this string.</param>
+		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color color, Vector2 scale, float rotation, Vector2 origin, float layerDepth = 0.0f)
 		{
-			font.DrawText(_renderer, text, position, color);
+			font.DrawText(_renderer, text, position, color, scale, rotation, origin, layerDepth);
 		}
 
-		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color color, Vector2 origin, Vector2 scale, float layerDepth)
-		{
-			font.DrawText(_renderer, text, position, color, scale, origin, layerDepth);
-		}
-
-		public void DrawString(SpriteFontBase font, StringBuilder text, Vector2 position, Color color, Vector2 scale, float layerDepth)
+		/// <summary>
+		/// Draws a text
+		/// </summary>
+		/// <param name="text">The text which will be drawn.</param>
+		/// <param name="position">The drawing location on screen.</param>
+		/// <param name="color">A color mask.</param>
+		/// <param name="scale">A scaling of this text.</param>
+		/// <param name="layerDepth">A depth of the layer of this string.</param>
+		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color color, Vector2 scale, float layerDepth = 0.0f)
 		{
 			font.DrawText(_renderer, text, position, color, scale, layerDepth);
 		}
 
-		public void DrawString(SpriteFontBase font, StringBuilder text, Vector2 position, Color color)
+		/// <summary>
+		/// Draws a text
+		/// </summary>
+		/// <param name="text">The text which will be drawn.</param>
+		/// <param name="position">The drawing location on screen.</param>
+		/// <param name="color">A color mask.</param>
+		/// <param name="layerDepth">A depth of the layer of this string.</param>
+		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color color, float layerDepth = 0.0f)
 		{
-			font.DrawText(_renderer, text, position, color);
+			font.DrawText(_renderer, text, position, color, layerDepth);
+		}
+
+		/// <summary>
+		/// Draws a text
+		/// </summary>
+		/// <param name="text">The text which will be drawn.</param>
+		/// <param name="position">The drawing location on screen.</param>
+		/// <param name="colors">Colors of glyphs.</param>
+		/// <param name="rotation">A rotation of this text in radians.</param>
+		/// <param name="origin">Center of the rotation.</param>
+		/// <param name="scale">A scaling of this text.</param>
+		/// <param name="layerDepth">A depth of the layer of this string.</param>
+		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color[] colors, Vector2 scale, float rotation, Vector2 origin, float layerDepth = 0.0f)
+		{
+			font.DrawText(_renderer, text, position, colors, scale, rotation, origin, layerDepth);
 		}
 
 		internal void Begin()

@@ -17,11 +17,15 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\**\*.*" />
-  </ItemGroup>  
- 
+  </ItemGroup>
+  
   <ItemGroup>
-    <PackageReference Include="FontStashSharp.Stride" Version="0.9.0.1" />
-    <PackageReference Include="XNAssets.Stride" Version="0.5.1.14" />
+    <Compile Remove="Platform\**\*.*" />
+  </ItemGroup>  
+
+  <ItemGroup>
+    <PackageReference Include="AssetManagementBase" Version="0.5.2" />
+    <PackageReference Include="FontStashSharp.Stride" Version="0.9.1" />
     <PackageReference Include="info.lundin.math.dll" Version="1.2.6" />
   </ItemGroup>  
 </Project>
