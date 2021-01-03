@@ -145,11 +145,6 @@ namespace Myra.Graphics2D
 #endif
 		}
 
-		public void Draw(Texture2D texture, Rectangle destinationRectangle, Color color)
-		{
-			_renderer.Draw(texture, destinationRectangle, color);
-		}
-
 		public void Draw(Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color)
 		{
 #if MONOGAME || FNA
@@ -159,6 +154,12 @@ namespace Myra.Graphics2D
 #else
 			_renderer.Draw(texture, destinationRectangle, sourceRectangle, color);
 #endif
+		}
+
+#if MONOGAME || FNA || STRIDE
+		public void Draw(Texture2D texture, Rectangle destinationRectangle, Color color)
+		{
+			_renderer.Draw(texture, destinationRectangle, color);
 		}
 
 		public void Draw(Texture2D texture, Vector2 position, Color color)
@@ -171,7 +172,6 @@ namespace Myra.Graphics2D
 			_renderer.Draw(texture, position, sourceRectangle, color);
 		}
 
-#if MONOGAME || FNA || STRIDE
 		public void Draw(Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, SpriteEffects effects, float layerDepth)
 		{
 #if MONOGAME || FNA
@@ -193,22 +193,22 @@ namespace Myra.Graphics2D
 
 		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color color)
 		{
-			_renderer.DrawString(font, text, position, color);
+			font.DrawText(_renderer, text, position, color);
 		}
 
 		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color color, Vector2 origin, Vector2 scale, float layerDepth)
 		{
-			_renderer.DrawString(font, text, position, color, scale, origin, layerDepth);
+			font.DrawText(_renderer, text, position, color, scale, origin, layerDepth);
 		}
 
 		public void DrawString(SpriteFontBase font, StringBuilder text, Vector2 position, Color color, Vector2 scale, float layerDepth)
 		{
-			_renderer.DrawString(font, text, position, color, scale, layerDepth);
+			font.DrawText(_renderer, text, position, color, scale, layerDepth);
 		}
 
 		public void DrawString(SpriteFontBase font, StringBuilder text, Vector2 position, Color color)
 		{
-			_renderer.DrawString(font, text, position, color);
+			font.DrawText(_renderer, text, position, color);
 		}
 
 		internal void Begin()

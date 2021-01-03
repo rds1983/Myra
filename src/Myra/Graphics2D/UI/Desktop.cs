@@ -457,7 +457,7 @@ namespace Myra.Graphics2D.UI
 				keys[i] = input.IsKeyDown((Keys)i);
 			}
 #else
-			MyraEnvironment.Platform.SetKeysDown(keysDown);
+			MyraEnvironment.Platform.SetKeysDown(keys);
 #endif
 		}
 

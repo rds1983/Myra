@@ -502,7 +502,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 				_vPicker.Top = (int)(hsv.V / -100f * WheelHeight) + WheelHeight;
 			}
 
-			_colorWheel.Color = CrossEngineStuff.CreateColor((int)(hsv.V / 100f), (int)(hsv.V / 100f), (int)(hsv.V / 100f));
+			_colorWheel.Color = CrossEngineStuff.CreateColor((int)(hsv.V * 255.0f / 100f), (int)(hsv.V * 255.0f / 100f), (int)(hsv.V * 255.0f / 100f));
 			
 			_colorDisplay.Color = rgb;
 			

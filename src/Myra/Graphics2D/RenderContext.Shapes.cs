@@ -1,4 +1,7 @@
-﻿using System;
+﻿// This code had been borrowed from the MonoGame.Extended project: https://github.com/craftworkgames/MonoGame.Extended
+
+using System;
+using Myra.Utility;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -9,17 +12,102 @@ using Stride.Graphics;
 using Texture2D = Stride.Graphics.Texture;
 #else
 using System.Drawing;
-using Myra.Platform;
 using Vector2 = System.Drawing.PointF;
+using Texture2D = System.Object;
 #endif
 
 namespace Myra.Graphics2D
 {
 	partial class RenderContext
 	{
+		/// <summary>
+		///     Draws a filled rectangle
+		/// </summary>
+		/// <param name="spriteBatch">The destination drawing surface</param>
+		/// <param name="rectangle">The rectangle to draw</param>
+		/// <param name="color">The color to draw the rectangle in</param>
+		public void FillRectangle(Rectangle rectangle, Color color)
+		{
+			FillRectangle(new Vector2(rectangle.X, rectangle.Y), new Vector2(rectangle.Width, rectangle.Height), color);
+		}
+
+		/// <summary>
+		///     Draws a filled rectangle
+		/// </summary>
+		/// <param name="spriteBatch">The destination drawing surface</param>
+		/// <param name="location">Where to draw</param>
+		/// <param name="size">The size of the rectangle</param>
+		/// <param name="color">The color to draw the rectangle in</param>
+		public void FillRectangle(Vector2 location, Vector2 size, Color color)
+		{
+			Draw(DefaultAssets.WhiteTexture,
+				new Rectangle((int)location.X, (int)location.Y, (int)size.X, (int)size.Y),
+				null,
+				color);
+		}
+
+		/// <summary>
+		///     Draws a filled rectangle
+		/// </summary>
+		/// <param name="spriteBatch">The destination drawing surface</param>
+		/// <param name="x">The X coord of the left side</param>
+		/// <param name="y">The Y coord of the upper side</param>
+		/// <param name="width">Width</param>
+		/// <param name="height">Height</param>
+		/// <param name="color">The color to draw the rectangle in</param>
+		public void FillRectangle(float x, float y, float width, float height,
+			Color color)
+		{
+			FillRectangle(new Vector2(x, y), new Vector2(width, height), color);
+		}
+
+		/// <summary>
+		///     Draws a rectangle with the thickness provided
+		/// </summary>
+		/// <param name="spriteBatch">The destination drawing surface</param>
+		/// <param name="rectangle">The rectangle to draw</param>
+		/// <param name="color">The color to draw the rectangle in</param>
+		/// <param name="thickness">The thickness of the lines</param>
+		public void DrawRectangle(Rectangle rectangle, Color color, float thickness = 1f)
+		{
+			var texture = DefaultAssets.WhiteTexture;
+			var t = (int)thickness;
+
+			var c = CrossEngineStuff.MultiplyColor(color, Opacity);
+
+			// Top
+			Draw(texture, new Rectangle(rectangle.X, rectangle.Y, rectangle.Width, t), Mathematics.RectangleOne, c);
+
+			// Bottom
+			Draw(texture, new Rectangle(rectangle.X, rectangle.Bottom - t, rectangle.Width, t), Mathematics.RectangleOne, c);
+
+			// Left
+			Draw(texture, new Rectangle(rectangle.X, rectangle.Y, t, rectangle.Height), Mathematics.RectangleOne, c);
+
+			// Right
+			Draw(texture, new Rectangle(rectangle.Right - t, rectangle.Y, t, rectangle.Height), Mathematics.RectangleOne, c);
+		}
+
+		/// <summary>
+		///     Draws a rectangle with the thickness provided
+		/// </summary>
+		/// <param name="spriteBatch">The destination drawing surface</param>
+		/// <param name="location">Where to draw</param>
+		/// <param name="size">The size of the rectangle</param>
+		/// <param name="color">The color to draw the rectangle in</param>
+		/// <param name="thickness">The thickness of the line</param>
+		public void DrawRectangle(Vector2 location, Vector2 size, Color color,
+			float thickness = 1f)
+		{
+			DrawRectangle(new Rectangle((int)location.X, (int)location.Y, (int)size.X, (int)size.Y), color,
+				thickness);
+		}
+
+#if MONOGAME || FNA || STRIDE
+
 		private void Draw(Texture2D texture, Vector2 offset, Color color, Vector2 scale, float rotation = 0.0f)
 		{
-			Draw(texture, offset, null, color, rotation, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
+			Draw(texture, offset, null, color, rotation, Mathematics.Vector2Zero, scale, SpriteEffects.None, 0.0f);
 		}
 
 		/// <summary>
@@ -57,82 +145,6 @@ namespace Myra.Graphics2D
 			var angle = (float)Math.Atan2(point2.Y - point1.Y, point2.X - point1.X);
 			var scale = new Vector2(length, thickness);
 			Draw(texture, point1, color, scale, angle);
-		}
-
-		/// <summary>
-		///     Draws a filled rectangle
-		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
-		/// <param name="rectangle">The rectangle to draw</param>
-		/// <param name="color">The color to draw the rectangle in</param>
-		public void FillRectangle(Rectangle rectangle, Color color)
-		{
-			FillRectangle(new Vector2(rectangle.X, rectangle.Y), new Vector2(rectangle.Width, rectangle.Height), color);
-		}
-
-		/// <summary>
-		///     Draws a filled rectangle
-		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
-		/// <param name="location">Where to draw</param>
-		/// <param name="size">The size of the rectangle</param>
-		/// <param name="color">The color to draw the rectangle in</param>
-		public void FillRectangle(Vector2 location, Vector2 size, Color color)
-		{
-			Draw(DefaultAssets.WhiteTexture, location, null, color, 0, Vector2.Zero, size, SpriteEffects.None, 0);
-		}
-
-		/// <summary>
-		///     Draws a filled rectangle
-		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
-		/// <param name="x">The X coord of the left side</param>
-		/// <param name="y">The Y coord of the upper side</param>
-		/// <param name="width">Width</param>
-		/// <param name="height">Height</param>
-		/// <param name="color">The color to draw the rectangle in</param>
-		public void FillRectangle(float x, float y, float width, float height,
-			Color color)
-		{
-			FillRectangle(new Vector2(x, y), new Vector2(width, height), color);
-		}
-
-		/// <summary>
-		///     Draws a rectangle with the thickness provided
-		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
-		/// <param name="rectangle">The rectangle to draw</param>
-		/// <param name="color">The color to draw the rectangle in</param>
-		/// <param name="thickness">The thickness of the lines</param>
-		public void DrawRectangle(Rectangle rectangle, Color color,
-			float thickness = 1f)
-		{
-			var texture = DefaultAssets.WhiteTexture;
-			var topLeft = new Vector2(rectangle.X, rectangle.Y);
-			var topRight = new Vector2(rectangle.Right - thickness, rectangle.Y);
-			var bottomLeft = new Vector2(rectangle.X, rectangle.Bottom - thickness);
-			var horizontalScale = new Vector2(rectangle.Width, thickness);
-			var verticalScale = new Vector2(thickness, rectangle.Height);
-
-			Draw(texture, topLeft, color, horizontalScale);
-			Draw(texture, topLeft, color, verticalScale);
-			Draw(texture, topRight, color, verticalScale);
-			Draw(texture, bottomLeft, color, horizontalScale);
-		}
-
-		/// <summary>
-		///     Draws a rectangle with the thickness provided
-		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
-		/// <param name="location">Where to draw</param>
-		/// <param name="size">The size of the rectangle</param>
-		/// <param name="color">The color to draw the rectangle in</param>
-		/// <param name="thickness">The thickness of the line</param>
-		public void DrawRectangle(Vector2 location, Vector2 size, Color color,
-			float thickness = 1f)
-		{
-			DrawRectangle(new Rectangle((int)location.X, (int)location.Y, (int)size.X, (int)size.Y), color,
-				thickness);
 		}
 
 		/// <summary>
@@ -252,5 +264,6 @@ namespace Myra.Graphics2D
 
 			return points;
 		}
+#endif
 	}
 }

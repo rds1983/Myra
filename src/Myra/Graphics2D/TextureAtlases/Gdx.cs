@@ -10,6 +10,7 @@ using Stride.Core.Mathematics;
 using Texture2D = Stride.Graphics.Texture;
 #else
 using System.Drawing;
+using Texture2D = System.Object;
 #endif
 
 namespace Myra.Graphics2D.TextureAtlases

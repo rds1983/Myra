@@ -1,12 +1,5 @@
 ﻿using FontStashSharp.Interfaces;
-
-#if MONOGAME || FNA
-using Microsoft.Xna.Framework;
-#elif STRIDE
-using Stride.Core.Mathematics;
-#else
 using System.Drawing;
-#endif
 
 namespace Myra.Platform
 {
@@ -18,6 +11,6 @@ namespace Myra.Platform
 
 		void End();
 
-		void Draw(object texture, Rectangle dest, Rectangle src, Color color);
+		void Draw(object texture, Rectangle dest, Rectangle? src, Color color);
 	}
 }

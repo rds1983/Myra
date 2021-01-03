@@ -99,13 +99,13 @@ namespace Myra.Samples.AllWidgets
 				depth);
 		}
 
-		public void Draw(object texture, Rectangle dest, Rectangle src, Color color)
+		public void Draw(object texture, Rectangle dest, Rectangle? src, Color color)
 		{
 			var xnaTexture = (Texture2D)texture;
 
 			_batch.Draw(xnaTexture,
 				dest.ToXNA(),
-				src.ToXNA(),
+				src != null ? src.Value.ToXNA() : (Microsoft.Xna.Framework.Rectangle?)null,
 				color.ToXNA());
 		}
 

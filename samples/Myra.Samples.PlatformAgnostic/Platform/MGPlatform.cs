@@ -2,6 +2,7 @@
 using System.Drawing;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Myra.Graphics2D.UI;
 using Myra.Platform;
 
 namespace Myra.Samples.AllWidgets

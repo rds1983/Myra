@@ -21,7 +21,7 @@ namespace Myra.Utility
 			{
 #if MONOGAME || FNA
 				var device = MyraEnvironment.GraphicsDevice;
-				return new Point(device.Viewport.Width, _device.Viewport.Height);
+				return new Point(device.Viewport.Width, device.Viewport.Height);
 #elif STRIDE
 				var device = MyraEnvironment.GraphicsDevice;
 				return new Point(device.Presenter.BackBuffer.Width, device.Presenter.BackBuffer.Height);

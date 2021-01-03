@@ -1,12 +1,6 @@
 ﻿using FontStashSharp.Interfaces;
-
-#if MONOGAME || FNA
-using Microsoft.Xna.Framework;
-#elif STRIDE
-using Stride.Core.Mathematics;
-#else
+using Myra.Graphics2D.UI;
 using System.Drawing;
-#endif
 
 namespace Myra.Platform
 {
