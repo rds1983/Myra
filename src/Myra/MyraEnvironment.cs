@@ -2,17 +2,16 @@
 using System.Reflection;
 using AssetManagementBase;
 using AssetManagementBase.Utility;
-using Myra.Platform;
 using Myra.Assets;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Platform.XNA;
 #elif STRIDE
 using Stride.Engine;
 using Stride.Graphics;
-using Myra.Platform.XNA;
+#else
+using Myra.Platform;
 #endif
 
 namespace Myra
@@ -20,7 +19,6 @@ namespace Myra
 	public static class MyraEnvironment
 	{
 		private static AssetManager _defaultAssetManager;
-		private static IMyraPlatform _platform;
 		private static bool _assetsLoadersUpdated = false;
 
 		public static event EventHandler GameDisposed;
@@ -61,7 +59,8 @@ namespace Myra
 #endif
 
 				_game = value;
-				_platform = new XNAPlatform(_game.GraphicsDevice);
+
+				UpdateAssetManager();
 
 #if !STRIDE
 				if (_game != null)
@@ -71,7 +70,14 @@ namespace Myra
 #endif
 			}
 		}
-#endif
+
+		public static GraphicsDevice GraphicsDevice
+		{
+			get => Game.GraphicsDevice;
+		}
+#else
+
+		private static IMyraPlatform _platform;
 
 		public static IMyraPlatform Platform
 		{
@@ -79,11 +85,7 @@ namespace Myra
 			{
 				if (_platform == null)
 				{
-#if MONOGAME || FNA || STRIDE
-					throw new Exception("MyraEnvironment.Game is null. Please, set it to the Game instance before using Myra.");
-#else
 					throw new Exception("MyraEnvironment.Platform is null. Please, set it before using Myra.");
-#endif
 				}
 
 				return _platform;
@@ -98,17 +100,10 @@ namespace Myra
 
 				_platform = value;
 
-				if (!_assetsLoadersUpdated)
-				{
-					AssetManager.SetAssetLoader(new StaticSpriteFontLoader());
-					AssetManager.SetAssetLoader(new FontSystemLoader());
-					AssetManager.SetAssetLoader(new DynamicSpriteFontLoader());
-					AssetManager.SetAssetLoader(new SpriteFontBaseLoader());
-
-					_assetsLoadersUpdated = true;
-				}
+				UpdateAssetManager();
 			}
 		}
+#endif
 
 		/// <summary>
 		/// Default Assets Manager
@@ -131,6 +126,22 @@ namespace Myra
 		public static bool DrawMouseWheelFocusedWidgetFrame { get; set; }
 		public static bool DrawTextGlyphsFrames { get; set; }
 		public static bool DisableClipping { get; set; }
+
+		private static void UpdateAssetManager()
+		{
+			if (_assetsLoadersUpdated)
+			{
+				return;
+			}
+
+			AssetManager.SetAssetLoader(new Texture2DLoader());
+			AssetManager.SetAssetLoader(new StaticSpriteFontLoader());
+			AssetManager.SetAssetLoader(new FontSystemLoader());
+			AssetManager.SetAssetLoader(new DynamicSpriteFontLoader());
+			AssetManager.SetAssetLoader(new SpriteFontBaseLoader());
+
+			_assetsLoadersUpdated = true;
+		}
 
 		private static void GameOnDisposed(object sender, EventArgs eventArgs)
 		{

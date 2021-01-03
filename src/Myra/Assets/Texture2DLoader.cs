@@ -1,18 +1,21 @@
 ﻿using StbImageSharp;
 using System.IO;
 using AssetManagementBase;
+using Myra.Utility;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 #elif STRIDE
 using Stride.Core.Mathematics;
+using Texture2D = Stride.Graphics.Texture;
 #else
 using System.Drawing;
 #endif
 
 namespace Myra.Assets
 {
-	[AssetLoader(typeof(Texture2DLoader))]
+#if PLATFORM_AGNOSTIC
 	internal class Texture2DWrapper
 	{
 		public int Width { get; private set; }
@@ -26,8 +29,13 @@ namespace Myra.Assets
 			Texture = texture;
 		}
 	}
+#endif
 
+#if MONOGAME || FNA || STRIDE
+	internal class Texture2DLoader : IAssetLoader<Texture2D>
+#else
 	internal class Texture2DLoader : IAssetLoader<Texture2DWrapper>
+#endif
 	{
 		private static byte ApplyAlpha(byte color, byte alpha)
 		{
@@ -45,7 +53,11 @@ namespace Myra.Assets
 			return (byte)fr;
 		}
 
+#if MONOGAME || FNA || STRIDE
+		public Texture2D Load(AssetLoaderContext context, string assetName)
+#else
 		public Texture2DWrapper Load(AssetLoaderContext context, string assetName)
+#endif
 		{
 			ImageResult result = null;
 			using (var stream = context.Open(assetName))
@@ -76,10 +88,15 @@ namespace Myra.Assets
 				b[i + 2] = ApplyAlpha(b[i + 2], a);
 			}
 
+#if MONOGAME || FNA || STRIDE
+			var texture = CrossEngineStuff.CreateTexture(MyraEnvironment.GraphicsDevice, result.Width, result.Height);
+			CrossEngineStuff.SetTextureData(texture, new Rectangle(0, 0, result.Width, result.Height), result.Data);
+			return texture;
+#else
 			var texture = MyraEnvironment.Platform.CreateTexture(result.Width, result.Height);
 			MyraEnvironment.Platform.SetTextureData(texture, new Rectangle(0, 0, result.Width, result.Height), result.Data);
-
 			return new Texture2DWrapper(result.Width, result.Height, texture);
+#endif
 		}
 	}
 }

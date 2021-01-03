@@ -85,10 +85,10 @@ namespace Myra.Utility
                 expression = expression.Replace("&.height", GerParrentValue(widget, "&.h"));
             }
             ///add window walues
-            expression = expression.Replace("W.h", $"{MyraEnvironment.Platform.ViewSize.Y}");
-            expression = expression.Replace("W.height", $"{MyraEnvironment.Platform.ViewSize.Y}");
-            expression = expression.Replace("W.w", $"{MyraEnvironment.Platform.ViewSize.X}");
-            expression = expression.Replace("W.width", $"{MyraEnvironment.Platform.ViewSize.X}");
+            expression = expression.Replace("W.h", $"{CrossEngineStuff.ViewSize.Y}");
+            expression = expression.Replace("W.height", $"{CrossEngineStuff.ViewSize.Y}");
+            expression = expression.Replace("W.w", $"{CrossEngineStuff.ViewSize.X}");
+            expression = expression.Replace("W.width", $"{CrossEngineStuff.ViewSize.X}");
             ///
             if (expression.Contains("["))
             {
@@ -120,9 +120,9 @@ namespace Myra.Utility
                     case "&.Y":
                         return "0";
                     case "&.w":
-                        return $"{MyraEnvironment.Platform.ViewSize.X}";
+                        return $"{CrossEngineStuff.ViewSize.X}";
                     case "&.h":
-                        return $"{MyraEnvironment.Platform.ViewSize.Y}";
+                        return $"{CrossEngineStuff.ViewSize.Y}";
                 }
             }
             else
@@ -165,14 +165,14 @@ namespace Myra.Utility
                 case "width":
                     if (widgets.IsEmpty)
                     {
-                        return MyraEnvironment.Platform.ViewSize.X;
+                        return CrossEngineStuff.ViewSize.X;
                     }
                     return widgets.Width;
                 case "h":
                 case "height":
                     if (widgets.IsEmpty)
                     {
-                        return MyraEnvironment.Platform.ViewSize.Y;
+                        return CrossEngineStuff.ViewSize.Y;
                     }
                     return widgets.Height;
                 default:

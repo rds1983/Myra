@@ -35,6 +35,21 @@ namespace Myra.Assets
 			}
 
 			FontSystem fontSystem = null;
+
+#if MONOGAME || FNA || STRIDE
+			switch (fontType)
+			{
+				case FontType.Regular:
+					fontSystem = FontSystemFactory.Create(MyraEnvironment.GraphicsDevice);
+					break;
+				case FontType.Blurry:
+					fontSystem = FontSystemFactory.CreateBlurry(MyraEnvironment.GraphicsDevice, amount);
+					break;
+				case FontType.Stroked:
+					fontSystem = FontSystemFactory.CreateStroked(MyraEnvironment.GraphicsDevice, amount);
+					break;
+			}
+#else
 			switch (fontType)
 			{
 				case FontType.Regular:
@@ -47,6 +62,7 @@ namespace Myra.Assets
 					fontSystem = new FontSystem(MyraEnvironment.Platform, 1024, 1024, 0, amount);
 					break;
 			}
+#endif
 
 			var data = context.Load<byte[]>(parts[0]);
 			fontSystem.AddFont(data);

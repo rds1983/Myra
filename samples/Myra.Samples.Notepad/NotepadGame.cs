@@ -2,10 +2,10 @@
 using System.IO;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.File;
-using XNAssets.Utility;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using AssetManagementBase.Utility;
 
 namespace Myra.Samples.Notepad
 {
@@ -112,21 +112,21 @@ namespace Myra.Samples.Notepad
 					return;
 				}
 
-				if (_desktop.DownKeys.Contains(Keys.LeftControl) || _desktop.DownKeys.Contains(Keys.RightControl))
+				if (_desktop.IsKeyDown(Keys.LeftControl) || _desktop.IsKeyDown(Keys.RightControl))
 				{
-					if (_desktop.DownKeys.Contains(Keys.N))
+					if (_desktop.IsKeyDown(Keys.N))
 					{
 						NewItemOnDown(this, EventArgs.Empty);
 					}
-					else if (_desktop.DownKeys.Contains(Keys.O))
+					else if (_desktop.IsKeyDown(Keys.O))
 					{
 						OpenItemOnDown(this, EventArgs.Empty);
 					}
-					else if (_desktop.DownKeys.Contains(Keys.S))
+					else if (_desktop.IsKeyDown(Keys.S))
 					{
 						SaveItemOnDown(this, EventArgs.Empty);
 					}
-					else if (_desktop.DownKeys.Contains(Keys.Q))
+					else if (_desktop.IsKeyDown(Keys.Q))
 					{
 						Exit();
 					}

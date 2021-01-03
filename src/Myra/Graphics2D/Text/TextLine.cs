@@ -83,7 +83,7 @@ namespace Myra.Graphics2D.Text
 			return Chunks[Chunks.Count - 1].GetGlyphIndexByX(startX);
 		}
 
-		public Color Draw(RenderContext context, Point pos, Color color, bool useChunkColor)
+		public Color Draw(RenderContext context, Vector2 pos, Color color, bool useChunkColor)
 		{
 			foreach (var chunk in Chunks)
 			{

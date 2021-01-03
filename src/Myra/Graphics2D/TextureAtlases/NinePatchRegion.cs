@@ -1,7 +1,9 @@
 ﻿#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 #elif STRIDE
 using Stride.Core.Mathematics;
+using Texture2D = Stride.Graphics.Texture;
 #else
 using System.Drawing;
 #endif
@@ -27,7 +29,7 @@ namespace Myra.Graphics2D.TextureAtlases
 			get { return _info; }
 		}
 
-		public NinePatchRegion(object texture, Rectangle bounds, Thickness info) : base(texture, bounds)
+		public NinePatchRegion(Texture2D texture, Rectangle bounds, Thickness info) : base(texture, bounds)
 		{
 			_info = info;
 

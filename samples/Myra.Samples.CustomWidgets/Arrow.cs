@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Myra.Graphics2D;
 using Myra.Graphics2D.UI;
 using System.ComponentModel;
 
@@ -68,8 +69,8 @@ namespace Myra.Samples.AllWidgets
 					_points[2] = new Vector2(HeadSize, bounds.Height);
 				}
 
-				context.Batch.DrawLine(new Vector2(bounds.Right, bounds.Top + h), new Vector2(bounds.Left + HeadSize, bounds.Top + h), Color);
-				context.Batch.DrawPolygon(new Vector2(bounds.Left, bounds.Top), _points, Color);
+				context.DrawLine(new Vector2(bounds.Right, bounds.Top + h), new Vector2(bounds.Left + HeadSize, bounds.Top + h), Color);
+				context.DrawPolygon(new Vector2(bounds.Left, bounds.Top), _points, Color);
 			}
 			else
 			{
@@ -82,8 +83,8 @@ namespace Myra.Samples.AllWidgets
 					_points[2] = new Vector2(-HeadSize, bounds.Height);
 				}
 
-				context.Batch.DrawLine(new Vector2(bounds.Left, bounds.Top + h), new Vector2(bounds.Right - HeadSize, bounds.Top + h), Color);
-				context.Batch.DrawPolygon(new Vector2(bounds.Right, bounds.Top), _points, Color);
+				context.DrawLine(new Vector2(bounds.Left, bounds.Top + h), new Vector2(bounds.Right - HeadSize, bounds.Top + h), Color);
+				context.DrawPolygon(new Vector2(bounds.Right, bounds.Top), _points, Color);
 			}
 
 			_lastHeight = bounds.Height;

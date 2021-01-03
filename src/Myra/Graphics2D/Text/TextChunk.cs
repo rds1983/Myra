@@ -129,7 +129,7 @@ namespace Myra.Graphics2D.Text
 			return i;
 		}
 
-		public void Draw(RenderContext context, Point pos, Color color)
+		public void Draw(RenderContext context, Vector2 pos, Color color)
 		{
 			context.DrawString(_font, _text, pos, color);
 
@@ -139,8 +139,8 @@ namespace Myra.Graphics2D.Text
 				{
 					var g = Glyphs[i];
 
-					var r = new Rectangle(pos.X + g.Bounds.X,
-						pos.Y + g.Bounds.Y,
+					var r = new Rectangle((int)pos.X + g.Bounds.X,
+						(int)pos.Y + g.Bounds.Y,
 						g.Bounds.Width, g.Bounds.Height);
 
 					context.DrawRectangle(r, Clr.White);

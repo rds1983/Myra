@@ -1,0 +1,256 @@
+﻿using System;
+
+#if MONOGAME || FNA
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+#elif STRIDE
+using Stride.Core.Mathematics;
+using Stride.Graphics;
+using Texture2D = Stride.Graphics.Texture;
+#else
+using System.Drawing;
+using Myra.Platform;
+using Vector2 = System.Drawing.PointF;
+#endif
+
+namespace Myra.Graphics2D
+{
+	partial class RenderContext
+	{
+		private void Draw(Texture2D texture, Vector2 offset, Color color, Vector2 scale, float rotation = 0.0f)
+		{
+			Draw(texture, offset, null, color, rotation, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
+		}
+
+		/// <summary>
+		///     Draws a closed polygon from an array of points
+		/// </summary>
+		/// <param name="spriteBatch">The destination drawing surface</param>
+		/// ///
+		/// <param name="offset">Where to offset the points</param>
+		/// <param name="points">The points to connect with lines</param>
+		/// <param name="color">The color to use</param>
+		/// <param name="thickness">The thickness of the lines</param>
+		public void DrawPolygon(Vector2 offset, Vector2[] points, Color color, float thickness = 1f)
+		{
+			if (points.Length == 0)
+				return;
+
+			if (points.Length == 1)
+			{
+				DrawPoint(points[0], color, (int)thickness);
+				return;
+			}
+
+			var texture = DefaultAssets.WhiteTexture;
+
+			for (var i = 0; i < points.Length - 1; i++)
+				DrawPolygonEdge(texture, points[i] + offset, points[i + 1] + offset, color, thickness);
+
+			DrawPolygonEdge(texture, points[points.Length - 1] + offset, points[0] + offset, color,
+				thickness);
+		}
+
+		private void DrawPolygonEdge(Texture2D texture, Vector2 point1, Vector2 point2, Color color, float thickness)
+		{
+			var length = Vector2.Distance(point1, point2);
+			var angle = (float)Math.Atan2(point2.Y - point1.Y, point2.X - point1.X);
+			var scale = new Vector2(length, thickness);
+			Draw(texture, point1, color, scale, angle);
+		}
+
+		/// <summary>
+		///     Draws a filled rectangle
+		/// </summary>
+		/// <param name="spriteBatch">The destination drawing surface</param>
+		/// <param name="rectangle">The rectangle to draw</param>
+		/// <param name="color">The color to draw the rectangle in</param>
+		public void FillRectangle(Rectangle rectangle, Color color)
+		{
+			FillRectangle(new Vector2(rectangle.X, rectangle.Y), new Vector2(rectangle.Width, rectangle.Height), color);
+		}
+
+		/// <summary>
+		///     Draws a filled rectangle
+		/// </summary>
+		/// <param name="spriteBatch">The destination drawing surface</param>
+		/// <param name="location">Where to draw</param>
+		/// <param name="size">The size of the rectangle</param>
+		/// <param name="color">The color to draw the rectangle in</param>
+		public void FillRectangle(Vector2 location, Vector2 size, Color color)
+		{
+			Draw(DefaultAssets.WhiteTexture, location, null, color, 0, Vector2.Zero, size, SpriteEffects.None, 0);
+		}
+
+		/// <summary>
+		///     Draws a filled rectangle
+		/// </summary>
+		/// <param name="spriteBatch">The destination drawing surface</param>
+		/// <param name="x">The X coord of the left side</param>
+		/// <param name="y">The Y coord of the upper side</param>
+		/// <param name="width">Width</param>
+		/// <param name="height">Height</param>
+		/// <param name="color">The color to draw the rectangle in</param>
+		public void FillRectangle(float x, float y, float width, float height,
+			Color color)
+		{
+			FillRectangle(new Vector2(x, y), new Vector2(width, height), color);
+		}
+
+		/// <summary>
+		///     Draws a rectangle with the thickness provided
+		/// </summary>
+		/// <param name="spriteBatch">The destination drawing surface</param>
+		/// <param name="rectangle">The rectangle to draw</param>
+		/// <param name="color">The color to draw the rectangle in</param>
+		/// <param name="thickness">The thickness of the lines</param>
+		public void DrawRectangle(Rectangle rectangle, Color color,
+			float thickness = 1f)
+		{
+			var texture = DefaultAssets.WhiteTexture;
+			var topLeft = new Vector2(rectangle.X, rectangle.Y);
+			var topRight = new Vector2(rectangle.Right - thickness, rectangle.Y);
+			var bottomLeft = new Vector2(rectangle.X, rectangle.Bottom - thickness);
+			var horizontalScale = new Vector2(rectangle.Width, thickness);
+			var verticalScale = new Vector2(thickness, rectangle.Height);
+
+			Draw(texture, topLeft, color, horizontalScale);
+			Draw(texture, topLeft, color, verticalScale);
+			Draw(texture, topRight, color, verticalScale);
+			Draw(texture, bottomLeft, color, horizontalScale);
+		}
+
+		/// <summary>
+		///     Draws a rectangle with the thickness provided
+		/// </summary>
+		/// <param name="spriteBatch">The destination drawing surface</param>
+		/// <param name="location">Where to draw</param>
+		/// <param name="size">The size of the rectangle</param>
+		/// <param name="color">The color to draw the rectangle in</param>
+		/// <param name="thickness">The thickness of the line</param>
+		public void DrawRectangle(Vector2 location, Vector2 size, Color color,
+			float thickness = 1f)
+		{
+			DrawRectangle(new Rectangle((int)location.X, (int)location.Y, (int)size.X, (int)size.Y), color,
+				thickness);
+		}
+
+		/// <summary>
+		///     Draws a line from point1 to point2 with an offset
+		/// </summary>
+		/// <param name="spriteBatch">The destination drawing surface</param>
+		/// <param name="x1">The X coord of the first point</param>
+		/// <param name="y1">The Y coord of the first point</param>
+		/// <param name="x2">The X coord of the second point</param>
+		/// <param name="y2">The Y coord of the second point</param>
+		/// <param name="color">The color to use</param>
+		/// <param name="thickness">The thickness of the line</param>
+		public void DrawLine(float x1, float y1, float x2, float y2, Color color,
+			float thickness = 1f)
+		{
+			DrawLine(new Vector2(x1, y1), new Vector2(x2, y2), color, thickness);
+		}
+
+		/// <summary>
+		///     Draws a line from point1 to point2 with an offset
+		/// </summary>
+		/// <param name="spriteBatch">The destination drawing surface</param>
+		/// <param name="point1">The first point</param>
+		/// <param name="point2">The second point</param>
+		/// <param name="color">The color to use</param>
+		/// <param name="thickness">The thickness of the line</param>
+		public void DrawLine(Vector2 point1, Vector2 point2, Color color,
+			float thickness = 1f)
+		{
+			// calculate the distance between the two vectors
+			var distance = Vector2.Distance(point1, point2);
+
+			// calculate the angle between the two vectors
+			var angle = (float)Math.Atan2(point2.Y - point1.Y, point2.X - point1.X);
+
+			DrawLine(point1, distance, angle, color, thickness);
+		}
+
+		/// <summary>
+		///     Draws a line from point1 to point2 with an offset
+		/// </summary>
+		/// <param name="spriteBatch">The destination drawing surface</param>
+		/// <param name="point">The starting point</param>
+		/// <param name="length">The length of the line</param>
+		/// <param name="angle">The angle of this line from the starting point</param>
+		/// <param name="color">The color to use</param>
+		/// <param name="thickness">The thickness of the line</param>
+		public void DrawLine(Vector2 point, float length, float angle, Color color,
+			float thickness = 1f)
+		{
+			var origin = new Vector2(0f, 0.5f);
+			var scale = new Vector2(length, thickness);
+			Draw(DefaultAssets.WhiteTexture, point, null, color, angle, origin, scale, SpriteEffects.None, 0);
+		}
+
+		/// <summary>
+		///     Draws a point at the specified x, y position. The center of the point will be at the position.
+		/// </summary>
+		public void DrawPoint(float x, float y, Color color, float size = 1f)
+		{
+			DrawPoint(new Vector2(x, y), color, size);
+		}
+
+		/// <summary>
+		///     Draws a point at the specified position. The center of the point will be at the position.
+		/// </summary>
+		public void DrawPoint(Vector2 position, Color color, float size = 1f)
+		{
+			var scale = Vector2.One * size;
+			var offset = new Vector2(0.5f) - new Vector2(size * 0.5f);
+			Draw(DefaultAssets.WhiteTexture, position + offset, color, scale);
+		}
+
+		/// <summary>
+		///     Draw a circle
+		/// </summary>
+		/// <param name="spriteBatch">The destination drawing surface</param>
+		/// <param name="center">The center of the circle</param>
+		/// <param name="radius">The radius of the circle</param>
+		/// <param name="sides">The number of sides to generate</param>
+		/// <param name="color">The color of the circle</param>
+		/// <param name="thickness">The thickness of the lines used</param>
+		public void DrawCircle(Vector2 center, float radius, int sides, Color color,
+			float thickness = 1f)
+		{
+			DrawPolygon(center, CreateCircle(radius, sides), color, thickness);
+		}
+
+		/// <summary>
+		///     Draw a circle
+		/// </summary>
+		/// <param name="spriteBatch">The destination drawing surface</param>
+		/// <param name="x">The center X of the circle</param>
+		/// <param name="y">The center Y of the circle</param>
+		/// <param name="radius">The radius of the circle</param>
+		/// <param name="sides">The number of sides to generate</param>
+		/// <param name="color">The color of the circle</param>
+		/// <param name="thickness">The thickness of the line</param>
+		public void DrawCircle(float x, float y, float radius, int sides,
+			Color color, float thickness = 1f)
+		{
+			DrawPolygon(new Vector2(x, y), CreateCircle(radius, sides), color, thickness);
+		}
+
+		private Vector2[] CreateCircle(double radius, int sides)
+		{
+			const double max = 2.0 * Math.PI;
+			var points = new Vector2[sides];
+			var step = max / sides;
+			var theta = 0.0;
+
+			for (var i = 0; i < sides; i++)
+			{
+				points[i] = new Vector2((float)(radius * Math.Cos(theta)), (float)(radius * Math.Sin(theta)));
+				theta += step;
+			}
+
+			return points;
+		}
+	}
+}

@@ -4,8 +4,10 @@ using System.IO;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 #elif STRIDE
 using Stride.Core.Mathematics;
+using Texture2D = Stride.Graphics.Texture;
 #else
 using System.Drawing;
 #endif
@@ -22,7 +24,7 @@ namespace Myra.Graphics2D.TextureAtlases
 
 		private class GDXPageData
 		{
-			public object Texture { get; set; }
+			public Texture2D Texture { get; set; }
 		}
 
 		private class GDXSpriteData
@@ -36,7 +38,7 @@ namespace Myra.Graphics2D.TextureAtlases
 			public Point Offset;
 		}
 
-		public static TextureRegionAtlas FromGDX(string data, Func<string, object> textureLoader)
+		public static TextureRegionAtlas FromGDX(string data, Func<string, Texture2D> textureLoader)
 		{
 			GDXPageData pageData = null;
 			var spriteDatas = new Dictionary<string, GDXSpriteData>();

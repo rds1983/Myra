@@ -2,11 +2,14 @@
 using Myra.Graphics2D.UI.Styles;
 using AssetManagementBase;
 using Myra.Assets;
+using Myra.Utility;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 #elif STRIDE
 using Stride.Core.Mathematics;
+using Texture2D = Stride.Graphics.Texture;
 #else
 using System.Drawing;
 #endif
@@ -18,9 +21,13 @@ namespace Myra
 		private static AssetManager _assetManager;
 		private static TextureRegionAtlas _uiTextureRegionAtlas;
 		private static Stylesheet _uiStylesheet;
-		private static object _uiBitmap;
-		private static object _whiteTexture;
 		private static TextureRegion _whiteRegion;
+
+#if MONOGAME || FNA || STRIDE
+		private static Texture2D _whiteTexture;
+#else
+		private static object _whiteTexture;
+#endif
 
 		private static AssetManager AssetManager
 		{
@@ -35,14 +42,23 @@ namespace Myra
 			}
 		}
 
+#if MONOGAME || FNA || STRIDE
+		public static Texture2D WhiteTexture
+#else
 		public static object WhiteTexture
+#endif
 		{
 			get
 			{
 				if (_whiteTexture == null)
 				{
+#if MONOGAME || FNA || STRIDE
+					var texture = CrossEngineStuff.CreateTexture(MyraEnvironment.GraphicsDevice, 1, 1);
+					CrossEngineStuff.SetTextureData(texture, new Rectangle(0, 0, 1, 1), new byte[] { 255, 255, 255, 255 });
+#else
 					var texture = MyraEnvironment.Platform.CreateTexture(1, 1);
 					MyraEnvironment.Platform.SetTextureData(texture, new Rectangle(0, 0, 1, 1), new byte[] { 255, 255, 255, 255 });
+#endif
 
 					_whiteTexture = texture;
 				}
@@ -89,21 +105,6 @@ namespace Myra
 
 				_uiStylesheet = AssetManager.Load<Stylesheet>("default_ui_skin.xmms");
 				return _uiStylesheet;
-			}
-		}
-
-		public static object UIBitmap
-		{
-			get
-			{
-				if (_uiBitmap != null)
-				{
-					return _uiBitmap;
-				}
-
-				var wrapper = AssetManager.Load<Texture2DWrapper>("default_ui_skin_atlas.png");
-				_uiBitmap = wrapper.Texture;
-				return _uiBitmap;
 			}
 		}
 

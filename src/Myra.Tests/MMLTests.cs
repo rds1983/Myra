@@ -1,8 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AssetManagementBase;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.UI;
 using NUnit.Framework;
-using XNAssets;
 
 namespace Myra.Tests
 {
@@ -24,7 +24,7 @@ namespace Myra.Tests
 		public void LoadMMLWithExternalAssets()
 		{
 			ResourceAssetResolver assetResolver = new ResourceAssetResolver(typeof(MMLTests).Assembly, "Resources.");
-			AssetManager assetManager = new AssetManager(GraphicsDevice, assetResolver);
+			AssetManager assetManager = new AssetManager(assetResolver);
 
 			var mml = assetManager.Load<string>("GridWithExternalResources.xmmp");
 

@@ -512,7 +512,7 @@ namespace Myra.Graphics2D.Text
 							break;
 					}
 
-					textColor = line.Draw(context, new Point(x, y), textColor, useChunkColor);
+					textColor = line.Draw(context, new Vector2(x, y), textColor, useChunkColor);
 				}
 				else
 				{

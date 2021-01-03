@@ -17,13 +17,21 @@ namespace Myra.Graphics2D.TextureAtlases
 	[AssetLoader(typeof(TextureRegionLoader))]
 	public class TextureRegion: IImage
 	{
-		private readonly object _texture;
 		private readonly Rectangle _bounds;
 
+#if MONOGAME || FNA || STRIDE
+		private readonly Texture2D _texture;
+		public Texture2D Texture
+		{
+			get { return _texture; }
+		}
+#else
+		private readonly object _texture;
 		public object Texture
 		{
 			get { return _texture; }
 		}
+#endif
 
 		public Rectangle Bounds
 		{
@@ -46,9 +54,10 @@ namespace Myra.Graphics2D.TextureAtlases
 		public TextureRegion(Texture2D texture) : this(texture, new Rectangle(0, 0, texture.Width, texture.Height))
 		{
 		}
+
 #endif
 
-		public TextureRegion(object texture, Rectangle bounds)
+		public TextureRegion(Texture2D texture, Rectangle bounds)
 		{
 			if (texture == null)
 			{

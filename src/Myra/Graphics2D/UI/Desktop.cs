@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
-using Myra.Platform;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -15,11 +14,21 @@ using Stride.Core.Mathematics;
 using Stride.Input;
 #else
 using System.Drawing;
+using Myra.Platform;
 using Vector2 = System.Drawing.PointF;
 #endif
 
 namespace Myra.Graphics2D.UI
 {
+	public struct MouseInfo
+	{
+		public Point Position;
+		public bool IsLeftButtonDown;
+		public bool IsMiddleButtonDown;
+		public bool IsRightButtonDown;
+		public float Wheel;
+	}
+
 	public class Desktop
 	{
 		public const int DoubleClickIntervalInMs = 500;
@@ -404,12 +413,52 @@ namespace Myra.Graphics2D.UI
 
 		public MouseInfo DefaultMouseInfoGetter()
 		{
+#if MONOGAME || FNA
+			var state = Mouse.GetState();
+
+			return new MouseInfo
+			{
+				Position = new Point(state.X, state.Y),
+				IsLeftButtonDown = state.LeftButton == ButtonState.Pressed,
+				IsMiddleButtonDown = state.MiddleButton == ButtonState.Pressed,
+				IsRightButtonDown = state.RightButton == ButtonState.Pressed,
+				Wheel = state.ScrollWheelValue
+			};
+#elif STRIDE
+			var input = MyraEnvironment.Game.Input;
+
+			var v = input.AbsoluteMousePosition;
+
+			return new MouseInfo
+			{
+				Position = new Point((int)v.X, (int)v.Y),
+				IsLeftButtonDown = input.IsMouseButtonDown(MouseButton.Left),
+				IsMiddleButtonDown = input.IsMouseButtonDown(MouseButton.Middle),
+				IsRightButtonDown = input.IsMouseButtonDown(MouseButton.Right),
+				Wheel = input.MouseWheelDelta
+			};
+#else
 			return MyraEnvironment.Platform.GetMouseInfo();
+#endif
 		}
 
-		public void DefaultDownKeysGetter(bool[] keysDown)
+		public void DefaultDownKeysGetter(bool[] keys)
 		{
+#if MONOGAME || FNA
+			var state = Keyboard.GetState();
+			for (var i = 0; i < keys.Length; ++i)
+			{
+				keys[i] = state.IsKeyDown((Keys)i);
+			}
+#elif STRIDE
+			var input = MyraEnvironment.Game.Input;
+			for (var i = 0; i < keys.Length; ++i)
+			{
+				keys[i] = input.IsKeyDown((Keys)i);
+			}
+#else
 			MyraEnvironment.Platform.SetKeysDown(keysDown);
+#endif
 		}
 
 		public Widget GetChild(int index)
@@ -589,8 +638,7 @@ namespace Myra.Graphics2D.UI
 		{
 			if (_renderContext == null)
 			{
-				var renderer = MyraEnvironment.Platform.CreateRenderer();
-				_renderContext = new RenderContext(renderer);
+				_renderContext = new RenderContext();
 
 				if (MyraEnvironment.LayoutScale.HasValue)
 				{
@@ -1181,7 +1229,7 @@ namespace Myra.Graphics2D.UI
 
 		public static Rectangle DefaultBoundsFetcher()
 		{
-			var size = MyraEnvironment.Platform.ViewSize;
+			var size = CrossEngineStuff.ViewSize;
 			return new Rectangle(0, 0, size.X, size.Y);
 		}
 	}
