@@ -59,6 +59,7 @@ namespace Myra.Graphics2D
 		private readonly IMyraRenderer _renderer;
 #endif
 		private bool _beginCalled;
+		private Rectangle _scissor;
 		private Matrix? _transform;
 
 		public Matrix? Transform
@@ -87,6 +88,8 @@ namespace Myra.Graphics2D
 					InverseTransform = inverse;
 #endif
 				}
+
+				Flush();
 			}
 		}
 
@@ -96,23 +99,17 @@ namespace Myra.Graphics2D
 		{
 			get
 			{
-#if MONOGAME || FNA
-				var device = _renderer.GraphicsDevice;
-				var rect = device.ScissorRectangle;
-
-				rect.X -= device.Viewport.X;
-				rect.Y -= device.Viewport.Y;
-
-				return rect;
-#elif STRIDE
-				return MyraEnvironment.Game.GraphicsContext.CommandList.Scissor;
-#else
-				return _renderer.Scissor;
-#endif
+				return _scissor;
 			}
 
 			set
 			{
+				_scissor = value;
+
+				if (MyraEnvironment.DisableClipping)
+				{
+					return;
+				}
 
 				if (Transform != null)
 				{
@@ -147,6 +144,25 @@ namespace Myra.Graphics2D
 			_renderer = new SpriteBatch(MyraEnvironment.Game.GraphicsDevice);
 #else
 			_renderer = MyraEnvironment.Platform.CreateRenderer();
+#endif
+
+			_scissor = GetDeviceScissor();
+		}
+
+		private Rectangle GetDeviceScissor()
+		{
+#if MONOGAME || FNA
+			var device = _renderer.GraphicsDevice;
+			var rect = device.ScissorRectangle;
+
+			rect.X -= device.Viewport.X;
+			rect.Y -= device.Viewport.Y;
+
+			return rect;
+#elif STRIDE
+			return MyraEnvironment.Game.GraphicsContext.CommandList.Scissor;
+#else
+			return _renderer.Scissor;
 #endif
 		}
 
@@ -251,35 +267,49 @@ namespace Myra.Graphics2D
 			font.DrawText(_renderer, text, position, colors, scale, rotation, origin, layerDepth);
 		}
 
-		internal void Begin()
+		public void Begin()
 		{
 #if MONOGAME || FNA
 			_renderer.Begin(SpriteSortMode.Deferred,
 				BlendState.AlphaBlend,
 				SamplerState.PointClamp,
 				null,
-				UIRasterizerState);
+				UIRasterizerState,
+				null,
+				Transform);
 #elif STRIDE
-			_renderer.Begin(MyraEnvironment.Game.GraphicsContext,
-				SpriteSortMode.Deferred,
-				BlendStates.AlphaBlend,
-				MyraEnvironment.Game.GraphicsDevice.SamplerStates.PointClamp,
-				DepthStencilStates.Default,
-				_uiRasterizerState);
+			if (Transform == null)
+			{
+				_renderer.Begin(MyraEnvironment.Game.GraphicsContext,
+					SpriteSortMode.Deferred,
+					BlendStates.AlphaBlend,
+					MyraEnvironment.Game.GraphicsDevice.SamplerStates.PointClamp,
+					null,
+					_uiRasterizerState);
+			} else
+			{
+				_renderer.Begin(MyraEnvironment.Game.GraphicsContext,
+					Transform.Value,
+					SpriteSortMode.Deferred,
+					BlendStates.AlphaBlend,
+					MyraEnvironment.Game.GraphicsDevice.SamplerStates.PointClamp,
+					null,
+					_uiRasterizerState);
+			}
 #else
-			_renderer.Begin();
+			_renderer.Begin(Transform);
 #endif
 
 			_beginCalled = true;
 		}
 
-		internal void End()
+		public void End()
 		{
 			_renderer.End();
 			_beginCalled = false;
 		}
 
-		internal void Flush()
+		public void Flush()
 		{
 			if (!_beginCalled)
 			{

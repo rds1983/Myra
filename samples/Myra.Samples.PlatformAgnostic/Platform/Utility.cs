@@ -29,5 +29,19 @@ namespace Myra.Samples.AllWidgets
 		{
 			return System.Drawing.Color.FromArgb(c.A, c.R, c.G, c.B);
 		}
+
+		public static Matrix ToXNA(this System.Numerics.Matrix3x2 matrix)
+		{
+			var result = Matrix.Identity;
+			result.M11 = matrix.M11;
+			result.M12 = matrix.M12;
+			result.M21 = matrix.M21;
+			result.M22 = matrix.M22;
+
+			result.M41 = matrix.M31;
+			result.M42 = matrix.M32;
+
+			return result;
+		}
 	}
 }

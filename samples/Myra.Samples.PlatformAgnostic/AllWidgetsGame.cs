@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Myra.Graphics2D.UI;
 using Myra.Platform;
+using System;
+using System.Numerics;
 
 namespace Myra.Samples.AllWidgets
 {
@@ -98,16 +100,7 @@ namespace Myra.Samples.AllWidgets
 		{
 			base.Draw(gameTime);
 
-#if !STRIDE
 			GraphicsDevice.Clear(Color.Black);
-#else
-			// Clear screen
-			GraphicsContext.CommandList.Clear(GraphicsDevice.Presenter.BackBuffer, Color.Black);
-			GraphicsContext.CommandList.Clear(GraphicsDevice.Presenter.DepthStencilBuffer, DepthStencilClearOptions.DepthBuffer | DepthStencilClearOptions.Stencil);
-
-			// Set render target
-			GraphicsContext.CommandList.SetRenderTargetAndViewport(GraphicsDevice.Presenter.DepthStencilBuffer, GraphicsDevice.Presenter.BackBuffer);
-#endif
 			_desktop.Render();
 		}
 	}

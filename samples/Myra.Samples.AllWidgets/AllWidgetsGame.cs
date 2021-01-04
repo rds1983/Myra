@@ -1,11 +1,11 @@
 ﻿using Myra.Graphics2D.UI;
+using System;
 using System.Linq;
 
 #if !STRIDE
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 #if ANDROID
-using System;
 using Microsoft.Xna.Framework.GamerServices;
 #endif
 #else
@@ -99,7 +99,7 @@ namespace Myra.Samples.AllWidgets
 
 			_desktop.Root = _allWidgets;
 
-#if MONOGAME
+#if MONOGAME && !ANDROID
 			// Inform Myra that external text input is available
 			// So it stops translating Keys to chars
 			_desktop.HasExternalTextInput = true;

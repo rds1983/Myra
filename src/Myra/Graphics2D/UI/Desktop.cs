@@ -16,6 +16,7 @@ using Stride.Input;
 using System.Drawing;
 using Myra.Platform;
 using System.Numerics;
+using Matrix = System.Numerics.Matrix3x2;
 #endif
 
 namespace Myra.Graphics2D.UI
@@ -260,6 +261,8 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public float Opacity { get; set; }
+
+		public Matrix? Transform { get => RenderContext.Transform; set => RenderContext.Transform = value; }
 
 		public bool IsMouseOverGUI
 		{

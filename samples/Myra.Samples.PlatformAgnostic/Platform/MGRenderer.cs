@@ -30,6 +30,7 @@ namespace Myra.Samples.AllWidgets
 		}
 
 		private readonly GraphicsDevice _device;
+		private Matrix3x2? _transform;
 
 		public Rectangle Scissor
 		{
@@ -65,15 +66,18 @@ namespace Myra.Samples.AllWidgets
 			_batch = new SpriteBatch(_device);
 		}
 
-		public void Begin()
+		public void Begin(Matrix3x2? transform)
 		{
 			_batch.Begin(SpriteSortMode.Deferred,
 				BlendState.AlphaBlend,
 				SamplerState.PointClamp,
 				null,
-				UIRasterizerState);
+				UIRasterizerState,
+				null,
+				transform != null ? transform.Value.ToXNA() : (Microsoft.Xna.Framework.Matrix?)null);
 
 			_beginCalled = true;
+			_transform = transform;
 		}
 
 		public void End()
@@ -113,7 +117,7 @@ namespace Myra.Samples.AllWidgets
 			if (_beginCalled)
 			{
 				End();
-				Begin();
+				Begin(_transform);
 			}
 		}
 	}

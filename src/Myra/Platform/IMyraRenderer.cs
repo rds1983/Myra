@@ -1,5 +1,6 @@
 ﻿using FontStashSharp.Interfaces;
 using System.Drawing;
+using System.Numerics;
 
 namespace Myra.Platform
 {
@@ -7,7 +8,7 @@ namespace Myra.Platform
 	{
 		Rectangle Scissor { get; set; }
 
-		void Begin();
+		void Begin(Matrix3x2? transform);
 
 		void End();
 
