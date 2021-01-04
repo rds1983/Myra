@@ -8,6 +8,7 @@ Myra is UI Library for [MonoGame](http://www.monogame.net/), [FNA](https://githu
 * **MML(Myra Markup Language).** XML based declarative language to describe UI ([example](/samples/Myra.Samples.AllWidgets/allControls.xml)).
 * **Skinning.**  The default skin(it had been borrowed from [VisUI](https://github.com/kotcrab/vis-ui)) could be replaced with a custom skin loaded from the XML ([example](/samples/Myra.Samples.CustomUIStylesheet/Resources/ui_stylesheet.xml)).
 * **MyraPad.** Standalone WYSIWYG MML based UI designer.
+* **Myra.PlatformAgnostic** Version of the library that could be used in any C# game engine.
 
 ## Demo
 If you would like to see Myra in action, download the binary release(Myra.v.v.v.v.zip from the latest release at [Releases](https://github.com/rds1983/Myra/releases)), unpack it and run samples(should be runnable on Linux too through Mono).
