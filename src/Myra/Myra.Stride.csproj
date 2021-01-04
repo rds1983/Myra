@@ -25,7 +25,7 @@
 
   <ItemGroup>
     <PackageReference Include="AssetManagementBase" Version="0.5.2" />
-    <PackageReference Include="FontStashSharp.Stride" Version="0.9.1" />
+    <PackageReference Include="FontStashSharp.Stride" Version="0.9.1.1" />
     <PackageReference Include="info.lundin.math.dll" Version="1.2.6" />
   </ItemGroup>  
 </Project>

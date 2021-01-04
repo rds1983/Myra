@@ -15,7 +15,7 @@ using System.Drawing;
 using Myra.Platform;
 using System.Numerics;
 using Texture2D = System.Object;
-using Matrix = Matrix3x2;
+using Matrix = System.Numerics.Matrix3x2;
 #endif
 
 namespace Myra.Graphics2D

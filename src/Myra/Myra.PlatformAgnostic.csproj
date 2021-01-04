@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>MyraTeam</Authors>
     <Product>Myra.PlatformAgnostic</Product>
     <Description>UI Library</Description>
@@ -10,7 +11,6 @@
     <Version>1.0.0.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <DefineConstants>$(DefineConstants);PLATFORM_AGNOSTIC</DefineConstants>
-    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,8 +18,8 @@
   </ItemGroup>  
 
   <ItemGroup>
+    <PackageReference Include="FontStashSharp" Version="0.9.1.1" />
     <PackageReference Include="AssetManagementBase" Version="0.5.2" />
-    <PackageReference Include="FontStashSharp" Version="0.9.1" />
     <PackageReference Include="info.lundin.math.dll" Version="1.2.6" />
-  </ItemGroup>
+  </ItemGroup>  
 </Project>
