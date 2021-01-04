@@ -14,8 +14,6 @@ namespace Myra.Utility
 	{
 		public static readonly Point PointZero = new Point(0, 0);
 
-		public static readonly Rectangle RectangleOne = new Rectangle(0, 0, 1, 1);
-
 		/// <summary>
 		/// The value for which all absolute numbers smaller than are considered equal to zero.
 		/// </summary>

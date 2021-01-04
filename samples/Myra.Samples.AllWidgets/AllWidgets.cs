@@ -123,17 +123,18 @@ namespace Myra.Samples.AllWidgets
 
 		public void ChooseColor()
 		{
-			var debugWindow = new ColorPickerDialog();
-			debugWindow.ShowModal(Desktop);
+			var colorWindow = new ColorPickerDialog();
+			colorWindow.Color = _textButtonLabel.TextColor;
+			colorWindow.ShowModal(Desktop);
 
-			debugWindow.Closed += (s, a) =>
+			colorWindow.Closed += (s, a) =>
 			{
-				if (!debugWindow.Result)
+				if (!colorWindow.Result)
 				{
 					return;
 				}
 
-				_textButtonLabel.TextColor = debugWindow.Color;
+				_textButtonLabel.TextColor = colorWindow.Color;
 			};
 		}
 

@@ -75,16 +75,16 @@ namespace Myra.Graphics2D
 			var c = CrossEngineStuff.MultiplyColor(color, Opacity);
 
 			// Top
-			Draw(texture, new Rectangle(rectangle.X, rectangle.Y, rectangle.Width, t), Mathematics.RectangleOne, c);
+			Draw(texture, new Rectangle(rectangle.X, rectangle.Y, rectangle.Width, t), null, c);
 
 			// Bottom
-			Draw(texture, new Rectangle(rectangle.X, rectangle.Bottom - t, rectangle.Width, t), Mathematics.RectangleOne, c);
+			Draw(texture, new Rectangle(rectangle.X, rectangle.Bottom - t, rectangle.Width, t), null, c);
 
 			// Left
-			Draw(texture, new Rectangle(rectangle.X, rectangle.Y, t, rectangle.Height), Mathematics.RectangleOne, c);
+			Draw(texture, new Rectangle(rectangle.X, rectangle.Y, t, rectangle.Height), null, c);
 
 			// Right
-			Draw(texture, new Rectangle(rectangle.Right - t, rectangle.Y, t, rectangle.Height), Mathematics.RectangleOne, c);
+			Draw(texture, new Rectangle(rectangle.Right - t, rectangle.Y, t, rectangle.Height), null, c);
 		}
 
 		/// <summary>

@@ -169,23 +169,23 @@ namespace Myra.Graphics2D
 		public void Draw(Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color)
 		{
 #if MONOGAME || FNA
-			_renderer.Draw(texture, destinationRectangle, sourceRectangle, color);
+			_renderer.Draw(texture, destinationRectangle, sourceRectangle, color * Opacity);
 #elif STRIDE
-			_renderer.Draw(texture, destinationRectangle, sourceRectangle, color, 0, Vector2.Zero);
+			_renderer.Draw(texture, destinationRectangle, sourceRectangle, color * Opacity, 0, Vector2.Zero);
 #else
-			_renderer.Draw(texture, destinationRectangle, sourceRectangle, color);
+			_renderer.Draw(texture, destinationRectangle, sourceRectangle, CrossEngineStuff.MultiplyColor(color, Opacity));
 #endif
 		}
 
 #if MONOGAME || FNA || STRIDE
 		public void Draw(Texture2D texture, Rectangle destinationRectangle, Color color)
 		{
-			_renderer.Draw(texture, destinationRectangle, color);
+			_renderer.Draw(texture, destinationRectangle, color * Opacity);
 		}
 
 		public void Draw(Texture2D texture, Vector2 position, Color color)
 		{
-			_renderer.Draw(texture, position, color);
+			_renderer.Draw(texture, position, color * Opacity);
 		}
 		
 		public void Draw(Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color)
@@ -224,7 +224,7 @@ namespace Myra.Graphics2D
 		/// <param name="layerDepth">A depth of the layer of this string.</param>
 		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color color, Vector2 scale, float rotation, Vector2 origin, float layerDepth = 0.0f)
 		{
-			font.DrawText(_renderer, text, position, color, scale, rotation, origin, layerDepth);
+			font.DrawText(_renderer, text, position, CrossEngineStuff.MultiplyColor(color, Opacity), scale, rotation, origin, layerDepth);
 		}
 
 		/// <summary>
@@ -237,7 +237,7 @@ namespace Myra.Graphics2D
 		/// <param name="layerDepth">A depth of the layer of this string.</param>
 		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color color, Vector2 scale, float layerDepth = 0.0f)
 		{
-			font.DrawText(_renderer, text, position, color, scale, layerDepth);
+			font.DrawText(_renderer, text, position, CrossEngineStuff.MultiplyColor(color, Opacity), scale, layerDepth);
 		}
 
 		/// <summary>
@@ -249,7 +249,7 @@ namespace Myra.Graphics2D
 		/// <param name="layerDepth">A depth of the layer of this string.</param>
 		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color color, float layerDepth = 0.0f)
 		{
-			font.DrawText(_renderer, text, position, color, layerDepth);
+			font.DrawText(_renderer, text, position, CrossEngineStuff.MultiplyColor(color, Opacity), layerDepth);
 		}
 
 		/// <summary>

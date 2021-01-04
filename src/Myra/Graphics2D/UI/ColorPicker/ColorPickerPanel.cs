@@ -49,12 +49,16 @@ namespace Myra.Graphics2D.UI.ColorPicker
 		{
 			get
 			{
-				return _colorDisplay.Color;
+				var c = _colorDisplay.Color;
+				return CrossEngineStuff.CreateColor(c.R,
+					c.G,
+					c.B,
+					DisplayAlpha);
 			}
 
 			set
 			{
-				if (value == _colorDisplay.Color)
+				if (value == Color)
 				{
 					return;
 				}
@@ -460,6 +464,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 		private void OnColorChanged(Color c)
 		{
+			A = c.A / 255f;
 			OnColorChanged(c, c.ToHSV());
 		}
 

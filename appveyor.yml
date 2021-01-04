@@ -1,4 +1,4 @@
-version: 1.1.0.{build}
+version: 1.2.0.{build}
 configuration: Release
 test: off # Tests are off, since appveyor box can't create GraphicsDevice
 dotnet_csproj:
@@ -21,6 +21,9 @@ artifacts:
   - path: src/Myra/bin/Stride/Release/Myra.Stride.$(appveyor_build_version).nupkg
     name: Myra.Stride.nupkg
     
+  - path: src/Myra/bin/PlatformAgnostic/Release/Myra.PlatformAgnostic.$(appveyor_build_version).nupkg
+    name: Myra.PlatformAgnostic.nupkg
+
   - path: Myra.$(appveyor_build_version).zip
     name: ZipPackage
 deploy:

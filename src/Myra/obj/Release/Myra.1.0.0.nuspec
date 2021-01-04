@@ -4,18 +4,19 @@
     <id>Myra</id>
     <version>1.0.0</version>
     <authors>MyraTeam</authors>
-    <owners>MyraTeam</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <licenseUrl>https://en.wikipedia.org/wiki/MIT_License</licenseUrl>
     <projectUrl>https://github.com/rds1983/Myra</projectUrl>
     <description>UI Library for MonoGame, FNA and Xenko</description>
     <dependencies>
       <group targetFramework=".NETFramework4.5">
-        <dependency id="XNAssets" version="0.5.0.6" exclude="Build,Analyzers" />
+        <dependency id="AssetManagementBase" version="0.5.2" exclude="Build,Analyzers" />
+        <dependency id="FontStashSharp.MonoGame" version="0.9.1.1" exclude="Build,Analyzers" />
         <dependency id="info.lundin.math.dll" version="1.2.6" exclude="Build,Analyzers" />
       </group>
       <group targetFramework=".NETStandard2.0">
-        <dependency id="XNAssets" version="0.5.0.6" exclude="Build,Analyzers" />
+        <dependency id="AssetManagementBase" version="0.5.2" exclude="Build,Analyzers" />
+        <dependency id="FontStashSharp.MonoGame" version="0.9.1.1" exclude="Build,Analyzers" />
         <dependency id="info.lundin.math.dll" version="1.2.6" exclude="Build,Analyzers" />
       </group>
     </dependencies>
