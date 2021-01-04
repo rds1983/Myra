@@ -4,6 +4,7 @@ using Myra.Graphics2D.UI.Properties;
 using Microsoft.Xna.Framework.Graphics;
 using FontStashSharp;
 using System.Linq;
+using Myra.Graphics2D;
 
 namespace Myra.Samples.ObjectEditor
 {
@@ -16,6 +17,7 @@ namespace Myra.Samples.ObjectEditor
 		private Window _windowEditor;
 		private Point _lastPosition = new Point(800, 100);
 		private SpriteBatch _spriteBatch;
+		private RenderContext _renderContext;
 		private Desktop _desktop;
 		private SpriteFontBase _font;
 
@@ -91,6 +93,7 @@ namespace Myra.Samples.ObjectEditor
 
 			// Force window show
 			showButton.IsPressed = true;
+
 #if MONOGAME
 			// Inform Myra that external text input is available
 			// So it stops translating Keys to chars
@@ -102,6 +105,8 @@ namespace Myra.Samples.ObjectEditor
 				_desktop.OnChar(a.Character);
 			};
 #endif
+
+			_renderContext = new RenderContext();
 		}
 
 		private void ShowButton_PressedChanged(object sender, System.EventArgs e)
@@ -126,6 +131,15 @@ namespace Myra.Samples.ObjectEditor
 
 			if (_player.Visible)
 			{
+
+				var playerRect = new Rectangle(_player.X, _player.Y, _player.Width, _player.Height);
+				if (_player.Background != null)
+				{
+					_renderContext.Begin();
+					_player.Background.Draw(_renderContext, playerRect, _player.Color);
+					_renderContext.End();
+				}
+
 				_spriteBatch.Begin();
 
 				if (!string.IsNullOrEmpty(_player.Name))
@@ -133,12 +147,6 @@ namespace Myra.Samples.ObjectEditor
 					var size = _font.MeasureString(_player.Name);
 					_spriteBatch.DrawString(_font, _player.Name, 
 						new Vector2(_player.X, _player.Y - size.Y - 5), _player.Color);
-				}
-
-				var playerRect = new Rectangle(_player.X, _player.Y, _player.Width, _player.Height);
-				if (_player.Background != null)
-				{
-					_player.Background.Draw(_spriteBatch, playerRect, _player.Color);
 				}
 
 				_spriteBatch.DrawString(_font, 
