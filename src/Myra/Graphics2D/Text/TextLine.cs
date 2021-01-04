@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using Stride.Core.Mathematics;
 #else
 using System.Drawing;
-using Vector2 = System.Drawing.PointF;
+using System.Numerics;
 #endif
 
 namespace Myra.Graphics2D.Text

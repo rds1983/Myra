@@ -16,14 +16,18 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\**\*.*" />
-  </ItemGroup>  
-  
+  </ItemGroup>
+
   <ItemGroup>
+    <Compile Remove="Platform\**\*.*" />
+  </ItemGroup>  
+
+  <ItemGroup>
+    <PackageReference Include="AssetManagementBase" Version="0.5.2" />
     <PackageReference Include="info.lundin.math.dll" Version="1.2.6" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\FontStashSharp\src\XNA\FontStashSharp.FNA.Core.csproj" />
-    <ProjectReference Include="..\..\..\XNAssets\src\XNAssets.FNA.Core.csproj" />
   </ItemGroup>
 </Project>

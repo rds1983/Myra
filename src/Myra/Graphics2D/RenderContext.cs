@@ -1,5 +1,3 @@
-// FillRectangle/DrawRectangle code had been borrowed from the MonoGame.Extended project: https://github.com/craftworkgames/MonoGame.Extended
-
 using FontStashSharp;
 using System;
 using Myra.Utility;
@@ -15,8 +13,9 @@ using Texture2D = Stride.Graphics.Texture;
 #else
 using System.Drawing;
 using Myra.Platform;
-using Vector2 = System.Drawing.PointF;
+using System.Numerics;
 using Texture2D = System.Object;
+using Matrix = Matrix3x2;
 #endif
 
 namespace Myra.Graphics2D
@@ -80,7 +79,13 @@ namespace Myra.Graphics2D
 
 				if (_transform != null)
 				{
+#if MONOGAME || FNA || STRIDE
 					InverseTransform = Matrix.Invert(_transform.Value);
+#else
+					Matrix inverse = Matrix.Identity;
+					Matrix.Invert(_transform.Value, out inverse);
+					InverseTransform = inverse;
+#endif
 				}
 			}
 		}
@@ -111,8 +116,8 @@ namespace Myra.Graphics2D
 
 				if (Transform != null)
 				{
-					var pos = new Vector2(value.X, value.Y).Transform(Transform.Value);
-					var size = new Vector2(value.Width, value.Height).Transform(Transform.Value);
+					var pos = Vector2.Transform(new Vector2(value.X, value.Y), Transform.Value);
+					var size = Vector2.Transform(new Vector2(value.Width, value.Height), Transform.Value);
 
 					value = new Rectangle((int)pos.X, (int)pos.Y, (int)size.X, (int)size.Y);
 				}
@@ -150,7 +155,7 @@ namespace Myra.Graphics2D
 #if MONOGAME || FNA
 			_renderer.Draw(texture, destinationRectangle, sourceRectangle, color);
 #elif STRIDE
-			_renderer.Draw(texture, destinationRectangle, sourceRectangle, color, 0, Mathematics.Vector2Zero);
+			_renderer.Draw(texture, destinationRectangle, sourceRectangle, color, 0, Vector2.Zero);
 #else
 			_renderer.Draw(texture, destinationRectangle, sourceRectangle, color);
 #endif

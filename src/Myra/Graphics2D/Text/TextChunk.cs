@@ -12,7 +12,7 @@ using Clr = Stride.Core.Mathematics.Color;
 #else
 using System.Drawing;
 using Clr = System.Drawing.Color;
-using Vector2 = System.Drawing.PointF;
+using System.Numerics;
 #endif
 
 namespace Myra.Graphics2D.Text
@@ -71,7 +71,7 @@ namespace Myra.Graphics2D.Text
 				});
 			}
 
-			var offset = Mathematics.Vector2Zero;
+			var offset = Vector2.Zero;
 			for (var i = 0; i < _text.Length; ++i)
 			{
 				Vector2 v = _font.MeasureString(_text[i].ToString());

@@ -4,7 +4,7 @@ namespace Myra.Samples.AllWidgets
 {
 	static class Utility
 	{
-		public static Vector2 ToXNA(this System.Drawing.PointF r)
+		public static Vector2 ToXNA(this System.Numerics.Vector2 r)
 		{
 			return new Vector2(r.X, r.Y);
 		}

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Drawing;
+using System.Numerics;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Platform;
-
-using Vector2 = System.Drawing.PointF;
 
 namespace Myra.Samples.AllWidgets
 {

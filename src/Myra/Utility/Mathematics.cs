@@ -6,16 +6,12 @@ using Microsoft.Xna.Framework;
 using Stride.Core.Mathematics;
 #else
 using System.Drawing;
-using Vector2 = System.Drawing.PointF;
 #endif
 
 namespace Myra.Utility
 {
 	internal static class Mathematics
 	{
-		public static readonly Vector2 Vector2Zero = new Vector2(0, 0);
-		public static readonly Vector2 Vector2One = new Vector2(1, 1);
-
 		public static readonly Point PointZero = new Point(0, 0);
 
 		public static readonly Rectangle RectangleOne = new Rectangle(0, 0, 1, 1);
@@ -40,11 +36,6 @@ namespace Myra.Utility
 		public static bool IsZero(this float a)
 		{
 			return a.EpsilonEquals(0.0f);
-		}
-
-		public static Vector2 Transform(this Vector2 position, Matrix matrix)
-		{
-			return new Vector2((position.X * matrix.M11) + (position.Y * matrix.M21) + matrix.M41, (position.X * matrix.M12) + (position.Y * matrix.M22) + matrix.M42);
 		}
 	}
 }

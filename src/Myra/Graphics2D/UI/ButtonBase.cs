@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework.Input;
 #elif STRIDE
 using Stride.Input;
 #else
-using System.Drawing;
 using Myra.Platform;
 #endif
 

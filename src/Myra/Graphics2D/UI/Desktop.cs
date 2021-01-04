@@ -15,7 +15,7 @@ using Stride.Input;
 #else
 using System.Drawing;
 using Myra.Platform;
-using Vector2 = System.Drawing.PointF;
+using System.Numerics;
 #endif
 
 namespace Myra.Graphics2D.UI
@@ -961,7 +961,7 @@ namespace Myra.Graphics2D.UI
 			if (_renderContext.Transform != null)
 			{
 				// Apply transform
-				var t = new Vector2(mousePosition.X, mousePosition.Y).Transform(_renderContext.InverseTransform);
+				var t = Vector2.Transform(new Vector2(mousePosition.X, mousePosition.Y), _renderContext.InverseTransform);
 
 				mousePosition = new Point((int)t.X, (int)t.Y);
 			}

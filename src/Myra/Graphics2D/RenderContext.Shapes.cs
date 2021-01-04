@@ -12,8 +12,7 @@ using Stride.Graphics;
 using Texture2D = Stride.Graphics.Texture;
 #else
 using System.Drawing;
-using Vector2 = System.Drawing.PointF;
-using Texture2D = System.Object;
+using System.Numerics;
 #endif
 
 namespace Myra.Graphics2D
@@ -107,7 +106,7 @@ namespace Myra.Graphics2D
 
 		private void Draw(Texture2D texture, Vector2 offset, Color color, Vector2 scale, float rotation = 0.0f)
 		{
-			Draw(texture, offset, null, color, rotation, Mathematics.Vector2Zero, scale, SpriteEffects.None, 0.0f);
+			Draw(texture, offset, null, color, rotation, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
 		}
 
 		/// <summary>
