@@ -11,13 +11,15 @@ jobs:
     - uses: actions/checkout@v2
       with:
         submodules: recursive
+    - name: Extract Version
+      run: echo %PATH%
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1.x'
     - name: Build Myra.MonoGame
-      run: dotnet build src\XNA\Myra.MonoGame.csproj --configuration Release
+      run: dotnet build build\Myra.MonoGame.sln --configuration Release
     - name: Build Myra.Stride
-      run: dotnet build src\XNA\Myra.Stride.csproj --configuration Release
+      run: dotnet build build\Myra.Stride.sln --configuration Release
     - name: Build Myra.PlatformAgnostic
-      run: dotnet build src\Myra\Myra.PlatformAgnostic.csproj --configuration Release
+      run: dotnet build build\Myra.PlatformAgnostic.sln --configuration Release
