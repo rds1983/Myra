@@ -54,7 +54,7 @@ namespace Myra.Graphics2D.Brushes
 			}
 			else
 			{
-				var c = CrossEngineStuff.CreateColor((int)(Color.R * color.R / 255.0f),
+				var c = ColorStorage.CreateColor((int)(Color.R * color.R / 255.0f),
 					(int)(Color.G * color.G / 255.0f),
 					(int)(Color.B * color.B / 255.0f),
 					(int)(Color.A * color.A / 255.0f));

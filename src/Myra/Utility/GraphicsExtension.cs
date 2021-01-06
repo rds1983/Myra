@@ -143,7 +143,7 @@ namespace Myra.Utility
 					break;
 			}
 
-			return CrossEngineStuff.CreateColor((byte)r, (byte)g, (byte)b, (byte)255);
+			return ColorStorage.CreateColor((byte)r, (byte)g, (byte)b, (byte)255);
 		}
 	}
 }

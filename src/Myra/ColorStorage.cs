@@ -115,7 +115,7 @@ namespace Myra
 						}
 					}
 
-					return CrossEngineStuff.CreateColor(r, g, b, a);
+					return CreateColor(r, g, b, a);
 				}
 			}
 			else
@@ -128,6 +128,15 @@ namespace Myra
 			}
 
 			return null;
+		}
+
+		public static Color CreateColor(int r, int g, int b, int a = 255)
+		{
+#if MONOGAME || FNA || STRIDE
+			return new Color((byte)r, (byte)g, (byte)b, (byte)a);
+#else
+			return Color.FromArgb(a, r, g, b);
+#endif
 		}
 	}
 }

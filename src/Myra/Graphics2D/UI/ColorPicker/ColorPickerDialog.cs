@@ -44,7 +44,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 				var colorDisplay = ColorPickerPanel.GetUserColorImage(i);
 				var color = colorDisplay.Color;
 				var alpha = (int) (colorDisplay.Opacity * 255);
-				ColorPickerPanel.UserColors[i] = CrossEngineStuff.CreateColor(color.R, color.G, color.B, alpha);
+				ColorPickerPanel.UserColors[i] = ColorStorage.CreateColor(color.R, color.G, color.B, alpha);
 			}
 		}
 	}

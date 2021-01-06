@@ -27,22 +27,22 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 		public static readonly Color[] UserColors = new[]
 		{
-			CrossEngineStuff.CreateColor(255, 255, 255),
-			CrossEngineStuff.CreateColor(217, 217, 217),
-			CrossEngineStuff.CreateColor(178, 178, 178),
-			CrossEngineStuff.CreateColor(140, 140, 140),
-			CrossEngineStuff.CreateColor(102, 102, 102),
-			CrossEngineStuff.CreateColor(64, 64, 64),
-			CrossEngineStuff.CreateColor(32, 32, 32),
-			CrossEngineStuff.CreateColor(0, 0, 0),
-			CrossEngineStuff.CreateColor(254, 57, 48),
-			CrossEngineStuff.CreateColor(255, 149, 3),
-			CrossEngineStuff.CreateColor(255, 204, 1),
-			CrossEngineStuff.CreateColor(75, 217, 97),
-			CrossEngineStuff.CreateColor(91, 198, 250),
-			CrossEngineStuff.CreateColor(3, 121, 255),
-			CrossEngineStuff.CreateColor(87, 86, 213),
-			CrossEngineStuff.CreateColor(207, 86, 191)
+			ColorStorage.CreateColor(255, 255, 255),
+			ColorStorage.CreateColor(217, 217, 217),
+			ColorStorage.CreateColor(178, 178, 178),
+			ColorStorage.CreateColor(140, 140, 140),
+			ColorStorage.CreateColor(102, 102, 102),
+			ColorStorage.CreateColor(64, 64, 64),
+			ColorStorage.CreateColor(32, 32, 32),
+			ColorStorage.CreateColor(0, 0, 0),
+			ColorStorage.CreateColor(254, 57, 48),
+			ColorStorage.CreateColor(255, 149, 3),
+			ColorStorage.CreateColor(255, 204, 1),
+			ColorStorage.CreateColor(75, 217, 97),
+			ColorStorage.CreateColor(91, 198, 250),
+			ColorStorage.CreateColor(3, 121, 255),
+			ColorStorage.CreateColor(87, 86, 213),
+			ColorStorage.CreateColor(207, 86, 191)
 		};
 
 		public Color Color
@@ -50,7 +50,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			get
 			{
 				var c = _colorDisplay.Color;
-				return CrossEngineStuff.CreateColor(c.R,
+				return ColorStorage.CreateColor(c.R,
 					c.G,
 					c.B,
 					DisplayAlpha);
@@ -76,7 +76,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 			set
 			{
-				Color = CrossEngineStuff.CreateColor(value, Color.G, Color.B, Color.A);
+				Color = ColorStorage.CreateColor(value, Color.G, Color.B, Color.A);
 			}
 		}
 
@@ -89,7 +89,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 			set
 			{
-				Color = CrossEngineStuff.CreateColor(Color.R, value, Color.B, Color.A);
+				Color = ColorStorage.CreateColor(Color.R, value, Color.B, Color.A);
 			}
 		}
 
@@ -102,7 +102,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 			set
 			{
-				Color = CrossEngineStuff.CreateColor(Color.R, Color.G, value, Color.A);
+				Color = ColorStorage.CreateColor(Color.R, Color.G, value, Color.A);
 			}
 		}
 
@@ -388,7 +388,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			if (byte.TryParse(st[0], out byte r) && byte.TryParse(st[1], out byte g) && byte.TryParse(st[2], out byte b))
 			{
 				_inputRGB.Tag = true;
-				OnColorChanged(CrossEngineStuff.CreateColor(r, g, b));
+				OnColorChanged(ColorStorage.CreateColor(r, g, b));
 				_inputRGB.Tag = false;
 			}
 		}
@@ -435,7 +435,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			{
 				_inputHEX.Tag = true;
 				var c = color.Value;
-				OnColorChanged(CrossEngineStuff.CreateColor(c.R, c.G, c.B));
+				OnColorChanged(ColorStorage.CreateColor(c.R, c.G, c.B));
 				_inputHEX.Tag = false;
 			}
 		}
@@ -471,7 +471,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 		private void OnColorChanged(ColorHSV h)
 		{
 			var c = h.ToRGB();
-			c = CrossEngineStuff.CreateColor(c.R, c.G, c.B, 255);
+			c = ColorStorage.CreateColor(c.R, c.G, c.B, 255);
 			OnColorChanged(c, h);
 		}
 
@@ -507,7 +507,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 				_vPicker.Top = (int)(hsv.V / -100f * WheelHeight) + WheelHeight;
 			}
 
-			_colorWheel.Color = CrossEngineStuff.CreateColor((int)(hsv.V * 255.0f / 100f), (int)(hsv.V * 255.0f / 100f), (int)(hsv.V * 255.0f / 100f));
+			_colorWheel.Color = ColorStorage.CreateColor((int)(hsv.V * 255.0f / 100f), (int)(hsv.V * 255.0f / 100f), (int)(hsv.V * 255.0f / 100f));
 			
 			_colorDisplay.Color = rgb;
 			

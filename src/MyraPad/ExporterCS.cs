@@ -284,7 +284,7 @@ namespace MyraPad
 			{
 				string strValue = null;
 				if (typeof(IBrush).IsAssignableFrom(property.PropertyType) || 
-					property.PropertyType == typeof(DynamicSpriteFont))
+					property.PropertyType == typeof(SpriteFontBase))
 				{
 					var baseObject = o as BaseObject;
 					string s;
@@ -353,6 +353,11 @@ namespace MyraPad
 				if (!string.IsNullOrEmpty(name))
 				{
 					return "Color." + name;
+				} else
+				{
+					var c = (Color)value;
+
+					return string.Format("ColorStorage.CreateColor({0}, {1}, {2}, {3})", (int)c.R, (int)c.G, (int)c.B, (int)c.A);
 				}
 			}
 
