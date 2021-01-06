@@ -12,7 +12,9 @@ jobs:
       with:
         submodules: recursive
     - name: Extract Version
-      run: echo %PATH%
+      shell: pwsh
+      run: $props = Get-Content Directory.Build.Props
+           echo $props
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
