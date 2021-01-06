@@ -13,8 +13,9 @@ jobs:
         submodules: recursive
     - name: Extract Version
       shell: pwsh
-      run: $props = Get-Content Directory.Build.Props
-           echo $props
+      run: ./extractVersion.ps1
+    - name: Show Version
+      run: echo %Version%
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
