@@ -14,19 +14,13 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '3.1.x'
+        dotnet-version: '5.0.x'
     - name: Build Myra.MonoGame
-      run: |
-        dotnet restore build\Myra.MonoGame.sln
-        dotnet build build\Myra.MonoGame.sln --configuration Release
+      run: dotnet build build\Myra.MonoGame.sln --configuration Release
     - name: Build Myra.Stride
-      run: |
-        dotnet restore build\Myra.Stride.sln
-        dotnet build build\Myra.Stride.sln --configuration Release
+      run: dotnet build build\Myra.Stride.sln --configuration Release
     - name: Build Myra.PlatformAgnostic
-      run: |
-        dotnet restore build\Myra.PlatformAgnostic.sln
-        dotnet build build\Myra.PlatformAgnostic.sln --configuration Release
+      run: dotnet build build\Myra.PlatformAgnostic.sln --configuration Release
     - name: Build Binary Distribution
       shell: pwsh
       run: ./buildBinaryDistribution.ps1
