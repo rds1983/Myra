@@ -17,6 +17,7 @@ jobs:
         $version = select-string -Path 'Directory.Build.Props' -Pattern '<Version>(.*)<\/Version>' -AllMatches | % { $_.Matches } | % { $_.Groups[1].Value }
         echo "VERSION=$version" >> $Env:GITHUB_ENV
     - name: Show Version
+      shell: pwsh
       run: |
         echo "${Env:VERSION}"
     - name: Setup .NET Core
