@@ -1,18 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Authors>MyraTeam</Authors>
-    <Product>Myra</Product>
-    <Description>UI Library for MonoGame, FNA and Stride</Description>
-    <PackageLicenseUrl>https://en.wikipedia.org/wiki/MIT_License</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/rds1983/Myra</PackageProjectUrl>
-    <AssemblyName>Myra</AssemblyName>
-    <RootNamespace>Myra</RootNamespace>
-    <Version>1.0.0.0</Version>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <DefineConstants>$(DefineConstants);STRIDE</DefineConstants>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Myra</AssemblyName>
     <PackageId>Myra.Stride</PackageId>
     <OutputPath>bin\Stride\$(Configuration)</OutputPath>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>

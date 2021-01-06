@@ -1,5 +1,5 @@
 <Project>
-  <Project.ExportOptions Namespace="Myra.Samples.AllWidgets" Class="AllWidgets" OutputPath="D:\Projects\Myra\samples\Myra.Samples.AllWidgets" />
+  <Project.ExportOptions Namespace="Myra.Samples.AllWidgets" Class="AllWidgets" OutputPath="C:\Projects\Myra\samples\Myra.Samples.AllWidgets" />
   <VerticalStackPanel Spacing="8">
     <VerticalStackPanel.Proportions>
       <Proportion Type="Auto" />
