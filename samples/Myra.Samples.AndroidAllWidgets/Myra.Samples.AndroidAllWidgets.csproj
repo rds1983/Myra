@@ -121,9 +121,9 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Myra\Myra.Android.csproj">
-      <Project>{b0300dd0-c044-405f-b2fb-d1bcc93e633c}</Project>
-      <Name>Myra.Android</Name>
+    <ProjectReference Include="..\..\src\Myra\Myra.MonoGame.csproj">
+      <Project>{10764131-25e8-4b3e-abe7-45ade3fd6cca}</Project>
+      <Name>Myra.MonoGame</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />

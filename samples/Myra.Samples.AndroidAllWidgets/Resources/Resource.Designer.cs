@@ -8,9 +8,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("Myra.Samples.AllWidgets.Resource", IsApplication=true)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("Myra.Resource", IsApplication=true)]
 
-namespace Myra.Samples.AllWidgets
+namespace Myra
 {
 	
 	
