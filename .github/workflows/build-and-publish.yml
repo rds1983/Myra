@@ -16,11 +16,17 @@ jobs:
       with:
         dotnet-version: '3.1.x'
     - name: Build Myra.MonoGame
-      run: dotnet build build\Myra.MonoGame.sln --configuration Release
+      run: |
+        dotnet restore build\Myra.MonoGame.sln
+        dotnet build build\Myra.MonoGame.sln --configuration Release
     - name: Build Myra.Stride
-      run: dotnet build build\Myra.Stride.sln --configuration Release
+      run: |
+        dotnet restore build\Myra.Stride.sln
+        dotnet build build\Myra.Stride.sln --configuration Release
     - name: Build Myra.PlatformAgnostic
-      run: dotnet build build\Myra.PlatformAgnostic.sln --configuration Release
+      run: |
+        dotnet restore build\Myra.PlatformAgnostic.sln
+        dotnet build build\Myra.PlatformAgnostic.sln --configuration Release
     - name: Build Binary Distribution
       shell: pwsh
       run: ./buildBinaryDistribution.ps1
