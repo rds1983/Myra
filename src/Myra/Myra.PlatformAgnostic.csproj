@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <DefineConstants>$(DefineConstants);PLATFORM_AGNOSTIC</DefineConstants>
     <AssemblyName>Myra</AssemblyName>
     <PackageId>Myra.PlatformAgnostic</PackageId>
