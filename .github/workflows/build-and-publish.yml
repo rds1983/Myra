@@ -48,4 +48,13 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
         asset_path: ./Myra.${{ env.VERSION }}.zip
         asset_name: Myra.${{ env.VERSION }}.zip
-        asset_content_type: application/zip      
+        asset_content_type: application/zip
+    - name: Install NuGet
+      uses: NuGet/setup-nuget@v1
+    - name: Publish Myra.MonoGame to NuGet
+      run: nuget.exe push src\Myra\bin\MonoGame\Release\Myra.*.nupkg ${{secrets.NUGET_APIKEY}} -Source https://api.nuget.org/v3/index.json
+    - name: Publish Myra.Stride to NuGet
+      run: nuget.exe push src\Myra\bin\Stride\Release\Myra.Stride.*.nupkg ${{secrets.NUGET_APIKEY}} -Source https://api.nuget.org/v3/index.json
+    - name: Publish Myra.PlatformAgnostic to NuGet
+      run: nuget.exe push src\Myra\bin\PlatformAgnostic\Release\Myra.PlatformAgnostic.*.nupkg ${{secrets.NUGET_APIKEY}} -Source https://api.nuget.org/v3/index.json
+        
