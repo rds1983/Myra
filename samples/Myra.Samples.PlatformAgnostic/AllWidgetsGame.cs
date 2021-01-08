@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Myra.Graphics2D.UI;
 using Myra.Platform;
-using System;
-using System.Numerics;
 
 namespace Myra.Samples.AllWidgets
 {

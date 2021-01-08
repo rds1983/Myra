@@ -48,7 +48,7 @@ namespace Myra.Graphics2D.UI
 		private readonly bool[] _downKeys = new bool[0xff], _lastDownKeys = new bool[0xff];
 		private Widget _previousKeyboardFocus;
 		private Widget _previousMouseWheelFocus;
-#if MONOGAME || FNA
+#if MONOGAME || FNA || PLATFORM_AGNOSTIC
 		private TouchCollection _oldTouchState;
 #endif
 		private Widget _scheduleMouseWheelFocus;
@@ -649,6 +649,8 @@ namespace Myra.Graphics2D.UI
 					_renderContext.Transform = Matrix.CreateScale(MyraEnvironment.LayoutScale.Value);
 #elif STRIDE
 					_renderContext.Transform = Matrix.Scaling(MyraEnvironment.LayoutScale.Value);
+#else
+					_renderContext.Transform = Matrix3x2.CreateScale(MyraEnvironment.LayoutScale.Value);
 #endif
 				}
 			}
@@ -897,10 +899,15 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-#if MONOGAME || FNA
+#if MONOGAME || FNA || PLATFORM_AGNOSTIC
 		public void UpdateTouch()
 		{
+#if MONOGAME || FNA
 			var touchState = TouchPanel.GetState();
+#else
+			var touchState = MyraEnvironment.Platform.GetTouchState();
+#endif
+
 			if (!touchState.IsConnected)
 			{
 				return;

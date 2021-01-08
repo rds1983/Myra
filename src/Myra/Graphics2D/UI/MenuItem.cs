@@ -20,7 +20,6 @@ namespace Myra.Graphics2D.UI
 	{
 		private string _shortcutText;
 		private Color? _shortcutColor;
-		private bool _toggleable;
 		private IImage _image;
 		private string _text;
 		private Color? _color;

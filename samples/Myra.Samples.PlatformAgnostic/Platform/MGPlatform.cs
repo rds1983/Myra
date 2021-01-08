@@ -71,5 +71,11 @@ namespace Myra.Samples.AllWidgets
 				keys[i] = state.IsKeyDown((Microsoft.Xna.Framework.Input.Keys)i);
 			}
 		}
+
+		public TouchCollection GetTouchState()
+		{
+			// Do not bother with accurately returning touch state for now
+			return TouchCollection.Empty;
+		}
 	}
 }
