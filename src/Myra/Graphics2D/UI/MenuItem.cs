@@ -69,6 +69,8 @@ namespace Myra.Graphics2D.UI
 						UnderscoreChar = char.ToLower(value[underscoreIndex + 1]);
 					}
 				}
+
+				FireChanged();
 			}
 		}
 
@@ -172,26 +174,6 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_shortcutColor = value;
-				FireChanged();
-			}
-		}
-
-		[DefaultValue(false)]
-		public bool Toggleable
-		{
-			get
-			{
-				return _toggleable;
-			}
-
-			set
-			{
-				if (value == _toggleable)
-				{
-					return;
-				}
-
-				_toggleable = value;
 				FireChanged();
 			}
 		}
