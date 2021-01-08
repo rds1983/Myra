@@ -57,7 +57,7 @@ namespace Myra.Graphics2D.UI
 		private bool _contextMenuShown = false;
 		private bool _keyboardFocusSet = false;
 		private bool _mouseWheelFocusSet = false;
-#if MONOGAME
+#if MONOGAME || PLATFORM_AGNOSTIC
 		public bool HasExternalTextInput = false;
 #endif
 
@@ -1142,7 +1142,7 @@ namespace Myra.Graphics2D.UI
 					{
 						_focusedKeyboardWidget.OnChar(ch.Value);
 					}
-#elif MONOGAME
+#elif MONOGAME || PLATFORM_AGNOSTIC
 					if (!HasExternalTextInput && !IsControlDown && !IsAltDown)
 					{
 						var c = key.ToChar(IsShiftDown);

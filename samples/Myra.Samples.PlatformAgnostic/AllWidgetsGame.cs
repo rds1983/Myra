@@ -70,7 +70,7 @@ namespace Myra.Samples.AllWidgets
 
 			// Inform Myra that external text input is available
 			// So it stops translating Keys to chars
-			// _desktop.HasExternalTextInput = true;
+			_desktop.HasExternalTextInput = true;
 
 			// Provide that text input
 			Window.TextInput += (s, a) =>
