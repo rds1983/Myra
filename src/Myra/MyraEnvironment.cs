@@ -134,6 +134,9 @@ namespace Myra
 				return;
 			}
 
+#if MONOGAME || FNA
+			AssetManager.SetAssetLoader(new SoundEffectLoader());
+#endif
 			AssetManager.SetAssetLoader(new Texture2DLoader());
 			AssetManager.SetAssetLoader(new StaticSpriteFontLoader());
 			AssetManager.SetAssetLoader(new FontSystemLoader());
