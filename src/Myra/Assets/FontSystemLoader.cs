@@ -2,6 +2,10 @@
 using FontStashSharp;
 using System;
 
+#if PLATFORM_AGNOSTIC
+using Myra.Platform;
+#endif
+
 namespace Myra.Assets
 {
 	internal class FontSystemLoader : IAssetLoader<FontSystem>
@@ -40,26 +44,26 @@ namespace Myra.Assets
 			switch (fontType)
 			{
 				case FontType.Regular:
-					fontSystem = FontSystemFactory.Create(MyraEnvironment.GraphicsDevice);
+					fontSystem = FontSystemFactory.Create(MyraEnvironment.GraphicsDevice, MyraEnvironment.FontAtlasSize, MyraEnvironment.FontAtlasSize);
 					break;
 				case FontType.Blurry:
-					fontSystem = FontSystemFactory.CreateBlurry(MyraEnvironment.GraphicsDevice, amount);
+					fontSystem = FontSystemFactory.CreateBlurry(MyraEnvironment.GraphicsDevice, amount, MyraEnvironment.FontAtlasSize, MyraEnvironment.FontAtlasSize);
 					break;
 				case FontType.Stroked:
-					fontSystem = FontSystemFactory.CreateStroked(MyraEnvironment.GraphicsDevice, amount);
+					fontSystem = FontSystemFactory.CreateStroked(MyraEnvironment.GraphicsDevice, amount, MyraEnvironment.FontAtlasSize, MyraEnvironment.FontAtlasSize);
 					break;
 			}
 #else
 			switch (fontType)
 			{
 				case FontType.Regular:
-					fontSystem = new FontSystem(MyraEnvironment.Platform, 1024, 1024);
+					fontSystem = FontSystemFactory.Create(MyraEnvironment.FontAtlasSize, MyraEnvironment.FontAtlasSize);
 					break;
 				case FontType.Blurry:
-					fontSystem = new FontSystem(MyraEnvironment.Platform, 1024, 1024, amount);
+					fontSystem = FontSystemFactory.CreateBlurry(amount, MyraEnvironment.FontAtlasSize, MyraEnvironment.FontAtlasSize);
 					break;
 				case FontType.Stroked:
-					fontSystem = new FontSystem(MyraEnvironment.Platform, 1024, 1024, 0, amount);
+					fontSystem = FontSystemFactory.CreateStroked(amount, MyraEnvironment.FontAtlasSize, MyraEnvironment.FontAtlasSize);
 					break;
 			}
 #endif

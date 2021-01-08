@@ -23,6 +23,8 @@ namespace Myra
 
 		public static event EventHandler GameDisposed;
 
+		public static int FontAtlasSize = 1024;
+
 #if MONOGAME || FNA || STRIDE
 
 		private static Game _game;
