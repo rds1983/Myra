@@ -6,6 +6,6 @@
     <PackageProjectUrl>https://github.com/rds1983/Myra</PackageProjectUrl>
     <RootNamespace>Myra</RootNamespace>
     <Description>UI Library for MonoGame, FNA and Stride</Description>
-    <Version>1.2.1.0</Version>
+    <Version>1.2.2</Version>
   </PropertyGroup>
 </Project>
