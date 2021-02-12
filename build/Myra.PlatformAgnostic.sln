@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.PlatformAgnostic", "..
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.PlatformAgnostic", "..\samples\Myra.Samples.PlatformAgnostic\Myra.Samples.PlatformAgnostic.csproj", "{3003BD7F-F0C9-4EDB-A68F-7A96E1C878CB}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.Silk.NET", "..\samples\Myra.Samples.Silk.NET\Myra.Samples.Silk.NET.csproj", "{698BD42F-C57D-48C8-97F9-7A98A72A943B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,12 +25,17 @@ Global
 		{3003BD7F-F0C9-4EDB-A68F-7A96E1C878CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3003BD7F-F0C9-4EDB-A68F-7A96E1C878CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3003BD7F-F0C9-4EDB-A68F-7A96E1C878CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{698BD42F-C57D-48C8-97F9-7A98A72A943B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{698BD42F-C57D-48C8-97F9-7A98A72A943B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{698BD42F-C57D-48C8-97F9-7A98A72A943B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{698BD42F-C57D-48C8-97F9-7A98A72A943B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3003BD7F-F0C9-4EDB-A68F-7A96E1C878CB} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{698BD42F-C57D-48C8-97F9-7A98A72A943B} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35ACDF4E-2CE2-46B1-A19F-35DC131069A1}

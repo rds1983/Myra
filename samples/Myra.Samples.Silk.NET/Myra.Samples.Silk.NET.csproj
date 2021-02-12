@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <ApplicationIcon />
+    <StartupObject />
+    <AssemblyName>Myra.Samples.AllWidgets</AssemblyName>
+    <RootNamespace>Myra.Samples.AllWidgets</RootNamespace>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <DefineConstants>$(DefineConstants);PLATFORM_AGNOSTIC</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Myra.Samples.AllWidgets\AllWidgets.cs" Link="AllWidgets.cs" />
+    <Compile Include="..\Myra.Samples.AllWidgets\AllWidgets.Generated.cs" Link="AllWidgets.Generated.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="TrippyGL" Version="1.0.0-rc2" />
+    <PackageReference Include="Silk.NET.OpenGL" Version="1.8.0" />
+    <PackageReference Include="Silk.NET.Input" Version="1.8.0" />
+    <PackageReference Include="Silk.NET.Windowing" Version="1.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Myra\Myra.PlatformAgnostic.csproj" />
+  </ItemGroup>  
+</Project>

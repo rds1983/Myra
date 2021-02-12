@@ -276,7 +276,7 @@ namespace Myra.Graphics2D
 				null,
 				UIRasterizerState,
 				null,
-				Transform);
+				Transform != null ? Transform.Value : Matrix.Identity);
 #elif STRIDE
 			if (Transform == null)
 			{
