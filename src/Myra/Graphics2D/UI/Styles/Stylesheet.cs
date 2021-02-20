@@ -573,9 +573,12 @@ namespace Myra.Graphics2D.UI.Styles
 			styles[DefaultStyleName] = value;
 		}
 
-		public static Stylesheet LoadFromSource(string stylesheetXml,
+
+		public static Stylesheet LoadFromSource(
+			string stylesheetXml,
 			TextureRegionAtlas textureRegionAtlas,
-			Dictionary<string, SpriteFontBase> fonts)
+			Dictionary<string, SpriteFontBase> fonts,
+			MMLDiagnosticAction onDiagnostic)
 		{
 			var xDoc = XDocument.Parse(stylesheetXml);
 
@@ -641,9 +644,17 @@ namespace Myra.Graphics2D.UI.Styles
 				Colors = colors
 			};
 
-			loadContext.Load(result, xDoc.Root);
+			loadContext.Load(result, xDoc.Root, onDiagnostic);
 
 			return result;
+		}
+
+		public static Stylesheet LoadFromSource(
+			string stylesheetXml,
+			TextureRegionAtlas textureRegionAtlas,
+			Dictionary<string, SpriteFontBase> fonts)
+		{
+			return LoadFromSource(stylesheetXml, textureRegionAtlas, fonts, null);
 		}
 
 		public string[] GetStylesByWidgetName(string name)
