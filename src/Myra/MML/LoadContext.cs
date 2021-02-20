@@ -34,9 +34,10 @@ namespace Myra.MML
 
 		private const string UserDataAttributePrefix = "_";
 
-		public void Load(object obj, XElement el)
+		public void Load<T>(object obj, XElement el, T handler) where T : class
 		{
 			var type = obj.GetType();
+			var handlerType = typeof(T);
 
 			var baseObject = obj as BaseObject;
 
@@ -124,6 +125,18 @@ namespace Myra.MML
 
 					property.SetValue(obj, value);
 				}
+				else if (handler != null && type.GetEvent(attr.Name.LocalName) != null)
+				{
+					var method = handlerType.GetMethod(attr.Value, BindingFlags.Public | BindingFlags.Instance);
+					var eventHandler = type.GetEvent(attr.Name.LocalName);
+					if (method == null)
+					{
+						throw new InvalidOperationException($"Handler of type '{handlerType}' does not contain method '{attr.Value}'. If it does, ensure the method is both public and non-static.");
+					}
+
+					var delegateMethod = method.CreateDelegate(eventHandler.EventHandlerType, handler);
+					eventHandler.AddEventHandler(obj, delegateMethod);
+				}
 				else
 				{
 					// Stow away custom user attributes
@@ -133,6 +146,7 @@ namespace Myra.MML
 					}
 				}
 			}
+			
 
 			var contentProperty = (from p in complexProperties
 								   where p.FindAttribute<ContentAttribute>() 
@@ -174,7 +188,7 @@ namespace Myra.MML
 							foreach (var child2 in child.Elements())
 							{
 								var item = ObjectCreator(property.PropertyType.GenericTypeArguments[0], child2);
-								Load(item, child2);
+								Load(item, child2, handler);
 								asList.Add(item);
 							}
 
@@ -188,7 +202,7 @@ namespace Myra.MML
 							foreach (var child2 in child.Elements())
 							{
 								var item = ObjectCreator(property.PropertyType.GenericTypeArguments[1], child2);
-								Load(item, child2);
+								Load(item, child2, handler);
 
 								var id = string.Empty;
 								if (child2.Attribute(IdName) != null)
@@ -205,12 +219,12 @@ namespace Myra.MML
 						if (property.SetMethod == null)
 						{
 							// Readonly
-							Load(value, child);
+							Load(value, child, handler);
 						}
 						else
 						{
 							var newValue = ObjectCreator(property.PropertyType, child);
-							Load(newValue, child);
+							Load(newValue, child, handler);
 							property.SetValue(obj, newValue);
 						}
 						break;
@@ -243,7 +257,7 @@ namespace Myra.MML
 					if (itemType != null)
 					{
 						var item = ObjectCreator(itemType, child);
-						Load(item, child);
+						Load(item, child, handler);
 
 						if (contentProperty == null)
 						{
