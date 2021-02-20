@@ -40,7 +40,7 @@ namespace Myra.Graphics2D.UI
 			set 
 			{
 				_l18nText = value;
-				Text = Project.Localize.Invoke(value);
+				Text = Project.Localize?.Invoke(value) ?? value;
 			}
 		}
 
