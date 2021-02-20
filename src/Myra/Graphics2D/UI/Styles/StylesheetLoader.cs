@@ -8,57 +8,62 @@ using AssetManagementBase;
 
 namespace Myra.Graphics2D.UI.Styles
 {
-	public class StylesheetLoader : IAssetLoader<Stylesheet>
-	{
-		public Stylesheet Load(AssetLoaderContext context, string assetName)
-		{
-			var xml = context.Load<string>(assetName);
+    public class StylesheetLoader : IAssetLoader<Stylesheet>
+    {
+        public Stylesheet Load(AssetLoaderContext context, string assetName)
+        {
+            return Load(context, assetName, null);
+        }
 
-			var xDoc = XDocument.Parse(xml);
-			var attr = xDoc.Root.Attribute("TextureRegionAtlas");
-			if (attr == null)
-			{
-				throw new Exception("Mandatory attribute 'TextureRegionAtlas' doesnt exist");
-			}
+        public Stylesheet Load(AssetLoaderContext context, string assetName, MMLDiagnosticAction onDiagnostic)
+        {
+            var xml = context.Load<string>(assetName);
 
-			var textureRegionAtlas = context.Load<TextureRegionAtlas>(attr.Value);
+            var xDoc = XDocument.Parse(xml);
+            var attr = xDoc.Root.Attribute("TextureRegionAtlas");
+            if (attr == null)
+            {
+                throw new Exception("Mandatory attribute 'TextureRegionAtlas' doesnt exist");
+            }
 
-			// Load fonts
-			var fonts = new Dictionary<string, SpriteFontBase>();
-			var fontsNode = xDoc.Root.Element("Fonts");
-			foreach (var el in fontsNode.Elements())
-			{
-				SpriteFontBase font = null;
+            var textureRegionAtlas = context.Load<TextureRegionAtlas>(attr.Value);
 
-				var fontFile = el.Attribute("File").Value;
-				if (fontFile.EndsWith(".ttf"))
-				{
-					var parts = new List<string>();
-					parts.Add(fontFile);
-					
-					var typeAttribute = el.Attribute("Type");
-					if (typeAttribute != null)
-					{
-						parts.Add(typeAttribute.Value);
+            // Load fonts
+            var fonts = new Dictionary<string, SpriteFontBase>();
+            var fontsNode = xDoc.Root.Element("Fonts");
+            foreach (var el in fontsNode.Elements())
+            {
+                SpriteFontBase font = null;
 
-						var amountAttribute = el.Attribute("Amount");
-						parts.Add(amountAttribute.Value);
-					}
+                var fontFile = el.Attribute("File").Value;
+                if (fontFile.EndsWith(".ttf"))
+                {
+                    var parts = new List<string>();
+                    parts.Add(fontFile);
+                    
+                    var typeAttribute = el.Attribute("Type");
+                    if (typeAttribute != null)
+                    {
+                        parts.Add(typeAttribute.Value);
 
-					parts.Add(el.Attribute("Size").Value);
-					font = context.Load<DynamicSpriteFont>(string.Join(":", parts));
-				} else if (fontFile.EndsWith(".fnt"))
-				{
-					font = context.Load<StaticSpriteFont>(fontFile);
-				} else
-				{
-					throw new Exception(string.Format("Font '{0}' isn't supported", fontFile));
-				}
+                        var amountAttribute = el.Attribute("Amount");
+                        parts.Add(amountAttribute.Value);
+                    }
 
-				fonts[el.Attribute(BaseContext.IdName).Value] = font;
-			}
+                    parts.Add(el.Attribute("Size").Value);
+                    font = context.Load<DynamicSpriteFont>(string.Join(":", parts));
+                } else if (fontFile.EndsWith(".fnt"))
+                {
+                    font = context.Load<StaticSpriteFont>(fontFile);
+                } else
+                {
+                    throw new Exception(string.Format("Font '{0}' isn't supported", fontFile));
+                }
 
-			return Stylesheet.LoadFromSource(xml, textureRegionAtlas, fonts);
-		}
-	}
+                fonts[el.Attribute(BaseContext.IdName).Value] = font;
+            }
+
+            return Stylesheet.LoadFromSource(xml, textureRegionAtlas, fonts, onDiagnostic);
+        }
+    }
 }

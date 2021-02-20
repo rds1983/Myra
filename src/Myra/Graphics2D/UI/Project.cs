@@ -18,391 +18,403 @@ using FontStashSharp;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ExportOptions
-	{
-		public string Namespace { get; set; }
-		public string Class { get; set; }
-		public string OutputPath { get; set; }
-		public string TemplateDesigner { get; set; }
-		public string TemplateMain { get; set; }
-	}
+    public class ExportOptions
+    {
+        public string Namespace { get; set; }
+        public string Class { get; set; }
+        public string OutputPath { get; set; }
+        public string TemplateDesigner { get; set; }
+        public string TemplateMain { get; set; }
+    }
 
-	public class Project
-	{
-		public const string ProportionName = "Proportion";
-		public const string DefaultProportionName = "DefaultProportion";
-		public const string DefaultColumnProportionName = "DefaultColumnProportion";
-		public const string DefaultRowProportionName = "DefaultRowProportion";
+    public class Project
+    {
+        public const string ProportionName = "Proportion";
+        public const string DefaultProportionName = "DefaultProportion";
+        public const string DefaultColumnProportionName = "DefaultColumnProportion";
+        public const string DefaultRowProportionName = "DefaultRowProportion";
 
-		private static readonly Dictionary<string, string> LegacyClassNames = new Dictionary<string, string>();
+        private static readonly Dictionary<string, string> LegacyClassNames = new Dictionary<string, string>();
 
-		private readonly ExportOptions _exportOptions = new ExportOptions();
+        private readonly ExportOptions _exportOptions = new ExportOptions();
+        private readonly List<MMLDiagnostic> _diagnostics = new List<MMLDiagnostic>();
 
-		[Browsable(false)]
-		public ExportOptions ExportOptions
-		{
-			get { return _exportOptions; }
-		}
+        [Browsable(false)]
+        public ExportOptions ExportOptions
+        {
+            get { return _exportOptions; }
+        }
 
-		[Browsable(false)]
-		[Content]
-		public Widget Root { get; set; }
+        [Browsable(false)]
+        [Content]
+        public Widget Root { get; set; }
 
-		[Browsable(false)]
-		public string StylesheetPath
-		{
-			get; set;
-		}
+        [Browsable(false)]
+        public string StylesheetPath
+        {
+            get; set;
+        }
 
-		[Browsable(false)]
-		[XmlIgnore]
-		public Stylesheet Stylesheet { get; set; }
+        [Browsable(false)]
+        [XmlIgnore]
+        public Stylesheet Stylesheet { get; set; }
 
-		static Project()
-		{
-			LegacyClassNames["Button"] = "ImageTextButton";
-			LegacyClassNames["VerticalBox"] = "VerticalStackPanel";
-			LegacyClassNames["HorizontalBox"] = "HorizontalStackPanel";
-			LegacyClassNames["TextField"] = "TextBox";
-			LegacyClassNames["TextBlock"] = "Label";
-			LegacyClassNames["ScrollPane"] = "ScrollViewer";
-		}
+        [Browsable(false)]
+        [XmlIgnore]
+        public List<MMLDiagnostic> Diagnostics
+        {
+            get { return _diagnostics; }
+        }
 
-		public Project()
-		{
-			Stylesheet = Stylesheet.Current;
-		}
+        static Project()
+        {
+            LegacyClassNames["Button"] = "ImageTextButton";
+            LegacyClassNames["VerticalBox"] = "VerticalStackPanel";
+            LegacyClassNames["HorizontalBox"] = "HorizontalStackPanel";
+            LegacyClassNames["TextField"] = "TextBox";
+            LegacyClassNames["TextBlock"] = "Label";
+            LegacyClassNames["ScrollPane"] = "ScrollViewer";
+        }
 
-		public static bool IsProportionName(string s)
-		{
-			return s.EndsWith(ProportionName) ||
-				s.EndsWith(DefaultProportionName) ||
-				s.EndsWith(DefaultColumnProportionName) ||
-				s.EndsWith(DefaultRowProportionName);
-		}
+        public Project()
+        {
+            Stylesheet = Stylesheet.Current;
+        }
 
-		public static bool ShouldSerializeProperty(Stylesheet stylesheet, object o, PropertyInfo p)
-		{
-			var asWidget = o as Widget;
-			if (asWidget != null && asWidget.Parent != null && asWidget.Parent is Grid)
-			{
-				var container = asWidget.Parent.Parent;
-				if (container != null &&
-				   (container is StackPanel || container is SplitPane) &&
-				   (p.Name == "GridRow" || p.Name == "GridColumn"))
-				{
-					// Skip serializing auto-assigned GridRow/GridColumn for SplitPane and Box containers
-					return false;
-				}
-			}
+        public static bool IsProportionName(string s)
+        {
+            return s.EndsWith(ProportionName) ||
+                s.EndsWith(DefaultProportionName) ||
+                s.EndsWith(DefaultColumnProportionName) ||
+                s.EndsWith(DefaultRowProportionName);
+        }
 
-			var asGrid = o as Grid;
-			if (asGrid != null)
-			{
-				var value = p.GetValue(o);
-				if ((p.Name == DefaultColumnProportionName || p.Name == DefaultRowProportionName) &&
-					value == Proportion.GridDefault)
-				{
-					return false;
-				}
-			}
+        public static bool ShouldSerializeProperty(Stylesheet stylesheet, object o, PropertyInfo p)
+        {
+            var asWidget = o as Widget;
+            if (asWidget != null && asWidget.Parent != null && asWidget.Parent is Grid)
+            {
+                var container = asWidget.Parent.Parent;
+                if (container != null &&
+                   (container is StackPanel || container is SplitPane) &&
+                   (p.Name == "GridRow" || p.Name == "GridColumn"))
+                {
+                    // Skip serializing auto-assigned GridRow/GridColumn for SplitPane and Box containers
+                    return false;
+                }
+            }
 
-			var asBox = o as StackPanel;
-			if (asBox != null)
-			{
-				var value = p.GetValue(o);
-				if (p.Name == DefaultProportionName && value == Proportion.StackPanelDefault)
-				{
-					return false;
-				}
-			}
+            var asGrid = o as Grid;
+            if (asGrid != null)
+            {
+                var value = p.GetValue(o);
+                if ((p.Name == DefaultColumnProportionName || p.Name == DefaultRowProportionName) &&
+                    value == Proportion.GridDefault)
+                {
+                    return false;
+                }
+            }
 
-			if (SaveContext.HasDefaultValue(o, p))
-			{
-				return false;
-			}
+            var asBox = o as StackPanel;
+            if (asBox != null)
+            {
+                var value = p.GetValue(o);
+                if (p.Name == DefaultProportionName && value == Proportion.StackPanelDefault)
+                {
+                    return false;
+                }
+            }
 
-			if(asWidget != null && HasStylesheetValue(asWidget, p, stylesheet))
-			{
-				return false;
-			}
+            if (SaveContext.HasDefaultValue(o, p))
+            {
+                return false;
+            }
 
-			return true;
-		}
+            if (asWidget != null && HasStylesheetValue(asWidget, p, stylesheet))
+            {
+                return false;
+            }
 
-		public bool ShouldSerializeProperty(object o, PropertyInfo p)
-		{
-			return ShouldSerializeProperty(Stylesheet, o, p);
-		}
+            return true;
+        }
 
-		internal static SaveContext CreateSaveContext(Stylesheet stylesheet)
-		{
-			return new SaveContext
-			{
-				ShouldSerializeProperty = (o, p) => ShouldSerializeProperty(stylesheet, o, p)
-			};
-		}
+        public bool ShouldSerializeProperty(object o, PropertyInfo p)
+        {
+            return ShouldSerializeProperty(Stylesheet, o, p);
+        }
 
-		internal SaveContext CreateSaveContext()
-		{
-			return CreateSaveContext(Stylesheet);
-		}
+        internal static SaveContext CreateSaveContext(Stylesheet stylesheet)
+        {
+            return new SaveContext
+            {
+                ShouldSerializeProperty = (o, p) => ShouldSerializeProperty(stylesheet, o, p)
+            };
+        }
 
-		internal static LoadContext CreateLoadContext(IAssetManager assetManager, Stylesheet stylesheet)
-		{
-			Func<Type, string, object> resourceGetter = (t, name) =>
-			{
-				if (t == typeof(IBrush))
-				{
-					return new SolidBrush(name);
-				}
-				else if (t == typeof(IImage))
-				{
-					return assetManager.Load<TextureRegion>(name);
-				}
-				else if (t == typeof(SpriteFontBase))
-				{
-					return assetManager.Load<SpriteFontBase>(name);
-				}
+        internal SaveContext CreateSaveContext()
+        {
+            return CreateSaveContext(Stylesheet);
+        }
 
-				throw new Exception(string.Format("Type {0} isn't supported", t.Name));
-			};
+        internal static LoadContext CreateLoadContext(IAssetManager assetManager, Stylesheet stylesheet)
+        {
+            Func<Type, string, object> resourceGetter = (t, name) =>
+            {
+                if (t == typeof(IBrush))
+                {
+                    return new SolidBrush(name);
+                }
+                else if (t == typeof(IImage))
+                {
+                    return assetManager.Load<TextureRegion>(name);
+                }
+                else if (t == typeof(SpriteFontBase))
+                {
+                    return assetManager.Load<SpriteFontBase>(name);
+                }
 
-			return new LoadContext
-			{
-				Namespaces = new[]
-				{ 
-					typeof(Widget).Namespace,
-					typeof(PropertyGrid).Namespace,
-				},
-				LegacyClassNames = LegacyClassNames,
-				ObjectCreator = (t, el) => CreateItem(t, el, stylesheet),
-				ResourceGetter = resourceGetter
-			};
-		}
+                throw new Exception(string.Format("Type {0} isn't supported", t.Name));
+            };
 
-		internal LoadContext CreateLoadContext(IAssetManager assetManager)
-		{
-			return CreateLoadContext(assetManager, Stylesheet);
-		}
+            return new LoadContext
+            {
+                Namespaces = new[]
+                {
+                    typeof(Widget).Namespace,
+                    typeof(PropertyGrid).Namespace,
+                },
+                LegacyClassNames = LegacyClassNames,
+                ObjectCreator = (t, el) => CreateItem(t, el, stylesheet),
+                ResourceGetter = resourceGetter
+            };
+        }
 
-		public string Save()
-		{
-			var saveContext = CreateSaveContext();
-			var root = saveContext.Save(this);
+        internal LoadContext CreateLoadContext(IAssetManager assetManager)
+        {
+            return CreateLoadContext(assetManager, Stylesheet);
+        }
 
-			var xDoc = new XDocument(root);
+        public string Save()
+        {
+            var saveContext = CreateSaveContext();
+            var root = saveContext.Save(this);
 
-			return xDoc.ToString();
-		}
+            var xDoc = new XDocument(root);
 
-		public static Project LoadFromXml(XDocument xDoc, IAssetManager assetManager, Stylesheet stylesheet)
-		{
-			var result = new Project
-			{
-				Stylesheet = stylesheet
-			};
+            return xDoc.ToString();
+        }
 
-			var loadContext = result.CreateLoadContext(assetManager);
-			loadContext.Load(result, xDoc.Root);
+        public static Project LoadFromXml(
+            XDocument xDoc, IAssetManager assetManager, Stylesheet stylesheet)
+        {
+            var result = new Project
+            {
+                Stylesheet = stylesheet
+            };
 
-			return result;
-		}
+            var loadContext = result.CreateLoadContext(assetManager);
 
-		public static Project LoadFromXml(string data, IAssetManager assetManager, Stylesheet stylesheet)
-		{
-			return LoadFromXml(XDocument.Parse(data), assetManager, stylesheet);
-		}
+            loadContext.Load(result, xDoc.Root, (d) => result.Diagnostics.Add(d));
 
-		public static Project LoadFromXml(string data, IAssetManager assetManager = null)
-		{
-			return LoadFromXml(data, assetManager, Stylesheet.Current);
-		}
+            return result;
+        }
 
-		public static object LoadObjectFromXml(string data, IAssetManager assetManager, Stylesheet stylesheet)
-		{
-			XDocument xDoc = XDocument.Parse(data);
+        public static Project LoadFromXml(string data, IAssetManager assetManager, Stylesheet stylesheet)
+        {
+            return LoadFromXml(XDocument.Parse(data), assetManager, stylesheet);
+        }
 
-			var name = xDoc.Root.Name.ToString();
-			Type itemType;
+        public static Project LoadFromXml(string data, IAssetManager assetManager = null)
+        {
+            return LoadFromXml(data, assetManager, Stylesheet.Current);
+        }
 
-			if (name == "PropertyGrid")
-			{
-				itemType = typeof(PropertyGrid);
-			} else  if (!IsProportionName(name))
-			{
-				string newName;
-				if (LegacyClassNames.TryGetValue(name, out newName))
-				{
-					name = newName;
-				}
+        public static object LoadObjectFromXml(
+            string data, IAssetManager assetManager, Stylesheet stylesheet, MMLDiagnosticAction onDiagnostic = null)
+        {
+            XDocument xDoc = XDocument.Parse(data);
 
-				var itemNamespace = typeof(Widget).Namespace;
-				itemType = typeof(Widget).Assembly.GetType(itemNamespace + "." + name);
-			}
-			else
-			{
-				itemType = typeof(Proportion);
-			}
+            var name = xDoc.Root.Name.ToString();
+            Type itemType;
 
-			if (itemType == null)
-			{
-				return null;
-			}
+            if (name == "PropertyGrid")
+            {
+                itemType = typeof(PropertyGrid);
+            }
+            else if (!IsProportionName(name))
+            {
+                string newName;
+                if (LegacyClassNames.TryGetValue(name, out newName))
+                {
+                    name = newName;
+                }
 
-			var item = CreateItem(itemType, xDoc.Root, stylesheet);
-			var loadContext = CreateLoadContext(assetManager, stylesheet);
-			loadContext.Load(item, xDoc.Root);
+                var itemNamespace = typeof(Widget).Namespace;
+                itemType = typeof(Widget).Assembly.GetType(itemNamespace + "." + name);
+            }
+            else
+            {
+                itemType = typeof(Proportion);
+            }
 
-			return item;
-		}
+            if (itemType == null)
+            {
+                return null;
+            }
 
-		public object LoadObjectFromXml(string data, IAssetManager assetManager)
-		{
-			return LoadObjectFromXml(data, assetManager, Stylesheet);
-		}
+            var item = CreateItem(itemType, xDoc.Root, stylesheet);
+            var loadContext = CreateLoadContext(assetManager, stylesheet);
+            loadContext.Load(item, xDoc.Root, onDiagnostic);
 
-		public string SaveObjectToXml(object obj, string tagName)
-		{
-			var saveContext = CreateSaveContext(Stylesheet);
-			return saveContext.Save(obj, true, tagName).ToString();
-		}
+            return item;
+        }
 
-		private static object CreateItem(Type type, XElement element, Stylesheet stylesheet)
-		{
-			if (typeof(Widget).IsAssignableFrom(type))
-			{
-				// Check whether it accepts style name parameter
-				var acceptsStyleName = false;
-				foreach (var c in type.GetConstructors())
-				{
-					var p = c.GetParameters();
-					if (p != null && p.Length == 1)
-					{
-						if (p[0].ParameterType == typeof(string))
-						{
-							acceptsStyleName = true;
-							break;
-						}
-					}
-				}
+        public object LoadObjectFromXml(string data, IAssetManager assetManager)
+        {
+            return LoadObjectFromXml(data, assetManager, Stylesheet);
+        }
 
-				if (acceptsStyleName)
-				{
-					var result = (Widget)Activator.CreateInstance(type, (string)null);
+        public string SaveObjectToXml(object obj, string tagName)
+        {
+            var saveContext = CreateSaveContext(Stylesheet);
+            return saveContext.Save(obj, true, tagName).ToString();
+        }
 
-					// Determine style name
-					var styleName = Stylesheet.DefaultStyleName;
-					var styleNameAttr = element.Attribute("StyleName");
-					if (styleNameAttr != null)
-					{
-						var stylesNames = stylesheet.GetStylesByWidgetName(type.Name);
-						if (stylesNames != null && stylesNames.Contains(styleNameAttr.Value))
-						{
-							styleName = styleNameAttr.Value;
-						}
-						else
-						{
-							// Remove property with absent value
-							styleNameAttr.Remove();
-						}
-					}
+        private static object CreateItem(Type type, XElement element, Stylesheet stylesheet)
+        {
+            if (typeof(Widget).IsAssignableFrom(type))
+            {
+                // Check whether it accepts style name parameter
+                var acceptsStyleName = false;
+                foreach (var c in type.GetConstructors())
+                {
+                    var p = c.GetParameters();
+                    if (p != null && p.Length == 1)
+                    {
+                        if (p[0].ParameterType == typeof(string))
+                        {
+                            acceptsStyleName = true;
+                            break;
+                        }
+                    }
+                }
 
-					// Set style
-					result.SetStyle(stylesheet, styleName);
+                if (acceptsStyleName)
+                {
+                    var result = (Widget)Activator.CreateInstance(type, (string)null);
 
-					return result;
-				}
-			}
+                    // Determine style name
+                    var styleName = Stylesheet.DefaultStyleName;
+                    var styleNameAttr = element.Attribute("StyleName");
+                    if (styleNameAttr != null)
+                    {
+                        var stylesNames = stylesheet.GetStylesByWidgetName(type.Name);
+                        if (stylesNames != null && stylesNames.Contains(styleNameAttr.Value))
+                        {
+                            styleName = styleNameAttr.Value;
+                        }
+                        else
+                        {
+                            // Remove property with absent value
+                            styleNameAttr.Remove();
+                        }
+                    }
 
-			return Activator.CreateInstance(type);
-		}
+                    // Set style
+                    result.SetStyle(stylesheet, styleName);
 
-		private static bool HasStylesheetValue(Widget w, PropertyInfo property, Stylesheet stylesheet)
-		{
-			if (stylesheet == null)
-			{
-				return false;
-			}
+                    return result;
+                }
+            }
 
-			var styleName = w.StyleName;
-			if (string.IsNullOrEmpty(styleName))
-			{
-				styleName = Stylesheet.DefaultStyleName;
-			}
+            return Activator.CreateInstance(type);
+        }
 
-			// Find styles dict of that widget
-			var typeName = w.GetType().Name;
-			var styleTypeNameAttribute = w.GetType().FindAttribute<StyleTypeNameAttribute>();
-			if (styleTypeNameAttribute != null)
-			{
-				typeName = styleTypeNameAttribute.Name;
-			}
+        private static bool HasStylesheetValue(Widget w, PropertyInfo property, Stylesheet stylesheet)
+        {
+            if (stylesheet == null)
+            {
+                return false;
+            }
 
-			var stylesDictPropertyName = typeName + "Styles";
-			var stylesDictProperty = stylesheet.GetType().GetRuntimeProperty(stylesDictPropertyName);
-			if (stylesDictProperty == null)
-			{
-				return false;
-			}
+            var styleName = w.StyleName;
+            if (string.IsNullOrEmpty(styleName))
+            {
+                styleName = Stylesheet.DefaultStyleName;
+            }
 
-			var stylesDict = (IDictionary)stylesDictProperty.GetValue(stylesheet);
-			if (stylesDict == null)
-			{
-				return false;
-			}
+            // Find styles dict of that widget
+            var typeName = w.GetType().Name;
+            var styleTypeNameAttribute = w.GetType().FindAttribute<StyleTypeNameAttribute>();
+            if (styleTypeNameAttribute != null)
+            {
+                typeName = styleTypeNameAttribute.Name;
+            }
 
-			// Fetch style from the dict
-			if (!stylesDict.Contains(styleName))
-			{
-				styleName = Stylesheet.DefaultStyleName;
-			}
+            var stylesDictPropertyName = typeName + "Styles";
+            var stylesDictProperty = stylesheet.GetType().GetRuntimeProperty(stylesDictPropertyName);
+            if (stylesDictProperty == null)
+            {
+                return false;
+            }
 
-			object obj =  stylesDict[styleName];
+            var stylesDict = (IDictionary)stylesDictProperty.GetValue(stylesheet);
+            if (stylesDict == null)
+            {
+                return false;
+            }
 
-			// Now find corresponding property
-			PropertyInfo styleProperty = null;
+            // Fetch style from the dict
+            if (!stylesDict.Contains(styleName))
+            {
+                styleName = Stylesheet.DefaultStyleName;
+            }
 
-			var stylePropertyPathAttribute = property.FindAttribute<StylePropertyPathAttribute>();
-			if (stylePropertyPathAttribute != null)
-			{
-				var path = stylePropertyPathAttribute.Name;
-				if (path.StartsWith("/"))
-				{
-					obj = stylesheet;
-					path = path.Substring(1);
-				}
+            object obj = stylesDict[styleName];
 
-				var parts = path.Split('/');
-				for (var i = 0; i < parts.Length; ++i)
-				{
-					styleProperty = obj.GetType().GetRuntimeProperty(parts[i]);
+            // Now find corresponding property
+            PropertyInfo styleProperty = null;
 
-					if (i < parts.Length - 1)
-					{
-						obj = styleProperty.GetValue(obj);
-					}
-				}
-			}
-			else
-			{
-				styleProperty = obj.GetType().GetRuntimeProperty(property.Name);
-			}
+            var stylePropertyPathAttribute = property.FindAttribute<StylePropertyPathAttribute>();
+            if (stylePropertyPathAttribute != null)
+            {
+                var path = stylePropertyPathAttribute.Name;
+                if (path.StartsWith("/"))
+                {
+                    obj = stylesheet;
+                    path = path.Substring(1);
+                }
 
-			if (styleProperty == null)
-			{
-				return false;
-			}
+                var parts = path.Split('/');
+                for (var i = 0; i < parts.Length; ++i)
+                {
+                    styleProperty = obj.GetType().GetRuntimeProperty(parts[i]);
 
-			// Compare values
-			var styleValue = styleProperty.GetValue(obj);
-			var value = property.GetValue(w);
-			if (!Equals(styleValue, value))
-			{
-				return false;
-			}
+                    if (i < parts.Length - 1)
+                    {
+                        obj = styleProperty.GetValue(obj);
+                    }
+                }
+            }
+            else
+            {
+                styleProperty = obj.GetType().GetRuntimeProperty(property.Name);
+            }
 
-			return true;
-		}
-	}
+            if (styleProperty == null)
+            {
+                return false;
+            }
+
+            // Compare values
+            var styleValue = styleProperty.GetValue(obj);
+            var value = property.GetValue(w);
+            if (!Equals(styleValue, value))
+            {
+                return false;
+            }
+
+            return true;
+        }
+    }
 }

@@ -6,6 +6,7 @@
     <StartupObject />
     <AssemblyName>MyraPad</AssemblyName>
     <RootNamespace>MyraPad</RootNamespace>
+    <DefineConstants>MONOGAME</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
