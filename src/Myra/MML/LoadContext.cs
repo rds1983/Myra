@@ -42,6 +42,10 @@ namespace Myra.MML
             try
             {
                 var type = obj.GetType();
+		public void Load<T>(object obj, XElement el, T handler) where T : class
+		{
+			var type = obj.GetType();
+			var handlerType = typeof(T);
 
                 var baseObject = obj as BaseObject;
 
@@ -169,6 +173,34 @@ namespace Myra.MML
                     (from p in complexProperties
                      where p.FindAttribute<ContentAttribute>() != null
                      select p).FirstOrDefault();
+					property.SetValue(obj, value);
+				}
+				else if (handler != null && type.GetEvent(attr.Name.LocalName) != null)
+				{
+					var method = handlerType.GetMethod(attr.Value, BindingFlags.Public | BindingFlags.Instance);
+					var eventHandler = type.GetEvent(attr.Name.LocalName);
+					if (method == null)
+					{
+						throw new InvalidOperationException($"Handler of type '{handlerType}' does not contain method '{attr.Value}'. If it does, ensure the method is both public and non-static.");
+					}
+
+					var delegateMethod = method.CreateDelegate(eventHandler.EventHandlerType, handler);
+					eventHandler.AddEventHandler(obj, delegateMethod);
+				}
+				else
+				{
+					// Stow away custom user attributes
+					if (propertyName.StartsWith(UserDataAttributePrefix) && baseObject != null)
+					{
+						baseObject.UserData.Add(propertyName, attr.Value);
+					}
+				}
+			}
+			
+
+			var contentProperty = (from p in complexProperties
+								   where p.FindAttribute<ContentAttribute>() 
+								   != null select p).FirstOrDefault();
 
                 foreach (XElement child in el.Elements())
                 {
@@ -192,34 +224,35 @@ namespace Myra.MML
                         childName = newName;
                     }
 
-                    // Find property
-                    var property = (from p in complexProperties where p.Name == childName select p).FirstOrDefault();
-                    if (property != null)
-                    {
-                        do
-                        {
-                            var value = property.GetValue(obj);
-                            var asList = value as IList;
-                            if (asList != null)
-                            {
-                                // List
-                                foreach (XElement child2 in child.Elements())
-                                {
-                                    var item = ObjectCreator(property.PropertyType.GenericTypeArguments[0], child2);
-                                    Load(item, child2, onDiagnostic);
-                                    asList.Add(item);
-                                }
-                                break;
-                            }
+				// Find property
+				var property = (from p in complexProperties where p.Name == childName select p).FirstOrDefault();
+				if (property != null)
+				{
+					do
+					{
+						var value = property.GetValue(obj);
+						var asList = value as IList;
+						if (asList != null)
+						{
+							// List
+							foreach (var child2 in child.Elements())
+							{
+								var item = ObjectCreator(property.PropertyType.GenericTypeArguments[0], child2);
+								Load(item, child2, handler);
+								asList.Add(item);
+							}
 
-                            var asDict = value as IDictionary;
-                            if (asDict != null)
-                            {
-                                // Dict
-                                foreach (XElement child2 in child.Elements())
-                                {
-                                    var item = ObjectCreator(property.PropertyType.GenericTypeArguments[1], child2);
-                                    Load(item, child2, onDiagnostic);
+							break;
+						}
+
+						var asDict = value as IDictionary;
+						if (asDict != null)
+						{
+							// Dict
+							foreach (var child2 in child.Elements())
+							{
+								var item = ObjectCreator(property.PropertyType.GenericTypeArguments[1], child2);
+								Load(item, child2, handler);
 
                                     var id = string.Empty;
                                     if (child2.Attribute(IdName) != null)
@@ -232,32 +265,27 @@ namespace Myra.MML
                                 break;
                             }
 
-                            if (property.SetMethod == null)
-                            {
-                                // Readonly
-                                Load(value, child, onDiagnostic);
-                            }
-                            else
-                            {
-                                var newValue = ObjectCreator(property.PropertyType, child);
-                                Load(newValue, child, onDiagnostic);
-                                property.SetValue(obj, newValue);
-                            }
-                            break;
-                        }
-                        while (true);
-                    }
-                    else
-                    {
-                        // Property not found
-                        if (isProperty)
-                        {
-                            var diagnostic = new MMLDiagnostic(MMLDiagnosticSeverity.Error, "", "", string.Format(
-                                "Class '{0}' doesnt have property '{1}'", type.Name, childName));
-                            diagnostic.TargetElements.Add(child);
-                            onDiagnostic.Invoke(diagnostic);
-                            continue;
-                        }
+						if (property.SetMethod == null)
+						{
+							// Readonly
+							Load(value, child, handler);
+						}
+						else
+						{
+							var newValue = ObjectCreator(property.PropertyType, child);
+							Load(newValue, child, handler);
+							property.SetValue(obj, newValue);
+						}
+						break;
+					} while (true);
+				}
+				else
+				{
+					// Property not found
+					if (isProperty)
+					{
+						throw new Exception(string.Format("Class {0} doesnt have property {1}", type.Name, childName));
+					}
 
                         // Should be widget class name then
                         var widgetName = childName;
@@ -266,19 +294,19 @@ namespace Myra.MML
                             widgetName = newName;
                         }
 
-                        Type itemType = null;
-                        foreach (string ns in Namespaces)
-                        {
-                            itemType = Assembly.GetType(ns + "." + widgetName);
-                            if (itemType != null)
-                            {
-                                break;
-                            }
-                        }
-                        if (itemType != null)
-                        {
-                            var item = ObjectCreator(itemType, child);
-                            Load(item, child, onDiagnostic);
+					Type itemType = null;
+					foreach(var ns in Namespaces)
+					{
+						itemType = Assembly.GetType(ns + "." + widgetName);
+						if (itemType != null)
+						{
+							break;
+						}
+					}
+					if (itemType != null)
+					{
+						var item = ObjectCreator(itemType, child);
+						Load(item, child, handler);
 
                             if (contentProperty == null)
                             {
