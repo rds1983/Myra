@@ -615,11 +615,27 @@ namespace Myra.Graphics2D.UI.Styles
 						return region;
 					}
 
-					throw new Exception(string.Format("Could not find parse IBrush '{0}'", name));
+					onDiagnostic?.Invoke(new MMLDiagnostic(MMLDiagnosticSeverity.Error, "Assets", "Brush", $"Could not find parse IBrush '{name}'"));
+					return null;
 				}
 				else if (t == typeof(SpriteFontBase))
 				{
-					return fonts[name];
+					if (fonts.ContainsKey(name))
+					{
+						return fonts[name];
+					}
+
+					if (fonts == null || fonts.Count == 0)
+                    {
+						onDiagnostic?.Invoke(new MMLDiagnostic(MMLDiagnosticSeverity.Error, "Assets", "Font", "There are no fonts registered."));
+
+					}
+					else
+                    {
+						onDiagnostic?.Invoke(new MMLDiagnostic(MMLDiagnosticSeverity.Error, "Assets", "Font", $"Font '{name}' has not been registered."));
+					}
+
+					return null;
 				}
 
 				throw new Exception(string.Format("Type {0} isn't supported", t.Name));
@@ -644,7 +660,7 @@ namespace Myra.Graphics2D.UI.Styles
 				Colors = colors
 			};
 
-			loadContext.Load<object>(result, xDoc.Root, null);
+			loadContext.Load<object>(result, xDoc.Root, onDiagnostic, null);
 
 			return result;
 		}

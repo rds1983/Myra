@@ -215,7 +215,7 @@ namespace Myra.Graphics2D.UI
 
             var loadContext = result.CreateLoadContext(assetManager);
 
-            loadContext.Load(result, xDoc.Root, (d) => result.Diagnostics.Add(d));
+            loadContext.Load(result, xDoc.Root, (d) => result.Diagnostics.Add(d), handler);
 
             return result;
         }
@@ -245,12 +245,8 @@ namespace Myra.Graphics2D.UI
 			return LoadFromXml<object>(data, assetManager, Stylesheet.Current, null);
 		}
 
-		public static object LoadObjectFromXml<T>(string data, IAssetManager assetManager, Stylesheet stylesheet, T handler) where T : class
+		public static object LoadObjectFromXml<T>(string data, IAssetManager assetManager, Stylesheet stylesheet, T handler, MMLDiagnosticAction onDiagnostic = null) where T : class
 		{
-			XDocument xDoc = XDocument.Parse(data);
-        public static object LoadObjectFromXml(
-            string data, IAssetManager assetManager, Stylesheet stylesheet, MMLDiagnosticAction onDiagnostic = null)
-        {
             XDocument xDoc = XDocument.Parse(data);
 
             var name = xDoc.Root.Name.ToString();
@@ -283,7 +279,7 @@ namespace Myra.Graphics2D.UI
 
 			var item = CreateItem(itemType, xDoc.Root, stylesheet);
 			var loadContext = CreateLoadContext(assetManager, stylesheet);
-			loadContext.Load(item, xDoc.Root, handler);
+			loadContext.Load(item, xDoc.Root, onDiagnostic, handler);
 
             return item;
         }
@@ -297,10 +293,7 @@ namespace Myra.Graphics2D.UI
 		{
 			return LoadObjectFromXml(data, assetManager, Stylesheet);
 		}
-        public object LoadObjectFromXml(string data, IAssetManager assetManager)
-        {
-            return LoadObjectFromXml(data, assetManager, Stylesheet);
-        }
+
 
         public string SaveObjectToXml(object obj, string tagName)
         {
