@@ -5,9 +5,12 @@
     <AssemblyName>Myra</AssemblyName>
     <PackageId>Myra.Stride</PackageId>
     <OutputPath>bin\Stride\$(Configuration)</OutputPath>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+  
   <ItemGroup>
     <EmbeddedResource Include="Resources\**\*.*" />
   </ItemGroup>
@@ -17,8 +20,8 @@
   </ItemGroup>  
 
   <ItemGroup>
-    <PackageReference Include="AssetManagementBase" Version="0.5.2" />
-    <PackageReference Include="FontStashSharp.Stride" Version="0.9.1.1" />
-    <PackageReference Include="info.lundin.math.dll" Version="1.2.6" />
+    <PackageReference Include="AssetManagementBase" Version="$(AssetManagementBaseVersion)" />
+    <PackageReference Include="FontStashSharp.Stride" Version="$(FontStashSharpVersion)" />
+    <PackageReference Include="info.lundin.math.dll" Version="$(InfoLundinMathVersion)" />
   </ItemGroup>  
 </Project>

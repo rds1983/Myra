@@ -1,10 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
     <DefineConstants>$(DefineConstants);PLATFORM_AGNOSTIC</DefineConstants>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Myra</AssemblyName>
     <PackageId>Myra.PlatformAgnostic</PackageId>
     <OutputPath>bin\PlatformAgnostic\$(Configuration)</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
@@ -13,8 +16,8 @@
   </ItemGroup>  
 
   <ItemGroup>
-    <PackageReference Include="FontStashSharp" Version="0.9.1.1" />
-    <PackageReference Include="AssetManagementBase" Version="0.5.2" />
-    <PackageReference Include="info.lundin.math.dll" Version="1.2.6" />
+    <PackageReference Include="AssetManagementBase" Version="$(AssetManagementBaseVersion)" />
+    <PackageReference Include="FontStashSharp" Version="$(FontStashSharpVersion)" />
+    <PackageReference Include="info.lundin.math.dll" Version="$(InfoLundinMathVersion)" />
   </ItemGroup>  
 </Project>

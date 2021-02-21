@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas Image="default_ui_skin.png">
+  <TextureRegion Id="border-circle-error" Left="0" Top="0" Width="14" Height="14" />
+  <TextureRegion Id="border-circle" Left="14" Top="0" Width="14" Height="14" />
+  <NinePatchRegion Id="border-dark-blue" Left="28" Top="0" Width="3" Height="3" NinePatchLeft="1" NinePatchTop="1" NinePatchRight="1" NinePatchBottom="1" />
+  <NinePatchRegion Id="border-error" Left="31" Top="0" Width="3" Height="3" NinePatchLeft="1" NinePatchTop="1" NinePatchRight="1" NinePatchBottom="1" />
+  <NinePatchRegion Id="border" Left="34" Top="0" Width="3" Height="3" NinePatchLeft="1" NinePatchTop="1" NinePatchRight="1" NinePatchBottom="1" />
+  <NinePatchRegion Id="button-blue-down" Left="37" Top="0" Width="12" Height="20" NinePatchLeft="5" NinePatchTop="5" NinePatchRight="5" NinePatchBottom="4" />
+  <NinePatchRegion Id="button-blue-over" Left="49" Top="0" Width="12" Height="20" NinePatchLeft="5" NinePatchTop="5" NinePatchRight="5" NinePatchBottom="4" />
+  <NinePatchRegion Id="button-blue" Left="61" Top="0" Width="12" Height="20" NinePatchLeft="5" NinePatchTop="5" NinePatchRight="5" NinePatchBottom="4" />
+  <NinePatchRegion Id="button-down" Left="73" Top="0" Width="12" Height="20" NinePatchLeft="5" NinePatchTop="5" NinePatchRight="5" NinePatchBottom="4" />
+  <NinePatchRegion Id="button-over" Left="85" Top="0" Width="12" Height="20" NinePatchLeft="5" NinePatchTop="5" NinePatchRight="5" NinePatchBottom="4" />
+  <NinePatchRegion Id="button-red" Left="97" Top="0" Width="12" Height="20" NinePatchLeft="5" NinePatchTop="5" NinePatchRight="5" NinePatchBottom="4" />
+  <NinePatchRegion Id="button-window-bg" Left="109" Top="0" Width="12" Height="20" NinePatchLeft="5" NinePatchTop="5" NinePatchRight="5" NinePatchBottom="4" />
+  <NinePatchRegion Id="button" Left="121" Top="0" Width="12" Height="20" NinePatchLeft="5" NinePatchTop="5" NinePatchRight="5" NinePatchBottom="4" />
+  <TextureRegion Id="check-off" Left="133" Top="0" Width="14" Height="14" />
+  <TextureRegion Id="check-on" Left="147" Top="0" Width="14" Height="14" />
+  <TextureRegion Id="color-picker-bar-selector" Left="161" Top="0" Width="7" Height="14" />
+  <TextureRegion Id="color-picker-checkerboard" Left="168" Top="0" Width="40" Height="40" />
+  <TextureRegion Id="color-picker-cross" Left="208" Top="0" Width="5" Height="5" />
+  <TextureRegion Id="color-picker-gradient" Left="213" Top="0" Width="10" Height="147" />
+  <TextureRegion Id="color-picker-selector-horizontal" Left="223" Top="0" Width="3" Height="1" />
+  <TextureRegion Id="color-picker-selector-vertical" Left="226" Top="0" Width="1" Height="3" />
+  <TextureRegion Id="color-picker-wheel" Left="227" Top="0" Width="147" Height="147" />
+  <TextureRegion Id="cursor" Left="374" Top="0" Width="1" Height="1" />
+  <TextureRegion Id="default-pane-noborder" Left="375" Top="0" Width="1" Height="1" />
+  <NinePatchRegion Id="default-pane" Left="376" Top="0" Width="5" Height="3" NinePatchLeft="1" NinePatchTop="1" NinePatchRight="1" NinePatchBottom="1" />
+  <NinePatchRegion Id="default-select-selection" Left="381" Top="0" Width="3" Height="3" NinePatchLeft="1" NinePatchTop="1" NinePatchRight="1" NinePatchBottom="1" />
+  <NinePatchRegion Id="default-select" Left="384" Top="0" Width="27" Height="24" NinePatchLeft="4" NinePatchTop="0" NinePatchRight="16" NinePatchBottom="24" />
+  <TextureRegion Id="default" Left="0" Top="147" Width="256" Height="256" />
+  <TextureRegion Id="font-small" Left="256" Top="147" Width="256" Height="128" />
+  <TextureRegion Id="grey" Left="256" Top="275" Width="1" Height="1" />
+  <TextureRegion Id="icon-arrow-left" Left="257" Top="275" Width="22" Height="22" />
+  <TextureRegion Id="icon-arrow-right" Left="279" Top="275" Width="22" Height="22" />
+  <TextureRegion Id="icon-close-titlebar" Left="301" Top="275" Width="22" Height="22" />
+  <TextureRegion Id="icon-close" Left="323" Top="275" Width="22" Height="22" />
+  <TextureRegion Id="icon-drive" Left="345" Top="275" Width="22" Height="22" />
+  <TextureRegion Id="icon-file-audio" Left="367" Top="275" Width="22" Height="22" />
+  <TextureRegion Id="icon-file-image" Left="389" Top="275" Width="22" Height="22" />
+  <TextureRegion Id="icon-file-pdf" Left="411" Top="275" Width="22" Height="22" />
+  <TextureRegion Id="icon-file-text" Left="433" Top="275" Width="22" Height="22" />
+  <TextureRegion Id="icon-folder-new" Left="455" Top="275" Width="22" Height="22" />
+  <TextureRegion Id="icon-folder-parent" Left="477" Top="275" Width="22" Height="22" />
+  <TextureRegion Id="icon-folder-star" Left="256" Top="297" Width="22" Height="22" />
+  <TextureRegion Id="icon-folder" Left="278" Top="297" Width="22" Height="22" />
+  <TextureRegion Id="icon-list-settings" Left="300" Top="297" Width="22" Height="22" />
+  <TextureRegion Id="icon-maximize" Left="322" Top="297" Width="22" Height="22" />
+  <TextureRegion Id="icon-minimize" Left="344" Top="297" Width="22" Height="22" />
+  <TextureRegion Id="icon-refresh" Left="366" Top="297" Width="22" Height="22" />
+  <TextureRegion Id="icon-restore" Left="388" Top="297" Width="22" Height="22" />
+  <TextureRegion Id="icon-star-outline" Left="410" Top="297" Width="22" Height="22" />
+  <TextureRegion Id="icon-star" Left="432" Top="297" Width="22" Height="22" />
+  <TextureRegion Id="icon-trash" Left="454" Top="297" Width="22" Height="22" />
+  <TextureRegion Id="list-selection" Left="499" Top="275" Width="1" Height="1" />
+  <TextureRegion Id="menu-bg" Left="500" Top="275" Width="1" Height="1" />
+  <NinePatchRegion Id="padded-list-selection" Left="501" Top="275" Width="10" Height="1" NinePatchLeft="4" NinePatchTop="0" NinePatchRight="4" NinePatchBottom="1" />
+  <TextureRegion Id="progressbar-filled-vertical" Left="476" Top="297" Width="16" Height="1" />
+  <TextureRegion Id="progressbar-filled" Left="511" Top="275" Width="1" Height="16" />
+  <TextureRegion Id="progressbar-vertical" Left="492" Top="297" Width="16" Height="1" />
+  <TextureRegion Id="progressbar" Left="508" Top="276" Width="1" Height="16" />
+  <TextureRegion Id="radio-off" Left="476" Top="298" Width="14" Height="14" />
+  <TextureRegion Id="radio-on" Left="490" Top="298" Width="14" Height="14" />
+  <NinePatchRegion Id="scroll-horizontal" Left="504" Top="298" Width="6" Height="17" NinePatchLeft="2" NinePatchTop="0" NinePatchRight="2" NinePatchBottom="17" />
+  <NinePatchRegion Id="scroll-knob-horizontal" Left="476" Top="312" Width="6" Height="17" NinePatchLeft="2" NinePatchTop="0" NinePatchRight="2" NinePatchBottom="17" />
+  <NinePatchRegion Id="scroll-knob-vertical" Left="482" Top="312" Width="17" Height="6" NinePatchLeft="6" NinePatchTop="2" NinePatchRight="6" NinePatchBottom="2" />
+  <NinePatchRegion Id="scroll" Left="482" Top="318" Width="17" Height="6" NinePatchLeft="2" NinePatchTop="2" NinePatchRight="2" NinePatchBottom="2" />
+  <TextureRegion Id="select-box-list-bg" Left="510" Top="276" Width="1" Height="1" />
+  <TextureRegion Id="select-down" Left="499" Top="315" Width="7" Height="4" />
+  <TextureRegion Id="select-up" Left="256" Top="319" Width="7" Height="4" />
+  <TextureRegion Id="selection" Left="510" Top="277" Width="1" Height="1" />
+  <TextureRegion Id="separator-menu" Left="510" Top="278" Width="1" Height="1" />
+  <TextureRegion Id="separator" Left="510" Top="279" Width="1" Height="1" />
+  <TextureRegion Id="slider-knob-disabled" Left="263" Top="319" Width="11" Height="22" />
+  <TextureRegion Id="slider-knob-down" Left="274" Top="319" Width="11" Height="22" />
+  <TextureRegion Id="slider-knob-over" Left="285" Top="319" Width="11" Height="22" />
+  <TextureRegion Id="slider-knob" Left="296" Top="319" Width="11" Height="22" />
+  <TextureRegion Id="slider-vertical" Left="506" Top="315" Width="4" Height="1" />
+  <TextureRegion Id="slider" Left="510" Top="280" Width="1" Height="4" />
+  <TextureRegion Id="splitpane-over" Left="506" Top="316" Width="4" Height="1" />
+  <TextureRegion Id="splitpane-vertical-over" Left="510" Top="284" Width="1" Height="4" />
+  <TextureRegion Id="splitpane-vertical" Left="510" Top="288" Width="1" Height="4" />
+  <TextureRegion Id="splitpane" Left="506" Top="317" Width="4" Height="1" />
+  <TextureRegion Id="sub-menu" Left="506" Top="318" Width="4" Height="7" />
+  <NinePatchRegion Id="textfield-over" Left="307" Top="319" Width="14" Height="14" NinePatchLeft="1" NinePatchTop="1" NinePatchRight="1" NinePatchBottom="1" />
+  <NinePatchRegion Id="textfield" Left="321" Top="319" Width="14" Height="14" NinePatchLeft="1" NinePatchTop="1" NinePatchRight="1" NinePatchBottom="1" />
+  <NinePatchRegion Id="tooltip-bg" Left="335" Top="319" Width="3" Height="3" NinePatchLeft="1" NinePatchTop="1" NinePatchRight="1" NinePatchBottom="1" />
+  <TextureRegion Id="touchpad-knob" Left="338" Top="319" Width="22" Height="22" />
+  <TextureRegion Id="tree-minus" Left="360" Top="319" Width="8" Height="8" />
+  <TextureRegion Id="tree-over" Left="511" Top="291" Width="1" Height="1" />
+  <TextureRegion Id="tree-plus" Left="368" Top="319" Width="8" Height="8" />
+  <NinePatchRegion Id="tree-selection" Left="376" Top="319" Width="3" Height="3" NinePatchLeft="1" NinePatchTop="1" NinePatchRight="1" NinePatchBottom="1" />
+  <TextureRegion Id="vis-blue" Left="510" Top="292" Width="1" Height="1" />
+  <TextureRegion Id="vis-check-down" Left="379" Top="319" Width="14" Height="14" />
+  <TextureRegion Id="vis-check-over" Left="393" Top="319" Width="14" Height="14" />
+  <TextureRegion Id="vis-check-tick-disabled" Left="407" Top="319" Width="14" Height="14" />
+  <TextureRegion Id="vis-check-tick" Left="421" Top="319" Width="14" Height="14" />
+  <TextureRegion Id="vis-check" Left="435" Top="319" Width="14" Height="14" />
+  <TextureRegion Id="vis-radio-down" Left="449" Top="319" Width="14" Height="14" />
+  <TextureRegion Id="vis-radio-over" Left="482" Top="324" Width="14" Height="14" />
+  <TextureRegion Id="vis-radio-tick-disabled" Left="496" Top="325" Width="14" Height="14" />
+  <TextureRegion Id="vis-radio-tick" Left="360" Top="327" Width="14" Height="14" />
+  <TextureRegion Id="vis-radio" Left="463" Top="329" Width="14" Height="14" />
+  <TextureRegion Id="vis-red" Left="511" Top="292" Width="1" Height="1" />
+  <TextureRegion Id="white" Left="335" Top="322" Width="3" Height="3" />
+  <TextureRegion Id="window-bg" Left="510" Top="293" Width="1" Height="1" />
+  <NinePatchRegion Id="window-border-bg" Left="376" Top="322" Width="3" Height="3" NinePatchLeft="1" NinePatchTop="1" NinePatchRight="1" NinePatchBottom="1" />
+  <NinePatchRegion Id="window-noborder" Left="307" Top="333" Width="27" Height="34" NinePatchLeft="5" NinePatchTop="26" NinePatchRight="4" NinePatchBottom="3" />
+  <NinePatchRegion Id="window-resizable" Left="374" Top="333" Width="27" Height="43" NinePatchLeft="5" NinePatchTop="3" NinePatchRight="12" NinePatchBottom="12" />
+  <NinePatchRegion Id="window" Left="401" Top="333" Width="27" Height="34" NinePatchLeft="5" NinePatchTop="26" NinePatchRight="4" NinePatchBottom="3" />
+</TextureAtlas>

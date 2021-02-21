@@ -5,6 +5,9 @@
     <AssemblyName>Myra</AssemblyName>
     <PackageId>Myra</PackageId>
     <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
@@ -17,9 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AssetManagementBase" Version="0.5.2" />
-    <PackageReference Include="FontStashSharp.MonoGame" Version="0.9.1.1" />
+    <PackageReference Include="AssetManagementBase" Version="$(AssetManagementBaseVersion)" />
+    <PackageReference Include="FontStashSharp.MonoGame" Version="$(FontStashSharpVersion)" />
+    <PackageReference Include="info.lundin.math.dll" Version="$(InfoLundinMathVersion)" />
     <PackageReference Include="MonoGame.Framework.Portable" PrivateAssets="All" Version="3.6.0.1625" />
-    <PackageReference Include="info.lundin.math.dll" Version="1.2.6" />
   </ItemGroup>  
 </Project>
