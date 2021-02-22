@@ -34,7 +34,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
-			ApplySliderStyle(stylesheet.HorizontalSliderStyles[name]);
+			ApplySliderStyle(stylesheet.HorizontalSliderStyles.SafelyGetStyle(name));
 		}
 	}
 }

@@ -11,7 +11,6 @@ namespace Myra.Tests
 	{
 		private SpriteFontBase _font;
 
-
 		private SpriteFontBase Font
 		{
 			get

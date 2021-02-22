@@ -270,7 +270,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
-			ApplyListBoxStyle(stylesheet.ListBoxStyles[name]);
+			ApplyListBoxStyle(stylesheet.ListBoxStyles.SafelyGetStyle(name));
 		}
 	}
 }

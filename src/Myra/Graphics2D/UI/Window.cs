@@ -331,7 +331,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
-			ApplyWindowStyle(stylesheet.WindowStyles[name]);
+			ApplyWindowStyle(stylesheet.WindowStyles.SafelyGetStyle(name));
 		}
 	}
 }

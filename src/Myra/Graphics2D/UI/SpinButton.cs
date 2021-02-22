@@ -468,7 +468,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
-			ApplySpinButtonStyle(stylesheet.SpinButtonStyles[name]);
+			ApplySpinButtonStyle(stylesheet.SpinButtonStyles.SafelyGetStyle(name));
 		}
 
 		private void UpButtonOnUp(object sender, EventArgs eventArgs)

@@ -47,7 +47,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
-			ApplyProgressBarStyle(stylesheet.VerticalProgressBarStyles[name]);
+			ApplyProgressBarStyle(stylesheet.VerticalProgressBarStyles.SafelyGetStyle(name));
 		}
 	}
 }

@@ -89,7 +89,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
-			ApplyImageTextButtonStyle(stylesheet.RadioButtonStyles[name]);
+			ApplyImageTextButtonStyle(stylesheet.RadioButtonStyles.SafelyGetStyle(name));
 		}
 	}
 }

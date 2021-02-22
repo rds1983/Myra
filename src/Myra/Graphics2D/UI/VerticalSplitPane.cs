@@ -18,7 +18,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
-			ApplySplitPaneStyle(stylesheet.VerticalSplitPaneStyles[name]);
+			ApplySplitPaneStyle(stylesheet.VerticalSplitPaneStyles.SafelyGetStyle(name));
 		}
 	}
 }
