@@ -139,10 +139,8 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var invokeClick = false;
 			if (!Toggleable)
 			{
-				invokeClick = IsPressed;
 				IsPressed = false;
 			}
 
