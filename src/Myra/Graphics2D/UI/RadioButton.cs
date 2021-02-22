@@ -23,6 +23,42 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public override bool IsPressed
+		{
+			get => base.IsPressed;
+
+			set
+			{
+				if (IsPressed)
+				{
+					// If this is last pressed button
+					// Don't allow it to be unpressed
+					var allow = false;
+					foreach (var child in Parent.ChildrenCopy)
+					{
+						var asRadio = child as RadioButton;
+						if (asRadio == null || asRadio == this)
+						{
+							continue;
+						}
+
+						if (asRadio.IsPressed)
+						{
+							allow = true;
+							break;
+						}
+					}
+
+					if (!allow)
+					{
+						return;
+					}
+				}
+
+				base.IsPressed = value;
+			}
+		}
+
 		public RadioButton(string styleName = Stylesheet.DefaultStyleName): base(styleName)
 		{
 			Toggleable = true;
@@ -32,25 +68,23 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnPressedChanged();
 
-			if (IsPressed)
+			if (!IsPressed)
 			{
-				foreach (var child in Parent.ChildrenCopy)
-				{
-					var asRadio = child as RadioButton;
-
-					if (asRadio == null || asRadio == this)
-					{
-						continue;
-					}
-
-					asRadio.IsPressed = false;
-				}
+				return;
 			}
-		}
 
-		protected override bool CanChangeToggleable(bool value)
-		{
-			return !IsPressed;
+			// Release other pressed radio buttons
+			foreach (var child in Parent.ChildrenCopy)
+			{
+				var asRadio = child as RadioButton;
+
+				if (asRadio == null || asRadio == this)
+				{
+					continue;
+				}
+
+				asRadio.IsPressed = false;
+			}
 		}
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
