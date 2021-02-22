@@ -4,6 +4,8 @@
     <TargetFrameworks>net452</TargetFrameworks>
     <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
     <OutputType>Library</OutputType>
+    <RootNamespace>Myra.Tests</RootNamespace>
+    <AssemblyName>Myra.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

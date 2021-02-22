@@ -1,29 +1,18 @@
 ﻿using AssetManagementBase;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D.UI;
 using NUnit.Framework;
 
 namespace Myra.Tests
 {
 	[TestFixture]
-	public class MMLTests
+	public class MMLTests: BaseTests
 	{
-		private TestGame _game;
-
-		public GraphicsDevice GraphicsDevice => _game.GraphicsDevice;
-
-		[SetUp]
-		public void SetUp()
-		{
-			_game = new TestGame();
-			MyraEnvironment.Game = _game;
-		}
-
 		[Test]
 		public void LoadMMLWithExternalAssets()
 		{
-			ResourceAssetResolver assetResolver = new ResourceAssetResolver(typeof(MMLTests).Assembly, "Resources.");
+			var assembly = typeof(MMLTests).Assembly;
+			ResourceAssetResolver assetResolver = new ResourceAssetResolver(assembly, "Resources.");
 			AssetManager assetManager = new AssetManager(assetResolver);
 
 			var mml = assetManager.Load<string>("GridWithExternalResources.xmmp");
