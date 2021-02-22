@@ -1093,6 +1093,11 @@ namespace MyraPad
 
 		private void LoadObjectAsync(object state)
 		{
+			if (Project == null)
+			{
+				return;
+			}
+
 			try
 			{
 				var xml = (string)state;
