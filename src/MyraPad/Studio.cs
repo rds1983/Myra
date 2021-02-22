@@ -295,7 +295,7 @@ namespace MyraPad
 
 			#endif
 
-			if (_state != null && !string.IsNullOrEmpty(_state.EditedFile))
+			if (_state != null && !string.IsNullOrEmpty(_state.EditedFile) && File.Exists(_state.EditedFile))
 			{
 				Load(_state.EditedFile);
 			}
