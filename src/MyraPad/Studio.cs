@@ -82,7 +82,6 @@ namespace MyraPad
 		private readonly GraphicsDeviceManager _graphicsDeviceManager;
 		private readonly State _state;
 		private StudioWidget _ui;
-		private PropertyGrid _propertyGrid;
 		private string _filePath;
 		private string _lastFolder;
 		private bool _isDirty;
@@ -201,11 +200,14 @@ namespace MyraPad
 			}
 		}
 
+		private PropertyGrid PropertyGrid => _ui._propertyGrid;
+
+
 		private PropertyGridSettings PropertyGridSettings
 		{
 			get
 			{
-				return _propertyGrid.Settings;
+				return PropertyGrid.Settings;
 			}
 		}
 
@@ -407,16 +409,12 @@ namespace MyraPad
 			_ui._textStatus.Text = string.Empty;
 			_ui._textLocation.Text = "Line: 0, Column: 0, Indent: 0";
 
-			_propertyGrid = new PropertyGrid
-			{
-				IgnoreCollections = true
-			};
-			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
-			_propertyGrid.CustomValuesProvider = RecordValuesProvider;
-			_propertyGrid.CustomSetter = RecordSetter;
-			_propertyGrid.Settings.AssetManager = MyraEnvironment.DefaultAssetManager;
+			_ui._textBoxFilter.TextChanged += _textBoxFilter_TextChanged;
 
-			_ui._propertyGridPane.Content = _propertyGrid;
+			PropertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
+			PropertyGrid.CustomValuesProvider = RecordValuesProvider;
+			PropertyGrid.CustomSetter = RecordSetter;
+			PropertyGrid.Settings.AssetManager = MyraEnvironment.DefaultAssetManager;
 
 			_ui._topSplitPane.SetSplitterPosition(0, _state != null ? _state.TopSplitterPosition : 0.75f);
 			_ui._leftSplitPane.SetSplitterPosition(0, _state != null ? _state.LeftSplitterPosition : 0.5f);
@@ -424,6 +422,12 @@ namespace MyraPad
 			_desktop.Root = _ui;
 
 			UpdateMenuFile();
+		}
+
+		private void _textBoxFilter_TextChanged(object sender, ValueChangedEventArgs<string> e)
+		{
+			PropertyGrid.Filter = _ui._textBoxFilter.Text;
+			_ui._propertyGridPane.ResetScroll();
 		}
 
 		private object[] RecordValuesProvider(Record record)
@@ -434,7 +438,7 @@ namespace MyraPad
 				return null;
 			}
 
-			var widget = _propertyGrid.Object as Widget;
+			var widget = PropertyGrid.Object as Widget;
 			if (widget == null)
 			{
 				return null;
@@ -910,7 +914,8 @@ namespace MyraPad
 
 			if ((lastStart != _currentTagStart || lastEnd != _currentTagEnd))
 			{
-				_propertyGrid.Object = null;
+				PropertyGrid.Object = null;
+				_ui._propertyGridPane.ResetScroll();
 				if (!string.IsNullOrEmpty(currentTag))
 				{
 					var xml = currentTag;
@@ -1289,7 +1294,7 @@ namespace MyraPad
 		{
 			IsDirty = true;
 
-			var xml = _project.SaveObjectToXml(_propertyGrid.Object, ExtractTag(CurrentTag));
+			var xml = _project.SaveObjectToXml(PropertyGrid.Object, ExtractTag(CurrentTag));
 
 			if (_needsCloseTag)
 			{
@@ -1451,7 +1456,8 @@ namespace MyraPad
 
 			if (_newObject != null)
 			{
-				_propertyGrid.Object = _newObject;
+				PropertyGrid.Object = _newObject;
+				_ui._propertyGridPane.ResetScroll();
 				_newObject = null;
 			}
 
