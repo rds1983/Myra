@@ -529,29 +529,12 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Behavior")]
-		[DefaultValue(false)]
-		public virtual bool IsDraggable
-		{
-			get
-			{
-				return _isDraggable;
-			}
+		[DefaultValue(DragDirection.None)]
+		public virtual DragDirection DragDirection { get; set; } = DragDirection.None;
 
-			set
-			{
-				if (value == _isDraggable)
-				{
-					return;
-				}
-
-				_isDraggable = value;
-				SubscribeOnTouchMoved(IsPlaced && IsDraggable);
-			}
-		}
-
-		[Category("Behavior")]
-		[DefaultValue(DragDirection.Both)]
-		public DragDirection DragDirection { get; set; } = DragDirection.Both;
+		[XmlIgnore]
+		[Browsable(false)]
+		public bool IsDraggable => DragDirection != DragDirection.None;
 
 		[XmlIgnore]
 		[Browsable(false)]
