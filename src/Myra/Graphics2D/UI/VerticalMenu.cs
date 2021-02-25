@@ -70,7 +70,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
-			ApplyMenuStyle(stylesheet.VerticalMenuStyles[name]);
+			ApplyMenuStyle(stylesheet.VerticalMenuStyles.SafelyGetStyle(name));
 		}
 	}
 }

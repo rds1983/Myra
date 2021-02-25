@@ -79,23 +79,22 @@ namespace MyraPad
         private readonly ConcurrentQueue<Project> _newProjectsQueue = new ConcurrentQueue<Project>();
         private readonly AutoResetEvent _refreshProjectEvent = new AutoResetEvent(false);
 
-        private bool _suppressProjectRefresh = false;
-        private readonly GraphicsDeviceManager _graphicsDeviceManager;
-        private readonly State _state;
-        private StudioWidget _ui;
-        private PropertyGrid _propertyGrid;
-        private string _filePath;
-        private string _lastFolder;
-        private bool _isDirty;
-        private Project _project;
-        private bool _needsCloseTag;
-        private string _parentTag;
-        private int? _currentTagStart, _currentTagEnd;
-        private int _line, _col, _indentLevel;
-        private bool _applyAutoIndent = false;
-        private bool _applyAutoClose = false;
-        private object _newObject;
-        private DateTime? _refreshInitiated;
+		private bool _suppressProjectRefresh = false;
+		private readonly GraphicsDeviceManager _graphicsDeviceManager;
+		private readonly State _state;
+		private StudioWidget _ui;
+		private string _filePath;
+		private string _lastFolder;
+		private bool _isDirty;
+		private Project _project;
+		private bool _needsCloseTag;
+		private string _parentTag;
+		private int? _currentTagStart, _currentTagEnd;
+		private int _line, _col, _indentLevel;
+		private bool _applyAutoIndent = false;
+		private bool _applyAutoClose = false;
+		private object _newObject;
+		private DateTime? _refreshInitiated;
 
         private VerticalMenu _autoCompleteMenu = null;
         private readonly Options _options = null;
@@ -203,13 +202,16 @@ namespace MyraPad
             }
         }
 
-        private PropertyGridSettings PropertyGridSettings
-        {
-            get
-            {
-                return _propertyGrid.Settings;
-            }
-        }
+		private PropertyGrid PropertyGrid => _ui._propertyGrid;
+
+
+		private PropertyGridSettings PropertyGridSettings
+		{
+			get
+			{
+				return PropertyGrid.Settings;
+			}
+		}
 
         private IAssetManager AssetManager
         {
@@ -297,11 +299,11 @@ namespace MyraPad
 
 #endif
 
-            if (_state != null && !string.IsNullOrEmpty(_state.EditedFile))
-            {
-                Load(_state.EditedFile);
-            }
-        }
+			if (_state != null && !string.IsNullOrEmpty(_state.EditedFile) && File.Exists(_state.EditedFile))
+			{
+				Load(_state.EditedFile);
+			}
+		}
 
         public void ClosingFunction(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -409,16 +411,12 @@ namespace MyraPad
             _ui._textStatus.Text = string.Empty;
             _ui._textLocation.Text = "Line: 0, Column: 0, Indent: 0";
 
-            _propertyGrid = new PropertyGrid
-            {
-                IgnoreCollections = true
-            };
-            _propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
-            _propertyGrid.CustomValuesProvider = RecordValuesProvider;
-            _propertyGrid.CustomSetter = RecordSetter;
-            _propertyGrid.Settings.AssetManager = MyraEnvironment.DefaultAssetManager;
+			_ui._textBoxFilter.TextChanged += _textBoxFilter_TextChanged;
 
-            _ui._propertyGridPane.Content = _propertyGrid;
+			PropertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
+			PropertyGrid.CustomValuesProvider = RecordValuesProvider;
+			PropertyGrid.CustomSetter = RecordSetter;
+			PropertyGrid.Settings.AssetManager = MyraEnvironment.DefaultAssetManager;
 
             _ui._topSplitPane.SetSplitterPosition(0, _state != null ? _state.TopSplitterPosition : 0.75f);
             _ui._leftSplitPane.SetSplitterPosition(0, _state != null ? _state.LeftSplitterPosition : 0.5f);
@@ -428,19 +426,25 @@ namespace MyraPad
             UpdateMenuFile();
         }
 
-        private object[] RecordValuesProvider(Record record)
-        {
-            if (record.Name != "StyleName")
-            {
-                // Default processing
-                return null;
-            }
+		private void _textBoxFilter_TextChanged(object sender, ValueChangedEventArgs<string> e)
+		{
+			PropertyGrid.Filter = _ui._textBoxFilter.Text;
+			_ui._propertyGridPane.ResetScroll();
+		}
 
-            var widget = _propertyGrid.Object as Widget;
-            if (widget == null)
-            {
-                return null;
-            }
+		private object[] RecordValuesProvider(Record record)
+		{
+			if (record.Name != "StyleName")
+			{
+				// Default processing
+				return null;
+			}
+
+			var widget = PropertyGrid.Object as Widget;
+			if (widget == null)
+			{
+				return null;
+			}
 
             var styleNames = Project.Stylesheet.GetStylesByWidgetName(widget.GetType().Name);
             if (styleNames == null || styleNames.Length < 2)
@@ -919,12 +923,13 @@ namespace MyraPad
                 _ui._textLocation.Text += ", Parent: " + _parentTag;
             }
 
-            if ((lastStart != _currentTagStart || lastEnd != _currentTagEnd))
-            {
-                _propertyGrid.Object = null;
-                if (!string.IsNullOrEmpty(currentTag))
-                {
-                    var xml = currentTag;
+			if ((lastStart != _currentTagStart || lastEnd != _currentTagEnd))
+			{
+				PropertyGrid.Object = null;
+				_ui._propertyGridPane.ResetScroll();
+				if (!string.IsNullOrEmpty(currentTag))
+				{
+					var xml = currentTag;
 
                     if (_needsCloseTag)
                     {
@@ -1102,17 +1107,22 @@ namespace MyraPad
             return result;
         }
 
-        private void LoadObjectAsync(object state)
-        {
-            try
-            {
-                var xml = (string)state;
-                _newObject = Project.LoadObjectFromXml(xml, AssetManager);
-            }
-            catch (Exception)
-            {
-            }
-        }
+		private void LoadObjectAsync(object state)
+		{
+			if (Project == null)
+			{
+				return;
+			}
+
+			try
+			{
+				var xml = (string)state;
+				_newObject = Project.LoadObjectFromXml(xml, AssetManager);
+			}
+			catch (Exception)
+			{
+			}
+		}
 
         private void UpdateCursor()
         {
@@ -1295,7 +1305,7 @@ namespace MyraPad
         {
             IsDirty = true;
 
-            var xml = _project.SaveObjectToXml(_propertyGrid.Object, ExtractTag(CurrentTag));
+			var xml = _project.SaveObjectToXml(PropertyGrid.Object, ExtractTag(CurrentTag));
 
             if (_needsCloseTag)
             {
@@ -1455,11 +1465,12 @@ namespace MyraPad
                 QueueRefreshProject();
             }
 
-            if (_newObject != null)
-            {
-                _propertyGrid.Object = _newObject;
-                _newObject = null;
-            }
+			if (_newObject != null)
+			{
+				PropertyGrid.Object = _newObject;
+				_ui._propertyGridPane.ResetScroll();
+				_newObject = null;
+			}
 
             Project newProject;
             while (_newProjectsQueue.Count > 1)

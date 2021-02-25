@@ -41,7 +41,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
-			ApplySeparatorStyle(stylesheet.VerticalSeparatorStyles[name]);
+			ApplySeparatorStyle(stylesheet.VerticalSeparatorStyles.SafelyGetStyle(name));
 		}
 	}
 }

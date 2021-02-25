@@ -666,7 +666,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
-			ApplyScrollViewerStyle(stylesheet.ScrollViewerStyles[name]);
+			ApplyScrollViewerStyle(stylesheet.ScrollViewerStyles.SafelyGetStyle(name));
 		}
 	}
 }

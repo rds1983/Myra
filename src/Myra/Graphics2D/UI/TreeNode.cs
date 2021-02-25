@@ -232,7 +232,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
-			ApplyTreeNodeStyle(stylesheet.TreeStyles[name]);
+			ApplyTreeNodeStyle(stylesheet.TreeStyles.SafelyGetStyle(name));
 		}
 	}
 }

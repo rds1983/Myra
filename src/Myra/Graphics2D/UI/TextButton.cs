@@ -116,7 +116,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
-			ApplyTextButtonStyle(stylesheet.ButtonStyles[name]);
+			ApplyTextButtonStyle(stylesheet.ButtonStyles.SafelyGetStyle(name));
 		}
 	}
 }

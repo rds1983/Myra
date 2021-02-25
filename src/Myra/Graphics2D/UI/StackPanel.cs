@@ -144,6 +144,11 @@ namespace Myra.Graphics2D.UI
 			return widget;
 		}
 
+		public override void RemoveChild(Widget widget)
+		{
+			Widgets.Remove(widget);
+		}
+
 		private void Widgets_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
 		{
 			_dirty = true;

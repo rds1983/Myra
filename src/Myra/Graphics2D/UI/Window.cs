@@ -138,12 +138,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[DefaultValue(true)]
-		public override bool IsDraggable
-		{
-			get => base.IsDraggable;
-			set => base.IsDraggable = value;
-		}
+		[DefaultValue(DragDirection.Both)]
+		public override DragDirection DragDirection { get => base.DragDirection; set => base.DragDirection = value; }
 
 		[Category("Behavior")]
 		[DefaultValue(Keys.Escape)]
@@ -163,7 +159,7 @@ namespace Myra.Graphics2D.UI
 			CloseKey = Keys.Escape;
 
 			IsModal = true;
-			IsDraggable = true;
+			DragDirection = DragDirection.Both;
 
 			InternalChild = new VerticalStackPanel();
 
@@ -331,7 +327,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
-			ApplyWindowStyle(stylesheet.WindowStyles[name]);
+			ApplyWindowStyle(stylesheet.WindowStyles.SafelyGetStyle(name));
 		}
 	}
 }

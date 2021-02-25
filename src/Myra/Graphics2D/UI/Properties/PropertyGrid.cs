@@ -66,7 +66,7 @@ namespace Myra.Graphics2D.UI.Properties
 				}
 			}
 
-			public SubGrid(PropertyGrid parent, object value, string header, string category, Record parentProperty)
+			public SubGrid(PropertyGrid parent, object value, string header, string category, string filter, Record parentProperty)
 			{
 				InternalChild = new Grid
 				{
@@ -82,7 +82,7 @@ namespace Myra.Graphics2D.UI.Properties
 				_propertyGrid = new PropertyGrid(parent.PropertyGridStyle, category, parentProperty, parent)
 				{
 					Object = value,
-					Visible = false,
+					Filter = filter,
 					HorizontalAlignment = HorizontalAlignment.Stretch,
 					GridColumn = 1,
 					GridRow = 1
@@ -103,12 +103,12 @@ namespace Myra.Graphics2D.UI.Properties
 				{
 					if (_mark.IsPressed)
 					{
-						_propertyGrid.Visible = true;
+						InternalChild.Widgets.Add(_propertyGrid);
 						parent._expandedCategories.Add(category);
 					}
 					else
 					{
-						_propertyGrid.Visible = false;
+						InternalChild.Widgets.Remove(_propertyGrid);
 						parent._expandedCategories.Remove(category);
 					}
 				};
@@ -132,7 +132,6 @@ namespace Myra.Graphics2D.UI.Properties
 				label.ApplyLabelStyle(parent.PropertyGridStyle.LabelStyle);
 
 				InternalChild.Widgets.Add(label);
-				InternalChild.Widgets.Add(_propertyGrid);
 
 				HorizontalAlignment = HorizontalAlignment.Stretch;
 				VerticalAlignment = VerticalAlignment.Stretch;
@@ -173,6 +172,7 @@ namespace Myra.Graphics2D.UI.Properties
 		private object _object;
 		private bool _ignoreCollections;
 		private readonly PropertyGridSettings _settings = new PropertyGridSettings();
+		private string _filter;
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -277,6 +277,23 @@ namespace Myra.Graphics2D.UI.Properties
 			set { base.VerticalAlignment = value; }
 		}
 
+		[XmlIgnore]
+		[Browsable(false)]
+		public string Filter
+		{
+			get => _filter;
+			set
+			{
+				if (_filter == value)
+				{
+					return;
+				}
+
+				_filter = value;
+				Rebuild();
+			}
+		}
+
 		[Browsable(false)]
 		[XmlIgnore]
 		public Func<Record, object[]> CustomValuesProvider;
@@ -307,6 +324,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
+			Filter = string.Empty;
 		}
 
 		public PropertyGrid(TreeStyle style, string category) : this(style, category, null)
@@ -1010,17 +1028,20 @@ namespace Myra.Graphics2D.UI.Properties
 					// Subgrid
 					if (value != null)
 					{
-						var subGrid = new SubGrid(this, value, record.Name, DefaultCategoryName, record)
+						if (PassesFilter(record.Name))
 						{
-							GridColumnSpan = 2,
-							GridRow = y
-						};
+							var subGrid = new SubGrid(this, value, record.Name, DefaultCategoryName, string.Empty, record)
+							{
+								GridColumnSpan = 2,
+								GridRow = y
+							};
 
-						InternalChild.Widgets.Add(subGrid);
+							InternalChild.Widgets.Add(subGrid);
 
-						rowProportion = new Proportion(ProportionType.Auto);
-						InternalChild.RowsProportions.Add(rowProportion);
-						++y;
+							rowProportion = new Proportion(ProportionType.Auto);
+							InternalChild.RowsProportions.Add(rowProportion);
+							++y;
+						}
 
 						continue;
 					}
@@ -1043,6 +1064,11 @@ namespace Myra.Graphics2D.UI.Properties
 				if (dn != null)
 				{
 					name = dn.DisplayName;
+				}
+
+				if (!PassesFilter(name))
+				{
+					continue;
 				}
 
 				var nameLabel = new Label
@@ -1068,7 +1094,17 @@ namespace Myra.Graphics2D.UI.Properties
 			}
 		}
 
-		private void Rebuild()
+		public bool PassesFilter(string name)
+		{
+			if (string.IsNullOrEmpty(Filter) || string.IsNullOrEmpty(name))
+			{
+				return true;
+			}
+
+			return name.ToLower().Contains(_filter.ToLower());
+		}
+
+		public void Rebuild()
 		{
 			InternalChild.RowsProportions.Clear();
 			InternalChild.Widgets.Clear();
@@ -1192,7 +1228,7 @@ namespace Myra.Graphics2D.UI.Properties
 					continue;
 				}
 
-				var subGrid = new SubGrid(this, Object, category.Key, category.Key, null)
+				var subGrid = new SubGrid(this, Object, category.Key, category.Key, Filter, null)
 				{
 					GridColumnSpan = 2,
 					GridRow = y

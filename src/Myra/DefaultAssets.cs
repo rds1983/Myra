@@ -89,7 +89,7 @@ namespace Myra
 					return _uiTextureRegionAtlas;
 				}
 
-				_uiTextureRegionAtlas = AssetManager.Load<TextureRegionAtlas>("default_ui_skin.atlas");
+				_uiTextureRegionAtlas = AssetManager.Load<TextureRegionAtlas>("default_ui_skin.xmat");
 				return _uiTextureRegionAtlas;
 			}
 		}

@@ -1457,7 +1457,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
-			ApplyTextBoxStyle(stylesheet.TextBoxStyles[name]);
+			ApplyTextBoxStyle(stylesheet.TextBoxStyles.SafelyGetStyle(name));
 		}
 
 		public float GetWidth(int index)

@@ -179,7 +179,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
-			ApplyTabControlStyle(stylesheet.TabControlStyles[name]);
+			ApplyTabControlStyle(stylesheet.TabControlStyles.SafelyGetStyle(name));
 		}
 	}
 }

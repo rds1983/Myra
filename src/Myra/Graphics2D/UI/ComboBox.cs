@@ -262,7 +262,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
-			ApplyComboBoxStyle(stylesheet.ComboBoxStyles[name]);
+			ApplyComboBoxStyle(stylesheet.ComboBoxStyles.SafelyGetStyle(name));
 		}
 	}
 }

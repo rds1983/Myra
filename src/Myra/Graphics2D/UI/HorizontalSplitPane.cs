@@ -19,10 +19,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
-			if (stylesheet.HorizontalSplitPaneStyles.ContainsKey(name))
-			{
-				ApplySplitPaneStyle(stylesheet.HorizontalSplitPaneStyles[name]);
-			}
+			ApplySplitPaneStyle(stylesheet.HorizontalSplitPaneStyles.SafelyGetStyle(name));
 		}
 	}
 }

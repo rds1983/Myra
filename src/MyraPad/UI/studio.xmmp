@@ -3,6 +3,7 @@
   <VerticalStackPanel>
     <VerticalStackPanel.Proportions>
       <Proportion Type="Auto" />
+      <Proportion Type="Auto" />
       <Proportion Type="Fill" />
     </VerticalStackPanel.Proportions>
     <HorizontalMenu Id="_mainMenu">
@@ -34,6 +35,7 @@
         <MenuItem Text="&amp;About" Id="_menuHelpAbout" />
       </MenuItem>
     </HorizontalMenu>
+    <HorizontalSeparator />
     <HorizontalSplitPane Id="_topSplitPane">
       <VerticalStackPanel>
         <VerticalStackPanel.Proportions>
@@ -50,9 +52,22 @@
       </VerticalStackPanel>
       <VerticalStackPanel Background="#000000FF">
         <VerticalStackPanel.Proportions>
+          <Proportion Type="Auto" />
+          <Proportion Type="Auto" />
           <Proportion Type="Fill" />
         </VerticalStackPanel.Proportions>
-        <ScrollViewer Id="_propertyGridPane" />
+        <HorizontalStackPanel Spacing="8">
+          <HorizontalStackPanel.Proportions>
+            <Proportion Type="Auto" />
+            <Proportion Type="Fill" />
+          </HorizontalStackPanel.Proportions>
+          <Label Text="Filter:" />
+          <TextBox Id="_textBoxFilter" />
+        </HorizontalStackPanel>
+        <HorizontalSeparator />
+        <ScrollViewer Id="_propertyGridPane" >
+          <PropertyGrid Filter="" Id="_propertyGrid" />
+        </ScrollViewer>
         <HorizontalSeparator />
         <Label Text="Line: 1, Column: 2, Indent: 3" Id="_textLocation" />
       </VerticalStackPanel>

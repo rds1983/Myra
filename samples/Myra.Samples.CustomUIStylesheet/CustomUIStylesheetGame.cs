@@ -36,15 +36,17 @@ namespace Myra.Samples.CustomUIStylesheet
 			var assetManager = new AssetManager(new ResourceAssetResolver(typeof(CustomUIStylesheetGame).Assembly, "Resources"));
 
 			// Load stylesheet
-			Stylesheet.Current = assetManager.Load<Stylesheet>("ui_stylesheet.xml");
+			Stylesheet.Current = assetManager.Load<Stylesheet>("ui_stylesheet.xmms");
 
 			_allWidgets = new AllWidgets();
-			var textureAtlas = assetManager.Load<TextureRegionAtlas>("ui_stylesheet.atlas");
+			var textureAtlas = assetManager.Load<TextureRegionAtlas>("ui_stylesheet.xmat");
 			_allWidgets._button.Image = textureAtlas["music-off"];
 			_allWidgets._imageButton.Image = textureAtlas["sound-off"];
 
-			_desktop = new Desktop();
-			_desktop.Root = _allWidgets;
+			_desktop = new Desktop
+			{
+				Root = _allWidgets
+			};
 		}
 
 		protected override void Update(GameTime gameTime)

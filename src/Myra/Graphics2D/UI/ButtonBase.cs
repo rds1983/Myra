@@ -43,7 +43,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public bool IsPressed
+		public virtual bool IsPressed
 		{
 			get
 			{
@@ -139,17 +139,12 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var invokeClick = false;
 			if (!Toggleable)
 			{
-				invokeClick = IsPressed;
 				IsPressed = false;
 			}
 
-			if (invokeClick)
-			{
-				Click.Invoke(this);
-			}
+			Click.Invoke(this);
 		}
 
 		public override void OnTouchDown()
@@ -167,18 +162,8 @@ namespace Myra.Graphics2D.UI
 			}
 			else
 			{
-				var value = !IsPressed;
-				if (CanChangeToggleable(value))
-				{
-					IsPressed = value;
-					Click.Invoke(this);
-				}
+				IsPressed = !IsPressed;
 			}
-		}
-
-		protected virtual bool CanChangeToggleable(bool value)
-		{
-			return true;
 		}
 
 		public override void OnKeyDown(Keys k)
@@ -239,7 +224,7 @@ namespace Myra.Graphics2D.UI
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
-			ApplyButtonStyle(stylesheet.ButtonStyles[name]);
+			ApplyButtonStyle(stylesheet.ButtonStyles.SafelyGetStyle(name));
 		}
 	}
 }

@@ -16,11 +16,11 @@
   </ItemGroup>  
 
   <ItemGroup>
-    <PackageReference Include="info.lundin.math.dll" Version="1.2.6" />
+    <PackageReference Include="AssetManagementBase" Version="$(AssetManagementBaseVersion)" />
+    <PackageReference Include="info.lundin.math.dll" Version="$(InfoLundinMathVersion)" />  
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="AssetManagementBase" Version="0.5.2" />
     <ProjectReference Include="..\..\..\FontStashSharp\src\XNA\FontStashSharp.FNA.csproj" />
   </ItemGroup>
 </Project>

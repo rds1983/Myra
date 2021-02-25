@@ -49,6 +49,7 @@ Copy-Item -Path "samples\Stylesheets\*" -Destination "ZipPackage\Stylesheets\" -
 Copy-Item -Path "samples\Myra.Samples.AssetManagement\Assets\fonts\*" -Destination "ZipPackage\Assets\fonts\" -Recurse
 Copy-Item -Path "samples\Myra.Samples.AssetManagement\Assets\images\*" -Destination "ZipPackage\Assets\images\" -Recurse
 Copy-Item -Path "samples\Myra.Samples.ObjectEditor\image.png" -Destination "ZipPackage"
+Copy-Item -Path "src\Myra.GdxTextureAtlasToMyra\bin\Release\net45\Myra.GdxTextureAtlasToMyra.exe" -Destination "ZipPackage"
 
 # Compress
 Rename-Item "ZipPackage" "Myra.$version"
