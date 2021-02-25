@@ -3,14 +3,14 @@ using NUnit.Framework;
 
 namespace Myra.Tests
 {
-	[TestFixture]
-	public class BaseTests
+	[SetUpFixture]
+	public class TestsEnvironment
 	{
 		private TestGame _game;
 
 		public GraphicsDevice GraphicsDevice => _game.GraphicsDevice;
 
-		[SetUp]
+		[OneTimeSetUp]
 		public void SetUp()
 		{
 			_game = new TestGame();

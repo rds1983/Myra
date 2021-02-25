@@ -675,5 +675,58 @@ namespace Myra.Graphics2D.UI.Styles
 
 			return result.ToArray();
 		}
+
+		private void CloneStylesTo<T>(Stylesheet destStylesheet, Func<Stylesheet, Dictionary<string, T>> stylesGetter) where T: WidgetStyle
+		{
+			var src = stylesGetter(this);
+			var dest = stylesGetter(destStylesheet);
+
+			dest.Clear();
+			foreach(var pair in src)
+			{
+				dest[pair.Key] = (T)pair.Value.Clone();
+			}
+		}
+
+		public Stylesheet Clone()
+		{
+			var result = new Stylesheet
+			{
+				Atlas = Atlas,
+				Fonts = new Dictionary<string, SpriteFontBase>()
+			};
+
+			// Clone all dictionary properties
+			CloneStylesTo(result, s => s.HorizontalSliderStyles);
+			CloneStylesTo(result, s => s.VerticalSliderStyles);
+			CloneStylesTo(result, s => s.HorizontalProgressBarStyles);
+			CloneStylesTo(result, s => s.VerticalProgressBarStyles);
+			CloneStylesTo(result, s => s.HorizontalSeparatorStyles);
+			CloneStylesTo(result, s => s.VerticalSeparatorStyles);
+			CloneStylesTo(result, s => s.HorizontalSplitPaneStyles);
+			CloneStylesTo(result, s => s.VerticalSplitPaneStyles);
+			CloneStylesTo(result, s => s.HorizontalMenuStyles);
+			CloneStylesTo(result, s => s.VerticalMenuStyles);
+
+			CloneStylesTo(result, s => s.LabelStyles);
+			CloneStylesTo(result, s => s.TextBoxStyles);
+			CloneStylesTo(result, s => s.ButtonStyles);
+			CloneStylesTo(result, s => s.CheckBoxStyles);
+			CloneStylesTo(result, s => s.RadioButtonStyles);
+			CloneStylesTo(result, s => s.SpinButtonStyles);
+			CloneStylesTo(result, s => s.ComboBoxStyles);
+			CloneStylesTo(result, s => s.ListBoxStyles);
+			CloneStylesTo(result, s => s.TabControlStyles);
+			CloneStylesTo(result, s => s.TreeStyles);
+			CloneStylesTo(result, s => s.ScrollViewerStyles);
+			CloneStylesTo(result, s => s.WindowStyles);
+
+			foreach(var pair in Fonts)
+			{
+				result.Fonts[pair.Key] = pair.Value;
+			}
+
+			return result;
+		}
 	}
 }

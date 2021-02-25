@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace Myra.Tests
 {
 	[TestFixture]
-	public class StackPanelTests: BaseTests
+	public class StackPanelTests
 	{
 		[Test]
 		public void AddRemove()

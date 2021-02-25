@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Myra.Tests
 {
 	[TestFixture]
-	public class MMLTests: BaseTests
+	public class MMLTests
 	{
 		[Test]
 		public void LoadMMLWithExternalAssets()

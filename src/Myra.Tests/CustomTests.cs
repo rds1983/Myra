@@ -6,7 +6,7 @@ using System;
 namespace Myra.Tests
 {
 	[TestFixture]
-	public class CustomTests: BaseTests
+	public class CustomTests
 	{
 		/// <summary>
 		/// Ensures exception is thrown if a label is created without default style set in the stylesheet
@@ -14,6 +14,9 @@ namespace Myra.Tests
 		[Test]
 		public void NoDefaultStyleLabel()
 		{
+			// Store current stylesheet
+			var oldStylesheet = Stylesheet.Current.Clone();
+
 			// Remove all styles, including default one from the stylesheet
 			Stylesheet.Current.LabelStyles.Clear();
 
@@ -21,6 +24,9 @@ namespace Myra.Tests
 			{
 				var label = new Label("blue");
 			});
+
+			// Restore the stylesheet for other tests to work
+			Stylesheet.Current = oldStylesheet;
 		}
 	}
 }

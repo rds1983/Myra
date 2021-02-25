@@ -7,7 +7,7 @@ using System.Linq;
 namespace Myra.Tests
 {
 	[TestFixture]
-	public class FormattedTextTests: BaseTests
+	public class FormattedTextTests
 	{
 		private SpriteFontBase _font;
 
