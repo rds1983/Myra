@@ -81,6 +81,7 @@ namespace Myra.Graphics2D.UI
         public Project()
         {
             Stylesheet = Stylesheet.Current;
+            _diagnostics = new List<MMLDiagnostic>();
         }
 
         public static bool IsProportionName(string s)
