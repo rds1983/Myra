@@ -1292,20 +1292,19 @@ namespace Myra.Graphics2D.UI
 				return this;
 			}
 
-			var asContainer = this as Container;
-			if (asContainer != null)
-			{
-				foreach (var widget in asContainer.ChildrenCopy)
-				{
-					var result = widget.FindWidgetBy(finder);
-					if (result != null)
-					{
-						return result;
-					}
-				}
-			}
+            if (this is Container asContainer)
+            {
+                foreach (var widget in asContainer.ChildrenCopy)
+                {
+                    var result = widget.FindWidgetBy(finder);
+                    if (result != null)
+                    {
+                        return result;
+                    }
+                }
+            }
 
-			return null;
+            return null;
 		}
 
 		/// <summary>
