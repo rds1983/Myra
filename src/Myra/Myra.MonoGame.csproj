@@ -5,13 +5,8 @@
     <AssemblyName>Myra</AssemblyName>
     <PackageId>Myra</PackageId>
     <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <Version>1.2.3.2</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.2.2.7</Version>
-    <AssemblyVersion>1.2.2.7</AssemblyVersion>
-    <FileVersion>1.2.2.7</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
