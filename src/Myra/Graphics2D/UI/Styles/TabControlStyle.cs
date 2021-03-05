@@ -22,6 +22,11 @@
 			get; set;
 		}
 
+		public TabSelectorPosition TabSelectorPosition
+		{
+			get; set;
+		}
+
 		public TabControlStyle()
 		{
 		}
@@ -33,6 +38,8 @@
 
 			ButtonSpacing = style.ButtonSpacing;
 			HeaderSpacing = style.HeaderSpacing;
+
+			TabSelectorPosition = style.TabSelectorPosition;
 		}
 
 		public override WidgetStyle Clone()

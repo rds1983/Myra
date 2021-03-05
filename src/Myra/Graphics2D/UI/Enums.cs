@@ -72,4 +72,12 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		KeepAspectRatio
 	}
+	
+	public enum TabSelectorPosition
+	{
+		Top,
+		Right,
+		Bottom,
+		Left
+	}
 }
