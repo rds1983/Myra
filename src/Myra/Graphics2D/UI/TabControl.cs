@@ -147,25 +147,26 @@ namespace Myra.Graphics2D.UI
 
 		public TabControl(string styleName = Stylesheet.DefaultStyleName) : base(new Grid())
 		{
-			// First row contains button
-			InternalChild.RowsProportions.Add(new Proportion());
+			HorizontalAlignment = HorizontalAlignment.Left;
+			VerticalAlignment = VerticalAlignment.Top;
 
 			_gridButtons = new Grid();
-			InternalChild.Widgets.Add(_gridButtons);
-
-			// Second row contains content
-			InternalChild.RowsProportions.Add(new Proportion(ProportionType.Fill));
-
 			_panelContent = new SingleItemContainer<Widget>()
 			{
 				GridRow = 1,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch
 			};
-			InternalChild.Widgets.Add(_panelContent);
 
-			HorizontalAlignment = HorizontalAlignment.Left;
-			VerticalAlignment = VerticalAlignment.Top;
+			// Default to Top selector position:
+			_buttonProportions = _gridButtons.ColumnsProportions;
+			_contentProportions = InternalChild.RowsProportions;
+
+			// button, then content
+			_contentProportions.Add(new Proportion());
+			_contentProportions.Add(new Proportion(ProportionType.Fill));
+			InternalChild.Widgets.Add(_gridButtons);
+			InternalChild.Widgets.Add(_panelContent);
 
 			SetStyle(styleName);
 		}
