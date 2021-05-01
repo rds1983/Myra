@@ -447,6 +447,11 @@ namespace Myra.Graphics2D.UI
 
 		private int Delete(int where, int len)
 		{
+			if (where < 0 || where >= Length || len < 0)
+			{
+				return 0;
+			}
+			
 			// If we're trying to delete one part
 			// of a surrogate pair, delete both.
 			if (len == 1)
@@ -460,11 +465,6 @@ namespace Myra.Graphics2D.UI
 				{
 					where--;
 				}
-			}
-
-			if (where < 0 || where >= Length || len < 0)
-			{
-				return 0;
 			}
 			
 			UndoStack.MakeDelete(Text, where, len);
