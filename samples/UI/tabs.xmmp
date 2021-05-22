@@ -1,7 +1,7 @@
 <Project>
   <Project.ExportOptions />
   <Panel>
-    <TabControl HorizontalAlignment="Center" VerticalAlignment="Center" Width="280" Height="260" GridRow="1">
+    <TabControl HorizontalAlignment="Center" VerticalAlignment="Center" TabSelectorPosition="Left" Width="350" Height="260" GridRow="1" >
       <TabItem Text="Character">
         <Grid ColumnSpacing="8" RowSpacing="8">
           <Grid.DefaultColumnProportion Type="Auto" />
