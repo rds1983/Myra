@@ -29,7 +29,7 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (IsPressed)
+				if (IsPressed && Parent != null)
 				{
 					// If this is last pressed button
 					// Don't allow it to be unpressed
