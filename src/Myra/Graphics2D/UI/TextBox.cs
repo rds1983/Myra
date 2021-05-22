@@ -445,17 +445,32 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private bool Delete(int where, int len)
+		private int Delete(int where, int len)
 		{
 			if (where < 0 || where >= Length || len < 0)
 			{
-				return false;
+				return 0;
 			}
+			
+			// If we're trying to delete one part
+			// of a surrogate pair, delete both.
+			if (len == 1)
+			{
+				if (char.IsSurrogate(Text[where]))
+				{
+					len++;
+				}
 
+				if (char.IsLowSurrogate(Text[where]))
+				{
+					where--;
+				}
+			}
+			
 			UndoStack.MakeDelete(Text, where, len);
 			DeleteChars(where, len);
 
-			return true;
+			return len;
 		}
 
 		private void DeleteSelection()
@@ -778,9 +793,10 @@ namespace Myra.Graphics2D.UI
 					{
 						if (SelectStart == SelectEnd)
 						{
-							if (Delete(CursorPosition - 1, 1))
+							int deleted = Delete(CursorPosition - 1, 1);
+							if (deleted > 0)
 							{
-								UserSetCursorPosition(CursorPosition - 1);
+								UserSetCursorPosition(CursorPosition - deleted);
 								ResetSelection();
 							}
 						}
