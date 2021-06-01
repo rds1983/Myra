@@ -40,6 +40,20 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		private string _l18nText;
+		public string L18nTextKey 
+		{
+			get 
+			{
+				return _l18nText;
+			}
+			set 
+			{
+				_l18nText = value;
+				Text = Project.Localize?.Invoke(value) ?? value;
+			}
+		}
+
 		[DefaultValue(null)]
 		public Color? Color
 		{

@@ -21,7 +21,7 @@ using System.Drawing;
 
 namespace Myra.MML
 {
-	internal class SaveContext: BaseContext
+	internal class SaveContext : BaseContext
 	{
 		public Func<object, PropertyInfo, bool> ShouldSerializeProperty = HasDefaultValue;
 

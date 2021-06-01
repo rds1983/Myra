@@ -196,7 +196,10 @@ namespace Myra.Graphics2D.UI
 			{
 				InternalChild.Text = item.Text;
 				InternalChild.TextColor = item.Color ?? _listBox.ListBoxStyle.ListItemStyle.LabelStyle.TextColor;
-				((ImageTextButton)item.Widget).IsPressed = true;
+				if (item.Widget != null)
+				{
+					((ImageTextButton)item.Widget).IsPressed = true;
+				}
 			}
 			else
 			{
