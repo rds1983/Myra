@@ -34,8 +34,6 @@ namespace Myra.Graphics2D.UI
 		public const string DefaultColumnProportionName = "DefaultColumnProportion";
 		public const string DefaultRowProportionName = "DefaultRowProportion";
 
-		public static Func<string, string> Localize = null;
-
 		private static readonly Dictionary<string, string> LegacyClassNames = new Dictionary<string, string>();
 
 		private readonly ExportOptions _exportOptions = new ExportOptions();
