@@ -628,6 +628,14 @@ namespace Myra.Graphics2D.UI
 
 			// Fit scroll position in new maximums
 			var scrollPosition = ScrollPosition;
+			if (scrollPosition.X > ScrollMaximum.X)
+			{
+				scrollPosition.X = ScrollMaximum.X;
+			}
+			if (scrollPosition.Y > ScrollMaximum.Y)
+			{
+				scrollPosition.Y = ScrollMaximum.Y;
+			}
 			ScrollPosition = scrollPosition;
 		}
 
