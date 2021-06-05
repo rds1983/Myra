@@ -645,7 +645,7 @@ namespace Myra.Graphics2D.UI.Styles
 				Colors = colors
 			};
 
-			loadContext.Load(result, xDoc.Root);
+			loadContext.Load<object>(result, xDoc.Root, null);
 
 			return result;
 		}
