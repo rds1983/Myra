@@ -175,7 +175,7 @@ namespace Myra.Graphics2D.UI
 
 		private void SyncHintWithValue()
 		{
-			Hint = (int)(MaxHint * (_value / Maximum));
+			Hint = (int)(MaxHint * ((_value - Minimum) / (Maximum - Minimum)));
 		}
 
 		public override void Arrange()
