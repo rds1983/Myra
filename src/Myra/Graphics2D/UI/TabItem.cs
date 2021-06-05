@@ -20,6 +20,7 @@ namespace Myra.Graphics2D.UI
 	{
 		private string _text;
 		private Color? _color;
+		private ImageTextButton _button;
 
 		public string Text
 		{
@@ -92,28 +93,34 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		internal ImageTextButton Button
 		{
-			get; set;
+			get => _button;
+			set
+			{
+				if (value == _button)
+				{
+					return;
+				}
+
+				if (_button != null)
+				{
+					_button.PressedChanged -= OnPressedChanged;
+				}
+
+				_button = value;
+
+				if (_button != null)
+				{
+					_button.PressedChanged += OnPressedChanged;
+				}
+			}
 		}
 
 		[Browsable(false)]
 		[XmlIgnore]
 		public bool IsSelected
 		{
-			get
-			{
-				return Button.IsPressed;
-			}
-
-			set
-			{
-				if (value == IsSelected)
-				{
-					return;
-				}
-
-				Button.IsPressed = value;
-				FireSelected();
-			}
+			get => _button.IsPressed;
+			set => _button.IsPressed = value;
 		}
 
 		public event EventHandler Changed;
@@ -166,9 +173,12 @@ namespace Myra.Graphics2D.UI
 			Changed.Invoke(this);
 		}
 
-		public void FireSelected()
+		private void OnPressedChanged(object sender, EventArgs args)
 		{
-			SelectedChanged.Invoke(this);
+			if (_button.IsPressed)
+			{
+				SelectedChanged.Invoke(this);
+			}
 		}
 	}
 }
