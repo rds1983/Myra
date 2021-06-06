@@ -214,11 +214,6 @@ namespace Myra.Graphics2D.UI
 			return LoadFromXml(XDocument.Parse(data), assetManager, stylesheet, handler);
 		}
 
-		public static Project LoadFromXml<T>(string data, T handler) where T : class
-		{
-			return LoadFromXml(data, null, Stylesheet.Current, handler);
-		}
-
 		public static Project LoadFromXml(XDocument xDoc, IAssetManager assetManager, Stylesheet stylesheet)
 		{
 			return LoadFromXml<object>(xDoc, assetManager, stylesheet, null);

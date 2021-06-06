@@ -112,7 +112,6 @@ namespace Myra
 		{	
 			_uiTextureRegionAtlas = null;
 			_uiStylesheet = null;
-			Stylesheet.Current = null;
 
 			if (_assetManager != null)
 			{

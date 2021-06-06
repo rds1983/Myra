@@ -3,6 +3,7 @@ using System.Reflection;
 using AssetManagementBase;
 using AssetManagementBase.Utility;
 using Myra.Assets;
+using Myra.Graphics2D.UI.Styles;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -20,8 +21,6 @@ namespace Myra
 	{
 		private static AssetManager _defaultAssetManager;
 		private static bool _assetsLoadersUpdated = false;
-
-		public static event EventHandler GameDisposed;
 
 		public static int FontAtlasSize = 1024;
 
@@ -150,13 +149,16 @@ namespace Myra
 
 		private static void GameOnDisposed(object sender, EventArgs eventArgs)
 		{
-			DefaultAssets.Dispose();
+			Reset();
+		}
 
-			var ev = GameDisposed;
-			if (ev != null)
-			{
-				ev(null, EventArgs.Empty);
-			}
+		/// <summary>
+		/// 
+		/// </summary>
+		public static void Reset()
+		{
+			DefaultAssets.Dispose();
+			Stylesheet.Current = null;
 		}
 
 		public static string Version

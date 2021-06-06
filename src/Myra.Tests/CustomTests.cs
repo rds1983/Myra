@@ -1,4 +1,5 @@
-﻿using Myra.Graphics2D.UI;
+﻿using Myra.Graphics2D.TextureAtlases;
+using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.Styles;
 using NUnit.Framework;
 using System;
@@ -27,6 +28,26 @@ namespace Myra.Tests
 
 			// Restore the stylesheet for other tests to work
 			Stylesheet.Current = oldStylesheet;
+		}
+
+		/// <summary>
+		/// Tests that stylesheet is correctly recreated after MyraEnvironment.Reset() call
+		/// </summary>
+		[Test]
+		public void MyraEnvironmentReset()
+		{
+			var oldStylesheet = Stylesheet.Current;
+			var button = new TextButton();
+			var oldTexture = ((TextureRegion)button.Background).Texture;
+
+			MyraEnvironment.Reset();
+
+			var newStylesheet = Stylesheet.Current;
+			button = new TextButton();
+			var newTexture = ((TextureRegion)button.Background).Texture;
+
+			Assert.AreNotEqual(oldStylesheet, newStylesheet);
+			Assert.AreNotEqual(oldTexture, newTexture);
 		}
 	}
 }

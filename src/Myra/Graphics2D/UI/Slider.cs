@@ -67,7 +67,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private int Hint
+		internal int Hint
 		{
 			get
 			{
@@ -92,7 +92,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private int MaxHint
+		internal int MaxHint
 		{
 			get
 			{
