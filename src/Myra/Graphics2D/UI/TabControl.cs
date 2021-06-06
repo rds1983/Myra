@@ -47,6 +47,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[Category("Behavior")]
+		[DefaultValue(TabSelectorPosition.Top)]
 		public TabSelectorPosition TabSelectorPosition
 		{
 			get
@@ -159,6 +161,7 @@ namespace Myra.Graphics2D.UI
 			};
 
 			// Default to Top selector position:
+			_selectorPosition = TabSelectorPosition.Top;
 			_buttonProportions = _gridButtons.ColumnsProportions;
 			_contentProportions = InternalChild.RowsProportions;
 

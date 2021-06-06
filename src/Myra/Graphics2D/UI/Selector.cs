@@ -15,7 +15,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(SelectionMode.Single)]
 		public abstract SelectionMode SelectionMode { get; set; }
 
-		[Category("Data")]
+		[Browsable(false)]
 		[Content]
 		public abstract ObservableCollection<ItemType> Items { get; }
 
