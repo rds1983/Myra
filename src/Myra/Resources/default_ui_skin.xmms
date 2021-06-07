@@ -133,7 +133,7 @@
   <WindowStyles>
     <WindowStyle Background="window" Padding="5">
       <TitleStyle Font="default-font" TextColor="white" />
-      <CloseButtonStyle OverBackground="button-over" Padding="5" PressedBackground="button-red">
+      <CloseButtonStyle OverBackground="button-over" Padding="5, 0" PressedBackground="button-red">
         <ImageStyle Image="icon-close" />
       </CloseButtonStyle>
     </WindowStyle>
