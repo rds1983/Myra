@@ -605,6 +605,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				SubscribeOnTouchMoved(IsPlaced && IsDraggable);
+				OnPlacedChanged();
 			}
 		}
 
@@ -871,6 +872,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public event EventHandler PlacedChanged;
 		public event EventHandler VisibleChanged;
 		public event EventHandler EnabledChanged;
 
@@ -1504,6 +1506,11 @@ namespace Myra.Graphics2D.UI
 			Char.Invoke(this, c);
 		}
 
+		protected virtual void OnPlacedChanged()
+		{
+			PlacedChanged?.Invoke(this);
+		}
+		
 		public virtual void OnVisibleChanged()
 		{
 			InvalidateMeasure();
