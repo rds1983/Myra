@@ -38,36 +38,26 @@ namespace Myra.Assets
 				}
 			}
 
-			FontSystem fontSystem = null;
-
-#if MONOGAME || FNA || STRIDE
-			switch (fontType)
+			var fontSystemSettings = new FontSystemSettings
 			{
-				case FontType.Regular:
-					fontSystem = FontSystemFactory.Create(MyraEnvironment.GraphicsDevice, MyraEnvironment.FontAtlasSize, MyraEnvironment.FontAtlasSize);
-					break;
-				case FontType.Blurry:
-					fontSystem = FontSystemFactory.CreateBlurry(MyraEnvironment.GraphicsDevice, amount, MyraEnvironment.FontAtlasSize, MyraEnvironment.FontAtlasSize);
-					break;
-				case FontType.Stroked:
-					fontSystem = FontSystemFactory.CreateStroked(MyraEnvironment.GraphicsDevice, amount, MyraEnvironment.FontAtlasSize, MyraEnvironment.FontAtlasSize);
-					break;
-			}
-#else
-			switch (fontType)
-			{
-				case FontType.Regular:
-					fontSystem = FontSystemFactory.Create(MyraEnvironment.FontAtlasSize, MyraEnvironment.FontAtlasSize);
-					break;
-				case FontType.Blurry:
-					fontSystem = FontSystemFactory.CreateBlurry(amount, MyraEnvironment.FontAtlasSize, MyraEnvironment.FontAtlasSize);
-					break;
-				case FontType.Stroked:
-					fontSystem = FontSystemFactory.CreateStroked(amount, MyraEnvironment.FontAtlasSize, MyraEnvironment.FontAtlasSize);
-					break;
-			}
-#endif
+				TextureWidth = MyraEnvironment.FontAtlasSize,
+				TextureHeight = MyraEnvironment.FontAtlasSize,
+				EffectAmount = amount,
+				KernelWidth = MyraEnvironment.FontKernelWidth,
+				KernelHeight = MyraEnvironment.FontKernelHeight,
+				PremultiplyAlpha = MyraEnvironment.FontPremultiplyAlpha,
+				FontResolutionFactor = MyraEnvironment.FontResolutionFactor,
+				Effect =
+					fontType switch
+					{
+						FontType.Regular => FontSystemEffect.None,
+						FontType.Blurry => FontSystemEffect.Blurry,
+						FontType.Stroked => FontSystemEffect.Stroked,
+						_ => throw new Exception(),
+					}
+			};
 
+			var fontSystem = new FontSystem(fontSystemSettings);
 			var data = context.Load<byte[]>(parts[0]);
 			fontSystem.AddFont(data);
 

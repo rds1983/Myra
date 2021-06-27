@@ -8,7 +8,8 @@
     <Description>UI Library for MonoGame, FNA and Stride</Description>
     <Version>1.2.4</Version>
     <AssetManagementBaseVersion>0.5.2</AssetManagementBaseVersion>
-    <FontStashSharpVersion>0.9.3</FontStashSharpVersion>
+    <FontStashSharpVersion>0.9.4</FontStashSharpVersion>
+    <LangVersion>8.0</LangVersion>
     <InfoLundinMathVersion>1.2.6</InfoLundinMathVersion>
   </PropertyGroup>
 </Project>
