@@ -2,6 +2,7 @@
 
 using System;
 using Myra.Utility;
+using System.Runtime.CompilerServices;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -19,55 +20,48 @@ namespace Myra.Graphics2D
 {
 	partial class RenderContext
 	{
-		/// <summary>
-		///     Draws a filled rectangle
-		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
-		/// <param name="rectangle">The rectangle to draw</param>
-		/// <param name="color">The color to draw the rectangle in</param>
-		public void FillRectangle(Rectangle rectangle, Color color)
-		{
-			FillRectangle(new Vector2(rectangle.X, rectangle.Y), new Vector2(rectangle.Width, rectangle.Height), color);
-		}
+        /// <summary>
+        ///     Draws a filled rectangle
+        /// </summary>
+        /// <param name="spriteBatch">The destination drawing surface</param>
+        /// <param name="rectangle">The rectangle to draw</param>
+        /// <param name="color">The color to draw the rectangle in</param>
+        public void FillRectangle(Rectangle rectangle, Color color) =>
+            FillRectangle(new Vector2(rectangle.X, rectangle.Y), new Vector2(rectangle.Width, rectangle.Height), color);
 
-		/// <summary>
-		///     Draws a filled rectangle
-		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
-		/// <param name="location">Where to draw</param>
-		/// <param name="size">The size of the rectangle</param>
-		/// <param name="color">The color to draw the rectangle in</param>
-		public void FillRectangle(Vector2 location, Vector2 size, Color color)
-		{
-			Draw(DefaultAssets.WhiteTexture,
-				new Rectangle((int)location.X, (int)location.Y, (int)size.X, (int)size.Y),
-				null,
-				color);
-		}
+        /// <summary>
+        ///     Draws a filled rectangle
+        /// </summary>
+        /// <param name="spriteBatch">The destination drawing surface</param>
+        /// <param name="location">Where to draw</param>
+        /// <param name="size">The size of the rectangle</param>
+        /// <param name="color">The color to draw the rectangle in</param>
+        public void FillRectangle(Vector2 location, Vector2 size, Color color) =>
+            Draw(DefaultAssets.WhiteTexture,
+                new Rectangle((int)location.X, (int)location.Y, (int)size.X, (int)size.Y),
+                null,
+                color);
 
-		/// <summary>
-		///     Draws a filled rectangle
-		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
-		/// <param name="x">The X coord of the left side</param>
-		/// <param name="y">The Y coord of the upper side</param>
-		/// <param name="width">Width</param>
-		/// <param name="height">Height</param>
-		/// <param name="color">The color to draw the rectangle in</param>
-		public void FillRectangle(float x, float y, float width, float height,
-			Color color)
-		{
-			FillRectangle(new Vector2(x, y), new Vector2(width, height), color);
-		}
+        /// <summary>
+        ///     Draws a filled rectangle
+        /// </summary>
+        /// <param name="spriteBatch">The destination drawing surface</param>
+        /// <param name="x">The X coord of the left side</param>
+        /// <param name="y">The Y coord of the upper side</param>
+        /// <param name="width">Width</param>
+        /// <param name="height">Height</param>
+        /// <param name="color">The color to draw the rectangle in</param>
+        public void FillRectangle(float x, float y, float width, float height,
+            Color color) => FillRectangle(new Vector2(x, y), new Vector2(width, height), color);
 
-		/// <summary>
-		///     Draws a rectangle with the thickness provided
-		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
-		/// <param name="rectangle">The rectangle to draw</param>
-		/// <param name="color">The color to draw the rectangle in</param>
-		/// <param name="thickness">The thickness of the lines</param>
-		public void DrawRectangle(Rectangle rectangle, Color color, float thickness = 1f)
+        /// <summary>
+        ///     Draws a rectangle with the thickness provided
+        /// </summary>
+        /// <param name="spriteBatch">The destination drawing surface</param>
+        /// <param name="rectangle">The rectangle to draw</param>
+        /// <param name="color">The color to draw the rectangle in</param>
+        /// <param name="thickness">The thickness of the lines</param>
+        public void DrawRectangle(Rectangle rectangle, Color color, float thickness = 1f)
 		{
 			var texture = DefaultAssets.WhiteTexture;
 			var t = (int)thickness;
@@ -104,21 +98,19 @@ namespace Myra.Graphics2D
 
 #if MONOGAME || FNA || STRIDE
 
-		private void Draw(Texture2D texture, Vector2 offset, Color color, Vector2 scale, float rotation = 0.0f)
-		{
+        private void Draw(Texture2D texture, Vector2 offset, Color color, Vector2 scale, float rotation = 0.0f) =>
 			Draw(texture, offset, null, color, rotation, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
-		}
 
-		/// <summary>
-		///     Draws a closed polygon from an array of points
-		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
-		/// ///
-		/// <param name="offset">Where to offset the points</param>
-		/// <param name="points">The points to connect with lines</param>
-		/// <param name="color">The color to use</param>
-		/// <param name="thickness">The thickness of the lines</param>
-		public void DrawPolygon(Vector2 offset, Vector2[] points, Color color, float thickness = 1f)
+        /// <summary>
+        ///     Draws a closed polygon from an array of points
+        /// </summary>
+        /// <param name="spriteBatch">The destination drawing surface</param>
+        /// ///
+        /// <param name="offset">Where to offset the points</param>
+        /// <param name="points">The points to connect with lines</param>
+        /// <param name="color">The color to use</param>
+        /// <param name="thickness">The thickness of the lines</param>
+        public void DrawPolygon(Vector2 offset, Vector2[] points, Color color, float thickness = 1f)
 		{
 			if (points.Length == 0)
 				return;
@@ -146,31 +138,28 @@ namespace Myra.Graphics2D
 			Draw(texture, point1, color, scale, angle);
 		}
 
-		/// <summary>
-		///     Draws a line from point1 to point2 with an offset
-		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
-		/// <param name="x1">The X coord of the first point</param>
-		/// <param name="y1">The Y coord of the first point</param>
-		/// <param name="x2">The X coord of the second point</param>
-		/// <param name="y2">The Y coord of the second point</param>
-		/// <param name="color">The color to use</param>
-		/// <param name="thickness">The thickness of the line</param>
-		public void DrawLine(float x1, float y1, float x2, float y2, Color color,
-			float thickness = 1f)
-		{
-			DrawLine(new Vector2(x1, y1), new Vector2(x2, y2), color, thickness);
-		}
+        /// <summary>
+        ///     Draws a line from point1 to point2 with an offset
+        /// </summary>
+        /// <param name="spriteBatch">The destination drawing surface</param>
+        /// <param name="x1">The X coord of the first point</param>
+        /// <param name="y1">The Y coord of the first point</param>
+        /// <param name="x2">The X coord of the second point</param>
+        /// <param name="y2">The Y coord of the second point</param>
+        /// <param name="color">The color to use</param>
+        /// <param name="thickness">The thickness of the line</param>
+        public void DrawLine(float x1, float y1, float x2, float y2, Color color,
+            float thickness = 1f) => DrawLine(new Vector2(x1, y1), new Vector2(x2, y2), color, thickness);
 
-		/// <summary>
-		///     Draws a line from point1 to point2 with an offset
-		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
-		/// <param name="point1">The first point</param>
-		/// <param name="point2">The second point</param>
-		/// <param name="color">The color to use</param>
-		/// <param name="thickness">The thickness of the line</param>
-		public void DrawLine(Vector2 point1, Vector2 point2, Color color,
+        /// <summary>
+        ///     Draws a line from point1 to point2 with an offset
+        /// </summary>
+        /// <param name="spriteBatch">The destination drawing surface</param>
+        /// <param name="point1">The first point</param>
+        /// <param name="point2">The second point</param>
+        /// <param name="color">The color to use</param>
+        /// <param name="thickness">The thickness of the line</param>
+        public void DrawLine(Vector2 point1, Vector2 point2, Color color,
 			float thickness = 1f)
 		{
 			// calculate the distance between the two vectors
@@ -217,51 +206,86 @@ namespace Myra.Graphics2D
 			Draw(DefaultAssets.WhiteTexture, position + offset, color, scale);
 		}
 
-		/// <summary>
-		///     Draw a circle
-		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
-		/// <param name="center">The center of the circle</param>
-		/// <param name="radius">The radius of the circle</param>
-		/// <param name="sides">The number of sides to generate</param>
-		/// <param name="color">The color of the circle</param>
-		/// <param name="thickness">The thickness of the lines used</param>
-		public void DrawCircle(Vector2 center, float radius, int sides, Color color,
-			float thickness = 1f)
-		{
-			DrawPolygon(center, CreateCircle(radius, sides), color, thickness);
-		}
+        /// <summary>
+        ///     Draw a circle
+        /// </summary>
+        /// <param name="spriteBatch">The destination drawing surface</param>
+        /// <param name="center">The center of the circle</param>
+        /// <param name="radius">The radius of the circle</param>
+        /// <param name="sides">The number of sides to generate</param>
+        /// <param name="color">The color of the circle</param>
+        /// <param name="thickness">The thickness of the lines used</param>
+        public void DrawCircle(Vector2 center, float radius, int sides, Color color,
+            float thickness = 1f) => DrawPolygon(center, CreateCircle(radius, sides), color, thickness);
 
-		/// <summary>
-		///     Draw a circle
-		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
-		/// <param name="x">The center X of the circle</param>
-		/// <param name="y">The center Y of the circle</param>
-		/// <param name="radius">The radius of the circle</param>
-		/// <param name="sides">The number of sides to generate</param>
-		/// <param name="color">The color of the circle</param>
-		/// <param name="thickness">The thickness of the line</param>
-		public void DrawCircle(float x, float y, float radius, int sides,
-			Color color, float thickness = 1f)
-		{
-			DrawPolygon(new Vector2(x, y), CreateCircle(radius, sides), color, thickness);
-		}
+        /// <summary>
+        ///     Draw a circle
+        /// </summary>
+        /// <param name="spriteBatch">The destination drawing surface</param>
+        /// <param name="x">The center X of the circle</param>
+        /// <param name="y">The center Y of the circle</param>
+        /// <param name="radius">The radius of the circle</param>
+        /// <param name="sides">The number of sides to generate</param>
+        /// <param name="color">The color of the circle</param>
+        /// <param name="thickness">The thickness of the line</param>
+        public void DrawCircle(float x, float y, float radius, int sides,
+			Color color, float thickness = 1f) => DrawPolygon(new Vector2(x, y), CreateCircle(radius, sides), color, thickness);
 
-		private Vector2[] CreateCircle(double radius, int sides)
+        /// <summary>
+        ///     Draw an Arc
+        /// </summary>
+        /// <param name="spriteBatch">The destination drawing surface</param>
+        /// <param name="center">The center of the Arc</param>
+        /// <param name="radius">The radius of the Arc</param>
+        /// <param name="sides">The number of sides to generate</param>
+        /// <param name="color">The color of the Arc</param>
+        /// <param name="thickness">The thickness of the lines used</param>
+        /// <param name="startAngle">The start angle of the line in radians</param>
+        /// <param name="endAngle">The end angle of the line in radians</param>
+        public void DrawArc(Vector2 center, float radius, int sides, Color color, float startAngle, float endAngle,
+            float thickness = 1f) => DrawPolygon(center, CreateArc(radius, sides, startAngle, endAngle), color, thickness);
+
+        /// <summary>
+        ///     Draw a Arc
+        /// </summary>
+        /// <param name="spriteBatch">The destination drawing surface</param>
+        /// <param name="x">The center X of the Arc</param>
+        /// <param name="y">The center Y of the Arc</param>
+        /// <param name="radius">The radius of the Arc</param>
+        /// <param name="sides">The number of sides to generate</param>
+        /// <param name="color">The color of the Arc</param>
+        /// <param name="thickness">The thickness of the line</param>
+        /// <param name="startAngle">The start angle of the line in radians</param>
+        /// <param name="endAngle">The end angle of the line in radians</param>
+        public void DrawArc(float x, float y, float radius, int sides,
+			Color color, float startAngle, float endAngle, float thickness = 1f) =>
+			DrawPolygon(new Vector2(x, y), CreateArc(radius, sides, startAngle, endAngle), color, thickness);
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private Vector2[] CreateArcHelper(double radius, int sides, double step, double theta = 0.0)
 		{
-			const double max = 2.0 * Math.PI;
 			var points = new Vector2[sides];
-			var step = max / sides;
-			var theta = 0.0;
-
 			for (var i = 0; i < sides; i++)
 			{
 				points[i] = new Vector2((float)(radius * Math.Cos(theta)), (float)(radius * Math.Sin(theta)));
 				theta += step;
 			}
-
 			return points;
+		}
+
+		private Vector2[] CreateCircle(double radius, int sides)
+		{
+			const double max = 2.0 * Math.PI;
+			var step = max / sides;
+			return CreateArcHelper(radius, sides, step);
+		}
+
+		private Vector2[] CreateArc(double radius, int sides, double startAngle, double endAngle)
+		{
+			var max = Math.Max(endAngle - startAngle, 0);
+			var step = max / sides;
+			var theta = startAngle;
+			return CreateArcHelper(radius, sides, step, theta);
 		}
 #endif
 	}
