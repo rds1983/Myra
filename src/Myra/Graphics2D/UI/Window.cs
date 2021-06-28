@@ -209,6 +209,9 @@ namespace Myra.Graphics2D.UI
 			{
 				CenterOnDesktop();
 				IsWindowPlaced = true;
+
+				// Need to call base.UpdateLayout again in order for the new Left/Top values be applied
+				base.UpdateLayout();
 			}
 		}
 
