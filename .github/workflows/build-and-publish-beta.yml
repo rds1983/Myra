@@ -33,3 +33,5 @@ jobs:
       run: dotnet build build\Myra.Stride.sln --configuration Release --version-suffix ${{env.VERSION_SUFFIX}}
     - name: Build Myra.PlatformAgnostic
       run: dotnet build build\Myra.PlatformAgnostic.sln --configuration Release --version-suffix ${{env.VERSION_SUFFIX}}
+    - name: Test
+      run: dotnet test build\Myra.MonoGame.sln --verbosity normal
