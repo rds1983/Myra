@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Numerics;
+using FontStashSharp.Interfaces;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Platform;
 
@@ -8,8 +9,6 @@ namespace Myra.Samples.AllWidgets
 {
 	internal class MGRenderer: IMyraRenderer
 	{
-		private bool _beginCalled;
-
 		private static RasterizerState _uiRasterizerState;
 
 		private static RasterizerState UIRasterizerState
@@ -29,17 +28,21 @@ namespace Myra.Samples.AllWidgets
 			}
 		}
 
-		private readonly GraphicsDevice _device;
+		private readonly MGPlatform _platform;
+		private bool _beginCalled;
+		private readonly SpriteBatch _batch;
 		private Matrix3x2? _transform;
+
+		private GraphicsDevice GraphicsDevice => _platform.GraphicsDevice;
 
 		public Rectangle Scissor
 		{
 			get
 			{
-				var rect = _device.ScissorRectangle;
+				var rect = GraphicsDevice.ScissorRectangle;
 
-				rect.X -= _device.Viewport.X;
-				rect.Y -= _device.Viewport.Y;
+				rect.X -= GraphicsDevice.Viewport.X;
+				rect.Y -= GraphicsDevice.Viewport.Y;
 
 				return rect.ToSystemDrawing();
 			}
@@ -47,23 +50,23 @@ namespace Myra.Samples.AllWidgets
 			set
 			{
 				Flush();
-				value.X += _device.Viewport.X;
-				value.Y += _device.Viewport.Y;
-				_device.ScissorRectangle = value.ToXNA();
+				value.X += GraphicsDevice.Viewport.X;
+				value.Y += GraphicsDevice.Viewport.Y;
+				GraphicsDevice.ScissorRectangle = value.ToXNA();
 			}
 		}
 
-		private readonly SpriteBatch _batch;
+		public ITexture2DManager TextureManager => _platform;
 
-		public MGRenderer(GraphicsDevice graphicsDevice)
+		public MGRenderer(MGPlatform platform)
 		{
-			if (graphicsDevice == null)
+			if (platform == null)
 			{
-				throw new ArgumentNullException(nameof(graphicsDevice));
+				throw new ArgumentNullException(nameof(platform));
 			}
 
-			_device = graphicsDevice;
-			_batch = new SpriteBatch(_device);
+			_platform = platform;
+			_batch = new SpriteBatch(GraphicsDevice);
 		}
 
 		public void Begin(Matrix3x2? transform)

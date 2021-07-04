@@ -19,6 +19,8 @@ namespace Myra.Samples.AllWidgets
 			}
 		}
 
+		internal GraphicsDevice GraphicsDevice => _device;
+
 		public MGPlatform(GraphicsDevice device)
 		{
 			if (device == null)
@@ -44,7 +46,7 @@ namespace Myra.Samples.AllWidgets
 
 		public IMyraRenderer CreateRenderer()
 		{
-			return new MGRenderer(_device);
+			return new MGRenderer(this);
 		}
 
 		public MouseInfo GetMouseInfo()
