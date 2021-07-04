@@ -1,0 +1,24 @@
+name: Validate Pull Request
+
+on: [pull_request]
+
+jobs:
+  BuildAndPublish:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.x'
+    - name: Build Myra.MonoGame
+      run: dotnet build build\Myra.MonoGame.sln --configuration Release
+    - name: Build Myra.Stride
+      run: dotnet build build\Myra.Stride.sln --configuration Release
+    - name: Build Myra.PlatformAgnostic
+      run: dotnet build build\Myra.PlatformAgnostic.sln --configuration Release
+    - name: Test
+      run: dotnet test build\Myra.MonoGame.sln --verbosity normal
