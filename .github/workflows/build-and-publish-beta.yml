@@ -13,7 +13,6 @@ jobs:
     - name: Extract Version
       shell: pwsh
       run: |
-        echo "BUILD_NUMBER="+$Env:GITHUB_RUN_NUMBER
         $versionSuffix = "-beta-"+$Env:GITHUB_RUN_NUMBER
         echo "VERSION_SUFFIX=$versionSuffix"
         echo "VERSION_SUFFIX=$versionSuffix" >> $Env:GITHUB_ENV
@@ -27,10 +26,10 @@ jobs:
         dotnet-version: '5.0.x'
     - name: Build Myra.MonoGame
       run: dotnet build build\Myra.MonoGame.sln --configuration Release --version-suffix ${{env.VERSION_SUFFIX}}
+    - name: Build Binary Distribution
+      shell: pwsh
+      run: ./buildBinaryDistribution.ps1 ${{env.VERSION}}
     - name: Build Myra.Stride
       run: dotnet build build\Myra.Stride.sln --configuration Release --version-suffix ${{env.VERSION_SUFFIX}}
     - name: Build Myra.PlatformAgnostic
       run: dotnet build build\Myra.PlatformAgnostic.sln --configuration Release --version-suffix ${{env.VERSION_SUFFIX}}
-    - name: Build Binary Distribution
-      shell: pwsh
-      run: ./buildBinaryDistribution.ps1
