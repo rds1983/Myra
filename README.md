@@ -1,5 +1,7 @@
 ## Overview
-[![Nuget](https://img.shields.io/nuget/dt/Myra)](https://www.nuget.org/packages/Myra/) ![Build & Publish](https://github.com/rds1983/Myra/workflows/Build%20&%20Publish/badge.svg) [![Chat](https://img.shields.io/discord/628186029488340992.svg)](https://discord.gg/ZeHxhCY)
+[![Nuget](https://img.shields.io/nuget/dt/Myra)](https://www.nuget.org/packages/Myra/)
+[![Build & Publish Beta](https://github.com/rds1983/Myra/actions/workflows/build-and-publish-beta.yml/badge.svg)](https://github.com/rds1983/Myra/actions/workflows/build-and-publish-beta.yml)
+[![Chat](https://img.shields.io/discord/628186029488340992.svg)](https://discord.gg/ZeHxhCY)
 
 Myra is UI Library for [MonoGame](http://www.monogame.net/), [FNA](https://github.com/FNA-XNA/FNA) and [Stride](https://github.com/stride3d/stride).  
 
