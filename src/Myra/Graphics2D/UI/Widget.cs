@@ -41,7 +41,6 @@ namespace Myra.Graphics2D.UI
 		private bool _measureDirty = true;
 		private bool _active = false;
 		private Desktop _desktop;
-		private bool _isDraggable = false;
 
 		private Point _lastMeasureSize;
 		private Point _lastMeasureAvailableSize;
