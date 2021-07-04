@@ -13,8 +13,8 @@ jobs:
     - name: Extract Version
       shell: pwsh
       run: |
-        echo "BUILD_NUMBER="+$Env:BUILD_NUMBER
-        $versionSuffix = "-beta-"+$Env:BUILD_NUMBER
+        echo "BUILD_NUMBER="+$Env:GITHUB_RUN_NUMBER
+        $versionSuffix = "-beta-"+$Env:GITHUB_RUN_NUMBER
         echo "VERSION_SUFFIX=$versionSuffix"
         echo "VERSION_SUFFIX=$versionSuffix" >> $Env:GITHUB_ENV
         $version = select-string -Path 'Directory.Build.Props' -Pattern '<VersionPrefix>(.*)<\/VersionPrefix>' -AllMatches | % { $_.Matches } | % { $_.Groups[1].Value }
