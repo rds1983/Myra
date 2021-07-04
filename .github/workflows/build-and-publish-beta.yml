@@ -26,12 +26,17 @@ jobs:
         dotnet-version: '5.0.x'
     - name: Build Myra.MonoGame
       run: dotnet build build\Myra.MonoGame.sln --configuration Release --version-suffix ${{env.VERSION_SUFFIX}}
-    - name: Build Binary Distribution
-      shell: pwsh
-      run: ./buildBinaryDistribution.ps1 ${{env.VERSION}}
     - name: Build Myra.Stride
       run: dotnet build build\Myra.Stride.sln --configuration Release --version-suffix ${{env.VERSION_SUFFIX}}
     - name: Build Myra.PlatformAgnostic
       run: dotnet build build\Myra.PlatformAgnostic.sln --configuration Release --version-suffix ${{env.VERSION_SUFFIX}}
     - name: Test
       run: dotnet test build\Myra.MonoGame.sln --verbosity normal
+    - name: Build Binary Distribution
+      shell: pwsh
+      run: ./buildBinaryDistribution.ps1 ${{env.VERSION}}
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: Myra.${{env.VERSION}}.zip
+        path: Myra.${{env.VERSION}}.zip
