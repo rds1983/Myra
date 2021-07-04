@@ -1,6 +1,6 @@
 name: Build & Publish Beta
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   BuildAndPublish:
