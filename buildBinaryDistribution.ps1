@@ -1,4 +1,4 @@
-$version = select-string -Path 'Directory.Build.Props' -Pattern '<Version>(.*)<\/Version>' -AllMatches | % { $_.Matches } | % { $_.Groups[1].Value }
+$version = $args[0]
 echo "Version: $version"
 
 # Recreate "ZipPackage"
