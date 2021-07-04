@@ -1,0 +1,33 @@
+name: Build & Publish Beta
+
+on: [push]
+
+jobs:
+  BuildAndPublish:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.x'
+    - name: Build Myra.MonoGame
+      run: dotnet build build\Myra.MonoGame.sln --configuration Release
+    - name: Build Myra.Stride
+      run: dotnet build build\Myra.Stride.sln --configuration Release
+    - name: Build Myra.PlatformAgnostic
+      run: dotnet build build\Myra.PlatformAgnostic.sln --configuration Release
+    - name: Build Binary Distribution
+      shell: pwsh
+      run: ./buildBinaryDistribution.ps1
+    - name: Extract Version
+      shell: pwsh
+      run: |
+        $version = select-string -Path 'Directory.Build.Props' -Pattern '<VersionPrefix>(.*)<\/VersionPrefix>' -AllMatches | % { $_.Matches } | % { $_.Groups[1].Value }
+        $version += "-beta-$BUILD_NUMBER"
+        echo "VERSION=$version" >> $Env:GITHUB_ENV
+        
+        
