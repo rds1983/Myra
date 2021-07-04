@@ -42,9 +42,9 @@ jobs:
         path: Myra.${{env.VERSION}}.zip
     - name: Install NuGet
       uses: NuGet/setup-nuget@v1
-    - name: Publish Myra.MonoGame to NuGet
+    - name: Publish Myra.MonoGame to MyGet
       run: nuget.exe push src\Myra\bin\MonoGame\Release\Myra.*.nupkg ${{secrets.MYGET_APIKEY}} -Source https://www.myget.org/F/abarim-games/api/v2/package
-    - name: Publish Myra.Stride to NuGet
+    - name: Publish Myra.Stride to MyGet
       run: nuget.exe push src\Myra\bin\Stride\Release\Myra.Stride.*.nupkg ${{secrets.MYGET_APIKEY}} -Source https://www.myget.org/F/abarim-games/api/v2/package
-    - name: Publish Myra.PlatformAgnostic to NuGet
+    - name: Publish Myra.PlatformAgnostic to MyGet
       run: nuget.exe push src\Myra\bin\PlatformAgnostic\Release\Myra.PlatformAgnostic.*.nupkg ${{secrets.MYGET_APIKEY}} -Source https://www.myget.org/F/abarim-games/api/v2/package
