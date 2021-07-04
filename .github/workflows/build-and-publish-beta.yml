@@ -14,6 +14,12 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '5.0.x'
+    - name: Extract Version
+      shell: pwsh
+      run: |
+        $version = select-string -Path 'Directory.Build.Props' -Pattern '<VersionPrefix>(.*)<\/VersionPrefix>' -AllMatches | % { $_.Matches } | % { $_.Groups[1].Value }
+        $version += "-beta-$BUILD_NUMBER"
+        echo "VERSION=$version" >> $Env:GITHUB_ENV
     - name: Build Myra.MonoGame
       run: dotnet build build\Myra.MonoGame.sln --configuration Release
     - name: Build Myra.Stride
@@ -23,11 +29,3 @@ jobs:
     - name: Build Binary Distribution
       shell: pwsh
       run: ./buildBinaryDistribution.ps1
-    - name: Extract Version
-      shell: pwsh
-      run: |
-        $version = select-string -Path 'Directory.Build.Props' -Pattern '<VersionPrefix>(.*)<\/VersionPrefix>' -AllMatches | % { $_.Matches } | % { $_.Groups[1].Value }
-        $version += "-beta-$BUILD_NUMBER"
-        echo "VERSION=$version" >> $Env:GITHUB_ENV
-        
-        
