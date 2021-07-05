@@ -1,7 +1,6 @@
 name: Build & Publish Release
 
-on:
-  workflow_dispatch:
+on: [workflow_dispatch]
 
 jobs:
   BuildAndPublish:
