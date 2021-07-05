@@ -14,7 +14,7 @@ jobs:
     - name: Extract Version
       shell: pwsh
       run: |
-        $version = select-string -Path 'Directory.Build.Props' -Pattern '<Version>(.*)<\/Version>' -AllMatches | % { $_.Matches } | % { $_.Groups[1].Value }
+        $version = select-string -Path 'Directory.Build.Props' -Pattern '<VersionPrefix>(.*)<\/VersionPrefix>' -AllMatches | % { $_.Matches } | % { $_.Groups[1].Value }
         echo "VERSION=$version"
         echo "VERSION=$version" >> $Env:GITHUB_ENV
     - name: Setup .NET Core
