@@ -11,6 +11,12 @@ jobs:
     - uses: actions/checkout@v2
       with:
         submodules: recursive
+    - name: Extract Version
+      shell: pwsh
+      run: |
+        $version = select-string -Path 'Directory.Build.Props' -Pattern '<Version>(.*)<\/Version>' -AllMatches | % { $_.Matches } | % { $_.Groups[1].Value }
+        echo "VERSION=$version"
+        echo "VERSION=$version" >> $Env:GITHUB_ENV
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
@@ -21,14 +27,25 @@ jobs:
       run: dotnet build build\Myra.Stride.sln --configuration Release
     - name: Build Myra.PlatformAgnostic
       run: dotnet build build\Myra.PlatformAgnostic.sln --configuration Release
+    - name: Test
+      run: dotnet test build\Myra.MonoGame.sln --verbosity normal
     - name: Build Binary Distribution
       shell: pwsh
-      run: ./buildBinaryDistribution.ps1
-    - name: Extract Version
-      shell: pwsh
-      run: |
-        $version = select-string -Path 'Directory.Build.Props' -Pattern '<Version>(.*)<\/Version>' -AllMatches | % { $_.Matches } | % { $_.Groups[1].Value }
-        echo "VERSION=$version" >> $Env:GITHUB_ENV
+      run: ./buildBinaryDistribution.ps1 ${{env.VERSION}}
+    - name: Install NuGet
+      uses: NuGet/setup-nuget@v1
+    - name: Publish Myra.MonoGame to MyGet
+      run: nuget.exe push src\Myra\bin\MonoGame\Release\Myra.*.nupkg ${{secrets.MYGET_APIKEY}} -Source https://www.myget.org/F/abarim-games/api/v2/package
+    - name: Publish Myra.Stride to MyGet
+      run: nuget.exe push src\Myra\bin\Stride\Release\Myra.Stride.*.nupkg ${{secrets.MYGET_APIKEY}} -Source https://www.myget.org/F/abarim-games/api/v2/package
+    - name: Publish Myra.PlatformAgnostic to MyGet
+      run: nuget.exe push src\Myra\bin\PlatformAgnostic\Release\Myra.PlatformAgnostic.*.nupkg ${{secrets.MYGET_APIKEY}} -Source https://www.myget.org/F/abarim-games/api/v2/package
+    - name: Publish Myra.MonoGame to NuGet
+      run: nuget.exe push src\Myra\bin\MonoGame\Release\Myra.*.nupkg ${{secrets.NUGET_APIKEY}} -Source https://api.nuget.org/v3/index.json
+    - name: Publish Myra.Stride to NuGet
+      run: nuget.exe push src\Myra\bin\Stride\Release\Myra.Stride.*.nupkg ${{secrets.NUGET_APIKEY}} -Source https://api.nuget.org/v3/index.json
+    - name: Publish Myra.PlatformAgnostic to NuGet
+      run: nuget.exe push src\Myra\bin\PlatformAgnostic\Release\Myra.PlatformAgnostic.*.nupkg ${{secrets.NUGET_APIKEY}} -Source https://api.nuget.org/v3/index.json
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -49,12 +66,3 @@ jobs:
         asset_path: ./Myra.${{ env.VERSION }}.zip
         asset_name: Myra.${{ env.VERSION }}.zip
         asset_content_type: application/zip
-    - name: Install NuGet
-      uses: NuGet/setup-nuget@v1
-    - name: Publish Myra.MonoGame to NuGet
-      run: nuget.exe push src\Myra\bin\MonoGame\Release\Myra.*.nupkg ${{secrets.NUGET_APIKEY}} -Source https://api.nuget.org/v3/index.json
-    - name: Publish Myra.Stride to NuGet
-      run: nuget.exe push src\Myra\bin\Stride\Release\Myra.Stride.*.nupkg ${{secrets.NUGET_APIKEY}} -Source https://api.nuget.org/v3/index.json
-    - name: Publish Myra.PlatformAgnostic to NuGet
-      run: nuget.exe push src\Myra\bin\PlatformAgnostic\Release\Myra.PlatformAgnostic.*.nupkg ${{secrets.NUGET_APIKEY}} -Source https://api.nuget.org/v3/index.json
-        
