@@ -1,6 +1,10 @@
 name: Build & Publish Beta
 
-on: [push, workflow_dispatch]
+on:
+    push:
+        paths:
+            - 'src/**'
+    workflow_dispatch:
 
 jobs:
   BuildAndPublish:
