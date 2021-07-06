@@ -132,6 +132,11 @@ namespace Myra
 		public static bool DrawTextGlyphsFrames { get; set; }
 		public static bool DisableClipping { get; set; }
 
+		/// <summary>
+		/// Makes the text rendering more smooth(especially when scaling) for the cost of sacrificing some performance 
+		/// </summary>
+		public static bool SmoothText { get; set; }
+
 		private static void UpdateAssetManager()
 		{
 			if (_assetsLoadersUpdated)

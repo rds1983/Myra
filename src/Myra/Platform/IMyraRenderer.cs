@@ -1,4 +1,5 @@
 ﻿using FontStashSharp.Interfaces;
+using Myra.Graphics2D;
 using System.Drawing;
 using System.Numerics;
 
@@ -15,7 +16,8 @@ namespace Myra.Platform
 		/// Prepares the graphics device for drawing sprites with specified render state options.
 		/// </summary>
 		/// <param name="transformMatrix">A matrix to apply to position, rotation, scale, and depth data passed to Draw.</param>
-		void Begin(Matrix3x2? transformMatrix);
+		/// <param name="textureFiltering"></param>
+		void Begin(Matrix3x2? transformMatrix, TextureFiltering textureFiltering);
 
 		/// <summary>
 		/// Flushes the sprite batch.

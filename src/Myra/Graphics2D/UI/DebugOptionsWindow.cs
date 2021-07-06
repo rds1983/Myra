@@ -41,6 +41,12 @@ namespace Myra.Graphics2D.UI
 			{
 				MyraEnvironment.DisableClipping = _checkBoxDisableClipping.IsPressed;
 			};
+
+			_checkBoxSmoothText.IsPressed = MyraEnvironment.SmoothText;
+			_checkBoxSmoothText.PressedChanged += (s, a) =>
+			{
+				MyraEnvironment.SmoothText = _checkBoxSmoothText.IsPressed;
+			};
 		}
 
 		public void AddOption(string text, Action onEnabled, Action onDisabled)
