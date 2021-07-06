@@ -1,7 +1,5 @@
 using FontStashSharp;
-using System;
 using Myra.Utility;
-using System.Text;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -63,6 +61,7 @@ namespace Myra.Graphics2D
 		private readonly SpriteBatch _renderer;
 #else
 		private readonly IMyraRenderer _renderer;
+		private readonly FontStashRenderer _fontStashRenderer;
 #endif
 		private bool _beginCalled;
 		private Rectangle _scissor;
@@ -151,6 +150,7 @@ namespace Myra.Graphics2D
 			_renderer = new SpriteBatch(MyraEnvironment.Game.GraphicsDevice);
 #else
 			_renderer = MyraEnvironment.Platform.CreateRenderer();
+			_fontStashRenderer = new FontStashRenderer(_renderer);
 #endif
 
 			_scissor = GetDeviceScissor();
@@ -261,7 +261,11 @@ namespace Myra.Graphics2D
 		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color color, Vector2 scale, float rotation, Vector2 origin, float layerDepth = 0.0f)
 		{
 			SetTextTextureFiltering();
+#if MONOGAME || FNA || STRIDE
 			font.DrawText(_renderer, text, position, CrossEngineStuff.MultiplyColor(color, Opacity), scale, rotation, origin, layerDepth);
+#else
+			font.DrawText(_fontStashRenderer, text, position, CrossEngineStuff.MultiplyColor(color, Opacity), scale, rotation, origin, layerDepth);
+#endif
 		}
 
 		/// <summary>
@@ -275,7 +279,11 @@ namespace Myra.Graphics2D
 		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color color, Vector2 scale, float layerDepth = 0.0f)
 		{
 			SetTextTextureFiltering();
+#if MONOGAME || FNA || STRIDE
 			font.DrawText(_renderer, text, position, CrossEngineStuff.MultiplyColor(color, Opacity), scale, layerDepth);
+#else
+			font.DrawText(_fontStashRenderer, text, position, CrossEngineStuff.MultiplyColor(color, Opacity), scale, layerDepth);
+#endif
 		}
 
 		/// <summary>
@@ -288,7 +296,11 @@ namespace Myra.Graphics2D
 		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color color, float layerDepth = 0.0f)
 		{
 			SetTextTextureFiltering();
+#if MONOGAME || FNA || STRIDE
 			font.DrawText(_renderer, text, position, CrossEngineStuff.MultiplyColor(color, Opacity), layerDepth);
+#else
+			font.DrawText(_fontStashRenderer, text, position, CrossEngineStuff.MultiplyColor(color, Opacity), layerDepth);
+#endif
 		}
 
 		/// <summary>
@@ -304,7 +316,11 @@ namespace Myra.Graphics2D
 		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color[] colors, Vector2 scale, float rotation, Vector2 origin, float layerDepth = 0.0f)
 		{
 			SetTextTextureFiltering();
+#if MONOGAME || FNA || STRIDE
 			font.DrawText(_renderer, text, position, colors, scale, rotation, origin, layerDepth);
+#else
+			font.DrawText(_fontStashRenderer, text, position, colors, scale, rotation, origin, layerDepth);
+#endif
 		}
 
 		public void Begin()
