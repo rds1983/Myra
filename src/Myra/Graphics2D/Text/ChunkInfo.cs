@@ -14,6 +14,7 @@ namespace Myra.Graphics2D.Text
 		public int Y;
 		public int StartIndex;
 		public int CharsCount;
+		public int SkipCount;
 		public Color? Color;
 		public bool LineEnd;
 	}

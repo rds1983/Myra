@@ -193,8 +193,19 @@ namespace Myra.Graphics2D.Text
 					continue;
 				}
 
-				if (SupportsCommands && c == '\\')
+				if (c == '\\' && SupportsCommands)
 				{
+					if (i < _text.Length - 1 && _text[i + 1] == 'n')
+					{
+						var sz2 = new Point(r.X + NewLineWidth, Math.Max(r.Y, _font.FontSize));
+
+						// Break right here
+						r.SkipCount += 2;
+						r.X = sz2.X;
+						r.Y = sz2.Y;
+						break;
+					}
+
 					if (i < _text.Length - 2 && _text[i + 1] == 'c' && _text[i + 2] == '[')
 					{
 						// Find end
@@ -236,7 +247,7 @@ namespace Myra.Graphics2D.Text
 					sz = new Point(r.X + NewLineWidth, Math.Max(r.Y, _font.FontSize));
 
 					// Break right here
-					++r.CharsCount;
+					++r.SkipCount;
 					r.X = sz.X;
 					r.Y = sz.Y;
 					break;
@@ -301,7 +312,7 @@ namespace Myra.Graphics2D.Text
 						break;
 
 					lineWidth += chunkInfo.X;
-					i = chunkInfo.StartIndex + chunkInfo.CharsCount;
+					i = chunkInfo.StartIndex + chunkInfo.CharsCount + chunkInfo.SkipCount;
 
 					if (remainingWidth.HasValue)
 					{
@@ -372,7 +383,7 @@ namespace Myra.Graphics2D.Text
 
 				width -= chunk.Size.X;
 
-				i = c.StartIndex + c.CharsCount;
+				i = c.StartIndex + c.CharsCount + c.SkipCount;
 
 				line.Chunks.Add(chunk);
 				line.Count += chunk.Count;
