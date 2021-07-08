@@ -247,7 +247,7 @@ namespace Myra.Graphics2D.Text
 					sz = new Point(r.X + NewLineWidth, Math.Max(r.Y, _font.FontSize));
 
 					// Break right here
-					++r.SkipCount;
+					++r.CharsCount;
 					r.X = sz.X;
 					r.Y = sz.Y;
 					break;
