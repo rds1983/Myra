@@ -26,6 +26,7 @@ Copy-Item -Path "samples\Myra.Samples.NonModalWindows\bin\MonoGame\Release\net45
 Copy-Item -Path "samples\Myra.Samples.DebugConsole\bin\MonoGame\Release\net45\Myra.Samples.DebugConsole.exe" -Destination "ZipPackage"
 Copy-Item -Path "samples\Myra.Samples.AssetManagement\bin\MonoGame\Release\net45\Myra.Samples.AssetManagement.exe" -Destination "ZipPackage"
 Copy-Item -Path "samples\Myra.Samples.ObjectEditor\bin\MonoGame\Release\net45\Myra.Samples.ObjectEditor.exe" -Destination "ZipPackage"
+Copy-Item -Path "samples\Myra.Samples.TextRendering\bin\MonoGame\Release\net45\Myra.Samples.TextRendering.exe" -Destination "ZipPackage"
 Copy-Item -Path "src\MyraPad\bin\Release\net45\MyraPad.exe" -Destination "ZipPackage"
 Copy-Item -Path "src\MyraPad\bin\Release\net45\AssetManagementBase.dll" -Destination "ZipPackage"
 Copy-Item -Path "src\MyraPad\bin\Release\net45\FontStashSharp.MonoGame.dll" -Destination "ZipPackage"
