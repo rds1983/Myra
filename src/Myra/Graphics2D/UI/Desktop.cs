@@ -664,7 +664,12 @@ namespace Myra.Graphics2D.UI
 
 			_renderContext.Begin();
 
+			// Disable transform during setting the scissor rectangle for the Desktop
+			var trasform = _renderContext.Transform;
+			_renderContext.Transform = null;
 			_renderContext.Scissor = InternalBounds;
+			_renderContext.Transform = trasform;
+
 			_renderContext.View = InternalBounds;
 			_renderContext.Opacity = Opacity;
 
