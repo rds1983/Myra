@@ -467,7 +467,7 @@ namespace Myra.Graphics2D.Text
 				}
 			}
 
-			return _lines[_lines.Count - 1];
+			return null;
 		}
 
 		public TextLine GetLineByY(int y)

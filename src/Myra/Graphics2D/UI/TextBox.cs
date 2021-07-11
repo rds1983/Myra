@@ -623,14 +623,19 @@ namespace Myra.Graphics2D.UI
 		private void MoveLine(int delta)
 		{
 			var line = _formattedText.GetLineByCursorPosition(CursorPosition);
-			if (line == null)
+			int newLine = line != null?line.LineIndex:_formattedText.Lines.Count;
+			newLine += delta;
+
+			if (newLine < 0)
 			{
 				return;
 			}
 
-			var newLine = line.LineIndex + delta;
-			if (newLine < 0 || newLine >= _formattedText.Lines.Count)
+			if(newLine >= _formattedText.Lines.Count)
 			{
+				// Basically move cursor to the end
+				UserSetCursorPosition(Text.Length);
+				UpdateSelectionIfShiftDown();
 				return;
 			}
 
@@ -1283,9 +1288,17 @@ namespace Myra.Graphics2D.UI
 					if (lastLine.Count > 0)
 					{
 						var glyphRender = lastLine.GetGlyphInfoByIndex(lastLine.Count - 1);
-
-						x += glyphRender.Bounds.Right;
 						y += glyphRender.TextChunk.Top;
+						if (glyphRender.Character == '\n')
+						{
+							// Next line
+							x = bounds.X;
+							y += Font.FontSize;
+						}
+						else
+						{
+							x += glyphRender.Bounds.Right;
+						}
 					}
 				}
 			}

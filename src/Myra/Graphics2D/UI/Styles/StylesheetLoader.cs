@@ -31,11 +31,13 @@ namespace Myra.Graphics2D.UI.Styles
 				SpriteFontBase font = null;
 
 				var fontFile = el.Attribute("File").Value;
-				if (fontFile.EndsWith(".ttf"))
+				if (fontFile.EndsWith(".ttf") || fontFile.EndsWith(".otf"))
 				{
-					var parts = new List<string>();
-					parts.Add(fontFile);
-					
+					var parts = new List<string>
+					{
+						fontFile
+					};
+
 					var typeAttribute = el.Attribute("Effect");
 					if (typeAttribute != null)
 					{

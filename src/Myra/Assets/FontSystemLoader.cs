@@ -58,8 +58,13 @@ namespace Myra.Assets
 			};
 
 			var fontSystem = new FontSystem(fontSystemSettings);
-			var data = context.Load<byte[]>(parts[0]);
-			fontSystem.AddFont(data);
+
+			var files = parts[0].Split('|');
+			foreach (var file in files)
+			{
+				var data = context.Load<byte[]>(file);
+				fontSystem.AddFont(data);
+			}
 
 			return fontSystem;
 		}
