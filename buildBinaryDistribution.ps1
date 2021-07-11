@@ -30,7 +30,6 @@ Copy-Item -Path "samples\Myra.Samples.AssetManagement\Assets\images\*" -Destinat
 Copy-Item -Path "samples\Myra.Samples.ObjectEditor\bin\MonoGame\Release\net45\Myra.Samples.ObjectEditor.exe" -Destination "ZipPackage"
 Copy-Item -Path "samples\Myra.Samples.ObjectEditor\image.png" -Destination "ZipPackage"
 Copy-Item -Path "samples\Myra.Samples.TextRendering\bin\MonoGame\Release\net45\Myra.Samples.TextRendering.exe" -Destination "ZipPackage"
-Copy-Item -Path "samples\Myra.Samples.TextRendering\Assets\fonts\*" -Destination "ZipPackage\Assets\fonts\" -Recurse
 Copy-Item -Path "samples\Stylesheets\*" -Destination "ZipPackage\Stylesheets\" -Recurse
 Copy-Item -Path "src\MyraPad\bin\Release\net45\MyraPad.exe" -Destination "ZipPackage"
 Copy-Item -Path "src\MyraPad\bin\Release\net45\AssetManagementBase.dll" -Destination "ZipPackage"

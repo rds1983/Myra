@@ -36,7 +36,7 @@ namespace Myra.Graphics2D.UI.Styles
 					var parts = new List<string>();
 					parts.Add(fontFile);
 					
-					var typeAttribute = el.Attribute("Type");
+					var typeAttribute = el.Attribute("Effect");
 					if (typeAttribute != null)
 					{
 						parts.Add(typeAttribute.Value);
