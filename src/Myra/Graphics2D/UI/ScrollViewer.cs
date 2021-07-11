@@ -27,6 +27,14 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		internal int VerticalThumbWidth => (_verticalScrollingOn && ShowVerticalScrollBar) ? _verticalScrollbarThumb.Width : 0;
+
+		[Browsable(false)]
+		[XmlIgnore]
+		internal int HorizontalThumbHeight => (_horizontalScrollingOn && ShowHorizontalScrollBar) ? _horizontalScrollbarThumb.Height : 0;
+
+		[Browsable(false)]
+		[XmlIgnore]
 		public Point ScrollMaximum
 		{
 			get
@@ -38,8 +46,8 @@ namespace Myra.Graphics2D.UI
 
 				var bounds = ActualBounds;
 
-				var result = new Point(InternalChild.Bounds.Width - bounds.Width + ((_verticalScrollingOn && ShowVerticalScrollBar) ? _verticalScrollbarThumb.Width : 0),
-								 InternalChild.Bounds.Height - bounds.Height + ((_horizontalScrollingOn && ShowHorizontalScrollBar) ? _horizontalScrollbarThumb.Height : 0));
+				var result = new Point(InternalChild.Bounds.Width - bounds.Width + VerticalThumbWidth,
+								 InternalChild.Bounds.Height - bounds.Height + HorizontalThumbHeight);
 
 				if (result.X < 0)
 				{

@@ -623,19 +623,14 @@ namespace Myra.Graphics2D.UI
 		private void MoveLine(int delta)
 		{
 			var line = _formattedText.GetLineByCursorPosition(CursorPosition);
-			int newLine = line != null?line.LineIndex:_formattedText.Lines.Count;
-			newLine += delta;
-
-			if (newLine < 0)
+			if (line == null)
 			{
 				return;
 			}
 
-			if(newLine >= _formattedText.Lines.Count)
+			var newLine = line.LineIndex + delta;
+			if (newLine < 0 || newLine >= _formattedText.Lines.Count)
 			{
-				// Basically move cursor to the end
-				UserSetCursorPosition(Text.Length);
-				UpdateSelectionIfShiftDown();
 				return;
 			}
 
@@ -645,12 +640,15 @@ namespace Myra.Graphics2D.UI
 
 			// Find closest glyph
 			var newString = _formattedText.Lines[newLine];
+			var cursorPosition = newString.TextStartIndex;
 			var glyphIndex = newString.GetGlyphIndexByX(preferredX);
 			if (glyphIndex != null)
 			{
-				UserSetCursorPosition(newString.TextStartIndex + glyphIndex.Value);
-				UpdateSelectionIfShiftDown();
+				cursorPosition += glyphIndex.Value;
 			}
+
+			UserSetCursorPosition(cursorPosition);
+			UpdateSelectionIfShiftDown();
 		}
 
 		public void SelectAll()
@@ -1024,6 +1022,9 @@ namespace Myra.Graphics2D.UI
 			{
 				asScrollViewer.UpdateLayout();
 				sz = new Point(asScrollViewer.Bounds.Width, asScrollViewer.Bounds.Height);
+				sz.X -= asScrollViewer.VerticalThumbWidth;
+				sz.Y -= asScrollViewer.HorizontalThumbHeight;
+
 				maximum = asScrollViewer.ScrollMaximum;
 			}
 			else
@@ -1085,6 +1086,26 @@ namespace Myra.Graphics2D.UI
 
 			if (asScrollViewer != null)
 			{
+				if (sp.X < 0)
+				{
+					sp.X = 0;
+				}
+
+				if (sp.X > maximum.X)
+				{
+					sp.X = maximum.X;
+				}
+
+				if (sp.Y < 0)
+				{
+					sp.Y = 0;
+				}
+
+				if (sp.Y > maximum.Y)
+				{
+					sp.Y = maximum.Y;
+				}
+
 				asScrollViewer.ScrollPosition = sp;
 			}
 			else
@@ -1140,7 +1161,7 @@ namespace Myra.Graphics2D.UI
 		private void SetCursorByTouch()
 		{
 			var bounds = ActualBounds;
-			var mousePos = Desktop.TouchPosition;
+			var mousePos = Desktop.TouchPosition + _internalScrolling;
 
 			mousePos.X -= bounds.X;
 			mousePos.Y -= bounds.Y;
@@ -1288,17 +1309,12 @@ namespace Myra.Graphics2D.UI
 					if (lastLine.Count > 0)
 					{
 						var glyphRender = lastLine.GetGlyphInfoByIndex(lastLine.Count - 1);
+
+						x += glyphRender.Bounds.Right;
 						y += glyphRender.TextChunk.Top;
-						if (glyphRender.Character == '\n')
-						{
-							// Next line
-							x = bounds.X;
-							y += Font.FontSize;
-						}
-						else
-						{
-							x += glyphRender.Bounds.Right;
-						}
+					} else
+					{
+						y += lastLine.Top;
 					}
 				}
 			}
@@ -1336,6 +1352,11 @@ namespace Myra.Graphics2D.UI
 			while (true)
 			{
 				startGlyph = _formattedText.GetGlyphInfoByIndex(i);
+				if (startGlyph == null)
+				{
+					break;
+				}
+
 				var startPosition = GetRenderPositionByIndex(i);
 
 				var line = _formattedText.Lines[startGlyph.TextChunk.LineIndex];

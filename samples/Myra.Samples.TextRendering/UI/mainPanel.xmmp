@@ -26,7 +26,9 @@
       <HorizontalSeparator />
       <HorizontalStackPanel>
         <HorizontalStackPanel.DefaultProportion Type="Part" />
-        <TextBox Text="The quick brown\nfox jumps over\nthe lazy dog" Multiline="True" VerticalAlignment="Stretch" Id="_textBoxText" />
+        <ScrollViewer>
+          <TextBox Text="The quick brown\nfox jumps over\nthe lazy dog" Multiline="True" Wrap="True" VerticalAlignment="Stretch" Id="_textBoxText" />
+        </ScrollViewer>
         <Image Id="_imageTexture" />
       </HorizontalStackPanel>
     </VerticalStackPanel>

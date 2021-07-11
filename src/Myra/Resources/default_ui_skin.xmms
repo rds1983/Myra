@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Stylesheet TextureRegionAtlas="default_ui_skin.xmat">
   <Fonts>
-    <Font Id="default-font" File="NotoSans-Regular.ttf|NotoSansJP-Regular.otf" Size="20"/>
+    <Font Id="default-font" File="NotoSansJP-Regular.otf" Size="20"/>
   </Fonts>
   <LabelStyles>
     <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="gray" />

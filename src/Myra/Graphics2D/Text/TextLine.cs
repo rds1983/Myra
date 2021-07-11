@@ -16,7 +16,7 @@ namespace Myra.Graphics2D.Text
 		public int Count { get; internal set; }
 
 		public Point Size;
-
+		
 		public int LineIndex
 		{
 			get; internal set;

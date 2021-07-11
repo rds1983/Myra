@@ -334,6 +334,13 @@ namespace Myra.Graphics2D.Text
 					}
 				}
 
+				// If text ends with '\n', then add additional line to the measure
+				if (_text[_text.Length - 1] == '\n')
+				{
+					var lineSize = Font.MeasureString(" ");
+					y += (int)lineSize.Y;
+				}
+
 				result.Y = y;
 			}
 
@@ -408,6 +415,20 @@ namespace Myra.Graphics2D.Text
 				}
 			}
 
+			// If text ends with '\n', then add additional line
+			if (_text[_text.Length - 1] == '\n')
+			{
+				var additionalLine = new TextLine
+				{
+					TextStartIndex = _text.Length
+				};
+
+				var lineSize = Font.MeasureString(" ");
+				additionalLine.Size.Y = (int)lineSize.Y;
+
+				_lines.Add(additionalLine);
+			}
+
 			// Calculate size
 			_size = Mathematics.PointZero;
 			for (i = 0; i < _lines.Count; ++i)
@@ -467,7 +488,7 @@ namespace Myra.Graphics2D.Text
 				}
 			}
 
-			return null;
+			return _lines[_lines.Count - 1];
 		}
 
 		public TextLine GetLineByY(int y)
