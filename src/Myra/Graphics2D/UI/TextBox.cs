@@ -1161,10 +1161,9 @@ namespace Myra.Graphics2D.UI
 		private void SetCursorByTouch()
 		{
 			var bounds = ActualBounds;
-			var mousePos = Desktop.TouchPosition + _internalScrolling;
-
-			mousePos.X -= bounds.X;
-			mousePos.Y -= bounds.Y;
+			var mousePos = Desktop.TouchPosition;
+			mousePos.X += _internalScrolling.X - bounds.X;
+			mousePos.Y += _internalScrolling.Y - bounds.Y;
 
 			var line = _formattedText.GetLineByY(mousePos.Y);
 			if (line != null)
