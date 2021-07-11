@@ -2,7 +2,8 @@
 using Microsoft.Xna.Framework;
 using Myra.Samples.TextRendering.UI;
 using FontStashSharp;
-using System.IO;
+using System.Linq;
+using Myra.Graphics2D.TextureAtlases;
 
 namespace Myra.Samples.TextRendering
 {
@@ -40,12 +41,7 @@ namespace Myra.Samples.TextRendering
 
 			_topDesktop = new Desktop();
 
-			var fontSystem = new FontSystem();
-			fontSystem.AddFont(File.ReadAllBytes("Assets/fonts/DroidSans.ttf"));
-
 			_labelText = new Label();
-			_labelText.Font = fontSystem.GetFont(32);
-
 			_topDesktop.Root = _labelText;
 
 			_bottomDesktop = new Desktop

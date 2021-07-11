@@ -13,11 +13,5 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Myra\Myra.MonoGame.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Assets\fonts\DroidSans.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>  
 </Project>

@@ -5,23 +5,30 @@
       <VerticalStackPanel.Proportions>
         <Proportion Type="Auto" />
         <Proportion Type="Auto" />
+        <Proportion Type="Auto" />
         <Proportion Type="Fill" />
       </VerticalStackPanel.Proportions>
       <HorizontalSeparator />
-      <Grid ColumnSpacing="8" RowSpacing="2">
-        <Grid.DefaultColumnProportion Type="Auto" />
-        <Grid.DefaultRowProportion Type="Auto" />
+      <HorizontalStackPanel Spacing="8">
         <Label Text="Font Size:" />
-        <SpinButton Value="32" Width="40" GridColumn="1" Id="_spinButtonFontSize" />
-        <Label Text="Scale:" GridColumn="2" />
-        <Label Text="0.1" GridColumn="3" />
-        <HorizontalSlider Minimum="0.1" Maximum="10" Value="1" Width="200" GridColumn="4" Id="_sliderScale" />
-        <Label Text="10" GridColumn="5" />
-        <TextButton Text="Reset" GridColumn="6" Id="_buttonReset" />
-        <CheckBox Text="Smooth Text" GridColumn="7" Id="_checkBoxSmoothText" />
-        <Label Text="5.4" HorizontalAlignment="Center" GridColumn="4" GridRow="1" Id="_labelScaleValue" />
-      </Grid>
-      <TextBox Text="The quick brown\nfox jumps over\nthe lazy dog" Multiline="True" VerticalAlignment="Stretch" Id="_textBoxText" />
+        <SpinButton Value="32" Width="40" Id="_spinButtonFontSize" />
+        <Label Text="Scale:" />
+        <Label Text="0.1" />
+        <VerticalStackPanel>
+          <HorizontalSlider Minimum="0.1" Maximum="10" Value="1" Width="200" Id="_sliderScale" />
+          <Label Text="5.4" HorizontalAlignment="Center" Id="_labelScaleValue" />
+        </VerticalStackPanel>
+        <Label Text="10" />
+        <TextButton Text="Reset" Id="_buttonReset" />
+        <CheckBox Text="Smooth Text" Id="_checkBoxSmoothText" />
+        <CheckBox IsChecked="True" Text="Show Texture" Id="_checkBoxShowTexture" />
+      </HorizontalStackPanel>
+      <HorizontalSeparator />
+      <HorizontalStackPanel>
+        <HorizontalStackPanel.DefaultProportion Type="Part" />
+        <TextBox Text="The quick brown\nfox jumps over\nthe lazy dog" Multiline="True" VerticalAlignment="Stretch" Id="_textBoxText" />
+        <Image Id="_imageTexture" />
+      </HorizontalStackPanel>
     </VerticalStackPanel>
   </Panel>
 </Project>

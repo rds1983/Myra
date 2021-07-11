@@ -23,8 +23,8 @@ namespace Myra
 		private static bool _assetsLoadersUpdated = false;
 
 		public static int FontAtlasSize = 1024;
-		public static int FontKernelWidth = 1024;
-		public static int FontKernelHeight = 1024;
+		public static int FontKernelWidth = 0;
+		public static int FontKernelHeight = 0;
 		public static bool FontPremultiplyAlpha = true;
 		public static float FontResolutionFactor = 1;
 

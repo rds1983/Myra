@@ -195,14 +195,14 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void InternalRender(RenderContext batch)
+		public override void InternalRender(RenderContext context)
 		{
 			foreach (var child in ChildrenCopy)
 			{
 				if (!child.Visible)
 					continue;
 
-				child.Render(batch);
+				child.Render(context);
 			}
 		}
 

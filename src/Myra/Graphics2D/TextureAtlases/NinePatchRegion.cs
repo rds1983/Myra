@@ -136,7 +136,16 @@ namespace Myra.Graphics2D.TextureAtlases
 			var y = dest.Y;
 
 			var centerWidth = dest.Width - _info.Left - _info.Right;
+			if (centerWidth < 0)
+			{
+				centerWidth = 0;
+			}
+
 			var centerHeight = dest.Height - _info.Top - _info.Bottom;
+			if (centerHeight < 0)
+			{
+				centerHeight = 0;
+			}
 
 			if (_topLeft != null)
 			{
@@ -148,7 +157,7 @@ namespace Myra.Graphics2D.TextureAtlases
 					color);
 			}
 
-			if (_topCenter != null)
+			if (_topCenter != null && centerWidth > 0)
 			{
 				_topCenter.Draw(context,
 					new Rectangle(dest.X + _info.Left,
@@ -169,7 +178,7 @@ namespace Myra.Graphics2D.TextureAtlases
 			}
 
 			y += _info.Top;
-			if (_centerLeft != null)
+			if (_centerLeft != null && centerHeight > 0)
 			{
 				_centerLeft.Draw(context,
 					new Rectangle(dest.X,
@@ -179,7 +188,7 @@ namespace Myra.Graphics2D.TextureAtlases
 					color);
 			}
 
-			if (_center != null)
+			if (_center != null && centerWidth > 0 && centerHeight > 0)
 			{
 				_center.Draw(context,
 					new Rectangle(dest.X + _info.Left,
@@ -189,7 +198,7 @@ namespace Myra.Graphics2D.TextureAtlases
 					color);
 			}
 
-			if (_centerRight != null)
+			if (_centerRight != null && centerHeight > 0)
 			{
 				_centerRight.Draw(context,
 					new Rectangle(dest.X + Info.Left + centerWidth,
@@ -210,7 +219,7 @@ namespace Myra.Graphics2D.TextureAtlases
 					color);
 			}
 
-			if (_bottomCenter != null)
+			if (_bottomCenter != null && centerWidth > 0)
 			{
 				_bottomCenter.Draw(context,
 					new Rectangle(dest.X + _info.Left,
