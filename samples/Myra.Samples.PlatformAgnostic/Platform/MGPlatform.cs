@@ -44,6 +44,12 @@ namespace Myra.Samples.AllWidgets
 			xnaTexture.SetData(0, bounds.ToXNA(), data, 0, bounds.Width * bounds.Height * 4);
 		}
 
+		public Point GetTextureSize(object texture)
+		{
+			var xnaTexture = (Texture2D)texture;
+			return new Point(xnaTexture.Width, xnaTexture.Height);
+		}
+
 		public IMyraRenderer CreateRenderer()
 		{
 			return new MGRenderer(this);

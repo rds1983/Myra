@@ -11,6 +11,7 @@ using Texture2D = Stride.Graphics.Texture;
 #else
 using System.Drawing;
 using Myra.Platform;
+using Texture2D = System.Object;
 #endif
 
 namespace Myra.Assets
