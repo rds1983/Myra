@@ -2,7 +2,14 @@
 using FontStashSharp;
 using System;
 
-#if PLATFORM_AGNOSTIC
+#if MONOGAME || FNA
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+#elif STRIDE
+using Stride.Core.Mathematics;
+using Texture2D = Stride.Graphics.Texture;
+#else
+using System.Drawing;
 using Myra.Platform;
 #endif
 
@@ -10,6 +17,9 @@ namespace Myra.Assets
 {
 	internal class FontSystemLoader : IAssetLoader<FontSystem>
 	{
+		public static Texture2D ExistingTexture;
+		public static Rectangle ExistingTextureUsedSpace;
+
 		private enum FontType
 		{
 			Regular,
@@ -54,7 +64,9 @@ namespace Myra.Assets
 						FontType.Blurry => FontSystemEffect.Blurry,
 						FontType.Stroked => FontSystemEffect.Stroked,
 						_ => throw new Exception(),
-					}
+					},
+				ExistingTexture = ExistingTexture,
+				ExistingTextureUsedSpace = ExistingTextureUsedSpace
 			};
 
 			var fontSystem = new FontSystem(fontSystemSettings);

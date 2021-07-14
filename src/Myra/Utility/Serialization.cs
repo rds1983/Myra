@@ -2,6 +2,7 @@
 using System.Reflection;
 using AssetManagementBase.Utility;
 using Myra.Graphics2D;
+using System;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -50,6 +51,23 @@ namespace Myra.Utility
 			}
 
 			return false;
+		}
+
+		public static Rectangle ParseRectangle(this string s)
+		{
+			var parts = s.Split(',');
+			if (parts.Length != 4)
+			{
+				throw new Exception("Rectangle should consist of 4 numbers");
+			}
+
+			Rectangle result;
+			result.X = int.Parse(parts[0].Trim());
+			result.Y = int.Parse(parts[1].Trim());
+			result.Width = int.Parse(parts[2].Trim());
+			result.Height = int.Parse(parts[3].Trim());
+
+			return result;
 		}
 	}
 }

@@ -38,6 +38,8 @@ namespace Myra.Graphics2D.TextureAtlases
 
 		public Dictionary<string, TextureRegion> Regions { get; } = new Dictionary<string, TextureRegion>();
 
+		public Texture2D Texture { get; private set; }
+
 		public TextureRegion this[string name]
 		{
 			get
@@ -137,6 +139,7 @@ namespace Myra.Graphics2D.TextureAtlases
 			result.Image = imageFileAttr.Value;
 
 			var texture = textureGetter(result.Image);
+			result.Texture = texture;
 			foreach(XElement entry in root.Elements())
 			{
 				var id = entry.Attribute(BaseContext.IdName).Value;
