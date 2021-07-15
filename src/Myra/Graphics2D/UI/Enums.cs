@@ -32,6 +32,13 @@ namespace Myra.Graphics2D.UI
 		Right
 	}
 
+	public enum MouseWheelFocusType
+	{
+		None,
+		Hover,
+		HoverAndFocus
+	}
+
 	public enum Orientation
 	{
 		Horizontal,

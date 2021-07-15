@@ -39,7 +39,7 @@ namespace Myra.Graphics2D.UI
 
 		private bool _layoutDirty = true;
 		private bool _widgetsDirty = true;
-		private Widget _focusedKeyboardWidget, _focusedMouseWheelWidget;
+		private Widget _focusedKeyboardWidget, _mouseInsideWidget;
 		private readonly List<Widget> _widgetsCopy = new List<Widget>();
 		private DateTime _lastTouchDown;
 		private DateTime? _lastKeyDown;
@@ -47,16 +47,13 @@ namespace Myra.Graphics2D.UI
 		private MouseInfo _lastMouseInfo;
 		private readonly bool[] _downKeys = new bool[0xff], _lastDownKeys = new bool[0xff];
 		private Widget _previousKeyboardFocus;
-		private Widget _previousMouseWheelFocus;
 #if MONOGAME || FNA || PLATFORM_AGNOSTIC
 		private TouchCollection _oldTouchState;
 #endif
-		private Widget _scheduleMouseWheelFocus;
 		private bool _isTouchDown;
 		private Point _previousMousePosition, _mousePosition, _previousTouchPosition, _touchPosition;
 		private bool _contextMenuShown = false;
 		private bool _keyboardFocusSet = false;
-		private bool _mouseWheelFocusSet = false;
 #if MONOGAME || PLATFORM_AGNOSTIC
 		public bool HasExternalTextInput = false;
 #endif
@@ -188,6 +185,9 @@ namespace Myra.Graphics2D.UI
 
 		public Widget ContextMenu { get; private set; }
 
+		/// <summary>
+		/// Widget having keyboard focus
+		/// </summary>
 		public Widget FocusedKeyboardWidget
 		{
 			get { return _focusedKeyboardWidget; }
@@ -232,21 +232,18 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public Widget FocusedMouseWheelWidget
+		public Widget MouseInsideWidget
 		{
-			get
-			{
-				return _focusedMouseWheelWidget;
-			}
-
+			get => _mouseInsideWidget;
 			set
 			{
-				if (value != null)
+				if (value == _mouseInsideWidget)
 				{
-					_mouseWheelFocusSet = true;
+					return;
 				}
 
-				_focusedMouseWheelWidget = value;
+				_mouseInsideWidget = value;
+				MouseInsideWidgetChanged.Invoke(this);
 			}
 		}
 
@@ -391,6 +388,8 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler<CancellableEventArgs<Widget>> WidgetLosingKeyboardFocus;
 		public event EventHandler<GenericEventArgs<Widget>> WidgetGotKeyboardFocus;
 
+		public event EventHandler MouseInsideWidgetChanged;
+
 		public Desktop()
 		{
 			Opacity = 1.0f;
@@ -513,7 +512,6 @@ namespace Myra.Graphics2D.UI
 		{
 			_contextMenuShown = false;
 			_keyboardFocusSet = false;
-			_mouseWheelFocusSet = false;
 
 			ChildrenCopy.ProcessTouchDown();
 
@@ -521,12 +519,6 @@ namespace Myra.Graphics2D.UI
 			{
 				// Nullify keyboard focus
 				FocusedKeyboardWidget = null;
-			}
-
-			if (!_mouseWheelFocusSet && FocusedMouseWheelWidget != null && FocusedMouseWheelWidget.MouseWheelFocusCanBeNull)
-			{
-				// Nullify mouse wheel focus
-				FocusedMouseWheelWidget = null;
 			}
 
 			if (!_contextMenuShown)
@@ -578,8 +570,6 @@ namespace Myra.Graphics2D.UI
 				FocusedKeyboardWidget = ContextMenu;
 			}
 
-			_scheduleMouseWheelFocus = ContextMenu;
-
 			_contextMenuShown = true;
 		}
 
@@ -600,12 +590,6 @@ namespace Myra.Graphics2D.UI
 			{
 				FocusedKeyboardWidget = _previousKeyboardFocus;
 				_previousKeyboardFocus = null;
-			}
-
-			if (_previousMouseWheelFocus != null)
-			{
-				FocusedMouseWheelWidget = _previousMouseWheelFocus;
-				_previousMouseWheelFocus = null;
 			}
 		}
 
@@ -751,12 +735,6 @@ namespace Myra.Graphics2D.UI
 					{
 						// Found MenuBar
 						MenuBar = (HorizontalMenu)widget;
-					}
-
-					if (FocusedMouseWheelWidget == null && widget is ScrollViewer && widget.AcceptsMouseWheelFocus && active)
-					{
-						// If focused mouse wheel widget unset, then set first that accepts such focus
-						FocusedMouseWheelWidget = widget;
 					}
 
 					// Continue
@@ -953,17 +931,6 @@ namespace Myra.Graphics2D.UI
 
 		public void UpdateMouseInput()
 		{
-			if (_scheduleMouseWheelFocus != null)
-			{
-				if (_scheduleMouseWheelFocus.AcceptsMouseWheelFocus)
-				{
-					_previousMouseWheelFocus = FocusedMouseWheelWidget;
-					FocusedMouseWheelWidget = _scheduleMouseWheelFocus;
-				}
-
-				_scheduleMouseWheelFocus = null;
-			}
-
 			if (MouseInfoGetter == null)
 			{
 				return;
@@ -1000,9 +967,18 @@ namespace Myra.Graphics2D.UI
 #endif
 				MouseWheelChanged.Invoke(delta);
 
-				if (FocusedMouseWheelWidget != null)
+				// Go through the parents chain in order to find first widget that accepts mouse wheel events
+				var widget = MouseInsideWidget;
+				while(widget != null)
 				{
-					FocusedMouseWheelWidget.OnMouseWheel(delta);
+					if (widget.MouseWheelFocusType == MouseWheelFocusType.Hover ||
+						(widget.MouseWheelFocusType == MouseWheelFocusType.HoverAndFocus && widget.IsKeyboardFocused))
+					{
+						widget.OnMouseWheel(delta);
+						break;
+					}
+
+					widget = widget.Parent;
 				}
 			}
 
@@ -1074,10 +1050,6 @@ namespace Myra.Graphics2D.UI
 					if (CanFocusWidget(w))
 					{
 						w.SetKeyboardFocus();
-						if (w.AcceptsMouseWheelFocus)
-						{
-							w.SetMouseWheelFocus();
-						}
 						focusChanged = true;
 						return false;
 					}

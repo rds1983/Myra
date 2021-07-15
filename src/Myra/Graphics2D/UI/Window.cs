@@ -23,7 +23,7 @@ namespace Myra.Graphics2D.UI
 	{
 		private readonly Label _titleLabel;
 		private Widget _content;
-		private Widget _previousKeyboardFocus, _previousMouseWheelFocus;
+		private Widget _previousKeyboardFocus;
 
 		[Category("Appearance")]
 		public string Title
@@ -279,15 +279,12 @@ namespace Myra.Graphics2D.UI
 			InternalShow(desktop, position);
 
 			_previousKeyboardFocus = desktop.FocusedKeyboardWidget;
-			_previousMouseWheelFocus = desktop.FocusedMouseWheelWidget;
 
 			// Force mouse wheel focused to be set to the first appropriate widget in the next Desktop.UpdateLayout
 			if (AcceptsKeyboardFocus)
 			{
 				Desktop.FocusedKeyboardWidget = this;
 			}
-
-			Desktop.FocusedMouseWheelWidget = null;
 		}
 
 		public virtual void Close()
@@ -312,7 +309,6 @@ namespace Myra.Graphics2D.UI
 			if (IsModal)
 			{
 				Desktop.FocusedKeyboardWidget = _previousKeyboardFocus;
-				Desktop.FocusedMouseWheelWidget = _previousMouseWheelFocus;
 			}
 
 			if (Desktop.Widgets.Contains(this))

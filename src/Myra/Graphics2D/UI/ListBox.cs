@@ -43,7 +43,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		protected internal override bool AcceptsMouseWheelFocus => InternalChild.AcceptsMouseWheelFocus;
+		protected internal override MouseWheelFocusType MouseWheelFocusType => InternalChild.MouseWheelFocusType;
 
 		public ListBox(string styleName = Stylesheet.DefaultStyleName) : base(new ScrollViewer())
 		{

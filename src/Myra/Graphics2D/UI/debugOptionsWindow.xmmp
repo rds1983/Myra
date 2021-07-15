@@ -1,10 +1,10 @@
 <Project>
   <Project.ExportOptions Namespace="Myra.Graphics2D.UI" Class="DebugOptionsWindow" OutputPath="C:/Projects/Myra/src/Myra/Graphics2D/UI" />
-  <Window Title="Debug Options" Left="537" Top="175">
+  <Window Title="Debug Options" Left="533" Top="179">
     <VerticalStackPanel Id="Root">
       <CheckBox Text="Draw green frame around every widget" Id="_checkBoxWidgetFrames" />
       <CheckBox Text="Draw red frame around the keyboard focused widget" Id="_checkBoxKeyboardFocusedWidgetFrame" />
-      <CheckBox Text="Draw yellow frame around the mouse wheel focused widget" Id="_checkBoxMouseWheelFocusedWidgetFrame" />
+      <CheckBox Text="Draw yellow frame around the mouse hovered widget" Id="_checkBoxMouseInsideWidgetFrame" />
       <CheckBox Text="Draw white frame around every TextBox letter glyph" Id="_checkBoxGlyphFrames" />
       <CheckBox Text="Disable clipping" Id="_checkBoxDisableClipping" />
       <CheckBox Text="Smooth text" Id="_checkBoxSmoothText" />

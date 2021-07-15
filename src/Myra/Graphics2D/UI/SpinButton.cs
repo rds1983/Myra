@@ -228,10 +228,7 @@ namespace Myra.Graphics2D.UI
 		[Browsable(false)]
 		public TextBox TextBox => _textField;
 
-		internal protected override bool AcceptsMouseWheelFocus
-		{
-			get { return true; }
-		}
+		protected internal override MouseWheelFocusType MouseWheelFocusType => MouseWheelFocusType.HoverAndFocus;
 
 		/// <summary>
 		/// Fires when the value is about to be changed

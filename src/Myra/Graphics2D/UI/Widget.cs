@@ -520,7 +520,6 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_visible = value;
-				IsMouseInside = false;
 				IsTouchInside = false;
 
 				OnVisibleChanged();
@@ -588,14 +587,13 @@ namespace Myra.Graphics2D.UI
 						_desktop.FocusedKeyboardWidget = null;
 					}
 
-					if (_desktop.FocusedMouseWheelWidget == this)
+					if (_desktop.MouseInsideWidget == this)
 					{
-						_desktop.FocusedMouseWheelWidget = null;
+						_desktop.MouseInsideWidget = null;
 					}
 				}
 
 				_desktop = value;
-				IsMouseInside = false;
 				IsTouchInside = false;
 
 				if (_desktop != null)
@@ -714,7 +712,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public bool IsMouseInside { get; private set; }
+		public bool IsMouseInside { get => Desktop != null && Desktop.MouseInsideWidget == this; }
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -814,22 +812,19 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Determines whether a widget accepts keyboard focus
+		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
 		public bool AcceptsKeyboardFocus { get; set; }
 
-		[Browsable(false)]
-		[XmlIgnore]
-		internal protected virtual bool AcceptsMouseWheelFocus
-		{
-			get { return false; }
-		}
 
 		[Browsable(false)]
 		[XmlIgnore]
-		internal protected virtual bool MouseWheelFocusCanBeNull
+		internal protected virtual MouseWheelFocusType MouseWheelFocusType
 		{
-			get { return true; }
+			get { return MouseWheelFocusType.None; }
 		}
 
 		[Browsable(false)]
@@ -850,16 +845,6 @@ namespace Myra.Graphics2D.UI
 
 				_isKeyboardFocused = value;
 				KeyboardFocusChanged?.Invoke(this, EventArgs.Empty);
-			}
-		}
-
-		[Browsable(false)]
-		[XmlIgnore]
-		public virtual bool IsMouseWheelFocused
-		{
-			get
-			{
-				return Desktop != null && Desktop.FocusedMouseWheelWidget == this;
 			}
 		}
 
@@ -1065,7 +1050,7 @@ namespace Myra.Graphics2D.UI
 				context.DrawRectangle(Bounds, Color.Red);
 			}
 
-			if (MyraEnvironment.DrawMouseWheelFocusedWidgetFrame && IsMouseWheelFocused)
+			if (MyraEnvironment.DrawMouseHoveredWidgetFrame && IsMouseInside)
 			{
 				context.DrawRectangle(Bounds, Color.Yellow);
 			}
@@ -1398,19 +1383,19 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnMouseLeft()
 		{
-			IsMouseInside = false;
+			Desktop.MouseInsideWidget = null;
 			MouseLeft.Invoke(this);
 		}
 
 		public virtual void OnMouseEntered()
 		{
-			IsMouseInside = true;
+			Desktop.MouseInsideWidget = this;
 			MouseEntered.Invoke(this);
 		}
 
 		public virtual void OnMouseMoved()
 		{
-			IsMouseInside = true;
+			Desktop.MouseInsideWidget = this;
 			MouseMoved.Invoke(this);
 		}
 
@@ -1449,11 +1434,6 @@ namespace Myra.Graphics2D.UI
 			if (Enabled && AcceptsKeyboardFocus)
 			{
 				Desktop.FocusedKeyboardWidget = this;
-			}
-
-			if (Enabled && AcceptsMouseWheelFocus)
-			{
-				Desktop.FocusedMouseWheelWidget = this;
 			}
 
 			var x = Bounds.X;
@@ -1563,11 +1543,6 @@ namespace Myra.Graphics2D.UI
 		public void SetKeyboardFocus()
 		{
 			Desktop.FocusedKeyboardWidget = this;
-		}
-
-		public void SetMouseWheelFocus()
-		{
-			Desktop.FocusedMouseWheelWidget = this;
 		}
 
 		private void SubscribeOnTouchMoved(bool subscribe)
