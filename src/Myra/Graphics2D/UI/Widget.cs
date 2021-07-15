@@ -53,7 +53,7 @@ namespace Myra.Graphics2D.UI
 
 		private float _opacity = 1.0f;
 
-		private bool _enabled;
+		private bool _isMouseInside, _enabled;
 		private bool _isKeyboardFocused = false;
 
 		/// <summary>
@@ -520,6 +520,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_visible = value;
+				IsMouseInside = false;
 				IsTouchInside = false;
 
 				OnVisibleChanged();
@@ -594,6 +595,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_desktop = value;
+				IsMouseInside = false;
 				IsTouchInside = false;
 
 				if (_desktop != null)
@@ -712,9 +714,19 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public bool IsMouseInside { get => Desktop != null && Desktop.MouseInsideWidget == this; }
+		public bool IsMouseInside
+		{
+			get => _isMouseInside;
+			set
+			{
+				_isMouseInside = value;
+				if (Desktop != null && Desktop.MouseInsideWidget == this)
+				{
+					Desktop.MouseInsideWidget = null;
+				}
+			}
+		}
 
-		[Browsable(false)]
 		[XmlIgnore]
 		public bool IsTouchInside { get; private set; }
 
@@ -1383,18 +1395,20 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnMouseLeft()
 		{
-			Desktop.MouseInsideWidget = null;
+			IsMouseInside = false;
 			MouseLeft.Invoke(this);
 		}
 
 		public virtual void OnMouseEntered()
 		{
+			IsMouseInside = true;
 			Desktop.MouseInsideWidget = this;
 			MouseEntered.Invoke(this);
 		}
 
 		public virtual void OnMouseMoved()
 		{
+			IsMouseInside = true;
 			Desktop.MouseInsideWidget = this;
 			MouseMoved.Invoke(this);
 		}
