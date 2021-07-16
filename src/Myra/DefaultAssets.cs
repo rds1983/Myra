@@ -1,8 +1,9 @@
 ﻿using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using AssetManagementBase;
-using Myra.Assets;
 using Myra.Utility;
+using AssetManagementBase.Utility;
+using System.IO;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -106,6 +107,12 @@ namespace Myra
 				_uiStylesheet = AssetManager.Load<Stylesheet>("default_ui_skin.xmms");
 				return _uiStylesheet;
 			}
+		}
+
+		public static Stream OpenDefaultFontDataStream()
+		{
+			var assembly = typeof(DefaultAssets).Assembly;
+			return assembly.OpenResourceStream("Resources.Inter-Regular.ttf");
 		}
 
 		internal static void Dispose()

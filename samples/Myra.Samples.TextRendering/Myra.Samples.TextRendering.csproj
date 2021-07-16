@@ -5,6 +5,7 @@
     <StartupObject />
     <TargetFramework>net45</TargetFramework>
     <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
+    <DefineConstants>$(DefineConstants);MONOGAME</DefineConstants>
   </PropertyGroup>
   
   <ItemGroup>

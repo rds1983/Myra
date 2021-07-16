@@ -9,20 +9,39 @@
         <Proportion Type="Fill" />
       </VerticalStackPanel.Proportions>
       <HorizontalSeparator />
-      <HorizontalStackPanel Spacing="8">
-        <Label Text="Font Size:" />
-        <SpinButton Value="32" Width="40" Id="_spinButtonFontSize" />
-        <Label Text="Scale:" />
-        <Label Text="0.1" />
-        <VerticalStackPanel>
-          <HorizontalSlider Minimum="0.1" Maximum="10" Value="1" Width="200" Id="_sliderScale" />
-          <Label Text="5.4" HorizontalAlignment="Center" Id="_labelScaleValue" />
-        </VerticalStackPanel>
-        <Label Text="10" />
-        <TextButton Text="Reset" Id="_buttonReset" />
-        <CheckBox Text="Smooth Text" Id="_checkBoxSmoothText" />
-        <CheckBox IsChecked="True" Text="Show Texture" Id="_checkBoxShowTexture" />
-      </HorizontalStackPanel>
+      <VerticalStackPanel Spacing="8" Padding="0, 8">
+        <HorizontalStackPanel Spacing="8">
+          <HorizontalStackPanel.Proportions>
+            <Proportion Type="Auto" />
+            <Proportion Type="Fill" />
+          </HorizontalStackPanel.Proportions>
+          <Label Text="Font:" />
+          <TextBox Text="(default)" Readonly="True" Id="_textBoxFont" />
+          <TextButton Text="Browse..." Id="_buttonBrowseFont" />
+          <TextButton Text="Reset" Id="_buttonReset" />
+        </HorizontalStackPanel>
+        <HorizontalStackPanel Spacing="8">
+          <Label Text="Font Size:" />
+          <SpinButton Value="32" Width="40" Id="_spinButtonFontSize" />
+          <Label Text="Scale:" />
+          <Label Text="0.1" />
+          <VerticalStackPanel>
+            <HorizontalSlider Minimum="0.1" Maximum="10" Value="1" Width="200" Id="_sliderScale" />
+            <Label Text="5.4" HorizontalAlignment="Center" Id="_labelScaleValue" />
+          </VerticalStackPanel>
+          <Label Text="10" />
+          <CheckBox Text="Smooth Text" Id="_checkBoxSmoothText" />
+          <CheckBox IsChecked="True" Text="Show Texture" Id="_checkBoxShowTexture" />
+        </HorizontalStackPanel>
+        <HorizontalStackPanel Spacing="8">
+          <Label Text="Resolution Factor:" />
+          <SpinButton Minimum="1" Value="1" Width="40" Id="_spinButtonResolutionFactor" />
+          <Label Text="Kernel Width:" />
+          <SpinButton Minimum="0" Width="40" Id="_spinButtonKernelWidth" />
+          <Label Text="Kernel Height:" />
+          <SpinButton Minimum="0" Width="40" Id="_spinButtonKernelHeight" />
+        </HorizontalStackPanel>
+      </VerticalStackPanel>
       <HorizontalSeparator />
       <HorizontalStackPanel>
         <HorizontalStackPanel.DefaultProportion Type="Part" />
