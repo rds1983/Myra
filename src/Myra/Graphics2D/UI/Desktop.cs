@@ -1171,6 +1171,8 @@ namespace Myra.Graphics2D.UI
 			_widgetsCopy.Clear();
 			_widgetsCopy.AddRange(Widgets);
 
+			_widgetsCopy.Sort((a, b) => Comparer<int>.Default.Compare(a.ZOrder, b.ZOrder));
+
 			_widgetsDirty = false;
 		}
 

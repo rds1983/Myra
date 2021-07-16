@@ -531,6 +531,12 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(DragDirection.None)]
 		public virtual DragDirection DragDirection { get; set; } = DragDirection.None;
 
+		[Category("Behavior")]
+		[DefaultValue(0)]
+		public int ZOrder { get; set; }
+
+
+		[Obsolete("Use DragDirection instead")]
 		[XmlIgnore]
 		[Browsable(false)]
 		public bool IsDraggable => DragDirection != DragDirection.None;
