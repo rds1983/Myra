@@ -978,8 +978,7 @@ namespace Myra.Graphics2D.UI
 					var widget = MouseInsideWidget;
 					while (widget != null)
 					{
-						if (widget.MouseWheelFocusType == MouseWheelFocusType.Hover ||
-							(widget.MouseWheelFocusType == MouseWheelFocusType.Focus && widget.IsKeyboardFocused))
+						if (widget.MouseWheelFocusType == MouseWheelFocusType.Hover)
 						{
 							mouseWheelFocusedWidget = widget;
 							break;
