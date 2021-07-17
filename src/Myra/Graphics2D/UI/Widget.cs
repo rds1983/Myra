@@ -24,7 +24,7 @@ namespace Myra.Graphics2D.UI
 	{
 		None,
 		Hover,
-		HoverAndFocus
+		Focus
 	}
 
 	[Flags]

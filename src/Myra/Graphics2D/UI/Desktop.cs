@@ -967,19 +967,33 @@ namespace Myra.Graphics2D.UI
 #endif
 				MouseWheelChanged.Invoke(delta);
 
-				// Go through the parents chain in order to find first widget that accepts mouse wheel events
-				var widget = MouseInsideWidget;
-				while(widget != null)
+				Widget mouseWheelFocusedWidget = null;
+				if (FocusedKeyboardWidget != null && FocusedKeyboardWidget.MouseWheelFocusType == MouseWheelFocusType.Focus)
 				{
-					if (widget.MouseWheelFocusType == MouseWheelFocusType.Hover ||
-						(widget.MouseWheelFocusType == MouseWheelFocusType.HoverAndFocus && widget.IsKeyboardFocused))
-					{
-						widget.OnMouseWheel(delta);
-						break;
-					}
-
-					widget = widget.Parent;
+					mouseWheelFocusedWidget = FocusedKeyboardWidget;
 				}
+				else
+				{
+					// Go through the parents chain in order to find first widget that accepts mouse wheel events
+					var widget = MouseInsideWidget;
+					while (widget != null)
+					{
+						if (widget.MouseWheelFocusType == MouseWheelFocusType.Hover ||
+							(widget.MouseWheelFocusType == MouseWheelFocusType.Focus && widget.IsKeyboardFocused))
+						{
+							mouseWheelFocusedWidget = widget;
+							break;
+						}
+
+						widget = widget.Parent;
+					}
+				}
+
+				if (mouseWheelFocusedWidget != null)
+				{
+					mouseWheelFocusedWidget.OnMouseWheel(delta);
+				}
+
 			}
 
 			_lastMouseInfo = mouseInfo;
