@@ -1,8 +1,10 @@
 ﻿using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.Styles;
+using Myra.Utility;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 
 namespace Myra.Tests
 {
@@ -48,6 +50,41 @@ namespace Myra.Tests
 
 			Assert.AreNotEqual(oldStylesheet, newStylesheet);
 			Assert.AreNotEqual(oldTexture, newTexture);
+		}
+
+		[Test]
+		public void TestZIndexSort()
+		{
+			var widgets = new List<Widget>();
+			var button1 = new TextButton
+			{
+				ZIndex = 10
+			};
+			var button2 = new TextButton
+			{
+				ZIndex = 6
+			};
+			var button3 = new TextButton
+			{
+				ZIndex = 4
+			};
+			var button4 = new TextButton
+			{
+				ZIndex = 2
+			};
+
+			widgets.Add(button1);
+			widgets.Add(button2);
+			widgets.Add(button3);
+			widgets.Add(button4);
+
+			widgets.SortWidgetsByZIndex();
+
+			// The list should become reversed
+			Assert.AreEqual(widgets[0], button4);
+			Assert.AreEqual(widgets[1], button3);
+			Assert.AreEqual(widgets[2], button2);
+			Assert.AreEqual(widgets[3], button1);
 		}
 	}
 }

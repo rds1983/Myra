@@ -110,7 +110,7 @@ namespace Myra.Graphics2D.UI
 				_childrenCopy.Add(GetChild(i));
 			}
 
-			_childrenCopy.Sort((a, b) => Comparer<int>.Default.Compare(a.ZOrder, b.ZOrder));
+			_childrenCopy.SortWidgetsByZIndex();
 
 			_childrenDirty = false;
 		}

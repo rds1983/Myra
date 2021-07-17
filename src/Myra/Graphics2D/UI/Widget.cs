@@ -34,6 +34,7 @@ namespace Myra.Graphics2D.UI
 		private int _left, _top;
 		private int? _minWidth, _minHeight, _maxWidth, _maxHeight, _width, _height;
 		private int _gridColumn, _gridRow, _gridColumnSpan = 1, _gridRowSpan = 1;
+		private int _zIndex;
 		private HorizontalAlignment _horizontalAlignment = HorizontalAlignment.Left;
 		private VerticalAlignment _verticalAlignment = VerticalAlignment.Top;
 		private LayoutState _layoutState = LayoutState.Invalid;
@@ -531,15 +532,26 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(DragDirection.None)]
 		public virtual DragDirection DragDirection { get; set; } = DragDirection.None;
 
-		[Category("Behavior")]
-		[DefaultValue(0)]
-		public int ZOrder { get; set; }
-
-
-		[Obsolete("Use DragDirection instead")]
 		[XmlIgnore]
 		[Browsable(false)]
-		public bool IsDraggable => DragDirection != DragDirection.None;
+		internal bool IsDraggable { get => DragDirection != DragDirection.None; }
+
+		[Category("Behavior")]
+		[DefaultValue(0)]
+		public int ZIndex
+		{
+			get => _zIndex;
+			set
+			{
+				if (value == _zIndex)
+				{
+					return;
+				}
+
+				_zIndex = value;
+				InvalidateMeasure();
+			}
+		}
 
 		[XmlIgnore]
 		[Browsable(false)]

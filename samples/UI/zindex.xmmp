@@ -1,0 +1,7 @@
+<Project>
+  <Panel>
+    <TextButton Text="Button 3" Left="20"  />
+    <TextButton Text="Button 1" ZIndex="2" />
+    <TextButton Text="Button 2" Left="10" Top="10" ZIndex="4" />
+  </Panel>
+</Project>
