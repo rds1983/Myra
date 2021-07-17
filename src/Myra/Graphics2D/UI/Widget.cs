@@ -20,6 +20,22 @@ using Myra.Platform;
 
 namespace Myra.Graphics2D.UI
 {
+	public enum MouseWheelFocusType
+	{
+		None,
+		Hover,
+		HoverAndFocus
+	}
+
+	[Flags]
+	public enum DragDirection
+	{
+		None = 0,
+		Vertical = 1,
+		Horizontal = 2,
+		Both = Vertical | Horizontal
+	}
+
 	public class Widget : BaseObject
 	{
 		private enum LayoutState

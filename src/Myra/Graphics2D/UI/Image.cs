@@ -12,6 +12,19 @@ using System.Drawing;
 
 namespace Myra.Graphics2D.UI
 {
+	public enum ImageResizeMode
+	{
+		/// <summary>
+		/// Simply Stretch
+		/// </summary>
+		Stretch,
+
+		/// <summary>
+		/// Keep Aspect Ratio
+		/// </summary>
+		KeepAspectRatio
+	}
+
 	public class Image : Widget
 	{
 		private IImage _image, _overImage, _pressedImage;

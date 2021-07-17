@@ -6,6 +6,14 @@ using System.Xml.Serialization;
 
 namespace Myra.Graphics2D.UI
 {
+	public enum TabSelectorPosition
+	{
+		Top,
+		Right,
+		Bottom,
+		Left
+	}
+
 	public class TabControl : Selector<Grid, TabItem>
 	{
 		private Grid _gridButtons;

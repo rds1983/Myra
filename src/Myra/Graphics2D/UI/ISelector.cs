@@ -1,11 +1,21 @@
-﻿using Myra.Attributes;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Xml.Serialization;
 
 namespace Myra.Graphics2D.UI
 {
+	public enum SelectionMode
+	{
+		/// <summary>
+		/// Only one item can be selected
+		/// </summary>
+		Single,
+
+		/// <summary>
+		/// Multiple items can be selected
+		/// </summary>
+		Multiple
+	}
+
 	internal interface ISelector
 	{
 		SelectionMode SelectionMode { get; set; }
