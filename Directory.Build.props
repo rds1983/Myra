@@ -7,8 +7,8 @@
     <RootNamespace>Myra</RootNamespace>
     <Description>UI Library for MonoGame, FNA and Stride</Description>
     <VersionPrefix>1.3.1</VersionPrefix>
-    <AssetManagementBaseVersion>0.5.2</AssetManagementBaseVersion>
-    <FontStashSharpVersion>0.9.5</FontStashSharpVersion>
+    <AssetManagementBaseVersion>0.5.3</AssetManagementBaseVersion>
+    <FontStashSharpVersion>1.0.0</FontStashSharpVersion>
     <LangVersion>8.0</LangVersion>
     <InfoLundinMathVersion>1.2.6</InfoLundinMathVersion>
   </PropertyGroup>

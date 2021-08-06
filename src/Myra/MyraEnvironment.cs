@@ -4,6 +4,7 @@ using AssetManagementBase;
 using AssetManagementBase.Utility;
 using Myra.Assets;
 using Myra.Graphics2D.UI.Styles;
+using FontStashSharp.Interfaces;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -27,6 +28,7 @@ namespace Myra
 		public static int FontKernelHeight = 0;
 		public static bool FontPremultiplyAlpha = true;
 		public static float FontResolutionFactor = 1;
+		public static IFontLoader FontLoader = null;
 
 #if MONOGAME || FNA || STRIDE
 

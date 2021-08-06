@@ -67,7 +67,8 @@ namespace Myra.Assets
 						_ => throw new Exception(),
 					},
 				ExistingTexture = ExistingTexture,
-				ExistingTextureUsedSpace = ExistingTextureUsedSpace
+				ExistingTextureUsedSpace = ExistingTextureUsedSpace,
+				FontLoader = MyraEnvironment.FontLoader
 			};
 
 			var fontSystem = new FontSystem(fontSystemSettings);
