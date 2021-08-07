@@ -95,7 +95,7 @@ namespace Myra.Samples.Notepad
 
 			_textField = ui.textArea;
 
-			_textField.Text = typeof(NotepadGame).Assembly.ReadResourceAsString("hobbits.txt");
+			_textField.Text = typeof(NotepadGame).Assembly.ReadResourceAsString("Myra.Samples.Notepad.hobbits.txt");
 
 			_textField.TextChanged += TextBoxOnTextChanged;
 

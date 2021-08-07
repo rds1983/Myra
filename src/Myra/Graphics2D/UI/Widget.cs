@@ -761,6 +761,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[Browsable(false)]
 		[XmlIgnore]
 		public bool IsTouchInside { get; private set; }
 

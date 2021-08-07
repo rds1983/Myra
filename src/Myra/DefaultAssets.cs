@@ -90,7 +90,7 @@ namespace Myra
 					return _uiTextureRegionAtlas;
 				}
 
-				_uiTextureRegionAtlas = AssetManager.Load<TextureRegionAtlas>("default_ui_skin.xmat");
+				_uiTextureRegionAtlas = Load<TextureRegionAtlas>("default_ui_skin.xmat");
 				return _uiTextureRegionAtlas;
 			}
 		}
@@ -104,7 +104,7 @@ namespace Myra
 					return _uiStylesheet;
 				}
 
-				_uiStylesheet = AssetManager.Load<Stylesheet>("default_ui_skin.xmms");
+				_uiStylesheet = Load<Stylesheet>("default_ui_skin.xmms");
 				return _uiStylesheet;
 			}
 		}
@@ -112,7 +112,13 @@ namespace Myra
 		public static Stream OpenDefaultFontDataStream()
 		{
 			var assembly = typeof(DefaultAssets).Assembly;
-			return assembly.OpenResourceStream("Resources.Inter-Regular.ttf");
+			return assembly.OpenResourceStream("Myra.Resources.Inter-Regular.ttf");
+		}
+
+		private static T Load<T>(string assetName)
+		{
+			MyraEnvironment.UpdateAssetManager();
+			return AssetManager.Load<T>(assetName);
 		}
 
 		internal static void Dispose()

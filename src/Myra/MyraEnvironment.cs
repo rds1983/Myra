@@ -139,7 +139,7 @@ namespace Myra
 		/// </summary>
 		public static bool SmoothText { get; set; }
 
-		private static void UpdateAssetManager()
+		internal static void UpdateAssetManager()
 		{
 			if (_assetsLoadersUpdated)
 			{
