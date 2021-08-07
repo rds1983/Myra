@@ -150,6 +150,8 @@ namespace Myra.Graphics2D.UI
 
 		internal static LoadContext CreateLoadContext(IAssetManager assetManager, Stylesheet stylesheet)
 		{
+			MyraEnvironment.UpdateAssetManager();
+
 			Func<Type, string, object> resourceGetter = (t, name) =>
 			{
 				if (t == typeof(IBrush))
