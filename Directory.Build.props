@@ -6,7 +6,7 @@
     <PackageProjectUrl>https://github.com/rds1983/Myra</PackageProjectUrl>
     <RootNamespace>Myra</RootNamespace>
     <Description>UI Library for MonoGame, FNA and Stride</Description>
-    <VersionPrefix>1.3.1</VersionPrefix>
+    <VersionPrefix>1.3.2</VersionPrefix>
     <AssetManagementBaseVersion>0.5.3</AssetManagementBaseVersion>
     <FontStashSharpVersion>1.0.0</FontStashSharpVersion>
     <LangVersion>8.0</LangVersion>
