@@ -258,58 +258,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-
-		[Obsolete("Use Padding")]
-		[Browsable(false)]
-		public int PaddingRight
-		{
-			get
-			{
-				return Padding.Right;
-			}
-
-			set
-			{
-				var p = Padding;
-				p.Right = value;
-				Padding = p;
-			}
-		}
-
-		[Obsolete("Use Padding")]
-		[Browsable(false)]
-		public int PaddingTop
-		{
-			get
-			{
-				return Padding.Top;
-			}
-
-			set
-			{
-				var p = Padding;
-				p.Top = value;
-				Padding = p;
-			}
-		}
-
-		[Obsolete("Use Padding")]
-		[Browsable(false)]
-		public int PaddingBottom
-		{
-			get
-			{
-				return Padding.Top;
-			}
-
-			set
-			{
-				var p = Padding;
-				p.Bottom = value;
-				Padding = p;
-			}
-		}
-
 		[Category("Layout")]
 		[DesignerFolded]
 		public Thickness Margin

@@ -150,22 +150,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
-		[Obsolete("Use Content instead")]
-		public Widget Child
-		{
-			get
-			{
-				return Content;
-			}
-
-			set
-			{
-				Content = value;
-			}
-		}
-
 		[Category("Behavior")]
 		[DefaultValue(true)]
 		public bool ShowHorizontalScrollBar
