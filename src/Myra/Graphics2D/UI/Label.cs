@@ -225,9 +225,9 @@ namespace Myra.Graphics2D.UI
 				result = _formattedText.Measure(_wrap ? width : default(int?));
 			}
 
-			if (result.Y < Font.FontSize)
+			if (result.Y < Font.LineHeight)
 			{
-				result.Y = Font.FontSize;
+				result.Y = Font.LineHeight;
 			}
 
 			return result;

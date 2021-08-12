@@ -197,7 +197,7 @@ namespace Myra.Graphics2D.Text
 				{
 					if (i < _text.Length - 1 && _text[i + 1] == 'n')
 					{
-						var sz2 = new Point(r.X + NewLineWidth, Math.Max(r.Y, _font.FontSize));
+						var sz2 = new Point(r.X + NewLineWidth, Math.Max(r.Y, _font.LineHeight));
 
 						// Break right here
 						r.SkipCount += 2;
@@ -240,11 +240,11 @@ namespace Myra.Graphics2D.Text
 				if (c != '\n')
 				{
 					var v = Font.MeasureString(_stringBuilder);
-					sz = new Point((int)v.X, _font.FontSize);
+					sz = new Point((int)v.X, _font.LineHeight);
 				}
 				else
 				{
-					sz = new Point(r.X + NewLineWidth, Math.Max(r.Y, _font.FontSize));
+					sz = new Point(r.X + NewLineWidth, Math.Max(r.Y, _font.LineHeight));
 
 					// Break right here
 					++r.CharsCount;
@@ -346,7 +346,7 @@ namespace Myra.Graphics2D.Text
 
 			if (result.Y == 0)
 			{
-				result.Y = _font.FontSize;
+				result.Y = _font.LineHeight;
 			}
 
 			_measures[key] = result;

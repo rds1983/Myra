@@ -1054,7 +1054,7 @@ namespace Myra.Graphics2D.UI
 			p.X -= bounds.X;
 			p.Y -= bounds.Y;
 
-			var lineHeight = _formattedText.Font.FontSize;
+			var lineHeight = _formattedText.Font.LineHeight;
 
 			Point sp;
 			if (asScrollViewer != null)
@@ -1347,7 +1347,7 @@ namespace Myra.Graphics2D.UI
 			var lineIndex = startGlyph.TextChunk.LineIndex;
 			var i = selectStart;
 
-			var lineHeight = _formattedText.Font.FontSize;
+			var lineHeight = _formattedText.Font.LineHeight;
 			while (true)
 			{
 				startGlyph = _formattedText.GetGlyphInfoByIndex(i);
@@ -1444,7 +1444,7 @@ namespace Myra.Graphics2D.UI
 				Cursor.Draw(context,
 					new Rectangle(p.X, p.Y,
 						Cursor.Size.X,
-						_formattedText.Font.FontSize));
+						_formattedText.Font.LineHeight));
 			}
 
 			context.Opacity = oldOpacity;
@@ -1466,9 +1466,9 @@ namespace Myra.Graphics2D.UI
 				result = _formattedText.Measure(_wrap ? width : default(int?));
 			}
 
-			if (result.Y < Font.FontSize)
+			if (result.Y < Font.LineHeight)
 			{
-				result.Y = Font.FontSize;
+				result.Y = Font.LineHeight;
 			}
 
 			if (Cursor != null)
