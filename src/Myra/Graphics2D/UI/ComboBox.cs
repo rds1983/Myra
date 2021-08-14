@@ -68,6 +68,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[Browsable(false)]
+		[XmlIgnore]
+		public ListBox ListBox => _listBox;
+
 		public override ObservableCollection<ListItem> Items => _listBox.Items;
 
 		public override ListItem SelectedItem { get => _listBox.SelectedItem; set => _listBox.SelectedItem = value; }
