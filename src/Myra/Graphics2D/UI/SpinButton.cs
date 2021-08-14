@@ -4,7 +4,8 @@ using System.Linq;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Serialization;
-
+using FontStashSharp;
+using Microsoft.Xna.Framework;
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework.Input;
 #elif STRIDE
@@ -302,6 +303,11 @@ namespace Myra.Graphics2D.UI
 			Value = 0;
 		}
 
+		public SpinButton(SpriteFontBase spriteFont) : this()
+		{
+			_textField.Font = spriteFont;
+		}
+
 		private static float? StringToFloat(string s)
 		{
 			if (string.IsNullOrEmpty(s))
@@ -452,13 +458,20 @@ namespace Myra.Graphics2D.UI
 				_textField.ApplyTextBoxStyle(style.TextBoxStyle);
 			}
 
-			if (style.UpButtonStyle != null)
+			//the default spin button is too big and messes up the format. this is a bit of a hack but this fixes 
+			//the problem
+			Vector2 measurement = _textField.Font.MeasureString(NumberToString(Value));
+			var (width, height) = ((int) (measurement.X / 2), (int) (measurement.Y / 2));
+			
+			if (style.DownButtonStyle != null)
 			{
-				_upButton.ApplyImageButtonStyle(style.UpButtonStyle);
+				(style.DownButtonStyle.Width, style.DownButtonStyle.Height) = (width, height);
+				_upButton.ApplyImageButtonStyle(style.DownButtonStyle);
 			}
 
 			if (style.DownButtonStyle != null)
 			{
+				(style.DownButtonStyle.Width, style.DownButtonStyle.Height) = (width, height);
 				_downButton.ApplyImageButtonStyle(style.DownButtonStyle);
 			}
 		}

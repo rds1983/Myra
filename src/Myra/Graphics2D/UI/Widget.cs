@@ -822,6 +822,7 @@ namespace Myra.Graphics2D.UI
 			{
 				return _actualBounds;
 			}
+			set => _actualBounds = value;
 		}
 
 		[Browsable(false)]

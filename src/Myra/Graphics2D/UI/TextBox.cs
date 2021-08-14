@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Serialization;
@@ -1493,7 +1494,7 @@ namespace Myra.Graphics2D.UI
 		public void ApplyTextBoxStyle(TextBoxStyle style)
 		{
 			ApplyWidgetStyle(style);
-
+			
 			TextColor = style.TextColor;
 			DisabledTextColor = style.DisabledTextColor;
 			FocusedTextColor = style.FocusedTextColor;
