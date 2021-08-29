@@ -1,8 +1,9 @@
-﻿using NUnit.Framework;
+﻿using Myra.Assets;
+using NUnit.Framework;
 using System;
 using System.Reflection;
 
-namespace AssetManagementBase.Tests
+namespace Myra.Tests
 {
 	[TestFixture]
 	public class ResourceAssetResolverTests

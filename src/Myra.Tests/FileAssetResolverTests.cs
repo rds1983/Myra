@@ -3,7 +3,7 @@ using Myra.Utility;
 using NUnit.Framework;
 using System;
 
-namespace AssetManagementBase.Tests
+namespace Myra.Tests
 {
 	[TestFixture]
 	public class FileAssetResolverTests

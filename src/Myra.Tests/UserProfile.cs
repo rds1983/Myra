@@ -1,6 +1,6 @@
 ﻿using Myra.Assets;
 
-namespace AssetManagementBase.Tests
+namespace Myra.Tests
 {
 	[AssetLoader(typeof(UserProfileLoader))]
 	public class UserProfile

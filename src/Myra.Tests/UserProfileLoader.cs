@@ -1,7 +1,7 @@
 ﻿using Myra.Assets;
 using System.Xml.Linq;
 
-namespace AssetManagementBase.Tests
+namespace Myra.Tests
 {
 	internal class UserProfileLoader : IAssetLoader<UserProfile>
 	{
