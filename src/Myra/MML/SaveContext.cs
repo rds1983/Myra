@@ -8,7 +8,6 @@ using System.Xml.Linq;
 using Myra.Attributes;
 using System.Linq;
 using Myra.Graphics2D;
-using AssetManagementBase.Utility;
 using FontStashSharp;
 
 #if MONOGAME || FNA

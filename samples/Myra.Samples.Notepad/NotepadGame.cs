@@ -2,10 +2,9 @@
 using System.IO;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.File;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using AssetManagementBase.Utility;
+using Myra.Utility;
 
 namespace Myra.Samples.Notepad
 {

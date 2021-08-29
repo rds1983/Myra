@@ -1,5 +1,5 @@
-﻿using AssetManagementBase;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using Myra.Assets;
 using Myra.Graphics2D.UI;
 using NUnit.Framework;
 

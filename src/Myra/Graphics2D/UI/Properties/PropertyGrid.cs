@@ -11,7 +11,6 @@ using Myra.MML;
 using Myra.Graphics2D.UI.File;
 using Myra.Graphics2D.TextureAtlases;
 using System.IO;
-using AssetManagementBase.Utility;
 using Myra.Attributes;
 using FontStashSharp;
 using Myra.Graphics2D.Brushes;

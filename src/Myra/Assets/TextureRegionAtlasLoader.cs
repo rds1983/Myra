@@ -1,4 +1,3 @@
-using AssetManagementBase;
 using Myra.Graphics2D.TextureAtlases;
 
 #if MONOGAME || FNA

@@ -1,9 +1,8 @@
 ﻿using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
-using AssetManagementBase;
 using Myra.Utility;
-using AssetManagementBase.Utility;
 using System.IO;
+using Myra.Assets;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -90,7 +89,7 @@ namespace Myra
 					return _uiTextureRegionAtlas;
 				}
 
-				_uiTextureRegionAtlas = Load<TextureRegionAtlas>("default_ui_skin.xmat");
+				_uiTextureRegionAtlas = AssetManager.Load<TextureRegionAtlas>("default_ui_skin.xmat");
 				return _uiTextureRegionAtlas;
 			}
 		}
@@ -104,7 +103,7 @@ namespace Myra
 					return _uiStylesheet;
 				}
 
-				_uiStylesheet = Load<Stylesheet>("default_ui_skin.xmms");
+				_uiStylesheet = AssetManager.Load<Stylesheet>("default_ui_skin.xmms");
 				return _uiStylesheet;
 			}
 		}
@@ -113,12 +112,6 @@ namespace Myra
 		{
 			var assembly = typeof(DefaultAssets).Assembly;
 			return assembly.OpenResourceStream("Myra.Resources.Inter-Regular.ttf");
-		}
-
-		private static T Load<T>(string assetName)
-		{
-			MyraEnvironment.UpdateAssetManager();
-			return AssetManager.Load<T>(assetName);
 		}
 
 		internal static void Dispose()

@@ -1,6 +1,5 @@
 ﻿using StbImageSharp;
 using System.IO;
-using AssetManagementBase;
 using Myra.Utility;
 
 #if MONOGAME || FNA

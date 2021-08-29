@@ -18,8 +18,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Threading;
 using System.Xml.Linq;
 using Myra.Graphics2D;
-using AssetManagementBase;
-using AssetManagementBase.Utility;
+using Myra.Assets;
 
 namespace MyraPad
 {

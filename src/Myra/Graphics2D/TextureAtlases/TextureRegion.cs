@@ -1,5 +1,4 @@
 ﻿using System;
-using AssetManagementBase;
 using Myra.Assets;
 
 #if MONOGAME || FNA

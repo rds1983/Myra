@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using AssetManagementBase.Utility;
+using Myra.Utility;
 
 namespace MyraPad
 {

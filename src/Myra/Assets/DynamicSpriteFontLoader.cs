@@ -1,5 +1,4 @@
-﻿using AssetManagementBase;
-using FontStashSharp;
+﻿using FontStashSharp;
 using System;
 using System.Collections.Generic;
 
