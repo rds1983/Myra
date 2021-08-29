@@ -102,8 +102,6 @@ namespace Myra
 				}
 
 				_platform = value;
-
-				UpdateAssetManager();
 			}
 		}
 #endif
