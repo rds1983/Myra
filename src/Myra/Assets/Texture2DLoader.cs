@@ -37,22 +37,6 @@ namespace Myra.Assets
 	internal class Texture2DLoader : IAssetLoader<Texture2DWrapper>
 #endif
 	{
-		private static byte ApplyAlpha(byte color, byte alpha)
-		{
-			var fc = color / 255.0f;
-			var fa = alpha / 255.0f;
-			var fr = (int)(255.0f * fc * fa);
-			if (fr < 0)
-			{
-				fr = 0;
-			}
-			if (fr > 255)
-			{
-				fr = 255;
-			}
-			return (byte)fr;
-		}
-
 #if MONOGAME || FNA || STRIDE
 		public Texture2D Load(AssetLoaderContext context, string assetName)
 #else
@@ -82,10 +66,10 @@ namespace Myra.Assets
 			var b = result.Data;
 			for (var i = 0; i < result.Data.Length; i += 4)
 			{
-				var a = b[i + 3];
-				b[i] = ApplyAlpha(b[i], a);
-				b[i + 1] = ApplyAlpha(b[i + 1], a);
-				b[i + 2] = ApplyAlpha(b[i + 2], a);
+				var falpha = b[i + 3] / 255.0f;
+				b[i] = (byte)(b[i] * falpha);
+				b[i + 1] = (byte)(b[i + 1] * falpha);
+				b[i + 2] = (byte)(b[i + 2] * falpha);
 			}
 
 #if MONOGAME || FNA || STRIDE
