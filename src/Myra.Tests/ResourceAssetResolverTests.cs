@@ -46,7 +46,7 @@ namespace Myra.Tests
 		public void TestWithoutPrependAssemblyName()
 		{
 			// Without dot at the end
-			var resolver = new ResourceAssetResolver(_assembly, "AssetManagementBase.Tests.Resources", false);
+			var resolver = new ResourceAssetResolver(_assembly, "Myra.Tests.Resources", false);
 			var assetManager = new AssetManager(resolver);
 			var text = assetManager.Load<string>("test.txt");
 			Assert.AreEqual(text, "Test");
