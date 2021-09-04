@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using Myra.Utility;
+using System;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -208,5 +209,136 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public abstract void RemoveChild(Widget widget);
+
+
+		/// <summary>
+		/// Finds first child widget of type <typeparamref name="WidgetT"/> with specified <paramref name="Id"/>
+		/// </summary>
+		/// <typeparam name="WidgetT">Widget type</typeparam>
+		/// <param name="Id">Id of widget</param>
+		/// <returns>Widget instance if found otherwise null</returns>
+		public WidgetT FindChildById<WidgetT>(string Id) where WidgetT : Widget
+		{
+			return FindChild<WidgetT>(this, w => w.Id == Id);
+		}
+
+		/// <summary>
+		/// Finds first child widget of type <typeparamref name="WidgetT"/>. If <paramref name="predicate"/> is null -
+		/// the first widget of <typeparamref name="WidgetT"/> is returned,
+		/// otherwise the first widget of <typeparamref name="WidgetT"/> matching <paramref name="predicate"/> is returned.
+		/// </summary>
+		/// <typeparam name="WidgetT">Widget type</typeparam>
+		/// <param name="predicate">Predicate to match on widget</param>
+		/// <returns>Widget instance if found otherwise null</returns>
+		public WidgetT FindChild<WidgetT>(Func<WidgetT, bool> predicate = null) where WidgetT : Widget
+		{
+			return FindChild(this, predicate);
+		}
+
+		/// <summary>
+		/// Finds the first widget with matching <paramref name="Id"/>
+		/// </summary>
+		/// <param name="Id">Id to match on</param>
+		/// <returns>Widget instance if found otherwise null</returns>
+		public Widget FindChildById(string Id)
+		{
+			return FindChild(this, w => w.Id == Id);
+		}
+
+		/// <summary>
+		/// Finds the first child found by predicate.
+		/// </summary>
+		/// <param name="predicate">Predicate to match on widget</param>
+		/// <returns>Widget instance if found otherwise null</returns>
+		public Widget FindChild(Func<Widget, bool> predicate)
+		{
+			return FindChild(this, predicate);
+		}
+
+		/// <summary>
+		/// Gets all children in container matching on optional predicate.
+		/// </summary>
+		/// <param name="recursive">If true, indicates that child containers will also be iterated.</param>
+		/// <param name="predicate">Predicate to filter children</param>
+		/// <returns>Children found</returns>
+		public IEnumerable<Widget> GetChildren(bool recursive = false, Func<Widget, bool> predicate = null)
+        {
+			return GetChildren(this, recursive, predicate);
+        }
+
+		internal static IEnumerable<Widget> GetChildren(Container container, bool recursive = false,
+			Func<Widget, bool> predicate = null)
+        {
+            foreach (var widget in container.ChildrenCopy)
+            {
+				if (predicate?.Invoke(widget) ?? true)
+				{
+					yield return widget;
+				}
+
+				if (recursive && widget is Container childContainer)
+				{
+                    foreach (var innerWidget in GetChildren(childContainer, recursive, predicate))
+                    {
+						yield return innerWidget;
+                    }
+				}
+			}
+        }
+
+		internal static WidgetT FindChildById<WidgetT>(Container container, string Id) where WidgetT : Widget
+		{
+			return FindChild<WidgetT>(container, w => w.Id == Id);
+		}
+
+		internal static Widget FindChildById(Container container, string Id)
+		{
+			return FindChild(container, w => w.Id == Id);
+		}
+
+		internal static WidgetT FindChild<WidgetT>(Container container, 
+			Func<WidgetT, bool> predicate = null) where WidgetT : Widget
+		{
+			foreach (var widget in container.ChildrenCopy)
+			{
+				if (widget is WidgetT casted && (predicate?.Invoke(casted) ?? true))
+				{
+					return casted;
+				}
+				else if (widget is Container childContainer)
+				{
+					var child = FindChild(childContainer, predicate);
+
+					if (child != null)
+					{
+						return child;
+					}
+				}
+			}
+
+			return null;
+		}
+
+		internal static Widget FindChild(Container container, Func<Widget, bool> predicate = null)
+        {
+			foreach (var widget in container.ChildrenCopy)
+			{
+				if (predicate?.Invoke(widget) ?? true)
+				{
+					return widget;
+				}
+				else if (widget is Container childContainer)
+				{
+					var child = FindChild(childContainer, predicate);
+
+					if (child != null)
+					{
+						return child;
+					}
+				}
+			}
+
+			return null;
+		}
 	}
 }
