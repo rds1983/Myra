@@ -797,11 +797,20 @@ namespace Myra.Graphics2D.UI
 					{
 						if (SelectStart == SelectEnd)
 						{
+							int prevStart = SelectStart;
+							int prevEnd = SelectEnd;
+							
 							int deleted = Delete(CursorPosition - 1, 1);
 							if (deleted > 0)
 							{
 								UserSetCursorPosition(CursorPosition - deleted);
-								ResetSelection();
+								
+								//a bit of a hack here. if the selection is modified (when one of the events are called)
+								//then don't reset selection
+								if (prevStart == SelectStart && prevEnd == SelectEnd)
+								{
+									ResetSelection();
+								}
 							}
 						}
 						else
