@@ -370,8 +370,7 @@ namespace Myra.Graphics2D.UI
 
 		private void DeleteChars(int pos, int l)
 		{
-			if (l == 0)
-				return;
+			if (l == 0) return;
 
 			UserText = UserText.Substring(0, pos) + UserText.Substring(pos + l);
 		}
@@ -519,17 +518,32 @@ namespace Myra.Graphics2D.UI
 				if (InsertChar(CursorPosition, ch))
 				{
 					UserSetCursorPosition(CursorPosition + 1);
-
 				}
 			}
 			else
 			{
-				DeleteSelection();
-				if (InsertChar(CursorPosition, ch))
+				//don't update UserText until we have done both deleting and inserting as we only want to call SetText
+				//once
+				string tempText = UserText;
+
+				//swap start and end if one is higher than the other
+				if (SelectStart > SelectEnd)
 				{
-					UndoStack.MakeInsert(CursorPosition, 1);
-					UserSetCursorPosition(CursorPosition + 1);
+					int temp = SelectStart;
+					SelectStart = SelectEnd;
+					SelectEnd = temp;
 				}
+
+				//remove selection and insert
+				tempText = SelectEnd >= tempText.Length
+					? tempText.Substring(0, SelectStart)
+					: tempText.Substring(0, SelectStart) + tempText.Substring(SelectEnd + 1);
+				tempText = tempText.Substring(0, CursorPosition) + ch + tempText.Substring(CursorPosition);
+
+				UserText = tempText;
+
+				UndoStack.MakeInsert(CursorPosition, 1);
+				UserSetCursorPosition(CursorPosition + 1);
 			}
 
 			ResetSelection();
