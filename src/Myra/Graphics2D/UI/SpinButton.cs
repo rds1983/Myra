@@ -461,18 +461,23 @@ namespace Myra.Graphics2D.UI
 			//the default spin button is too big and messes up the format. this is a bit of a hack but this fixes 
 			//the problem
 			Vector2 measurement = _textField.Font.MeasureString(NumberToString(Value));
-			var (width, height) = ((int) (measurement.X / 2), (int) (measurement.Y / 2));
-			
-			if (style.DownButtonStyle != null)
-			{
-				(style.DownButtonStyle.Width, style.DownButtonStyle.Height) = (width, height);
-				_upButton.ApplyImageButtonStyle(style.DownButtonStyle);
-			}
+			int width = (int) (measurement.X / 2);
+			int height = (int) (measurement.Y / 2);
 
 			if (style.DownButtonStyle != null)
 			{
-				(style.DownButtonStyle.Width, style.DownButtonStyle.Height) = (width, height);
+				style.DownButtonStyle.Width = width;
+				style.DownButtonStyle.Height = height;
+				
 				_downButton.ApplyImageButtonStyle(style.DownButtonStyle);
+			}
+
+			if (style.UpButtonStyle != null)
+			{
+				style.UpButtonStyle.Width = width;    
+				style.UpButtonStyle.Height = height;  
+
+				_upButton.ApplyImageButtonStyle(style.UpButtonStyle);
 			}
 		}
 
