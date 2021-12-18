@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Serialization;
@@ -535,12 +534,8 @@ namespace Myra.Graphics2D.UI
 				}
 
 				//remove selection and insert
-				tempText = SelectEnd >= tempText.Length
-					? tempText.Substring(0, SelectStart)
-					: tempText.Substring(0, SelectStart) + tempText.Substring(SelectEnd + 1);
-				tempText = tempText.Substring(0, CursorPosition) + ch + tempText.Substring(CursorPosition);
-
-				UserText = tempText;
+				UserText = tempText.Substring(0, SelectStart) + ch +
+				           tempText.Substring(SelectEnd, (tempText.Length - SelectEnd));
 
 				UndoStack.MakeInsert(CursorPosition, 1);
 				UserSetCursorPosition(CursorPosition + 1);
