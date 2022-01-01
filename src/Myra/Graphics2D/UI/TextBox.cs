@@ -523,7 +523,7 @@ namespace Myra.Graphics2D.UI
 			{
 				//don't update UserText until we have done both deleting and inserting as we only want to call SetText
 				//once
-				string tempText = UserText;
+				string tempText = string.IsNullOrEmpty(UserText) ? "" : UserText;
 
 				//swap start and end if one is higher than the other
 				if (SelectStart > SelectEnd)
