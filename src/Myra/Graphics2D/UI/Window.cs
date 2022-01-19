@@ -201,17 +201,14 @@ namespace Myra.Graphics2D.UI
 			SetStyle(styleName);
 		}
 
-		public override void UpdateLayout()
+		public override void InternalArrange()
 		{
-			base.UpdateLayout();
+			base.InternalArrange();
 
 			if (!IsWindowPlaced)
 			{
 				CenterOnDesktop();
 				IsWindowPlaced = true;
-
-				// Need to call base.UpdateLayout again in order for the new Left/Top values be applied
-				base.UpdateLayout();
 			}
 		}
 

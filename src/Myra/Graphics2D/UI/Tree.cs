@@ -208,26 +208,38 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
-				if (HoverRow.Mark.Visible && !HoverRow.Mark.Bounds.Contains(Desktop.TouchPosition))
+				if (HoverRow.Mark.Visible && !HoverRow.Mark.AbsoluteBounds.Contains(Desktop.TouchPosition))
 				{
 					HoverRow.Mark.DoClick();
 				}
 			}
 		}
 
+		private Rectangle BuildRowRect(TreeNode rowInfo)
+		{
+			var bounds = AbsoluteBounds;
+			return new Rectangle(bounds.X, rowInfo.AbsoluteBounds.Y, bounds.Width,
+						rowInfo.InternalChild.GetRowHeight(0));
+		}
+
 		private void SetHoverRow(Point position)
 		{
-			if (!Bounds.Contains(position))
+			var bounds = AbsoluteBounds;
+			if (!bounds.Contains(position))
 			{
 				return;
 			}
 
 			foreach (var rowInfo in _allNodes)
 			{
-				if (rowInfo.RowVisible && rowInfo.RowBounds.Contains(position))
+				if (rowInfo.RowVisible)
 				{
-					HoverRow = rowInfo;
-					return;
+					var rect = BuildRowRect(rowInfo);
+					if (rect.Contains(position))
+					{
+						HoverRow = rowInfo;
+						return;
+					}
 				}
 			}
 		}
@@ -238,7 +250,6 @@ namespace Myra.Graphics2D.UI
 
 			HoverRow = null;
 
-			var position = Desktop.MousePosition;
 			SetHoverRow(Desktop.MousePosition);
 		}
 
@@ -304,28 +315,17 @@ namespace Myra.Graphics2D.UI
 
 		private void UpdateRowInfos()
 		{
-			var bounds = Bounds;
-
 			foreach (var rowInfo in _allNodes)
 			{
 				rowInfo.RowVisible = false;
 			}
 
 			RecursiveUpdateRowVisibility(this);
-
-			foreach (var rowInfo in _allNodes)
-			{
-				if (rowInfo.RowVisible)
-				{
-					rowInfo.RowBounds = new Rectangle(bounds.X, rowInfo.Bounds.Y, bounds.Width,
-						rowInfo.InternalChild.GetRowHeight(0));
-				}
-			}
 		}
 
-		public override void UpdateLayout()
+		public override void InternalArrange()
 		{
-			base.UpdateLayout();
+			base.InternalArrange();
 			_rowInfosDirty = true;
 		}
 
@@ -339,12 +339,16 @@ namespace Myra.Graphics2D.UI
 
 			if (Active && HoverRow != null && HoverRow != SelectedRow && SelectionHoverBackground != null)
 			{
-				SelectionHoverBackground.Draw(context, HoverRow.RowBounds);
+				var rect = BuildRowRect(HoverRow);
+				rect.Offset(-AbsoluteOffset.X, -AbsoluteOffset.Y);
+				SelectionHoverBackground.Draw(context, rect);
 			}
 
 			if (SelectedRow != null && SelectedRow.RowVisible && SelectionBackground != null)
 			{
-				SelectionBackground.Draw(context, SelectedRow.RowBounds);
+				var rect =  BuildRowRect(SelectedRow);
+				rect.Offset(-AbsoluteOffset.X, -AbsoluteOffset.Y);
+				SelectionBackground.Draw(context, rect);
 			}
 
 			base.InternalRender(context);

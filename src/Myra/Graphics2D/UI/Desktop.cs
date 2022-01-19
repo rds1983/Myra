@@ -654,7 +654,7 @@ namespace Myra.Graphics2D.UI
 			_renderContext.Scissor = InternalBounds;
 			_renderContext.Transform = trasform;
 
-			_renderContext.View = InternalBounds;
+			_renderContext.AbsoluteView = InternalBounds;
 			_renderContext.Opacity = Opacity;
 
 			if (Stylesheet.Current.DesktopStyle != null &&
@@ -708,11 +708,11 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			foreach (var i in ChildrenCopy)
+			foreach (var child in ChildrenCopy)
 			{
-				if (i.Visible)
+				if (child.Visible)
 				{
-					i.Layout(InternalBounds);
+					child.Arrange(InternalBounds);
 				}
 			}
 
@@ -852,20 +852,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			return result;
-		}
-
-		private Widget GetTopWidget()
-		{
-			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
-			{
-				var w = ChildrenCopy[i];
-				if (w.Visible && w.Enabled && w.Active)
-				{
-					return w;
-				}
-			}
-
-			return null;
 		}
 
 		public void HandleButton(bool isDown, bool wasDown, MouseButtons buttons)
@@ -1191,7 +1177,7 @@ namespace Myra.Graphics2D.UI
 
 		private bool InternalIsPointOverGUI(Point p, Widget w)
 		{
-			if (!w.Visible || !w.BorderBounds.Contains(p))
+			if (!w.Visible || !w.AbsoluteBorderBounds.Contains(p))
 			{
 				return false;
 			}

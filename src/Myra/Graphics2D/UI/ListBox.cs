@@ -216,9 +216,8 @@ namespace Myra.Graphics2D.UI
 			var p = SelectedItem.Widget.Bounds;
 
 			var bounds = _box.ActualBounds;
-			InternalChild.UpdateLayout();
+			InternalChild.UpdateArrange();
 			var sz = new Point(InternalChild.Bounds.Width, InternalChild.Bounds.Height);
-			var maximum = InternalChild.ScrollMaximum;
 
 			p.X -= bounds.X;
 			p.Y -= bounds.Y;

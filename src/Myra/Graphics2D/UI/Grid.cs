@@ -583,10 +583,9 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public override void Arrange()
+		public override void InternalArrange()
 		{
-			var bounds = ActualBounds;
-			LayoutProcessFixed(bounds.Size());
+			LayoutProcessFixed(ActualSize);
 
 			_colWidths.Clear();
 			for (var i = 0; i < _measureColWidths.Count; ++i)
@@ -605,7 +604,7 @@ namespace Myra.Graphics2D.UI
 
 			// Dynamic widths
 			// First run: calculate available width
-			var availableWidth = (float)bounds.Width;
+			var availableWidth = (float)ActualWidth;
 			availableWidth -= (_colWidths.Count - 1) * _columnSpacing;
 
 			var totalPart = 0.0f;
@@ -653,7 +652,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			// Same with row heights
-			var availableHeight = (float)bounds.Height;
+			var availableHeight = (float)ActualHeight;
 			availableHeight -= (_rowHeights.Count - 1) * _rowSpacing;
 
 			totalPart = 0.0f;
@@ -773,13 +772,12 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			var bounds = ActualBounds;
+			var rect = new Rectangle(_cellLocationsX[col], _cellLocationsY[row], cellSize.X, cellSize.Y);
 
-			var rect = new Rectangle(bounds.Left + _cellLocationsX[col], bounds.Top + _cellLocationsY[row], cellSize.X, cellSize.Y);
-
-			if (rect.Right > bounds.Right)
+			var width = ActualWidth;
+			if (rect.Right > width)
 			{
-				rect.Width = bounds.Right - rect.X;
+				rect.Width = width - rect.X;
 			}
 
 			if (rect.Width < 0)
@@ -787,14 +785,15 @@ namespace Myra.Graphics2D.UI
 				rect.Width = 0;
 			}
 
-			if (rect.Width > bounds.Width)
+			if (rect.Width > width)
 			{
-				rect.Width = bounds.Width;
+				rect.Width = width;
 			}
 
-			if (rect.Bottom > bounds.Bottom)
+			var height = ActualHeight;
+			if (rect.Bottom > height)
 			{
-				rect.Height = bounds.Bottom - rect.Y;
+				rect.Height = height - rect.Y;
 			}
 
 			if (rect.Height < 0)
@@ -802,12 +801,12 @@ namespace Myra.Graphics2D.UI
 				rect.Height = 0;
 			}
 
-			if (rect.Height > bounds.Height)
+			if (rect.Height > height)
 			{
-				rect.Height = bounds.Height;
+				rect.Height = height;
 			}
 
-			control.Layout(rect);
+			control.Arrange(rect);
 		}
 
 		private void RenderSelection(RenderContext context)
@@ -822,20 +821,20 @@ namespace Myra.Graphics2D.UI
 					{
 						if (HoverRowIndex != null && HoverRowIndex != SelectedRowIndex && SelectionHoverBackground != null)
 						{
-							var rect = Rectangle.Intersect(new Rectangle(bounds.Left,
+							var rect = new Rectangle(bounds.Left,
 								_cellLocationsY[HoverRowIndex.Value] + bounds.Top - RowSpacing / 2,
 								bounds.Width,
-								_rowHeights[HoverRowIndex.Value] + RowSpacing), context.View);
+								_rowHeights[HoverRowIndex.Value] + RowSpacing);
 
 							SelectionHoverBackground.Draw(context, rect);
 						}
 
 						if (SelectedRowIndex != null && SelectionBackground != null)
 						{
-							var rect = Rectangle.Intersect(new Rectangle(bounds.Left,
+							var rect = new Rectangle(bounds.Left,
 								_cellLocationsY[SelectedRowIndex.Value] + bounds.Top - RowSpacing / 2,
 								bounds.Width,
-								_rowHeights[SelectedRowIndex.Value] + RowSpacing), context.View);
+								_rowHeights[SelectedRowIndex.Value] + RowSpacing);
 
 							SelectionBackground.Draw(context, rect);
 						}
@@ -845,20 +844,20 @@ namespace Myra.Graphics2D.UI
 					{
 						if (HoverColumnIndex != null && HoverColumnIndex != SelectedColumnIndex && SelectionHoverBackground != null)
 						{
-							var rect = Rectangle.Intersect(new Rectangle(_cellLocationsX[HoverColumnIndex.Value] + bounds.Left - ColumnSpacing / 2,
+							var rect = new Rectangle(_cellLocationsX[HoverColumnIndex.Value] + bounds.Left - ColumnSpacing / 2,
 								bounds.Top,
 								_colWidths[HoverColumnIndex.Value] + ColumnSpacing,
-								bounds.Height), context.View);
+								bounds.Height);
 
 							SelectionHoverBackground.Draw(context, rect);
 						}
 
 						if (SelectedColumnIndex != null && SelectionBackground != null)
 						{
-							var rect = Rectangle.Intersect(new Rectangle(_cellLocationsX[SelectedColumnIndex.Value] + bounds.Left - ColumnSpacing / 2,
+							var rect = new Rectangle(_cellLocationsX[SelectedColumnIndex.Value] + bounds.Left - ColumnSpacing / 2,
 								bounds.Top,
 								_colWidths[SelectedColumnIndex.Value] + ColumnSpacing,
-								bounds.Height), context.View);
+								bounds.Height);
 
 							SelectionBackground.Draw(context, rect);
 						}
@@ -870,20 +869,20 @@ namespace Myra.Graphics2D.UI
 							(HoverRowIndex != SelectedRowIndex || HoverColumnIndex != SelectedColumnIndex) &&
 							SelectionHoverBackground != null)
 						{
-							var rect = Rectangle.Intersect(new Rectangle(_cellLocationsX[HoverColumnIndex.Value] + bounds.Left - ColumnSpacing / 2,
+							var rect = new Rectangle(_cellLocationsX[HoverColumnIndex.Value] + bounds.Left - ColumnSpacing / 2,
 								_cellLocationsY[HoverRowIndex.Value] + bounds.Top - RowSpacing / 2,
 								_colWidths[HoverColumnIndex.Value] + ColumnSpacing,
-								_rowHeights[HoverRowIndex.Value] + RowSpacing), context.View);
+								_rowHeights[HoverRowIndex.Value] + RowSpacing);
 
 							SelectionHoverBackground.Draw(context, rect);
 						}
 
 						if (SelectedRowIndex != null && SelectedColumnIndex != null && SelectionBackground != null)
 						{
-							var rect = Rectangle.Intersect(new Rectangle(_cellLocationsX[SelectedColumnIndex.Value] + bounds.Left - ColumnSpacing / 2,
+							var rect = new Rectangle(_cellLocationsX[SelectedColumnIndex.Value] + bounds.Left - ColumnSpacing / 2,
 								_cellLocationsY[SelectedRowIndex.Value] + bounds.Top - RowSpacing / 2,
 								_colWidths[SelectedColumnIndex.Value] + ColumnSpacing,
-								_rowHeights[SelectedRowIndex.Value] + RowSpacing), context.View);
+								_rowHeights[SelectedRowIndex.Value] + RowSpacing);
 
 							SelectionBackground.Draw(context, rect);
 						}
@@ -941,8 +940,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var bounds = ActualBounds;
-
+			var bounds = AbsoluteActualBounds;
 			if (GridSelectionMode == GridSelectionMode.Column || GridSelectionMode == GridSelectionMode.Cell)
 			{
 				var x = position.Value.X;

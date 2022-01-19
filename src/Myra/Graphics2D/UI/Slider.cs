@@ -159,8 +159,8 @@ namespace Myra.Graphics2D.UI
 
 		private int GetHint()
 		{
-			return Orientation == Orientation.Horizontal ? Desktop.TouchPosition.X - ActualBounds.X - InternalChild.ActualBounds.Width / 2 :
-				Desktop.TouchPosition.Y - ActualBounds.Y - InternalChild.ActualBounds.Height / 2;
+			return Orientation == Orientation.Horizontal ? Desktop.TouchPosition.X - AbsoluteActualBounds.X - InternalChild.ActualWidth / 2 :
+				Desktop.TouchPosition.Y - AbsoluteActualBounds.Y - InternalChild.ActualHeight / 2;
 		}
 
 		public void ApplySliderStyle(SliderStyle style)
@@ -178,9 +178,9 @@ namespace Myra.Graphics2D.UI
 			Hint = (int)(MaxHint * ((_value - Minimum) / (Maximum - Minimum)));
 		}
 
-		public override void Arrange()
+		public override void InternalArrange()
 		{
-			base.Arrange();
+			base.InternalArrange();
 
 			SyncHintWithValue();
 		}
