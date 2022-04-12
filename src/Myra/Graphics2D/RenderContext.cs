@@ -167,7 +167,7 @@ namespace Myra.Graphics2D
 		/// <param name="offset"></param>
 		public void AddOffset(Point offset)
 		{
-			Offset += offset;
+			Offset = new Point(Offset.X + offset.X, Offset.Y + offset.Y);
 		}
 
 		/// <summary>
@@ -209,7 +209,7 @@ namespace Myra.Graphics2D
 
 		private Vector2 ApplyTransform(Vector2 source)
 		{
-			return source + Offset.ToVector2();
+			return source + new Vector2(Offset.X, Offset.Y);
 		}
 
 		private Rectangle ApplyTransform(Rectangle source)

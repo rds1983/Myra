@@ -977,9 +977,9 @@ namespace Myra.Graphics2D.UI
 
 			UpdateArrange();
 
-			AbsoluteOffset = context.Offset + Bounds.Location;
-
 			var absoluteBounds = Bounds;
+			AbsoluteOffset = new Point(context.Offset.X + absoluteBounds.X, context.Offset.Y + absoluteBounds.Y);
+
 			absoluteBounds.Offset(context.Offset);
 
 			var absoluteView = Rectangle.Intersect(context.AbsoluteView, absoluteBounds);
