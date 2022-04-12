@@ -64,16 +64,16 @@ namespace Myra.Graphics2D.UI
 			return InternalChild;
 		}
 
-		public override void Arrange()
+		public override void InternalArrange()
 		{
-			base.Arrange();
+			base.InternalArrange();
 
 			if (InternalChild == null)
 			{
 				return;
 			}
 
-			InternalChild.Layout(ActualBounds);
+			InternalChild.Arrange(new Rectangle(0, 0, ActualWidth, ActualHeight));
 		}
 
 		protected override Point InternalMeasure(Point availableSize)

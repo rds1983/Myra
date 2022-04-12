@@ -49,6 +49,50 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[Category("Appearance")]
+		[DefaultValue(null)]
+		public int? ImageWidth
+		{
+			get
+			{
+				return InternalChild.Width;
+			}
+			set
+			{
+				InternalChild.Width = value;
+			}
+		}
+
+		[Category("Appearance")]
+		[DefaultValue(null)]
+		public int? ImageHeight
+		{
+			get
+			{
+				return InternalChild.Height;
+			}
+			set
+			{
+				InternalChild.Height = value;
+			}
+		}
+
+		[Category("Appearance")]
+		[DefaultValue(HorizontalAlignment.Center)]
+		public HorizontalAlignment ImageHorizontalAlignment
+		{
+			get => InternalChild.HorizontalAlignment;
+			set => InternalChild.HorizontalAlignment = value;
+		}
+
+		[Category("Appearance")]
+		[DefaultValue(VerticalAlignment.Center)]
+		public VerticalAlignment ImageVerticalAlignment
+		{
+			get => InternalChild.VerticalAlignment;
+			set => InternalChild.VerticalAlignment = value;
+		}
+
 		public ImageButton(string styleName = Stylesheet.DefaultStyleName)
 		{
 			InternalChild = new Image

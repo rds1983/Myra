@@ -163,21 +163,10 @@ namespace Myra.Graphics2D.UI
 			ChildrenCopy.ProcessTouchDoubleClick();
 		}
 
-		internal override void MoveChildren(Point delta)
-		{
-			base.MoveChildren(delta);
-
-			foreach (var child in ChildrenCopy)
-			{
-				if (!child.Visible)
-					continue;
-
-				child.MoveChildren(delta);
-			}
-		}
-
 		public override void InternalRender(RenderContext context)
 		{
+			base.InternalRender(context);
+
 			foreach (var child in ChildrenCopy)
 			{
 				if (!child.Visible)

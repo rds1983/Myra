@@ -1020,7 +1020,6 @@ namespace Myra.Graphics2D.UI
 			var bounds = ActualBounds;
 			if (asScrollViewer != null)
 			{
-				asScrollViewer.UpdateLayout();
 				sz = new Point(asScrollViewer.Bounds.Width, asScrollViewer.Bounds.Height);
 				sz.X -= asScrollViewer.VerticalThumbWidth;
 				sz.Y -= asScrollViewer.HorizontalThumbHeight;
@@ -1160,7 +1159,7 @@ namespace Myra.Graphics2D.UI
 
 		private void SetCursorByTouch()
 		{
-			var bounds = ActualBounds;
+			var bounds = AbsoluteActualBounds;
 			var mousePos = Desktop.TouchPosition;
 			mousePos.X += _internalScrolling.X - bounds.X;
 			mousePos.Y += _internalScrolling.Y - bounds.Y;
@@ -1480,9 +1479,9 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public override void Arrange()
+		public override void InternalArrange()
 		{
-			base.Arrange();
+			base.InternalArrange();
 
 			var width = ActualBounds.Width;
 			width -= CursorWidth;

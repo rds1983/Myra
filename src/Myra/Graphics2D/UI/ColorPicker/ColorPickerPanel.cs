@@ -136,7 +136,14 @@ namespace Myra.Graphics2D.UI.ColorPicker
 		}
 
 		private ColorHSV colorHSV;
-		private bool hsPickerActive, vPickerActive;
+		private enum ActiveState
+		{
+			None,
+			ColorPickerActive,
+			GradientActive
+		}
+
+		private ActiveState _activeState;
 
 		public ColorPickerPanel()
 		{
@@ -211,10 +218,12 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_colorBackground.Renderable = checkerboardRenderable;
 
 			_colorWheel.Renderable = DefaultAssets.UITextureRegionAtlas["color-picker-wheel"];
-			_colorWheel.TouchDown += (s, e) => hsPickerActive = true;
+			_colorWheel.TouchDown += (s, a) => HsPickerMove(Desktop.TouchPosition);
+			_colorWheel.TouchMoved += (s, a) => HsPickerMove(Desktop.TouchPosition);
 
 			_gradient.Renderable = DefaultAssets.UITextureRegionAtlas["color-picker-gradient"];
-			_gradient.TouchDown += (s, e) => vPickerActive = true;
+			_gradient.TouchDown += (s, e) => VPickerMove(Desktop.TouchPosition);
+			_gradient.TouchMoved += (s, e) => VPickerMove(Desktop.TouchPosition);
 
 			OnColorChanged(Color.White);
 		}
@@ -266,30 +275,16 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			}
 		}
 
-		public override void UpdateLayout()
-		{
-			base.UpdateLayout();
-
-			if (!Desktop.DefaultMouseInfoGetter().IsLeftButtonDown)
-			{
-				hsPickerActive = false;
-				vPickerActive = false;
-			}
-			if (hsPickerActive)
-			{
-				HsPickerMove(Desktop.MousePosition);
-			}
-			if (vPickerActive)
-			{
-				VPickerMove(Desktop.MousePosition);
-			}
-		}
-
 		private void HsPickerMove(Point p)
 		{
+			if (_activeState != ActiveState.ColorPickerActive)
+			{
+				return;
+			}
+
 			int r = WheelHeight / 2;
-			int x = p.X - _colorWheel.Bounds.Location.X - r - _hsPicker.Bounds.Height / 2;
-			int y = p.Y - _colorWheel.Bounds.Location.Y - r - _hsPicker.Bounds.Width / 2;
+			int x = p.X - _colorWheel.AbsoluteBounds.Location.X - r - _hsPicker.AbsoluteBounds.Height / 2;
+			int y = p.Y - _colorWheel.AbsoluteBounds.Location.Y - r - _hsPicker.AbsoluteBounds.Width / 2;
 			float angle = (float)Math.Atan2(x, y);
 			float rsquared = Math.Min(x * x + y * y, r * r);
 			float radius = (float)Math.Sqrt(rsquared);
@@ -315,7 +310,13 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 		private void VPickerMove(Point p)
 		{
-			int x = p.Y - _gradient.Bounds.Location.Y - _hsPicker.Bounds.Height / 2;
+			if (_activeState != ActiveState.GradientActive)
+			{
+				return;
+			}
+
+
+			int x = p.Y - _gradient.AbsoluteBounds.Location.Y - _hsPicker.AbsoluteBounds.Height / 2;
 			x = Math.Max(0, Math.Min(x, WheelHeight));
 			_vPicker.Top = x;
 
@@ -329,6 +330,61 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_vPicker.Tag = true;
 			OnColorChanged(hsv);
 			_vPicker.Tag = false;
+		}
+
+		public override void OnTouchDown()
+		{
+			base.OnTouchDown();
+
+			var position = Desktop.TouchPosition;
+			if (_colorWheel.AbsoluteActualBounds.Contains(position))
+			{
+				_activeState = ActiveState.ColorPickerActive;
+				HsPickerMove(position);
+			}
+			else if (_gradient.AbsoluteActualBounds.Contains(position))
+			{
+				_activeState = ActiveState.GradientActive;
+				VPickerMove(position);
+			}
+			else
+			{
+				_activeState = ActiveState.None;
+			}
+		}
+
+		public override void OnTouchMoved()
+		{
+			base.OnTouchMoved();
+
+			var position = Desktop.TouchPosition;
+			if (_activeState == ActiveState.GradientActive)
+			{
+				VPickerMove(position);
+			}
+			else if (_colorWheel.AbsoluteActualBounds.Contains(position))
+			{
+				_activeState = ActiveState.ColorPickerActive;
+				HsPickerMove(position);
+			}
+			else
+			{
+				_activeState = ActiveState.None;
+			}
+		}
+
+		public override void OnTouchLeft()
+		{
+			base.OnTouchLeft();
+
+			_activeState = ActiveState.None;
+		}
+
+		public override void OnTouchUp()
+		{
+			base.OnTouchUp();
+
+			_activeState = ActiveState.None;
 		}
 
 		private void ButtonSaveColorDown(object sender, EventArgs e)

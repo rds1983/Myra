@@ -44,10 +44,8 @@ namespace Myra.Graphics2D.UI
 					return Mathematics.PointZero;
 				}
 
-				var bounds = ActualBounds;
-
-				var result = new Point(InternalChild.Bounds.Width - bounds.Width + VerticalThumbWidth,
-								 InternalChild.Bounds.Height - bounds.Height + HorizontalThumbHeight);
+				var result = new Point(InternalChild.Bounds.Width - ActualWidth + VerticalThumbWidth,
+								 InternalChild.Bounds.Height - ActualHeight + HorizontalThumbHeight);
 
 				if (result.X < 0)
 				{
@@ -349,23 +347,6 @@ namespace Myra.Graphics2D.UI
 			ScrollPosition = scrollPosition;
 		}
 
-		internal override void MoveChildren(Point delta)
-		{
-			base.MoveChildren(delta);
-
-			if (_horizontalScrollingOn)
-			{
-				_horizontalScrollbarFrame.Offset(delta.X, delta.Y);
-				_horizontalScrollbarThumb.Offset(delta.X, delta.Y);
-			}
-
-			if (_verticalScrollingOn)
-			{
-				_verticalScrollbarFrame.Offset(delta.X, delta.Y);
-				_verticalScrollbarThumb.Offset(delta.X, delta.Y);
-			}
-		}
-
 		public override void OnTouchUp()
 		{
 			base.OnTouchUp();
@@ -380,6 +361,7 @@ namespace Myra.Graphics2D.UI
 			var touchPosition = Desktop.TouchPosition;
 
 			var r = _verticalScrollbarThumb;
+			r.Offset(AbsoluteOffset);
 			var thumbPosition = ThumbPosition;
 			r.Y += thumbPosition.Y;
 			if (ShowVerticalScrollBar && _verticalScrollingOn && r.Contains(touchPosition))
@@ -389,6 +371,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			r = _horizontalScrollbarThumb;
+			r.Offset(AbsoluteOffset);
 			r.X += thumbPosition.X;
 			if (ShowHorizontalScrollBar && _horizontalScrollingOn && r.Contains(touchPosition))
 			{
@@ -492,7 +475,7 @@ namespace Myra.Graphics2D.UI
 			return measureSize;
 		}
 
-		public override void Arrange()
+		public override void InternalArrange()
 		{
 			if (InternalChild == null)
 			{
@@ -532,7 +515,6 @@ namespace Myra.Graphics2D.UI
 
 				// Remeasure with scrollbars
 				var measureSize = InternalChild.Measure(availableSize);
-
 				var bw = bounds.Width - (_verticalScrollingOn && ShowVerticalScrollBar ? vsWidth : 0);
 
 				_horizontalScrollbarFrame = new Rectangle(bounds.Left,
@@ -611,7 +593,7 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			InternalChild.Layout(bounds);
+			InternalChild.Arrange(bounds);
 
 			// Fit scroll position in new maximums
 			var scrollPosition = ScrollPosition;

@@ -53,19 +53,18 @@ namespace Myra.Graphics2D.UI
 		private int _zIndex;
 		private HorizontalAlignment _horizontalAlignment = HorizontalAlignment.Left;
 		private VerticalAlignment _verticalAlignment = VerticalAlignment.Top;
-		private LayoutState _layoutState = LayoutState.Invalid;
 		private bool _isModal = false;
 		private bool _measureDirty = true;
+		private bool _arrangeDirty = true;
 		private bool _active = false;
 		private Desktop _desktop;
 
 		private Point _lastMeasureSize;
 		private Point _lastMeasureAvailableSize;
-		private Point _lastLocationHint;
 
 		private Rectangle _containerBounds;
-		private Rectangle _bounds;
-		private Rectangle _actualBounds;
+		private Rectangle _layoutBounds, _bounds;
+		private Point _boxOffset, _actualSize;
 		private bool _visible;
 
 		private float _opacity = 1.0f;
@@ -93,11 +92,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_left = value;
-				if (_layoutState == LayoutState.Normal)
-				{
-					_layoutState = LayoutState.LocationInvalid;
-				}
-
+				UpdateBounds();
 				FireLocationChanged();
 			}
 		}
@@ -116,11 +111,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_top = value;
-				if (_layoutState == LayoutState.Normal)
-				{
-					_layoutState = LayoutState.LocationInvalid;
-				}
-
+				UpdateBounds();
 				FireLocationChanged();
 			}
 		}
@@ -520,21 +511,21 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		[Browsable(false)]
 		public Widget DragHandle { get; set; }
-		
-		
+
+
 		[XmlIgnore]
 		[Browsable(false)]
 		private int RelativeLeft { get; set; }
-		
+
 		[XmlIgnore]
 		[Browsable(false)]
 		private int RelativeTop { get; set; }
-		
+
 		[XmlIgnore]
 		[Browsable(false)]
 
 		private int RelativeRight { get; set; }
-		
+
 		[XmlIgnore]
 		[Browsable(false)]
 		private int RelativeBottom { get; set; }
@@ -582,7 +573,7 @@ namespace Myra.Graphics2D.UI
 
 				if (_desktop != null)
 				{
-					InvalidateLayout();
+					InvalidateMeasure();
 				}
 
 				SubscribeOnTouchMoved(IsPlaced && IsDraggable);
@@ -701,11 +692,33 @@ namespace Myra.Graphics2D.UI
 			get => _isMouseInside;
 			set
 			{
-				_isMouseInside = value;
-				if (Desktop != null && Desktop.MouseInsideWidget == this)
+				if (value && _isMouseInside)
 				{
-					Desktop.MouseInsideWidget = null;
+					if (Desktop != null)
+					{
+						Desktop.MouseInsideWidget = this;
+					}
+
+					OnMouseMoved();
+				} else if (value && !_isMouseInside)
+				{
+					if (Desktop != null)
+					{
+						Desktop.MouseInsideWidget = this;
+					}
+
+					OnMouseEntered();
+				} else if (!value && _isMouseInside)
+				{
+					if (Desktop != null && Desktop.MouseInsideWidget == this)
+					{
+						Desktop.MouseInsideWidget = null;
+					}
+
+					OnMouseLeft();
 				}
+
+				_isMouseInside = value;
 			}
 		}
 
@@ -721,91 +734,91 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public object Tag { get; set; }
 
+		/// <summary>
+		/// Widget bounds relative to container
+		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
 		public Rectangle Bounds
 		{
 			get
 			{
-				return _bounds;
+				var result = _layoutBounds;
+				result.Offset(Left, Top);
+				return result;
 			}
 		}
 
-		internal Rectangle BorderBounds
-		{
-			get
-			{
-				return _bounds - _margin;
-			}
-		}
+		/// <summary>
+		/// Bounds - Margin
+		/// </summary>
+		[Browsable(false)]
+		[XmlIgnore]
+		internal Rectangle BorderBounds => new Rectangle(0, 0, _layoutBounds.Width, _layoutBounds.Height) - _margin;
 
-		internal bool ContainsMouse
-		{
-			get
-			{
-				return Desktop != null && BorderBounds.Contains(Desktop.MousePosition);
-			}
-		}
+		/// <summary>
+		/// Widget bounds in absolute coordinates
+		/// </summary>
+		[Browsable(false)]
+		[XmlIgnore]
+		internal Rectangle AbsoluteBounds => new Rectangle(AbsoluteOffset.X, AbsoluteOffset.Y, _layoutBounds.Width, _layoutBounds.Height);
 
-		internal bool ContainsTouch
-		{
-			get
-			{
-				return Desktop != null && BorderBounds.Contains(Desktop.TouchPosition);
-			}
-		}
+		/// <summary>
+		/// AbsoluteBounds - Margin
+		/// </summary>
+		[Browsable(false)]
+		[XmlIgnore]
+		internal Rectangle AbsoluteBorderBounds => AbsoluteBounds - _margin;
 
-		protected Rectangle BackgroundBounds
-		{
-			get
-			{
-				return BorderBounds - _borderThickness;
-			}
-		}
+		/// <summary>
+		/// AbsoluteBounds - Margin - Border - Padding
+		/// </summary>
+		[Browsable(false)]
+		[XmlIgnore]
+		internal Rectangle AbsoluteActualBounds => AbsoluteBounds - _margin - _borderThickness - _padding;
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public Rectangle ActualBounds
-		{
-			get
-			{
-				return _actualBounds;
-			}
-		}
+		public Point AbsoluteOffset { get; private set; }
+
+		internal bool ContainsMouse => Desktop != null && AbsoluteBorderBounds.Contains(Desktop.MousePosition);
+
+		internal bool ContainsTouch => Desktop != null && AbsoluteBorderBounds.Contains(Desktop.TouchPosition);
+
+		protected Rectangle BackgroundBounds => BorderBounds - _borderThickness;
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public Rectangle ContainerBounds
-		{
-			get
-			{
-				return _containerBounds;
-			}
-		}
+		public Rectangle ActualBounds => new Rectangle(0, 0, _actualSize.X, _actualSize.Y);
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public int MBPWidth
-		{
-			get
-			{
-				return Margin.Left + Margin.Right +
+		public int ActualWidth => _actualSize.X;
+
+		[Browsable(false)]
+		[XmlIgnore]
+		public int ActualHeight => _actualSize.Y;
+
+		[Browsable(false)]
+		[XmlIgnore]
+		public Point ActualSize => _actualSize;
+
+
+		[Browsable(false)]
+		[XmlIgnore]
+		public Rectangle ContainerBounds => _containerBounds;
+
+		[Browsable(false)]
+		[XmlIgnore]
+		public int MBPWidth => Margin.Left + Margin.Right +
 					BorderThickness.Left + BorderThickness.Right +
 					Padding.Left + Padding.Right;
-			}
-		}
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public int MBPHeight
-		{
-			get
-			{
-				return Margin.Top + Margin.Bottom +
+		public int MBPHeight => Margin.Top + Margin.Bottom +
 					BorderThickness.Top + BorderThickness.Bottom +
 					Padding.Top + Padding.Bottom;
-			}
-		}
 
 		/// <summary>
 		/// Determines whether a widget accepts keyboard focus
@@ -817,10 +830,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		internal protected virtual MouseWheelFocusType MouseWheelFocusType
-		{
-			get { return MouseWheelFocusType.None; }
-		}
+		internal protected virtual MouseWheelFocusType MouseWheelFocusType => MouseWheelFocusType.None;
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -857,7 +867,7 @@ namespace Myra.Graphics2D.UI
 
 		public event EventHandler LocationChanged;
 		public event EventHandler SizeChanged;
-		public event EventHandler LayoutUpdated;
+		public event EventHandler ArrangeUpdated;
 
 		public event EventHandler MouseLeft;
 		public event EventHandler MouseEntered;
@@ -965,10 +975,15 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			UpdateLayout();
+			UpdateArrange();
 
-			var view = Rectangle.Intersect(context.View, Bounds);
-			if (view.Width == 0 || view.Height == 0)
+			var absoluteBounds = Bounds;
+			AbsoluteOffset = new Point(context.Offset.X + absoluteBounds.X, context.Offset.Y + absoluteBounds.Y);
+
+			absoluteBounds.Offset(context.Offset);
+
+			var absoluteView = Rectangle.Intersect(context.AbsoluteView, absoluteBounds);
+			if (absoluteView.Width == 0 || absoluteView.Height == 0)
 			{
 				return;
 			}
@@ -976,31 +991,26 @@ namespace Myra.Graphics2D.UI
 			var oldScissorRectangle = context.Scissor;
 			if (ClipToBounds && !MyraEnvironment.DisableClipping)
 			{
-				var newScissorRectangle = Rectangle.Intersect(oldScissorRectangle, view);
-				if (newScissorRectangle.IsEmpty)
-				{
-					return;
-				}
-
-				context.Scissor = newScissorRectangle;
+				context.Scissor = absoluteView;
 			}
 
+			var oldOffset = context.Offset;
+			var oldView = context.AbsoluteView;
 			var oldOpacity = context.Opacity;
-			var oldView = context.View;
 
-			context.Opacity *= Opacity;
-			context.View = view;
+			// Apply widget transforms
+			context.AddOffset(Bounds.Location);
+			context.AbsoluteView = absoluteView;
+			context.AddOpacity(Opacity);
 
-			BeforeRender?.Invoke(context);
-
-			// Background
+			// Draw Background
 			var background = GetCurrentBackground();
 			if (background != null)
 			{
 				background.Draw(context, BackgroundBounds);
 			}
 
-			// Borders
+			// Draw Borders
 			var border = GetCurrentBorder();
 			if (border != null)
 			{
@@ -1026,12 +1036,21 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
+			// Internal rendering
+			context.AddOffset(_boxOffset);
+			BeforeRender?.Invoke(context);
 			InternalRender(context);
-
 			AfterRender?.Invoke(context);
 
+			if (ClipToBounds && !MyraEnvironment.DisableClipping)
+			{
+				// Restore scissor
+				context.Scissor = oldScissorRectangle;
+			}
+
 			// Restore context settings
-			context.View = oldView;
+			context.Offset = oldOffset;
+			context.AbsoluteView = oldView;
 			context.Opacity = oldOpacity;
 
 			// Optional debug rendering
@@ -1048,12 +1067,6 @@ namespace Myra.Graphics2D.UI
 			if (MyraEnvironment.DrawMouseHoveredWidgetFrame && IsMouseInside)
 			{
 				context.DrawRectangle(Bounds, Color.Yellow);
-			}
-
-			if (ClipToBounds && !MyraEnvironment.DisableClipping)
-			{
-				// Restore scissor
-				context.Scissor = oldScissorRectangle;
 			}
 		}
 
@@ -1148,105 +1161,84 @@ namespace Myra.Graphics2D.UI
 			return Mathematics.PointZero;
 		}
 
-		public virtual void Arrange()
+		public void Arrange(Rectangle containerBounds)
 		{
-		}
-
-		public void Layout(Rectangle containerBounds)
-		{
-			if (_containerBounds != containerBounds)
-			{
-				InvalidateLayout();
-				_containerBounds = containerBounds;
-			}
-
-			UpdateLayout();
-		}
-
-		public void InvalidateLayout()
-		{
-			_layoutState = LayoutState.Invalid;
-		}
-
-		internal virtual void MoveChildren(Point delta)
-		{
-			_bounds.X += delta.X;
-			_bounds.Y += delta.Y;
-
-			_actualBounds.X += delta.X;
-			_actualBounds.Y += delta.Y;
-
-			_containerBounds.X += delta.X;
-			_containerBounds.Y += delta.Y;
-		}
-
-		public virtual void UpdateLayout()
-		{
-			if (_layoutState == LayoutState.Normal)
+			if (!_arrangeDirty && _containerBounds == containerBounds)
 			{
 				return;
 			}
 
-			if (_layoutState == LayoutState.Invalid)
+			_arrangeDirty = true;
+			_containerBounds = containerBounds;
+			UpdateArrange();
+		}
+
+		public void UpdateArrange()
+		{
+			if (!_arrangeDirty)
 			{
-				// Full rearrange
-				Point size;
-				if (HorizontalAlignment != HorizontalAlignment.Stretch ||
-						VerticalAlignment != VerticalAlignment.Stretch)
-				{
-					size = Measure(_containerBounds.Size());
-				}
-				else
-				{
-					size = _containerBounds.Size();
-				}
+				return;
+			}
 
-				if (size.X > _containerBounds.Width)
-				{
-					size.X = _containerBounds.Width;
-				}
-
-				if (size.Y > _containerBounds.Height)
-				{
-					size.Y = _containerBounds.Height;
-				}
-
-				// Resolve possible conflict beetween Alignment set to Streth and Size explicitly set
-				var containerSize = _containerBounds.Size();
-
-				if (HorizontalAlignment == HorizontalAlignment.Stretch && Width != null && Width.Value < containerSize.X)
-				{
-					containerSize.X = Width.Value;
-				}
-
-				if (VerticalAlignment == VerticalAlignment.Stretch && Height != null && Height.Value < containerSize.Y)
-				{
-					containerSize.Y = Height.Value;
-				}
-
-				// Align
-				var controlBounds = LayoutUtils.Align(containerSize, size, HorizontalAlignment, VerticalAlignment, Parent == null);
-				controlBounds.Offset(_containerBounds.Location);
-
-				controlBounds.Offset(Left, Top);
-
-				_bounds = controlBounds;
-				_actualBounds = CalculateClientBounds(controlBounds);
-
-				Arrange();
-				
-				CalculateRelativePositions();
+			Point size;
+			if (HorizontalAlignment != HorizontalAlignment.Stretch ||
+					VerticalAlignment != VerticalAlignment.Stretch)
+			{
+				size = Measure(_containerBounds.Size());
 			}
 			else
 			{
-				// Only location
-				MoveChildren(new Point(Left - _lastLocationHint.X, Top - _lastLocationHint.Y));
+				size = _containerBounds.Size();
 			}
 
-			_lastLocationHint = new Point(Left, Top);
-			_layoutState = LayoutState.Normal;
+			if (size.X > _containerBounds.Width)
+			{
+				size.X = _containerBounds.Width;
+			}
 
-			LayoutUpdated.Invoke(this);
+			if (size.Y > _containerBounds.Height)
+			{
+				size.Y = _containerBounds.Height;
+			}
+
+			// Resolve possible conflict beetween Alignment set to Streth and Size explicitly set
+			var containerSize = _containerBounds.Size();
+			if (HorizontalAlignment == HorizontalAlignment.Stretch && Width != null && Width.Value < containerSize.X)
+			{
+				containerSize.X = Width.Value;
+			}
+
+			if (VerticalAlignment == VerticalAlignment.Stretch && Height != null && Height.Value < containerSize.Y)
+			{
+				containerSize.Y = Height.Value;
+			}
+
+			// Align
+			var layoutBounds = LayoutUtils.Align(containerSize, size, HorizontalAlignment, VerticalAlignment, Parent == null);
+			layoutBounds.Offset(_containerBounds.Location);
+
+			_layoutBounds = layoutBounds;
+			UpdateBounds();
+			var actualBounds = new Rectangle(0, 0, layoutBounds.Width, layoutBounds.Height) - Margin - BorderThickness - Padding;
+			_boxOffset = new Point(actualBounds.X, actualBounds.Y);
+			_actualSize = new Point(actualBounds.Width, actualBounds.Height);
+
+			CalculateRelativePositions();
+
+			InternalArrange();
+			ArrangeUpdated.Invoke(this);
+
+			_arrangeDirty = false;
+		}
+
+		public virtual void InternalArrange()
+		{
+		}
+
+
+		public void InvalidateArrange()
+		{
+			_arrangeDirty = true;
 		}
 
 		private void CalculateRelativePositions()
@@ -1321,7 +1313,7 @@ namespace Myra.Graphics2D.UI
 		{
 			_measureDirty = true;
 
-			InvalidateLayout();
+			InvalidateArrange();
 
 			if (Parent != null)
 			{
@@ -1378,21 +1370,16 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnMouseLeft()
 		{
-			IsMouseInside = false;
 			MouseLeft.Invoke(this);
 		}
 
 		public virtual void OnMouseEntered()
 		{
-			IsMouseInside = true;
-			Desktop.MouseInsideWidget = this;
 			MouseEntered.Invoke(this);
 		}
 
 		public virtual void OnMouseMoved()
 		{
-			IsMouseInside = true;
-			Desktop.MouseInsideWidget = this;
 			MouseMoved.Invoke(this);
 		}
 
@@ -1433,15 +1420,15 @@ namespace Myra.Graphics2D.UI
 				Desktop.FocusedKeyboardWidget = this;
 			}
 
-			var x = Bounds.X;
-			var y = Bounds.Y;
+			var x = AbsoluteBorderBounds.X;
+			var y = AbsoluteBorderBounds.Y;
 
 			var bounds = DragHandle != null
 					? new Rectangle(
 							x,
 							y,
-							DragHandle.Bounds.Right - x,
-							DragHandle.Bounds.Bottom - y
+							DragHandle.AbsoluteBorderBounds.Right - x,
+							DragHandle.AbsoluteBorderBounds.Bottom - y
 					) : Rectangle.Empty;
 
 			var touchPos = Desktop.TouchPosition;
@@ -1505,11 +1492,6 @@ namespace Myra.Graphics2D.UI
 
 		protected internal virtual void OnActiveChanged()
 		{
-		}
-
-		internal Rectangle CalculateClientBounds(Rectangle clientBounds)
-		{
-			return clientBounds - Margin - BorderThickness - Padding;
 		}
 
 		public void RemoveFromParent()
@@ -1625,6 +1607,12 @@ namespace Myra.Graphics2D.UI
 		private void DesktopTouchUp(object sender, EventArgs args)
 		{
 			_startPos = null;
+		}
+
+		private void UpdateBounds()
+		{
+			_bounds = _layoutBounds;
+			_bounds.Offset(Left, Top);
 		}
 	}
 }
