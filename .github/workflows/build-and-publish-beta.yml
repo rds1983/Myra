@@ -2,6 +2,8 @@ name: Build & Publish Beta
 
 on:
     push:
+        branches:
+            - master    
         paths:
             - 'src/**'
             - 'build/**'
