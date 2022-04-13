@@ -508,6 +508,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[Category("Transform")]
+		[DesignerFolded]
+		public Vector2 Scale { get; set; } = Vector2.One;
+
 		[XmlIgnore]
 		[Browsable(false)]
 		public Widget DragHandle { get; set; }
@@ -995,11 +999,13 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var oldOffset = context.Offset;
+			var oldScale = context.Scale;
 			var oldView = context.AbsoluteView;
 			var oldOpacity = context.Opacity;
 
 			// Apply widget transforms
 			context.AddOffset(Bounds.Location);
+			context.AddScale(Scale);
 			context.AbsoluteView = absoluteView;
 			context.AddOpacity(Opacity);
 
@@ -1050,6 +1056,7 @@ namespace Myra.Graphics2D.UI
 
 			// Restore context settings
 			context.Offset = oldOffset;
+			context.Scale = oldScale;
 			context.AbsoluteView = oldView;
 			context.Opacity = oldOpacity;
 
