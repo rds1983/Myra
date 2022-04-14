@@ -259,7 +259,7 @@ namespace Myra.Graphics2D.UI
 
 		public float Opacity { get; set; }
 
-		public Matrix? Transform { get => RenderContext.Transform; set => RenderContext.Transform = value; }
+		public Matrix? Transform { get => RenderContext.Matrix; set => RenderContext.Matrix = value; }
 
 		public bool IsMouseOverGUI
 		{
@@ -630,7 +630,7 @@ namespace Myra.Graphics2D.UI
 				if (MyraEnvironment.LayoutScale.HasValue)
 				{
 #if MONOGAME || FNA
-					_renderContext.Transform = Matrix.CreateScale(MyraEnvironment.LayoutScale.Value);
+					_renderContext.Matrix = Matrix.CreateScale(MyraEnvironment.LayoutScale.Value);
 #elif STRIDE
 					_renderContext.Transform = Matrix.Scaling(MyraEnvironment.LayoutScale.Value);
 #else
@@ -649,13 +649,14 @@ namespace Myra.Graphics2D.UI
 			_renderContext.Begin();
 
 			// Disable transform during setting the scissor rectangle for the Desktop
-			var trasform = _renderContext.Transform;
-			_renderContext.Transform = null;
+			var trasform = _renderContext.Matrix;
+			_renderContext.Matrix = null;
 			_renderContext.Scissor = InternalBounds;
-			_renderContext.Transform = trasform;
+			_renderContext.Matrix = trasform;
 
 			_renderContext.AbsoluteView = InternalBounds;
 			_renderContext.Opacity = Opacity;
+			_renderContext.Transform.Reset();
 
 			if (Stylesheet.Current.DesktopStyle != null &&
 				Stylesheet.Current.DesktopStyle.Background != null)
@@ -886,7 +887,7 @@ namespace Myra.Graphics2D.UI
 			{
 				var pos = touchState[0].Position;
 
-				if (_renderContext.Transform != null)
+				if (_renderContext.Matrix != null)
 				{
 					// Apply transform
 					var t = Vector2.Transform(
@@ -926,7 +927,7 @@ namespace Myra.Graphics2D.UI
 			var mousePosition = mouseInfo.Position;
 
 			EnsureRenderContext();
-			if (_renderContext.Transform != null)
+			if (_renderContext.Matrix != null)
 			{
 				// Apply transform
 				var t = Vector2.Transform(new Vector2(mousePosition.X, mousePosition.Y), _renderContext.InverseTransform);

@@ -63,7 +63,7 @@ namespace Myra.Graphics2D.UI
 		private Point _lastMeasureAvailableSize;
 
 		private Rectangle _containerBounds;
-		private Rectangle _layoutBounds, _bounds;
+		private Rectangle _layoutBounds;
 		private Point _boxOffset, _actualSize;
 		private bool _visible;
 
@@ -92,7 +92,6 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_left = value;
-				UpdateBounds();
 				FireLocationChanged();
 			}
 		}
@@ -111,7 +110,6 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_top = value;
-				UpdateBounds();
 				FireLocationChanged();
 			}
 		}
@@ -981,10 +979,8 @@ namespace Myra.Graphics2D.UI
 
 			UpdateArrange();
 
-			var absoluteBounds = Bounds;
-			AbsoluteOffset = new Point(context.Offset.X + absoluteBounds.X, context.Offset.Y + absoluteBounds.Y);
-
-			absoluteBounds.Offset(context.Offset);
+			var absoluteBounds = context.Transform.Apply(Bounds);
+			AbsoluteOffset = absoluteBounds.Location;
 
 			var absoluteView = Rectangle.Intersect(context.AbsoluteView, absoluteBounds);
 			if (absoluteView.Width == 0 || absoluteView.Height == 0)
@@ -993,19 +989,18 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var oldScissorRectangle = context.Scissor;
-			if (ClipToBounds && !MyraEnvironment.DisableClipping)
+			if (ClipToBounds)
 			{
 				context.Scissor = absoluteView;
 			}
 
-			var oldOffset = context.Offset;
-			var oldScale = context.Scale;
+			var oldTransform = context.Transform;
 			var oldView = context.AbsoluteView;
 			var oldOpacity = context.Opacity;
 
 			// Apply widget transforms
-			context.AddOffset(Bounds.Location);
-			context.AddScale(Scale);
+			context.Transform.AddOffset(Bounds.Location);
+			context.Transform.AddScale(Scale);
 			context.AbsoluteView = absoluteView;
 			context.AddOpacity(Opacity);
 
@@ -1043,7 +1038,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			// Internal rendering
-			context.AddOffset(_boxOffset);
+			context.Transform.AddOffset(_boxOffset);
 			BeforeRender?.Invoke(context);
 			InternalRender(context);
 			AfterRender?.Invoke(context);
@@ -1055,8 +1050,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			// Restore context settings
-			context.Offset = oldOffset;
-			context.Scale = oldScale;
+			context.Transform = oldTransform;
 			context.AbsoluteView = oldView;
 			context.Opacity = oldOpacity;
 
@@ -1225,7 +1219,6 @@ namespace Myra.Graphics2D.UI
 			layoutBounds.Offset(_containerBounds.Location);
 
 			_layoutBounds = layoutBounds;
-			UpdateBounds();
 			var actualBounds = new Rectangle(0, 0, layoutBounds.Width, layoutBounds.Height) - Margin - BorderThickness - Padding;
 			_boxOffset = new Point(actualBounds.X, actualBounds.Y);
 			_actualSize = new Point(actualBounds.Width, actualBounds.Height);
@@ -1614,12 +1607,6 @@ namespace Myra.Graphics2D.UI
 		private void DesktopTouchUp(object sender, EventArgs args)
 		{
 			_startPos = null;
-		}
-
-		private void UpdateBounds()
-		{
-			_bounds = _layoutBounds;
-			_bounds.Offset(Left, Top);
 		}
 	}
 }
