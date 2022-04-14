@@ -979,12 +979,19 @@ namespace Myra.Graphics2D.UI
 
 			UpdateArrange();
 
-			var absoluteBounds = context.Transform.Apply(Bounds);
+			var oldTransform = context.Transform;
+
+			// Apply widget transforms
+			context.Transform.AddOffset(Bounds.Location);
+			context.Transform.AddScale(Scale);
+
+			var absoluteBounds = context.Transform.Apply(new Rectangle(0, 0, _layoutBounds.Width, _layoutBounds.Height));
 			AbsoluteOffset = absoluteBounds.Location;
 
 			var absoluteView = Rectangle.Intersect(context.AbsoluteView, absoluteBounds);
 			if (absoluteView.Width == 0 || absoluteView.Height == 0)
 			{
+				context.Transform = oldTransform;
 				return;
 			}
 
@@ -994,13 +1001,9 @@ namespace Myra.Graphics2D.UI
 				context.Scissor = absoluteView;
 			}
 
-			var oldTransform = context.Transform;
 			var oldView = context.AbsoluteView;
 			var oldOpacity = context.Opacity;
 
-			// Apply widget transforms
-			context.Transform.AddOffset(Bounds.Location);
-			context.Transform.AddScale(Scale);
 			context.AbsoluteView = absoluteView;
 			context.AddOpacity(Opacity);
 

@@ -28,7 +28,7 @@ namespace Myra.Graphics2D
 		/// <param name="offset"></param>
 		public void AddOffset(Point offset)
 		{
-			Offset = new Point(Offset.X + offset.X, Offset.Y + offset.Y);
+			Offset = new Point(Offset.X + (int)(offset.X * Scale.X), Offset.Y + (int)(offset.Y * Scale.Y));
 		}
 
 		/// <summary>

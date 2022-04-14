@@ -207,7 +207,7 @@ namespace Myra.Graphics2D
 				sourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
 			}
 
-			var scale = Transform.Scale;
+			var scale = Vector2.One;
 			scale.X *= (float)destinationRectangle.Width / sourceRectangle.Value.Width;
 			scale.Y *= (float)destinationRectangle.Height / sourceRectangle.Value.Height;
 
