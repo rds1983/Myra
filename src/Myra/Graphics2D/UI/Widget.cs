@@ -71,6 +71,8 @@ namespace Myra.Graphics2D.UI
 
 		private bool _isMouseInside, _enabled;
 		private bool _isKeyboardFocused = false;
+		private Matrix _transform;
+		private Matrix? _inverseTransform;
 
 		/// <summary>
 		/// Internal use only. (MyraPad)
@@ -532,6 +534,41 @@ namespace Myra.Graphics2D.UI
 		[Browsable(false)]
 		private int RelativeBottom { get; set; }
 
+		[XmlIgnore]
+		[Browsable(false)]
+		private Matrix Transform
+		{
+			get => _transform;
+			set
+			{
+				_transform = value;
+				_inverseTransform = null;
+			}
+
+		}
+
+		[XmlIgnore]
+		[Browsable(false)]
+		private Matrix InverseTransform
+		{
+			get
+			{
+				if (_inverseTransform == null)
+				{
+#if MONOGAME || FNA || STRIDE
+					_inverseTransform = Microsoft.Xna.Framework.Matrix.Invert(_transform);
+#else
+					Matrix inverse = Matrix.Identity;
+					Matrix.Invert(_transform.Value, out inverse);
+					InverseTransform = inverse;
+#endif
+				}
+
+				return _inverseTransform.Value;
+			}
+		}
+
+
 		/// <summary>
 		/// Determines whether the widget had been placed on Desktop
 		/// </summary>
@@ -766,13 +803,6 @@ namespace Myra.Graphics2D.UI
 		internal Rectangle AbsoluteBounds => new Rectangle(AbsoluteOffset.X, AbsoluteOffset.Y, _layoutBounds.Width, _layoutBounds.Height);
 
 		/// <summary>
-		/// AbsoluteBounds - Margin
-		/// </summary>
-		[Browsable(false)]
-		[XmlIgnore]
-		internal Rectangle AbsoluteBorderBounds => AbsoluteBounds - _margin;
-
-		/// <summary>
 		/// AbsoluteBounds - Margin - Border - Padding
 		/// </summary>
 		[Browsable(false)]
@@ -783,9 +813,37 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public Point AbsoluteOffset { get; private set; }
 
-		internal bool ContainsMouse => Desktop != null && AbsoluteBorderBounds.Contains(Desktop.MousePosition);
+		[Browsable(false)]
+		[XmlIgnore]
+		internal bool ContainsMouse
+		{
+			get
+			{
+				if (Desktop == null)
+				{
+					return false;
+				}
 
-		internal bool ContainsTouch => Desktop != null && AbsoluteBorderBounds.Contains(Desktop.TouchPosition);
+				var localPos = ToLocal(Desktop.MousePosition);
+				return BorderBounds.Contains(localPos);
+			}
+		}
+
+		[Browsable(false)]
+		[XmlIgnore]
+		internal bool ContainsTouch
+		{
+			get
+			{
+				if (Desktop == null)
+				{
+					return false;
+				}
+
+				var localPos = ToLocal(Desktop.TouchPosition);
+				return BorderBounds.Contains(localPos);
+			}
+		}
 
 		protected Rectangle BackgroundBounds => BorderBounds - _borderThickness;
 
@@ -984,6 +1042,8 @@ namespace Myra.Graphics2D.UI
 			// Apply widget transforms
 			context.Transform.AddOffset(Bounds.Location);
 			context.Transform.AddScale(Scale);
+
+			Transform = context.Transform.ToMatrix();
 
 			var absoluteBounds = context.Transform.Apply(new Rectangle(0, 0, _layoutBounds.Width, _layoutBounds.Height));
 			AbsoluteOffset = absoluteBounds.Location;
@@ -1423,21 +1483,9 @@ namespace Myra.Graphics2D.UI
 				Desktop.FocusedKeyboardWidget = this;
 			}
 
-			var x = AbsoluteBorderBounds.X;
-			var y = AbsoluteBorderBounds.Y;
-
-			var bounds = DragHandle != null
-					? new Rectangle(
-							x,
-							y,
-							DragHandle.AbsoluteBorderBounds.Right - x,
-							DragHandle.AbsoluteBorderBounds.Bottom - y
-					) : Rectangle.Empty;
-
-			var touchPos = Desktop.TouchPosition;
-
-			if (bounds == Rectangle.Empty || bounds.Contains(touchPos))
+			if (DragHandle != null && ContainsTouch)
 			{
+				var touchPos = Desktop.TouchPosition;
 				_startPos = new Point(touchPos.X - Left,
 						touchPos.Y - Top);
 			}
@@ -1605,6 +1653,26 @@ namespace Myra.Graphics2D.UI
 			{
 				newLeft = RelativeRight - Bounds.Width;
 			}
+		}
+
+		public Point ToGlobal(Point pos)
+		{
+			var t = Vector2.Transform(new Vector2(pos.X, pos.Y), Transform);
+
+			return new Point((int)t.X, (int)t.Y);
+		}
+
+		public Point ToLocal(Point pos)
+		{
+			var t = Vector2.Transform(new Vector2(pos.X, pos.Y), InverseTransform);
+
+			return new Point((int)t.X, (int)t.Y);
+		}
+
+		public bool ContainsGlobalPoint(Point pos)
+		{
+			var localPos = ToLocal(pos);
+			return BorderBounds.Contains(localPos);
 		}
 
 		private void DesktopTouchUp(object sender, EventArgs args)

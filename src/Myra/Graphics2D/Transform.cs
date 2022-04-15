@@ -40,16 +40,6 @@ namespace Myra.Graphics2D
 			Scale *= scale;
 		}
 
-		/// <summary>
-		/// Adds another transform
-		/// </summary>
-		/// <param name="transform"></param>
-		public void AddTransform(Transform transform)
-		{
-			AddOffset(transform.Offset);
-			AddScale(transform.Scale);
-		}
-
 		public Vector2 Apply(Vector2 source)
 		{
 			return new Vector2(Offset.X, Offset.Y) + source * Scale;
@@ -61,6 +51,11 @@ namespace Myra.Graphics2D
 				(int)(Offset.Y + source.Y * Scale.Y),
 				(int)(source.Width * Scale.X),
 				(int)(source.Height * Scale.Y));
+		}
+
+		public Matrix ToMatrix()
+		{
+			return Matrix.CreateScale(Scale.X, Scale.Y, 1.0f) * Matrix.CreateTranslation(Offset.X, Offset.Y, 1.0f);
 		}
 	}
 }

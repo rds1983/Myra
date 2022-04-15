@@ -198,7 +198,6 @@ namespace Myra.Graphics2D
 
 		public void Draw(Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color)
 		{
-			destinationRectangle = Transform.Apply(destinationRectangle);
 			SetTextureFiltering(TextureFiltering.Nearest);
 			color = CrossEngineStuff.MultiplyColor(color, Opacity);
 
@@ -207,11 +206,11 @@ namespace Myra.Graphics2D
 				sourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
 			}
 
-			var scale = Vector2.One;
+			var pos = Transform.Apply(destinationRectangle.Location.ToVector2());
+
+			var scale = Transform.Scale;
 			scale.X *= (float)destinationRectangle.Width / sourceRectangle.Value.Width;
 			scale.Y *= (float)destinationRectangle.Height / sourceRectangle.Value.Height;
-
-			var pos = new Vector2(destinationRectangle.X, destinationRectangle.Y);
 #if MONOGAME || FNA
 			_renderer.Draw(texture, pos, sourceRectangle, color, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
 #elif STRIDE
