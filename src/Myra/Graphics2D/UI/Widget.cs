@@ -509,6 +509,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Transform")]
+		[DefaultValue("1, 1")]
 		[DesignerFolded]
 		public Vector2 Scale { get; set; } = Vector2.One;
 

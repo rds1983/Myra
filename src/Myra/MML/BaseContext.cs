@@ -18,12 +18,6 @@ namespace Myra.MML
 {
 	internal class BaseContext
 	{
-		public static readonly Dictionary<Type, ITypeSerializer> _serializers = new Dictionary<Type, ITypeSerializer>
-		{
-			{typeof(Vector2), new Vector2Serializer()},
-			{typeof(Thickness), new ThicknessSerializer()},
-		};
-
 		public const string IdName = "Id";
 
 		public static ITypeSerializer FindSerializer(Type type)
@@ -34,7 +28,7 @@ namespace Myra.MML
 			}
 
 			ITypeSerializer result;
-			if (_serializers.TryGetValue(type, out result))
+			if (Serialization._serializers.TryGetValue(type, out result))
 			{
 				return result;
 			}
