@@ -64,7 +64,7 @@ namespace Myra.Graphics2D.UI
 
 		private Rectangle _containerBounds;
 		private Rectangle _layoutBounds;
-		private Point _boxOffset, _actualSize;
+		private Point _actualSize;
 		private bool _visible;
 
 		private float _opacity = 1.0f;
@@ -795,61 +795,19 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		internal Rectangle BorderBounds => new Rectangle(0, 0, _layoutBounds.Width, _layoutBounds.Height) - _margin;
 
-		/// <summary>
-		/// Widget bounds in absolute coordinates
-		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		internal Rectangle AbsoluteBounds => new Rectangle(AbsoluteOffset.X, AbsoluteOffset.Y, _layoutBounds.Width, _layoutBounds.Height);
-
-		/// <summary>
-		/// AbsoluteBounds - Margin - Border - Padding
-		/// </summary>
-		[Browsable(false)]
-		[XmlIgnore]
-		internal Rectangle AbsoluteActualBounds => AbsoluteBounds - _margin - _borderThickness - _padding;
+		internal bool ContainsMouse => Desktop != null && ContainsGlobalPoint(Desktop.MousePosition);
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public Point AbsoluteOffset { get; private set; }
-
-		[Browsable(false)]
-		[XmlIgnore]
-		internal bool ContainsMouse
-		{
-			get
-			{
-				if (Desktop == null)
-				{
-					return false;
-				}
-
-				var localPos = ToLocal(Desktop.MousePosition);
-				return BorderBounds.Contains(localPos);
-			}
-		}
-
-		[Browsable(false)]
-		[XmlIgnore]
-		internal bool ContainsTouch
-		{
-			get
-			{
-				if (Desktop == null)
-				{
-					return false;
-				}
-
-				var localPos = ToLocal(Desktop.TouchPosition);
-				return BorderBounds.Contains(localPos);
-			}
-		}
+		internal bool ContainsTouch => Desktop != null && ContainsGlobalPoint(Desktop.TouchPosition);
 
 		protected Rectangle BackgroundBounds => BorderBounds - _borderThickness;
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public Rectangle ActualBounds => new Rectangle(0, 0, _actualSize.X, _actualSize.Y);
+		public Rectangle ActualBounds => new Rectangle(0, 0, _layoutBounds.Width, _layoutBounds.Height) - _margin - _borderThickness - _padding;
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -1046,7 +1004,6 @@ namespace Myra.Graphics2D.UI
 			Transform = context.Transform.ToMatrix();
 
 			var absoluteBounds = context.Transform.Apply(new Rectangle(0, 0, _layoutBounds.Width, _layoutBounds.Height));
-			AbsoluteOffset = absoluteBounds.Location;
 
 			var absoluteView = Rectangle.Intersect(context.AbsoluteView, absoluteBounds);
 			if (absoluteView.Width == 0 || absoluteView.Height == 0)
@@ -1101,7 +1058,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			// Internal rendering
-			context.Transform.AddOffset(_boxOffset);
 			BeforeRender?.Invoke(context);
 			InternalRender(context);
 			AfterRender?.Invoke(context);
@@ -1283,7 +1239,6 @@ namespace Myra.Graphics2D.UI
 
 			_layoutBounds = layoutBounds;
 			var actualBounds = new Rectangle(0, 0, layoutBounds.Width, layoutBounds.Height) - Margin - BorderThickness - Padding;
-			_boxOffset = new Point(actualBounds.X, actualBounds.Y);
 			_actualSize = new Point(actualBounds.Width, actualBounds.Height);
 
 			CalculateRelativePositions();
@@ -1483,7 +1438,7 @@ namespace Myra.Graphics2D.UI
 				Desktop.FocusedKeyboardWidget = this;
 			}
 
-			if (DragHandle != null && ContainsTouch)
+			if (DragHandle != null && DragHandle.ContainsTouch)
 			{
 				var touchPos = Desktop.TouchPosition;
 				_startPos = new Point(touchPos.X - Left,

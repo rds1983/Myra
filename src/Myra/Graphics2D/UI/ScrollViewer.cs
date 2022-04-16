@@ -358,24 +358,22 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnTouchDown();
 
-			var touchPosition = Desktop.TouchPosition;
+			var touchPosition = ToLocal(Desktop.TouchPosition);
 
 			var r = _verticalScrollbarThumb;
-			r.Offset(AbsoluteOffset);
 			var thumbPosition = ThumbPosition;
 			r.Y += thumbPosition.Y;
 			if (ShowVerticalScrollBar && _verticalScrollingOn && r.Contains(touchPosition))
 			{
-				_startBoundsPos = touchPosition.Y;
+				_startBoundsPos = Desktop.TouchPosition.Y;
 				_scrollbarOrientation = Orientation.Vertical;
 			}
 
 			r = _horizontalScrollbarThumb;
-			r.Offset(AbsoluteOffset);
 			r.X += thumbPosition.X;
 			if (ShowHorizontalScrollBar && _horizontalScrollingOn && r.Contains(touchPosition))
 			{
-				_startBoundsPos = touchPosition.X;
+				_startBoundsPos = Desktop.TouchPosition.X;
 				_scrollbarOrientation = Orientation.Horizontal;
 			}
 		}

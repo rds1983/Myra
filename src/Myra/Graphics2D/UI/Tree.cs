@@ -208,7 +208,7 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
-				if (HoverRow.Mark.Visible && !HoverRow.Mark.AbsoluteBounds.Contains(Desktop.TouchPosition))
+				if (HoverRow.Mark.Visible && !HoverRow.Mark.ContainsTouch)
 				{
 					HoverRow.Mark.DoClick();
 				}
@@ -217,19 +217,20 @@ namespace Myra.Graphics2D.UI
 
 		private Rectangle BuildRowRect(TreeNode rowInfo)
 		{
-			var bounds = AbsoluteBounds;
-			return new Rectangle(bounds.X, rowInfo.AbsoluteBounds.Y, bounds.Width,
+			var absolutePos = ToGlobal(Point.Zero);
+			var rowAbsolutePos = rowInfo.ToGlobal(Point.Zero);
+			return new Rectangle(0, rowAbsolutePos.Y - absolutePos.Y, Bounds.Width,
 						rowInfo.InternalChild.GetRowHeight(0));
 		}
 
 		private void SetHoverRow(Point position)
 		{
-			var bounds = AbsoluteBounds;
-			if (!bounds.Contains(position))
+			if (!ContainsGlobalPoint(position))
 			{
 				return;
 			}
 
+			position = ToLocal(position);
 			foreach (var rowInfo in _allNodes)
 			{
 				if (rowInfo.RowVisible)
@@ -340,14 +341,12 @@ namespace Myra.Graphics2D.UI
 			if (Active && HoverRow != null && HoverRow != SelectedRow && SelectionHoverBackground != null)
 			{
 				var rect = BuildRowRect(HoverRow);
-				rect.Offset(-AbsoluteOffset.X, -AbsoluteOffset.Y);
 				SelectionHoverBackground.Draw(context, rect);
 			}
 
 			if (SelectedRow != null && SelectedRow.RowVisible && SelectionBackground != null)
 			{
 				var rect =  BuildRowRect(SelectedRow);
-				rect.Offset(-AbsoluteOffset.X, -AbsoluteOffset.Y);
 				SelectionBackground.Draw(context, rect);
 			}
 
