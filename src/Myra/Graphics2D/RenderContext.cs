@@ -13,7 +13,6 @@ using System.Drawing;
 using Myra.Platform;
 using System.Numerics;
 using Texture2D = System.Object;
-using Matrix = System.Numerics.Matrix3x2;
 #endif
 
 namespace Myra.Graphics2D
@@ -65,42 +64,8 @@ namespace Myra.Graphics2D
 #endif
 		private bool _beginCalled;
 		private Rectangle _scissor;
-		private Matrix? _matrix;
 		private TextureFiltering _textureFiltering = TextureFiltering.Nearest;
 		public Transform Transform;
-
-		public Matrix? Matrix
-		{
-			get
-			{
-				return _matrix;
-			}
-
-			set
-			{
-				if (value == _matrix)
-				{
-					return;
-				}
-
-				_matrix = value;
-
-				if (_matrix != null)
-				{
-#if MONOGAME || FNA || STRIDE
-					InverseTransform = Microsoft.Xna.Framework.Matrix.Invert(_matrix.Value);
-#else
-					Matrix inverse = Matrix.Identity;
-					Matrix.Invert(_transform.Value, out inverse);
-					InverseTransform = inverse;
-#endif
-				}
-
-				Flush();
-			}
-		}
-
-		internal Matrix InverseTransform { get; set; }
 
 		public Rectangle Scissor
 		{
@@ -116,14 +81,6 @@ namespace Myra.Graphics2D
 				if (MyraEnvironment.DisableClipping)
 				{
 					return;
-				}
-
-				if (Matrix != null)
-				{
-					var pos = Vector2.Transform(new Vector2(value.X, value.Y), Matrix.Value);
-					var size = Vector2.Transform(new Vector2(value.Width, value.Height), Matrix.Value);
-
-					value = new Rectangle((int)pos.X, (int)pos.Y, (int)size.X, (int)size.Y);
 				}
 
 #if MONOGAME || FNA
@@ -203,20 +160,19 @@ namespace Myra.Graphics2D
 
 			if (sourceRectangle == null)
 			{
-				sourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
+				var sz = _fontStashRenderer.TextureManager.GetTextureSize(texture);
+				sourceRectangle = new Rectangle(0, 0, sz.X, sz.Y);
 			}
 
-			var pos = Transform.Apply(destinationRectangle.Location.ToVector2());
+			var pos = Transform.Apply(new Vector2(destinationRectangle.X, destinationRectangle.Y));
 
 			var scale = Transform.Scale;
 			scale.X *= (float)destinationRectangle.Width / sourceRectangle.Value.Width;
 			scale.Y *= (float)destinationRectangle.Height / sourceRectangle.Value.Height;
-#if MONOGAME || FNA
+#if MONOGAME || FNA || STRIDE
 			_renderer.Draw(texture, pos, sourceRectangle, color, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
-#elif STRIDE
-			_renderer.Draw(texture, destinationRectangle, sourceRectangle, color, 0, Vector2.Zero);
 #else
-			_renderer.Draw(texture, destinationRectangle, sourceRectangle, color);
+			_renderer.Draw(texture, pos, sourceRectangle, color, 0.0f, Vector2.Zero, scale, 0.0f);
 #endif
 		}
 
@@ -357,32 +313,19 @@ namespace Myra.Graphics2D
 				samplerState,
 				null,
 				UIRasterizerState,
-				null,
-				Matrix != null ? Matrix.Value : Microsoft.Xna.Framework.Matrix.Identity);
+				null);
 #elif STRIDE
 			var samplerState = _textureFiltering == TextureFiltering.Nearest ?
 				MyraEnvironment.Game.GraphicsDevice.SamplerStates.PointClamp :
 				MyraEnvironment.Game.GraphicsDevice.SamplerStates.LinearClamp;
-			if (Transform == null)
-			{
-				_renderer.Begin(MyraEnvironment.Game.GraphicsContext,
-					SpriteSortMode.Deferred,
-					BlendStates.AlphaBlend,
-					samplerState,
-					null,
-					_uiRasterizerState);
-			} else
-			{
-				_renderer.Begin(MyraEnvironment.Game.GraphicsContext,
-					Transform.Value,
-					SpriteSortMode.Deferred,
-					BlendStates.AlphaBlend,
-					samplerState,
-					null,
-					_uiRasterizerState);
-			}
+			_renderer.Begin(MyraEnvironment.Game.GraphicsContext,
+				SpriteSortMode.Deferred,
+				BlendStates.AlphaBlend,
+				samplerState,
+				null,
+				_uiRasterizerState);
 #else
-			_renderer.Begin(Transform, _textureFiltering);
+			_renderer.Begin(_textureFiltering);
 #endif
 
 			_beginCalled = true;

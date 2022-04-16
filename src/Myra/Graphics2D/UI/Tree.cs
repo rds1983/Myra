@@ -217,10 +217,9 @@ namespace Myra.Graphics2D.UI
 
 		private Rectangle BuildRowRect(TreeNode rowInfo)
 		{
-			var absolutePos = ToGlobal(Point.Zero);
-			var rowAbsolutePos = rowInfo.ToGlobal(Point.Zero);
-			return new Rectangle(0, rowAbsolutePos.Y - absolutePos.Y, Bounds.Width,
-						rowInfo.InternalChild.GetRowHeight(0));
+			var rowPos = ToLocal(rowInfo.ToGlobal(rowInfo.ActualBounds.Location));
+
+			return new Rectangle(ActualBounds.Left, rowPos.Y, ActualBounds.Width, rowInfo.InternalChild.GetRowHeight(0));
 		}
 
 		private void SetHoverRow(Point position)

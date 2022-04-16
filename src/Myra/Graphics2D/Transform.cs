@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using Stride.Core.Mathematics;
 #else
 using System.Drawing;
+using System.Numerics;
+using Matrix = System.Numerics.Matrix3x2;
 #endif
 
 namespace Myra.Graphics2D
@@ -18,7 +20,7 @@ namespace Myra.Graphics2D
 		/// </summary>
 		public void Reset()
 		{
-			Offset = Point.Zero;
+			Offset = new Point(0, 0);
 			Scale = Vector2.One;
 		}
 
@@ -55,7 +57,13 @@ namespace Myra.Graphics2D
 
 		public Matrix ToMatrix()
 		{
+#if MONOGAME || FNA
 			return Matrix.CreateScale(Scale.X, Scale.Y, 1.0f) * Matrix.CreateTranslation(Offset.X, Offset.Y, 1.0f);
+#elif STRIDE
+			return Matrix.Scaling(Scale.X, Scale.Y, 1.0f) * Matrix.Translation(Offset.X, Offset.Y, 1.0f);
+#else
+			return Matrix.CreateScale(Scale) * Matrix.CreateTranslation(new Vector2(Offset.X, Offset.Y));
+#endif
 		}
 	}
 }

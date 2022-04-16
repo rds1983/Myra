@@ -14,8 +14,10 @@ using Microsoft.Xna.Framework.Input;
 using Stride.Core.Mathematics;
 using Stride.Input;
 #else
+using System.Numerics;
 using System.Drawing;
 using Myra.Platform;
+using Matrix = System.Numerics.Matrix3x2;
 #endif
 
 namespace Myra.Graphics2D.UI
@@ -557,11 +559,11 @@ namespace Myra.Graphics2D.UI
 				if (_inverseTransform == null)
 				{
 #if MONOGAME || FNA || STRIDE
-					_inverseTransform = Microsoft.Xna.Framework.Matrix.Invert(_transform);
+					_inverseTransform = Matrix.Invert(_transform);
 #else
 					Matrix inverse = Matrix.Identity;
-					Matrix.Invert(_transform.Value, out inverse);
-					InverseTransform = inverse;
+					Matrix.Invert(_transform, out inverse);
+					_inverseTransform = inverse;
 #endif
 				}
 
@@ -1235,7 +1237,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			// Align
-			var layoutBounds = LayoutUtils.Align(containerSize, size, HorizontalAlignment, VerticalAlignment, Parent == null);
+			var layoutBounds = LayoutUtils.Align(containerSize, size, HorizontalAlignment, VerticalAlignment);
 			layoutBounds.Offset(_containerBounds.Location);
 
 			_layoutBounds = layoutBounds;

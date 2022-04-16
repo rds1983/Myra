@@ -215,9 +215,8 @@ namespace Myra.Graphics2D.UI
 		public void CenterOnDesktop()
 		{
 			var size = Bounds.Size();
-			var layoutScale = MyraEnvironment.LayoutScale.GetValueOrDefault(1);
-			Left = ((int)(ContainerBounds.Width / layoutScale) - size.X) / 2;
-			Top = ((int)(ContainerBounds.Height / layoutScale) - size.Y) / 2;
+			Left = (ContainerBounds.Width - size.X) / 2;
+			Top = (ContainerBounds.Height - size.Y) / 2;
 		}
 
 		public override void OnTouchDown()

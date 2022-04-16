@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework;
 using Stride.Core.Mathematics;
 #else
 using System.Drawing;
+using System.Numerics;
 #endif
 
 namespace Myra.MML
