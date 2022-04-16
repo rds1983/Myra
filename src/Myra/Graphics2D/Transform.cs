@@ -78,7 +78,7 @@ namespace Myra.Graphics2D
 					_inverseMatrix = Matrix.Invert(Matrix);
 #else
 					Matrix inverse = Matrix.Identity;
-					Matrix.Invert(_matrix, out inverse);
+					Matrix.Invert(Matrix, out inverse);
 					_inverseMatrix = inverse;
 #endif
 				}
@@ -110,7 +110,8 @@ namespace Myra.Graphics2D
 		/// <param name="offset"></param>
 		public void AddOffset(Point offset)
 		{
-			Offset += Scale.Multiply(offset).ToPoint();
+			var p = Mathematics.ToPoint(Scale.Multiply(offset));
+			Offset = new Point(Offset.X + p.X, Offset.Y + p.Y);
 		}
 
 		/// <summary>
@@ -129,14 +130,14 @@ namespace Myra.Graphics2D
 
 		public Point Apply(Point source)
 		{
-			return Offset + Scale.Multiply(source).ToPoint();
+			var p = Mathematics.ToPoint(Scale.Multiply(source));
+			return new Point(Offset.X + p.X, Offset.Y + p.Y);
 		}
-
 
 		public Rectangle Apply(Rectangle source)
 		{
 			var pos = Apply(source.Location);
-			var size = Scale.Multiply(source.Size).ToPoint();
+			var size = Mathematics.ToPoint(Scale.Multiply(source.Size()));
 
 			return new Rectangle(pos.X, pos.Y, size.X, size.Y);
 		}

@@ -1509,7 +1509,7 @@ namespace Myra.Graphics2D.UI
 
 		public Point ToGlobal(Point pos) => Transform.Apply(pos);
 
-		public Point ToLocal(Point pos) => Vector2.Transform(new Vector2(pos.X, pos.Y), Transform.InverseMatrix).ToPoint();
+		public Point ToLocal(Point pos) => Mathematics.ToPoint(Vector2.Transform(new Vector2(pos.X, pos.Y), Transform.InverseMatrix));
 
 		public bool ContainsGlobalPoint(Point pos)
 		{

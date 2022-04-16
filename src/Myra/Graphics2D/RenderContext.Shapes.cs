@@ -14,6 +14,7 @@ using Texture2D = Stride.Graphics.Texture;
 #else
 using System.Drawing;
 using System.Numerics;
+using Texture2D = System.Object;
 #endif
 
 namespace Myra.Graphics2D
@@ -95,11 +96,6 @@ namespace Myra.Graphics2D
 			DrawRectangle(new Rectangle((int)location.X, (int)location.Y, (int)size.X, (int)size.Y), color,
 				thickness);
 		}
-
-#if MONOGAME || FNA || STRIDE
-
-		private void Draw(Texture2D texture, Vector2 offset, Color color, Vector2 scale, float rotation = 0.0f) =>
-			Draw(texture, offset, null, color, rotation, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
 
 		/// <summary>
 		///     Draws a closed polygon from an array of points
@@ -183,9 +179,9 @@ namespace Myra.Graphics2D
 		public void DrawLine(Vector2 point, float length, float angle, Color color,
 			float thickness = 1f)
 		{
-			var origin = new Vector2(0f, 0.5f);
+			var origin = new Vector2(0f, 0.0f);
 			var scale = new Vector2(length, thickness);
-			Draw(DefaultAssets.WhiteTexture, point, null, color, angle, origin, scale, SpriteEffects.None, 0);
+			Draw(DefaultAssets.WhiteTexture, point, null, color, angle, origin, scale, 0);
 		}
 
 		/// <summary>
@@ -287,6 +283,5 @@ namespace Myra.Graphics2D
 			var theta = startAngle;
 			return CreateArcHelper(radius, sides, step, theta);
 		}
-#endif
 	}
 }

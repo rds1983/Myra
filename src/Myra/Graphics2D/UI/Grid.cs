@@ -586,7 +586,7 @@ namespace Myra.Graphics2D.UI
 		public override void InternalArrange()
 		{
 			var bounds = ActualBounds;
-			LayoutProcessFixed(bounds.Size);
+			LayoutProcessFixed(bounds.Size());
 
 			_colWidths.Clear();
 			for (var i = 0; i < _measureColWidths.Count; ++i)
