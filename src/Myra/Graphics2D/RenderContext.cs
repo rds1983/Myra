@@ -160,8 +160,13 @@ namespace Myra.Graphics2D
 
 			if (sourceRectangle == null)
 			{
+
+#if MONOGAME || FNA || STRIDE
+				sourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
+#else
 				var sz = _fontStashRenderer.TextureManager.GetTextureSize(texture);
 				sourceRectangle = new Rectangle(0, 0, sz.X, sz.Y);
+#endif
 			}
 
 			var pos = Transform.Apply(new Vector2(destinationRectangle.X, destinationRectangle.Y));
