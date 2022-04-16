@@ -488,7 +488,7 @@ namespace Myra.Graphics2D.UI
 
 		private void ContextMenuOnTouchDown()
 		{
-			if (ContextMenu == null || ContextMenu.Bounds.Contains(TouchPosition))
+			if (ContextMenu == null || ContextMenu.ContainsTouch)
 			{
 				return;
 			}

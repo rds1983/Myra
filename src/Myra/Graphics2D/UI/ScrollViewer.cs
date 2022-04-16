@@ -44,8 +44,9 @@ namespace Myra.Graphics2D.UI
 					return Mathematics.PointZero;
 				}
 
-				var result = new Point(InternalChild.Bounds.Width - ActualWidth + VerticalThumbWidth,
-								 InternalChild.Bounds.Height - ActualHeight + HorizontalThumbHeight);
+				var bounds = ActualBounds;
+				var result = new Point(InternalChild.Bounds.Width - bounds.Width + VerticalThumbWidth,
+								 InternalChild.Bounds.Height - bounds.Height + HorizontalThumbHeight);
 
 				if (result.X < 0)
 				{

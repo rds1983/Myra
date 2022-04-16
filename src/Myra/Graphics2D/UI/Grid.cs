@@ -585,7 +585,8 @@ namespace Myra.Graphics2D.UI
 
 		public override void InternalArrange()
 		{
-			LayoutProcessFixed(ActualSize);
+			var bounds = ActualBounds;
+			LayoutProcessFixed(bounds.Size);
 
 			_colWidths.Clear();
 			for (var i = 0; i < _measureColWidths.Count; ++i)
@@ -604,7 +605,7 @@ namespace Myra.Graphics2D.UI
 
 			// Dynamic widths
 			// First run: calculate available width
-			var availableWidth = (float)ActualWidth;
+			var availableWidth = (float)bounds.Width;
 			availableWidth -= (_colWidths.Count - 1) * _columnSpacing;
 
 			var totalPart = 0.0f;
@@ -652,7 +653,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			// Same with row heights
-			var availableHeight = (float)ActualHeight;
+			var availableHeight = (float)bounds.Height;
 			availableHeight -= (_rowHeights.Count - 1) * _rowSpacing;
 
 			totalPart = 0.0f;
@@ -775,7 +776,7 @@ namespace Myra.Graphics2D.UI
 			var bounds = ActualBounds;
 			var rect = new Rectangle(bounds.Left + _cellLocationsX[col], bounds.Top + _cellLocationsY[row], cellSize.X, cellSize.Y);
 
-			var width = ActualWidth;
+			var width = bounds.Width;
 			if (rect.Right > width)
 			{
 				rect.Width = width - rect.X;
@@ -791,7 +792,7 @@ namespace Myra.Graphics2D.UI
 				rect.Width = width;
 			}
 
-			var height = ActualHeight;
+			var height = bounds.Height;
 			if (rect.Bottom > height)
 			{
 				rect.Height = height - rect.Y;

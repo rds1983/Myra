@@ -49,7 +49,7 @@ namespace Myra.Graphics2D.UI.Properties
 			{
 				get
 				{
-					var headerBounds = new Rectangle(0, 0, ActualWidth, InternalChild.GetRowHeight(0));
+					var headerBounds = new Rectangle(0, 0, ActualBounds.Width, InternalChild.GetRowHeight(0));
 
 					return headerBounds;
 				}

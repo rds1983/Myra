@@ -161,7 +161,8 @@ namespace Myra.Graphics2D.UI
 		{
 			var pos = ToLocal(Desktop.TouchPosition);
 
-			return Orientation == Orientation.Horizontal ? pos.X - InternalChild.ActualWidth / 2 : pos.Y - InternalChild.ActualHeight / 2;
+			var bounds = InternalChild.ActualBounds;
+			return Orientation == Orientation.Horizontal ? pos.X - bounds.Width / 2 : pos.Y - bounds.Height / 2;
 		}
 
 		public void ApplySliderStyle(SliderStyle style)
