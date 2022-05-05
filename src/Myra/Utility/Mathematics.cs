@@ -46,5 +46,18 @@ namespace Myra.Utility
 		{
 			return new Vector2(v.X * p.X, v.Y * p.Y);
 		}
+
+		public static Vector2 Transform(this Vector2 v, Matrix m)
+		{
+#if STRIDE
+			Vector4 v2;
+			Vector2.Transform(ref v, ref m, out v2);
+			return new Vector2(v2.X, v2.Y);
+#else
+			Vector2 v2;
+			Vector2.Transform(ref v, ref m, out v2);
+			return v2;
+#endif
+		}
 	}
 }

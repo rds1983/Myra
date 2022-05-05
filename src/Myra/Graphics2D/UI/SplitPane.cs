@@ -93,10 +93,10 @@ namespace Myra.Graphics2D.UI
 			Proportion firstProportion, secondProportion;
 			float fp;
 
-			var position = Desktop.TouchPosition;
+			var position = ToLocal(Desktop.TouchPosition);
 			if (Orientation == Orientation.Horizontal)
 			{
-				var firstWidth = position.X - bounds.X - _mouseCoord.Value;
+				var firstWidth = position.X - _mouseCoord.Value;
 
 				for (var i = 0; i < handleIndex - 1; ++i)
 				{
@@ -110,7 +110,7 @@ namespace Myra.Graphics2D.UI
 			}
 			else
 			{
-				var firstHeight = position.Y - bounds.Y - _mouseCoord.Value;
+				var firstHeight = position.Y - _mouseCoord.Value;
 
 				for (var i = 0; i < handleIndex - 1; ++i)
 				{

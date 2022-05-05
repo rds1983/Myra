@@ -229,8 +229,10 @@ namespace Myra.Graphics2D
 			color = CrossEngineStuff.MultiplyColor(color, Opacity);
 			position = Transform.Apply(position);
 
-#if MONOGAME || FNA || STRIDE
+#if MONOGAME || FNA
 			_renderer.Draw(texture, position, sourceRectangle, color, rotation, origin, Transform.Scale * scale, SpriteEffects.None, depth);
+#elif STRIDE
+			_renderer.Draw(texture, position, sourceRectangle, color, rotation, origin, Transform.Scale * scale, SpriteEffects.None, ImageOrientation.AsIs, depth);
 #else
 			_renderer.Draw(texture, position, sourceRectangle, color,  rotation, origin, Transform.Scale * scale, depth);
 #endif
