@@ -153,9 +153,11 @@ namespace Myra.Graphics2D.UI
 			else
 			{
 				_handleDown = (ImageButton)sender;
+
+				var handleGlobalPos = _handleDown.ToGlobal(_handleDown.Bounds.Location);
 				_mouseCoord = Orientation == Orientation.Horizontal
-					? Desktop.TouchPosition.X - _handleDown.Bounds.X
-					: Desktop.TouchPosition.Y - _handleDown.Bounds.Y;
+					? Desktop.TouchPosition.X - handleGlobalPos.X
+					: Desktop.TouchPosition.Y - handleGlobalPos.Y;
 			}
 		}
 
