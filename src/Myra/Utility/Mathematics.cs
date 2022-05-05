@@ -7,6 +7,7 @@ using Stride.Core.Mathematics;
 #else
 using System.Drawing;
 using System.Numerics;
+using Matrix = System.Numerics.Matrix3x2;
 #endif
 
 namespace Myra.Utility
@@ -49,14 +50,16 @@ namespace Myra.Utility
 
 		public static Vector2 Transform(this Vector2 v, Matrix m)
 		{
-#if STRIDE
+#if MONOGAME || FNA
+			Vector2 v2;
+			Vector2.Transform(ref v, ref m, out v2);
+			return v2;
+#elif STRIDE
 			Vector4 v2;
 			Vector2.Transform(ref v, ref m, out v2);
 			return new Vector2(v2.X, v2.Y);
 #else
-			Vector2 v2;
-			Vector2.Transform(ref v, ref m, out v2);
-			return v2;
+			return Vector2.Transform(v, m);
 #endif
 		}
 	}
