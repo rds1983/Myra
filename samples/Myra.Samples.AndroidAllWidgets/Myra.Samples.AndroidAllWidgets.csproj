@@ -52,10 +52,10 @@
       <HintPath>..\..\build\packages\AssetManagementBase.0.5.2\lib\netstandard2.0\AssetManagementBase.dll</HintPath>
     </Reference>
     <Reference Include="Cyotek.Drawing.BitmapFont, Version=1.0.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
-      <HintPath>..\..\build\packages\Cyotek.Drawing.BitmapFont.2.0.0\lib\netstandard2.1\Cyotek.Drawing.BitmapFont.dll</HintPath>
+      <HintPath>..\..\build\packages\Cyotek.Drawing.BitmapFont.2.0.1\lib\netstandard2.1\Cyotek.Drawing.BitmapFont.dll</HintPath>
     </Reference>
-    <Reference Include="FontStashSharp.MonoGame, Version=0.9.1.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\build\packages\FontStashSharp.MonoGame.0.9.1.1\lib\netstandard2.0\FontStashSharp.MonoGame.dll</HintPath>
+    <Reference Include="FontStashSharp.MonoGame, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\build\packages\FontStashSharp.MonoGame.1.0.4\lib\netstandard2.0\FontStashSharp.MonoGame.dll</HintPath>
     </Reference>
     <Reference Include="info.lundin.math, Version=1.2.6.0, Culture=neutral, PublicKeyToken=2f7fe9ec5efab85f, processorArchitecture=MSIL">
       <HintPath>..\..\build\packages\info.lundin.math.dll.1.2.6\lib\netstandard2.0\info.lundin.math.dll</HintPath>
@@ -67,11 +67,11 @@
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="OpenTK-1.0" />
-    <Reference Include="StbImageSharp, Version=2.22.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\build\packages\StbImageSharp.2.22.4\lib\netstandard2.0\StbImageSharp.dll</HintPath>
+    <Reference Include="StbImageSharp, Version=2.22.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\build\packages\StbImageSharp.2.22.6\lib\netstandard2.0\StbImageSharp.dll</HintPath>
     </Reference>
-    <Reference Include="StbTrueTypeSharp, Version=1.24.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\build\packages\StbTrueTypeSharp.1.24.6\lib\netstandard1.1\StbTrueTypeSharp.dll</HintPath>
+    <Reference Include="StbTrueTypeSharp, Version=1.24.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\build\packages\StbTrueTypeSharp.1.24.8\lib\netstandard2.0\StbTrueTypeSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

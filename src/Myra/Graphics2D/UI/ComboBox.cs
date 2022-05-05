@@ -142,7 +142,8 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_listBox.Width = BorderBounds.Width;
-				Desktop.ShowContextMenu(_listBox, new Point(AbsoluteBounds.X, AbsoluteBounds.Bottom));
+				var pos = ToGlobal(new Point(0, Bounds.Height));
+				Desktop.ShowContextMenu(_listBox, pos);
 			}
 		}
 

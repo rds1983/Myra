@@ -213,26 +213,24 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var p = SelectedItem.Widget.Bounds;
-
-			var bounds = _box.ActualBounds;
 			InternalChild.UpdateArrange();
-			var sz = new Point(InternalChild.Bounds.Width, InternalChild.Bounds.Height);
 
-			p.X -= bounds.X;
-			p.Y -= bounds.Y;
+			// Determine item position within ListBox
+			var widget = SelectedItem.Widget;
+			var p = _box.ToLocal(widget.ToGlobal(widget.Bounds.Location));
 
 			var lineHeight = ListBoxStyle.ListItemStyle.LabelStyle.Font.LineHeight;
 
 			var sp = InternalChild.ScrollPosition;
 
+			var sz = new Point(InternalChild.Bounds.Width, InternalChild.Bounds.Height);
 			if (p.Y < sp.Y)
 			{
 				sp.Y = p.Y;
 			}
 			else if (p.Y + lineHeight > sp.Y + sz.Y)
 			{
-				sp.Y = (p.Y + lineHeight - sz.Y);
+				sp.Y = p.Y + lineHeight - sz.Y;
 			}
 
 			InternalChild.ScrollPosition = sp;

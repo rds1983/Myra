@@ -169,9 +169,6 @@ namespace Myra.Graphics2D.UI
 
 			foreach (var child in ChildrenCopy)
 			{
-				if (!child.Visible)
-					continue;
-
 				child.Render(context);
 			}
 		}

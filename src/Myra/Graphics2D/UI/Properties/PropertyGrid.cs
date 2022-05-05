@@ -49,7 +49,7 @@ namespace Myra.Graphics2D.UI.Properties
 			{
 				get
 				{
-					var headerBounds = new Rectangle(0, 0, ActualWidth, InternalChild.GetRowHeight(0));
+					var headerBounds = new Rectangle(0, 0, ActualBounds.Width, InternalChild.GetRowHeight(0));
 
 					return headerBounds;
 				}
@@ -140,7 +140,7 @@ namespace Myra.Graphics2D.UI.Properties
 			{
 				base.OnTouchDoubleClick();
 
-				var mousePosition = Desktop.MousePosition;
+				var mousePosition = ToLocal(Desktop.MousePosition);
 				if (!HeaderBounds.Contains(mousePosition) || _mark.Bounds.Contains(mousePosition))
 				{
 					return;
@@ -154,7 +154,7 @@ namespace Myra.Graphics2D.UI.Properties
 				if (_propertyGrid.PropertyGridStyle.SelectionHoverBackground != null && UseHoverRenderable)
 				{
 					var headerBounds = HeaderBounds;
-					if (headerBounds.Contains(Desktop.MousePosition))
+					if (headerBounds.Contains(ToLocal(Desktop.MousePosition)))
 					{
 						_propertyGrid.PropertyGridStyle.SelectionHoverBackground.Draw(context, headerBounds);
 					}

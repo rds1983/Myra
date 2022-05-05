@@ -159,8 +159,10 @@ namespace Myra.Graphics2D.UI
 
 		private int GetHint()
 		{
-			return Orientation == Orientation.Horizontal ? Desktop.TouchPosition.X - AbsoluteActualBounds.X - InternalChild.ActualWidth / 2 :
-				Desktop.TouchPosition.Y - AbsoluteActualBounds.Y - InternalChild.ActualHeight / 2;
+			var pos = ToLocal(Desktop.TouchPosition);
+
+			var bounds = InternalChild.ActualBounds;
+			return Orientation == Orientation.Horizontal ? pos.X - bounds.Width / 2 : pos.Y - bounds.Height / 2;
 		}
 
 		public void ApplySliderStyle(SliderStyle style)

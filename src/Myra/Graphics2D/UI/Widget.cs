@@ -14,8 +14,10 @@ using Microsoft.Xna.Framework.Input;
 using Stride.Core.Mathematics;
 using Stride.Input;
 #else
+using System.Numerics;
 using System.Drawing;
 using Myra.Platform;
+using Matrix = System.Numerics.Matrix3x2;
 #endif
 
 namespace Myra.Graphics2D.UI
@@ -38,13 +40,6 @@ namespace Myra.Graphics2D.UI
 
 	public class Widget : BaseObject
 	{
-		private enum LayoutState
-		{
-			Normal,
-			LocationInvalid,
-			Invalid
-		}
-
 		private Point? _startPos;
 		private Thickness _margin, _borderThickness, _padding;
 		private int _left, _top;
@@ -63,14 +58,14 @@ namespace Myra.Graphics2D.UI
 		private Point _lastMeasureAvailableSize;
 
 		private Rectangle _containerBounds;
-		private Rectangle _layoutBounds, _bounds;
-		private Point _boxOffset, _actualSize;
+		private Rectangle _layoutBounds;
 		private bool _visible;
 
 		private float _opacity = 1.0f;
 
 		private bool _isMouseInside, _enabled;
 		private bool _isKeyboardFocused = false;
+		private Transform Transform;
 
 		/// <summary>
 		/// Internal use only. (MyraPad)
@@ -92,7 +87,6 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_left = value;
-				UpdateBounds();
 				FireLocationChanged();
 			}
 		}
@@ -111,7 +105,6 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_top = value;
-				UpdateBounds();
 				FireLocationChanged();
 			}
 		}
@@ -508,27 +501,14 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[Category("Transform")]
+		[DefaultValue("1, 1")]
+		[DesignerFolded]
+		public Vector2 Scale { get; set; } = Vector2.One;
+
 		[XmlIgnore]
 		[Browsable(false)]
 		public Widget DragHandle { get; set; }
-
-
-		[XmlIgnore]
-		[Browsable(false)]
-		private int RelativeLeft { get; set; }
-
-		[XmlIgnore]
-		[Browsable(false)]
-		private int RelativeTop { get; set; }
-
-		[XmlIgnore]
-		[Browsable(false)]
-
-		private int RelativeRight { get; set; }
-
-		[XmlIgnore]
-		[Browsable(false)]
-		private int RelativeBottom { get; set; }
 
 		/// <summary>
 		/// Determines whether the widget had been placed on Desktop
@@ -735,73 +715,33 @@ namespace Myra.Graphics2D.UI
 		public object Tag { get; set; }
 
 		/// <summary>
-		/// Widget bounds relative to container
+		/// Zero-based bounds
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		public Rectangle Bounds
-		{
-			get
-			{
-				var result = _layoutBounds;
-				result.Offset(Left, Top);
-				return result;
-			}
-		}
+		public Rectangle Bounds => new Rectangle(0, 0, _layoutBounds.Width, _layoutBounds.Height);
+
+		[Browsable(false)]
+		[XmlIgnore]
+		public Rectangle ActualBounds => Bounds - _margin - _borderThickness - _padding;
 
 		/// <summary>
 		/// Bounds - Margin
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		internal Rectangle BorderBounds => new Rectangle(0, 0, _layoutBounds.Width, _layoutBounds.Height) - _margin;
+		internal Rectangle BorderBounds => Bounds - _margin;
 
-		/// <summary>
-		/// Widget bounds in absolute coordinates
-		/// </summary>
 		[Browsable(false)]
-		[XmlIgnore]
-		internal Rectangle AbsoluteBounds => new Rectangle(AbsoluteOffset.X, AbsoluteOffset.Y, _layoutBounds.Width, _layoutBounds.Height);
-
-		/// <summary>
-		/// AbsoluteBounds - Margin
-		/// </summary>
-		[Browsable(false)]
-		[XmlIgnore]
-		internal Rectangle AbsoluteBorderBounds => AbsoluteBounds - _margin;
-
-		/// <summary>
-		/// AbsoluteBounds - Margin - Border - Padding
-		/// </summary>
-		[Browsable(false)]
-		[XmlIgnore]
-		internal Rectangle AbsoluteActualBounds => AbsoluteBounds - _margin - _borderThickness - _padding;
+		[XmlIgnore] protected Rectangle BackgroundBounds => BorderBounds - _borderThickness;
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public Point AbsoluteOffset { get; private set; }
-
-		internal bool ContainsMouse => Desktop != null && AbsoluteBorderBounds.Contains(Desktop.MousePosition);
-
-		internal bool ContainsTouch => Desktop != null && AbsoluteBorderBounds.Contains(Desktop.TouchPosition);
-
-		protected Rectangle BackgroundBounds => BorderBounds - _borderThickness;
+		internal bool ContainsMouse => Desktop != null && ContainsGlobalPoint(Desktop.MousePosition);
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public Rectangle ActualBounds => new Rectangle(0, 0, _actualSize.X, _actualSize.Y);
-
-		[Browsable(false)]
-		[XmlIgnore]
-		public int ActualWidth => _actualSize.X;
-
-		[Browsable(false)]
-		[XmlIgnore]
-		public int ActualHeight => _actualSize.Y;
-
-		[Browsable(false)]
-		[XmlIgnore]
-		public Point ActualSize => _actualSize;
+		internal bool ContainsTouch => Desktop != null && ContainsGlobalPoint(Desktop.TouchPosition);
 
 
 		[Browsable(false)]
@@ -977,29 +917,32 @@ namespace Myra.Graphics2D.UI
 
 			UpdateArrange();
 
-			var absoluteBounds = Bounds;
-			AbsoluteOffset = new Point(context.Offset.X + absoluteBounds.X, context.Offset.Y + absoluteBounds.Y);
+			var oldTransform = context.Transform;
 
-			absoluteBounds.Offset(context.Offset);
+			// Apply widget transforms
+			context.Transform.AddOffset(_layoutBounds.Location);
+			context.Transform.AddOffset(Left, Top);
+			context.Transform.AddScale(Scale);
 
+			Transform = context.Transform;
+
+			var absoluteBounds = context.Transform.Apply(Bounds);
 			var absoluteView = Rectangle.Intersect(context.AbsoluteView, absoluteBounds);
 			if (absoluteView.Width == 0 || absoluteView.Height == 0)
 			{
+				context.Transform = oldTransform;
 				return;
 			}
 
 			var oldScissorRectangle = context.Scissor;
-			if (ClipToBounds && !MyraEnvironment.DisableClipping)
+			if (ClipToBounds)
 			{
 				context.Scissor = absoluteView;
 			}
 
-			var oldOffset = context.Offset;
 			var oldView = context.AbsoluteView;
 			var oldOpacity = context.Opacity;
 
-			// Apply widget transforms
-			context.AddOffset(Bounds.Location);
 			context.AbsoluteView = absoluteView;
 			context.AddOpacity(Opacity);
 
@@ -1037,7 +980,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			// Internal rendering
-			context.AddOffset(_boxOffset);
 			BeforeRender?.Invoke(context);
 			InternalRender(context);
 			AfterRender?.Invoke(context);
@@ -1047,11 +989,6 @@ namespace Myra.Graphics2D.UI
 				// Restore scissor
 				context.Scissor = oldScissorRectangle;
 			}
-
-			// Restore context settings
-			context.Offset = oldOffset;
-			context.AbsoluteView = oldView;
-			context.Opacity = oldOpacity;
 
 			// Optional debug rendering
 			if (MyraEnvironment.DrawWidgetsFrames)
@@ -1068,6 +1005,11 @@ namespace Myra.Graphics2D.UI
 			{
 				context.DrawRectangle(Bounds, Color.Yellow);
 			}
+			
+			// Restore context settings
+			context.Transform = oldTransform;
+			context.AbsoluteView = oldView;
+			context.Opacity = oldOpacity;
 		}
 
 		public virtual void InternalRender(RenderContext context)
@@ -1214,16 +1156,10 @@ namespace Myra.Graphics2D.UI
 			}
 
 			// Align
-			var layoutBounds = LayoutUtils.Align(containerSize, size, HorizontalAlignment, VerticalAlignment, Parent == null);
+			var layoutBounds = LayoutUtils.Align(containerSize, size, HorizontalAlignment, VerticalAlignment);
 			layoutBounds.Offset(_containerBounds.Location);
 
 			_layoutBounds = layoutBounds;
-			UpdateBounds();
-			var actualBounds = new Rectangle(0, 0, layoutBounds.Width, layoutBounds.Height) - Margin - BorderThickness - Padding;
-			_boxOffset = new Point(actualBounds.X, actualBounds.Y);
-			_actualSize = new Point(actualBounds.Width, actualBounds.Height);
-
-			CalculateRelativePositions();
 
 			InternalArrange();
 			ArrangeUpdated.Invoke(this);
@@ -1239,23 +1175,6 @@ namespace Myra.Graphics2D.UI
 		public void InvalidateArrange()
 		{
 			_arrangeDirty = true;
-		}
-
-		private void CalculateRelativePositions()
-		{
-			RelativeLeft = Left - Bounds.X;
-			RelativeTop = Top - Bounds.Y;
-			
-			if (Parent != null)
-			{
-				RelativeRight = Left + Parent.Bounds.Width - Bounds.X;
-				RelativeBottom = Top + Parent.Bounds.Height - Bounds.Y;
-			}
-			else
-			{
-				RelativeRight = Left + Desktop.InternalBounds.Width - Bounds.X;
-				RelativeBottom = Top + Desktop.InternalBounds.Height - Bounds.Y;
-			}
 		}
 
 		private Widget FindWidgetBy(Func<Widget, bool> finder)
@@ -1420,21 +1339,9 @@ namespace Myra.Graphics2D.UI
 				Desktop.FocusedKeyboardWidget = this;
 			}
 
-			var x = AbsoluteBorderBounds.X;
-			var y = AbsoluteBorderBounds.Y;
-
-			var bounds = DragHandle != null
-					? new Rectangle(
-							x,
-							y,
-							DragHandle.AbsoluteBorderBounds.Right - x,
-							DragHandle.AbsoluteBorderBounds.Bottom - y
-					) : Rectangle.Empty;
-
-			var touchPos = Desktop.TouchPosition;
-
-			if (bounds == Rectangle.Empty || bounds.Contains(touchPos))
+			if (DragHandle != null && DragHandle.ContainsTouch)
 			{
+				var touchPos = Desktop.TouchPosition;
 				_startPos = new Point(touchPos.X - Left,
 						touchPos.Y - Top);
 			}
@@ -1575,44 +1482,44 @@ namespace Myra.Graphics2D.UI
 				newTop = position.Y;
 			}
 
-			ConstrainToBounds(ref newLeft, ref newTop);
+			var parentBounds = Parent != null ? Parent.Bounds : Desktop.InternalBounds;
+			if (newLeft < 0)
+			{
+				newLeft = 0;
+			}
+
+			if (newLeft + Bounds.Width > parentBounds.Width)
+			{
+				newLeft = parentBounds.Width - Bounds.Width;
+			}
+
+			if (newTop < 0)
+			{
+				newTop = 0;
+			}
+
+			if (newTop + Bounds.Height > parentBounds.Height)
+			{
+				newTop = parentBounds.Height - Bounds.Height;
+			}
 
 			Left = newLeft;
 			Top = newTop;
 		}
 
-		private void ConstrainToBounds(ref int newLeft, ref int newTop)
+		public Point ToGlobal(Point pos) => Transform.Apply(pos);
+
+		public Point ToLocal(Point pos) => new Vector2(pos.X, pos.Y).Transform(Transform.InverseMatrix).ToPoint();
+
+		public bool ContainsGlobalPoint(Point pos)
 		{
-			if (newLeft < RelativeLeft)
-			{
-				newLeft = RelativeLeft;
-			}
-
-			if (newTop < RelativeTop)
-			{
-				newTop = RelativeTop;
-			}
-
-			if (newTop + Bounds.Height > RelativeBottom)
-			{
-				newTop = RelativeBottom - Bounds.Height;
-			}
-				
-			if (newLeft + Bounds.Width > RelativeRight)
-			{
-				newLeft = RelativeRight - Bounds.Width;
-			}
+			var localPos = ToLocal(pos);
+			return BorderBounds.Contains(localPos);
 		}
 
 		private void DesktopTouchUp(object sender, EventArgs args)
 		{
 			_startPos = null;
-		}
-
-		private void UpdateBounds()
-		{
-			_bounds = _layoutBounds;
-			_bounds.Offset(Left, Top);
 		}
 	}
 }

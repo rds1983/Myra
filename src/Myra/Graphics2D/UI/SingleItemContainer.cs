@@ -73,7 +73,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			InternalChild.Arrange(new Rectangle(0, 0, ActualWidth, ActualHeight));
+			InternalChild.Arrange(ActualBounds);
 		}
 
 		protected override Point InternalMeasure(Point availableSize)

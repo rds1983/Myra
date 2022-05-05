@@ -54,7 +54,11 @@ namespace Myra.MML
 				{
 					string str = null;
 
-					if (property.PropertyType == typeof(Color?))
+					var serializer = FindSerializer(property.PropertyType);
+					if (serializer != null)
+					{
+						str = serializer.Serialize(value);
+					} else if (property.PropertyType == typeof(Color?))
 					{
 						str = ((Color?)value).Value.ToHexString();
 					}

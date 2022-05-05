@@ -1,6 +1,5 @@
 using FontStashSharp;
 using Myra.Utility;
-using System.Collections.Generic;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -14,7 +13,6 @@ using System.Drawing;
 using Myra.Platform;
 using System.Numerics;
 using Texture2D = System.Object;
-using Matrix = System.Numerics.Matrix3x2;
 #endif
 
 namespace Myra.Graphics2D
@@ -66,41 +64,8 @@ namespace Myra.Graphics2D
 #endif
 		private bool _beginCalled;
 		private Rectangle _scissor;
-		private Matrix? _transform;
 		private TextureFiltering _textureFiltering = TextureFiltering.Nearest;
-
-		public Matrix? Transform
-		{
-			get
-			{
-				return _transform;
-			}
-
-			set
-			{
-				if (value == _transform)
-				{
-					return;
-				}
-
-				_transform = value;
-
-				if (_transform != null)
-				{
-#if MONOGAME || FNA || STRIDE
-					InverseTransform = Matrix.Invert(_transform.Value);
-#else
-					Matrix inverse = Matrix.Identity;
-					Matrix.Invert(_transform.Value, out inverse);
-					InverseTransform = inverse;
-#endif
-				}
-
-				Flush();
-			}
-		}
-
-		internal Matrix InverseTransform { get; set; }
+		public Transform Transform;
 
 		public Rectangle Scissor
 		{
@@ -116,14 +81,6 @@ namespace Myra.Graphics2D
 				if (MyraEnvironment.DisableClipping)
 				{
 					return;
-				}
-
-				if (Transform != null)
-				{
-					var pos = Vector2.Transform(new Vector2(value.X, value.Y), Transform.Value);
-					var size = Vector2.Transform(new Vector2(value.Width, value.Height), Transform.Value);
-
-					value = new Rectangle((int)pos.X, (int)pos.Y, (int)size.X, (int)size.Y);
 				}
 
 #if MONOGAME || FNA
@@ -143,9 +100,7 @@ namespace Myra.Graphics2D
 
 		public float Opacity { get; set; }
 
-		public Point Offset { get; set; }
-
-		public Rectangle View => new Rectangle(AbsoluteView.X - Offset.X, AbsoluteView.Y - Offset.Y, AbsoluteView.Width, AbsoluteView.Height);
+		public Rectangle View => new Rectangle(AbsoluteView.X - Transform.Offset.X, AbsoluteView.Y - Transform.Offset.Y, AbsoluteView.Width, AbsoluteView.Height);
 
 		public Rectangle AbsoluteView { get; set; }
 
@@ -157,17 +112,8 @@ namespace Myra.Graphics2D
 			_renderer = MyraEnvironment.Platform.CreateRenderer();
 			_fontStashRenderer = new FontStashRenderer(_renderer);
 #endif
-
 			_scissor = GetDeviceScissor();
-		}
-
-		/// <summary>
-		/// Adds offset to the transform
-		/// </summary>
-		/// <param name="offset"></param>
-		public void AddOffset(Point offset)
-		{
-			Offset = new Point(Offset.X + offset.X, Offset.Y + offset.Y);
+			Transform.Reset();
 		}
 
 		/// <summary>
@@ -207,85 +153,132 @@ namespace Myra.Graphics2D
 			Flush();
 		}
 
-		private Vector2 ApplyTransform(Vector2 source)
+		/// <summary>
+		/// Draws a texture
+		/// </summary>
+		/// <param name="texture"></param>
+		/// <param name="destinationRectangle"></param>
+		/// <param name="sourceRectangle"></param>
+		/// <param name="color"></param>
+		/// <param name="rotation"></param>
+		/// <param name="origin"></param>
+		/// <param name="depth"></param>
+		public void Draw(Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, float depth = 0.0f)
 		{
-			return source + new Vector2(Offset.X, Offset.Y);
-		}
-
-		private Rectangle ApplyTransform(Rectangle source)
-		{
-			return new Rectangle(source.X + Offset.X,
-				source.Y + Offset.Y,
-				source.Width,
-				source.Height);
-		}
-
-		public void Draw(Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color)
-		{
-			destinationRectangle = ApplyTransform(destinationRectangle);
-			SetTextureFiltering(TextureFiltering.Nearest);
-			color = CrossEngineStuff.MultiplyColor(color, Opacity);
-#if MONOGAME || FNA
-			_renderer.Draw(texture, destinationRectangle, sourceRectangle, color);
-#elif STRIDE
-			_renderer.Draw(texture, destinationRectangle, sourceRectangle, color, 0, Vector2.Zero);
-#else
-			_renderer.Draw(texture, destinationRectangle, sourceRectangle, color);
-#endif
-		}
-
+			Vector2 sz;
+			if (sourceRectangle != null)
+			{
+				sz = new Vector2(sourceRectangle.Value.Width, sourceRectangle.Value.Height);
+			} else
+			{
 #if MONOGAME || FNA || STRIDE
-		public void Draw(Texture2D texture, Rectangle destinationRectangle, Color color)
-		{
-			destinationRectangle = ApplyTransform(destinationRectangle);
-			SetTextureFiltering(TextureFiltering.Nearest);
-			color = CrossEngineStuff.MultiplyColor(color, Opacity);
-
-			_renderer.Draw(texture, destinationRectangle, color);
-		}
-
-		public void Draw(Texture2D texture, Vector2 position, Color color)
-		{
-			position = ApplyTransform(position);
-			SetTextureFiltering(TextureFiltering.Nearest);
-			color = CrossEngineStuff.MultiplyColor(color, Opacity);
-
-			_renderer.Draw(texture, position, color);
-		}
-		
-		public void Draw(Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color)
-		{
-			position = ApplyTransform(position);
-			SetTextureFiltering(TextureFiltering.Nearest);
-			color = CrossEngineStuff.MultiplyColor(color, Opacity);
-
-			_renderer.Draw(texture, position, sourceRectangle, color);
-		}
-
-		public void Draw(Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, SpriteEffects effects, float layerDepth)
-		{
-			destinationRectangle = ApplyTransform(destinationRectangle);
-			SetTextureFiltering(TextureFiltering.Nearest);
-			color = CrossEngineStuff.MultiplyColor(color, Opacity);
-#if MONOGAME || FNA
-			_renderer.Draw(texture, destinationRectangle, sourceRectangle, color, rotation, origin, effects, layerDepth);
+				sz = new Vector2(texture.Width, texture.Height);
 #else
-			_renderer.Draw(texture, destinationRectangle, sourceRectangle, color, rotation, origin, effects, ImageOrientation.AsIs, layerDepth);
+				var p = _fontStashRenderer.TextureManager.GetTextureSize(texture);
+				sz = new Vector2(p.X, p.Y);
+#endif
+			}
+
+			var pos = new Vector2(destinationRectangle.X, destinationRectangle.Y);
+			var scale = new Vector2(destinationRectangle.Width / sz.X, destinationRectangle.Height / sz.Y);
+
+			Draw(texture, pos, sourceRectangle, color, rotation, origin, scale, depth);
+		}
+
+		/// <summary>
+		/// Draws a texture
+		/// </summary>
+		/// <param name="texture"></param>
+		/// <param name="destinationRectangle"></param>
+		/// <param name="sourceRectangle"></param>
+		/// <param name="color"></param>
+		/// <param name="rotation"></param>
+		/// <param name="origin"></param>
+		public void Draw(Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin) => Draw(texture, destinationRectangle, sourceRectangle, color, rotation, origin, 0.0f);
+
+		/// <summary>
+		/// Draws a texture
+		/// </summary>
+		/// <param name="texture"></param>
+		/// <param name="destinationRectangle"></param>
+		/// <param name="sourceRectangle"></param>
+		/// <param name="color"></param>
+		public void Draw(Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color) => Draw(texture, destinationRectangle, sourceRectangle, color, 0, Vector2.Zero);
+
+		/// <summary>
+		/// Draws a texture
+		/// </summary>
+		/// <param name="texture"></param>
+		/// <param name="destinationRectangle"></param>
+		/// <param name="color"></param>
+		public void Draw(Texture2D texture, Rectangle destinationRectangle, Color color) => Draw(texture, destinationRectangle, null, color, 0, Vector2.Zero);
+
+		/// <summary>
+		/// Draws a texture
+		/// </summary>
+		/// <param name="texture"></param>
+		/// <param name="position"></param>
+		/// <param name="sourceRectangle"></param>
+		/// <param name="color"></param>
+		/// <param name="rotation"></param>
+		/// <param name="origin"></param>
+		/// <param name="depth"></param>
+		public void Draw(Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, float depth = 0.0f)
+		{
+			SetTextureFiltering(TextureFiltering.Nearest);
+			color = CrossEngineStuff.MultiplyColor(color, Opacity);
+			position = Transform.Apply(position);
+
+#if MONOGAME || FNA
+			_renderer.Draw(texture, position, sourceRectangle, color, rotation, origin, Transform.Scale * scale, SpriteEffects.None, depth);
+#elif STRIDE
+			_renderer.Draw(texture, position, sourceRectangle, color, rotation, origin, Transform.Scale * scale, SpriteEffects.None, ImageOrientation.AsIs, depth);
+#else
+			_renderer.Draw(texture, position, sourceRectangle, color,  rotation, origin, Transform.Scale * scale, depth);
 #endif
 		}
 
-		public void Draw(Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
-		{
-			position = ApplyTransform(position);
-			SetTextureFiltering(TextureFiltering.Nearest);
-			color = CrossEngineStuff.MultiplyColor(color, Opacity);
-#if MONOGAME || FNA
-			_renderer.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, effects, layerDepth);
-#else
-			_renderer.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, effects, ImageOrientation.AsIs, layerDepth);
-#endif
-		}
-#endif
+		/// <summary>
+		/// Draws a texture
+		/// </summary>
+		/// <param name="texture"></param>
+		/// <param name="pos"></param>
+		/// <param name="color"></param>
+		/// <param name="scale"></param>
+		/// <param name="rotation"></param>
+		public void Draw(Texture2D texture, Vector2 pos, Color color, Vector2 scale, float rotation = 0.0f) =>
+			Draw(texture, pos, null, color, rotation, Vector2.Zero, scale);
+
+		/// <summary>
+		/// Draws a texture
+		/// </summary>
+		/// <param name="texture"></param>
+		/// <param name="position"></param>
+		/// <param name="sourceRectangle"></param>
+		/// <param name="color"></param>
+		/// <param name="rotation"></param>
+		/// <param name="origin"></param>
+		public void Draw(Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin) =>
+			Draw(texture, position, sourceRectangle, color, rotation, origin, Vector2.One);
+
+		/// <summary>
+		/// Draws a texture
+		/// </summary>
+		/// <param name="texture"></param>
+		/// <param name="position"></param>
+		/// <param name="sourceRectangle"></param>
+		/// <param name="color"></param>
+		public void Draw(Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color) =>
+			Draw(texture, position, sourceRectangle, color, 0, Vector2.Zero, Vector2.One);
+
+		/// <summary>
+		/// Draws a texture
+		/// </summary>
+		/// <param name="texture"></param>
+		/// <param name="position"></param>
+		/// <param name="color"></param>
+		public void Draw(Texture2D texture, Vector2 position, Color color) => 
+			Draw(texture, position, null, color, 0, Vector2.Zero, Vector2.One);
 
 		private void SetTextTextureFiltering()
 		{
@@ -311,29 +304,19 @@ namespace Myra.Graphics2D
 		/// <param name="layerDepth">A depth of the layer of this string.</param>
 		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color color, Vector2 scale, float rotation, Vector2 origin, float layerDepth = 0.0f)
 		{
-			position = ApplyTransform(position);
+			position = Transform.Apply(position);
 			SetTextTextureFiltering();
 			color = CrossEngineStuff.MultiplyColor(color, Opacity);
 
 #if MONOGAME || FNA || STRIDE
-			font.DrawText(_renderer, text, position, color, scale, rotation, origin, layerDepth);
+			font.DrawText(_renderer, text, position, color, Transform.Scale * scale, rotation, origin, layerDepth);
 #else
-			font.DrawText(_fontStashRenderer, text, position, color, scale, rotation, origin, layerDepth);
+			font.DrawText(_fontStashRenderer, text, position, color, Transform.Scale * scale, rotation, origin, layerDepth);
 #endif
 		}
 
-		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color color, Vector2 scale, float layerDepth = 0.0f)
-		{
-			position = ApplyTransform(position);
-			SetTextTextureFiltering();
-			color = CrossEngineStuff.MultiplyColor(color, Opacity);
-
-#if MONOGAME || FNA || STRIDE
-			font.DrawText(_renderer, text, position, color, scale, layerDepth);
-#else
-			font.DrawText(_fontStashRenderer, text, position, color, scale, layerDepth);
-#endif
-		}
+		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color color, Vector2 scale, float layerDepth = 0.0f) =>
+			DrawString(font, text, position, color, scale, 0, Vector2.Zero, layerDepth);
 
 		/// <summary>
 		/// Draws a text
@@ -342,18 +325,8 @@ namespace Myra.Graphics2D
 		/// <param name="position">The drawing location on screen.</param>
 		/// <param name="color">A color mask.</param>
 		/// <param name="layerDepth">A depth of the layer of this string.</param>
-		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color color, float layerDepth = 0.0f)
-		{
-			position = ApplyTransform(position);
-			SetTextTextureFiltering();
-			color = CrossEngineStuff.MultiplyColor(color, Opacity);
-
-#if MONOGAME || FNA || STRIDE
-			font.DrawText(_renderer, text, position, color, layerDepth);
-#else
-			font.DrawText(_fontStashRenderer, text, position, color, layerDepth);
-#endif
-		}
+		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color color, float layerDepth = 0.0f) =>
+			DrawString(font, text, position, color, Vector2.One, 0, Vector2.Zero, layerDepth);
 
 		/// <summary>
 		/// Draws a text
@@ -367,13 +340,13 @@ namespace Myra.Graphics2D
 		/// <param name="layerDepth">A depth of the layer of this string.</param>
 		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color[] colors, Vector2 scale, float rotation, Vector2 origin, float layerDepth = 0.0f)
 		{
-			position = ApplyTransform(position);
+			position = Transform.Apply(position);
 			SetTextTextureFiltering();
 
 #if MONOGAME || FNA || STRIDE
-			font.DrawText(_renderer, text, position, colors, scale, rotation, origin, layerDepth);
+			font.DrawText(_renderer, text, position, colors, Transform.Scale * scale, rotation, origin, layerDepth);
 #else
-			font.DrawText(_fontStashRenderer, text, position, colors, scale, rotation, origin, layerDepth);
+			font.DrawText(_fontStashRenderer, text, position, colors, Transform.Scale * scale, rotation, origin, layerDepth);
 #endif
 		}
 
@@ -387,32 +360,19 @@ namespace Myra.Graphics2D
 				samplerState,
 				null,
 				UIRasterizerState,
-				null,
-				Transform != null ? Transform.Value : Matrix.Identity);
+				null);
 #elif STRIDE
 			var samplerState = _textureFiltering == TextureFiltering.Nearest ?
 				MyraEnvironment.Game.GraphicsDevice.SamplerStates.PointClamp :
 				MyraEnvironment.Game.GraphicsDevice.SamplerStates.LinearClamp;
-			if (Transform == null)
-			{
-				_renderer.Begin(MyraEnvironment.Game.GraphicsContext,
-					SpriteSortMode.Deferred,
-					BlendStates.AlphaBlend,
-					samplerState,
-					null,
-					_uiRasterizerState);
-			} else
-			{
-				_renderer.Begin(MyraEnvironment.Game.GraphicsContext,
-					Transform.Value,
-					SpriteSortMode.Deferred,
-					BlendStates.AlphaBlend,
-					samplerState,
-					null,
-					_uiRasterizerState);
-			}
+			_renderer.Begin(MyraEnvironment.Game.GraphicsContext,
+				SpriteSortMode.Deferred,
+				BlendStates.AlphaBlend,
+				samplerState,
+				null,
+				_uiRasterizerState);
 #else
-			_renderer.Begin(Transform, _textureFiltering);
+			_renderer.Begin(_textureFiltering);
 #endif
 
 			_beginCalled = true;

@@ -282,9 +282,11 @@ namespace Myra.Graphics2D.UI.ColorPicker
 				return;
 			}
 
+			p = _colorWheel.ToLocal(p);
+
 			int r = WheelHeight / 2;
-			int x = p.X - _colorWheel.AbsoluteBounds.Location.X - r - _hsPicker.AbsoluteBounds.Height / 2;
-			int y = p.Y - _colorWheel.AbsoluteBounds.Location.Y - r - _hsPicker.AbsoluteBounds.Width / 2;
+			int x = p.X - r - _hsPicker.Bounds.Height / 2;
+			int y = p.Y - r - _hsPicker.Bounds.Width / 2;
 			float angle = (float)Math.Atan2(x, y);
 			float rsquared = Math.Min(x * x + y * y, r * r);
 			float radius = (float)Math.Sqrt(rsquared);
@@ -315,8 +317,9 @@ namespace Myra.Graphics2D.UI.ColorPicker
 				return;
 			}
 
+			p = _gradient.ToLocal(p);
 
-			int x = p.Y - _gradient.AbsoluteBounds.Location.Y - _hsPicker.AbsoluteBounds.Height / 2;
+			int x = p.Y - _hsPicker.Bounds.Height / 2;
 			x = Math.Max(0, Math.Min(x, WheelHeight));
 			_vPicker.Top = x;
 
@@ -337,12 +340,12 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			base.OnTouchDown();
 
 			var position = Desktop.TouchPosition;
-			if (_colorWheel.AbsoluteActualBounds.Contains(position))
+			if (_colorWheel.ContainsTouch)
 			{
 				_activeState = ActiveState.ColorPickerActive;
 				HsPickerMove(position);
 			}
-			else if (_gradient.AbsoluteActualBounds.Contains(position))
+			else if (_gradient.ContainsTouch)
 			{
 				_activeState = ActiveState.GradientActive;
 				VPickerMove(position);
@@ -362,7 +365,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			{
 				VPickerMove(position);
 			}
-			else if (_colorWheel.AbsoluteActualBounds.Contains(position))
+			else if (_colorWheel.ContainsTouch)
 			{
 				_activeState = ActiveState.ColorPickerActive;
 				HsPickerMove(position);

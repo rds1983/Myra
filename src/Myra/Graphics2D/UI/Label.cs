@@ -322,7 +322,7 @@ namespace Myra.Graphics2D.UI
 		{
 			base.InternalArrange();
 
-			_formattedText.Width = _wrap ? ActualWidth : default(int?);
+			_formattedText.Width = _wrap ? ActualBounds.Width : default(int?);
 		}
 
 		public void ApplyLabelStyle(LabelStyle style)
