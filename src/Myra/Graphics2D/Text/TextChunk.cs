@@ -23,7 +23,7 @@ namespace Myra.Graphics2D.Text
 		protected readonly SpriteFontBase _font;
 		protected Point _size;
 
-		public List<GlyphInfo> Glyphs { get; private set; }
+		public List<GlyphInfo> Glyphs { get; } = new List<GlyphInfo>();
 
 		public int Count { get { return _text.Length(); } }
 		public string Text { get { return _text; } }
@@ -59,37 +59,18 @@ namespace Myra.Graphics2D.Text
 				return;
 			}
 
-			Glyphs = new List<GlyphInfo>();
+			var rects = _font.GetGlyphRects(_text, Vector2.Zero);
 
-			for (var i = 0; i < _text.Length; ++i)
+			Glyphs.Clear();
+			for(var i = 0; i < rects.Count; ++i)
 			{
 				Glyphs.Add(new GlyphInfo
 				{
 					TextChunk = this,
 					Character = _text[i],
 					Index = i,
+					Bounds = rects[i]
 				});
-			}
-
-			var offset = Vector2.Zero;
-			for (var i = 0; i < _text.Length; ++i)
-			{
-				char c = _text[i];
-				
-				if (char.IsLowSurrogate(c))
-				{
-					// Hopefully the text is valid UTF16...
-					Glyphs[i].Bounds = Glyphs[i - 1].Bounds;
-					continue;	
-				}
-
-				Vector2 v = _font.MeasureString(char.IsHighSurrogate(c) ? _text.Substring(i, 2) : _text[i].ToString());
-
-				var result = new Rectangle((int)offset.X, (int)offset.Y, (int)v.X, (int)v.Y);
-
-				Glyphs[i].Bounds = result;
-
-				offset.X += v.X;	
 			}
 		}
 

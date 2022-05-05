@@ -7,6 +7,7 @@ using Myra.Graphics2D.Text;
 using TextCopy;
 using Myra.Graphics2D.UI.TextEdit;
 using FontStashSharp;
+using System.Diagnostics;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -1437,12 +1438,14 @@ namespace Myra.Graphics2D.UI
 			if (Enabled && _cursorOn && Cursor != null)
 			{
 				p = GetRenderPositionByIndex(CursorPosition);
+
 				p.X -= _internalScrolling.X;
 				p.Y -= _internalScrolling.Y;
-				Cursor.Draw(context,
-					new Rectangle(p.X, p.Y,
+
+				var rect = new Rectangle(p.X, p.Y,
 						Cursor.Size.X,
-						_formattedText.Font.LineHeight));
+						_formattedText.Font.LineHeight);
+				Cursor.Draw(context, rect);
 			}
 
 			context.Opacity = oldOpacity;
