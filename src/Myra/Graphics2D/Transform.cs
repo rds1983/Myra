@@ -50,6 +50,7 @@ namespace Myra.Graphics2D
 			}
 		}
 
+		public Vector2 LocalOrigin { get; private set; }
 		public Vector2 Origin { get; private set; }
 
 		public float Rotation { get; private set; }
@@ -106,16 +107,13 @@ namespace Myra.Graphics2D
 		{
 			Offset += offset * Scale;
 			Scale *= scale;
-
-			if (origin != Vector2.Zero || !_originNonZero)
-			{
-				Origin = Offset + origin * scale;
-				if (origin != Vector2.Zero)
-				{
-					_originNonZero = true;
-				}
-			}
 			Rotation += rotation;
+
+			if (rotation != 0 || origin != Vector2.Zero)
+			{
+				LocalOrigin = Offset + origin;
+				Origin = Offset + origin * scale;
+			}
 		}
 
 		public Vector2 Apply(Vector2 source)

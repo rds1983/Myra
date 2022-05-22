@@ -224,14 +224,12 @@ namespace Myra.Graphics2D
 		{
 			SetTextureFiltering(TextureFiltering.Nearest);
 			color = CrossEngineStuff.MultiplyColor(color, Opacity);
-			position = Transform.Apply(position);
 
 			scale *= Transform.Scale;
 			rotation += Transform.Rotation * (float)Math.PI / 180;
 
-			var origin = Transform.Origin - position;
-			position += origin;
-			origin /= scale;
+			var origin = (Transform.Origin - Transform.Apply(position)) / scale;
+			position = Transform.LocalOrigin;
 
 #if MONOGAME || FNA
 			_renderer.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, SpriteEffects.None, depth);
@@ -306,22 +304,14 @@ namespace Myra.Graphics2D
 		/// <param name="layerDepth">A depth of the layer of this string.</param>
 		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color color, Vector2 scale, float rotation, float layerDepth = 0.0f)
 		{
-			position = Transform.Apply(position);
 			SetTextTextureFiltering();
 			color = CrossEngineStuff.MultiplyColor(color, Opacity);
 
 			scale *= Transform.Scale;
 			rotation += Transform.Rotation * (float)Math.PI / 180;
 
-			var origin = Transform.Origin - position;
-			position += origin;
-			origin /= scale;
-
-			if (rotation != 0)
-			{
-				var k = 5;
-			}
-
+			var origin = (Transform.Origin - Transform.Apply(position)) / scale;
+			position = Transform.LocalOrigin;
 
 #if MONOGAME || FNA || STRIDE
 			font.DrawText(_renderer, text, position, color, scale, rotation, origin, layerDepth);
