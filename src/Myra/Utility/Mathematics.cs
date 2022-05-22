@@ -38,10 +38,9 @@ namespace Myra.Utility
 			return a.EpsilonEquals(0.0f);
 		}
 
-		public static Point ToPoint(this Vector2 v)
-		{
-			return new Point((int)Math.Round(v.X), (int)Math.Round(v.Y));
-		}
+		public static Point ToPoint(this Vector2 v) => new Point((int)Math.Round(v.X), (int)Math.Round(v.Y));
+
+		public static Vector2 ToVector2(this Point p) => new Vector2(p.X, p.Y);
 
 		public static Vector2 Multiply(this Vector2 v, Point p)
 		{

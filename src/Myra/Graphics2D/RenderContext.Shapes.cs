@@ -179,9 +179,8 @@ namespace Myra.Graphics2D
 		public void DrawLine(Vector2 point, float length, float angle, Color color,
 			float thickness = 1f)
 		{
-			var origin = new Vector2(0f, 0.0f);
 			var scale = new Vector2(length, thickness);
-			Draw(DefaultAssets.WhiteTexture, point, null, color, angle, origin, scale, 0);
+			Draw(DefaultAssets.WhiteTexture, point, null, color, angle, scale, 0);
 		}
 
 		/// <summary>

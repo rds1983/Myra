@@ -14,11 +14,12 @@ namespace Myra.Graphics2D
 {
 	public struct Transform
 	{
-		private Point _offset;
+		private Vector2 _offset;
 		private Vector2 _scale;
 		private Matrix? _matrix, _inverseMatrix;
+		private bool _originNonZero;
 
-		public Point Offset
+		public Vector2 Offset
 		{
 			get => _offset;
 			set
@@ -48,6 +49,10 @@ namespace Myra.Graphics2D
 				ResetMatrices();
 			}
 		}
+
+		public Vector2 Origin { get; private set; }
+
+		public float Rotation { get; private set; }
 
 		public Matrix Matrix
 		{
@@ -93,50 +98,34 @@ namespace Myra.Graphics2D
 		/// </summary>
 		public void Reset()
 		{
-			Offset = new Point(0, 0);
 			Scale = Vector2.One;
+			_originNonZero = false;
 		}
 
-		/// <summary>
-		/// Adds offset to the transform
-		/// </summary>
-		/// <param name="offset"></param>
-		public void AddOffset(int x, int y) => AddOffset(new Point(x, y));
-
-
-		/// <summary>
-		/// Adds offset to the transform
-		/// </summary>
-		/// <param name="offset"></param>
-		public void AddOffset(Point offset)
+		public void AddTransform(Vector2 offset, Vector2 origin, Vector2 scale, float rotation)
 		{
-			var p = Mathematics.ToPoint(Scale.Multiply(offset));
-			Offset = new Point(Offset.X + p.X, Offset.Y + p.Y);
-		}
-
-		/// <summary>
-		/// Adds scale to the transform
-		/// </summary>
-		/// <param name="offset"></param>
-		public void AddScale(Vector2 scale)
-		{
+			Offset += offset * Scale;
 			Scale *= scale;
+
+			if (origin != Vector2.Zero || !_originNonZero)
+			{
+				Origin = Offset + origin * scale;
+				if (origin != Vector2.Zero)
+				{
+					_originNonZero = true;
+				}
+			}
+			Rotation += rotation;
 		}
 
 		public Vector2 Apply(Vector2 source)
 		{
-			return new Vector2(Offset.X, Offset.Y) + source * Scale;
-		}
-
-		public Point Apply(Point source)
-		{
-			var p = Mathematics.ToPoint(Scale.Multiply(source));
-			return new Point(Offset.X + p.X, Offset.Y + p.Y);
+			return Offset + source * Scale;
 		}
 
 		public Rectangle Apply(Rectangle source)
 		{
-			var pos = Apply(source.Location);
+			var pos = Mathematics.ToPoint(Apply(source.Location.ToVector2()));
 			var size = Mathematics.ToPoint(Scale.Multiply(source.Size()));
 
 			return new Rectangle(pos.X, pos.Y, size.X, size.Y);

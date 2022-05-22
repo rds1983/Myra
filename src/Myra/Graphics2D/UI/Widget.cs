@@ -506,6 +506,16 @@ namespace Myra.Graphics2D.UI
 		[DesignerFolded]
 		public Vector2 Scale { get; set; } = Vector2.One;
 
+		[Category("Transform")]
+		[DefaultValue("0, 0")]
+		[DesignerFolded]
+		public Vector2 Origin { get; set; } = Vector2.Zero;
+
+		[Category("Transform")]
+		[DefaultValue(0.0f)]
+		[DesignerFolded]
+		public float Rotation { get; set; } = 0.0f;
+
 		[XmlIgnore]
 		[Browsable(false)]
 		public Widget DragHandle { get; set; }
@@ -920,9 +930,10 @@ namespace Myra.Graphics2D.UI
 			var oldTransform = context.Transform;
 
 			// Apply widget transforms
-			context.Transform.AddOffset(_layoutBounds.Location);
-			context.Transform.AddOffset(Left, Top);
-			context.Transform.AddScale(Scale);
+			context.Transform.AddTransform((_layoutBounds.Location + new Point(Left, Top)).ToVector2(), 
+				Origin * _layoutBounds.Size().ToVector2(),
+				Scale,
+				Rotation);
 
 			Transform = context.Transform;
 
@@ -1507,7 +1518,7 @@ namespace Myra.Graphics2D.UI
 			Top = newTop;
 		}
 
-		public Point ToGlobal(Point pos) => Transform.Apply(pos);
+		public Point ToGlobal(Point pos) => Transform.Apply(pos.ToVector2()).ToPoint();
 
 		public Point ToLocal(Point pos) => new Vector2(pos.X, pos.Y).Transform(Transform.InverseMatrix).ToPoint();
 
