@@ -1,4 +1,5 @@
 ﻿using Myra.Utility;
+using System;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -14,85 +15,23 @@ namespace Myra.Graphics2D
 {
 	public struct Transform
 	{
-		private Vector2 _offset;
-		private Vector2 _scale;
-		private Matrix? _matrix, _inverseMatrix;
-		private bool _originNonZero;
+		private Matrix _transformMatrix, _inverseMatrix;
+		private bool _transformDirty;
 
-		public Vector2 Offset
-		{
-			get => _offset;
-			set
-			{
-				if (value == _offset)
-				{
-					return;
-				}
-
-				_offset = value;
-				ResetMatrices();
-			}
-		}
-
-		public Vector2 Scale
-		{
-			get => _scale;
-
-			set
-			{
-				if (value == _scale)
-				{
-					return;
-				}
-
-				_scale = value;
-				ResetMatrices();
-			}
-		}
-
-		public Vector2 LocalOrigin { get; private set; }
-		public Vector2 Origin { get; private set; }
-
+		public Vector2 Scale { get; private set; }
 		public float Rotation { get; private set; }
 
-		public Matrix Matrix
+		public Matrix TransformMatrix
 		{
-			get
+			get => _transformMatrix;
+			set
 			{
-				if (_matrix == null)
-				{
-#if MONOGAME || FNA
-					_matrix = Matrix.CreateScale(Scale.X, Scale.Y, 1.0f) * Matrix.CreateTranslation(Offset.X, Offset.Y, 1.0f);
-#elif STRIDE
-					_matrix = Matrix.Scaling(Scale.X, Scale.Y, 1.0f) * Matrix.Translation(Offset.X, Offset.Y, 1.0f);
-#else
-					_matrix = Matrix.CreateScale(Scale) * Matrix.CreateTranslation(new Vector2(Offset.X, Offset.Y));
-#endif
-				}
+				if (_transformMatrix == value) return;
 
-				return _matrix.Value;
+				_transformMatrix = value;
+				_transformDirty = true;
 			}
 		}
-
-		public Matrix InverseMatrix
-		{
-			get
-			{
-				if (_inverseMatrix == null)
-				{
-#if MONOGAME || FNA || STRIDE
-					_inverseMatrix = Matrix.Invert(Matrix);
-#else
-					Matrix inverse = Matrix.Identity;
-					Matrix.Invert(Matrix, out inverse);
-					_inverseMatrix = inverse;
-#endif
-				}
-
-				return _inverseMatrix.Value;
-			}
-		}
-
 
 		/// <summary>
 		/// Resets the transform
@@ -100,39 +39,80 @@ namespace Myra.Graphics2D
 		public void Reset()
 		{
 			Scale = Vector2.One;
-			_originNonZero = false;
+			Rotation = 0;
+			TransformMatrix = Matrix.Identity;
+		}
+
+		private static void BuildTransform(Vector2 position, Vector2 origin, Vector2 scale, float rotation, out Matrix result)
+		{
+			// This code had been borrowed from MonoGame's SpriteBatch.DrawString
+			result = Matrix.Identity;
+
+			float offsetX, offsetY;
+			if (rotation == 0)
+			{
+				result.M11 = scale.X;
+				result.M22 = scale.Y;
+				offsetX = position.X - (origin.X * result.M11);
+				offsetY = position.Y - (origin.Y * result.M22);
+			}
+			else
+			{
+				var cos = (float)Math.Cos(rotation);
+				var sin = (float)Math.Sin(rotation);
+				result.M11 = scale.X * cos;
+				result.M12 = scale.X * sin;
+				result.M21 = scale.Y * -sin;
+				result.M22 = scale.Y * cos;
+				offsetX = position.X - (origin.X * result.M11) - (origin.Y * result.M21);
+				offsetY = position.Y - (origin.X * result.M12) - (origin.Y * result.M22);
+			}
+
+			offsetX += origin.X;
+			offsetY += origin.Y;
+
+#if MONOGAME || FNA || STRIDE
+			result.M41 = offsetX;
+			result.M42 = offsetY;
+#else
+			result.M31 = offsetX;
+			result.M32 = offsetY;
+#endif
 		}
 
 		public void AddTransform(Vector2 offset, Vector2 origin, Vector2 scale, float rotation)
 		{
-			Offset += offset * Scale;
+			Matrix newTransform;
+			BuildTransform(offset, origin, scale, rotation, out newTransform);
+			TransformMatrix = newTransform * TransformMatrix;
+
 			Scale *= scale;
 			Rotation += rotation;
+		}
 
-			if (rotation != 0 || origin != Vector2.Zero)
+		public Vector2 Apply(Vector2 source) => source.Transform(ref _transformMatrix);
+
+		public Point Apply(Point source) => Apply(new Vector2(source.X, source.Y)).ToPoint();
+
+		public Rectangle Apply(Rectangle source) => source.Transform(ref _transformMatrix);
+
+		public Vector2 ApplyInverse(Vector2 source)
+		{
+			if (_transformDirty)
 			{
-				LocalOrigin = Offset + origin;
-				Origin = Offset + origin * scale;
+#if MONOGAME || FNA || STRIDE
+				_inverseMatrix = Matrix.Invert(TransformMatrix);
+#else
+				Matrix inverse = Matrix.Identity;
+				Matrix.Invert(TransformMatrix, out inverse);
+				_inverseMatrix = inverse;
+#endif
+				_transformDirty = false;
 			}
+
+			return source.Transform(ref _inverseMatrix);
 		}
 
-		public Vector2 Apply(Vector2 source)
-		{
-			return Offset + source * Scale;
-		}
-
-		public Rectangle Apply(Rectangle source)
-		{
-			var pos = Mathematics.ToPoint(Apply(source.Location.ToVector2()));
-			var size = Mathematics.ToPoint(Scale.Multiply(source.Size()));
-
-			return new Rectangle(pos.X, pos.Y, size.X, size.Y);
-		}
-
-		private void ResetMatrices()
-		{
-			_matrix = null;
-			_inverseMatrix = null;
-		}
+		public Point ApplyInverse(Point source) => ApplyInverse(new Vector2(source.X, source.Y)).ToPoint();
 	}
 }

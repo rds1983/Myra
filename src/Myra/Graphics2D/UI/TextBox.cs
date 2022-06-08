@@ -1420,7 +1420,7 @@ namespace Myra.Graphics2D.UI
 			var p = new Point(centeredBounds.Location.X - _internalScrolling.X,
 				centeredBounds.Location.Y - _internalScrolling.Y);
 
-			_formattedText.Draw(context, TextAlign.Left, new Rectangle(p.X, p.Y, bounds.Width, bounds.Height), context.View, textColor, false);
+			_formattedText.Draw(context, TextAlign.Left, new Rectangle(p.X, p.Y, bounds.Width, bounds.Height), textColor, false);
 
 			if (!IsKeyboardFocused)
 			{

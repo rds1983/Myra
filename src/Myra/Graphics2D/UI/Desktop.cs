@@ -261,6 +261,10 @@ namespace Myra.Graphics2D.UI
 
 		public Vector2 Scale { get; set; } = Vector2.One;
 
+		public Vector2 TransformOrigin { get; set; } = Vector2.Zero;
+
+		public float Rotation { get; set; } = 0.0f;
+
 		public bool IsMouseOverGUI
 		{
 			get
@@ -639,11 +643,13 @@ namespace Myra.Graphics2D.UI
 
 			// Disable transform during setting the scissor rectangle for the Desktop
 			_renderContext.Transform.Reset();
-			_renderContext.Transform.Scale = Scale;
+			_renderContext.Transform.AddTransform(InternalBounds.Location.ToVector2(),
+				TransformOrigin * InternalBounds.Size().ToVector2(),
+				Scale,
+				Rotation);
 
 			var bounds = _renderContext.Transform.Apply(InternalBounds);
 			_renderContext.Scissor = bounds;
-			_renderContext.AbsoluteView = bounds;
 			_renderContext.Opacity = Opacity;
 
 			if (Stylesheet.Current.DesktopStyle != null &&

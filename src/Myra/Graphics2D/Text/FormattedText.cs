@@ -532,37 +532,24 @@ namespace Myra.Graphics2D.Text
 			return null;
 		}
 
-		public void Draw(RenderContext context, TextAlign align, Rectangle bounds, Rectangle clip, Color textColor, bool useChunkColor)
+		public void Draw(RenderContext context, TextAlign align, Rectangle bounds, Color textColor, bool useChunkColor)
 		{
 			var y = bounds.Y;
 			foreach (var line in Lines)
 			{
-				if (y + line.Size.Y >= clip.Top && y <= clip.Bottom)
-				{
-					int x = bounds.X;
+				int x = bounds.X;
 
-					switch (align)
-					{
-						case TextAlign.Center:
-							x = bounds.X + (bounds.Width / 2) - (line.Size.X / 2);
-							break;
-						case TextAlign.Right:
-							x = bounds.X + bounds.Width - line.Size.X;
-							break;
-					}
-
-					textColor = line.Draw(context, new Vector2(x, y), textColor, useChunkColor);
-				}
-				else
+				switch (align)
 				{
-					foreach (var chunk in line.Chunks)
-					{
-						if (useChunkColor && chunk.Color != null)
-						{
-							textColor = chunk.Color.Value;
-						}
-					}
+					case TextAlign.Center:
+						x = bounds.X + (bounds.Width / 2) - (line.Size.X / 2);
+						break;
+					case TextAlign.Right:
+						x = bounds.X + bounds.Width - line.Size.X;
+						break;
 				}
+
+				textColor = line.Draw(context, new Vector2(x, y), textColor, useChunkColor);
 
 				y += line.Size.Y;
 				y += _verticalSpacing;

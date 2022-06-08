@@ -507,9 +507,9 @@ namespace Myra.Graphics2D.UI
 		public Vector2 Scale { get; set; } = Vector2.One;
 
 		[Category("Transform")]
-		[DefaultValue("0, 0")]
+		[DefaultValue("0.5, 0.5")]
 		[DesignerFolded]
-		public Vector2 Origin { get; set; } = Vector2.Zero;
+		public Vector2 TransformOrigin { get; set; } = new Vector2(0.5f, 0.5f);
 
 		[Category("Transform")]
 		[DefaultValue(0.0f)]
@@ -690,7 +690,8 @@ namespace Myra.Graphics2D.UI
 					}
 
 					OnMouseMoved();
-				} else if (value && !_isMouseInside)
+				}
+				else if (value && !_isMouseInside)
 				{
 					if (Desktop != null)
 					{
@@ -698,7 +699,8 @@ namespace Myra.Graphics2D.UI
 					}
 
 					OnMouseEntered();
-				} else if (!value && _isMouseInside)
+				}
+				else if (!value && _isMouseInside)
 				{
 					if (Desktop != null && Desktop.MouseInsideWidget == this)
 					{
@@ -930,31 +932,30 @@ namespace Myra.Graphics2D.UI
 			var oldTransform = context.Transform;
 
 			// Apply widget transforms
-			context.Transform.AddTransform((_layoutBounds.Location + new Point(Left, Top)).ToVector2(), 
-				Origin * _layoutBounds.Size().ToVector2(),
+			context.Transform.AddTransform((_layoutBounds.Location + new Point(Left, Top)).ToVector2(),
+				TransformOrigin * _layoutBounds.Size().ToVector2(),
 				Scale,
-				Rotation);
+				Rotation * (float)Math.PI / 180);
 
 			Transform = context.Transform;
 
-			var absoluteBounds = context.Transform.Apply(Bounds);
-			var absoluteView = Rectangle.Intersect(context.AbsoluteView, absoluteBounds);
-			if (absoluteView.Width == 0 || absoluteView.Height == 0)
+			Rectangle? oldScissorRectangle = null;
+			if (ClipToBounds && Transform.Rotation == 0)
 			{
-				context.Transform = oldTransform;
-				return;
+				oldScissorRectangle = context.Scissor;
+				var absoluteBounds = context.Transform.Apply(Bounds);
+				var newScissorRectangle = Rectangle.Intersect(context.Scissor, absoluteBounds);
+
+				if (newScissorRectangle.Width == 0 || newScissorRectangle.Height == 0)
+				{
+					context.Transform = oldTransform;
+					return;
+				}
+
+				context.Scissor = newScissorRectangle;
 			}
 
-			var oldScissorRectangle = context.Scissor;
-			if (ClipToBounds)
-			{
-				context.Scissor = absoluteView;
-			}
-
-			var oldView = context.AbsoluteView;
 			var oldOpacity = context.Opacity;
-
-			context.AbsoluteView = absoluteView;
 			context.AddOpacity(Opacity);
 
 			// Draw Background
@@ -995,10 +996,10 @@ namespace Myra.Graphics2D.UI
 			InternalRender(context);
 			AfterRender?.Invoke(context);
 
-			if (ClipToBounds && !MyraEnvironment.DisableClipping)
+			if (oldScissorRectangle != null)
 			{
 				// Restore scissor
-				context.Scissor = oldScissorRectangle;
+				context.Scissor = oldScissorRectangle.Value;
 			}
 
 			// Optional debug rendering
@@ -1016,10 +1017,9 @@ namespace Myra.Graphics2D.UI
 			{
 				context.DrawRectangle(Bounds, Color.Yellow);
 			}
-			
+
 			// Restore context settings
 			context.Transform = oldTransform;
-			context.AbsoluteView = oldView;
 			context.Opacity = oldOpacity;
 		}
 
@@ -1391,7 +1391,7 @@ namespace Myra.Graphics2D.UI
 		{
 			PlacedChanged?.Invoke(this);
 		}
-		
+
 		public virtual void OnVisibleChanged()
 		{
 			InvalidateMeasure();
@@ -1482,7 +1482,7 @@ namespace Myra.Graphics2D.UI
 
 			int newLeft = Left;
 			int newTop = Top;
-			
+
 			if (DragDirection.HasFlag(DragDirection.Horizontal))
 			{
 				newLeft = position.X;
@@ -1518,9 +1518,9 @@ namespace Myra.Graphics2D.UI
 			Top = newTop;
 		}
 
-		public Point ToGlobal(Point pos) => Transform.Apply(pos.ToVector2()).ToPoint();
+		public Point ToGlobal(Point pos) => Transform.Apply(pos);
 
-		public Point ToLocal(Point pos) => new Vector2(pos.X, pos.Y).Transform(Transform.InverseMatrix).ToPoint();
+		public Point ToLocal(Point pos) => Transform.ApplyInverse(pos);
 
 		public bool ContainsGlobalPoint(Point pos)
 		{

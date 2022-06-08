@@ -47,19 +47,29 @@ namespace Myra.Utility
 			return new Vector2(v.X * p.X, v.Y * p.Y);
 		}
 
-		public static Vector2 Transform(this Vector2 v, Matrix m)
+		public static Vector2 Transform(this Vector2 v, ref Matrix matrix)
 		{
 #if MONOGAME || FNA
-			Vector2 v2;
-			Vector2.Transform(ref v, ref m, out v2);
-			return v2;
+			Vector2 result;
+			Vector2.Transform(ref v, ref matrix, out result);
+			return result;
 #elif STRIDE
-			Vector4 v2;
-			Vector2.Transform(ref v, ref m, out v2);
-			return new Vector2(v2.X, v2.Y);
+			Vector4 result;
+			Vector2.Transform(ref v, ref matrix, out result);
+			return new Vector2(result.X, result.Y);
 #else
-			return Vector2.Transform(v, m);
+			return Vector2.Transform(v, matrix);
 #endif
+		}
+
+		public static Rectangle Transform(this Rectangle r, ref Matrix matrix)
+		{
+			var position = new Vector2(r.X, r.Y).Transform(ref matrix);
+
+			var transformScale = new Vector2(matrix.M11, matrix.M22);
+			var scale = new Vector2(r.Width * transformScale.X, r.Height * transformScale.Y);
+
+			return new Rectangle((int)position.X, (int)position.Y, (int)scale.X, (int)scale.Y);
 		}
 	}
 }

@@ -101,10 +101,6 @@ namespace Myra.Graphics2D
 
 		public float Opacity { get; set; }
 
-		public Rectangle View => new Rectangle(AbsoluteView.X - (int)Transform.Offset.X, AbsoluteView.Y - (int)Transform.Offset.Y, AbsoluteView.Width, AbsoluteView.Height);
-
-		public Rectangle AbsoluteView { get; set; }
-
 		public RenderContext()
 		{
 #if MONOGAME || FNA || STRIDE
@@ -224,15 +220,12 @@ namespace Myra.Graphics2D
 		{
 			SetTextureFiltering(TextureFiltering.Nearest);
 			color = CrossEngineStuff.MultiplyColor(color, Opacity);
-
 			scale *= Transform.Scale;
-			rotation += Transform.Rotation * (float)Math.PI / 180;
+			rotation += Transform.Rotation;
 
-			var origin = (Transform.Origin - Transform.Apply(position)) / scale;
-			position = Transform.LocalOrigin;
-
+			position = Transform.Apply(position);
 #if MONOGAME || FNA
-			_renderer.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, SpriteEffects.None, depth);
+			 _renderer.Draw(texture, position, sourceRectangle, color, rotation, Vector2.Zero, scale, SpriteEffects.None, depth);
 #elif STRIDE
 			_renderer.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, SpriteEffects.None, ImageOrientation.AsIs, depth);
 #else
@@ -306,15 +299,13 @@ namespace Myra.Graphics2D
 		{
 			SetTextTextureFiltering();
 			color = CrossEngineStuff.MultiplyColor(color, Opacity);
+			position = Transform.Apply(position);
 
 			scale *= Transform.Scale;
-			rotation += Transform.Rotation * (float)Math.PI / 180;
-
-			var origin = (Transform.Origin - Transform.Apply(position)) / scale;
-			position = Transform.LocalOrigin;
+			rotation += Transform.Rotation;
 
 #if MONOGAME || FNA || STRIDE
-			font.DrawText(_renderer, text, position, color, scale, rotation, origin, layerDepth);
+			font.DrawText(_renderer, text, position, color, scale, rotation, Vector2.Zero, layerDepth);
 #else
 			font.DrawText(_fontStashRenderer, text, position, color, scale, rotation, origin, layerDepth);
 #endif
@@ -332,28 +323,6 @@ namespace Myra.Graphics2D
 		/// <param name="layerDepth">A depth of the layer of this string.</param>
 		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color color, float layerDepth = 0.0f) =>
 			DrawString(font, text, position, color, Vector2.One, 0, layerDepth);
-
-		/// <summary>
-		/// Draws a text
-		/// </summary>
-		/// <param name="text">The text which will be drawn.</param>
-		/// <param name="position">The drawing location on screen.</param>
-		/// <param name="colors">Colors of glyphs.</param>
-		/// <param name="rotation">A rotation of this text in radians.</param>
-		/// <param name="origin">Center of the rotation.</param>
-		/// <param name="scale">A scaling of this text.</param>
-		/// <param name="layerDepth">A depth of the layer of this string.</param>
-		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color[] colors, Vector2 scale, float rotation, Vector2 origin, float layerDepth = 0.0f)
-		{
-			position = Transform.Apply(position);
-			SetTextTextureFiltering();
-
-#if MONOGAME || FNA || STRIDE
-			font.DrawText(_renderer, text, position, colors, Transform.Scale * scale, rotation, origin, layerDepth);
-#else
-			font.DrawText(_fontStashRenderer, text, position, colors, Transform.Scale * scale, rotation, origin, layerDepth);
-#endif
-		}
 
 		public void Begin()
 		{
