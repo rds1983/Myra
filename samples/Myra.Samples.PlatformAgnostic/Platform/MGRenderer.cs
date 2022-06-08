@@ -90,8 +90,7 @@ namespace Myra.Samples.AllWidgets
 			_beginCalled = false;
 		}
 
-		public void Draw(object texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation,
-			Vector2 origin, Vector2 scale, float depth)
+		public void Draw(object texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 scale, float depth)
 		{
 			var xnaTexture = (Texture2D)texture;
 
@@ -100,7 +99,7 @@ namespace Myra.Samples.AllWidgets
 				sourceRectangle?.ToXNA(),
 				color.ToXNA(),
 				rotation,
-				origin.ToXNA(),
+				Vector2.Zero.ToXNA(),
 				scale.ToXNA(),
 				SpriteEffects.None,
 				depth);

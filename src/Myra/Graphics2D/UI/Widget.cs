@@ -932,7 +932,8 @@ namespace Myra.Graphics2D.UI
 			var oldTransform = context.Transform;
 
 			// Apply widget transforms
-			context.Transform.AddTransform((_layoutBounds.Location + new Point(Left, Top)).ToVector2(),
+			var p = new Point(_layoutBounds.X + Left, _layoutBounds.Y + Top);
+			context.Transform.AddTransform(p.ToVector2(),
 				TransformOrigin * _layoutBounds.Size().ToVector2(),
 				Scale,
 				Rotation * (float)Math.PI / 180);

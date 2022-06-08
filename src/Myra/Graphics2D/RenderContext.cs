@@ -227,9 +227,9 @@ namespace Myra.Graphics2D
 #if MONOGAME || FNA
 			 _renderer.Draw(texture, position, sourceRectangle, color, rotation, Vector2.Zero, scale, SpriteEffects.None, depth);
 #elif STRIDE
-			_renderer.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, SpriteEffects.None, ImageOrientation.AsIs, depth);
+			_renderer.Draw(texture, position, sourceRectangle, color, rotation, Vector2.Zero, scale, SpriteEffects.None, ImageOrientation.AsIs, depth);
 #else
-			_renderer.Draw(texture, position, sourceRectangle, color,  rotation, origin, scale, depth);
+			_renderer.Draw(texture, position, sourceRectangle, color,  rotation, scale, depth);
 #endif
 		}
 
@@ -307,7 +307,7 @@ namespace Myra.Graphics2D
 #if MONOGAME || FNA || STRIDE
 			font.DrawText(_renderer, text, position, color, scale, rotation, Vector2.Zero, layerDepth);
 #else
-			font.DrawText(_fontStashRenderer, text, position, color, scale, rotation, origin, layerDepth);
+			font.DrawText(_fontStashRenderer, text, position, color, scale, rotation, Vector2.Zero, layerDepth);
 #endif
 		}
 

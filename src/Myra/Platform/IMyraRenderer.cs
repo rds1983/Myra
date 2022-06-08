@@ -30,9 +30,8 @@ namespace Myra.Platform
 		/// <param name="src"></param>
 		/// <param name="color"></param>
 		/// <param name="rotation"></param>
-		/// <param name="origin"></param>
 		/// <param name="scale"></param>
 		/// <param name="depth"></param>
-		void Draw(object texture, Vector2 pos, Rectangle? src, Color color, float rotation, Vector2 origin, Vector2 scale, float depth);
+		void Draw(object texture, Vector2 pos, Rectangle? src, Color color, float rotation, Vector2 scale, float depth);
 	}
 }
