@@ -75,6 +75,7 @@ namespace MyraPad
 
 		private readonly ConcurrentQueue<string> _loadQueue = new ConcurrentQueue<string>();
 		private readonly ConcurrentQueue<Project> _newProjectsQueue = new ConcurrentQueue<Project>();
+		private readonly ConcurrentQueue<Action> _uiActions = new ConcurrentQueue<Action>();
 		private readonly AutoResetEvent _refreshProjectEvent = new AutoResetEvent(false);
 
 		private bool _suppressProjectRefresh = false;
@@ -738,6 +739,19 @@ namespace MyraPad
 			_refreshProjectEvent.Set();
 		}
 
+		private void QueueUIAction(Action action)
+		{
+			_uiActions.Enqueue(action);
+		}
+
+		private void QueueSetStatusText(string text)
+		{
+			QueueUIAction(() =>
+			{
+				_ui._textStatus.Text = text;
+			});
+		}
+
 		private void RefreshProjectProc(object state)
 		{
 			while (true)
@@ -756,7 +770,7 @@ namespace MyraPad
 				{
 					try
 					{
-						_ui._textStatus.Text = "Reloading...";
+						QueueSetStatusText("Reloading...");
 
 						var xDoc = XDocument.Parse(data);
 
@@ -778,11 +792,11 @@ namespace MyraPad
 						var newProject = Project.LoadFromXml(xDoc, AssetManager, stylesheet);
 						_newProjectsQueue.Enqueue(newProject);
 
-						_ui._textStatus.Text = string.Empty;
+						QueueSetStatusText(string.Empty);
 					}
 					catch (Exception ex)
 					{
-						_ui._textStatus.Text = ex.Message;
+						QueueSetStatusText(ex.Message);
 					}
 				}
 			}
@@ -1451,6 +1465,13 @@ namespace MyraPad
 			if (_refreshInitiated != null && (DateTime.Now - _refreshInitiated.Value).TotalSeconds >= 0.75f)
 			{
 				QueueRefreshProject();
+			}
+
+			while (!_uiActions.IsEmpty)
+			{
+				Action action;
+				_uiActions.TryDequeue(out action);
+				action();
 			}
 
 			if (_newObject != null)
