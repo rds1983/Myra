@@ -32,6 +32,7 @@ Copy-Item -Path "samples\Myra.Samples.ObjectEditor\image.png" -Destination "ZipP
 Copy-Item -Path "samples\Myra.Samples.TextRendering\bin\MonoGame\Release\net45\Myra.Samples.TextRendering.exe" -Destination "ZipPackage"
 Copy-Item -Path "samples\Stylesheets\*" -Destination "ZipPackage\Stylesheets\" -Recurse
 Copy-Item -Path "src\MyraPad\bin\Release\net45\MyraPad.exe" -Destination "ZipPackage"
+Copy-Item -Path "src\MyraPad\bin\Release\net45\FontStashSharp.Base.dll" -Destination "ZipPackage"
 Copy-Item -Path "src\MyraPad\bin\Release\net45\FontStashSharp.MonoGame.dll" -Destination "ZipPackage"
 Copy-Item -Path "src\MyraPad\bin\Release\net45\StbImageSharp.dll" -Destination "ZipPackage"
 Copy-Item -Path "src\MyraPad\bin\Release\net45\StbTrueTypeSharp.dll" -Destination "ZipPackage"
