@@ -15,23 +15,10 @@ namespace Myra.Graphics2D
 {
 	public struct Transform
 	{
-		private Matrix _transformMatrix, _inverseMatrix;
-		private bool _transformDirty;
-
 		public Vector2 Scale { get; private set; }
 		public float Rotation { get; private set; }
 
-		public Matrix TransformMatrix
-		{
-			get => _transformMatrix;
-			set
-			{
-				if (_transformMatrix == value) return;
-
-				_transformMatrix = value;
-				_transformDirty = true;
-			}
-		}
+		public Matrix TransformMatrix;
 
 		/// <summary>
 		/// Resets the transform
@@ -90,29 +77,10 @@ namespace Myra.Graphics2D
 			Rotation += rotation;
 		}
 
-		public Vector2 Apply(Vector2 source) => source.Transform(ref _transformMatrix);
+		public Vector2 Apply(Vector2 source) => source.Transform(ref TransformMatrix);
 
 		public Point Apply(Point source) => Apply(new Vector2(source.X, source.Y)).ToPoint();
 
-		public Rectangle Apply(Rectangle source) => source.Transform(ref _transformMatrix);
-
-		public Vector2 ApplyInverse(Vector2 source)
-		{
-			if (_transformDirty)
-			{
-#if MONOGAME || FNA || STRIDE
-				_inverseMatrix = Matrix.Invert(TransformMatrix);
-#else
-				Matrix inverse = Matrix.Identity;
-				Matrix.Invert(TransformMatrix, out inverse);
-				_inverseMatrix = inverse;
-#endif
-				_transformDirty = false;
-			}
-
-			return source.Transform(ref _inverseMatrix);
-		}
-
-		public Point ApplyInverse(Point source) => ApplyInverse(new Vector2(source.X, source.Y)).ToPoint();
+		public Rectangle Apply(Rectangle source) => source.Transform(ref TransformMatrix);
 	}
 }

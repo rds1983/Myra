@@ -65,7 +65,8 @@ namespace Myra.Graphics2D.UI
 
 		private bool _isMouseInside, _enabled;
 		private bool _isKeyboardFocused = false;
-		private Transform Transform;
+		private Matrix _transformMatrix, _inverseMatrix;
+		private bool _transformDirty = true;
 
 		/// <summary>
 		/// Internal use only. (MyraPad)
@@ -813,6 +814,21 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		private Matrix TransformMatrix
+		{
+			get => _transformMatrix;
+			set
+			{
+				if (value == _transformMatrix)
+				{
+					return;
+				}
+
+				_transformMatrix = value;
+				_transformDirty = true;
+			}
+		}
+
 		public event EventHandler PlacedChanged;
 		public event EventHandler VisibleChanged;
 		public event EventHandler EnabledChanged;
@@ -938,10 +954,10 @@ namespace Myra.Graphics2D.UI
 				Scale,
 				Rotation * (float)Math.PI / 180);
 
-			Transform = context.Transform;
+			TransformMatrix = context.Transform.TransformMatrix;
 
 			Rectangle? oldScissorRectangle = null;
-			if (ClipToBounds && Transform.Rotation == 0)
+			if (ClipToBounds && context.Transform.Rotation == 0)
 			{
 				oldScissorRectangle = context.Scissor;
 				var absoluteBounds = context.Transform.Apply(Bounds);
@@ -1519,9 +1535,28 @@ namespace Myra.Graphics2D.UI
 			Top = newTop;
 		}
 
-		public Point ToGlobal(Point pos) => Transform.Apply(pos);
+		public Vector2 ToGlobal(Vector2 pos) => pos.Transform(ref _transformMatrix);
 
-		public Point ToLocal(Point pos) => Transform.ApplyInverse(pos);
+		public Point ToGlobal(Point pos) => ToGlobal(new Vector2(pos.X, pos.Y)).ToPoint();
+
+		public Vector2 ToLocal(Vector2 source)
+		{
+			if (_transformDirty)
+			{
+#if MONOGAME || FNA || STRIDE
+				_inverseMatrix = Matrix.Invert(TransformMatrix);
+#else
+				Matrix inverse = Matrix.Identity;
+				Matrix.Invert(TransformMatrix, out inverse);
+				_inverseMatrix = inverse;
+#endif
+				_transformDirty = false;
+			}
+
+			return source.Transform(ref _inverseMatrix);
+		}
+
+		public Point ToLocal(Point pos) => ToLocal(new Vector2(pos.X, pos.Y)).ToPoint();
 
 		public bool ContainsGlobalPoint(Point pos)
 		{
