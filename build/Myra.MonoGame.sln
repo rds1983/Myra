@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30011.22
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{EAB0AA24-7185-4897-A866-AE87AF3F2E0B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.CustomUIStylesheet", "..\samples\Myra.Samples.CustomUIStylesheet\Myra.Samples.CustomUIStylesheet.csproj", "{8385D5C0-C8D8-4242-940A-2BD071EDC5B1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.GridContainer", "..\samples\Myra.Samples.GridContainer\Myra.Samples.GridContainer.csproj", "{E96FADDC-29FA-49F7-920D-4AD9F5FBD705}"
 EndProject
@@ -39,16 +37,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.GdxTextureAtlasToMyra"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.TextRendering", "..\samples\Myra.Samples.TextRendering\Myra.Samples.TextRendering.csproj", "{7CC726A6-30C6-47D7-9233-7881E4E8F5E4}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.CustomUIStylesheet.MonoGame", "..\samples\Myra.Samples.CustomUIStylesheet\Myra.Samples.CustomUIStylesheet.MonoGame.csproj", "{3016FB8F-2C41-4C8C-8B05-CECCD40526AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8385D5C0-C8D8-4242-940A-2BD071EDC5B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8385D5C0-C8D8-4242-940A-2BD071EDC5B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8385D5C0-C8D8-4242-940A-2BD071EDC5B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8385D5C0-C8D8-4242-940A-2BD071EDC5B1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E96FADDC-29FA-49F7-920D-4AD9F5FBD705}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E96FADDC-29FA-49F7-920D-4AD9F5FBD705}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E96FADDC-29FA-49F7-920D-4AD9F5FBD705}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -109,12 +105,15 @@ Global
 		{7CC726A6-30C6-47D7-9233-7881E4E8F5E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CC726A6-30C6-47D7-9233-7881E4E8F5E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7CC726A6-30C6-47D7-9233-7881E4E8F5E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3016FB8F-2C41-4C8C-8B05-CECCD40526AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3016FB8F-2C41-4C8C-8B05-CECCD40526AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3016FB8F-2C41-4C8C-8B05-CECCD40526AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3016FB8F-2C41-4C8C-8B05-CECCD40526AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{8385D5C0-C8D8-4242-940A-2BD071EDC5B1} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{E96FADDC-29FA-49F7-920D-4AD9F5FBD705} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{15129613-1D63-4709-8B71-70E73BAB9C0B} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{C98D1921-8281-4FA4-B451-E648B59C23B5} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
@@ -128,6 +127,7 @@ Global
 		{7A6283C5-C2CF-4CE0-877A-B8A95D391007} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{318EFE82-73CE-43A4-A4B3-A26152596064} = {869736F8-E5A4-4A51-BC70-0433C6ACE5D4}
 		{7CC726A6-30C6-47D7-9233-7881E4E8F5E4} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{3016FB8F-2C41-4C8C-8B05-CECCD40526AB} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35ACDF4E-2CE2-46B1-A19F-35DC131069A1}

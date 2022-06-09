@@ -182,6 +182,7 @@ namespace Myra.Graphics2D.UI
 		public Func<Rectangle> BoundsFetcher = DefaultBoundsFetcher;
 
 		internal Rectangle InternalBounds { get; private set; }
+		internal Rectangle LayoutBounds => new Rectangle(0, 0, InternalBounds.Width, InternalBounds.Height);
 
 		public Widget ContextMenu { get; private set; }
 
@@ -549,16 +550,16 @@ namespace Myra.Graphics2D.UI
 			ContextMenu.HorizontalAlignment = HorizontalAlignment.Left;
 			ContextMenu.VerticalAlignment = VerticalAlignment.Top;
 
-			var measure = ContextMenu.Measure(InternalBounds.Size());
+			var measure = ContextMenu.Measure(LayoutBounds.Size());
 
-			if (position.X + measure.X > InternalBounds.Right)
+			if (position.X + measure.X > LayoutBounds.Right)
 			{
-				position.X = InternalBounds.Right - measure.X;
+				position.X = LayoutBounds.Right - measure.X;
 			}
 
-			if (position.Y + measure.Y > InternalBounds.Bottom)
+			if (position.Y + measure.Y > LayoutBounds.Bottom)
 			{
-				position.Y = InternalBounds.Bottom - measure.Y;
+				position.Y = LayoutBounds.Bottom - measure.Y;
 			}
 
 			ContextMenu.Left = position.X;
@@ -648,14 +649,14 @@ namespace Myra.Graphics2D.UI
 				Scale,
 				Rotation);
 
-			var bounds = _renderContext.Transform.Apply(InternalBounds);
+			var bounds = _renderContext.Transform.Apply(LayoutBounds);
 			_renderContext.Scissor = bounds;
 			_renderContext.Opacity = Opacity;
 
 			if (Stylesheet.Current.DesktopStyle != null &&
 				Stylesheet.Current.DesktopStyle.Background != null)
 			{
-				Stylesheet.Current.DesktopStyle.Background.Draw(_renderContext, InternalBounds);
+				Stylesheet.Current.DesktopStyle.Background.Draw(_renderContext, LayoutBounds);
 			}
 
 			foreach (var widget in ChildrenCopy)
@@ -707,7 +708,7 @@ namespace Myra.Graphics2D.UI
 			{
 				if (child.Visible)
 				{
-					child.Arrange(InternalBounds);
+					child.Arrange(LayoutBounds);
 				}
 			}
 
