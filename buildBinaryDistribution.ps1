@@ -50,7 +50,6 @@ Copy-Item -Path "src\MyraPad\bin\Release\net45\x86\SDL2.dll" -Destination "ZipPa
 Copy-Item -Path "src\MyraPad\bin\Release\net45\x86\soft_oal.dll" -Destination "ZipPackage\x86"
 Copy-Item -Path "src\MyraPad\bin\Release\net45\libSDL2-2.0.0.dylib" -Destination "ZipPackage"
 Copy-Item -Path "src\MyraPad\bin\Release\net45\libopenal.1.dylib" -Destination "ZipPackage"
-Copy-Item -Path "src\Myra.GdxTextureAtlasToMyra\bin\Release\net45\Myra.GdxTextureAtlasToMyra.exe" -Destination "ZipPackage"
 
 # Compress
 Rename-Item "ZipPackage" "Myra.$version"
