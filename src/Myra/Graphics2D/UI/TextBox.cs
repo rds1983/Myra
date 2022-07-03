@@ -280,9 +280,12 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Cursor position in local coordinates
+		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		public Point CursorScreenPosition
+		public Point CursorCoords
 		{
 			get
 			{

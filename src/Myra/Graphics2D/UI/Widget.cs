@@ -864,6 +864,7 @@ namespace Myra.Graphics2D.UI
 		{
 			Visible = true;
 			Enabled = true;
+			DragHandle = this;
 		}
 
 		public virtual IBrush GetCurrentBackground()

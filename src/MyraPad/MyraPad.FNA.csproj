@@ -1,9 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net45</TargetFramework>
-    <ApplicationIcon />
-    <StartupObject />
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net461</TargetFramework>
     <AssemblyName>MyraPad</AssemblyName>
     <RootNamespace>MyraPad</RootNamespace>
     <OutputPath>bin\FNA\$(Configuration)</OutputPath>
@@ -20,5 +18,6 @@
 
   <ItemGroup>
     <Reference Include="System.Windows.Forms" />
+    <PackageReference Include="System.CodeDom" Version="6.0.0" />
   </ItemGroup>
 </Project>

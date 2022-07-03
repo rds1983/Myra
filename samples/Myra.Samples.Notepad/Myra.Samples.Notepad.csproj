@@ -1,16 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <ApplicationIcon />
-    <StartupObject />
+    <OutputType>Exe</OutputType>
     <AssemblyName>Myra.Samples.Notepad</AssemblyName>
     <RootNamespace>Myra.Samples.Notepad</RootNamespace>
-    <TargetFramework>net45</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.7.1.189" />
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="$(MonoGameVersion)" />
   </ItemGroup>
 
   <ItemGroup>

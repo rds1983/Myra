@@ -1,17 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <ApplicationIcon />
-    <StartupObject />
-    <AssemblyName>Myra.Samples.AllWidgets</AssemblyName>
-    <RootNamespace>Myra.Samples.AllWidgets</RootNamespace>
-    <TargetFramework>net45</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
     <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
     <DefineConstants>$(DefineConstants);MONOGAME</DefineConstants>
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.7.1.189" />
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="$(MonoGameVersion)" />
   </ItemGroup>
 
   <ItemGroup>

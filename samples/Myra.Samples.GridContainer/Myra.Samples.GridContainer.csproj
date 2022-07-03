@@ -1,16 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <ApplicationIcon />
-    <StartupObject />
-    <AssemblyName>Myra.Samples.GridContainer</AssemblyName>
-    <RootNamespace>Myra.Samples.GridContainer</RootNamespace>
-    <TargetFramework>net45</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
     <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.7.1.189" />
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="$(MonoGameVersion)" />
   </ItemGroup>
 
   <ItemGroup>

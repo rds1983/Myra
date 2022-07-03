@@ -15,7 +15,7 @@ namespace Myra.Samples.ObjectEditor
 		private Texture2D _playerImage;
 		private Label _labelOverGui;
 		private Window _windowEditor;
-		private Point _lastPosition = new Point(800, 100);
+		private Point _lastPosition = new Point(600, 100);
 		private SpriteBatch _spriteBatch;
 		private RenderContext _renderContext;
 		private Desktop _desktop;

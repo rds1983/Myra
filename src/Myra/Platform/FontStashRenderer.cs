@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace Myra.Platform
 {
-	internal class FontStashRenderer: IFontStashRenderer
+	internal class FontStashRenderer: IFontStashRenderer2
 	{
 		private readonly IMyraRenderer _myraRenderer;
 
@@ -21,9 +21,9 @@ namespace Myra.Platform
 			_myraRenderer = myraRenderer;
 		}
 
-		public void Draw(object texture, Vector2 pos, Rectangle? src, Color color, float rotation, Vector2 scale, float depth)
+		public void DrawQuad(object texture, ref VertexPositionColorTexture topLeft, ref VertexPositionColorTexture topRight, ref VertexPositionColorTexture bottomLeft, ref VertexPositionColorTexture bottomRight)
 		{
-			_myraRenderer.Draw(texture, pos, src, color, rotation, scale, depth);
+			_myraRenderer.DrawQuad(texture, ref topLeft, ref topRight, ref bottomLeft, ref bottomRight);
 		}
 	}
 }

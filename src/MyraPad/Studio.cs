@@ -1036,7 +1036,7 @@ namespace MyraPad
 						_autoCompleteMenu.Items.Add(menuItem);
 					}
 
-					var screen = _ui._textSource.CursorScreenPosition;
+					var screen = _ui._textSource.ToGlobal(_ui._textSource.CursorCoords);
 					screen.Y += _ui._textSource.Font.LineHeight;
 
 					if (_autoCompleteMenu.Items.Count > 0)

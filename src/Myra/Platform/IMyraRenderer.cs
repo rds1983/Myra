@@ -1,6 +1,6 @@
-﻿using Myra.Graphics2D;
+﻿using FontStashSharp.Interfaces;
+using Myra.Graphics2D;
 using System.Drawing;
-using System.Numerics;
 
 namespace Myra.Platform
 {
@@ -23,15 +23,13 @@ namespace Myra.Platform
 		void End();
 
 		/// <summary>
-		/// Draws a texture
+		/// Draws a texture quad
 		/// </summary>
 		/// <param name="texture"></param>
-		/// <param name="pos"></param>
-		/// <param name="src"></param>
-		/// <param name="color"></param>
-		/// <param name="rotation"></param>
-		/// <param name="scale"></param>
-		/// <param name="depth"></param>
-		void Draw(object texture, Vector2 pos, Rectangle? src, Color color, float rotation, Vector2 scale, float depth);
+		/// <param name="topLeft"></param>
+		/// <param name="topRight"></param>
+		/// <param name="bottomLeft"></param>
+		/// <param name="bottomRight"></param>
+		void DrawQuad(object texture, ref VertexPositionColorTexture topLeft, ref VertexPositionColorTexture topRight, ref VertexPositionColorTexture bottomLeft, ref VertexPositionColorTexture bottomRight);
 	}
 }

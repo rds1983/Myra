@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);MONOGAME</DefineConstants>
-    <TargetFrameworks>net452</TargetFrameworks>
+    <TargetFrameworks>net6.0-windows</TargetFrameworks>
     <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
     <OutputType>Library</OutputType>
     <RootNamespace>Myra.Tests</RootNamespace>
@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.0.1641" />
+    <PackageReference Include="MonoGame.Framework.WindowsDX" Version="$(MonoGameVersion)" />
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />

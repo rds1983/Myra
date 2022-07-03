@@ -1,6 +1,7 @@
 using FontStashSharp;
 using Myra.Utility;
 using System;
+using FontStashSharp.Interfaces;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -229,7 +230,7 @@ namespace Myra.Graphics2D
 #elif STRIDE
 			_renderer.Draw(texture, position, sourceRectangle, color, rotation, Vector2.Zero, scale, SpriteEffects.None, ImageOrientation.AsIs, depth);
 #else
-			_renderer.Draw(texture, position, sourceRectangle, color,  rotation, scale, depth);
+			_renderer.Draw(texture, position, sourceRectangle, color,  rotation, scale);
 #endif
 		}
 
@@ -307,7 +308,7 @@ namespace Myra.Graphics2D
 #if MONOGAME || FNA || STRIDE
 			font.DrawText(_renderer, text, position, color, scale, rotation, Vector2.Zero, layerDepth);
 #else
-			font.DrawText(_fontStashRenderer, text, position, color, scale, rotation, Vector2.Zero, layerDepth);
+			font.DrawText(_fontStashRenderer, text, position, color, scale, rotation, Vector2.Zero);
 #endif
 		}
 

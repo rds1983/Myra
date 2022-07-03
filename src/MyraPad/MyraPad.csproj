@@ -1,9 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net45</TargetFramework>
-    <ApplicationIcon />
-    <StartupObject />
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>MyraPad</AssemblyName>
     <RootNamespace>MyraPad</RootNamespace>
     <DefineConstants>$(DefineConstants);MONOGAME</DefineConstants>	
@@ -14,14 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.7.1.189" />
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="$(MonoGameVersion)" />
+    <PackageReference Include="System.CodeDom" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Myra\Myra.MonoGame.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
 </Project>
