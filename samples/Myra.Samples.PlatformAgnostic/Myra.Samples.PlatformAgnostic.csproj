@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <AssemblyName>Myra.Samples.AllWidgets</AssemblyName>
+    <RootNamespace>Myra.Samples.AllWidgets</RootNamespace>
+    <TargetFramework>net6.0</TargetFramework>
+    <DefineConstants>$(DefineConstants);PLATFORM_AGNOSTIC</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Myra.Samples.AllWidgets\AllWidgets.cs" Link="AllWidgets.cs" />
+    <Compile Include="..\Myra.Samples.AllWidgets\AllWidgets.Generated.cs" Link="AllWidgets.Generated.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="$(MonoGameVersion)" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Myra\Myra.PlatformAgnostic.csproj" />
+  </ItemGroup>  
+</Project>

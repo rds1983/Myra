@@ -230,7 +230,7 @@ namespace Myra.Graphics2D
 #elif STRIDE
 			_renderer.Draw(texture, position, sourceRectangle, color, rotation, Vector2.Zero, scale, SpriteEffects.None, ImageOrientation.AsIs, depth);
 #else
-			_renderer.Draw(texture, position, sourceRectangle, color,  rotation, scale);
+			_renderer.Draw(texture, position, sourceRectangle, color,  rotation, scale, depth);
 #endif
 		}
 
