@@ -37,7 +37,7 @@ namespace Myra.Graphics2D.UI
 
 		private Rectangle _bounds;
 		private Vector2 _scale = Vector2.One;
-		private Vector2 _transformOrigin = new Vector2(0.5f, 0.5f);
+		private Vector2 _transformOrigin = Vector2.Zero;
 		private float _rotation = 0.0f;
 		private Transform? _transform;
 
