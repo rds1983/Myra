@@ -173,6 +173,16 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		internal override void InvalidateTransform()
+		{
+			base.InvalidateTransform();
+
+			foreach (var child in ChildrenCopy)
+			{
+				child.InvalidateTransform();
+			}
+		}
+
 		public int CalculateTotalChildCount(bool visibleOnly)
 		{
 			var result = ChildrenCopy.Count;

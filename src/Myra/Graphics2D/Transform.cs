@@ -15,19 +15,42 @@ namespace Myra.Graphics2D
 {
 	public struct Transform
 	{
+		private Matrix? _inverseMatrix;
+
 		public Vector2 Scale { get; private set; }
 		public float Rotation { get; private set; }
 
 		public Matrix TransformMatrix;
 
-		/// <summary>
-		/// Resets the transform
-		/// </summary>
-		public void Reset()
+		public Matrix InverseMatrix
 		{
-			Scale = Vector2.One;
-			Rotation = 0;
-			TransformMatrix = Matrix.Identity;
+			get
+			{
+				if (_inverseMatrix == null)
+				{
+#if MONOGAME || FNA || STRIDE
+					_inverseMatrix = Matrix.Invert(TransformMatrix);
+#else
+					Matrix inverse = Matrix.Identity;
+					Matrix.Invert(TransformMatrix, out inverse);
+					_inverseMatrix = inverse;
+#endif
+				}
+
+				return _inverseMatrix.Value;
+			}
+		}
+
+		public Transform(Vector2 offset, Vector2 origin, Vector2 scale, float rotation)
+		{
+			Matrix newTransform;
+			BuildTransform(offset, origin, scale, rotation, out newTransform);
+			TransformMatrix = newTransform;
+
+			Scale = scale;
+			Rotation = rotation;
+
+			_inverseMatrix = null;
 		}
 
 		private static void BuildTransform(Vector2 position, Vector2 origin, Vector2 scale, float rotation, out Matrix result)
@@ -67,19 +90,23 @@ namespace Myra.Graphics2D
 #endif
 		}
 
-		public void AddTransform(Vector2 offset, Vector2 origin, Vector2 scale, float rotation)
+		public void AddTransform(ref Transform newTransform)
 		{
-			Matrix newTransform;
-			BuildTransform(offset, origin, scale, rotation, out newTransform);
-			TransformMatrix = newTransform * TransformMatrix;
+			TransformMatrix = newTransform.TransformMatrix * TransformMatrix;
 
-			Scale *= scale;
-			Rotation += rotation;
+			Scale *= newTransform.Scale;
+			Rotation += newTransform.Rotation;
+
+			_inverseMatrix = null;
 		}
 
 		public Vector2 Apply(Vector2 source) => source.Transform(ref TransformMatrix);
 
 		public Point Apply(Point source) => Apply(new Vector2(source.X, source.Y)).ToPoint();
+
+		public Vector2 InverseApply(Vector2 source) => Vector2.Transform(source, InverseMatrix);
+
+		public Point InverseApply(Point source) => InverseApply(new Vector2(source.X, source.Y)).ToPoint();
 
 		public Rectangle Apply(Rectangle source) => source.Transform(ref TransformMatrix);
 	}

@@ -35,6 +35,12 @@ namespace Myra.Graphics2D.UI
 		public const int DoubleClickIntervalInMs = 500;
 		public const int DoubleClickRadius = 2;
 
+		private Rectangle _bounds;
+		private Vector2 _scale = Vector2.One;
+		private Vector2 _transformOrigin = new Vector2(0.5f, 0.5f);
+		private float _rotation = 0.0f;
+		private Transform? _transform;
+
 		private RenderContext _renderContext;
 
 		private bool _layoutDirty = true;
@@ -181,7 +187,24 @@ namespace Myra.Graphics2D.UI
 
 		public Func<Rectangle> BoundsFetcher = DefaultBoundsFetcher;
 
-		internal Rectangle InternalBounds { get; private set; }
+		internal Rectangle InternalBounds
+		{
+			get => _bounds;
+
+			set
+			{
+				if (_bounds == value)
+				{
+					return;
+				}
+
+				_bounds = value;
+
+
+				InvalidateTransform();
+			}
+		}
+
 		internal Rectangle LayoutBounds => new Rectangle(0, 0, InternalBounds.Width, InternalBounds.Height);
 
 		public Widget ContextMenu { get; private set; }
@@ -260,11 +283,68 @@ namespace Myra.Graphics2D.UI
 
 		public float Opacity { get; set; }
 
-		public Vector2 Scale { get; set; } = Vector2.One;
+		public Vector2 Scale
+		{
+			get => _scale;
+			set
+			{
+				if (value == _scale)
+				{
+					return;
+				}
 
-		public Vector2 TransformOrigin { get; set; } = Vector2.Zero;
+				_scale = value;
+				InvalidateTransform();
+			}
 
-		public float Rotation { get; set; } = 0.0f;
+		}
+
+		public Vector2 TransformOrigin
+		{
+			get => _transformOrigin;
+			set
+			{
+				if (value == _transformOrigin)
+				{
+					return;
+				}
+
+				_transformOrigin = value;
+				InvalidateTransform();
+			}
+		}
+
+		public float Rotation
+		{
+			get => _rotation;
+
+			set
+			{
+				if (value == _rotation)
+				{
+					return;
+				}
+
+				_rotation = value;
+				InvalidateTransform();
+			}
+		}
+
+		internal Transform Transform
+		{
+			get
+			{
+				if (_transform == null)
+				{
+					_transform = new Transform(_bounds.Location.ToVector2(),
+						TransformOrigin * _bounds.Size().ToVector2(),
+						Scale,
+						Rotation * (float)Math.PI / 180);
+				}
+
+				return _transform.Value;
+			}
+		}
 
 		public bool IsMouseOverGUI
 		{
@@ -643,11 +723,7 @@ namespace Myra.Graphics2D.UI
 			_renderContext.Begin();
 
 			// Disable transform during setting the scissor rectangle for the Desktop
-			_renderContext.Transform.Reset();
-			_renderContext.Transform.AddTransform(InternalBounds.Location.ToVector2(),
-				TransformOrigin * InternalBounds.Size().ToVector2(),
-				Scale,
-				Rotation);
+			_renderContext.Transform = Transform;
 
 			var bounds = _renderContext.Transform.Apply(LayoutBounds);
 			_renderContext.Scissor = bounds;
@@ -677,6 +753,16 @@ namespace Myra.Graphics2D.UI
 			UpdateInput();
 			UpdateLayout();
 			RenderVisual();
+		}
+
+		private void InvalidateTransform()
+		{
+			_transform = null;
+
+			foreach (var child in ChildrenCopy)
+			{
+				child.InvalidateTransform();
+			}
 		}
 
 		public void InvalidateLayout()

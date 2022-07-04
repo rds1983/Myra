@@ -1,4 +1,6 @@
-﻿#if MONOGAME || FNA
+﻿using System;
+
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 #elif STRIDE
@@ -135,13 +137,18 @@ namespace Myra.Graphics2D.TextureAtlases
 		{
 			var y = dest.Y;
 
-			var centerWidth = dest.Width - _info.Left - _info.Right;
+			var left = Math.Min(_info.Left, dest.Width);
+			var top = Math.Min(_info.Top, dest.Height);
+			var right = Math.Min(_info.Right, dest.Width);
+			var bottom = Math.Min(_info.Bottom, dest.Height);
+
+			var centerWidth = dest.Width - left - right;
 			if (centerWidth < 0)
 			{
 				centerWidth = 0;
 			}
 
-			var centerHeight = dest.Height - _info.Top - _info.Bottom;
+			var centerHeight = dest.Height - top - bottom;
 			if (centerHeight < 0)
 			{
 				centerHeight = 0;
@@ -152,18 +159,18 @@ namespace Myra.Graphics2D.TextureAtlases
 				_topLeft.Draw(context,
 					new Rectangle(dest.X,
 						y,
-						_info.Left,
-						_info.Top),
+						left,
+						top),
 					color);
 			}
 
 			if (_topCenter != null && centerWidth > 0)
 			{
 				_topCenter.Draw(context,
-					new Rectangle(dest.X + _info.Left,
+					new Rectangle(dest.X + left,
 						y,
 						centerWidth,
-						_info.Top),
+						top),
 					color);
 			}
 
@@ -172,18 +179,18 @@ namespace Myra.Graphics2D.TextureAtlases
 				_topRight.Draw(context,
 					new Rectangle(dest.X + Info.Left + centerWidth,
 						y,
-						_info.Right,
-						_info.Top),
+						right,
+						top),
 					color);
 			}
 
-			y += _info.Top;
+			y += top;
 			if (_centerLeft != null && centerHeight > 0)
 			{
 				_centerLeft.Draw(context,
 					new Rectangle(dest.X,
 						y,
-						_info.Left,
+						left,
 						centerHeight),
 					color);
 			}
@@ -191,7 +198,7 @@ namespace Myra.Graphics2D.TextureAtlases
 			if (_center != null && centerWidth > 0 && centerHeight > 0)
 			{
 				_center.Draw(context,
-					new Rectangle(dest.X + _info.Left,
+					new Rectangle(dest.X + left,
 						y,
 						centerWidth,
 						centerHeight),
@@ -203,7 +210,7 @@ namespace Myra.Graphics2D.TextureAtlases
 				_centerRight.Draw(context,
 					new Rectangle(dest.X + Info.Left + centerWidth,
 						y,
-						_info.Right,
+						right,
 						centerHeight),
 					color);
 			}
@@ -214,18 +221,18 @@ namespace Myra.Graphics2D.TextureAtlases
 				_bottomLeft.Draw(context,
 					new Rectangle(dest.X,
 						y,
-						_info.Left,
-						_info.Bottom),
+						left,
+						bottom),
 					color);
 			}
 
 			if (_bottomCenter != null && centerWidth > 0)
 			{
 				_bottomCenter.Draw(context,
-					new Rectangle(dest.X + _info.Left,
+					new Rectangle(dest.X + left,
 						y,
 						centerWidth,
-						_info.Bottom),
+						bottom),
 					color);
 			}
 
@@ -234,8 +241,8 @@ namespace Myra.Graphics2D.TextureAtlases
 				_bottomRight.Draw(context,
 					new Rectangle(dest.X + Info.Left + centerWidth,
 						y,
-						_info.Right,
-						_info.Bottom),
+						right,
+						bottom),
 					color);
 			}
 		}

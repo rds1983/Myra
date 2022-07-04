@@ -65,8 +65,11 @@ namespace Myra.Graphics2D.UI
 
 		private bool _isMouseInside, _enabled;
 		private bool _isKeyboardFocused = false;
-		private Matrix _transformMatrix, _inverseMatrix;
-		private bool _transformDirty = true;
+		private Vector2 _scale = Vector2.One;
+		private Vector2 _transformOrigin = new Vector2(0.5f, 0.5f);
+		private float _rotation = 0.0f;
+		private Transform? _transform;
+
 
 		/// <summary>
 		/// Internal use only. (MyraPad)
@@ -88,6 +91,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_left = value;
+				InvalidateTransform();
 				FireLocationChanged();
 			}
 		}
@@ -106,6 +110,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_top = value;
+				InvalidateTransform();
 				FireLocationChanged();
 			}
 		}
@@ -505,17 +510,58 @@ namespace Myra.Graphics2D.UI
 		[Category("Transform")]
 		[DefaultValue("1, 1")]
 		[DesignerFolded]
-		public Vector2 Scale { get; set; } = Vector2.One;
+		public Vector2 Scale
+		{
+			get => _scale;
+			set
+			{
+				if (value == _scale)
+				{
+					return;
+				}
+
+				_scale = value;
+				InvalidateTransform();
+			}
+
+		}
 
 		[Category("Transform")]
 		[DefaultValue("0.5, 0.5")]
 		[DesignerFolded]
-		public Vector2 TransformOrigin { get; set; } = new Vector2(0.5f, 0.5f);
+		public Vector2 TransformOrigin
+		{
+			get => _transformOrigin;
+			set
+			{
+				if (value == _transformOrigin)
+				{
+					return;
+				}
+
+				_transformOrigin = value;
+				InvalidateTransform();
+			}
+		}
 
 		[Category("Transform")]
 		[DefaultValue(0.0f)]
 		[DesignerFolded]
-		public float Rotation { get; set; } = 0.0f;
+		public float Rotation
+		{
+			get => _rotation;
+
+			set
+			{
+				if (value == _rotation)
+				{
+					return;
+				}
+
+				_rotation = value;
+				InvalidateTransform();
+			}
+		}
 
 		[XmlIgnore]
 		[Browsable(false)]
@@ -814,18 +860,38 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private Matrix TransformMatrix
+		internal Transform Transform
 		{
-			get => _transformMatrix;
-			set
+			get
 			{
-				if (value == _transformMatrix)
+				if (_transform == null)
 				{
-					return;
+					var p = new Point(_layoutBounds.X + Left, _layoutBounds.Y + Top);
+
+					var localTransform = new Transform(p.ToVector2(),
+						TransformOrigin * _layoutBounds.Size().ToVector2(),
+						Scale,
+						Rotation * (float)Math.PI / 180);
+
+					if (Parent != null)
+					{
+						var transform = Parent.Transform;
+						transform.AddTransform(ref localTransform);
+						_transform = transform;
+					}
+					else if (Desktop != null)
+					{
+						var transform = Desktop.Transform;
+						transform.AddTransform(ref localTransform);
+						_transform = transform;
+					}
+					else
+					{
+						_transform = localTransform;
+					}
 				}
 
-				_transformMatrix = value;
-				_transformDirty = true;
+				return _transform.Value;
 			}
 		}
 
@@ -944,18 +1010,10 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			UpdateArrange();
-
 			var oldTransform = context.Transform;
 
 			// Apply widget transforms
-			var p = new Point(_layoutBounds.X + Left, _layoutBounds.Y + Top);
-			context.Transform.AddTransform(p.ToVector2(),
-				TransformOrigin * _layoutBounds.Size().ToVector2(),
-				Scale,
-				Rotation * (float)Math.PI / 180);
-
-			TransformMatrix = context.Transform.TransformMatrix;
+			context.Transform = Transform;
 
 			Rectangle? oldScissorRectangle = null;
 			if (ClipToBounds && context.Transform.Rotation == 0)
@@ -1189,6 +1247,7 @@ namespace Myra.Graphics2D.UI
 			layoutBounds.Offset(_containerBounds.Location);
 
 			_layoutBounds = layoutBounds;
+			InvalidateTransform();
 
 			InternalArrange();
 			ArrangeUpdated.Invoke(this);
@@ -1255,6 +1314,11 @@ namespace Myra.Graphics2D.UI
 			}
 
 			return result;
+		}
+
+		internal virtual void InvalidateTransform()
+		{
+			_transform = null;
 		}
 
 		public virtual void InvalidateMeasure()
@@ -1536,28 +1600,13 @@ namespace Myra.Graphics2D.UI
 			Top = newTop;
 		}
 
-		public Vector2 ToGlobal(Vector2 pos) => pos.Transform(ref _transformMatrix);
+		public Vector2 ToGlobal(Vector2 pos) => Transform.Apply(pos);
 
-		public Point ToGlobal(Point pos) => ToGlobal(new Vector2(pos.X, pos.Y)).ToPoint();
+		public Point ToGlobal(Point pos) => Transform.Apply(pos);
 
-		public Vector2 ToLocal(Vector2 source)
-		{
-			if (_transformDirty)
-			{
-#if MONOGAME || FNA || STRIDE
-				_inverseMatrix = Matrix.Invert(TransformMatrix);
-#else
-				Matrix inverse = Matrix.Identity;
-				Matrix.Invert(TransformMatrix, out inverse);
-				_inverseMatrix = inverse;
-#endif
-				_transformDirty = false;
-			}
+		public Vector2 ToLocal(Vector2 pos) => Transform.InverseApply(pos);
 
-			return source.Transform(ref _inverseMatrix);
-		}
-
-		public Point ToLocal(Point pos) => ToLocal(new Vector2(pos.X, pos.Y)).ToPoint();
+		public Point ToLocal(Point pos) => Transform.InverseApply(pos);
 
 		public bool ContainsGlobalPoint(Point pos)
 		{

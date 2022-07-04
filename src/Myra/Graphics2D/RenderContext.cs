@@ -111,7 +111,6 @@ namespace Myra.Graphics2D
 			_fontStashRenderer = new FontStashRenderer(_renderer);
 #endif
 			_scissor = GetDeviceScissor();
-			Transform.Reset();
 		}
 
 		/// <summary>
