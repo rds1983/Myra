@@ -69,7 +69,8 @@ namespace Myra.Graphics2D.UI
 		private Vector2 _transformOrigin = new Vector2(0.5f, 0.5f);
 		private float _rotation = 0.0f;
 		private Transform? _transform;
-
+		private Matrix _inverseMatrix;
+		private bool _inverseMatrixDirty = true;
 
 		/// <summary>
 		/// Internal use only. (MyraPad)
@@ -1319,6 +1320,7 @@ namespace Myra.Graphics2D.UI
 		internal virtual void InvalidateTransform()
 		{
 			_transform = null;
+			_inverseMatrixDirty = true;
 		}
 
 		public virtual void InvalidateMeasure()
@@ -1604,9 +1606,24 @@ namespace Myra.Graphics2D.UI
 
 		public Point ToGlobal(Point pos) => Transform.Apply(pos);
 
-		public Vector2 ToLocal(Vector2 pos) => Transform.InverseApply(pos);
+		public Vector2 ToLocal(Vector2 source)
+		{
+			if (_inverseMatrixDirty)
+			{
+#if MONOGAME || FNA || STRIDE
+				_inverseMatrix = Matrix.Invert(Transform.Matrix);
+#else
+					Matrix inverse = Matrix.Identity;
+					Matrix.Invert(TransformMatrix, out inverse);
+					_inverseMatrix = inverse;
+#endif
+				_inverseMatrixDirty = false;
+			}
 
-		public Point ToLocal(Point pos) => Transform.InverseApply(pos);
+			return source.Transform(ref _inverseMatrix);
+		}
+
+		public Point ToLocal(Point pos) => ToLocal(new Vector2(pos.X, pos.Y)).ToPoint();
 
 		public bool ContainsGlobalPoint(Point pos)
 		{

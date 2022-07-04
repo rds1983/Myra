@@ -15,42 +15,19 @@ namespace Myra.Graphics2D
 {
 	public struct Transform
 	{
-		private Matrix? _inverseMatrix;
-
 		public Vector2 Scale { get; private set; }
 		public float Rotation { get; private set; }
 
-		public Matrix TransformMatrix;
-
-		public Matrix InverseMatrix
-		{
-			get
-			{
-				if (_inverseMatrix == null)
-				{
-#if MONOGAME || FNA || STRIDE
-					_inverseMatrix = Matrix.Invert(TransformMatrix);
-#else
-					Matrix inverse = Matrix.Identity;
-					Matrix.Invert(TransformMatrix, out inverse);
-					_inverseMatrix = inverse;
-#endif
-				}
-
-				return _inverseMatrix.Value;
-			}
-		}
+		public Matrix Matrix;
 
 		public Transform(Vector2 offset, Vector2 origin, Vector2 scale, float rotation)
 		{
-			Matrix newTransform;
-			BuildTransform(offset, origin, scale, rotation, out newTransform);
-			TransformMatrix = newTransform;
+			Matrix newMatrix;
+			BuildTransform(offset, origin, scale, rotation, out newMatrix);
+			Matrix = newMatrix;
 
 			Scale = scale;
 			Rotation = rotation;
-
-			_inverseMatrix = null;
 		}
 
 		private static void BuildTransform(Vector2 position, Vector2 origin, Vector2 scale, float rotation, out Matrix result)
@@ -92,22 +69,16 @@ namespace Myra.Graphics2D
 
 		public void AddTransform(ref Transform newTransform)
 		{
-			TransformMatrix = newTransform.TransformMatrix * TransformMatrix;
+			Matrix = newTransform.Matrix * Matrix;
 
 			Scale *= newTransform.Scale;
 			Rotation += newTransform.Rotation;
-
-			_inverseMatrix = null;
 		}
 
-		public Vector2 Apply(Vector2 source) => source.Transform(ref TransformMatrix);
+		public Vector2 Apply(Vector2 source) => source.Transform(ref Matrix);
 
 		public Point Apply(Point source) => Apply(new Vector2(source.X, source.Y)).ToPoint();
 
-		public Vector2 InverseApply(Vector2 source) => Vector2.Transform(source, InverseMatrix);
-
-		public Point InverseApply(Point source) => InverseApply(new Vector2(source.X, source.Y)).ToPoint();
-
-		public Rectangle Apply(Rectangle source) => source.Transform(ref TransformMatrix);
+		public Rectangle Apply(Rectangle source) => source.Transform(ref Matrix);
 	}
 }
