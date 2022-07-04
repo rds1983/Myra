@@ -34,6 +34,7 @@ Copy-Sample "ObjectEditor"
 Copy-Item -Path "samples\Myra.Samples.ObjectEditor\image.png" -Destination "ZipPackage"
 Copy-Sample "TextRendering"
 Copy-Item -Path "samples\Stylesheets\*" -Destination "ZipPackage\Stylesheets\" -Recurse
+Copy-Item -Path "src\MyraPad\bin\Release\net6.0\System.CodeDom.dll" -Destination "ZipPackage"
 Copy-Item -Path "src\MyraPad\bin\Release\net6.0\MyraPad.exe" -Destination "ZipPackage"
 Copy-Item -Path "src\MyraPad\bin\Release\net6.0\MyraPad.dll" -Destination "ZipPackage"
 Copy-Item -Path "src\MyraPad\bin\Release\net6.0\MyraPad.runtimeconfig.json" -Destination "ZipPackage"
