@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FNA", "..\..\FNA\FNA.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FontStashSharp.FNA", "..\..\FontStashSharp\src\XNA\FontStashSharp.FNA.csproj", "{AFE1C8A6-ECD7-4F17-8EDE-E40633C35C04}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{51B3896A-60E3-422D-AC8A-697A0A5B9E61}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyraPad.FNA", "..\src\MyraPad\MyraPad.FNA.csproj", "{E7E9FE37-2C6D-46B7-9FCC-C1283C3B67AA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.CustomUIStylesheet.FNA", "..\samples\Myra.Samples.CustomUIStylesheet\Myra.Samples.CustomUIStylesheet.FNA.csproj", "{12FD6776-69C6-4FAA-93AE-87138D9033D3}"
@@ -55,7 +53,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D4231816-B63A-4230-8DF7-A4B4F96EFB38} = {D17FD092-A553-4770-A7A5-822661193436}
-		{E7E9FE37-2C6D-46B7-9FCC-C1283C3B67AA} = {51B3896A-60E3-422D-AC8A-697A0A5B9E61}
 		{12FD6776-69C6-4FAA-93AE-87138D9033D3} = {D17FD092-A553-4770-A7A5-822661193436}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

@@ -2,6 +2,7 @@
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);STRIDE</DefineConstants>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>Myra.Stride</PackageId>
     <AssemblyName>Myra</AssemblyName>
     <OutputPath>bin\Stride\$(Configuration)</OutputPath>
   </PropertyGroup>
