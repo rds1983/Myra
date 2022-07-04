@@ -1613,9 +1613,9 @@ namespace Myra.Graphics2D.UI
 #if MONOGAME || FNA || STRIDE
 				_inverseMatrix = Matrix.Invert(Transform.Matrix);
 #else
-					Matrix inverse = Matrix.Identity;
-					Matrix.Invert(TransformMatrix, out inverse);
-					_inverseMatrix = inverse;
+				Matrix inverse = Matrix.Identity;
+				Matrix.Invert(Transform.Matrix, out inverse);
+				_inverseMatrix = inverse;
 #endif
 				_inverseMatrixDirty = false;
 			}
