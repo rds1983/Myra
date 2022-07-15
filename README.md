@@ -13,7 +13,7 @@ Myra is UI Library for [MonoGame](http://www.monogame.net/), [FNA](https://githu
 * **Myra.PlatformAgnostic.** Version of the library that could be used in any C# game engine.
 
 ## Demo
-If you would like to see Myra in action, download the binary release(Myra.v.v.v.v.zip from the latest release at [Releases](https://github.com/rds1983/Myra/releases)), unpack it and run samples(should be runnable on Linux too through Mono).
+If you would like to see Myra in action, download the binary release(Myra.v.v.v.v.zip from the latest release at [Releases](https://github.com/rds1983/Myra/releases)), unpack it and run samples.
 
 ## Documentation
 [https://github.com/rds1983/Myra/wiki](https://github.com/rds1983/Myra/wiki)
