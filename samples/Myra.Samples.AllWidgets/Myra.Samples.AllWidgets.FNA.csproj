@@ -1,11 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <ApplicationIcon />
-    <StartupObject />
-    <AssemblyName>Myra.Samples.AllWidgets</AssemblyName>
-    <RootNamespace>Myra.Samples.AllWidgets</RootNamespace>
-    <TargetFramework>net45</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net461</TargetFramework>
     <OutputPath>bin\FNA\$(Configuration)</OutputPath>
     <DefineConstants>$(DefineConstants);FNA</DefineConstants>
   </PropertyGroup>

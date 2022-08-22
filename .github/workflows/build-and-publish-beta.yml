@@ -2,6 +2,8 @@ name: Build & Publish Beta
 
 on:
     push:
+        branches:
+            - master    
         paths:
             - 'src/**'
             - 'build/**'
@@ -29,7 +31,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '5.0.x'
+        dotnet-version: '6.0.x'
     - name: Build Myra.MonoGame
       run: dotnet build build\Myra.MonoGame.sln --configuration Release --version-suffix ${{env.VERSION_SUFFIX}}
     - name: Build Myra.Stride
@@ -51,7 +53,10 @@ jobs:
       uses: NuGet/setup-nuget@v1
     - name: Publish Myra.MonoGame to MyGet
       run: nuget.exe push src\Myra\bin\MonoGame\Release\Myra.*.nupkg ${{secrets.MYGET_APIKEY}} -Source https://www.myget.org/F/abarim-games/api/v2/package
+      continue-on-error: true
     - name: Publish Myra.Stride to MyGet
       run: nuget.exe push src\Myra\bin\Stride\Release\Myra.Stride.*.nupkg ${{secrets.MYGET_APIKEY}} -Source https://www.myget.org/F/abarim-games/api/v2/package
+      continue-on-error: true
     - name: Publish Myra.PlatformAgnostic to MyGet
       run: nuget.exe push src\Myra\bin\PlatformAgnostic\Release\Myra.PlatformAgnostic.*.nupkg ${{secrets.MYGET_APIKEY}} -Source https://www.myget.org/F/abarim-games/api/v2/package
+      continue-on-error: true

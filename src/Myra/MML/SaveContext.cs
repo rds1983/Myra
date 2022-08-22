@@ -8,7 +8,6 @@ using System.Xml.Linq;
 using Myra.Attributes;
 using System.Linq;
 using Myra.Graphics2D;
-using AssetManagementBase.Utility;
 using FontStashSharp;
 
 #if MONOGAME || FNA
@@ -55,7 +54,11 @@ namespace Myra.MML
 				{
 					string str = null;
 
-					if (property.PropertyType == typeof(Color?))
+					var serializer = FindSerializer(property.PropertyType);
+					if (serializer != null)
+					{
+						str = serializer.Serialize(value);
+					} else if (property.PropertyType == typeof(Color?))
 					{
 						str = ((Color?)value).Value.ToHexString();
 					}

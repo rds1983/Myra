@@ -1,11 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <ApplicationIcon />
-    <StartupObject />
-    <AssemblyName>Myra.Samples.AllWidgets</AssemblyName>
-    <RootNamespace>Myra.Samples.AllWidgets</RootNamespace>
-    <TargetFramework>net461</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
     <OutputPath>bin\Stride\$(Configuration)</OutputPath>
     <DefineConstants>$(DefineConstants);STRIDE</DefineConstants>
   </PropertyGroup>

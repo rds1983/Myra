@@ -1,0 +1,5 @@
+<Project>
+  <Panel>
+    <TextButton Text="Some Text" DragDirection="Both" />
+  </Panel>
+</Project>

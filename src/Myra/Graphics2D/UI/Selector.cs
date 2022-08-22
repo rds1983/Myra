@@ -96,6 +96,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public override event EventHandler SelectedIndexChanged;
+		public event EventHandler ItemsCollectionChanged;
 
 		protected Selector(WidgetType widget)
 		{
@@ -146,6 +147,7 @@ namespace Myra.Graphics2D.UI
 
 		protected virtual void OnItemCollectionChanged()
 		{
+			ItemsCollectionChanged.Invoke(this);
 		}
 
 		protected virtual void OnSelectedItemChanged()

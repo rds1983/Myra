@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Reflection;
-using AssetManagementBase;
-using AssetManagementBase.Utility;
 using Myra.Assets;
 using Myra.Graphics2D.UI.Styles;
+using FontStashSharp.Interfaces;
+using Myra.Utility;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -20,13 +20,13 @@ namespace Myra
 	public static class MyraEnvironment
 	{
 		private static AssetManager _defaultAssetManager;
-		private static bool _assetsLoadersUpdated = false;
 
 		public static int FontAtlasSize = 1024;
 		public static int FontKernelWidth = 0;
 		public static int FontKernelHeight = 0;
 		public static bool FontPremultiplyAlpha = true;
 		public static float FontResolutionFactor = 1;
+		public static IFontLoader FontLoader = null;
 
 #if MONOGAME || FNA || STRIDE
 
@@ -65,8 +65,6 @@ namespace Myra
 
 				_game = value;
 
-				UpdateAssetManager();
-
 #if !STRIDE
 				if (_game != null)
 				{
@@ -104,8 +102,6 @@ namespace Myra
 				}
 
 				_platform = value;
-
-				UpdateAssetManager();
 			}
 		}
 #endif
@@ -137,25 +133,6 @@ namespace Myra
 		/// </summary>
 		public static bool SmoothText { get; set; }
 
-		private static void UpdateAssetManager()
-		{
-			if (_assetsLoadersUpdated)
-			{
-				return;
-			}
-
-#if MONOGAME || FNA
-			AssetManager.SetAssetLoader(new SoundEffectLoader());
-#endif
-			AssetManager.SetAssetLoader(new Texture2DLoader());
-			AssetManager.SetAssetLoader(new StaticSpriteFontLoader());
-			AssetManager.SetAssetLoader(new FontSystemLoader());
-			AssetManager.SetAssetLoader(new DynamicSpriteFontLoader());
-			AssetManager.SetAssetLoader(new SpriteFontBaseLoader());
-
-			_assetsLoadersUpdated = true;
-		}
-
 		private static void GameOnDisposed(object sender, EventArgs eventArgs)
 		{
 			Reset();
@@ -182,10 +159,5 @@ namespace Myra
 		}
 
 		internal static string InternalClipboard;
-
-		/// <summary>
-		/// Applies an overall scaling factor to adjust the size and spacing of widgets on devices with high definition displays
-		/// </summary>
-		public static float? LayoutScale { get; set; }
 	}
 }

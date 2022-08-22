@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Myra.Utility;
+using System;
 using System.Reflection;
-using AssetManagementBase.Utility;
 
 namespace Myra.Graphics2D.UI.Properties
 {

@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Xml.Serialization;
-using AssetManagementBase.Utility;
 using FontStashSharp;
+using Myra.Utility;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework;
 using Stride.Core.Mathematics;
 #else
 using System.Drawing;
+using System.Numerics;
 #endif
 
 namespace Myra.MML
@@ -19,6 +20,22 @@ namespace Myra.MML
 	internal class BaseContext
 	{
 		public const string IdName = "Id";
+
+		public static ITypeSerializer FindSerializer(Type type)
+		{
+			if (type.IsNullablePrimitive())
+			{
+				type = type.GetNullableType();
+			}
+
+			ITypeSerializer result;
+			if (Serialization._serializers.TryGetValue(type, out result))
+			{
+				return result;
+			}
+
+			return null;
+		}
 
 		protected static void ParseProperties(Type type, 
 			out List<PropertyInfo> complexProperties, 
@@ -48,6 +65,7 @@ namespace Myra.MML
 					propertyType.IsNullablePrimitive() ||
 					propertyType.IsEnum || 
 					propertyType == typeof(string) ||
+					propertyType == typeof(Vector2) ||
 					propertyType == typeof(Color) ||
 					propertyType == typeof(Color?) ||
 					typeof(IBrush).IsAssignableFrom(propertyType) ||

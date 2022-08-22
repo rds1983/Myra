@@ -1,9 +1,8 @@
 ﻿using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
-using AssetManagementBase;
 using Myra.Utility;
-using AssetManagementBase.Utility;
 using System.IO;
+using Myra.Assets;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -112,7 +111,7 @@ namespace Myra
 		public static Stream OpenDefaultFontDataStream()
 		{
 			var assembly = typeof(DefaultAssets).Assembly;
-			return assembly.OpenResourceStream("Resources.Inter-Regular.ttf");
+			return assembly.OpenResourceStream("Myra.Resources.Inter-Regular.ttf");
 		}
 
 		internal static void Dispose()

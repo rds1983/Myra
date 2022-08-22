@@ -10,11 +10,11 @@ using System.Collections.Generic;
 using Myra.Attributes;
 using System.Linq;
 using Myra.Graphics2D.TextureAtlases;
-using AssetManagementBase.Utility;
 using Myra.Graphics2D.Brushes;
-using AssetManagementBase;
 using Myra.Graphics2D.UI.Properties;
 using FontStashSharp;
+using Myra.Assets;
+using Myra.Utility;
 
 namespace Myra.Graphics2D.UI
 {

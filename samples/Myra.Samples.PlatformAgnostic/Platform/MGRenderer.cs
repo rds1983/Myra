@@ -32,7 +32,6 @@ namespace Myra.Samples.AllWidgets
 		private readonly MGPlatform _platform;
 		private bool _beginCalled;
 		private readonly SpriteBatch _batch;
-		private Matrix3x2? _transform;
 		private TextureFiltering _textureFiltering;
 
 		private GraphicsDevice GraphicsDevice => _platform.GraphicsDevice;
@@ -71,7 +70,7 @@ namespace Myra.Samples.AllWidgets
 			_batch = new SpriteBatch(GraphicsDevice);
 		}
 
-		public void Begin(Matrix3x2? transform, TextureFiltering textureFiltering)
+		public void Begin(TextureFiltering textureFiltering)
 		{
 			var samplerState = textureFiltering == TextureFiltering.Nearest ? SamplerState.PointClamp : SamplerState.LinearClamp;
 			_batch.Begin(SpriteSortMode.Deferred,
@@ -79,11 +78,9 @@ namespace Myra.Samples.AllWidgets
 				samplerState,
 				null,
 				UIRasterizerState,
-				null,
-				transform != null ? transform.Value.ToXNA() : (Microsoft.Xna.Framework.Matrix?)null);
+				null);
 
 			_beginCalled = true;
-			_transform = transform;
 			_textureFiltering = textureFiltering;
 		}
 
@@ -93,8 +90,7 @@ namespace Myra.Samples.AllWidgets
 			_beginCalled = false;
 		}
 
-		public void Draw(object texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation,
-			Vector2 origin, Vector2 scale, float depth)
+		public void Draw(object texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 scale, float depth)
 		{
 			var xnaTexture = (Texture2D)texture;
 
@@ -103,7 +99,7 @@ namespace Myra.Samples.AllWidgets
 				sourceRectangle?.ToXNA(),
 				color.ToXNA(),
 				rotation,
-				origin.ToXNA(),
+				Vector2.Zero.ToXNA(),
 				scale.ToXNA(),
 				SpriteEffects.None,
 				depth);
@@ -124,7 +120,7 @@ namespace Myra.Samples.AllWidgets
 			if (_beginCalled)
 			{
 				End();
-				Begin(_transform, _textureFiltering);
+				Begin(_textureFiltering);
 			}
 		}
 	}

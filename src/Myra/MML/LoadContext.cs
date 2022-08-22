@@ -8,8 +8,8 @@ using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 using Myra.Attributes;
-using AssetManagementBase.Utility;
 using FontStashSharp;
+using Myra.Utility;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -60,6 +60,12 @@ namespace Myra.MML
 					object value = null;
 
 					var propertyType = property.PropertyType;
+
+					var serializer = FindSerializer(propertyType);
+					if (serializer != null)
+					{
+						value = serializer.Deserialize(attr.Value);
+					} else 
 					if (propertyType.IsEnum)
 					{
 						value = Enum.Parse(propertyType, attr.Value);
@@ -98,16 +104,6 @@ namespace Myra.MML
 							{
 								baseObject.Resources[property.Name] = attr.Value;
 							}
-						}
-						catch (Exception)
-						{
-						}
-					}
-					else if (propertyType == typeof(Thickness))
-					{
-						try
-						{
-							value = Thickness.FromString(attr.Value);
 						}
 						catch (Exception)
 						{

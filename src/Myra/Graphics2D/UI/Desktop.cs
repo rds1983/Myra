@@ -35,6 +35,12 @@ namespace Myra.Graphics2D.UI
 		public const int DoubleClickIntervalInMs = 500;
 		public const int DoubleClickRadius = 2;
 
+		private Rectangle _bounds;
+		private Vector2 _scale = Vector2.One;
+		private Vector2 _transformOrigin = Vector2.Zero;
+		private float _rotation = 0.0f;
+		private Transform? _transform;
+
 		private RenderContext _renderContext;
 
 		private bool _layoutDirty = true;
@@ -181,7 +187,25 @@ namespace Myra.Graphics2D.UI
 
 		public Func<Rectangle> BoundsFetcher = DefaultBoundsFetcher;
 
-		internal Rectangle InternalBounds { get; private set; }
+		internal Rectangle InternalBounds
+		{
+			get => _bounds;
+
+			set
+			{
+				if (_bounds == value)
+				{
+					return;
+				}
+
+				_bounds = value;
+
+
+				InvalidateTransform();
+			}
+		}
+
+		internal Rectangle LayoutBounds => new Rectangle(0, 0, InternalBounds.Width, InternalBounds.Height);
 
 		public Widget ContextMenu { get; private set; }
 
@@ -259,7 +283,68 @@ namespace Myra.Graphics2D.UI
 
 		public float Opacity { get; set; }
 
-		public Matrix? Transform { get => RenderContext.Transform; set => RenderContext.Transform = value; }
+		public Vector2 Scale
+		{
+			get => _scale;
+			set
+			{
+				if (value == _scale)
+				{
+					return;
+				}
+
+				_scale = value;
+				InvalidateTransform();
+			}
+
+		}
+
+		public Vector2 TransformOrigin
+		{
+			get => _transformOrigin;
+			set
+			{
+				if (value == _transformOrigin)
+				{
+					return;
+				}
+
+				_transformOrigin = value;
+				InvalidateTransform();
+			}
+		}
+
+		public float Rotation
+		{
+			get => _rotation;
+
+			set
+			{
+				if (value == _rotation)
+				{
+					return;
+				}
+
+				_rotation = value;
+				InvalidateTransform();
+			}
+		}
+
+		internal Transform Transform
+		{
+			get
+			{
+				if (_transform == null)
+				{
+					_transform = new Transform(_bounds.Location.ToVector2(),
+						TransformOrigin * _bounds.Size().ToVector2(),
+						Scale,
+						Rotation * (float)Math.PI / 180);
+				}
+
+				return _transform.Value;
+			}
+		}
 
 		public bool IsMouseOverGUI
 		{
@@ -488,7 +573,7 @@ namespace Myra.Graphics2D.UI
 
 		private void ContextMenuOnTouchDown()
 		{
-			if (ContextMenu == null || ContextMenu.Bounds.Contains(TouchPosition))
+			if (ContextMenu == null || ContextMenu.ContainsTouch)
 			{
 				return;
 			}
@@ -545,16 +630,16 @@ namespace Myra.Graphics2D.UI
 			ContextMenu.HorizontalAlignment = HorizontalAlignment.Left;
 			ContextMenu.VerticalAlignment = VerticalAlignment.Top;
 
-			var measure = ContextMenu.Measure(InternalBounds.Size());
+			var measure = ContextMenu.Measure(LayoutBounds.Size());
 
-			if (position.X + measure.X > InternalBounds.Right)
+			if (position.X + measure.X > LayoutBounds.Right)
 			{
-				position.X = InternalBounds.Right - measure.X;
+				position.X = LayoutBounds.Right - measure.X;
 			}
 
-			if (position.Y + measure.Y > InternalBounds.Bottom)
+			if (position.Y + measure.Y > LayoutBounds.Bottom)
 			{
-				position.Y = InternalBounds.Bottom - measure.Y;
+				position.Y = LayoutBounds.Bottom - measure.Y;
 			}
 
 			ContextMenu.Left = position.X;
@@ -626,17 +711,6 @@ namespace Myra.Graphics2D.UI
 			if (_renderContext == null)
 			{
 				_renderContext = new RenderContext();
-
-				if (MyraEnvironment.LayoutScale.HasValue)
-				{
-#if MONOGAME || FNA
-					_renderContext.Transform = Matrix.CreateScale(MyraEnvironment.LayoutScale.Value);
-#elif STRIDE
-					_renderContext.Transform = Matrix.Scaling(MyraEnvironment.LayoutScale.Value);
-#else
-					_renderContext.Transform = Matrix3x2.CreateScale(MyraEnvironment.LayoutScale.Value);
-#endif
-				}
 			}
 		}
 
@@ -649,18 +723,16 @@ namespace Myra.Graphics2D.UI
 			_renderContext.Begin();
 
 			// Disable transform during setting the scissor rectangle for the Desktop
-			var trasform = _renderContext.Transform;
-			_renderContext.Transform = null;
-			_renderContext.Scissor = InternalBounds;
-			_renderContext.Transform = trasform;
+			_renderContext.Transform = Transform;
 
-			_renderContext.View = InternalBounds;
+			var bounds = _renderContext.Transform.Apply(LayoutBounds);
+			_renderContext.Scissor = bounds;
 			_renderContext.Opacity = Opacity;
 
 			if (Stylesheet.Current.DesktopStyle != null &&
 				Stylesheet.Current.DesktopStyle.Background != null)
 			{
-				Stylesheet.Current.DesktopStyle.Background.Draw(_renderContext, InternalBounds);
+				Stylesheet.Current.DesktopStyle.Background.Draw(_renderContext, LayoutBounds);
 			}
 
 			foreach (var widget in ChildrenCopy)
@@ -681,6 +753,16 @@ namespace Myra.Graphics2D.UI
 			UpdateInput();
 			UpdateLayout();
 			RenderVisual();
+		}
+
+		private void InvalidateTransform()
+		{
+			_transform = null;
+
+			foreach (var child in ChildrenCopy)
+			{
+				child.InvalidateTransform();
+			}
 		}
 
 		public void InvalidateLayout()
@@ -708,11 +790,11 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			foreach (var i in ChildrenCopy)
+			foreach (var child in ChildrenCopy)
 			{
-				if (i.Visible)
+				if (child.Visible)
 				{
-					i.Layout(InternalBounds);
+					child.Arrange(LayoutBounds);
 				}
 			}
 
@@ -854,20 +936,6 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		private Widget GetTopWidget()
-		{
-			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
-			{
-				var w = ChildrenCopy[i];
-				if (w.Visible && w.Enabled && w.Active)
-				{
-					return w;
-				}
-			}
-
-			return null;
-		}
-
 		public void HandleButton(bool isDown, bool wasDown, MouseButtons buttons)
 		{
 			if (isDown && !wasDown)
@@ -899,17 +967,6 @@ namespace Myra.Graphics2D.UI
 			if (touchState.Count > 0)
 			{
 				var pos = touchState[0].Position;
-
-				if (_renderContext.Transform != null)
-				{
-					// Apply transform
-					var t = Vector2.Transform(
-						new Vector2(pos.X, pos.Y),
-						_renderContext.InverseTransform);
-
-					pos = new Vector2((int)t.X, (int)t.Y);
-				}
-
 				TouchPosition = new Point((int)pos.X, (int)pos.Y);
 			}
 
@@ -940,14 +997,6 @@ namespace Myra.Graphics2D.UI
 			var mousePosition = mouseInfo.Position;
 
 			EnsureRenderContext();
-			if (_renderContext.Transform != null)
-			{
-				// Apply transform
-				var t = Vector2.Transform(new Vector2(mousePosition.X, mousePosition.Y), _renderContext.InverseTransform);
-
-				mousePosition = new Point((int)t.X, (int)t.Y);
-			}
-
 			MousePosition = mousePosition;
 
 			HandleButton(mouseInfo.IsLeftButtonDown, _lastMouseInfo.IsLeftButtonDown, MouseButtons.Left);
@@ -1191,7 +1240,7 @@ namespace Myra.Graphics2D.UI
 
 		private bool InternalIsPointOverGUI(Point p, Widget w)
 		{
-			if (!w.Visible || !w.BorderBounds.Contains(p))
+			if (!w.Visible || !w.ContainsGlobalPoint(p))
 			{
 				return false;
 			}

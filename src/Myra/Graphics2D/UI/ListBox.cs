@@ -43,6 +43,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[Browsable(false)]
+		[XmlIgnore]
+		public ScrollViewer ScrollViewer => InternalChild;
+
 		protected internal override MouseWheelFocusType MouseWheelFocusType => InternalChild.MouseWheelFocusType;
 
 		public ListBox(string styleName = Stylesheet.DefaultStyleName) : base(new ScrollViewer())
@@ -209,27 +213,24 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var p = SelectedItem.Widget.Bounds;
+			InternalChild.UpdateArrange();
 
-			var bounds = _box.ActualBounds;
-			InternalChild.UpdateLayout();
-			var sz = new Point(InternalChild.Bounds.Width, InternalChild.Bounds.Height);
-			var maximum = InternalChild.ScrollMaximum;
+			// Determine item position within ListBox
+			var widget = SelectedItem.Widget;
+			var p = _box.ToLocal(widget.ToGlobal(widget.Bounds.Location));
 
-			p.X -= bounds.X;
-			p.Y -= bounds.Y;
-
-			var lineHeight = ListBoxStyle.ListItemStyle.LabelStyle.Font.FontSize;
+			var lineHeight = ListBoxStyle.ListItemStyle.LabelStyle.Font.LineHeight;
 
 			var sp = InternalChild.ScrollPosition;
 
+			var sz = new Point(InternalChild.Bounds.Width, InternalChild.Bounds.Height);
 			if (p.Y < sp.Y)
 			{
 				sp.Y = p.Y;
 			}
 			else if (p.Y + lineHeight > sp.Y + sz.Y)
 			{
-				sp.Y = (p.Y + lineHeight - sz.Y);
+				sp.Y = p.Y + lineHeight - sz.Y;
 			}
 
 			InternalChild.ScrollPosition = sp;

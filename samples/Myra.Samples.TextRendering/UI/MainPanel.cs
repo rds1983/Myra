@@ -141,7 +141,7 @@ namespace Myra.Samples.TextRendering.UI
 			game.LabelText.Font = FontSystem.GetFont((int)_spinButtonFontSize.Value.Value);
 
 			var scale = _sliderScale.Value;
-			game.TopDesktop.Transform = Matrix.CreateScale(scale, scale, 0);
+			game.TopDesktop.Scale = new Vector2(scale, scale);
 			_labelScaleValue.Text = scale.ToString("0.00");
 
 			_imageTexture.Visible = _checkBoxShowTexture.IsChecked;
@@ -151,9 +151,9 @@ namespace Myra.Samples.TextRendering.UI
 		{
 			base.InternalRender(context);
 
-			if (_imageTexture.Renderable == null && _imageTexture.Visible)
+			if (_imageTexture.Renderable == null && _imageTexture.Visible && FontSystem.Atlases.Count > 0)
 			{
-				var texture = FontSystem.EnumerateTextures().FirstOrDefault();
+				var texture = FontSystem.Atlases[0].Texture;
 				if (texture != null)
 				{
 					_imageTexture.Renderable = new TextureRegion(texture);

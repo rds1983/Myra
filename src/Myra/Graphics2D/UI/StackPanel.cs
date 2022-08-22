@@ -161,11 +161,11 @@ namespace Myra.Graphics2D.UI
 			return base.InternalMeasure(availableSize);
 		}
 
-		public override void Arrange()
+		public override void InternalArrange()
 		{
 			UpdateGrid();
 
-			base.Arrange();
+			base.InternalArrange();
 		}
 	}
 }

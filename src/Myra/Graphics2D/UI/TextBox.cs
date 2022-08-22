@@ -7,6 +7,7 @@ using Myra.Graphics2D.Text;
 using TextCopy;
 using Myra.Graphics2D.UI.TextEdit;
 using FontStashSharp;
+using System.Diagnostics;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -279,9 +280,12 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Cursor position in local coordinates
+		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		public Point CursorScreenPosition
+		public Point CursorCoords
 		{
 			get
 			{
@@ -1039,7 +1043,6 @@ namespace Myra.Graphics2D.UI
 			var bounds = ActualBounds;
 			if (asScrollViewer != null)
 			{
-				asScrollViewer.UpdateLayout();
 				sz = new Point(asScrollViewer.Bounds.Width, asScrollViewer.Bounds.Height);
 				sz.X -= asScrollViewer.VerticalThumbWidth;
 				sz.Y -= asScrollViewer.HorizontalThumbHeight;
@@ -1073,7 +1076,7 @@ namespace Myra.Graphics2D.UI
 			p.X -= bounds.X;
 			p.Y -= bounds.Y;
 
-			var lineHeight = _formattedText.Font.FontSize;
+			var lineHeight = _formattedText.Font.LineHeight;
 
 			Point sp;
 			if (asScrollViewer != null)
@@ -1179,10 +1182,9 @@ namespace Myra.Graphics2D.UI
 
 		private void SetCursorByTouch()
 		{
-			var bounds = ActualBounds;
-			var mousePos = Desktop.TouchPosition;
-			mousePos.X += _internalScrolling.X - bounds.X;
-			mousePos.Y += _internalScrolling.Y - bounds.Y;
+			var mousePos = ToLocal(Desktop.TouchPosition);
+			mousePos.X += _internalScrolling.X;
+			mousePos.Y += _internalScrolling.Y;
 
 			var line = _formattedText.GetLineByY(mousePos.Y);
 			if (line != null)
@@ -1366,7 +1368,7 @@ namespace Myra.Graphics2D.UI
 			var lineIndex = startGlyph.TextChunk.LineIndex;
 			var i = selectStart;
 
-			var lineHeight = _formattedText.Font.FontSize;
+			var lineHeight = _formattedText.Font.LineHeight;
 			while (true)
 			{
 				startGlyph = _formattedText.GetGlyphInfoByIndex(i);
@@ -1440,7 +1442,7 @@ namespace Myra.Graphics2D.UI
 			var p = new Point(centeredBounds.Location.X - _internalScrolling.X,
 				centeredBounds.Location.Y - _internalScrolling.Y);
 
-			_formattedText.Draw(context, TextAlign.Left, new Rectangle(p.X, p.Y, bounds.Width, bounds.Height), context.View, textColor, false);
+			_formattedText.Draw(context, TextAlign.Left, new Rectangle(p.X, p.Y, bounds.Width, bounds.Height), textColor, false);
 
 			if (!IsKeyboardFocused)
 			{
@@ -1458,12 +1460,14 @@ namespace Myra.Graphics2D.UI
 			if (Enabled && _cursorOn && Cursor != null)
 			{
 				p = GetRenderPositionByIndex(CursorPosition);
+
 				p.X -= _internalScrolling.X;
 				p.Y -= _internalScrolling.Y;
-				Cursor.Draw(context,
-					new Rectangle(p.X, p.Y,
+
+				var rect = new Rectangle(p.X, p.Y,
 						Cursor.Size.X,
-						_formattedText.Font.FontSize));
+						_formattedText.Font.LineHeight);
+				Cursor.Draw(context, rect);
 			}
 
 			context.Opacity = oldOpacity;
@@ -1485,9 +1489,9 @@ namespace Myra.Graphics2D.UI
 				result = _formattedText.Measure(_wrap ? width : default(int?));
 			}
 
-			if (result.Y < Font.FontSize)
+			if (result.Y < Font.LineHeight)
 			{
-				result.Y = Font.FontSize;
+				result.Y = Font.LineHeight;
 			}
 
 			if (Cursor != null)
@@ -1499,9 +1503,9 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public override void Arrange()
+		public override void InternalArrange()
 		{
-			base.Arrange();
+			base.InternalArrange();
 
 			var width = ActualBounds.Width;
 			width -= CursorWidth;

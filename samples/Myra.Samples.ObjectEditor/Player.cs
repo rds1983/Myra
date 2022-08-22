@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Myra.Attributes;
 using Myra.Graphics2D;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -62,6 +63,7 @@ namespace Myra.Samples.ObjectEditor
 		}
 
 		[Category("Data")]
+		[DesignerFolded]
 		public HitPoints HitPoints
 		{
 			get;

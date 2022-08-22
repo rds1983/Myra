@@ -15,7 +15,6 @@ using Myra.Graphics2D;
 using Myra.Graphics2D.UI;
 using Myra.MML;
 using Myra.Utility;
-using AssetManagementBase.Utility;
 
 namespace MyraPad
 {
@@ -55,8 +54,8 @@ namespace MyraPad
 				return string.Empty;
 			}
 
-			var template = string.IsNullOrWhiteSpace(_project.ExportOptions.TemplateMain) ? 
-				Resources.ExportCSMain : 
+			var template = string.IsNullOrWhiteSpace(_project.ExportOptions.TemplateMain) ?
+				Resources.ExportCSMain :
 				File.ReadAllText(_project.ExportOptions.TemplateMain);
 
 			template = template.Replace("$namespace$", _project.ExportOptions.Namespace);
@@ -93,7 +92,7 @@ namespace MyraPad
 				if (property.Name == "StyleName")
 				{
 					// Special case
-					styleName = (string) value;
+					styleName = (string)value;
 					continue;
 				}
 
@@ -105,7 +104,7 @@ namespace MyraPad
 
 				if (value is IItemWithId)
 				{
-					var subItemId = ExportDesignerRecursive((IItemWithId) value);
+					var subItemId = ExportDesignerRecursive((IItemWithId)value);
 					var subItemCode = string.Format("{0} = {1}", property.Name, subItemId);
 					subItems.Add(subItemCode);
 				}
@@ -116,11 +115,11 @@ namespace MyraPad
 					var asList = value as IList;
 
 					if (asList != null && type.IsGenericType &&
-						typeof (IItemWithId).IsAssignableFrom(type.GetGenericArguments()[0]))
+						typeof(IItemWithId).IsAssignableFrom(type.GetGenericArguments()[0]))
 					{
 						foreach (var comp in asList)
 						{
-							var subItemId = ExportDesignerRecursive((IItemWithId) comp);
+							var subItemId = ExportDesignerRecursive((IItemWithId)comp);
 							var subItemCode = string.Format("{0}.Add({1})", property.Name, subItemId);
 							subItems.Add(subItemCode);
 						}
@@ -219,7 +218,7 @@ namespace MyraPad
 			var template = string.IsNullOrWhiteSpace(_project.ExportOptions.TemplateDesigner) ?
 				Resources.ExportCSDesigner :
 				File.ReadAllText(_project.ExportOptions.TemplateDesigner);
-			
+
 			template = template.Replace("$namespace$", _project.ExportOptions.Namespace);
 			template = template.Replace("$class$", _project.ExportOptions.Class);
 			template = template.Replace("$parentClass$", _project.Root.GetType().Name);
@@ -283,7 +282,7 @@ namespace MyraPad
 			if (asList == null)
 			{
 				string strValue = null;
-				if (typeof(IBrush).IsAssignableFrom(property.PropertyType) || 
+				if (typeof(IBrush).IsAssignableFrom(property.PropertyType) ||
 					property.PropertyType == typeof(SpriteFontBase))
 				{
 					var baseObject = o as BaseObject;
@@ -349,11 +348,12 @@ namespace MyraPad
 
 			if (value is Color)
 			{
-				var name = ((Color) value).GetColorName();
+				var name = ((Color)value).GetColorName();
 				if (!string.IsNullOrEmpty(name))
 				{
 					return "Color." + name;
-				} else
+				}
+				else
 				{
 					var c = (Color)value;
 
@@ -466,8 +466,8 @@ namespace MyraPad
 			return result.ToArray();
 		}
 
-        public void Dispose() => converter.Dispose();
-    }
+		public void Dispose() => converter.Dispose();
+	}
 
 	class PrimitiveConverter : IDisposable
 	{

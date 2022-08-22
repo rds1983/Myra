@@ -1,9 +1,6 @@
 ﻿using Myra.Graphics2D.UI;
 using Microsoft.Xna.Framework;
 using Myra.Samples.TextRendering.UI;
-using FontStashSharp;
-using System.Linq;
-using Myra.Graphics2D.TextureAtlases;
 
 namespace Myra.Samples.TextRendering
 {

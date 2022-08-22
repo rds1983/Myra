@@ -178,8 +178,6 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var bounds = ActualBounds;
-
 			var color = TextColor;
 			var useChunkColor = true;
 			if (!Enabled && DisabledTextColor != null)
@@ -200,7 +198,8 @@ namespace Myra.Graphics2D.UI
 
 			var textToDraw = (_autoEllipsisMethod == AutoEllipsisMethod.None) 
 				? _formattedText : _autoEllipsisText;
-			textToDraw.Draw(context, TextAlign, bounds, context.View, color, useChunkColor);
+
+			textToDraw.Draw(context, TextAlign, ActualBounds, color, useChunkColor);
 		}
 
 		protected override Point InternalMeasure(Point availableSize)
@@ -225,9 +224,9 @@ namespace Myra.Graphics2D.UI
 				result = _formattedText.Measure(_wrap ? width : default(int?));
 			}
 
-			if (result.Y < Font.FontSize)
+			if (result.Y < Font.LineHeight)
 			{
-				result.Y = Font.FontSize;
+				result.Y = Font.LineHeight;
 			}
 
 			return result;
@@ -319,9 +318,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void Arrange()
+		public override void InternalArrange()
 		{
-			base.Arrange();
+			base.InternalArrange();
 
 			_formattedText.Width = _wrap ? ActualBounds.Width : default(int?);
 		}

@@ -45,7 +45,6 @@ namespace Myra.Graphics2D.UI
 				}
 
 				var bounds = ActualBounds;
-
 				var result = new Point(InternalChild.Bounds.Width - bounds.Width + VerticalThumbWidth,
 								 InternalChild.Bounds.Height - bounds.Height + HorizontalThumbHeight);
 
@@ -147,22 +146,6 @@ namespace Myra.Graphics2D.UI
 			{
 				base.InternalChild = value;
 				ResetScroll();
-			}
-		}
-
-		[Browsable(false)]
-		[XmlIgnore]
-		[Obsolete("Use Content instead")]
-		public Widget Child
-		{
-			get
-			{
-				return Content;
-			}
-
-			set
-			{
-				Content = value;
 			}
 		}
 
@@ -365,23 +348,6 @@ namespace Myra.Graphics2D.UI
 			ScrollPosition = scrollPosition;
 		}
 
-		internal override void MoveChildren(Point delta)
-		{
-			base.MoveChildren(delta);
-
-			if (_horizontalScrollingOn)
-			{
-				_horizontalScrollbarFrame.Offset(delta.X, delta.Y);
-				_horizontalScrollbarThumb.Offset(delta.X, delta.Y);
-			}
-
-			if (_verticalScrollingOn)
-			{
-				_verticalScrollbarFrame.Offset(delta.X, delta.Y);
-				_verticalScrollbarThumb.Offset(delta.X, delta.Y);
-			}
-		}
-
 		public override void OnTouchUp()
 		{
 			base.OnTouchUp();
@@ -393,14 +359,14 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnTouchDown();
 
-			var touchPosition = Desktop.TouchPosition;
+			var touchPosition = ToLocal(Desktop.TouchPosition);
 
 			var r = _verticalScrollbarThumb;
 			var thumbPosition = ThumbPosition;
 			r.Y += thumbPosition.Y;
 			if (ShowVerticalScrollBar && _verticalScrollingOn && r.Contains(touchPosition))
 			{
-				_startBoundsPos = touchPosition.Y;
+				_startBoundsPos = Desktop.TouchPosition.Y;
 				_scrollbarOrientation = Orientation.Vertical;
 			}
 
@@ -408,7 +374,7 @@ namespace Myra.Graphics2D.UI
 			r.X += thumbPosition.X;
 			if (ShowHorizontalScrollBar && _horizontalScrollingOn && r.Contains(touchPosition))
 			{
-				_startBoundsPos = touchPosition.X;
+				_startBoundsPos = Desktop.TouchPosition.X;
 				_scrollbarOrientation = Orientation.Horizontal;
 			}
 		}
@@ -508,7 +474,7 @@ namespace Myra.Graphics2D.UI
 			return measureSize;
 		}
 
-		public override void Arrange()
+		public override void InternalArrange()
 		{
 			if (InternalChild == null)
 			{
@@ -548,7 +514,6 @@ namespace Myra.Graphics2D.UI
 
 				// Remeasure with scrollbars
 				var measureSize = InternalChild.Measure(availableSize);
-
 				var bw = bounds.Width - (_verticalScrollingOn && ShowVerticalScrollBar ? vsWidth : 0);
 
 				_horizontalScrollbarFrame = new Rectangle(bounds.Left,
@@ -627,7 +592,7 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			InternalChild.Layout(bounds);
+			InternalChild.Arrange(bounds);
 
 			// Fit scroll position in new maximums
 			var scrollPosition = ScrollPosition;

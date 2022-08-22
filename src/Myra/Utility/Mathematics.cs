@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework;
 using Stride.Core.Mathematics;
 #else
 using System.Drawing;
+using System.Numerics;
+using Matrix = System.Numerics.Matrix3x2;
 #endif
 
 namespace Myra.Utility
@@ -34,6 +36,40 @@ namespace Myra.Utility
 		public static bool IsZero(this float a)
 		{
 			return a.EpsilonEquals(0.0f);
+		}
+
+		public static Point ToPoint(this Vector2 v) => new Point((int)Math.Round(v.X), (int)Math.Round(v.Y));
+
+		public static Vector2 ToVector2(this Point p) => new Vector2(p.X, p.Y);
+
+		public static Vector2 Multiply(this Vector2 v, Point p)
+		{
+			return new Vector2(v.X * p.X, v.Y * p.Y);
+		}
+
+		public static Vector2 Transform(this Vector2 v, ref Matrix matrix)
+		{
+#if MONOGAME || FNA
+			Vector2 result;
+			Vector2.Transform(ref v, ref matrix, out result);
+			return result;
+#elif STRIDE
+			Vector4 result;
+			Vector2.Transform(ref v, ref matrix, out result);
+			return new Vector2(result.X, result.Y);
+#else
+			return Vector2.Transform(v, matrix);
+#endif
+		}
+
+		public static Rectangle Transform(this Rectangle r, ref Matrix matrix)
+		{
+			var position = new Vector2(r.X, r.Y).Transform(ref matrix);
+
+			var transformScale = new Vector2(matrix.M11, matrix.M22);
+			var scale = new Vector2(r.Width * transformScale.X, r.Height * transformScale.Y);
+
+			return new Rectangle((int)position.X, (int)position.Y, (int)scale.X, (int)scale.Y);
 		}
 	}
 }

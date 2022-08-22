@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Forms;
 
 namespace Myra.Samples.AssetManagement
 {
@@ -14,7 +13,6 @@ namespace Myra.Samples.AssetManagement
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(ex.ToString());
 				Console.WriteLine(ex.ToString());
 			}
 		}

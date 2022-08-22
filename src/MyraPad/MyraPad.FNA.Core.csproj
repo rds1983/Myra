@@ -1,9 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <ApplicationIcon />
-    <StartupObject />
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>MyraPad</AssemblyName>
     <RootNamespace>MyraPad</RootNamespace>
     <OutputPath>bin\FNA.Core\$(Configuration)</OutputPath>
@@ -16,5 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Myra\Myra.FNA.Core.csproj" />
+    <PackageReference Include="System.CodeDom" Version="6.0.0" />
   </ItemGroup>
 </Project>

@@ -197,7 +197,7 @@ namespace Myra.Graphics2D.Text
 				{
 					if (i < _text.Length - 1 && _text[i + 1] == 'n')
 					{
-						var sz2 = new Point(r.X + NewLineWidth, Math.Max(r.Y, _font.FontSize));
+						var sz2 = new Point(r.X + NewLineWidth, Math.Max(r.Y, _font.LineHeight));
 
 						// Break right here
 						r.SkipCount += 2;
@@ -240,11 +240,11 @@ namespace Myra.Graphics2D.Text
 				if (c != '\n')
 				{
 					var v = Font.MeasureString(_stringBuilder);
-					sz = new Point((int)v.X, _font.FontSize);
+					sz = new Point((int)v.X, _font.LineHeight);
 				}
 				else
 				{
-					sz = new Point(r.X + NewLineWidth, Math.Max(r.Y, _font.FontSize));
+					sz = new Point(r.X + NewLineWidth, Math.Max(r.Y, _font.LineHeight));
 
 					// Break right here
 					++r.CharsCount;
@@ -346,7 +346,7 @@ namespace Myra.Graphics2D.Text
 
 			if (result.Y == 0)
 			{
-				result.Y = _font.FontSize;
+				result.Y = _font.LineHeight;
 			}
 
 			_measures[key] = result;
@@ -532,37 +532,24 @@ namespace Myra.Graphics2D.Text
 			return null;
 		}
 
-		public void Draw(RenderContext context, TextAlign align, Rectangle bounds, Rectangle clip, Color textColor, bool useChunkColor)
+		public void Draw(RenderContext context, TextAlign align, Rectangle bounds, Color textColor, bool useChunkColor)
 		{
 			var y = bounds.Y;
 			foreach (var line in Lines)
 			{
-				if (y + line.Size.Y >= clip.Top && y <= clip.Bottom)
-				{
-					int x = bounds.X;
+				int x = bounds.X;
 
-					switch (align)
-					{
-						case TextAlign.Center:
-							x = bounds.X + (bounds.Width / 2) - (line.Size.X / 2);
-							break;
-						case TextAlign.Right:
-							x = bounds.X + bounds.Width - line.Size.X;
-							break;
-					}
-
-					textColor = line.Draw(context, new Vector2(x, y), textColor, useChunkColor);
-				}
-				else
+				switch (align)
 				{
-					foreach (var chunk in line.Chunks)
-					{
-						if (useChunkColor && chunk.Color != null)
-						{
-							textColor = chunk.Color.Value;
-						}
-					}
+					case TextAlign.Center:
+						x = bounds.X + (bounds.Width / 2) - (line.Size.X / 2);
+						break;
+					case TextAlign.Right:
+						x = bounds.X + bounds.Width - line.Size.X;
+						break;
 				}
+
+				textColor = line.Draw(context, new Vector2(x, y), textColor, useChunkColor);
 
 				y += line.Size.Y;
 				y += _verticalSpacing;

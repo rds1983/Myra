@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);FNA</DefineConstants>
-    <TargetFramework>net45</TargetFramework>
+    <TargetFramework>net461</TargetFramework>
     <AssemblyName>Myra</AssemblyName>
     <PackageId>Myra.FNA</PackageId>
     <OutputPath>bin\FNA\$(Configuration)</OutputPath>
@@ -16,7 +16,6 @@
   </ItemGroup>  
 
   <ItemGroup>
-    <PackageReference Include="AssetManagementBase" Version="$(AssetManagementBaseVersion)" />
     <PackageReference Include="info.lundin.math.dll" Version="$(InfoLundinMathVersion)" />  
   </ItemGroup>
   

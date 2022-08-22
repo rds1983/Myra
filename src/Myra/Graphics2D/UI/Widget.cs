@@ -14,8 +14,10 @@ using Microsoft.Xna.Framework.Input;
 using Stride.Core.Mathematics;
 using Stride.Input;
 #else
+using System.Numerics;
 using System.Drawing;
 using Myra.Platform;
+using Matrix = System.Numerics.Matrix3x2;
 #endif
 
 namespace Myra.Graphics2D.UI
@@ -38,13 +40,6 @@ namespace Myra.Graphics2D.UI
 
 	public class Widget : BaseObject
 	{
-		private enum LayoutState
-		{
-			Normal,
-			LocationInvalid,
-			Invalid
-		}
-
 		private Point? _startPos;
 		private Thickness _margin, _borderThickness, _padding;
 		private int _left, _top;
@@ -53,25 +48,29 @@ namespace Myra.Graphics2D.UI
 		private int _zIndex;
 		private HorizontalAlignment _horizontalAlignment = HorizontalAlignment.Left;
 		private VerticalAlignment _verticalAlignment = VerticalAlignment.Top;
-		private LayoutState _layoutState = LayoutState.Invalid;
 		private bool _isModal = false;
 		private bool _measureDirty = true;
+		private bool _arrangeDirty = true;
 		private bool _active = false;
 		private Desktop _desktop;
 
 		private Point _lastMeasureSize;
 		private Point _lastMeasureAvailableSize;
-		private Point _lastLocationHint;
 
 		private Rectangle _containerBounds;
-		private Rectangle _bounds;
-		private Rectangle _actualBounds;
+		private Rectangle _layoutBounds;
 		private bool _visible;
 
 		private float _opacity = 1.0f;
 
 		private bool _isMouseInside, _enabled;
 		private bool _isKeyboardFocused = false;
+		private Vector2 _scale = Vector2.One;
+		private Vector2 _transformOrigin = new Vector2(0.5f, 0.5f);
+		private float _rotation = 0.0f;
+		private Transform? _transform;
+		private Matrix _inverseMatrix;
+		private bool _inverseMatrixDirty = true;
 
 		/// <summary>
 		/// Internal use only. (MyraPad)
@@ -93,11 +92,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_left = value;
-				if (_layoutState == LayoutState.Normal)
-				{
-					_layoutState = LayoutState.LocationInvalid;
-				}
-
+				InvalidateTransform();
 				FireLocationChanged();
 			}
 		}
@@ -116,11 +111,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_top = value;
-				if (_layoutState == LayoutState.Normal)
-				{
-					_layoutState = LayoutState.LocationInvalid;
-				}
-
+				InvalidateTransform();
 				FireLocationChanged();
 			}
 		}
@@ -254,58 +245,6 @@ namespace Myra.Graphics2D.UI
 			{
 				var p = Padding;
 				p.Left = value;
-				Padding = p;
-			}
-		}
-
-
-		[Obsolete("Use Padding")]
-		[Browsable(false)]
-		public int PaddingRight
-		{
-			get
-			{
-				return Padding.Right;
-			}
-
-			set
-			{
-				var p = Padding;
-				p.Right = value;
-				Padding = p;
-			}
-		}
-
-		[Obsolete("Use Padding")]
-		[Browsable(false)]
-		public int PaddingTop
-		{
-			get
-			{
-				return Padding.Top;
-			}
-
-			set
-			{
-				var p = Padding;
-				p.Top = value;
-				Padding = p;
-			}
-		}
-
-		[Obsolete("Use Padding")]
-		[Browsable(false)]
-		public int PaddingBottom
-		{
-			get
-			{
-				return Padding.Top;
-			}
-
-			set
-			{
-				var p = Padding;
-				p.Bottom = value;
 				Padding = p;
 			}
 		}
@@ -569,27 +508,65 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[Category("Transform")]
+		[DefaultValue("1, 1")]
+		[DesignerFolded]
+		public Vector2 Scale
+		{
+			get => _scale;
+			set
+			{
+				if (value == _scale)
+				{
+					return;
+				}
+
+				_scale = value;
+				InvalidateTransform();
+			}
+
+		}
+
+		[Category("Transform")]
+		[DefaultValue("0.5, 0.5")]
+		[DesignerFolded]
+		public Vector2 TransformOrigin
+		{
+			get => _transformOrigin;
+			set
+			{
+				if (value == _transformOrigin)
+				{
+					return;
+				}
+
+				_transformOrigin = value;
+				InvalidateTransform();
+			}
+		}
+
+		[Category("Transform")]
+		[DefaultValue(0.0f)]
+		[DesignerFolded]
+		public float Rotation
+		{
+			get => _rotation;
+
+			set
+			{
+				if (value == _rotation)
+				{
+					return;
+				}
+
+				_rotation = value;
+				InvalidateTransform();
+			}
+		}
+
 		[XmlIgnore]
 		[Browsable(false)]
 		public Widget DragHandle { get; set; }
-		
-		
-		[XmlIgnore]
-		[Browsable(false)]
-		private int RelativeLeft { get; set; }
-		
-		[XmlIgnore]
-		[Browsable(false)]
-		private int RelativeTop { get; set; }
-		
-		[XmlIgnore]
-		[Browsable(false)]
-
-		private int RelativeRight { get; set; }
-		
-		[XmlIgnore]
-		[Browsable(false)]
-		private int RelativeBottom { get; set; }
 
 		/// <summary>
 		/// Determines whether the widget had been placed on Desktop
@@ -634,7 +611,7 @@ namespace Myra.Graphics2D.UI
 
 				if (_desktop != null)
 				{
-					InvalidateLayout();
+					InvalidateMeasure();
 				}
 
 				SubscribeOnTouchMoved(IsPlaced && IsDraggable);
@@ -753,14 +730,39 @@ namespace Myra.Graphics2D.UI
 			get => _isMouseInside;
 			set
 			{
-				_isMouseInside = value;
-				if (Desktop != null && Desktop.MouseInsideWidget == this)
+				if (value && _isMouseInside)
 				{
-					Desktop.MouseInsideWidget = null;
+					if (Desktop != null)
+					{
+						Desktop.MouseInsideWidget = this;
+					}
+
+					OnMouseMoved();
 				}
+				else if (value && !_isMouseInside)
+				{
+					if (Desktop != null)
+					{
+						Desktop.MouseInsideWidget = this;
+					}
+
+					OnMouseEntered();
+				}
+				else if (!value && _isMouseInside)
+				{
+					if (Desktop != null && Desktop.MouseInsideWidget == this)
+					{
+						Desktop.MouseInsideWidget = null;
+					}
+
+					OnMouseLeft();
+				}
+
+				_isMouseInside = value;
 			}
 		}
 
+		[Browsable(false)]
 		[XmlIgnore]
 		public bool IsTouchInside { get; private set; }
 
@@ -772,47 +774,30 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public object Tag { get; set; }
 
+		/// <summary>
+		/// Zero-based bounds
+		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		public Rectangle Bounds
-		{
-			get
-			{
-				return _bounds;
-			}
-		}
+		public Rectangle Bounds => new Rectangle(0, 0, _layoutBounds.Width, _layoutBounds.Height);
 
-		internal Rectangle BorderBounds
-		{
-			get
-			{
-				return _bounds - _margin;
-			}
-		}
+		[Browsable(false)]
+		[XmlIgnore]
+		public Rectangle ActualBounds => Bounds - _margin - _borderThickness - _padding;
 
-		internal bool ContainsMouse
-		{
-			get
-			{
-				return Desktop != null && BorderBounds.Contains(Desktop.MousePosition);
-			}
-		}
+		/// <summary>
+		/// Bounds - Margin
+		/// </summary>
+		[Browsable(false)]
+		[XmlIgnore]
+		internal Rectangle BorderBounds => Bounds - _margin;
 
-		internal bool ContainsTouch
-		{
-			get
-			{
-				return Desktop != null && BorderBounds.Contains(Desktop.TouchPosition);
-			}
-		}
+		[Browsable(false)]
+		[XmlIgnore] protected Rectangle BackgroundBounds => BorderBounds - _borderThickness;
 
-		protected Rectangle BackgroundBounds
-		{
-			get
-			{
-				return BorderBounds - _borderThickness;
-			}
-		}
+		[Browsable(false)]
+		[XmlIgnore]
+		internal bool ContainsMouse => Desktop != null && ContainsGlobalPoint(Desktop.MousePosition);
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -824,40 +809,24 @@ namespace Myra.Graphics2D.UI
 			}
 			set => _actualBounds = value;
 		}
+    
+		internal bool ContainsTouch => Desktop != null && ContainsGlobalPoint(Desktop.TouchPosition);
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public Rectangle ContainerBounds
-		{
-			get
-			{
-				return _containerBounds;
-			}
-		}
+		public Rectangle ContainerBounds => _containerBounds;
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public int MBPWidth
-		{
-			get
-			{
-				return Margin.Left + Margin.Right +
+		public int MBPWidth => Margin.Left + Margin.Right +
 					BorderThickness.Left + BorderThickness.Right +
 					Padding.Left + Padding.Right;
-			}
-		}
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public int MBPHeight
-		{
-			get
-			{
-				return Margin.Top + Margin.Bottom +
+		public int MBPHeight => Margin.Top + Margin.Bottom +
 					BorderThickness.Top + BorderThickness.Bottom +
 					Padding.Top + Padding.Bottom;
-			}
-		}
 
 		/// <summary>
 		/// Determines whether a widget accepts keyboard focus
@@ -869,10 +838,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		internal protected virtual MouseWheelFocusType MouseWheelFocusType
-		{
-			get { return MouseWheelFocusType.None; }
-		}
+		internal protected virtual MouseWheelFocusType MouseWheelFocusType => MouseWheelFocusType.None;
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -903,13 +869,48 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		internal Transform Transform
+		{
+			get
+			{
+				if (_transform == null)
+				{
+					var p = new Point(_layoutBounds.X + Left, _layoutBounds.Y + Top);
+
+					var localTransform = new Transform(p.ToVector2(),
+						TransformOrigin * _layoutBounds.Size().ToVector2(),
+						Scale,
+						Rotation * (float)Math.PI / 180);
+
+					if (Parent != null)
+					{
+						var transform = Parent.Transform;
+						transform.AddTransform(ref localTransform);
+						_transform = transform;
+					}
+					else if (Desktop != null)
+					{
+						var transform = Desktop.Transform;
+						transform.AddTransform(ref localTransform);
+						_transform = transform;
+					}
+					else
+					{
+						_transform = localTransform;
+					}
+				}
+
+				return _transform.Value;
+			}
+		}
+
 		public event EventHandler PlacedChanged;
 		public event EventHandler VisibleChanged;
 		public event EventHandler EnabledChanged;
 
 		public event EventHandler LocationChanged;
 		public event EventHandler SizeChanged;
-		public event EventHandler LayoutUpdated;
+		public event EventHandler ArrangeUpdated;
 
 		public event EventHandler MouseLeft;
 		public event EventHandler MouseEntered;
@@ -938,6 +939,7 @@ namespace Myra.Graphics2D.UI
 		{
 			Visible = true;
 			Enabled = true;
+			DragHandle = this;
 		}
 
 		public virtual IBrush GetCurrentBackground()
@@ -1017,20 +1019,21 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			UpdateLayout();
+			var oldTransform = context.Transform;
 
-			var view = Rectangle.Intersect(context.View, Bounds);
-			if (view.Width == 0 || view.Height == 0)
-			{
-				return;
-			}
+			// Apply widget transforms
+			context.Transform = Transform;
 
-			var oldScissorRectangle = context.Scissor;
-			if (ClipToBounds && !MyraEnvironment.DisableClipping)
+			Rectangle? oldScissorRectangle = null;
+			if (ClipToBounds && context.Transform.Rotation == 0)
 			{
-				var newScissorRectangle = Rectangle.Intersect(oldScissorRectangle, view);
-				if (newScissorRectangle.IsEmpty)
+				oldScissorRectangle = context.Scissor;
+				var absoluteBounds = context.Transform.Apply(Bounds);
+				var newScissorRectangle = Rectangle.Intersect(context.Scissor, absoluteBounds);
+
+				if (newScissorRectangle.Width == 0 || newScissorRectangle.Height == 0)
 				{
+					context.Transform = oldTransform;
 					return;
 				}
 
@@ -1038,21 +1041,16 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var oldOpacity = context.Opacity;
-			var oldView = context.View;
+			context.AddOpacity(Opacity);
 
-			context.Opacity *= Opacity;
-			context.View = view;
-
-			BeforeRender?.Invoke(context);
-
-			// Background
+			// Draw Background
 			var background = GetCurrentBackground();
 			if (background != null)
 			{
 				background.Draw(context, BackgroundBounds);
 			}
 
-			// Borders
+			// Draw Borders
 			var border = GetCurrentBorder();
 			if (border != null)
 			{
@@ -1078,13 +1076,16 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
+			// Internal rendering
+			BeforeRender?.Invoke(context);
 			InternalRender(context);
-
 			AfterRender?.Invoke(context);
 
-			// Restore context settings
-			context.View = oldView;
-			context.Opacity = oldOpacity;
+			if (oldScissorRectangle != null)
+			{
+				// Restore scissor
+				context.Scissor = oldScissorRectangle.Value;
+			}
 
 			// Optional debug rendering
 			if (MyraEnvironment.DrawWidgetsFrames)
@@ -1102,11 +1103,9 @@ namespace Myra.Graphics2D.UI
 				context.DrawRectangle(Bounds, Color.Yellow);
 			}
 
-			if (ClipToBounds && !MyraEnvironment.DisableClipping)
-			{
-				// Restore scissor
-				context.Scissor = oldScissorRectangle;
-			}
+			// Restore context settings
+			context.Transform = oldTransform;
+			context.Opacity = oldOpacity;
 		}
 
 		public virtual void InternalRender(RenderContext context)
@@ -1200,122 +1199,79 @@ namespace Myra.Graphics2D.UI
 			return Mathematics.PointZero;
 		}
 
-		public virtual void Arrange()
+		public void Arrange(Rectangle containerBounds)
 		{
-		}
-
-		public void Layout(Rectangle containerBounds)
-		{
-			if (_containerBounds != containerBounds)
-			{
-				InvalidateLayout();
-				_containerBounds = containerBounds;
-			}
-
-			UpdateLayout();
-		}
-
-		public void InvalidateLayout()
-		{
-			_layoutState = LayoutState.Invalid;
-		}
-
-		internal virtual void MoveChildren(Point delta)
-		{
-			_bounds.X += delta.X;
-			_bounds.Y += delta.Y;
-
-			_actualBounds.X += delta.X;
-			_actualBounds.Y += delta.Y;
-
-			_containerBounds.X += delta.X;
-			_containerBounds.Y += delta.Y;
-		}
-
-		public virtual void UpdateLayout()
-		{
-			if (_layoutState == LayoutState.Normal)
+			if (!_arrangeDirty && _containerBounds == containerBounds)
 			{
 				return;
 			}
 
-			if (_layoutState == LayoutState.Invalid)
-			{
-				// Full rearrange
-				Point size;
-				if (HorizontalAlignment != HorizontalAlignment.Stretch ||
-						VerticalAlignment != VerticalAlignment.Stretch)
-				{
-					size = Measure(_containerBounds.Size());
-				}
-				else
-				{
-					size = _containerBounds.Size();
-				}
-
-				if (size.X > _containerBounds.Width)
-				{
-					size.X = _containerBounds.Width;
-				}
-
-				if (size.Y > _containerBounds.Height)
-				{
-					size.Y = _containerBounds.Height;
-				}
-
-				// Resolve possible conflict beetween Alignment set to Streth and Size explicitly set
-				var containerSize = _containerBounds.Size();
-
-				if (HorizontalAlignment == HorizontalAlignment.Stretch && Width != null && Width.Value < containerSize.X)
-				{
-					containerSize.X = Width.Value;
-				}
-
-				if (VerticalAlignment == VerticalAlignment.Stretch && Height != null && Height.Value < containerSize.Y)
-				{
-					containerSize.Y = Height.Value;
-				}
-
-				// Align
-				var controlBounds = LayoutUtils.Align(containerSize, size, HorizontalAlignment, VerticalAlignment, Parent == null);
-				controlBounds.Offset(_containerBounds.Location);
-
-				controlBounds.Offset(Left, Top);
-
-				_bounds = controlBounds;
-				_actualBounds = CalculateClientBounds(controlBounds);
-
-				Arrange();
-				
-				CalculateRelativePositions();
-			}
-			else
-			{
-				// Only location
-				MoveChildren(new Point(Left - _lastLocationHint.X, Top - _lastLocationHint.Y));
-			}
-
-			_lastLocationHint = new Point(Left, Top);
-			_layoutState = LayoutState.Normal;
-
-			LayoutUpdated.Invoke(this);
+			_arrangeDirty = true;
+			_containerBounds = containerBounds;
+			UpdateArrange();
 		}
 
-		private void CalculateRelativePositions()
+		public void UpdateArrange()
 		{
-			RelativeLeft = Left - Bounds.X;
-			RelativeTop = Top - Bounds.Y;
-			
-			if (Parent != null)
+			if (!_arrangeDirty)
 			{
-				RelativeRight = Left + Parent.Bounds.Width - Bounds.X;
-				RelativeBottom = Top + Parent.Bounds.Height - Bounds.Y;
+				return;
+			}
+
+			Point size;
+			if (HorizontalAlignment != HorizontalAlignment.Stretch ||
+					VerticalAlignment != VerticalAlignment.Stretch)
+			{
+				size = Measure(_containerBounds.Size());
 			}
 			else
 			{
-				RelativeRight = Left + Desktop.InternalBounds.Width - Bounds.X;
-				RelativeBottom = Top + Desktop.InternalBounds.Height - Bounds.Y;
+				size = _containerBounds.Size();
 			}
+
+			if (size.X > _containerBounds.Width)
+			{
+				size.X = _containerBounds.Width;
+			}
+
+			if (size.Y > _containerBounds.Height)
+			{
+				size.Y = _containerBounds.Height;
+			}
+
+			// Resolve possible conflict beetween Alignment set to Streth and Size explicitly set
+			var containerSize = _containerBounds.Size();
+			if (HorizontalAlignment == HorizontalAlignment.Stretch && Width != null && Width.Value < containerSize.X)
+			{
+				containerSize.X = Width.Value;
+			}
+
+			if (VerticalAlignment == VerticalAlignment.Stretch && Height != null && Height.Value < containerSize.Y)
+			{
+				containerSize.Y = Height.Value;
+			}
+
+			// Align
+			var layoutBounds = LayoutUtils.Align(containerSize, size, HorizontalAlignment, VerticalAlignment);
+			layoutBounds.Offset(_containerBounds.Location);
+
+			_layoutBounds = layoutBounds;
+			InvalidateTransform();
+
+			InternalArrange();
+			ArrangeUpdated.Invoke(this);
+
+			_arrangeDirty = false;
+		}
+
+		public virtual void InternalArrange()
+		{
+		}
+
+
+		public void InvalidateArrange()
+		{
+			_arrangeDirty = true;
 		}
 
 		private Widget FindWidgetBy(Func<Widget, bool> finder)
@@ -1369,11 +1325,17 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
+		internal virtual void InvalidateTransform()
+		{
+			_transform = null;
+			_inverseMatrixDirty = true;
+		}
+
 		public virtual void InvalidateMeasure()
 		{
 			_measureDirty = true;
 
-			InvalidateLayout();
+			InvalidateArrange();
 
 			if (Parent != null)
 			{
@@ -1430,21 +1392,16 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnMouseLeft()
 		{
-			IsMouseInside = false;
 			MouseLeft.Invoke(this);
 		}
 
 		public virtual void OnMouseEntered()
 		{
-			IsMouseInside = true;
-			Desktop.MouseInsideWidget = this;
 			MouseEntered.Invoke(this);
 		}
 
 		public virtual void OnMouseMoved()
 		{
-			IsMouseInside = true;
-			Desktop.MouseInsideWidget = this;
 			MouseMoved.Invoke(this);
 		}
 
@@ -1485,21 +1442,9 @@ namespace Myra.Graphics2D.UI
 				Desktop.FocusedKeyboardWidget = this;
 			}
 
-			var x = Bounds.X;
-			var y = Bounds.Y;
-
-			var bounds = DragHandle != null
-					? new Rectangle(
-							x,
-							y,
-							DragHandle.Bounds.Right - x,
-							DragHandle.Bounds.Bottom - y
-					) : Rectangle.Empty;
-
-			var touchPos = Desktop.TouchPosition;
-
-			if (bounds == Rectangle.Empty || bounds.Contains(touchPos))
+			if (DragHandle != null && DragHandle.ContainsTouch)
 			{
+				var touchPos = Desktop.TouchPosition;
 				_startPos = new Point(touchPos.X - Left,
 						touchPos.Y - Top);
 			}
@@ -1538,7 +1483,7 @@ namespace Myra.Graphics2D.UI
 		{
 			PlacedChanged?.Invoke(this);
 		}
-		
+
 		public virtual void OnVisibleChanged()
 		{
 			InvalidateMeasure();
@@ -1557,11 +1502,6 @@ namespace Myra.Graphics2D.UI
 
 		protected internal virtual void OnActiveChanged()
 		{
-		}
-
-		internal Rectangle CalculateClientBounds(Rectangle clientBounds)
-		{
-			return clientBounds - Margin - BorderThickness - Padding;
 		}
 
 		public void RemoveFromParent()
@@ -1634,7 +1574,7 @@ namespace Myra.Graphics2D.UI
 
 			int newLeft = Left;
 			int newTop = Top;
-			
+
 			if (DragDirection.HasFlag(DragDirection.Horizontal))
 			{
 				newLeft = position.X;
@@ -1645,33 +1585,58 @@ namespace Myra.Graphics2D.UI
 				newTop = position.Y;
 			}
 
-			ConstrainToBounds(ref newLeft, ref newTop);
+			var parentBounds = Parent != null ? Parent.Bounds : Desktop.InternalBounds;
+			if (newLeft < 0)
+			{
+				newLeft = 0;
+			}
+
+			if (newLeft + Bounds.Width > parentBounds.Width)
+			{
+				newLeft = parentBounds.Width - Bounds.Width;
+			}
+
+			if (newTop < 0)
+			{
+				newTop = 0;
+			}
+
+			if (newTop + Bounds.Height > parentBounds.Height)
+			{
+				newTop = parentBounds.Height - Bounds.Height;
+			}
 
 			Left = newLeft;
 			Top = newTop;
 		}
 
-		private void ConstrainToBounds(ref int newLeft, ref int newTop)
+		public Vector2 ToGlobal(Vector2 pos) => Transform.Apply(pos);
+
+		public Point ToGlobal(Point pos) => Transform.Apply(pos);
+
+		public Vector2 ToLocal(Vector2 source)
 		{
-			if (newLeft < RelativeLeft)
+			if (_inverseMatrixDirty)
 			{
-				newLeft = RelativeLeft;
+#if MONOGAME || FNA || STRIDE
+				_inverseMatrix = Matrix.Invert(Transform.Matrix);
+#else
+				Matrix inverse = Matrix.Identity;
+				Matrix.Invert(Transform.Matrix, out inverse);
+				_inverseMatrix = inverse;
+#endif
+				_inverseMatrixDirty = false;
 			}
 
-			if (newTop < RelativeTop)
-			{
-				newTop = RelativeTop;
-			}
+			return source.Transform(ref _inverseMatrix);
+		}
 
-			if (newTop + Bounds.Height > RelativeBottom)
-			{
-				newTop = RelativeBottom - Bounds.Height;
-			}
-				
-			if (newLeft + Bounds.Width > RelativeRight)
-			{
-				newLeft = RelativeRight - Bounds.Width;
-			}
+		public Point ToLocal(Point pos) => ToLocal(new Vector2(pos.X, pos.Y)).ToPoint();
+
+		public bool ContainsGlobalPoint(Point pos)
+		{
+			var localPos = ToLocal(pos);
+			return BorderBounds.Contains(localPos);
 		}
 
 		private void DesktopTouchUp(object sender, EventArgs args)

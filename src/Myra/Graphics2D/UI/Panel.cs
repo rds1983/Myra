@@ -12,7 +12,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class Panel : MultipleItemsContainerBase
 	{
-		public override void Arrange()
+		public override void InternalArrange()
 		{
 			foreach (var control in _widgets)
 			{
@@ -27,7 +27,7 @@ namespace Myra.Graphics2D.UI
 
 		private void LayoutControl(Widget control)
 		{
-			control.Layout(ActualBounds);
+			control.Arrange(ActualBounds);
 		}
 
 		protected override Point InternalMeasure(Point availableSize)

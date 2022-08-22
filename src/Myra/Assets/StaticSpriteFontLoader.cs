@@ -1,5 +1,4 @@
 ﻿using Myra.Graphics2D.TextureAtlases;
-using AssetManagementBase;
 using FontStashSharp;
 using TextureWithOffset = FontStashSharp.TextureWithOffset;
 

@@ -1,5 +1,4 @@
-﻿using AssetManagementBase;
-using FontStashSharp;
+﻿using FontStashSharp;
 using System;
 
 #if MONOGAME || FNA
@@ -67,7 +66,8 @@ namespace Myra.Assets
 						_ => throw new Exception(),
 					},
 				ExistingTexture = ExistingTexture,
-				ExistingTextureUsedSpace = ExistingTextureUsedSpace
+				ExistingTextureUsedSpace = ExistingTextureUsedSpace,
+				FontLoader = MyraEnvironment.FontLoader
 			};
 
 			var fontSystem = new FontSystem(fontSystemSettings);

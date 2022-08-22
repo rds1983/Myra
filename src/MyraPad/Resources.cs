@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using AssetManagementBase.Utility;
+using Myra.Utility;
 
 namespace MyraPad
 {
@@ -21,7 +21,7 @@ namespace MyraPad
 			{
 				if (string.IsNullOrEmpty(_exportCsDesigner))
 				{
-					_exportCsDesigner = Assembly.ReadResourceAsString("Resources.ExportCSDesigner.cstemplate");
+					_exportCsDesigner = Assembly.ReadResourceAsString("MyraPad.Resources.ExportCSDesigner.cstemplate");
 				}
 
 				return _exportCsDesigner;
@@ -34,7 +34,7 @@ namespace MyraPad
 			{
 				if (string.IsNullOrEmpty(_exportCsMain))
 				{
-					_exportCsMain = Assembly.ReadResourceAsString("Resources.ExportCSMain.cstemplate");
+					_exportCsMain = Assembly.ReadResourceAsString("MyraPad.Resources.ExportCSMain.cstemplate");
 				}
 
 				return _exportCsMain;
@@ -47,7 +47,7 @@ namespace MyraPad
 			{
 				if (string.IsNullOrEmpty(_newProjectTemplate))
 				{
-					_newProjectTemplate = Assembly.ReadResourceAsString("Resources.NewProject.xmmptemplate");
+					_newProjectTemplate = Assembly.ReadResourceAsString("MyraPad.Resources.NewProject.xmmptemplate");
 				}
 
 				return _newProjectTemplate;

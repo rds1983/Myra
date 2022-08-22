@@ -13,7 +13,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '5.0.x'
+        dotnet-version: '6.0.x'
     - name: Build Myra.MonoGame
       run: dotnet build build\Myra.MonoGame.sln --configuration Release
     - name: Build Myra.Stride

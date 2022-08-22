@@ -2,8 +2,8 @@
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);STRIDE</DefineConstants>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Myra</AssemblyName>
     <PackageId>Myra.Stride</PackageId>
+    <AssemblyName>Myra</AssemblyName>
     <OutputPath>bin\Stride\$(Configuration)</OutputPath>
   </PropertyGroup>
 
@@ -20,7 +20,6 @@
   </ItemGroup>  
 
   <ItemGroup>
-    <PackageReference Include="AssetManagementBase" Version="$(AssetManagementBaseVersion)" />
     <PackageReference Include="FontStashSharp.Stride" Version="$(FontStashSharpVersion)" />
     <PackageReference Include="info.lundin.math.dll" Version="$(InfoLundinMathVersion)" />
   </ItemGroup>  

@@ -1,8 +1,8 @@
 ﻿using Myra.Graphics2D.UI;
 using Microsoft.Xna.Framework;
 using System.IO;
-using AssetManagementBase;
-using AssetManagementBase.Utility;
+using Myra.Assets;
+using Myra.Utility;
 
 namespace Myra.Samples.AssetManagement
 {

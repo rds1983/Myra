@@ -1,9 +1,5 @@
 ﻿using System;
 
-#if !CORE
-using System.Windows.Forms;
-#endif
-
 namespace MyraPad
 {
 	static class Program
@@ -23,9 +19,6 @@ namespace MyraPad
 			}
 			catch (Exception ex)
 			{
-#if !CORE
-				MessageBox.Show(ex.ToString());
-#endif			
 				Console.WriteLine(ex.ToString());
 			}
 		}

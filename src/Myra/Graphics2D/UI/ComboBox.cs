@@ -68,6 +68,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[Browsable(false)]
+		[XmlIgnore]
+		public ListBox ListBox => _listBox;
+
 		public override ObservableCollection<ListItem> Items => _listBox.Items;
 
 		public override ListItem SelectedItem { get => _listBox.SelectedItem; set => _listBox.SelectedItem = value; }
@@ -138,7 +142,8 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_listBox.Width = BorderBounds.Width;
-				Desktop.ShowContextMenu(_listBox, new Point(Bounds.X, Bounds.Bottom));
+				var pos = ToGlobal(new Point(0, Bounds.Height));
+				Desktop.ShowContextMenu(_listBox, pos);
 			}
 		}
 
@@ -221,7 +226,8 @@ namespace Myra.Graphics2D.UI
 			// Measure by the longest string
 			var result = base.InternalMeasure(availableSize);
 
-			// Reset ListBox Width so it wont be return by ListBox.Measure
+			// Temporary remove width, so it wont be used in the measure
+			var oldWidth = _listBox.Width;
 			_listBox.Width = null;
 
 			// Make visible, otherwise Measure will return zero
@@ -234,7 +240,8 @@ namespace Myra.Graphics2D.UI
 				result.X = listResult.X;
 			}
 
-			// Revert ListBox visibility
+			// Revert ListBox settings
+			_listBox.Width = oldWidth;
 			_listBox.Visible = wasVisible;
 
 			// Add some x space
@@ -243,9 +250,9 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public override void Arrange()
+		public override void InternalArrange()
 		{
-			base.Arrange();
+			base.InternalArrange();
 
 			_listBox.Width = BorderBounds.Width;
 		}

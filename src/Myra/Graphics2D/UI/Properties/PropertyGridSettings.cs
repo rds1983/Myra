@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Xml.Serialization;
-using AssetManagementBase;
+using Myra.Assets;
 
 namespace Myra.Graphics2D.UI.Properties
 {
