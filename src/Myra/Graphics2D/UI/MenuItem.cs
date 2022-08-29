@@ -278,9 +278,9 @@ namespace Myra.Graphics2D.UI
 				if (specialCharColor != null)
 				{
 					_displayText = Text.Substring(0, underscoreIndex) +
-						@"\c[" + specialCharColor.Value.ToHexString() + "]" +
+						@"/c[" + specialCharColor.Value.ToHexString() + "]" +
 						underscoreChar.ToString() +
-						@"\c[" + originalColor.ToHexString() + "]" +
+						@"/c[" + originalColor.ToHexString() + "]" +
 						Text.Substring(underscoreIndex + 2);
 				}
 				else

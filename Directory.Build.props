@@ -10,6 +10,6 @@
     <FontStashSharpVersion>1.1.6</FontStashSharpVersion>
     <LangVersion>8.0</LangVersion>
     <InfoLundinMathVersion>1.2.6</InfoLundinMathVersion>
-    <MonoGameVersion>3.8.0.1641</MonoGameVersion>
+    <MonoGameVersion>3.8.1.303</MonoGameVersion>
   </PropertyGroup>
 </Project>

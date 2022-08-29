@@ -1,4 +1,4 @@
 <Project>
   <Project.ExportOptions />
-  <Label Text="This is \c[red]colored \c[#00f0fa]ext, \c[white]color could be set either \c[lightGreen]by name or \c[#fa9000]by hex code" />
+  <Label Text="This is /c[red]colored /c[#00f0fa]ext,/n/c[white]color could be set either/n/c[lightGreen]by name or /c[#fa9000]by hex code" Left="200" Top="200" Scale="2, 2" Rotation="-11" />
 </Project>
