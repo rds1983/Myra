@@ -17,6 +17,7 @@ using Stride.Input;
 #else
 using System.Drawing;
 using Myra.Platform;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace Myra.Graphics2D.UI

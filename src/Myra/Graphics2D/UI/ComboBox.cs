@@ -116,7 +116,7 @@ namespace Myra.Graphics2D.UI
 
 		internal void HideDropdown()
 		{
-			if (Desktop.ContextMenu == _listBox)
+			if (Desktop != null && Desktop.ContextMenu == _listBox)
 			{
 				Desktop.HideContextMenu();
 			}

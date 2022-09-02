@@ -1,7 +1,5 @@
 using FontStashSharp;
 using Myra.Utility;
-using System;
-using FontStashSharp.Interfaces;
 using FontStashSharp.RichText;
 
 #if MONOGAME || FNA
@@ -16,6 +14,7 @@ using System.Drawing;
 using Myra.Platform;
 using System.Numerics;
 using Texture2D = System.Object;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace Myra.Graphics2D
@@ -336,7 +335,7 @@ namespace Myra.Graphics2D
 		/// <param name="layerDepth">A depth of the layer of this string.</param>
 		public void DrawRichText(RichTextLayout richText, Vector2 position, Color color, 
 			Vector2? sourceScale = null, float rotation = 0, float layerDepth = 0.0f, 
-			TextHorizontalAlignment textHorizontalAlignment = TextHorizontalAlignment.Left)
+			TextHorizontalAlignment horizontalAlignment = TextHorizontalAlignment.Left)
 		{
 			SetTextTextureFiltering();
 			color = CrossEngineStuff.MultiplyColor(color, Opacity);
@@ -348,9 +347,9 @@ namespace Myra.Graphics2D
 			rotation += Transform.Rotation;
 
 #if MONOGAME || FNA || STRIDE
-			richText.Draw(_renderer, position, color, scale, rotation, Vector2.Zero, layerDepth);
+			richText.Draw(_renderer, position, color, scale, rotation, Vector2.Zero, layerDepth, horizontalAlignment);
 #else
-			font.DrawText(_fontStashRenderer, text, position, color, scale, rotation, Vector2.Zero);
+			richText.Draw(_fontStashRenderer, position, color, scale, rotation, Vector2.Zero, layerDepth, horizontalAlignment);
 #endif
 		}
 

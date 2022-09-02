@@ -4,6 +4,7 @@ using Myra.Graphics2D;
 using System;
 using System.Collections.Generic;
 using Myra.MML;
+using FontStashSharp.RichText;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -12,6 +13,7 @@ using Stride.Core.Mathematics;
 #else
 using System.Drawing;
 using System.Numerics;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace Myra.Utility

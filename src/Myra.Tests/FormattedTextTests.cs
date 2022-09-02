@@ -1,6 +1,6 @@
 ﻿using FontStashSharp;
+using FontStashSharp.RichText;
 using Microsoft.Xna.Framework;
-using Myra.Graphics2D.Text;
 using NUnit.Framework;
 using System.Linq;
 
@@ -27,7 +27,7 @@ namespace Myra.Tests
 		[Test]
 		public void MeasureUtf32DoesNotThrow()
 		{
-			var formattedText = new FormattedText
+			var formattedText = new RichTextLayout
 			{
 				Font = Font,
 				Text = "🙌h📦e l👏a👏zy"

@@ -713,6 +713,8 @@ namespace MyraPad
 					return;
 				}
 
+				UpdateCursor();
+
 				var newLength = string.IsNullOrEmpty(e.NewValue) ? 0 : e.NewValue.Length;
 				var oldLength = string.IsNullOrEmpty(e.OldValue) ? 0 : e.OldValue.Length;
 				if (Math.Abs(newLength - oldLength) > 1 || _applyAutoClose)

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FontStashSharp;
+using Microsoft.Xna.Framework;
 
 namespace Myra.Samples.AllWidgets
 {
@@ -20,7 +21,7 @@ namespace Myra.Samples.AllWidgets
 		}
 
 
-		public static Color ToXNA(this System.Drawing.Color c)
+		public static Color ToXNA(this FSColor c)
 		{
 			return new Color(c.R, c.G, c.B, c.A);
 		}

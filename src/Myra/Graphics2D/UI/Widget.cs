@@ -18,6 +18,7 @@ using System.Numerics;
 using System.Drawing;
 using Myra.Platform;
 using Matrix = System.Numerics.Matrix3x2;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace Myra.Graphics2D.UI

@@ -15,8 +15,10 @@ using Microsoft.Xna.Framework.Input;
 using Stride.Core.Mathematics;
 using Stride.Input;
 #else
+using System.Numerics;
 using System.Drawing;
 using Myra.Platform;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace Myra.Graphics2D.UI

@@ -11,6 +11,8 @@ using Microsoft.Xna.Framework;
 using Stride.Core.Mathematics;
 #else
 using System.Drawing;
+using System.Numerics;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace Myra.Graphics2D.UI
@@ -201,7 +203,15 @@ namespace Myra.Graphics2D.UI
 
 			textToDraw.IgnoreColorCommand = !useChunkColor;
 			var bounds = ActualBounds;
-			context.DrawRichText(textToDraw, new Vector2(bounds.X, bounds.Y), color, textHorizontalAlignment: TextAlign);
+
+			if (TextAlign == TextHorizontalAlignment.Center)
+			{
+				bounds.X += bounds.Width / 2;
+			} else if (TextAlign == TextHorizontalAlignment.Right)
+			{
+				bounds.X += bounds.Width;
+			}
+			context.DrawRichText(textToDraw, new Vector2(bounds.X, bounds.Y), color, horizontalAlignment: TextAlign);
 		}
 
 		protected override Point InternalMeasure(Point availableSize)

@@ -9,6 +9,7 @@ using Texture2D = Stride.Graphics.Texture;
 #else
 using System.Drawing;
 using Texture2D = System.Object;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace Myra.Graphics2D.TextureAtlases

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Stride.Core.Mathematics;
 #else
 using System.Drawing;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace Myra.Utility
@@ -143,7 +144,7 @@ namespace Myra.Utility
 					break;
 			}
 
-			return ColorStorage.CreateColor((byte)r, (byte)g, (byte)b, (byte)255);
+			return new Color((byte)r, (byte)g, (byte)b, (byte)255);
 		}
 	}
 }

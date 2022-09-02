@@ -9,13 +9,14 @@ using Myra.Attributes;
 using System.Linq;
 using Myra.Graphics2D;
 using FontStashSharp;
+using FontStashSharp.RichText;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
 #elif STRIDE
 using Stride.Core.Mathematics;
 #else
-using System.Drawing;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace Myra.MML

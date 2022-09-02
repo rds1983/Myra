@@ -1,5 +1,5 @@
-﻿using System;
-using Myra.Utility;
+﻿using FontStashSharp.RichText;
+using System;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Stride.Core.Mathematics;
 #else
 using System.Drawing;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace Myra.Graphics2D.Brushes
@@ -54,7 +55,7 @@ namespace Myra.Graphics2D.Brushes
 			}
 			else
 			{
-				var c = ColorStorage.CreateColor((int)(Color.R * color.R / 255.0f),
+				var c = new Color((int)(Color.R * color.R / 255.0f),
 					(int)(Color.G * color.G / 255.0f),
 					(int)(Color.B * color.B / 255.0f),
 					(int)(Color.A * color.A / 255.0f));

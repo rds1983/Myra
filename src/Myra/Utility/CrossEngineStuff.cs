@@ -1,6 +1,4 @@
-﻿using System;
-
-#if MONOGAME || FNA
+﻿#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 #elif STRIDE
@@ -9,6 +7,7 @@ using Stride.Graphics;
 using Texture2D = Stride.Graphics.Texture;
 #else
 using System.Drawing;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace Myra.Utility
@@ -46,10 +45,10 @@ namespace Myra.Utility
 				value = 1;
 			}
 
-			return Color.FromArgb((int)(color.A * value),
-				(int)(color.R * value),
+			return new Color((int)(color.R * value),
 				(int)(color.G * value),
-				(int)(color.B * value));
+				(int)(color.B * value),
+				(int)(color.A * value));
 #endif
 		}
 

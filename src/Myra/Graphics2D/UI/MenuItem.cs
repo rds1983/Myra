@@ -5,13 +5,14 @@ using System;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using Myra.MML;
+using FontStashSharp.RichText;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
 #elif STRIDE
 using Stride.Core.Mathematics;
 #else
-using System.Drawing;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace Myra.Graphics2D.UI

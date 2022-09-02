@@ -15,6 +15,7 @@ using Texture2D = Stride.Graphics.Texture;
 using System.Drawing;
 using System.Numerics;
 using Texture2D = System.Object;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace Myra.Graphics2D

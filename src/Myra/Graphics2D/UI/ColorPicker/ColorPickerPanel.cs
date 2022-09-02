@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Myra.Utility;
+using FontStashSharp.RichText;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -8,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Stride.Core.Mathematics;
 #else
 using System.Drawing;
+using Color = FontStashSharp.FSColor;
 #endif
 
 using ColorHSV = Myra.Utility.ColorHSV;
@@ -27,22 +29,22 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 		public static readonly Color[] UserColors = new[]
 		{
-			ColorStorage.CreateColor(255, 255, 255),
-			ColorStorage.CreateColor(217, 217, 217),
-			ColorStorage.CreateColor(178, 178, 178),
-			ColorStorage.CreateColor(140, 140, 140),
-			ColorStorage.CreateColor(102, 102, 102),
-			ColorStorage.CreateColor(64, 64, 64),
-			ColorStorage.CreateColor(32, 32, 32),
-			ColorStorage.CreateColor(0, 0, 0),
-			ColorStorage.CreateColor(254, 57, 48),
-			ColorStorage.CreateColor(255, 149, 3),
-			ColorStorage.CreateColor(255, 204, 1),
-			ColorStorage.CreateColor(75, 217, 97),
-			ColorStorage.CreateColor(91, 198, 250),
-			ColorStorage.CreateColor(3, 121, 255),
-			ColorStorage.CreateColor(87, 86, 213),
-			ColorStorage.CreateColor(207, 86, 191)
+			new Color(255, 255, 255),
+			new Color(217, 217, 217),
+			new Color(178, 178, 178),
+			new Color(140, 140, 140),
+			new Color(102, 102, 102),
+			new Color(64, 64, 64),
+			new Color(32, 32, 32),
+			new Color(0, 0, 0),
+			new Color(254, 57, 48),
+			new Color(255, 149, 3),
+			new Color(255, 204, 1),
+			new Color(75, 217, 97),
+			new Color(91, 198, 250),
+			new Color(3, 121, 255),
+			new Color(87, 86, 213),
+			new Color(207, 86, 191)
 		};
 
 		public Color Color
@@ -50,7 +52,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			get
 			{
 				var c = _colorDisplay.Color;
-				return ColorStorage.CreateColor(c.R,
+				return new Color(c.R,
 					c.G,
 					c.B,
 					DisplayAlpha);
@@ -76,7 +78,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 			set
 			{
-				Color = ColorStorage.CreateColor(value, Color.G, Color.B, Color.A);
+				Color = new Color(value, Color.G, Color.B, Color.A);
 			}
 		}
 
@@ -89,7 +91,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 			set
 			{
-				Color = ColorStorage.CreateColor(Color.R, value, Color.B, Color.A);
+				Color = new Color(Color.R, value, Color.B, Color.A);
 			}
 		}
 
@@ -102,7 +104,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 			set
 			{
-				Color = ColorStorage.CreateColor(Color.R, Color.G, value, Color.A);
+				Color = new Color(Color.R, Color.G, value, Color.A);
 			}
 		}
 
@@ -447,7 +449,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			if (byte.TryParse(st[0], out byte r) && byte.TryParse(st[1], out byte g) && byte.TryParse(st[2], out byte b))
 			{
 				_inputRGB.Tag = true;
-				OnColorChanged(ColorStorage.CreateColor(r, g, b));
+				OnColorChanged(new Color(r, g, b));
 				_inputRGB.Tag = false;
 			}
 		}
@@ -494,7 +496,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			{
 				_inputHEX.Tag = true;
 				var c = color.Value;
-				OnColorChanged(ColorStorage.CreateColor(c.R, c.G, c.B));
+				OnColorChanged(new Color(c.R, c.G, c.B));
 				_inputHEX.Tag = false;
 			}
 		}
@@ -530,7 +532,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 		private void OnColorChanged(ColorHSV h)
 		{
 			var c = h.ToRGB();
-			c = ColorStorage.CreateColor(c.R, c.G, c.B, 255);
+			c = new Color(c.R, c.G, c.B, (byte)255);
 			OnColorChanged(c, h);
 		}
 
@@ -566,7 +568,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 				_vPicker.Top = (int)(hsv.V / -100f * WheelHeight) + WheelHeight;
 			}
 
-			_colorWheel.Color = ColorStorage.CreateColor((int)(hsv.V * 255.0f / 100f), (int)(hsv.V * 255.0f / 100f), (int)(hsv.V * 255.0f / 100f));
+			_colorWheel.Color = new Color((int)(hsv.V * 255.0f / 100f), (int)(hsv.V * 255.0f / 100f), (int)(hsv.V * 255.0f / 100f));
 			
 			_colorDisplay.Color = rgb;
 			

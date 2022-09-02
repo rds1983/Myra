@@ -13,6 +13,7 @@ using Stride.Core.Mathematics;
 #else
 using System.Drawing;
 using System.Numerics;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace Myra.Samples.AllWidgets
@@ -202,7 +203,7 @@ namespace Myra.Samples.AllWidgets
 
 			var listItem3 = new ListItem();
 			listItem3.Text = "Blue";
-			listItem3.Color = ColorStorage.CreateColor(0, 128, 255, 255);
+			listItem3.Color = new Color(0, 128, 255, 255);
 
 			var comboBox1 = new ComboBox();
 			comboBox1.Width = 200;
