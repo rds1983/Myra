@@ -4,6 +4,7 @@ using Myra.Graphics2D;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.Brushes;
+using FontStashSharp.RichText;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -203,7 +204,7 @@ namespace Myra.Samples.AllWidgets
 
 			var listItem3 = new ListItem();
 			listItem3.Text = "Blue";
-			listItem3.Color = new Color(0, 128, 255, 255);
+			listItem3.Color = ColorStorage.CreateColor(0, 128, 255, 255);
 
 			var comboBox1 = new ComboBox();
 			comboBox1.Width = 200;

@@ -4,6 +4,7 @@ using Myra.Assets;
 using Myra.Graphics2D.UI.Styles;
 using FontStashSharp.Interfaces;
 using Myra.Utility;
+using FontStashSharp;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -21,12 +22,56 @@ namespace Myra
 	{
 		private static AssetManager _defaultAssetManager;
 
-		public static int FontAtlasSize = 1024;
-		public static int FontKernelWidth = 0;
-		public static int FontKernelHeight = 0;
-		public static bool FontPremultiplyAlpha = true;
-		public static float FontResolutionFactor = 1;
-		public static IFontLoader FontLoader = null;
+		[Obsolete("Use FontSystemDefaults.KernelWidth")]
+		public static int FontKernelWidth
+		{
+			get => FontSystemDefaults.KernelWidth;
+			set
+			{
+				FontSystemDefaults.KernelWidth = value;
+			}
+		}
+
+		[Obsolete("Use FontSystemDefaults.KernelHeight")]
+		public static int FontKernelHeight
+		{
+			get => FontSystemDefaults.KernelHeight;
+			set
+			{
+				FontSystemDefaults.KernelHeight = value;
+			}
+		}
+
+		[Obsolete("Use FontSystemDefaults.PremultiplyAlpha")]
+		public static bool FontPremultiplyAlpha
+		{
+			get => FontSystemDefaults.PremultiplyAlpha;
+			set
+			{
+				FontSystemDefaults.PremultiplyAlpha = value;
+			}
+		}
+
+		[Obsolete("Use FontSystemDefaults.FontResolutionFactor")]
+		public static float FontResolutionFactor
+		{
+			get => FontSystemDefaults.FontResolutionFactor;
+			set
+			{
+				FontSystemDefaults.FontResolutionFactor = value;
+			}
+		}
+
+
+		[Obsolete("Use FontSystemDefaults.FontLoader")]
+		public static IFontLoader FontLoader
+		{
+			get => FontSystemDefaults.FontLoader;
+			set
+			{
+				FontSystemDefaults.FontLoader = value;
+			}
+		}
 
 #if MONOGAME || FNA || STRIDE
 
