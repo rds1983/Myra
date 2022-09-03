@@ -51,6 +51,11 @@ namespace Myra.Graphics2D.UI.File
 		{
 			get
 			{
+				if (_mode == FileDialogMode.ChooseFolder)
+				{
+					return Folder;
+				}
+
 				if (string.IsNullOrEmpty(Folder))
 				{
 					return FileName;

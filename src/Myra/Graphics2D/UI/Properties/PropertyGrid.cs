@@ -945,6 +945,83 @@ namespace Myra.Graphics2D.UI.Properties
 			return subGrid;
 		}
 
+		private Widget CreateAttributeFileEditor(Record record, bool hasSetter, FileDialogMode dialogMode, string filter)
+		{
+			if (Settings.AssetManager == null)
+			{
+				return null;
+			}
+
+			var propertyType = record.Type;
+			var value = record.GetValue(_object);
+
+			var button = new TextButton
+			{
+				Text = "Change...",
+				ContentHorizontalAlignment = HorizontalAlignment.Center,
+				Tag = value,
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				GridColumn = 1
+			};
+
+			if (hasSetter)
+			{
+				button.Click += (sender, args) =>
+				{
+					var dlg = new FileDialog(dialogMode)
+					{
+						Filter = filter
+					};
+
+					if (value != null)
+					{
+						var filePath = value.ToString();
+						if (!Path.IsPathRooted(filePath) && !string.IsNullOrEmpty(Settings.BasePath))
+						{
+							filePath = Path.Combine(Settings.BasePath, filePath);
+						}
+						dlg.FilePath = filePath;
+					}
+					else if (!string.IsNullOrEmpty(Settings.BasePath))
+					{
+						dlg.Folder = Settings.BasePath;
+					}
+
+					dlg.Closed += (s, a) =>
+					{
+						if (!dlg.Result)
+						{
+							return;
+						}
+
+						try
+						{
+							var filePath = dlg.FilePath;
+							if (!string.IsNullOrEmpty(Settings.BasePath))
+							{
+								filePath = PathUtils.TryToMakePathRelativeTo(filePath, Settings.BasePath);
+							}
+
+							SetValue(record, _object, filePath);
+
+							FireChanged(propertyType.Name);
+						}
+						catch (Exception)
+						{
+						}
+					};
+
+					dlg.ShowModal(Desktop);
+				};
+			}
+			else
+			{
+				button.Enabled = false;
+			}
+
+			return button;
+		}
+
 		private void FillSubGrid(ref int y, IReadOnlyList<Record> records)
 		{
 			for (var i = 0; i < records.Count; ++i)
@@ -992,6 +1069,11 @@ namespace Myra.Graphics2D.UI.Properties
 				{
 
 					valueWidget = CreateNumericEditor(record, hasSetter);
+				}
+				else if (propertyType == typeof(string) && record.FindAttribute<FilePathAttribute>() != null)
+				{
+					var filePathAttr = record.FindAttribute<FilePathAttribute>();
+					valueWidget = CreateAttributeFileEditor(record, hasSetter, filePathAttr.DialogMode, filePathAttr.Filter);
 				}
 				else if (propertyType == typeof(string) || propertyType.IsPrimitive || propertyType.IsNullablePrimitive())
 				{
