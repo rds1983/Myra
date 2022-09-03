@@ -50,13 +50,7 @@ namespace Myra.Assets
 
 			var fontSystemSettings = new FontSystemSettings
 			{
-				TextureWidth = MyraEnvironment.FontAtlasSize,
-				TextureHeight = MyraEnvironment.FontAtlasSize,
 				EffectAmount = amount,
-				KernelWidth = MyraEnvironment.FontKernelWidth,
-				KernelHeight = MyraEnvironment.FontKernelHeight,
-				PremultiplyAlpha = MyraEnvironment.FontPremultiplyAlpha,
-				FontResolutionFactor = MyraEnvironment.FontResolutionFactor,
 				Effect =
 					fontType switch
 					{
@@ -67,7 +61,6 @@ namespace Myra.Assets
 					},
 				ExistingTexture = ExistingTexture,
 				ExistingTextureUsedSpace = ExistingTextureUsedSpace,
-				FontLoader = MyraEnvironment.FontLoader
 			};
 
 			var fontSystem = new FontSystem(fontSystemSettings);

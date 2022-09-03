@@ -2,6 +2,7 @@
 using System;
 using System.Drawing;
 using System.Numerics;
+using Color = FontStashSharp.FSColor;
 
 namespace Myra.Platform
 {

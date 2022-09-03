@@ -4,6 +4,7 @@ using Myra.Graphics2D;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.Brushes;
+using FontStashSharp.RichText;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -13,6 +14,7 @@ using Stride.Core.Mathematics;
 #else
 using System.Drawing;
 using System.Numerics;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace Myra.Samples.AllWidgets

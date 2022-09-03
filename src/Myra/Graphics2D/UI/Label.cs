@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
-using Myra.Graphics2D.Text;
 using Myra.Graphics2D.UI.Styles;
 using System;
 using FontStashSharp;
 using Myra.Utility;
+using FontStashSharp.RichText;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -11,23 +11,28 @@ using Microsoft.Xna.Framework;
 using Stride.Core.Mathematics;
 #else
 using System.Drawing;
+using System.Numerics;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace Myra.Graphics2D.UI
 {
 	public class Label : Widget
 	{
-		private readonly FormattedText _formattedText = new FormattedText
+		private readonly RichTextLayout _richText = new RichTextLayout
 		{
-			CalculateGlyphs = false,
 			SupportsCommands = true
 		};
 
 		private bool _wrap = false;
 
 		private AutoEllipsisMethod _autoEllipsisMethod = AutoEllipsisMethod.None;
-		private FormattedText _autoEllipsisText;
+		private RichTextLayout _autoEllipsisText;
 		private string _autoEllipsisString = "...";
+		private readonly RichTextLayout _errorText = new RichTextLayout
+		{
+			SupportsCommands = false
+		};
 
 		[Category("Appearance")]
 		[DefaultValue(0)]
@@ -35,11 +40,11 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return _formattedText.VerticalSpacing;
+				return _richText.VerticalSpacing;
 			}
 			set
 			{
-				_formattedText.VerticalSpacing = value;
+				_richText.VerticalSpacing = value;
 				InvalidateMeasure();
 			}
 		}
@@ -50,16 +55,16 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return _formattedText.Text;
+				return _richText.Text;
 			}
 			set
 			{
-				if (_formattedText.Text == value)
+				if (_richText.Text == value)
 				{
 					return;
 				}
 
-				_formattedText.Text = value;
+				_richText.Text = value;
 				InvalidateMeasure();
 			}
 		}
@@ -69,11 +74,11 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return _formattedText.Font;
+				return _richText.Font;
 			}
 			set
 			{
-				_formattedText.Font = value;
+				_richText.Font = value;
 				InvalidateMeasure();
 			}
 		}
@@ -132,8 +137,8 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
-		[DefaultValue(TextAlign.Left)]
-		public TextAlign TextAlign
+		[DefaultValue(TextHorizontalAlignment.Left)]
+		public TextHorizontalAlignment TextAlign
 		{
 			get; set;
 		}
@@ -173,7 +178,7 @@ namespace Myra.Graphics2D.UI
 
 		public override void InternalRender(RenderContext context)
 		{
-			if (_formattedText.Font == null)
+			if (_richText.Font == null)
 			{
 				return;
 			}
@@ -197,9 +202,35 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var textToDraw = (_autoEllipsisMethod == AutoEllipsisMethod.None) 
-				? _formattedText : _autoEllipsisText;
+				? _richText : _autoEllipsisText;
 
-			textToDraw.Draw(context, TextAlign, ActualBounds, color, useChunkColor);
+			textToDraw.IgnoreColorCommand = !useChunkColor;
+			var bounds = ActualBounds;
+
+			var x = bounds.X;
+			if (TextAlign == TextHorizontalAlignment.Center)
+			{
+				x += bounds.Width / 2;
+			} else if (TextAlign == TextHorizontalAlignment.Right)
+			{
+				x += bounds.Width;
+			}
+
+			try
+			{
+				context.DrawRichText(textToDraw, new Vector2(x, bounds.Y), color, horizontalAlignment: TextAlign);
+			}
+			catch(Exception ex)
+			{
+				x = bounds.X;
+				_errorText.Text = BuildRtlError(ex);
+				context.DrawRichText(_errorText, new Vector2(x, bounds.Y), Color.Red);
+			}
+		}
+
+		private static string BuildRtlError(Exception ex)
+		{
+			return "RTL Error: " + ex.Message;
 		}
 
 		protected override Point InternalMeasure(Point availableSize)
@@ -214,14 +245,33 @@ namespace Myra.Graphics2D.UI
 			var ellipsisEnabled = _autoEllipsisMethod != AutoEllipsisMethod.None;
 
 			var result = Mathematics.PointZero;
+
 			if (ellipsisEnabled)
 			{
-				_autoEllipsisText = ApplyAutoEllipsis(width, height);
-				result = _autoEllipsisText.Measure(_wrap ? width : default(int?));
+				try
+				{
+					_autoEllipsisText = ApplyAutoEllipsis(width, height);
+					result = _autoEllipsisText.Measure(_wrap ? width : default(int?));
+				}
+				catch (Exception ex)
+				{
+					_errorText.Font = Font;
+					_errorText.Text = BuildRtlError(ex);
+					result = _errorText.Measure(_wrap ? width : default(int?));
+				}
 			}
-			else if (Font != null)
+			else
 			{
-				result = _formattedText.Measure(_wrap ? width : default(int?));
+				try
+				{
+					result = _richText.Measure(_wrap ? width : default(int?));
+				}
+				catch (Exception ex)
+				{
+					_errorText.Font = Font;
+					_errorText.Text = BuildRtlError(ex);
+					result = _errorText.Measure(_wrap ? width : default(int?));
+				}
 			}
 
 			if (result.Y < Font.LineHeight)
@@ -232,23 +282,23 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		private FormattedText ApplyAutoEllipsis(int width, int height)
+		private RichTextLayout ApplyAutoEllipsis(int width, int height)
 		{
-			var unchangedMeasure = _formattedText.Measure(_wrap ? width : default(int?));
+			var unchangedMeasure = _richText.Measure(_wrap ? width : default(int?));
 			if (unchangedMeasure.X <= width && unchangedMeasure.Y <= height)
 			{
-				return _formattedText; // don't even need to do anything.
+				return _richText; // don't even need to do anything.
 			}
 
-			var origText = _formattedText.Text;
-			var measureText = new FormattedText()
+			var origText = _richText.Text;
+			var measureText = new RichTextLayout()
 			{
-				Text = _formattedText.Text,
-				Font = _formattedText.Font,
-				VerticalSpacing = _formattedText.VerticalSpacing,
-				Width = _formattedText.Width,
-				CalculateGlyphs = _formattedText.CalculateGlyphs,
-				SupportsCommands = _formattedText.SupportsCommands
+				Text = _richText.Text,
+				Font = _richText.Font,
+				VerticalSpacing = _richText.VerticalSpacing,
+				Width = _richText.Width,
+				CalculateGlyphs = _richText.CalculateGlyphs,
+				SupportsCommands = _richText.SupportsCommands
 			};
 			string result;
 
@@ -304,12 +354,12 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			return new FormattedText()
+			return new RichTextLayout()
 			{
 				Text = result + AutoEllipsisString,
-				Font = _formattedText.Font,
-				VerticalSpacing =_formattedText.VerticalSpacing,
-				Width = _formattedText.Width
+				Font = _richText.Font,
+				VerticalSpacing =_richText.VerticalSpacing,
+				Width = _richText.Width
 			};
 
 			Point GetMeasure()
@@ -322,7 +372,7 @@ namespace Myra.Graphics2D.UI
 		{
 			base.InternalArrange();
 
-			_formattedText.Width = _wrap ? ActualBounds.Width : default(int?);
+			_richText.Width = _wrap ? ActualBounds.Width : default(int?);
 		}
 
 		public void ApplyLabelStyle(LabelStyle style)

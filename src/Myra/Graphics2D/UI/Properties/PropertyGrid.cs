@@ -13,6 +13,7 @@ using Myra.Graphics2D.TextureAtlases;
 using System.IO;
 using Myra.Attributes;
 using FontStashSharp;
+using FontStashSharp.RichText;
 using Myra.Graphics2D.Brushes;
 
 #if MONOGAME || FNA
@@ -22,6 +23,7 @@ using Stride.Core.Mathematics;
 #else
 using System.Drawing;
 using SolidBrush = Myra.Graphics2D.Brushes.SolidBrush;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace Myra.Graphics2D.UI.Properties

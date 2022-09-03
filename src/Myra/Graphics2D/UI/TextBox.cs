@@ -3,11 +3,10 @@ using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Serialization;
-using Myra.Graphics2D.Text;
 using TextCopy;
 using Myra.Graphics2D.UI.TextEdit;
 using FontStashSharp;
-using System.Diagnostics;
+using FontStashSharp.RichText;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -16,8 +15,10 @@ using Microsoft.Xna.Framework.Input;
 using Stride.Core.Mathematics;
 using Stride.Input;
 #else
+using System.Numerics;
 using System.Drawing;
 using Myra.Platform;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace Myra.Graphics2D.UI
@@ -27,7 +28,7 @@ namespace Myra.Graphics2D.UI
 		private DateTime _lastBlinkStamp = DateTime.Now;
 		private bool _cursorOn = true;
 		private bool _wrap = false;
-		private readonly FormattedText _formattedText = new FormattedText
+		private readonly RichTextLayout _richTextLayout = new RichTextLayout
 		{
 			CalculateGlyphs = true,
 			SupportsCommands = false
@@ -51,11 +52,11 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return _formattedText.VerticalSpacing;
+				return _richTextLayout.VerticalSpacing;
 			}
 			set
 			{
-				_formattedText.VerticalSpacing = value;
+				_richTextLayout.VerticalSpacing = value;
 				InvalidateMeasure();
 			}
 		}
@@ -136,11 +137,11 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				return _formattedText.Font;
+				return _richTextLayout.Font;
 			}
 			set
 			{
-				_formattedText.Font = value;
+				_richTextLayout.Font = value;
 				InvalidateMeasure();
 			}
 		}
@@ -221,7 +222,7 @@ namespace Myra.Graphics2D.UI
 			set
 			{
 				_passwordField = value;
-				UpdateFormattedText();
+				UpdateRichTextLayout();
 			}
 		}
 
@@ -626,14 +627,14 @@ namespace Myra.Graphics2D.UI
 
 		private void MoveLine(int delta)
 		{
-			var line = _formattedText.GetLineByCursorPosition(CursorPosition);
+			var line = _richTextLayout.GetLineByCursorPosition(CursorPosition);
 			if (line == null)
 			{
 				return;
 			}
 
 			var newLine = line.LineIndex + delta;
-			if (newLine < 0 || newLine >= _formattedText.Lines.Count)
+			if (newLine < 0 || newLine >= _richTextLayout.Lines.Count)
 			{
 				return;
 			}
@@ -643,7 +644,7 @@ namespace Myra.Graphics2D.UI
 			var preferredX = pos.X - bounds.X;
 
 			// Find closest glyph
-			var newString = _formattedText.Lines[newLine];
+			var newString = _richTextLayout.Lines[newLine];
 			var cursorPosition = newString.TextStartIndex;
 			var glyphIndex = newString.GetGlyphIndexByX(preferredX);
 			if (glyphIndex != null)
@@ -892,7 +893,7 @@ namespace Myra.Graphics2D.UI
 				var selectStart = Math.Min(SelectStart, SelectEnd);
 				var selectEnd = Math.Max(SelectStart, SelectEnd);
 
-				var clipboardText = _formattedText.Text.Substring(selectStart, selectEnd - selectStart);
+				var clipboardText = _richTextLayout.Text.Substring(selectStart, selectEnd - selectStart);
 				try
 				{
 					Clipboard.SetText(clipboardText);
@@ -938,7 +939,7 @@ namespace Myra.Graphics2D.UI
 
 			_text = value;
 
-			UpdateFormattedText();
+			UpdateRichTextLayout();
 
 			if (!byUser)
 			{
@@ -970,17 +971,17 @@ namespace Myra.Graphics2D.UI
 			return true;
 		}
 
-		private void UpdateFormattedText()
+		private void UpdateRichTextLayout()
 		{
 			if (string.IsNullOrEmpty(_text))
 			{
-				_formattedText.Text = _text;
+				_richTextLayout.Text = _text;
 				EnableHintText();
 				return;
 			}
 
 			DisableHintText();
-			_formattedText.Text = PasswordField ? new string('*', _text.Length) : _text;
+			_richTextLayout.Text = PasswordField ? new string('*', _text.Length) : _text;
 		}
 
 		private void DisableHintText()
@@ -990,7 +991,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			_formattedText.Text = _text;
+			_richTextLayout.Text = _text;
 			HintTextEnabled = false;
 		}
 
@@ -998,7 +999,7 @@ namespace Myra.Graphics2D.UI
 		{
 			if (ShouldEnableHintText())
 			{
-				_formattedText.Text = _hintText;
+				_richTextLayout.Text = _hintText;
 				HintTextEnabled = true;
 			}
 		}
@@ -1033,8 +1034,8 @@ namespace Myra.Graphics2D.UI
 			else
 			{
 				sz = new Point(Bounds.Width, Bounds.Height);
-				maximum = new Point(_formattedText.Size.X + CursorWidth - sz.X,
-					_formattedText.Size.Y - sz.Y);
+				maximum = new Point(_richTextLayout.Size.X + CursorWidth - sz.X,
+					_richTextLayout.Size.Y - sz.Y);
 
 				if (maximum.X < 0)
 				{
@@ -1057,7 +1058,7 @@ namespace Myra.Graphics2D.UI
 			p.X -= bounds.X;
 			p.Y -= bounds.Y;
 
-			var lineHeight = _formattedText.Font.LineHeight;
+			var lineHeight = _richTextLayout.Font.LineHeight;
 
 			Point sp;
 			if (asScrollViewer != null)
@@ -1167,7 +1168,7 @@ namespace Myra.Graphics2D.UI
 			mousePos.X += _internalScrolling.X;
 			mousePos.Y += _internalScrolling.Y;
 
-			var line = _formattedText.GetLineByY(mousePos.Y);
+			var line = _richTextLayout.GetLineByY(mousePos.Y);
 			if (line != null)
 			{
 				var glyphIndex = line.GetGlyphIndexByX(mousePos.X);
@@ -1296,26 +1297,26 @@ namespace Myra.Graphics2D.UI
 			{
 				if (index < Text.Length)
 				{
-					var glyphRender = _formattedText.GetGlyphInfoByIndex(index);
+					var glyphRender = _richTextLayout.GetGlyphInfoByIndex(index);
 					if (glyphRender != null)
 					{
 						x += glyphRender.Bounds.Left;
-						y += glyphRender.TextChunk.Top;
+						y += glyphRender.LineTop;
 					}
 				}
-				else if (_formattedText.Lines != null && _formattedText.Lines.Count > 0)
+				else if (_richTextLayout.Lines != null && _richTextLayout.Lines.Count > 0)
 				{
 					// After last glyph
-					var lastLine = _formattedText.Lines[_formattedText.Lines.Count - 1];
+					var lastLine = _richTextLayout.Lines[_richTextLayout.Lines.Count - 1];
 					if (lastLine.Count > 0)
 					{
 						var glyphRender = lastLine.GetGlyphInfoByIndex(lastLine.Count - 1);
 
 						x += glyphRender.Bounds.Right;
-						y += glyphRender.TextChunk.Top;
+						y += glyphRender.LineTop;
 					} else
 					{
-						y += lastLine.Top;
+//						y += lastLine.Top;
 					}
 				}
 			}
@@ -1340,7 +1341,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var startGlyph = _formattedText.GetGlyphInfoByIndex(selectStart);
+			var startGlyph = _richTextLayout.GetGlyphInfoByIndex(selectStart);
 			if (startGlyph == null)
 			{
 				return;
@@ -1349,10 +1350,10 @@ namespace Myra.Graphics2D.UI
 			var lineIndex = startGlyph.TextChunk.LineIndex;
 			var i = selectStart;
 
-			var lineHeight = _formattedText.Font.LineHeight;
+			var lineHeight = _richTextLayout.Font.LineHeight;
 			while (true)
 			{
-				startGlyph = _formattedText.GetGlyphInfoByIndex(i);
+				startGlyph = _richTextLayout.GetGlyphInfoByIndex(i);
 				if (startGlyph == null)
 				{
 					break;
@@ -1360,7 +1361,7 @@ namespace Myra.Graphics2D.UI
 
 				var startPosition = GetRenderPositionByIndex(i);
 
-				var line = _formattedText.Lines[startGlyph.TextChunk.LineIndex];
+				var line = _richTextLayout.Lines[startGlyph.TextChunk.LineIndex];
 
 				if (selectEnd < line.TextStartIndex + line.Count)
 				{
@@ -1382,18 +1383,18 @@ namespace Myra.Graphics2D.UI
 						lineHeight));
 
 				++lineIndex;
-				if (lineIndex >= _formattedText.Lines.Count)
+				if (lineIndex >= _richTextLayout.Lines.Count)
 				{
 					break;
 				}
 
-				i = _formattedText.Lines[lineIndex].TextStartIndex;
+				i = _richTextLayout.Lines[lineIndex].TextStartIndex;
 			}
 		}
 
 		public override void InternalRender(RenderContext context)
 		{
-			if (_formattedText.Font == null)
+			if (_richTextLayout.Font == null)
 			{
 				return;
 			}
@@ -1417,13 +1418,27 @@ namespace Myra.Graphics2D.UI
 				textColor = FocusedTextColor.Value;
 			}
 
-			var centeredBounds = LayoutUtils.Align(new Point(bounds.Width, bounds.Height), _formattedText.Size, HorizontalAlignment.Left, TextVerticalAlignment);
+			var centeredBounds = LayoutUtils.Align(new Point(bounds.Width, bounds.Height), _richTextLayout.Size, HorizontalAlignment.Left, TextVerticalAlignment);
 			centeredBounds.Offset(bounds.Location);
 
 			var p = new Point(centeredBounds.Location.X - _internalScrolling.X,
 				centeredBounds.Location.Y - _internalScrolling.Y);
 
-			_formattedText.Draw(context, TextAlign.Left, new Rectangle(p.X, p.Y, bounds.Width, bounds.Height), textColor, false);
+			if (MyraEnvironment.DrawTextGlyphsFrames)
+			{
+				foreach (var line in _richTextLayout.Lines)
+				{
+					foreach (TextChunk chunk in line.Chunks)
+					{
+						foreach(var glyph in chunk.Glyphs)
+						{
+							context.DrawRectangle(glyph.Bounds, Color.White);
+						}
+					}
+				}
+			}
+
+			context.DrawRichText(_richTextLayout, new Vector2(p.X, p.Y), textColor);
 
 			if (!IsKeyboardFocused)
 			{
@@ -1445,9 +1460,7 @@ namespace Myra.Graphics2D.UI
 				p.X -= _internalScrolling.X;
 				p.Y -= _internalScrolling.Y;
 
-				var rect = new Rectangle(p.X, p.Y,
-						Cursor.Size.X,
-						_formattedText.Font.LineHeight);
+				var rect = new Rectangle(p.X, p.Y, Cursor.Size.X, _richTextLayout.Font.LineHeight);
 				Cursor.Draw(context, rect);
 			}
 
@@ -1467,7 +1480,7 @@ namespace Myra.Graphics2D.UI
 			var result = Mathematics.PointZero;
 			if (Font != null)
 			{
-				result = _formattedText.Measure(_wrap ? width : default(int?));
+				result = _richTextLayout.Measure(_wrap ? width : default(int?));
 			}
 
 			if (result.Y < Font.LineHeight)
@@ -1491,7 +1504,7 @@ namespace Myra.Graphics2D.UI
 			var width = ActualBounds.Width;
 			width -= CursorWidth;
 
-			_formattedText.Width = _wrap ? width : default(int?);
+			_richTextLayout.Width = _wrap ? width : default(int?);
 		}
 
 		public void ApplyTextBoxStyle(TextBoxStyle style)
@@ -1515,8 +1528,7 @@ namespace Myra.Graphics2D.UI
 
 		public float GetWidth(int index)
 		{
-			var glyph = _formattedText.GetGlyphInfoByIndex(index);
-
+			var glyph = _richTextLayout.GetGlyphInfoByIndex(index);
 			if (glyph == null)
 			{
 				return 0;
@@ -1524,7 +1536,7 @@ namespace Myra.Graphics2D.UI
 
 			if (glyph.Character == '\n')
 			{
-				return FormattedText.NewLineWidth;
+				return 0;
 			}
 
 			return glyph.Bounds.Width;

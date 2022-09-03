@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Xml.Serialization;
 using FontStashSharp;
+using FontStashSharp.RichText;
 using Microsoft.Xna.Framework;
 using Myra;
 using Myra.Graphics2D;

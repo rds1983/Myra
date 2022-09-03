@@ -6,15 +6,16 @@ using Myra.MML;
 using System.Collections;
 using FontStashSharp;
 using Myra.Graphics2D.TextureAtlases;
-using Myra.Graphics2D.Brushes;
 using Myra.Assets;
+using FontStashSharp.RichText;
+using Myra.Graphics2D.Brushes;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
 #elif STRIDE
 using Stride.Core.Mathematics;
 #else
-using System.Drawing;
+using Color = FontStashSharp.FSColor;
 using SolidBrush = Myra.Graphics2D.Brushes.SolidBrush;
 #endif
 

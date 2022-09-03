@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Numerics;
+using FontStashSharp;
 using FontStashSharp.Interfaces;
 using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D;
@@ -90,7 +91,7 @@ namespace Myra.Samples.AllWidgets
 			_beginCalled = false;
 		}
 
-		public void Draw(object texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 scale, float depth)
+		public void Draw(object texture, Vector2 position, Rectangle? sourceRectangle, FSColor color, float rotation, Vector2 scale, float depth)
 		{
 			var xnaTexture = (Texture2D)texture;
 
@@ -105,7 +106,7 @@ namespace Myra.Samples.AllWidgets
 				depth);
 		}
 
-		public void Draw(object texture, Rectangle dest, Rectangle? src, Color color)
+		public void Draw(object texture, Rectangle dest, Rectangle? src, FSColor color)
 		{
 			var xnaTexture = (Texture2D)texture;
 

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
+using FontStashSharp.RichText;
 using Microsoft.Xna.Framework;
 using Myra;
 

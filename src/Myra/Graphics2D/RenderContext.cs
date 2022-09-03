@@ -1,7 +1,6 @@
 using FontStashSharp;
 using Myra.Utility;
-using System;
-using FontStashSharp.Interfaces;
+using FontStashSharp.RichText;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -15,6 +14,7 @@ using System.Drawing;
 using Myra.Platform;
 using System.Numerics;
 using Texture2D = System.Object;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace Myra.Graphics2D
@@ -323,6 +323,35 @@ namespace Myra.Graphics2D
 		/// <param name="layerDepth">A depth of the layer of this string.</param>
 		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color color, float layerDepth = 0.0f) =>
 			DrawString(font, text, position, color, Vector2.One, 0, layerDepth);
+
+		/// <summary>
+		/// Draws a rich text
+		/// </summary>
+		/// <param name="richText">The text which will be drawn.</param>
+		/// <param name="position">The drawing location on screen.</param>
+		/// <param name="color">A color mask.</param>
+		/// <param name="sourceScale">A scaling of this text.</param>
+		/// <param name="rotation">A rotation of this text in radians.</param>
+		/// <param name="layerDepth">A depth of the layer of this string.</param>
+		public void DrawRichText(RichTextLayout richText, Vector2 position, Color color, 
+			Vector2? sourceScale = null, float rotation = 0, float layerDepth = 0.0f, 
+			TextHorizontalAlignment horizontalAlignment = TextHorizontalAlignment.Left)
+		{
+			SetTextTextureFiltering();
+			color = CrossEngineStuff.MultiplyColor(color, Opacity);
+			position = Transform.Apply(position);
+
+			var scale = sourceScale ?? Vector2.One;
+
+			scale *= Transform.Scale;
+			rotation += Transform.Rotation;
+
+#if MONOGAME || FNA || STRIDE
+			richText.Draw(_renderer, position, color, scale, rotation, Vector2.Zero, layerDepth, horizontalAlignment);
+#else
+			richText.Draw(_fontStashRenderer, position, color, scale, rotation, Vector2.Zero, layerDepth, horizontalAlignment);
+#endif
+		}
 
 		public void Begin()
 		{

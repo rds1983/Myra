@@ -5,6 +5,7 @@ using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.Brushes;
 using Myra.Graphics2D.UI.Properties;
+using FontStashSharp.RichText;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -14,6 +15,7 @@ using Stride.Core.Mathematics;
 #else
 using System.Drawing;
 using System.Numerics;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace $namespace$

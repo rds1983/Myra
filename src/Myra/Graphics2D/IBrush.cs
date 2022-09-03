@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Stride.Core.Mathematics;
 #else
 using System.Drawing;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace Myra.Graphics2D
