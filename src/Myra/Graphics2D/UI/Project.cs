@@ -15,6 +15,7 @@ using Myra.Graphics2D.UI.Properties;
 using FontStashSharp;
 using Myra.Assets;
 using Myra.Utility;
+using Myra.Graphics2D.UI.File;
 
 namespace Myra.Graphics2D.UI
 {
@@ -49,14 +50,14 @@ namespace Myra.Graphics2D.UI
 		public Widget Root { get; set; }
 
 		[Browsable(false)]
-		public string StylesheetPath
-		{
-			get; set;
-		}
+		public string StylesheetPath { get; set; }
 
 		[Browsable(false)]
 		[XmlIgnore]
 		public Stylesheet Stylesheet { get; set; }
+
+		[FilePath(FileDialogMode.ChooseFolder)]
+		public string DesignerRtfAssetsPath { get; set; }
 
 		static Project()
 		{
@@ -122,7 +123,7 @@ namespace Myra.Graphics2D.UI
 				return false;
 			}
 
-			if(asWidget != null && HasStylesheetValue(asWidget, p, stylesheet))
+			if (asWidget != null && HasStylesheetValue(asWidget, p, stylesheet))
 			{
 				return false;
 			}
@@ -171,7 +172,7 @@ namespace Myra.Graphics2D.UI
 			return new LoadContext
 			{
 				Namespaces = new[]
-				{ 
+				{
 					typeof(Widget).Namespace,
 					typeof(PropertyGrid).Namespace,
 				},
@@ -196,7 +197,7 @@ namespace Myra.Graphics2D.UI
 			return xDoc.ToString();
 		}
 
-		public static Project LoadFromXml<T>(XDocument xDoc, IAssetManager assetManager, Stylesheet stylesheet, T handler) where T : class 
+		public static Project LoadFromXml<T>(XDocument xDoc, IAssetManager assetManager, Stylesheet stylesheet, T handler) where T : class
 		{
 			var result = new Project
 			{
@@ -239,7 +240,8 @@ namespace Myra.Graphics2D.UI
 			if (name == "PropertyGrid")
 			{
 				itemType = typeof(PropertyGrid);
-			} else  if (!IsProportionName(name))
+			}
+			else if (!IsProportionName(name))
 			{
 				string newName;
 				if (LegacyClassNames.TryGetValue(name, out newName))
@@ -268,9 +270,9 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public static object LoadObjectFromXml(string data, IAssetManager assetManager, Stylesheet stylesheet)
-        {
+		{
 			return LoadObjectFromXml<object>(data, assetManager, stylesheet, null);
-        }
+		}
 
 		public object LoadObjectFromXml(string data, IAssetManager assetManager)
 		{
@@ -373,7 +375,7 @@ namespace Myra.Graphics2D.UI
 				styleName = Stylesheet.DefaultStyleName;
 			}
 
-			object obj =  stylesDict[styleName];
+			object obj = stylesDict[styleName];
 
 			// Now find corresponding property
 			PropertyInfo styleProperty = null;

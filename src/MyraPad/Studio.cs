@@ -19,6 +19,8 @@ using System.Threading;
 using System.Xml.Linq;
 using Myra.Graphics2D;
 using Myra.Assets;
+using FontStashSharp.RichText;
+using FontStashSharp;
 
 namespace MyraPad
 {
@@ -99,6 +101,9 @@ namespace MyraPad
 		private readonly Options _options = null;
 		private Desktop _desktop;
 
+		private readonly Dictionary<string, FontSystem> _fontCache = new Dictionary<string, FontSystem>();
+		private readonly Dictionary<string, Texture2D> _textureCache = new Dictionary<string, Texture2D>();
+
 		public static Studio Instance
 		{
 			get
@@ -129,7 +134,8 @@ namespace MyraPad
 					PropertyGridSettings.BasePath = folder;
 					PropertyGridSettings.AssetManager = new AssetManager(new FileAssetResolver(folder));
 					_lastFolder = folder;
-				} else
+				}
+				else
 				{
 					PropertyGridSettings.BasePath = string.Empty;
 					PropertyGridSettings.AssetManager = MyraEnvironment.DefaultAssetManager;
@@ -202,7 +208,6 @@ namespace MyraPad
 
 		private PropertyGrid PropertyGrid => _ui._propertyGrid;
 
-
 		private PropertyGridSettings PropertyGridSettings
 		{
 			get
@@ -219,13 +224,34 @@ namespace MyraPad
 			}
 		}
 
+		private string BaseRichTextPath
+		{
+			get
+			{
+				var result = string.IsNullOrEmpty(FilePath) ? string.Empty : Path.GetDirectoryName(FilePath);
+				if (!string.IsNullOrEmpty(Project.DesignerRtfAssetsPath))
+				{
+					if (string.IsNullOrEmpty(result) || Path.IsPathRooted(Project.DesignerRtfAssetsPath))
+					{
+						result = Project.DesignerRtfAssetsPath;
+					}
+					else
+					{
+						result = Path.Combine(result, Project.DesignerRtfAssetsPath);
+					}
+				}
+
+				return result;
+			}
+		}
+
 		public Studio(string[] args)
 		{
 			_instance = this;
 
 			// Restore state
 			_state = State.Load();
-			
+
 			//Load via program argument
 			if (args.Length > 0)
 			{
@@ -233,10 +259,10 @@ namespace MyraPad
 				if (!string.IsNullOrEmpty(filePathArg))
 				{
 					_state.EditedFile = filePathArg;
-					_state.LastFolder =  Path.GetDirectoryName(filePathArg);
+					_state.LastFolder = Path.GetDirectoryName(filePathArg);
 				}
 			}
-			
+
 			_graphicsDeviceManager = new GraphicsDeviceManager(this);
 
 			if (_state != null)
@@ -278,13 +304,13 @@ namespace MyraPad
 			base.LoadContent();
 
 			MyraEnvironment.Game = this;
-			
+
 			_desktop = new Desktop();
 
 			BuildUI();
-			
-			#if MONOGAME
-			
+
+#if MONOGAME
+
 			// Inform Myra that external text input is available
 			// So it stops translating Keys to chars
 			_desktop.HasExternalTextInput = true;
@@ -295,12 +321,53 @@ namespace MyraPad
 				_desktop.OnChar(a.Character);
 			};
 
-			#endif
+#endif
 
 			if (_state != null && !string.IsNullOrEmpty(_state.EditedFile) && File.Exists(_state.EditedFile))
 			{
 				Load(_state.EditedFile);
 			}
+
+			RichTextDefaults.FontResolver = p =>
+			{
+				// Parse font name and size
+				var args = p.Split(',');
+				var fontName = args[0].Trim();
+				var fontSize = int.Parse(args[1].Trim());
+
+				// _fontCache is field of type Dictionary<string, FontSystem>
+				// It is used to cache fonts
+				FontSystem fontSystem;
+				if (!_fontCache.TryGetValue(fontName, out fontSystem))
+				{
+					// Load and cache the font system
+					fontSystem = new FontSystem();
+					fontSystem.AddFont(File.ReadAllBytes(Path.Combine(BaseRichTextPath, fontName)));
+					_fontCache[fontName] = fontSystem;
+				}
+
+				// Return the required font
+				return fontSystem.GetFont(fontSize);
+			};
+
+			RichTextDefaults.ImageResolver = p =>
+			{
+				Texture2D texture;
+
+				// _textureCache is field of type Dictionary<string, Texture2D>
+				// it is used to cache textures
+				if (!_textureCache.TryGetValue(p, out texture))
+				{
+					using (var stream = File.OpenRead(Path.Combine(BaseRichTextPath, p)))
+					{
+						texture = Texture2D.FromStream(GraphicsDevice, stream);
+					}
+
+					_textureCache[p] = texture;
+				}
+
+				return new TextureFragment(texture);
+			};
 		}
 
 		public void ClosingFunction(object sender, System.ComponentModel.CancelEventArgs e)
@@ -553,7 +620,7 @@ namespace MyraPad
 					onFinished(false);
 					return;
 				}
-				
+
 				// Check whether project has external assets
 				var hasExternalResources = false;
 
@@ -609,7 +676,7 @@ namespace MyraPad
 							});
 
 							// Update resources
-							foreach(var pair in newResources)
+							foreach (var pair in newResources)
 							{
 								if (widget.Resources[pair.Key] != pair.Value)
 								{
@@ -1102,8 +1169,8 @@ namespace MyraPad
 
 			if (_parentTag == "VerticalStackPanel" || _parentTag == "HorizontalStackPanel")
 			{
-					result.Add(_parentTag + "." + Project.DefaultProportionName);
-					result.Add(_parentTag + "." + ProportionsName);
+				result.Add(_parentTag + "." + Project.DefaultProportionName);
+				result.Add(_parentTag + "." + ProportionsName);
 			}
 
 			result = result.OrderBy(s => !s.Contains('.')).ThenBy(s => s).ToList();
@@ -1149,6 +1216,8 @@ namespace MyraPad
 		private void OnMenuFileReloadSelected(object sender, EventArgs e)
 		{
 			AssetManager.ClearCache();
+			_fontCache.Clear();
+			_textureCache.Clear();
 			Load(FilePath);
 		}
 
@@ -1233,7 +1302,7 @@ namespace MyraPad
 				{
 					var stylesheet = StylesheetFromFile(filePath);
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					var msg = Dialog.CreateMessageBox("Stylesheet Error", ex.Message);
 					msg.ShowModal(_desktop);
