@@ -1,4 +1,6 @@
-﻿#if MONOGAME || FNA
+﻿using System;
+
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 #elif STRIDE
