@@ -1300,8 +1300,8 @@ namespace Myra.Graphics2D.UI
 					var glyphRender = _richTextLayout.GetGlyphInfoByIndex(index);
 					if (glyphRender != null)
 					{
-						x += glyphRender.Bounds.Left;
-						y += glyphRender.LineTop;
+						x += glyphRender.Value.Bounds.Left;
+						y += glyphRender.Value.LineTop;
 					}
 				}
 				else if (_richTextLayout.Lines != null && _richTextLayout.Lines.Count > 0)
@@ -1312,8 +1312,8 @@ namespace Myra.Graphics2D.UI
 					{
 						var glyphRender = lastLine.GetGlyphInfoByIndex(lastLine.Count - 1);
 
-						x += glyphRender.Bounds.Right;
-						y += glyphRender.LineTop;
+						x += glyphRender.Value.Bounds.Right;
+						y += glyphRender.Value.LineTop;
 					} else
 					{
 //						y += lastLine.Top;
@@ -1347,7 +1347,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var lineIndex = startGlyph.TextChunk.LineIndex;
+			var lineIndex = startGlyph.Value.TextChunk.LineIndex;
 			var i = selectStart;
 
 			var lineHeight = _richTextLayout.Font.LineHeight;
@@ -1361,7 +1361,7 @@ namespace Myra.Graphics2D.UI
 
 				var startPosition = GetRenderPositionByIndex(i);
 
-				var line = _richTextLayout.Lines[startGlyph.TextChunk.LineIndex];
+				var line = _richTextLayout.Lines[startGlyph.Value.TextChunk.LineIndex];
 
 				if (selectEnd < line.TextStartIndex + line.Count)
 				{
@@ -1379,7 +1379,7 @@ namespace Myra.Graphics2D.UI
 				Selection.Draw(context,
 					new Rectangle(startPosition.X - _internalScrolling.X,
 						startPosition.Y - _internalScrolling.Y,
-						bounds.Left + startGlyph.TextChunk.Size.X - startPosition.X,
+						bounds.Left + startGlyph.Value.TextChunk.Size.X - startPosition.X,
 						lineHeight));
 
 				++lineIndex;
@@ -1534,12 +1534,12 @@ namespace Myra.Graphics2D.UI
 				return 0;
 			}
 
-			if (glyph.Character == '\n')
+			if (glyph.Value.Codepoint == '\n')
 			{
 				return 0;
 			}
 
-			return glyph.Bounds.Width;
+			return glyph.Value.Bounds.Width;
 		}
 
 		private void DesktopTouchUp(object sender, EventArgs args)
