@@ -21,7 +21,6 @@ namespace Myra.Graphics2D.UI
 	{
 		private readonly RichTextLayout _richText = new RichTextLayout
 		{
-			CalculateGlyphs = false,
 			SupportsCommands = true
 		};
 
@@ -30,6 +29,10 @@ namespace Myra.Graphics2D.UI
 		private AutoEllipsisMethod _autoEllipsisMethod = AutoEllipsisMethod.None;
 		private RichTextLayout _autoEllipsisText;
 		private string _autoEllipsisString = "...";
+		private readonly RichTextLayout _errorText = new RichTextLayout
+		{
+			SupportsCommands = false
+		};
 
 		[Category("Appearance")]
 		[DefaultValue(0)]
@@ -204,14 +207,30 @@ namespace Myra.Graphics2D.UI
 			textToDraw.IgnoreColorCommand = !useChunkColor;
 			var bounds = ActualBounds;
 
+			var x = bounds.X;
 			if (TextAlign == TextHorizontalAlignment.Center)
 			{
-				bounds.X += bounds.Width / 2;
+				x += bounds.Width / 2;
 			} else if (TextAlign == TextHorizontalAlignment.Right)
 			{
-				bounds.X += bounds.Width;
+				x += bounds.Width;
 			}
-			context.DrawRichText(textToDraw, new Vector2(bounds.X, bounds.Y), color, horizontalAlignment: TextAlign);
+
+			try
+			{
+				context.DrawRichText(textToDraw, new Vector2(x, bounds.Y), color, horizontalAlignment: TextAlign);
+			}
+			catch(Exception ex)
+			{
+				x = bounds.X;
+				_errorText.Text = BuildRtlError(ex);
+				context.DrawRichText(_errorText, new Vector2(x, bounds.Y), Color.Red);
+			}
+		}
+
+		private static string BuildRtlError(Exception ex)
+		{
+			return "RTL Error: " + ex.Message;
 		}
 
 		protected override Point InternalMeasure(Point availableSize)
@@ -226,14 +245,33 @@ namespace Myra.Graphics2D.UI
 			var ellipsisEnabled = _autoEllipsisMethod != AutoEllipsisMethod.None;
 
 			var result = Mathematics.PointZero;
+
 			if (ellipsisEnabled)
 			{
-				_autoEllipsisText = ApplyAutoEllipsis(width, height);
-				result = _autoEllipsisText.Measure(_wrap ? width : default(int?));
+				try
+				{
+					_autoEllipsisText = ApplyAutoEllipsis(width, height);
+					result = _autoEllipsisText.Measure(_wrap ? width : default(int?));
+				}
+				catch (Exception ex)
+				{
+					_errorText.Font = Font;
+					_errorText.Text = BuildRtlError(ex);
+					result = _errorText.Measure(_wrap ? width : default(int?));
+				}
 			}
-			else if (Font != null)
+			else
 			{
-				result = _richText.Measure(_wrap ? width : default(int?));
+				try
+				{
+					result = _richText.Measure(_wrap ? width : default(int?));
+				}
+				catch (Exception ex)
+				{
+					_errorText.Font = Font;
+					_errorText.Text = BuildRtlError(ex);
+					result = _errorText.Measure(_wrap ? width : default(int?));
+				}
 			}
 
 			if (result.Y < Font.LineHeight)
