@@ -1,4 +1,4 @@
-<Project StylesheetPath="Resources/ui_stylesheet.xml">
+<Project StylesheetPath="Resources/ui_stylesheet.xmms">
   <Project.ExportOptions Namespace="Myra.Samples.CustomUIStylesheet" Class="AllWidgets" OutputPath="D:\Projects\Myra\samples\Myra.Samples.CustomUIStylesheet" />
   <HorizontalSplitPane GridRow="1">
     <ScrollViewer>
