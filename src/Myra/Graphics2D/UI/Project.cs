@@ -16,6 +16,7 @@ using FontStashSharp;
 using Myra.Assets;
 using Myra.Utility;
 using Myra.Graphics2D.UI.File;
+using System.IO;
 
 namespace Myra.Graphics2D.UI
 {
@@ -30,6 +31,22 @@ namespace Myra.Graphics2D.UI
 
 	public class Project
 	{
+		private struct StylesheetChanger: IDisposable
+		{
+			private readonly Stylesheet _oldStylesheet;
+
+			public StylesheetChanger(Stylesheet newStylesheet)
+			{
+				_oldStylesheet = Stylesheet.Current;
+				Stylesheet.Current = newStylesheet;
+			}
+
+			public void Dispose()
+			{
+				Stylesheet.Current = _oldStylesheet;
+			}
+		}
+
 		public const string ProportionName = "Proportion";
 		public const string DefaultProportionName = "DefaultProportion";
 		public const string DefaultColumnProportionName = "DefaultColumnProportion";
@@ -149,7 +166,7 @@ namespace Myra.Graphics2D.UI
 			return CreateSaveContext(Stylesheet);
 		}
 
-		internal static LoadContext CreateLoadContext(IAssetManager assetManager, Stylesheet stylesheet)
+		internal static LoadContext CreateLoadContext(IAssetManager assetManager)
 		{
 			Func<Type, string, object> resourceGetter = (t, name) =>
 			{
@@ -177,14 +194,9 @@ namespace Myra.Graphics2D.UI
 					typeof(PropertyGrid).Namespace,
 				},
 				LegacyClassNames = LegacyClassNames,
-				ObjectCreator = (t, el) => CreateItem(t, el, stylesheet),
+				ObjectCreator = (t, el) => CreateItem(t, el),
 				ResourceGetter = resourceGetter
 			};
-		}
-
-		internal LoadContext CreateLoadContext(IAssetManager assetManager)
-		{
-			return CreateLoadContext(assetManager, Stylesheet);
 		}
 
 		public string Save()
@@ -197,40 +209,51 @@ namespace Myra.Graphics2D.UI
 			return xDoc.ToString();
 		}
 
-		public static Project LoadFromXml<T>(XDocument xDoc, IAssetManager assetManager, Stylesheet stylesheet, T handler) where T : class
+		public static Project LoadFromXml<T>(XDocument xDoc, IAssetManager assetManager = null, T handler = null) where T : class
 		{
-			var result = new Project
+			var stylesheet = Stylesheet.Current;
+			var stylesheetPathAttr = xDoc.Root.Attribute("StylesheetPath");
+			if (stylesheetPathAttr != null)
 			{
-				Stylesheet = stylesheet
-			};
+				stylesheet = assetManager.Load<Stylesheet>(stylesheetPathAttr.Value);
+			}
 
-			var loadContext = result.CreateLoadContext(assetManager);
-			loadContext.Load(result, xDoc.Root, handler);
+			var result = new Project();
+
+			if (stylesheet != null)
+			{
+				result.Stylesheet = stylesheet;
+				using(var stylesheetChanger = new StylesheetChanger(stylesheet))
+				{ 
+					var loadContext = CreateLoadContext(assetManager);
+					loadContext.Load(result, xDoc.Root, handler);
+				}
+			}
+			else
+			{
+				var loadContext = CreateLoadContext(assetManager);
+				loadContext.Load(result, xDoc.Root, handler);
+			}
 
 			return result;
 		}
 
-		public static Project LoadFromXml<T>(string data, IAssetManager assetManager, Stylesheet stylesheet, T handler) where T : class
+		public static Project LoadFromXml<T>(string data, IAssetManager assetManager = null, T handler = null) where T : class
 		{
-			return LoadFromXml(XDocument.Parse(data), assetManager, stylesheet, handler);
+			return LoadFromXml(XDocument.Parse(data), assetManager, handler);
 		}
 
-		public static Project LoadFromXml(XDocument xDoc, IAssetManager assetManager, Stylesheet stylesheet)
+		public static Project LoadFromXml(XDocument xDoc, IAssetManager assetManager = null)
 		{
-			return LoadFromXml<object>(xDoc, assetManager, stylesheet, null);
-		}
-
-		public static Project LoadFromXml(string data, IAssetManager assetManager, Stylesheet stylesheet)
-		{
-			return LoadFromXml<object>(XDocument.Parse(data), assetManager, stylesheet, null);
+			return LoadFromXml<object>(xDoc, assetManager, null);
 		}
 
 		public static Project LoadFromXml(string data, IAssetManager assetManager = null)
 		{
-			return LoadFromXml<object>(data, assetManager, Stylesheet.Current, null);
+			return LoadFromXml<object>(XDocument.Parse(data), assetManager, null);
 		}
 
-		public static object LoadObjectFromXml<T>(string data, IAssetManager assetManager, Stylesheet stylesheet, T handler) where T : class
+		public static object LoadObjectFromXml<T>(string data, IAssetManager assetManager = null, Stylesheet stylesheet = null, T handler = null) where T : class
 		{
 			XDocument xDoc = XDocument.Parse(data);
 
@@ -262,9 +285,22 @@ namespace Myra.Graphics2D.UI
 				return null;
 			}
 
-			var item = CreateItem(itemType, xDoc.Root, stylesheet);
-			var loadContext = CreateLoadContext(assetManager, stylesheet);
-			loadContext.Load(item, xDoc.Root, handler);
+			object item = null;
+			if (stylesheet != null)
+			{
+				using (var stylesheetChanger = new StylesheetChanger(stylesheet))
+				{
+					item = CreateItem(itemType, xDoc.Root);
+					var loadContext = CreateLoadContext(assetManager);
+					loadContext.Load(item, xDoc.Root, handler);
+				}
+			}
+			else
+			{
+				item = CreateItem(itemType, xDoc.Root);
+				var loadContext = CreateLoadContext(assetManager);
+				loadContext.Load(item, xDoc.Root, handler);
+			}
 
 			return item;
 		}
@@ -285,7 +321,7 @@ namespace Myra.Graphics2D.UI
 			return saveContext.Save(obj, true, tagName).ToString();
 		}
 
-		private static object CreateItem(Type type, XElement element, Stylesheet stylesheet)
+		private static object CreateItem(Type type, XElement element)
 		{
 			if (typeof(Widget).IsAssignableFrom(type))
 			{
@@ -306,14 +342,12 @@ namespace Myra.Graphics2D.UI
 
 				if (acceptsStyleName)
 				{
-					var result = (Widget)Activator.CreateInstance(type, (string)null);
-
 					// Determine style name
 					var styleName = Stylesheet.DefaultStyleName;
 					var styleNameAttr = element.Attribute("StyleName");
 					if (styleNameAttr != null)
 					{
-						var stylesNames = stylesheet.GetStylesByWidgetName(type.Name);
+						var stylesNames = Stylesheet.Current.GetStylesByWidgetName(type.Name);
 						if (stylesNames != null && stylesNames.Contains(styleNameAttr.Value))
 						{
 							styleName = styleNameAttr.Value;
@@ -325,10 +359,7 @@ namespace Myra.Graphics2D.UI
 						}
 					}
 
-					// Set style
-					result.SetStyle(stylesheet, styleName);
-
-					return result;
+					return (Widget)Activator.CreateInstance(type, styleName);
 				}
 			}
 

@@ -565,7 +565,7 @@ namespace MyraPad
 		{
 			try
 			{
-				var project = Project.LoadFromXml(_ui._textSource.Text, AssetManager, _project.Stylesheet);
+				var project = Project.LoadFromXml(_ui._textSource.Text, AssetManager);
 				_ui._textSource.Text = _project.Save();
 			}
 			catch (Exception ex)
@@ -841,24 +841,7 @@ namespace MyraPad
 					{
 						QueueSetStatusText("Reloading...");
 
-						var xDoc = XDocument.Parse(data);
-
-						var stylesheet = Stylesheet.Current;
-						var stylesheetPathAttr = xDoc.Root.Attribute("StylesheetPath");
-						if (stylesheetPathAttr != null)
-						{
-							try
-							{
-								stylesheet = StylesheetFromFile(stylesheetPathAttr.Value);
-							}
-							catch (Exception ex)
-							{
-								var dialog = Dialog.CreateMessageBox("Stylesheet Error", ex.ToString());
-								dialog.ShowModal(_desktop);
-							}
-						}
-
-						var newProject = Project.LoadFromXml(xDoc, AssetManager, stylesheet);
+						var newProject = Project.LoadFromXml(data, AssetManager);
 						_newProjectsQueue.Enqueue(newProject);
 
 						QueueSetStatusText(string.Empty);
@@ -1221,42 +1204,6 @@ namespace MyraPad
 			Load(FilePath);
 		}
 
-		private Stylesheet StylesheetFromFile(string path)
-		{
-			if (!Path.IsPathRooted(path))
-			{
-				path = Path.Combine(Path.GetDirectoryName(FilePath), path);
-			}
-
-			return AssetManager.Load<Stylesheet>(path);
-		}
-
-		private void LoadStylesheet(string filePath)
-		{
-			if (string.IsNullOrEmpty(filePath))
-			{
-				return;
-			}
-
-			try
-			{
-				if (!Path.IsPathRooted(filePath))
-				{
-					filePath = Path.Combine(Path.GetDirectoryName(FilePath), filePath);
-				}
-
-				var stylesheet = StylesheetFromFile(filePath);
-
-				Project.StylesheetPath = filePath;
-				UpdateSource();
-			}
-			catch (Exception ex)
-			{
-				var dialog = Dialog.CreateMessageBox("Error", ex.ToString());
-				dialog.ShowModal(_desktop);
-			}
-		}
-
 		private void OnMenuFileLoadStylesheet(object sender, EventArgs e)
 		{
 			AssetManager.ClearCache();
@@ -1300,7 +1247,7 @@ namespace MyraPad
 				// Check whether stylesheet could be loaded
 				try
 				{
-					var stylesheet = StylesheetFromFile(filePath);
+					var stylesheet = AssetManager.Load<Stylesheet>(filePath);
 				}
 				catch (Exception ex)
 				{

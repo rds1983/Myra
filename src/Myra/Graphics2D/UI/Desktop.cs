@@ -41,7 +41,7 @@ namespace Myra.Graphics2D.UI
 		private float _rotation = 0.0f;
 		private Transform? _transform;
 
-		private RenderContext _renderContext;
+		private readonly RenderContext _renderContext = new RenderContext();
 
 		private bool _layoutDirty = true;
 		private bool _widgetsDirty = true;
@@ -268,16 +268,6 @@ namespace Myra.Graphics2D.UI
 
 				_mouseInsideWidget = value;
 				MouseInsideWidgetChanged.Invoke(this);
-			}
-		}
-
-		private RenderContext RenderContext
-		{
-			get
-			{
-				EnsureRenderContext();
-
-				return _renderContext;
 			}
 		}
 
@@ -706,18 +696,8 @@ namespace Myra.Graphics2D.UI
 			_widgetsDirty = true;
 		}
 
-		private void EnsureRenderContext()
-		{
-			if (_renderContext == null)
-			{
-				_renderContext = new RenderContext();
-			}
-		}
-
 		public void RenderVisual()
 		{
-			EnsureRenderContext();
-
 			var oldScissorRectangle = _renderContext.Scissor;
 
 			_renderContext.Begin();
@@ -996,7 +976,6 @@ namespace Myra.Graphics2D.UI
 			var mouseInfo = MouseInfoGetter();
 			var mousePosition = mouseInfo.Position;
 
-			EnsureRenderContext();
 			MousePosition = mousePosition;
 
 			HandleButton(mouseInfo.IsLeftButtonDown, _lastMouseInfo.IsLeftButtonDown, MouseButtons.Left);
