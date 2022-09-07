@@ -1,5 +1,5 @@
 <Project>
-  <Project.ExportOptions Namespace="Myra.Samples.TextRendering.UI" Class="MainPanel" OutputPath="C:\Projects\Myra\samples\Myra.Samples.TextRendering\UI" />
+  <Project.ExportOptions Namespace="Myra.Samples.TextRendering.UI" Class="MainPanel" OutputPath="D:\Projects\Myra\samples\Myra.Samples.TextRendering\UI" />
   <Panel>
     <VerticalStackPanel>
       <VerticalStackPanel.Proportions>
@@ -46,7 +46,7 @@
       <HorizontalStackPanel>
         <HorizontalStackPanel.DefaultProportion Type="Part" />
         <ScrollViewer>
-          <TextBox Text="The quick brown\nfox jumps over\nthe lazy dog" Multiline="True" Wrap="True" VerticalAlignment="Stretch" Id="_textBoxText" />
+          <TextBox Text="/tuThe quick brown/n/ts/c[blue]fox jumps over/n/td/c[green]the lazy dog" Multiline="True" Wrap="True" VerticalAlignment="Stretch" Id="_textBoxText" />
         </ScrollViewer>
         <Image Id="_imageTexture" />
       </HorizontalStackPanel>
