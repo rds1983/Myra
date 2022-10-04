@@ -222,6 +222,11 @@ namespace Myra.Graphics2D.UI
 
 			if (stylesheet != null)
 			{
+				if (assetManager == null)
+				{
+					throw new Exception($"assetManager couldn't be null if the project has external stylesheet");
+				}
+
 				result.Stylesheet = stylesheet;
 				using(var stylesheetChanger = new StylesheetChanger(stylesheet))
 				{ 

@@ -42,11 +42,6 @@ namespace Myra.Utility
 
 		public static Vector2 ToVector2(this Point p) => new Vector2(p.X, p.Y);
 
-		public static Vector2 Multiply(this Vector2 v, Point p)
-		{
-			return new Vector2(v.X * p.X, v.Y * p.Y);
-		}
-
 		public static Vector2 Transform(this Vector2 v, ref Matrix matrix)
 		{
 #if MONOGAME || FNA

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 using FontStashSharp.RichText;
 using Microsoft.Xna.Framework;
-using Myra;
 
 namespace MyraPad
 {
@@ -36,10 +37,14 @@ namespace MyraPad
 
 		public void Save()
 		{
-			using (var stream = new StreamWriter(StateFilePath, false))
+			using (var fileStream = File.OpenWrite(StateFilePath))
 			{
+				var xmlWriter = new XmlTextWriter(fileStream, Encoding.UTF8)
+				{
+					Formatting = Formatting.Indented
+				};
 				var serializer = new XmlSerializer(typeof(State));
-				serializer.Serialize(stream, this);
+				serializer.Serialize(xmlWriter, this);
 			}
 		}
 
