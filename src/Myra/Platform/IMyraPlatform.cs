@@ -8,7 +8,7 @@ namespace Myra.Platform
 	{
 		Point ViewSize { get; }
 
-		IMyraRenderer CreateRenderer();
+		IMyraRenderer Renderer { get; }
 
 		MouseInfo GetMouseInfo();
 

@@ -37,6 +37,8 @@ namespace Myra.Samples.AllWidgets
 
 		private GraphicsDevice GraphicsDevice => _platform.GraphicsDevice;
 
+		public RendererType RendererType => RendererType.Sprite;
+
 		public Rectangle Scissor
 		{
 			get
@@ -91,7 +93,7 @@ namespace Myra.Samples.AllWidgets
 			_beginCalled = false;
 		}
 
-		public void Draw(object texture, Vector2 position, Rectangle? sourceRectangle, FSColor color, float rotation, Vector2 scale, float depth)
+		public void DrawSprite(object texture, Vector2 position, Rectangle? sourceRectangle, FSColor color, float rotation, Vector2 scale, float depth)
 		{
 			var xnaTexture = (Texture2D)texture;
 
@@ -104,6 +106,11 @@ namespace Myra.Samples.AllWidgets
 				scale.ToXNA(),
 				SpriteEffects.None,
 				depth);
+		}
+
+		public void DrawQuad(object texture, ref FontStashSharp.Interfaces.VertexPositionColorTexture topLeft, ref FontStashSharp.Interfaces.VertexPositionColorTexture topRight, ref FontStashSharp.Interfaces.VertexPositionColorTexture bottomLeft, ref FontStashSharp.Interfaces.VertexPositionColorTexture bottomRight)
+		{
+			throw new NotImplementedException();
 		}
 
 		public void Draw(object texture, Rectangle dest, Rectangle? src, FSColor color)

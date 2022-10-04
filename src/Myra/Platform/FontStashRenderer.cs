@@ -24,7 +24,7 @@ namespace Myra.Platform
 
 		public void Draw(object texture, Vector2 pos, Rectangle? src, Color color, float rotation, Vector2 scale, float depth)
 		{
-			_myraRenderer.Draw(texture, pos, src, color, rotation, scale, depth);
+			_myraRenderer.DrawSprite(texture, pos, src, color, rotation, scale, depth);
 		}
 	}
 }

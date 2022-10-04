@@ -1,7 +1,8 @@
-﻿#if MONOGAME || FNA
+﻿using System;
+
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
-using System;
-#elif STRIDE
+elif STRIDE
 using Stride.Core.Mathematics;
 #else
 using System.Drawing;

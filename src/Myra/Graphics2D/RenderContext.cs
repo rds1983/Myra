@@ -63,6 +63,7 @@ namespace Myra.Graphics2D
 #else
 		private readonly IMyraRenderer _renderer;
 		private readonly FontStashRenderer _fontStashRenderer;
+		private readonly FontStashRenderer2 _fontStashRenderer2;
 #endif
 		private bool _beginCalled;
 		private Rectangle _scissor;
@@ -107,8 +108,18 @@ namespace Myra.Graphics2D
 #if MONOGAME || FNA || STRIDE
 			_renderer = new SpriteBatch(MyraEnvironment.Game.GraphicsDevice);
 #else
-			_renderer = MyraEnvironment.Platform.CreateRenderer();
-			_fontStashRenderer = new FontStashRenderer(_renderer);
+			_renderer = MyraEnvironment.Platform.Renderer;
+
+			if (_renderer.RendererType == RendererType.Sprite)
+			{
+				_fontStashRenderer = new FontStashRenderer(_renderer);
+				_fontStashRenderer2 = null;
+			}
+			else
+			{
+				_fontStashRenderer = null;
+				_fontStashRenderer2 = new FontStashRenderer2(_renderer);
+			}
 #endif
 			_scissor = GetDeviceScissor();
 		}
@@ -165,7 +176,8 @@ namespace Myra.Graphics2D
 			if (sourceRectangle != null)
 			{
 				sz = new Vector2(sourceRectangle.Value.Width, sourceRectangle.Value.Height);
-			} else
+			}
+			else
 			{
 #if MONOGAME || FNA || STRIDE
 				sz = new Vector2(texture.Width, texture.Height);
@@ -229,7 +241,7 @@ namespace Myra.Graphics2D
 #elif STRIDE
 			_renderer.Draw(texture, position, sourceRectangle, color, rotation, Vector2.Zero, scale, SpriteEffects.None, ImageOrientation.AsIs, depth);
 #else
-			_renderer.Draw(texture, position, sourceRectangle, color,  rotation, scale, depth);
+			_renderer.DrawSprite(texture, position, sourceRectangle, color, rotation, scale, depth);
 #endif
 		}
 
@@ -271,7 +283,7 @@ namespace Myra.Graphics2D
 		/// <param name="texture"></param>
 		/// <param name="position"></param>
 		/// <param name="color"></param>
-		public void Draw(Texture2D texture, Vector2 position, Color color) => 
+		public void Draw(Texture2D texture, Vector2 position, Color color) =>
 			Draw(texture, position, null, color, 0, Vector2.One);
 
 		private void SetTextTextureFiltering()
@@ -307,7 +319,14 @@ namespace Myra.Graphics2D
 #if MONOGAME || FNA || STRIDE
 			font.DrawText(_renderer, text, position, color, scale, rotation, Vector2.Zero, layerDepth);
 #else
-			font.DrawText(_fontStashRenderer, text, position, color, scale, rotation, Vector2.Zero);
+			if (_fontStashRenderer != null)
+			{
+				font.DrawText(_fontStashRenderer, text, position, color, scale, rotation, Vector2.Zero);
+			}
+			else
+			{
+				font.DrawText(_fontStashRenderer2, text, position, color, scale, rotation, Vector2.Zero);
+			}
 #endif
 		}
 
@@ -333,8 +352,8 @@ namespace Myra.Graphics2D
 		/// <param name="sourceScale">A scaling of this text.</param>
 		/// <param name="rotation">A rotation of this text in radians.</param>
 		/// <param name="layerDepth">A depth of the layer of this string.</param>
-		public void DrawRichText(RichTextLayout richText, Vector2 position, Color color, 
-			Vector2? sourceScale = null, float rotation = 0, float layerDepth = 0.0f, 
+		public void DrawRichText(RichTextLayout richText, Vector2 position, Color color,
+			Vector2? sourceScale = null, float rotation = 0, float layerDepth = 0.0f,
 			TextHorizontalAlignment horizontalAlignment = TextHorizontalAlignment.Left)
 		{
 			SetTextTextureFiltering();
@@ -349,7 +368,14 @@ namespace Myra.Graphics2D
 #if MONOGAME || FNA || STRIDE
 			richText.Draw(_renderer, position, color, scale, rotation, Vector2.Zero, layerDepth, horizontalAlignment);
 #else
-			richText.Draw(_fontStashRenderer, position, color, scale, rotation, Vector2.Zero, layerDepth, horizontalAlignment);
+			if (_fontStashRenderer != null)
+			{
+				richText.Draw(_fontStashRenderer, position, color, scale, rotation, Vector2.Zero, layerDepth, horizontalAlignment);
+			}
+			else
+			{
+				richText.Draw(_fontStashRenderer2, position, color, scale, rotation, Vector2.Zero, layerDepth, horizontalAlignment);
+			}
 #endif
 		}
 

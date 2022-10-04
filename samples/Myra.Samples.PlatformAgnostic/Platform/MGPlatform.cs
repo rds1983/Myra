@@ -10,6 +10,7 @@ namespace Myra.Samples.AllWidgets
 	internal class MGPlatform : IMyraPlatform
 	{
 		private readonly GraphicsDevice _device;
+		private readonly MGRenderer _renderer;
 
 		public Point ViewSize
 		{
@@ -18,6 +19,8 @@ namespace Myra.Samples.AllWidgets
 				return new Point(_device.Viewport.Width, _device.Viewport.Height);
 			}
 		}
+
+		public IMyraRenderer Renderer => _renderer;
 
 		internal GraphicsDevice GraphicsDevice => _device;
 
@@ -29,6 +32,7 @@ namespace Myra.Samples.AllWidgets
 			}
 
 			_device = device;
+			_renderer = new MGRenderer(this);
 		}
 
 		public object CreateTexture(int width, int height)
@@ -48,11 +52,6 @@ namespace Myra.Samples.AllWidgets
 		{
 			var xnaTexture = (Texture2D)texture;
 			return new Point(xnaTexture.Width, xnaTexture.Height);
-		}
-
-		public IMyraRenderer CreateRenderer()
-		{
-			return new MGRenderer(this);
 		}
 
 		public MouseInfo GetMouseInfo()
