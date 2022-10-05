@@ -7,7 +7,7 @@ namespace Myra.Platform
 	{
 		private readonly IMyraRenderer _myraRenderer;
 
-		public ITexture2DManager TextureManager => MyraEnvironment.Platform;
+		public ITexture2DManager TextureManager => MyraEnvironment.Platform.Renderer.TextureManager;
 
 		public FontStashRenderer2(IMyraRenderer myraRenderer)
 		{

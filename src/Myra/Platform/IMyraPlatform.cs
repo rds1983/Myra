@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace Myra.Platform
 {
-	public interface IMyraPlatform: ITexture2DManager
+	public interface IMyraPlatform
 	{
 		Point ViewSize { get; }
 

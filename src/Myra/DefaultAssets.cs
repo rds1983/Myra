@@ -56,8 +56,9 @@ namespace Myra
 					var texture = CrossEngineStuff.CreateTexture(MyraEnvironment.GraphicsDevice, 1, 1);
 					CrossEngineStuff.SetTextureData(texture, new Rectangle(0, 0, 1, 1), new byte[] { 255, 255, 255, 255 });
 #else
-					var texture = MyraEnvironment.Platform.CreateTexture(1, 1);
-					MyraEnvironment.Platform.SetTextureData(texture, new Rectangle(0, 0, 1, 1), new byte[] { 255, 255, 255, 255 });
+					var textureManager = MyraEnvironment.Platform.Renderer.TextureManager;
+					var texture = textureManager.CreateTexture(1, 1);
+					textureManager.SetTextureData(texture, new Rectangle(0, 0, 1, 1), new byte[] { 255, 255, 255, 255 });
 #endif
 
 					_whiteTexture = texture;

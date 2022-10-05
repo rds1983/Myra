@@ -1,6 +1,7 @@
 using FontStashSharp;
 using Myra.Utility;
 using FontStashSharp.RichText;
+using FontStashSharp.Interfaces;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -64,6 +65,10 @@ namespace Myra.Graphics2D
 		private readonly IMyraRenderer _renderer;
 		private readonly FontStashRenderer _fontStashRenderer;
 		private readonly FontStashRenderer2 _fontStashRenderer2;
+		private VertexPositionColorTexture _topLeft = new VertexPositionColorTexture(), 
+			_topRight = new VertexPositionColorTexture(),
+			_bottomLeft = new VertexPositionColorTexture(),
+			_bottomRight = new VertexPositionColorTexture();
 #endif
 		private bool _beginCalled;
 		private Rectangle _scissor;
@@ -235,13 +240,24 @@ namespace Myra.Graphics2D
 			scale *= Transform.Scale;
 			rotation += Transform.Rotation;
 
-			position = Transform.Apply(position);
 #if MONOGAME || FNA
+			position = Transform.Apply(position);
 			 _renderer.Draw(texture, position, sourceRectangle, color, rotation, Vector2.Zero, scale, SpriteEffects.None, depth);
 #elif STRIDE
+			position = Transform.Apply(position);
 			_renderer.Draw(texture, position, sourceRectangle, color, rotation, Vector2.Zero, scale, SpriteEffects.None, ImageOrientation.AsIs, depth);
 #else
-			_renderer.DrawSprite(texture, position, sourceRectangle, color, rotation, scale, depth);
+			if (_fontStashRenderer != null)
+			{
+				position = Transform.Apply(position);
+				_renderer.DrawSprite(texture, position, sourceRectangle, color, rotation, scale, depth);
+			}
+			else
+			{
+				var size = new Vector2(scale.X * sourceRectangle.Value.Width, scale.Y * sourceRectangle.Value.Height);
+				_renderer.DrawQuad(texture, color, position, ref Transform.Matrix, depth, size, sourceRectangle.Value,
+					ref _topLeft, ref _topRight, ref _bottomLeft, ref _bottomRight);
+			}
 #endif
 		}
 

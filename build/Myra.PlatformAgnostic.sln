@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.PlatformAgnostic", "..
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.PlatformAgnostic", "..\samples\Myra.Samples.PlatformAgnostic\Myra.Samples.PlatformAgnostic.csproj", "{0D553344-A5D2-42F6-947B-30139A27A9F4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.Silk.NET", "..\samples\Myra.Samples.Silk.NET.TrippyGL\Myra.Samples.Silk.NET.csproj", "{AB7475A8-3FAC-473F-B6F7-CE2907D60785}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.Silk.NET", "..\samples\Myra.Samples.Silk.NET\Myra.Samples.Silk.NET.csproj", "{B661A371-75A8-43AD-B285-DCD0FD7EC93B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.Silk.NET.TrippyGL", "..\samples\Myra.Samples.Silk.NET.TrippyGL\Myra.Samples.Silk.NET.TrippyGL.csproj", "{28D35517-E469-4A95-904B-AF225A54774C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,17 +27,22 @@ Global
 		{0D553344-A5D2-42F6-947B-30139A27A9F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D553344-A5D2-42F6-947B-30139A27A9F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D553344-A5D2-42F6-947B-30139A27A9F4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AB7475A8-3FAC-473F-B6F7-CE2907D60785}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AB7475A8-3FAC-473F-B6F7-CE2907D60785}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AB7475A8-3FAC-473F-B6F7-CE2907D60785}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AB7475A8-3FAC-473F-B6F7-CE2907D60785}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B661A371-75A8-43AD-B285-DCD0FD7EC93B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B661A371-75A8-43AD-B285-DCD0FD7EC93B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B661A371-75A8-43AD-B285-DCD0FD7EC93B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B661A371-75A8-43AD-B285-DCD0FD7EC93B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28D35517-E469-4A95-904B-AF225A54774C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28D35517-E469-4A95-904B-AF225A54774C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28D35517-E469-4A95-904B-AF225A54774C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28D35517-E469-4A95-904B-AF225A54774C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0D553344-A5D2-42F6-947B-30139A27A9F4} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
-		{AB7475A8-3FAC-473F-B6F7-CE2907D60785} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{B661A371-75A8-43AD-B285-DCD0FD7EC93B} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{28D35517-E469-4A95-904B-AF225A54774C} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35ACDF4E-2CE2-46B1-A19F-35DC131069A1}

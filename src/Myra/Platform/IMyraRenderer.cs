@@ -14,6 +14,8 @@ namespace Myra.Platform
 
 	public interface IMyraRenderer
 	{
+		ITexture2DManager TextureManager { get; }
+
 		/// <summary>
 		/// Renderer Type
 		/// </summary>

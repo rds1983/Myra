@@ -76,8 +76,9 @@ namespace Myra.Assets
 			CrossEngineStuff.SetTextureData(texture, new Rectangle(0, 0, result.Width, result.Height), result.Data);
 			return texture;
 #else
-			var texture = MyraEnvironment.Platform.CreateTexture(result.Width, result.Height);
-			MyraEnvironment.Platform.SetTextureData(texture, new Rectangle(0, 0, result.Width, result.Height), result.Data);
+			var textureManager = MyraEnvironment.Platform.Renderer.TextureManager;
+			var texture = textureManager.CreateTexture(result.Width, result.Height);
+			textureManager.SetTextureData(texture, new Rectangle(0, 0, result.Width, result.Height), result.Data);
 			return new Texture2DWrapper(result.Width, result.Height, texture);
 #endif
 		}

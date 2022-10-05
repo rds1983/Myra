@@ -30,12 +30,14 @@ namespace Myra.Samples.AllWidgets
 			}
 		}
 
-		private readonly MGPlatform _platform;
+		private readonly Texture2DManager _textureManager;
 		private bool _beginCalled;
 		private readonly SpriteBatch _batch;
 		private TextureFiltering _textureFiltering;
 
-		private GraphicsDevice GraphicsDevice => _platform.GraphicsDevice;
+		public GraphicsDevice GraphicsDevice => _textureManager.Device;
+
+		public ITexture2DManager TextureManager => _textureManager;
 
 		public RendererType RendererType => RendererType.Sprite;
 
@@ -60,16 +62,9 @@ namespace Myra.Samples.AllWidgets
 			}
 		}
 
-		public ITexture2DManager TextureManager => _platform;
-
-		public MGRenderer(MGPlatform platform)
+		public MGRenderer(GraphicsDevice device)
 		{
-			if (platform == null)
-			{
-				throw new ArgumentNullException(nameof(platform));
-			}
-
-			_platform = platform;
+			_textureManager = new Texture2DManager(device);
 			_batch = new SpriteBatch(GraphicsDevice);
 		}
 

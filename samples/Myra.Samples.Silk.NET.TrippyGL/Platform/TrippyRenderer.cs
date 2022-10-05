@@ -13,7 +13,7 @@ namespace Myra.Samples.AllWidgets
 	{
 		private bool _beginCalled;
 		
-		private readonly GraphicsDevice _device;
+		private readonly Texture2DManager _textureManager;
 		private readonly SimpleShaderProgram _shaderProgram;
 		private readonly TextureBatcher _batch;
 
@@ -24,6 +24,10 @@ namespace Myra.Samples.AllWidgets
 		private BlendState _oldBlendState;
 		private bool _oldScissorEnabled;
 		private Rectangle _scissorRectangle;
+
+		public GraphicsDevice Device => _textureManager.Device;
+
+		public ITexture2DManager TextureManager => _textureManager;
 
 		public RendererType RendererType => RendererType.Sprite;
 
@@ -38,13 +42,13 @@ namespace Myra.Samples.AllWidgets
 			{
 				Flush();
 
-				value.X += _device.Viewport.X;
-				value.Y += _device.Viewport.Y;
+				value.X += Device.Viewport.X;
+				value.Y += Device.Viewport.Y;
 
 				// TripplyGL Scissor Rect has y-axis facing upwards
 				// Hence we require some transforms
-				var result = new Viewport(value.X, (int)(_device.Viewport.Height - value.Height - value.Y), (uint)value.Width, (uint)value.Height);
-				_device.ScissorRectangle = result;
+				var result = new Viewport(value.X, (int)(Device.Viewport.Height - value.Height - value.Y), (uint)value.Width, (uint)value.Height);
+				Device.ScissorRectangle = result;
 
 				_scissorRectangle = value;
 			}
@@ -52,37 +56,32 @@ namespace Myra.Samples.AllWidgets
 
 		public TrippyRenderer(GraphicsDevice graphicsDevice)
 		{
-			if (graphicsDevice == null)
-			{
-				throw new ArgumentNullException(nameof(graphicsDevice));
-			}
-
-			_device = graphicsDevice;
+			_textureManager = new Texture2DManager(graphicsDevice);
 
 			_shaderProgram = SimpleShaderProgram.Create<VertexColorTexture>(graphicsDevice, 0, 0, true);
 			OnViewportChanged();
-			_batch = new TextureBatcher(_device);
+			_batch = new TextureBatcher(Device);
 			_batch.SetShaderProgram(_shaderProgram);
 		}
 
 		public void OnViewportChanged()
 		{
-			_shaderProgram.Projection = Matrix4x4.CreateOrthographicOffCenter(0, _device.Viewport.Width, _device.Viewport.Height, 0, 0, 1);
+			_shaderProgram.Projection = Matrix4x4.CreateOrthographicOffCenter(0, Device.Viewport.Width, Device.Viewport.Height, 0, 0, 1);
 		}
 
 		public void Begin(TextureFiltering textureFiltering)
 		{
 			// Save old state
-			_oldDepthState = _device.DepthState;
-			_oldFaceCullingEnabled = _device.FaceCullingEnabled;
-			_oldBlendState = _device.BlendState;
-			_oldScissorEnabled = _device.ScissorTestEnabled;
+			_oldDepthState = Device.DepthState;
+			_oldFaceCullingEnabled = Device.FaceCullingEnabled;
+			_oldBlendState = Device.BlendState;
+			_oldScissorEnabled = Device.ScissorTestEnabled;
 
 			// Set new state
-			_device.DepthState = DepthState.None;
-			_device.FaceCullingEnabled = false;
-			_device.BlendState = BlendState.AlphaBlend;
-			_device.ScissorTestEnabled = true;
+			Device.DepthState = DepthState.None;
+			Device.FaceCullingEnabled = false;
+			Device.BlendState = BlendState.AlphaBlend;
+			Device.ScissorTestEnabled = true;
 
 			_batch.Begin();
 
@@ -96,10 +95,10 @@ namespace Myra.Samples.AllWidgets
 			_beginCalled = false;
 
 			// Restore old state
-			_device.DepthState = _oldDepthState;
-			_device.FaceCullingEnabled = _oldFaceCullingEnabled;
-			_device.BlendState = _oldBlendState;
-			_device.ScissorTestEnabled = _oldScissorEnabled;
+			Device.DepthState = _oldDepthState;
+			Device.FaceCullingEnabled = _oldFaceCullingEnabled;
+			Device.BlendState = _oldBlendState;
+			Device.ScissorTestEnabled = _oldScissorEnabled;
 		}
 
 		public void DrawQuad(object texture, ref VertexPositionColorTexture topLeft, ref VertexPositionColorTexture topRight, ref VertexPositionColorTexture bottomLeft, ref VertexPositionColorTexture bottomRight)

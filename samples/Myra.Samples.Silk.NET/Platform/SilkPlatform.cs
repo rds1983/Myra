@@ -5,33 +5,31 @@ using Myra.Graphics2D.UI;
 using Myra.Platform;
 using Silk.NET.Input;
 using Silk.NET.OpenGL;
-using TrippyGL;
 
 namespace Myra.Samples.AllWidgets
 {
-	internal class TrippyPlatform : IMyraPlatform
+	internal class SilkPlatform : IMyraPlatform
 	{
 		private static readonly Dictionary<Keys, Key> _keysMap = new Dictionary<Keys, Key>();
 
-		private readonly GraphicsDevice _device;
 		private readonly IInputContext _inputContext;
-		private readonly TrippyRenderer _renderer;
+		private readonly Renderer _renderer;
 
-		public Point ViewSize
+		public Rectangle Viewport
 		{
-			get
-			{
-				return new Point((int)_device.Viewport.Width, (int)_device.Viewport.Height);
-			}
+			get => _renderer.Viewport;
+			set => _renderer.Viewport = value;
 		}
+
+		public Point ViewSize => new Point(_renderer.Viewport.Width, _renderer.Viewport.Height);
 
 		public IMyraRenderer Renderer => _renderer;
 
-		static TrippyPlatform()
+		static SilkPlatform()
 		{
 			// Fill _keysMap matching names
 			var keysValues = Enum.GetValues(typeof(Keys));
-			foreach(Keys keys in keysValues)
+			foreach (Keys keys in keysValues)
 			{
 				var name = Enum.GetName(typeof(Keys), keys);
 
@@ -47,24 +45,16 @@ namespace Myra.Samples.AllWidgets
 			_keysMap[Keys.RightShift] = Key.ShiftRight;
 		}
 
-		public TrippyPlatform(GraphicsDevice device, IInputContext inputContext)
+		public SilkPlatform(IInputContext inputContext)
 		{
-			if (device == null)
-			{
-				throw new ArgumentNullException(nameof(device));
-			}
-
 			if (inputContext == null)
 			{
 				throw new ArgumentNullException(nameof(inputContext));
 			}
 
-			_device = device;
 			_inputContext = inputContext;
-			_renderer = new TrippyRenderer(device);
+			_renderer = new Renderer();
 		}
-
-		public void OnViewportChanged() => _renderer.OnViewportChanged();
 
 		public MouseInfo GetMouseInfo()
 		{
@@ -93,7 +83,8 @@ namespace Myra.Samples.AllWidgets
 				if (_keysMap.TryGetValue(ks, out key))
 				{
 					keys[i] = state.IsKeyPressed(key);
-				} else
+				}
+				else
 				{
 					keys[i] = false;
 				}
