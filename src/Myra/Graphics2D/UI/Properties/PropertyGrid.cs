@@ -945,15 +945,35 @@ namespace Myra.Graphics2D.UI.Properties
 			return subGrid;
 		}
 
-		private Widget CreateAttributeFileEditor(Record record, bool hasSetter, FileDialogMode dialogMode, string filter)
+		private Widget CreateAttributeFileEditor(Record record, bool hasSetter, FilePathAttribute attribute)
 		{
-			if (Settings.AssetManager == null)
-			{
-				return null;
-			}
-
 			var propertyType = record.Type;
 			var value = record.GetValue(_object);
+
+			var result = new HorizontalStackPanel
+			{
+				Spacing = 8
+			};
+
+			TextBox path = null;
+			if (attribute.ShowPath)
+			{
+				result.Proportions.Add(Proportion.Fill);
+				path = new TextBox
+				{
+					Readonly = true,
+					HorizontalAlignment = HorizontalAlignment.Stretch
+				};
+
+				if (value != null)
+				{
+					path.Text = value.ToString();
+				}
+
+				result.AddChild(path);
+			}
+
+			result.Proportions.Add(Proportion.Auto);
 
 			var button = new TextButton
 			{
@@ -968,9 +988,9 @@ namespace Myra.Graphics2D.UI.Properties
 			{
 				button.Click += (sender, args) =>
 				{
-					var dlg = new FileDialog(dialogMode)
+					var dlg = new FileDialog(attribute.DialogMode)
 					{
-						Filter = filter
+						Filter = attribute.Filter
 					};
 
 					if (value != null)
@@ -1002,6 +1022,11 @@ namespace Myra.Graphics2D.UI.Properties
 								filePath = PathUtils.TryToMakePathRelativeTo(filePath, Settings.BasePath);
 							}
 
+							if (path != null)
+							{
+								path.Text = filePath;
+							}
+
 							SetValue(record, _object, filePath);
 
 							FireChanged(propertyType.Name);
@@ -1019,7 +1044,9 @@ namespace Myra.Graphics2D.UI.Properties
 				button.Enabled = false;
 			}
 
-			return button;
+			result.AddChild(button);
+
+			return result;
 		}
 
 		private void FillSubGrid(ref int y, IReadOnlyList<Record> records)
@@ -1073,7 +1100,7 @@ namespace Myra.Graphics2D.UI.Properties
 				else if (propertyType == typeof(string) && record.FindAttribute<FilePathAttribute>() != null)
 				{
 					var filePathAttr = record.FindAttribute<FilePathAttribute>();
-					valueWidget = CreateAttributeFileEditor(record, hasSetter, filePathAttr.DialogMode, filePathAttr.Filter);
+					valueWidget = CreateAttributeFileEditor(record, hasSetter, filePathAttr);
 				}
 				else if (propertyType == typeof(string) || propertyType.IsPrimitive || propertyType.IsNullablePrimitive())
 				{

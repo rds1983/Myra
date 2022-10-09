@@ -245,7 +245,6 @@ namespace Myra.Graphics2D.UI
 			var ellipsisEnabled = _autoEllipsisMethod != AutoEllipsisMethod.None;
 
 			var result = Mathematics.PointZero;
-
 			if (ellipsisEnabled)
 			{
 				try
