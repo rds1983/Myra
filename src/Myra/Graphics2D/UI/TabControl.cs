@@ -225,7 +225,9 @@ namespace Myra.Graphics2D.UI
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
 				Image = item.Image,
-				ImageTextSpacing = item.ImageTextSpacing
+				ImageTextSpacing = item.ImageTextSpacing,
+				ContentVerticalAlignment = item.ContentVerticalAlignment,
+				Height = item.Height
 			};
 
 			button.Click += ButtonOnClick;
