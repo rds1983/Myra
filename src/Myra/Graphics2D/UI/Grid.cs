@@ -777,7 +777,7 @@ namespace Myra.Graphics2D.UI
 			var bounds = ActualBounds;
 			var rect = new Rectangle(bounds.Left + _cellLocationsX[col], bounds.Top + _cellLocationsY[row], cellSize.X, cellSize.Y);
 
-			var width = bounds.Width;
+			var width = bounds.Right;
 			if (rect.Right > width)
 			{
 				rect.Width = width - rect.X;
@@ -793,7 +793,7 @@ namespace Myra.Graphics2D.UI
 				rect.Width = width;
 			}
 
-			var height = bounds.Height;
+			var height = bounds.Bottom;
 			if (rect.Bottom > height)
 			{
 				rect.Height = height - rect.Y;
