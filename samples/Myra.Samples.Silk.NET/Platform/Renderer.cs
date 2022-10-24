@@ -59,7 +59,6 @@ namespace Myra.Samples.AllWidgets
 
 		public void Begin(TextureFiltering textureFiltering)
 		{
-			// TODO: Save scissor state
 			Env.Gl.Enable(EnableCap.ScissorTest);
 			GLUtility.CheckError();
 
@@ -74,7 +73,8 @@ namespace Myra.Samples.AllWidgets
 			_batch.End();
 			_beginCalled = false;
 
-			// TODO: Restore scissor state
+			Env.Gl.Disable(EnableCap.ScissorTest);
+			GLUtility.CheckError();
 		}
 
 		public void DrawQuad(object texture, ref VertexPositionColorTexture topLeft, ref VertexPositionColorTexture topRight, ref VertexPositionColorTexture bottomLeft, ref VertexPositionColorTexture bottomRight)
