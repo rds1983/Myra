@@ -1,6 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
+using Myra.MML;
+using System.Text;
+using Myra.Utility;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -12,9 +15,58 @@ using Color = FontStashSharp.FSColor;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ListItem : SelectableItem, ISelectorItem
+	public class ListItem : BaseObject, ISelectorItem
 	{
+		private string _text;
+		private Color? _color;
 		private Widget _widget;
+
+		[DefaultValue(null)]
+		public string Text
+		{
+			get
+			{
+				return _text;
+			}
+
+			set
+			{
+				if (value == _text)
+				{
+					return;
+				}
+
+				_text = value;
+				FireChanged();
+			}
+		}
+
+		[DefaultValue(null)]
+		public Color? Color
+		{
+			get
+			{
+				return _color;
+			}
+
+			set
+			{
+				if (value == _color)
+				{
+					return;
+				}
+
+				_color = value;
+				FireChanged();
+			}
+		}
+
+		[Browsable(false)]
+		[XmlIgnore]
+		public object Tag
+		{
+			get; set;
+		}
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -28,7 +80,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public Widget Widget
+		internal Widget Widget
 		{
 			get
 			{
@@ -74,13 +126,14 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public event EventHandler Changed;
 		public event EventHandler SelectedChanged;
 
 		public ListItem()
 		{
 		}
 
-		public ListItem(string text, Color? color, object tag): base(text, color, tag)
+		public ListItem(string text, Color? color, object tag)
 		{
 			Text = text;
 			Color = color;
@@ -102,6 +155,51 @@ namespace Myra.Graphics2D.UI
 			{
 				ev(this, EventArgs.Empty);
 			}
+		}
+
+		public override string ToString()
+		{
+			var sb = new StringBuilder();
+
+			if (!string.IsNullOrEmpty(Text))
+			{
+				sb.Append(Text);
+				sb.Append(" ");
+			}
+
+			if (!string.IsNullOrEmpty(Id))
+			{
+				sb.Append("(#");
+				sb.Append(Id);
+				sb.Append(")");
+			}
+			return sb.ToString();
+		}
+
+		protected internal override void OnIdChanged()
+		{
+			base.OnIdChanged();
+
+			FireChanged();
+		}
+
+		protected void FireChanged()
+		{
+			Changed.Invoke(this);
+		}
+
+		public ListItem Clone()
+		{
+			return new ListItem
+			{
+				Id = Id,
+				Text = Text,
+				Color = Color,
+				Tag = Tag,
+				IsSeparator = IsSeparator,
+				Image = Image,
+				ImageTextSpacing = ImageTextSpacing,
+			};
 		}
 	}
 }
