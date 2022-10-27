@@ -139,12 +139,16 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
+			var wasIsPressed = IsPressed;
 			if (!Toggleable)
 			{
 				IsPressed = false;
 			}
 
-			Click.Invoke(this);
+			if (wasIsPressed)
+			{
+				Click.Invoke(this);
+			}
 		}
 
 		public override void OnTouchDown()
