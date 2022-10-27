@@ -17,6 +17,7 @@ namespace Myra.Graphics2D.UI
 	public class ButtonBase<T> : SingleItemContainer<T> where T : Widget
 	{
 		private bool _isPressed = false;
+		private bool _isClicked = false;
 
 		[Category("Appearance")]
 		[DefaultValue(HorizontalAlignment.Center)]
@@ -139,15 +140,15 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var wasIsPressed = IsPressed;
 			if (!Toggleable)
 			{
 				IsPressed = false;
 			}
 
-			if (wasIsPressed)
+			if (_isClicked)
 			{
 				Click.Invoke(this);
+				_isClicked = false;
 			}
 		}
 
@@ -168,6 +169,8 @@ namespace Myra.Graphics2D.UI
 			{
 				IsPressed = !IsPressed;
 			}
+
+			_isClicked = true;
 		}
 
 		public override void OnKeyDown(Keys k)
