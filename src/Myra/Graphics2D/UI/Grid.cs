@@ -777,10 +777,9 @@ namespace Myra.Graphics2D.UI
 			var bounds = ActualBounds;
 			var rect = new Rectangle(bounds.Left + _cellLocationsX[col], bounds.Top + _cellLocationsY[row], cellSize.X, cellSize.Y);
 
-			var width = bounds.Right;
-			if (rect.Right > width)
+			if (rect.Right > bounds.Right)
 			{
-				rect.Width = width - rect.X;
+				rect.Width = bounds.Right - rect.X;
 			}
 
 			if (rect.Width < 0)
@@ -788,25 +787,14 @@ namespace Myra.Graphics2D.UI
 				rect.Width = 0;
 			}
 
-			if (rect.Width > width)
+			if (rect.Bottom > bounds.Bottom)
 			{
-				rect.Width = width;
-			}
-
-			var height = bounds.Bottom;
-			if (rect.Bottom > height)
-			{
-				rect.Height = height - rect.Y;
+				rect.Height = bounds.Bottom - rect.Y;
 			}
 
 			if (rect.Height < 0)
 			{
 				rect.Height = 0;
-			}
-
-			if (rect.Height > height)
-			{
-				rect.Height = height;
 			}
 
 			control.Arrange(rect);

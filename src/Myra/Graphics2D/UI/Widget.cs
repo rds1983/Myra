@@ -1142,6 +1142,9 @@ namespace Myra.Graphics2D.UI
 			// So now InternalMeasure is called every time
 			result = InternalMeasure(availableSize);
 
+			result.X += MBPWidth;
+			result.Y += MBPHeight;
+
 			// Result lerp
 			if (Width.HasValue)
 			{
@@ -1176,9 +1179,6 @@ namespace Myra.Graphics2D.UI
 					result.Y = MaxHeight.Value;
 				}
 			}
-
-			result.X += MBPWidth;
-			result.Y += MBPHeight;
 
 			_lastMeasureSize = result;
 			_lastMeasureAvailableSize = availableSize;
