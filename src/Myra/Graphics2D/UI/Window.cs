@@ -310,7 +310,7 @@ namespace Myra.Graphics2D.UI
 
 			if (Desktop.Widgets.Contains(this))
 			{
-				Desktop.Widgets.Remove(this);
+				RemoveFromDesktop();
 			}
 			else
 			{
