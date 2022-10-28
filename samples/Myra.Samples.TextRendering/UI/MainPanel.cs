@@ -121,8 +121,6 @@ namespace Myra.Samples.TextRendering.UI
 
 		private void Update()
 		{
-			var game = TextRenderingGame.Instance;
-
 			if (FontSystem == null)
 			{
 				byte[] data;
@@ -137,11 +135,11 @@ namespace Myra.Samples.TextRendering.UI
 				FontSystem = LoadFontSystem(data);
 			}
 
-			game.LabelText.Text = _textBoxText.Text;
-			game.LabelText.Font = FontSystem.GetFont((int)_spinButtonFontSize.Value.Value);
+			_labelText.Text = _textBoxText.Text;
+			_labelText.Font = FontSystem.GetFont((int)_spinButtonFontSize.Value.Value);
 
 			var scale = _sliderScale.Value;
-			game.TopDesktop.Scale = new Vector2(scale, scale);
+			_labelText.Scale = new Vector2(scale, scale);
 			_labelScaleValue.Text = scale.ToString("0.00");
 
 			_imageTexture.Visible = _checkBoxShowTexture.IsChecked;

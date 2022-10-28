@@ -3,11 +3,15 @@
   <Panel>
     <VerticalStackPanel>
       <VerticalStackPanel.Proportions>
+        <Proportion Type="Part" />
         <Proportion Type="Auto" />
         <Proportion Type="Auto" />
         <Proportion Type="Auto" />
-        <Proportion Type="Fill" />
+        <Proportion Type="Part" />
       </VerticalStackPanel.Proportions>
+      <Panel Background="#404040FF" ClipToBounds="True">
+        <Label TransformOrigin="0, 0" Id="_labelText" />
+      </Panel>
       <HorizontalSeparator />
       <VerticalStackPanel Spacing="8" Padding="0, 8">
         <HorizontalStackPanel Spacing="8">
