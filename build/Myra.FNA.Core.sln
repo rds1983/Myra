@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30804.86
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{D17FD092-A553-4770-A7A5-822661193436}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FontStashSharp.FNA.Core", "..\..\FontStashSharp\src\XNA\FontStashSharp.FNA.Core.csproj", "{94F1DDDF-5DF9-4033-B60C-1B33E963AEA5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyraPad.FNA.Core", "..\src\MyraPad\MyraPad.FNA.Core.csproj", "{1FC2F781-2F83-4FDC-9D9F-DCF487AAC42D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.TextRendering.FNA.Core", "..\samples\Myra.Samples.TextRendering\Myra.Samples.TextRendering.FNA.Core.csproj", "{D963B41E-DF39-44A3-878B-857C8A3CB5F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,12 +49,17 @@ Global
 		{1FC2F781-2F83-4FDC-9D9F-DCF487AAC42D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FC2F781-2F83-4FDC-9D9F-DCF487AAC42D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FC2F781-2F83-4FDC-9D9F-DCF487AAC42D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D963B41E-DF39-44A3-878B-857C8A3CB5F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D963B41E-DF39-44A3-878B-857C8A3CB5F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D963B41E-DF39-44A3-878B-857C8A3CB5F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D963B41E-DF39-44A3-878B-857C8A3CB5F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{08F5F0B8-6573-46DF-BBCB-AB8E22731880} = {D17FD092-A553-4770-A7A5-822661193436}
+		{D963B41E-DF39-44A3-878B-857C8A3CB5F6} = {D17FD092-A553-4770-A7A5-822661193436}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A9C9D369-EE58-4E9D-B9FE-63023B644741}

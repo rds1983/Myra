@@ -1,6 +1,8 @@
 ﻿using Myra.Graphics2D.UI;
 using Microsoft.Xna.Framework;
 using Myra.Samples.TextRendering.UI;
+using Myra.Graphics2D.UI.Styles;
+using Myra.Graphics2D.Brushes;
 
 namespace Myra.Samples.TextRendering
 {
@@ -36,33 +38,36 @@ namespace Myra.Samples.TextRendering
 
 			MyraEnvironment.Game = this;
 
-			_topDesktop = new Desktop();
+			// Top desktop occupies upper half
+			_topDesktop = new Desktop
+			{
+				Background = new SolidBrush(Color.DarkGray),
+				BoundsFetcher = () => new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height / 2)
+			};
 
 			_labelText = new Label();
 			_topDesktop.Root = _labelText;
 
+			// Bottom desktop - bottom half
 			_bottomDesktop = new Desktop
 			{
-				// Inform Myra that external text input is available
-				// So it stops translating Keys to chars
-				HasExternalTextInput = true
+				BoundsFetcher = () => new Rectangle(0, GraphicsDevice.Viewport.Height / 2, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height / 2)
 			};
+#if MONOGAME
+			// Inform Myra that external text input is available
+			// So it stops translating Keys to chars
+			_bottomDesktop.HasExternalTextInput = true;
 
 			// Provide that text input
 			Window.TextInput += (s, a) =>
 			{
 				_bottomDesktop.OnChar(a.Character);
 			};
+#endif
 
 			_mainPanel = new MainPanel();
 
 			_bottomDesktop.Root = _mainPanel;
-
-			// Top desktop occupies upper half
-			_topDesktop.BoundsFetcher = () => new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height / 2);
-
-			// Bottom desktop - bottom half
-			_bottomDesktop.BoundsFetcher = () => new Rectangle(0, GraphicsDevice.Viewport.Height / 2, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height / 2);
 		}
 
 		protected override void Draw(GameTime gameTime)

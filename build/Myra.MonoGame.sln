@@ -31,9 +31,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.ObjectEditor",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Tests.MonoGame", "..\src\Myra.Tests\Myra.Tests.MonoGame.csproj", "{E0A97939-4F2B-4415-9466-5BD1AA16CF1C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.TextRendering", "..\samples\Myra.Samples.TextRendering\Myra.Samples.TextRendering.csproj", "{7CC726A6-30C6-47D7-9233-7881E4E8F5E4}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.CustomUIStylesheet.MonoGame", "..\samples\Myra.Samples.CustomUIStylesheet\Myra.Samples.CustomUIStylesheet.MonoGame.csproj", "{3016FB8F-2C41-4C8C-8B05-CECCD40526AB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.TextRendering.MonoGame", "..\samples\Myra.Samples.TextRendering\Myra.Samples.TextRendering.MonoGame.csproj", "{39205279-736F-4474-BBBB-AD824E36744E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,14 +93,14 @@ Global
 		{E0A97939-4F2B-4415-9466-5BD1AA16CF1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0A97939-4F2B-4415-9466-5BD1AA16CF1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0A97939-4F2B-4415-9466-5BD1AA16CF1C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7CC726A6-30C6-47D7-9233-7881E4E8F5E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7CC726A6-30C6-47D7-9233-7881E4E8F5E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7CC726A6-30C6-47D7-9233-7881E4E8F5E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7CC726A6-30C6-47D7-9233-7881E4E8F5E4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3016FB8F-2C41-4C8C-8B05-CECCD40526AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3016FB8F-2C41-4C8C-8B05-CECCD40526AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3016FB8F-2C41-4C8C-8B05-CECCD40526AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3016FB8F-2C41-4C8C-8B05-CECCD40526AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39205279-736F-4474-BBBB-AD824E36744E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39205279-736F-4474-BBBB-AD824E36744E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39205279-736F-4474-BBBB-AD824E36744E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39205279-736F-4474-BBBB-AD824E36744E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -116,8 +116,8 @@ Global
 		{C5251EC7-58F7-4F71-B3BB-B28C982AF777} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{86685C49-7408-4E47-9B34-AC93812CB3EC} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{7A6283C5-C2CF-4CE0-877A-B8A95D391007} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
-		{7CC726A6-30C6-47D7-9233-7881E4E8F5E4} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{3016FB8F-2C41-4C8C-8B05-CECCD40526AB} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{39205279-736F-4474-BBBB-AD824E36744E} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35ACDF4E-2CE2-46B1-A19F-35DC131069A1}

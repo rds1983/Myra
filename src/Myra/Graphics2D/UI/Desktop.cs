@@ -446,6 +446,8 @@ namespace Myra.Graphics2D.UI
 
 		public Action<Keys> KeyDownHandler;
 
+		public IBrush Background { get; set; }
+
 		public event EventHandler MouseMoved;
 
 		public event EventHandler TouchMoved;
@@ -483,6 +485,11 @@ namespace Myra.Graphics2D.UI
 				OnChar(c);
 			};
 #endif
+
+			if (Stylesheet.Current.DesktopStyle != null)
+			{
+				Background = Stylesheet.Current.DesktopStyle.Background;
+			}
 		}
 
 		public bool IsKeyDown(Keys keys)
@@ -711,10 +718,9 @@ namespace Myra.Graphics2D.UI
 			_renderContext.Scissor = bounds;
 			_renderContext.Opacity = Opacity;
 
-			if (Stylesheet.Current.DesktopStyle != null &&
-				Stylesheet.Current.DesktopStyle.Background != null)
+			if (Background != null)
 			{
-				Stylesheet.Current.DesktopStyle.Background.Draw(_renderContext, LayoutBounds);
+				Background.Draw(_renderContext, LayoutBounds);
 			}
 
 			foreach (var widget in ChildrenCopy)
