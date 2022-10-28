@@ -30,7 +30,7 @@ namespace Myra.Graphics2D.UI
 		public float Wheel;
 	}
 
-	public class Desktop
+	public class Desktop: ITransformable
 	{
 		public const int DoubleClickIntervalInMs = 500;
 		public const int DoubleClickRadius = 2;
@@ -40,6 +40,8 @@ namespace Myra.Graphics2D.UI
 		private Vector2 _transformOrigin = Vector2.Zero;
 		private float _rotation = 0.0f;
 		private Transform? _transform;
+		private Matrix _inverseMatrix;
+		private bool _inverseMatrixDirty = true;
 
 		private readonly RenderContext _renderContext = new RenderContext();
 
@@ -738,12 +740,36 @@ namespace Myra.Graphics2D.UI
 		private void InvalidateTransform()
 		{
 			_transform = null;
+			_inverseMatrixDirty = true;
 
 			foreach (var child in ChildrenCopy)
 			{
 				child.InvalidateTransform();
 			}
 		}
+
+		public Vector2 ToGlobal(Vector2 pos) => Transform.Apply(pos);
+
+		public Point ToGlobal(Point pos) => Transform.Apply(pos);
+
+		public Vector2 ToLocal(Vector2 source)
+		{
+			if (_inverseMatrixDirty)
+			{
+#if MONOGAME || FNA || STRIDE
+				_inverseMatrix = Matrix.Invert(Transform.Matrix);
+#else
+				Matrix inverse = Matrix.Identity;
+				Matrix.Invert(Transform.Matrix, out inverse);
+				_inverseMatrix = inverse;
+#endif
+				_inverseMatrixDirty = false;
+			}
+
+			return source.Transform(ref _inverseMatrix);
+		}
+
+		public Point ToLocal(Point pos) => ToLocal(new Vector2(pos.X, pos.Y)).ToPoint();
 
 		public void InvalidateLayout()
 		{

@@ -34,7 +34,6 @@ namespace Myra.Tests
 
 			slider.Value = 2.0f;
 			Assert.AreEqual(slider.Hint, slider.MaxHint);
-
 		}
 	}
 }

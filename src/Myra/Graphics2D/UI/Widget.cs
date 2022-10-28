@@ -39,9 +39,10 @@ namespace Myra.Graphics2D.UI
 		Both = Vertical | Horizontal
 	}
 
-	public class Widget : BaseObject
+	public class Widget : BaseObject, ITransformable
 	{
-		private Point? _startPos;
+		private Vector2? _startPos;
+		private Point _startLeftTop;
 		private Thickness _margin, _borderThickness, _padding;
 		private int _left, _top;
 		private int? _minWidth, _minHeight, _maxWidth, _maxHeight, _width, _height;
@@ -1437,9 +1438,9 @@ namespace Myra.Graphics2D.UI
 
 			if (DragHandle != null && DragHandle.ContainsTouch)
 			{
-				var touchPos = Desktop.TouchPosition;
-				_startPos = new Point(touchPos.X - Left,
-						touchPos.Y - Top);
+				var parent = Parent != null ? (ITransformable)Parent : Desktop;
+				_startPos = parent.ToLocal(new Vector2(Desktop.TouchPosition.X, Desktop.TouchPosition.Y));
+				_startLeftTop = new Point(Left, Top);
 			}
 
 			TouchDown.Invoke(this);
@@ -1562,20 +1563,20 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var position = new Point(Desktop.TouchPosition.X - _startPos.Value.X,
-				Desktop.TouchPosition.Y - _startPos.Value.Y);
+			var parent = Parent != null ? (ITransformable)Parent : Desktop;
+			var newPos = parent.ToLocal(new Vector2(Desktop.TouchPosition.X, Desktop.TouchPosition.Y));
+			var delta = newPos - _startPos.Value;
 
-			int newLeft = Left;
-			int newTop = Top;
-
+			var newLeft = Left;
+			var newTop = Top;
 			if (DragDirection.HasFlag(DragDirection.Horizontal))
 			{
-				newLeft = position.X;
+				newLeft = _startLeftTop.X + (int)delta.X;
 			}
 
 			if (DragDirection.HasFlag(DragDirection.Vertical))
 			{
-				newTop = position.Y;
+				newTop = _startLeftTop.Y + (int)delta.Y;
 			}
 
 			var parentBounds = Parent != null ? Parent.Bounds : Desktop.InternalBounds;
