@@ -4,8 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <OutputPath>bin\FNA.Core\$(Configuration)</OutputPath>
     <DefineConstants>$(DefineConstants);FNA;</DefineConstants>
-    <AssemblyName>Myra.Samples.AllWidgets</AssemblyName>
-    <RootNamespace>Myra.Samples.AllWidgets</RootNamespace>
+    <AssemblyName>Myra.Samples.TextRendering</AssemblyName>
+    <RootNamespace>Myra.Samples.TextRendering</RootNamespace>
   </PropertyGroup>
   
   <ItemGroup>
