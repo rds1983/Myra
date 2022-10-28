@@ -89,6 +89,16 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
+		public VerticalAlignment ContentVerticalAlignment
+		{
+			get; set;
+		} = VerticalAlignment.Stretch;
+
+		public int? Height
+		{
+			get; set;
+		}
+
 		[Browsable(false)]
 		[XmlIgnore]
 		internal ImageTextButton Button
