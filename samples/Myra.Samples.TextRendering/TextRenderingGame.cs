@@ -36,7 +36,7 @@ namespace Myra.Samples.TextRendering
 			// Provide that text input
 			Window.TextInput += (s, a) =>
 			{
-				_bottomDesktop.OnChar(a.Character);
+				_desktop.OnChar(a.Character);
 			};
 #endif
 
