@@ -303,6 +303,10 @@ namespace Myra.Graphics2D.UI.Properties
 		[XmlIgnore]
 		public Func<Record, object, object, bool> CustomSetter;
 
+		[Browsable(false)]
+		[XmlIgnore]
+		public Func<Record, object, Widget> CustomWidgetProvider;
+
 		public event EventHandler<GenericEventArgs<string>> PropertyChanged;
 
 		private PropertyGrid(TreeStyle style, string category, Record parentProperty, PropertyGrid parentGrid = null)
@@ -326,6 +330,10 @@ namespace Myra.Graphics2D.UI.Properties
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 			Filter = string.Empty;
+
+			this.CustomWidgetProvider = parentGrid?.CustomWidgetProvider;
+			this.CustomSetter = parentGrid?.CustomSetter;
+			this.CustomValuesProvider = parentGrid?.CustomValuesProvider;
 		}
 
 		public PropertyGrid(TreeStyle style, string category) : this(style, category, null)
@@ -1070,7 +1078,11 @@ namespace Myra.Graphics2D.UI.Properties
 
 				Proportion rowProportion;
 				object[] customValues = null;
-				if (CustomValuesProvider != null && (customValues = CustomValuesProvider(record)) != null)
+				if ((valueWidget = CustomWidgetProvider?.Invoke(record, _object)) != null)
+				{
+
+				}
+				else if (CustomValuesProvider != null && (customValues = CustomValuesProvider(record)) != null)
 				{
 					if (customValues.Length == 0)
 					{
