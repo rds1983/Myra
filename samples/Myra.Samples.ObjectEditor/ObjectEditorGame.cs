@@ -80,28 +80,28 @@ namespace Myra.Samples.ObjectEditor
 			};
 
 
-            propertyGrid.CustomWidgetProvider = new System.Func<Record, object, Widget>((r, obj) =>
-            {
-                RenderAsSliderAttribute att;
-                if (r.Type == typeof(int) && (att = r.FindAttribute<RenderAsSliderAttribute>()) != null)
-                {
-                    var value = (int)r.GetValue(obj);
-                    return new HorizontalProgressBar()
-                    {
-                        Minimum = att.Min,
-                        Maximum = att.Max,
-                        Value = value,
-                        HorizontalAlignment = HorizontalAlignment.Stretch,
-                        Height = 20
-                    };
-                }
+			propertyGrid.CustomWidgetProvider = new System.Func<Record, object, Widget>((r, obj) =>
+			{
+				RenderAsSliderAttribute att;
+				if (r.Type == typeof(int) && (att = r.FindAttribute<RenderAsSliderAttribute>()) != null)
+				{
+					var value = (int)r.GetValue(obj);
+					return new HorizontalProgressBar()
+					{
+						Minimum = att.Min,
+						Maximum = att.Max,
+						Value = value,
+						HorizontalAlignment = HorizontalAlignment.Stretch,
+						Height = 20
+					};
+				}
 
-                return null;
-            });
+				return null;
+			});
 
-            propertyGrid.Object = _player;
+			propertyGrid.Object = _player;
 
-            _windowEditor = new Window
+			_windowEditor = new Window
 			{
 				Title = "Object Editor",
 				Content = propertyGrid
