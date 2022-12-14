@@ -303,11 +303,11 @@ namespace Myra.Graphics2D.UI.Properties
 		[XmlIgnore]
 		public Func<Record, object, object, bool> CustomSetter;
 
-        [Browsable(false)]
-        [XmlIgnore]
-        public Func<Record, object, Widget> CustomWidgetProvider;
+		[Browsable(false)]
+		[XmlIgnore]
+		public Func<Record, object, Widget> CustomWidgetProvider;
 
-        public event EventHandler<GenericEventArgs<string>> PropertyChanged;
+		public event EventHandler<GenericEventArgs<string>> PropertyChanged;
 
 		private PropertyGrid(TreeStyle style, string category, Record parentProperty, PropertyGrid parentGrid = null)
 		{
