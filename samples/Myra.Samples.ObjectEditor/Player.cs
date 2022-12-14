@@ -50,14 +50,16 @@ namespace Myra.Samples.ObjectEditor
 
 		[Category("Data")]
 		[DisplayName("Attack (ReadOnly)")]
-		public int Attack
+        [RenderAsSlider(1, 200)]
+        public int Attack
 		{
 			get; private set;
 		}
 
 		[Category("Data")]
 		[DisplayName("Defense (ReadOnly)")]
-		public int Defense
+        [RenderAsSlider(1, 200)]
+        public int Defense
 		{
 			get; private set;
 		}
