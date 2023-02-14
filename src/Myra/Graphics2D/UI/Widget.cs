@@ -1427,7 +1427,11 @@ namespace Myra.Graphics2D.UI
 			TouchMoved.Invoke(this);
 		}
 
-		public virtual void OnTouchDown()
+		/// <summary>
+		/// Returns true if the touch was handled
+		/// </summary>
+		/// <returns></returns>
+		public virtual bool OnTouchDown()
 		{
 			IsTouchInside = true;
 
@@ -1444,6 +1448,8 @@ namespace Myra.Graphics2D.UI
 			}
 
 			TouchDown.Invoke(this);
+
+			return true;
 		}
 
 		public virtual void OnTouchUp()

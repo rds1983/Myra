@@ -180,7 +180,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void OnTouchDown()
+		public override bool OnTouchDown()
 		{
 			base.OnTouchDown();
 
@@ -190,11 +190,13 @@ namespace Myra.Graphics2D.UI
 			{
 				if (!HoverRow.RowVisible)
 				{
-					return;
+					return false;
 				}
 
 				SelectedRow = HoverRow;
 			}
+
+			return true;
 		}
 
 		public override void OnTouchDoubleClick()

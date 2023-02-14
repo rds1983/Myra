@@ -187,12 +187,14 @@ namespace Myra.Graphics2D.UI
 			SyncHintWithValue();
 		}
 
-		public override void OnTouchDown()
+		public override bool OnTouchDown()
 		{
 			base.OnTouchDown();
 
 			UpdateHint();
 			InternalChild.IsPressed = true;
+
+			return true;
 		}
 
 		private void UpdateHint()

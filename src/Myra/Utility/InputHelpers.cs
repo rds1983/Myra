@@ -54,8 +54,13 @@ namespace Myra.Utility
 
 			return true;
 		}
-
-		public static void ProcessTouchDown(this List<Widget> widgets)
+        
+        /// <summary>
+		/// Returns true if the event was handled
+		/// </summary>
+		/// <param name="widgets"></param>
+		/// <returns></returns>
+		public static bool ProcessTouchDown(this List<Widget> widgets)
 		{
 			for (var i = widgets.Count - 1; i >= 0; --i)
 			{
@@ -65,18 +70,19 @@ namespace Myra.Utility
 				{
 					// Since OnTouchDown may reset Desktop, we need to save break condition before calling it
 					var doBreak = (w.Desktop != null && !w.FallsThrough(w.Desktop.TouchPosition));
-					w.OnTouchDown();
-					if (doBreak)
+					var inputHandled = w.OnTouchDown();
+					if (doBreak || inputHandled)
 					{
-						break;
+						return true;
 					}
 				}
 
 				if (w.IsModal)
 				{
-					break;
+					return true;
 				}
 			}
+			return false;
 		}
 
 		public static void ProcessTouchUp(this List<Widget> widgets)

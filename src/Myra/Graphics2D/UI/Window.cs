@@ -220,10 +220,12 @@ namespace Myra.Graphics2D.UI
 			Top = (ContainerBounds.Height - size.Y) / 2;
 		}
 
-		public override void OnTouchDown()
+		public override bool OnTouchDown()
 		{
 			BringToFront();
 			base.OnTouchDown();
+
+			return true;
 		}
 
 		public override void OnKeyDown(Keys k)

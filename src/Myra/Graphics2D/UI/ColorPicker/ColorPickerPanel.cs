@@ -337,7 +337,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_vPicker.Tag = false;
 		}
 
-		public override void OnTouchDown()
+		public override bool OnTouchDown()
 		{
 			base.OnTouchDown();
 
@@ -356,6 +356,8 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			{
 				_activeState = ActiveState.None;
 			}
+
+			return true;
 		}
 
 		public override void OnTouchMoved()

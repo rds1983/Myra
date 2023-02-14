@@ -151,14 +151,14 @@ namespace Myra.Graphics2D.UI
 				_isClicked = false;
 			}
 		}
-
-		public override void OnTouchDown()
+        
+		public override bool OnTouchDown()
 		{
 			base.OnTouchDown();
 
 			if (!Enabled)
 			{
-				return;
+				return false;
 			}
 
 			if (!Toggleable)
@@ -171,6 +171,8 @@ namespace Myra.Graphics2D.UI
 			}
 
 			_isClicked = true;
+
+			return true;
 		}
 
 		public override void OnKeyDown(Keys k)
