@@ -142,11 +142,11 @@ namespace Myra.Graphics2D.UI
 			ChildrenCopy.ProcessTouchMovement();
 		}
 
-		public override void OnTouchDown()
+		public override bool OnTouchDown()
 		{
 			base.OnTouchDown();
 
-			ChildrenCopy.ProcessTouchDown();
+			return ChildrenCopy.ProcessTouchDown();
 		}
 
 		public override void OnTouchUp()

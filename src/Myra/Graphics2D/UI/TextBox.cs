@@ -1186,23 +1186,25 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void OnTouchDown()
+		public override bool OnTouchDown()
 		{
 			base.OnTouchDown();
 
 			if (!Enabled)
 			{
-				return;
+				return false;
 			}
 
 			if (Length == 0)
 			{
-				return;
+				return false;
 			}
 
 			SetCursorByTouch();
 
 			_isTouchDown = true;
+
+			return true;
 		}
 
 		public override void OnTouchMoved()

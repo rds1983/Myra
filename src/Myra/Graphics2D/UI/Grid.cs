@@ -986,13 +986,13 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override void OnTouchDown()
+		public override bool OnTouchDown()
 		{
 			base.OnTouchDown();
 
 			if (Desktop == null)
 			{
-				return;
+				return false;
 			}
 
 			UpdateHoverPosition(Desktop.TouchPosition);
@@ -1018,6 +1018,8 @@ namespace Myra.Graphics2D.UI
 					SelectedColumnIndex = null;
 				}
 			}
+
+			return (SelectedRowIndex != null && SelectedColumnIndex != null);
 		}
 	}
 }

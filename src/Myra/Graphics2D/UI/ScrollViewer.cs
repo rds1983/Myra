@@ -355,7 +355,7 @@ namespace Myra.Graphics2D.UI
 			_startBoundsPos = null;
 		}
 
-		public override void OnTouchDown()
+		public override bool OnTouchDown()
 		{
 			base.OnTouchDown();
 
@@ -377,6 +377,8 @@ namespace Myra.Graphics2D.UI
 				_startBoundsPos = Desktop.TouchPosition.X;
 				_scrollbarOrientation = Orientation.Horizontal;
 			}
+
+			return true;
 		}
 
 		public override void OnMouseWheel(float delta)
