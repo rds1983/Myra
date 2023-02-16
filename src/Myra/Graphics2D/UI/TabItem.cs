@@ -89,11 +89,14 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
+		[DefaultValue(VerticalAlignment.Stretch)]
+
 		public VerticalAlignment ContentVerticalAlignment
 		{
 			get; set;
 		} = VerticalAlignment.Stretch;
 
+		[DefaultValue(null)]
 		public int? Height
 		{
 			get; set;
@@ -148,7 +151,7 @@ namespace Myra.Graphics2D.UI
 			Content = content;
 		}
 
-		public TabItem(string text, Widget content): this(text, null, null, content)
+		public TabItem(string text, Widget content) : this(text, null, null, content)
 		{
 		}
 

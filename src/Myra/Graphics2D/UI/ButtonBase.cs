@@ -59,7 +59,6 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_isPressed = value;
-
 				OnPressedChanged();
 			}
 		}
@@ -104,6 +103,13 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler Click;
 		public event EventHandler PressedChanged;
 
+		/// <summary>
+		/// Fires when the value is about to be changed
+		/// Set Cancel to true if you want to cancel the change
+		/// </summary>
+		public event EventHandler<ValueChangingEventArgs<bool>> PressedChangingByUser;
+
+
 		public ButtonBase()
 		{
 			Toggleable = false;
@@ -121,13 +127,29 @@ namespace Myra.Graphics2D.UI
 			PressedChanged.Invoke(this);
 		}
 
+		private void SetValueByUser(bool value)
+		{
+			if (value != IsPressed && PressedChangingByUser != null)
+			{
+				var args = new ValueChangingEventArgs<bool>(_isPressed, value);
+				PressedChangingByUser(this, args);
+
+				if (args.Cancel)
+				{
+					return;
+				}
+			}
+
+			IsPressed = value;
+		}
+
 		public override void OnTouchLeft()
 		{
 			base.OnTouchLeft();
 
 			if (ReleaseOnTouchLeft && !Toggleable)
 			{
-				IsPressed = false;
+				SetValueByUser(false);
 			}
 		}
 
@@ -142,7 +164,7 @@ namespace Myra.Graphics2D.UI
 
 			if (!Toggleable)
 			{
-				IsPressed = false;
+				SetValueByUser(false);
 			}
 
 			if (_isClicked)
@@ -163,11 +185,11 @@ namespace Myra.Graphics2D.UI
 
 			if (!Toggleable)
 			{
-				IsPressed = true;
+				SetValueByUser(true);
 			}
 			else
 			{
-				IsPressed = !IsPressed;
+				SetValueByUser(!IsPressed);
 			}
 
 			_isClicked = true;
@@ -179,6 +201,11 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnKeyDown(k);
 
+			if (!Enabled)
+			{
+				return;
+			}
+
 			if (k == Keys.Space)
 			{
 				if (!Toggleable)
@@ -188,7 +215,7 @@ namespace Myra.Graphics2D.UI
 				}
 				else
 				{
-					IsPressed = !IsPressed;
+					SetValueByUser(!IsPressed);
 				}
 			}
 		}
