@@ -2,7 +2,7 @@
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.IO;
-using Myra.Assets;
+using AssetManagementBase;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -35,7 +35,7 @@ namespace Myra
 			{
 				if (_assetManager == null)
 				{
-					_assetManager = new AssetManager(new ResourceAssetResolver(typeof(DefaultAssets).Assembly, "Resources."));
+					_assetManager = AssetManager.CreateResourceAssetManager(typeof(DefaultAssets).Assembly, "Resources.");
 				}
 
 				return _assetManager;
@@ -90,7 +90,7 @@ namespace Myra
 					return _uiTextureRegionAtlas;
 				}
 
-				_uiTextureRegionAtlas = AssetManager.Load<TextureRegionAtlas>("default_ui_skin.xmat");
+				_uiTextureRegionAtlas = AssetManager.LoadTextureRegionAtlas("default_ui_skin.xmat");
 				return _uiTextureRegionAtlas;
 			}
 		}
@@ -104,7 +104,7 @@ namespace Myra
 					return _uiStylesheet;
 				}
 
-				_uiStylesheet = AssetManager.Load<Stylesheet>("default_ui_skin.xmms");
+				_uiStylesheet = AssetManager.LoadStylesheet("default_ui_skin.xmms");
 				return _uiStylesheet;
 			}
 		}
@@ -122,7 +122,7 @@ namespace Myra
 
 			if (_assetManager != null)
 			{
-				_assetManager.ClearCache();
+				_assetManager.Cache.Clear();
 				_assetManager = null;
 			}
 

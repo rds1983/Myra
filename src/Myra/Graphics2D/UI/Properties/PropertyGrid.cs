@@ -15,6 +15,7 @@ using Myra.Attributes;
 using FontStashSharp;
 using FontStashSharp.RichText;
 using Myra.Graphics2D.Brushes;
+using AssetManagementBase;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -203,7 +204,7 @@ namespace Myra.Graphics2D.UI.Properties
 		[Browsable(false)]
 		[XmlIgnore]
 		public string Category { get; private set; }
-		
+
 		[Category("Behavior")]
 		[DefaultValue(false)]
 		public bool IgnoreCollections
@@ -844,7 +845,7 @@ namespace Myra.Graphics2D.UI.Properties
 			return subGrid;
 		}
 
-		private Grid CreateFileEditor<T>(Record record, bool hasSetter, string filter)
+		private Grid CreateFileEditor<T>(Record record, bool hasSetter, string filter, Func<string, T> loader)
 		{
 			if (Settings.AssetManager == null)
 			{
@@ -905,7 +906,8 @@ namespace Myra.Graphics2D.UI.Properties
 							filePath = Path.Combine(Settings.BasePath, filePath);
 						}
 						dlg.FilePath = filePath;
-					} else if (!string.IsNullOrEmpty(Settings.BasePath))
+					}
+					else if (!string.IsNullOrEmpty(Settings.BasePath))
 					{
 						dlg.Folder = Settings.BasePath;
 					}
@@ -919,7 +921,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 						try
 						{
-							var newValue = Settings.AssetManager.Load<T>(dlg.FilePath);
+							var newValue = loader(dlg.FilePath);
 
 							var filePath = dlg.FilePath;
 							if (!string.IsNullOrEmpty(Settings.BasePath))
@@ -936,7 +938,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 							FireChanged(propertyType.Name);
 						}
-						catch(Exception)
+						catch (Exception)
 						{
 
 						}
@@ -1135,7 +1137,7 @@ namespace Myra.Graphics2D.UI.Properties
 				}
 				else if (propertyType == typeof(SpriteFontBase))
 				{
-					valueWidget = CreateFileEditor<SpriteFontBase>(record, hasSetter, "*.fnt");
+					valueWidget = CreateFileEditor<SpriteFontBase>(record, hasSetter, "*.fnt", name => Settings.AssetManager.LoadFont(name));
 				}
 				else if (propertyType == typeof(IBrush))
 				{
@@ -1143,7 +1145,7 @@ namespace Myra.Graphics2D.UI.Properties
 				}
 				else if (propertyType == typeof(IImage))
 				{
-					valueWidget = CreateFileEditor<TextureRegion>(record, hasSetter, "*.png|*.jpg|*.bmp|*.gif");
+					valueWidget = CreateFileEditor<TextureRegion>(record, hasSetter, "*.png|*.jpg|*.bmp|*.gif", name => Settings.AssetManager.LoadTextureRegion(name));
 				}
 				else
 				{

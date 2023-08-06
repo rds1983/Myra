@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Reflection;
-using Myra.Assets;
 using Myra.Graphics2D.UI.Styles;
 using FontStashSharp.Interfaces;
 using Myra.Utility;
 using FontStashSharp;
+using AssetManagementBase;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -160,7 +160,7 @@ namespace Myra
 			{
 				if (_defaultAssetManager == null)
 				{
-					_defaultAssetManager = new AssetManager(new FileAssetResolver(PathUtils.ExecutingAssemblyDirectory));
+					_defaultAssetManager = AssetManager.CreateFileAssetManager(PathUtils.ExecutingAssemblyDirectory);
 				}
 
 				return _defaultAssetManager;

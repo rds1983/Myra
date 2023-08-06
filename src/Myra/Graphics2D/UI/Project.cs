@@ -13,10 +13,9 @@ using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.Brushes;
 using Myra.Graphics2D.UI.Properties;
 using FontStashSharp;
-using Myra.Assets;
 using Myra.Utility;
 using Myra.Graphics2D.UI.File;
-using System.IO;
+using AssetManagementBase;
 
 namespace Myra.Graphics2D.UI
 {
@@ -166,7 +165,7 @@ namespace Myra.Graphics2D.UI
 			return CreateSaveContext(Stylesheet);
 		}
 
-		internal static LoadContext CreateLoadContext(IAssetManager assetManager)
+		internal static LoadContext CreateLoadContext(AssetManager assetManager)
 		{
 			Func<Type, string, object> resourceGetter = (t, name) =>
 			{
@@ -176,11 +175,11 @@ namespace Myra.Graphics2D.UI
 				}
 				else if (t == typeof(IImage))
 				{
-					return assetManager.Load<TextureRegion>(name);
+					return assetManager.LoadTextureRegion(name);
 				}
 				else if (t == typeof(SpriteFontBase))
 				{
-					return assetManager.Load<SpriteFontBase>(name);
+					return assetManager.LoadFont(name);
 				}
 
 				throw new Exception(string.Format("Type {0} isn't supported", t.Name));
@@ -209,13 +208,13 @@ namespace Myra.Graphics2D.UI
 			return xDoc.ToString();
 		}
 
-		public static Project LoadFromXml<T>(XDocument xDoc, IAssetManager assetManager = null, T handler = null) where T : class
+		public static Project LoadFromXml<T>(XDocument xDoc, AssetManager assetManager = null, T handler = null) where T : class
 		{
 			var stylesheet = Stylesheet.Current;
 			var stylesheetPathAttr = xDoc.Root.Attribute("StylesheetPath");
 			if (stylesheetPathAttr != null)
 			{
-				stylesheet = assetManager.Load<Stylesheet>(stylesheetPathAttr.Value);
+				stylesheet = assetManager.LoadStylesheet(stylesheetPathAttr.Value);
 			}
 
 			var result = new Project();
@@ -243,22 +242,22 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public static Project LoadFromXml<T>(string data, IAssetManager assetManager = null, T handler = null) where T : class
+		public static Project LoadFromXml<T>(string data, AssetManager assetManager = null, T handler = null) where T : class
 		{
 			return LoadFromXml(XDocument.Parse(data), assetManager, handler);
 		}
 
-		public static Project LoadFromXml(XDocument xDoc, IAssetManager assetManager = null)
+		public static Project LoadFromXml(XDocument xDoc, AssetManager assetManager = null)
 		{
 			return LoadFromXml<object>(xDoc, assetManager, null);
 		}
 
-		public static Project LoadFromXml(string data, IAssetManager assetManager = null)
+		public static Project LoadFromXml(string data, AssetManager assetManager = null)
 		{
 			return LoadFromXml<object>(XDocument.Parse(data), assetManager, null);
 		}
 
-		public static object LoadObjectFromXml<T>(string data, IAssetManager assetManager = null, Stylesheet stylesheet = null, T handler = null) where T : class
+		public static object LoadObjectFromXml<T>(string data, AssetManager assetManager = null, Stylesheet stylesheet = null, T handler = null) where T : class
 		{
 			XDocument xDoc = XDocument.Parse(data);
 
@@ -310,12 +309,12 @@ namespace Myra.Graphics2D.UI
 			return item;
 		}
 
-		public static object LoadObjectFromXml(string data, IAssetManager assetManager, Stylesheet stylesheet)
+		public static object LoadObjectFromXml(string data, AssetManager assetManager, Stylesheet stylesheet)
 		{
 			return LoadObjectFromXml<object>(data, assetManager, stylesheet, null);
 		}
 
-		public object LoadObjectFromXml(string data, IAssetManager assetManager)
+		public object LoadObjectFromXml(string data, AssetManager assetManager)
 		{
 			return LoadObjectFromXml(data, assetManager, Stylesheet);
 		}

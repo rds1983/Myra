@@ -6,7 +6,6 @@ using Myra.MML;
 using System.Collections;
 using FontStashSharp;
 using Myra.Graphics2D.TextureAtlases;
-using Myra.Assets;
 using FontStashSharp.RichText;
 using Myra.Graphics2D.Brushes;
 
@@ -21,7 +20,6 @@ using SolidBrush = Myra.Graphics2D.Brushes.SolidBrush;
 
 namespace Myra.Graphics2D.UI.Styles
 {
-	[AssetLoader(typeof(StylesheetLoader))]
 	public class Stylesheet
 	{
 		private static readonly Dictionary<string, string> LegacyClassNames = new Dictionary<string, string>();

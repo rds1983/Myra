@@ -19,6 +19,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyraPad.FNA.Core", "..\src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.TextRendering.FNA.Core", "..\samples\Myra.Samples.TextRendering\Myra.Samples.TextRendering.FNA.Core.csproj", "{D963B41E-DF39-44A3-878B-857C8A3CB5F6}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetManagementBase", "..\..\AssetManagementBase\src\AssetManagementBase.csproj", "{7F82AC10-6DD4-40B9-82CE-2D5A70D601DF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XNAssets.FNA.Core", "..\..\XNAssets\src\XNAssets.FNA.Core.csproj", "{1609F0D5-B26B-41F1-B004-8C6BE9D11440}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +57,14 @@ Global
 		{D963B41E-DF39-44A3-878B-857C8A3CB5F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D963B41E-DF39-44A3-878B-857C8A3CB5F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D963B41E-DF39-44A3-878B-857C8A3CB5F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F82AC10-6DD4-40B9-82CE-2D5A70D601DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F82AC10-6DD4-40B9-82CE-2D5A70D601DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F82AC10-6DD4-40B9-82CE-2D5A70D601DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F82AC10-6DD4-40B9-82CE-2D5A70D601DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1609F0D5-B26B-41F1-B004-8C6BE9D11440}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1609F0D5-B26B-41F1-B004-8C6BE9D11440}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1609F0D5-B26B-41F1-B004-8C6BE9D11440}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1609F0D5-B26B-41F1-B004-8C6BE9D11440}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
