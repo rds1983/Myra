@@ -1,3 +1,4 @@
+using System;
 using FontStashSharp;
 using Myra.Utility;
 using FontStashSharp.RichText;
@@ -26,7 +27,7 @@ namespace Myra.Graphics2D
 		Linear
 	}
 
-	public partial class RenderContext
+	public partial class RenderContext : IDisposable
 	{
 #if MONOGAME || FNA
 		private static RasterizerState _uiRasterizerState;
@@ -438,6 +439,24 @@ namespace Myra.Graphics2D
 
 			End();
 			Begin();
+		}
+
+		private void ReleaseUnmanagedResources()
+		{
+#if MONOGAME || FNA || STRIDE
+			_renderer?.Dispose();
+#endif
+		}
+
+		public void Dispose()
+		{
+			ReleaseUnmanagedResources();
+			GC.SuppressFinalize(this);
+		}
+
+		~RenderContext()
+		{
+			ReleaseUnmanagedResources();
 		}
 	}
 }
