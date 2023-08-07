@@ -30,7 +30,7 @@ namespace Myra.Graphics2D.UI
 		public float Wheel;
 	}
 
-	public class Desktop: ITransformable
+	public class Desktop: ITransformable, IDisposable
 	{
 		public const int DoubleClickIntervalInMs = 500;
 		public const int DoubleClickRadius = 2;
@@ -65,6 +65,8 @@ namespace Myra.Graphics2D.UI
 #if MONOGAME || PLATFORM_AGNOSTIC
 		public bool HasExternalTextInput = false;
 #endif
+
+		private bool _isDisposed = false;
 
 		/// <summary>
 		/// Root Widget
@@ -480,10 +482,7 @@ namespace Myra.Graphics2D.UI
 			KeyDownHandler = OnKeyDown;
 
 #if FNA
-			TextInputEXT.TextInput += c =>
-			{
-				OnChar(c);
-			};
+			TextInputEXT.TextInput += OnChar;
 #endif
 
 			if (Stylesheet.Current.DesktopStyle != null)
@@ -1293,6 +1292,29 @@ namespace Myra.Graphics2D.UI
 		{
 			var size = CrossEngineStuff.ViewSize;
 			return new Rectangle(0, 0, size.X, size.Y);
+		}
+
+		private void ReleaseUnmanagedResources()
+		{
+			_renderContext.Dispose();
+		}
+
+		public void Dispose()
+		{
+			if (_isDisposed)
+				return;
+
+#if FNA
+			TextInputEXT.TextInput -= OnChar;
+#endif
+
+			ReleaseUnmanagedResources();
+			GC.SuppressFinalize(this);
+		}
+
+		~Desktop()
+		{
+			ReleaseUnmanagedResources();
 		}
 	}
 }
