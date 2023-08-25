@@ -23,5 +23,5 @@
     <PackageReference Include="FontStashSharp.MonoGame" Version="$(FontStashSharpVersion)" />
     <PackageReference Include="info.lundin.math.dll" Version="$(InfoLundinMathVersion)" />
     <PackageReference Include="MonoGame.Framework.Portable" PrivateAssets="All" Version="3.7.1.189" />
-  </ItemGroup>  
+  </ItemGroup>
 </Project>

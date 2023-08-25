@@ -77,17 +77,17 @@ namespace AssetManagementBase
 			public string[] AdditionalFonts { get; set; }
 		}
 
-		private static AssetLoader<TextureRegionAtlas> _atlasLoader = (context) =>
+		private static AssetLoader<TextureRegionAtlas> _atlasLoader = (manager, assetName, settings) =>
 		{
-			var data = context.ReadDataAsString();
-			return TextureRegionAtlas.Load(data, name => context.Manager.LoadTexture2D(MyraEnvironment.GraphicsDevice, name, true));
+			var data = manager.ReadAssetAsString(assetName);
+			return TextureRegionAtlas.Load(data, name => manager.LoadTexture2D(MyraEnvironment.GraphicsDevice, name, true));
 		};
 
-		private static AssetLoader<FontSystem> _fontSystemLoader = (context) =>
+		private static AssetLoader<FontSystem> _fontSystemLoader = (manager, assetName, settings) =>
 		{
 			var fontSystemSettings = new FontSystemSettings();
 
-			var fontSystemLoadingSettings = (FontSystemLoadingSettings)context.Settings;
+			var fontSystemLoadingSettings = (FontSystemLoadingSettings)settings;
 			if (fontSystemLoadingSettings != null)
 			{
 				fontSystemSettings.ExistingTexture = fontSystemLoadingSettings.ExistingTexture;
@@ -95,13 +95,13 @@ namespace AssetManagementBase
 			};
 
 			var fontSystem = new FontSystem(fontSystemSettings);
-			var data = context.ReadAssetAsByteArray();
+			var data = manager.ReadAssetAsByteArray(assetName);
 			fontSystem.AddFont(data);
 			if (fontSystemLoadingSettings != null && fontSystemLoadingSettings.AdditionalFonts != null)
 			{
 				foreach (var file in fontSystemLoadingSettings.AdditionalFonts)
 				{
-					data = context.Manager.LoadByteArray(file, false);
+					data = manager.ReadAssetAsByteArray(file);
 					fontSystem.AddFont(data);
 				}
 			}
@@ -109,21 +109,21 @@ namespace AssetManagementBase
 			return fontSystem;
 		};
 
-		private static AssetLoader<StaticSpriteFont> _staticFontLoader = (context) =>
+		private static AssetLoader<StaticSpriteFont> _staticFontLoader = (manager, assetName, settings) =>
 		{
-			var fontData = context.ReadDataAsString();
+			var fontData = manager.ReadAssetAsString(assetName);
 
 			return StaticSpriteFont.FromBMFont(fontData,
 						name =>
 						{
-							var region = LoadTextureRegion(context.Manager, name);
+							var region = LoadTextureRegion(manager, name);
 							return new TextureWithOffset(region.Texture, region.Bounds.Location);
 						});
 		};
 
-		private static AssetLoader<Stylesheet> _stylesheetLoader = (context) =>
+		private static AssetLoader<Stylesheet> _stylesheetLoader = (manager, assetName, settings) =>
 		{
-			var xml = context.ReadDataAsString();
+			var xml = manager.ReadAssetAsString(assetName);
 
 			var xDoc = XDocument.Parse(xml);
 			var attr = xDoc.Root.Attribute("TextureRegionAtlas");
@@ -132,7 +132,7 @@ namespace AssetManagementBase
 				throw new Exception("Mandatory attribute 'TextureRegionAtlas' doesnt exist");
 			}
 
-			var textureRegionAtlas = context.Manager.LoadTextureRegionAtlas(attr.Value);
+			var textureRegionAtlas = manager.LoadTextureRegionAtlas(attr.Value);
 
 			// Load fonts
 			var fonts = new Dictionary<string, SpriteFontBase>();
@@ -176,12 +176,12 @@ namespace AssetManagementBase
 					}
 
 					parts.Add(el.Attribute("Size").Value);
-					var fontSystem = context.Manager.LoadFontSystem(fontFile, existingTexture: existingTexture, existingTextureUsedSpace: existingTextureUsedSpace);
+					var fontSystem = manager.LoadFontSystem(fontFile, existingTexture: existingTexture, existingTextureUsedSpace: existingTextureUsedSpace);
 					font = fontSystem.GetFont(float.Parse(el.Attribute("Size").Value));
 				}
 				else if (fontFile.EndsWith(".fnt"))
 				{
-					font = context.Manager.LoadStaticSpriteFont(fontFile);
+					font = manager.LoadStaticSpriteFont(fontFile);
 				}
 				else
 				{
