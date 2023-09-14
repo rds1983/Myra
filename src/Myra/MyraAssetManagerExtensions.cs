@@ -70,20 +70,22 @@ namespace AssetManagementBase
 	}
 #endif
 
-		private class FontSystemLoadingSettings
+		private class FontSystemLoadingSettings: IAssetSettings
 		{
 			public Texture2D ExistingTexture { get; set; }
 			public Rectangle ExistingTextureUsedSpace { get; set; }
 			public string[] AdditionalFonts { get; set; }
+
+			public string BuildKey() => string.Empty;
 		}
 
-		private static AssetLoader<TextureRegionAtlas> _atlasLoader = (manager, assetName, settings) =>
+		private static AssetLoader<TextureRegionAtlas> _atlasLoader = (manager, assetName, settings, tag) =>
 		{
 			var data = manager.ReadAssetAsString(assetName);
 			return TextureRegionAtlas.Load(data, name => manager.LoadTexture2D(MyraEnvironment.GraphicsDevice, name, true));
 		};
 
-		private static AssetLoader<FontSystem> _fontSystemLoader = (manager, assetName, settings) =>
+		private static AssetLoader<FontSystem> _fontSystemLoader = (manager, assetName, settings, tag) =>
 		{
 			var fontSystemSettings = new FontSystemSettings();
 
@@ -109,7 +111,7 @@ namespace AssetManagementBase
 			return fontSystem;
 		};
 
-		private static AssetLoader<StaticSpriteFont> _staticFontLoader = (manager, assetName, settings) =>
+		private static AssetLoader<StaticSpriteFont> _staticFontLoader = (manager, assetName, settings, tag) =>
 		{
 			var fontData = manager.ReadAssetAsString(assetName);
 
@@ -121,7 +123,7 @@ namespace AssetManagementBase
 						});
 		};
 
-		private static AssetLoader<Stylesheet> _stylesheetLoader = (manager, assetName, settings) =>
+		private static AssetLoader<Stylesheet> _stylesheetLoader = (manager, assetName, settings, tag) =>
 		{
 			var xml = manager.ReadAssetAsString(assetName);
 

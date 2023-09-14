@@ -173,7 +173,7 @@ namespace Myra.Graphics2D.UI
 				_isClicked = false;
 			}
 		}
-        
+
 		public override bool OnTouchDown()
 		{
 			base.OnTouchDown();
