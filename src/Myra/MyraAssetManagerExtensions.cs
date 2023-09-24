@@ -81,7 +81,7 @@ namespace AssetManagementBase
 
 		private static AssetLoader<TextureRegionAtlas> _atlasLoader = (manager, assetName, settings, tag) =>
 		{
-			var data = manager.ReadAssetAsString(assetName);
+			var data = manager.ReadAsString(assetName);
 			return TextureRegionAtlas.Load(data, name => manager.LoadTexture2D(MyraEnvironment.GraphicsDevice, name, true));
 		};
 
@@ -97,13 +97,13 @@ namespace AssetManagementBase
 			};
 
 			var fontSystem = new FontSystem(fontSystemSettings);
-			var data = manager.ReadAssetAsByteArray(assetName);
+			var data = manager.ReadAsByteArray(assetName);
 			fontSystem.AddFont(data);
 			if (fontSystemLoadingSettings != null && fontSystemLoadingSettings.AdditionalFonts != null)
 			{
 				foreach (var file in fontSystemLoadingSettings.AdditionalFonts)
 				{
-					data = manager.ReadAssetAsByteArray(file);
+					data = manager.ReadAsByteArray(file);
 					fontSystem.AddFont(data);
 				}
 			}
@@ -113,7 +113,7 @@ namespace AssetManagementBase
 
 		private static AssetLoader<StaticSpriteFont> _staticFontLoader = (manager, assetName, settings, tag) =>
 		{
-			var fontData = manager.ReadAssetAsString(assetName);
+			var fontData = manager.ReadAsString(assetName);
 
 			return StaticSpriteFont.FromBMFont(fontData,
 						name =>
@@ -125,7 +125,7 @@ namespace AssetManagementBase
 
 		private static AssetLoader<Stylesheet> _stylesheetLoader = (manager, assetName, settings, tag) =>
 		{
-			var xml = manager.ReadAssetAsString(assetName);
+			var xml = manager.ReadAsString(assetName);
 
 			var xDoc = XDocument.Parse(xml);
 			var attr = xDoc.Root.Attribute("TextureRegionAtlas");
