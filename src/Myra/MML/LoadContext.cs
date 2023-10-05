@@ -29,8 +29,7 @@ namespace Myra.MML
 		public Dictionary<string, Color> Colors;
 		public HashSet<string> NodesToIgnore = null;
 		public Func<Type, XElement, object> ObjectCreator = (type, el) => Activator.CreateInstance(type);
-		public string[] Namespaces;
-		public Assembly Assembly = typeof(Widget).Assembly;
+		public Dictionary<Assembly, string[]> Assemblies;
 		public Func<Type, string, object> ResourceGetter = null;
 
 		private const string UserDataAttributePrefix = "_";
@@ -243,14 +242,22 @@ namespace Myra.MML
 					}
 
 					Type itemType = null;
-					foreach(var ns in Namespaces)
+					foreach (var pair in Assemblies)
 					{
-						itemType = Assembly.GetType(ns + "." + widgetName);
-						if (itemType != null)
+						foreach (var ns in pair.Value)
 						{
-							break;
+							var widgetType = pair.Key.GetType(ns + "." + widgetName);
+							if (widgetType != null)
+							{
+								itemType = widgetType;
+								break;
+							}
 						}
+
+						if (itemType != null)
+							break;
 					}
+
 					if (itemType != null)
 					{
 						var item = ObjectCreator(itemType, child);
