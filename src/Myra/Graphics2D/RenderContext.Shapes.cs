@@ -181,7 +181,7 @@ namespace Myra.Graphics2D
 			float thickness = 1f)
 		{
 			var scale = new Vector2(length, thickness);
-			Draw(DefaultAssets.WhiteTexture, point, null, color, angle, scale, 0);
+			Draw(DefaultAssets.WhiteTexture, point, null, color, angle, scale, 0, drawLine: true);
 		}
 
 		/// <summary>
