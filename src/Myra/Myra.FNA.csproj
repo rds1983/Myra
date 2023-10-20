@@ -21,5 +21,6 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\..\FontStashSharp\src\XNA\FontStashSharp.FNA.csproj" />
+    <ProjectReference Include="..\..\..\XNAssets\src\XNAssets.FNA.csproj" />
   </ItemGroup>
 </Project>

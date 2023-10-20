@@ -223,6 +223,7 @@ namespace Myra.Graphics2D.UI
 			catch(Exception ex)
 			{
 				x = bounds.X;
+				_errorText.Font = Font;
 				_errorText.Text = BuildRtlError(ex);
 				context.DrawRichText(_errorText, new Vector2(x, bounds.Y), Color.Red);
 			}

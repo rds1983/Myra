@@ -2,7 +2,7 @@
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.IO;
-using Myra.Assets;
+using AssetManagementBase;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -12,6 +12,7 @@ using Stride.Core.Mathematics;
 using Texture2D = Stride.Graphics.Texture;
 #else
 using System.Drawing;
+using Texture2D = System.Object;
 #endif
 
 namespace Myra
@@ -22,12 +23,7 @@ namespace Myra
 		private static TextureRegionAtlas _uiTextureRegionAtlas;
 		private static Stylesheet _uiStylesheet;
 		private static TextureRegion _whiteRegion;
-
-#if MONOGAME || FNA || STRIDE
 		private static Texture2D _whiteTexture;
-#else
-		private static object _whiteTexture;
-#endif
 
 		private static AssetManager AssetManager
 		{
@@ -35,18 +31,14 @@ namespace Myra
 			{
 				if (_assetManager == null)
 				{
-					_assetManager = new AssetManager(new ResourceAssetResolver(typeof(DefaultAssets).Assembly, "Resources."));
+					_assetManager = AssetManager.CreateResourceAssetManager(typeof(DefaultAssets).Assembly, "Resources.");
 				}
 
 				return _assetManager;
 			}
 		}
 
-#if MONOGAME || FNA || STRIDE
 		public static Texture2D WhiteTexture
-#else
-		public static object WhiteTexture
-#endif
 		{
 			get
 			{
@@ -90,7 +82,7 @@ namespace Myra
 					return _uiTextureRegionAtlas;
 				}
 
-				_uiTextureRegionAtlas = AssetManager.Load<TextureRegionAtlas>("default_ui_skin.xmat");
+				_uiTextureRegionAtlas = AssetManager.LoadTextureRegionAtlas("default_ui_skin.xmat");
 				return _uiTextureRegionAtlas;
 			}
 		}
@@ -104,7 +96,7 @@ namespace Myra
 					return _uiStylesheet;
 				}
 
-				_uiStylesheet = AssetManager.Load<Stylesheet>("default_ui_skin.xmms");
+				_uiStylesheet = AssetManager.LoadStylesheet("default_ui_skin.xmms");
 				return _uiStylesheet;
 			}
 		}
@@ -122,7 +114,7 @@ namespace Myra
 
 			if (_assetManager != null)
 			{
-				_assetManager.ClearCache();
+				_assetManager.Cache.Clear();
 				_assetManager = null;
 			}
 

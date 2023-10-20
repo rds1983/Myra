@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Xml.Linq;
 using Myra.MML;
-using Myra.Assets;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -17,7 +16,6 @@ using Texture2D = System.Object;
 
 namespace Myra.Graphics2D.TextureAtlases
 {
-	[AssetLoader(typeof(TextureRegionAtlasLoader))]
 	public partial class TextureRegionAtlas
 	{
 		private const string TextureAtlasName = "TextureAtlas";

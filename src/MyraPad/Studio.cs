@@ -16,11 +16,10 @@ using Myra;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework.Input;
 using System.Threading;
-using System.Xml.Linq;
 using Myra.Graphics2D;
-using Myra.Assets;
 using FontStashSharp.RichText;
 using FontStashSharp;
+using AssetManagementBase;
 
 namespace MyraPad
 {
@@ -132,14 +131,14 @@ namespace MyraPad
 				{
 					var folder = Path.GetDirectoryName(_filePath);
 					PropertyGridSettings.BasePath = folder;
-					PropertyGridSettings.AssetManager = new AssetManager(new FileAssetResolver(folder));
+					PropertyGridSettings.AssetManager = AssetManager.CreateFileAssetManager(folder);
 					_lastFolder = folder;
 				}
 				else
 				{
 					PropertyGridSettings.BasePath = string.Empty;
 					PropertyGridSettings.AssetManager = MyraEnvironment.DefaultAssetManager;
-					PropertyGridSettings.AssetManager.ClearCache();
+					PropertyGridSettings.AssetManager.Cache.Clear();
 				}
 
 				UpdateTitle();
@@ -216,7 +215,7 @@ namespace MyraPad
 			}
 		}
 
-		private IAssetManager AssetManager
+		private AssetManager AssetManager
 		{
 			get
 			{
@@ -1198,7 +1197,7 @@ namespace MyraPad
 
 		private void OnMenuFileReloadSelected(object sender, EventArgs e)
 		{
-			AssetManager.ClearCache();
+			AssetManager.Cache.Clear();
 			_fontCache.Clear();
 			_textureCache.Clear();
 			Load(FilePath);
@@ -1206,7 +1205,7 @@ namespace MyraPad
 
 		private void OnMenuFileLoadStylesheet(object sender, EventArgs e)
 		{
-			AssetManager.ClearCache();
+			AssetManager.Cache.Clear();
 
 			var dlg = new FileDialog(FileDialogMode.OpenFile)
 			{
@@ -1247,7 +1246,7 @@ namespace MyraPad
 				// Check whether stylesheet could be loaded
 				try
 				{
-					var stylesheet = AssetManager.Load<Stylesheet>(filePath);
+					var stylesheet = AssetManager.LoadStylesheet(filePath);
 				}
 				catch (Exception ex)
 				{
@@ -1269,7 +1268,7 @@ namespace MyraPad
 
 		private void OnMenuFileResetStylesheetSelected(object sender, EventArgs e)
 		{
-			AssetManager.ClearCache();
+			AssetManager.Cache.Clear();
 			Project.StylesheetPath = null;
 			UpdateSource();
 			UpdateMenuFile();

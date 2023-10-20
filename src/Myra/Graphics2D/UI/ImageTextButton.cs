@@ -21,6 +21,8 @@ namespace Myra.Graphics2D.UI
 		{
 			Right,
 			Left,
+			Top,
+			Bottom,
 			OverlapsImage,
 			BehindImage
 		}
@@ -195,6 +197,7 @@ namespace Myra.Graphics2D.UI
 			set
 			{
 				InternalChild.ColumnSpacing = value;
+				InternalChild.RowSpacing = value;
 			}
 		}
 
@@ -278,8 +281,11 @@ namespace Myra.Graphics2D.UI
 
 		public ImageTextButton(string styleName = Stylesheet.DefaultStyleName)
 		{
-			InternalChild = new Grid();
-			InternalChild.RowsProportions.Add(Proportion.Auto);
+			InternalChild = new Grid
+			{
+				DefaultColumnProportion = Proportion.Auto,
+				DefaultRowProportion = Proportion.Auto
+			};
 
 			_image = new Image
 			{
@@ -306,36 +312,52 @@ namespace Myra.Graphics2D.UI
 			switch (value)
 			{
 				case TextPositionEnum.Right:
-					InternalChild.ColumnsProportions.Add(Proportion.Auto);
-					InternalChild.ColumnsProportions.Add(Proportion.Auto);
 					_image.GridColumn = 0;
+					_image.GridRow = 0;
 					_label.GridColumn = 1;
+					_label.GridRow = 0;
 					InternalChild.Widgets.Add(_image);
 					InternalChild.Widgets.Add(_label);
 					break;
 				case TextPositionEnum.Left:
-					InternalChild.ColumnsProportions.Add(Proportion.Auto);
-					InternalChild.ColumnsProportions.Add(Proportion.Auto);
 					_label.GridColumn = 0;
+					_label.GridColumn = 1;
+					_image.GridRow = 0;
 					_image.GridColumn = 1;
 					InternalChild.Widgets.Add(_image);
 					InternalChild.Widgets.Add(_label);
 					break;
 				case TextPositionEnum.OverlapsImage:
-					InternalChild.ColumnsProportions.Add(Proportion.Auto);
-					InternalChild.ColumnsProportions.Add(Proportion.Auto);
 					_image.GridColumn = 0;
+					_image.GridRow = 0;
 					_label.GridColumn = 0;
+					_label.GridColumn = 1;
 					InternalChild.Widgets.Add(_image);
 					InternalChild.Widgets.Add(_label);
 					break;
 				case TextPositionEnum.BehindImage:
-					InternalChild.ColumnsProportions.Add(Proportion.Auto);
-					InternalChild.ColumnsProportions.Add(Proportion.Auto);
 					_image.GridColumn = 0;
+					_image.GridRow = 0;
 					_label.GridColumn = 0;
+					_label.GridColumn = 1;
 					InternalChild.Widgets.Add(_label);
 					InternalChild.Widgets.Add(_image);
+					break;
+				case TextPositionEnum.Top:
+					_image.GridColumn = 0;
+					_image.GridRow = 1;
+					_label.GridColumn = 0;
+					_label.GridRow = 0;
+					InternalChild.Widgets.Add(_image);
+					InternalChild.Widgets.Add(_label);
+					break;
+				case TextPositionEnum.Bottom:
+					_image.GridColumn = 0;
+					_image.GridRow = 0;
+					_label.GridColumn = 0;
+					_label.GridRow = 1;
+					InternalChild.Widgets.Add(_image);
+					InternalChild.Widgets.Add(_label);
 					break;
 			}
 

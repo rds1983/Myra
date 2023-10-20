@@ -15,11 +15,14 @@ using Myra.Attributes;
 using FontStashSharp;
 using FontStashSharp.RichText;
 using Myra.Graphics2D.Brushes;
+using AssetManagementBase;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 #elif STRIDE
 using Stride.Core.Mathematics;
+using Texture2D = Stride.Graphics.Texture;
 #else
 using System.Drawing;
 using SolidBrush = Myra.Graphics2D.Brushes.SolidBrush;
@@ -203,7 +206,7 @@ namespace Myra.Graphics2D.UI.Properties
 		[Browsable(false)]
 		[XmlIgnore]
 		public string Category { get; private set; }
-		
+
 		[Category("Behavior")]
 		[DefaultValue(false)]
 		public bool IgnoreCollections
@@ -844,7 +847,7 @@ namespace Myra.Graphics2D.UI.Properties
 			return subGrid;
 		}
 
-		private Grid CreateFileEditor<T>(Record record, bool hasSetter, string filter)
+		private Grid CreateFileEditor<T>(Record record, bool hasSetter, string filter, Func<string, T> loader)
 		{
 			if (Settings.AssetManager == null)
 			{
@@ -868,6 +871,9 @@ namespace Myra.Graphics2D.UI.Properties
 			if (baseObject != null)
 			{
 				baseObject.Resources.TryGetValue(record.Name, out path);
+			} else if (Settings.ImagePropertyValueGetter != null)
+			{
+				path = Settings.ImagePropertyValueGetter(record.Name);
 			}
 
 			var textBox = new TextBox
@@ -905,7 +911,8 @@ namespace Myra.Graphics2D.UI.Properties
 							filePath = Path.Combine(Settings.BasePath, filePath);
 						}
 						dlg.FilePath = filePath;
-					} else if (!string.IsNullOrEmpty(Settings.BasePath))
+					}
+					else if (!string.IsNullOrEmpty(Settings.BasePath))
 					{
 						dlg.Folder = Settings.BasePath;
 					}
@@ -919,24 +926,26 @@ namespace Myra.Graphics2D.UI.Properties
 
 						try
 						{
-							var newValue = Settings.AssetManager.Load<T>(dlg.FilePath);
-
 							var filePath = dlg.FilePath;
 							if (!string.IsNullOrEmpty(Settings.BasePath))
 							{
 								filePath = PathUtils.TryToMakePathRelativeTo(filePath, Settings.BasePath);
 							}
 
+							var newValue = loader(filePath);
 							textBox.Text = filePath;
 							SetValue(record, _object, newValue);
 							if (baseObject != null)
 							{
 								baseObject.Resources[record.Name] = filePath;
+							} else if (Settings.ImagePropertyValueSetter != null)
+							{
+								Settings.ImagePropertyValueSetter(record.Name, filePath);
 							}
 
 							FireChanged(propertyType.Name);
 						}
-						catch(Exception)
+						catch (Exception)
 						{
 
 						}
@@ -1135,7 +1144,7 @@ namespace Myra.Graphics2D.UI.Properties
 				}
 				else if (propertyType == typeof(SpriteFontBase))
 				{
-					valueWidget = CreateFileEditor<SpriteFontBase>(record, hasSetter, "*.fnt");
+					valueWidget = CreateFileEditor(record, hasSetter, "*.fnt", name => Settings.AssetManager.LoadFont(name));
 				}
 				else if (propertyType == typeof(IBrush))
 				{
@@ -1143,8 +1152,14 @@ namespace Myra.Graphics2D.UI.Properties
 				}
 				else if (propertyType == typeof(IImage))
 				{
-					valueWidget = CreateFileEditor<TextureRegion>(record, hasSetter, "*.png|*.jpg|*.bmp|*.gif");
+					valueWidget = CreateFileEditor(record, hasSetter, "*.png|*.jpg|*.bmp|*.gif", name => Settings.AssetManager.LoadTextureRegion(name));
 				}
+#if !PLATFORM_AGNOSTIC
+				else if (propertyType == typeof(Texture2D))
+				{
+					valueWidget = CreateFileEditor(record, hasSetter, "*.png|*.jpg|*.bmp|*.gif", name => Settings.AssetManager.LoadTexture2D(MyraEnvironment.GraphicsDevice, name));
+				}
+#endif
 				else
 				{
 					// Subgrid
