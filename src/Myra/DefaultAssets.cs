@@ -12,6 +12,7 @@ using Stride.Core.Mathematics;
 using Texture2D = Stride.Graphics.Texture;
 #else
 using System.Drawing;
+using Texture2D = System.Object;
 #endif
 
 namespace Myra
@@ -22,12 +23,7 @@ namespace Myra
 		private static TextureRegionAtlas _uiTextureRegionAtlas;
 		private static Stylesheet _uiStylesheet;
 		private static TextureRegion _whiteRegion;
-
-#if MONOGAME || FNA || STRIDE
 		private static Texture2D _whiteTexture;
-#else
-		private static object _whiteTexture;
-#endif
 
 		private static AssetManager AssetManager
 		{
@@ -42,11 +38,7 @@ namespace Myra
 			}
 		}
 
-#if MONOGAME || FNA || STRIDE
 		public static Texture2D WhiteTexture
-#else
-		public static object WhiteTexture
-#endif
 		{
 			get
 			{

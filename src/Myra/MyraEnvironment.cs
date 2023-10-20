@@ -165,6 +165,16 @@ namespace Myra
 
 				return _defaultAssetManager;
 			}
+
+			set
+			{
+				if (value == null)
+				{
+					throw new ArgumentNullException(nameof(value));
+
+				}
+				_defaultAssetManager = value;
+			}
 		}
 
 		public static bool DrawWidgetsFrames { get; set; }

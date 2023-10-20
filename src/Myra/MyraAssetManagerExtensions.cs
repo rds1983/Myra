@@ -2,39 +2,50 @@
 using System.Xml.Linq;
 using System;
 using FontStashSharp;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Myra;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using Myra.MML;
 using Myra.Utility;
 
+#if MONOGAME || FNA
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+#elif STRIDE
+using Stride.Core.Mathematics;
+using Texture2D = Stride.Graphics.Texture;
+#else
+using System.Drawing;
+using SolidBrush = Myra.Graphics2D.Brushes.SolidBrush;
+using Color = FontStashSharp.FSColor;
+using Texture2D = System.Object;
+using StbImageSharp;
+using System.IO;
+#endif
+
 namespace AssetManagementBase
 {
 	public static class MyraAssetManagerExtensions
 	{
 #if PLATFORM_AGNOSTIC
-	internal class Texture2DWrapper
-	{
-		public int Width { get; private set; }
-		public int Height { get; private set; }
-		public object Texture { get; private set; }
-
-		public Texture2DWrapper(int width, int height, object texture)
+		internal class Texture2DWrapper
 		{
-			Width = width;
-			Height = height;
-			Texture = texture;
-		}
-	}
+			public int Width { get; private set; }
+			public int Height { get; private set; }
+			public object Texture { get; private set; }
 
-	internal class Texture2DLoader : IAssetLoader<Texture2DWrapper>
-	{
-		public Texture2DWrapper Load(AssetLoaderContext context, string assetName)
+			public Texture2DWrapper(int width, int height, object texture)
+			{
+				Width = width;
+				Height = height;
+				Texture = texture;
+			}
+		}
+
+		private static AssetLoader<Texture2DWrapper> _textureLoader = (manager, assetName, settings, tag) =>
 		{
 			ImageResult result = null;
-			using (var stream = context.Open(assetName))
+			using (var stream = manager.Open(assetName))
 			{
 				if (stream.CanSeek)
 				{
@@ -66,11 +77,13 @@ namespace AssetManagementBase
 			var texture = textureManager.CreateTexture(result.Width, result.Height);
 			textureManager.SetTextureData(texture, new Rectangle(0, 0, result.Width, result.Height), result.Data);
 			return new Texture2DWrapper(result.Width, result.Height, texture);
-		}
-	}
+		};
+
+		internal static Texture2DWrapper LoadTexture2D(this AssetManager assetManager, string assetName) =>
+				assetManager.UseLoader(_textureLoader, assetName);
 #endif
 
-		private class FontSystemLoadingSettings: IAssetSettings
+		private class FontSystemLoadingSettings : IAssetSettings
 		{
 			public Texture2D ExistingTexture { get; set; }
 			public Rectangle ExistingTextureUsedSpace { get; set; }
@@ -82,7 +95,12 @@ namespace AssetManagementBase
 		private static AssetLoader<TextureRegionAtlas> _atlasLoader = (manager, assetName, settings, tag) =>
 		{
 			var data = manager.ReadAsString(assetName);
+
+#if !PLATFORM_AGNOSTIC
 			return TextureRegionAtlas.Load(data, name => manager.LoadTexture2D(MyraEnvironment.GraphicsDevice, name, true));
+#else
+			return TextureRegionAtlas.Load(data, name => manager.LoadTexture2D(name).Texture);
+#endif
 		};
 
 		private static AssetLoader<FontSystem> _fontSystemLoader = (manager, assetName, settings, tag) =>
@@ -220,7 +238,7 @@ namespace AssetManagementBase
 			var texture = assetManager.LoadTexture2D(MyraEnvironment.GraphicsDevice, assetName);
 			return new TextureRegion(texture, new Rectangle(0, 0, texture.Width, texture.Height));
 #else
-			var texture = context.Load<Texture2DWrapper>(assetName);
+			var texture = assetManager.LoadTexture2D(assetName);
 			return new TextureRegion(texture.Texture, new Rectangle(0, 0, texture.Width, texture.Height));
 #endif
 		}

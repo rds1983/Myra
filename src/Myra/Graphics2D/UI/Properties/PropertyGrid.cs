@@ -16,12 +16,13 @@ using FontStashSharp;
 using FontStashSharp.RichText;
 using Myra.Graphics2D.Brushes;
 using AssetManagementBase;
-using Microsoft.Xna.Framework.Graphics;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 #elif STRIDE
 using Stride.Core.Mathematics;
+using Texture2D = Stride.Graphics.Texture;
 #else
 using System.Drawing;
 using SolidBrush = Myra.Graphics2D.Brushes.SolidBrush;
@@ -1143,7 +1144,7 @@ namespace Myra.Graphics2D.UI.Properties
 				}
 				else if (propertyType == typeof(SpriteFontBase))
 				{
-					valueWidget = CreateFileEditor<SpriteFontBase>(record, hasSetter, "*.fnt", name => Settings.AssetManager.LoadFont(name));
+					valueWidget = CreateFileEditor(record, hasSetter, "*.fnt", name => Settings.AssetManager.LoadFont(name));
 				}
 				else if (propertyType == typeof(IBrush))
 				{
@@ -1153,11 +1154,12 @@ namespace Myra.Graphics2D.UI.Properties
 				{
 					valueWidget = CreateFileEditor(record, hasSetter, "*.png|*.jpg|*.bmp|*.gif", name => Settings.AssetManager.LoadTextureRegion(name));
 				}
+#if !PLATFORM_AGNOSTIC
 				else if (propertyType == typeof(Texture2D))
 				{
 					valueWidget = CreateFileEditor(record, hasSetter, "*.png|*.jpg|*.bmp|*.gif", name => Settings.AssetManager.LoadTexture2D(MyraEnvironment.GraphicsDevice, name));
-
 				}
+#endif
 				else
 				{
 					// Subgrid
