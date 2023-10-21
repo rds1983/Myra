@@ -333,15 +333,15 @@ namespace Myra.Graphics2D
 			rotation += Transform.Rotation;
 
 #if MONOGAME || FNA || STRIDE
-			font.DrawText(_renderer, text, position, color, scale, rotation, Vector2.Zero, layerDepth);
+			font.DrawText(_renderer, text, position, color, rotation, Vector2.Zero, scale, layerDepth);
 #else
 			if (_fontStashRenderer != null)
 			{
-				font.DrawText(_fontStashRenderer, text, position, color, scale, rotation, Vector2.Zero);
+				font.DrawText(_fontStashRenderer, text, position, color, rotation, Vector2.Zero, scale);
 			}
 			else
 			{
-				font.DrawText(_fontStashRenderer2, text, position, color, scale, rotation, Vector2.Zero);
+				font.DrawText(_fontStashRenderer2, text, position, color, rotation, Vector2.Zero, scale);
 			}
 #endif
 		}
@@ -382,15 +382,15 @@ namespace Myra.Graphics2D
 			rotation += Transform.Rotation;
 
 #if MONOGAME || FNA || STRIDE
-			richText.Draw(_renderer, position, color, scale, rotation, Vector2.Zero, layerDepth, horizontalAlignment);
+			richText.Draw(_renderer, position, color, rotation, Vector2.Zero, scale, layerDepth, horizontalAlignment);
 #else
 			if (_fontStashRenderer != null)
 			{
-				richText.Draw(_fontStashRenderer, position, color, scale, rotation, Vector2.Zero, layerDepth, horizontalAlignment);
+				richText.Draw(_fontStashRenderer, position, color, rotation, Vector2.Zero, scale, layerDepth, horizontalAlignment);
 			}
 			else
 			{
-				richText.Draw(_fontStashRenderer2, position, color, scale, rotation, Vector2.Zero, layerDepth, horizontalAlignment);
+				richText.Draw(_fontStashRenderer2, position, color, rotation, Vector2.Zero, scale, layerDepth, horizontalAlignment);
 			}
 #endif
 		}
