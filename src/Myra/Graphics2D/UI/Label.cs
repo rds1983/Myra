@@ -26,9 +26,6 @@ namespace Myra.Graphics2D.UI
 
 		private bool _wrap = false;
 
-		private AutoEllipsisMethod _autoEllipsisMethod = AutoEllipsisMethod.None;
-		private RichTextLayout _autoEllipsisText;
-		private string _autoEllipsisString = "...";
 		private readonly RichTextLayout _errorText = new RichTextLayout
 		{
 			SupportsCommands = false
@@ -111,13 +108,8 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(AutoEllipsisMethod.None)]
 		public AutoEllipsisMethod AutoEllipsisMethod
 		{
-			get => _autoEllipsisMethod;
-			set
-			{
-				if (value == _autoEllipsisMethod) return;
-				_autoEllipsisMethod = value;
-				InvalidateMeasure();
-			}
+			get => _richText.AutoEllipsisMethod;
+			set => _richText.AutoEllipsisMethod = value;
 		}
 
 		/// <summary>
@@ -127,13 +119,8 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue("...")]
 		public string AutoEllipsisString
 		{
-			get => _autoEllipsisString;
-			set
-			{
-				if (value == _autoEllipsisString) return;
-				_autoEllipsisString = value;
-				InvalidateMeasure();
-			}
+			get => _richText.AutoEllipsisString;
+			set => _richText.AutoEllipsisString = value;
 		}
 
 		[Category("Appearance")]
@@ -201,8 +188,7 @@ namespace Myra.Graphics2D.UI
 				useChunkColor = false;
 			}
 
-			var textToDraw = (_autoEllipsisMethod == AutoEllipsisMethod.None) 
-				? _richText : _autoEllipsisText;
+			var textToDraw = _richText;
 
 			textToDraw.IgnoreColorCommand = !useChunkColor;
 			var bounds = ActualBounds;
@@ -211,7 +197,8 @@ namespace Myra.Graphics2D.UI
 			if (TextAlign == TextHorizontalAlignment.Center)
 			{
 				x += bounds.Width / 2;
-			} else if (TextAlign == TextHorizontalAlignment.Right)
+			}
+			else if (TextAlign == TextHorizontalAlignment.Right)
 			{
 				x += bounds.Width;
 			}
@@ -220,7 +207,7 @@ namespace Myra.Graphics2D.UI
 			{
 				context.DrawRichText(textToDraw, new Vector2(x, bounds.Y), color, horizontalAlignment: TextAlign);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				x = bounds.X;
 				_errorText.Font = Font;
@@ -243,35 +230,17 @@ namespace Myra.Graphics2D.UI
 
 			var width = availableSize.X;
 			var height = availableSize.Y;
-			var ellipsisEnabled = _autoEllipsisMethod != AutoEllipsisMethod.None;
 
 			var result = Mathematics.PointZero;
-			if (ellipsisEnabled)
+			try
 			{
-				try
-				{
-					_autoEllipsisText = ApplyAutoEllipsis(width, height);
-					result = _autoEllipsisText.Measure(_wrap ? width : default(int?));
-				}
-				catch (Exception ex)
-				{
-					_errorText.Font = Font;
-					_errorText.Text = BuildRtlError(ex);
-					result = _errorText.Measure(_wrap ? width : default(int?));
-				}
+				result = _richText.Measure(_wrap ? width : default(int?));
 			}
-			else
+			catch (Exception ex)
 			{
-				try
-				{
-					result = _richText.Measure(_wrap ? width : default(int?));
-				}
-				catch (Exception ex)
-				{
-					_errorText.Font = Font;
-					_errorText.Text = BuildRtlError(ex);
-					result = _errorText.Measure(_wrap ? width : default(int?));
-				}
+				_errorText.Font = Font;
+				_errorText.Text = BuildRtlError(ex);
+				result = _errorText.Measure(_wrap ? width : default(int?));
 			}
 
 			if (result.Y < Font.LineHeight)
@@ -282,97 +251,12 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		private RichTextLayout ApplyAutoEllipsis(int width, int height)
-		{
-			var unchangedMeasure = _richText.Measure(_wrap ? width : default(int?));
-			if (unchangedMeasure.X <= width && unchangedMeasure.Y <= height)
-			{
-				return _richText; // don't even need to do anything.
-			}
-
-			var origText = _richText.Text;
-			var measureText = new RichTextLayout()
-			{
-				Text = _richText.Text,
-				Font = _richText.Font,
-				VerticalSpacing = _richText.VerticalSpacing,
-				Width = _richText.Width,
-				CalculateGlyphs = _richText.CalculateGlyphs,
-				SupportsCommands = _richText.SupportsCommands
-			};
-			string result;
-
-			// find longest possible string using binary search
-			int left = 0;
-			int right = origText.Length;
-			int center = 0;
-
-			while (left <= right)
-			{
-				center = left + ((right - left) / 2);
-				measureText.Text = $"{origText.Substring(0, center)}{AutoEllipsisString}";
-
-				var measure = GetMeasure();
-				if (measure.X == width && measure.Y <= height)
-				{
-					break;
-				}
-				else if (measure.X > width || measure.Y > height)
-				{
-					right = center - 1;
-				}
-				else
-				{
-					left = center + 1;
-				}
-			}
-
-			result = origText.Substring(0, center);
-
-			if (AutoEllipsisMethod == AutoEllipsisMethod.Word)
-			{
-				// cut on spaces rather than in the middle of a word.
-				// preserve a space character before the ellipsis if there is
-				// enough room for it.
-				try
-				{
-					var closestSpace = origText.LastIndexOf(' ', center);
-					if (closestSpace > 0)
-					{
-						int subStrLength = closestSpace;
-						measureText.Text = origText.Substring(0, closestSpace + 1) + AutoEllipsisString;
-						if (GetMeasure().X < width)
-						{
-							subStrLength++;
-						}
-						result = origText.Substring(0, subStrLength);
-					}
-				}
-				catch (ArgumentOutOfRangeException)
-				{
-					// do nothing
-				}
-			}
-
-			return new RichTextLayout()
-			{
-				Text = result + AutoEllipsisString,
-				Font = _richText.Font,
-				VerticalSpacing =_richText.VerticalSpacing,
-				Width = _richText.Width
-			};
-
-			Point GetMeasure()
-			{
-				return measureText.Measure(_wrap ? width : default(int?));
-			}
-		}
-
 		public override void InternalArrange()
 		{
 			base.InternalArrange();
 
 			_richText.Width = _wrap ? ActualBounds.Width : default(int?);
+			_richText.Height = _wrap ? ActualBounds.Height : default(int?);
 		}
 
 		public void ApplyLabelStyle(LabelStyle style)
@@ -390,23 +274,5 @@ namespace Myra.Graphics2D.UI
 		{
 			ApplyLabelStyle(stylesheet.LabelStyles.SafelyGetStyle(name));
 		}
-	}
-
-	public enum AutoEllipsisMethod
-	{
-		/// <summary>
-		/// Autoellipsis is disabled.
-		/// </summary>
-		None,
-
-		/// <summary>
-		/// The text can be cut at any character.
-		/// </summary>
-		Character,
-
-		/// <summary>
-		/// The text will be cut at spaces.
-		/// </summary>
-		Word
 	}
 }
