@@ -30,7 +30,7 @@ namespace Myra.Graphics2D.UI
 		public float Wheel;
 	}
 
-	public class Desktop: ITransformable, IDisposable
+	public class Desktop : ITransformable, IDisposable
 	{
 		public const int DoubleClickIntervalInMs = 500;
 		public const int DoubleClickRadius = 2;
@@ -872,11 +872,7 @@ namespace Myra.Graphics2D.UI
 					ExpressionParser.Parse(i, ChildrenCopy);
 				}
 
-				var c = i as Container;
-				if (c != null)
-				{
-					UpdateRecursiveLayout(c.ChildrenCopy);
-				}
+				UpdateRecursiveLayout(i.ChildrenCopy);
 			}
 		}
 
@@ -887,15 +883,8 @@ namespace Myra.Graphics2D.UI
 				return root;
 			}
 
-			var asContainer = root as Container;
-			if (asContainer == null)
+			foreach (var w in root.ChildrenCopy)
 			{
-				return null;
-			}
-
-			for (var i = 0; i < asContainer.ChildrenCount; ++i)
-			{
-				var w = asContainer.GetChild(i);
 				var result = GetWidgetBy(w, filter);
 				if (result != null)
 				{
@@ -937,11 +926,7 @@ namespace Myra.Graphics2D.UI
 
 				++result;
 
-				var asContainer = w as Container;
-				if (asContainer != null)
-				{
-					result += asContainer.CalculateTotalChildCount(visibleOnly);
-				}
+				result += w.CalculateTotalChildCount(visibleOnly);
 			}
 
 			return result;
@@ -1067,7 +1052,7 @@ namespace Myra.Graphics2D.UI
 			DownKeysGetter(_downKeys);
 
 			var now = DateTime.Now;
-			for(var i = 0; i < _downKeys.Length; ++i)
+			for (var i = 0; i < _downKeys.Length; ++i)
 			{
 				var key = (Keys)i;
 				if (_downKeys[i] && !_lastDownKeys[i])
@@ -1081,7 +1066,8 @@ namespace Myra.Graphics2D.UI
 
 					_lastKeyDown = now;
 					_keyDownCount = 0;
-				} else if (!_downKeys[i] && _lastDownKeys[i])
+				}
+				else if (!_downKeys[i] && _lastDownKeys[i])
 				{
 					// Key had been released
 					KeyUp.Invoke(key);
@@ -1092,7 +1078,8 @@ namespace Myra.Graphics2D.UI
 
 					_lastKeyDown = null;
 					_keyDownCount = 0;
-				} else if (_downKeys[i] && _lastDownKeys[i])
+				}
+				else if (_downKeys[i] && _lastDownKeys[i])
 				{
 					if (_lastKeyDown != null &&
 									  ((_keyDownCount == 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownStartInMs) ||
@@ -1260,11 +1247,8 @@ namespace Myra.Graphics2D.UI
 				return true;
 			}
 
-			// If widget fell through, then it is Container for sure
-			var asContainer = (Container)w;
-
 			// Or if any child is solid
-			foreach (var ch in asContainer.ChildrenCopy)
+			foreach (var ch in w.ChildrenCopy)
 			{
 				if (InternalIsPointOverGUI(p, ch))
 				{

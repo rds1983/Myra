@@ -16,7 +16,6 @@ namespace Myra.Graphics2D.UI
 	{
 		private readonly GridLayout _layout = new GridLayout();
 		private int _spacing;
-		private bool _dirty = true;
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -75,15 +74,11 @@ namespace Myra.Graphics2D.UI
 		protected StackPanel()
 		{
 			DefaultProportion = Proportion.StackPanelDefault;
-			Widgets.CollectionChanged += Widgets_CollectionChanged;
 		}
 
-		private void UpdateGrid()
+		protected override void InternalUpdateChildren()
 		{
-			if (!_dirty)
-			{
-				return;
-			}
+			base.InternalUpdateChildren();
 
 			var index = 0;
 			foreach (var widget in Widgets)
@@ -99,26 +94,15 @@ namespace Myra.Graphics2D.UI
 
 				++index;
 			}
-
-			_dirty = false;
-		}
-
-		private void Widgets_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-		{
-			_dirty = true;
 		}
 
 		protected override Point InternalMeasure(Point availableSize)
 		{
-			UpdateGrid();
-
 			return _layout.Measure(Widgets, availableSize);
 		}
 
 		protected override void InternalArrange()
 		{
-			UpdateGrid();
-
 			_layout.Arrange(Widgets, ActualBounds);
 		}
 	}

@@ -19,15 +19,11 @@ namespace Myra.Utility
 				return false;
 			}
 
-			var asContainer = root as Container;
-			if (asContainer != null)
+			foreach (var w in root.ChildrenCopy)
 			{
-				foreach (var w in asContainer.ChildrenCopy)
+				if (!ProcessWidgets(w, operation))
 				{
-					if (!ProcessWidgets(w, operation))
-					{
-						return false;
-					}
+					return false;
 				}
 			}
 

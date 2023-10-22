@@ -316,7 +316,7 @@ namespace Myra.Graphics2D.UI
 			else
 			{
 				//todo fix remove error. DONE
-				Parent.RemoveChild(this);
+				RemoveFromParent();
 			}
 
 			Closed.Invoke(this);

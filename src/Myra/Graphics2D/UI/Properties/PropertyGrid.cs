@@ -1012,7 +1012,7 @@ namespace Myra.Graphics2D.UI.Properties
 					path.Text = value.ToString();
 				}
 
-				result.AddChild(path);
+				result.Widgets.Add(path);
 			}
 
 			result.Proportions.Add(Proportion.Auto);
@@ -1086,7 +1086,7 @@ namespace Myra.Graphics2D.UI.Properties
 				button.Enabled = false;
 			}
 
-			result.AddChild(button);
+			result.Widgets.Add(button);
 
 			return result;
 		}

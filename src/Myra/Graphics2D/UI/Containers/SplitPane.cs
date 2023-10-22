@@ -1,33 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
+using Microsoft.Xna.Framework;
+using System.Collections.ObjectModel;
 using Myra.Attributes;
-using System.Reflection.Metadata;
 
 namespace Myra.Graphics2D.UI
 {
-	public abstract class SplitPane : SingleItemContainer<Grid>
+	public abstract class SplitPane : MultipleItemsContainerBase
 	{
 		private readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
+		private readonly GridLayout _layout = new GridLayout();
 		private readonly List<ImageButton> _handles = new List<ImageButton>();
 		private ImageButton _handleDown;
 		private int? _mouseCoord;
 		private int _handlesSize;
 
+		[Content]
+		[Browsable(false)]
+		public override ObservableCollection<Widget> Widgets => _widgets;
+
 		[XmlIgnore]
 		[Browsable(false)]
 		public abstract Orientation Orientation { get; }
-
-		[Browsable(false)]
-		[Content]
-		public ObservableCollection<Widget> Widgets
-		{
-			get { return _widgets; }
-		}
 
 		[XmlIgnore]
 		[Browsable(false)]
@@ -35,27 +33,8 @@ namespace Myra.Graphics2D.UI
 
 		public event EventHandler ProportionsChanged;
 
-		[DefaultValue(HorizontalAlignment.Stretch)]
-		public override HorizontalAlignment HorizontalAlignment
-		{
-			get { return base.HorizontalAlignment; }
-			set { base.HorizontalAlignment = value; }
-		}
-
-		[DefaultValue(VerticalAlignment.Stretch)]
-		public override VerticalAlignment VerticalAlignment
-		{
-			get { return base.VerticalAlignment; }
-			set { base.VerticalAlignment = value; }
-		}
-
 		protected SplitPane(string styleName)
 		{
-			HorizontalAlignment = HorizontalAlignment.Stretch;
-			VerticalAlignment = VerticalAlignment.Stretch;
-
-			InternalChild = new Grid();
-
 			_widgets.CollectionChanged += WidgetsOnCollectionChanged;
 
 			SetStyle(styleName);
@@ -69,8 +48,8 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var result = Orientation == Orientation.Horizontal
-				? InternalChild.ColumnsProportions[widgetIndex*2].Value
-				: InternalChild.RowsProportions[widgetIndex*2].Value;
+				? _layout.ColumnsProportions[widgetIndex * 2].Value
+				: _layout.RowsProportions[widgetIndex * 2].Value;
 
 			return result;
 		}
@@ -90,7 +69,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var handleIndex = InternalChild.Widgets.IndexOf(_handleDown);
+			var handleIndex = Children.IndexOf(_handleDown);
 			Proportion firstProportion, secondProportion;
 			float fp;
 
@@ -101,13 +80,13 @@ namespace Myra.Graphics2D.UI
 
 				for (var i = 0; i < handleIndex - 1; ++i)
 				{
-					firstWidth -= InternalChild.GetColumnWidth(i);
+					firstWidth -= _layout.GetColumnWidth(i);
 				}
 
-				fp = (float) Widgets.Count*firstWidth/(bounds.Width - _handlesSize);
+				fp = (float)Widgets.Count * firstWidth / (bounds.Width - _handlesSize);
 
-				firstProportion = InternalChild.ColumnsProportions[handleIndex - 1];
-				secondProportion = InternalChild.ColumnsProportions[handleIndex + 1];
+				firstProportion = _layout.ColumnsProportions[handleIndex - 1];
+				secondProportion = _layout.ColumnsProportions[handleIndex + 1];
 			}
 			else
 			{
@@ -115,13 +94,13 @@ namespace Myra.Graphics2D.UI
 
 				for (var i = 0; i < handleIndex - 1; ++i)
 				{
-					firstHeight -= InternalChild.GetRowHeight(i);
+					firstHeight -= _layout.GetRowHeight(i);
 				}
 
-				fp = (float) Widgets.Count*firstHeight/(bounds.Height - _handlesSize);
+				fp = (float)Widgets.Count * firstHeight / (bounds.Height - _handlesSize);
 
-				firstProportion = InternalChild.RowsProportions[handleIndex - 1];
-				secondProportion = InternalChild.RowsProportions[handleIndex + 1];
+				firstProportion = _layout.RowsProportions[handleIndex - 1];
+				secondProportion = _layout.RowsProportions[handleIndex + 1];
 			}
 
 			if (fp >= 0 && fp <= 2.0f)
@@ -131,6 +110,8 @@ namespace Myra.Graphics2D.UI
 				secondProportion.Value = fp2;
 				FireProportionsChanged();
 			}
+
+			InvalidateArrange();
 		}
 
 		private void FireProportionsChanged()
@@ -171,13 +152,13 @@ namespace Myra.Graphics2D.UI
 			out Proportion leftProportion,
 			out Proportion rightProportion)
 		{
-			var baseIndex = leftWidgetIndex*2;
+			var baseIndex = leftWidgetIndex * 2;
 			leftProportion = Orientation == Orientation.Horizontal
-				? InternalChild.ColumnsProportions[baseIndex]
-				: InternalChild.RowsProportions[baseIndex];
+				? _layout.ColumnsProportions[baseIndex]
+				: _layout.RowsProportions[baseIndex];
 			rightProportion = Orientation == Orientation.Horizontal
-				? InternalChild.ColumnsProportions[baseIndex + 2]
-				: InternalChild.RowsProportions[baseIndex + 2];
+				? _layout.ColumnsProportions[baseIndex + 2]
+				: _layout.RowsProportions[baseIndex + 2];
 		}
 
 		public float GetSplitterPosition(int leftWidgetIndex)
@@ -187,7 +168,7 @@ namespace Myra.Graphics2D.UI
 
 			var total = leftProportion.Value + rightProportion.Value;
 
-			return leftProportion.Value/total;
+			return leftProportion.Value / total;
 		}
 
 		public void SetSplitterPosition(int leftWidgetIndex, float proportion)
@@ -197,7 +178,7 @@ namespace Myra.Graphics2D.UI
 
 			var total = leftProportion.Value + rightProportion.Value;
 
-			var fp = proportion*total;
+			var fp = proportion * total;
 			var fp2 = total - fp;
 			leftProportion.Value = fp;
 			rightProportion.Value = fp2;
@@ -206,12 +187,12 @@ namespace Myra.Graphics2D.UI
 		public void Reset()
 		{
 			// Clear
-			InternalChild.Widgets.Clear();
+			Children.Clear();
 			_handles.Clear();
 			_handlesSize = 0;
 
-			InternalChild.ColumnsProportions.Clear();
-			InternalChild.RowsProportions.Clear();
+			_layout.ColumnsProportions.Clear();
+			_layout.RowsProportions.Clear();
 
 			var i = 0;
 
@@ -224,7 +205,7 @@ namespace Myra.Graphics2D.UI
 					: asImage.Size.Y;
 			}
 
-			foreach (var w in _widgets)
+			foreach (var w in Widgets)
 			{
 				Proportion proportion;
 				if (i > 0)
@@ -238,7 +219,8 @@ namespace Myra.Graphics2D.UI
 					if (Orientation == Orientation.Horizontal)
 					{
 						handle.VerticalAlignment = VerticalAlignment.Stretch;
-					} else
+					}
+					else
 					{
 						handle.HorizontalAlignment = HorizontalAlignment.Stretch;
 					}
@@ -253,20 +235,20 @@ namespace Myra.Graphics2D.UI
 					{
 						_handlesSize += handleSize;
 						Grid.SetColumn(handle, i * 2 - 1);
-						InternalChild.ColumnsProportions.Add(proportion);
+						_layout.ColumnsProportions.Add(proportion);
 					}
 					else
 					{
 						_handlesSize += handleSize;
 						Grid.SetRow(handle, i * 2 - 1);
-						InternalChild.RowsProportions.Add(proportion);
+						_layout.RowsProportions.Add(proportion);
 					}
 
-					InternalChild.Widgets.Add(handle);
+					Children.Add(handle);
 					_handles.Add(handle);
 				}
 
-				proportion = i < _widgets.Count - 1
+				proportion = i < Widgets.Count - 1
 					? new Proportion(ProportionType.Part, 1.0f)
 					: new Proportion(ProportionType.Fill, 1.0f);
 
@@ -274,15 +256,15 @@ namespace Myra.Graphics2D.UI
 				if (Orientation == Orientation.Horizontal)
 				{
 					Grid.SetColumn(w, i * 2);
-					InternalChild.ColumnsProportions.Add(proportion);
+					_layout.ColumnsProportions.Add(proportion);
 				}
 				else
 				{
 					Grid.SetRow(w, i * 2);
-					InternalChild.RowsProportions.Add(proportion);
+					_layout.RowsProportions.Add(proportion);
 				}
 
-				InternalChild.Widgets.Add(w);
+				Children.Add(w);
 
 				++i;
 			}
@@ -302,6 +284,18 @@ namespace Myra.Graphics2D.UI
 			}
 
 			FireProportionsChanged();
+		}
+
+		protected override Point InternalMeasure(Point availableSize)
+		{
+			return _layout.Measure(Children, availableSize);
+		}
+
+		protected override void InternalArrange()
+		{
+			base.InternalArrange();
+
+			_layout.Arrange(Children, ActualBounds);
 		}
 
 		public void ApplySplitPaneStyle(SplitPaneStyle style)

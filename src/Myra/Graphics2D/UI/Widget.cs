@@ -40,7 +40,7 @@ namespace Myra.Graphics2D.UI
 		Both = Vertical | Horizontal
 	}
 
-	public class Widget : BaseObject, ITransformable
+	public partial class Widget : BaseObject, ITransformable
 	{
 		private Vector2? _startPos;
 		private Point _startLeftTop;
@@ -388,7 +388,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(true)]
-		public virtual bool Enabled
+		public bool Enabled
 		{
 			get
 			{
@@ -404,13 +404,18 @@ namespace Myra.Graphics2D.UI
 
 				_enabled = value;
 
+				foreach (var item in ChildrenCopy)
+				{
+					item.Enabled = value;
+				}
+
 				EnabledChanged.Invoke(this);
 			}
 		}
 
 		[Category("Behavior")]
 		[DefaultValue(true)]
-		public virtual bool Visible
+		public bool Visible
 		{
 			get { return _visible; }
 
@@ -561,6 +566,12 @@ namespace Myra.Graphics2D.UI
 				}
 
 				SubscribeOnTouchMoved(IsPlaced && IsDraggable);
+
+				foreach (var child in ChildrenCopy)
+				{
+					child.Desktop = value;
+				}
+
 				OnPlacedChanged();
 			}
 		}
@@ -708,7 +719,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public Container Parent { get; internal set; }
+		public Widget Parent { get; internal set; }
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -872,6 +883,8 @@ namespace Myra.Graphics2D.UI
 			Visible = true;
 			Enabled = true;
 			DragHandle = this;
+
+			Children.CollectionChanged += ChildrenOnCollectionChanged;
 		}
 
 		public virtual IBrush GetCurrentBackground()
@@ -916,12 +929,7 @@ namespace Myra.Graphics2D.UI
 
 		public void BringToFront()
 		{
-			if (Parent != null && !(Parent is IMultipleItemsContainer))
-			{
-				return;
-			}
-
-			var widgets = (Parent as IMultipleItemsContainer)?.Widgets ?? Desktop.Widgets;
+			var widgets = Parent != null ? Parent.Children : Desktop.Widgets;
 
 			if (widgets[widgets.Count - 1] == this) return;
 
@@ -931,12 +939,7 @@ namespace Myra.Graphics2D.UI
 
 		public void BringToBack()
 		{
-			if (Parent != null && !(Parent is IMultipleItemsContainer))
-			{
-				return;
-			}
-
-			var widgets = (Parent as IMultipleItemsContainer)?.Widgets ?? Desktop.Widgets;
+			var widgets = Parent != null ? Parent.Children : Desktop.Widgets;
 
 			if (widgets[widgets.Count - 1] == this) return;
 
@@ -950,6 +953,8 @@ namespace Myra.Graphics2D.UI
 			{
 				return;
 			}
+
+			UpdateArrange();
 
 			var oldTransform = context.Transform;
 
@@ -1042,6 +1047,10 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void InternalRender(RenderContext context)
 		{
+			foreach (var child in ChildrenCopy)
+			{
+				child.Render(context);
+			}
 		}
 
 		public Point Measure(Point availableSize)
@@ -1198,46 +1207,16 @@ namespace Myra.Graphics2D.UI
 
 		protected virtual void InternalArrange()
 		{
+			foreach(var widget in ChildrenCopy)
+			{
+				widget.Arrange(ActualBounds);
+			}
 		}
 
 
 		public void InvalidateArrange()
 		{
 			_arrangeDirty = true;
-		}
-
-		private Widget FindWidgetBy(Func<Widget, bool> finder)
-		{
-			if (finder(this))
-			{
-				return this;
-			}
-
-			var asContainer = this as Container;
-			if (asContainer != null)
-			{
-				foreach (var widget in asContainer.ChildrenCopy)
-				{
-					var result = widget.FindWidgetBy(finder);
-					if (result != null)
-					{
-						return result;
-					}
-				}
-			}
-
-			return null;
-		}
-
-		/// <summary>
-		/// Finds a widget by id
-		/// Returns null if not found
-		/// </summary>
-		/// <param name="id"></param>
-		/// <returns></returns>
-		public Widget FindWidgetById(string id)
-		{
-			return FindWidgetBy(w => w.Id == id);
 		}
 
 		/// <summary>
@@ -1248,7 +1227,7 @@ namespace Myra.Graphics2D.UI
 		/// <returns></returns>
 		public Widget EnsureWidgetById(string id)
 		{
-			var result = FindWidgetById(id);
+			var result = FindChildById(id);
 			if (result == null)
 			{
 				throw new Exception(string.Format($"Could not find widget with id {id}"));
@@ -1261,6 +1240,11 @@ namespace Myra.Graphics2D.UI
 		{
 			_transform = null;
 			_inverseMatrixDirty = true;
+
+			foreach (var child in ChildrenCopy)
+			{
+				child.InvalidateTransform();
+			}
 		}
 
 		public virtual void InvalidateMeasure()
@@ -1324,22 +1308,30 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnMouseLeft()
 		{
+			ChildrenCopy.ProcessMouseMovement();
+
 			MouseLeft.Invoke(this);
 		}
 
 		public virtual void OnMouseEntered()
 		{
+			ChildrenCopy.ProcessMouseMovement();
+
 			MouseEntered.Invoke(this);
 		}
 
 		public virtual void OnMouseMoved()
 		{
+			ChildrenCopy.ProcessMouseMovement();
+
 			MouseMoved.Invoke(this);
 		}
 
 		public virtual void OnTouchDoubleClick()
 		{
 			TouchDoubleClick.Invoke(this);
+
+			ChildrenCopy.ProcessTouchDoubleClick();
 		}
 
 		public virtual void OnMouseWheel(float delta)
@@ -1350,18 +1342,24 @@ namespace Myra.Graphics2D.UI
 		public virtual void OnTouchLeft()
 		{
 			IsTouchInside = false;
+			ChildrenCopy.ProcessTouchMovement();
+
 			TouchLeft.Invoke(this);
 		}
 
 		public virtual void OnTouchEntered()
 		{
 			IsTouchInside = true;
+			ChildrenCopy.ProcessTouchMovement();
+
 			TouchEntered.Invoke(this);
 		}
 
 		public virtual void OnTouchMoved()
 		{
 			IsTouchInside = true;
+			ChildrenCopy.ProcessTouchMovement();
+
 			TouchMoved.Invoke(this);
 		}
 
@@ -1385,15 +1383,21 @@ namespace Myra.Graphics2D.UI
 				_startLeftTop = new Point(Left, Top);
 			}
 
+
+			var result = ChildrenCopy.ProcessTouchDown();
+
 			TouchDown.Invoke(this);
 
-			return true;
+			return result;
 		}
 
 		public virtual void OnTouchUp()
 		{
 			_startPos = null;
 			IsTouchInside = false;
+
+			ChildrenCopy.ProcessTouchUp();
+
 			TouchUp.Invoke(this);
 		}
 
@@ -1449,7 +1453,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			Parent.RemoveChild(this);
+			Parent.Children.Remove(this);
 		}
 
 		public void RemoveFromDesktop()

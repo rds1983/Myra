@@ -1,7 +1,6 @@
-﻿using System;
-using System.ComponentModel;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using Myra.Utility;
+using System.ComponentModel;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -13,67 +12,18 @@ using System.Drawing;
 
 namespace Myra.Graphics2D.UI
 {
-	public class SingleItemContainer<T> : Container where T : Widget
+	public class SingleItemContainer<T> : Widget where T : Widget
 	{
-		private T _internalChild;
-
 		[Browsable(false)]
 		[XmlIgnore]
 		protected internal virtual T InternalChild
 		{
-			get { return _internalChild; }
+			get { return Children.Count > 0 ? (T)Children[0] : null; }
 			set
 			{
-				if (_internalChild != null)
-				{
-					_internalChild.Parent = null;
-					_internalChild.Desktop = null;
-
-					_internalChild = null;
-				}
-
-				_internalChild = value;
-
-				if (_internalChild != null)
-				{
-					_internalChild.Parent = this;
-					_internalChild.Desktop = Desktop;
-				}
-
-				InvalidateChildren();
+				Children.Clear();
+				Children.Add(value);
 			}
-		}
-
-		public override int ChildrenCount
-		{
-			get
-			{
-				return InternalChild != null ? 1 : 0;
-			}
-		}
-
-		public override Widget GetChild(int index)
-		{
-			if (index < 0 ||
-				InternalChild == null ||
-				index >= 1)
-			{
-				throw new ArgumentOutOfRangeException("index");
-			}
-
-			return InternalChild;
-		}
-
-		protected override void InternalArrange()
-		{
-			base.InternalArrange();
-
-			if (InternalChild == null)
-			{
-				return;
-			}
-
-			InternalChild.Arrange(ActualBounds);
 		}
 
 		protected override Point InternalMeasure(Point availableSize)
@@ -86,16 +36,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			return result;
-		}
-
-		public override void RemoveChild(Widget widget)
-		{
-			if (widget != InternalChild)
-			{
-				return;
-			}
-
-			InternalChild = null;
 		}
 	}
 }
