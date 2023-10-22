@@ -28,10 +28,10 @@ namespace Myra.Graphics2D.UI
 
 	public class Grid : MultipleItemsContainerBase
 	{
-		internal static AttachedPropertyInfo<int> ColumnProperty = AttachedPropertiesRegistry.Create(typeof(Grid), "Column", 0);
-		internal static AttachedPropertyInfo<int> RowProperty = AttachedPropertiesRegistry.Create(typeof(Grid), "Row", 0);
-		internal static AttachedPropertyInfo<int> ColumnSpanProperty = AttachedPropertiesRegistry.Create(typeof(Grid), "ColumnSpan", 1);
-		internal static AttachedPropertyInfo<int> RowSpanProperty = AttachedPropertiesRegistry.Create(typeof(Grid), "RowSpan", 1);
+		public static AttachedPropertyInfo<int> ColumnProperty = AttachedPropertiesRegistry.Create(typeof(Grid), "Column", 0);
+		public static AttachedPropertyInfo<int> RowProperty = AttachedPropertiesRegistry.Create(typeof(Grid), "Row", 0);
+		public static AttachedPropertyInfo<int> ColumnSpanProperty = AttachedPropertiesRegistry.Create(typeof(Grid), "ColumnSpan", 1);
+		public static AttachedPropertyInfo<int> RowSpanProperty = AttachedPropertiesRegistry.Create(typeof(Grid), "RowSpan", 1);
 
 		private int _columnSpacing;
 		private int _rowSpacing;

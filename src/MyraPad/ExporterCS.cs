@@ -203,6 +203,21 @@ namespace MyraPad
 				}
 			}
 
+			var asBaseObject = w as BaseObject;
+			if (asBaseObject != null)
+			{
+				foreach(var pair in asBaseObject.AttachedPropertiesValues)
+				{
+					if (pair.Key == Grid.ColumnProperty.Id ||
+						pair.Key == Grid.RowProperty.Id || 
+						pair.Key == Grid.ColumnSpanProperty.Id ||
+						pair.Key == Grid.RowSpanProperty.Id)
+					{
+						sbBuild.Append($"\n\t\t\tGrid.Set{Grid.ColumnProperty.Name}({id}, {pair.Value});");
+					}
+				}
+			}
+
 			foreach (var subItem in subItems)
 			{
 				sbBuild.Append("\n\t\t\t");

@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace Myra.MML
 {
-	internal abstract class BaseAttachedPropertyInfo
+	public abstract class BaseAttachedPropertyInfo
 	{
 		public Type OwnerType { get; private set; }
 		public int Id { get; private set; }
@@ -29,7 +29,7 @@ namespace Myra.MML
 		public abstract void SetValueObject(BaseObject obj, object value);
 	}
 
-	internal class AttachedPropertyInfo<T>: BaseAttachedPropertyInfo
+	public class AttachedPropertyInfo<T>: BaseAttachedPropertyInfo
 	{
 		public T DefaultValue { get; private set; }
 		public override Type PropertyType => typeof(T);
