@@ -263,12 +263,12 @@ namespace Myra.Graphics2D.UI
 
 			_textField = new TextBox
 			{
-				GridRowSpan = 2,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
 				TextVerticalAlignment = VerticalAlignment.Center,
 				AcceptsKeyboardFocus = false
 			};
+			Grid.SetRowSpan(_textField, 2);
 
 			_textField.ValueChanging += _textField_ValueChanging;
 
@@ -279,21 +279,22 @@ namespace Myra.Graphics2D.UI
 
 			_upButton = new ImageButton
 			{
-				GridColumn = 1,
 				ContentVerticalAlignment = VerticalAlignment.Center,
 				ContentHorizontalAlignment = HorizontalAlignment.Center
 			};
+			Grid.SetColumn(_upButton, 1);
 			_upButton.Click += UpButtonOnUp;
 
 			InternalChild.Widgets.Add(_upButton);
 
 			_downButton = new ImageButton
 			{
-				GridColumn = 1,
-				GridRow = 1,
 				ContentVerticalAlignment = VerticalAlignment.Center,
 				ContentHorizontalAlignment = HorizontalAlignment.Center
 			};
+			Grid.SetColumn(_downButton, 1);
+			Grid.SetRow(_downButton, 1);
+
 			_downButton.Click += DownButtonOnUp;
 			InternalChild.Widgets.Add(_downButton);
 

@@ -185,10 +185,8 @@ namespace Myra.Graphics2D.UI
 			_titleLabel = new Label();
 			TitleGrid.Widgets.Add(_titleLabel);
 
-			CloseButton = new ImageButton
-			{
-				GridColumn = 1
-			};
+			CloseButton = new ImageButton();
+			Grid.SetColumn(CloseButton, 1);
 
 			CloseButton.Click += (sender, args) =>
 			{
@@ -255,6 +253,7 @@ namespace Myra.Graphics2D.UI
 
 		private void InternalShow(Desktop desktop, Point? position = null)
 		{
+			Visible = true;
 			Desktop = desktop;
 			Desktop.Widgets.Add(this);
 

@@ -16,6 +16,7 @@ using FontStashSharp;
 using FontStashSharp.RichText;
 using Myra.Graphics2D.Brushes;
 using AssetManagementBase;
+using System.Xml;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -88,9 +89,9 @@ namespace Myra.Graphics2D.UI.Properties
 					Object = value,
 					Filter = filter,
 					HorizontalAlignment = HorizontalAlignment.Stretch,
-					GridColumn = 1,
-					GridRow = 1
 				};
+				Grid.SetColumn(_propertyGrid, 1);
+				Grid.SetRow(_propertyGrid, 1);
 
 				// Mark
 				_mark = new ImageButton(null)
@@ -131,8 +132,8 @@ namespace Myra.Graphics2D.UI.Properties
 				var label = new Label(null)
 				{
 					Text = header,
-					GridColumn = 1
 				};
+				Grid.SetColumn(label, 1);
 				label.ApplyLabelStyle(parent.PropertyGridStyle.LabelStyle);
 
 				InternalChild.Widgets.Add(label);
@@ -482,8 +483,8 @@ namespace Myra.Graphics2D.UI.Properties
 				ContentHorizontalAlignment = HorizontalAlignment.Center,
 				Tag = value,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
-				GridColumn = 1
 			};
+			Grid.SetColumn(button, 1);
 
 			subGrid.Widgets.Add(button);
 
@@ -558,8 +559,8 @@ namespace Myra.Graphics2D.UI.Properties
 				ContentHorizontalAlignment = HorizontalAlignment.Center,
 				Tag = value,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
-				GridColumn = 1
 			};
+			Grid.SetColumn(button, 1);
 
 			subGrid.Widgets.Add(button);
 
@@ -824,8 +825,8 @@ namespace Myra.Graphics2D.UI.Properties
 				ContentHorizontalAlignment = HorizontalAlignment.Center,
 				Tag = value,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
-				GridColumn = 1
 			};
+			Grid.SetColumn(button, 1);
 
 			button.Click += (sender, args) =>
 			{
@@ -889,8 +890,8 @@ namespace Myra.Graphics2D.UI.Properties
 				ContentHorizontalAlignment = HorizontalAlignment.Center,
 				Tag = value,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
-				GridColumn = 1
 			};
+			Grid.SetColumn(button, 1);
 
 			subGrid.Widgets.Add(button);
 
@@ -998,8 +999,8 @@ namespace Myra.Graphics2D.UI.Properties
 				ContentHorizontalAlignment = HorizontalAlignment.Center,
 				Tag = value,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
-				GridColumn = 1
 			};
+			Grid.SetColumn(button, 1);
 
 			if (hasSetter)
 			{
@@ -1167,11 +1168,9 @@ namespace Myra.Graphics2D.UI.Properties
 					{
 						if (PassesFilter(record.Name))
 						{
-							var subGrid = new SubGrid(this, value, record.Name, DefaultCategoryName, string.Empty, record)
-							{
-								GridColumnSpan = 2,
-								GridRow = y
-							};
+							var subGrid = new SubGrid(this, value, record.Name, DefaultCategoryName, string.Empty, record);
+							Grid.SetColumnSpan(subGrid, 2);
+							Grid.SetRow(subGrid, y);
 
 							InternalChild.Widgets.Add(subGrid);
 
@@ -1212,14 +1211,14 @@ namespace Myra.Graphics2D.UI.Properties
 				{
 					Text = name,
 					VerticalAlignment = VerticalAlignment.Center,
-					GridColumn = 0,
-					GridRow = oldY
 				};
+				Grid.SetColumn(nameLabel, 0);
+				Grid.SetRow(nameLabel, oldY);
 
 				InternalChild.Widgets.Add(nameLabel);
 
-				valueWidget.GridColumn = 1;
-				valueWidget.GridRow = oldY;
+				Grid.SetColumn(valueWidget, 1);
+				Grid.SetRow(valueWidget, oldY);
 				valueWidget.HorizontalAlignment = HorizontalAlignment.Stretch;
 				valueWidget.VerticalAlignment = VerticalAlignment.Top;
 
@@ -1365,11 +1364,10 @@ namespace Myra.Graphics2D.UI.Properties
 					continue;
 				}
 
-				var subGrid = new SubGrid(this, Object, category.Key, category.Key, Filter, null)
-				{
-					GridColumnSpan = 2,
-					GridRow = y
-				};
+				var subGrid = new SubGrid(this, Object, category.Key, category.Key, Filter, null);
+				Grid.SetColumnSpan(subGrid, 2);
+				Grid.SetRow(subGrid, y); ;
+
 
 				if (subGrid.IsEmpty)
 				{

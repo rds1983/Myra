@@ -32,7 +32,7 @@ namespace Myra.Graphics2D.UI
 		{
 			ConfirmKey = Keys.Enter;
 
-			var buttonsGrid = new HorizontalStackPanel()
+			var buttonsPanel = new HorizontalStackPanel()
 			{
 				Spacing = 8,
 				HorizontalAlignment = HorizontalAlignment.Right
@@ -48,12 +48,11 @@ namespace Myra.Graphics2D.UI
 				OnOk();
 			};
 
-			buttonsGrid.Widgets.Add(ButtonOk);
+			buttonsPanel.Widgets.Add(ButtonOk);
 
 			ButtonCancel = new ImageTextButton
 			{
 				Text = "Cancel",
-				GridColumn = 1
 			};
 
 			ButtonCancel.Click += (sender, args) =>
@@ -62,9 +61,9 @@ namespace Myra.Graphics2D.UI
 				Close();
 			};
 
-			buttonsGrid.Widgets.Add(ButtonCancel);
+			buttonsPanel.Widgets.Add(ButtonCancel);
 
-			InternalChild.Widgets.Add(buttonsGrid);
+			InternalChild.Widgets.Add(buttonsPanel);
 		}
 
 		public override void OnKeyDown(Keys k)

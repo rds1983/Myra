@@ -94,10 +94,11 @@ namespace Myra.Graphics2D.UI
 						newContentProportions = InternalChild.ColumnsProportions;
 					}
 
-					_panelContent.GridRow = value == TabSelectorPosition.Top ? 1 : 0;
-					_panelContent.GridColumn = value == TabSelectorPosition.Left ? 1 : 0;
-					_gridButtons.GridRow = value == TabSelectorPosition.Bottom ? 1 : 0;
-					_gridButtons.GridColumn = value == TabSelectorPosition.Right ? 1 : 0;
+					Grid.SetColumn(_panelContent, value == TabSelectorPosition.Left ? 1 : 0);
+					Grid.SetRow(_panelContent, value == TabSelectorPosition.Top ? 1 : 0);
+
+					Grid.SetColumn(_gridButtons, value == TabSelectorPosition.Right ? 1 : 0);
+					Grid.SetRow(_gridButtons, value == TabSelectorPosition.Bottom ? 1 : 0);
 
 					if (newButtonProportions != _buttonProportions)
 					{
@@ -135,13 +136,13 @@ namespace Myra.Graphics2D.UI
 						Widget w = InternalChild.Widgets[i];
 						if (newValueIsTopOrBottom)
 						{
-							w.GridColumn = 0;
-							w.GridRow = i;
+							Grid.SetColumn(w, 0);
+							Grid.SetRow(w, i);
 						}
 						else
 						{
-							w.GridColumn = i;
-							w.GridRow = 0;
+							Grid.SetColumn(w, i);
+							Grid.SetRow(w, 0);
 						}
 					}
 
@@ -163,10 +164,10 @@ namespace Myra.Graphics2D.UI
 			_gridButtons = new Grid();
 			_panelContent = new SingleItemContainer<Widget>()
 			{
-				GridRow = 1,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch
 			};
+			Grid.SetRow(_panelContent, 1);
 
 			// Default to Top selector position:
 			_selectorPosition = TabSelectorPosition.Top;
@@ -178,6 +179,8 @@ namespace Myra.Graphics2D.UI
 			_contentProportions.Add(new Proportion(ProportionType.Fill));
 			InternalChild.Widgets.Add(_gridButtons);
 			InternalChild.Widgets.Add(_panelContent);
+
+			ClipToBounds = true;
 
 			SetStyle(styleName);
 		}
@@ -202,13 +205,13 @@ namespace Myra.Graphics2D.UI
 				var widget = _gridButtons.Widgets[i];
 				if (tabSelectorIsLeftOrRight)
 				{
-					widget.GridRow = i;
-					widget.GridColumn = 0;
+					Grid.SetColumn(widget, 0);
+					Grid.SetRow(widget, i);
 				}
 				else
 				{
-					widget.GridRow = 0;
-					widget.GridColumn = i;
+					Grid.SetColumn(widget, i);
+					Grid.SetRow(widget, 0);
 				}
 			}
 		}

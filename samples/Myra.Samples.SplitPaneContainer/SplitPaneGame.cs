@@ -53,8 +53,8 @@ namespace Myra.Samples.SplitPaneContainer
 			var buttonReset = new ImageTextButton
 			{
 				Text = "Reset",
-				GridColumn = 1
 			};
+			Grid.SetColumn(buttonReset, 1);
 
 			buttonReset.Click += (sender, args) =>
 			{
@@ -84,7 +84,7 @@ namespace Myra.Samples.SplitPaneContainer
 			_splitPane =
 				orientation == Orientation.Horizontal ? (SplitPane)new HorizontalSplitPane() : new VerticalSplitPane();
 
-			_splitPane.GridRow = 1;
+			Grid.SetRow(_splitPane, 1);
 
 			_splitPane.ProportionsChanged += SplitPaneOnProportionsChanged;
 

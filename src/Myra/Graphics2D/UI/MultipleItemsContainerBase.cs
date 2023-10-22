@@ -57,29 +57,39 @@ namespace Myra.Graphics2D.UI
 			{
 				foreach (Widget w in args.NewItems)
 				{
-					w.Desktop = Desktop;
-					w.Parent = this;
+					OnChildAdded(w);
 				}
 			}
 			else if (args.Action == NotifyCollectionChangedAction.Remove)
 			{
 				foreach (Widget w in args.OldItems)
 				{
-					w.Desktop = null;
-					w.Parent = null;
+					OnChildRemoved(w);
 				}
 			}
 			else if (args.Action == NotifyCollectionChangedAction.Reset)
 			{
 				foreach (Widget w in ChildrenCopy)
 				{
-					w.Desktop = null;
-					w.Parent = null;
+					OnChildRemoved(w);
 				}
 			}
 
 			InvalidateChildren();
 		}
+
+		protected virtual void OnChildAdded(Widget w)
+		{
+			w.Desktop = Desktop;
+			w.Parent = this;
+		}
+
+		protected virtual void OnChildRemoved(Widget w)
+		{
+			w.Desktop = null;
+			w.Parent = null;
+		}
+
 
 		public T AddChild<T>(T widget) where T : Widget
 		{

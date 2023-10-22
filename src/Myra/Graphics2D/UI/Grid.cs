@@ -27,6 +27,11 @@ namespace Myra.Graphics2D.UI
 
 	public class Grid : MultipleItemsContainerBase
 	{
+		private const int GridRowPropertyId = 0;
+		private const int GridColumnPropertyId = 1;
+		private const int GridRowSpanPropertyId = 2;
+		private const int GridColumnSpanPropertyId = 3;
+
 		private int _columnSpacing;
 		private int _rowSpacing;
 		private readonly ObservableCollection<Proportion> _columnsProportions = new ObservableCollection<Proportion>();
@@ -310,6 +315,18 @@ namespace Myra.Graphics2D.UI
 				_colWidths[col], _rowHeights[row]);
 		}
 
+		protected override void OnChildAdded(Widget w)
+		{
+			base.OnChildAdded(w);
+
+
+		}
+
+		protected override void OnChildRemoved(Widget w)
+		{
+			base.OnChildRemoved(w);
+		}
+
 		private void OnProportionsChanged(object sender, NotifyCollectionChangedEventArgs args)
 		{
 			if (args.Action == NotifyCollectionChangedAction.Add)
@@ -360,7 +377,7 @@ namespace Myra.Graphics2D.UI
 
 		private Point GetActualGridPosition(Widget child)
 		{
-			return new Point(child.GridColumn, child.GridRow);
+			return new Point(GetColumn(child), GetRow(child));
 		}
 
 		private void LayoutProcessFixedPart()
@@ -437,13 +454,13 @@ namespace Myra.Graphics2D.UI
 					_visibleWidgets.Add(child);
 
 					var gridPosition = GetActualGridPosition(child);
-					var c = gridPosition.X + Math.Max(child.GridColumnSpan, 1);
+					var c = gridPosition.X + Math.Max(GetColumnSpan(child), 1);
 					if (c > columns)
 					{
 						columns = c;
 					}
 
-					var r = gridPosition.Y + Math.Max(child.GridRowSpan, 1);
+					var r = gridPosition.Y + Math.Max(GetRowSpan(child), 1);
 					if (r > rows)
 					{
 						rows = r;
@@ -497,7 +514,7 @@ namespace Myra.Graphics2D.UI
 
 			foreach (var widget in _visibleWidgets)
 			{
-				_widgetsByGridPosition[widget.GridRow, widget.GridColumn].Add(widget);
+				_widgetsByGridPosition[GetRow(widget), GetColumn(widget)].Add(widget);
 			}
 
 			availableSize.X -= (_measureColWidths.Count - 1) * _columnSpacing;
@@ -532,12 +549,12 @@ namespace Myra.Graphics2D.UI
 							measuredSize = widget.Measure(availableSize);
 						}
 
-						if (widget.GridColumnSpan != 1)
+						if (GetColumnSpan(widget) != 1)
 						{
 							measuredSize.X = 0;
 						}
 
-						if (widget.GridRowSpan != 1)
+						if (GetRowSpan(widget) != 1)
 						{
 							measuredSize.Y = 0;
 						}
@@ -754,21 +771,21 @@ namespace Myra.Graphics2D.UI
 
 			var cellSize = Mathematics.PointZero;
 
-			for (var i = col; i < col + control.GridColumnSpan; ++i)
+			for (var i = col; i < col + GetColumnSpan(control); ++i)
 			{
 				cellSize.X += _colWidths[i];
 
-				if (i < col + control.GridColumnSpan - 1)
+				if (i < col + GetColumnSpan(control) - 1)
 				{
 					cellSize.X += _columnSpacing;
 				}
 			}
 
-			for (var i = row; i < row + control.GridRowSpan; ++i)
+			for (var i = row; i < row + GetRowSpan(control); ++i)
 			{
 				cellSize.Y += _rowHeights[i];
 
-				if (i < row + control.GridRowSpan - 1)
+				if (i < row + GetRowSpan(control) - 1)
 				{
 					cellSize.Y += _rowSpacing;
 				}
@@ -1020,6 +1037,90 @@ namespace Myra.Graphics2D.UI
 			}
 
 			return (SelectedRowIndex != null && SelectedColumnIndex != null);
+		}
+
+		public static int GetRow(Widget widget)
+		{
+			return widget.GetAttachedProperty(GridRowPropertyId, 0);
+		}
+
+		public static void SetRow(Widget widget, int value)
+		{
+			if (GetRow(widget) == value)
+			{
+				return;
+			}
+
+			if (value < 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(value));
+			}
+
+			widget.SetAttachedProperty(GridRowPropertyId, value);
+			widget.InvalidateMeasure();
+		}
+
+		public static int GetColumn(Widget widget)
+		{
+			return widget.GetAttachedProperty(GridColumnPropertyId, 0);
+		}
+
+		public static void SetColumn(Widget widget, int value)
+		{
+			if (GetColumn(widget) == value)
+			{
+				return;
+			}
+
+			if (value < 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(value));
+			}
+
+			widget.SetAttachedProperty(GridColumnPropertyId, value);
+			widget.InvalidateMeasure();
+		}
+
+		public static int GetRowSpan(Widget widget)
+		{
+			return widget.GetAttachedProperty(GridRowSpanPropertyId, 1);
+		}
+
+		public static void SetRowSpan(Widget widget, int value)
+		{
+			if (GetRowSpan(widget) == value)
+			{
+				return;
+			}
+
+			if (value < 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(value));
+			}
+
+			widget.SetAttachedProperty(GridRowSpanPropertyId, value);
+			widget.InvalidateMeasure();
+		}
+
+		public static int GetColumnSpan(Widget widget)
+		{
+			return widget.GetAttachedProperty(GridColumnSpanPropertyId, 1);
+		}
+
+		public static void SetColumnSpan(Widget widget, int value)
+		{
+			if (GetColumnSpan(widget) == value)
+			{
+				return;
+			}
+
+			if (value < 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(value));
+			}
+
+			widget.SetAttachedProperty(GridColumnSpanPropertyId, value);
+			widget.InvalidateMeasure();
 		}
 	}
 }

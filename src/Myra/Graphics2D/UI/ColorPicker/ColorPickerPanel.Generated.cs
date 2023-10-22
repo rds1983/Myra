@@ -54,7 +54,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_colorBackground.Width = 40;
 			_colorBackground.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
 			_colorBackground.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;
-			_colorBackground.GridColumnSpan = 3;
+			Grid.SetColumnSpan(_colorBackground, 3);
 			_colorBackground.Background = new SolidBrush("#FFFFFFFF");
 			_colorBackground.Id = "_colorBackground";
 
@@ -62,60 +62,60 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_colorDisplay.Width = 40;
 			_colorDisplay.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
 			_colorDisplay.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;
-			_colorDisplay.GridColumnSpan = 3;
+			Grid.SetColumnSpan(_colorDisplay, 3);
 			_colorDisplay.Id = "_colorDisplay";
 
 			var label1 = new Label();
 			label1.Text = "RGB";
-			label1.GridRow = 1;
+			Grid.SetRow(label1, 1);
 
 			_inputRGB = new TextBox();
-			_inputRGB.GridColumn = 1;
-			_inputRGB.GridRow = 1;
-			_inputRGB.GridColumnSpan = 2;
+			Grid.SetColumn(_inputRGB, 1);
+			Grid.SetRow(_inputRGB, 1);
+			Grid.SetColumnSpan(_inputRGB, 2);
 			_inputRGB.Id = "_inputRGB";
 
 			var label2 = new Label();
 			label2.Text = "HSV";
-			label2.GridRow = 2;
+			Grid.SetRow(label2, 2);
 
 			_inputHSV = new TextBox();
-			_inputHSV.GridColumn = 1;
-			_inputHSV.GridRow = 2;
-			_inputHSV.GridColumnSpan = 2;
+			Grid.SetColumn(_inputHSV, 1);
+			Grid.SetRow(_inputHSV, 2);
+			Grid.SetColumnSpan(_inputHSV, 2);
 			_inputHSV.Id = "_inputHSV";
 
 			var label3 = new Label();
 			label3.Text = "HEX";
-			label3.GridRow = 3;
+			Grid.SetRow(label3, 3);
 
 			_inputHEX = new TextBox();
-			_inputHEX.GridColumn = 1;
-			_inputHEX.GridRow = 3;
-			_inputHEX.GridColumnSpan = 2;
+			Grid.SetColumn(_inputHEX, 1);
+			Grid.SetRow(_inputHEX, 3);
+			Grid.SetColumnSpan(_inputHEX, 2);
 			_inputHEX.Id = "_inputHEX";
 
 			var label4 = new Label();
 			label4.Text = "Alpha";
-			label4.GridRow = 4;
+			Grid.SetRow(label4, 4);
 
 			_inputAlpha = new TextBox();
-			_inputAlpha.GridColumn = 2;
-			_inputAlpha.GridRow = 4;
+			Grid.SetColumn(_inputAlpha, 2);
+			Grid.SetRow(_inputAlpha, 4);
 			_inputAlpha.Id = "_inputAlpha";
 
 			_sliderAlpha = new HorizontalSlider();
 			_sliderAlpha.Maximum = 255;
 			_sliderAlpha.Height = 21;
-			_sliderAlpha.GridColumn = 1;
-			_sliderAlpha.GridRow = 4;
+			Grid.SetColumn(_sliderAlpha, 1);
+			Grid.SetRow(_sliderAlpha, 4);
 			_sliderAlpha.Id = "_sliderAlpha";
 
 			_saveColor = new TextButton();
 			_saveColor.Text = "Save Color";
 			_saveColor.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Right;
-			_saveColor.GridRow = 5;
-			_saveColor.GridColumnSpan = 3;
+			Grid.SetRow(_saveColor, 5);
+			Grid.SetColumnSpan(_saveColor, 3);
 			_saveColor.Id = "_saveColor";
 
 			var grid1 = new Grid();

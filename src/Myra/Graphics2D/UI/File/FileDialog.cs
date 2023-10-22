@@ -87,7 +87,7 @@ namespace Myra.Graphics2D.UI.File
 
 						if (asLabel.Text == FileName)
 						{
-							_gridFiles.SelectedRowIndex = asLabel.GridRow;
+							_gridFiles.SelectedRowIndex = Grid.GetRow(asLabel);
 							break;
 						}
 					}
@@ -388,19 +388,19 @@ namespace Myra.Graphics2D.UI.File
 				var image = new Image
 				{
 					Renderable = iconFolder,
-					GridRow = gridY,
 					HorizontalAlignment = HorizontalAlignment.Center,
 					VerticalAlignment = VerticalAlignment.Center
 				};
+				Grid.SetRow(image, gridY);
 
 				_gridFiles.Widgets.Add(image);
 
 				var name = new Label
 				{
 					Text = Path.GetFileName(f),
-					GridColumn = 1,
-					GridRow = gridY
 				};
+				Grid.SetColumn(name, 1);
+				Grid.SetRow(name, gridY);
 
 				_gridFiles.Widgets.Add(name);
 
@@ -448,9 +448,9 @@ namespace Myra.Graphics2D.UI.File
 				var name = new Label
 				{
 					Text = Path.GetFileName(f),
-					GridColumn = 1,
-					GridRow = gridY
 				};
+				Grid.SetColumn(name, 1);
+				Grid.SetRow(name, gridY);
 
 				_gridFiles.Widgets.Add(name);
 

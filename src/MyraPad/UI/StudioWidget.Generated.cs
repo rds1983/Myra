@@ -156,7 +156,7 @@ namespace MyraPad.UI
 			_textSource.Multiline = true;
 			_textSource.Wrap = true;
 			_textSource.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Stretch;
-			_textSource.GridRow = 2;
+			Grid.SetRow(_textSource, 2);
 			_textSource.Id = "_textSource";
 
 			var scrollViewer1 = new ScrollViewer();

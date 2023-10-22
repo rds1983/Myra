@@ -125,11 +125,11 @@ namespace Myra.Graphics2D.UI
 			{
 				if (Orientation == Orientation.Horizontal)
 				{
-					widget.GridColumn = index;
+					Grid.SetColumn(widget, index);
 				}
 				else
 				{
-					widget.GridRow = index;
+					Grid.SetRow(widget, index);
 				}
 
 				++index;

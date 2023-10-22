@@ -6,6 +6,7 @@ using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
 using Myra.Attributes;
+using System.Reflection.Metadata;
 
 namespace Myra.Graphics2D.UI
 {
@@ -251,13 +252,13 @@ namespace Myra.Graphics2D.UI
 					if (Orientation == Orientation.Horizontal)
 					{
 						_handlesSize += handleSize;
-						handle.GridColumn = i*2 - 1;
+						Grid.SetColumn(handle, i * 2 - 1);
 						InternalChild.ColumnsProportions.Add(proportion);
 					}
 					else
 					{
 						_handlesSize += handleSize;
-						handle.GridRow = i*2 - 1;
+						Grid.SetRow(handle, i * 2 - 1);
 						InternalChild.RowsProportions.Add(proportion);
 					}
 
@@ -272,12 +273,12 @@ namespace Myra.Graphics2D.UI
 				// Set grid coord and add widget itself
 				if (Orientation == Orientation.Horizontal)
 				{
-					w.GridColumn = i*2;
+					Grid.SetColumn(w, i * 2);
 					InternalChild.ColumnsProportions.Add(proportion);
 				}
 				else
 				{
-					w.GridRow = i*2;
+					Grid.SetRow(w, i * 2);
 					InternalChild.RowsProportions.Add(proportion);
 				}
 

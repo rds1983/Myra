@@ -18,19 +18,19 @@ namespace Myra.Graphics2D.UI.File
 			_buttonForward = new ImageButton();
 			_buttonForward.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
 			_buttonForward.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
-			_buttonForward.GridColumn = 1;
+			Grid.SetColumn(_buttonForward, 1);
 			_buttonForward.Id = "_buttonForward";
 
 			_textFieldPath = new TextBox();
 			_textFieldPath.Readonly = true;
 			_textFieldPath.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
-			_textFieldPath.GridColumn = 2;
+			Grid.SetColumn(_textFieldPath, 2);
 			_textFieldPath.Id = "_textFieldPath";
 
 			_buttonParent = new ImageButton();
 			_buttonParent.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
 			_buttonParent.VerticalAlignment = Myra.Graphics2D.UI.VerticalAlignment.Center;
-			_buttonParent.GridColumn = 3;
+			Grid.SetColumn(_buttonParent, 3);
 			_buttonParent.Id = "_buttonParent";
 
 			var grid1 = new Grid();
@@ -90,7 +90,7 @@ namespace Myra.Graphics2D.UI.File
 			_textBlockFileName.Id = "_textBlockFileName";
 
 			_textFieldFileName = new TextBox();
-			_textFieldFileName.GridColumn = 1;
+			Grid.SetColumn(_textFieldFileName, 1);
 			_textFieldFileName.Id = "_textFieldFileName";
 
 			var grid2 = new Grid();

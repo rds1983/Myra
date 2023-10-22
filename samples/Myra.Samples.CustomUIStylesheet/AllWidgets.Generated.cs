@@ -20,47 +20,47 @@ namespace Myra.Samples.CustomUIStylesheet
 
 			_button = new ImageTextButton();
 			_button.Text = "Button";
-			_button.GridColumn = 1;
+			Grid.SetColumn(_button, 1);
 			_button.Id = "_button";
 
 			_textButtonLabel = new Label();
 			_textButtonLabel.Text = "Text Button:";
-			_textButtonLabel.GridRow = 1;
+			Grid.SetRow(_textButtonLabel, 1);
 			_textButtonLabel.Id = "_textButtonLabel";
 
 			_textButton = new TextButton();
 			_textButton.Text = "Button 2";
-			_textButton.GridColumn = 1;
-			_textButton.GridRow = 1;
+			Grid.SetColumn(_textButton, 1);
+			Grid.SetRow(_textButton, 1);
 			_textButton.Id = "_textButton";
 
 			var label2 = new Label();
 			label2.Text = "Image Button:";
-			label2.GridRow = 2;
+			Grid.SetRow(label2, 2);
 
 			_imageButton = new ImageButton();
-			_imageButton.GridColumn = 1;
-			_imageButton.GridRow = 2;
+			Grid.SetColumn(_imageButton, 1);
+			Grid.SetRow(_imageButton, 2);
 			_imageButton.Id = "_imageButton";
 
 			var checkBox1 = new CheckBox();
 			checkBox1.Text = "This is checkbox";
 			checkBox1.ImageWidth = 10;
 			checkBox1.ImageHeight = 10;
-			checkBox1.GridRow = 3;
-			checkBox1.GridColumnSpan = 2;
+			Grid.SetRow(checkBox1, 3);
+			Grid.SetColumnSpan(checkBox1, 2);
 
 			var label3 = new Label();
 			label3.Text = "Horizontal Slider:";
-			label3.GridRow = 4;
+			Grid.SetRow(label3, 4);
 
 			var horizontalSlider1 = new HorizontalSlider();
-			horizontalSlider1.GridColumn = 1;
-			horizontalSlider1.GridRow = 4;
+			Grid.SetColumn(horizontalSlider1, 1);
+			Grid.SetRow(horizontalSlider1, 4);
 
 			var label4 = new Label();
 			label4.Text = "Combo Box:";
-			label4.GridRow = 5;
+			Grid.SetRow(label4, 5);
 
 			var listItem1 = new ListItem();
 			listItem1.Text = "Red";
@@ -76,23 +76,23 @@ namespace Myra.Samples.CustomUIStylesheet
 
 			var comboBox1 = new ComboBox();
 			comboBox1.Width = 200;
-			comboBox1.GridColumn = 1;
-			comboBox1.GridRow = 5;
+			Grid.SetColumn(comboBox1, 1);
+			Grid.SetRow(comboBox1, 5);
 			comboBox1.Items.Add(listItem1);
 			comboBox1.Items.Add(listItem2);
 			comboBox1.Items.Add(listItem3);
 
 			var label5 = new Label();
 			label5.Text = "Text Field:";
-			label5.GridRow = 6;
+			Grid.SetRow(label5, 6);
 
 			var textBox1 = new TextBox();
-			textBox1.GridColumn = 1;
-			textBox1.GridRow = 6;
+			Grid.SetColumn(textBox1, 1);
+			Grid.SetRow(textBox1, 6);
 
 			var label6 = new Label();
 			label6.Text = "List Box:";
-			label6.GridRow = 7;
+			Grid.SetRow(label6, 7);
 
 			var listItem4 = new ListItem();
 			listItem4.Text = "Red";
@@ -108,15 +108,15 @@ namespace Myra.Samples.CustomUIStylesheet
 
 			var listBox1 = new ListBox();
 			listBox1.Width = 200;
-			listBox1.GridColumn = 1;
-			listBox1.GridRow = 7;
+			Grid.SetColumn(listBox1, 1);
+			Grid.SetRow(listBox1, 7);
 			listBox1.Items.Add(listItem4);
 			listBox1.Items.Add(listItem5);
 			listBox1.Items.Add(listItem6);
 
 			var label7 = new Label();
 			label7.Text = "Tree";
-			label7.GridRow = 8;
+			Grid.SetRow(label7, 8);
 
 			_gridRight = new Grid();
 			_gridRight.ColumnSpacing = 8;
@@ -159,7 +159,7 @@ namespace Myra.Samples.CustomUIStylesheet
 
 			var verticalSlider1 = new VerticalSlider();
 			verticalSlider1.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
-			verticalSlider1.GridRow = 1;
+			Grid.SetRow(verticalSlider1, 1);
 
 			var grid1 = new Grid();
 			grid1.RowSpacing = 8;
@@ -182,12 +182,12 @@ namespace Myra.Samples.CustomUIStylesheet
 			label9.Text = "Progress Bars:";
 
 			_horizontalProgressBar = new HorizontalProgressBar();
-			_horizontalProgressBar.GridRow = 1;
+			Grid.SetRow(_horizontalProgressBar, 1);
 			_horizontalProgressBar.Id = "_horizontalProgressBar";
 
 			_verticalProgressBar = new VerticalProgressBar();
 			_verticalProgressBar.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
-			_verticalProgressBar.GridRow = 2;
+			Grid.SetRow(_verticalProgressBar, 2);
 			_verticalProgressBar.Id = "_verticalProgressBar";
 
 			var grid2 = new Grid();
@@ -216,8 +216,6 @@ namespace Myra.Samples.CustomUIStylesheet
 			verticalSplitPane1.Widgets.Add(grid1);
 			verticalSplitPane1.Widgets.Add(grid2);
 
-			
-			GridRow = 1;
 			Widgets.Add(scrollViewer1);
 			Widgets.Add(verticalSplitPane1);
 		}

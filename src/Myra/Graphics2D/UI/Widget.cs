@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 using Myra.MML;
 using Myra.Graphics2D.UI.Properties;
 using Myra.Attributes;
+using System.Collections.Generic;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -46,7 +47,6 @@ namespace Myra.Graphics2D.UI
 		private Thickness _margin, _borderThickness, _padding;
 		private int _left, _top;
 		private int? _minWidth, _minHeight, _maxWidth, _maxHeight, _width, _height;
-		private int _gridColumn, _gridRow, _gridColumnSpan = 1, _gridRowSpan = 1;
 		private int _zIndex;
 		private HorizontalAlignment _horizontalAlignment = HorizontalAlignment.Left;
 		private VerticalAlignment _verticalAlignment = VerticalAlignment.Top;
@@ -73,6 +73,10 @@ namespace Myra.Graphics2D.UI
 		private Transform? _transform;
 		private Matrix _inverseMatrix;
 		private bool _inverseMatrixDirty = true;
+
+		[Browsable(false)]
+		public readonly Dictionary<int, object> AttachedProperties = new Dictionary<int, object>();
+
 
 		/// <summary>
 		/// Internal use only. (MyraPad)
@@ -350,96 +354,37 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[Category("Layout")]
-		[DefaultValue(0)]
+		[Browsable(false)]
+		[Obsolete("Use Grid.GetColumn/Grid.SetColumn")]
+
 		public int GridColumn
 		{
-			get { return _gridColumn; }
-
-			set
-			{
-				if (value == _gridColumn)
-				{
-					return;
-				}
-
-				if (value < 0)
-				{
-					throw new ArgumentOutOfRangeException("value");
-				}
-
-				_gridColumn = value;
-				InvalidateMeasure();
-			}
+			get => Grid.GetColumn(this);
+			set => Grid.SetColumn(this, value);
 		}
 
-		[Category("Layout")]
-		[DefaultValue(0)]
+		[Browsable(false)]
+		[Obsolete("Use Grid.GetColumn/Grid.SetColumn")]
 		public int GridRow
 		{
-			get { return _gridRow; }
-
-			set
-			{
-				if (value == _gridRow)
-				{
-					return;
-				}
-
-				if (value < 0)
-				{
-					throw new ArgumentOutOfRangeException("value");
-				}
-
-				_gridRow = value;
-				InvalidateMeasure();
-			}
+			get => Grid.GetRow(this);
+			set => Grid.SetRow(this, value);
 		}
 
-		[Category("Layout")]
-		[DefaultValue(1)]
+		[Browsable(false)]
+		[Obsolete("Use Grid.GetColumnSpan/Grid.SetColumnSpan")]
 		public int GridColumnSpan
 		{
-			get { return _gridColumnSpan; }
-
-			set
-			{
-				if (value == _gridColumnSpan)
-				{
-					return;
-				}
-
-				if (value < 0)
-				{
-					throw new ArgumentOutOfRangeException("value");
-				}
-
-				_gridColumnSpan = value;
-				InvalidateMeasure();
-			}
+			get => Grid.GetColumnSpan(this);
+			set => Grid.SetColumnSpan(this, value);
 		}
 
-		[Category("Layout")]
-		[DefaultValue(1)]
+		[Browsable(false)]
+		[Obsolete("Use Grid.GetColumnSpan/Grid.SetColumnSpan")]
 		public int GridRowSpan
 		{
-			get { return _gridRowSpan; }
-
-			set
-			{
-				if (value == _gridRowSpan)
-				{
-					return;
-				}
-
-				if (value < 0)
-				{
-					throw new ArgumentOutOfRangeException("value");
-				}
-
-				_gridRowSpan = value;
-				InvalidateMeasure();
-			}
+			get => Grid.GetRowSpan(this);
+			set => Grid.SetRowSpan(this, value);
 		}
 
 		[Category("Behavior")]
@@ -1642,6 +1587,21 @@ namespace Myra.Graphics2D.UI
 		private void DesktopTouchUp(object sender, EventArgs args)
 		{
 			_startPos = null;
+		}
+
+		internal void SetAttachedProperty<T>(int propertyId, T value)
+		{
+			AttachedProperties[propertyId] = value;
+		}
+
+		internal T GetAttachedProperty<T>(int propertyId, T defaultValue)
+		{
+			if (AttachedProperties.TryGetValue(propertyId, out var value))
+			{
+				return (T)value;
+			}
+
+			return defaultValue;
 		}
 	}
 }

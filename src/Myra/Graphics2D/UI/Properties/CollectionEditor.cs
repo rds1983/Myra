@@ -46,7 +46,8 @@ namespace Myra.Graphics2D.UI.Properties
 
 			splitPanel.Widgets.Add(_listItems);
 
-			_propertyGrid = new PropertyGrid { GridColumn = 1 };
+			_propertyGrid = new PropertyGrid();
+			Grid.SetColumn(_propertyGrid, 1);
 			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
 			splitPanel.Widgets.Add(_propertyGrid);
 
@@ -55,9 +56,10 @@ namespace Myra.Graphics2D.UI.Properties
 
 			var buttonsGrid = new Grid
 			{
-				GridRow = 1,
 				ColumnSpacing = 4
 			};
+
+			Grid.SetRow(buttonsGrid, 1);
 
 			buttonsGrid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
 			buttonsGrid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
@@ -71,24 +73,24 @@ namespace Myra.Graphics2D.UI.Properties
 			_buttonDelete = new ImageTextButton
 			{
 				Text = "Delete",
-				GridColumn = 1
 			};
+			Grid.SetColumn(_buttonDelete, 1);
 			_buttonDelete.Click += ButtonDeleteOnUp;
 			buttonsGrid.Widgets.Add(_buttonDelete);
 
 			_buttonMoveUp = new ImageTextButton
 			{
 				Text = "Up",
-				GridColumn = 2
 			};
+			Grid.SetColumn(_buttonDelete, 2);
 			_buttonMoveUp.Click += ButtonMoveUpOnUp;
 			buttonsGrid.Widgets.Add(_buttonMoveUp);
 
 			_buttonMoveDown = new ImageTextButton
 			{
 				Text = "Down",
-				GridColumn = 3
 			};
+			Grid.SetColumn(_buttonDelete, 3);
 			_buttonMoveDown.Click += ButtonMoveDownOnUp;
 			buttonsGrid.Widgets.Add(_buttonMoveDown);
 

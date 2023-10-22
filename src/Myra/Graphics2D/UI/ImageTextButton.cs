@@ -312,50 +312,55 @@ namespace Myra.Graphics2D.UI
 			switch (value)
 			{
 				case TextPositionEnum.Right:
-					_image.GridColumn = 0;
-					_image.GridRow = 0;
-					_label.GridColumn = 1;
-					_label.GridRow = 0;
+					Grid.SetColumn(_image, 0);
+					Grid.SetRow(_image, 0);
+					Grid.SetColumn(_label, 1);
+					Grid.SetRow(_label, 0);
 					InternalChild.Widgets.Add(_image);
 					InternalChild.Widgets.Add(_label);
 					break;
 				case TextPositionEnum.Left:
-					_label.GridColumn = 0;
-					_label.GridColumn = 1;
-					_image.GridRow = 0;
-					_image.GridColumn = 1;
+					Grid.SetColumn(_image, 1);
+					Grid.SetRow(_image, 0);
+					Grid.SetColumn(_label, 0);
+					Grid.SetRow(_label, 0);
+
 					InternalChild.Widgets.Add(_image);
 					InternalChild.Widgets.Add(_label);
 					break;
 				case TextPositionEnum.OverlapsImage:
-					_image.GridColumn = 0;
-					_image.GridRow = 0;
-					_label.GridColumn = 0;
-					_label.GridColumn = 1;
+					Grid.SetColumn(_image, 0);
+					Grid.SetRow(_image, 0);
+					Grid.SetColumn(_label, 0);
+					Grid.SetRow(_label, 0);
+
 					InternalChild.Widgets.Add(_image);
 					InternalChild.Widgets.Add(_label);
 					break;
 				case TextPositionEnum.BehindImage:
-					_image.GridColumn = 0;
-					_image.GridRow = 0;
-					_label.GridColumn = 0;
-					_label.GridColumn = 1;
+					Grid.SetColumn(_image, 0);
+					Grid.SetRow(_image, 0);
+					Grid.SetColumn(_label, 0);
+					Grid.SetRow(_label, 0);
+
 					InternalChild.Widgets.Add(_label);
 					InternalChild.Widgets.Add(_image);
 					break;
 				case TextPositionEnum.Top:
-					_image.GridColumn = 0;
-					_image.GridRow = 1;
-					_label.GridColumn = 0;
-					_label.GridRow = 0;
+					Grid.SetColumn(_image, 0);
+					Grid.SetRow(_image, 1);
+					Grid.SetColumn(_label, 0);
+					Grid.SetRow(_label, 0);
+
 					InternalChild.Widgets.Add(_image);
 					InternalChild.Widgets.Add(_label);
 					break;
 				case TextPositionEnum.Bottom:
-					_image.GridColumn = 0;
-					_image.GridRow = 0;
-					_label.GridColumn = 0;
-					_label.GridRow = 1;
+					Grid.SetColumn(_image, 0);
+					Grid.SetRow(_image, 0);
+					Grid.SetColumn(_label, 0);
+					Grid.SetRow(_label, 1);
+
 					InternalChild.Widgets.Add(_image);
 					InternalChild.Widgets.Add(_label);
 					break;

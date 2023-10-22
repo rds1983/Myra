@@ -776,25 +776,25 @@ namespace Myra.Graphics2D.UI
 				{
 					if (Orientation == Orientation.Horizontal)
 					{
-						menuItem.Label.GridColumn = index;
-						menuItem.Label.GridRow = 0;
+						Grid.SetColumn(menuItem.Label, index);
+						Grid.SetRow(menuItem.Label, 0);
 					}
 					else
 					{
 						var colIndex = 0;
 						if (hasImage)
 						{
-							menuItem.ImageWidget.GridColumn = colIndex++;
-							menuItem.ImageWidget.GridRow = index;
+							Grid.SetColumn(menuItem.ImageWidget, colIndex++);
+							Grid.SetRow(menuItem.ImageWidget, index);
 						}
 
-						menuItem.Label.GridColumn = colIndex++;
-						menuItem.Label.GridRow = index;
+						Grid.SetColumn(menuItem.Label, colIndex++);
+						Grid.SetRow(menuItem.Label, index);
 
 						if (hasShortcut)
 						{
-							menuItem.Shortcut.GridColumn = colIndex++;
-							menuItem.Shortcut.GridRow = index;
+							Grid.SetColumn(menuItem.Shortcut, colIndex++);
+							Grid.SetRow(menuItem.Shortcut, index);
 						}
 					}
 				} else
@@ -802,14 +802,14 @@ namespace Myra.Graphics2D.UI
 					var separator = (MenuSeparator)item;
 					if (Orientation == Orientation.Horizontal)
 					{
-						separator.Separator.GridColumn = index;
-						separator.Separator.GridRow = 0;
+						Grid.SetColumn(separator.Separator, index);
+						Grid.SetRow(separator.Separator, 0);
 					}
 					else
 					{
-						separator.Separator.GridColumn = 0;
-						separator.Separator.GridColumnSpan = separatorSpan;
-						separator.Separator.GridRow = index;
+						Grid.SetColumn(separator.Separator, 0);
+						Grid.SetRow(separator.Separator, index);
+						Grid.SetColumnSpan(separator.Separator, separatorSpan);
 					}
 				}
 

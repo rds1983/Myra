@@ -59,9 +59,9 @@ namespace Myra.Graphics2D.UI
 				Enabled = true,
 				HorizontalAlignment = HorizontalAlignment.Left,
 				VerticalAlignment = VerticalAlignment.Top,
-				GridRow = InternalChild.Widgets.Count,
 				Visible = true
 			};
+			Grid.SetRow(optionsCheckBox, InternalChild.Widgets.Count);
 
 			optionsCheckBox.PressedChanged += (s, a) =>
 			{

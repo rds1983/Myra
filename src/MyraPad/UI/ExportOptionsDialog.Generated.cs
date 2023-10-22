@@ -19,33 +19,33 @@ namespace MyraPad.UI
 		{
 			var label1 = new Label();
 			label1.Text = "Class Name:";
-			label1.GridRow = 1;
+			Grid.SetRow(label1, 1);
 
 			_textClassName = new TextBox();
-			_textClassName.GridColumn = 1;
-			_textClassName.GridRow = 1;
+			Grid.SetColumn(_textClassName, 1);
+			Grid.SetRow(_textClassName, 1);
 			_textClassName.Id = "_textClassName";
 
 			var label2 = new Label();
 			label2.Text = "Output Path:";
-			label2.GridRow = 2;
+			Grid.SetRow(label2, 2);
 
 			_textOutputPath = new TextBox();
-			_textOutputPath.GridColumn = 1;
-			_textOutputPath.GridRow = 2;
+			Grid.SetColumn(_textOutputPath, 1);
+			Grid.SetRow(_textOutputPath, 2);
 			_textOutputPath.Id = "_textOutputPath";
 
 			_buttonChangeOutputPath = new TextButton();
 			_buttonChangeOutputPath.Text = "Change...";
-			_buttonChangeOutputPath.GridColumn = 2;
-			_buttonChangeOutputPath.GridRow = 2;
+			Grid.SetColumn(_buttonChangeOutputPath, 2);
+			Grid.SetRow(_buttonChangeOutputPath, 2);
 			_buttonChangeOutputPath.Id = "_buttonChangeOutputPath";
 
 			var label3 = new Label();
 			label3.Text = "Namespace:";
 
 			_textNamespace = new TextBox();
-			_textNamespace.GridColumn = 1;
+			Grid.SetColumn(_textNamespace, 1);
 			_textNamespace.Id = "_textNamespace";
 
 			Root = new Grid();

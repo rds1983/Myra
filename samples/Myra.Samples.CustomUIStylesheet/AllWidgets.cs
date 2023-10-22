@@ -20,9 +20,9 @@ namespace Myra.Samples.CustomUIStylesheet
 			var tree = new Tree
 			{
 				HasRoot = false,
-				GridColumn = 1,
-				GridRow = 8
 			};
+			Grid.SetColumn(tree, 1);
+			Grid.SetRow(tree, 8);
 
 			var node1 = tree.AddSubNode("node1");
 			var node2 = node1.AddSubNode("node2");

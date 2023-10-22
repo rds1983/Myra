@@ -161,18 +161,19 @@ namespace Myra.Graphics2D.UI.ColorPicker
 					{
 						HorizontalAlignment = HorizontalAlignment.Stretch,
 						VerticalAlignment = VerticalAlignment.Stretch,
-						GridRow = row,
-						GridColumn = col,
 						Renderable = checkerboardRenderable,
 					};
+					Grid.SetRow(background, row);
+					Grid.SetColumn(background, col);
+
 					var image = new Image
 					{
 						HorizontalAlignment = HorizontalAlignment.Stretch,
 						VerticalAlignment = VerticalAlignment.Stretch,
-						GridRow = row,
-						GridColumn = col,
 						Renderable = DefaultAssets.WhiteRegion
 					};
+					Grid.SetRow(image, row);
+					Grid.SetColumn(image, col);
 
 					_userColors.Widgets.Add(background);
 					_userColors.Widgets.Add(image);
