@@ -40,11 +40,11 @@ namespace Myra.Graphics2D.UI
 		private int? _selectedRowIndex = null;
 		private int? _selectedColumnIndex = null;
 
-		[Category("Behavior")]
+		[Category("Debug")]
 		[DefaultValue(false)]
 		public bool ShowGridLines { get; set; }
 
-		[Category("Behavior")]
+		[Category("Debug")]
 		[DefaultValue("White")]
 		public Color GridLinesColor { get; set; }
 
