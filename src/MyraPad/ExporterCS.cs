@@ -208,12 +208,26 @@ namespace MyraPad
 			{
 				foreach(var pair in asBaseObject.AttachedPropertiesValues)
 				{
-					if (pair.Key == Grid.ColumnProperty.Id ||
-						pair.Key == Grid.RowProperty.Id || 
-						pair.Key == Grid.ColumnSpanProperty.Id ||
-						pair.Key == Grid.RowSpanProperty.Id)
+					BaseAttachedPropertyInfo property = null;
+					if (pair.Key == Grid.ColumnProperty.Id)
 					{
-						sbBuild.Append($"\n\t\t\tGrid.Set{Grid.ColumnProperty.Name}({id}, {pair.Value});");
+						property = Grid.ColumnProperty;
+					} else if (pair.Key == Grid.RowProperty.Id)
+					{
+						property = Grid.RowProperty;
+					}
+					else if (pair.Key == Grid.ColumnSpanProperty.Id)
+					{
+						property = Grid.ColumnSpanProperty;
+					}
+					else if (pair.Key == Grid.RowSpanProperty.Id)
+					{
+						property = Grid.RowSpanProperty;
+					}
+
+					if (property != null)
+					{
+						sbBuild.Append($"\n\t\t\tGrid.Set{property.Name}({id}, {pair.Value});");
 					}
 				}
 			}
