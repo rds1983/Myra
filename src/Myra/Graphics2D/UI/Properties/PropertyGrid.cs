@@ -178,6 +178,7 @@ namespace Myra.Graphics2D.UI.Properties
 		private bool _ignoreCollections;
 		private readonly PropertyGridSettings _settings = new PropertyGridSettings();
 		private string _filter;
+		private Type _parentType;
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -201,6 +202,29 @@ namespace Myra.Graphics2D.UI.Properties
 
 				_object = value;
 				Rebuild();
+			}
+		}
+
+		/// <summary>
+		/// Used to determine the attached properties
+		/// </summary>
+		[Browsable(false)]
+		[XmlIgnore]
+		public Type ParentType
+		{
+			get
+			{
+				if (_parentGrid != null)
+				{
+					return _parentGrid.ParentType;
+				}
+
+				return _parentType;
+			}
+
+			set
+			{
+				_parentType = value;
 			}
 		}
 
@@ -1252,6 +1276,7 @@ namespace Myra.Graphics2D.UI.Properties
 				return;
 			}
 
+			// Properties
 			var properties = from p in _object.GetType().GetProperties() select p;
 			var records = new List<Record>();
 			foreach (var property in properties)
@@ -1289,6 +1314,7 @@ namespace Myra.Graphics2D.UI.Properties
 				records.Add(record);
 			}
 
+			// Fields
 			var fields = from f in _object.GetType().GetFields() select f;
 			foreach (var field in fields)
 			{
@@ -1320,6 +1346,21 @@ namespace Myra.Graphics2D.UI.Properties
 				};
 
 				records.Add(record);
+			}
+
+			// Attached properties
+			var asWidget = _object as Widget;
+			if (asWidget != null && ParentType != null)
+			{
+				var attachedProperties = AttachedPropertiesRegistry.GetPropertiesOfType(ParentType);
+				foreach (var attachedProperty in attachedProperties)
+				{
+					var record = new AttachedPropertyRecord(attachedProperty)
+					{
+						Category = ParentType.Name
+					};
+					records.Add(record);
+				}
 			}
 
 			// Sort by categories

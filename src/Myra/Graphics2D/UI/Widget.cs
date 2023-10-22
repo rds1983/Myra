@@ -74,10 +74,6 @@ namespace Myra.Graphics2D.UI
 		private Matrix _inverseMatrix;
 		private bool _inverseMatrixDirty = true;
 
-		[Browsable(false)]
-		public readonly Dictionary<int, object> AttachedProperties = new Dictionary<int, object>();
-
-
 		/// <summary>
 		/// Internal use only. (MyraPad)
 		/// </summary>
@@ -1587,21 +1583,6 @@ namespace Myra.Graphics2D.UI
 		private void DesktopTouchUp(object sender, EventArgs args)
 		{
 			_startPos = null;
-		}
-
-		internal void SetAttachedProperty<T>(int propertyId, T value)
-		{
-			AttachedProperties[propertyId] = value;
-		}
-
-		internal T GetAttachedProperty<T>(int propertyId, T defaultValue)
-		{
-			if (AttachedProperties.TryGetValue(propertyId, out var value))
-			{
-				return (T)value;
-			}
-
-			return defaultValue;
 		}
 	}
 }

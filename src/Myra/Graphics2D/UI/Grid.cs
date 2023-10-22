@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using Myra.Utility;
 using System.Xml.Serialization;
+using Myra.MML;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -27,10 +28,10 @@ namespace Myra.Graphics2D.UI
 
 	public class Grid : MultipleItemsContainerBase
 	{
-		private const int GridRowPropertyId = 0;
-		private const int GridColumnPropertyId = 1;
-		private const int GridRowSpanPropertyId = 2;
-		private const int GridColumnSpanPropertyId = 3;
+		internal static AttachedPropertyInfo<int> ColumnProperty = AttachedPropertiesRegistry.Create(typeof(Grid), "Column", 0);
+		internal static AttachedPropertyInfo<int> RowProperty = AttachedPropertiesRegistry.Create(typeof(Grid), "Row", 0);
+		internal static AttachedPropertyInfo<int> ColumnSpanProperty = AttachedPropertiesRegistry.Create(typeof(Grid), "ColumnSpan", 1);
+		internal static AttachedPropertyInfo<int> RowSpanProperty = AttachedPropertiesRegistry.Create(typeof(Grid), "RowSpan", 1);
 
 		private int _columnSpacing;
 		private int _rowSpacing;
@@ -1039,88 +1040,13 @@ namespace Myra.Graphics2D.UI
 			return (SelectedRowIndex != null && SelectedColumnIndex != null);
 		}
 
-		public static int GetRow(Widget widget)
-		{
-			return widget.GetAttachedProperty(GridRowPropertyId, 0);
-		}
-
-		public static void SetRow(Widget widget, int value)
-		{
-			if (GetRow(widget) == value)
-			{
-				return;
-			}
-
-			if (value < 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(value));
-			}
-
-			widget.SetAttachedProperty(GridRowPropertyId, value);
-			widget.InvalidateMeasure();
-		}
-
-		public static int GetColumn(Widget widget)
-		{
-			return widget.GetAttachedProperty(GridColumnPropertyId, 0);
-		}
-
-		public static void SetColumn(Widget widget, int value)
-		{
-			if (GetColumn(widget) == value)
-			{
-				return;
-			}
-
-			if (value < 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(value));
-			}
-
-			widget.SetAttachedProperty(GridColumnPropertyId, value);
-			widget.InvalidateMeasure();
-		}
-
-		public static int GetRowSpan(Widget widget)
-		{
-			return widget.GetAttachedProperty(GridRowSpanPropertyId, 1);
-		}
-
-		public static void SetRowSpan(Widget widget, int value)
-		{
-			if (GetRowSpan(widget) == value)
-			{
-				return;
-			}
-
-			if (value < 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(value));
-			}
-
-			widget.SetAttachedProperty(GridRowSpanPropertyId, value);
-			widget.InvalidateMeasure();
-		}
-
-		public static int GetColumnSpan(Widget widget)
-		{
-			return widget.GetAttachedProperty(GridColumnSpanPropertyId, 1);
-		}
-
-		public static void SetColumnSpan(Widget widget, int value)
-		{
-			if (GetColumnSpan(widget) == value)
-			{
-				return;
-			}
-
-			if (value < 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(value));
-			}
-
-			widget.SetAttachedProperty(GridColumnSpanPropertyId, value);
-			widget.InvalidateMeasure();
-		}
+		public static int GetColumn(Widget widget) => ColumnProperty.GetValue(widget);
+		public static void SetColumn(Widget widget, int value) => ColumnProperty.SetValue(widget, value);
+		public static int GetRow(Widget widget) => RowProperty.GetValue(widget);
+		public static void SetRow(Widget widget, int value) => RowProperty.SetValue(widget, value);
+		public static int GetColumnSpan(Widget widget) => ColumnSpanProperty.GetValue(widget);
+		public static void SetColumnSpan(Widget widget, int value) => ColumnSpanProperty.SetValue(widget, value);
+		public static int GetRowSpan(Widget widget) => RowSpanProperty.GetValue(widget);
+		public static void SetRowSpan(Widget widget, int value) => RowSpanProperty.SetValue(widget, value);
 	}
 }

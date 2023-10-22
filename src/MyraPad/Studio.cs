@@ -244,6 +244,19 @@ namespace MyraPad
 			}
 		}
 
+		private Type ParentType
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(_parentTag))
+				{
+					return null;
+				}
+
+				return Project.GetWidgetTypeByName(_parentTag);
+			}
+		}
+
 		public Studio(string[] args)
 		{
 			_instance = this;
@@ -1324,7 +1337,7 @@ namespace MyraPad
 		{
 			IsDirty = true;
 
-			var xml = _project.SaveObjectToXml(PropertyGrid.Object, ExtractTag(CurrentTag));
+			var xml = _project.SaveObjectToXml(PropertyGrid.Object, ExtractTag(CurrentTag), ParentType);
 
 			if (_needsCloseTag)
 			{
@@ -1493,7 +1506,9 @@ namespace MyraPad
 
 			if (_newObject != null)
 			{
+				PropertyGrid.ParentType = ParentType;
 				PropertyGrid.Object = _newObject;
+
 				_ui._propertyGridPane.ResetScroll();
 				_newObject = null;
 			}

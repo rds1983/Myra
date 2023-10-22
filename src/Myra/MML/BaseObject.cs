@@ -30,6 +30,9 @@ namespace Myra.MML
 			}
 		}
 
+		[Browsable(false)]
+		internal readonly Dictionary<int, object> AttachedPropertiesValues = new Dictionary<int, object>();
+
 		/// <summary>
 		/// Holds custom user attributes not mapped to the object
 		/// </summary>

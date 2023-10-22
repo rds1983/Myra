@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Myra.Graphics2D.UI.Properties
 {
-	public class FieldRecord : Record
+	internal class FieldRecord : Record
 	{
 		private readonly FieldInfo _fieldInfo;
 

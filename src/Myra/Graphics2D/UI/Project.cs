@@ -28,6 +28,20 @@ namespace Myra.Graphics2D.UI
 		public string TemplateMain { get; set; }
 	}
 
+	public class ObjectPosition
+	{
+		public object Object { get; private set; }
+		public int Start { get; private set; }
+		public int End { get; private set; }
+
+		public ObjectPosition(object obj, int start, int end)
+		{
+			Object = obj;
+			Start = start;
+			End = end;
+		}
+	}
+
 	public class Project
 	{
 		private struct StylesheetChanger: IDisposable
@@ -257,7 +271,7 @@ namespace Myra.Graphics2D.UI
 			return LoadFromXml<object>(XDocument.Parse(data), assetManager, null);
 		}
 
-		public static object LoadObjectFromXml<T>(string data, AssetManager assetManager = null, Stylesheet stylesheet = null, T handler = null) where T : class
+		public static object LoadObjectFromXml<T>(string data, AssetManager assetManager = null, Stylesheet stylesheet = null, T handler = null, Type parentType = null) where T : class
 		{
 			XDocument xDoc = XDocument.Parse(data);
 
@@ -276,8 +290,7 @@ namespace Myra.Graphics2D.UI
 					name = newName;
 				}
 
-				var itemNamespace = typeof(Widget).Namespace;
-				itemType = typeof(Widget).Assembly.GetType(itemNamespace + "." + name);
+				itemType = GetWidgetTypeByName(name);
 			}
 			else
 			{
@@ -319,10 +332,10 @@ namespace Myra.Graphics2D.UI
 			return LoadObjectFromXml(data, assetManager, Stylesheet);
 		}
 
-		public string SaveObjectToXml(object obj, string tagName)
+		public string SaveObjectToXml(object obj, string tagName, Type parentType)
 		{
 			var saveContext = CreateSaveContext(Stylesheet);
-			return saveContext.Save(obj, true, tagName).ToString();
+			return saveContext.Save(obj, true, tagName, parentType).ToString();
 		}
 
 		private static object CreateItem(Type type, XElement element)
@@ -455,6 +468,12 @@ namespace Myra.Graphics2D.UI
 			}
 
 			return true;
+		}
+
+		public static Type GetWidgetTypeByName(string name)
+		{
+			var itemNamespace = typeof(Widget).Namespace;
+			return typeof(Widget).Assembly.GetType(itemNamespace + "." + name);
 		}
 	}
 }
