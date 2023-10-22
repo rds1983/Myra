@@ -1,4 +1,5 @@
 using Myra.Attributes;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
@@ -29,5 +30,18 @@ namespace Myra.Graphics2D.UI
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 		}
+
+		[Obsolete("Use Widgets.Add")]
+		public void AddChild(Widget child)
+		{
+			Widgets.Add(child);
+		}
+
+		[Obsolete("Use Widgets.Remove")]
+		public void RemoveChild(Widget child)
+		{
+			Widgets.Remove(child);
+		}
+
 	}
 }

@@ -249,5 +249,14 @@ namespace Myra.Graphics2D.UI
 
 			return null;
 		}
+
+		/// <summary>
+		/// Finds the first widget with matching <paramref name="Id"/>
+		/// </summary>
+		/// <param name="Id">Id to match on</param>
+		/// <returns>Widget instance if found otherwise null</returns>
+
+		[Obsolete("Use FindChildById")]
+		public Widget FindWidgetById(string Id) => FindChildById(Id);
 	}
 }
