@@ -161,7 +161,7 @@ namespace Myra.Graphics2D.UI
 			return base.InternalMeasure(availableSize);
 		}
 
-		public override void InternalArrange()
+		protected override void InternalArrange()
 		{
 			UpdateGrid();
 

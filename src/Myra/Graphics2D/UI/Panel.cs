@@ -12,7 +12,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class Panel : MultipleItemsContainerBase
 	{
-		public override void InternalArrange()
+		protected override void InternalArrange()
 		{
 			foreach (var control in _widgets)
 			{

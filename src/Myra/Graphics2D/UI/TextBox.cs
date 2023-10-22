@@ -1499,7 +1499,7 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		public override void InternalArrange()
+		protected override void InternalArrange()
 		{
 			base.InternalArrange();
 

@@ -180,7 +180,7 @@ namespace Myra.Graphics2D.UI
 			Hint = (int)(MaxHint * ((_value - Minimum) / (Maximum - Minimum)));
 		}
 
-		public override void InternalArrange()
+		protected override void InternalArrange()
 		{
 			base.InternalArrange();
 

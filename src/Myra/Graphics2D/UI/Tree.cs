@@ -325,7 +325,7 @@ namespace Myra.Graphics2D.UI
 			RecursiveUpdateRowVisibility(this);
 		}
 
-		public override void InternalArrange()
+		protected override void InternalArrange()
 		{
 			base.InternalArrange();
 			_rowInfosDirty = true;

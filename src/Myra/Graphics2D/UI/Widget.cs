@@ -272,7 +272,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[Category("Appearance")]
+		[Category("Layout")]
+		public IBrush Border { get; set; }
+
+		[Category("Layout")]
 		[DesignerFolded]
 		public Thickness BorderThickness
 		{
@@ -637,12 +640,6 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Appearance")]
 		public IBrush FocusedBackground { get; set; }
-
-		[Category("Appearance")]
-		public IBrush Border
-		{
-			get; set;
-		}
 
 		[Category("Appearance")]
 		public IBrush OverBorder
@@ -1199,7 +1196,7 @@ namespace Myra.Graphics2D.UI
 			_arrangeDirty = false;
 		}
 
-		public virtual void InternalArrange()
+		protected virtual void InternalArrange()
 		{
 		}
 

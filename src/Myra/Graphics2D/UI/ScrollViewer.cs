@@ -476,7 +476,7 @@ namespace Myra.Graphics2D.UI
 			return measureSize;
 		}
 
-		public override void InternalArrange()
+		protected override void InternalArrange()
 		{
 			if (InternalChild == null)
 			{
