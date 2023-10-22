@@ -71,7 +71,7 @@ namespace Myra.MML
 	}
 
 
-	internal static class AttachedPropertiesRegistry
+	public static class AttachedPropertiesRegistry
 	{
 		private static readonly Dictionary<int, BaseAttachedPropertyInfo> _properties = new Dictionary<int, BaseAttachedPropertyInfo>();
 		private static readonly Dictionary<Type, BaseAttachedPropertyInfo[]> _propertiesByType = new Dictionary<Type, BaseAttachedPropertyInfo[]>();

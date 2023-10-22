@@ -203,31 +203,19 @@ namespace MyraPad
 				}
 			}
 
-			var asBaseObject = w as BaseObject;
-			if (asBaseObject != null)
+			var asWidget = w as Widget;
+			if (asWidget != null)
 			{
-				foreach(var pair in asBaseObject.AttachedPropertiesValues)
+				if (asWidget.Parent != null && asWidget.Parent is Grid)
 				{
-					BaseAttachedPropertyInfo property = null;
-					if (pair.Key == Grid.ColumnProperty.Id)
+					var gridAttachedProperties = AttachedPropertiesRegistry.GetPropertiesOfType(typeof(Grid));
+					foreach (var property in gridAttachedProperties)
 					{
-						property = Grid.ColumnProperty;
-					} else if (pair.Key == Grid.RowProperty.Id)
-					{
-						property = Grid.RowProperty;
-					}
-					else if (pair.Key == Grid.ColumnSpanProperty.Id)
-					{
-						property = Grid.ColumnSpanProperty;
-					}
-					else if (pair.Key == Grid.RowSpanProperty.Id)
-					{
-						property = Grid.RowSpanProperty;
-					}
-
-					if (property != null)
-					{
-						sbBuild.Append($"\n\t\t\tGrid.Set{property.Name}({id}, {pair.Value});");
+						var value = property.GetValueObject(asWidget);
+						if (value != null && !value.Equals(property.DefaultValueObject))
+						{
+							sbBuild.Append($"\n\t\t\tGrid.Set{property.Name}({id}, {value});");
+						}
 					}
 				}
 			}
