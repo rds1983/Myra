@@ -327,7 +327,11 @@ namespace MyraPad
 
 						if (property.PropertyType != typeof(IBrush))
 						{
-							strValue = "MyraEnvironment.DefaultAssetManager.Load<" + typeName + ">(\"" + s + "\")";
+							if (typeName == "SpriteFontBase")
+							{
+								typeName = "Font";
+							}
+							strValue = "MyraEnvironment.DefaultAssetManager.Load" + typeName + "(\"" + s + "\")";
 						}
 						else
 						{
