@@ -69,7 +69,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public Grid TitleGrid { get; private set; }
+		public HorizontalStackPanel TitlePanel { get; private set; }
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -99,6 +99,7 @@ namespace Myra.Graphics2D.UI
 
 				if (value != null)
 				{
+					StackPanel.SetProportionType(value, ProportionType.Fill);
 					InternalChild.Widgets.Insert(1, value);
 				}
 
@@ -170,32 +171,26 @@ namespace Myra.Graphics2D.UI
 
 			InternalChild.Spacing = 8;
 
-			InternalChild.Proportions.Add(new Proportion(ProportionType.Auto));
-			InternalChild.Proportions.Add(new Proportion(ProportionType.Fill));
-
-			TitleGrid = new Grid
+			TitlePanel = new HorizontalStackPanel
 			{
-				ColumnSpacing = 8
+				Spacing = 8
 			};
-			DragHandle = TitleGrid;
-
-			TitleGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
-			TitleGrid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
+			DragHandle = TitlePanel;
 
 			_titleLabel = new Label();
-			TitleGrid.Widgets.Add(_titleLabel);
+			StackPanel.SetProportionType(_titleLabel, ProportionType.Fill);
+			TitlePanel.Widgets.Add(_titleLabel);
 
 			CloseButton = new ImageButton();
-			Grid.SetColumn(CloseButton, 1);
 
 			CloseButton.Click += (sender, args) =>
 			{
 				Close();
 			};
 
-			TitleGrid.Widgets.Add(CloseButton);
+			TitlePanel.Widgets.Add(CloseButton);
 
-			InternalChild.Widgets.Add(TitleGrid);
+			InternalChild.Widgets.Add(TitlePanel);
 
 			SetStyle(styleName);
 		}

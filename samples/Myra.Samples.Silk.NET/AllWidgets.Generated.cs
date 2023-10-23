@@ -399,17 +399,9 @@ namespace Myra.Samples.AllWidgets
 			var horizontalSplitPane1 = new HorizontalSplitPane();
 			horizontalSplitPane1.Widgets.Add(scrollViewer1);
 			horizontalSplitPane1.Widgets.Add(verticalSplitPane1);
+			StackPanel.SetProportionType(horizontalSplitPane1, ProportionType.Fill);
 
-			
 			Spacing = 8;
-			Proportions.Add(new Proportion
-			{
-				Type = Myra.Graphics2D.UI.ProportionType.Auto,
-			});
-			Proportions.Add(new Proportion
-			{
-				Type = Myra.Graphics2D.UI.ProportionType.Fill,
-			});
 			Widgets.Add(_mainMenu);
 			Widgets.Add(horizontalSplitPane1);
 		}

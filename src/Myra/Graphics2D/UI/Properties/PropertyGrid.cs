@@ -1000,7 +1000,6 @@ namespace Myra.Graphics2D.UI.Properties
 			TextBox path = null;
 			if (attribute.ShowPath)
 			{
-				result.Proportions.Add(Proportion.Fill);
 				path = new TextBox
 				{
 					Readonly = true,
@@ -1012,10 +1011,9 @@ namespace Myra.Graphics2D.UI.Properties
 					path.Text = value.ToString();
 				}
 
+				StackPanel.SetProportionType(path, ProportionType.Fill);
 				result.Widgets.Add(path);
 			}
-
-			result.Proportions.Add(Proportion.Auto);
 
 			var button = new TextButton
 			{

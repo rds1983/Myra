@@ -20,12 +20,6 @@ namespace Myra.Graphics2D.UI.Properties
 			_type = type;
 
 			InternalChild = new VerticalStackPanel();
-
-			InternalChild.Proportions.Add(new Proportion(ProportionType.Auto));
-			InternalChild.Proportions.Add(new Proportion(ProportionType.Fill));
-			InternalChild.Proportions.Add(new Proportion(ProportionType.Auto));
-			InternalChild.Proportions.Add(new Proportion(ProportionType.Auto));
-
 			InternalChild.Widgets.Add(new HorizontalSeparator());
 
 			var splitPanel = new HorizontalSplitPane();
@@ -44,6 +38,7 @@ namespace Myra.Graphics2D.UI.Properties
 				_listItems.Items.Add(new ListItem(BuildItemText(item), null, item));
 			}
 
+			StackPanel.SetProportionType(_listItems, ProportionType.Fill);
 			splitPanel.Widgets.Add(_listItems);
 
 			_propertyGrid = new PropertyGrid();

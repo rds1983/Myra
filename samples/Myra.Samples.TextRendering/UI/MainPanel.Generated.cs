@@ -77,7 +77,7 @@ namespace Myra.Samples.TextRendering.UI
 			label4.Text = "0.1";
 
 			_sliderScale = new HorizontalSlider();
-			_sliderScale.Minimum = 0.1;
+			_sliderScale.Minimum = 0.1f;
 			_sliderScale.Maximum = 10;
 			_sliderScale.Value = 1;
 			_sliderScale.Width = 200;

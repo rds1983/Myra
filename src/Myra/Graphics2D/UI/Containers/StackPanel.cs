@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
-
-#if MONOGAME || FNA
-using Microsoft.Xna.Framework;
 using Myra.Attributes;
 using Myra.MML;
 
+#if MONOGAME || FNA
+using Microsoft.Xna.Framework;
 #elif STRIDE
 using Stride.Core.Mathematics;
 #else
