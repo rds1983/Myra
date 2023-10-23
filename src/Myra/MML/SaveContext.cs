@@ -66,7 +66,7 @@ namespace Myra.MML
 			var baseObject = obj as BaseObject;
 
 			List<PropertyInfo> complexProperties, simpleProperties;
-			ParseProperties(type, out complexProperties, out simpleProperties);
+			ParseProperties(type, true, out complexProperties, out simpleProperties);
 
 			var el = new XElement(tagName ?? type.Name);
 
@@ -103,7 +103,7 @@ namespace Myra.MML
 					var value = property.GetValueObject(baseObject);
 					if (value != null && !value.Equals(property.DefaultValueObject))
 					{
-						var propertyName = parentType.Name + "." + property.Name;
+						var propertyName = property.OwnerType.Name + "." + property.Name;
 						var str = SaveSimpleProperty(baseObject, value,
 							property.PropertyType, propertyName);
 						if (!string.IsNullOrEmpty(str))

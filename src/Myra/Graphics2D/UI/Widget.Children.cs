@@ -84,19 +84,13 @@ namespace Myra.Graphics2D.UI
 
 			_childrenCopy.SortWidgetsByZIndex();
 
-			InternalUpdateChildren();
-
 			_childrenDirty = false;
 		}
 
-		protected void InvalidateChildren()
+		private void InvalidateChildren()
 		{
 			InvalidateMeasure();
 			_childrenDirty = true;
-		}
-
-		protected virtual void InternalUpdateChildren()
-		{
 		}
 
 		public int CalculateTotalChildCount(bool visibleOnly)

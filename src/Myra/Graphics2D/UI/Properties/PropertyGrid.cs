@@ -1338,7 +1338,6 @@ namespace Myra.Graphics2D.UI.Properties
 					hasSetter = false;
 				}
 
-
 				var record = new FieldRecord(field)
 				{
 					HasSetter = hasSetter,
@@ -1357,8 +1356,9 @@ namespace Myra.Graphics2D.UI.Properties
 				{
 					var record = new AttachedPropertyRecord(attachedProperty)
 					{
-						Category = ParentType.Name
+						Category = attachedProperty.OwnerType.Name
 					};
+
 					records.Add(record);
 				}
 			}

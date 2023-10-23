@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Xml.Serialization;
 using FontStashSharp;
 using Myra.Utility;
+using Myra.Attributes;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -37,7 +38,7 @@ namespace Myra.MML
 			return null;
 		}
 
-		protected static void ParseProperties(Type type, 
+		protected static void ParseProperties(Type type, bool checkSkipSave,
 			out List<PropertyInfo> complexProperties, 
 			out List<PropertyInfo> simpleProperties)
 		{
@@ -54,10 +55,19 @@ namespace Myra.MML
 					continue;
 				}
 
-				var attr = property.FindAttribute<XmlIgnoreAttribute>();
+				Attribute attr = property.FindAttribute<XmlIgnoreAttribute>();
 				if (attr != null)
 				{
 					continue;
+				}
+
+				if (checkSkipSave)
+				{
+					attr = property.FindAttribute<SkipSaveAttribute>();
+					if (attr != null)
+					{
+						continue;
+					}
 				}
 
 				var propertyType = property.PropertyType;

@@ -206,15 +206,16 @@ namespace MyraPad
 			var asWidget = w as Widget;
 			if (asWidget != null)
 			{
-				if (asWidget.Parent != null && asWidget.Parent is Grid)
+				if (asWidget.Parent != null)
 				{
-					var gridAttachedProperties = AttachedPropertiesRegistry.GetPropertiesOfType(typeof(Grid));
-					foreach (var property in gridAttachedProperties)
+					var attachedProperties = AttachedPropertiesRegistry.GetPropertiesOfType(asWidget.Parent.GetType());
+					foreach (var property in attachedProperties)
 					{
 						var value = property.GetValueObject(asWidget);
 						if (value != null && !value.Equals(property.DefaultValueObject))
 						{
-							sbBuild.Append($"\n\t\t\tGrid.Set{property.Name}({id}, {value});");
+							value = BuildValue(value, converter);
+							sbBuild.Append($"\n\t\t\t{property.OwnerType.Name}.Set{property.Name}({id}, {value});");
 						}
 					}
 				}

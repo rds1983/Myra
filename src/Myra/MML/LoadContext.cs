@@ -80,7 +80,7 @@ namespace Myra.MML
 			var baseObject = obj as BaseObject;
 
 			List<PropertyInfo> complexProperties, simpleProperties;
-			ParseProperties(type, out complexProperties, out simpleProperties);
+			ParseProperties(type, false, out complexProperties, out simpleProperties);
 
 			string newName;
 			foreach (var attr in el.Attributes())
