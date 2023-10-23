@@ -1,4 +1,4 @@
-name: Build & Publish Release Without Nuget
+name: Release Without Nuget
 
 on: [workflow_dispatch]
 
