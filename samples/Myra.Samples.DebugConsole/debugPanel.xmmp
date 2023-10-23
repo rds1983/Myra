@@ -15,12 +15,8 @@
       </MenuItem>
     </HorizontalMenu>
     <HorizontalStackPanel Spacing="8">
-      <HorizontalStackPanel.Proportions>
-        <Proportion Type="Auto" />
-        <Proportion Type="Fill" />
-      </HorizontalStackPanel.Proportions>
       <Label Text="Command:" />
-      <TextBox />
+      <TextBox StackPanel.ProportionType="Fill" />
     </HorizontalStackPanel>
     <TextButton Text="Hide Debug Panel" HorizontalAlignment="Center" Id="_buttonHideDebug" />
   </VerticalStackPanel>

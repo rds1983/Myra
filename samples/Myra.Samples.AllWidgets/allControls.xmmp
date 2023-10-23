@@ -1,10 +1,6 @@
 <Project>
   <Project.ExportOptions Namespace="Myra.Samples.AllWidgets" Class="AllWidgets" OutputPath="D:\Projects\Myra\samples\Myra.Samples.AllWidgets" />
   <VerticalStackPanel Spacing="8">
-    <VerticalStackPanel.Proportions>
-      <Proportion Type="Auto" />
-      <Proportion Type="Fill" />
-    </VerticalStackPanel.Proportions>
     <HorizontalMenu VerticalAlignment="Stretch" Id="_mainMenu">
       <MenuItem Text="&amp;File" Id="_menuFile">
         <MenuItem Text="&amp;Open" ShortcutText="Ctrl+O" Id="_menuItemOpenFile" />
@@ -25,7 +21,7 @@
         <MenuItem Text="&amp;About" Id="_menuItemAbout" />
       </MenuItem>
     </HorizontalMenu>
-    <HorizontalSplitPane>
+    <HorizontalSplitPane StackPanel.ProportionType="Fill" >
       <ScrollViewer>
         <Grid ColumnSpacing="8" RowSpacing="8" Id="_gridRight">
           <Grid.DefaultRowProportion Type="Auto" />

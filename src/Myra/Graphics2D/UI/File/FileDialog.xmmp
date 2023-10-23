@@ -2,23 +2,13 @@
   <Project.ExportOptions Namespace="Myra.Graphics2D.UI.File" Class="FileDialog" OutputPath="D:/Projects/Myra/src/Myra/Graphics2D/UI/File" />
   <Dialog Title="Open File..." Left="980" Top="464" Width="600" Height="400">
     <VerticalStackPanel Spacing="4">
-      <VerticalStackPanel.Proportions>
-        <Proportion Type="Auto" />
-        <Proportion Type="Fill" />
-      </VerticalStackPanel.Proportions>
-      <Grid ColumnSpacing="4">
-        <Grid.ColumnsProportions>
-          <Proportion Type="Auto" />
-          <Proportion Type="Auto" />
-          <Proportion Type="Fill" />
-          <Proportion Type="Auto" />
-        </Grid.ColumnsProportions>
+      <HorizontalStackPanel Spacing="4">
         <ImageButton HorizontalAlignment="Center" VerticalAlignment="Center" Id="_buttonBack" />
-        <ImageButton HorizontalAlignment="Center" VerticalAlignment="Center" Id="_buttonForward" Grid.Column="1" />
-        <TextBox Readonly="True" VerticalAlignment="Center" Id="_textFieldPath" Grid.Column="2" />
-        <ImageButton HorizontalAlignment="Center" VerticalAlignment="Center" Id="_buttonParent" Grid.Column="3" />
-      </Grid>
-      <HorizontalSplitPane Id="_splitPane">
+        <ImageButton HorizontalAlignment="Center" VerticalAlignment="Center" Id="_buttonForward" />
+        <TextBox Readonly="True" VerticalAlignment="Center" Id="_textFieldPath" StackPanel.ProportionType="Fill" />
+        <ImageButton HorizontalAlignment="Center" VerticalAlignment="Center" Id="_buttonParent" />
+      </HorizontalStackPanel>
+      <HorizontalSplitPane Id="_splitPane" StackPanel.ProportionType="Fill">
         <ListBox HorizontalAlignment="Stretch" ClipToBounds="True" Id="_listBoxPlaces" />
         <ScrollViewer ShowHorizontalScrollBar="False" Id="_scrollPane">
           <Grid ColumnSpacing="4" RowSpacing="4" GridSelectionMode="Row" Id="_gridFiles">
@@ -29,14 +19,10 @@
           </Grid>
         </ScrollViewer>
       </HorizontalSplitPane>
-      <Grid ColumnSpacing="4">
-        <Grid.ColumnsProportions>
-          <Proportion Type="Auto" />
-          <Proportion Type="Fill" />
-        </Grid.ColumnsProportions>
+      <HorizontalStackPanel Spacing="4">
         <Label Text="File name" Id="_textBlockFileName" />
-        <TextBox Id="_textFieldFileName" Grid.Column="1" />
-      </Grid>
+        <TextBox Readonly="True" Id="_textFieldFileName" StackPanel.ProportionType="Fill" />
+      </HorizontalStackPanel>
     </VerticalStackPanel>
   </Dialog>
 </Project>

@@ -1,11 +1,6 @@
 <Project>
   <Project.ExportOptions Namespace="MyraPad.UI" Class="StudioWidget" OutputPath="D:/Projects/Myra/src/MyraPad/UI" />
   <VerticalStackPanel>
-    <VerticalStackPanel.Proportions>
-      <Proportion Type="Auto" />
-      <Proportion Type="Auto" />
-      <Proportion Type="Fill" />
-    </VerticalStackPanel.Proportions>
     <HorizontalMenu Id="_mainMenu">
       <MenuItem Text="&amp;File" Id="_menuFile">
         <MenuItem Text="&amp;New" ShortcutText="Ctrl+N" Id="_menuFileNew" />
@@ -36,12 +31,9 @@
       </MenuItem>
     </HorizontalMenu>
     <HorizontalSeparator />
-    <HorizontalSplitPane Id="_topSplitPane">
+    <HorizontalSplitPane Id="_topSplitPane" StackPanel.ProportionType="Fill">
       <VerticalStackPanel>
-        <VerticalStackPanel.Proportions>
-          <Proportion Type="Fill" />
-        </VerticalStackPanel.Proportions>
-        <VerticalSplitPane Id="_leftSplitPane">
+        <VerticalSplitPane Id="_leftSplitPane" StackPanel.ProportionType="Fill">
           <Panel Id="_projectHolder" />
           <ScrollViewer>
             <TextBox Multiline="True" Wrap="True" VerticalAlignment="Stretch" Id="_textSource" />
@@ -51,21 +43,12 @@
         <Label Text="Reloading..." Id="_textStatus" />
       </VerticalStackPanel>
       <VerticalStackPanel Background="#000000FF">
-        <VerticalStackPanel.Proportions>
-          <Proportion Type="Auto" />
-          <Proportion Type="Auto" />
-          <Proportion Type="Fill" />
-        </VerticalStackPanel.Proportions>
         <HorizontalStackPanel Spacing="8">
-          <HorizontalStackPanel.Proportions>
-            <Proportion Type="Auto" />
-            <Proportion Type="Fill" />
-          </HorizontalStackPanel.Proportions>
           <Label Text="Filter:" />
-          <TextBox Id="_textBoxFilter" />
+          <TextBox Id="_textBoxFilter" StackPanel.ProportionType="Fill" />
         </HorizontalStackPanel>
         <HorizontalSeparator />
-        <ScrollViewer Id="_propertyGridPane">
+        <ScrollViewer Id="_propertyGridPane" StackPanel.ProportionType="Fill">
           <PropertyGrid Id="_propertyGrid" />
         </ScrollViewer>
         <HorizontalSeparator />
