@@ -133,8 +133,13 @@ namespace Myra.MML
 					{
 						value = serializer.Deserialize(attr.Value);
 					} else 
-					if (propertyType.IsEnum)
+					if (propertyType.IsEnum ||
+						propertyType.IsNullableEnum())
 					{
+						if (propertyType.IsNullableEnum())
+						{
+							propertyType = propertyType.GetNullableType();
+						}
 						value = Enum.Parse(propertyType, attr.Value);
 					}
 					else if (propertyType == typeof(Color) || propertyType == typeof(Color?))

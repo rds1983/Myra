@@ -29,6 +29,12 @@ namespace Myra.Utility
 					type.GenericTypeArguments[0].IsPrimitive;
 		}
 
+		public static bool IsNullableEnum(this Type type)
+		{
+			return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>) &&
+					type.GenericTypeArguments[0].IsEnum;
+		}
+
 		public static Type GetNullableType(this Type type)
 		{
 			return type.GenericTypeArguments[0];
@@ -146,12 +152,6 @@ namespace Myra.Utility
 				default:
 					return false;
 			}
-		}
-
-		public static bool IsNullableEnum(this Type type)
-		{
-			return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>) &&
-					type.GenericTypeArguments[0].IsEnum;
 		}
 	}
 }

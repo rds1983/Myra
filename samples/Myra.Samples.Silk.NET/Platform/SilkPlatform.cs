@@ -96,5 +96,9 @@ namespace Myra.Samples.AllWidgets
 			// Do not bother with accurately returning touch state for now
 			return TouchCollection.Empty;
 		}
+
+		public void SetMouseCursorType(MouseCursorType mouseCursorType)
+		{
+		}
 	}
 }

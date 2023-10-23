@@ -236,6 +236,14 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
+		[Category("Behavior")]
+		[DefaultValue(MouseCursorType.IBeam)]
+		public override MouseCursorType? MouseCursor
+		{
+			get => base.MouseCursor;
+			set => base.MouseCursor = value;
+		}
+
 		[DefaultValue(true)]
 		public override bool ClipToBounds
 		{
@@ -374,6 +382,8 @@ namespace Myra.Graphics2D.UI
 			SetStyle(styleName);
 
 			BlinkIntervalInMs = 450;
+
+			MouseCursor = MouseCursorType.IBeam;
 		}
 
 		private void DeleteChars(int pos, int l)

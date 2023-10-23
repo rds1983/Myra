@@ -74,6 +74,7 @@ namespace Myra.MML
 				if (propertyType.IsPrimitive || 
 					propertyType.IsNullablePrimitive() ||
 					propertyType.IsEnum || 
+					propertyType.IsNullableEnum() ||
 					propertyType == typeof(string) ||
 					propertyType == typeof(Vector2) ||
 					propertyType == typeof(Color) ||

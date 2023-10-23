@@ -42,6 +42,7 @@ namespace Myra.Graphics2D.UI
 
 	public partial class Widget : BaseObject, ITransformable
 	{
+		private MouseCursorType? _mouseCursorType;
 		private Vector2? _startPos;
 		private Point _startLeftTop;
 		private Thickness _margin, _borderThickness, _padding;
@@ -458,6 +459,27 @@ namespace Myra.Graphics2D.UI
 				InvalidateMeasure();
 			}
 		}
+
+		[Category("Behavior")]
+		[DefaultValue(null)]
+		public virtual MouseCursorType? MouseCursor
+		{
+			get => _mouseCursorType;
+			set
+			{
+				if (value == _mouseCursorType)
+				{
+					return;
+				}
+
+				_mouseCursorType = value;
+				foreach(var child in Children)
+				{
+					child.MouseCursor = value;
+				}
+			}
+		}
+
 
 		[Category("Transform")]
 		[DefaultValue("1, 1")]
@@ -1304,6 +1326,11 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnMouseLeft()
 		{
+			if (MouseCursor != null)
+			{
+				MyraEnvironment.MouseCursorType = MyraEnvironment.DefaultMouseCursorType;
+			}
+
 			ChildrenCopy.ProcessMouseLeft();
 
 			MouseLeft.Invoke(this);
@@ -1311,6 +1338,11 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnMouseEntered()
 		{
+			if (MouseCursor != null)
+			{
+				MyraEnvironment.MouseCursorType = MouseCursor.Value;
+			}
+
 			ChildrenCopy.ProcessMouseMovement();
 
 			MouseEntered.Invoke(this);

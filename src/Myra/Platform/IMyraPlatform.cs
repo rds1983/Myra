@@ -19,6 +19,7 @@ namespace Myra.Platform
 		/// </summary>
 		/// <param name="keys"></param>
 		void SetKeysDown(bool[] keys);
+		void SetMouseCursorType(MouseCursorType mouseCursorType);
 
 		TouchCollection GetTouchState();
 	}

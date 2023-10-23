@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Reflection;
 using Myra.Graphics2D.UI.Styles;
-using FontStashSharp.Interfaces;
 using Myra.Utility;
-using FontStashSharp;
 using AssetManagementBase;
+using Myra.Graphics2D.UI;
+using System.Collections.Generic;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+#if FNA
+using static SDL2.SDL;
+using MouseCursor = System.Nullable<System.IntPtr>;
+#endif
+
 #elif STRIDE
 using Stride.Engine;
 using Stride.Graphics;
@@ -20,58 +26,94 @@ namespace Myra
 {
 	public static class MyraEnvironment
 	{
+#if MONOGAME
+		private static readonly Dictionary<MouseCursorType, MouseCursor> _mouseCursors = new Dictionary<MouseCursorType, MouseCursor>
+		{
+			[MouseCursorType.Arrow] = MouseCursor.Arrow,
+			[MouseCursorType.IBeam] = MouseCursor.IBeam,
+			[MouseCursorType.Wait] = MouseCursor.Wait,
+			[MouseCursorType.Crosshair] = MouseCursor.Crosshair,
+			[MouseCursorType.WaitArrow] = MouseCursor.WaitArrow,
+			[MouseCursorType.SizeNWSE] = MouseCursor.SizeNWSE,
+			[MouseCursorType.SizeNESW] = MouseCursor.SizeNESW,
+			[MouseCursorType.SizeWE] = MouseCursor.SizeWE,
+			[MouseCursorType.SizeNS] = MouseCursor.SizeNS,
+			[MouseCursorType.SizeAll] = MouseCursor.SizeAll,
+			[MouseCursorType.No] = MouseCursor.No,
+			[MouseCursorType.Hand] = MouseCursor.Hand,
+		};
+#elif FNA
+		private static readonly Dictionary<SDL_SystemCursor, IntPtr> _systemCursors = new Dictionary<SDL_SystemCursor, IntPtr>();
+
+		private static IntPtr GetSystemCursor(SDL_SystemCursor type)
+		{
+			IntPtr result;
+			if (_systemCursors.TryGetValue(type, out result))
+			{
+				return result;
+			}
+
+			result = SDL_CreateSystemCursor(type);
+			_systemCursors[type] = result;
+
+			return result;
+		}
+
+		private static readonly Dictionary<MouseCursorType, SDL_SystemCursor> _mouseCursors = new Dictionary<MouseCursorType, SDL_SystemCursor>
+		{
+			[MouseCursorType.Arrow] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_ARROW,
+			[MouseCursorType.IBeam] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_IBEAM,
+			[MouseCursorType.Wait] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_WAIT,
+			[MouseCursorType.Crosshair] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_CROSSHAIR,
+			[MouseCursorType.WaitArrow] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_WAITARROW,
+			[MouseCursorType.SizeNWSE] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_SIZENWSE,
+			[MouseCursorType.SizeNESW] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_SIZENESW,
+			[MouseCursorType.SizeWE] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_SIZEWE,
+			[MouseCursorType.SizeNS] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_SIZENS,
+			[MouseCursorType.SizeAll] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_SIZEALL,
+			[MouseCursorType.No] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_NO,
+			[MouseCursorType.Hand] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_HAND,
+		};
+#endif
+
+		private static MouseCursorType _mouseCursorType;
 		private static AssetManager _defaultAssetManager;
 
-		[Obsolete("Use FontSystemDefaults.KernelWidth")]
-		public static int FontKernelWidth
+		public static MouseCursorType MouseCursorType
 		{
-			get => FontSystemDefaults.KernelWidth;
+			get => _mouseCursorType;
 			set
 			{
-				FontSystemDefaults.KernelWidth = value;
+				if (_mouseCursorType == value)
+				{
+					return;
+				}
+
+				_mouseCursorType = value;
+#if MONOGAME
+				MouseCursor mouseCursor;
+				if (!_mouseCursors.TryGetValue(value, out mouseCursor))
+				{
+					throw new Exception($"Could not find mouse cursor {value}");
+				}
+
+				Mouse.SetCursor(mouseCursor);
+#elif FNA
+				SDL_SystemCursor mouseCursor;
+				if (!_mouseCursors.TryGetValue(value, out mouseCursor))
+				{
+					throw new Exception($"Could not find mouse cursor {value}");
+				}
+
+				var mouseCursorPtr = GetSystemCursor(mouseCursor);
+				SDL2.SDL.SDL_SetCursor(mouseCursorPtr);
+#elif PLATFORM_AGNOSTIC
+				Platform.SetMouseCursorType(value);
+#endif
 			}
 		}
 
-		[Obsolete("Use FontSystemDefaults.KernelHeight")]
-		public static int FontKernelHeight
-		{
-			get => FontSystemDefaults.KernelHeight;
-			set
-			{
-				FontSystemDefaults.KernelHeight = value;
-			}
-		}
-
-		[Obsolete("Use FontSystemDefaults.PremultiplyAlpha")]
-		public static bool FontPremultiplyAlpha
-		{
-			get => FontSystemDefaults.PremultiplyAlpha;
-			set
-			{
-				FontSystemDefaults.PremultiplyAlpha = value;
-			}
-		}
-
-		[Obsolete("Use FontSystemDefaults.FontResolutionFactor")]
-		public static float FontResolutionFactor
-		{
-			get => FontSystemDefaults.FontResolutionFactor;
-			set
-			{
-				FontSystemDefaults.FontResolutionFactor = value;
-			}
-		}
-
-
-		[Obsolete("Use FontSystemDefaults.FontLoader")]
-		public static IFontLoader FontLoader
-		{
-			get => FontSystemDefaults.FontLoader;
-			set
-			{
-				FontSystemDefaults.FontLoader = value;
-			}
-		}
+		public static MouseCursorType DefaultMouseCursorType { get; set; }
 
 #if MONOGAME || FNA || STRIDE
 
