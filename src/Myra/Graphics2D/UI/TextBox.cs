@@ -1410,6 +1410,7 @@ namespace Myra.Graphics2D.UI
 
 			if (_isTouchDown)
 			{
+				// This makes the text to scroll if the touch is outside of the TextBox bounds
 				var passed = DateTime.Now - _lastCursorUpdate;
 				if (passed.TotalMilliseconds > CursorUpdateDelayInMs)
 				{
