@@ -1,6 +1,6 @@
 <Project>
-  <Project.ExportOptions Namespace="Myra.Graphics2D.UI.File" Class="FileDialog" OutputPath="C:/Projects/Myra/src/Myra/Graphics2D/UI/File" />
-  <Dialog Title="Open File..." Left="286" Top="10" Width="600" Height="400">
+  <Project.ExportOptions Namespace="Myra.Graphics2D.UI.File" Class="FileDialog" OutputPath="D:/Projects/Myra/src/Myra/Graphics2D/UI/File" />
+  <Dialog Title="Open File..." Left="980" Top="464" Width="600" Height="400">
     <VerticalStackPanel Spacing="4">
       <VerticalStackPanel.Proportions>
         <Proportion Type="Auto" />
@@ -14,9 +14,9 @@
           <Proportion Type="Auto" />
         </Grid.ColumnsProportions>
         <ImageButton HorizontalAlignment="Center" VerticalAlignment="Center" Id="_buttonBack" />
-        <ImageButton HorizontalAlignment="Center" VerticalAlignment="Center" GridColumn="1" Id="_buttonForward" />
-        <TextBox Readonly="True" VerticalAlignment="Center" GridColumn="2" Id="_textFieldPath" />
-        <ImageButton HorizontalAlignment="Center" VerticalAlignment="Center" GridColumn="3" Id="_buttonParent" />
+        <ImageButton HorizontalAlignment="Center" VerticalAlignment="Center" Id="_buttonForward" Grid.Column="1" />
+        <TextBox Readonly="True" VerticalAlignment="Center" Id="_textFieldPath" Grid.Column="2" />
+        <ImageButton HorizontalAlignment="Center" VerticalAlignment="Center" Id="_buttonParent" Grid.Column="3" />
       </Grid>
       <HorizontalSplitPane Id="_splitPane">
         <ListBox HorizontalAlignment="Stretch" ClipToBounds="True" Id="_listBoxPlaces" />
@@ -35,7 +35,7 @@
           <Proportion Type="Fill" />
         </Grid.ColumnsProportions>
         <Label Text="File name" Id="_textBlockFileName" />
-        <TextBox GridColumn="1" Id="_textFieldFileName" />
+        <TextBox Id="_textFieldFileName" Grid.Column="1" />
       </Grid>
     </VerticalStackPanel>
   </Dialog>

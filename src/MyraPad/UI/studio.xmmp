@@ -1,5 +1,5 @@
 <Project>
-  <Project.ExportOptions Namespace="MyraPad.UI" Class="StudioWidget" OutputPath="C:/Projects/Myra/src/MyraPad/UI" />
+  <Project.ExportOptions Namespace="MyraPad.UI" Class="StudioWidget" OutputPath="D:/Projects/Myra/src/MyraPad/UI" />
   <VerticalStackPanel>
     <VerticalStackPanel.Proportions>
       <Proportion Type="Auto" />
@@ -44,7 +44,7 @@
         <VerticalSplitPane Id="_leftSplitPane">
           <Panel Id="_projectHolder" />
           <ScrollViewer>
-            <TextBox Multiline="True" Wrap="True" VerticalAlignment="Stretch" GridRow="2" Id="_textSource" />
+            <TextBox Multiline="True" Wrap="True" VerticalAlignment="Stretch" Id="_textSource" />
           </ScrollViewer>
         </VerticalSplitPane>
         <HorizontalSeparator />
@@ -65,8 +65,8 @@
           <TextBox Id="_textBoxFilter" />
         </HorizontalStackPanel>
         <HorizontalSeparator />
-        <ScrollViewer Id="_propertyGridPane" >
-          <PropertyGrid Filter="" Id="_propertyGrid" />
+        <ScrollViewer Id="_propertyGridPane">
+          <PropertyGrid Id="_propertyGrid" />
         </ScrollViewer>
         <HorizontalSeparator />
         <Label Text="Line: 1, Column: 2, Indent: 3" Id="_textLocation" />

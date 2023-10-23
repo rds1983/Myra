@@ -46,10 +46,10 @@ namespace Myra.Samples.AllWidgets
 			var tree = new Tree
 			{
 				HasRoot = false,
-				GridColumn = 1,
-				GridRow = 12,
-				GridColumnSpan = 2
 			};
+			Grid.SetColumn(tree, 1);
+			Grid.SetRow(tree, 12);
+			Grid.SetColumnSpan(tree, 2);
 			var node1 = tree.AddSubNode("node1");
 			var node2 = node1.AddSubNode("node2");
 			var node3 = node2.AddSubNode("node3");

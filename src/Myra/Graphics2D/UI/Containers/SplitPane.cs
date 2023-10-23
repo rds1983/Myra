@@ -4,9 +4,16 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
-using Microsoft.Xna.Framework;
 using System.Collections.ObjectModel;
 using Myra.Attributes;
+
+#if MONOGAME || FNA
+using Microsoft.Xna.Framework;
+#elif STRIDE
+using Stride.Core.Mathematics;
+#else
+using System.Drawing;
+#endif
 
 namespace Myra.Graphics2D.UI
 {

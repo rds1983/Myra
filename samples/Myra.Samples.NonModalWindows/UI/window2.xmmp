@@ -1,6 +1,6 @@
 <Project>
   <Project.ExportOptions Namespace="Myra.Samples.NonModalWindows.UI" Class="Window2" OutputPath="D:\Projects\Myra\samples\Myra.Samples.NonModalWindows\UI" />
-  <Window Title="Window 2" Left="436" Top="231" Width="200" Height="200">
+  <Window Title="Window 2" Left="540" Top="276" Width="200" Height="200">
     <ScrollViewer>
       <Label Text="Lorem ipsum /c[green]dolor sit amet, /c[red]consectetur adipisicing elit, sed do eiusmod /c[#AAAAAA]tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. /c{white}Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum!" Wrap="True" />
     </ScrollViewer>

@@ -73,6 +73,7 @@ namespace Myra.Graphics2D.UI
 
 		protected StackPanel()
 		{
+			GridLinesColor = Color.White;
 			DefaultProportion = Proportion.StackPanelDefault;
 		}
 
