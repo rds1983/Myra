@@ -30,6 +30,16 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		protected override void InternalArrange()
+		{
+			base.InternalArrange();
+
+			if (InternalChild != null && InternalChild.Visible)
+			{
+				InternalChild.Arrange(ActualBounds);
+			}
+		}
+
 		protected override Point InternalMeasure(Point availableSize)
 		{
 			var result = Mathematics.PointZero;

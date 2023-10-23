@@ -120,6 +120,18 @@ namespace Myra.Utility
 			}
 		}
 
+		public static void ProcessMouseLeft(this List<Widget> widgets)
+		{
+			for (var i = widgets.Count - 1; i >= 0; --i)
+			{
+				var w = widgets[i];
+				if (w.IsMouseInside)
+				{
+					w.IsMouseInside = false;
+				}
+			}
+		}
+
 		public static void ProcessMouseMovement(this List<Widget> widgets)
 		{
 			// First run: call on OnMouseLeft on all widgets if it is required
@@ -150,6 +162,18 @@ namespace Myra.Utility
 				if (w.IsModal)
 				{
 					break;
+				}
+			}
+		}
+
+		public static void ProcessTouchLeft(this List<Widget> widgets)
+		{
+			for (var i = widgets.Count - 1; i >= 0; --i)
+			{
+				var w = widgets[i];
+				if (w.IsTouchInside)
+				{
+					w.OnTouchLeft();
 				}
 			}
 		}

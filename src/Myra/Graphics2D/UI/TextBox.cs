@@ -25,6 +25,9 @@ namespace Myra.Graphics2D.UI
 {
 	public class TextBox : Widget
 	{
+		private const int CursorUpdateDelayInMs = 30;
+
+		private DateTime _lastCursorUpdate;
 		private DateTime _lastBlinkStamp = DateTime.Now;
 		private bool _cursorOn = true;
 		private bool _wrap = false;
@@ -328,6 +331,7 @@ namespace Myra.Graphics2D.UI
 				if (Desktop != null)
 				{
 					Desktop.TouchUp -= DesktopTouchUp;
+					Desktop.TouchDown -= DesktopTouchDown;
 				}
 
 				base.Desktop = value;
@@ -335,10 +339,10 @@ namespace Myra.Graphics2D.UI
 				if (Desktop != null)
 				{
 					Desktop.TouchUp += DesktopTouchUp;
+					Desktop.TouchDown += DesktopTouchDown;
 				}
 			}
 		}
-
 
 		/// <summary>
 		/// Fires when the value is about to be changed
@@ -1164,9 +1168,24 @@ namespace Myra.Graphics2D.UI
 
 		private void SetCursorByTouch()
 		{
+			if (Desktop == null)
+			{
+				return;
+			}
+
 			var mousePos = ToLocal(Desktop.TouchPosition);
 			mousePos.X += _internalScrolling.X;
 			mousePos.Y += _internalScrolling.Y;
+
+			if (mousePos.X < 0)
+			{
+				mousePos.X = 0;
+			}
+
+			if (mousePos.Y < 0)
+			{
+				mousePos.Y = 0;
+			}
 
 			var line = _richTextLayout.GetLineByY(mousePos.Y);
 			if (line != null)
@@ -1186,33 +1205,24 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override bool OnTouchDown()
+		private void DesktopTouchUp(object sender, EventArgs args)
 		{
-			base.OnTouchDown();
+			_isTouchDown = false;
+		}
 
-			if (!Enabled)
+		private void DesktopTouchDown(object sender, EventArgs e)
+		{
+			if (!Enabled || !IsTouchInside || Length == 0)
 			{
-				return false;
-			}
-
-			if (Length == 0)
-			{
-				return false;
+				return;
 			}
 
 			SetCursorByTouch();
 
+			_lastCursorUpdate = DateTime.Now;
 			_isTouchDown = true;
-
-			return true;
 		}
 
-		public override void OnTouchMoved()
-		{
-			base.OnTouchMoved();
-
-			SetCursorByTouch();
-		}
 
 		public override void OnTouchDoubleClick()
 		{
@@ -1398,6 +1408,16 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
+			if (_isTouchDown)
+			{
+				var passed = DateTime.Now - _lastCursorUpdate;
+				if (passed.TotalMilliseconds > CursorUpdateDelayInMs)
+				{
+					SetCursorByTouch();
+					_lastCursorUpdate = DateTime.Now;
+				}
+			}
+
 			var bounds = ActualBounds;
 			RenderSelection(context);
 
@@ -1539,11 +1559,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			return glyph.Value.Bounds.Width;
-		}
-
-		private void DesktopTouchUp(object sender, EventArgs args)
-		{
-			_isTouchDown = false;
 		}
 	}
 }

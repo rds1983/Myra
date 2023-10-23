@@ -1304,7 +1304,7 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnMouseLeft()
 		{
-			ChildrenCopy.ProcessMouseMovement();
+			ChildrenCopy.ProcessMouseLeft();
 
 			MouseLeft.Invoke(this);
 		}
@@ -1338,7 +1338,7 @@ namespace Myra.Graphics2D.UI
 		public virtual void OnTouchLeft()
 		{
 			IsTouchInside = false;
-			ChildrenCopy.ProcessTouchMovement();
+			ChildrenCopy.ProcessTouchLeft();
 
 			TouchLeft.Invoke(this);
 		}
