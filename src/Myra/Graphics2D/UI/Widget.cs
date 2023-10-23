@@ -1135,11 +1135,6 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		protected virtual Point InternalMeasure(Point availableSize)
-		{
-			return Mathematics.PointZero;
-		}
-
 		public void Arrange(Rectangle containerBounds)
 		{
 			if (!_arrangeDirty && _containerBounds == containerBounds)
@@ -1207,10 +1202,11 @@ namespace Myra.Graphics2D.UI
 
 		protected virtual void InternalArrange()
 		{
-			foreach(var widget in ChildrenCopy)
-			{
-				widget.Arrange(ActualBounds);
-			}
+		}
+
+		protected virtual Point InternalMeasure(Point availableSize)
+		{
+			return Mathematics.PointZero;
 		}
 
 
