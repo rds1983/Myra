@@ -23,6 +23,7 @@ namespace Myra.Graphics2D.UI.Properties
 			InternalChild.Widgets.Add(new HorizontalSeparator());
 
 			var splitPanel = new HorizontalSplitPane();
+			StackPanel.SetProportionType(splitPanel, ProportionType.Fill);
 
 			_listItems = new ListBox
 			{
@@ -38,7 +39,6 @@ namespace Myra.Graphics2D.UI.Properties
 				_listItems.Items.Add(new ListItem(BuildItemText(item), null, item));
 			}
 
-			StackPanel.SetProportionType(_listItems, ProportionType.Fill);
 			splitPanel.Widgets.Add(_listItems);
 
 			_propertyGrid = new PropertyGrid();
