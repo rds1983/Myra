@@ -48,7 +48,7 @@ jobs:
       with:
         name: Myra.${{env.VERSION}}.zip
         path: Myra.${{env.VERSION}}.zip
-        retention-days: 30
+        retention-days: 10
     - name: Install NuGet
       uses: NuGet/setup-nuget@v1
     - name: Publish Myra.MonoGame to MyGet
