@@ -3,6 +3,7 @@ using FontStashSharp;
 using Myra.Utility;
 using FontStashSharp.RichText;
 using FontStashSharp.Interfaces;
+using info.lundin.math;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -76,6 +77,35 @@ namespace Myra.Graphics2D
 		private TextureFiltering _textureFiltering = TextureFiltering.Nearest;
 		public Transform Transform;
 
+		internal Rectangle DeviceScissor
+		{
+			get
+			{
+#if MONOGAME || FNA
+				var device = _renderer.GraphicsDevice;
+				return device.ScissorRectangle;
+#elif STRIDE
+				return MyraEnvironment.Game.GraphicsContext.CommandList.Scissor;
+#else
+				return _renderer.Scissor;
+#endif
+			}
+
+			set
+			{
+#if MONOGAME || FNA
+				var device = _renderer.GraphicsDevice;
+				device.ScissorRectangle = value;
+#elif STRIDE
+				Flush();
+				MyraEnvironment.Game.GraphicsContext.CommandList.SetScissorRectangle(value);
+#else
+				_renderer.Scissor = value;
+#endif
+			}
+		}
+
+
 		public Rectangle Scissor
 		{
 			get
@@ -97,13 +127,12 @@ namespace Myra.Graphics2D
 				var device = _renderer.GraphicsDevice;
 				value.X += device.Viewport.X;
 				value.Y += device.Viewport.Y;
-				device.ScissorRectangle = value;
 #elif STRIDE
 				Flush();
-				MyraEnvironment.Game.GraphicsContext.CommandList.SetScissorRectangle(value);
 #else
-				_renderer.Scissor = value;
 #endif
+
+				DeviceScissor = value;
 			}
 		}
 
@@ -127,7 +156,6 @@ namespace Myra.Graphics2D
 				_fontStashRenderer2 = new FontStashRenderer2(_renderer);
 			}
 #endif
-			_scissor = GetDeviceScissor();
 		}
 
 		/// <summary>
@@ -137,23 +165,6 @@ namespace Myra.Graphics2D
 		public void AddOpacity(float opacity)
 		{
 			Opacity *= opacity;
-		}
-
-		private Rectangle GetDeviceScissor()
-		{
-#if MONOGAME || FNA
-			var device = _renderer.GraphicsDevice;
-			var rect = device.ScissorRectangle;
-
-			rect.X -= device.Viewport.X;
-			rect.Y -= device.Viewport.Y;
-
-			return rect;
-#elif STRIDE
-			return MyraEnvironment.Game.GraphicsContext.CommandList.Scissor;
-#else
-			return _renderer.Scissor;
-#endif
 		}
 
 		private void SetTextureFiltering(TextureFiltering value)

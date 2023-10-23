@@ -706,7 +706,7 @@ namespace Myra.Graphics2D.UI
 
 		public void RenderVisual()
 		{
-			var oldScissorRectangle = _renderContext.Scissor;
+			var oldDeviceScissor = _renderContext.DeviceScissor;
 
 			_renderContext.Begin();
 
@@ -732,7 +732,7 @@ namespace Myra.Graphics2D.UI
 
 			_renderContext.End();
 
-			_renderContext.Scissor = oldScissorRectangle;
+			_renderContext.DeviceScissor = oldDeviceScissor;
 		}
 
 		public void Render()
