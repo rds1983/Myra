@@ -22,7 +22,11 @@ namespace Myra.Graphics2D.UI
 			set
 			{
 				Children.Clear();
-				Children.Add(value);
+
+				if (value != null)
+				{
+					Children.Add(value);
+				}
 			}
 		}
 

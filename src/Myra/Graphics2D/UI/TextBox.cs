@@ -1316,9 +1316,6 @@ namespace Myra.Graphics2D.UI
 
 						x += glyphRender.Value.Bounds.Right;
 						y += glyphRender.Value.LineTop;
-					} else
-					{
-//						y += lastLine.Top;
 					}
 				}
 			}
