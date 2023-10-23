@@ -91,7 +91,6 @@ namespace Myra.Graphics2D.UI
 
 		static Project()
 		{
-			LegacyClassNames["Button"] = "ImageTextButton";
 			LegacyClassNames["VerticalBox"] = "VerticalStackPanel";
 			LegacyClassNames["HorizontalBox"] = "HorizontalStackPanel";
 			LegacyClassNames["TextField"] = "TextBox";
