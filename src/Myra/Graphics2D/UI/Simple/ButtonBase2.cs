@@ -1,0 +1,150 @@
+﻿using Myra.Graphics2D.UI.Styles;
+using Myra.Utility;
+using System.ComponentModel;
+using System.Xml.Serialization;
+using System;
+
+namespace Myra.Graphics2D.UI
+{
+	public abstract class ButtonBase2: ContentControl
+	{
+		private bool _isPressed = false;
+		private bool _isClicked = false;
+
+		[Category("Appearance")]
+		public virtual IBrush PressedBackground { get; set; }
+
+		[Browsable(false)]
+		[XmlIgnore]
+		public virtual bool IsPressed
+		{
+			get
+			{
+				return _isPressed;
+			}
+
+			set
+			{
+				if (value == _isPressed)
+				{
+					return;
+				}
+
+				_isPressed = value;
+				OnPressedChanged();
+			}
+		}
+
+		public event EventHandler Click;
+		public event EventHandler PressedChanged;
+
+		/// <summary>
+		/// Fires when the value is about to be changed
+		/// Set Cancel to true if you want to cancel the change
+		/// </summary>
+		public event EventHandler<ValueChangingEventArgs<bool>> PressedChangingByUser;
+
+
+		public void DoClick()
+		{
+			OnTouchDown();
+			OnTouchUp();
+		}
+
+		public virtual void OnPressedChanged()
+		{
+			PressedChanged.Invoke(this);
+		}
+
+		protected void SetValueByUser(bool value)
+		{
+			if (value != IsPressed && PressedChangingByUser != null)
+			{
+				var args = new ValueChangingEventArgs<bool>(_isPressed, value);
+				PressedChangingByUser(this, args);
+
+				if (args.Cancel)
+				{
+					return;
+				}
+			}
+
+			IsPressed = value;
+		}
+
+		protected abstract void InternalOnTouchUp();
+		protected abstract void InternalOnTouchDown();
+
+		public override void OnTouchUp()
+		{
+			base.OnTouchUp();
+
+			if (!Enabled)
+			{
+				return;
+			}
+
+			InternalOnTouchUp();
+
+			if (_isClicked)
+			{
+				Click.Invoke(this);
+				_isClicked = false;
+			}
+		}
+
+		public override bool OnTouchDown()
+		{
+			base.OnTouchDown();
+
+			if (!Enabled)
+			{
+				return false;
+			}
+
+			InternalOnTouchDown();
+
+			_isClicked = true;
+
+			return true;
+		}
+
+		public override IBrush GetCurrentBackground()
+		{
+			var result = base.GetCurrentBackground();
+
+			if (Enabled)
+			{
+				if (IsPressed && PressedBackground != null)
+				{
+					result = PressedBackground;
+				}
+				else if (UseHoverRenderable && OverBackground != null)
+				{
+					result = OverBackground;
+				}
+			}
+			else
+			{
+				if (DisabledBackground != null)
+				{
+					result = DisabledBackground;
+				}
+			}
+
+			return result;
+		}
+
+		public void ApplyButtonStyle(ButtonStyle style)
+		{
+			ApplyWidgetStyle(style);
+
+			PressedBackground = style.PressedBackground;
+		}
+
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
+		{
+			ApplyButtonStyle(stylesheet.ButtonStyles.SafelyGetStyle(name));
+		}
+	}
+}

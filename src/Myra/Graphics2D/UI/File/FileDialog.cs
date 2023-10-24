@@ -220,6 +220,8 @@ namespace Myra.Graphics2D.UI.File
 			_buttonBack.Click += OnButtonBack;
 			_buttonForward.Click += OnButtonForward;
 
+			_textFieldFileName.Readonly = !(mode == FileDialogMode.SaveFile);
+
 			UpdateEnabled();
 		}
 

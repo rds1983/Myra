@@ -53,6 +53,8 @@ namespace MyraPad
 
 		private static readonly string[] Containers = new[]
 		{
+			"Button",
+			"ToggleButton",
 			"Window",
 			"Grid",
 			"Panel",

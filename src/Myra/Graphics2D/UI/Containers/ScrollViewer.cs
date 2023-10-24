@@ -15,7 +15,7 @@ using System.Drawing;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ScrollViewer : SingleItemContainer<Widget>, IContent
+	public class ScrollViewer : ContentControl
 	{
 		private Orientation _scrollbarOrientation;
 		internal bool _horizontalScrollingOn, _verticalScrollingOn;
