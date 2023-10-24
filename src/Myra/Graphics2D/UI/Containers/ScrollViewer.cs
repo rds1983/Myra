@@ -136,15 +136,13 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[Content]
-		public Widget Content
+		public override Widget Content
 		{
-			get
-			{
-				return base.InternalChild;
-			}
+			get => base.Content;
+
 			set
 			{
-				base.InternalChild = value;
+				base.Content = value;
 				ResetScroll();
 			}
 		}

@@ -5,7 +5,7 @@ namespace Myra.Graphics2D.UI
 	public class ContentControl: SingleItemContainer<Widget>, IContent
 	{
 		[Content]
-		public Widget Content
+		public virtual Widget Content
 		{
 			get => InternalChild;
 			set => InternalChild = value;
