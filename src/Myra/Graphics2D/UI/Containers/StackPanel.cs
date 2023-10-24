@@ -150,6 +150,32 @@ namespace Myra.Graphics2D.UI
 			_layout.Arrange(Widgets, ActualBounds);
 		}
 
+		public override void InternalRender(RenderContext context)
+		{
+
+			base.InternalRender(context);
+
+			if (!ShowGridLines)
+			{
+				return;
+			}
+
+			var bounds = ActualBounds;
+
+			int i;
+			for (i = 0; i < _layout.GridLinesX.Count; ++i)
+			{
+				var x = _layout.GridLinesX[i] + bounds.Left;
+				context.FillRectangle(new Rectangle(x, bounds.Top, 1, bounds.Height), GridLinesColor);
+			}
+
+			for (i = 0; i < _layout.GridLinesY.Count; ++i)
+			{
+				var y = _layout.GridLinesY[i] + bounds.Top;
+				context.FillRectangle(new Rectangle(bounds.Left, y, bounds.Width, 1), GridLinesColor);
+			}
+		}
+
 		public override void OnAttachedPropertyChanged(BaseAttachedPropertyInfo propertyInfo)
 		{
 			base.OnAttachedPropertyChanged(propertyInfo);
