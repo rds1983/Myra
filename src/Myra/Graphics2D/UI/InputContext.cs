@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-
-namespace Myra.Graphics2D.UI
+﻿namespace Myra.Graphics2D.UI
 {
 	public class InputContext
 	{
