@@ -326,11 +326,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		internal override bool IsInputFallsThrough(Point p)
+		internal override bool IsInputFallsThrough(Point localPos)
 		{
 			return true;
 		}
-
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{

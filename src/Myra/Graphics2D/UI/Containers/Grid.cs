@@ -531,7 +531,7 @@ namespace Myra.Graphics2D.UI
 
 		internal override bool IsInputFallsThrough(Point p)
 		{
-			return SelectedRowIndex == null || SelectedColumnIndex == null;
+			return GridSelectionMode == GridSelectionMode.None;
 		}
 
 		public static int GetColumn(Widget widget) => ColumnProperty.GetValue(widget);

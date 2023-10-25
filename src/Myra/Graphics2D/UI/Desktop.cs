@@ -802,7 +802,9 @@ namespace Myra.Graphics2D.UI
 				return false;
 			}
 
-			if (!w.IsInputFallsThrough(p))
+
+			var localPos = w.ToLocal(p);
+			if (!w.IsInputFallsThrough(localPos))
 			{
 				return true;
 			}

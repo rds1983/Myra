@@ -783,36 +783,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public event EventHandler PlacedChanged;
-		public event EventHandler VisibleChanged;
-		public event EventHandler EnabledChanged;
-
-		public event EventHandler LocationChanged;
-		public event EventHandler SizeChanged;
-		public event EventHandler ArrangeUpdated;
-
-		public event EventHandler MouseLeft;
-		public event EventHandler MouseEntered;
-		public event EventHandler MouseMoved;
-
-		[Obsolete("Use TouchLeft")]
-		public event EventHandler TouchLeft;
-
-		[Obsolete("Use TouchDown")]
-		public event EventHandler TouchEntered;
-		public event EventHandler TouchMoved;
-		public event EventHandler TouchDown;
-		public event EventHandler TouchUp;
-		public event EventHandler TouchDoubleClick;
-
-		public event EventHandler KeyboardFocusChanged;
-
-		public event EventHandler<GenericEventArgs<float>> MouseWheelChanged;
-
-		public event EventHandler<GenericEventArgs<Keys>> KeyUp;
-		public event EventHandler<GenericEventArgs<Keys>> KeyDown;
-		public event EventHandler<GenericEventArgs<char>> Char;
-
 		[Browsable(false)]
 		[XmlIgnore]
 		public Action<RenderContext> BeforeRender, AfterRender;

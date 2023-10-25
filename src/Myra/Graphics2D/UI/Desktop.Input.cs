@@ -26,6 +26,7 @@ namespace Myra.Graphics2D.UI
 		private Point? _touchPosition;
 		private float _mouseWheelDelta;
 		private readonly List<InputEventType> _scheduledInputEvents = new List<InputEventType>();
+		private readonly List<InputEventType> _scheduledInputEventsCopy = new List<InputEventType>();
 
 		public Func<MouseInfo> MouseInfoGetter { get; set; }
 
@@ -146,6 +147,9 @@ namespace Myra.Graphics2D.UI
 				delta -= _lastMouseInfo.Wheel;
 #endif
 				MouseWheelDelta = delta;
+			} else
+			{
+				MouseWheelDelta = 0;
 			}
 
 			_lastMouseInfo = mouseInfo;
@@ -241,7 +245,11 @@ namespace Myra.Graphics2D.UI
 
 		public void ProcessInputEvents()
 		{
-			foreach (var inputEventType in _scheduledInputEvents)
+			_scheduledInputEventsCopy.Clear();
+			_scheduledInputEventsCopy.AddRange(_scheduledInputEvents);
+			_scheduledInputEvents.Clear();
+
+			foreach (var inputEventType in _scheduledInputEventsCopy)
 			{
 				switch (inputEventType)
 				{
@@ -274,8 +282,6 @@ namespace Myra.Graphics2D.UI
 						break;
 				}
 			}
-
-			_scheduledInputEvents.Clear();
 		}
 
 		public MouseInfo DefaultMouseInfoGetter()

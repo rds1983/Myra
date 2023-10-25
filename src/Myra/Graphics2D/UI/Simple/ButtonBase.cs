@@ -152,7 +152,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			if (!Toggleable)
+			if (ReleaseOnTouchLeft && !Toggleable)
 			{
 				SetValueByUser(false);
 			}

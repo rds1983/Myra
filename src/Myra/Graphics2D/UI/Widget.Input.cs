@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Myra.Utility;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace Myra.Graphics2D.UI
 		private Point? _localMousePosition;
 		private Point? _localTouchPosition;
 		private readonly List<InputEventType> _scheduledInputEvents = new List<InputEventType>();
+		private readonly List<InputEventType> _scheduledInputEventsCopy = new List<InputEventType>();
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -112,7 +114,7 @@ namespace Myra.Graphics2D.UI
 					return true;
 				}
 
-				return IsInputFallsThrough(Desktop.MousePosition);
+				return IsInputFallsThrough(LocalMousePosition.Value);
 			}
 		}
 
@@ -125,9 +127,36 @@ namespace Myra.Graphics2D.UI
 					return true;
 				}
 
-				return IsInputFallsThrough(Desktop.TouchPosition.Value);
+				return IsInputFallsThrough(LocalTouchPosition.Value);
 			}
 		}
+
+		public event EventHandler PlacedChanged;
+		public event EventHandler VisibleChanged;
+		public event EventHandler EnabledChanged;
+
+		public event EventHandler LocationChanged;
+		public event EventHandler SizeChanged;
+		public event EventHandler ArrangeUpdated;
+
+		public event EventHandler MouseLeft;
+		public event EventHandler MouseEntered;
+		public event EventHandler MouseMoved;
+
+		public event EventHandler TouchLeft;
+		public event EventHandler TouchEntered;
+		public event EventHandler TouchMoved;
+		public event EventHandler TouchDown;
+		public event EventHandler TouchUp;
+		public event EventHandler TouchDoubleClick;
+
+		public event EventHandler KeyboardFocusChanged;
+
+		public event EventHandler<GenericEventArgs<float>> MouseWheelChanged;
+
+		public event EventHandler<GenericEventArgs<Keys>> KeyUp;
+		public event EventHandler<GenericEventArgs<Keys>> KeyDown;
+		public event EventHandler<GenericEventArgs<char>> Char;
 
 		private void ProcessMouseInput(InputContext inputContext)
 		{
@@ -183,14 +212,18 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		internal virtual bool IsInputFallsThrough(Point p)
+		internal virtual bool IsInputFallsThrough(Point localPos)
 		{
 			return false;
 		}
 
 		internal void ProcessInputEvents()
 		{
-			foreach (var inputEvent in _scheduledInputEvents)
+			_scheduledInputEventsCopy.Clear();
+			_scheduledInputEventsCopy.AddRange(_scheduledInputEvents);
+			_scheduledInputEvents.Clear();
+
+			foreach (var inputEvent in _scheduledInputEventsCopy)
 			{
 				switch (inputEvent)
 				{
@@ -242,8 +275,6 @@ namespace Myra.Graphics2D.UI
 						break;
 				}
 			}
-
-			_scheduledInputEvents.Clear();
 
 			foreach (var child in Children)
 			{
