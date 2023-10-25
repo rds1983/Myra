@@ -204,12 +204,6 @@ namespace Myra.Graphics2D.UI
 
 		protected internal virtual void ProcessInput(InputContext inputContext)
 		{
-			var ib = this as ImageButton;
-			if (ib != null && ib.Id == "aaa" && Desktop.TouchPosition != null)
-			{
-				var k = 5;
-			}
-
 			if (!Desktop.IsMobile)
 			{
 				ProcessMouseInput(inputContext);
@@ -238,18 +232,11 @@ namespace Myra.Graphics2D.UI
 					inputContext.MouseOrTouchHandled = true;
 				}
 			}
-		}
 
-		internal void ProcessInputChildren(InputContext inputContext)
-		{
-			foreach (var child in Children)
+			for(var i = ChildrenCopy.Count - 1; i >= 0; i--) 
 			{
+				var child = ChildrenCopy[i];
 				child.ProcessInput(inputContext);
-			}
-
-			foreach (var child in Children)
-			{
-				child.ProcessInputChildren(inputContext);
 			}
 		}
 
