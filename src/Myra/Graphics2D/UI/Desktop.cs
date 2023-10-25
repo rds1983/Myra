@@ -480,7 +480,6 @@ namespace Myra.Graphics2D.UI
 			UpdateInput();
 
 			_inputContext.Reset();
-			_inputContext.GlobalBounds = InternalBounds;
 			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
 			{
 				var widget = ChildrenCopy[i];

@@ -114,7 +114,8 @@ namespace Myra.Graphics2D.UI
 
 						ScheduleInputEvent(InputEventType.TouchDown);
 						ProcessDoubleClick(value.Value);
-					} else
+					}
+					else
 					{
 						// Touch Entered
 						ScheduleInputEvent(InputEventType.TouchEntered);
@@ -188,18 +189,45 @@ namespace Myra.Graphics2D.UI
 		{
 			if (!inputContext.MouseOrTouchHandled)
 			{
-				var oldBounds = inputContext.GlobalBounds;
-				var widgetBounds = Transform.Apply(BorderBounds);
-				inputContext.GlobalBounds = Rectangle.Intersect(oldBounds, widgetBounds);
+				var oldContainsMouse = inputContext.ParentContainsMouse;
+				var oldContainsTouch = inputContext.ParentContainsTouch;
 
 				if (!Desktop.IsMobile)
 				{
-					var isMouseInside = inputContext.GlobalBounds.Contains(Desktop.MousePosition);
-					LocalMousePosition = isMouseInside ? ToLocal(Desktop.MousePosition) : (Point?)null;
+					if (inputContext.ParentContainsMouse)
+					{
+						if (ContainsGlobalPoint(Desktop.MousePosition))
+						{
+							LocalMousePosition = ToLocal(Desktop.MousePosition);
+						}
+						else
+						{
+							LocalMousePosition = null;
+							inputContext.ParentContainsMouse = false;
+						}
+					}
+					else
+					{
+						LocalMousePosition = null;
+					}
 				}
 
-				var isTouchInside = Desktop.TouchPosition != null && inputContext.GlobalBounds.Contains(Desktop.TouchPosition.Value);
-				LocalTouchPosition = isTouchInside ? ToLocal(Desktop.TouchPosition.Value) : (Point?)null;
+				if (Desktop.TouchPosition != null && inputContext.ParentContainsTouch)
+				{
+					if (ContainsGlobalPoint(Desktop.TouchPosition.Value))
+					{
+						LocalTouchPosition = ToLocal(Desktop.TouchPosition.Value);
+					}
+					else
+					{
+						LocalTouchPosition = null;
+						inputContext.ParentContainsTouch = false;
+					}
+				}
+				else
+				{
+					LocalTouchPosition = null;
+				}
 
 				if (IsMouseInside &&
 					!Desktop.MouseWheelDelta.IsZero() &&
@@ -237,8 +265,10 @@ namespace Myra.Graphics2D.UI
 					}
 				}
 
-				inputContext.GlobalBounds = oldBounds;
-			} else
+				inputContext.ParentContainsMouse = oldContainsMouse;
+				inputContext.ParentContainsTouch = oldContainsTouch;
+			}
+			else
 			{
 				if (!Desktop.IsMobile)
 				{

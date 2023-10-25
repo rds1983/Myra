@@ -1373,8 +1373,7 @@ namespace Myra.Graphics2D.UI
 		public bool ContainsGlobalPoint(Point globalPos)
 		{
 			var localPos = ToLocal(globalPos);
-			var bounds = BorderBounds;
-			return bounds.Contains(localPos);
+			return BorderBounds.Contains(localPos);
 		}
 
 		private void DesktopTouchUp(object sender, EventArgs args)
