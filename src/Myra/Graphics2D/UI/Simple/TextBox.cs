@@ -1183,7 +1183,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var mousePos = ToLocal(Desktop.TouchPosition);
+			var mousePos = ToLocal(Desktop.TouchPosition.Value);
 			mousePos.X += _internalScrolling.X;
 			mousePos.Y += _internalScrolling.Y;
 

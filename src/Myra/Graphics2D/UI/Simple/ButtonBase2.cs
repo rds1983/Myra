@@ -93,20 +93,18 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override bool OnTouchDown()
+		public override void OnTouchDown()
 		{
 			base.OnTouchDown();
 
 			if (!Enabled)
 			{
-				return false;
+				return;
 			}
 
 			InternalOnTouchDown();
 
 			_isClicked = true;
-
-			return true;
 		}
 
 		public override IBrush GetCurrentBackground()
@@ -119,7 +117,7 @@ namespace Myra.Graphics2D.UI
 				{
 					result = PressedBackground;
 				}
-				else if (UseHoverRenderable && OverBackground != null)
+				else if (IsMouseInside && OverBackground != null)
 				{
 					result = OverBackground;
 				}

@@ -182,7 +182,7 @@ namespace Myra.Graphics2D.UI
 				color = PressedTextColor.Value;
 				useChunkColor = false;
 			}
-			else if (UseHoverRenderable && OverTextColor != null)
+			else if (IsMouseInside && OverTextColor != null)
 			{
 				color = OverTextColor.Value;
 				useChunkColor = false;

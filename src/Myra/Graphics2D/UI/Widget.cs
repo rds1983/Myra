@@ -6,7 +6,6 @@ using System.Xml.Serialization;
 using Myra.MML;
 using Myra.Graphics2D.UI.Properties;
 using Myra.Attributes;
-using System.Collections.Generic;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -24,13 +23,6 @@ using Color = FontStashSharp.FSColor;
 
 namespace Myra.Graphics2D.UI
 {
-	public enum MouseWheelFocusType
-	{
-		None,
-		Hover,
-		Focus
-	}
-
 	[Flags]
 	public enum DragDirection
 	{
@@ -54,7 +46,6 @@ namespace Myra.Graphics2D.UI
 		private bool _isModal = false;
 		private bool _measureDirty = true;
 		private bool _arrangeDirty = true;
-		private bool _active = false;
 		private Desktop _desktop;
 
 		private Point _lastMeasureSize;
@@ -66,7 +57,7 @@ namespace Myra.Graphics2D.UI
 
 		private float _opacity = 1.0f;
 
-		private bool _isMouseInside, _enabled;
+		private bool _enabled;
 		private bool _isKeyboardFocused = false;
 		private Vector2 _scale = Vector2.One;
 		private Vector2 _transformOrigin = new Vector2(0.5f, 0.5f);
@@ -428,8 +419,8 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_visible = value;
-				IsMouseInside = false;
-				IsTouchInside = false;
+				LocalMousePosition = null;
+				LocalTouchPosition = null;
 
 				OnVisibleChanged();
 			}
@@ -473,7 +464,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_mouseCursorType = value;
-				foreach(var child in Children)
+				foreach (var child in Children)
 				{
 					child.MouseCursor = value;
 				}
@@ -571,16 +562,11 @@ namespace Myra.Graphics2D.UI
 					{
 						_desktop.FocusedKeyboardWidget = null;
 					}
-
-					if (_desktop.MouseInsideWidget == this)
-					{
-						_desktop.MouseInsideWidget = null;
-					}
 				}
 
 				_desktop = value;
-				IsMouseInside = false;
-				IsTouchInside = false;
+				LocalMousePosition = null;
+				LocalTouchPosition = null;
 
 				if (_desktop != null)
 				{
@@ -613,25 +599,6 @@ namespace Myra.Graphics2D.UI
 
 				_isModal = value;
 				InvalidateMeasure();
-			}
-		}
-
-		protected internal bool Active
-		{
-			get
-			{
-				return _active;
-			}
-
-			set
-			{
-				if (_active == value)
-				{
-					return;
-				}
-
-				_active = value;
-				OnActiveChanged();
 			}
 		}
 
@@ -698,49 +665,6 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public bool IsMouseInside
-		{
-			get => _isMouseInside;
-			set
-			{
-				if (value && _isMouseInside)
-				{
-					if (Desktop != null)
-					{
-						Desktop.MouseInsideWidget = this;
-					}
-
-					OnMouseMoved();
-				}
-				else if (value && !_isMouseInside)
-				{
-					if (Desktop != null)
-					{
-						Desktop.MouseInsideWidget = this;
-					}
-
-					OnMouseEntered();
-				}
-				else if (!value && _isMouseInside)
-				{
-					if (Desktop != null && Desktop.MouseInsideWidget == this)
-					{
-						Desktop.MouseInsideWidget = null;
-					}
-
-					OnMouseLeft();
-				}
-
-				_isMouseInside = value;
-			}
-		}
-
-		[Browsable(false)]
-		[XmlIgnore]
-		public bool IsTouchInside { get; private set; }
-
-		[Browsable(false)]
-		[XmlIgnore]
 		public Widget Parent { get; internal set; }
 
 		[Browsable(false)]
@@ -770,15 +694,6 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		internal bool ContainsMouse => Desktop != null && ContainsGlobalPoint(Desktop.MousePosition);
-
-		[Browsable(false)]
-		[XmlIgnore]
-		internal bool ContainsTouch => Desktop != null && ContainsGlobalPoint(Desktop.TouchPosition);
-
-
-		[Browsable(false)]
-		[XmlIgnore]
 		public Rectangle ContainerBounds => _containerBounds;
 
 		[Browsable(false)]
@@ -803,10 +718,6 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		internal protected virtual MouseWheelFocusType MouseWheelFocusType => MouseWheelFocusType.None;
-
-		[Browsable(false)]
-		[XmlIgnore]
 		public bool IsKeyboardFocused
 		{
 			get
@@ -823,14 +734,6 @@ namespace Myra.Graphics2D.UI
 
 				_isKeyboardFocused = value;
 				KeyboardFocusChanged?.Invoke(this, EventArgs.Empty);
-			}
-		}
-
-		protected virtual bool UseHoverRenderable
-		{
-			get
-			{
-				return IsMouseInside && Active;
 			}
 		}
 
@@ -869,33 +772,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public event EventHandler PlacedChanged;
-		public event EventHandler VisibleChanged;
-		public event EventHandler EnabledChanged;
-
-		public event EventHandler LocationChanged;
-		public event EventHandler SizeChanged;
-		public event EventHandler ArrangeUpdated;
-
-		public event EventHandler MouseLeft;
-		public event EventHandler MouseEntered;
-		public event EventHandler MouseMoved;
-
-		public event EventHandler TouchLeft;
-		public event EventHandler TouchEntered;
-		public event EventHandler TouchMoved;
-		public event EventHandler TouchDown;
-		public event EventHandler TouchUp;
-		public event EventHandler TouchDoubleClick;
-
-		public event EventHandler KeyboardFocusChanged;
-
-		public event EventHandler<GenericEventArgs<float>> MouseWheelChanged;
-
-		public event EventHandler<GenericEventArgs<Keys>> KeyUp;
-		public event EventHandler<GenericEventArgs<Keys>> KeyDown;
-		public event EventHandler<GenericEventArgs<char>> Char;
-
 		[Browsable(false)]
 		[XmlIgnore]
 		public Action<RenderContext> BeforeRender, AfterRender;
@@ -921,7 +797,7 @@ namespace Myra.Graphics2D.UI
 			{
 				result = FocusedBackground;
 			}
-			else if (UseHoverRenderable && OverBackground != null)
+			else if (IsMouseInside && OverBackground != null)
 			{
 				result = OverBackground;
 			}
@@ -941,7 +817,7 @@ namespace Myra.Graphics2D.UI
 			{
 				result = FocusedBorder;
 			}
-			else if (UseHoverRenderable && OverBorder != null)
+			else if (IsMouseInside && OverBorder != null)
 			{
 				result = OverBorder;
 			}
@@ -1324,111 +1200,6 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
-		public virtual void OnMouseLeft()
-		{
-			if (MouseCursor != null)
-			{
-				MyraEnvironment.MouseCursorType = MyraEnvironment.DefaultMouseCursorType;
-			}
-
-			ChildrenCopy.ProcessMouseLeft();
-
-			MouseLeft.Invoke(this);
-		}
-
-		public virtual void OnMouseEntered()
-		{
-			if (MouseCursor != null)
-			{
-				MyraEnvironment.MouseCursorType = MouseCursor.Value;
-			}
-
-			ChildrenCopy.ProcessMouseMovement();
-
-			MouseEntered.Invoke(this);
-		}
-
-		public virtual void OnMouseMoved()
-		{
-			ChildrenCopy.ProcessMouseMovement();
-
-			MouseMoved.Invoke(this);
-		}
-
-		public virtual void OnTouchDoubleClick()
-		{
-			TouchDoubleClick.Invoke(this);
-
-			ChildrenCopy.ProcessTouchDoubleClick();
-		}
-
-		public virtual void OnMouseWheel(float delta)
-		{
-			MouseWheelChanged.Invoke(this, delta);
-		}
-
-		public virtual void OnTouchLeft()
-		{
-			IsTouchInside = false;
-			ChildrenCopy.ProcessTouchLeft();
-
-			TouchLeft.Invoke(this);
-		}
-
-		public virtual void OnTouchEntered()
-		{
-			IsTouchInside = true;
-			ChildrenCopy.ProcessTouchMovement();
-
-			TouchEntered.Invoke(this);
-		}
-
-		public virtual void OnTouchMoved()
-		{
-			IsTouchInside = true;
-			ChildrenCopy.ProcessTouchMovement();
-
-			TouchMoved.Invoke(this);
-		}
-
-		/// <summary>
-		/// Returns true if the touch was handled
-		/// </summary>
-		/// <returns></returns>
-		public virtual bool OnTouchDown()
-		{
-			IsTouchInside = true;
-
-			if (Enabled && AcceptsKeyboardFocus)
-			{
-				Desktop.FocusedKeyboardWidget = this;
-			}
-
-			if (DragHandle != null && DragHandle.ContainsTouch)
-			{
-				var parent = Parent != null ? (ITransformable)Parent : Desktop;
-				_startPos = parent.ToLocal(new Vector2(Desktop.TouchPosition.X, Desktop.TouchPosition.Y));
-				_startLeftTop = new Point(Left, Top);
-			}
-
-
-			var result = ChildrenCopy.ProcessTouchDown();
-
-			TouchDown.Invoke(this);
-
-			return result;
-		}
-
-		public virtual void OnTouchUp()
-		{
-			_startPos = null;
-			IsTouchInside = false;
-
-			ChildrenCopy.ProcessTouchUp();
-
-			TouchUp.Invoke(this);
-		}
-
 		protected void FireKeyDown(Keys k)
 		{
 			KeyDown.Invoke(this, k);
@@ -1468,10 +1239,6 @@ namespace Myra.Graphics2D.UI
 		public virtual void OnGotKeyboardFocus()
 		{
 			IsKeyboardFocused = true;
-		}
-
-		protected internal virtual void OnActiveChanged()
-		{
 		}
 
 		public void RemoveFromParent()
@@ -1540,7 +1307,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var parent = Parent != null ? (ITransformable)Parent : Desktop;
-			var newPos = parent.ToLocal(new Vector2(Desktop.TouchPosition.X, Desktop.TouchPosition.Y));
+			var newPos = parent.ToLocal(new Vector2(Desktop.TouchPosition.Value.X, Desktop.TouchPosition.Value.Y));
 			var delta = newPos - _startPos.Value;
 
 			var newLeft = Left;

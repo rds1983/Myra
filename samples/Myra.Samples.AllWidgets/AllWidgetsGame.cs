@@ -6,7 +6,6 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 #if ANDROID
-using Microsoft.Xna.Framework.GamerServices;
 #endif
 #else
 using System.Threading.Tasks;
@@ -108,28 +107,6 @@ namespace Myra.Samples.AllWidgets
 			Window.TextInput += (s, a) =>
 			{
 				_desktop.OnChar(a.Character);
-			};
-#endif
-
-#if ANDROID
-			_desktop.WidgetGotKeyboardFocus += (s, a) =>
-			{
-				var asTextBox = a.Data as TextBox;
-				if (asTextBox == null)
-				{
-					return;
-				}
-
-				Guide.BeginShowKeyboardInput(PlayerIndex.One,
-					"Title",
-					"Description",
-					asTextBox.Text,
-					new AsyncCallback(r =>
-					{
-						var text = Guide.EndShowKeyboardInput(r);
-						asTextBox.Text = text;
-					}),
-					null);
 			};
 #endif
 		}

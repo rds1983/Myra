@@ -228,7 +228,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		protected internal override MouseWheelFocusType MouseWheelFocusType => _verticalScrollingOn ? MouseWheelFocusType.Hover : MouseWheelFocusType.None;
+		protected internal override bool AcceptsMouseWheel => _verticalScrollingOn;
 
 		public override Desktop Desktop
 		{
@@ -353,18 +353,18 @@ namespace Myra.Graphics2D.UI
 			_startBoundsPos = null;
 		}
 
-		public override bool OnTouchDown()
+		public override void OnTouchDown()
 		{
 			base.OnTouchDown();
 
-			var touchPosition = ToLocal(Desktop.TouchPosition);
+			var touchPosition = ToLocal(Desktop.TouchPosition.Value);
 
 			var r = _verticalScrollbarThumb;
 			var thumbPosition = ThumbPosition;
 			r.Y += thumbPosition.Y;
 			if (ShowVerticalScrollBar && _verticalScrollingOn && r.Contains(touchPosition))
 			{
-				_startBoundsPos = Desktop.TouchPosition.Y;
+				_startBoundsPos = Desktop.TouchPosition.Value.Y;
 				_scrollbarOrientation = Orientation.Vertical;
 			}
 
@@ -372,11 +372,9 @@ namespace Myra.Graphics2D.UI
 			r.X += thumbPosition.X;
 			if (ShowHorizontalScrollBar && _horizontalScrollingOn && r.Contains(touchPosition))
 			{
-				_startBoundsPos = Desktop.TouchPosition.X;
+				_startBoundsPos = Desktop.TouchPosition.Value.X;
 				_scrollbarOrientation = Orientation.Horizontal;
 			}
-
-			return true;
 		}
 
 		public override void OnMouseWheel(float delta)
@@ -622,16 +620,16 @@ namespace Myra.Graphics2D.UI
 			int delta;
 			if (_scrollbarOrientation == Orientation.Horizontal)
 			{
-				delta = (touchPosition.X - _startBoundsPos.Value) * ScrollMaximum.X / _thumbMaximumX;
-				_startBoundsPos = touchPosition.X;
+				delta = (touchPosition.Value.X - _startBoundsPos.Value) * ScrollMaximum.X / _thumbMaximumX;
+				_startBoundsPos = touchPosition.Value.X;
 			}
 			else
 			{
-				delta = (touchPosition.Y - _startBoundsPos.Value) * ScrollMaximum.Y / _thumbMaximumY;
-				_startBoundsPos = touchPosition.Y;
+				delta = (touchPosition.Value.Y - _startBoundsPos.Value) * ScrollMaximum.Y / _thumbMaximumY;
+				_startBoundsPos = touchPosition.Value.Y;
 			}
 
-			
+
 			MoveThumb(delta);
 		}
 
@@ -643,6 +641,17 @@ namespace Myra.Graphics2D.UI
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplyScrollViewerStyle(stylesheet.ScrollViewerStyles.SafelyGetStyle(name));
+		}
+
+		internal override bool IsInputFallsThrough(Point localPos)
+		{
+			if (_horizontalScrollingOn && _horizontalScrollbarFrame.Contains(localPos) ||
+				_verticalScrollingOn && _verticalScrollbarFrame.Contains(localPos))
+			{
+				return false;
+			}
+
+			return true;
 		}
 	}
 }

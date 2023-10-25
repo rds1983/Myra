@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using Myra.Attributes;
 using System;
 using System.Collections.ObjectModel;
@@ -43,5 +44,9 @@ namespace Myra.Graphics2D.UI
 			Widgets.Remove(child);
 		}
 
+		internal override bool IsInputFallsThrough(Point p)
+		{
+			return true;
+		}
 	}
 }

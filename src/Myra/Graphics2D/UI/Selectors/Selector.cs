@@ -1,4 +1,5 @@
-﻿using Myra.Attributes;
+﻿using Microsoft.Xna.Framework;
+using Myra.Attributes;
 using Myra.Utility;
 using System;
 using System.Collections.ObjectModel;
@@ -28,6 +29,11 @@ namespace Myra.Graphics2D.UI
 		public abstract ItemType SelectedItem { get; set; }
 
 		public abstract event EventHandler SelectedIndexChanged;
+
+		internal override bool IsInputFallsThrough(Point localPos)
+		{
+			return true;
+		}
 	}
 
 	public abstract class Selector<WidgetType, ItemType> : SelectorBase<WidgetType, ItemType>

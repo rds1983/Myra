@@ -90,16 +90,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		protected internal override void OnActiveChanged()
-		{
-			base.OnActiveChanged();
-
-			if (!Active && IsPressed && !Toggleable)
-			{
-				IsPressed = false;
-			}
-		}
-
 		public event EventHandler Click;
 		public event EventHandler PressedChanged;
 
@@ -162,7 +152,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			if (!Toggleable)
+			if (ReleaseOnTouchLeft && !Toggleable)
 			{
 				SetValueByUser(false);
 			}
@@ -174,13 +164,13 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override bool OnTouchDown()
+		public override void OnTouchDown()
 		{
 			base.OnTouchDown();
 
 			if (!Enabled)
 			{
-				return false;
+				return;
 			}
 
 			if (!Toggleable)
@@ -193,8 +183,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			_isClicked = true;
-
-			return true;
 		}
 
 		public override void OnKeyDown(Keys k)
@@ -230,7 +218,7 @@ namespace Myra.Graphics2D.UI
 				{
 					result = PressedBackground;
 				}
-				else if (UseHoverRenderable && OverBackground != null)
+				else if (IsMouseInside && OverBackground != null)
 				{
 					result = OverBackground;
 				}

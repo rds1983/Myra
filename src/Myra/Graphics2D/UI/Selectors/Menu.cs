@@ -828,6 +828,11 @@ namespace Myra.Graphics2D.UI
 			return base.InternalMeasure(availableSize);
 		}
 
+		internal override bool IsInputFallsThrough(Point localPos)
+		{
+			return true;
+		}
+
 		public void ApplyMenuStyle(MenuStyle style)
 		{
 			var clone = new MenuStyle(style);

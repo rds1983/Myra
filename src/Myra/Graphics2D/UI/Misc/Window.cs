@@ -213,12 +213,10 @@ namespace Myra.Graphics2D.UI
 			Top = (ContainerBounds.Height - size.Y) / 2;
 		}
 
-		public override bool OnTouchDown()
+		public override void OnTouchDown()
 		{
 			BringToFront();
 			base.OnTouchDown();
-
-			return true;
 		}
 
 		public override void OnKeyDown(Keys k)
@@ -315,6 +313,22 @@ namespace Myra.Graphics2D.UI
 			}
 
 			Closed.Invoke(this);
+		}
+
+		protected internal override void ProcessInput(InputContext inputContext)
+		{
+			base.ProcessInput(inputContext);
+
+			// Modal window prevents all further input processing
+			if (IsModal)
+			{
+				inputContext.MouseOrTouchHandled = true;
+			}
+		}
+
+		internal override bool IsInputFallsThrough(Point localPos)
+		{
+			return true;
 		}
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)

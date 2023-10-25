@@ -157,7 +157,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 			public override void InternalRender(RenderContext context)
 			{
-				if (_propertyGrid.PropertyGridStyle.SelectionHoverBackground != null && UseHoverRenderable)
+				if (_propertyGrid.PropertyGridStyle.SelectionHoverBackground != null && IsMouseInside)
 				{
 					var headerBounds = HeaderBounds;
 					if (headerBounds.Contains(ToLocal(Desktop.MousePosition)))
@@ -167,6 +167,11 @@ namespace Myra.Graphics2D.UI.Properties
 				}
 
 				base.InternalRender(context);
+			}
+
+			internal override bool IsInputFallsThrough(Point localPos)
+			{
+				return true;
 			}
 		}
 
@@ -1425,6 +1430,11 @@ namespace Myra.Graphics2D.UI.Properties
 
 				y++;
 			}
+		}
+
+		internal override bool IsInputFallsThrough(Point localPos)
+		{
+			return true;
 		}
 
 		public void ApplyPropertyGridStyle(TreeStyle style)

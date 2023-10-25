@@ -51,16 +51,6 @@ namespace Myra.Graphics2D.UI
 			SetStyle(styleName);
 		}
 
-		protected internal override void OnActiveChanged()
-		{
-			base.OnActiveChanged();
-
-			if (!Active && IsPressed)
-			{
-				IsPressed = false;
-			}
-		}
-
 		public override void OnTouchLeft()
 		{
 			base.OnTouchLeft();
