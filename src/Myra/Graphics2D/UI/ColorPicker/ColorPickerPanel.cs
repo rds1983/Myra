@@ -18,6 +18,13 @@ namespace Myra.Graphics2D.UI.ColorPicker
 {
 	public partial class ColorPickerPanel
 	{
+		private enum ActiveState
+		{
+			None,
+			ColorPickerActive,
+			GradientActive
+		}
+
 		private const int Rows = 2;
 		private const int ColorsPerRow = 8;
 		private const int WheelHeight = 136;
@@ -26,6 +33,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 		private const string InputChars = "1234567890,";
 		private const string HexChars = "1234567890ABCDEFabcdef";
 		private readonly IList<Image> _userColorDisplays = new List<Image>();
+		private ActiveState _activeState;
 
 		public static readonly Color[] UserColors = new[]
 		{
@@ -272,6 +280,8 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 		private void HsPickerMove(Point p)
 		{
+			_activeState = ActiveState.ColorPickerActive;
+
 			p = _colorWheel.ToLocal(p);
 
 			int r = WheelHeight / 2;
@@ -302,6 +312,8 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 		private void VPickerMove(Point p)
 		{
+			_activeState = ActiveState.GradientActive;
+
 			p = _gradient.ToLocal(p);
 
 			int x = p.Y - _hsPicker.Bounds.Height / 2;
@@ -320,11 +332,46 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_vPicker.Tag = false;
 		}
 
-		protected internal override void ProcessInput(InputContext inputContext)
+		private void ProcessTouch()
 		{
-			base.ProcessInput(inputContext);
+			var position = Desktop.TouchPosition.Value;
+			switch (_activeState)
+			{
+				case ActiveState.None:
+					break;
+				case ActiveState.ColorPickerActive:
+					HsPickerMove(position);
+					break;
+				case ActiveState.GradientActive:
+					VPickerMove(position);
+					break;
+			}
+		}
 
+		public override void OnTouchDown()
+		{
+			base.OnTouchDown();
+			ProcessTouch();
+		}
 
+		public override void OnTouchMoved()
+		{
+			base.OnTouchMoved();
+			ProcessTouch();
+		}
+
+		public override void OnTouchLeft()
+		{
+			base.OnTouchLeft();
+
+			_activeState = ActiveState.None;
+		}
+
+		public override void OnTouchUp()
+		{
+			base.OnTouchUp();
+
+			_activeState = ActiveState.None;
 		}
 
 		private void ButtonSaveColorDown(object sender, EventArgs e)
