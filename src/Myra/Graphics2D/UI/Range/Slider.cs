@@ -159,7 +159,7 @@ namespace Myra.Graphics2D.UI
 
 		private int GetHint()
 		{
-			var pos = ToLocal(Desktop.TouchPosition);
+			var pos = ToLocal(Desktop.TouchPosition.Value);
 
 			var bounds = InternalChild.ActualBounds;
 			return Orientation == Orientation.Horizontal ? pos.X - bounds.Width / 2 : pos.Y - bounds.Height / 2;
@@ -187,14 +187,12 @@ namespace Myra.Graphics2D.UI
 			SyncHintWithValue();
 		}
 
-		public override bool OnTouchDown()
+		public override void OnTouchDown()
 		{
 			base.OnTouchDown();
 
 			UpdateHint();
 			InternalChild.IsPressed = true;
-
-			return true;
 		}
 
 		private void UpdateHint()

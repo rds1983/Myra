@@ -80,7 +80,7 @@ namespace Myra.Graphics2D.UI
 			Proportion firstProportion, secondProportion;
 			float fp;
 
-			var position = ToLocal(Desktop.TouchPosition);
+			var position = ToLocal(Desktop.TouchPosition.Value);
 			if (Orientation == Orientation.Horizontal)
 			{
 				var firstWidth = position.X - _mouseCoord.Value;
@@ -145,8 +145,8 @@ namespace Myra.Graphics2D.UI
 
 				var handleGlobalPos = _handleDown.ToGlobal(_handleDown.Bounds.Location);
 				_mouseCoord = Orientation == Orientation.Horizontal
-					? Desktop.TouchPosition.X - handleGlobalPos.X
-					: Desktop.TouchPosition.Y - handleGlobalPos.Y;
+					? Desktop.TouchPosition.Value.X - handleGlobalPos.X
+					: Desktop.TouchPosition.Value.Y - handleGlobalPos.Y;
 			}
 		}
 

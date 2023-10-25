@@ -31,10 +31,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private TreeNode HoverRow
-		{
-			get; set;
-		}
+		private TreeNode HoverRow { get; set; }
 
 		public TreeNode SelectedRow
 		{
@@ -180,23 +177,26 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override bool OnTouchDown()
+		internal override bool IsInputFallsThrough(Point p)
+		{
+			if (HoverRow != null && !HoverRow.RowVisible)
+			{
+				return false;
+			}
+
+			return base.IsInputFallsThrough(p);
+		}
+
+		public override void OnTouchDown()
 		{
 			base.OnTouchDown();
 
-			SetHoverRow(Desktop.TouchPosition);
+			SetHoverRow(Desktop.TouchPosition.Value);
 
-			if (HoverRow != null)
+			if (HoverRow != null && HoverRow.RowVisible)
 			{
-				if (!HoverRow.RowVisible)
-				{
-					return false;
-				}
-
 				SelectedRow = HoverRow;
 			}
-
-			return true;
 		}
 
 		public override void OnTouchDoubleClick()
@@ -210,7 +210,7 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
-				if (HoverRow.Mark.Visible && !HoverRow.Mark.ContainsTouch)
+				if (HoverRow.Mark.Visible && !HoverRow.Mark.IsTouchInside)
 				{
 					HoverRow.Mark.DoClick();
 				}
@@ -339,7 +339,7 @@ namespace Myra.Graphics2D.UI
 				_rowInfosDirty = false;
 			}
 
-			if (Active && HoverRow != null && HoverRow != SelectedRow && SelectionHoverBackground != null)
+			if (HoverRow != null && HoverRow != SelectedRow && SelectionHoverBackground != null)
 			{
 				var rect = BuildRowRect(HoverRow);
 				SelectionHoverBackground.Draw(context, rect);

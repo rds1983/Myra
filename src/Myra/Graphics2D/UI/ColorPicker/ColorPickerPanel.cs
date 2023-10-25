@@ -138,14 +138,6 @@ namespace Myra.Graphics2D.UI.ColorPicker
 		}
 
 		private ColorHSV colorHSV;
-		private enum ActiveState
-		{
-			None,
-			ColorPickerActive,
-			GradientActive
-		}
-
-		private ActiveState _activeState;
 
 		public ColorPickerPanel()
 		{
@@ -221,12 +213,12 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_colorBackground.Renderable = checkerboardRenderable;
 
 			_colorWheel.Renderable = DefaultAssets.UITextureRegionAtlas["color-picker-wheel"];
-			_colorWheel.TouchDown += (s, a) => HsPickerMove(Desktop.TouchPosition);
-			_colorWheel.TouchMoved += (s, a) => HsPickerMove(Desktop.TouchPosition);
+			_colorWheel.TouchDown += (s, a) => HsPickerMove(Desktop.TouchPosition.Value);
+			_colorWheel.TouchMoved += (s, a) => HsPickerMove(Desktop.TouchPosition.Value);
 
 			_gradient.Renderable = DefaultAssets.UITextureRegionAtlas["color-picker-gradient"];
-			_gradient.TouchDown += (s, e) => VPickerMove(Desktop.TouchPosition);
-			_gradient.TouchMoved += (s, e) => VPickerMove(Desktop.TouchPosition);
+			_gradient.TouchDown += (s, e) => VPickerMove(Desktop.TouchPosition.Value);
+			_gradient.TouchMoved += (s, e) => VPickerMove(Desktop.TouchPosition.Value);
 
 			OnColorChanged(Color.White);
 		}
@@ -280,11 +272,6 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 		private void HsPickerMove(Point p)
 		{
-			if (_activeState != ActiveState.ColorPickerActive)
-			{
-				return;
-			}
-
 			p = _colorWheel.ToLocal(p);
 
 			int r = WheelHeight / 2;
@@ -315,11 +302,6 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 		private void VPickerMove(Point p)
 		{
-			if (_activeState != ActiveState.GradientActive)
-			{
-				return;
-			}
-
 			p = _gradient.ToLocal(p);
 
 			int x = p.Y - _hsPicker.Bounds.Height / 2;
@@ -338,61 +320,11 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_vPicker.Tag = false;
 		}
 
-		public override bool OnTouchDown()
+		protected internal override void ProcessInput(InputContext inputContext)
 		{
-			base.OnTouchDown();
+			base.ProcessInput(inputContext);
 
-			var position = Desktop.TouchPosition;
-			if (_colorWheel.ContainsTouch)
-			{
-				_activeState = ActiveState.ColorPickerActive;
-				HsPickerMove(position);
-			}
-			else if (_gradient.ContainsTouch)
-			{
-				_activeState = ActiveState.GradientActive;
-				VPickerMove(position);
-			}
-			else
-			{
-				_activeState = ActiveState.None;
-			}
 
-			return true;
-		}
-
-		public override void OnTouchMoved()
-		{
-			base.OnTouchMoved();
-
-			var position = Desktop.TouchPosition;
-			if (_activeState == ActiveState.GradientActive)
-			{
-				VPickerMove(position);
-			}
-			else if (_colorWheel.ContainsTouch)
-			{
-				_activeState = ActiveState.ColorPickerActive;
-				HsPickerMove(position);
-			}
-			else
-			{
-				_activeState = ActiveState.None;
-			}
-		}
-
-		public override void OnTouchLeft()
-		{
-			base.OnTouchLeft();
-
-			_activeState = ActiveState.None;
-		}
-
-		public override void OnTouchUp()
-		{
-			base.OnTouchUp();
-
-			_activeState = ActiveState.None;
 		}
 
 		private void ButtonSaveColorDown(object sender, EventArgs e)

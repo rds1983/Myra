@@ -157,7 +157,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 			public override void InternalRender(RenderContext context)
 			{
-				if (_propertyGrid.PropertyGridStyle.SelectionHoverBackground != null && UseHoverRenderable)
+				if (_propertyGrid.PropertyGridStyle.SelectionHoverBackground != null && IsMouseInside)
 				{
 					var headerBounds = HeaderBounds;
 					if (headerBounds.Contains(ToLocal(Desktop.MousePosition)))
