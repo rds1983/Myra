@@ -1,11 +1,18 @@
-﻿using Microsoft.Xna.Framework;
-using Myra.Attributes;
+﻿using Myra.Attributes;
 using Myra.Utility;
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Xml.Serialization;
+
+#if MONOGAME || FNA
+using Microsoft.Xna.Framework;
+#elif STRIDE
+using Stride.Core.Mathematics;
+#else
+using System.Drawing;
+#endif
 
 namespace Myra.Graphics2D.UI
 {

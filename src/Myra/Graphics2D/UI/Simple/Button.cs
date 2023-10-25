@@ -1,15 +1,15 @@
 ﻿using Myra.Graphics2D.UI.Styles;
 using Myra.Attributes;
-using Myra.Utility;
-using Microsoft.Xna.Framework.Input;
 using System;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 #elif STRIDE
 using Stride.Core.Mathematics;
+using Stride.Input;
 #else
-using Color = FontStashSharp.FSColor;
+using Myra.Platform;
 #endif
 
 namespace Myra.Graphics2D.UI

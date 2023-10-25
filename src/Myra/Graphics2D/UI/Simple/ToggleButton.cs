@@ -1,7 +1,13 @@
-﻿using Microsoft.Xna.Framework.Input;
-using Myra.Attributes;
+﻿using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
-using System.Security.Cryptography.X509Certificates;
+
+#if MONOGAME || FNA
+using Microsoft.Xna.Framework.Input;
+#elif STRIDE
+using Stride.Input;
+#else
+using Myra.Platform;
+#endif
 
 namespace Myra.Graphics2D.UI
 {

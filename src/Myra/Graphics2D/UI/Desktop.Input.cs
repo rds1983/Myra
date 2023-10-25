@@ -1,10 +1,23 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Touch;
-using MonoGame.Framework.Utilities;
-using Myra.Utility;
+﻿using Myra.Utility;
 using System;
 using System.Collections.Generic;
+
+#if MONOGAME || FNA
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
+#if MONOGAME
+using MonoGame.Framework.Utilities;
+#endif
+#elif STRIDE
+using Stride.Core.Mathematics;
+using Stride.Input;
+#else
+using System.Drawing;
+using Myra.Platform;
+using System.Numerics;
+using Matrix = System.Numerics.Matrix3x2;
+#endif
 
 namespace Myra.Graphics2D.UI
 {
@@ -260,6 +273,7 @@ namespace Myra.Graphics2D.UI
 			}
 			else
 			{
+#if MONOGAME || FNA || PLATFORM_AGNOSTIC
 				try
 				{
 					UpdateTouchInput();
@@ -267,6 +281,7 @@ namespace Myra.Graphics2D.UI
 				catch (Exception)
 				{
 				}
+#endif
 			}
 		}
 

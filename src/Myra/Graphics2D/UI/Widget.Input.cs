@@ -1,11 +1,20 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using Myra.Utility;
+﻿using Myra.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Xml.Serialization;
+
+#if MONOGAME || FNA
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+#elif STRIDE
+using Stride.Core.Mathematics;
+using Stride.Input;
+#else
+using System.Numerics;
+using System.Drawing;
+using Myra.Platform;
+#endif
 
 namespace Myra.Graphics2D.UI
 {
@@ -39,6 +48,11 @@ namespace Myra.Graphics2D.UI
 
 				var oldValue = _localMousePosition;
 				_localMousePosition = value;
+
+				if (Desktop == null)
+				{
+					return;
+				}
 
 				if (value != null && oldValue == null)
 				{
@@ -81,6 +95,11 @@ namespace Myra.Graphics2D.UI
 
 				var oldValue = _localTouchPosition;
 				_localTouchPosition = value;
+
+				if (Desktop == null)
+				{
+					return;
+				}
 
 				if (value != null && oldValue == null)
 				{
