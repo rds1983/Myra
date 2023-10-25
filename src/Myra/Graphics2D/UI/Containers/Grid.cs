@@ -490,12 +490,22 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnMouseEntered();
 
+			if (Desktop == null)
+			{
+				return;
+			}
+
 			UpdateHoverPosition(Desktop.MousePosition);
 		}
 
 		public override void OnMouseMoved()
 		{
 			base.OnMouseMoved();
+
+			if (Desktop == null)
+			{
+				return;
+			}
 
 			UpdateHoverPosition(Desktop.MousePosition);
 		}
@@ -527,11 +537,6 @@ namespace Myra.Graphics2D.UI
 					SelectedColumnIndex = null;
 				}
 			}
-		}
-
-		internal override bool IsInputFallsThrough(Point p)
-		{
-			return GridSelectionMode == GridSelectionMode.None;
 		}
 
 		public static int GetColumn(Widget widget) => ColumnProperty.GetValue(widget);

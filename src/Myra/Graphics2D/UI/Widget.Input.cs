@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Xml.Serialization;
+using System.Diagnostics;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -137,32 +138,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		internal bool MouseEventFallsThrough
-		{
-			get
-			{
-				if (Desktop == null || !IsMouseInside)
-				{
-					return true;
-				}
-
-				return IsInputFallsThrough(LocalMousePosition.Value);
-			}
-		}
-
-		internal bool TouchEventFallsThrough
-		{
-			get
-			{
-				if (Desktop == null || !IsTouchInside)
-				{
-					return true;
-				}
-
-				return IsInputFallsThrough(LocalTouchPosition.Value);
-			}
-		}
-
 		protected internal virtual bool AcceptsMouseWheel => false;
 
 		public event EventHandler PlacedChanged;
@@ -192,18 +167,6 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler<GenericEventArgs<Keys>> KeyDown;
 		public event EventHandler<GenericEventArgs<char>> Char;
 
-		private void ProcessMouseInput(InputContext inputContext)
-		{
-			var isMouseInside = ContainsGlobalPoint(Desktop.MousePosition) && !inputContext.MouseOrTouchHandled;
-			LocalMousePosition = isMouseInside ? ToLocal(Desktop.MousePosition) : (Point?)null;
-		}
-
-		private void ProcessTouchInput(InputContext inputContext)
-		{
-			var isTouchInside = Desktop.TouchPosition != null && ContainsGlobalPoint(Desktop.TouchPosition.Value) && !inputContext.MouseOrTouchHandled;
-			LocalTouchPosition = isTouchInside ? ToLocal(Desktop.TouchPosition.Value) : (Point?)null;
-		}
-
 		private void ProcessDoubleClick(Point touchPos)
 		{
 			if (_lastTouchDown != null &&
@@ -223,107 +186,138 @@ namespace Myra.Graphics2D.UI
 
 		protected internal virtual void ProcessInput(InputContext inputContext)
 		{
-			if (!Desktop.IsMobile)
+			if (!inputContext.MouseOrTouchHandled)
 			{
-				ProcessMouseInput(inputContext);
-			}
+				var oldBounds = inputContext.GlobalBounds;
+				var widgetBounds = Transform.Apply(BorderBounds);
+				inputContext.GlobalBounds = Rectangle.Intersect(oldBounds, widgetBounds);
 
-			ProcessTouchInput(inputContext);
-
-			if (IsMouseInside &&
-				!inputContext.MouseOrTouchHandled &&
-				!Desktop.MouseWheelDelta.IsZero() &&
-				AcceptsMouseWheel)
-			{
-				inputContext.MouseWheelWidget = this;
-			}
-
-			if (!Desktop.IsMobile)
-			{
-				if (!MouseEventFallsThrough)
+				if (!Desktop.IsMobile)
 				{
+					var isMouseInside = inputContext.GlobalBounds.Contains(Desktop.MousePosition);
+					LocalMousePosition = isMouseInside ? ToLocal(Desktop.MousePosition) : (Point?)null;
+				}
+
+				var isTouchInside = Desktop.TouchPosition != null && inputContext.GlobalBounds.Contains(Desktop.TouchPosition.Value);
+				LocalTouchPosition = isTouchInside ? ToLocal(Desktop.TouchPosition.Value) : (Point?)null;
+
+				if (IsMouseInside &&
+					!Desktop.MouseWheelDelta.IsZero() &&
+					AcceptsMouseWheel)
+				{
+					inputContext.MouseWheelWidget = this;
+				}
+
+				for (var i = ChildrenCopy.Count - 1; i >= 0; i--)
+				{
+					var child = ChildrenCopy[i];
+					child.ProcessInput(inputContext);
+				}
+
+				if (IsModal)
+				{
+					// Modal widget prevents all further input processing
 					inputContext.MouseOrTouchHandled = true;
 				}
+				else
+				{
+					if (!Desktop.IsMobile)
+					{
+						if (IsMouseInside)
+						{
+							inputContext.MouseOrTouchHandled = true;
+						}
+					}
+					else
+					{
+						if (IsTouchInside)
+						{
+							inputContext.MouseOrTouchHandled = true;
+						}
+					}
+				}
+
+				inputContext.GlobalBounds = oldBounds;
 			} else
 			{
-				if (!TouchEventFallsThrough)
+				if (!Desktop.IsMobile)
 				{
-					inputContext.MouseOrTouchHandled = true;
+					LocalMousePosition = null;
+				}
+
+				LocalTouchPosition = null;
+
+				for (var i = ChildrenCopy.Count - 1; i >= 0; i--)
+				{
+					var child = ChildrenCopy[i];
+					child.ProcessInput(inputContext);
 				}
 			}
-
-			for(var i = ChildrenCopy.Count - 1; i >= 0; i--) 
-			{
-				var child = ChildrenCopy[i];
-				child.ProcessInput(inputContext);
-			}
-		}
-
-		internal virtual bool IsInputFallsThrough(Point localPos)
-		{
-			return false;
 		}
 
 		internal void ProcessInputEvents()
 		{
-			_scheduledInputEventsCopy.Clear();
-			_scheduledInputEventsCopy.AddRange(_scheduledInputEvents);
-			_scheduledInputEvents.Clear();
-
-			foreach (var inputEvent in _scheduledInputEventsCopy)
+			if (_scheduledInputEvents.Count > 0)
 			{
-				switch (inputEvent)
+				_scheduledInputEventsCopy.Clear();
+				_scheduledInputEventsCopy.AddRange(_scheduledInputEvents);
+				_scheduledInputEvents.Clear();
+
+				foreach (var inputEvent in _scheduledInputEventsCopy)
 				{
-					case InputEventType.MouseLeft:
-						OnMouseLeft();
-						MouseLeft.Invoke(this);
-						break;
-					case InputEventType.MouseEntered:
-						OnMouseEntered();
-						MouseEntered.Invoke(this);
-						break;
-					case InputEventType.MouseMoved:
-						OnMouseMoved();
-						MouseMoved.Invoke(this);
-						break;
-					case InputEventType.MouseWheel:
-						OnMouseWheel(Desktop.MouseWheelDelta);
-						MouseWheelChanged.Invoke(this, Desktop.MouseWheelDelta);
-						break;
-					case InputEventType.TouchLeft:
-						OnTouchLeft();
-						TouchLeft.Invoke(this);
-						break;
-					case InputEventType.TouchEntered:
-						OnTouchEntered();
-						TouchEntered.Invoke(this);
-						break;
-					case InputEventType.TouchMoved:
-						OnTouchMoved();
-						TouchMoved.Invoke(this);
-						break;
-					case InputEventType.TouchDown:
-						if (DragHandle != null && DragHandle.IsTouchInside)
-						{
-							var parent = Parent != null ? (ITransformable)Parent : Desktop;
-							_startPos = parent.ToLocal(new Vector2(Desktop.TouchPosition.Value.X, Desktop.TouchPosition.Value.Y));
-							_startLeftTop = new Point(Left, Top);
-						}
-						OnTouchDown();
-						TouchDown.Invoke(this);
-						break;
-					case InputEventType.TouchUp:
-						OnTouchUp();
-						TouchUp.Invoke(this);
-						break;
-					case InputEventType.TouchDoubleClick:
-						OnTouchDoubleClick();
-						TouchDoubleClick.Invoke(this);
-						break;
+					switch (inputEvent)
+					{
+						case InputEventType.MouseLeft:
+							OnMouseLeft();
+							MouseLeft.Invoke(this);
+							break;
+						case InputEventType.MouseEntered:
+							OnMouseEntered();
+							MouseEntered.Invoke(this);
+							break;
+						case InputEventType.MouseMoved:
+							OnMouseMoved();
+							MouseMoved.Invoke(this);
+							break;
+						case InputEventType.MouseWheel:
+							OnMouseWheel(Desktop.MouseWheelDelta);
+							MouseWheelChanged.Invoke(this, Desktop.MouseWheelDelta);
+							break;
+						case InputEventType.TouchLeft:
+							OnTouchLeft();
+							TouchLeft.Invoke(this);
+							break;
+						case InputEventType.TouchEntered:
+							OnTouchEntered();
+							TouchEntered.Invoke(this);
+							break;
+						case InputEventType.TouchMoved:
+							OnTouchMoved();
+							TouchMoved.Invoke(this);
+							break;
+						case InputEventType.TouchDown:
+							if (DragHandle != null && DragHandle.IsTouchInside)
+							{
+								var parent = Parent != null ? (ITransformable)Parent : Desktop;
+								_startPos = parent.ToLocal(new Vector2(Desktop.TouchPosition.Value.X, Desktop.TouchPosition.Value.Y));
+								_startLeftTop = new Point(Left, Top);
+							}
+							OnTouchDown();
+							TouchDown.Invoke(this);
+							break;
+						case InputEventType.TouchUp:
+							OnTouchUp();
+							TouchUp.Invoke(this);
+							break;
+						case InputEventType.TouchDoubleClick:
+							OnTouchDoubleClick();
+							TouchDoubleClick.Invoke(this);
+							break;
+					}
 				}
 			}
 
-			foreach (var child in Children)
+			foreach (var child in ChildrenCopy)
 			{
 				child.ProcessInputEvents();
 			}
@@ -352,26 +346,32 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnTouchLeft()
 		{
+			Debug.WriteLine($"{GetType().Name}.OnTouchLeft");
 		}
 
 		public virtual void OnTouchEntered()
 		{
+			Debug.WriteLine($"{GetType().Name}.OnTouchEntered");
 		}
 
 		public virtual void OnTouchMoved()
 		{
+			Debug.WriteLine($"{GetType().Name}.OnTouchMoved");
 		}
 
 		public virtual void OnTouchDown()
 		{
+			Debug.WriteLine($"{GetType().Name}.OnTouchDown");
 		}
 
 		public virtual void OnTouchUp()
 		{
+			Debug.WriteLine($"{GetType().Name}.OnTouchUp");
 		}
 
 		public virtual void OnTouchDoubleClick()
 		{
+			Debug.WriteLine($"{GetType().Name}.OnTouchDoubleClick");
 		}
 	}
 }

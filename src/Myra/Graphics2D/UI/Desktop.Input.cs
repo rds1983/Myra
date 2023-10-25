@@ -287,6 +287,11 @@ namespace Myra.Graphics2D.UI
 
 		public void ProcessInputEvents()
 		{
+			if (_scheduledInputEvents.Count == 0)
+			{
+				return;
+			}
+
 			_scheduledInputEventsCopy.Clear();
 			_scheduledInputEventsCopy.AddRange(_scheduledInputEvents);
 			_scheduledInputEvents.Clear();

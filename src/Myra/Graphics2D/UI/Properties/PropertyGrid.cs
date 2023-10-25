@@ -168,11 +168,6 @@ namespace Myra.Graphics2D.UI.Properties
 
 				base.InternalRender(context);
 			}
-
-			internal override bool IsInputFallsThrough(Point localPos)
-			{
-				return true;
-			}
 		}
 
 		private readonly PropertyGrid _parentGrid;
@@ -1430,11 +1425,6 @@ namespace Myra.Graphics2D.UI.Properties
 
 				y++;
 			}
-		}
-
-		internal override bool IsInputFallsThrough(Point localPos)
-		{
-			return true;
 		}
 
 		public void ApplyPropertyGridStyle(TreeStyle style)

@@ -177,16 +177,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		internal override bool IsInputFallsThrough(Point localPos)
-		{
-			if (HoverRow != null && !HoverRow.RowVisible)
-			{
-				return false;
-			}
-
-			return base.IsInputFallsThrough(localPos);
-		}
-
 		public override void OnTouchDown()
 		{
 			base.OnTouchDown();

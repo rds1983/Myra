@@ -50,10 +50,5 @@ namespace Myra.Graphics2D.UI
 		{
 			Widgets.Remove(child);
 		}
-
-		internal override bool IsInputFallsThrough(Point p)
-		{
-			return true;
-		}
 	}
 }

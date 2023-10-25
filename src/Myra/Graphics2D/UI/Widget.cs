@@ -1370,10 +1370,11 @@ namespace Myra.Graphics2D.UI
 
 		public Point ToLocal(Point pos) => ToLocal(new Vector2(pos.X, pos.Y)).ToPoint();
 
-		public bool ContainsGlobalPoint(Point pos)
+		public bool ContainsGlobalPoint(Point globalPos)
 		{
-			var localPos = ToLocal(pos);
-			return BorderBounds.Contains(localPos);
+			var localPos = ToLocal(globalPos);
+			var bounds = BorderBounds;
+			return bounds.Contains(localPos);
 		}
 
 		private void DesktopTouchUp(object sender, EventArgs args)

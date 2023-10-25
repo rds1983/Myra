@@ -480,6 +480,7 @@ namespace Myra.Graphics2D.UI
 			UpdateInput();
 
 			_inputContext.Reset();
+			_inputContext.GlobalBounds = InternalBounds;
 			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
 			{
 				var widget = ChildrenCopy[i];
@@ -804,7 +805,7 @@ namespace Myra.Graphics2D.UI
 
 		private bool InternalIsPointOverGUI(Point p, Widget w)
 		{
-			if (!w.Visible || !w.ContainsGlobalPoint(p))
+/*			if (!w.Visible || !w.ContainsGlobalPoint(p))
 			{
 				return false;
 			}
@@ -823,7 +824,7 @@ namespace Myra.Graphics2D.UI
 				{
 					return true;
 				}
-			}
+			}*/
 
 			return false;
 		}

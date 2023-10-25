@@ -315,22 +315,6 @@ namespace Myra.Graphics2D.UI
 			Closed.Invoke(this);
 		}
 
-		protected internal override void ProcessInput(InputContext inputContext)
-		{
-			base.ProcessInput(inputContext);
-
-			// Modal window prevents all further input processing
-			if (IsModal)
-			{
-				inputContext.MouseOrTouchHandled = true;
-			}
-		}
-
-		internal override bool IsInputFallsThrough(Point localPos)
-		{
-			return true;
-		}
-
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplyWindowStyle(stylesheet.WindowStyles.SafelyGetStyle(name));
