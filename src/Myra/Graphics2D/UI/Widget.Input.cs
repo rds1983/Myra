@@ -4,6 +4,7 @@ using Myra.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Xml.Serialization;
 
 namespace Myra.Graphics2D.UI
@@ -101,8 +102,14 @@ namespace Myra.Graphics2D.UI
 				}
 				else if (value == null && oldValue != null)
 				{
-					ScheduleInputEvent(InputEventType.TouchUp);
-					ScheduleInputEvent(InputEventType.TouchLeft);
+					if (Desktop.TouchPosition == null)
+					{
+						ScheduleInputEvent(InputEventType.TouchUp);
+					}
+					else
+					{
+						ScheduleInputEvent(InputEventType.TouchLeft);
+					}
 				}
 				else if (value != null && oldValue != null && value.Value != oldValue.Value)
 				{
@@ -169,7 +176,6 @@ namespace Myra.Graphics2D.UI
 		private void ProcessMouseInput(InputContext inputContext)
 		{
 			var isMouseInside = ContainsGlobalPoint(Desktop.MousePosition) && !inputContext.MouseOrTouchHandled;
-
 			LocalMousePosition = isMouseInside ? ToLocal(Desktop.MousePosition) : (Point?)null;
 		}
 
@@ -198,7 +204,17 @@ namespace Myra.Graphics2D.UI
 
 		protected internal virtual void ProcessInput(InputContext inputContext)
 		{
-			ProcessMouseInput(inputContext);
+			var ib = this as ImageButton;
+			if (ib != null && ib.Id == "aaa" && Desktop.TouchPosition != null)
+			{
+				var k = 5;
+			}
+
+			if (!Desktop.IsMobile)
+			{
+				ProcessMouseInput(inputContext);
+			}
+
 			ProcessTouchInput(inputContext);
 
 			if (IsMouseInside &&
@@ -209,14 +225,31 @@ namespace Myra.Graphics2D.UI
 				inputContext.MouseWheelWidget = this;
 			}
 
-			if (!MouseEventFallsThrough)
+			if (!Desktop.IsMobile)
 			{
-				inputContext.MouseOrTouchHandled = true;
+				if (!MouseEventFallsThrough)
+				{
+					inputContext.MouseOrTouchHandled = true;
+				}
+			} else
+			{
+				if (!TouchEventFallsThrough)
+				{
+					inputContext.MouseOrTouchHandled = true;
+				}
+			}
+		}
+
+		internal void ProcessInputChildren(InputContext inputContext)
+		{
+			foreach (var child in Children)
+			{
+				child.ProcessInput(inputContext);
 			}
 
 			foreach (var child in Children)
 			{
-				child.ProcessInput(inputContext);
+				child.ProcessInputChildren(inputContext);
 			}
 		}
 

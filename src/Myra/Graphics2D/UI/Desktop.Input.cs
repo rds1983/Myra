@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
+using MonoGame.Framework.Utilities;
 using Myra.Utility;
 using System;
 using System.Collections.Generic;
@@ -102,6 +103,19 @@ namespace Myra.Graphics2D.UI
 
 		public int RepeatKeyDownInternalInMs { get; set; } = 50;
 
+		public static bool IsMobile
+		{
+			get
+			{
+#if MONOGAME
+				return PlatformInfo.MonoGamePlatform == MonoGamePlatform.Android ||
+					PlatformInfo.MonoGamePlatform == MonoGamePlatform.iOS;
+#else
+				return false;
+#endif
+			}
+		}
+
 		public event EventHandler MouseMoved;
 
 		public event EventHandler TouchMoved;
@@ -121,9 +135,6 @@ namespace Myra.Graphics2D.UI
 			{
 				return;
 			}
-
-			PreviousMousePosition = MousePosition;
-			PreviousTouchPosition = TouchPosition;
 
 			var mouseInfo = MouseInfoGetter();
 
@@ -239,13 +250,23 @@ namespace Myra.Graphics2D.UI
 		public void UpdateInput()
 		{
 			UpdateKeyboardInput();
-			UpdateMouseInput();
-			try
+
+			PreviousMousePosition = MousePosition;
+			PreviousTouchPosition = TouchPosition;
+
+			if (!IsMobile)
 			{
-				//				UpdateTouchInput();
+				UpdateMouseInput();
 			}
-			catch (Exception)
+			else
 			{
+				try
+				{
+					UpdateTouchInput();
+				}
+				catch (Exception)
+				{
+				}
 			}
 		}
 

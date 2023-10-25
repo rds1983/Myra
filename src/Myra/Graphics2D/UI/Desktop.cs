@@ -486,6 +486,12 @@ namespace Myra.Graphics2D.UI
 				widget.ProcessInput(_inputContext);
 			}
 
+			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
+			{
+				var widget = ChildrenCopy[i];
+				widget.ProcessInputChildren(_inputContext);
+			}
+
 			// Only one widget at a time can receive mouse wheel event
 			// So scheduling it here
 			if (_inputContext.MouseWheelWidget != null)

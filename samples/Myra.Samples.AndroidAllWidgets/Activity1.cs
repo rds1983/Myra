@@ -5,14 +5,15 @@ using Android.Views;
 
 namespace Myra.Samples.AllWidgets
 {
-	[Activity(Label = "MGAndroidGame"
-		, MainLauncher = true
-		, Icon = "@drawable/icon"
-		, Theme = "@style/Theme.Splash"
-		, AlwaysRetainTaskState = true
-		, LaunchMode = Android.Content.PM.LaunchMode.SingleInstance
-		, ScreenOrientation = ScreenOrientation.FullUser
-		, ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize | ConfigChanges.ScreenLayout)]
+	[Activity(
+		Label = "@string/app_name",
+		MainLauncher = true,
+		Icon = "@drawable/icon",
+		AlwaysRetainTaskState = true,
+		LaunchMode = LaunchMode.SingleInstance,
+		ScreenOrientation = ScreenOrientation.FullUser,
+		ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize
+	)]
 	public class Activity1 : Microsoft.Xna.Framework.AndroidGameActivity
 	{
 		protected override void OnCreate(Bundle bundle)
