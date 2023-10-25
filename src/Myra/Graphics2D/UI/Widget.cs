@@ -23,13 +23,6 @@ using Color = FontStashSharp.FSColor;
 
 namespace Myra.Graphics2D.UI
 {
-	public enum MouseWheelFocusType
-	{
-		None,
-		Hover,
-		Focus
-	}
-
 	[Flags]
 	public enum DragDirection
 	{
@@ -722,10 +715,6 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public bool AcceptsKeyboardFocus { get; set; }
 
-
-		[Browsable(false)]
-		[XmlIgnore]
-		internal protected virtual MouseWheelFocusType MouseWheelFocusType => MouseWheelFocusType.None;
 
 		[Browsable(false)]
 		[XmlIgnore]

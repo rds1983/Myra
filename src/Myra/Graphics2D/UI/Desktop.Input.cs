@@ -30,10 +30,13 @@ namespace Myra.Graphics2D.UI
 
 		public Func<MouseInfo> MouseInfoGetter { get; set; }
 
+		public Point PreviousMousePosition { get; private set; }
+		public Point? PreviousTouchPosition { get; private set; }
+
 		public Point MousePosition
 		{
 			get => _mousePosition;
-			set
+			private set
 			{
 				if (value == _mousePosition)
 				{
@@ -49,7 +52,7 @@ namespace Myra.Graphics2D.UI
 		{
 			get => _touchPosition;
 
-			set
+			private set
 			{
 				if (value == _touchPosition)
 				{
@@ -118,6 +121,9 @@ namespace Myra.Graphics2D.UI
 			{
 				return;
 			}
+
+			PreviousMousePosition = MousePosition;
+			PreviousTouchPosition = TouchPosition;
 
 			var mouseInfo = MouseInfoGetter();
 

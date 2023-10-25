@@ -228,7 +228,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		protected internal override MouseWheelFocusType MouseWheelFocusType => _verticalScrollingOn ? MouseWheelFocusType.Hover : MouseWheelFocusType.None;
+		protected internal override bool AcceptsMouseWheel => _verticalScrollingOn;
 
 		public override Desktop Desktop
 		{

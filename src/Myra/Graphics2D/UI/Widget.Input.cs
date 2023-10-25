@@ -83,15 +83,21 @@ namespace Myra.Graphics2D.UI
 
 				if (value != null && oldValue == null)
 				{
-					if (Enabled && AcceptsKeyboardFocus)
+					if (Desktop.PreviousTouchPosition == null)
 					{
-						Desktop.FocusedKeyboardWidget = this;
+						// Touch Down Event
+						if (Enabled && AcceptsKeyboardFocus)
+						{
+							Desktop.FocusedKeyboardWidget = this;
+						}
+
+						ScheduleInputEvent(InputEventType.TouchDown);
+						ProcessDoubleClick(value.Value);
+					} else
+					{
+						// Touch Entered
+						ScheduleInputEvent(InputEventType.TouchEntered);
 					}
-
-					ScheduleInputEvent(InputEventType.TouchDown);
-					ScheduleInputEvent(InputEventType.TouchEntered);
-					ProcessDoubleClick(value.Value);
-
 				}
 				else if (value == null && oldValue != null)
 				{
@@ -130,6 +136,8 @@ namespace Myra.Graphics2D.UI
 				return IsInputFallsThrough(LocalTouchPosition.Value);
 			}
 		}
+
+		protected internal virtual bool AcceptsMouseWheel => false;
 
 		public event EventHandler PlacedChanged;
 		public event EventHandler VisibleChanged;
@@ -184,6 +192,7 @@ namespace Myra.Graphics2D.UI
 			else
 			{
 				_lastTouchDown = DateTime.Now;
+				_lastLocalTouchPosition = LocalTouchPosition.Value;
 			}
 		}
 
@@ -194,15 +203,14 @@ namespace Myra.Graphics2D.UI
 
 			if (IsMouseInside &&
 				!inputContext.MouseOrTouchHandled &&
-				!Desktop.MouseWheelDelta.IsZero())
+				!Desktop.MouseWheelDelta.IsZero() &&
+				AcceptsMouseWheel)
 			{
-				ScheduleInputEvent(InputEventType.MouseWheel);
+				inputContext.MouseWheelWidget = this;
 			}
 
 			if (!MouseEventFallsThrough)
 			{
-				var b = MouseEventFallsThrough;
-
 				inputContext.MouseOrTouchHandled = true;
 			}
 
@@ -282,7 +290,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void ScheduleInputEvent(InputEventType inputEvent)
+		internal void ScheduleInputEvent(InputEventType inputEvent)
 		{
 			_scheduledInputEvents.Add(inputEvent);
 		}

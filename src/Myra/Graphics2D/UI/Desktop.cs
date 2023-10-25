@@ -479,11 +479,18 @@ namespace Myra.Graphics2D.UI
 			// First input run: set Desktop/Widgets input states and schedule input events
 			UpdateInput();
 
-			_inputContext.MouseOrTouchHandled = false;
+			_inputContext.Reset();
 			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
 			{
 				var widget = ChildrenCopy[i];
 				widget.ProcessInput(_inputContext);
+			}
+
+			// Only one widget at a time can receive mouse wheel event
+			// So scheduling it here
+			if (_inputContext.MouseWheelWidget != null)
+			{
+				_inputContext.MouseWheelWidget.ScheduleInputEvent(InputEventType.MouseWheel);
 			}
 
 			// Second input run: process input events

@@ -47,8 +47,6 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public ScrollViewer ScrollViewer => InternalChild;
 
-		protected internal override MouseWheelFocusType MouseWheelFocusType => InternalChild.MouseWheelFocusType;
-
 		public ListBox(string styleName = Stylesheet.DefaultStyleName) : base(new ScrollViewer())
 		{
 			AcceptsKeyboardFocus = true;
