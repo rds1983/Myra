@@ -23,11 +23,9 @@ namespace Myra.Graphics2D.UI
 		public static readonly AttachedPropertyInfo<float> ProportionValueProperty =
 			AttachedPropertiesRegistry.Create(typeof(StackPanel), "ProportionValue", 1.0f, AttachedPropertyOption.AffectsMeasure);
 
-
+		private readonly StackPanelLayout _layout;
 		private readonly ObservableCollection<Proportion> _proportions = new ObservableCollection<Proportion>();
-		private readonly GridLayout _layout = new GridLayout();
 		private bool _childrenDirty = true;
-		private int _spacing;
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -45,41 +43,15 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(0)]
 		public int Spacing
 		{
-			get => _spacing;
-			set
-			{
-				_spacing = value;
-				if (Orientation == Orientation.Horizontal)
-				{
-					_layout.ColumnSpacing = value;
-				}
-				else
-				{
-					_layout.RowSpacing = value;
-				}
-			}
+			get => _layout.Spacing;
+			set => _layout.Spacing = value;
 		}
 
 		[Browsable(false)]
 		public Proportion DefaultProportion
 		{
-			get => Orientation == Orientation.Horizontal ? _layout.DefaultColumnProportion : _layout.DefaultRowProportion;
-			set
-			{
-				if (Orientation == Orientation.Horizontal)
-				{
-					_layout.DefaultColumnProportion = value;
-				}
-				else
-				{
-					_layout.DefaultRowProportion = value;
-				}
-			}
-		}
-
-		private ObservableCollection<Proportion> InternalProportions
-		{
-			get => Orientation == Orientation.Horizontal ? _layout.ColumnsProportions : _layout.RowsProportions;
+			get => _layout.DefaultProportion;
+			set => _layout.DefaultProportion = value;
 		}
 
 
@@ -90,8 +62,9 @@ namespace Myra.Graphics2D.UI
 
 		protected StackPanel()
 		{
+			_layout = new StackPanelLayout(Orientation);
+			ChildrenLayout = _layout;
 			GridLinesColor = Color.White;
-			DefaultProportion = Proportion.StackPanelDefault;
 
 			_proportions.CollectionChanged += (s, e) => InvalidateChildren();
 		}
@@ -108,28 +81,15 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			InternalProportions.Clear();
-
 			var index = 0;
-			foreach (var widget in Widgets)
+			foreach (var widget in ChildrenCopy)
 			{
-				if (Orientation == Orientation.Horizontal)
-				{
-					Grid.SetColumn(widget, index);
-				}
-				else
-				{
-					Grid.SetRow(widget, index);
-				}
-
 				if (index < _proportions.Count)
 				{
 					var prop = _proportions[index];
 					SetProportionType(widget, prop.Type);
 					SetProportionValue(widget, prop.Value);
 				}
-
-				InternalProportions.Add(new Proportion(GetProportionType(widget), GetProportionValue(widget)));
 
 				++index;
 			}
@@ -141,14 +101,14 @@ namespace Myra.Graphics2D.UI
 		{
 			UpdateChildren();
 
-			return _layout.Measure(Widgets, availableSize);
+			return base.InternalMeasure(availableSize);
 		}
 
 		protected override void InternalArrange()
 		{
 			UpdateChildren();
 
-			_layout.Arrange(Widgets, ActualBounds);
+			base.InternalArrange();
 		}
 
 		public override void InternalRender(RenderContext context)

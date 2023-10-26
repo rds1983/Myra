@@ -68,8 +68,7 @@ namespace Myra.Graphics2D.UI
 			};
 
 			buttonsPanel.Widgets.Add(ButtonCancel);
-
-			InternalChild.Widgets.Add(buttonsPanel);
+			Children.Add(buttonsPanel);
 		}
 
 		public override void OnKeyDown(Keys k)

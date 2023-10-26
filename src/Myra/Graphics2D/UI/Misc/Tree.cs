@@ -270,7 +270,7 @@ namespace Myra.Graphics2D.UI
 				return false;
 			}
 
-			foreach (var widget in node.ChildNodesGrid.Widgets)
+			foreach (var widget in node.ChildNodesGrid.ChildrenCopy)
 			{
 				var subNode = (TreeNode)widget;
 				if (!Iterate(subNode, action))
@@ -297,7 +297,7 @@ namespace Myra.Graphics2D.UI
 
 			if (tree.IsExpanded)
 			{
-				foreach (var widget in tree.ChildNodesGrid.Widgets)
+				foreach (var widget in tree.ChildNodesGrid.ChildrenCopy)
 				{
 					var treeNode = (TreeNode)widget;
 					RecursiveUpdateRowVisibility(treeNode);

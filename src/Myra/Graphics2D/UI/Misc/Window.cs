@@ -22,7 +22,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class Window : ContentControl
 	{
-		private readonly SingleItemLayout<VerticalStackPanel> _layout;
+		private readonly StackPanelLayout _layout = new StackPanelLayout(Orientation.Vertical);
 		private readonly Label _titleLabel;
 		private Widget _content;
 		private Widget _previousKeyboardFocus;
@@ -95,13 +95,13 @@ namespace Myra.Graphics2D.UI
 				// Remove existing
 				if (_content != null)
 				{
-					_layout.Child.Widgets.Remove(_content);
+					Children.Remove(_content);
 				}
 
 				if (value != null)
 				{
 					StackPanel.SetProportionType(value, ProportionType.Fill);
-					_layout.Child.Widgets.Insert(1, value);
+					Children.Insert(1, value);
 				}
 
 				_content = value;
@@ -147,20 +147,12 @@ namespace Myra.Graphics2D.UI
 
 		private bool IsWindowPlaced { get; set; }
 
-		protected VerticalStackPanel InternalChild => _layout.Child;
-
 		public event EventHandler<CancellableEventArgs> Closing;
 		public event EventHandler Closed;
 
 		public Window(string styleName = Stylesheet.DefaultStyleName)
 		{
-			_layout = new SingleItemLayout<VerticalStackPanel>(this)
-			{
-				Child = new VerticalStackPanel
-				{
-					Spacing = 8
-				}
-			};
+			_layout.Spacing = 8;
 			ChildrenLayout = _layout;
 
 			AcceptsKeyboardFocus = true;
@@ -194,7 +186,7 @@ namespace Myra.Graphics2D.UI
 
 			TitlePanel.Widgets.Add(CloseButton);
 
-			_layout.Child.Widgets.Add(TitlePanel);
+			Children.Add(TitlePanel);
 
 			SetStyle(styleName);
 		}

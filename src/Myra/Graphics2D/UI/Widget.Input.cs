@@ -236,9 +236,9 @@ namespace Myra.Graphics2D.UI
 					inputContext.MouseWheelWidget = this;
 				}
 
-				for (var i = ChildrenCopy.Count - 1; i >= 0; i--)
+				for (var i = _childrenCopy.Count - 1; i >= 0; i--)
 				{
-					var child = ChildrenCopy[i];
+					var child = _childrenCopy[i];
 					child.ProcessInput(inputContext);
 				}
 
@@ -277,9 +277,9 @@ namespace Myra.Graphics2D.UI
 
 				LocalTouchPosition = null;
 
-				for (var i = ChildrenCopy.Count - 1; i >= 0; i--)
+				for (var i = _childrenCopy.Count - 1; i >= 0; i--)
 				{
-					var child = ChildrenCopy[i];
+					var child = _childrenCopy[i];
 					child.ProcessInput(inputContext);
 				}
 			}

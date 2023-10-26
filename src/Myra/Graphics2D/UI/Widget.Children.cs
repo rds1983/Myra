@@ -22,7 +22,7 @@ namespace Myra.Graphics2D.UI
 		[Content]
 		protected internal ObservableCollection<Widget> Children { get; } = new ObservableCollection<Widget>();
 
-		protected internal List<Widget> ChildrenCopy
+		protected internal IEnumerable<Widget> ChildrenCopy
 		{
 			get
 			{
@@ -100,7 +100,7 @@ namespace Myra.Graphics2D.UI
 
 		public int CalculateTotalChildCount(bool visibleOnly)
 		{
-			var result = ChildrenCopy.Count;
+			var result = _childrenCopy.Count;
 
 			foreach (var child in ChildrenCopy)
 			{

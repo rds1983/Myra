@@ -1,7 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Xml.Serialization;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -65,11 +63,13 @@ namespace Myra.Graphics2D.UI
 		public StackPanelLayout(Orientation orientation)
 		{
 			Orientation = orientation;
+			DefaultProportion = Proportion.StackPanelDefault;
 		}
 
-		private void UpdatePositions(IEnumerable<Widget> widgets)
+		private void UpdateWidgets(IEnumerable<Widget> widgets)
 		{
 			var index = 0;
+			Proportions.Clear();
 			foreach (var widget in widgets)
 			{
 				if (Orientation == Orientation.Horizontal)
@@ -81,19 +81,21 @@ namespace Myra.Graphics2D.UI
 					Grid.SetRow(widget, index);
 				}
 
+				Proportions.Add(new Proportion(StackPanel.GetProportionType(widget), StackPanel.GetProportionValue(widget)));
+
 				++index;
 			}
 		}
 
 		public Point Measure(IEnumerable<Widget> widgets, Point availableSize)
 		{
-			UpdatePositions(widgets);
+			UpdateWidgets(widgets);
 			return _layout.Measure(widgets, availableSize);
 		}
 
 		public void Arrange(IEnumerable<Widget> widgets, Rectangle bounds)
 		{
-			UpdatePositions(widgets);
+			UpdateWidgets(widgets);
 			_layout.Arrange(widgets, bounds);
 		}
 	}

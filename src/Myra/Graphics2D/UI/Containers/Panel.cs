@@ -14,7 +14,7 @@ namespace Myra.Graphics2D.UI
 	{
 		protected override void InternalArrange()
 		{
-			foreach (var control in Widgets)
+			foreach (var control in ChildrenCopy)
 			{
 				if (!control.Visible)
 				{
@@ -34,7 +34,7 @@ namespace Myra.Graphics2D.UI
 		{
 			Point result = Mathematics.PointZero;
 
-			foreach (var control in Widgets)
+			foreach (var control in ChildrenCopy)
 			{
 				if (!control.Visible)
 				{
