@@ -12,7 +12,7 @@ using System.Drawing;
 
 namespace Myra.Graphics2D.UI
 {
-	public class SingleItemContainer<T> : Widget where T : Widget
+	public class SingleItemContainer<T> : ContentControl where T : Widget
 	{
 		[Browsable(false)]
 		[XmlIgnore]
@@ -28,6 +28,12 @@ namespace Myra.Graphics2D.UI
 					Children.Add(value);
 				}
 			}
+		}
+
+		public override Widget Content
+		{
+			get => InternalChild;
+			set => InternalChild = (T)value;
 		}
 
 		protected override void InternalArrange()
