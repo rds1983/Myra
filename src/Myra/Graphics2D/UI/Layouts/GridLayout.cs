@@ -13,7 +13,7 @@ using System.Drawing;
 
 namespace Myra.Graphics2D.UI
 {
-	internal class GridLayout
+	public class GridLayout: ILayout
 	{
 		private readonly List<int> _measureColWidths = new List<int>();
 		private readonly List<int> _measureRowHeights = new List<int>();

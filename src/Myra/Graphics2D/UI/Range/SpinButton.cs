@@ -15,8 +15,9 @@ using Myra.Platform;
 
 namespace Myra.Graphics2D.UI
 {
-	public class SpinButton : SingleItemContainer<Grid>
+	public class SpinButton : Widget
 	{
+		private readonly GridLayout _layout = new GridLayout();
 		private readonly TextBox _textField;
 		private readonly Button _upButton;
 		private readonly Button _downButton;
@@ -248,18 +249,17 @@ namespace Myra.Graphics2D.UI
 
 		public SpinButton(string styleName = Stylesheet.DefaultStyleName)
 		{
+			ChildrenLayout = _layout;
 			AcceptsKeyboardFocus = true;
-
-			InternalChild = new Grid();
-
+			
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
 
-			InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
-			InternalChild.ColumnsProportions.Add(new Proportion());
+			_layout.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+			_layout.ColumnsProportions.Add(new Proportion());
 
-			InternalChild.RowsProportions.Add(new Proportion());
-			InternalChild.RowsProportions.Add(new Proportion());
+			_layout.RowsProportions.Add(new Proportion());
+			_layout.RowsProportions.Add(new Proportion());
 
 			_textField = new TextBox
 			{
@@ -275,7 +275,7 @@ namespace Myra.Graphics2D.UI
 			_textField.TextChanged += TextBoxOnTextChanged;
 			_textField.TextChangedByUser += TextBoxOnTextChangedByUser;
 
-			InternalChild.Widgets.Add(_textField);
+			Children.Add(_textField);
 
 			_upButton = new Button
 			{
@@ -288,7 +288,7 @@ namespace Myra.Graphics2D.UI
 			Grid.SetColumn(_upButton, 1);
 			_upButton.Click += UpButtonOnUp;
 
-			InternalChild.Widgets.Add(_upButton);
+			Children.Add(_upButton);
 
 			_downButton = new Button
 			{
@@ -302,7 +302,7 @@ namespace Myra.Graphics2D.UI
 			Grid.SetRow(_downButton, 1);
 
 			_downButton.Click += DownButtonOnUp;
-			InternalChild.Widgets.Add(_downButton);
+			Children.Add(_downButton);
 
 			SetStyle(styleName);
 

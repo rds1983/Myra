@@ -91,15 +91,14 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ComboBox(string styleName = Stylesheet.DefaultStyleName)
-		{
-			AcceptsKeyboardFocus = true;
-
-			InternalChild = new ImageTextButton(null)
+		public ComboBox(string styleName = Stylesheet.DefaultStyleName) :
+			base(new ImageTextButton(null)
 			{
 				Toggleable = true,
 				HorizontalAlignment = HorizontalAlignment.Stretch
-			};
+			})
+		{
+			AcceptsKeyboardFocus = true;
 
 			InternalChild.PressedChanged += InternalChild_PressedChanged;
 
@@ -167,24 +166,24 @@ namespace Myra.Graphics2D.UI
 			switch (args.Action)
 			{
 				case NotifyCollectionChangedAction.Add:
-				{
-					foreach (ListItem item in args.NewItems)
 					{
-						item.Changed += ItemOnChanged;
+						foreach (ListItem item in args.NewItems)
+						{
+							item.Changed += ItemOnChanged;
+						}
+						break;
 					}
-					break;
-				}
 
 				case NotifyCollectionChangedAction.Remove:
-				{
-					foreach (ListItem item in args.OldItems)
 					{
-						item.Changed -= ItemOnChanged;
-					}
+						foreach (ListItem item in args.OldItems)
+						{
+							item.Changed -= ItemOnChanged;
+						}
 
-					UpdateSelectedItem();
-					break;
-				}
+						UpdateSelectedItem();
+						break;
+					}
 
 				case NotifyCollectionChangedAction.Reset:
 					UpdateSelectedItem();

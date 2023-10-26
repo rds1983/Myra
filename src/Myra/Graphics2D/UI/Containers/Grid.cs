@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using Myra.Utility;
 using System.Xml.Serialization;
 using Myra.MML;
 
@@ -253,6 +252,7 @@ namespace Myra.Graphics2D.UI
 
 		public Grid()
 		{
+			ChildrenLayout = _layout;
 			_layout.ColumnsProportions.CollectionChanged += OnProportionsChanged;
 			_layout.RowsProportions.CollectionChanged += OnProportionsChanged;
 
@@ -310,16 +310,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			return RowsProportions[row];
-		}
-
-		protected override void InternalArrange()
-		{
-			_layout.Arrange(Widgets, ActualBounds);
-		}
-
-		protected override Point InternalMeasure(Point availableSize)
-		{
-			return _layout.Measure(Widgets, availableSize);
 		}
 
 		private void RenderSelection(RenderContext context)

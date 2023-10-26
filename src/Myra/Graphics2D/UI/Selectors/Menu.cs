@@ -22,8 +22,9 @@ using Color = FontStashSharp.FSColor;
 
 namespace Myra.Graphics2D.UI
 {
-	public abstract class Menu : SingleItemContainer<Grid>
+	public abstract class Menu : Widget
 	{
+		private readonly SingleItemLayout<Grid> _layout;
 		private Proportion _imageProportion = Proportion.Auto, _shortcutProportion = Proportion.Auto;
 		private bool _dirty = true;
 		private bool _internalSetSelectedIndex = false;
@@ -292,16 +293,22 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		protected Grid InternalChild => _layout.Child;
+
 		protected Menu(string styleName)
 		{
+			_layout = new SingleItemLayout<Grid>(this)
+			{
+				Child = new Grid
+				{
+					CanSelectNothing = true
+				}
+			};
+			ChildrenLayout = _layout;
+
 			Items.CollectionChanged += ItemsOnCollectionChanged;
 
 			AcceptsKeyboardFocus = true;
-
-			InternalChild = new Grid
-			{
-				CanSelectNothing = true
-			};
 
 			if (Orientation == Orientation.Horizontal)
 			{
@@ -819,7 +826,6 @@ namespace Myra.Graphics2D.UI
 		protected override Point InternalMeasure(Point availableSize)
 		{
 			UpdateGrid();
-
 			return base.InternalMeasure(availableSize);
 		}
 

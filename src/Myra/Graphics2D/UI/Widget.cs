@@ -1100,11 +1100,22 @@ namespace Myra.Graphics2D.UI
 
 		protected virtual void InternalArrange()
 		{
+			if (ChildrenLayout == null)
+			{
+				return;
+			}
+
+			ChildrenLayout.Arrange(ChildrenCopy, ActualBounds);
 		}
 
 		protected virtual Point InternalMeasure(Point availableSize)
 		{
-			return Mathematics.PointZero;
+			if (ChildrenLayout == null)
+			{
+				return Mathematics.PointZero;
+			}
+
+			return ChildrenLayout.Measure(ChildrenCopy, availableSize);
 		}
 
 

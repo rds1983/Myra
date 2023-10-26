@@ -6,20 +6,14 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Xml.Serialization;
 
-#if MONOGAME || FNA
-using Microsoft.Xna.Framework;
-#elif STRIDE
-using Stride.Core.Mathematics;
-#else
-using System.Drawing;
-#endif
-
 namespace Myra.Graphics2D.UI
 {
-	public abstract class SelectorBase<WidgetType, ItemType> : SingleItemContainer<WidgetType>, ISelectorT<ItemType>
+	public abstract class SelectorBase<WidgetType, ItemType> : Widget, ISelectorT<ItemType>
 		where WidgetType : Widget
 		where ItemType : class, ISelectorItem
 	{
+		private readonly SingleItemLayout<WidgetType> _layout;
+
 		[DefaultValue(SelectionMode.Single)]
 		public abstract SelectionMode SelectionMode { get; set; }
 
@@ -35,7 +29,20 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public abstract ItemType SelectedItem { get; set; }
 
+		[Browsable(false)]
+		[XmlIgnore]
+		protected WidgetType InternalChild => _layout.Child;
+
 		public abstract event EventHandler SelectedIndexChanged;
+
+		protected SelectorBase(WidgetType widget)
+		{
+			_layout = new SingleItemLayout<WidgetType>(this)
+			{
+				Child = widget
+			};
+			ChildrenLayout = _layout;
+		}
 	}
 
 	public abstract class Selector<WidgetType, ItemType> : SelectorBase<WidgetType, ItemType>
@@ -106,9 +113,8 @@ namespace Myra.Graphics2D.UI
 		public override event EventHandler SelectedIndexChanged;
 		public event EventHandler ItemsCollectionChanged;
 
-		protected Selector(WidgetType widget)
+		protected Selector(WidgetType widget): base(widget)
 		{
-			InternalChild = widget;
 			widget.HorizontalAlignment = HorizontalAlignment.Stretch;
 			widget.VerticalAlignment = VerticalAlignment.Stretch;
 

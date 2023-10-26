@@ -14,8 +14,10 @@ using Myra.Platform;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ButtonBase<T> : SingleItemContainer<T> where T : Widget
+	public class ButtonBase<T> : Widget where T : Widget
 	{
+		private readonly SingleItemLayout<T> _layout;
+
 		private bool _isPressed = false;
 		private bool _isClicked = false;
 
@@ -99,9 +101,16 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		public event EventHandler<ValueChangingEventArgs<bool>> PressedChangingByUser;
 
+		protected T InternalChild
+		{
+			get => _layout.Child;
+			set => _layout.Child = value;
+		}
 
 		public ButtonBase()
 		{
+			_layout = new SingleItemLayout<T>(this);
+			ChildrenLayout = _layout;
 			Toggleable = false;
 			ReleaseOnTouchLeft = true;
 		}

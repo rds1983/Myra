@@ -211,7 +211,7 @@ namespace Myra.Graphics2D.UI
 		{
 			var rowPos = ToLocal(rowInfo.ToGlobal(rowInfo.ActualBounds.Location));
 
-			return new Rectangle(ActualBounds.Left, rowPos.Y, ActualBounds.Width, rowInfo.InternalChild.GetRowHeight(0));
+			return new Rectangle(ActualBounds.Left, rowPos.Y, ActualBounds.Width, rowInfo.Grid.GetRowHeight(0));
 		}
 
 		private void SetHoverRow(Point position)

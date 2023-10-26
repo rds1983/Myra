@@ -7,14 +7,6 @@ using System.Xml.Serialization;
 using System.Collections.ObjectModel;
 using Myra.Attributes;
 
-#if MONOGAME || FNA
-using Microsoft.Xna.Framework;
-#elif STRIDE
-using Stride.Core.Mathematics;
-#else
-using System.Drawing;
-#endif
-
 namespace Myra.Graphics2D.UI
 {
 	public abstract class SplitPane : MultipleItemsContainerBase
@@ -42,6 +34,7 @@ namespace Myra.Graphics2D.UI
 
 		protected SplitPane(string styleName)
 		{
+			ChildrenLayout = _layout;
 			_widgets.CollectionChanged += WidgetsOnCollectionChanged;
 
 			SetStyle(styleName);
@@ -291,18 +284,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			FireProportionsChanged();
-		}
-
-		protected override Point InternalMeasure(Point availableSize)
-		{
-			return _layout.Measure(Children, availableSize);
-		}
-
-		protected override void InternalArrange()
-		{
-			base.InternalArrange();
-
-			_layout.Arrange(Children, ActualBounds);
 		}
 
 		public void ApplySplitPaneStyle(SplitPaneStyle style)

@@ -14,8 +14,9 @@ using Color = FontStashSharp.FSColor;
 
 namespace Myra.Graphics2D.UI
 {
-	public class TreeNode : SingleItemContainer<Grid>
+	public class TreeNode : Widget
 	{
+		private readonly SingleItemLayout<Grid> _layout;
 		private readonly Tree _topTree;
 		private readonly Grid _childNodesGrid;
 		private readonly ToggleButton _mark;
@@ -73,7 +74,7 @@ namespace Myra.Graphics2D.UI
 		[Browsable(false)]
 		public Grid Grid
 		{
-			get { return InternalChild; }
+			get { return _layout.Child; }
 		}
 
 		internal bool RowVisible { get; set; }
@@ -96,12 +97,18 @@ namespace Myra.Graphics2D.UI
 
 		public TreeNode(Tree topTree, string styleName = Stylesheet.DefaultStyleName)
 		{
-			InternalChild = new Grid();
+			_layout = new SingleItemLayout<Grid>(this)
+			{
+				Child = new Grid
+				{
+					ColumnSpacing = 2,
+					RowSpacing = 2,
+				}
+			};
+			ChildrenLayout = _layout;
+
 
 			_topTree = topTree;
-
-			InternalChild.ColumnSpacing = 2;
-			InternalChild.RowSpacing = 2;
 
 			if (_topTree != null)
 			{
@@ -120,21 +127,21 @@ namespace Myra.Graphics2D.UI
 				_childNodesGrid.Visible = _mark.IsPressed;
 			};
 
-			InternalChild.Widgets.Add(_mark);
+			Grid.Widgets.Add(_mark);
 
 			_label = new Label();
 			Grid.SetColumn(_label, 1);
 
-			InternalChild.Widgets.Add(_label);
+			Grid.Widgets.Add(_label);
 
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 
-			InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
-			InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+			Grid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
+			Grid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
 
-			InternalChild.RowsProportions.Add(new Proportion(ProportionType.Auto));
-			InternalChild.RowsProportions.Add(new Proportion(ProportionType.Auto));
+			Grid.RowsProportions.Add(new Proportion(ProportionType.Auto));
+			Grid.RowsProportions.Add(new Proportion(ProportionType.Auto));
 
 			// Second is yet another grid holding child nodes
 			_childNodesGrid = new Grid()
@@ -144,7 +151,7 @@ namespace Myra.Graphics2D.UI
 			Grid.SetColumn(_childNodesGrid, 1);
 			Grid.SetRow(_childNodesGrid, 1);
 
-			InternalChild.Widgets.Add(_childNodesGrid);
+			Grid.Widgets.Add(_childNodesGrid);
 
 			SetStyle(styleName);
 
@@ -171,7 +178,7 @@ namespace Myra.Graphics2D.UI
 
 		public TreeNode AddSubNode(string text)
 		{
-			var result = new TreeNode(_topTree ?? (Tree) this, StyleName)
+			var result = new TreeNode(_topTree ?? (Tree)this, StyleName)
 			{
 				Text = text,
 				ParentNode = this
@@ -188,7 +195,7 @@ namespace Myra.Graphics2D.UI
 
 		public TreeNode GetSubNode(int index)
 		{
-			return (TreeNode) _childNodesGrid.Widgets[index];
+			return (TreeNode)_childNodesGrid.Widgets[index];
 		}
 
 		public void RemoveSubNode(TreeNode subNode)

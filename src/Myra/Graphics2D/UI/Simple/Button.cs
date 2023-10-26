@@ -1,12 +1,11 @@
 ﻿using Myra.Graphics2D.UI.Styles;
 using Myra.Attributes;
 using System;
+using System.ComponentModel;
 
 #if MONOGAME || FNA
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 #elif STRIDE
-using Stride.Core.Mathematics;
 using Stride.Input;
 #else
 using Myra.Platform;
@@ -17,6 +16,7 @@ namespace Myra.Graphics2D.UI
 	[StyleTypeName("Button")]
 	public class Button : ButtonBase2
 	{
+		private readonly SingleItemLayout<Widget> _layout;
 		internal bool ReleaseOnTouchLeft;
 
 		public override Desktop Desktop
@@ -44,8 +44,18 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[Browsable(false)]
+		[Content]
+		public override Widget Content
+		{
+			get => _layout.Child;
+			set => _layout.Child = value;
+		}
+
 		public Button(string styleName = Stylesheet.DefaultStyleName)
 		{
+			_layout = new SingleItemLayout<Widget>(this);
+			ChildrenLayout = _layout;
 			ReleaseOnTouchLeft = true;
 
 			SetStyle(styleName);

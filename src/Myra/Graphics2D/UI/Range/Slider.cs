@@ -4,10 +4,20 @@ using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Serialization;
 
+#if MONOGAME || FNA
+using Microsoft.Xna.Framework;
+#elif STRIDE
+using Stride.Core.Mathematics;
+#else
+using System.Drawing;
+#endif
+
 namespace Myra.Graphics2D.UI
 {
-	public abstract class Slider : SingleItemContainer<Button>
+	public abstract class Slider : Widget
 	{
+		private readonly SingleItemLayout<Button> _layout;
+
 		private float _value;
 
 		[Browsable(false)]
@@ -66,6 +76,8 @@ namespace Myra.Graphics2D.UI
 				ValueChanged?.Invoke(this, new ValueChangedEventArgs<float>(oldValue, value));
 			}
 		}
+
+		private Button InternalChild => _layout.Child;
 
 		internal int Hint
 		{
@@ -147,11 +159,15 @@ namespace Myra.Graphics2D.UI
 
 		protected Slider(string styleName)
 		{
-			InternalChild = new Button(null)
+			_layout = new SingleItemLayout<Button>(this)
 			{
-				Content = new Image(),
-				ReleaseOnTouchLeft = false
+				Child = new Button(null)
+				{
+					Content = new Image(),
+					ReleaseOnTouchLeft = false
+				}
 			};
+			ChildrenLayout = _layout;
 
 			SetStyle(styleName);
 

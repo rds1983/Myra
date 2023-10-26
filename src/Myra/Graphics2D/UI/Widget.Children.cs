@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Xml.Serialization;
 
 namespace Myra.Graphics2D.UI
 {
@@ -12,6 +13,10 @@ namespace Myra.Graphics2D.UI
 	{
 		private bool _childrenDirty = true;
 		private readonly List<Widget> _childrenCopy = new List<Widget>();
+
+		[Browsable(false)]
+		[XmlIgnore]
+		public ILayout ChildrenLayout { get; set; }
 
 		[Browsable(false)]
 		[Content]

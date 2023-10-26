@@ -20,8 +20,9 @@ using Color = FontStashSharp.FSColor;
 
 namespace Myra.Graphics2D.UI
 {
-	public class Window : SingleItemContainer<VerticalStackPanel>, IContent
+	public class Window : ContentControl
 	{
+		private readonly SingleItemLayout<VerticalStackPanel> _layout;
 		private readonly Label _titleLabel;
 		private Widget _content;
 		private Widget _previousKeyboardFocus;
@@ -77,7 +78,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[Content]
-		public Widget Content
+		public override Widget Content
 		{
 			get
 			{
@@ -94,13 +95,13 @@ namespace Myra.Graphics2D.UI
 				// Remove existing
 				if (_content != null)
 				{
-					InternalChild.Widgets.Remove(_content);
+					_layout.Child.Widgets.Remove(_content);
 				}
 
 				if (value != null)
 				{
 					StackPanel.SetProportionType(value, ProportionType.Fill);
-					InternalChild.Widgets.Insert(1, value);
+					_layout.Child.Widgets.Insert(1, value);
 				}
 
 				_content = value;
@@ -109,10 +110,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public bool Result
-		{
-			get; set;
-		}
+		public bool Result { get; set; }
 
 		[DefaultValue(HorizontalAlignment.Left)]
 		public override HorizontalAlignment HorizontalAlignment
@@ -147,28 +145,32 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(Keys.Escape)]
 		public Keys CloseKey { get; set; }
 
-		private bool IsWindowPlaced
-		{
-			get; set;
-		}
+		private bool IsWindowPlaced { get; set; }
+
+		protected VerticalStackPanel InternalChild => _layout.Child;
 
 		public event EventHandler<CancellableEventArgs> Closing;
 		public event EventHandler Closed;
 
 		public Window(string styleName = Stylesheet.DefaultStyleName)
 		{
+			_layout = new SingleItemLayout<VerticalStackPanel>(this)
+			{
+				Child = new VerticalStackPanel
+				{
+					Spacing = 8
+				}
+			};
+			ChildrenLayout = _layout;
+
 			AcceptsKeyboardFocus = true;
 			CloseKey = Keys.Escape;
 
 			DragDirection = DragDirection.Both;
 
-			InternalChild = new VerticalStackPanel();
-
 			Result = false;
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
-
-			InternalChild.Spacing = 8;
 
 			TitlePanel = new HorizontalStackPanel
 			{
@@ -192,7 +194,7 @@ namespace Myra.Graphics2D.UI
 
 			TitlePanel.Widgets.Add(CloseButton);
 
-			InternalChild.Widgets.Add(TitlePanel);
+			_layout.Child.Widgets.Add(TitlePanel);
 
 			SetStyle(styleName);
 		}
@@ -223,7 +225,7 @@ namespace Myra.Graphics2D.UI
 
 		public override void OnKeyDown(Keys k)
 		{
-			base.OnKeyDown(k);	
+			base.OnKeyDown(k);
 
 			if (k == CloseKey)
 			{

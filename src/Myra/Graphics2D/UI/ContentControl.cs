@@ -3,14 +3,10 @@ using System.ComponentModel;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ContentControl: SingleItemContainer<Widget>, IContent
+	public abstract class ContentControl: Widget, IContent
 	{
 		[Content]
 		[DefaultValue(null)]
-		public virtual Widget Content
-		{
-			get => InternalChild;
-			set => InternalChild = value;
-		}
+		public abstract Widget Content { get; set; }
 	}
 }
