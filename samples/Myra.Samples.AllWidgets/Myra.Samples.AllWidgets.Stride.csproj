@@ -5,10 +5,11 @@
     <OutputPath>bin\Stride\$(Configuration)</OutputPath>
     <DefineConstants>$(DefineConstants);STRIDE</DefineConstants>
   </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="Stride.Engine" Version="4.1.0.1948" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\..\src\Myra\Myra.Stride.csproj" />
   </ItemGroup>  
