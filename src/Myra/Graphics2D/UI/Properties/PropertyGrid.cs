@@ -9,14 +9,12 @@ using Myra.Utility;
 using System.Xml.Serialization;
 using Myra.MML;
 using Myra.Graphics2D.UI.File;
-using Myra.Graphics2D.TextureAtlases;
 using System.IO;
 using Myra.Attributes;
 using FontStashSharp;
 using FontStashSharp.RichText;
 using Myra.Graphics2D.Brushes;
 using AssetManagementBase;
-using System.Xml;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -32,12 +30,16 @@ using Color = FontStashSharp.FSColor;
 
 namespace Myra.Graphics2D.UI.Properties
 {
-	public class PropertyGrid : SingleItemContainer<Grid>
+	public class PropertyGrid : Widget
 	{
+		private readonly GridLayout _layout = new GridLayout();
+
 		private const string DefaultCategoryName = "Miscellaneous";
 
-		private class SubGrid : SingleItemContainer<Grid>
+		private class SubGrid : Widget
 		{
+			private readonly GridLayout _layout = new GridLayout();
+
 			private readonly ToggleButton _mark;
 			private readonly PropertyGrid _propertyGrid;
 
@@ -55,7 +57,7 @@ namespace Myra.Graphics2D.UI.Properties
 			{
 				get
 				{
-					var headerBounds = new Rectangle(0, 0, ActualBounds.Width, InternalChild.GetRowHeight(0));
+					var headerBounds = new Rectangle(0, 0, ActualBounds.Width, _layout.GetRowHeight(0));
 
 					return headerBounds;
 				}
@@ -73,16 +75,15 @@ namespace Myra.Graphics2D.UI.Properties
 
 			public SubGrid(PropertyGrid parent, object value, string header, string category, string filter, Record parentProperty)
 			{
-				InternalChild = new Grid
-				{
-					ColumnSpacing = 4,
-					RowSpacing = 4
-				};
+				ChildrenLayout = _layout;
 
-				InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
-				InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
-				InternalChild.RowsProportions.Add(new Proportion(ProportionType.Auto));
-				InternalChild.RowsProportions.Add(new Proportion(ProportionType.Auto));
+				_layout.ColumnSpacing = 4;
+				_layout.RowSpacing = 4;
+
+				_layout.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
+				_layout.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+				_layout.RowsProportions.Add(new Proportion(ProportionType.Auto));
+				_layout.RowsProportions.Add(new Proportion(ProportionType.Auto));
 
 				_propertyGrid = new PropertyGrid(parent.PropertyGridStyle, category, parentProperty, parent)
 				{
@@ -108,18 +109,18 @@ namespace Myra.Graphics2D.UI.Properties
 					Content = markImage
 				};
 
-				InternalChild.Widgets.Add(_mark);
+				Children.Add(_mark);
 
 				_mark.PressedChanged += (sender, args) =>
 				{
 					if (_mark.IsPressed)
 					{
-						InternalChild.Widgets.Add(_propertyGrid);
+						Children.Add(_propertyGrid);
 						parent._expandedCategories.Add(category);
 					}
 					else
 					{
-						InternalChild.Widgets.Remove(_propertyGrid);
+						Children.Remove(_propertyGrid);
 						parent._expandedCategories.Remove(category);
 					}
 				};
@@ -142,7 +143,7 @@ namespace Myra.Graphics2D.UI.Properties
 				Grid.SetColumn(label, 1);
 				label.ApplyLabelStyle(parent.PropertyGridStyle.LabelStyle);
 
-				InternalChild.Widgets.Add(label);
+				Children.Add(label);
 
 				HorizontalAlignment = HorizontalAlignment.Stretch;
 				VerticalAlignment = VerticalAlignment.Stretch;
@@ -264,7 +265,7 @@ namespace Myra.Graphics2D.UI.Properties
 		{
 			get
 			{
-				return InternalChild.Widgets.Count == 0;
+				return Children.Count == 0;
 			}
 		}
 
@@ -289,12 +290,12 @@ namespace Myra.Graphics2D.UI.Properties
 		{
 			get
 			{
-				return (int)InternalChild.ColumnsProportions[0].Value;
+				return (int)_layout.ColumnsProportions[0].Value;
 			}
 
 			set
 			{
-				InternalChild.ColumnsProportions[0].Value = value;
+				_layout.ColumnsProportions[0].Value = value;
 			}
 		}
 
@@ -345,14 +346,15 @@ namespace Myra.Graphics2D.UI.Properties
 
 		private PropertyGrid(TreeStyle style, string category, Record parentProperty, PropertyGrid parentGrid = null)
 		{
+			ChildrenLayout = _layout;
+
 			_parentGrid = parentGrid;
-			InternalChild = new Grid();
 
 			_parentProperty = parentProperty;
-			InternalChild.ColumnSpacing = 8;
-			InternalChild.RowSpacing = 8;
-			InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Part, 1));
-			InternalChild.ColumnsProportions.Add(new Proportion(ProportionType.Part, 1));
+			_layout.ColumnSpacing = 8;
+			_layout.RowSpacing = 8;
+			_layout.ColumnsProportions.Add(new Proportion(ProportionType.Part, 1));
+			_layout.ColumnsProportions.Add(new Proportion(ProportionType.Part, 1));
 
 			Category = category;
 
@@ -911,7 +913,8 @@ namespace Myra.Graphics2D.UI.Properties
 			if (baseObject != null)
 			{
 				baseObject.Resources.TryGetValue(record.Name, out path);
-			} else if (Settings.ImagePropertyValueGetter != null)
+			}
+			else if (Settings.ImagePropertyValueGetter != null)
 			{
 				path = Settings.ImagePropertyValueGetter(record.Name);
 			}
@@ -981,7 +984,8 @@ namespace Myra.Graphics2D.UI.Properties
 							if (baseObject != null)
 							{
 								baseObject.Resources[record.Name] = filePath;
-							} else if (Settings.ImagePropertyValueSetter != null)
+							}
+							else if (Settings.ImagePropertyValueSetter != null)
 							{
 								Settings.ImagePropertyValueSetter(record.Name, filePath);
 							}
@@ -1215,10 +1219,10 @@ namespace Myra.Graphics2D.UI.Properties
 							Grid.SetColumnSpan(subGrid, 2);
 							Grid.SetRow(subGrid, y);
 
-							InternalChild.Widgets.Add(subGrid);
+							Children.Add(subGrid);
 
 							rowProportion = new Proportion(ProportionType.Auto);
-							InternalChild.RowsProportions.Add(rowProportion);
+							_layout.RowsProportions.Add(rowProportion);
 							++y;
 						}
 
@@ -1258,17 +1262,17 @@ namespace Myra.Graphics2D.UI.Properties
 				Grid.SetColumn(nameLabel, 0);
 				Grid.SetRow(nameLabel, oldY);
 
-				InternalChild.Widgets.Add(nameLabel);
+				Children.Add(nameLabel);
 
 				Grid.SetColumn(valueWidget, 1);
 				Grid.SetRow(valueWidget, oldY);
 				valueWidget.HorizontalAlignment = HorizontalAlignment.Stretch;
 				valueWidget.VerticalAlignment = VerticalAlignment.Top;
 
-				InternalChild.Widgets.Add(valueWidget);
+				Children.Add(valueWidget);
 
 				rowProportion = new Proportion(ProportionType.Auto);
-				InternalChild.RowsProportions.Add(rowProportion);
+				_layout.RowsProportions.Add(rowProportion);
 				++y;
 			}
 		}
@@ -1285,8 +1289,8 @@ namespace Myra.Graphics2D.UI.Properties
 
 		public void Rebuild()
 		{
-			InternalChild.RowsProportions.Clear();
-			InternalChild.Widgets.Clear();
+			_layout.RowsProportions.Clear();
+			Children.Clear();
 			_records.Clear();
 			_expandedCategories.Clear();
 
@@ -1434,7 +1438,7 @@ namespace Myra.Graphics2D.UI.Properties
 					continue;
 				}
 
-				InternalChild.Widgets.Add(subGrid);
+				Children.Add(subGrid);
 
 				if (_expandedCategories.Contains(category.Key))
 				{
@@ -1442,7 +1446,7 @@ namespace Myra.Graphics2D.UI.Properties
 				}
 
 				var rp = new Proportion(ProportionType.Auto);
-				InternalChild.RowsProportions.Add(rp);
+				_layout.RowsProportions.Add(rp);
 
 				y++;
 			}

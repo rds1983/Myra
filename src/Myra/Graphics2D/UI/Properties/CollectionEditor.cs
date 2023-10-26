@@ -3,8 +3,9 @@ using System.Collections;
 
 namespace Myra.Graphics2D.UI.Properties
 {
-	public class CollectionEditor : SingleItemContainer<VerticalStackPanel>
+	public class CollectionEditor : Widget
 	{
+		private readonly StackPanelLayout _layout = new StackPanelLayout(Orientation.Vertical);
 		private readonly IList _collection;
 		private readonly Type _type;
 		private readonly ListBox _listItems;
@@ -13,14 +14,15 @@ namespace Myra.Graphics2D.UI.Properties
 
 		public CollectionEditor(IList collection, Type type)
 		{
+			ChildrenLayout = _layout;
+
 			Width = 500;
 			Height = 400;
 
 			_collection = collection;
 			_type = type;
 
-			InternalChild = new VerticalStackPanel();
-			InternalChild.Widgets.Add(new HorizontalSeparator());
+			Children.Add(new HorizontalSeparator());
 
 			var splitPanel = new HorizontalSplitPane();
 			StackPanel.SetProportionType(splitPanel, ProportionType.Fill);
@@ -46,8 +48,8 @@ namespace Myra.Graphics2D.UI.Properties
 			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
 			splitPanel.Widgets.Add(_propertyGrid);
 
-			InternalChild.Widgets.Add(splitPanel);
-			InternalChild.Widgets.Add(new HorizontalSeparator());
+			Children.Add(splitPanel);
+			Children.Add(new HorizontalSeparator());
 
 			var buttonsGrid = new Grid
 			{
@@ -80,7 +82,7 @@ namespace Myra.Graphics2D.UI.Properties
 			_buttonMoveDown.Click += ButtonMoveDownOnUp;
 			buttonsGrid.Widgets.Add(_buttonMoveDown);
 
-			InternalChild.Widgets.Add(buttonsGrid);
+			Children.Add(buttonsGrid);
 
 			UpdateButtonsEnabled();
 		}
