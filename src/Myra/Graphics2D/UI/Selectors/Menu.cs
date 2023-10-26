@@ -502,11 +502,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void AddItem(IMenuItem item)
-		{
-			InsertItem(item, Items.Count);
-		}
-
 		private void RemoveItem(IMenuItem item)
 		{
 			var menuItem = item as MenuItem;

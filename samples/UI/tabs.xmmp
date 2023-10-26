@@ -1,22 +1,22 @@
 <Project>
   <Project.ExportOptions />
   <Panel>
-    <TabControl HorizontalAlignment="Center" VerticalAlignment="Center" TabSelectorPosition="Left" Width="350" Height="260" GridRow="1" >
+    <TabControl HorizontalAlignment="Center" VerticalAlignment="Center" TabSelectorPosition="Left" Width="350" Height="260" ClipToBounds="True">
       <TabItem Text="Character">
         <Grid ColumnSpacing="8" RowSpacing="8">
           <Grid.DefaultColumnProportion Type="Auto" />
           <Grid.DefaultRowProportion Type="Auto" />
           <Label Text="Name" />
-          <TextBox Width="200" GridColumn="1" />
-          <Label Text="Race" GridRow="1" />
-          <ComboBox Width="200" GridColumn="1" GridRow="1">
+          <TextBox Width="200" Grid.Column="1" />
+          <Label Text="Race" Grid.Row="1" />
+          <ComboBox Width="200" Grid.Column="1" Grid.Row="1">
             <ListItem Text="Human" />
             <ListItem Text="Dwarf" />
             <ListItem Text="Elf" />
             <ListItem Text="Hobbit" />
           </ComboBox>
-          <Label Text="Class" GridRow="2" />
-          <ComboBox Width="200" GridColumn="1" GridRow="2">
+          <Label Text="Class" Grid.Row="2" />
+          <ComboBox Width="200" Grid.Column="1" Grid.Row="2">
             <ListItem Text="Warrior" />
             <ListItem Text="Mage" />
             <ListItem Text="Priest" />
@@ -28,19 +28,19 @@
         <Grid ColumnSpacing="8" RowSpacing="8">
           <Grid.DefaultColumnProportion Type="Auto" />
           <Grid.DefaultRowProportion Type="Auto" />
-          <Label Text="You have 10 points left to distribute" GridColumnSpan="2" />
-          <Label Text="Strength" GridRow="1" />
-          <SpinButton Value="5" Width="50" GridColumn="1" GridRow="1" />
-          <Label Text="Dexterity" GridRow="2" />
-          <SpinButton Value="5" Width="50" GridColumn="1" GridRow="2" />
-          <Label Text="Constitution" GridRow="3" />
-          <SpinButton Value="5" Width="50" GridColumn="1" GridRow="3" />
-          <Label Text="Intelligence" GridRow="4" />
-          <SpinButton Value="5" Width="50" GridColumn="1" GridRow="4" />
-          <Label Text="Wisdom" GridRow="5" />
-          <SpinButton Value="5" Width="50" GridColumn="1" GridRow="5" />
-          <Label Text="Charisma" GridRow="6" />
-          <SpinButton Value="5" Width="50" GridColumn="1" GridRow="6" />
+          <Label Text="You have 10 points left to distribute" Grid.ColumnSpan="2" />
+          <Label Text="Strength" Grid.Row="1" />
+          <SpinButton Value="5" Width="50" Grid.Column="1" Grid.Row="1" />
+          <Label Text="Dexterity" Grid.Row="2" />
+          <SpinButton Value="5" Width="50" Grid.Column="1" Grid.Row="2" />
+          <Label Text="Constitution" Grid.Row="3" />
+          <SpinButton Value="5" Width="50" Grid.Column="1" Grid.Row="3" />
+          <Label Text="Intelligence" Grid.Row="4" />
+          <SpinButton Value="5" Width="50" Grid.Column="1" Grid.Row="4" />
+          <Label Text="Wisdom" Grid.Row="5" />
+          <SpinButton Value="5" Width="50" Grid.Column="1" Grid.Row="5" />
+          <Label Text="Charisma" Grid.Row="6" />
+          <SpinButton Value="5" Width="50" Grid.Column="1" Grid.Row="6" />
         </Grid>
       </TabItem>
       <TabItem Text="Feats">

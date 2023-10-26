@@ -30,7 +30,8 @@ namespace Myra.Samples.AllWidgets
 
 			_buttonChooseColor.Click += (sender, args) => ChooseColor();
 
-			_imageButton.Image = DefaultAssets.UITextureRegionAtlas["icon-star-outline"];
+			var image = (Image)_imageButton.Content;
+			image.Renderable = DefaultAssets.UITextureRegionAtlas["icon-star-outline"];
 			_imageButton.Click += (sender, args) =>
 			{
 				var debugWindow = new DebugOptionsWindow();

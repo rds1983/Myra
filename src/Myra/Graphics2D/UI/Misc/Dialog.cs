@@ -18,11 +18,11 @@ namespace Myra.Graphics2D.UI
 	{
 		[Browsable(false)]
 		[XmlIgnore]
-		public ImageTextButton ButtonOk { get; private set; }
+		public Button ButtonOk { get; private set; }
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public ImageTextButton ButtonCancel { get; private set; }
+		public Button ButtonCancel { get; private set; }
 
 		[Category("Behavior")]
 		[DefaultValue(Keys.Enter)]
@@ -38,9 +38,12 @@ namespace Myra.Graphics2D.UI
 				HorizontalAlignment = HorizontalAlignment.Right
 			};
 
-			ButtonOk = new ImageTextButton
+			ButtonOk = new Button
 			{
-				Text = "Ok"
+				Content = new Label
+				{
+					Text = "Ok"
+				}
 			};
 
 			ButtonOk.Click += (sender, args) =>
@@ -50,9 +53,12 @@ namespace Myra.Graphics2D.UI
 
 			buttonsPanel.Widgets.Add(ButtonOk);
 
-			ButtonCancel = new ImageTextButton
+			ButtonCancel = new Button
 			{
-				Text = "Cancel",
+				Content = new Label
+				{
+					Text = "Cancel",
+				}
 			};
 
 			ButtonCancel.Click += (sender, args) =>

@@ -18,8 +18,8 @@ namespace Myra.Graphics2D.UI
 	public class SpinButton : SingleItemContainer<Grid>
 	{
 		private readonly TextBox _textField;
-		private readonly ImageButton _upButton;
-		private readonly ImageButton _downButton;
+		private readonly Button _upButton;
+		private readonly Button _downButton;
 		private bool _integer = false;
 		private int _decimalPlaces = 0;
 
@@ -277,20 +277,26 @@ namespace Myra.Graphics2D.UI
 
 			InternalChild.Widgets.Add(_textField);
 
-			_upButton = new ImageButton
+			_upButton = new Button
 			{
-				ContentVerticalAlignment = VerticalAlignment.Center,
-				ContentHorizontalAlignment = HorizontalAlignment.Center
+				Content = new Image
+				{
+					VerticalAlignment = VerticalAlignment.Center,
+					HorizontalAlignment = HorizontalAlignment.Center
+				}
 			};
 			Grid.SetColumn(_upButton, 1);
 			_upButton.Click += UpButtonOnUp;
 
 			InternalChild.Widgets.Add(_upButton);
 
-			_downButton = new ImageButton
+			_downButton = new Button
 			{
-				ContentVerticalAlignment = VerticalAlignment.Center,
-				ContentHorizontalAlignment = HorizontalAlignment.Center
+				Content = new Image
+				{
+					VerticalAlignment = VerticalAlignment.Center,
+					HorizontalAlignment = HorizontalAlignment.Center
+				}
 			};
 			Grid.SetColumn(_downButton, 1);
 			Grid.SetRow(_downButton, 1);
@@ -455,12 +461,22 @@ namespace Myra.Graphics2D.UI
 
 			if (style.UpButtonStyle != null)
 			{
-				_upButton.ApplyImageButtonStyle(style.UpButtonStyle);
+				_upButton.ApplyButtonStyle(style.UpButtonStyle);
+				if (style.UpButtonStyle.ImageStyle != null)
+				{
+					var image = (Image)_upButton.Content;
+					image.ApplyPressableImageStyle(style.UpButtonStyle.ImageStyle);
+				}
 			}
 
 			if (style.DownButtonStyle != null)
 			{
-				_downButton.ApplyImageButtonStyle(style.DownButtonStyle);
+				_downButton.ApplyButtonStyle(style.DownButtonStyle);
+				if (style.DownButtonStyle.ImageStyle != null)
+				{
+					var image = (Image)_downButton.Content;
+					image.ApplyPressableImageStyle(style.DownButtonStyle.ImageStyle);
+				}
 			}
 		}
 

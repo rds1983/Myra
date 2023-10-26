@@ -18,6 +18,8 @@
       <Label Text="Command:" />
       <TextBox StackPanel.ProportionType="Fill" />
     </HorizontalStackPanel>
-    <TextButton Text="Hide Debug Panel" HorizontalAlignment="Center" Id="_buttonHideDebug" />
+    <Button HorizontalAlignment="Center" Id="_buttonHideDebug">
+      <Label Text="Hide Debug Panel" />
+    </Button>
   </VerticalStackPanel>
 </Project>

@@ -18,7 +18,7 @@ namespace Myra.Graphics2D.UI
 	{
 		private readonly Tree _topTree;
 		private readonly Grid _childNodesGrid;
-		private readonly ImageButton _mark;
+		private readonly ToggleButton _mark;
 		private readonly Label _label;
 
 		public bool IsExpanded
@@ -36,7 +36,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ImageButton Mark
+		public ToggleButton Mark
 		{
 			get { return _mark; }
 		}
@@ -108,11 +108,11 @@ namespace Myra.Graphics2D.UI
 				_topTree.AllNodes.Add(this);
 			}
 
-			_mark = new ImageButton(null)
+			_mark = new ToggleButton(null)
 			{
-				Toggleable = true,
 				HorizontalAlignment = HorizontalAlignment.Left,
-				VerticalAlignment = VerticalAlignment.Center
+				VerticalAlignment = VerticalAlignment.Center,
+				Content = new Image()
 			};
 
 			_mark.PressedChanged += (s, a) =>
@@ -216,7 +216,14 @@ namespace Myra.Graphics2D.UI
 
 			if (style.MarkStyle != null)
 			{
-				_mark.ApplyImageButtonStyle(style.MarkStyle);
+				_mark.ApplyButtonStyle(style.MarkStyle);
+				if (style.MarkStyle.ImageStyle != null)
+				{
+					var image = (Image)_mark.Content;
+					image.ApplyPressableImageStyle(style.MarkStyle.ImageStyle);
+				}
+
+
 				_label.ApplyLabelStyle(style.LabelStyle);
 			}
 

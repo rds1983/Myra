@@ -132,9 +132,20 @@ namespace Myra.Graphics2D.UI.File
 
 			_listBoxPlaces.Background = null;
 
-			_buttonBack.Image = DefaultAssets.UITextureRegionAtlas["icon-arrow-left"];
-			_buttonForward.Image = DefaultAssets.UITextureRegionAtlas["icon-arrow-right"];
-			_buttonParent.Image = DefaultAssets.UITextureRegionAtlas["icon-folder-parent"];
+			_buttonBack.Content = new Image
+			{
+				Renderable = DefaultAssets.UITextureRegionAtlas["icon-arrow-left"]
+			};
+
+			_buttonForward.Content = new Image
+			{
+				Renderable = DefaultAssets.UITextureRegionAtlas["icon-arrow-right"]
+			};
+
+			_buttonParent.Content = new Image
+			{
+				Renderable = DefaultAssets.UITextureRegionAtlas["icon-folder-parent"]
+			};
 
 			var homePath = (Environment.OSVersion.Platform == PlatformID.Unix ||
 							Environment.OSVersion.Platform == PlatformID.MacOSX)

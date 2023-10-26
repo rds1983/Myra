@@ -9,14 +9,26 @@
       <RadioButton Text="Radio 4" />
     </HorizontalStackPanel>
     <HorizontalStackPanel Spacing="8" Top="300">
-      <TextButton Text="Button 1" />
-      <TextButton Text="Button 2" />
-      <TextButton Text="Button 3" />
-      <TextButton Text="Button 4" />
+      <Button>
+        <Label Text="Button 1" />
+      </Button>
+      <Button>
+        <Label Text="Button 2" />
+      </Button>
+      <Button>
+        <Label Text="Button 3" />
+      </Button>
+      <Button>
+        <Label Text="Button 4" />
+      </Button>
     </HorizontalStackPanel>
     <HorizontalStackPanel Spacing="8" VerticalAlignment="Bottom">
-      <TextButton Text="Show Debug Panel" Id="_buttonDebugPanel" />
-      <TextButton Text="Show Debug Panel Modal" Id="_buttonModalDebugPanel" />
+      <Button Id="_buttonDebugPanel">
+        <Label Text="Show Debug Panel" />
+      </Button>
+      <Button Id="_buttonModalDebugPanel">
+        <Label Text="Show Debug Panel Modal" />
+      </Button>
     </HorizontalStackPanel>
   </Panel>
 </Project>

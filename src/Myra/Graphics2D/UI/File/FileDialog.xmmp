@@ -1,12 +1,12 @@
 <Project>
   <Project.ExportOptions Namespace="Myra.Graphics2D.UI.File" Class="FileDialog" OutputPath="D:/Projects/Myra/src/Myra/Graphics2D/UI/File" />
-  <Dialog Title="Open File..." Left="980" Top="464" Width="600" Height="400">
+  <Dialog Title="Open File..." Left="199" Width="600" Height="400">
     <VerticalStackPanel Spacing="4">
       <HorizontalStackPanel Spacing="4">
-        <ImageButton HorizontalAlignment="Center" VerticalAlignment="Center" Id="_buttonBack" />
-        <ImageButton HorizontalAlignment="Center" VerticalAlignment="Center" Id="_buttonForward" />
+        <Button HorizontalAlignment="Center" VerticalAlignment="Center" Id="_buttonBack" />
+        <Button HorizontalAlignment="Center" VerticalAlignment="Center" Id="_buttonForward" />
         <TextBox Readonly="True" VerticalAlignment="Center" Id="_textFieldPath" StackPanel.ProportionType="Fill" />
-        <ImageButton HorizontalAlignment="Center" VerticalAlignment="Center" Id="_buttonParent" />
+        <Button HorizontalAlignment="Center" VerticalAlignment="Center" Id="_buttonParent" />
       </HorizontalStackPanel>
       <HorizontalSplitPane Id="_splitPane" StackPanel.ProportionType="Fill">
         <ListBox HorizontalAlignment="Stretch" ClipToBounds="True" Id="_listBoxPlaces" />

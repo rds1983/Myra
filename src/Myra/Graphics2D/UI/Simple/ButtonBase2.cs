@@ -54,6 +54,12 @@ namespace Myra.Graphics2D.UI
 		public virtual void OnPressedChanged()
 		{
 			PressedChanged.Invoke(this);
+
+			var asPressable = Content as IPressable;
+			if (asPressable != null)
+			{
+				asPressable.IsPressed = IsPressed;
+			}
 		}
 
 		protected void SetValueByUser(bool value)

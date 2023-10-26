@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace Myra.Graphics2D.UI
 {
-	public static class LayoutUtils
+	internal static class LayoutUtils
 	{
 		public static Rectangle Align(Point containerSize, Point controlSize, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment)
 		{

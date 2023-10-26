@@ -9,7 +9,7 @@ namespace Myra.Graphics2D.UI.Properties
 		private readonly Type _type;
 		private readonly ListBox _listItems;
 		private readonly PropertyGrid _propertyGrid;
-		private readonly ImageTextButton _buttonDelete, _buttonMoveUp, _buttonMoveDown;
+		private readonly Button _buttonDelete, _buttonMoveUp, _buttonMoveDown;
 
 		public CollectionEditor(IList collection, Type type)
 		{
@@ -61,30 +61,21 @@ namespace Myra.Graphics2D.UI.Properties
 			buttonsGrid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
 			buttonsGrid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
 
-			var buttonNew = new ImageTextButton { Text = "New" };
+			var buttonNew = Button.CreateTextButton("New");
 			buttonNew.Click += ButtonNewOnUp;
 			buttonsGrid.Widgets.Add(buttonNew);
 
-			_buttonDelete = new ImageTextButton
-			{
-				Text = "Delete",
-			};
+			_buttonDelete = Button.CreateTextButton("Delete");
 			Grid.SetColumn(_buttonDelete, 1);
 			_buttonDelete.Click += ButtonDeleteOnUp;
 			buttonsGrid.Widgets.Add(_buttonDelete);
 
-			_buttonMoveUp = new ImageTextButton
-			{
-				Text = "Up",
-			};
+			_buttonMoveUp = Button.CreateTextButton("Up");
 			Grid.SetColumn(_buttonDelete, 2);
 			_buttonMoveUp.Click += ButtonMoveUpOnUp;
 			buttonsGrid.Widgets.Add(_buttonMoveUp);
 
-			_buttonMoveDown = new ImageTextButton
-			{
-				Text = "Down",
-			};
+			_buttonMoveDown = Button.CreateTextButton("Down");
 			Grid.SetColumn(_buttonDelete, 3);
 			_buttonMoveDown.Click += ButtonMoveDownOnUp;
 			buttonsGrid.Widgets.Add(_buttonMoveDown);

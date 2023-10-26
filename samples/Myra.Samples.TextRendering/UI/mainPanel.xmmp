@@ -10,8 +10,12 @@
         <HorizontalStackPanel Spacing="8">
           <Label Text="Font:" />
           <TextBox Text="(default)" Readonly="True" Id="_textBoxFont" StackPanel.ProportionType="Fill" />
-          <TextButton Text="Browse..." Id="_buttonBrowseFont" />
-          <TextButton Text="Reset" Id="_buttonReset" />
+          <Button Id="_buttonBrowseFont">
+            <Label Text="Browse..." />
+          </Button>
+          <Button Id="_buttonReset">
+            <Label Text="Reset" />
+          </Button>
         </HorizontalStackPanel>
         <HorizontalStackPanel Spacing="8">
           <Label Text="Font Size:" />

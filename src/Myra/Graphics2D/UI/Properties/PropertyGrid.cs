@@ -38,10 +38,10 @@ namespace Myra.Graphics2D.UI.Properties
 
 		private class SubGrid : SingleItemContainer<Grid>
 		{
-			private readonly ImageButton _mark;
+			private readonly ToggleButton _mark;
 			private readonly PropertyGrid _propertyGrid;
 
-			public ImageButton Mark
+			public ToggleButton Mark
 			{
 				get { return _mark; }
 			}
@@ -94,13 +94,19 @@ namespace Myra.Graphics2D.UI.Properties
 				Grid.SetRow(_propertyGrid, 1);
 
 				// Mark
-				_mark = new ImageButton(null)
+				var markImage = new Image();
+				var imageStyle = parent.PropertyGridStyle.MarkStyle.ImageStyle;
+				if (imageStyle != null)
 				{
-					Toggleable = true,
+					markImage.ApplyPressableImageStyle(imageStyle);
+				}
+
+				_mark = new ToggleButton(null)
+				{
 					HorizontalAlignment = HorizontalAlignment.Left,
-					VerticalAlignment = VerticalAlignment.Center
+					VerticalAlignment = VerticalAlignment.Center,
+					Content = markImage
 				};
-				_mark.ApplyImageButtonStyle(parent.PropertyGridStyle.MarkStyle);
 
 				InternalChild.Widgets.Add(_mark);
 
@@ -501,12 +507,15 @@ namespace Myra.Graphics2D.UI.Properties
 
 			subGrid.Widgets.Add(image);
 
-			var button = new ImageTextButton
+			var button = new Button
 			{
-				Text = "Change...",
-				ContentHorizontalAlignment = HorizontalAlignment.Center,
 				Tag = value,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
+				Content = new Label
+				{
+					HorizontalAlignment = HorizontalAlignment.Center,
+					Text = "Change..."
+				}
 			};
 			Grid.SetColumn(button, 1);
 
@@ -577,12 +586,15 @@ namespace Myra.Graphics2D.UI.Properties
 
 			subGrid.Widgets.Add(image);
 
-			var button = new ImageTextButton
+			var button = new Button
 			{
-				Text = "Change...",
-				ContentHorizontalAlignment = HorizontalAlignment.Center,
 				Tag = value,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
+				Content = new Label
+				{
+					Text = "Change...",
+					HorizontalAlignment = HorizontalAlignment.Center,
+				}
 			};
 			Grid.SetColumn(button, 1);
 
@@ -843,12 +855,15 @@ namespace Myra.Graphics2D.UI.Properties
 
 			subGrid.Widgets.Add(label);
 
-			var button = new ImageTextButton
+			var button = new Button
 			{
-				Text = "Change...",
-				ContentHorizontalAlignment = HorizontalAlignment.Center,
 				Tag = value,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
+				Content = new Label
+				{
+					Text = "Change...",
+					HorizontalAlignment = HorizontalAlignment.Center,
+				}
 			};
 			Grid.SetColumn(button, 1);
 
@@ -908,12 +923,15 @@ namespace Myra.Graphics2D.UI.Properties
 
 			subGrid.Widgets.Add(textBox);
 
-			var button = new ImageTextButton
+			var button = new Button
 			{
-				Text = "Change...",
-				ContentHorizontalAlignment = HorizontalAlignment.Center,
 				Tag = value,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
+				Content = new Label
+				{
+					Text = "Change...",
+					HorizontalAlignment = HorizontalAlignment.Center,
+				}
 			};
 			Grid.SetColumn(button, 1);
 
@@ -1015,12 +1033,15 @@ namespace Myra.Graphics2D.UI.Properties
 				result.Widgets.Add(path);
 			}
 
-			var button = new TextButton
+			var button = new Button
 			{
-				Text = "Change...",
-				ContentHorizontalAlignment = HorizontalAlignment.Center,
 				Tag = value,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
+				Content = new Label
+				{
+					Text = "Change...",
+					HorizontalAlignment = HorizontalAlignment.Center,
+				}
 			};
 			Grid.SetColumn(button, 1);
 

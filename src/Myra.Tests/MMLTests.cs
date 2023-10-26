@@ -19,10 +19,13 @@ namespace Myra.Tests
 
 			var project = Project.LoadFromXml(mml, assetManager);
 
-			var imageButton1 = (ImageButton)project.Root.FindChildById("spawnUnit1");
+			var imageButton1 = (Button)project.Root.FindChildById("spawnUnit1");
 			Assert.IsNotNull(imageButton1);
-			Assert.IsNotNull(imageButton1.Image);
-			Assert.AreEqual(imageButton1.Image.Size, new Point(64, 64));
+
+			var image = (Image)imageButton1.Content;
+			Assert.IsNotNull(image);
+			Assert.IsNotNull(image.Renderable);
+			Assert.AreEqual(image.Renderable.Size, new Point(64, 64));
 
 			var label = (Label)project.Root.FindChildById("label");
 			Assert.IsNotNull(label);

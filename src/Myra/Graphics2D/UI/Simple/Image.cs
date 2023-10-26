@@ -26,7 +26,12 @@ namespace Myra.Graphics2D.UI
 		KeepAspectRatio
 	}
 
-	public class Image : Widget
+	internal interface IPressable
+	{
+		bool IsPressed { get; set; }
+	}
+
+	public class Image : Widget, IPressable
 	{
 		private IImage _image, _overImage, _pressedImage;
 
@@ -92,6 +97,12 @@ namespace Myra.Graphics2D.UI
 		internal bool IsPressed
 		{
 			get; set;
+		}
+
+		bool IPressable.IsPressed
+		{
+			get => IsPressed;
+			set => IsPressed = value;
 		}
 
 		[Category("Appearance")]

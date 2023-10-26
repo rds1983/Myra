@@ -1,6 +1,6 @@
 <Project>
   <Project.ExportOptions />
   <Panel>
-    <Label Text="StbImageSharp" Margin="8" BorderThickness="8" Padding="16" Background="#008000FF" Border="#808000FF" />
+    <Label Text="StbImageSharp" Margin="8" Border="#808000FF" BorderThickness="8" Padding="16" Background="#008000FF" />
   </Panel>
 </Project>

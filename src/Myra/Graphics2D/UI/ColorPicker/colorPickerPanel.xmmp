@@ -35,7 +35,9 @@
         <Label Text="Alpha" Grid.Row="4" />
         <TextBox Id="_inputAlpha" Grid.Column="2" Grid.Row="4" />
         <HorizontalSlider Maximum="255" Height="21" Id="_sliderAlpha" Grid.Column="1" Grid.Row="4" />
-        <TextButton Text="Save Color" HorizontalAlignment="Right" Id="_saveColor" Grid.Row="5" Grid.ColumnSpan="3" />
+        <Button HorizontalAlignment="Right" Id="_saveColor" Grid.Row="5" Grid.ColumnSpan="3">
+          <Label Text="Save Color" />
+        </Button>
       </Grid>
     </HorizontalStackPanel>
     <Grid ColumnSpacing="8" RowSpacing="8" GridSelectionMode="Cell" Height="80" Padding="4" Id="_userColors" />

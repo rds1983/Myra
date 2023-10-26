@@ -770,7 +770,6 @@ namespace MyraPad
 
 			_applyAutoClose = false;
 
-			var text = _ui._textSource.Text;
 			var pos = _ui._textSource.CursorPosition;
 
 			var currentTag = CurrentTag;
@@ -1494,45 +1493,52 @@ namespace MyraPad
 		{
 			base.Update(gameTime);
 
-			if (_refreshInitiated != null && (DateTime.Now - _refreshInitiated.Value).TotalSeconds >= 0.75f)
+			try
 			{
-				QueueRefreshProject();
-			}
-
-			while (!_uiActions.IsEmpty)
-			{
-				Action action;
-				_uiActions.TryDequeue(out action);
-				action();
-			}
-
-			if (_newObject != null)
-			{
-				PropertyGrid.ParentType = ParentType;
-				PropertyGrid.Object = _newObject;
-
-				_ui._propertyGridPane.ResetScroll();
-				_newObject = null;
-			}
-
-			Project newProject;
-			while (_newProjectsQueue.Count > 1)
-			{
-				_newProjectsQueue.TryDequeue(out newProject);
-			}
-
-			if (_newProjectsQueue.TryDequeue(out newProject))
-			{
-				Project = newProject;
-
-				if (Project.Stylesheet != null && Project.Stylesheet.DesktopStyle != null)
+				if (_refreshInitiated != null && (DateTime.Now - _refreshInitiated.Value).TotalSeconds >= 0.75f)
 				{
-					_ui._projectHolder.Background = Project.Stylesheet.DesktopStyle.Background;
+					QueueRefreshProject();
 				}
-				else
+
+				while (!_uiActions.IsEmpty)
 				{
-					_ui._projectHolder.Background = null;
+					Action action;
+					_uiActions.TryDequeue(out action);
+					action();
 				}
+
+				if (_newObject != null)
+				{
+					PropertyGrid.ParentType = ParentType;
+					PropertyGrid.Object = _newObject;
+
+					_ui._propertyGridPane.ResetScroll();
+					_newObject = null;
+				}
+
+				Project newProject;
+				while (_newProjectsQueue.Count > 1)
+				{
+					_newProjectsQueue.TryDequeue(out newProject);
+				}
+
+				if (_newProjectsQueue.TryDequeue(out newProject))
+				{
+					Project = newProject;
+
+					if (Project.Stylesheet != null && Project.Stylesheet.DesktopStyle != null)
+					{
+						_ui._projectHolder.Background = Project.Stylesheet.DesktopStyle.Background;
+					}
+					else
+					{
+						_ui._projectHolder.Background = null;
+					}
+				}
+			}
+			catch(Exception ex)
+			{
+				_ui._textStatus.Text = ex.Message;
 			}
 		}
 

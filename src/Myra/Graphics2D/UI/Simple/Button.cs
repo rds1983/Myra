@@ -96,5 +96,16 @@ namespace Myra.Graphics2D.UI
 		{
 			ApplyButtonStyle(stylesheet.ButtonStyles.SafelyGetStyle(name));
 		}
+
+		public static Button CreateTextButton(string text)
+		{
+			return new Button
+			{
+				Content = new Label
+				{
+					Text = text
+				}
+			};
+		}
 	}
 }

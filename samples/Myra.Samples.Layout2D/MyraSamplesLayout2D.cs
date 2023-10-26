@@ -62,11 +62,22 @@ namespace Myra.Samples.Layout2D
 			Grid g = new Grid();
 			var panel = new Panel();
 			panel.Widgets.Add(new TextBox() { Text = "this.X=W.w/3;this.Y=W.h/2", Id = "Expression", Top = 25, Width = 100, Height = 100 });
-			var btnA = new TextButton();
-			var btnB = new TextButton() { Text = "Button", Left = 500, Top = 500 };
+			var btnA = new Button();
+			var btnB = new Button()
+			{
+				Left = 500,
+				Top = 500,
+				Content = new Label
+				{
+					Text = "Button"
+				}
+			};
 			btnB.Click += (object sender, EventArgs e) => { Console.WriteLine(btnB.Layout2d.Expresion); Console.ReadKey(); };
 
-			btnA.Text = "Calc";
+			btnA.Content = new Label
+			{
+				Text = "Calc"
+			};
 			btnA.Click += (object sender, EventArgs e) => { btnB.Layout2d.Expresion = (_desktop.GetWidgetByID("Expression") as TextBox).Text; _desktop.InvalidateLayout(); _desktop.UpdateLayout(); };
 			panel.Widgets.Add(btnA);
 

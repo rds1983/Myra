@@ -21,8 +21,8 @@ namespace Myra.Graphics2D.UI
 	{
 		private readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
 		private readonly GridLayout _layout = new GridLayout();
-		private readonly List<ImageButton> _handles = new List<ImageButton>();
-		private ImageButton _handleDown;
+		private readonly List<Button> _handles = new List<Button>();
+		private Button _handleDown;
 		private int? _mouseCoord;
 		private int _handlesSize;
 
@@ -132,7 +132,7 @@ namespace Myra.Graphics2D.UI
 
 		private void HandleOnPressedChanged(object sender, EventArgs args)
 		{
-			var handle = (ImageButton)sender;
+			var handle = (Button)sender;
 
 			if (!handle.IsPressed)
 			{
@@ -141,7 +141,7 @@ namespace Myra.Graphics2D.UI
 			}
 			else
 			{
-				_handleDown = (ImageButton)sender;
+				_handleDown = (Button)sender;
 
 				var handleGlobalPos = _handleDown.ToGlobal(_handleDown.Bounds.Location);
 				_mouseCoord = Orientation == Orientation.Horizontal
@@ -218,7 +218,7 @@ namespace Myra.Graphics2D.UI
 				if (i > 0)
 				{
 					// Add splitter
-					var handle = new ImageButton(null)
+					var handle = new Button(null)
 					{
 						ReleaseOnTouchLeft = false
 					};

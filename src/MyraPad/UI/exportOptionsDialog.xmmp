@@ -1,6 +1,6 @@
 <Project>
   <Project.ExportOptions Namespace="MyraPad.UI" Class="ExportOptionsDialog" OutputPath="D:\Projects\Myra\src\MyraPad\UI" />
-  <Dialog Title="Export" Left="875" Top="592">
+  <Dialog Title="Export" Left="94" Top="118">
     <Grid ColumnSpacing="8" RowSpacing="8" Width="800" Id="Root">
       <Grid.DefaultRowProportion Type="Auto" />
       <Grid.ColumnsProportions>
@@ -12,7 +12,9 @@
       <TextBox Id="_textClassName" Grid.Column="1" Grid.Row="1" />
       <Label Text="Output Path:" Grid.Row="2" />
       <TextBox Id="_textOutputPath" Grid.Column="1" Grid.Row="2" />
-      <TextButton Text="Change..." Id="_buttonChangeOutputPath" Grid.Column="2" Grid.Row="2" />
+      <Button Id="_buttonChangeOutputPath" Grid.Column="2" Grid.Row="2">
+        <Label Text="Change..." />
+      </Button>
       <Label Text="Namespace:" />
       <TextBox Id="_textNamespace" Grid.Column="1" />
     </Grid>

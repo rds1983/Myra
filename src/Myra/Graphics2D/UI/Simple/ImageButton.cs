@@ -1,9 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
 {
+	[Obsolete("Switch to Button")]
 	[StyleTypeName("Button")]
 	public class ImageButton : ButtonBase<Image>
 	{

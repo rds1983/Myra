@@ -73,7 +73,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public ImageButton CloseButton { get; private set; }
+		public Button CloseButton { get; private set; }
 
 		[Browsable(false)]
 		[Content]
@@ -160,7 +160,6 @@ namespace Myra.Graphics2D.UI
 			AcceptsKeyboardFocus = true;
 			CloseKey = Keys.Escape;
 
-			IsModal = true;
 			DragDirection = DragDirection.Both;
 
 			InternalChild = new VerticalStackPanel();
@@ -181,7 +180,10 @@ namespace Myra.Graphics2D.UI
 			StackPanel.SetProportionType(_titleLabel, ProportionType.Fill);
 			TitlePanel.Widgets.Add(_titleLabel);
 
-			CloseButton = new ImageButton();
+			CloseButton = new Button
+			{
+				Content = new Image()
+			};
 
 			CloseButton.Click += (sender, args) =>
 			{
@@ -240,7 +242,12 @@ namespace Myra.Graphics2D.UI
 
 			if (style.CloseButtonStyle != null)
 			{
-				CloseButton.ApplyImageButtonStyle(style.CloseButtonStyle);
+				CloseButton.ApplyButtonStyle(style.CloseButtonStyle);
+				if (style.CloseButtonStyle.ImageStyle != null)
+				{
+					var image = (Image)CloseButton.Content;
+					image.ApplyPressableImageStyle(style.CloseButtonStyle.ImageStyle);
+				}
 			}
 		}
 

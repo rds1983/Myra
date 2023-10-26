@@ -39,13 +39,13 @@ namespace Myra.Tests
 		public void MyraEnvironmentReset()
 		{
 			var oldStylesheet = Stylesheet.Current;
-			var button = new TextButton();
+			var button = new Button();
 			var oldTexture = ((TextureRegion)button.Background).Texture;
 
 			MyraEnvironment.Reset();
 
 			var newStylesheet = Stylesheet.Current;
-			button = new TextButton();
+			button = new Button();
 			var newTexture = ((TextureRegion)button.Background).Texture;
 
 			Assert.AreNotEqual(oldStylesheet, newStylesheet);
@@ -56,19 +56,19 @@ namespace Myra.Tests
 		public void TestZIndexSort()
 		{
 			var widgets = new List<Widget>();
-			var button1 = new TextButton
+			var button1 = new Button
 			{
 				ZIndex = 10
 			};
-			var button2 = new TextButton
+			var button2 = new Button
 			{
 				ZIndex = 6
 			};
-			var button3 = new TextButton
+			var button3 = new Button
 			{
 				ZIndex = 4
 			};
-			var button4 = new TextButton
+			var button4 = new Button
 			{
 				ZIndex = 2
 			};

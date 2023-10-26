@@ -376,32 +376,26 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnTouchLeft()
 		{
-			Debug.WriteLine($"{GetType().Name}.OnTouchLeft");
 		}
 
 		public virtual void OnTouchEntered()
 		{
-			Debug.WriteLine($"{GetType().Name}.OnTouchEntered");
 		}
 
 		public virtual void OnTouchMoved()
 		{
-			Debug.WriteLine($"{GetType().Name}.OnTouchMoved");
 		}
 
 		public virtual void OnTouchDown()
 		{
-			Debug.WriteLine($"{GetType().Name}.OnTouchDown");
 		}
 
 		public virtual void OnTouchUp()
 		{
-			Debug.WriteLine($"{GetType().Name}.OnTouchUp");
 		}
 
 		public virtual void OnTouchDoubleClick()
 		{
-			Debug.WriteLine($"{GetType().Name}.OnTouchDoubleClick");
 		}
 	}
 }

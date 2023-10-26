@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 
 namespace Myra.Graphics2D.UI
 {
-	public abstract class Slider : SingleItemContainer<ImageButton>
+	public abstract class Slider : SingleItemContainer<Button>
 	{
 		private float _value;
 
@@ -127,7 +127,7 @@ namespace Myra.Graphics2D.UI
 
 		[XmlIgnore]
 		[Browsable(false)]
-		public ImageButton ImageButton
+		public Button ImageButton
 		{
 			get
 			{
@@ -147,8 +147,9 @@ namespace Myra.Graphics2D.UI
 
 		protected Slider(string styleName)
 		{
-			InternalChild = new ImageButton(null)
+			InternalChild = new Button(null)
 			{
+				Content = new Image(),
 				ReleaseOnTouchLeft = false
 			};
 
@@ -171,7 +172,13 @@ namespace Myra.Graphics2D.UI
 
 			if (style.KnobStyle != null)
 			{
-				InternalChild.ApplyImageButtonStyle(style.KnobStyle);
+				InternalChild.ApplyButtonStyle(style.KnobStyle);
+
+				if (style.KnobStyle.ImageStyle != null)
+				{
+					var image = (Image)InternalChild.Content;
+					image.ApplyPressableImageStyle(style.KnobStyle.ImageStyle);
+				}
 			}
 		}
 
