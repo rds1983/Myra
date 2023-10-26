@@ -51,38 +51,31 @@ namespace Myra.Graphics2D.UI.Properties
 			Children.Add(splitPanel);
 			Children.Add(new HorizontalSeparator());
 
-			var buttonsGrid = new Grid
+			var buttonsPanel = new HorizontalStackPanel
 			{
-				ColumnSpacing = 4
+				Spacing = 4
 			};
-
-			Grid.SetRow(buttonsGrid, 1);
-
-			buttonsGrid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
-			buttonsGrid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
-			buttonsGrid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
-			buttonsGrid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
 
 			var buttonNew = Button.CreateTextButton("New");
 			buttonNew.Click += ButtonNewOnUp;
-			buttonsGrid.Widgets.Add(buttonNew);
+			buttonsPanel.Widgets.Add(buttonNew);
 
 			_buttonDelete = Button.CreateTextButton("Delete");
 			Grid.SetColumn(_buttonDelete, 1);
 			_buttonDelete.Click += ButtonDeleteOnUp;
-			buttonsGrid.Widgets.Add(_buttonDelete);
+			buttonsPanel.Widgets.Add(_buttonDelete);
 
 			_buttonMoveUp = Button.CreateTextButton("Up");
-			Grid.SetColumn(_buttonDelete, 2);
+			Grid.SetColumn(_buttonMoveUp, 2);
 			_buttonMoveUp.Click += ButtonMoveUpOnUp;
-			buttonsGrid.Widgets.Add(_buttonMoveUp);
+			buttonsPanel.Widgets.Add(_buttonMoveUp);
 
 			_buttonMoveDown = Button.CreateTextButton("Down");
-			Grid.SetColumn(_buttonDelete, 3);
+			Grid.SetColumn(_buttonMoveDown, 3);
 			_buttonMoveDown.Click += ButtonMoveDownOnUp;
-			buttonsGrid.Widgets.Add(_buttonMoveDown);
+			buttonsPanel.Widgets.Add(_buttonMoveDown);
 
-			Children.Add(buttonsGrid);
+			Children.Add(buttonsPanel);
 
 			UpdateButtonsEnabled();
 		}
