@@ -1472,7 +1472,9 @@ namespace Myra.Graphics2D.UI
 					{
 						foreach(var glyph in chunk.Glyphs)
 						{
-							context.DrawRectangle(glyph.Bounds, Color.White);
+							var glyphBounds = glyph.Bounds;
+							glyphBounds.Offset(p);
+							context.DrawRectangle(glyphBounds, Color.White);
 						}
 					}
 				}
