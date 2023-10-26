@@ -16,7 +16,7 @@ using Color = FontStashSharp.FSColor;
 
 namespace Myra.Graphics2D.UI
 {
-	public abstract class StackPanel : MultipleItemsContainerBase
+	public abstract class StackPanel : Container
 	{
 		public static readonly AttachedPropertyInfo<ProportionType> ProportionTypeProperty =
 			AttachedPropertiesRegistry.Create(typeof(StackPanel), "ProportionType", ProportionType.Auto, AttachedPropertyOption.AffectsMeasure);

@@ -25,7 +25,7 @@ namespace Myra.Graphics2D.UI
 		Cell
 	}
 
-	public class Grid : MultipleItemsContainerBase
+	public class Grid : Container
 	{
 		public static readonly AttachedPropertyInfo<int> ColumnProperty = 
 			AttachedPropertiesRegistry.Create(typeof(Grid), "Column", 0, AttachedPropertyOption.AffectsArrange);

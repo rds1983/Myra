@@ -9,7 +9,7 @@ using Myra.Attributes;
 
 namespace Myra.Graphics2D.UI
 {
-	public abstract class SplitPane : MultipleItemsContainerBase
+	public abstract class SplitPane : Container
 	{
 		private readonly ObservableCollection<Widget> _widgets = new ObservableCollection<Widget>();
 		private readonly GridLayout _layout = new GridLayout();

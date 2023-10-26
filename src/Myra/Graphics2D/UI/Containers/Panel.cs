@@ -10,7 +10,7 @@ using System.Drawing;
 
 namespace Myra.Graphics2D.UI
 {
-	public class Panel : MultipleItemsContainerBase
+	public class Panel : Container
 	{
 		protected override void InternalArrange()
 		{

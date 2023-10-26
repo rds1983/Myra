@@ -13,7 +13,7 @@ using System.Drawing;
 
 namespace Myra.Graphics2D.UI
 {
-	public abstract class MultipleItemsContainerBase : Widget
+	public abstract class Container : Widget
 	{
 		[Content]
 		[Browsable(false)]
@@ -33,7 +33,7 @@ namespace Myra.Graphics2D.UI
 			set { base.VerticalAlignment = value; }
 		}
 
-		public MultipleItemsContainerBase()
+		public Container()
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
