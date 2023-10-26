@@ -3,8 +3,8 @@
     <OutputType>Exe</OutputType>
     <AssemblyName>Myra.Samples.CustomUIStylesheet</AssemblyName>
     <RootNamespace>Myra.Samples.CustomUIStylesheet</RootNamespace>
-    <TargetFramework>net461</TargetFramework>
-    <OutputPath>bin\FNA\$(Configuration)</OutputPath>
+    <TargetFramework>net6.0</TargetFramework>
+    <OutputPath>bin\FNA.Core\$(Configuration)</OutputPath>
     <DefineConstants>$(DefineConstants);FNA</DefineConstants>
   </PropertyGroup>
 
@@ -13,5 +13,5 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Myra\Myra.FNA.csproj" />
+    <ProjectReference Include="..\..\src\Myra\Myra.FNA.Core.csproj" />
   </ItemGroup></Project>

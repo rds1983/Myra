@@ -21,6 +21,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.TextRendering.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XNAssets.FNA.Core", "..\..\XNAssets\src\XNAssets.FNA.Core.csproj", "{1609F0D5-B26B-41F1-B004-8C6BE9D11440}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.Notepad.FNA.Core", "..\samples\Myra.Samples.Notepad\Myra.Samples.Notepad.FNA.Core.csproj", "{F7D9FC22-B28D-494B-873D-96920E477552}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.CustomUIStylesheet.FNA.Core", "..\samples\Myra.Samples.CustomUIStylesheet\Myra.Samples.CustomUIStylesheet.FNA.Core.csproj", "{41A030C8-B98D-425A-9E62-AE069255D7E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +63,14 @@ Global
 		{1609F0D5-B26B-41F1-B004-8C6BE9D11440}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1609F0D5-B26B-41F1-B004-8C6BE9D11440}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1609F0D5-B26B-41F1-B004-8C6BE9D11440}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7D9FC22-B28D-494B-873D-96920E477552}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7D9FC22-B28D-494B-873D-96920E477552}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7D9FC22-B28D-494B-873D-96920E477552}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7D9FC22-B28D-494B-873D-96920E477552}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41A030C8-B98D-425A-9E62-AE069255D7E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41A030C8-B98D-425A-9E62-AE069255D7E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41A030C8-B98D-425A-9E62-AE069255D7E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41A030C8-B98D-425A-9E62-AE069255D7E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,6 +78,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{08F5F0B8-6573-46DF-BBCB-AB8E22731880} = {D17FD092-A553-4770-A7A5-822661193436}
 		{D963B41E-DF39-44A3-878B-857C8A3CB5F6} = {D17FD092-A553-4770-A7A5-822661193436}
+		{F7D9FC22-B28D-494B-873D-96920E477552} = {D17FD092-A553-4770-A7A5-822661193436}
+		{41A030C8-B98D-425A-9E62-AE069255D7E9} = {D17FD092-A553-4770-A7A5-822661193436}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A9C9D369-EE58-4E9D-B9FE-63023B644741}

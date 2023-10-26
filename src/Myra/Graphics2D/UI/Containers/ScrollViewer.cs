@@ -483,14 +483,14 @@ namespace Myra.Graphics2D.UI
 			var availableSize = bounds.Size();
 			var oldMeasureSize = InternalChild.Measure(availableSize);
 
-			_horizontalScrollingOn = (oldMeasureSize.X > bounds.Width) && ShowHorizontalScrollBar;
-			_verticalScrollingOn = (oldMeasureSize.Y > bounds.Height) && ShowVerticalScrollBar;
+			_horizontalScrollingOn = oldMeasureSize.X > bounds.Width;
+			_verticalScrollingOn = oldMeasureSize.Y > bounds.Height;
 			if (_horizontalScrollingOn || _verticalScrollingOn)
 			{
 				var vsWidth = VerticalScrollbarWidth;
 				var hsHeight = HorizontalScrollbarHeight;
 
-				if (_horizontalScrollingOn)
+				if (_horizontalScrollingOn && ShowHorizontalScrollBar)
 				{
 					availableSize.Y -= hsHeight;
 
@@ -500,7 +500,7 @@ namespace Myra.Graphics2D.UI
 					}
 				}
 
-				if (_verticalScrollingOn)
+				if (_verticalScrollingOn && ShowVerticalScrollBar)
 				{
 					availableSize.X -= vsWidth;
 
@@ -512,7 +512,7 @@ namespace Myra.Graphics2D.UI
 
 				// Remeasure with scrollbars
 				var measureSize = InternalChild.Measure(availableSize);
-				var bw = bounds.Width - (_verticalScrollingOn ? vsWidth : 0);
+				var bw = bounds.Width - (_verticalScrollingOn && ShowVerticalScrollBar ? vsWidth : 0);
 
 				_horizontalScrollbarFrame = new Rectangle(bounds.Left,
 					bounds.Bottom - hsHeight,
@@ -563,14 +563,22 @@ namespace Myra.Graphics2D.UI
 					_thumbMaximumY = 1;
 				}
 
-				if (_horizontalScrollingOn)
+				if (_horizontalScrollingOn && ShowHorizontalScrollBar)
 				{
 					bounds.Width = measureSize.X;
 				}
+				else
+				{
+					bounds.Width = availableSize.X;
+				}
 
-				if (_verticalScrollingOn)
+				if (_verticalScrollingOn && ShowVerticalScrollBar)
 				{
 					bounds.Height = measureSize.Y;
+				}
+				else
+				{
+					bounds.Height = availableSize.Y;
 				}
 			}
 

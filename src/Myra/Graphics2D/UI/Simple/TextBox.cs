@@ -1033,6 +1033,8 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
+			Desktop.UpdateLayout();
+
 			var asScrollViewer = Parent as ScrollViewer;
 
 			Point sz, maximum;
@@ -1336,6 +1338,14 @@ namespace Myra.Graphics2D.UI
 
 						x += glyphRender.Value.Bounds.Right;
 						y += glyphRender.Value.LineTop;
+					} else if (_richTextLayout.Lines.Count > 1)
+					{
+						var previousLine = _richTextLayout.Lines[_richTextLayout.Lines.Count - 2];
+						if (previousLine.Count > 0)
+						{
+							var glyphRender = previousLine.GetGlyphInfoByIndex(0);
+							y += glyphRender.Value.LineTop + lastLine.Size.Y + _richTextLayout.VerticalSpacing;
+						}
 					}
 				}
 			}
