@@ -1,12 +1,12 @@
 ﻿using Myra.Utility;
 using System;
 using System.Collections.Generic;
+using Myra.Events;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
-using Myra.Events;
 #if MONOGAME
 using MonoGame.Framework.Utilities;
 #endif
