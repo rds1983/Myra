@@ -9,7 +9,6 @@ using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.ColorPicker;
 using Myra.Graphics2D.UI.File;
 using Myra.Graphics2D.UI.Properties;
-using Myra.Graphics2D.UI.Styles;
 using MyraPad.UI;
 using Myra.Utility;
 using Myra;
@@ -76,10 +75,10 @@ namespace MyraPad
 
 		private static Studio _instance;
 
-		private readonly ConcurrentQueue<string> _loadQueue = new ConcurrentQueue<string>();
-		private readonly ConcurrentQueue<Project> _newProjectsQueue = new ConcurrentQueue<Project>();
+		private static readonly Regex TagResolver = new Regex("<([A-Za-z0-9\\.]+)");
+
+		private readonly AsyncTasksQueue _queue = new AsyncTasksQueue();
 		private readonly ConcurrentQueue<Action> _uiActions = new ConcurrentQueue<Action>();
-		private readonly AutoResetEvent _refreshProjectEvent = new AutoResetEvent(false);
 
 		private bool _suppressProjectRefresh = false;
 		private readonly GraphicsDeviceManager _graphicsDeviceManager;
@@ -95,7 +94,6 @@ namespace MyraPad
 		private int _line, _col, _indentLevel;
 		private bool _applyAutoIndent = false;
 		private bool _applyAutoClose = false;
-		private object _newObject;
 		private DateTime? _refreshInitiated;
 
 		private VerticalMenu _autoCompleteMenu = null;
@@ -217,7 +215,7 @@ namespace MyraPad
 			}
 		}
 
-		private AssetManager AssetManager
+		public AssetManager AssetManager
 		{
 			get
 			{
@@ -258,6 +256,9 @@ namespace MyraPad
 				return Project.GetWidgetTypeByName(_parentTag);
 			}
 		}
+
+		public object NewObject { get; set; }
+		public Project NewProject { get; set; }
 
 		public Studio(string[] args)
 		{
@@ -301,8 +302,6 @@ namespace MyraPad
 				_graphicsDeviceManager.PreferredBackBufferHeight = 800;
 				_options = new Options();
 			}
-
-			ThreadPool.QueueUserWorkItem(RefreshProjectProc);
 		}
 
 		protected override void Initialize()
@@ -817,8 +816,7 @@ namespace MyraPad
 		{
 			_refreshInitiated = null;
 
-			_loadQueue.Enqueue(_ui._textSource.Text);
-			_refreshProjectEvent.Set();
+			_queue.QueueLoadProject(_ui._textSource.Text);
 		}
 
 		private void QueueUIAction(Action action)
@@ -826,48 +824,13 @@ namespace MyraPad
 			_uiActions.Enqueue(action);
 		}
 
-		private void QueueSetStatusText(string text)
+		public void QueueSetStatusText(string text)
 		{
 			QueueUIAction(() =>
 			{
 				_ui._textStatus.Text = text;
 			});
 		}
-
-		private void RefreshProjectProc(object state)
-		{
-			while (true)
-			{
-				_refreshProjectEvent.WaitOne();
-
-				string data;
-
-				// We're interested only in the last data
-				while (_loadQueue.Count > 1)
-				{
-					_loadQueue.TryDequeue(out data);
-				}
-
-				if (_loadQueue.TryDequeue(out data))
-				{
-					try
-					{
-						QueueSetStatusText("Reloading...");
-
-						var newProject = Project.LoadFromXml(data, AssetManager);
-						_newProjectsQueue.Enqueue(newProject);
-
-						QueueSetStatusText(string.Empty);
-					}
-					catch (Exception ex)
-					{
-						QueueSetStatusText(ex.Message);
-					}
-				}
-			}
-		}
-
-		private static readonly Regex TagResolver = new Regex("<([A-Za-z0-9\\.]+)");
 
 		private static string ExtractTag(string source)
 		{
@@ -1004,7 +967,7 @@ namespace MyraPad
 						xml += "</" + tag + ">";
 					}
 
-					ThreadPool.QueueUserWorkItem(LoadObjectAsync, xml);
+					_queue.QueueLoadObject(xml);
 				}
 			}
 
@@ -1172,23 +1135,6 @@ namespace MyraPad
 			result = result.OrderBy(s => !s.Contains('.')).ThenBy(s => s).ToList();
 
 			return result;
-		}
-
-		private void LoadObjectAsync(object state)
-		{
-			if (Project == null)
-			{
-				return;
-			}
-
-			try
-			{
-				var xml = (string)state;
-				_newObject = Project.LoadObjectFromXml(xml, AssetManager);
-			}
-			catch (Exception)
-			{
-			}
 		}
 
 		private void UpdateCursor()
@@ -1507,24 +1453,18 @@ namespace MyraPad
 					action();
 				}
 
-				if (_newObject != null)
+				if (NewObject != null)
 				{
 					PropertyGrid.ParentType = ParentType;
-					PropertyGrid.Object = _newObject;
+					PropertyGrid.Object = NewObject;
 
 					_ui._propertyGridPane.ResetScroll();
-					_newObject = null;
+					NewObject = null;
 				}
 
-				Project newProject;
-				while (_newProjectsQueue.Count > 1)
+				if (NewProject != null)
 				{
-					_newProjectsQueue.TryDequeue(out newProject);
-				}
-
-				if (_newProjectsQueue.TryDequeue(out newProject))
-				{
-					Project = newProject;
+					Project = NewProject;
 
 					if (Project.Stylesheet != null && Project.Stylesheet.DesktopStyle != null)
 					{

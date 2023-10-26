@@ -1,7 +1,7 @@
 <Project StylesheetPath="Resources/ui_stylesheet.xmms">
   <Project.ExportOptions Namespace="Myra.Samples.CustomUIStylesheet" Class="AllWidgets" OutputPath="D:\Projects\Myra\samples\Myra.Samples.CustomUIStylesheet" />
   <HorizontalSplitPane>
-    <ScrollViewer>
+    <ScrollViewer ShowHorizontalScrollBar="False">
       <Grid ColumnSpacing="8" RowSpacing="8" Id="_gridRight">
         <Grid.DefaultRowProportion Type="Auto" />
         <Grid.ColumnsProportions>
@@ -15,7 +15,9 @@
           <Label Text="Button 2" />
         </Button>
         <Label Text="Image Button:" Grid.Row="2" />
-        <ImageButton Id="_imageButton" Grid.Column="1" Grid.Row="2" />
+        <Button Id="_imageButton" Grid.Column="1" Grid.Row="2">
+          <Image />
+        </Button>
         <CheckBox Text="This is checkbox" ImageWidth="10" ImageHeight="10" Grid.Row="3" Grid.ColumnSpan="2" />
         <Label Text="Horizontal Slider:" Grid.Row="4" />
         <HorizontalSlider Grid.Column="1" Grid.Row="4" />
