@@ -7,6 +7,7 @@ using Myra.Utility;
 using System.Xml.Serialization;
 using Myra.Attributes;
 using FontStashSharp;
+using Myra.Events;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -246,7 +247,8 @@ namespace Myra.Graphics2D.UI
 				if (hasImage && !value)
 				{
 					InternalChild.ColumnsProportions.RemoveAt(0);
-				} else if(!hasImage && value)
+				}
+				else if (!hasImage && value)
 				{
 					InternalChild.ColumnsProportions.Insert(0, _imageProportion);
 				}
@@ -391,7 +393,7 @@ namespace Myra.Graphics2D.UI
 		{
 			var hasImage = false;
 			var hasShortcut = false;
-			foreach(var item in Items)
+			foreach (var item in Items)
 			{
 				var menuItem = item as MenuItem;
 				if (menuItem == null)
@@ -560,7 +562,7 @@ namespace Myra.Graphics2D.UI
 				SelectedIndex = HoverIndex = null;
 			}
 		}
-		
+
 		private void OnHoverIndexChanged(object sender, EventArgs eventArgs)
 		{
 			var menuItem = GetMenuItem(HoverIndex);
@@ -651,7 +653,8 @@ namespace Myra.Graphics2D.UI
 			{
 				Close();
 				menuItem.FireSelected();
-			} else
+			}
+			else
 			{
 				SelectedIndex = HoverIndex = index;
 			}
@@ -799,7 +802,8 @@ namespace Myra.Graphics2D.UI
 							Grid.SetRow(menuItem.Shortcut, index);
 						}
 					}
-				} else
+				}
+				else
 				{
 					var separator = (MenuSeparator)item;
 					if (Orientation == Orientation.Horizontal)

@@ -18,7 +18,7 @@ using Color = FontStashSharp.FSColor;
 
 namespace Myra.Utility
 {
-	public static class Serialization
+	internal static class Serialization
 	{
 		public static readonly Dictionary<Type, ITypeSerializer> _serializers = new Dictionary<Type, ITypeSerializer>
 		{

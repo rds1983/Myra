@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Myra.Utility
 {
-	public static class UIUtils
+	internal static class UIUtils
 	{
 		public static bool ProcessWidgets(this Widget root, Func<Widget, bool> operation)
 		{

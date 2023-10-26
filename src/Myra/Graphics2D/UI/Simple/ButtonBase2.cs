@@ -3,10 +3,11 @@ using Myra.Utility;
 using System.ComponentModel;
 using System.Xml.Serialization;
 using System;
+using Myra.Events;
 
 namespace Myra.Graphics2D.UI
 {
-	public abstract class ButtonBase2: ContentControl
+	public abstract class ButtonBase2 : ContentControl
 	{
 		private bool _isPressed = false;
 		private bool _isClicked = false;

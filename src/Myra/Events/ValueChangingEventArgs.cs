@@ -1,4 +1,4 @@
-﻿namespace Myra.Utility
+﻿namespace Myra.Events
 {
 	public class ValueChangingEventArgs<T> : CancellableEventArgs
 	{

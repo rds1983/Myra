@@ -2,8 +2,8 @@
 using System.ComponentModel;
 using System.Linq;
 using Myra.Graphics2D.UI.Styles;
-using Myra.Utility;
 using System.Xml.Serialization;
+using Myra.Events;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework.Input;
@@ -251,7 +251,7 @@ namespace Myra.Graphics2D.UI
 		{
 			ChildrenLayout = _layout;
 			AcceptsKeyboardFocus = true;
-			
+
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
 
@@ -593,7 +593,8 @@ namespace Myra.Graphics2D.UI
 				if (Minimum != null && Minimum.Value > 0)
 				{
 					defaultValue = NumberToString(Minimum.Value);
-				} else if (Maximum != null && Maximum.Value < 0)
+				}
+				else if (Maximum != null && Maximum.Value < 0)
 				{
 					defaultValue = NumberToString(Maximum.Value);
 				}

@@ -15,6 +15,7 @@ using FontStashSharp;
 using FontStashSharp.RichText;
 using Myra.Graphics2D.Brushes;
 using AssetManagementBase;
+using Myra.Events;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;

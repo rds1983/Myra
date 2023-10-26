@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Myra.Utility;
 using FontStashSharp.RichText;
+using Myra.Events;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -128,8 +128,8 @@ namespace Myra.Graphics2D.UI.ColorPicker
 				_colorDisplay.Opacity = value;
 			}
 		}
-		
-		private int DisplayAlpha => (int) (A * 255f);
+
+		private int DisplayAlpha => (int)(A * 255f);
 
 		private int? SelectedUserColorIndex
 		{
@@ -151,7 +151,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 		{
 			BuildUI();
 
-			var checkerboardRenderable = DefaultAssets.UITextureRegionAtlas["color-picker-checkerboard"]; 
+			var checkerboardRenderable = DefaultAssets.UITextureRegionAtlas["color-picker-checkerboard"];
 			// Users colors
 			for (int row = 0; row < Rows; ++row)
 			{
@@ -393,7 +393,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 				var userColorImage = GetUserColorImage(index.Value);
 				Color = userColorImage.Color;
 				A = userColorImage.Opacity;
-				
+
 				// Call this so we can set the alpha slider and
 				// other visuals to match the new color and alpha.
 				OnColorChanged(Color);
@@ -551,9 +551,9 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			}
 
 			_colorWheel.Color = new Color((int)(hsv.V * 255.0f / 100f), (int)(hsv.V * 255.0f / 100f), (int)(hsv.V * 255.0f / 100f));
-			
+
 			_colorDisplay.Color = rgb;
-			
+
 			colorHSV = hsv;
 		}
 

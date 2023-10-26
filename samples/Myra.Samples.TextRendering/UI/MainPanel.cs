@@ -1,5 +1,6 @@
 using FontStashSharp;
 using Microsoft.Xna.Framework;
+using Myra.Events;
 using Myra.Graphics2D;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
@@ -10,7 +11,7 @@ using System.Linq;
 
 namespace Myra.Samples.TextRendering.UI
 {
-	public partial class MainPanel
+    public partial class MainPanel
 	{
 		private FontSystem _fontSystem;
 
@@ -53,7 +54,7 @@ namespace Myra.Samples.TextRendering.UI
 			_buttonBrowseFont.Click += _buttonBrowseFont_Click;
 		}
 
-		private void _spinButtonResolutionFactor_ValueChanged(object sender, Utility.ValueChangedEventArgs<float?> e)
+		private void _spinButtonResolutionFactor_ValueChanged(object sender, ValueChangedEventArgs<float?> e)
 		{
 			FontSystem = null;
 			Update();

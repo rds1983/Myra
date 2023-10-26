@@ -4,10 +4,7 @@ using System.Reflection;
 
 namespace Myra.Utility
 {
-	/// <summary>
-	/// Reflection Utility
-	/// </summary>
-	public static class Reflection
+	internal static class Reflection
 	{
 		public static T FindAttribute<T>(this MemberInfo property) where T : Attribute
 		{

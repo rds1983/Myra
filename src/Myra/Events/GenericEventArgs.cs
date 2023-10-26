@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Myra.Utility
+namespace Myra.Events
 {
 	public sealed class GenericEventArgs<T> : EventArgs
 	{

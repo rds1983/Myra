@@ -1,6 +1,6 @@
 using System;
 
-namespace Myra.Graphics2D.UI
+namespace Myra.Events
 {
 	public class CancellableEventArgs<T> : EventArgs
 	{

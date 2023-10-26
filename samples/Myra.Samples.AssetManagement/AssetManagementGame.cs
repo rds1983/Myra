@@ -1,7 +1,6 @@
 ﻿using Myra.Graphics2D.UI;
 using Microsoft.Xna.Framework;
 using System.IO;
-using Myra.Utility;
 using AssetManagementBase;
 
 namespace Myra.Samples.AssetManagement

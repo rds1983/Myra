@@ -1,12 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
+using System;
 
-namespace Myra.Utility
+namespace Myra.Samples.Notepad
 {
-	/// <summary>
-	/// Resource utility
-	/// </summary>
 	internal static class Res
 	{
 		/// <summary>

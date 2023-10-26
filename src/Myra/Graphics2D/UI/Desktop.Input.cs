@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
+using Myra.Events;
 #if MONOGAME
 using MonoGame.Framework.Utilities;
 #endif
@@ -177,7 +178,8 @@ namespace Myra.Graphics2D.UI
 				delta -= _lastMouseInfo.Wheel;
 #endif
 				MouseWheelDelta = delta;
-			} else
+			}
+			else
 			{
 				MouseWheelDelta = 0;
 			}

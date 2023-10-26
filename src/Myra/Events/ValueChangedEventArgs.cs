@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Myra.Utility
+namespace Myra.Events
 {
-	public class ValueChangedEventArgs<T>: EventArgs
+	public class ValueChangedEventArgs<T> : EventArgs
 	{
 		public T OldValue
 		{

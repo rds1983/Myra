@@ -7,6 +7,7 @@ using TextCopy;
 using Myra.Graphics2D.UI.TextEdit;
 using FontStashSharp;
 using FontStashSharp.RichText;
+using Myra.Events;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -78,7 +79,7 @@ namespace Myra.Graphics2D.UI
 				DisableHintText();
 			}
 		}
-		
+
 		[Category("Appearance")]
 		[DefaultValue(null)]
 		public string HintText
@@ -97,11 +98,11 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 		}
-		
+
 		[Browsable(false)]
 		[XmlIgnore]
 		public bool HintTextEnabled { get; set; }
-		
+
 		[Category("Behavior")]
 		[DefaultValue(false)]
 		public bool Multiline
@@ -470,7 +471,7 @@ namespace Myra.Graphics2D.UI
 			{
 				return 0;
 			}
-			
+
 			// If we're trying to delete one part
 			// of a surrogate pair, delete both.
 			if (len == 1)
@@ -485,7 +486,7 @@ namespace Myra.Graphics2D.UI
 					where--;
 				}
 			}
-			
+
 			UndoStack.MakeDelete(Text, where, len);
 			DeleteChars(where, len);
 
@@ -512,7 +513,7 @@ namespace Myra.Graphics2D.UI
 		private bool Paste(string text)
 		{
 			text = Process(text);
-			
+
 			DeleteSelection();
 			if (InsertChars(CursorPosition, text))
 			{
@@ -633,7 +634,8 @@ namespace Myra.Graphics2D.UI
 			if (Desktop.IsShiftDown)
 			{
 				UpdateSelection();
-			} else
+			}
+			else
 			{
 				ResetSelection();
 			}
@@ -746,7 +748,7 @@ namespace Myra.Graphics2D.UI
 							if (lineStart == 0)
 								line = "\n" + line;
 							Insert(lineEnd, line);
-						} 
+						}
 						// duplicate selection
 						else
 						{
@@ -844,52 +846,52 @@ namespace Myra.Graphics2D.UI
 					break;
 
 				case Keys.Home:
-				{
-					if (!Desktop.IsControlDown && !string.IsNullOrEmpty(Text))
 					{
-						var newPosition = CursorPosition;
-
-						while (newPosition > 0 &&
-							(newPosition - 1 >= Text.Length ||
-							Text[newPosition - 1] != '\n'))
+						if (!Desktop.IsControlDown && !string.IsNullOrEmpty(Text))
 						{
-							--newPosition;
+							var newPosition = CursorPosition;
+
+							while (newPosition > 0 &&
+								(newPosition - 1 >= Text.Length ||
+								Text[newPosition - 1] != '\n'))
+							{
+								--newPosition;
+							}
+
+							UserSetCursorPosition(newPosition);
+						}
+						else
+						{
+							UserSetCursorPosition(0);
 						}
 
-						UserSetCursorPosition(newPosition);
-					}
-					else
-					{
-						UserSetCursorPosition(0);
-					}
+						UpdateSelectionIfShiftDown();
 
-					UpdateSelectionIfShiftDown();
-
-					break;
-				}
+						break;
+					}
 
 				case Keys.End:
-				{
-					if (!Desktop.IsControlDown)
 					{
-						var newPosition = CursorPosition;
-
-						while (newPosition < Length && Text[newPosition] != '\n')
+						if (!Desktop.IsControlDown)
 						{
-							++newPosition;
+							var newPosition = CursorPosition;
+
+							while (newPosition < Length && Text[newPosition] != '\n')
+							{
+								++newPosition;
+							}
+
+							UserSetCursorPosition(newPosition);
+						}
+						else
+						{
+							UserSetCursorPosition(Length);
 						}
 
-						UserSetCursorPosition(newPosition);
-					}
-					else
-					{
-						UserSetCursorPosition(Length);
-					}
+						UpdateSelectionIfShiftDown();
 
-					UpdateSelectionIfShiftDown();
-
-					break;
-				}
+						break;
+					}
 
 				case Keys.Enter:
 					if (!Readonly)
@@ -1019,12 +1021,12 @@ namespace Myra.Graphics2D.UI
 		}
 
 		private bool ShouldEnableHintText()
-		{			
+		{
 			return _hintText != null &&
-			       string.IsNullOrEmpty(_text)
-			       && !IsKeyboardFocused;
+				   string.IsNullOrEmpty(_text)
+				   && !IsKeyboardFocused;
 		}
-		
+
 		private void UpdateScrolling()
 		{
 			var p = GetRenderPositionByIndex(CursorPosition);
@@ -1209,7 +1211,8 @@ namespace Myra.Graphics2D.UI
 					if (_isTouchDown || Desktop.IsShiftDown)
 					{
 						UpdateSelection();
-					} else
+					}
+					else
 					{
 						ResetSelection();
 					}
@@ -1263,7 +1266,7 @@ namespace Myra.Graphics2D.UI
 			int start, end;
 			start = end = position;
 
-			while(start > 0)
+			while (start > 0)
 			{
 				if (char.IsWhiteSpace(Text[start]))
 				{
@@ -1274,7 +1277,7 @@ namespace Myra.Graphics2D.UI
 				--start;
 			}
 
-			while(end < Text.Length)
+			while (end < Text.Length)
 			{
 				if (char.IsWhiteSpace(Text[end]))
 				{
@@ -1299,7 +1302,7 @@ namespace Myra.Graphics2D.UI
 
 			_lastBlinkStamp = DateTime.Now;
 			_cursorOn = true;
-			
+
 			DisableHintText();
 		}
 
@@ -1338,7 +1341,8 @@ namespace Myra.Graphics2D.UI
 
 						x += glyphRender.Value.Bounds.Right;
 						y += glyphRender.Value.LineTop;
-					} else if (_richTextLayout.Lines.Count > 1)
+					}
+					else if (_richTextLayout.Lines.Count > 1)
 					{
 						var previousLine = _richTextLayout.Lines[_richTextLayout.Lines.Count - 2];
 						if (previousLine.Count > 0)
@@ -1470,7 +1474,7 @@ namespace Myra.Graphics2D.UI
 				{
 					foreach (TextChunk chunk in line.Chunks)
 					{
-						foreach(var glyph in chunk.Glyphs)
+						foreach (var glyph in chunk.Glyphs)
 						{
 							var glyphBounds = glyph.Bounds;
 							glyphBounds.Offset(p);

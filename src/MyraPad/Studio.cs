@@ -10,7 +10,6 @@ using Myra.Graphics2D.UI.ColorPicker;
 using Myra.Graphics2D.UI.File;
 using Myra.Graphics2D.UI.Properties;
 using MyraPad.UI;
-using Myra.Utility;
 using Myra;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework.Input;
@@ -18,6 +17,8 @@ using Myra.Graphics2D;
 using FontStashSharp.RichText;
 using FontStashSharp;
 using AssetManagementBase;
+using Myra.Events;
+using Myra.Utility;
 
 namespace MyraPad
 {
@@ -636,7 +637,7 @@ namespace MyraPad
 				// Check whether project has external assets
 				var hasExternalResources = false;
 
-				UIUtils.ProcessWidgets(Project.Root, w =>
+				Project.Root.ProcessWidgets(w =>
 				{
 					ProcessResourcesPaths(w, k =>
 					{
@@ -1475,7 +1476,7 @@ namespace MyraPad
 					}
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				_ui._textStatus.Text = ex.Message;
 			}

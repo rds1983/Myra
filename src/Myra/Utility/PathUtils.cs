@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Myra.Utility
 {
-	public static class PathUtils
+	internal static class PathUtils
 	{
 		public static string ExecutingAssemblyDirectory
 		{

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
 using Myra.Utility;
+using Myra.Events;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework.Input;

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
+using Myra.Events;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -606,10 +607,8 @@ namespace Myra.Graphics2D.UI
 
 		internal void ProcessWidgets(Func<Widget, bool> operation)
 		{
-			var childrenCopy = ChildrenCopy;
-			for (var i = childrenCopy.Count - 1; i >= 0; --i)
+			foreach(var w in ChildrenCopy)
 			{
-				var w = childrenCopy[i];
 				var result = w.ProcessWidgets(operation);
 				if (!result)
 				{
@@ -631,16 +630,16 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private Widget GetWidgetBy(Widget root, Func<Widget, bool> filter)
+		private Widget FindChild(Widget root, Func<Widget, bool> predicate)
 		{
-			if (filter(root))
+			if (predicate(root))
 			{
 				return root;
 			}
 
 			foreach (var w in root.ChildrenCopy)
 			{
-				var result = GetWidgetBy(w, filter);
+				var result = w.FindChild(predicate);
 				if (result != null)
 				{
 					return result;
@@ -650,11 +649,11 @@ namespace Myra.Graphics2D.UI
 			return null;
 		}
 
-		public Widget GetWidgetBy(Func<Widget, bool> filter)
+		public Widget FindChild(Func<Widget, bool> filter)
 		{
 			foreach (var w in ChildrenCopy)
 			{
-				var result = GetWidgetBy(w, filter);
+				var result = FindChild(w, filter);
 				if (result != null)
 				{
 					return result;
@@ -664,9 +663,18 @@ namespace Myra.Graphics2D.UI
 			return null;
 		}
 
+		[Obsolete("Use FindChild")]
+		public Widget GetWidgetBy(Func<Widget, bool> predicate) => FindChild(predicate);
+
+		public Widget FindChild(string id)
+		{
+			return FindChild(w => w.Id == id);
+		}
+
+		[Obsolete("Use FindChild")]
 		public Widget GetWidgetByID(string ID)
 		{
-			return GetWidgetBy(w => w.Id == ID);
+			return FindChild(w => w.Id == ID);
 		}
 
 		public int CalculateTotalWidgets(bool visibleOnly)
@@ -812,26 +820,26 @@ namespace Myra.Graphics2D.UI
 
 		private bool InternalIsPointOverGUI(Point p, Widget w)
 		{
-/*			if (!w.Visible || !w.ContainsGlobalPoint(p))
-			{
-				return false;
-			}
+			/*			if (!w.Visible || !w.ContainsGlobalPoint(p))
+						{
+							return false;
+						}
 
 
-			var localPos = w.ToLocal(p);
-			if (!w.IsInputFallsThrough(localPos))
-			{
-				return true;
-			}
+						var localPos = w.ToLocal(p);
+						if (!w.IsInputFallsThrough(localPos))
+						{
+							return true;
+						}
 
-			// Or if any child is solid
-			foreach (var ch in w.ChildrenCopy)
-			{
-				if (InternalIsPointOverGUI(p, ch))
-				{
-					return true;
-				}
-			}*/
+						// Or if any child is solid
+						foreach (var ch in w.ChildrenCopy)
+						{
+							if (InternalIsPointOverGUI(p, ch))
+							{
+								return true;
+							}
+						}*/
 
 			return false;
 		}

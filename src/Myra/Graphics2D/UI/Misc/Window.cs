@@ -5,6 +5,7 @@ using Myra.Utility;
 using System.Xml.Serialization;
 using Myra.Attributes;
 using FontStashSharp;
+using Myra.Events;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
