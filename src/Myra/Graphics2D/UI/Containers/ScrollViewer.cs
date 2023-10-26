@@ -361,6 +361,11 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnTouchDown();
 
+			if (Desktop == null)
+			{
+				return;
+			}
+
 			var touchPosition = ToLocal(Desktop.TouchPosition.Value);
 
 			var r = _verticalScrollbarThumb;
@@ -608,7 +613,7 @@ namespace Myra.Graphics2D.UI
 
 		private void DesktopTouchMoved(object sender, EventArgs args)
 		{
-			if (!_startBoundsPos.HasValue)
+			if (!_startBoundsPos.HasValue || Desktop == null)
 				return;
 
 			var touchPosition = Desktop.TouchPosition;

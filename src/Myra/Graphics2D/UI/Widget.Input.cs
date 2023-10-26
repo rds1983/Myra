@@ -196,7 +196,7 @@ namespace Myra.Graphics2D.UI
 				{
 					if (inputContext.ParentContainsMouse)
 					{
-						if (ContainsGlobalPoint(Desktop.MousePosition))
+						if (Desktop != null && ContainsGlobalPoint(Desktop.MousePosition))
 						{
 							LocalMousePosition = ToLocal(Desktop.MousePosition);
 						}
@@ -212,7 +212,7 @@ namespace Myra.Graphics2D.UI
 					}
 				}
 
-				if (Desktop.TouchPosition != null && inputContext.ParentContainsTouch)
+				if (Desktop != null && Desktop.TouchPosition != null && inputContext.ParentContainsTouch)
 				{
 					if (ContainsGlobalPoint(Desktop.TouchPosition.Value))
 					{
@@ -229,7 +229,8 @@ namespace Myra.Graphics2D.UI
 					LocalTouchPosition = null;
 				}
 
-				if (IsMouseInside &&
+				if (Desktop != null && 
+					IsMouseInside &&
 					!Desktop.MouseWheelDelta.IsZero() &&
 					AcceptsMouseWheel)
 				{

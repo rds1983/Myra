@@ -220,6 +220,11 @@ namespace Myra.Graphics2D.UI
 
 		private void UpdateHint()
 		{
+			if (Desktop == null)
+			{
+				return;
+			}
+
 			var hint = GetHint();
 			if (hint < 0)
 			{

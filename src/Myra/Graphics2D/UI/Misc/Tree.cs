@@ -181,6 +181,11 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnTouchDown();
 
+			if (Desktop == null)
+			{
+				return;
+			}
+
 			SetHoverRow(Desktop.TouchPosition.Value);
 
 			if (HoverRow != null && HoverRow.RowVisible)
@@ -241,6 +246,11 @@ namespace Myra.Graphics2D.UI
 			base.OnMouseMoved();
 
 			HoverRow = null;
+
+			if (Desktop == null)
+			{
+				return;
+			}
 
 			SetHoverRow(Desktop.MousePosition);
 		}

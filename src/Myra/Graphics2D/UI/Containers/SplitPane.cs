@@ -58,7 +58,7 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnTouchMoved();
 
-			if (_mouseCoord == null)
+			if (Desktop == null || _mouseCoord == null)
 			{
 				return;
 			}
@@ -132,7 +132,7 @@ namespace Myra.Graphics2D.UI
 				_handleDown = null;
 				_mouseCoord = null;
 			}
-			else
+			else if (Desktop != null)
 			{
 				_handleDown = (Button)sender;
 
