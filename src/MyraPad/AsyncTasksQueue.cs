@@ -6,10 +6,12 @@ namespace MyraPad
 {
 	internal class AsyncTasksQueue
 	{
+		private bool _running = true;
 		private string _projectXml;
 		private string _objectXml;
 
 		private readonly AutoResetEvent _refreshProjectEvent = new AutoResetEvent(false);
+		private readonly AutoResetEvent _waitForQuitEvent = new AutoResetEvent(false);
 
 		public AsyncTasksQueue()
 		{
@@ -28,9 +30,16 @@ namespace MyraPad
 			_refreshProjectEvent.Set();
 		}
 
+		public void Quit()
+		{
+			_running = false;
+			_refreshProjectEvent.Set();
+			_waitForQuitEvent.WaitOne();
+		}
+
 		private void RefreshProc(object state)
 		{
-			while (true)
+			while (_running)
 			{
 				_refreshProjectEvent.WaitOne();
 
@@ -69,6 +78,8 @@ namespace MyraPad
 					_objectXml = null;
 				}
 			}
+
+			_waitForQuitEvent.Set();
 		}
 	}
 }

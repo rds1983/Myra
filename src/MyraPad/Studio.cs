@@ -14,7 +14,6 @@ using Myra.Utility;
 using Myra;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework.Input;
-using System.Threading;
 using Myra.Graphics2D;
 using FontStashSharp.RichText;
 using FontStashSharp;
@@ -1495,6 +1494,8 @@ namespace MyraPad
 		{
 			base.EndRun();
 
+
+
 			var state = new State
 			{
 				Size = new Point(GraphicsDevice.PresentationParameters.BackBufferWidth,
@@ -1507,6 +1508,8 @@ namespace MyraPad
 			};
 
 			state.Save();
+
+			_queue.Quit();
 		}
 
 		private void New(string rootType)

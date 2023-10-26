@@ -2,15 +2,15 @@
   <Project.ExportOptions Namespace="Myra.Samples.NonModalWindows.UI" Class="MainPanel" OutputPath="D:\Projects\Myra\samples\Myra.Samples.NonModalWindows\UI" />
   <Panel>
     <HorizontalStackPanel Spacing="8">
-      <Button Id="_button1">
+      <ToggleButton Id="_button1">
         <Label Text="Window 1" />
-      </Button>
-      <Button Id="_button2">
+      </ToggleButton>
+      <ToggleButton Id="_button2">
         <Label Text="Window 2" />
-      </Button>
-      <Button Id="_button3">
+      </ToggleButton>
+      <ToggleButton Id="_button3">
         <Label Text="Window 3" />
-      </Button>
+      </ToggleButton>
     </HorizontalStackPanel>
     <Label Text="Is mouse over GUI: true" VerticalAlignment="Bottom" Id="_labelOverGui" />
   </Panel>
