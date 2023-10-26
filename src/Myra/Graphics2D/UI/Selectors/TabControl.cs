@@ -17,7 +17,7 @@ namespace Myra.Graphics2D.UI
 	public class TabControl : Selector<Grid, TabItem>
 	{
 		private Grid _gridButtons;
-		private SingleItemContainer<Widget> _panelContent;
+		private Panel _panelContent;
 		private TabSelectorPosition _selectorPosition;
 		private ObservableCollection<Proportion> _buttonProportions;
 		private ObservableCollection<Proportion> _contentProportions;
@@ -162,11 +162,7 @@ namespace Myra.Graphics2D.UI
 			VerticalAlignment = VerticalAlignment.Top;
 
 			_gridButtons = new Grid();
-			_panelContent = new SingleItemContainer<Widget>()
-			{
-				HorizontalAlignment = HorizontalAlignment.Stretch,
-				VerticalAlignment = VerticalAlignment.Stretch
-			};
+			_panelContent = new Panel();
 			Grid.SetRow(_panelContent, 1);
 
 			// Default to Top selector position:
@@ -269,9 +265,10 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnSelectedItemChanged();
 
-			if (SelectedItem != null)
+			_panelContent.Widgets.Clear();
+			if (SelectedItem != null && SelectedItem.Content != null)
 			{
-				_panelContent.InternalChild = SelectedItem.Content;
+				_panelContent.Widgets.Add(SelectedItem.Content);
 			}
 		}
 
