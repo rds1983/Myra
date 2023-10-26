@@ -232,7 +232,7 @@ namespace Myra.Graphics2D.UI
 
 			var result = new Project();
 
-			if (stylesheet != null)
+			if (stylesheetPathAttr != null)
 			{
 				if (assetManager == null)
 				{

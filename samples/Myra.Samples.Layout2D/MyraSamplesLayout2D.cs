@@ -78,7 +78,7 @@ namespace Myra.Samples.Layout2D
 			{
 				Text = "Calc"
 			};
-			btnA.Click += (object sender, EventArgs e) => { btnB.Layout2d.Expresion = (_desktop.GetWidgetByID("Expression") as TextBox).Text; _desktop.InvalidateLayout(); _desktop.UpdateLayout(); };
+			btnA.Click += (object sender, EventArgs e) => { btnB.Layout2d.Expresion = (_desktop.FindChild("Expression") as TextBox).Text; _desktop.InvalidateLayout(); _desktop.UpdateLayout(); };
 			panel.Widgets.Add(btnA);
 
 			g.Widgets.Add(panel);
