@@ -272,9 +272,10 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
+				var childrenCopy = ChildrenCopy;
+				for (var i = childrenCopy.Count - 1; i >= 0; --i)
 				{
-					var w = ChildrenCopy[i];
+					var w = childrenCopy[i];
 					if (w.Visible && w.Enabled && w.IsModal)
 					{
 						return true;
@@ -480,9 +481,11 @@ namespace Myra.Graphics2D.UI
 			UpdateInput();
 
 			_inputContext.Reset();
-			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
+
+			var childrenCopy = ChildrenCopy;
+			for (var i = childrenCopy.Count - 1; i >= 0; --i)
 			{
-				var widget = ChildrenCopy[i];
+				var widget = childrenCopy[i];
 				widget.ProcessInput(_inputContext);
 			}
 
@@ -495,9 +498,11 @@ namespace Myra.Graphics2D.UI
 
 			// Second input run: process input events
 			ProcessInputEvents();
-			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
+
+			childrenCopy = ChildrenCopy;
+			for (var i = childrenCopy.Count - 1; i >= 0; --i)
 			{
-				var widget = ChildrenCopy[i];
+				var widget = childrenCopy[i];
 				widget.ProcessInputEvents();
 			}
 
@@ -577,9 +582,11 @@ namespace Myra.Graphics2D.UI
 
 			// Rest processing
 			MenuBar = null;
-			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
+
+			var childrenCopy = ChildrenCopy;
+			for (var i = childrenCopy.Count - 1; i >= 0; --i)
 			{
-				var w = ChildrenCopy[i];
+				var w = childrenCopy[i];
 				if (!w.Visible)
 				{
 					continue;
@@ -599,9 +606,10 @@ namespace Myra.Graphics2D.UI
 
 		internal void ProcessWidgets(Func<Widget, bool> operation)
 		{
-			for (var i = ChildrenCopy.Count - 1; i >= 0; --i)
+			var childrenCopy = ChildrenCopy;
+			for (var i = childrenCopy.Count - 1; i >= 0; --i)
 			{
-				var w = ChildrenCopy[i];
+				var w = childrenCopy[i];
 				var result = w.ProcessWidgets(operation);
 				if (!result)
 				{
