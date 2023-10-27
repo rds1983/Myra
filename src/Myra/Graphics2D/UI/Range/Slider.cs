@@ -176,6 +176,11 @@ namespace Myra.Graphics2D.UI
 
 		private int GetHint()
 		{
+			if (Desktop == null)
+			{
+				return 0;
+			}
+
 			var pos = ToLocal(Desktop.TouchPosition.Value);
 
 			var bounds = InternalChild.ActualBounds;
@@ -220,11 +225,6 @@ namespace Myra.Graphics2D.UI
 
 		private void UpdateHint()
 		{
-			if (Desktop == null)
-			{
-				return;
-			}
-
 			var hint = GetHint();
 			if (hint < 0)
 			{
