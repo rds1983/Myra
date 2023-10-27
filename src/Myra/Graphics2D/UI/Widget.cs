@@ -1391,5 +1391,31 @@ namespace Myra.Graphics2D.UI
 		{
 			_startPos = null;
 		}
+
+		public virtual Widget HitTest(Point p)
+		{
+			if (Desktop == null || !Visible || !ContainsGlobalPoint(p))
+			{
+				return null;
+			}
+
+			Widget result = null;
+			for (var i = _childrenCopy.Count - 1; i >= 0; i--)
+			{
+				var child = _childrenCopy[i];
+				result = child.HitTest(p);
+				if (result != null)
+				{
+					break;
+				}
+			}
+
+			if (result == null && !this.FallsThrough(p)) 
+			{
+				result = this;
+			}
+
+			return result;
+		}
 	}
 }

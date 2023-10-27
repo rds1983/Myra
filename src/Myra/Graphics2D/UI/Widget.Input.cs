@@ -187,6 +187,11 @@ namespace Myra.Graphics2D.UI
 
 		protected internal virtual void ProcessInput(InputContext inputContext)
 		{
+			if (!Visible || Desktop == null)
+			{
+				return;
+			}
+
 			if (!inputContext.MouseOrTouchHandled)
 			{
 				var oldContainsMouse = inputContext.ParentContainsMouse;
@@ -196,7 +201,7 @@ namespace Myra.Graphics2D.UI
 				{
 					if (inputContext.ParentContainsMouse)
 					{
-						if (Desktop != null && ContainsGlobalPoint(Desktop.MousePosition))
+						if (ContainsGlobalPoint(Desktop.MousePosition))
 						{
 							LocalMousePosition = ToLocal(Desktop.MousePosition);
 						}
@@ -212,7 +217,7 @@ namespace Myra.Graphics2D.UI
 					}
 				}
 
-				if (Desktop != null && Desktop.TouchPosition != null && inputContext.ParentContainsTouch)
+				if (Desktop.TouchPosition != null && inputContext.ParentContainsTouch)
 				{
 					if (ContainsGlobalPoint(Desktop.TouchPosition.Value))
 					{
@@ -229,8 +234,7 @@ namespace Myra.Graphics2D.UI
 					LocalTouchPosition = null;
 				}
 
-				if (Desktop != null && 
-					IsMouseInside &&
+				if (IsMouseInside &&
 					!Desktop.MouseWheelDelta.IsZero() &&
 					AcceptsMouseWheel)
 				{

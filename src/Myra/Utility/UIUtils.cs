@@ -1,4 +1,5 @@
-﻿using Myra.Graphics2D.UI;
+﻿using Microsoft.Xna.Framework;
+using Myra.Graphics2D.UI;
 using System;
 using System.Collections.Generic;
 
@@ -55,6 +56,34 @@ namespace Myra.Utility
 
 				n = newN;
 			} while (n > 1);
+		}
+
+		public static bool FallsThrough(this Widget w, Point p)
+		{
+			// Only containers can fall through
+			if (!(w is Container || w is ScrollViewer))
+			{
+				return false;
+			}
+
+			// Real containers are solid only if backround is set
+			if (w.Background != null)
+			{
+				return false;
+			}
+
+			var asScrollViewer = w as ScrollViewer;
+			if (asScrollViewer != null)
+			{
+				// Special case
+				if (asScrollViewer._horizontalScrollingOn && asScrollViewer._horizontalScrollbarFrame.Contains(p) ||
+					asScrollViewer._verticalScrollingOn && asScrollViewer._verticalScrollbarFrame.Contains(p))
+				{
+					return false;
+				}
+			}
+
+			return true;
 		}
 	}
 }

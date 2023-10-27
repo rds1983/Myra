@@ -818,37 +818,12 @@ namespace Myra.Graphics2D.UI
 			_widgetsDirty = false;
 		}
 
-		private bool InternalIsPointOverGUI(Point p, Widget w)
-		{
-			/*			if (!w.Visible || !w.ContainsGlobalPoint(p))
-						{
-							return false;
-						}
-
-
-						var localPos = w.ToLocal(p);
-						if (!w.IsInputFallsThrough(localPos))
-						{
-							return true;
-						}
-
-						// Or if any child is solid
-						foreach (var ch in w.ChildrenCopy)
-						{
-							if (InternalIsPointOverGUI(p, ch))
-							{
-								return true;
-							}
-						}*/
-
-			return false;
-		}
-
 		public bool IsPointOverGUI(Point p)
 		{
 			foreach (var widget in ChildrenCopy)
 			{
-				if (InternalIsPointOverGUI(p, widget))
+				var result = widget.HitTest(p);
+				if (result != null)
 				{
 					return true;
 				}
