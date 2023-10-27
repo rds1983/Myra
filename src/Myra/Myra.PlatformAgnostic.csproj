@@ -2,7 +2,7 @@
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);PLATFORM_AGNOSTIC</DefineConstants>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Myra</AssemblyName>
+    <AssemblyName>Myra.PlatformAgnostic</AssemblyName>
     <PackageId>Myra.PlatformAgnostic</PackageId>
     <OutputPath>bin\PlatformAgnostic\$(Configuration)</OutputPath>
   </PropertyGroup>
