@@ -18,7 +18,9 @@
         <Button Id="_imageButton" Grid.Column="1" Grid.Row="2">
           <Image />
         </Button>
-        <CheckBox Text="This is checkbox" ImageWidth="10" ImageHeight="10" Grid.Row="3" Grid.ColumnSpan="2" />
+        <CheckButton Grid.Row="3" Grid.ColumnSpan="2">
+          <Label Text="This is checkbox" />
+        </CheckButton>
         <Label Text="Horizontal Slider:" Grid.Row="4" />
         <HorizontalSlider Grid.Column="1" Grid.Row="4" />
         <Label Text="Combo Box:" Grid.Row="5" />

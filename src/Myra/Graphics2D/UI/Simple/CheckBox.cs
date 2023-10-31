@@ -1,9 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Xml.Serialization;
 using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
 {
+	[Obsolete("Use CheckButton")]
 	public class CheckBox : ImageTextButton
 	{
 		[Browsable(false)]

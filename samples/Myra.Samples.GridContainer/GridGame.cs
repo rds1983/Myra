@@ -97,11 +97,15 @@ namespace Myra.Samples.GridContainer
 			grid.Widgets.Add(button);
 
 			// Button
-			var button2 = new TextButton
+			var button2 = new Button
 			{
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
-				Text = "This is 2 rows button"
+				Content = new Label
+				{
+					Text = "This is 2 rows button"
+				}
+
 			};
 			Grid.SetColumn(button2, 2);
 			Grid.SetRow(button2, 2);
@@ -189,9 +193,12 @@ namespace Myra.Samples.GridContainer
 
 			grid.Widgets.Add(textBlock);
 
-			var checkBox = new CheckBox
+			var checkBox = new CheckButton
 			{
-				Text = "This is a checkbox",
+				Content = new Label
+				{
+					Text = "This is a checkbox"
+				}
 			};
 			Grid.SetColumn(checkBox, 3);
 			Grid.SetRow(checkBox, 3);

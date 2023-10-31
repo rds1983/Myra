@@ -27,8 +27,12 @@
             <Label Text="5.4" HorizontalAlignment="Center" Id="_labelScaleValue" />
           </VerticalStackPanel>
           <Label Text="10" />
-          <CheckBox Text="Smooth Text" Id="_checkBoxSmoothText" />
-          <CheckBox IsChecked="True" Text="Show Texture" Id="_checkBoxShowTexture" />
+          <CheckButton Id="_checkBoxSmoothText">
+            <Label Text="Smooth Text" />
+          </CheckButton>
+          <CheckButton Id="_checkBoxShowTexture">
+            <Label Text="Show Texture" />
+          </CheckButton>
         </HorizontalStackPanel>
         <HorizontalStackPanel Spacing="8">
           <Label Text="Resolution Factor:" />

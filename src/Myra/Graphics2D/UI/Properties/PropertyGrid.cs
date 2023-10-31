@@ -446,22 +446,22 @@ namespace Myra.Graphics2D.UI.Properties
 			return cb;
 		}
 
-		private CheckBox CreateBooleanEditor(Record record, bool hasSetter)
+		private CheckButton CreateBooleanEditor(Record record, bool hasSetter)
 		{
 			var propertyType = record.Type;
 			var value = record.GetValue(_object);
 
 			var isChecked = (bool)value;
-			var cb = new CheckBox
+			var cb = new CheckButton
 			{
-				IsPressed = isChecked
+				IsChecked = isChecked
 			};
 
 			if (hasSetter)
 			{
 				cb.Click += (sender, args) =>
 				{
-					SetValue(record, _object, cb.IsPressed);
+					SetValue(record, _object, cb.IsChecked);
 					FireChanged(propertyType.Name);
 				};
 			}

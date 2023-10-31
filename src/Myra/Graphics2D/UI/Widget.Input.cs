@@ -33,7 +33,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public bool IsMouseInside => _localMousePosition != null;
+		public virtual bool IsMouseInside => _localMousePosition != null;
 
 		[Browsable(false)]
 		[XmlIgnore]

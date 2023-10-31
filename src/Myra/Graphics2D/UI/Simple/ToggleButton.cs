@@ -1,6 +1,7 @@
 ﻿using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
 using System.ComponentModel;
+using System;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework.Input;
@@ -17,6 +18,15 @@ namespace Myra.Graphics2D.UI
 	{
 		private readonly SingleItemLayout<Widget> _layout;
 
+		[Category("Behavior")]
+		[DefaultValue(false)]
+		public bool IsToggled
+		{
+			get => IsPressed;
+			set => IsPressed = value;
+		}
+
+
 		[Browsable(false)]
 		[Content]
 		public override Widget Content
@@ -24,6 +34,20 @@ namespace Myra.Graphics2D.UI
 			get => _layout.Child;
 			set => _layout.Child = value;
 		}
+
+		public event EventHandler IsToggledChanged
+		{
+			add
+			{
+				PressedChanged += value;
+			}
+
+			remove
+			{
+				PressedChanged -= value;
+			}
+		}
+
 
 		public ToggleButton(string styleName = Stylesheet.DefaultStyleName)
 		{
