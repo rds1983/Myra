@@ -14,6 +14,7 @@ using Color = FontStashSharp.FSColor;
 
 namespace Myra.Graphics2D.UI
 {
+	[Obsolete("Use TreeView")]
 	public class TreeNode : Widget
 	{
 		private readonly SingleItemLayout<Grid> _layout;

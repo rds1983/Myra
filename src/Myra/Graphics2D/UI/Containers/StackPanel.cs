@@ -69,6 +69,8 @@ namespace Myra.Graphics2D.UI
 			_proportions.CollectionChanged += (s, e) => InvalidateChildren();
 		}
 
+		public int GetCellSize(int index) => _layout.GetCellSize(index);
+
 		private void InvalidateChildren()
 		{
 			_childrenDirty = true;

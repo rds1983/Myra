@@ -276,19 +276,34 @@ namespace Myra.Samples.GridContainer
 
 			grid.Widgets.Add(vsliderValue);
 
-			var tree = new Tree
-			{
-				HasRoot = false,
-			};
+			var tree = new TreeView();
 			Grid.SetColumn(tree, 3);
 			Grid.SetRow(tree, 4);
 
-			var node1 = tree.AddSubNode("node1");
-			var node2 = node1.AddSubNode("node2");
-			var node3 = node2.AddSubNode("node3");
-			node3.AddSubNode("node4");
-			node3.AddSubNode("node5");
-			node2.AddSubNode("node6");
+			var node1 = tree.AddSubNode(new Label
+			{
+				Text = "node1"
+			});
+			var node2 = node1.AddSubNode(new Label
+			{
+				Text = "node2"
+			});
+			var node3 = node2.AddSubNode(new Label
+			{
+				Text = "node3"
+			});
+			node3.AddSubNode(new Label
+			{
+				Text = "node4"
+			});
+			node3.AddSubNode(new Label
+			{
+				Text = "node5"
+			});
+			node2.AddSubNode(new Label
+			{
+				Text = "node6"
+			});
 
 			grid.Widgets.Add(tree);
 

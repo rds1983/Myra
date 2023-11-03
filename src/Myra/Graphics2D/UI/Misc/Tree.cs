@@ -16,6 +16,7 @@ using Myra.Platform;
 
 namespace Myra.Graphics2D.UI
 {
+	[Obsolete("Use TreeView")]
 	public class Tree : TreeNode
 	{
 		private readonly List<TreeNode> _allNodes = new List<TreeNode>();

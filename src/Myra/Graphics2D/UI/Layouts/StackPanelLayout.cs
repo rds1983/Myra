@@ -98,5 +98,10 @@ namespace Myra.Graphics2D.UI
 			UpdateWidgets(widgets);
 			_layout.Arrange(widgets, bounds);
 		}
+
+		public int GetCellSize(int index)
+		{
+			return Orientation == Orientation.Horizontal ? _layout.GetColumnWidth(index) : _layout.GetRowHeight(index);
+		}
 	}
 }
