@@ -427,7 +427,7 @@ namespace Myra.Graphics2D.UI
 			ShowOverWidget(menu, OverWidgetType.ContextMenu, position);
 
 
-		public void ShowTooltip(Widget widget, string text, Point position)
+		public void ShowTooltip(Widget widget, Point position)
 		{
 			if (string.IsNullOrEmpty(widget.Tooltip))
 			{

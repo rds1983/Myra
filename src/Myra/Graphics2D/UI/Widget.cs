@@ -860,9 +860,11 @@ namespace Myra.Graphics2D.UI
 				(Desktop.OverWidget == null || Desktop.OverWidget.Tag != this) && 
 				_lastMouseMovement != null && (DateTime.Now - _lastMouseMovement.Value).TotalMilliseconds > MyraEnvironment.TooltipDelayInMs)
 			{
-				Desktop.ShowTooltip(this, Tooltip, Desktop.MousePosition + MyraEnvironment.TooltipOffset);
+				var pos = Desktop.MousePosition;
+				pos.X += MyraEnvironment.TooltipOffset.X;
+				pos.Y += MyraEnvironment.TooltipOffset.Y;
+				Desktop.ShowTooltip(this, pos);
 			}
-
 
 			UpdateArrange();
 

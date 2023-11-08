@@ -3,7 +3,7 @@
     <DefineConstants>$(DefineConstants);STRIDE</DefineConstants>
     <TargetFramework>net6.0</TargetFramework>
     <PackageId>Myra.Stride</PackageId>
-    <AssemblyName>Myra.Stride</AssemblyName>
+    <AssemblyName>Myra</AssemblyName>
     <OutputPath>bin\Stride\$(Configuration)</OutputPath>
   </PropertyGroup>
 

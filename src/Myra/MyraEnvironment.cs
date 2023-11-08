@@ -18,8 +18,10 @@ using MouseCursor = System.Nullable<System.IntPtr>;
 #elif STRIDE
 using Stride.Engine;
 using Stride.Graphics;
+using Stride.Core.Mathematics;
 #else
 using Myra.Platform;
+using System.Drawing;
 #endif
 
 namespace Myra
