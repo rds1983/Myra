@@ -2,10 +2,14 @@
 <Stylesheet TextureRegionAtlas="default_ui_skin.xmat">
   <Fonts UsedSpace="0, 0, 1024, 160">
     <Font Id="default-font" File="Inter-Regular.ttf" Size="20"/>
+    <Font Id="tooltip-font" File="Inter-Regular.ttf" Size="16"/>
   </Fonts>
   <LabelStyles>
     <LabelStyle Font="default-font" TextColor="white" DisabledTextColor="gray" />
   </LabelStyles>
+  <TooltipStyles>
+    <LabelStyle Background="default-pane" Padding="5" Font="tooltip-font" TextColor="white" />
+  </TooltipStyles>
   <TextBoxStyles>
     <TextBoxStyle Background="textfield" TextColor="white" DisabledTextColor="gray" Font="default-font" Cursor="cursor" Selection="selection" />
   </TextBoxStyles>

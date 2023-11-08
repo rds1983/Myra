@@ -25,6 +25,7 @@ namespace Myra.Graphics2D.UI
 		public const int DoubleClickRadius = 2;
 
 		private DateTime? _lastTouchDown;
+		private DateTime? _lastMouseMovement;
 		private Point _lastLocalTouchPosition;
 		private Point? _localMousePosition;
 		private Point? _localTouchPosition;
@@ -303,14 +304,23 @@ namespace Myra.Graphics2D.UI
 					switch (inputEvent)
 					{
 						case InputEventType.MouseLeft:
+							if (Desktop != null && Desktop.OverWidget != null && Desktop.OverWidget.Tag == this)
+							{
+								// Tooltip for this widget is shown
+								Desktop.HideOverWidget();
+							}
+
+							_lastMouseMovement = null;
 							OnMouseLeft();
 							MouseLeft.Invoke(this);
 							break;
 						case InputEventType.MouseEntered:
+							_lastMouseMovement = DateTime.Now;
 							OnMouseEntered();
 							MouseEntered.Invoke(this);
 							break;
 						case InputEventType.MouseMoved:
+							_lastMouseMovement = DateTime.Now;
 							OnMouseMoved();
 							MouseMoved.Invoke(this);
 							break;

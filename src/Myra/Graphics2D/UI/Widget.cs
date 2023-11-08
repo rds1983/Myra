@@ -471,6 +471,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[Category("Behavior")]
+		[DefaultValue(null)]
+		public string Tooltip { get; set; }
+
 
 		[Category("Transform")]
 		[DefaultValue("1, 1")]
@@ -851,6 +855,14 @@ namespace Myra.Graphics2D.UI
 			{
 				return;
 			}
+
+			if (!string.IsNullOrEmpty(Tooltip) && Desktop != null && 
+				(Desktop.OverWidget == null || Desktop.OverWidget.Tag != this) && 
+				_lastMouseMovement != null && (DateTime.Now - _lastMouseMovement.Value).TotalMilliseconds > MyraEnvironment.TooltipDelayInMs)
+			{
+				Desktop.ShowTooltip(this, Tooltip, Desktop.MousePosition + MyraEnvironment.TooltipOffset);
+			}
+
 
 			UpdateArrange();
 

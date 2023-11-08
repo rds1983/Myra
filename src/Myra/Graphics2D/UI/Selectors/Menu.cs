@@ -531,7 +531,7 @@ namespace Myra.Graphics2D.UI
 		{
 			if (Desktop != null)
 			{
-				Desktop.HideContextMenu();
+				Desktop.HideOverWidget();
 			}
 			HoverIndex = SelectedIndex = null;
 		}
@@ -578,7 +578,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			if (Desktop.ContextMenu != this && menuItem.CanOpen && OpenMenuItem != menuItem)
+			if (Desktop.OverWidget != this && menuItem.CanOpen && OpenMenuItem != menuItem)
 			{
 				SelectedIndex = HoverIndex;
 			}
@@ -603,9 +603,9 @@ namespace Myra.Graphics2D.UI
 				{
 					_internalSetSelectedIndex = true;
 
-					if (Desktop.ContextMenu != this)
+					if (Desktop.OverWidget != this)
 					{
-						Desktop.HideContextMenu();
+						Desktop.HideOverWidget();
 					}
 				}
 				finally

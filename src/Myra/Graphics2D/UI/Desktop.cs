@@ -21,6 +21,12 @@ using Matrix = System.Numerics.Matrix3x2;
 
 namespace Myra.Graphics2D.UI
 {
+	public enum OverWidgetType
+	{
+		ContextMenu,
+		Tooltip
+	}
+
 	public partial class Desktop : ITransformable, IDisposable
 	{
 		private Rectangle _bounds;
@@ -67,7 +73,7 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
-				HideContextMenu();
+				HideOverWidget();
 				Widgets.Clear();
 
 				if (value != null)
@@ -112,7 +118,9 @@ namespace Myra.Graphics2D.UI
 
 		internal Rectangle LayoutBounds => new Rectangle(0, 0, InternalBounds.Width, InternalBounds.Height);
 
-		public Widget ContextMenu { get; private set; }
+		public Widget OverWidget { get; private set; }
+
+		public OverWidgetType OverWidgetType { get; private set; }
 
 		/// <summary>
 		/// Widget having keyboard focus
@@ -335,7 +343,7 @@ namespace Myra.Graphics2D.UI
 
 		private void InputOnTouchDown()
 		{
-			if (ContextMenu == null || ContextMenu.IsTouchInside)
+			if (OverWidget == null || OverWidget.IsTouchInside)
 			{
 				return;
 			}
@@ -343,7 +351,7 @@ namespace Myra.Graphics2D.UI
 			var ev = ContextMenuClosing;
 			if (ev != null)
 			{
-				var args = new CancellableEventArgs<Widget>(ContextMenu);
+				var args = new CancellableEventArgs<Widget>(OverWidget);
 				ev(null, args);
 
 				if (args.Cancel)
@@ -352,23 +360,24 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			HideContextMenu();
+			HideOverWidget();
 		}
 
-		public void ShowContextMenu(Widget menu, Point position)
+		private void ShowOverWidget(Widget menu, OverWidgetType overWidgetType, Point position)
 		{
-			HideContextMenu();
+			HideOverWidget();
 
-			ContextMenu = menu;
-			if (ContextMenu == null)
+			OverWidget = menu;
+			if (OverWidget == null)
 			{
 				return;
 			}
 
-			ContextMenu.HorizontalAlignment = HorizontalAlignment.Left;
-			ContextMenu.VerticalAlignment = VerticalAlignment.Top;
+			OverWidgetType = overWidgetType;
+			OverWidget.HorizontalAlignment = HorizontalAlignment.Left;
+			OverWidget.VerticalAlignment = VerticalAlignment.Top;
 
-			var measure = ContextMenu.Measure(LayoutBounds.Size());
+			var measure = OverWidget.Measure(LayoutBounds.Size());
 
 			if (position.X + measure.X > LayoutBounds.Right)
 			{
@@ -380,32 +389,32 @@ namespace Myra.Graphics2D.UI
 				position.Y = LayoutBounds.Bottom - measure.Y;
 			}
 
-			ContextMenu.Left = position.X;
-			ContextMenu.Top = position.Y;
+			OverWidget.Left = position.X;
+			OverWidget.Top = position.Y;
 
-			ContextMenu.Visible = true;
+			OverWidget.Visible = true;
 
-			Widgets.Add(ContextMenu);
+			Widgets.Add(OverWidget);
 
-			if (ContextMenu.AcceptsKeyboardFocus)
+			if (OverWidget.AcceptsKeyboardFocus)
 			{
 				_previousKeyboardFocus = FocusedKeyboardWidget;
-				FocusedKeyboardWidget = ContextMenu;
+				FocusedKeyboardWidget = OverWidget;
 			}
 		}
 
-		public void HideContextMenu()
+		public void HideOverWidget()
 		{
-			if (ContextMenu == null)
+			if (OverWidget == null)
 			{
 				return;
 			}
 
-			Widgets.Remove(ContextMenu);
-			ContextMenu.Visible = false;
+			Widgets.Remove(OverWidget);
+			OverWidget.Visible = false;
 
-			ContextMenuClosed.Invoke(ContextMenu);
-			ContextMenu = null;
+			ContextMenuClosed.Invoke(OverWidget);
+			OverWidget = null;
 
 			if (_previousKeyboardFocus != null)
 			{
@@ -413,6 +422,25 @@ namespace Myra.Graphics2D.UI
 				_previousKeyboardFocus = null;
 			}
 		}
+
+		public void ShowContextMenu(Widget menu, Point position) =>
+			ShowOverWidget(menu, OverWidgetType.ContextMenu, position);
+
+
+		public void ShowTooltip(Widget widget, string text, Point position)
+		{
+			var tooltip = new Label(null)
+			{
+				Text = text,
+				Tag = widget
+			};
+
+			tooltip.ApplyLabelStyle(Stylesheet.Current.TooltipStyle);
+
+			ShowOverWidget(tooltip, OverWidgetType.Tooltip, position);
+		}
+
+		public void HideContextMenu() => HideOverWidget();
 
 		private void WidgetsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
 		{
@@ -607,7 +635,7 @@ namespace Myra.Graphics2D.UI
 
 		internal void ProcessWidgets(Func<Widget, bool> operation)
 		{
-			foreach(var w in ChildrenCopy)
+			foreach (var w in ChildrenCopy)
 			{
 				var result = w.ProcessWidgets(operation);
 				if (!result)
@@ -781,9 +809,9 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			if (key == Keys.Escape && ContextMenu != null)
+			if (key == Keys.Escape && OverWidget != null && OverWidgetType == OverWidgetType.ContextMenu)
 			{
-				HideContextMenu();
+				HideOverWidget();
 			}
 		}
 

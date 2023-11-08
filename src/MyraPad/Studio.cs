@@ -974,9 +974,9 @@ namespace MyraPad
 
 		private void HandleAutoComplete()
 		{
-			if (_desktop.ContextMenu == _autoCompleteMenu)
+			if (_desktop.OverWidget == _autoCompleteMenu)
 			{
-				_desktop.HideContextMenu();
+				_desktop.HideOverWidget();
 			}
 
 			if (_currentTagStart == null || _currentTagEnd != null || string.IsNullOrEmpty(_parentTag))

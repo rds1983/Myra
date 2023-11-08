@@ -224,6 +224,8 @@ namespace Myra
 		public static bool DrawMouseHoveredWidgetFrame { get; set; }
 		public static bool DrawTextGlyphsFrames { get; set; }
 		public static bool DisableClipping { get; set; }
+		public static int TooltipDelayInMs { get; set; } = 500;
+		public static Point TooltipOffset { get; set; } = new Point(0, 20);
 
 		/// <summary>
 		/// Makes the text rendering more smooth(especially when scaling) for the cost of sacrificing some performance 

@@ -48,6 +48,7 @@ namespace Myra.Graphics2D.UI.Styles
 		}
 
 		private readonly Dictionary<string, LabelStyle> _labelStyles = new Dictionary<string, LabelStyle>();
+		private readonly Dictionary<string, LabelStyle> _tooltipStyles = new Dictionary<string, LabelStyle>();
 		private readonly Dictionary<string, TextBoxStyle> _textBoxStyles = new Dictionary<string, TextBoxStyle>();
 		private readonly Dictionary<string, ButtonStyle> _buttonStyles = new Dictionary<string, ButtonStyle>();
 		private readonly Dictionary<string, ImageTextButtonStyle> _checkBoxStyles = new Dictionary<string, ImageTextButtonStyle>();
@@ -94,6 +95,19 @@ namespace Myra.Graphics2D.UI.Styles
 			set
 			{
 				SetDefaultStyle(_labelStyles, value);
+			}
+		}
+
+		[XmlIgnore]
+		public LabelStyle TooltipStyle
+		{
+			get
+			{
+				return GetDefaultStyle(_tooltipStyles);
+			}
+			set
+			{
+				SetDefaultStyle(_tooltipStyles, value);
 			}
 		}
 
@@ -375,6 +389,14 @@ namespace Myra.Graphics2D.UI.Styles
 			get
 			{
 				return _labelStyles;
+			}
+		}
+
+		public Dictionary<string, LabelStyle> TooltipStyles
+		{
+			get
+			{
+				return _tooltipStyles;
 			}
 		}
 
