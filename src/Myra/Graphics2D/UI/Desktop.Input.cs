@@ -54,7 +54,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_mousePosition = value;
-				InputEventsManager.QueueMouseMoved(this);
+				InputEventsManager.Queue(this, InputEventType.MouseMoved);
 			}
 		}
 
@@ -74,16 +74,16 @@ namespace Myra.Graphics2D.UI
 
 				if (value != null && oldValue == null)
 				{
-					InputEventsManager.QueueTouchDown(this);
+					InputEventsManager.Queue(this, InputEventType.TouchDown);
 				}
 				else if (value == null && oldValue != null)
 				{
-					InputEventsManager.QueueTouchUp(this);
+					InputEventsManager.Queue(this, InputEventType.TouchUp);
 				}
 				else if (value != null && oldValue != null &&
 					value.Value != oldValue.Value)
 				{
-					InputEventsManager.QueueTouchMoved(this);
+					InputEventsManager.Queue(this, InputEventType.TouchMoved);
 				}
 			}
 		}
@@ -100,7 +100,7 @@ namespace Myra.Graphics2D.UI
 
 				if (!value.IsZero())
 				{
-					InputEventsManager.QueueMouseWheel(this);
+					InputEventsManager.Queue(this, InputEventType.MouseWheel);
 				}
 			}
 		}

@@ -527,7 +527,7 @@ namespace Myra.Graphics2D.UI
 			// So scheduling it here
 			if (_inputContext.MouseWheelWidget != null)
 			{
-				InputEventsManager.QueueMouseWheel(_inputContext.MouseWheelWidget);
+				InputEventsManager.Queue(_inputContext.MouseWheelWidget, InputEventType.MouseWheel);
 			}
 
 			// Second input run: process input events

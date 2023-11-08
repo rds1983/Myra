@@ -53,15 +53,15 @@ namespace Myra.Graphics2D.UI
 
 				if (value != null && oldValue == null)
 				{
-					InputEventsManager.QueueMouseEntered(this);
+					InputEventsManager.Queue(this, InputEventType.MouseEntered);
 				}
 				else if (value == null && oldValue != null)
 				{
-					InputEventsManager.QueueMouseLeft(this);
+					InputEventsManager.Queue(this, InputEventType.MouseLeft);
 				}
 				else if (value != null && oldValue != null && value.Value != oldValue.Value)
 				{
-					InputEventsManager.QueueMouseMoved(this);
+					InputEventsManager.Queue(this, InputEventType.MouseMoved);
 				}
 			}
 		}
@@ -95,29 +95,29 @@ namespace Myra.Graphics2D.UI
 					if (Desktop.PreviousTouchPosition == null)
 					{
 						// Touch Down Event
-						InputEventsManager.QueueTouchDown(this);
+						InputEventsManager.Queue(this, InputEventType.TouchDown);
 						ProcessDoubleClick(value.Value);
 					}
 					else
 					{
 						// Touch Entered
-						InputEventsManager.QueueTouchEntered(this);
+						InputEventsManager.Queue(this, InputEventType.TouchEntered);
 					}
 				}
 				else if (value == null && oldValue != null)
 				{
 					if (Desktop.TouchPosition == null)
 					{
-						InputEventsManager.QueueTouchUp(this);
+						InputEventsManager.Queue(this, InputEventType.TouchUp);
 					}
 					else
 					{
-						InputEventsManager.QueueTouchLeft(this);
+						InputEventsManager.Queue(this, InputEventType.TouchLeft);
 					}
 				}
 				else if (value != null && oldValue != null && value.Value != oldValue.Value)
 				{
-					InputEventsManager.QueueTouchMoved(this);
+					InputEventsManager.Queue(this, InputEventType.TouchMoved);
 				}
 			}
 		}
@@ -159,7 +159,7 @@ namespace Myra.Graphics2D.UI
 				Math.Abs(touchPos.Y - _lastLocalTouchPosition.Y) <= MyraEnvironment.DoubleClickRadius)
 			{
 				_lastTouchDown = null;
-				InputEventsManager.QueueTouchDoubleClick(this);
+				InputEventsManager.Queue(this, InputEventType.TouchDoubleClick);
 			}
 			else
 			{

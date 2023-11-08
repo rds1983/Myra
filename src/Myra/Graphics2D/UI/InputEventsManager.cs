@@ -1,17 +1,5 @@
 ﻿using System.Collections.Generic;
 
-#if MONOGAME || FNA
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-#elif STRIDE
-using Stride.Core.Mathematics;
-using Stride.Input;
-#else
-using System.Numerics;
-using System.Drawing;
-using Myra.Platform;
-#endif
-
 namespace Myra.Graphics2D.UI
 {
 	internal enum InputEventType
@@ -49,54 +37,9 @@ namespace Myra.Graphics2D.UI
 
 		private static readonly Queue<InputEvent> _events = new Queue<InputEvent>();
 
-		public static void QueueMouseLeft(IInputEventsProcessor processor)
+		public static void Queue(IInputEventsProcessor processor, InputEventType type)
 		{
-			_events.Enqueue(new InputEvent(processor, InputEventType.MouseLeft));
-		}
-
-		public static void QueueMouseEntered(IInputEventsProcessor processor)
-		{
-			_events.Enqueue(new InputEvent(processor, InputEventType.MouseEntered));
-		}
-
-		public static void QueueMouseMoved(IInputEventsProcessor processor)
-		{
-			_events.Enqueue(new InputEvent(processor, InputEventType.MouseMoved));
-		}
-
-		public static void QueueMouseWheel(IInputEventsProcessor processor)
-		{
-			_events.Enqueue(new InputEvent(processor, InputEventType.MouseWheel));
-		}
-
-		public static void QueueTouchLeft(IInputEventsProcessor processor)
-		{
-			_events.Enqueue(new InputEvent(processor, InputEventType.TouchLeft));
-		}
-
-		public static void QueueTouchEntered(IInputEventsProcessor processor)
-		{
-			_events.Enqueue(new InputEvent(processor, InputEventType.TouchEntered));
-		}
-
-		public static void QueueTouchMoved(IInputEventsProcessor processor)
-		{
-			_events.Enqueue(new InputEvent(processor, InputEventType.TouchMoved));
-		}
-
-		public static void QueueTouchDown(IInputEventsProcessor processor)
-		{
-			_events.Enqueue(new InputEvent(processor, InputEventType.TouchDown));
-		}
-
-		public static void QueueTouchUp(IInputEventsProcessor processor)
-		{
-			_events.Enqueue(new InputEvent(processor, InputEventType.TouchUp));
-		}
-
-		public static void QueueTouchDoubleClick(IInputEventsProcessor processor)
-		{
-			_events.Enqueue(new InputEvent(processor, InputEventType.TouchDoubleClick));
+			_events.Enqueue(new InputEvent(processor, type));
 		}
 
 		public static void ProcessEvents()
