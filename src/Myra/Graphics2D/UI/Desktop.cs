@@ -429,14 +429,12 @@ namespace Myra.Graphics2D.UI
 
 		public void ShowTooltip(Widget widget, string text, Point position)
 		{
-			var tooltip = new Label(null)
+			if (string.IsNullOrEmpty(widget.Tooltip))
 			{
-				Text = text,
-				Tag = widget
-			};
+				return;
+			}
 
-			tooltip.ApplyLabelStyle(Stylesheet.Current.TooltipStyle);
-
+			var tooltip = MyraEnvironment.TooltipCreator(widget);
 			ShowOverWidget(tooltip, OverWidgetType.Tooltip, position);
 		}
 

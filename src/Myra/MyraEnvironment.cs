@@ -226,6 +226,18 @@ namespace Myra
 		public static bool DisableClipping { get; set; }
 		public static int TooltipDelayInMs { get; set; } = 500;
 		public static Point TooltipOffset { get; set; } = new Point(0, 20);
+		public static Func<Widget, Widget> TooltipCreator { get; set; } = w =>
+		{
+			var tooltip = new Label(null)
+			{
+				Text = w.Tooltip,
+				Tag = w
+			};
+
+			tooltip.ApplyLabelStyle(Stylesheet.Current.TooltipStyle);
+
+			return tooltip;
+		};
 
 		/// <summary>
 		/// Makes the text rendering more smooth(especially when scaling) for the cost of sacrificing some performance 
