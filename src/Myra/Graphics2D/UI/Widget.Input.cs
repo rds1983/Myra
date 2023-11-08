@@ -19,15 +19,13 @@ using Myra.Platform;
 
 namespace Myra.Graphics2D.UI
 {
-	partial class Widget
+	partial class Widget: IInputEventsProcessor
 	{
 		private DateTime? _lastTouchDown;
 		private DateTime? _lastMouseMovement;
 		private Point _lastLocalTouchPosition;
 		private Point? _localMousePosition;
 		private Point? _localTouchPosition;
-		private readonly List<InputEventType> _scheduledInputEvents = new List<InputEventType>();
-		private readonly List<InputEventType> _scheduledInputEventsCopy = new List<InputEventType>();
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -55,35 +53,15 @@ namespace Myra.Graphics2D.UI
 
 				if (value != null && oldValue == null)
 				{
-					_lastMouseMovement = DateTime.Now;
-					if (MouseCursor != null)
-					{
-						MyraEnvironment.MouseCursorType = MouseCursor.Value;
-					}
-
-					ScheduleInputEvent(InputEventType.MouseEntered);
+					InputEventsManager.QueueMouseEntered(this);
 				}
 				else if (value == null && oldValue != null)
 				{
-					if (Desktop.Tooltip != null && Desktop.Tooltip.Tag == this)
-					{
-						// Tooltip for this widget is shown
-						Desktop.HideTooltip();
-					}
-
-					_lastMouseMovement = null;
-					if (MouseCursor != null)
-					{
-						MyraEnvironment.MouseCursorType = MyraEnvironment.DefaultMouseCursorType;
-					}
-
-					ScheduleInputEvent(InputEventType.MouseLeft);
+					InputEventsManager.QueueMouseLeft(this);
 				}
 				else if (value != null && oldValue != null && value.Value != oldValue.Value)
 				{
-					_lastMouseMovement = DateTime.Now;
-
-					ScheduleInputEvent(InputEventType.MouseMoved);
+					InputEventsManager.QueueMouseMoved(this);
 				}
 			}
 		}
@@ -117,41 +95,29 @@ namespace Myra.Graphics2D.UI
 					if (Desktop.PreviousTouchPosition == null)
 					{
 						// Touch Down Event
-						if (Enabled && AcceptsKeyboardFocus)
-						{
-							Desktop.FocusedKeyboardWidget = this;
-						}
-
-						if (DragHandle != null && DragHandle.IsTouchInside)
-						{
-							var parent = Parent != null ? (ITransformable)Parent : Desktop;
-							_startPos = parent.ToLocal(new Vector2(Desktop.TouchPosition.Value.X, Desktop.TouchPosition.Value.Y));
-							_startLeftTop = new Point(Left, Top);
-						}
-
-						ScheduleInputEvent(InputEventType.TouchDown);
+						InputEventsManager.QueueTouchDown(this);
 						ProcessDoubleClick(value.Value);
 					}
 					else
 					{
 						// Touch Entered
-						ScheduleInputEvent(InputEventType.TouchEntered);
+						InputEventsManager.QueueTouchEntered(this);
 					}
 				}
 				else if (value == null && oldValue != null)
 				{
 					if (Desktop.TouchPosition == null)
 					{
-						ScheduleInputEvent(InputEventType.TouchUp);
+						InputEventsManager.QueueTouchUp(this);
 					}
 					else
 					{
-						ScheduleInputEvent(InputEventType.TouchLeft);
+						InputEventsManager.QueueTouchLeft(this);
 					}
 				}
 				else if (value != null && oldValue != null && value.Value != oldValue.Value)
 				{
-					ScheduleInputEvent(InputEventType.TouchMoved);
+					InputEventsManager.QueueTouchMoved(this);
 				}
 			}
 		}
@@ -193,7 +159,7 @@ namespace Myra.Graphics2D.UI
 				Math.Abs(touchPos.Y - _lastLocalTouchPosition.Y) <= MyraEnvironment.DoubleClickRadius)
 			{
 				_lastTouchDown = null;
-				ScheduleInputEvent(InputEventType.TouchDoubleClick);
+				InputEventsManager.QueueTouchDoubleClick(this);
 			}
 			else
 			{
@@ -307,86 +273,92 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		internal void ProcessInputEvents()
+		void IInputEventsProcessor.ProcessEvent(InputEventType eventType)
 		{
-			if (Desktop == null)
-			{
-				return;
-			}
+			// It's important to note that widget should process input events even if Desktop is null
+			// Just add corresponding null checks in that case
 
-			if (!string.IsNullOrEmpty(Tooltip) && (Desktop.Tooltip == null || Desktop.Tooltip.Tag != this) &&
-				_lastMouseMovement != null && (DateTime.Now - _lastMouseMovement.Value).TotalMilliseconds > MyraEnvironment.TooltipDelayInMs)
+			switch (eventType)
 			{
-				var pos = Desktop.MousePosition;
-				pos.X += MyraEnvironment.TooltipOffset.X;
-				pos.Y += MyraEnvironment.TooltipOffset.Y;
-				Desktop.ShowTooltip(this, pos);
-				_lastMouseMovement = null;
-			}
-
-			if (_scheduledInputEvents.Count > 0)
-			{
-				_scheduledInputEventsCopy.Clear();
-				_scheduledInputEventsCopy.AddRange(_scheduledInputEvents);
-				_scheduledInputEvents.Clear();
-
-				foreach (var inputEvent in _scheduledInputEventsCopy)
-				{
-					switch (inputEvent)
+				case InputEventType.MouseLeft:
+					if (Desktop != null && Desktop.Tooltip != null && Desktop.Tooltip.Tag == this)
 					{
-						case InputEventType.MouseLeft:
-							OnMouseLeft();
-							MouseLeft.Invoke(this);
-							break;
-						case InputEventType.MouseEntered:
-							OnMouseEntered();
-							MouseEntered.Invoke(this);
-							break;
-						case InputEventType.MouseMoved:
-							OnMouseMoved();
-							MouseMoved.Invoke(this);
-							break;
-						case InputEventType.MouseWheel:
-							OnMouseWheel(Desktop.MouseWheelDelta);
-							MouseWheelChanged.Invoke(this, Desktop.MouseWheelDelta);
-							break;
-						case InputEventType.TouchLeft:
-							OnTouchLeft();
-							TouchLeft.Invoke(this);
-							break;
-						case InputEventType.TouchEntered:
-							OnTouchEntered();
-							TouchEntered.Invoke(this);
-							break;
-						case InputEventType.TouchMoved:
-							OnTouchMoved();
-							TouchMoved.Invoke(this);
-							break;
-						case InputEventType.TouchDown:
-							OnTouchDown();
-							TouchDown.Invoke(this);
-							break;
-						case InputEventType.TouchUp:
-							OnTouchUp();
-							TouchUp.Invoke(this);
-							break;
-						case InputEventType.TouchDoubleClick:
-							OnTouchDoubleClick();
-							TouchDoubleClick.Invoke(this);
-							break;
+						// Tooltip for this widget is shown
+						Desktop.HideTooltip();
 					}
-				}
-			}
 
-			foreach (var child in ChildrenCopy)
-			{
-				child.ProcessInputEvents();
-			}
-		}
+					_lastMouseMovement = null;
+					if (MouseCursor != null)
+					{
+						MyraEnvironment.MouseCursorType = MyraEnvironment.DefaultMouseCursorType;
+					}
 
-		internal void ScheduleInputEvent(InputEventType inputEvent)
-		{
-			_scheduledInputEvents.Add(inputEvent);
+					OnMouseLeft();
+					MouseLeft.Invoke(this);
+					break;
+				case InputEventType.MouseEntered:
+					_lastMouseMovement = DateTime.Now;
+					if (MouseCursor != null)
+					{
+						MyraEnvironment.MouseCursorType = MouseCursor.Value;
+					}
+
+					OnMouseEntered();
+					MouseEntered.Invoke(this);
+					break;
+				case InputEventType.MouseMoved:
+					_lastMouseMovement = DateTime.Now;
+
+					OnMouseMoved();
+					MouseMoved.Invoke(this);
+					break;
+				case InputEventType.MouseWheel:
+					if (Desktop != null)
+					{
+						OnMouseWheel(Desktop.MouseWheelDelta);
+						MouseWheelChanged.Invoke(this, Desktop.MouseWheelDelta);
+					}
+					break;
+				case InputEventType.TouchLeft:
+					OnTouchLeft();
+					TouchLeft.Invoke(this);
+					break;
+				case InputEventType.TouchEntered:
+					OnTouchEntered();
+					TouchEntered.Invoke(this);
+					break;
+				case InputEventType.TouchMoved:
+					OnTouchMoved();
+					TouchMoved.Invoke(this);
+					break;
+				case InputEventType.TouchDown:
+					if (Desktop != null)
+					{
+						if (Enabled && AcceptsKeyboardFocus)
+						{
+							Desktop.FocusedKeyboardWidget = this;
+						}
+
+						if (DragHandle != null && DragHandle.IsTouchInside)
+						{
+							var parent = Parent != null ? (ITransformable)Parent : Desktop;
+							_startPos = parent.ToLocal(new Vector2(Desktop.TouchPosition.Value.X, Desktop.TouchPosition.Value.Y));
+							_startLeftTop = new Point(Left, Top);
+						}
+					}
+
+					OnTouchDown();
+					TouchDown.Invoke(this);
+					break;
+				case InputEventType.TouchUp:
+					OnTouchUp();
+					TouchUp.Invoke(this);
+					break;
+				case InputEventType.TouchDoubleClick:
+					OnTouchDoubleClick();
+					TouchDoubleClick.Invoke(this);
+					break;
+			}
 		}
 
 		public virtual void OnMouseLeft()

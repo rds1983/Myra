@@ -1,6 +1,5 @@
 ﻿using Myra.Utility;
 using System;
-using System.Collections.Generic;
 using Myra.Events;
 
 #if MONOGAME || FNA
@@ -31,7 +30,7 @@ namespace Myra.Graphics2D.UI
 		public float Wheel;
 	}
 
-	partial class Desktop
+	partial class Desktop: IInputEventsProcessor
 	{
 		private MouseInfo _lastMouseInfo;
 		private DateTime? _lastKeyDown;
@@ -40,8 +39,6 @@ namespace Myra.Graphics2D.UI
 		private Point _mousePosition;
 		private Point? _touchPosition;
 		private float _mouseWheelDelta;
-		private readonly List<InputEventType> _scheduledInputEvents = new List<InputEventType>();
-		private readonly List<InputEventType> _scheduledInputEventsCopy = new List<InputEventType>();
 
 		public Point PreviousMousePosition { get; private set; }
 		public Point? PreviousTouchPosition { get; private set; }
@@ -57,7 +54,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_mousePosition = value;
-				_scheduledInputEvents.Add(InputEventType.MouseMoved);
+				InputEventsManager.QueueMouseMoved(this);
 			}
 		}
 
@@ -77,16 +74,16 @@ namespace Myra.Graphics2D.UI
 
 				if (value != null && oldValue == null)
 				{
-					_scheduledInputEvents.Add(InputEventType.TouchDown);
+					InputEventsManager.QueueTouchDown(this);
 				}
 				else if (value == null && oldValue != null)
 				{
-					_scheduledInputEvents.Add(InputEventType.TouchUp);
+					InputEventsManager.QueueTouchUp(this);
 				}
 				else if (value != null && oldValue != null &&
 					value.Value != oldValue.Value)
 				{
-					_scheduledInputEvents.Add(InputEventType.TouchMoved);
+					InputEventsManager.QueueTouchMoved(this);
 				}
 			}
 		}
@@ -103,7 +100,7 @@ namespace Myra.Graphics2D.UI
 
 				if (!value.IsZero())
 				{
-					_scheduledInputEvents.Add(InputEventType.MouseWheel);
+					InputEventsManager.QueueMouseWheel(this);
 				}
 			}
 		}
@@ -283,49 +280,37 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public void ProcessInputEvents()
+		void IInputEventsProcessor.ProcessEvent(InputEventType eventType)
 		{
-			if (_scheduledInputEvents.Count == 0)
+			switch (eventType)
 			{
-				return;
-			}
-
-			_scheduledInputEventsCopy.Clear();
-			_scheduledInputEventsCopy.AddRange(_scheduledInputEvents);
-			_scheduledInputEvents.Clear();
-
-			foreach (var inputEventType in _scheduledInputEventsCopy)
-			{
-				switch (inputEventType)
-				{
-					case InputEventType.MouseLeft:
-						break;
-					case InputEventType.MouseEntered:
-						break;
-					case InputEventType.MouseMoved:
-						MouseMoved.Invoke(this);
-						break;
-					case InputEventType.MouseWheel:
-						MouseWheelChanged.Invoke(this, MouseWheelDelta);
-						break;
-					case InputEventType.TouchLeft:
-						break;
-					case InputEventType.TouchEntered:
-						break;
-					case InputEventType.TouchMoved:
-						TouchMoved.Invoke(this);
-						break;
-					case InputEventType.TouchDown:
-						InputOnTouchDown();
-						TouchDown.Invoke(this);
-						break;
-					case InputEventType.TouchUp:
-						TouchUp.Invoke(this);
-						break;
-					case InputEventType.TouchDoubleClick:
-						TouchDoubleClick.Invoke(this);
-						break;
-				}
+				case InputEventType.MouseLeft:
+					break;
+				case InputEventType.MouseEntered:
+					break;
+				case InputEventType.MouseMoved:
+					MouseMoved.Invoke(this);
+					break;
+				case InputEventType.MouseWheel:
+					MouseWheelChanged.Invoke(this, MouseWheelDelta);
+					break;
+				case InputEventType.TouchLeft:
+					break;
+				case InputEventType.TouchEntered:
+					break;
+				case InputEventType.TouchMoved:
+					TouchMoved.Invoke(this);
+					break;
+				case InputEventType.TouchDown:
+					InputOnTouchDown();
+					TouchDown.Invoke(this);
+					break;
+				case InputEventType.TouchUp:
+					TouchUp.Invoke(this);
+					break;
+				case InputEventType.TouchDoubleClick:
+					TouchDoubleClick.Invoke(this);
+					break;
 			}
 		}
 	}

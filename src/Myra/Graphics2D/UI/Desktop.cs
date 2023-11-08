@@ -527,18 +527,11 @@ namespace Myra.Graphics2D.UI
 			// So scheduling it here
 			if (_inputContext.MouseWheelWidget != null)
 			{
-				_inputContext.MouseWheelWidget.ScheduleInputEvent(InputEventType.MouseWheel);
+				InputEventsManager.QueueMouseWheel(_inputContext.MouseWheelWidget);
 			}
 
 			// Second input run: process input events
-			ProcessInputEvents();
-
-			childrenCopy = ChildrenCopy;
-			for (var i = childrenCopy.Count - 1; i >= 0; --i)
-			{
-				var widget = childrenCopy[i];
-				widget.ProcessInputEvents();
-			}
+			InputEventsManager.ProcessEvents();
 
 			// Do another layout run, since an input event could cause the layout change
 			UpdateLayout();

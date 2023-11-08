@@ -857,6 +857,16 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
+			if (!string.IsNullOrEmpty(Tooltip) && (Desktop.Tooltip == null || Desktop.Tooltip.Tag != this) &&
+				_lastMouseMovement != null && (DateTime.Now - _lastMouseMovement.Value).TotalMilliseconds > MyraEnvironment.TooltipDelayInMs)
+			{
+				var pos = Desktop.MousePosition;
+				pos.X += MyraEnvironment.TooltipOffset.X;
+				pos.Y += MyraEnvironment.TooltipOffset.Y;
+				Desktop.ShowTooltip(this, pos);
+				_lastMouseMovement = null;
+			}
+
 			UpdateArrange();
 
 			var oldTransform = context.Transform;
