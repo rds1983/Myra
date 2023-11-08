@@ -316,11 +316,6 @@ namespace Myra.Graphics2D.UI
 			Opacity = 1.0f;
 			Widgets.CollectionChanged += WidgetsOnCollectionChanged;
 
-			MouseInfoGetter = DefaultMouseInfoGetter;
-			DownKeysGetter = DefaultDownKeysGetter;
-
-			KeyDownHandler = OnKeyDown;
-
 #if FNA
 			TextInputEXT.TextInput += OnChar;
 #endif

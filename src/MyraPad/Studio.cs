@@ -408,19 +408,6 @@ namespace MyraPad
 		private void BuildUI()
 		{
 			_desktop.ContextMenuClosed += Desktop_ContextMenuClosed;
-			_desktop.KeyDownHandler = key =>
-			{
-				if (_autoCompleteMenu != null &&
-					(key == Keys.Up || key == Keys.Down || key == Keys.Enter))
-				{
-					_autoCompleteMenu.OnKeyDown(key);
-				}
-				else
-				{
-					_desktop.OnKeyDown(key);
-				}
-			};
-
 			_desktop.KeyDown += (s, a) =>
 			{
 				if (_desktop.HasModalWidget || _ui._mainMenu.IsOpen)
@@ -1006,7 +993,10 @@ namespace MyraPad
 					var lastStartPos = _currentTagStart.Value;
 					var lastEndPos = cursorPos;
 					// Build context menu
-					_autoCompleteMenu = new VerticalMenu();
+					_autoCompleteMenu = new VerticalMenu
+					{
+						AcceptsKeyboardFocus = true
+					};
 					foreach (var a in all)
 					{
 						var menuItem = new MenuItem
@@ -1071,8 +1061,6 @@ namespace MyraPad
 					}
 
 					_desktop.ShowContextMenu(_autoCompleteMenu, screen);
-					// Keep focus at text field
-					_desktop.FocusedKeyboardWidget = _ui._textSource;
 
 					_refreshInitiated = null;
 				}

@@ -127,7 +127,7 @@ namespace Myra.Samples.AllWidgets
 			_buttonOpenFile = new ImageTextButton();
 			_buttonOpenFile.Text = "Open File";
 			_buttonOpenFile.Padding = new Thickness(8, 0);
-			_buttonOpenFile.Tooltip = "Tooltip 1";
+			_buttonOpenFile.Tooltip = "E=mc/v[-8]2/n/vdMass–energy equivalence.";
 			Grid.SetColumn(_buttonOpenFile, 1);
 			Grid.SetRow(_buttonOpenFile, 1);
 			_buttonOpenFile.Id = "_buttonOpenFile";

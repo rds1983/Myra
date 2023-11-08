@@ -43,8 +43,6 @@ namespace Myra.Graphics2D.UI
 		private readonly List<InputEventType> _scheduledInputEvents = new List<InputEventType>();
 		private readonly List<InputEventType> _scheduledInputEventsCopy = new List<InputEventType>();
 
-		public Func<MouseInfo> MouseInfoGetter { get; set; }
-
 		public Point PreviousMousePosition { get; private set; }
 		public Point? PreviousTouchPosition { get; private set; }
 
@@ -110,9 +108,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public Action<bool[]> DownKeysGetter { get; set; }
 		public bool[] DownKeys => _downKeys;
-		public Action<Keys> KeyDownHandler;
 		public int RepeatKeyDownStartInMs { get; set; } = 500;
 
 		public int RepeatKeyDownInternalInMs { get; set; } = 50;
@@ -145,12 +141,12 @@ namespace Myra.Graphics2D.UI
 
 		public void UpdateMouseInput()
 		{
-			if (MouseInfoGetter == null)
+			if (MyraEnvironment.MouseInfoGetter == null)
 			{
 				return;
 			}
 
-			var mouseInfo = MouseInfoGetter();
+			var mouseInfo = MyraEnvironment.MouseInfoGetter();
 
 			// Mouse Position
 			MousePosition = mouseInfo.Position;
@@ -210,12 +206,12 @@ namespace Myra.Graphics2D.UI
 
 		public void UpdateKeyboardInput()
 		{
-			if (DownKeysGetter == null)
+			if (MyraEnvironment.DownKeysGetter == null)
 			{
 				return;
 			}
 
-			DownKeysGetter(_downKeys);
+			MyraEnvironment.DownKeysGetter(_downKeys);
 
 			var now = DateTime.Now;
 			for (var i = 0; i < _downKeys.Length; ++i)
@@ -228,7 +224,7 @@ namespace Myra.Graphics2D.UI
 						FocusNextWidget();
 					}
 
-					KeyDownHandler?.Invoke(key);
+					OnKeyDown(key);
 
 					_lastKeyDown = now;
 					_keyDownCount = 0;
@@ -251,7 +247,7 @@ namespace Myra.Graphics2D.UI
 									  ((_keyDownCount == 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownStartInMs) ||
 									  (_keyDownCount > 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownInternalInMs)))
 					{
-						KeyDownHandler?.Invoke(key);
+						OnKeyDown(key);
 
 						_lastKeyDown = now;
 						++_keyDownCount;
@@ -331,56 +327,6 @@ namespace Myra.Graphics2D.UI
 						break;
 				}
 			}
-		}
-
-		public MouseInfo DefaultMouseInfoGetter()
-		{
-#if MONOGAME || FNA
-			var state = Mouse.GetState();
-
-			return new MouseInfo
-			{
-				Position = new Point(state.X, state.Y),
-				IsLeftButtonDown = state.LeftButton == ButtonState.Pressed,
-				IsMiddleButtonDown = state.MiddleButton == ButtonState.Pressed,
-				IsRightButtonDown = state.RightButton == ButtonState.Pressed,
-				Wheel = state.ScrollWheelValue
-			};
-#elif STRIDE
-			var input = MyraEnvironment.Game.Input;
-
-			var v = input.AbsoluteMousePosition;
-
-			return new MouseInfo
-			{
-				Position = new Point((int)v.X, (int)v.Y),
-				IsLeftButtonDown = input.IsMouseButtonDown(MouseButton.Left),
-				IsMiddleButtonDown = input.IsMouseButtonDown(MouseButton.Middle),
-				IsRightButtonDown = input.IsMouseButtonDown(MouseButton.Right),
-				Wheel = input.MouseWheelDelta
-			};
-#else
-			return MyraEnvironment.Platform.GetMouseInfo();
-#endif
-		}
-
-		public void DefaultDownKeysGetter(bool[] keys)
-		{
-#if MONOGAME || FNA
-			var state = Keyboard.GetState();
-			for (var i = 0; i < keys.Length; ++i)
-			{
-				keys[i] = state.IsKeyDown((Keys)i);
-			}
-#elif STRIDE
-			var input = MyraEnvironment.Game.Input;
-			for (var i = 0; i < keys.Length; ++i)
-			{
-				keys[i] = input.IsKeyDown((Keys)i);
-			}
-#else
-			MyraEnvironment.Platform.SetKeysDown(keys);
-#endif
 		}
 	}
 }

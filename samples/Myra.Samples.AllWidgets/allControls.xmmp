@@ -32,7 +32,7 @@
               <Proportion Type="Fill" />
             </Grid.ColumnsProportions>
             <Label Text="Button:" />
-            <ImageTextButton Text="Save File" Padding="8, 0" Tooltip="Tooltip 1" Id="_buttonSaveFile" Grid.Column="1" />
+            <ImageTextButton Text="Save File" Padding="8, 0" Tooltip="E=mc/v[-8]2/n/vdMass–energy equivalence." Id="_buttonSaveFile" Grid.Column="1" />
             <TextBox Id="_textSaveFile" Grid.Column="2" />
             <Label Text="Another Button:" Grid.Row="1" />
             <ImageTextButton Text="Open File" Padding="8, 0" Tooltip="Tooltip 2" Id="_buttonOpenFile" Grid.Column="1" Grid.Row="1" />
