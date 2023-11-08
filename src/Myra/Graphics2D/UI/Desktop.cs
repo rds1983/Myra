@@ -21,12 +21,6 @@ using Matrix = System.Numerics.Matrix3x2;
 
 namespace Myra.Graphics2D.UI
 {
-	public enum OverWidgetType
-	{
-		ContextMenu,
-		Tooltip
-	}
-
 	public partial class Desktop : ITransformable, IDisposable
 	{
 		private Rectangle _bounds;
@@ -73,7 +67,8 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
-				HideOverWidget();
+				HideContextMenu();
+				HideTooltip();
 				Widgets.Clear();
 
 				if (value != null)
@@ -118,9 +113,8 @@ namespace Myra.Graphics2D.UI
 
 		internal Rectangle LayoutBounds => new Rectangle(0, 0, InternalBounds.Width, InternalBounds.Height);
 
-		public Widget OverWidget { get; private set; }
-
-		public OverWidgetType OverWidgetType { get; private set; }
+		public Widget ContextMenu { get; private set; }
+		public Widget Tooltip { get; private set; }
 
 		/// <summary>
 		/// Widget having keyboard focus
@@ -338,41 +332,51 @@ namespace Myra.Graphics2D.UI
 
 		private void InputOnTouchDown()
 		{
-			if (OverWidget == null || OverWidget.IsTouchInside)
+			if (ContextMenu != null && !ContextMenu.IsTouchInside)
 			{
-				return;
-			}
-
-			var ev = ContextMenuClosing;
-			if (ev != null)
-			{
-				var args = new CancellableEventArgs<Widget>(OverWidget);
-				ev(null, args);
-
-				if (args.Cancel)
+				var ev = ContextMenuClosing;
+				if (ev != null)
 				{
-					return;
+					var args = new CancellableEventArgs<Widget>(ContextMenu);
+					ev(null, args);
+
+					if (args.Cancel)
+					{
+						return;
+					}
 				}
+				HideContextMenu();
 			}
 
-			HideOverWidget();
+			HideTooltip();
 		}
 
-		private void ShowOverWidget(Widget menu, OverWidgetType overWidgetType, Point position)
+		public void HideContextMenu()
 		{
-			HideOverWidget();
-
-			OverWidget = menu;
-			if (OverWidget == null)
+			if (ContextMenu == null)
 			{
 				return;
 			}
 
-			OverWidgetType = overWidgetType;
-			OverWidget.HorizontalAlignment = HorizontalAlignment.Left;
-			OverWidget.VerticalAlignment = VerticalAlignment.Top;
+			Widgets.Remove(ContextMenu);
+			ContextMenu.Visible = false;
 
-			var measure = OverWidget.Measure(LayoutBounds.Size());
+			ContextMenuClosed.Invoke(ContextMenu);
+			ContextMenu = null;
+
+			if (_previousKeyboardFocus != null)
+			{
+				FocusedKeyboardWidget = _previousKeyboardFocus;
+				_previousKeyboardFocus = null;
+			}
+		}
+
+		private void FixOverWidgetPosition(Widget widget, Point position)
+		{
+			widget.HorizontalAlignment = HorizontalAlignment.Left;
+			widget.VerticalAlignment = VerticalAlignment.Top;
+
+			var measure = widget.Measure(LayoutBounds.Size());
 
 			if (position.X + measure.X > LayoutBounds.Right)
 			{
@@ -384,43 +388,44 @@ namespace Myra.Graphics2D.UI
 				position.Y = LayoutBounds.Bottom - measure.Y;
 			}
 
-			OverWidget.Left = position.X;
-			OverWidget.Top = position.Y;
-
-			OverWidget.Visible = true;
-
-			Widgets.Add(OverWidget);
-
-			if (OverWidget.AcceptsKeyboardFocus)
-			{
-				_previousKeyboardFocus = FocusedKeyboardWidget;
-				FocusedKeyboardWidget = OverWidget;
-			}
+			widget.Left = position.X;
+			widget.Top = position.Y;
 		}
 
-		public void HideOverWidget()
+		public void ShowContextMenu(Widget menu, Point position)
 		{
-			if (OverWidget == null)
+			HideContextMenu();
+
+			ContextMenu = menu;
+			if (ContextMenu == null)
 			{
 				return;
 			}
 
-			Widgets.Remove(OverWidget);
-			OverWidget.Visible = false;
 
-			ContextMenuClosed.Invoke(OverWidget);
-			OverWidget = null;
+			FixOverWidgetPosition(menu, position);
 
-			if (_previousKeyboardFocus != null)
+			ContextMenu.Visible = true;
+			Widgets.Add(ContextMenu);
+
+			if (ContextMenu.AcceptsKeyboardFocus)
 			{
-				FocusedKeyboardWidget = _previousKeyboardFocus;
-				_previousKeyboardFocus = null;
+				_previousKeyboardFocus = FocusedKeyboardWidget;
+				FocusedKeyboardWidget = ContextMenu;
 			}
 		}
 
-		public void ShowContextMenu(Widget menu, Point position) =>
-			ShowOverWidget(menu, OverWidgetType.ContextMenu, position);
+		public void HideTooltip()
+		{
+			if (Tooltip == null)
+			{
+				return;
+			}
 
+			Widgets.Remove(Tooltip);
+			Tooltip.Visible = false;
+			Tooltip = null;
+		}
 
 		public void ShowTooltip(Widget widget, Point position)
 		{
@@ -429,11 +434,18 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var tooltip = MyraEnvironment.TooltipCreator(widget);
-			ShowOverWidget(tooltip, OverWidgetType.Tooltip, position);
-		}
+			HideTooltip();
+			Tooltip = MyraEnvironment.TooltipCreator(widget);
+			if (Tooltip == null)
+			{
+				return;
+			}
 
-		public void HideContextMenu() => HideOverWidget();
+			FixOverWidgetPosition(Tooltip, position);
+
+			Tooltip.Visible = true;
+			Widgets.Add(Tooltip);
+		}
 
 		private void WidgetsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
 		{
@@ -802,9 +814,9 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			if (key == Keys.Escape && OverWidget != null && OverWidgetType == OverWidgetType.ContextMenu)
+			if (key == Keys.Escape && ContextMenu != null)
 			{
-				HideOverWidget();
+				HideContextMenu();
 			}
 		}
 

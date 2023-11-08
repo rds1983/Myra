@@ -231,6 +231,8 @@ namespace Myra
 		public static Func<MouseInfo> MouseInfoGetter { get; set; } = DefaultMouseInfoGetter;
 		public static Action<bool[]> DownKeysGetter { get; set; } = DefaultDownKeysGetter;
 
+		public static int DoubleClickIntervalInMs { get; set; } = 500;
+		public static int DoubleClickRadius { get; set; } = 2;
 		public static int TooltipDelayInMs { get; set; } = 500;
 		public static Point TooltipOffset { get; set; } = new Point(0, 20);
 		public static Func<Widget, Widget> TooltipCreator { get; set; } = w =>

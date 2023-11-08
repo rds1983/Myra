@@ -568,9 +568,10 @@ namespace Myra.Graphics2D.UI
 					}
 				}
 
-				_desktop = value;
 				LocalMousePosition = null;
 				LocalTouchPosition = null;
+
+				_desktop = value;
 
 				if (_desktop != null)
 				{
@@ -854,16 +855,6 @@ namespace Myra.Graphics2D.UI
 			if (!Visible)
 			{
 				return;
-			}
-
-			if (!string.IsNullOrEmpty(Tooltip) && Desktop != null && 
-				(Desktop.OverWidget == null || Desktop.OverWidget.Tag != this) && 
-				_lastMouseMovement != null && (DateTime.Now - _lastMouseMovement.Value).TotalMilliseconds > MyraEnvironment.TooltipDelayInMs)
-			{
-				var pos = Desktop.MousePosition;
-				pos.X += MyraEnvironment.TooltipOffset.X;
-				pos.Y += MyraEnvironment.TooltipOffset.Y;
-				Desktop.ShowTooltip(this, pos);
 			}
 
 			UpdateArrange();

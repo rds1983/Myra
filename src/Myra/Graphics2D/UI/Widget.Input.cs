@@ -21,9 +21,6 @@ namespace Myra.Graphics2D.UI
 {
 	partial class Widget
 	{
-		public const int DoubleClickIntervalInMs = 500;
-		public const int DoubleClickRadius = 2;
-
 		private DateTime? _lastTouchDown;
 		private DateTime? _lastMouseMovement;
 		private Point _lastLocalTouchPosition;
@@ -58,22 +55,34 @@ namespace Myra.Graphics2D.UI
 
 				if (value != null && oldValue == null)
 				{
+					_lastMouseMovement = DateTime.Now;
 					if (MouseCursor != null)
 					{
 						MyraEnvironment.MouseCursorType = MouseCursor.Value;
 					}
+
 					ScheduleInputEvent(InputEventType.MouseEntered);
 				}
 				else if (value == null && oldValue != null)
 				{
+					if (Desktop.Tooltip != null && Desktop.Tooltip.Tag == this)
+					{
+						// Tooltip for this widget is shown
+						Desktop.HideTooltip();
+					}
+
+					_lastMouseMovement = null;
 					if (MouseCursor != null)
 					{
 						MyraEnvironment.MouseCursorType = MyraEnvironment.DefaultMouseCursorType;
 					}
+
 					ScheduleInputEvent(InputEventType.MouseLeft);
 				}
 				else if (value != null && oldValue != null && value.Value != oldValue.Value)
 				{
+					_lastMouseMovement = DateTime.Now;
+
 					ScheduleInputEvent(InputEventType.MouseMoved);
 				}
 			}
@@ -111,6 +120,13 @@ namespace Myra.Graphics2D.UI
 						if (Enabled && AcceptsKeyboardFocus)
 						{
 							Desktop.FocusedKeyboardWidget = this;
+						}
+
+						if (DragHandle != null && DragHandle.IsTouchInside)
+						{
+							var parent = Parent != null ? (ITransformable)Parent : Desktop;
+							_startPos = parent.ToLocal(new Vector2(Desktop.TouchPosition.Value.X, Desktop.TouchPosition.Value.Y));
+							_startLeftTop = new Point(Left, Top);
 						}
 
 						ScheduleInputEvent(InputEventType.TouchDown);
@@ -172,9 +188,9 @@ namespace Myra.Graphics2D.UI
 		private void ProcessDoubleClick(Point touchPos)
 		{
 			if (_lastTouchDown != null &&
-				(DateTime.Now - _lastTouchDown.Value).TotalMilliseconds < DoubleClickIntervalInMs &&
-				Math.Abs(touchPos.X - _lastLocalTouchPosition.X) <= DoubleClickRadius &&
-				Math.Abs(touchPos.Y - _lastLocalTouchPosition.Y) <= DoubleClickRadius)
+				(DateTime.Now - _lastTouchDown.Value).TotalMilliseconds < MyraEnvironment.DoubleClickIntervalInMs &&
+				Math.Abs(touchPos.X - _lastLocalTouchPosition.X) <= MyraEnvironment.DoubleClickRadius &&
+				Math.Abs(touchPos.Y - _lastLocalTouchPosition.Y) <= MyraEnvironment.DoubleClickRadius)
 			{
 				_lastTouchDown = null;
 				ScheduleInputEvent(InputEventType.TouchDoubleClick);
@@ -293,6 +309,21 @@ namespace Myra.Graphics2D.UI
 
 		internal void ProcessInputEvents()
 		{
+			if (Desktop == null)
+			{
+				return;
+			}
+
+			if (!string.IsNullOrEmpty(Tooltip) && (Desktop.Tooltip == null || Desktop.Tooltip.Tag != this) &&
+				_lastMouseMovement != null && (DateTime.Now - _lastMouseMovement.Value).TotalMilliseconds > MyraEnvironment.TooltipDelayInMs)
+			{
+				var pos = Desktop.MousePosition;
+				pos.X += MyraEnvironment.TooltipOffset.X;
+				pos.Y += MyraEnvironment.TooltipOffset.Y;
+				Desktop.ShowTooltip(this, pos);
+				_lastMouseMovement = null;
+			}
+
 			if (_scheduledInputEvents.Count > 0)
 			{
 				_scheduledInputEventsCopy.Clear();
@@ -304,23 +335,14 @@ namespace Myra.Graphics2D.UI
 					switch (inputEvent)
 					{
 						case InputEventType.MouseLeft:
-							if (Desktop != null && Desktop.OverWidget != null && Desktop.OverWidget.Tag == this)
-							{
-								// Tooltip for this widget is shown
-								Desktop.HideOverWidget();
-							}
-
-							_lastMouseMovement = null;
 							OnMouseLeft();
 							MouseLeft.Invoke(this);
 							break;
 						case InputEventType.MouseEntered:
-							_lastMouseMovement = DateTime.Now;
 							OnMouseEntered();
 							MouseEntered.Invoke(this);
 							break;
 						case InputEventType.MouseMoved:
-							_lastMouseMovement = DateTime.Now;
 							OnMouseMoved();
 							MouseMoved.Invoke(this);
 							break;
@@ -341,12 +363,6 @@ namespace Myra.Graphics2D.UI
 							TouchMoved.Invoke(this);
 							break;
 						case InputEventType.TouchDown:
-							if (DragHandle != null && DragHandle.IsTouchInside)
-							{
-								var parent = Parent != null ? (ITransformable)Parent : Desktop;
-								_startPos = parent.ToLocal(new Vector2(Desktop.TouchPosition.Value.X, Desktop.TouchPosition.Value.Y));
-								_startLeftTop = new Point(Left, Top);
-							}
 							OnTouchDown();
 							TouchDown.Invoke(this);
 							break;
