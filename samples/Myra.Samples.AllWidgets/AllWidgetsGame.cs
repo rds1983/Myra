@@ -63,7 +63,7 @@ namespace Myra.Samples.AllWidgets
 			base.LoadContent();
 
 			MyraEnvironment.Game = this;
-			MyraEnvironment.EnableWindowDarkening = true;
+			MyraEnvironment.EnableModalDarkening = true;
 
 			_allWidgets = new AllWidgets();
 

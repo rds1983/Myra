@@ -253,7 +253,7 @@ namespace Myra
 		/// Makes the text rendering more smooth(especially when scaling) for the cost of sacrificing some performance 
 		/// </summary>
 		public static bool SmoothText { get; set; }
-		public static bool EnableWindowDarkening { get; set; } = true;
+		public static bool EnableModalDarkening { get; set; }
 
 		public static Color DarkeningColor { get; set; } = new Color(0, 0, 0, 192);
 
