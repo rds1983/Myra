@@ -159,7 +159,7 @@ namespace Myra.Samples.AllWidgets
 		public void OpenFile()
 		{
 			var fileDialog = new FileDialog(FileDialogMode.OpenFile);
-			fileDialog.ShowModal(Desktop, darkening: true);
+			fileDialog.ShowModal(Desktop);
 
 			fileDialog.Closed += (s, a) =>
 			{
@@ -175,7 +175,7 @@ namespace Myra.Samples.AllWidgets
 		public void SaveFile()
 		{
 			var fileDialog = new FileDialog(FileDialogMode.SaveFile);
-			fileDialog.ShowModal(Desktop, darkening: true);
+			fileDialog.ShowModal(Desktop);
 
 			fileDialog.Closed += (s, a) =>
 			{

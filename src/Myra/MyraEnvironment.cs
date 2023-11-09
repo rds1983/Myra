@@ -23,6 +23,7 @@ using Stride.Input;
 #else
 using Myra.Platform;
 using System.Drawing;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace Myra
@@ -252,6 +253,8 @@ namespace Myra
 		/// Makes the text rendering more smooth(especially when scaling) for the cost of sacrificing some performance 
 		/// </summary>
 		public static bool SmoothText { get; set; }
+		public static bool EnableWindowDarkening { get; set; } = true;
+
 		public static Color DarkeningColor { get; set; } = new Color(0, 0, 0, 192);
 
 		private static void GameOnDisposed(object sender, EventArgs eventArgs)

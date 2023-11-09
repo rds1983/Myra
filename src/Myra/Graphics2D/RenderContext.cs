@@ -199,7 +199,15 @@ namespace Myra.Graphics2D
 #if MONOGAME || FNA || STRIDE
 				sz = new Vector2(texture.Width, texture.Height);
 #else
-				var p = _fontStashRenderer.TextureManager.GetTextureSize(texture);
+				Point p;
+				if (_fontStashRenderer != null)
+				{
+					p = _fontStashRenderer.TextureManager.GetTextureSize(texture);
+				} else
+				{
+					p = _fontStashRenderer2.TextureManager.GetTextureSize(texture);
+				}
+
 				sz = new Vector2(p.X, p.Y);
 #endif
 			}
@@ -267,8 +275,18 @@ namespace Myra.Graphics2D
 			}
 			else
 			{
-				var size = new Vector2(scale.X * sourceRectangle.Value.Width, scale.Y * sourceRectangle.Value.Height);
-				_renderer.DrawQuad(texture, color, position, ref Transform.Matrix, depth, size, sourceRectangle.Value,
+				Rectangle r;
+				if (sourceRectangle != null)
+				{
+					r = sourceRectangle.Value;
+				} else
+				{
+					var textureSize = _fontStashRenderer2.TextureManager.GetTextureSize(texture);
+					r = new Rectangle(0, 0, textureSize.X, textureSize.Y);
+				}
+
+				var size = new Vector2(scale.X * r.Width, scale.Y * r.Height);
+				_renderer.DrawQuad(texture, color, position, ref Transform.Matrix, depth, size, r,
 					ref _topLeft, ref _topRight, ref _bottomLeft, ref _bottomRight);
 			}
 #endif

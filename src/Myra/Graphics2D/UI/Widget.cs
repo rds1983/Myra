@@ -592,10 +592,6 @@ namespace Myra.Graphics2D.UI
 		[Browsable(false)]
 		public bool IsModal { get; set; }
 
-		[XmlIgnore]
-		[Browsable(false)]
-		public bool IsDarkening { get; set; }
-
 		[Category("Appearance")]
 		[DefaultValue(1.0f)]
 		public float Opacity

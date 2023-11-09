@@ -497,7 +497,7 @@ namespace Myra.Graphics2D.UI
 			{
 				if (widget.Visible)
 				{
-					if (widget.IsDarkening)
+					if (MyraEnvironment.EnableWindowDarkening)
 					{
 						_renderContext.FillRectangle(bounds, MyraEnvironment.DarkeningColor);
 					}
