@@ -43,7 +43,6 @@ namespace Myra.Graphics2D.UI
 		private int _zIndex;
 		private HorizontalAlignment _horizontalAlignment = HorizontalAlignment.Left;
 		private VerticalAlignment _verticalAlignment = VerticalAlignment.Top;
-		private bool _isModal = false;
 		private bool _measureDirty = true;
 		private bool _arrangeDirty = true;
 		private Desktop _desktop;
@@ -591,21 +590,11 @@ namespace Myra.Graphics2D.UI
 
 		[XmlIgnore]
 		[Browsable(false)]
-		public bool IsModal
-		{
-			get { return _isModal; }
+		public bool IsModal { get; set; }
 
-			set
-			{
-				if (_isModal == value)
-				{
-					return;
-				}
-
-				_isModal = value;
-				InvalidateMeasure();
-			}
-		}
+		[XmlIgnore]
+		[Browsable(false)]
+		public bool IsDarkening { get; set; }
 
 		[Category("Appearance")]
 		[DefaultValue(1.0f)]

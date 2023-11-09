@@ -260,15 +260,17 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public void Show(Desktop desktop, Point? position = null)
+		public void Show(Desktop desktop, Point? position = null, bool darkening = false)
 		{
 			IsModal = false;
+			IsDarkening = darkening;
 			InternalShow(desktop, position);
 		}
 
-		public void ShowModal(Desktop desktop, Point? position = null)
+		public void ShowModal(Desktop desktop, Point? position = null, bool darkening = false)
 		{
 			IsModal = true;
+			IsDarkening = darkening;
 			InternalShow(desktop, position);
 
 			_previousKeyboardFocus = desktop.FocusedKeyboardWidget;

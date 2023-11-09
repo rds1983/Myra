@@ -252,6 +252,7 @@ namespace Myra
 		/// Makes the text rendering more smooth(especially when scaling) for the cost of sacrificing some performance 
 		/// </summary>
 		public static bool SmoothText { get; set; }
+		public static Color DarkeningColor { get; set; } = new Color(0, 0, 0, 192);
 
 		private static void GameOnDisposed(object sender, EventArgs eventArgs)
 		{
