@@ -572,7 +572,7 @@ namespace Myra.Graphics2D.UI
 					_thumbMaximumY = 1;
 				}
 
-				if (_horizontalScrollingOn && ShowHorizontalScrollBar)
+				if (_horizontalScrollingOn)
 				{
 					bounds.Width = measureSize.X;
 				}
@@ -581,7 +581,7 @@ namespace Myra.Graphics2D.UI
 					bounds.Width = availableSize.X;
 				}
 
-				if (_verticalScrollingOn && ShowVerticalScrollBar)
+				if (_verticalScrollingOn)
 				{
 					bounds.Height = measureSize.Y;
 				}
