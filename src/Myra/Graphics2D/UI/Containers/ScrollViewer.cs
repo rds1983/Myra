@@ -643,5 +643,21 @@ namespace Myra.Graphics2D.UI
 		{
 			ApplyScrollViewerStyle(stylesheet.ScrollViewerStyles.SafelyGetStyle(name));
 		}
+
+		public override bool InputFallsThrough(Point localPos)
+		{
+			if (Background != null)
+			{
+				return false;
+			}
+
+			if (_horizontalScrollingOn && _horizontalScrollbarFrame.Contains(localPos) ||
+				_verticalScrollingOn && _verticalScrollbarFrame.Contains(localPos))
+			{
+				return false;
+			}
+
+			return true;
+		}
 	}
 }

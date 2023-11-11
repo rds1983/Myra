@@ -315,6 +315,7 @@ namespace MyraPad
 			base.LoadContent();
 
 			MyraEnvironment.Game = this;
+			MyraEnvironment.EnableModalDarkening = true;
 
 			_desktop = new Desktop();
 

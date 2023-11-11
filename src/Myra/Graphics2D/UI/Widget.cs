@@ -1410,12 +1410,15 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			if (result == null && !this.FallsThrough(p)) 
+			var localPos = ToLocal(p);
+			if (result == null && !InputFallsThrough(localPos)) 
 			{
 				result = this;
 			}
 
 			return result;
 		}
+
+		public virtual bool InputFallsThrough(Point localPos) => false;
 	}
 }

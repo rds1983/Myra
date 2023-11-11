@@ -239,14 +239,14 @@ namespace Myra.Graphics2D.UI
 				{
 					if (!Desktop.IsMobile)
 					{
-						if (IsMouseInside)
+						if (IsMouseInside && !InputFallsThrough(LocalMousePosition.Value))
 						{
 							inputContext.MouseOrTouchHandled = true;
 						}
 					}
 					else
 					{
-						if (IsTouchInside)
+						if (IsTouchInside && !InputFallsThrough(LocalTouchPosition.Value))
 						{
 							inputContext.MouseOrTouchHandled = true;
 						}

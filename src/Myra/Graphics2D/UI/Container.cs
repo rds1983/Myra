@@ -50,5 +50,7 @@ namespace Myra.Graphics2D.UI
 		{
 			Widgets.Remove(child);
 		}
+
+		public override bool InputFallsThrough(Point localPos) => Background == null;
 	}
 }

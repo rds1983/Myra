@@ -15,8 +15,8 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="MonoGame.Framework.Android" Version="$(MonoGameVersion)" />
-    <PackageReference Include="MonoGame.Content.Builder.Task" Version="$(MonoGameVersion)" />
+    <PackageReference Include="MonoGame.Framework.Android" Version="$(AppMonoGameVersion)" />
+    <PackageReference Include="MonoGame.Content.Builder.Task" Version="$(AppMonoGameVersion)" />
   </ItemGroup>
 
   <ItemGroup>
