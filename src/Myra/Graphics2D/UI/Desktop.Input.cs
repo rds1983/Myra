@@ -221,7 +221,7 @@ namespace Myra.Graphics2D.UI
 						FocusNextWidget();
 					}
 
-					OnKeyDown(key);
+					KeyDownHandler?.Invoke(key);
 
 					_lastKeyDown = now;
 					_keyDownCount = 0;
@@ -244,7 +244,7 @@ namespace Myra.Graphics2D.UI
 									  ((_keyDownCount == 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownStartInMs) ||
 									  (_keyDownCount > 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownInternalInMs)))
 					{
-						OnKeyDown(key);
+						KeyDownHandler?.Invoke(key);
 
 						_lastKeyDown = now;
 						++_keyDownCount;

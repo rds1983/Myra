@@ -1,11 +1,40 @@
-﻿using System.ComponentModel;
-using System.Xml.Serialization;
+﻿using Myra.Attributes;
 using Myra.Graphics2D.UI.Styles;
+using System;
+using System.ComponentModel;
+using System.Xml.Serialization;
 
 namespace Myra.Graphics2D.UI
 {
-	public class RadioButton : CheckButton
+	[StyleTypeName("RadioButton")]
+	public class RadioButton : CheckButtonBase
 	{
+		private string _text;
+
+		[Obsolete("Set Content to Label instead")]
+		[Browsable(false)]
+		[XmlIgnore]
+		[Category("Appearance")]
+		public string Text
+		{
+			get => _text;
+			set
+			{
+				if (_text == value)
+				{
+					return;
+				}
+
+				Content = new Label
+				{
+					Text = value
+				};
+
+				_text = value;
+			}
+		}
+
+
 		public override bool IsPressed
 		{
 			get => base.IsPressed;
@@ -42,8 +71,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public RadioButton(string styleName = Stylesheet.DefaultStyleName): base(styleName)
+		public RadioButton(string styleName = Stylesheet.DefaultStyleName)
 		{
+			SetStyle(styleName);
 		}
 
 		public override void OnPressedChanged()

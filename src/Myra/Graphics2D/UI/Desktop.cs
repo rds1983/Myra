@@ -305,10 +305,13 @@ namespace Myra.Graphics2D.UI
 		public event EventHandler<CancellableEventArgs<Widget>> WidgetLosingKeyboardFocus;
 		public event EventHandler<GenericEventArgs<Widget>> WidgetGotKeyboardFocus;
 
+		public Action<Keys> KeyDownHandler;
+
 		public Desktop()
 		{
 			Opacity = 1.0f;
 			Widgets.CollectionChanged += WidgetsOnCollectionChanged;
+			KeyDownHandler = OnKeyDown;
 
 #if FNA
 			TextInputEXT.TextInput += OnChar;
