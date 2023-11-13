@@ -1,16 +1,34 @@
 <Project>
   <Project.ExportOptions Namespace="MyraPad.UI" Class="NewProjectWizard" OutputPath="D:\Projects\Myra\src\MyraPad\UI" />
-  <Dialog Title="Choose Root Container" Left="383" Top="95">
+  <Dialog Title="Choose Root Container" Left="762" Top="246">
     <VerticalStackPanel>
-      <RadioButton Text="Grid" Id="_radioButtonGrid" />
-      <RadioButton Text="HorizontalStackPanel" Id="_radioButtonHorizontalStackPanel" />
-      <RadioButton Text="VerticalStackPanel" Id="_radioButtonVerticalStackPanel" />
-      <RadioButton Text="Panel" Id="_radioButtonPanel" />
-      <RadioButton Text="ScrollViewer" Id="_radioButtonScrollViewer" />
-      <RadioButton Text="HorizontalSplitPane" Id="_radioButtonHorizontalSplitPane" />
-      <RadioButton Text="VerticalSplitPane" Id="_radioButtonVerticalSplitPane" />
-      <RadioButton Text="Window" Id="_radioButtonWindow" />
-      <RadioButton Text="Dialog" Id="_radioButtonDialog" />
+      <RadioButton Id="_radioButtonGrid">
+        <Label Text="Grid" />
+      </RadioButton>
+      <RadioButton Id="_radioButtonHorizontalStackPanel">
+        <Label Text="HorizontalStackPanel" />
+      </RadioButton>
+      <RadioButton Id="_radioButtonVerticalStackPanel">
+        <Label Text="VerticalStackPanel" />
+      </RadioButton>
+      <RadioButton Id="_radioButtonPanel">
+        <Label Text="Panel" />
+      </RadioButton>
+      <RadioButton Id="_radioButtonScrollViewer">
+        <Label Text="ScrollViewer" />
+      </RadioButton>
+      <RadioButton Id="_radioButtonHorizontalSplitPane">
+        <Label Text="HorizontalSplitPane" />
+      </RadioButton>
+      <RadioButton Id="_radioButtonVerticalSplitPane">
+        <Label Text="VerticalSplitPane" />
+      </RadioButton>
+      <RadioButton Id="_radioButtonWindow">
+        <Label Text="Window" />
+      </RadioButton>
+      <RadioButton Id="_radioButtonDialog">
+        <Label Text="Dialog" />
+      </RadioButton>
     </VerticalStackPanel>
   </Dialog>
 </Project>

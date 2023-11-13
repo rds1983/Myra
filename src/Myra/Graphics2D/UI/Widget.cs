@@ -762,6 +762,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		protected virtual bool UseOverBackground => IsMouseInside;
+
 		[Browsable(false)]
 		[XmlIgnore]
 		public Action<RenderContext> BeforeRender, AfterRender;
@@ -787,7 +789,7 @@ namespace Myra.Graphics2D.UI
 			{
 				result = FocusedBackground;
 			}
-			else if (IsMouseInside && OverBackground != null)
+			else if (UseOverBackground && OverBackground != null)
 			{
 				result = OverBackground;
 			}
@@ -1411,7 +1413,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var localPos = ToLocal(p);
-			if (result == null && !InputFallsThrough(localPos)) 
+			if (result == null && !InputFallsThrough(localPos))
 			{
 				result = this;
 			}

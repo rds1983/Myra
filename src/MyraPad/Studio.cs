@@ -33,7 +33,6 @@ namespace MyraPad
 		private static readonly string[] SimpleWidgets = new[]
 		{
 			"ImageTextButton",
-			"RadioButton",
 			"SpinButton",
 			"HorizontalProgressBar",
 			"VerticalProgressBar",
@@ -52,6 +51,7 @@ namespace MyraPad
 			"Button",
 			"ToggleButton",
 			"CheckButton",
+			"RadioButton",
 			"Window",
 			"Grid",
 			"Panel",

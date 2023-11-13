@@ -2,6 +2,7 @@
 using Myra.Graphics2D.UI.Styles;
 using System.ComponentModel;
 using System;
+using System.Xml.Serialization;
 
 
 #if MONOGAME || FNA
@@ -21,11 +22,11 @@ namespace Myra.Graphics2D.UI
 	}
 
 	[StyleTypeName("CheckBox")]
-	public class CheckButton: ButtonBase2
+	public class CheckButton : ButtonBase2
 	{
-		private class CheckImage: Image
+		private class CheckImageInternal : Image
 		{
-			public override bool IsMouseInside
+			protected override bool UseOverBackground
 			{
 				get
 				{
@@ -42,7 +43,7 @@ namespace Myra.Graphics2D.UI
 
 		private readonly StackPanelLayout _layout = new StackPanelLayout(Orientation.Horizontal);
 		private CheckPosition _checkPosition = CheckPosition.Left;
-		private readonly CheckImage _check = new CheckImage
+		private readonly CheckImageInternal _check = new CheckImageInternal
 		{
 			HorizontalAlignment = HorizontalAlignment.Left,
 			VerticalAlignment = VerticalAlignment.Center,
@@ -94,6 +95,10 @@ namespace Myra.Graphics2D.UI
 				UpdateChildren();
 			}
 		}
+
+		[Browsable(false)]
+		[XmlIgnore]
+		public Image CheckImage => _check;
 
 		public event EventHandler IsCheckedChanged
 		{
@@ -149,7 +154,14 @@ namespace Myra.Graphics2D.UI
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
+			base.InternalSetStyle(stylesheet, name);
+
 			var style = stylesheet.CheckBoxStyles.SafelyGetStyle(name);
+			ApplyCheckButtonStyle(style);
+		}
+
+		public void ApplyCheckButtonStyle(ImageTextButtonStyle style)
+		{
 			ApplyButtonStyle(style);
 
 			if (style.ImageStyle != null)
@@ -158,8 +170,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			CheckContentSpacing = style.ImageTextSpacing;
-
-			ApplyButtonStyle(stylesheet.CheckBoxStyles.SafelyGetStyle(name));
 		}
 
 		private void UpdateChildren()
