@@ -3,10 +3,18 @@
   <Panel>
     <Label Text="Game Screen" Top="100" HorizontalAlignment="Center" />
     <HorizontalStackPanel Top="50">
-      <RadioButton Text="Radio 1" />
-      <RadioButton Text="Radio 2" />
-      <RadioButton Text="Radio 3" />
-      <RadioButton Text="Radio 4" />
+      <RadioButton>
+        <Label Text="Radio 1" />
+      </RadioButton>
+      <RadioButton>
+        <Label Text="Radio 2" />
+      </RadioButton>
+      <RadioButton>
+        <Label Text="Radio 3" />
+      </RadioButton>
+      <RadioButton>
+        <Label Text="Radio 4" />
+      </RadioButton>
     </HorizontalStackPanel>
     <HorizontalStackPanel Spacing="8" Top="300">
       <Button>
