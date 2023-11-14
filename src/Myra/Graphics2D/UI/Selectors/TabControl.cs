@@ -189,6 +189,11 @@ namespace Myra.Graphics2D.UI
 			button.Text = item.Text;
 			button.TextColor = item.Color ?? TabControlStyle.TabItemStyle.LabelStyle.TextColor;
 
+			if (SelectedItem == item)
+			{
+				UpdateContent();
+			}
+
 			InvalidateMeasure();
 		}
 
@@ -261,15 +266,19 @@ namespace Myra.Graphics2D.UI
 			UpdateGridPositions();
 		}
 
-		protected override void OnSelectedItemChanged()
+		private void UpdateContent()
 		{
-			base.OnSelectedItemChanged();
-
 			_panelContent.Widgets.Clear();
 			if (SelectedItem != null && SelectedItem.Content != null)
 			{
 				_panelContent.Widgets.Add(SelectedItem.Content);
 			}
+		}
+
+		protected override void OnSelectedItemChanged()
+		{
+			base.OnSelectedItemChanged();
+			UpdateContent();
 		}
 
 		protected override void Reset()

@@ -18,6 +18,7 @@ namespace Myra.Graphics2D.UI
 {
 	public class TabItem : BaseObject, ISelectorItem, IContent
 	{
+		private Widget _content;
 		private string _text;
 		private Color? _color;
 		private ImageTextButton _button;
@@ -65,7 +66,17 @@ namespace Myra.Graphics2D.UI
 		[Content]
 		public Widget Content
 		{
-			get; set;
+			get => _content;
+			set
+			{
+				if (_content == value)
+				{
+					return;
+				}
+
+				_content = value;
+				FireChanged();
+			}
 		}
 
 		[Browsable(false)]
