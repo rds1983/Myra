@@ -6,8 +6,6 @@ using Myra.Attributes;
 using System.Collections;
 using System.Collections.Generic;
 using Myra.Utility;
-using System.Linq;
-using info.lundin.math;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -168,7 +166,7 @@ namespace Myra.Graphics2D.UI
 
 			public int Add(object value)
 			{
-				Add((Widget)value);
+				((IList<Widget>)this).Add((Widget)value);
 				return _listView.ChildrenCount - 1;
 			}
 
@@ -177,7 +175,7 @@ namespace Myra.Graphics2D.UI
 				Container.Widgets.Clear();
 			}
 
-			public bool Contains(object value) => FindButton((Widget)value) != null;
+			public bool Contains(object value) => Find((Widget)value) != null;
 
 			public void CopyTo(Array array, int index)
 			{
@@ -188,8 +186,13 @@ namespace Myra.Graphics2D.UI
 
 			public int IndexOf(object value)
 			{
-				var button = FindButton((Widget)value);
-				return Container.Widgets.IndexOf(button);
+				var widget = Find((Widget)value);
+				if (widget == null)
+				{
+					return -1;
+				}
+
+				return Container.Widgets.IndexOf(widget);
 			}
 
 			public void Insert(int index, object value)
@@ -209,32 +212,28 @@ namespace Myra.Graphics2D.UI
 
 			public int IndexOf(Widget item)
 			{
-				var button = FindButton(item);
-				if (button == null)
+				var widget = Find(item);
+				if (widget == null)
 				{
 					return -1;
 				}
 
-				return Container.Widgets.IndexOf(button);
+				return Container.Widgets.IndexOf(widget);
 			}
 
 			public void Insert(int index, Widget item)
 			{
-				var button = CreateButton(item);
+				var button = Wrap(item);
 				Container.Widgets.Insert(index, button);
 			}
 
 			public void Add(Widget item)
 			{
-				var button = CreateButton(item);
+				var button = Wrap(item);
 				Container.Widgets.Add(button);
 			}
 
-			public bool Contains(Widget item)
-			{
-				var button = FindButton(item);
-				return button != null;
-			}
+			public bool Contains(Widget item) => Find(item) != null;
 
 			public void CopyTo(Widget[] array, int arrayIndex)
 			{
@@ -243,20 +242,25 @@ namespace Myra.Graphics2D.UI
 
 			public bool Remove(Widget item)
 			{
-				var button = FindButton(item);
-				if (button == null)
+				var widget = Find(item);
+				if (widget == null)
 				{
 					return false;
 				}
 
-				Container.Widgets.Remove(button);
+				Container.Widgets.Remove(widget);
 				return true;
 			}
 
 			IEnumerator<Widget> IEnumerable<Widget>.GetEnumerator() => new WidgetsEnumerator(_listView);
 
-			private ListViewButton CreateButton(Widget w)
+			public Widget Wrap(Widget w)
 			{
+				if (w is SeparatorWidget)
+				{
+					return w;
+				}
+
 				var button = new ListViewButton()
 				{
 					Content = w,
@@ -270,14 +274,40 @@ namespace Myra.Graphics2D.UI
 				return button;
 			}
 
-			private ListViewButton FindButton(Widget w)
+			public Widget Unwrap(Widget w)
 			{
-				return (from ListViewButton b in Container.Widgets where b.Content == w select b).FirstOrDefault();
+				var asButton = w as ListViewButton;
+				if (asButton != null)
+				{
+					return asButton.Content;
+				}
+
+				return w;
+			}
+
+			private Widget Find(Widget item)
+			{
+				foreach(var w in Container.Widgets)
+				{
+					if (item == w)
+					{
+						return w;
+					}
+
+					var asButton = w as ListViewButton;
+					if (asButton != null && asButton.Content == item)
+					{
+						return w;
+					}
+				}
+
+				return null;
 			}
 		}
 
 		private readonly ScrollViewer _scrollViewer;
 		private readonly VerticalStackPanel _box;
+		private readonly WidgetsCollection _widgets;
 		private Widget _selectedItem;
 
 		internal ComboBox _parentComboBox;
@@ -299,7 +329,7 @@ namespace Myra.Graphics2D.UI
 
 		[Content]
 		[Browsable(false)]
-		public IList<Widget> Widgets { get; }
+		public IList<Widget> Widgets => _widgets;
 
 		public int? SelectedIndex
 		{
@@ -343,6 +373,12 @@ namespace Myra.Graphics2D.UI
 
 				_selectedItem = value;
 
+				var asButton = _selectedItem.Parent as ListViewButton;
+				if (asButton != null)
+				{
+					asButton.IsPressed = true;
+				}
+
 				SelectedIndexChanged.Invoke(this);
 				OnSelectedItemChanged();
 			}
@@ -366,7 +402,7 @@ namespace Myra.Graphics2D.UI
 			_box = new VerticalStackPanel();
 			_scrollViewer.Content = _box;
 
-			Widgets = new WidgetsCollection(this);
+			_widgets = new WidgetsCollection(this);
 
 			SetStyle(styleName);
 		}
@@ -508,16 +544,29 @@ namespace Myra.Graphics2D.UI
 
 		private Widget GetChildByIndex(int index)
 		{
-			var button = (ListViewButton)_box.Children[index];
-
-			return button.Content;
+			var w = _widgets.Unwrap(_box.Children[index]);
+			return w;
 		}
 
 		private void SetChildByIndex(int index, Widget widget)
 		{
-			var button = (ListViewButton)_box.Children[index];
+			if (widget is SeparatorWidget)
+			{
+				// Separators don't need to be wrapped inside buttons
+				_box.Children[index] = widget;
+				return;
+			}
 
-			button.Content = widget;
+			// Other widgets do
+			var w = _box.Children[index];
+			var asButton = w as ListViewButton;
+			if (asButton != null)
+			{
+				asButton.Content = widget;
+			} else
+			{
+				_box.Children[index] = _widgets.Wrap(widget);
+			}
 		}
 	}
 }
