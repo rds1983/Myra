@@ -111,14 +111,18 @@ namespace MyraPad
 				}
 				else
 				{
-
+					// Type should be assignable to IList<T> in order to be serialized as container
 					var type = value.GetType();
-					var asList = value as IList;
+					var listInterface = (from i in type.GetInterfaces()
+										 where i.IsGenericType &&
+										 i.GetGenericTypeDefinition() == typeof(IList<>)
+										 select i).FirstOrDefault();
 
-					if (asList != null && type.IsGenericType &&
-						typeof(IItemWithId).IsAssignableFrom(type.GetGenericArguments()[0]))
+					if (listInterface != null &&
+						typeof(IItemWithId).IsAssignableFrom(listInterface.GetGenericArguments()[0]))
 					{
-						foreach (var comp in asList)
+						var asEnumerable = value as IEnumerable;
+						foreach (var comp in asEnumerable)
 						{
 							var subItemId = ExportDesignerRecursive((IItemWithId)comp, w);
 							var subItemCode = string.Format("{0}.Add({1})", property.Name, subItemId);

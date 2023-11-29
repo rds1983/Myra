@@ -32,11 +32,11 @@
         <Label Text="Text Field:" Grid.Row="6" />
         <TextBox Grid.Column="1" Grid.Row="6" />
         <Label Text="List Box:" Grid.Row="7" />
-        <ListBox Width="200" Grid.Column="1" Grid.Row="7">
-          <ListItem Text="Red" Color="#FF0000FF" />
-          <ListItem Text="Green" Color="#00FF00FF" />
-          <ListItem Text="Blue" Color="#0000FFFF" />
-        </ListBox>
+        <ListView SelectedIndex="0" Width="200" Grid.Column="1" Grid.Row="7">
+          <Label Text="Red" TextColor="#FF0000FF" />
+          <Label Text="Green" TextColor="#00FF00FF" />
+          <Label Text="Blue" TextColor="#0000FFFF" />
+        </ListView>
         <Label Text="Tree" Grid.Row="8" />
       </Grid>
     </ScrollViewer>

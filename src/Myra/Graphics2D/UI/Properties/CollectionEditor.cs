@@ -8,7 +8,7 @@ namespace Myra.Graphics2D.UI.Properties
 		private readonly StackPanelLayout _layout = new StackPanelLayout(Orientation.Vertical);
 		private readonly IList _collection;
 		private readonly Type _type;
-		private readonly ListBox _listItems;
+		private readonly ListView _listItems;
 		private readonly PropertyGrid _propertyGrid;
 		private readonly Button _buttonDelete, _buttonMoveUp, _buttonMoveDown;
 
@@ -27,7 +27,7 @@ namespace Myra.Graphics2D.UI.Properties
 			var splitPanel = new HorizontalSplitPane();
 			StackPanel.SetProportionType(splitPanel, ProportionType.Fill);
 
-			_listItems = new ListBox
+			_listItems = new ListView
 			{
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch
@@ -38,7 +38,13 @@ namespace Myra.Graphics2D.UI.Properties
 			// Add initial items
 			foreach (var item in _collection)
 			{
-				_listItems.Items.Add(new ListItem(BuildItemText(item), null, item));
+				var widget = new Label
+				{
+					Text = BuildItemText(item),
+					Tag = item
+				};
+
+				_listItems.Widgets.Add(widget);
 			}
 
 			splitPanel.Widgets.Add(_listItems);
@@ -89,14 +95,14 @@ namespace Myra.Graphics2D.UI.Properties
 		{
 			_buttonDelete.Enabled = _listItems.SelectedIndex >= 0;
 			_buttonMoveUp.Enabled = _listItems.SelectedIndex > 0;
-			_buttonMoveDown.Enabled = _listItems.Items.Count > 1 && _listItems.SelectedIndex < _listItems.Items.Count - 1;
+			_buttonMoveDown.Enabled = _listItems.Widgets.Count > 1 && _listItems.SelectedIndex < _listItems.Widgets.Count - 1;
 		}
 
 		private void MoveSelectedItem(int newIndex)
 		{
 			var removed = _listItems.SelectedItem;
-			_listItems.Items.Remove(removed);
-			_listItems.Items.Insert(newIndex, removed);
+			_listItems.Widgets.Remove(removed);
+			_listItems.Widgets.Insert(newIndex, removed);
 			_listItems.SelectedItem = removed;
 			UpdateButtonsEnabled();
 		}
@@ -113,15 +119,22 @@ namespace Myra.Graphics2D.UI.Properties
 
 		private void ButtonDeleteOnUp(object sender, EventArgs eventArgs)
 		{
-			_listItems.Items.Remove(_listItems.SelectedItem);
+			_listItems.Widgets.Remove(_listItems.SelectedItem);
 			UpdateButtonsEnabled();
 		}
 
 		private void ButtonNewOnUp(object sender, EventArgs eventArgs)
 		{
 			var newItem = Activator.CreateInstance(_type);
-			_listItems.Items.Add(new ListItem(newItem.ToString(), null, newItem));
-			_listItems.SelectedIndex = _listItems.Items.Count - 1;
+
+			var widget = new Label
+			{
+				Text = newItem.ToString(),
+				Tag = newItem
+			};
+			_listItems.Widgets.Add(widget);
+
+			_listItems.SelectedIndex = _listItems.Widgets.Count - 1;
 			UpdateButtonsEnabled();
 		}
 
@@ -132,7 +145,7 @@ namespace Myra.Graphics2D.UI.Properties
 				return;
 			}
 
-			_listItems.SelectedItem.Text = BuildItemText(_listItems.SelectedItem.Tag);
+			((Label)_listItems.SelectedItem).Text = BuildItemText(_listItems.SelectedItem.Tag);
 		}
 
 		private void ListItemsOnSelectedIndexChanged(object sender, EventArgs eventArgs)
@@ -153,7 +166,7 @@ namespace Myra.Graphics2D.UI.Properties
 		{
 			_collection.Clear();
 
-			foreach (var listItem in _listItems.Items)
+			foreach (var listItem in _listItems.Widgets)
 			{
 				_collection.Add(listItem.Tag);
 			}

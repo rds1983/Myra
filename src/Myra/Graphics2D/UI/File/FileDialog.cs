@@ -130,7 +130,7 @@ namespace Myra.Graphics2D.UI.File
 			_buttonForward.Background = null;
 			_buttonParent.Background = null;
 
-			_listBoxPlaces.Background = null;
+			_listView.Background = null;
 
 			_buttonBack.Content = new Image
 			{
@@ -171,22 +171,16 @@ namespace Myra.Graphics2D.UI.File
 					continue;
 				}
 
-				_listBoxPlaces.Items.Add(new ListItem(Path.GetFileName(p), null, p)
-				{
-					Image = iconFolder,
-					ImageTextSpacing = ImageTextSpacing
-				});
+				var item = CreateListItem(Path.GetFileName(p), p, iconFolder);
+				_listView.Widgets.Add(item);
 			}
 
-			if (_listBoxPlaces.Items.Count > 0)
+			if (_listView.Widgets.Count > 0)
 			{
-				SetFolder((string)_listBoxPlaces.Items[0].Tag, false);
+				SetFolder((string)_listView.Widgets[0].Tag, false);
 			}
 
-			_listBoxPlaces.Items.Add(new ListItem
-			{
-				IsSeparator = true
-			});
+			_listView.Widgets.Add(new HorizontalSeparator());
 
 			var drives = DriveInfo.GetDrives();
 			var iconDrive = DefaultAssets.UITextureRegionAtlas["icon-drive"];
@@ -206,18 +200,15 @@ namespace Myra.Graphics2D.UI.File
 						s += " (" + d.VolumeLabel + ")";
 					}
 
-					_listBoxPlaces.Items.Add(new ListItem(s, null, d.RootDirectory.FullName)
-					{
-						Image = iconDrive,
-						ImageTextSpacing = ImageTextSpacing
-					});
+					var item = CreateListItem(s, d.RootDirectory.FullName, iconDrive);
+					_listView.Widgets.Add(item);
 				}
 				catch (Exception)
 				{
 				}
 			}
 
-			_listBoxPlaces.SelectedIndexChanged += OnPlacesSelectedIndexChanged;
+			_listView.SelectedIndexChanged += OnPlacesSelectedIndexChanged;
 
 			_gridFiles.SelectionBackground = DefaultAssets.UITextureRegionAtlas["tree-selection"];
 			_gridFiles.SelectionHoverBackground = DefaultAssets.UITextureRegionAtlas["button-over"];
@@ -234,6 +225,20 @@ namespace Myra.Graphics2D.UI.File
 			_textFieldFileName.Readonly = !(mode == FileDialogMode.SaveFile);
 
 			UpdateEnabled();
+		}
+
+		private static Widget CreateListItem(string text, string path, IImage icon)
+		{
+			var item = new HorizontalStackPanel
+			{
+				Spacing = ImageTextSpacing,
+				Tag = path
+			};
+
+			item.Widgets.Add(new Image { Renderable = icon });
+			item.Widgets.Add(new Label { Text = text });
+
+			return item;
 		}
 
 		private void UpdateEnabled()
@@ -332,7 +337,7 @@ namespace Myra.Graphics2D.UI.File
 
 			if (Directory.Exists(path))
 			{
-				_listBoxPlaces.SelectedIndex = null;
+				_listView.SelectedIndex = null;
 				Folder = path;
 			} else
 			{
@@ -347,7 +352,7 @@ namespace Myra.Graphics2D.UI.File
 				return;
 			}
 
-			_listBoxPlaces.SelectedIndex = null;
+			_listView.SelectedIndex = null;
 
 			var path = _paths[_gridFiles.SelectedRowIndex.Value];
 			var fi = new FileInfo(path);
@@ -363,12 +368,12 @@ namespace Myra.Graphics2D.UI.File
 
 		private void OnPlacesSelectedIndexChanged(object sender, EventArgs args)
 		{
-			if (_listBoxPlaces.SelectedIndex == null)
+			if (_listView.SelectedIndex == null)
 			{
 				return;
 			}
 
-			var path = (string)_listBoxPlaces.Items[_listBoxPlaces.SelectedIndex.Value].Tag;
+			var path = (string)_listView.Widgets[_listView.SelectedIndex.Value].Tag;
 			Folder = path;
 		}
 

@@ -6,6 +6,7 @@ using Myra.Attributes;
 using System.Collections;
 using System.Collections.Generic;
 using Myra.Utility;
+using System.Reflection;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -207,7 +208,13 @@ namespace Myra.Graphics2D.UI
 
 			public void RemoveAt(int index)
 			{
+				var isSelected = _listView.SelectedItem == Unwrap(Container.Widgets[index]);
 				Container.Widgets.RemoveAt(index);
+
+				if (isSelected)
+				{
+					_listView.SelectedItem = null;
+				}
 			}
 
 			public int IndexOf(Widget item)
@@ -248,7 +255,14 @@ namespace Myra.Graphics2D.UI
 					return false;
 				}
 
+				var isSelected = _listView.SelectedItem == Unwrap(widget);
 				Container.Widgets.Remove(widget);
+
+				if (isSelected)
+				{
+					_listView.SelectedItem = null;
+				}
+
 				return true;
 			}
 
@@ -331,6 +345,8 @@ namespace Myra.Graphics2D.UI
 		[Browsable(false)]
 		public IList<Widget> Widgets => _widgets;
 
+		[Browsable(false)]
+		[XmlIgnore]
 		public int? SelectedIndex
 		{
 			get
@@ -373,10 +389,13 @@ namespace Myra.Graphics2D.UI
 
 				_selectedItem = value;
 
-				var asButton = _selectedItem.Parent as ListViewButton;
-				if (asButton != null)
+				if (_selectedItem != null)
 				{
-					asButton.IsPressed = true;
+					var asButton = _selectedItem.Parent as ListViewButton;
+					if (asButton != null)
+					{
+						asButton.IsPressed = true;
+					}
 				}
 
 				SelectedIndexChanged.Invoke(this);

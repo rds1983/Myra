@@ -16,6 +16,7 @@ using Myra.Platform;
 
 namespace Myra.Graphics2D.UI
 {
+	[Obsolete("Use ListView")]
 	public class ListBox : Selector<ScrollViewer, ListItem>
 	{
 		private readonly VerticalStackPanel _box;

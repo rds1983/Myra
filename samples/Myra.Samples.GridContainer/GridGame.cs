@@ -245,13 +245,13 @@ namespace Myra.Samples.GridContainer
 			grid.Widgets.Add(_verticalProgressBar);
 
 			// List box
-			var list = new ListBox();
+			var list = new ListView();
 			Grid.SetColumn(list, 5);
 			Grid.SetRow(list, 4);
 
-			list.Items.Add(new ListItem("Red", Color.Red));
-			list.Items.Add(new ListItem("Green", Color.Green));
-			list.Items.Add(new ListItem("Blue", Color.Blue));
+			list.Widgets.Add(new Label { Text = "Red", TextColor = Color.Red });
+			list.Widgets.Add(new Label { Text = "Green", TextColor = Color.Green });
+			list.Widgets.Add(new Label { Text = "Blue", TextColor = Color.Blue });
 			grid.Widgets.Add(list);
 
 			// Vertical slider
