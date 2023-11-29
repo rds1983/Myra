@@ -448,30 +448,54 @@ namespace Myra.Graphics2D.UI
 			switch (k)
 			{
 				case Keys.Up:
-					if (SelectedIndex == null && Widgets.Count > 0)
 					{
-						SelectedIndex = Widgets.Count - 1;
-						UpdateScrolling();
+						int selectedIndex;
+						if (SelectedIndex == null)
+						{
+							selectedIndex = Widgets.Count - 1;
+						}
+						else
+						{
+							selectedIndex = SelectedIndex.Value - 1;
+						}
+
+						while (selectedIndex > 0 && _box.Widgets[selectedIndex] is SeparatorWidget)
+						{
+							--selectedIndex;
+						}
+
+						if (selectedIndex >= 0)
+						{
+							SelectedIndex = selectedIndex;
+							UpdateScrolling();
+						}
 					}
 
-					if (SelectedIndex != null && SelectedIndex.Value > 0)
-					{
-						SelectedIndex = SelectedIndex.Value - 1;
-						UpdateScrolling();
-					}
 					break;
 				case Keys.Down:
-					if (SelectedIndex == null && Widgets.Count > 0)
 					{
-						SelectedIndex = 0;
-						UpdateScrolling();
+						int selectedIndex;
+						if (SelectedIndex == null)
+						{
+							selectedIndex = 0;
+						}
+						else
+						{
+							selectedIndex = SelectedIndex.Value + 1;
+						}
+
+						while (selectedIndex < ChildrenCount && _box.Widgets[selectedIndex] is SeparatorWidget)
+						{
+							++selectedIndex;
+						}
+
+						if (selectedIndex < ChildrenCount)
+						{
+							SelectedIndex = selectedIndex;
+							UpdateScrolling();
+						}
 					}
 
-					if (SelectedIndex != null && SelectedIndex.Value < Widgets.Count - 1)
-					{
-						SelectedIndex = SelectedIndex.Value + 1;
-						UpdateScrolling();
-					}
 					break;
 				case Keys.Enter:
 					ComboHideDropdown();
