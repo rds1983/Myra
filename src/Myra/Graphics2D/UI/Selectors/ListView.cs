@@ -92,7 +92,7 @@ namespace Myra.Graphics2D.UI
 		private class WidgetsEnumerator : IEnumerator<Widget>, IEnumerator
 		{
 			private readonly ListView _listView;
-			private int _index;
+			private int _index = -1;
 
 			public Widget Current => _listView.GetChildByIndex(_index);
 
@@ -116,7 +116,7 @@ namespace Myra.Graphics2D.UI
 
 			public void Reset()
 			{
-				_index = 0;
+				_index = -1;
 			}
 		}
 
