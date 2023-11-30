@@ -150,21 +150,21 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public static ProportionType GetProportionType(Widget widget) => ProportionTypeProperty.GetValue(widget);
-		public static void SetProportionType(Widget widget, ProportionType value) => ProportionTypeProperty.SetValue(widget, value);
-		public static float GetProportionValue(Widget widget) => ProportionValueProperty.GetValue(widget);
-		public static void SetProportionValue(Widget widget, float value) => ProportionValueProperty.SetValue(widget, value);
-
 		protected override void CopyFrom(Widget w)
 		{
 			base.CopyFrom(w);
 
 			var stackPanel = (StackPanel)w;
-			
+
 			ShowGridLines = stackPanel.ShowGridLines;
 			GridLinesColor = stackPanel.GridLinesColor;
 			Spacing = stackPanel.Spacing;
 			DefaultProportion = stackPanel.DefaultProportion;
 		}
+
+		public static ProportionType GetProportionType(Widget widget) => ProportionTypeProperty.GetValue(widget);
+		public static void SetProportionType(Widget widget, ProportionType value) => ProportionTypeProperty.SetValue(widget, value);
+		public static float GetProportionValue(Widget widget) => ProportionValueProperty.GetValue(widget);
+		public static void SetProportionValue(Widget widget, float value) => ProportionValueProperty.SetValue(widget, value);
 	}
 }

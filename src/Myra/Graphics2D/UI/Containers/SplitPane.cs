@@ -293,5 +293,13 @@ namespace Myra.Graphics2D.UI
 			HandleStyle = style.HandleStyle;
 			Reset();
 		}
+
+		protected override void CopyFrom(Widget w)
+		{
+			base.CopyFrom(w);
+
+			var splitPane = (SplitPane)w;
+			HandleStyle = splitPane.HandleStyle;
+		}
 	}
 }

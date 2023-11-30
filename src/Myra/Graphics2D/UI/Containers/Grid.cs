@@ -534,6 +534,35 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		protected override void CopyFrom(Widget w)
+		{
+			base.CopyFrom(w);
+
+			var grid = (Grid)w;
+
+			ShowGridLines = grid.ShowGridLines;
+			GridLinesColor = grid.GridLinesColor;
+			ColumnSpacing = grid.ColumnSpacing;
+			RowSpacing = grid.RowSpacing;
+			DefaultColumnProportion = grid.DefaultColumnProportion;
+			DefaultRowProportion = grid.DefaultRowProportion;
+			SelectionBackground = grid.SelectionBackground;
+			SelectionHoverBackground = grid.SelectionHoverBackground;
+			GridSelectionMode = grid.GridSelectionMode;
+			HoverIndexCanBeNull = grid.HoverIndexCanBeNull;
+			CanSelectNothing = grid.CanSelectNothing;
+
+			foreach(var prop in grid.ColumnsProportions)
+			{
+				ColumnsProportions.Add(prop);
+			}
+
+			foreach(var prop in grid.RowsProportions)
+			{
+				RowsProportions.Add(prop);
+			}
+		}
+
 		public static int GetColumn(Widget widget) => ColumnProperty.GetValue(widget);
 		public static void SetColumn(Widget widget, int value) => ColumnProperty.SetValue(widget, value);
 		public static int GetRow(Widget widget) => RowProperty.GetValue(widget);

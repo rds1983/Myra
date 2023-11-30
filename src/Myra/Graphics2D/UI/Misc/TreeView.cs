@@ -231,7 +231,11 @@ namespace Myra.Graphics2D.UI
 
 		public TreeViewNode AddSubNode(Widget content)
 		{
-			var result = new TreeViewNode(this, content, StyleName);
+			var result = new TreeViewNode(this, StyleName)
+			{
+				Content = content
+			};
+
 			Grid.SetRow(result, Children.Count);
 
 			Children.Add(result);
@@ -407,6 +411,20 @@ namespace Myra.Graphics2D.UI
 
 			SelectionBackground = style.SelectionBackground;
 			SelectionHoverBackground = style.SelectionHoverBackground;
+		}
+
+		protected override void CopyFrom(Widget w)
+		{
+			base.CopyFrom(w);
+
+			var treeView = (TreeView)w;
+			SelectionBackground = treeView.SelectionBackground;
+			SelectionHoverBackground = treeView.SelectionHoverBackground;
+
+			foreach(TreeViewNode node in treeView.Children)
+			{
+				AddSubNode(node.Content);
+			}
 		}
 	}
 }

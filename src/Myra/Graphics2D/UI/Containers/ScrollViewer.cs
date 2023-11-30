@@ -659,5 +659,19 @@ namespace Myra.Graphics2D.UI
 
 			return true;
 		}
+
+		protected override void CopyFrom(Widget w)
+		{
+			base.CopyFrom(w);
+
+			var scrollViewer = (ScrollViewer)w;
+
+			HorizontalScrollBackground = scrollViewer.HorizontalScrollBackground;
+			HorizontalScrollKnob = scrollViewer.HorizontalScrollKnob;
+			VerticalScrollBackground = scrollViewer.VerticalScrollBackground;
+			VerticalScrollKnob = scrollViewer.VerticalScrollKnob;
+			ShowHorizontalScrollBar = scrollViewer.ShowHorizontalScrollBar;
+			ShowVerticalScrollBar = scrollViewer.ShowVerticalScrollBar;
+		}
 	}
 }

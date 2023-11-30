@@ -321,5 +321,17 @@ namespace Myra.Graphics2D.UI
 		{
 			ApplyWindowStyle(stylesheet.WindowStyles.SafelyGetStyle(name));
 		}
+
+		protected override void CopyFrom(Widget w)
+		{
+			base.CopyFrom(w);
+
+			var window = (Window)w;
+
+			Title = window.Title;
+			TitleTextColor = window.TitleTextColor;
+			TitleFont = window.TitleFont;
+			CloseKey = window.CloseKey;
+		}
 	}
 }

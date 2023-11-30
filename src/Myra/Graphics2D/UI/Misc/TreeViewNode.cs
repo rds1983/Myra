@@ -11,13 +11,13 @@ using Color = FontStashSharp.FSColor;
 
 namespace Myra.Graphics2D.UI
 {
-	public class TreeViewNode : Widget
+	public class TreeViewNode : ContentControl
 	{
 		private readonly GridLayout _layout = new GridLayout();
 		private readonly TreeView _topTree;
 		private readonly VerticalStackPanel _childNodesStackPanel;
 		private readonly ToggleButton _mark;
-		private readonly Widget _content;
+		private Widget _content;
 
 		public bool IsExpanded
 		{
@@ -38,8 +38,34 @@ namespace Myra.Graphics2D.UI
 
 		public TreeViewNode ParentNode { get; internal set; }
 
+		public override Widget Content
+		{
+			get => _content;
 
-		internal TreeViewNode(TreeView topTree, Widget content, string styleName = Stylesheet.DefaultStyleName)
+			set
+			{
+				if (_content == value)
+				{
+					return;
+				}
+
+				if (_content != null)
+				{
+					Children.Remove(_content);
+				}
+
+				_content = value;
+
+				if (_content != null)
+				{
+					Grid.SetColumn(_content, 1);
+					Children.Add(_content);
+				}
+			}
+		}
+
+
+		internal TreeViewNode(TreeView topTree, string styleName = Stylesheet.DefaultStyleName)
 		{
 			_layout.ColumnSpacing = 2;
 			_layout.RowSpacing = 2;
@@ -66,13 +92,6 @@ namespace Myra.Graphics2D.UI
 			};
 
 			Children.Add(_mark);
-
-			_content = content;
-			if (_content != null)
-			{
-				Grid.SetColumn(_content, 1);
-				Children.Add(_content);
-			}
 
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
@@ -116,9 +135,10 @@ namespace Myra.Graphics2D.UI
 
 		public TreeViewNode AddSubNode(Widget content)
 		{
-			var result = new TreeViewNode(_topTree, content, StyleName)
+			var result = new TreeViewNode(_topTree, StyleName)
 			{
-				ParentNode = this
+				ParentNode = this,
+				Content = content
 			};
 			Grid.SetRow(result, _childNodesStackPanel.Children.Count);
 

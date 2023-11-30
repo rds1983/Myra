@@ -100,6 +100,15 @@ namespace Myra.Graphics2D.UI
 			return true;
 		}
 
+		protected override void CopyFrom(Widget w)
+		{
+			base.CopyFrom(w);
+
+			var dialog = (Dialog)w;
+			ConfirmKey = dialog.ConfirmKey;
+		}
+
+
 		public static Dialog CreateMessageBox(string title, Widget content)
 		{
 			var w = new Dialog
