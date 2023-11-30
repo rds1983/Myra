@@ -60,14 +60,14 @@ namespace MyraPad
 			"HorizontalSplitPane",
 			"VerticalStackPanel",
 			"HorizontalStackPanel",
-			"ListView"
+			"ListView",
+			"ComboView"
 		};
 
 		private static readonly string[] SpecialContainers = new[]
 {
 			"HorizontalMenu",
 			"VerticalMenu",
-			"ComboBox",
 			"TabControl",
 		};
 

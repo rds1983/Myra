@@ -225,23 +225,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[Obsolete("Use Padding")]
-		[Browsable(false)]
-		public int PaddingLeft
-		{
-			get
-			{
-				return Padding.Left;
-			}
-
-			set
-			{
-				var p = Padding;
-				p.Left = value;
-				Padding = p;
-			}
-		}
-
 		[Category("Layout")]
 		[DesignerFolded]
 		public Thickness Margin
@@ -1422,5 +1405,76 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public virtual bool InputFallsThrough(Point localPos) => false;
+
+		public Widget Clone()
+		{
+			// Firstly try to use parameterless constructor
+			var type = GetType();
+			var constructor = type.GetConstructor(Type.EmptyTypes);
+
+			Widget result;
+			if (constructor != null)
+			{
+				result = (Widget)constructor.Invoke(new object[0]);
+			}
+			else
+			{
+				// Then string constructor
+				result = (Widget)Activator.CreateInstance(GetType(), (string)null);
+			}
+
+			result.CopyFrom(this);
+
+			// Copy attached properties
+			foreach(var pair in AttachedPropertiesValues)
+			{
+				result.AttachedPropertiesValues[pair.Key] = pair.Value;
+			}
+
+			return result;
+		}
+
+		protected virtual void CopyFrom(Widget w)
+		{
+			StyleName = w.StyleName;
+			Left = w.Left;
+			Top = w.Top;
+			MinWidth = w.MinWidth;
+			MaxWidth = w.MaxWidth;
+			Width = w.Width;
+			MinHeight = w.MinHeight;
+			MaxHeight = w.MaxHeight;
+			Height = w.Height;
+			Margin = w.Margin;
+			Border = w.Border;
+			BorderThickness = w.BorderThickness;
+			Padding = w.Padding;
+			HorizontalAlignment = w.HorizontalAlignment;
+			VerticalAlignment = w.VerticalAlignment;
+			Enabled = w.Enabled;
+			Visible = w.Visible;
+			DragDirection = w.DragDirection;
+			ZIndex = w.ZIndex;
+			MouseCursor = w.MouseCursor;
+			Tooltip = w.Tooltip;
+			Scale = w.Scale;
+			TransformOrigin = w.TransformOrigin;
+			Rotation = w.Rotation;
+			DragHandle = w.DragHandle;
+			IsModal = w.IsModal;
+			Opacity = w.Opacity;
+			Background = w.Background;
+			OverBackground = w.OverBackground;
+			DisabledBackground = w.DisabledBackground;
+			FocusedBackground = w.FocusedBackground;
+			OverBorder = w.OverBorder;
+			DisabledBorder = w.DisabledBorder;
+			FocusedBorder = w.FocusedBorder;
+			ClipToBounds = w.ClipToBounds;
+			Tag = w.Tag;
+			AcceptsKeyboardFocus = w.AcceptsKeyboardFocus;
+			BeforeRender = w.BeforeRender;
+			AfterRender = w.AfterRender;
+		}
 	}
 }

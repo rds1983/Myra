@@ -178,5 +178,18 @@ namespace Myra.Graphics2D.UI
 			OverRenderable = imageStyle.OverImage;
 			PressedRenderable = imageStyle.PressedImage;
 		}
+
+		protected override void CopyFrom(Widget w)
+		{
+			base.CopyFrom(w);
+
+			var image = (Image)w;
+
+			Renderable = image.Renderable;
+			OverRenderable = image.OverRenderable;
+			PressedRenderable = image.PressedRenderable;
+			Color = image.Color;
+			ResizeMode = image.ResizeMode;
+		}
 	}
 }

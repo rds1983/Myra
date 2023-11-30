@@ -301,7 +301,7 @@ namespace Myra.Graphics2D.UI
 
 			private Widget Find(Widget item)
 			{
-				foreach(var w in Container.Widgets)
+				foreach (var w in Container.Widgets)
 				{
 					if (item == w)
 					{
@@ -324,14 +324,11 @@ namespace Myra.Graphics2D.UI
 		private readonly WidgetsCollection _widgets;
 		private Widget _selectedItem;
 
-		internal ComboBox _parentComboBox;
+		internal ComboView _parentCombo;
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public ListBoxStyle ListBoxStyle
-		{
-			get; set;
-		}
+		public ListBoxStyle ListBoxStyle { get; set; }
 
 		[Category("Behavior")]
 		[DefaultValue(SelectionMode.Single)]
@@ -407,7 +404,6 @@ namespace Myra.Graphics2D.UI
 
 		public event EventHandler SelectedIndexChanged;
 
-
 		public ListView(string styleName = Stylesheet.DefaultStyleName)
 		{
 			_scrollViewer = new ScrollViewer();
@@ -444,19 +440,19 @@ namespace Myra.Graphics2D.UI
 
 		private void ComboHideDropdown()
 		{
-			if (_parentComboBox == null)
+			if (_parentCombo == null)
 			{
 				return;
 			}
 
-			_parentComboBox.HideDropdown();
+			_parentCombo.HideDropdown();
 		}
 
 		protected void OnSelectedItemChanged()
 		{
-			if (_parentComboBox != null)
+			if (_parentCombo != null)
 			{
-				_parentComboBox.UpdateSelectedItem();
+				_parentCombo.UpdateSelectedItem();
 			}
 		}
 
@@ -606,7 +602,8 @@ namespace Myra.Graphics2D.UI
 			if (asButton != null)
 			{
 				asButton.Content = widget;
-			} else
+			}
+			else
 			{
 				_box.Children[index] = _widgets.Wrap(widget);
 			}

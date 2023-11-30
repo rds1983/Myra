@@ -274,5 +274,24 @@ namespace Myra.Graphics2D.UI
 		{
 			ApplyLabelStyle(stylesheet.LabelStyles.SafelyGetStyle(name));
 		}
+
+		protected override void CopyFrom(Widget w)
+		{
+			base.CopyFrom(w);
+
+			var label = (Label)w;
+
+			VerticalSpacing = label.VerticalSpacing;
+			Text = label.Text;
+			Font = label.Font;
+			Wrap = label.Wrap;
+			AutoEllipsisMethod = label.AutoEllipsisMethod;
+			AutoEllipsisString = label.AutoEllipsisString;
+			TextAlign = label.TextAlign;
+			TextColor = label.TextColor;
+			DisabledTextColor = label.DisabledTextColor;
+			OverTextColor= label.OverTextColor;
+			PressedTextColor= label.PressedTextColor;
+		}
 	}
 }
