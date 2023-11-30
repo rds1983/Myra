@@ -84,7 +84,7 @@ namespace Myra.Tests
 			return project.Root.Clone();
 		}
 
-		public static void AssertSolidBrush(IBrush brush, Color color)
+		public static void AssertSolidBrush(Color color, IBrush brush)
 		{
 			Assert.IsInstanceOf<SolidBrush>(brush);
 			var solidBrush = (SolidBrush)brush;
@@ -92,10 +92,10 @@ namespace Myra.Tests
 			Assert.AreEqual(color, solidBrush.Color);
 		}
 
-		public static void AssertSolidBrush(IBrush brush, string colorName)
+		public static void AssertSolidBrush(string colorName, IBrush brush)
 		{
 			var color = ColorStorage.FromName(colorName);
-			AssertSolidBrush(brush, color.Value);
+			AssertSolidBrush(color.Value, brush);
 		}
 	}
 }

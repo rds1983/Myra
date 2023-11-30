@@ -19,12 +19,12 @@ namespace Myra.Tests
 			Assert.IsInstanceOf<Label>(panel.Widgets[0]);
 			var label = (Label)panel.Widgets[0];
 
-			Assert.AreEqual(label.Text, "StbImageSharp");
-			Assert.AreEqual(label.Margin, new Thickness(8));
-			Utility.AssertSolidBrush(label.Border, "#808000FF");
-			Assert.AreEqual(label.BorderThickness, new Thickness(8));
-			Assert.AreEqual(label.Padding, new Thickness(16));
-			Utility.AssertSolidBrush(label.Background, "#008000FF");
+			Assert.AreEqual("StbImageSharp", label.Text);
+			Assert.AreEqual(new Thickness(8), label.Margin);
+			Utility.AssertSolidBrush("#808000FF", label.Border);
+			Assert.AreEqual(new Thickness(8), label.BorderThickness);
+			Assert.AreEqual(new Thickness(16), label.Padding);
+			Utility.AssertSolidBrush("#008000FF", label.Background);
 		}
 
 		[Test]
@@ -47,7 +47,7 @@ namespace Myra.Tests
 			{
 				Assert.IsInstanceOf<Label>(stackPanel.Widgets[i - 1]);
 				var label = (Label)stackPanel.Widgets[i - 1];
-				Assert.AreEqual(label.Text, "Text " + i);
+				Assert.AreEqual("Text " + i, label.Text);
 			}
 		}
 
@@ -62,10 +62,15 @@ namespace Myra.Tests
 			Assert.AreEqual(2, rootPanel.Widgets.Count);
 			Assert.IsInstanceOf<Button>(rootPanel.Widgets[0]);
 			var button = (Button)rootPanel.Widgets[0];
+			Assert.AreEqual(new Thickness(4), button.Margin);
+			Utility.AssertSolidBrush("#4BD961FF", button.Border);
+			Assert.AreEqual(new Thickness(1), button.BorderThickness);
+			Assert.AreEqual(new Thickness(4), button.Padding);
 
 			Assert.IsInstanceOf<VerticalStackPanel>(button.Content);
 			var buttonStackPanel = (VerticalStackPanel)button.Content;
 			Assert.AreEqual(4, buttonStackPanel.Widgets.Count);
+			Assert.AreEqual(8, buttonStackPanel.Spacing);
 
 			for (var i = 1; i <= buttonStackPanel.Widgets.Count; ++i)
 			{
@@ -76,11 +81,16 @@ namespace Myra.Tests
 
 			Assert.IsInstanceOf<ToggleButton>(rootPanel.Widgets[1]);
 			var toggleButton = (ToggleButton)rootPanel.Widgets[1];
+			Assert.AreEqual(new Thickness(4), toggleButton.Margin);
+			Utility.AssertSolidBrush("#4BD961FF", toggleButton.Border);
+			Assert.AreEqual(new Thickness(1), toggleButton.BorderThickness);
+			Assert.AreEqual(new Thickness(4), toggleButton.Padding);
 
 			Assert.IsInstanceOf<VerticalStackPanel>(toggleButton.Content);
 			var toggleButtonStackPanel = (VerticalStackPanel)toggleButton.Content;
-			Assert.AreEqual(4, toggleButtonStackPanel.Widgets.Count);
 
+			Assert.AreEqual(8, toggleButtonStackPanel.Spacing);
+			Assert.AreEqual(4, toggleButtonStackPanel.Widgets.Count);
 			for (var i = 1; i <= toggleButtonStackPanel.Widgets.Count; ++i)
 			{
 				Assert.IsInstanceOf<Label>(toggleButtonStackPanel.Widgets[i - 1]);
