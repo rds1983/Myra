@@ -12,8 +12,7 @@ namespace Myra.Tests
 		[Test]
 		public void LoadMMLWithExternalAssets()
 		{
-			var assembly = typeof(MMLTests).Assembly;
-			var assetManager = AssetManager.CreateResourceAssetManager(assembly, "Resources.");
+			var assetManager = AssetManager.CreateResourceAssetManager(Utility.Assembly, "Resources.");
 
 			var mml = assetManager.ReadAsString("GridWithExternalResources.xmmp");
 

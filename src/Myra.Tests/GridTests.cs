@@ -9,7 +9,7 @@ namespace Myra.Tests
 	{
 		private static Project LoadFromResource(string name)
 		{
-			var xml = typeof(GridTests).Assembly.ReadResourceAsString("Resources.GridTests." + name);
+			var xml = Utility.ReadResourceAsString("Resources.GridTests." + name);
 
 			return Project.LoadFromXml(xml);
 		}

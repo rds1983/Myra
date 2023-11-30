@@ -8,5 +8,13 @@ namespace Myra.Graphics2D.UI
 		[Content]
 		[DefaultValue(null)]
 		public abstract Widget Content { get; set; }
+
+		protected override void CopyFrom(Widget w)
+		{
+			base.CopyFrom(w);
+
+			var contentControl = (ContentControl)w;
+			Content = contentControl.Content.Clone();
+		}
 	}
 }
