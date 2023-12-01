@@ -4,7 +4,7 @@
     <ComboView HorizontalAlignment="Center" VerticalAlignment="Center">
       <Label Text="Test" />
       <HorizontalStackPanel Spacing="8">
-        <Image Renderable="LogoOnly_64px.png" Width="16" Height="16" VerticalAlignment="Center" />
+        <Image Renderable="MonoGameLogo.png" Width="16" Height="16" VerticalAlignment="Center" />
         <Label Text="Test2" />
       </HorizontalStackPanel>
       <HorizontalSeparator />

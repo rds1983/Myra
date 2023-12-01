@@ -243,5 +243,19 @@ namespace Myra.Graphics2D.UI
 		{
 			ApplyComboViewStyle(stylesheet.ComboBoxStyles.SafelyGetStyle(name));
 		}
+
+		protected override void CopyFrom(Widget w)
+		{
+			base.CopyFrom(w);
+
+			var comboView = (ComboView)w;
+			SelectionMode = comboView.SelectionMode;
+			DropdownMaximumHeight = comboView.DropdownMaximumHeight;
+
+			foreach(var child in comboView.Widgets)
+			{
+				Widgets.Add(child.Clone());
+			}
+		}
 	}
 }

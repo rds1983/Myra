@@ -15,20 +15,6 @@
         <Label Text="test6" />
         <Label Text="test7" />
       </VerticalStackPanel>
-      <HorizontalSeparator />
-      <VerticalStackPanel>
-        <Label Text="test8" />
-        <Label Text="test9" />
-        <Label Text="test10" />
-        <Label Text="test11" />
-      </VerticalStackPanel>
-      <VerticalStackPanel>
-        <Label Text="test12" />
-        <Label Text="test13" />
-        <Label Text="test14" />
-        <Label Text="test15" />
-        <Label Text="test16" />
-      </VerticalStackPanel>
     </ListView>
   </Panel>
 </Project>
