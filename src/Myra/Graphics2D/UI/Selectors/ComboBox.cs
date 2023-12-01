@@ -19,6 +19,7 @@ using Myra.Platform;
 
 namespace Myra.Graphics2D.UI
 {
+	[Obsolete("Use ComboView")]
 	public class ComboBox : SelectorBase<ImageTextButton, ListItem>
 	{
 		private readonly ListBox _listBox = new ListBox(null);
@@ -123,7 +124,12 @@ namespace Myra.Graphics2D.UI
 
 		private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Widget> genericEventArgs)
 		{
-			InternalChild.IsPressed = false;
+			// Unpress the button only if mouse is outside
+			// As if it is inside, then it'll get unpressed naturally
+			if (!IsMouseInside)
+			{
+				InternalChild.IsPressed = false;
+			}
 		}
 
 		private void InternalChild_PressedChanged(object sender, EventArgs e)

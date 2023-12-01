@@ -151,7 +151,12 @@ namespace Myra.Graphics2D.UI
 
 		private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Widget> genericEventArgs)
 		{
-			_button.IsPressed = false;
+			// Unpress the button only if mouse is outside
+			// As if it is inside, then it'll get unpressed naturally
+			if (!IsMouseInside)
+			{
+				_button.IsPressed = false;
+			}
 		}
 
 		private void InternalChild_PressedChanged(object sender, EventArgs e)

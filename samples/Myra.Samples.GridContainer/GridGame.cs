@@ -67,13 +67,14 @@ namespace Myra.Samples.GridContainer
 			}
 
 			// Combo
-			var combo = new ComboBox();
+			var combo = new ComboView();
 			Grid.SetColumn(combo, 1);
 			Grid.SetRow(combo, 1);
 
-			combo.Items.Add(new ListItem("Red", Color.Red));
-			combo.Items.Add(new ListItem("Green", Color.Green));
-			combo.Items.Add(new ListItem("Blue", Color.Blue));
+			combo.Widgets.Add(new Label { Text = "Red", TextColor = Color.Red });
+			combo.Widgets.Add(new Label { Text = "Green", TextColor = Color.Green });
+			combo.Widgets.Add(new Label { Text = "Blue", TextColor = Color.Blue });
+
 			grid.Widgets.Add(combo);
 
 			// Button

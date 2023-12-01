@@ -417,33 +417,39 @@ namespace Myra.Graphics2D.UI.Properties
 			record.SetValue(obj, value);
 		}
 
-		private ComboBox CreateCustomValuesEditor(Record record, object[] customValues, bool hasSetter)
+		private ComboView CreateCustomValuesEditor(Record record, object[] customValues, bool hasSetter)
 		{
 			var propertyType = record.Type;
 			var value = record.GetValue(_object);
 
-			var cb = new ComboBox();
+			var cv = new ComboView();
 			foreach (var v in customValues)
 			{
-				cb.Items.Add(new ListItem(v.ToString(), null, v));
+				var label = new Label
+				{
+					Text = v.ToString(),
+					Tag = v
+				};
+
+				cv.Widgets.Add(label);
 			}
 
-			cb.SelectedIndex = Array.IndexOf(customValues, value);
+			cv.SelectedIndex = Array.IndexOf(customValues, value);
 			if (hasSetter)
 			{
-				cb.SelectedIndexChanged += (sender, args) =>
+				cv.SelectedIndexChanged += (sender, args) =>
 				{
-					var item = cb.SelectedIndex != null ? customValues[cb.SelectedIndex.Value] : null;
+					var item = cv.SelectedIndex != null ? customValues[cv.SelectedIndex.Value] : null;
 					SetValue(record, _object, item);
 					FireChanged(propertyType.Name);
 				};
 			}
 			else
 			{
-				cb.Enabled = false;
+				cv.Enabled = false;
 			}
 
-			return cb;
+			return cv;
 		}
 
 		private CheckButton CreateBooleanEditor(Record record, bool hasSetter)
@@ -640,7 +646,7 @@ namespace Myra.Graphics2D.UI.Properties
 			return subGrid;
 		}
 
-		private ComboBox CreateEnumEditor(Record record, bool hasSetter)
+		private ComboView CreateEnumEditor(Record record, bool hasSetter)
 		{
 			var propertyType = record.Type;
 			var value = record.GetValue(_object);
@@ -649,16 +655,23 @@ namespace Myra.Graphics2D.UI.Properties
 			var enumType = isNullable ? propertyType.GetNullableType() : propertyType;
 			var values = Enum.GetValues(enumType);
 
-			var cb = new ComboBox();
+			var cv = new ComboView();
 
 			if (isNullable)
 			{
-				cb.Items.Add(new ListItem(string.Empty, null, null));
+				cv.Widgets.Add(new Label
+				{
+					Text = string.Empty
+				});
 			}
 
 			foreach (var v in values)
 			{
-				cb.Items.Add(new ListItem(v.ToString(), null, v));
+				cv.Widgets.Add(new Label
+				{
+					Text = v.ToString(),
+					Tag = v
+				});
 			}
 
 			var selectedIndex = Array.IndexOf(values, value);
@@ -666,25 +679,25 @@ namespace Myra.Graphics2D.UI.Properties
 			{
 				++selectedIndex;
 			}
-			cb.SelectedIndex = selectedIndex;
+			cv.SelectedIndex = selectedIndex;
 
 			if (hasSetter)
 			{
-				cb.SelectedIndexChanged += (sender, args) =>
+				cv.SelectedIndexChanged += (sender, args) =>
 				{
-					if (cb.SelectedIndex != -1)
+					if (cv.SelectedIndex != -1)
 					{
-						SetValue(record, _object, cb.SelectedItem.Tag);
+						SetValue(record, _object, cv.SelectedItem.Tag);
 						FireChanged(enumType.Name);
 					}
 				};
 			}
 			else
 			{
-				cb.Enabled = false;
+				cv.Enabled = false;
 			}
 
-			return cb;
+			return cv;
 		}
 
 		private SpinButton CreateNumericEditor(Record record, bool hasSetter)

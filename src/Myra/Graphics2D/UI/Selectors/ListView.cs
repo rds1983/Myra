@@ -608,5 +608,19 @@ namespace Myra.Graphics2D.UI
 				_box.Children[index] = _widgets.Wrap(widget);
 			}
 		}
+
+		protected override void CopyFrom(Widget w)
+		{
+			base.CopyFrom(w);
+
+			var listView = (ListView)w;
+			ListBoxStyle = listView.ListBoxStyle;
+			SelectionMode = listView.SelectionMode;
+
+			foreach(var child in listView.Widgets)
+			{
+				Widgets.Add(child.Clone());
+			}
+		}
 	}
 }

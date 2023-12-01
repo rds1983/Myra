@@ -53,17 +53,17 @@
             </CheckButton>
             <Label Text="Horizontal Slider:" Grid.Row="6" />
             <HorizontalSlider Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="2" />
-            <Label Text="Combo Box:" Grid.Row="7" />
-            <ComboBox Width="200" Grid.Column="1" Grid.Row="7" Grid.ColumnSpan="2">
-              <ListItem Text="Red" Color="#FF0000FF" />
-              <ListItem Text="Green" Color="#00FF00FF" />
-              <ListItem Text="Blue" Color="#0080FFFF" />
-            </ComboBox>
+            <Label Text="Combo View:" Grid.Row="7" />
+            <ComboView Width="200" Grid.Column="1" Grid.Row="7" Grid.ColumnSpan="2">
+              <Label Text="Red" TextColor="#FF0000FF" />
+              <Label Text="Green" TextColor="#00FF00FF" />
+              <Label Text="Blue" TextColor="#0000FFFF" />
+            </ComboView>
             <Label Text="Text Field:" Grid.Row="8" />
             <TextBox Grid.Column="1" Grid.Row="8" Grid.ColumnSpan="2" />
             <Label Text="Spin Button:" Grid.Row="9" />
             <SpinButton Value="1" Width="100" Grid.Column="1" Grid.Row="9" />
-            <Label Text="List Box:" Grid.Row="10" />
+            <Label Text="List View:" Grid.Row="10" />
             <ListView Width="200" Grid.Column="1" Grid.Row="10" Grid.ColumnSpan="2">
               <Label Text="Red" TextColor="#FF0000FF" />
               <Label Text="Green" TextColor="#00FF00FF" />
