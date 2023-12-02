@@ -1,5 +1,4 @@
 ﻿using AssetManagementBase;
-using Myra.Graphics2D;
 using Myra.Graphics2D.UI;
 using NUnit.Framework;
 

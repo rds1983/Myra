@@ -28,6 +28,35 @@ namespace Myra.Tests
 		}
 
 		[Test]
+		public void LabelTest2()
+		{
+			var root = Utility.LoadFromResourceRootClone("marginBorderPadding.xmmp");
+
+			Assert.IsInstanceOf<Panel>(root);
+			var panel1 = (Panel)root;
+
+			Utility.AssertSolidBrush("#ADD8E6FF", panel1.Background);
+
+			Assert.AreEqual(1, panel1.Widgets.Count);
+			Assert.IsInstanceOf<Panel>(panel1.Widgets[0]);
+			var panel2 = (Panel)panel1.Widgets[0];
+
+			Assert.AreEqual(new Thickness(36), panel2.Margin);
+			Utility.AssertSolidBrush("#008000", panel2.Border);
+			Assert.AreEqual(new Thickness(12, 0), panel2.BorderThickness);
+			Assert.AreEqual(new Thickness(20, 20, 0, 0), panel2.Padding);
+			Utility.AssertSolidBrush("#FFA500FF", panel2.Background);
+			Utility.AssertSolidBrush("#808000FF", panel2.OverBorder);
+
+			Assert.AreEqual(1, panel2.Widgets.Count);
+			Assert.IsInstanceOf<Label>(panel2.Widgets[0]);
+			var label1 = (Label)panel2.Widgets[0];
+
+			Assert.AreEqual("Some Text", label1.Text);
+			Utility.AssertColor("#FF0000FF", label1.TextColor);
+		}
+
+		[Test]
 		public void CheckButtonTest()
 		{
 			var root = Utility.LoadFromResourceRootClone("checkButton.xmmp");

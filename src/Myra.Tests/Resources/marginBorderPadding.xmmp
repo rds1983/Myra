@@ -1,0 +1,8 @@
+<Project>
+  <Project.ExportOptions />
+  <Panel Background="#ADD8E6FF">
+    <Panel Margin="36" Border="#008000" BorderThickness="12, 0" Padding="20, 20, 0, 0" Background="#FFA500FF" OverBorder="#808000FF">
+      <Label Text="Some Text" TextColor="#FF0000FF" />
+    </Panel>
+  </Panel>
+</Project>

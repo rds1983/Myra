@@ -97,5 +97,11 @@ namespace Myra.Tests
 			var color = ColorStorage.FromName(colorName);
 			AssertSolidBrush(color.Value, brush);
 		}
+
+		public static void AssertColor(string colorName, Color color)
+		{
+			var color2 = ColorStorage.FromName(colorName);
+			Assert.AreEqual(color2.Value, color);
+		}
 	}
 }
