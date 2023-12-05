@@ -33,8 +33,6 @@ namespace Myra.Graphics2D.UI.Properties
 {
 	public class PropertyGrid : Widget
 	{
-		private readonly GridLayout _layout = new GridLayout();
-
 		private const string DefaultCategoryName = "Miscellaneous";
 
 		private class SubGrid : Widget
@@ -178,6 +176,7 @@ namespace Myra.Graphics2D.UI.Properties
 			}
 		}
 
+		private readonly GridLayout _layout = new GridLayout();
 		private readonly PropertyGrid _parentGrid;
 		private Record _parentProperty;
 		private readonly Dictionary<string, List<Record>> _records = new Dictionary<string, List<Record>>();
@@ -190,10 +189,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public TreeStyle PropertyGridStyle
-		{
-			get; private set;
-		}
+		public TreeStyle PropertyGridStyle { get; private set; }
 
 		[Browsable(false)]
 		[XmlIgnore]

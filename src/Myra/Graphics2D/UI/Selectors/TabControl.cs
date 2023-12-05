@@ -24,10 +24,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public TabControlStyle TabControlStyle
-		{
-			get; set;
-		}
+		public TabControlStyle TabControlStyle { get; set; }
 
 		[DefaultValue(HorizontalAlignment.Left)]
 		public override HorizontalAlignment HorizontalAlignment
@@ -70,14 +67,14 @@ namespace Myra.Graphics2D.UI
 					// Content proportions and widgets need to be reversed if switching between 
 					// right/bottom and top/left
 					bool newValueIsTopOrLeft = value == TabSelectorPosition.Top ||
-					                           value == TabSelectorPosition.Left;
+											   value == TabSelectorPosition.Left;
 					bool oldValueWasBottomOrRight = _selectorPosition == TabSelectorPosition.Bottom ||
-					                                _selectorPosition == TabSelectorPosition.Right;
+													_selectorPosition == TabSelectorPosition.Right;
 
 					bool newValueIsTopOrBottom = value == TabSelectorPosition.Top ||
-					                             value == TabSelectorPosition.Bottom;
+												 value == TabSelectorPosition.Bottom;
 					bool oldValueWasTopOrBottom = _selectorPosition == TabSelectorPosition.Top ||
-					                              _selectorPosition == TabSelectorPosition.Bottom;
+												  _selectorPosition == TabSelectorPosition.Bottom;
 
 					bool transposeContent = newValueIsTopOrLeft == oldValueWasBottomOrRight;
 					ObservableCollection<Proportion> newButtonProportions;
@@ -185,9 +182,9 @@ namespace Myra.Graphics2D.UI
 		{
 			var item = (TabItem)sender;
 
-			var button = item.Button;
-			button.Text = item.Text;
-			button.TextColor = item.Color ?? TabControlStyle.TabItemStyle.LabelStyle.TextColor;
+			var label = item.LabelWidget;
+			label.Text = item.Text;
+			label.TextColor = item.Color ?? TabControlStyle.TabItemStyle.LabelStyle.TextColor;
 
 			if (SelectedItem == item)
 			{
@@ -200,7 +197,7 @@ namespace Myra.Graphics2D.UI
 		private void UpdateGridPositions()
 		{
 			bool tabSelectorIsLeftOrRight = TabSelectorPosition == TabSelectorPosition.Left ||
-			                                TabSelectorPosition == TabSelectorPosition.Right;
+											TabSelectorPosition == TabSelectorPosition.Right;
 			for (var i = 0; i < Items.Count; ++i)
 			{
 				var widget = _gridButtons.Widgets[i];
@@ -221,18 +218,38 @@ namespace Myra.Graphics2D.UI
 		{
 			item.Changed += ItemOnChanged;
 
-			ImageTextButton button = new ListButton(TabControlStyle.TabItemStyle, this)
+			var image = new Image
+			{
+				Renderable = item.Image
+			};
+
+			var label = new Label(null)
 			{
 				Text = item.Text,
 				TextColor = item.Color ?? TabControlStyle.TabItemStyle.LabelStyle.TextColor,
+			};
+
+			label.ApplyLabelStyle(TabControlStyle.TabItemStyle.LabelStyle);
+
+			var panel = new HorizontalStackPanel
+			{
+				Spacing = item.ImageTextSpacing,
+				VerticalAlignment = item.ContentVerticalAlignment
+			};
+
+			panel.Widgets.Add(image);
+			panel.Widgets.Add(label);
+
+			var button = new ListViewButton
+			{
 				Tag = item,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
-				Image = item.Image,
-				ImageTextSpacing = item.ImageTextSpacing,
-				ContentVerticalAlignment = item.ContentVerticalAlignment,
-				Height = item.Height
+				Height = item.Height,
+				Content = panel
 			};
+
+			button.ApplyButtonStyle(TabControlStyle.TabItemStyle);
 
 			button.Click += ButtonOnClick;
 
@@ -291,7 +308,7 @@ namespace Myra.Graphics2D.UI
 
 		private void ButtonOnClick(object sender, EventArgs eventArgs)
 		{
-			var item = (ImageTextButton)sender;
+			var item = (ListViewButton)sender;
 			var index = _gridButtons.Widgets.IndexOf(item);
 			SelectedIndex = index;
 		}
@@ -310,13 +327,31 @@ namespace Myra.Graphics2D.UI
 
 			foreach (var item in Items)
 			{
-				item.Button.ApplyImageTextButtonStyle(style.TabItemStyle);
+				item.Button.ApplyButtonStyle(style.TabItemStyle);
+
+				var label = (Label)item.LabelWidget;
+				label.ApplyLabelStyle(style.TabItemStyle.LabelStyle);
 			}
 		}
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplyTabControlStyle(stylesheet.TabControlStyles.SafelyGetStyle(name));
+		}
+
+		protected internal override void CopyFrom(Widget w)
+		{
+			base.CopyFrom(w);
+
+			var tabControl = (TabControl)w;
+
+			TabControlStyle = tabControl.TabControlStyle;
+			TabSelectorPosition = tabControl.TabSelectorPosition;
+
+			foreach (var item in tabControl.Items)
+			{
+				Items.Add(item.Clone());
+			}
 		}
 	}
 }

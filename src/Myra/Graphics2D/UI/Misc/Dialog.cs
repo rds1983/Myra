@@ -100,7 +100,7 @@ namespace Myra.Graphics2D.UI
 			return true;
 		}
 
-		protected override void CopyFrom(Widget w)
+		protected internal override void CopyFrom(Widget w)
 		{
 			base.CopyFrom(w);
 

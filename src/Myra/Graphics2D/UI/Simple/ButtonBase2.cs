@@ -151,5 +151,14 @@ namespace Myra.Graphics2D.UI
 		{
 			ApplyButtonStyle(stylesheet.ButtonStyles.SafelyGetStyle(name));
 		}
+
+		protected internal override void CopyFrom(Widget w)
+		{
+			base.CopyFrom(w);
+
+			var buttonBase = (ButtonBase2)w;
+			PressedBackground = buttonBase.PressedBackground;
+			IsPressed = buttonBase.IsPressed;
+		}
 	}
 }

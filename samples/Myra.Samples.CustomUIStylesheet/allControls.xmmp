@@ -9,7 +9,12 @@
           <Proportion Type="Fill" />
         </Grid.ColumnsProportions>
         <Label Text="Button:" />
-        <ImageTextButton Text="Button" Id="_button" Grid.Column="1" />
+        <Button Id="_button" Grid.Column="1">
+          <HorizontalStackPanel>
+            <Image Id="_image" />
+            <Label Text="Button" />
+          </HorizontalStackPanel>
+        </Button>
         <Label Text="Text Button:" Id="_textButtonLabel" Grid.Row="1" />
         <Button Id="_textButton" Grid.Column="1" Grid.Row="1">
           <Label Text="Button 2" />

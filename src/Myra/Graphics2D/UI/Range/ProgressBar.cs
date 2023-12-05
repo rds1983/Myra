@@ -17,29 +17,19 @@ namespace Myra.Graphics2D.UI
 {
 	public abstract class ProgressBar : Widget
 	{
-		private IBrush _filler;
 		private float _value;
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public abstract Orientation Orientation
-		{
-			get;
-		}
+		public abstract Orientation Orientation { get; }
 
 		[Category("Behavior")]
 		[DefaultValue(0.0f)]
-		public float Minimum
-		{
-			get; set;
-		}
+		public float Minimum { get; set; }
 
 		[Category("Behavior")]
 		[DefaultValue(100.0f)]
-		public float Maximum
-		{
-			get; set;
-		}
+		public float Maximum { get; set; }
 
 		[Category("Behavior")]
 		[DefaultValue(0.0f)]
@@ -64,18 +54,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
-		public IBrush Filler
-		{
-			get
-			{
-				return _filler;
-			}
-
-			set
-			{
-				_filler = value;
-			}
-		}
+		public IBrush Filler { get; set; }
 
 		public event EventHandler ValueChanged;
 
@@ -92,14 +71,14 @@ namespace Myra.Graphics2D.UI
 			if (style.Filler == null)
 				return;
 
-			_filler = style.Filler;
+			Filler = style.Filler;
 		}
 
 		public override void InternalRender(RenderContext context)
 		{
 			base.InternalRender(context);
 
-			if (_filler == null)
+			if (Filler == null)
 			{
 				return;
 			}
@@ -130,16 +109,28 @@ namespace Myra.Graphics2D.UI
 			var bounds = ActualBounds;
 			if (Orientation == Orientation.Horizontal)
 			{
-				_filler.Draw(context,
+				Filler.Draw(context,
 					new Rectangle(bounds.X, bounds.Y, (int)(filledPart * bounds.Width), bounds.Height),
 					Color.White);
 			}
 			else
 			{
-				_filler.Draw(context,
+				Filler.Draw(context,
 					new Rectangle(bounds.X, bounds.Y, bounds.Width, (int)(filledPart * bounds.Height)),
 					Color.White);
 			}
+		}
+
+		protected internal override void CopyFrom(Widget w)
+		{
+			base.CopyFrom(w);
+
+			var progressBar = (ProgressBar)w;
+
+			Minimum = progressBar.Minimum;
+			Maximum = progressBar.Maximum;
+			Value = progressBar.Value;
+			Filler = progressBar.Filler;
 		}
 	}
 }

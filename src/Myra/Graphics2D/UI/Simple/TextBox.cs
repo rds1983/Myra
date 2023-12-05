@@ -105,10 +105,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
-		public bool Multiline
-		{
-			get; set;
-		}
+		public bool Multiline { get; set; }
 
 		private string UserText
 		{
@@ -123,18 +120,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private int Length
-		{
-			get
-			{
-				return _text.Length();
-			}
-		}
+		private int Length => _text.Length();
 
-		private bool InsertMode
-		{
-			get; set;
-		}
+		private bool InsertMode { get; set; }
 
 		[Category("Appearance")]
 		public SpriteFontBase Font
@@ -172,48 +160,27 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
-		public Color TextColor
-		{
-			get; set;
-		}
+		public Color TextColor { get; set; }
 
 		[Category("Appearance")]
-		public Color? DisabledTextColor
-		{
-			get; set;
-		}
+		public Color? DisabledTextColor { get; set; }
 
 		[Category("Appearance")]
-		public Color? FocusedTextColor
-		{
-			get; set;
-		}
+		public Color? FocusedTextColor { get; set; }
 
 		[Category("Appearance")]
-		public IImage Cursor
-		{
-			get; set;
-		}
+		public IImage Cursor { get; set; }
 
 		[Category("Appearance")]
-		public IBrush Selection
-		{
-			get; set;
-		}
+		public IBrush Selection { get; set; }
 
 		[Category("Behavior")]
 		[DefaultValue(450)]
-		public int BlinkIntervalInMs
-		{
-			get; set;
-		}
+		public int BlinkIntervalInMs { get; set; }
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
-		public bool Readonly
-		{
-			get; set;
-		}
+		public bool Readonly { get; set; }
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
@@ -232,10 +199,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(VerticalAlignment.Top)]
-		public VerticalAlignment TextVerticalAlignment
-		{
-			get; set;
-		}
+		public VerticalAlignment TextVerticalAlignment { get; set; }
 
 		[Category("Behavior")]
 		[DefaultValue(MouseCursorType.IBeam)]
@@ -298,35 +262,17 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		public Point CursorCoords
-		{
-			get
-			{
-				return GetRenderPositionByIndex(CursorPosition);
-			}
-		}
+		public Point CursorCoords => GetRenderPositionByIndex(CursorPosition);
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public int SelectStart
-		{
-			get; private set;
-		}
+		public int SelectStart { get; private set; }
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public int SelectEnd
-		{
-			get; private set;
-		}
+		public int SelectEnd { get; private set; }
 
-		private int CursorWidth
-		{
-			get
-			{
-				return 1 + (Cursor != null ? Cursor.Size.X : 0);
-			}
-		}
+		private int CursorWidth => 1 + (Cursor != null ? Cursor.Size.X : 0);
 
 		public override Desktop Desktop
 		{
@@ -1586,6 +1532,29 @@ namespace Myra.Graphics2D.UI
 			}
 
 			return glyph.Value.Bounds.Width;
+		}
+
+		protected internal override void CopyFrom(Widget w)
+		{
+			base.CopyFrom(w);
+
+			var textBox = (TextBox)w;
+			VerticalSpacing = textBox.VerticalSpacing;
+			Text = textBox.Text;
+			HintText = textBox.HintText;
+			HintTextEnabled = textBox.HintTextEnabled;
+			Multiline = textBox.Multiline;
+			Font = textBox.Font;
+			Wrap = textBox.Wrap;
+			TextColor = textBox.TextColor;
+			DisabledTextColor = textBox.DisabledTextColor;
+			FocusedTextColor = textBox.FocusedTextColor;
+			Cursor = textBox.Cursor;
+			Selection = textBox.Selection;
+			BlinkIntervalInMs = textBox.BlinkIntervalInMs;
+			Readonly = textBox.Readonly;
+			PasswordField = textBox.PasswordField;
+			TextVerticalAlignment = textBox.TextVerticalAlignment;
 		}
 	}
 }

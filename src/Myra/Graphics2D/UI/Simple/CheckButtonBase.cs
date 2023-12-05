@@ -70,6 +70,20 @@ namespace Myra.Graphics2D.UI
 			set => _layout.Spacing = value;
 		}
 
+		[Category("Appearance")]
+		public IImage UncheckedImage
+		{
+			get => _check.Renderable;
+			set => _check.Renderable = value;
+		}
+
+		[Category("Appearance")]
+		public IImage CheckedImage
+		{
+			get => _check.PressedRenderable;
+			set => _check.PressedRenderable = value;
+		}
+
 		[Browsable(false)]
 		[Content]
 		public override Widget Content
@@ -163,6 +177,17 @@ namespace Myra.Graphics2D.UI
 
 					break;
 			}
+		}
+
+		protected internal override void CopyFrom(Widget w)
+		{
+			base.CopyFrom(w);
+
+			var checkButtonBase = (CheckButtonBase)w;
+
+			CheckPosition = checkButtonBase.CheckPosition;
+			CheckContentSpacing = checkButtonBase.CheckContentSpacing;
+			CheckImage.CopyFrom(checkButtonBase.CheckImage);
 		}
 	}
 }

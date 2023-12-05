@@ -23,27 +23,19 @@ namespace Myra.Graphics2D.UI
 		private readonly Button _downButton;
 		private bool _integer = false;
 		private int _decimalPlaces = 0;
+		private float _increment = 1f;
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
-		public bool Nullable
-		{
-			get; set;
-		}
+		public bool Nullable { get; set; }
 
 		[Category("Behavior")]
 		[DefaultValue(null)]
-		public float? Maximum
-		{
-			get; set;
-		}
+		public float? Maximum { get; set; }
 
 		[Category("Behavior")]
 		[DefaultValue(null)]
-		public float? Minimum
-		{
-			get; set;
-		}
+		public float? Minimum { get; set; }
 
 		[DefaultValue(HorizontalAlignment.Left)]
 		public override HorizontalAlignment HorizontalAlignment
@@ -149,25 +141,24 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private float _Increment = 1f;
 		[Category("Behavior")]
 		[DefaultValue(1f)]
 		public float Increment
 		{
 			get
 			{
-				return _Increment;
+				return _increment;
 			}
 
 			set
 			{
 				if (Integer)
 				{
-					_Increment = (int)value;
+					_increment = (int)value;
 				}
 				else
 				{
-					_Increment = value;
+					_increment = value;
 				}
 			}
 		}
@@ -196,10 +187,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
-		public bool FixedNumberSize
-		{
-			get; set;
-		}
+		public bool FixedNumberSize { get; set; }
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
@@ -215,7 +203,7 @@ namespace Myra.Graphics2D.UI
 				_integer = value;
 				if (Integer)
 				{
-					_Increment = (int)_Increment;
+					_increment = (int)_increment;
 					Value = (int)Value;
 				}
 			}
@@ -492,7 +480,7 @@ namespace Myra.Graphics2D.UI
 			{
 				value = 0;
 			}
-			value += _Increment;
+			value += _increment;
 			if (InRange(value))
 			{
 				var changed = Value != value;
@@ -517,7 +505,7 @@ namespace Myra.Graphics2D.UI
 				value = 0;
 			}
 
-			value -= _Increment;
+			value -= _increment;
 			if (InRange(value))
 			{
 				var changed = Value != value;
@@ -546,7 +534,7 @@ namespace Myra.Graphics2D.UI
 
 			if (delta < 0 && _downButton.Visible && _downButton.Enabled)
 			{
-				value -= _Increment * Mul_Increment;
+				value -= _increment * Mul_Increment;
 				if (InRange(value))
 				{
 					var changed = Value != value;
@@ -561,7 +549,7 @@ namespace Myra.Graphics2D.UI
 			}
 			else if (delta > 0 && _upButton.Visible && _upButton.Enabled)
 			{
-				value += _Increment * Mul_Increment;
+				value += _increment * Mul_Increment;
 				if (InRange(value))
 				{
 					var changed = Value != value;
@@ -617,6 +605,23 @@ namespace Myra.Graphics2D.UI
 			base.OnChar(c);
 
 			_textField.OnChar(c);
+		}
+
+		protected internal override void CopyFrom(Widget w)
+		{
+			base.CopyFrom(w);
+
+			var spinButton = (SpinButton)w;
+
+			Nullable = spinButton.Nullable;
+			Minimum = spinButton.Minimum;
+			Maximum = spinButton.Maximum;
+			Value = spinButton.Value;
+			Increment = spinButton.Increment;
+			DecimalPlaces = spinButton.DecimalPlaces;
+			FixedNumberSize = spinButton.FixedNumberSize;
+			Integer = spinButton.Integer;
+			Mul_Increment = spinButton.Mul_Increment;
 		}
 	}
 }

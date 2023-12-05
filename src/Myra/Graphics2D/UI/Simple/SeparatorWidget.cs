@@ -15,10 +15,7 @@ namespace Myra.Graphics2D.UI
 {
 	public abstract class SeparatorWidget : Image
 	{
-		public int Thickness
-		{
-			get; set;
-		}
+		public int Thickness { get; set; }
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -56,6 +53,14 @@ namespace Myra.Graphics2D.UI
 		public override void InternalRender(RenderContext context)
 		{
 			base.InternalRender(context);
+		}
+
+		protected internal override void CopyFrom(Widget w)
+		{
+			base.CopyFrom(w);
+
+			var separator = (SeparatorWidget)w;
+			Thickness = separator.Thickness;
 		}
 	}
 }

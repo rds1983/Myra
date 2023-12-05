@@ -127,5 +127,22 @@ namespace Myra.Tests
 				Assert.AreEqual("Test" + i, label.Text);
 			}
 		}
+
+		[Test]
+		public void TextBoxTest()
+		{
+			var root = Utility.LoadFromResourceRootClone("scrolledTextField.xmmp");
+
+			Assert.IsInstanceOf<Panel>(root);
+			var panel = (Panel)root;
+
+			Assert.AreEqual(1, panel.Widgets.Count);
+			Assert.IsInstanceOf<TextBox>(panel.Widgets[0]);
+			var textBox = (TextBox)panel.Widgets[0];
+
+			Assert.AreEqual(HorizontalAlignment.Center, textBox.HorizontalAlignment);
+			Assert.AreEqual(VerticalAlignment.Center, textBox.VerticalAlignment);
+			Assert.AreEqual(100, textBox.Width);
+		}
 	}
 }

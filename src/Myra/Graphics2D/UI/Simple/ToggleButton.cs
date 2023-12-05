@@ -48,7 +48,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-
 		public ToggleButton(string styleName = Stylesheet.DefaultStyleName)
 		{
 			_layout = new SingleItemLayout<Widget>(this);

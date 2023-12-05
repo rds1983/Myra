@@ -1,7 +1,9 @@
 ﻿ using Myra.Graphics2D.UI.Styles;
+using System;
 
 namespace Myra.Graphics2D.UI
 {
+	[Obsolete]
 	internal class ListButton: ImageTextButton
 	{
 		private readonly ISelector _selector;

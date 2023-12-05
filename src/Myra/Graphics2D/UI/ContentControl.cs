@@ -9,7 +9,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(null)]
 		public abstract Widget Content { get; set; }
 
-		protected override void CopyFrom(Widget w)
+		protected internal override void CopyFrom(Widget w)
 		{
 			base.CopyFrom(w);
 

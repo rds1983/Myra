@@ -22,24 +22,15 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public abstract Orientation Orientation
-		{
-			get;
-		}
+		public abstract Orientation Orientation { get; }
 
 		[Category("Behavior")]
 		[DefaultValue(0.0f)]
-		public float Minimum
-		{
-			get; set;
-		}
+		public float Minimum { get; set; }
 
 		[Category("Behavior")]
 		[DefaultValue(100.0f)]
-		public float Maximum
-		{
-			get; set;
-		}
+		public float Maximum { get; set; }
 
 		[Category("Behavior")]
 		[DefaultValue(0.0f)]
@@ -77,13 +68,11 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private Button InternalChild => _layout.Child;
-
 		internal int Hint
 		{
 			get
 			{
-				return Orientation == Orientation.Horizontal ? InternalChild.Left : InternalChild.Top;
+				return Orientation == Orientation.Horizontal ? ImageButton.Left : ImageButton.Top;
 			}
 
 			set
@@ -95,11 +84,11 @@ namespace Myra.Graphics2D.UI
 
 				if (Orientation == Orientation.Horizontal)
 				{
-					InternalChild.Left = value;
+					ImageButton.Left = value;
 				}
 				else
 				{
-					InternalChild.Top = value;
+					ImageButton.Top = value;
 				}
 			}
 		}
@@ -109,8 +98,8 @@ namespace Myra.Graphics2D.UI
 			get
 			{
 				return Orientation == Orientation.Horizontal
-					? Bounds.Width - InternalChild.Bounds.Width
-					: Bounds.Height - InternalChild.Bounds.Height;
+					? Bounds.Width - ImageButton.Bounds.Width
+					: Bounds.Height - ImageButton.Bounds.Height;
 			}
 		}
 
@@ -139,13 +128,7 @@ namespace Myra.Graphics2D.UI
 
 		[XmlIgnore]
 		[Browsable(false)]
-		public Button ImageButton
-		{
-			get
-			{
-				return InternalChild;
-			}
-		}
+		public Button ImageButton => _layout.Child;
 
 		/// <summary>
 		/// Fires when the value had been changed
@@ -167,6 +150,7 @@ namespace Myra.Graphics2D.UI
 					ReleaseOnTouchLeft = false
 				}
 			};
+
 			ChildrenLayout = _layout;
 
 			SetStyle(styleName);
@@ -183,7 +167,7 @@ namespace Myra.Graphics2D.UI
 
 			var pos = ToLocal(Desktop.TouchPosition.Value);
 
-			var bounds = InternalChild.ActualBounds;
+			var bounds = ImageButton.ActualBounds;
 			return Orientation == Orientation.Horizontal ? pos.X - bounds.Width / 2 : pos.Y - bounds.Height / 2;
 		}
 
@@ -193,11 +177,11 @@ namespace Myra.Graphics2D.UI
 
 			if (style.KnobStyle != null)
 			{
-				InternalChild.ApplyButtonStyle(style.KnobStyle);
+				ImageButton.ApplyButtonStyle(style.KnobStyle);
 
 				if (style.KnobStyle.ImageStyle != null)
 				{
-					var image = (Image)InternalChild.Content;
+					var image = (Image)ImageButton.Content;
 					image.ApplyPressableImageStyle(style.KnobStyle.ImageStyle);
 				}
 			}
@@ -220,7 +204,7 @@ namespace Myra.Graphics2D.UI
 			base.OnTouchDown();
 
 			UpdateHint();
-			InternalChild.IsPressed = true;
+			ImageButton.IsPressed = true;
 		}
 
 		private void UpdateHint()
@@ -265,12 +249,23 @@ namespace Myra.Graphics2D.UI
 
 		private void DesktopTouchMoved(object sender, EventArgs args)
 		{
-			if (!InternalChild.IsPressed)
+			if (!ImageButton.IsPressed)
 			{
 				return;
 			}
 
 			UpdateHint();
+		}
+
+		protected internal override void CopyFrom(Widget w)
+		{
+			base.CopyFrom(w);
+
+			var slider = (Slider)w;
+
+			Minimum = slider.Minimum;
+			Maximum = slider.Maximum;
+			Value = slider.Value;
 		}
 	}
 }

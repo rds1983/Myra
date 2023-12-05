@@ -78,10 +78,13 @@ namespace Myra.Samples.GridContainer
 			grid.Widgets.Add(combo);
 
 			// Button
-			var button = new ImageTextButton
+			var button = new Button
 			{
 				HorizontalAlignment = HorizontalAlignment.Stretch,
-				Text = "This is 2 columns button"
+				Content = new Label
+				{
+					Text = "This is 2 columns button"
+				}
 			};
 			Grid.SetColumn(button, 2);
 			Grid.SetRow(button, 1);
@@ -121,11 +124,11 @@ namespace Myra.Samples.GridContainer
 			};
 			grid.Widgets.Add(button2);
 
-			var text = @"Lorem ipsum /c[green]dolor sit amet, /c[red]consectetur adipisicing elit," + 
-				@" sed do eiusmod /c[#AAAAAA]tempor incididunt ut labore et dolore magna aliqua. " + 
-				@"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip " + 
-				@"ex ea commodo consequat. /c[white]Duis aute irure dolor in reprehenderit in voluptate " + 
-				"velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non " + 
+			var text = @"Lorem ipsum /c[green]dolor sit amet, /c[red]consectetur adipisicing elit," +
+				@" sed do eiusmod /c[#AAAAAA]tempor incididunt ut labore et dolore magna aliqua. " +
+				@"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip " +
+				@"ex ea commodo consequat. /c[white]Duis aute irure dolor in reprehenderit in voluptate " +
+				"velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non " +
 				"proident, sunt in culpa qui officia deserunt mollit anim id est laborum!";
 			var label = new Label
 			{
@@ -148,9 +151,12 @@ namespace Myra.Samples.GridContainer
 				Content = pane
 			};
 
-			var button3 = new ImageTextButton
+			var button3 = new Button
 			{
-				Text = "Show Window",
+				Content = new Label
+				{
+					Text = "Show Window"
+				}
 			};
 			Grid.SetColumn(button3, 4);
 			Grid.SetRow(button3, 3);

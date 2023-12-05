@@ -275,7 +275,7 @@ namespace Myra.Graphics2D.UI
 			ApplyLabelStyle(stylesheet.LabelStyles.SafelyGetStyle(name));
 		}
 
-		protected override void CopyFrom(Widget w)
+		protected internal override void CopyFrom(Widget w)
 		{
 			base.CopyFrom(w);
 

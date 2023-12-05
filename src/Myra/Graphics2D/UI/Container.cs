@@ -53,7 +53,7 @@ namespace Myra.Graphics2D.UI
 
 		public override bool InputFallsThrough(Point localPos) => Background == null;
 
-		protected override void CopyFrom(Widget w)
+		protected internal override void CopyFrom(Widget w)
 		{
 			base.CopyFrom(w);
 

@@ -1434,7 +1434,7 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
-		protected virtual void CopyFrom(Widget w)
+		protected internal virtual void CopyFrom(Widget w)
 		{
 			StyleName = w.StyleName;
 			Left = w.Left;

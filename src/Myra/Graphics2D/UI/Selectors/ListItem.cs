@@ -15,6 +15,7 @@ using Color = FontStashSharp.FSColor;
 
 namespace Myra.Graphics2D.UI
 {
+	[Obsolete("Use ListView")]
 	public class ListItem : BaseObject, ISelectorItem
 	{
 		private string _text;

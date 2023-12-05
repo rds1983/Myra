@@ -2,6 +2,8 @@
 using Myra.Graphics2D.UI.Styles;
 using Myra.Attributes;
 using FontStashSharp;
+using System;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -14,6 +16,7 @@ using Color = FontStashSharp.FSColor;
 namespace Myra.Graphics2D.UI
 {
 
+	[Obsolete("Use Button")]
 	[StyleTypeName("Button")]
 	public class ImageTextButton : ButtonBase<Grid>
 	{

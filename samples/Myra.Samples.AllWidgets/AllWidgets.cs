@@ -19,13 +19,13 @@ namespace Myra.Samples.AllWidgets
 			_menuItemChooseFolder.Selected += (s, a) => ChooseFolder();
 			_menuItemQuit.Selected += (s, a) => Quit();
 
-			_buttonOpenFile.Image = DefaultAssets.UITextureRegionAtlas["icon-star"];
+			_imageOpenFile.Renderable = DefaultAssets.UITextureRegionAtlas["icon-star"];
 			_buttonOpenFile.Click += (sender, args) => OpenFile();
 
-			_buttonSaveFile.Image = DefaultAssets.UITextureRegionAtlas["icon-star"];
+			_imageSaveFile.Renderable = DefaultAssets.UITextureRegionAtlas["icon-star"];
 			_buttonSaveFile.Click += (sender, args) => SaveFile();
 
-			_buttonChooseFolder.Image = DefaultAssets.UITextureRegionAtlas["icon-star"];
+			_imageChooseFolder.Renderable = DefaultAssets.UITextureRegionAtlas["icon-star"];
 			_buttonChooseFolder.Click += (sender, args) => ChooseFolder();
 
 			_buttonChooseColor.Click += (sender, args) => ChooseColor();
