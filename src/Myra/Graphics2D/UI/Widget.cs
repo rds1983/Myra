@@ -1,4 +1,4 @@
-using System;
+ using System;
 using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
@@ -547,6 +547,11 @@ namespace Myra.Graphics2D.UI
 					if (_desktop.FocusedKeyboardWidget == this)
 					{
 						_desktop.FocusedKeyboardWidget = null;
+					}
+
+					if (_desktop.Tooltip != null && _desktop.Tooltip.Tag == this)
+					{
+						_desktop.HideTooltip();
 					}
 				}
 
