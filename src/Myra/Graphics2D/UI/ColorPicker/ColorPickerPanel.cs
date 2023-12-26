@@ -152,6 +152,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			BuildUI();
 
 			var checkerboardRenderable = DefaultAssets.UITextureRegionAtlas["color-picker-checkerboard"];
+
 			// Users colors
 			for (int row = 0; row < Rows; ++row)
 			{

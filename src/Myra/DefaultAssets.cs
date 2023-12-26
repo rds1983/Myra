@@ -73,19 +73,7 @@ namespace Myra
 			}
 		}
 
-		public static TextureRegionAtlas UITextureRegionAtlas
-		{
-			get
-			{
-				if (_uiTextureRegionAtlas != null)
-				{
-					return _uiTextureRegionAtlas;
-				}
-
-				_uiTextureRegionAtlas = AssetManager.LoadTextureRegionAtlas("default_ui_skin.xmat");
-				return _uiTextureRegionAtlas;
-			}
-		}
+		public static TextureRegionAtlas UITextureRegionAtlas => _uiStylesheet.Atlas;
 
 		public static Stylesheet UIStylesheet
 		{
@@ -96,7 +84,7 @@ namespace Myra
 					return _uiStylesheet;
 				}
 
-				_uiStylesheet = AssetManager.LoadStylesheet("default_ui_skin.xmms");
+				_uiStylesheet = AssetManager.LoadStylesheet("default_ui_skin_2x.xmms");
 				return _uiStylesheet;
 			}
 		}
