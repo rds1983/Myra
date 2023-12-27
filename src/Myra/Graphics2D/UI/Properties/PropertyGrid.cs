@@ -503,7 +503,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 			var image = new Image
 			{
-				Renderable = DefaultAssets.WhiteRegion,
+				Renderable = Stylesheet.Current.WhiteRegion,
 				VerticalAlignment = VerticalAlignment.Center,
 				Width = 32,
 				Height = 16,
@@ -582,7 +582,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 			var image = new Image
 			{
-				Renderable = DefaultAssets.WhiteRegion,
+				Renderable = Stylesheet.Current.WhiteRegion,
 				VerticalAlignment = VerticalAlignment.Center,
 				Width = 32,
 				Height = 16,

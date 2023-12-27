@@ -92,7 +92,7 @@ namespace Myra.Samples.CustomUIStylesheet
 
 			imageButtonContent.Widgets.Add(new Image
 			{
-				Renderable = DefaultAssets.UITextureRegionAtlas["icon-star"]
+				Renderable = Stylesheet.Current.Atlas["icon-star"]
 			});
 
 			imageButtonContent.Widgets.Add(new Label
@@ -116,7 +116,7 @@ namespace Myra.Samples.CustomUIStylesheet
 			});
 			imageButtonContent2.Widgets.Add(new Image
 			{
-				Renderable = DefaultAssets.UITextureRegionAtlas["icon-star"]
+				Renderable = Stylesheet.Current.Atlas["icon-star"]
 			});
 
 			node3.AddSubNode(new ToggleButton

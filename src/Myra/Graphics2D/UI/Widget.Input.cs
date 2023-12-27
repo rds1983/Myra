@@ -315,7 +315,12 @@ namespace Myra.Graphics2D.UI
 					if (Desktop != null)
 					{
 						OnMouseWheel(Desktop.MouseWheelDelta);
-						MouseWheelChanged.Invoke(this, Desktop.MouseWheelDelta);
+
+						// Add yet another null check, since OnMouseWheel call might nullify the Desktop
+						if (Desktop != null)
+						{
+							MouseWheelChanged.Invoke(this, Desktop.MouseWheelDelta);
+						}
 					}
 					break;
 				case InputEventType.TouchLeft:

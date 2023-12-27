@@ -151,7 +151,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 		{
 			BuildUI();
 
-			var checkerboardRenderable = DefaultAssets.UITextureRegionAtlas["color-picker-checkerboard"];
+/*			var checkerboardRenderable = Stylesheet.Current.Atlas["color-picker-checkerboard"];
 
 			// Users colors
 			for (int row = 0; row < Rows; ++row)
@@ -171,7 +171,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 					{
 						HorizontalAlignment = HorizontalAlignment.Stretch,
 						VerticalAlignment = VerticalAlignment.Stretch,
-						Renderable = DefaultAssets.WhiteRegion
+						Renderable = Stylesheet.Current.WhiteRegion
 					};
 					Grid.SetRow(image, row);
 					Grid.SetColumn(image, col);
@@ -188,8 +188,8 @@ namespace Myra.Graphics2D.UI.ColorPicker
 				SetUserColor(i, UserColors[i]);
 			}
 
-			_userColors.SelectionHoverBackground = DefaultAssets.UITextureRegionAtlas["button-over"];
-			_userColors.SelectionBackground = DefaultAssets.UITextureRegionAtlas["button-down"];
+			_userColors.SelectionHoverBackground = Stylesheet.Current.Atlas["button-over"];
+			_userColors.SelectionBackground = Stylesheet.Current.Atlas["button-down"];
 			_userColors.SelectedIndexChanged += GridUserColorsSelectedIndexChanged;
 			_saveColor.Click += ButtonSaveColorDown;
 			UpdateEnabled();
@@ -218,18 +218,18 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_vPicker.Tag = false;
 
 			// Set default value
-			_colorDisplay.Renderable = DefaultAssets.WhiteRegion;
+			_colorDisplay.Renderable = Stylesheet.Current.WhiteRegion;
 			_colorBackground.Renderable = checkerboardRenderable;
 
-			_colorWheel.Renderable = DefaultAssets.UITextureRegionAtlas["color-picker-wheel"];
+			_colorWheel.Renderable = Stylesheet.Current.Atlas["color-picker-wheel"];
 			_colorWheel.TouchDown += (s, a) => HsPickerMove(Desktop.TouchPosition.Value);
 			_colorWheel.TouchMoved += (s, a) => HsPickerMove(Desktop.TouchPosition.Value);
 
-			_gradient.Renderable = DefaultAssets.UITextureRegionAtlas["color-picker-gradient"];
+			_gradient.Renderable = Stylesheet.Current.Atlas["color-picker-gradient"];
 			_gradient.TouchDown += (s, e) => VPickerMove(Desktop.TouchPosition.Value);
 			_gradient.TouchMoved += (s, e) => VPickerMove(Desktop.TouchPosition.Value);
 
-			OnColorChanged(Color.White);
+			OnColorChanged(Color.White);*/
 		}
 
 		private void _inputHEX_ValueChanging(object sender, ValueChangingEventArgs<string> e)

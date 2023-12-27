@@ -147,6 +147,17 @@ namespace Myra.Graphics2D.UI
 			PressedBackground = style.PressedBackground;
 		}
 
+		public void ApplyImageButtonStyle(ImageButtonStyle style)
+		{
+			ApplyButtonStyle(style);
+
+			if (style.ImageStyle != null)
+			{
+				var image = (Image)Content;
+				image.ApplyPressableImageStyle(style.ImageStyle);
+			}
+		}
+
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplyButtonStyle(stylesheet.ButtonStyles.SafelyGetStyle(name));

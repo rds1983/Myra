@@ -253,7 +253,7 @@ namespace Myra.Graphics2D
 		/// <param name="color"></param>
 		/// <param name="rotation"></param>
 		/// <param name="depth"></param>
-		public void Draw(Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 scale, float depth = 0.0f, bool drawLine = false)
+		public void Draw(Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 scale, float depth = 0.0f)
 		{
 			SetTextureFiltering(TextureFiltering.Nearest);
 			color = CrossEngineStuff.MultiplyColor(color, Opacity);
@@ -263,7 +263,7 @@ namespace Myra.Graphics2D
 #if MONOGAME || FNA
 			position = Transform.Apply(position);
 			_renderer.Draw(texture, position, sourceRectangle, color, rotation,
-				drawLine ? new Vector2(0f, 0.5f) : Vector2.Zero, scale, SpriteEffects.None, depth);
+				Vector2.Zero, scale, SpriteEffects.None, depth);
 #elif STRIDE
 			position = Transform.Apply(position);
 			_renderer.Draw(texture, position, sourceRectangle, color, rotation, Vector2.Zero, scale, SpriteEffects.None, ImageOrientation.AsIs, depth);

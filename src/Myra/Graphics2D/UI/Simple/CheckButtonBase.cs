@@ -47,6 +47,7 @@ namespace Myra.Graphics2D.UI
 			VerticalAlignment = VerticalAlignment.Center,
 		};
 		private Widget _content;
+		private IImage _checkedImage, _uncheckedImage;
 
 		[Category("Behavior")]
 		[DefaultValue(CheckPosition.Left)]
@@ -73,15 +74,33 @@ namespace Myra.Graphics2D.UI
 		[Category("Appearance")]
 		public IImage UncheckedImage
 		{
-			get => _check.Renderable;
-			set => _check.Renderable = value;
+			get => _uncheckedImage;
+			set
+			{
+				if (value == _uncheckedImage)
+				{
+					return;
+				}
+
+				_uncheckedImage = value;
+				UpdateImage();
+			}
 		}
 
 		[Category("Appearance")]
 		public IImage CheckedImage
 		{
-			get => _check.PressedRenderable;
-			set => _check.PressedRenderable = value;
+			get => _checkedImage;
+			set
+			{
+				if (value == _checkedImage)
+				{
+					return;
+				}
+
+				_checkedImage = value;
+				UpdateImage();
+			}
 		}
 
 		[Browsable(false)]
@@ -148,6 +167,9 @@ namespace Myra.Graphics2D.UI
 			if (style.ImageStyle != null)
 			{
 				_check.ApplyPressableImageStyle(style.ImageStyle);
+
+				UncheckedImage = style.ImageStyle.Image;
+				CheckedImage = style.ImageStyle.PressedImage;
 			}
 
 			CheckContentSpacing = style.ImageTextSpacing;
@@ -188,6 +210,11 @@ namespace Myra.Graphics2D.UI
 			CheckPosition = checkButtonBase.CheckPosition;
 			CheckContentSpacing = checkButtonBase.CheckContentSpacing;
 			CheckImage.CopyFrom(checkButtonBase.CheckImage);
+		}
+
+		private void UpdateImage()
+		{
+			_check.Renderable = IsPressed ? _checkedImage : _uncheckedImage;
 		}
 	}
 }

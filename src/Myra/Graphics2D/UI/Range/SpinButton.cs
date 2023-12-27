@@ -449,22 +449,12 @@ namespace Myra.Graphics2D.UI
 
 			if (style.UpButtonStyle != null)
 			{
-				_upButton.ApplyButtonStyle(style.UpButtonStyle);
-				if (style.UpButtonStyle.ImageStyle != null)
-				{
-					var image = (Image)_upButton.Content;
-					image.ApplyPressableImageStyle(style.UpButtonStyle.ImageStyle);
-				}
+				_upButton.ApplyImageButtonStyle(style.UpButtonStyle);
 			}
 
 			if (style.DownButtonStyle != null)
 			{
-				_downButton.ApplyButtonStyle(style.DownButtonStyle);
-				if (style.DownButtonStyle.ImageStyle != null)
-				{
-					var image = (Image)_downButton.Content;
-					image.ApplyPressableImageStyle(style.DownButtonStyle.ImageStyle);
-				}
+				_downButton.ApplyImageButtonStyle(style.DownButtonStyle);
 			}
 		}
 

@@ -18,38 +18,17 @@
 		public IBrush DisabledBackground { get; set; }
 		public IBrush FocusedBackground { get; set; }
 
-		public IBrush Border
-		{
-			get; set;
-		}
+		public IBrush Border { get; set; }
 
-		public IBrush OverBorder
-		{
-			get; set;
-		}
-		public IBrush DisabledBorder
-		{
-			get; set;
-		}
-		public IBrush FocusedBorder
-		{
-			get; set;
-		}
+		public IBrush OverBorder { get; set; }
+		public IBrush DisabledBorder { get; set; }
+		public IBrush FocusedBorder { get; set; }
 
-		public Thickness Margin
-		{
-			get; set;
-		}
+		public Thickness Margin { get; set; }
 
-		public Thickness BorderThickness
-		{
-			get; set;
-		}
+		public Thickness BorderThickness { get; set; }
 
-		public Thickness Padding
-		{
-			get; set;
-		}
+		public Thickness Padding { get; set; }
 
 		public WidgetStyle()
 		{

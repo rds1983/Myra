@@ -1,6 +1,7 @@
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.ColorPicker;
 using Myra.Graphics2D.UI.File;
+using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Samples.AllWidgets
 {
@@ -10,8 +11,8 @@ namespace Myra.Samples.AllWidgets
 		{
 			BuildUI();
 
-			_menuItemOpenFile.Image = DefaultAssets.UITextureRegionAtlas["icon-folder"];
-			_menuItemSaveFile.Image = DefaultAssets.UITextureRegionAtlas["icon-folder-new"];
+			_menuItemOpenFile.Image = Stylesheet.Current.Atlas["icon-folder"];
+			_menuItemSaveFile.Image = Stylesheet.Current.Atlas["icon-folder-new"];
 
 			_menuItemOpenFile.Selected += (s, a) => OpenFile();
 			_menuItemSaveFile.Selected += (s, a) => SaveFile();
@@ -19,19 +20,19 @@ namespace Myra.Samples.AllWidgets
 			_menuItemChooseFolder.Selected += (s, a) => ChooseFolder();
 			_menuItemQuit.Selected += (s, a) => Quit();
 
-			_imageOpenFile.Renderable = DefaultAssets.UITextureRegionAtlas["icon-star"];
+			_imageOpenFile.Renderable = Stylesheet.Current.Atlas["icon-star"];
 			_buttonOpenFile.Click += (sender, args) => OpenFile();
 
-			_imageSaveFile.Renderable = DefaultAssets.UITextureRegionAtlas["icon-star"];
+			_imageSaveFile.Renderable = Stylesheet.Current.Atlas["icon-star"];
 			_buttonSaveFile.Click += (sender, args) => SaveFile();
 
-			_imageChooseFolder.Renderable = DefaultAssets.UITextureRegionAtlas["icon-star"];
+			_imageChooseFolder.Renderable = Stylesheet.Current.Atlas["icon-star"];
 			_buttonChooseFolder.Click += (sender, args) => ChooseFolder();
 
 			_buttonChooseColor.Click += (sender, args) => ChooseColor();
 
 			var image = (Image)_imageButton.Content;
-			image.Renderable = DefaultAssets.UITextureRegionAtlas["icon-star-outline"];
+			image.Renderable = Stylesheet.Current.Atlas["icon-star-outline"];
 			_imageButton.Click += (sender, args) =>
 			{
 				var debugWindow = new DebugOptionsWindow();
@@ -120,7 +121,7 @@ namespace Myra.Samples.AllWidgets
 
 			imageButtonContent.Widgets.Add(new Image
 			{
-				Renderable = DefaultAssets.UITextureRegionAtlas["icon-star"]
+				Renderable = Stylesheet.Current.Atlas["icon-star"]
 			});
 
 			imageButtonContent.Widgets.Add(new Label
@@ -145,7 +146,7 @@ namespace Myra.Samples.AllWidgets
 			});
 			imageButtonContent2.Widgets.Add(new Image
 			{
-				Renderable = DefaultAssets.UITextureRegionAtlas["icon-star"]
+				Renderable = Stylesheet.Current.Atlas["icon-star"]
 			});
 
 			node3.AddSubNode(new ToggleButton

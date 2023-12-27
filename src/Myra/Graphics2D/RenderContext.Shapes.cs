@@ -3,6 +3,9 @@
 using System;
 using Myra.Utility;
 using System.Runtime.CompilerServices;
+using Myra.Graphics2D.UI.Styles;
+using Myra.Graphics2D.TextureAtlases;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -39,9 +42,8 @@ namespace Myra.Graphics2D
 		/// <param name="size">The size of the rectangle</param>
 		/// <param name="color">The color to draw the rectangle in</param>
 		public void FillRectangle(Vector2 location, Vector2 size, Color color) =>
-			Draw(DefaultAssets.WhiteTexture,
+			Stylesheet.Current.WhiteRegion.Draw(this,
 				new Rectangle((int)location.X, (int)location.Y, (int)size.X, (int)size.Y),
-				null,
 				color);
 
 		/// <summary>
@@ -65,22 +67,22 @@ namespace Myra.Graphics2D
 		/// <param name="thickness">The thickness of the lines</param>
 		public void DrawRectangle(Rectangle rectangle, Color color, float thickness = 1f)
 		{
-			var texture = DefaultAssets.WhiteTexture;
+			var region = Stylesheet.Current.WhiteRegion;
 			var t = (int)thickness;
 
 			var c = CrossEngineStuff.MultiplyColor(color, Opacity);
 
 			// Top
-			Draw(texture, new Rectangle(rectangle.X, rectangle.Y, rectangle.Width, t), null, c);
+			region.Draw(this, new Rectangle(rectangle.X, rectangle.Y, rectangle.Width, t), c);
 
 			// Bottom
-			Draw(texture, new Rectangle(rectangle.X, rectangle.Bottom - t, rectangle.Width, t), null, c);
+			region.Draw(this, new Rectangle(rectangle.X, rectangle.Bottom - t, rectangle.Width, t), c);
 
 			// Left
-			Draw(texture, new Rectangle(rectangle.X, rectangle.Y, t, rectangle.Height), null, c);
+			region.Draw(this, new Rectangle(rectangle.X, rectangle.Y, t, rectangle.Height), c);
 
 			// Right
-			Draw(texture, new Rectangle(rectangle.Right - t, rectangle.Y, t, rectangle.Height), null, c);
+			region.Draw(this, new Rectangle(rectangle.Right - t, rectangle.Y, t, rectangle.Height), c);
 		}
 
 		/// <summary>
@@ -118,21 +120,22 @@ namespace Myra.Graphics2D
 				return;
 			}
 
-			var texture = DefaultAssets.WhiteTexture;
+			var whiteRegion = Stylesheet.Current.WhiteRegion;
 
 			for (var i = 0; i < points.Length - 1; i++)
-				DrawPolygonEdge(texture, points[i] + offset, points[i + 1] + offset, color, thickness);
+				DrawPolygonEdge(whiteRegion, points[i] + offset, points[i + 1] + offset, color, thickness);
 
-			DrawPolygonEdge(texture, points[points.Length - 1] + offset, points[0] + offset, color,
+			DrawPolygonEdge(whiteRegion, points[points.Length - 1] + offset, points[0] + offset, color,
 				thickness);
 		}
 
-		private void DrawPolygonEdge(Texture2D texture, Vector2 point1, Vector2 point2, Color color, float thickness)
+		private void DrawPolygonEdge(TextureRegion region, Vector2 point1, Vector2 point2, Color color, float thickness)
 		{
 			var length = Vector2.Distance(point1, point2);
 			var angle = (float)Math.Atan2(point2.Y - point1.Y, point2.X - point1.X);
+
 			var scale = new Vector2(length, thickness);
-			Draw(texture, point1, color, scale, angle);
+			Draw(region.Texture, point1, region.Bounds, color, angle, scale);
 		}
 
 		/// <summary>
@@ -181,7 +184,9 @@ namespace Myra.Graphics2D
 			float thickness = 1f)
 		{
 			var scale = new Vector2(length, thickness);
-			Draw(DefaultAssets.WhiteTexture, point, null, color, angle, scale, 0, drawLine: true);
+
+			var whiteRegion = Stylesheet.Current.WhiteRegion;
+			Draw(whiteRegion.Texture, point, whiteRegion.Bounds, color, angle, scale, 0);
 		}
 
 		/// <summary>
@@ -199,7 +204,9 @@ namespace Myra.Graphics2D
 		{
 			var scale = Vector2.One * size;
 			var offset = new Vector2(0.5f) - new Vector2(size * 0.5f);
-			Draw(DefaultAssets.WhiteTexture, position + offset, color, scale);
+
+			var whiteRegion = Stylesheet.Current.WhiteRegion;
+			Draw(whiteRegion.Texture, position + offset, whiteRegion.Bounds, color, 0.0f, scale);
 		}
 
 		/// <summary>
