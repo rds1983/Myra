@@ -1285,7 +1285,7 @@ namespace Myra.Graphics2D.UI
 					{
 						var glyphRender = lastLine.GetGlyphInfoByIndex(lastLine.Count - 1);
 
-						x += glyphRender.Value.Bounds.Right;
+						x += glyphRender.Value.Bounds.Left + glyphRender.Value.XAdvance;
 						y += glyphRender.Value.LineTop;
 					}
 					else if (_richTextLayout.Lines.Count > 1)

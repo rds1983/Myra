@@ -3,7 +3,7 @@
     <OutputType>Exe</OutputType>
     <AssemblyName>Myra.Samples.Notepad</AssemblyName>
     <RootNamespace>Myra.Samples.Notepad</RootNamespace>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <DefineConstants>$(DefineConstants);FNA;</DefineConstants>
     <OutputPath>bin\FNA.Core\$(Configuration)</OutputPath>
   </PropertyGroup>
