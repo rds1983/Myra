@@ -196,8 +196,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_colorWheel.TouchDown += (s, a) => HsPickerMove(Desktop.TouchPosition.Value);
 			_colorWheel.TouchMoved += (s, a) => HsPickerMove(Desktop.TouchPosition.Value);
 
-			_gradient.TouchDown += (s, e) => VPickerMove(Desktop.TouchPosition.Value);
-			_gradient.TouchMoved += (s, e) => VPickerMove(Desktop.TouchPosition.Value);
+			_vPicker.ValueChanged += (s, e) => VPickerMove();
 
 			OnColorChanged(Color.White);
 		}
@@ -282,21 +281,15 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_hsPicker.Tag = false;
 		}
 
-		private void VPickerMove(Point p)
+		private void VPickerMove()
 		{
 			_activeState = ActiveState.GradientActive;
-
-			p = _gradient.ToLocal(p);
-
-			int x = p.Y - _hsPicker.Bounds.Height / 2;
-			x = Math.Max(0, Math.Min(x, WheelHeight));
-			_vPicker.Top = x;
 
 			ColorHSV hsv = new ColorHSV()
 			{
 				H = colorHSV.H,
 				S = colorHSV.S,
-				V = 100 * (WheelHeight - x) / WheelHeight
+				V = 100 - (int)_vPicker.Value
 			};
 
 			_vPicker.Tag = true;
@@ -315,7 +308,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 					HsPickerMove(position);
 					break;
 				case ActiveState.GradientActive:
-					VPickerMove(position);
+					VPickerMove();
 					break;
 			}
 		}
@@ -519,7 +512,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			}
 			if (!(bool)_vPicker.Tag)
 			{
-				_vPicker.Top = (int)(hsv.V / -100f * WheelHeight) + WheelHeight;
+				_vPicker.Value = (int)(100 - hsv.V);
 			}
 
 			_colorWheel.Color = new Color((int)(hsv.V * 255.0f / 100f), (int)(hsv.V * 255.0f / 100f), (int)(hsv.V * 255.0f / 100f));
@@ -541,7 +534,10 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_userColors.SelectionBackground = style.SelectionBackground;
 
 			_colorWheel.Renderable = style.Wheel;
-			_gradient.Renderable = style.Gradient;
+			_vPicker.Background = style.Gradient;
+
+			var vsPickerKnob = (Image)_vPicker.ImageButton.Content;
+			vsPickerKnob.Renderable = vsPickerKnob.OverRenderable = vsPickerKnob.PressedRenderable = style.VSPickerKnob;
 		}
 	}
 }

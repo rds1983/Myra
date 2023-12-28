@@ -163,7 +163,7 @@
 	<ColorPickerDialogStyles>
 		<ColorPickerDialogStyle Background="window" Padding="10" CheckerBoard="color-picker-checkerboard"
 								SelectionBackground="button-down" SelectionHoverBackground="button-over"
-								Wheel="color-picker-wheel" Gradient="color-picker-gradient"
+								Wheel="color-picker-wheel" Gradient="color-picker-gradient" VSPickerKnob="vspicker-knob"
 								Width="900" Height="700">
 			<TitleStyle Font="default-font" TextColor="white" />
 			<CloseButtonStyle OverBackground="button-over" Padding="10, 0" PressedBackground="button-red">

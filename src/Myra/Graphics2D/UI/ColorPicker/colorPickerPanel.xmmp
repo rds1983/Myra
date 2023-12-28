@@ -6,10 +6,7 @@
         <Image Id="_colorWheel" />
         <Image Border="#000000" BorderThickness="1" Padding="4" HorizontalAlignment="Center" VerticalAlignment="Center" Enabled="False" Background="#FFFFFFFF" Id="_hsPicker" />
       </Panel>
-      <Panel>
-        <Image Border="#000000" BorderThickness="1" Id="_gradient" />
-        <Image Margin="0, 1" Border="#000000" BorderThickness="1" Padding="4" HorizontalAlignment="Center" Enabled="False" Background="#FFFFFFFF" Id="_vPicker" />
-      </Panel>
+      <VerticalSlider Id="_vPicker" />
       <Grid ColumnSpacing="8" RowSpacing="6" VerticalAlignment="Top" StackPanel.ProportionType="Fill">
         <Grid.ColumnsProportions>
           <Proportion Type="Auto" />
