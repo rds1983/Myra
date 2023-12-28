@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using FontStashSharp.RichText;
 using Myra.Events;
+using Myra.Graphics2D.UI.Styles;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -27,12 +28,12 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 		private const int Rows = 2;
 		private const int ColorsPerRow = 8;
-		private const int WheelHeight = 136;
 		private const float DegToRad = (float)Math.PI / 180;
 		private const float RadToDeg = 180 / (float)Math.PI;
 		private const string InputChars = "1234567890,";
 		private const string HexChars = "1234567890ABCDEFabcdef";
-		private readonly IList<Image> _userColorDisplays = new List<Image>();
+		private readonly List<Image> _userColorBackgrounds = new List<Image>();
+		private readonly List<Image> _userColorDisplays = new List<Image>();
 		private ActiveState _activeState;
 
 		public static readonly Color[] UserColors = new[]
@@ -79,54 +80,26 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 		public byte R
 		{
-			get
-			{
-				return Color.R;
-			}
-
-			set
-			{
-				Color = new Color(value, Color.G, Color.B, Color.A);
-			}
+			get => Color.R;
+			set => Color = new Color(value, Color.G, Color.B, Color.A);
 		}
 
 		public byte G
 		{
-			get
-			{
-				return Color.G;
-			}
-
-			set
-			{
-				Color = new Color(Color.R, value, Color.B, Color.A);
-			}
+			get => Color.G;
+			set => Color = new Color(Color.R, value, Color.B, Color.A);
 		}
 
 		public byte B
 		{
-			get
-			{
-				return Color.B;
-			}
-
-			set
-			{
-				Color = new Color(Color.R, Color.G, value, Color.A);
-			}
+			get => Color.B;
+			set => Color = new Color(Color.R, Color.G, value, Color.A);
 		}
 
 		public float A
 		{
-			get
-			{
-				return _colorDisplay.Opacity;
-			}
-
-			set
-			{
-				_colorDisplay.Opacity = value;
-			}
+			get => _colorDisplay.Opacity;
+			set => _colorDisplay.Opacity = value;
 		}
 
 		private int DisplayAlpha => (int)(A * 255f);
@@ -145,13 +118,13 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			}
 		}
 
+		private int WheelHeight => _colorWheel.Bounds.Height - 11;
+
 		private ColorHSV colorHSV;
 
 		public ColorPickerPanel()
 		{
 			BuildUI();
-
-/*			var checkerboardRenderable = Stylesheet.Current.Atlas["color-picker-checkerboard"];
 
 			// Users colors
 			for (int row = 0; row < Rows; ++row)
@@ -162,7 +135,6 @@ namespace Myra.Graphics2D.UI.ColorPicker
 					{
 						HorizontalAlignment = HorizontalAlignment.Stretch,
 						VerticalAlignment = VerticalAlignment.Stretch,
-						Renderable = checkerboardRenderable,
 					};
 					Grid.SetRow(background, row);
 					Grid.SetColumn(background, col);
@@ -178,6 +150,9 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 					_userColors.Widgets.Add(background);
 					_userColors.Widgets.Add(image);
+
+					_userColorBackgrounds.Add(background);
+
 					// Keep track of the displays so we can
 					// change their opacity and color.
 					_userColorDisplays.Add(image);
@@ -188,8 +163,6 @@ namespace Myra.Graphics2D.UI.ColorPicker
 				SetUserColor(i, UserColors[i]);
 			}
 
-			_userColors.SelectionHoverBackground = Stylesheet.Current.Atlas["button-over"];
-			_userColors.SelectionBackground = Stylesheet.Current.Atlas["button-down"];
 			_userColors.SelectedIndexChanged += GridUserColorsSelectedIndexChanged;
 			_saveColor.Click += ButtonSaveColorDown;
 			UpdateEnabled();
@@ -219,17 +192,14 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 			// Set default value
 			_colorDisplay.Renderable = Stylesheet.Current.WhiteRegion;
-			_colorBackground.Renderable = checkerboardRenderable;
 
-			_colorWheel.Renderable = Stylesheet.Current.Atlas["color-picker-wheel"];
 			_colorWheel.TouchDown += (s, a) => HsPickerMove(Desktop.TouchPosition.Value);
 			_colorWheel.TouchMoved += (s, a) => HsPickerMove(Desktop.TouchPosition.Value);
 
-			_gradient.Renderable = Stylesheet.Current.Atlas["color-picker-gradient"];
 			_gradient.TouchDown += (s, e) => VPickerMove(Desktop.TouchPosition.Value);
 			_gradient.TouchMoved += (s, e) => VPickerMove(Desktop.TouchPosition.Value);
 
-			OnColorChanged(Color.White);*/
+			OnColorChanged(Color.White);
 		}
 
 		private void _inputHEX_ValueChanging(object sender, ValueChangingEventArgs<string> e)
@@ -299,6 +269,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			{
 				h += 360;
 			}
+
 			ColorHSV hsv = new ColorHSV()
 			{
 				H = h,
@@ -552,11 +523,25 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			}
 
 			_colorWheel.Color = new Color((int)(hsv.V * 255.0f / 100f), (int)(hsv.V * 255.0f / 100f), (int)(hsv.V * 255.0f / 100f));
-
 			_colorDisplay.Color = rgb;
 
 			colorHSV = hsv;
 		}
 
+		public void ApplyColorPickerDialogStyle(ColorPickerDialogStyle style)
+		{
+			foreach (var image in _userColorBackgrounds)
+			{
+				image.Renderable = style.CheckerBoard;
+			}
+
+			_colorBackground.Renderable = style.CheckerBoard;
+
+			_userColors.SelectionHoverBackground = style.SelectionHoverBackground;
+			_userColors.SelectionBackground = style.SelectionBackground;
+
+			_colorWheel.Renderable = style.Wheel;
+			_gradient.Renderable = style.Gradient;
+		}
 	}
 }

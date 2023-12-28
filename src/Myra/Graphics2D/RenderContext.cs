@@ -262,10 +262,11 @@ namespace Myra.Graphics2D
 
 #if MONOGAME || FNA
 			position = Transform.Apply(position);
-			_renderer.Draw(texture, position, sourceRectangle, color, rotation,
-				Vector2.Zero, scale, SpriteEffects.None, depth);
+
+			_renderer.Draw(texture, position, sourceRectangle, color, rotation, Vector2.Zero, scale, SpriteEffects.None, depth);
 #elif STRIDE
 			position = Transform.Apply(position);
+
 			_renderer.Draw(texture, position, sourceRectangle, color, rotation, Vector2.Zero, scale, SpriteEffects.None, ImageOrientation.AsIs, depth);
 #else
 			if (_fontStashRenderer != null)

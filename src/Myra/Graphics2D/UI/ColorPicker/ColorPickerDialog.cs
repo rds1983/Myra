@@ -1,5 +1,7 @@
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
+using Myra.Graphics2D.UI.Styles;
+
 #elif STRIDE
 using Stride.Core.Mathematics;
 #else
@@ -25,12 +27,14 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			}
 		}
 
-		public ColorPickerDialog()
+		public ColorPickerDialog(): base(null)
 		{
 			ColorPickerPanel = new ColorPickerPanel();
 
 			Title = "Color Picker";
 			Content = ColorPickerPanel;
+
+			SetStyle(Stylesheet.DefaultStyleName);
 		}
 
 		public override void Close()
@@ -44,6 +48,18 @@ namespace Myra.Graphics2D.UI.ColorPicker
 				var alpha = (int) (colorDisplay.Opacity * 255);
 				ColorPickerPanel.UserColors[i] = new Color(color.R, color.G, color.B, alpha);
 			}
+		}
+
+		public void ApplyColorPickerDialogStyle(ColorPickerDialogStyle style)
+		{
+			ApplyWindowStyle(style);
+
+			ColorPickerPanel.ApplyColorPickerDialogStyle(style);
+		}
+
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
+		{
+			ApplyColorPickerDialogStyle(stylesheet.ColorPickerDialogStyles.SafelyGetStyle(name));
 		}
 	}
 }

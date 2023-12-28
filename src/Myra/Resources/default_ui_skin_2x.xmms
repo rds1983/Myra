@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Stylesheet TextureRegionAtlas="default_ui_skin_2x.xmat">
-	<Fonts UsedSpace="0, 0, 1024, 160">
+	<Fonts UsedSpace="0, 0, 1024, 320">
 		<Font Id="default-font" File="Inter-Regular.ttf" Size="40"/>
 		<Font Id="tooltip-font" File="Inter-Regular.ttf" Size="32"/>
 	</Fonts>
@@ -143,10 +143,10 @@
 		</WindowStyle>
 	</WindowStyles>
 	<FileDialogStyles>
-		<FileDialogStyle Background="window" Padding="5" SelectionBackground="tree-selection" SelectionHoverBackground="button-over"
+		<FileDialogStyle Background="window" Padding="10" SelectionBackground="tree-selection" SelectionHoverBackground="button-over"
 						 IconDrive="icon-drive" IconFolder="icon-folder" Width="1200" Height="800">
 			<TitleStyle Font="default-font" TextColor="white" />
-			<CloseButtonStyle OverBackground="button-over" Padding="5, 0" PressedBackground="button-red">
+			<CloseButtonStyle OverBackground="button-over" Padding="10, 0" PressedBackground="button-red">
 				<ImageStyle Image="icon-close" />
 			</CloseButtonStyle>
 			<BackButtonStyle Background="button" OverBackground="button-over" PressedBackground="button-down">
@@ -160,4 +160,15 @@
 			</ParentButtonStyle>
 		</FileDialogStyle>
 	</FileDialogStyles>
+	<ColorPickerDialogStyles>
+		<ColorPickerDialogStyle Background="window" Padding="10" CheckerBoard="color-picker-checkerboard"
+								SelectionBackground="button-down" SelectionHoverBackground="button-over"
+								Wheel="color-picker-wheel" Gradient="color-picker-gradient"
+								Width="900" Height="700">
+			<TitleStyle Font="default-font" TextColor="white" />
+			<CloseButtonStyle OverBackground="button-over" Padding="10, 0" PressedBackground="button-red">
+				<ImageStyle Image="icon-close" />
+			</CloseButtonStyle>
+		</ColorPickerDialogStyle>
+	</ColorPickerDialogStyles>
 </Stylesheet>

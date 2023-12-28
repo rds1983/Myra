@@ -1,13 +1,13 @@
 <Project>
   <Project.ExportOptions Namespace="Myra.Graphics2D.UI.ColorPicker" Class="ColorPickerPanel" OutputPath="D:\Projects\Myra\src\Myra\Graphics2D\UI\ColorPicker" />
-  <VerticalStackPanel Spacing="8" HorizontalAlignment="Center" Width="450" Padding="10, 0, 10, 5">
+  <VerticalStackPanel Spacing="8">
     <HorizontalStackPanel Spacing="8">
-      <Panel Width="147" Height="147">
+      <Panel HorizontalAlignment="Left" VerticalAlignment="Top">
         <Image Id="_colorWheel" />
         <Image Border="#000000" BorderThickness="1" Padding="4" HorizontalAlignment="Center" VerticalAlignment="Center" Enabled="False" Background="#FFFFFFFF" Id="_hsPicker" />
       </Panel>
       <Panel>
-        <Image Width="10" Height="147" Border="#000000" BorderThickness="1" Id="_gradient" />
+        <Image Border="#000000" BorderThickness="1" Id="_gradient" />
         <Image Margin="0, 1" Border="#000000" BorderThickness="1" Padding="4" HorizontalAlignment="Center" Enabled="False" Background="#FFFFFFFF" Id="_vPicker" />
       </Panel>
       <Grid ColumnSpacing="8" RowSpacing="6" VerticalAlignment="Top" StackPanel.ProportionType="Fill">
@@ -34,12 +34,12 @@
         <TextBox Id="_inputHEX" Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" />
         <Label Text="Alpha" Grid.Row="4" />
         <TextBox Id="_inputAlpha" Grid.Column="2" Grid.Row="4" />
-        <HorizontalSlider Maximum="255" Height="21" Id="_sliderAlpha" Grid.Column="1" Grid.Row="4" />
+        <HorizontalSlider Maximum="255" Id="_sliderAlpha" Grid.Column="1" Grid.Row="4" />
         <Button HorizontalAlignment="Right" Id="_saveColor" Grid.Row="5" Grid.ColumnSpan="3">
           <Label Text="Save Color" />
         </Button>
       </Grid>
     </HorizontalStackPanel>
-    <Grid ColumnSpacing="8" RowSpacing="8" GridSelectionMode="Cell" Height="80" Padding="4" Id="_userColors" />
+    <Grid ColumnSpacing="8" RowSpacing="8" GridSelectionMode="Cell" Padding="4" Id="_userColors" />
   </VerticalStackPanel>
 </Project>

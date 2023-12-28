@@ -8,6 +8,18 @@ namespace Myra.Graphics2D.UI.File
 {
 	public partial class FileDialog
 	{
+		private class PathInfo
+		{
+			public string Path { get; }
+			public bool IsDrive { get; }
+
+			public PathInfo(string path, bool isDrive)
+			{
+				Path = path;
+				IsDrive = isDrive;
+			}
+		}
+
 		private const int ImageTextSpacing = 4;
 
 		private static readonly string[] Folders =
@@ -90,7 +102,7 @@ namespace Myra.Graphics2D.UI.File
 		public IImage IconFolder { get; set; }
 		public IImage IconDrive { get; set; }
 
-		public FileDialog(FileDialogMode mode): base(null)
+		public FileDialog(FileDialogMode mode) : base(null)
 		{
 			_mode = mode;
 
@@ -147,13 +159,14 @@ namespace Myra.Graphics2D.UI.File
 					continue;
 				}
 
-				var item = CreateListItem(Path.GetFileName(p), p);
+				var item = CreateListItem(Path.GetFileName(p), p, false);
 				_listPlaces.Widgets.Add(item);
 			}
 
 			if (_listPlaces.Widgets.Count > 0)
 			{
-				SetFolder((string)_listPlaces.Widgets[0].Tag, false);
+				var pathInfo = (PathInfo)_listPlaces.Widgets[0].Tag;
+				SetFolder(pathInfo.Path, false);
 			}
 
 			_listPlaces.Widgets.Add(new HorizontalSeparator());
@@ -175,7 +188,7 @@ namespace Myra.Graphics2D.UI.File
 						s += " (" + d.VolumeLabel + ")";
 					}
 
-					var item = CreateListItem(s, d.RootDirectory.FullName);
+					var item = CreateListItem(s, d.RootDirectory.FullName, true);
 					_listPlaces.Widgets.Add(item);
 				}
 				catch (Exception)
@@ -202,12 +215,12 @@ namespace Myra.Graphics2D.UI.File
 			SetStyle(Stylesheet.DefaultStyleName);
 		}
 
-		private static Widget CreateListItem(string text, string path)
+		private static Widget CreateListItem(string text, string path, bool isDrive)
 		{
 			var item = new HorizontalStackPanel
 			{
 				Spacing = ImageTextSpacing,
-				Tag = path
+				Tag = new PathInfo(path, isDrive)
 			};
 
 			item.Widgets.Add(new Image());
@@ -349,8 +362,8 @@ namespace Myra.Graphics2D.UI.File
 				return;
 			}
 
-			var path = (string)_listPlaces.Widgets[_listPlaces.SelectedIndex.Value].Tag;
-			Folder = path;
+			var pathInfo = (PathInfo)_listPlaces.Widgets[_listPlaces.SelectedIndex.Value].Tag;
+			Folder = pathInfo.Path;
 		}
 
 		private void UpdateFolder()
@@ -519,6 +532,20 @@ namespace Myra.Graphics2D.UI.File
 
 			IconDrive = style.IconDrive;
 			IconFolder = style.IconFolder;
+
+			foreach (var widget in _listPlaces.Widgets)
+			{
+				var container = widget as Container;
+				if (container == null)
+				{
+					continue;
+				}
+
+				var pathInfo = (PathInfo)container.Tag;
+				var image = (Image)container.Widgets[0];
+
+				image.Renderable = pathInfo.IsDrive ? IconDrive : IconFolder;
+			}
 		}
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)

@@ -77,6 +77,7 @@ namespace Myra.Graphics2D.UI.Styles
 		private readonly Dictionary<string, MenuStyle> _verticalMenuStyles = new Dictionary<string, MenuStyle>();
 		private readonly Dictionary<string, WindowStyle> _windowStyles = new Dictionary<string, WindowStyle>();
 		private readonly Dictionary<string, FileDialogStyle> _fileDialogStyles = new Dictionary<string, FileDialogStyle>();
+		private readonly Dictionary<string, ColorPickerDialogStyle> _colorPickerDialogStyles = new Dictionary<string, ColorPickerDialogStyle>();
 
 		private TextureRegion _whiteRegion;
 
@@ -266,6 +267,12 @@ namespace Myra.Graphics2D.UI.Styles
 			set => SetDefaultStyle(_fileDialogStyles, value);
 		}
 
+		public ColorPickerDialogStyle ColorPickerDialogStyle
+		{
+			get => GetDefaultStyle(_colorPickerDialogStyles);
+			set => SetDefaultStyle(_colorPickerDialogStyles, value);
+		}
+
 		public Dictionary<string, LabelStyle> LabelStyles => _labelStyles;
 
 		public Dictionary<string, LabelStyle> TooltipStyles => _tooltipStyles;
@@ -313,6 +320,8 @@ namespace Myra.Graphics2D.UI.Styles
 		public Dictionary<string, WindowStyle> WindowStyles => _windowStyles;
 
 		public Dictionary<string, FileDialogStyle> FileDialogStyles => _fileDialogStyles;
+
+		public Dictionary<string, ColorPickerDialogStyle> ColorPickerDialogStyles => _colorPickerDialogStyles;
 
 		static Stylesheet()
 		{
