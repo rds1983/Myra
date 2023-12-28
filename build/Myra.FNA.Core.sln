@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.Notepad.FNA.Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.CustomUIStylesheet.FNA.Core", "..\samples\Myra.Samples.CustomUIStylesheet\Myra.Samples.CustomUIStylesheet.FNA.Core.csproj", "{41A030C8-B98D-425A-9E62-AE069255D7E9}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DdsKtxXna.FNA.Core", "..\..\DdsKtxXna\DdsKtxXna\DdsKtxXna.FNA.Core.csproj", "{A28F13C3-64D4-44F6-AF27-FB866F52C332}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{41A030C8-B98D-425A-9E62-AE069255D7E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41A030C8-B98D-425A-9E62-AE069255D7E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41A030C8-B98D-425A-9E62-AE069255D7E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A28F13C3-64D4-44F6-AF27-FB866F52C332}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A28F13C3-64D4-44F6-AF27-FB866F52C332}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A28F13C3-64D4-44F6-AF27-FB866F52C332}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A28F13C3-64D4-44F6-AF27-FB866F52C332}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
