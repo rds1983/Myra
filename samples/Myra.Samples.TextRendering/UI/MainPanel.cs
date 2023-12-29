@@ -5,6 +5,7 @@ using Myra.Graphics2D;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.File;
+using Myra.Graphics2D.UI.Styles;
 using System;
 using System.IO;
 using System.Linq;
@@ -124,16 +125,8 @@ namespace Myra.Samples.TextRendering.UI
 		{
 			if (FontSystem == null)
 			{
-				byte[] data;
-
-				using(var stream = DefaultAssets.OpenDefaultFontDataStream())
-				using(var ms = new MemoryStream())
-				{
-					stream.CopyTo(ms);
-					data = ms.ToArray();
-				}
-
-				FontSystem = LoadFontSystem(data);
+				DynamicSpriteFont font = (DynamicSpriteFont)Stylesheet.Current.Fonts.First().Value;
+				FontSystem = font.FontSystem;
 			}
 
 			_labelText.Text = _textBoxText.Text;
