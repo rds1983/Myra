@@ -1,5 +1,6 @@
 ﻿using Myra.Graphics2D.UI.Styles;
 using AssetManagementBase;
+using System;
 
 namespace Myra
 {
@@ -20,6 +21,9 @@ namespace Myra
 				return _assetManager;
 			}
 		}
+
+		[Obsolete("Use DefaultStylesheet")]
+		public static Stylesheet UIStylesheet => DefaultStylesheet;
 
 		public static Stylesheet DefaultStylesheet
 		{

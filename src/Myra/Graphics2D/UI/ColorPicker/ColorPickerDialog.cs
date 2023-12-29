@@ -1,7 +1,8 @@
-#if MONOGAME || FNA
-using Microsoft.Xna.Framework;
 using Myra.Graphics2D.UI.Styles;
 
+
+#if MONOGAME || FNA
+using Microsoft.Xna.Framework;
 #elif STRIDE
 using Stride.Core.Mathematics;
 #else
