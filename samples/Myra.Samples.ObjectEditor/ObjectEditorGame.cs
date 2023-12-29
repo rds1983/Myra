@@ -49,7 +49,7 @@ namespace Myra.Samples.ObjectEditor
 
 			MyraEnvironment.Game = this;
 
-			_font = DefaultAssets.UIStylesheet.Fonts.Values.First();
+			_font = DefaultAssets.DefaultStylesheet.Fonts.Values.First();
 
 			var root = new Panel();
 
