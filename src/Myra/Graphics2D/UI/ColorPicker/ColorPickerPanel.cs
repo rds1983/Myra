@@ -61,10 +61,10 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			get
 			{
 				var c = _colorDisplay.Color;
-				return new Color(c.R,
-					c.G,
-					c.B,
-					DisplayAlpha);
+				return new Color((byte)c.R,
+					(byte)c.G,
+					(byte)c.B,
+					(byte)DisplayAlpha);
 			}
 
 			set
@@ -515,7 +515,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 				_vPicker.Value = (int)(100 - hsv.V);
 			}
 
-			_colorWheel.Color = new Color((int)(hsv.V * 255.0f / 100f), (int)(hsv.V * 255.0f / 100f), (int)(hsv.V * 255.0f / 100f));
+			_colorWheel.Color = new Color((byte)(hsv.V * 255.0f / 100f), (byte)(hsv.V * 255.0f / 100f), (byte)(hsv.V * 255.0f / 100f));
 			_colorDisplay.Color = rgb;
 
 			colorHSV = hsv;
