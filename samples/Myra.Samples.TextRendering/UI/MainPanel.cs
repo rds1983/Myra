@@ -1,3 +1,4 @@
+using AssetManagementBase;
 using FontStashSharp;
 using Microsoft.Xna.Framework;
 using Myra.Events;
@@ -12,7 +13,7 @@ using System.Linq;
 
 namespace Myra.Samples.TextRendering.UI
 {
-    public partial class MainPanel
+	public partial class MainPanel
 	{
 		private FontSystem _fontSystem;
 
@@ -53,6 +54,13 @@ namespace Myra.Samples.TextRendering.UI
 
 			_buttonReset.Click += _buttonReset_Click;
 			_buttonBrowseFont.Click += _buttonBrowseFont_Click;
+
+			_comboRasterizer.SelectedIndex = 0;
+			_comboRasterizer.SelectedIndexChanged += (s, a) =>
+			{
+				FontSystem = null;
+				Update();
+			};
 		}
 
 		private void _spinButtonResolutionFactor_ValueChanged(object sender, ValueChangedEventArgs<float?> e)
@@ -82,6 +90,13 @@ namespace Myra.Samples.TextRendering.UI
 				KernelHeight = (int)_spinButtonKernelHeight.Value.Value
 			};
 
+			switch (_comboRasterizer.SelectedIndex)
+			{
+				case 1:
+					settings.StbTrueTypeUseOldRasterizer = true;
+					break;
+			}
+
 			var result = new FontSystem(settings);
 			result.AddFont(data);
 
@@ -110,7 +125,7 @@ namespace Myra.Samples.TextRendering.UI
 					FontSystem = fontSystem;
 					Update();
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					var messageBox = Dialog.CreateMessageBox("Error", ex.Message);
 					messageBox.ShowModal(Desktop);
@@ -125,8 +140,19 @@ namespace Myra.Samples.TextRendering.UI
 		{
 			if (FontSystem == null)
 			{
-				DynamicSpriteFont font = (DynamicSpriteFont)Stylesheet.Current.Fonts.First().Value;
-				FontSystem = font.FontSystem;
+				var assembly = typeof(MainPanel).Assembly;
+				var assetManager = AssetManager.CreateResourceAssetManager(assembly, "Resources");
+
+				byte[] data;
+
+				using (var stream = assetManager.Open("Inter-Regular.ttf"))
+				using (var ms = new MemoryStream())
+				{
+					stream.CopyTo(ms);
+					data = ms.ToArray();
+				}
+
+				FontSystem = LoadFontSystem(data);
 			}
 
 			_labelText.Text = _textBoxText.Text;

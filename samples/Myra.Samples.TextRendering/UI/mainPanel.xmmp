@@ -27,6 +27,10 @@
             <Label Text="5.4" HorizontalAlignment="Center" Id="_labelScaleValue" />
           </VerticalStackPanel>
           <Label Text="10" />
+          <ComboView Id="_comboRasterizer">
+            <Label Text="StbTrueType" />
+            <Label Text="StbTrueType(Old Rasterizer)" />
+          </ComboView>
           <CheckButton Id="_checkBoxSmoothText">
             <Label Text="Smooth Text" />
           </CheckButton>

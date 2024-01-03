@@ -11,6 +11,10 @@
   <ItemGroup>
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="$(AppMonoGameVersion)" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\**\*.*" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Myra\Myra.MonoGame.csproj" />
