@@ -1,7 +1,7 @@
 <Project>
   <Project.ExportOptions />
   <Panel>
-    <VerticalStackPanel ShowGridLines="True" HorizontalAlignment="Center" VerticalAlignment="Center" >
+    <VerticalStackPanel ShowGridLines="True" HorizontalAlignment="Center" VerticalAlignment="Center">
       <RadioButton>
         <Label Text="Text" />
       </RadioButton>
