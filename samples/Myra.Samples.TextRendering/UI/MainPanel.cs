@@ -6,10 +6,8 @@ using Myra.Graphics2D;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.File;
-using Myra.Graphics2D.UI.Styles;
 using System;
 using System.IO;
-using System.Linq;
 
 namespace Myra.Samples.TextRendering.UI
 {
@@ -61,6 +59,13 @@ namespace Myra.Samples.TextRendering.UI
 				FontSystem = null;
 				Update();
 			};
+
+			_comboRenderer.SelectedIndex = 0;
+			_comboRenderer.SelectedIndexChanged += (s, a) =>
+			{
+				FontSystem = null;
+				Update();
+			};
 		}
 
 		private void _spinButtonResolutionFactor_ValueChanged(object sender, ValueChangedEventArgs<float?> e)
@@ -94,6 +99,31 @@ namespace Myra.Samples.TextRendering.UI
 			{
 				case 1:
 					settings.StbTrueTypeUseOldRasterizer = true;
+					break;
+			}
+
+			switch (_comboRenderer.SelectedIndex)
+			{
+				case 1:
+					settings.GlyphRenderer = (input, output, options) =>
+					{
+						var size = options.Size.X * options.Size.Y;
+
+						for (var i = 0; i < size; i++)
+						{
+							var c = input[i];
+							var ci = i * 4;
+
+							if (c == 0)
+							{
+								output[ci] = output[ci + 1] = output[ci + 2] = output[ci + 3] = 0;
+							}
+							else
+							{
+								output[ci] = output[ci + 1] = output[ci + 2] = output[ci + 3] = 255;
+							}
+						}
+					};
 					break;
 			}
 

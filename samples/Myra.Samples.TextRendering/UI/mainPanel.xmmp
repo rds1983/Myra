@@ -31,6 +31,10 @@
             <Label Text="StbTrueType" />
             <Label Text="StbTrueType(Old Rasterizer)" />
           </ComboView>
+          <ComboView Id="_comboRenderer">
+            <Label Text="Default" />
+            <Label Text="NoSmoothing" />
+          </ComboView>
           <CheckButton Id="_checkBoxSmoothText">
             <Label Text="Smooth Text" />
           </CheckButton>
