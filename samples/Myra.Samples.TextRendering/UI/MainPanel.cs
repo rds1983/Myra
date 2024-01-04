@@ -145,11 +145,18 @@ namespace Myra.Samples.TextRendering.UI
 
 				byte[] data;
 
-				using (var stream = assetManager.Open("Inter-Regular.ttf"))
-				using (var ms = new MemoryStream())
+				if (string.IsNullOrEmpty(_textBoxFont.Text) || _textBoxFont.Text == "(default)")
 				{
-					stream.CopyTo(ms);
-					data = ms.ToArray();
+					using (var stream = assetManager.Open("Inter-Regular.ttf"))
+					using (var ms = new MemoryStream())
+					{
+						stream.CopyTo(ms);
+						data = ms.ToArray();
+					}
+				}
+				else
+				{
+					data = File.ReadAllBytes(_textBoxFont.Text);
 				}
 
 				FontSystem = LoadFontSystem(data);
