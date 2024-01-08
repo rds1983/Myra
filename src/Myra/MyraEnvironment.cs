@@ -292,9 +292,9 @@ namespace Myra
 			return new MouseInfo
 			{
 				Position = new Point(state.X, state.Y),
-				IsLeftButtonDown = state.LeftButton == ButtonState.Pressed,
-				IsMiddleButtonDown = state.MiddleButton == ButtonState.Pressed,
-				IsRightButtonDown = state.RightButton == ButtonState.Pressed,
+				IsLeftButtonDown = Game.IsActive && state.LeftButton == ButtonState.Pressed,
+				IsMiddleButtonDown = Game.IsActive && state.MiddleButton == ButtonState.Pressed,
+				IsRightButtonDown = Game.IsActive && state.RightButton == ButtonState.Pressed,
 				Wheel = state.ScrollWheelValue
 			};
 #elif STRIDE
