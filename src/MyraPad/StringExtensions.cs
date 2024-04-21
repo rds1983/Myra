@@ -50,5 +50,25 @@
             return @this.Substring(index, count);
 
         }
+
+        public static int LastIndexOfSafely(this string @this, char character, int index)
+        {
+            if (index < 0 || index >= @this.Length)
+            {
+                return -1;
+            }
+
+            return @this.LastIndexOf(character, index);
+        }
+        
+        public static int IndexOfSafely(this string @this, char character, int index)
+        {
+            if (index < 0 || index >= @this.Length)
+            {
+                return -1;
+            }
+
+            return @this.IndexOf(character, index);
+        }
     }
 }

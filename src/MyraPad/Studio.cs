@@ -502,16 +502,15 @@ namespace MyraPad
 			UpdateMenuFile();
 		}
 
-		private void _textSource_TextDeleted(object sender, TextDeletedEventArgs e)
+		private void _textSource_TextDeleted(object _, TextDeletedEventArgs e)
 		{
 			if (e.Value.Contains('\n'))
 			{
 				return;
 			}
 			
-			var endIndexOfLine = _ui._textSource.Text.IndexOf('\n', e.StartPosition);
-			var startIndexOfLine = _ui._textSource.Text.LastIndexOf('\n', e.StartPosition - 1);
-
+			int startIndexOfLine = _ui._textSource.Text.LastIndexOfSafely('\n', _ui._textSource.CursorPosition - 2);
+			var endIndexOfLine = _ui._textSource.Text.IndexOfSafely('\n', _ui._textSource.CursorPosition - 2);
 			if (endIndexOfLine < 0)
 			{
 				endIndexOfLine = _ui._textSource.Text.Length;
