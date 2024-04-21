@@ -314,7 +314,12 @@ namespace Myra.Graphics2D.UI
 		/// Fires every time when the text had been changed by user(doesnt fire if it had been assigned through code)
 		/// </summary>
 		public event EventHandler<ValueChangedEventArgs<string>> TextChangedByUser;
-
+		
+		/// <summary>
+		/// Fires every time when the text had been deleted
+		/// </summary>
+		public event EventHandler<TextDeletedEventArgs> TextDeleted;
+		
 		public event EventHandler CursorPositionChanged;
 
 		public TextBox(string styleName = Stylesheet.DefaultStyleName)
@@ -332,7 +337,7 @@ namespace Myra.Graphics2D.UI
 
 			MouseCursor = MouseCursorType.IBeam;
 		}
-
+		
 		private void DeleteChars(int pos, int l)
 		{
 			if (l == 0)
@@ -434,8 +439,10 @@ namespace Myra.Graphics2D.UI
 			}
 
 			UndoStack.MakeDelete(Text, where, len);
+			var stringToDelete = Text.Substring(where, len);
 			DeleteChars(where, len);
 
+			TextDeleted?.Invoke(this, new TextDeletedEventArgs(where, stringToDelete));
 			return len;
 		}
 
@@ -915,19 +922,11 @@ namespace Myra.Graphics2D.UI
 
 			InvalidateMeasure();
 
-			var ev = TextChanged;
-			if (ev != null)
-			{
-				ev(this, new ValueChangedEventArgs<string>(oldValue, value));
-			}
+			TextChanged?.Invoke(this, new ValueChangedEventArgs<string>(oldValue, value));
 
 			if (byUser)
 			{
-				ev = TextChangedByUser;
-				if (ev != null)
-				{
-					ev(this, new ValueChangedEventArgs<string>(oldValue, value));
-				}
+				TextChangedByUser?.Invoke(this, new ValueChangedEventArgs<string>(oldValue, value));
 			}
 
 			return true;
@@ -1106,6 +1105,8 @@ namespace Myra.Graphics2D.UI
 
 		private void OnCursorIndexChanged()
 		{
+			_lastCursorUpdate = DateTime.Now;
+			
 			UpdateScrolling();
 
 			CursorPositionChanged.Invoke(this);
@@ -1439,6 +1440,13 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var now = DateTime.Now;
+			
+			if (_lastCursorUpdate > _lastBlinkStamp)
+			{
+				_lastBlinkStamp = _lastCursorUpdate;
+				_cursorOn = true;
+			}
+			
 			if ((now - _lastBlinkStamp).TotalMilliseconds >= BlinkIntervalInMs)
 			{
 				_cursorOn = !_cursorOn;
