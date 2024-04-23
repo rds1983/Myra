@@ -131,6 +131,9 @@ namespace Myra.Graphics2D.UI
 			{
 				_handleDown = null;
 				_mouseCoord = null;
+
+				MyraEnvironment.SetMouseCursorFromWidget = true;
+				MyraEnvironment.MouseCursorType = MouseCursor ?? MyraEnvironment.DefaultMouseCursorType;
 			}
 			else if (Desktop != null)
 			{
@@ -140,6 +143,16 @@ namespace Myra.Graphics2D.UI
 				_mouseCoord = Orientation == Orientation.Horizontal
 					? Desktop.TouchPosition.Value.X - handleGlobalPos.X
 					: Desktop.TouchPosition.Value.Y - handleGlobalPos.Y;
+
+				MyraEnvironment.SetMouseCursorFromWidget = false;
+				if (Orientation == Orientation.Horizontal)
+				{
+					MyraEnvironment.MouseCursorType = MouseCursorType.SizeWE;
+				}
+				else
+				{
+					MyraEnvironment.MouseCursorType = MouseCursorType.SizeNS;
+				}
 			}
 		}
 
@@ -218,10 +231,12 @@ namespace Myra.Graphics2D.UI
 
 					if (Orientation == Orientation.Horizontal)
 					{
+						handle.MouseCursor = MouseCursorType.SizeWE;
 						handle.VerticalAlignment = VerticalAlignment.Stretch;
 					}
 					else
 					{
+						handle.MouseCursor = MouseCursorType.SizeNS;
 						handle.HorizontalAlignment = HorizontalAlignment.Stretch;
 					}
 

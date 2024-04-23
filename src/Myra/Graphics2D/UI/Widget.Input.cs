@@ -287,7 +287,8 @@ namespace Myra.Graphics2D.UI
 					}
 
 					_lastMouseMovement = null;
-					if (MouseCursor != null)
+
+					if (MyraEnvironment.SetMouseCursorFromWidget && MouseCursor != null)
 					{
 						MyraEnvironment.MouseCursorType = MyraEnvironment.DefaultMouseCursorType;
 					}
@@ -297,7 +298,7 @@ namespace Myra.Graphics2D.UI
 					break;
 				case InputEventType.MouseEntered:
 					_lastMouseMovement = DateTime.Now;
-					if (MouseCursor != null)
+					if (MyraEnvironment.SetMouseCursorFromWidget && MouseCursor != null)
 					{
 						MyraEnvironment.MouseCursorType = MouseCursor.Value;
 					}
@@ -307,7 +308,6 @@ namespace Myra.Graphics2D.UI
 					break;
 				case InputEventType.MouseMoved:
 					_lastMouseMovement = DateTime.Now;
-
 					OnMouseMoved();
 					MouseMoved.Invoke(this);
 					break;

@@ -83,6 +83,8 @@ namespace Myra
 		private static MouseCursorType _mouseCursorType;
 		private static AssetManager _defaultAssetManager;
 
+		public static bool SetMouseCursorFromWidget { get; set; } = true;
+
 		public static MouseCursorType MouseCursorType
 		{
 			get => _mouseCursorType;
