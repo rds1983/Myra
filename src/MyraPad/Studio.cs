@@ -483,7 +483,7 @@ namespace MyraPad
 			_ui._textSource.TextChanged += _textSource_TextChanged;
 			_ui._textSource.KeyDown += _textSource_KeyDown;
 			_ui._textSource.Char += _textSource_Char;
-
+			_ui._textSource.TextDeleted += _textSource_TextDeleted;
 			_ui._textStatus.Text = string.Empty;
 			_ui._textLocation.Text = "Line: 0, Column: 0, Indent: 0";
 
@@ -500,6 +500,38 @@ namespace MyraPad
 			_desktop.Root = _ui;
 
 			UpdateMenuFile();
+		}
+
+		private void _textSource_TextDeleted(object _, TextDeletedEventArgs e)
+		{
+			if (e.Value.Contains('\n'))
+			{
+				return;
+			}
+			
+			int startIndexOfLine = _ui._textSource.Text.LastIndexOfSafely('\n', _ui._textSource.CursorPosition - 2);
+			var endIndexOfLine = _ui._textSource.Text.IndexOfSafely('\n', _ui._textSource.CursorPosition - 2);
+			if (endIndexOfLine < 0)
+			{
+				endIndexOfLine = _ui._textSource.Text.Length;
+			}
+			
+			if (startIndexOfLine < 0)
+			{
+				startIndexOfLine = 0;
+			}
+			
+			var currentLineString = _ui._textSource.Text[startIndexOfLine..endIndexOfLine];
+			if (currentLineString is null)
+			{
+				return;
+			}
+			
+			if (string.IsNullOrWhiteSpace(currentLineString))
+			{
+				_ui._textSource.Text = _ui._textSource.Text.Remove(startIndexOfLine, currentLineString.Length);
+				_ui._textSource.CursorPosition = startIndexOfLine + 1;
+			}
 		}
 
 		private void _textBoxFilter_TextChanged(object sender, ValueChangedEventArgs<string> e)
@@ -742,20 +774,24 @@ namespace MyraPad
 				return;
 			}
 
-			var il = _indentLevel;
-			if (pos < text.Length - 2 && text[pos] == '<' && text[pos + 1] == '/')
-			{
-				--il;
-			}
+			var indentLevel = _indentLevel;
+			bool wrapAfterIndent = text.SubstringSafely(pos + 1, 2) == "</";
 
-			if (il <= 0)
+			if (indentLevel <= 0)
 			{
 				return;
 			}
 
 			// Insert indent
-			var indent = new string(' ', il * _options.IndentSpacesSize);
-			_ui._textSource.Insert(pos, indent);
+			var indent = new string(' ', indentLevel * _options.IndentSpacesSize);
+			if (wrapAfterIndent)
+			{
+				indent += '\n';
+			}
+			_ui._textSource.Insert(pos + 1, indent);
+
+			_ui._textSource.CursorPosition = pos + 2;
+			//Move the cursor to the position after indent
 		}
 
 		private void ApplyAutoClose()
@@ -768,15 +804,18 @@ namespace MyraPad
 			_applyAutoClose = false;
 
 			var pos = _ui._textSource.CursorPosition;
-
 			var currentTag = CurrentTag;
 			if (string.IsNullOrEmpty(currentTag) || !_needsCloseTag)
 			{
 				return;
 			}
 
-			var close = "</" + ExtractTag(currentTag) + ">";
-			_ui._textSource.Insert(pos, close);
+			var closeTag = "</" + ExtractTag(currentTag) + ">";
+			_ui._textSource.Insert(pos + 1, closeTag);
+			
+			_ui._textSource.CursorPosition = pos;
+			//Method Insert(int, string) has moved the cursor position
+			//this will restore the cursor to the position after '<Tag>' and before '<Tag/>'
 		}
 
 		private void _textSource_TextChanged(object sender, ValueChangedEventArgs<string> e)
