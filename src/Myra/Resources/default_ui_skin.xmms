@@ -110,12 +110,12 @@
 	</TreeStyles>
 	<HorizontalSplitPaneStyles>
 		<HorizontalSplitPaneStyle>
-			<HandleStyle Background="splitpane" OverBackground="splitpane-over" />
+			<HandleStyle Background="splitpane" OverBackground="splitpane-over" HandleSize="6" />
 		</HorizontalSplitPaneStyle>
 	</HorizontalSplitPaneStyles>
 	<VerticalSplitPaneStyles>
 		<VerticalSplitPaneStyle>
-			<HandleStyle Background="splitpane-vertical" OverBackground="splitpane-vertical-over" />
+			<HandleStyle Background="splitpane-vertical" OverBackground="splitpane-vertical-over" HandleSize="6" />
 		</VerticalSplitPaneStyle>
 	</VerticalSplitPaneStyles>
 	<HorizontalMenuStyles>

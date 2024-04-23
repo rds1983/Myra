@@ -28,7 +28,7 @@ namespace Myra.Graphics2D.UI
 
 		[XmlIgnore]
 		[Browsable(false)]
-		public ButtonStyle HandleStyle { get; private set; }
+		public SplitPanelButtonStyle HandleStyle { get; private set; }
 
 		public event EventHandler ProportionsChanged;
 
@@ -210,12 +210,20 @@ namespace Myra.Graphics2D.UI
 			var i = 0;
 
 			var handleSize = 0;
-			var asImage = HandleStyle.Background as IImage;
-			if (asImage != null)
+
+			if (HandleStyle.HandleSize != null)
 			{
-				handleSize = Orientation == Orientation.Horizontal
-					? asImage.Size.X
-					: asImage.Size.Y;
+				handleSize = HandleStyle.HandleSize.Value;
+			}
+			else
+			{
+				var asImage = HandleStyle.Background as IImage;
+				if (asImage != null)
+				{
+					handleSize = Orientation == Orientation.Horizontal
+						? asImage.Size.X
+						: asImage.Size.Y;
+				}
 			}
 
 			foreach (var w in Widgets)

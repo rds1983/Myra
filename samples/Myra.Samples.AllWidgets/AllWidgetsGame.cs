@@ -1,6 +1,8 @@
 ﻿using Myra.Graphics2D.UI;
 using System;
 using System.Linq;
+using Myra.Graphics2D.UI.Styles;
+
 
 #if !STRIDE
 using Microsoft.Xna.Framework;
@@ -64,6 +66,8 @@ namespace Myra.Samples.AllWidgets
 
 			MyraEnvironment.Game = this;
 			MyraEnvironment.EnableModalDarkening = true;
+
+//			Stylesheet.Current = DefaultAssets.DefaultStylesheet2X;
 
 			_allWidgets = new AllWidgets();
 
