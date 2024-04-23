@@ -1284,8 +1284,11 @@ namespace Myra.Graphics2D.UI
 					if (lastLine.Count > 0)
 					{
 						var glyphRender = lastLine.GetGlyphInfoByIndex(lastLine.Count - 1);
+						// It is possible that due to a FontStashSharp bug, adding XAdvance to Bounds.Left
+						// adds an extra space that is multiplied with the FontResolution scale.
+						// The change below accurately places the caret at the end of the line.
 
-						x += glyphRender.Value.Bounds.Left + glyphRender.Value.XAdvance;
+                        x = glyphRender.Value.TextChunk.Size.X;
 						y += glyphRender.Value.LineTop;
 					}
 					else if (_richTextLayout.Lines.Count > 1)
