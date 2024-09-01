@@ -16,7 +16,7 @@ using Myra.Platform;
 
 namespace Myra.Graphics2D.UI
 {
-	public class TreeView : Widget
+	public class TreeView : Widget, ITreeViewNode
 	{
 		private readonly StackPanelLayout _layout = new StackPanelLayout(Orientation.Vertical);
 		private readonly List<TreeViewNode> _allNodes = new List<TreeViewNode>();
@@ -24,6 +24,8 @@ namespace Myra.Graphics2D.UI
 		private bool _rowInfosDirty = true;
 
 		internal List<TreeViewNode> AllNodes => _allNodes;
+
+		public int ChildNodesCount => Children.Count;
 
 		private TreeViewNode HoverRow { get; set; }
 
@@ -243,8 +245,11 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
+		public TreeViewNode GetSubNode(int index) => (TreeViewNode)Children[index];
+
 		public void RemoveAllSubNodes()
 		{
+			Children.Clear();
 			_allNodes.Clear();
 			_selectedRow = null;
 			HoverRow = null;
@@ -411,6 +416,19 @@ namespace Myra.Graphics2D.UI
 
 			SelectionBackground = style.SelectionBackground;
 			SelectionHoverBackground = style.SelectionHoverBackground;
+		}
+
+		public TreeViewNode FindNode(Func<TreeViewNode, bool> predicate)
+		{
+			foreach (var node in AllNodes)
+			{
+				if (predicate(node))
+				{
+					return node;
+				}
+			}
+
+			return null;
 		}
 
 		protected internal override void CopyFrom(Widget w)

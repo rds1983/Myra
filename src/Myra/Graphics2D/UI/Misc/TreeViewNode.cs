@@ -11,7 +11,7 @@ using Color = FontStashSharp.FSColor;
 
 namespace Myra.Graphics2D.UI
 {
-	public class TreeViewNode : ContentControl
+	public class TreeViewNode : ContentControl, ITreeViewNode
 	{
 		private readonly GridLayout _layout = new GridLayout();
 		private readonly TreeView _topTree;
@@ -70,7 +70,6 @@ namespace Myra.Graphics2D.UI
 			_layout.ColumnSpacing = 2;
 			_layout.RowSpacing = 2;
 			ChildrenLayout = _layout;
-
 
 			_topTree = topTree;
 
@@ -157,6 +156,7 @@ namespace Myra.Graphics2D.UI
 		public void RemoveSubNode(TreeViewNode subNode)
 		{
 			_childNodesStackPanel.Children.Remove(subNode);
+			_topTree.AllNodes.Remove(subNode);
 			if (_topTree != null && _topTree.SelectedRow == subNode)
 			{
 				_topTree.SelectedRow = null;
@@ -165,8 +165,9 @@ namespace Myra.Graphics2D.UI
 
 		public void RemoveSubNodeAt(int index)
 		{
-			var subNode = _childNodesStackPanel.Children[index];
+			var subNode = (TreeViewNode)_childNodesStackPanel.Children[index];
 			_childNodesStackPanel.Children.RemoveAt(index);
+			_topTree.AllNodes.Remove(subNode);
 			if (_topTree.SelectedRow == subNode)
 			{
 				_topTree.SelectedRow = null;
