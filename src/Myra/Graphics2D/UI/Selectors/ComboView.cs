@@ -141,14 +141,6 @@ namespace Myra.Graphics2D.UI
 			SetStyle(styleName);
 		}
 
-		internal void HideDropdown()
-		{
-			if (Desktop != null && Desktop.ContextMenu == _listView)
-			{
-				Desktop.HideContextMenu();
-			}
-		}
-
 		private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Widget> genericEventArgs)
 		{
 			// Unpress the button only if mouse is outside

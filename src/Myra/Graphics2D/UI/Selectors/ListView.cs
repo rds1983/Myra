@@ -375,12 +375,10 @@ namespace Myra.Graphics2D.UI
 
 		private void ComboHideDropdown()
 		{
-			if (_parentCombo == null)
+			if (Desktop != null && Desktop.ContextMenu == this)
 			{
-				return;
+				Desktop.HideContextMenu();
 			}
-
-			_parentCombo.HideDropdown();
 		}
 
 		protected void OnSelectedItemChanged()
