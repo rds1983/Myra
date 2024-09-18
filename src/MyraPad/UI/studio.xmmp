@@ -32,7 +32,7 @@
     </HorizontalMenu>
     <HorizontalSeparator />
     <HorizontalSplitPane Id="_topSplitPane" StackPanel.ProportionType="Fill">
-      <Panel Id="_panelExplorer" />
+      <ScrollViewer Id="_panelExplorer" />
       <VerticalStackPanel>
         <VerticalSplitPane Id="_leftSplitPane" StackPanel.ProportionType="Fill">
           <Panel Id="_projectHolder" />

@@ -17,6 +17,10 @@ using System.Text.RegularExpressions;
 using System;
 using FontStashSharp;
 using FontStashSharp.RichText;
+using Myra.MML;
+using System.Reflection;
+using Myra.Attributes;
+using System.Collections;
 
 namespace MyraPad.UI
 {
@@ -87,6 +91,7 @@ namespace MyraPad.UI
 		private DateTime? _refreshInitiated;
 		private readonly Dictionary<string, FontSystem> _fontCache = new Dictionary<string, FontSystem>();
 		private readonly Dictionary<string, Texture2D> _textureCache = new Dictionary<string, Texture2D>();
+		private readonly TreeView _treeViewExplorer;
 
 		private VerticalMenu _autoCompleteMenu = null;
 
@@ -166,6 +171,8 @@ namespace MyraPad.UI
 				{
 					_projectHolder.Widgets.Add(_project.Root);
 				}
+
+				RefreshExplorer();
 
 				UpdateMenuFile();
 			}
@@ -282,6 +289,16 @@ namespace MyraPad.UI
 			_leftSplitPane.SetSplitterPosition(0, state != null ? state.CenterSplitterPosition : 0.5f);
 
 			UpdateMenuFile();
+
+			_treeViewExplorer = new TreeView
+			{
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				VerticalAlignment = VerticalAlignment.Stretch,
+			};
+
+			_treeViewExplorer.SelectionChanged += _treeViewExplorer_SelectionChanged;
+
+			_panelExplorer.Content = _treeViewExplorer;
 
 			RichTextDefaults.FontResolver = p =>
 			{
@@ -1572,5 +1589,75 @@ namespace MyraPad.UI
 		{
 			_queue.Quit();
 		}
+
+		private void BuildExplorerTreeRecursive(ITreeViewNode node, IItemWithId root)
+		{
+			if (root == null)
+			{
+				return;
+			}
+
+			var id = root.GetType().Name;
+			if (!string.IsNullOrEmpty(root.Id))
+			{
+				id += $" (#{root.Id})";
+			}
+
+			var newNode = node.AddSubNode(new Label
+			{
+				Text = id
+			});
+
+			newNode.Tag = root;
+			newNode.IsExpanded = true;
+
+			var props = root.GetType().GetRuntimeProperties();
+			var contentProperty = (from p in props where p.FindAttribute<ContentAttribute>() != null select p).FirstOrDefault();
+			if (contentProperty == null)
+			{
+				return;
+			}
+
+			var content = contentProperty.GetValue(root);
+
+			var asList = content as IList;
+			if (asList != null)
+			{
+				// List
+				foreach (IItemWithId child in asList)
+				{
+					BuildExplorerTreeRecursive(newNode, child);
+				}
+
+			}
+			else
+			{
+				// Simple
+				BuildExplorerTreeRecursive(newNode, (IItemWithId)content);
+			}
+		}
+
+		private void RefreshExplorer()
+		{
+			_treeViewExplorer.RemoveAllSubNodes();
+
+			if (Project == null || Project.Root == null)
+			{
+				return;
+			}
+
+			BuildExplorerTreeRecursive(_treeViewExplorer, Project.Root);
+		}
+
+		private void _treeViewExplorer_SelectionChanged(object sender, EventArgs e)
+		{
+			if (_treeViewExplorer.SelectedRow == null)
+			{
+				return;
+			}
+
+			NewObject = _treeViewExplorer.SelectedRow.Tag;
+		}
+
 	}
 }
