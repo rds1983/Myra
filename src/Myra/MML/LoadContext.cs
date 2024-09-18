@@ -69,11 +69,14 @@ namespace Myra.MML
 		public string[] Namespaces;
 		public Assembly Assembly = typeof(Widget).Assembly;
 		public Func<Type, string, object> ResourceGetter = null;
+		public readonly List<Tuple<object, XElement>> ObjectsNodes = new List<Tuple<object, XElement>>();
 
 		private const string UserDataAttributePrefix = "_";
 
 		public void Load<T>(object obj, XElement el, T handler) where T : class
 		{
+			ObjectsNodes.Add(new Tuple<object, XElement>(obj, el));
+
 			var type = obj.GetType();
 			var handlerType = typeof(T);
 

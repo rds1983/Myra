@@ -103,7 +103,7 @@ namespace Myra.Graphics2D.UI
 				secondProportion = _layout.RowsProportions[handleIndex + 1];
 			}
 
-			if (fp >= 0 && fp <= 2.0f)
+			if (fp >= 0)
 			{
 				var fp2 = firstProportion.Value + secondProportion.Value - fp;
 				firstProportion.Value = fp;

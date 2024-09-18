@@ -89,6 +89,13 @@ namespace Myra.Graphics2D.UI
 		[FilePath(FileDialogMode.ChooseFolder)]
 		public string DesignerRtfAssetsPath { get; set; }
 
+		/// <summary>
+		/// Maps loaded objects to their respective xml nodes
+		/// </summary>
+		[Browsable(false)]
+		[XmlIgnore]
+		public List<Tuple<object, XElement>> ObjectsNodes { get; internal set; }
+
 		static Project()
 		{
 			LegacyClassNames["VerticalBox"] = "VerticalStackPanel";
@@ -244,12 +251,14 @@ namespace Myra.Graphics2D.UI
 				{ 
 					var loadContext = CreateLoadContext(assetManager);
 					loadContext.Load(result, xDoc.Root, handler);
+					result.ObjectsNodes = loadContext.ObjectsNodes;
 				}
 			}
 			else
 			{
 				var loadContext = CreateLoadContext(assetManager);
 				loadContext.Load(result, xDoc.Root, handler);
+				result.ObjectsNodes = loadContext.ObjectsNodes;
 			}
 
 			return result;
@@ -257,7 +266,7 @@ namespace Myra.Graphics2D.UI
 
 		public static Project LoadFromXml<T>(string data, AssetManager assetManager = null, T handler = null) where T : class
 		{
-			return LoadFromXml(XDocument.Parse(data), assetManager, handler);
+			return LoadFromXml(XDocument.Parse(data, LoadOptions.SetLineInfo), assetManager, handler);
 		}
 
 		public static Project LoadFromXml(XDocument xDoc, AssetManager assetManager = null)
@@ -267,12 +276,12 @@ namespace Myra.Graphics2D.UI
 
 		public static Project LoadFromXml(string data, AssetManager assetManager = null)
 		{
-			return LoadFromXml<object>(XDocument.Parse(data), assetManager, null);
+			return LoadFromXml<object>(XDocument.Parse(data, LoadOptions.SetLineInfo), assetManager, null);
 		}
 
 		public static object LoadObjectFromXml<T>(string data, AssetManager assetManager = null, Stylesheet stylesheet = null, T handler = null, Type parentType = null) where T : class
 		{
-			XDocument xDoc = XDocument.Parse(data);
+			XDocument xDoc = XDocument.Parse(data, LoadOptions.SetLineInfo);
 
 			var name = xDoc.Root.Name.ToString();
 			Type itemType;

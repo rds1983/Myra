@@ -21,6 +21,8 @@ using Myra.MML;
 using System.Reflection;
 using Myra.Attributes;
 using System.Collections;
+using System.Xml.Linq;
+using System.Xml;
 
 namespace MyraPad.UI
 {
@@ -1651,12 +1653,63 @@ namespace MyraPad.UI
 
 		private void _treeViewExplorer_SelectionChanged(object sender, EventArgs e)
 		{
-			if (_treeViewExplorer.SelectedRow == null)
+			if (_treeViewExplorer.SelectedRow == null || Project.ObjectsNodes == null)
 			{
 				return;
 			}
 
-			NewObject = _treeViewExplorer.SelectedRow.Tag;
+			// Try to find the corresponding node
+			Tuple<object, XElement> find = null;
+			foreach(var pair in Project.ObjectsNodes)
+			{
+				if (pair.Item1 == _treeViewExplorer.SelectedRow.Tag)
+				{
+					find = pair;
+					break;
+				}
+			}
+
+			if (find == null)
+			{
+				return;
+			}
+
+			var lineInfo = (IXmlLineInfo)find.Item2;
+
+			// Set the position
+			var currentLineNumber = 0;
+			var currentLinePosition = 0;
+			for(var pos = 0; pos < _textSource.Text.Length; ++pos)
+			{
+				if (currentLineNumber > lineInfo.LineNumber - 1 ||
+					(currentLineNumber == lineInfo.LineNumber - 1 && currentLinePosition >= lineInfo.LinePosition - 1))
+				{
+					// Found
+					_textSource.CursorPosition = pos;
+					Desktop.FocusedKeyboardWidget = _textSource;
+					break;
+				}
+
+				var c = _textSource.Text[pos];
+				switch(c)
+				{
+					case '\n':
+						// New line
+						++currentLineNumber;
+						currentLinePosition = 0;
+						break;
+
+					case '\r':
+						// Do nothing
+						break;
+
+					default:
+						// New row
+						++currentLinePosition;
+						break;
+
+				}
+			}
 		}
 
 	}
