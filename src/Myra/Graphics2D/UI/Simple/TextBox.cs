@@ -975,7 +975,7 @@ namespace Myra.Graphics2D.UI
 		private void UpdateScrolling()
 		{
 			var p = GetRenderPositionByIndex(CursorPosition);
-			if (p == _lastCursorPosition)
+			if (p == _lastCursorPosition || Desktop == null)
 			{
 				return;
 			}

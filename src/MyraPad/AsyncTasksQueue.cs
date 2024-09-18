@@ -47,13 +47,13 @@ namespace MyraPad
 				{
 					try
 					{
-						Studio.Instance.QueueSetStatusText("Reloading Project...");
-						Studio.Instance.NewProject = Project.LoadFromXml(_projectXml, Studio.Instance.AssetManager);
-						Studio.Instance.QueueSetStatusText(string.Empty);
+						Studio.MainForm.QueueSetStatusText("Reloading Project...");
+						Studio.MainForm.NewProject = Project.LoadFromXml(_projectXml, Studio.MainForm.AssetManager);
+						Studio.MainForm.QueueSetStatusText(string.Empty);
 					}
 					catch (Exception ex)
 					{
-						Studio.Instance.QueueSetStatusText(ex.Message);
+						Studio.MainForm.QueueSetStatusText(ex.Message);
 					}
 
 					_projectXml = null;
@@ -61,17 +61,17 @@ namespace MyraPad
 
 				if (!string.IsNullOrEmpty(_objectXml))
 				{
-					if (Studio.Instance.Project != null)
+					if (Studio.MainForm.Project != null)
 					{
 						try
 						{
-							Studio.Instance.QueueSetStatusText("Reloading Object...");
-							Studio.Instance.NewObject = Studio.Instance.Project.LoadObjectFromXml(_objectXml, Studio.Instance.AssetManager);
-							Studio.Instance.QueueSetStatusText(string.Empty);
+							Studio.MainForm.QueueSetStatusText("Reloading Object...");
+							Studio.MainForm.NewObject = Studio.MainForm.Project.LoadObjectFromXml(_objectXml, Studio.MainForm.AssetManager);
+							Studio.MainForm.QueueSetStatusText(string.Empty);
 						}
 						catch (Exception ex)
 						{
-							Studio.Instance.QueueSetStatusText(ex.Message);
+							Studio.MainForm.QueueSetStatusText(ex.Message);
 						}
 					}
 
