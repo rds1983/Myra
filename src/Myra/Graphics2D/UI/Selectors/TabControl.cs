@@ -2,7 +2,6 @@
 using Myra.Graphics2D.UI.Styles;
 using System;
 using System.Xml.Serialization;
-using Microsoft.Xna.Framework;
 
 namespace Myra.Graphics2D.UI
 {
