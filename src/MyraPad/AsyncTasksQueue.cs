@@ -1,5 +1,6 @@
 ﻿using Myra.Graphics2D.UI;
 using System;
+using System.Collections.Concurrent;
 using System.Threading;
 
 namespace MyraPad
@@ -7,8 +8,8 @@ namespace MyraPad
 	internal class AsyncTasksQueue
 	{
 		private bool _running = true;
-		private string _projectXml;
-		private string _objectXml;
+		private readonly ConcurrentQueue<string> _projectXmls = new ConcurrentQueue<string>();
+		private readonly ConcurrentQueue<string> _objectXmls = new ConcurrentQueue<string>();
 
 		private readonly AutoResetEvent _refreshProjectEvent = new AutoResetEvent(false);
 		private readonly AutoResetEvent _waitForQuitEvent = new AutoResetEvent(false);
@@ -20,13 +21,13 @@ namespace MyraPad
 
 		public void QueueLoadProject(string xml)
 		{
-			_projectXml = xml;
+			_projectXmls.Enqueue(xml);
 			_refreshProjectEvent.Set();
 		}
 
 		public void QueueLoadObject(string xml)
 		{
-			_objectXml = xml;
+			_objectXmls.Enqueue(xml);
 			_refreshProjectEvent.Set();
 		}
 
@@ -43,12 +44,18 @@ namespace MyraPad
 			{
 				_refreshProjectEvent.WaitOne();
 
-				if (!string.IsNullOrEmpty(_projectXml))
+				// Get last project xml
+				var projectXml = string.Empty;
+				while (_projectXmls.Count > 0)
+				{
+					_projectXmls.TryDequeue(out projectXml);
+				}
+				if (!string.IsNullOrEmpty(projectXml))
 				{
 					try
 					{
 						Studio.MainForm.QueueSetStatusText("Reloading Project...");
-						Studio.MainForm.NewProject = Project.LoadFromXml(_projectXml, Studio.MainForm.AssetManager);
+						Studio.MainForm.NewProject = Project.LoadFromXml(projectXml, Studio.MainForm.AssetManager);
 						Studio.MainForm.QueueSetStatusText(string.Empty);
 					}
 					catch (Exception ex)
@@ -56,18 +63,21 @@ namespace MyraPad
 						Studio.MainForm.QueueClearExplorer();
 						Studio.MainForm.QueueSetStatusText(ex.Message);
 					}
-
-					_projectXml = null;
 				}
 
-				if (!string.IsNullOrEmpty(_objectXml))
+				var objectXml = string.Empty;
+				while (_objectXmls.Count > 0)
+				{
+					_objectXmls.TryDequeue(out objectXml);
+				}
+				if (!string.IsNullOrEmpty(objectXml))
 				{
 					if (Studio.MainForm.Project != null)
 					{
 						try
 						{
 							Studio.MainForm.QueueSetStatusText("Reloading Object...");
-							Studio.MainForm.NewObject = Studio.MainForm.Project.LoadObjectFromXml(_objectXml, Studio.MainForm.AssetManager);
+							Studio.MainForm.NewObject = Studio.MainForm.Project.LoadObjectFromXml(objectXml, Studio.MainForm.AssetManager);
 							Studio.MainForm.QueueSetStatusText(string.Empty);
 						}
 						catch (Exception ex)
@@ -76,8 +86,6 @@ namespace MyraPad
 							Studio.MainForm.QueueSetStatusText(ex.Message);
 						}
 					}
-
-					_objectXml = null;
 				}
 			}
 

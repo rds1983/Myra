@@ -91,13 +91,6 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public int ImageTextSpacing { get; set; }
 
-		[DefaultValue(VerticalAlignment.Stretch)]
-
-		public VerticalAlignment ContentVerticalAlignment
-		{
-			get; set;
-		} = VerticalAlignment.Stretch;
-
 		[DefaultValue(null)]
 		public int? Height { get; set; }
 

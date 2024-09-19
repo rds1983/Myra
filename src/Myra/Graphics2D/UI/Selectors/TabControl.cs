@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using System;
-using System.Collections.ObjectModel;
 using System.Xml.Serialization;
+using Microsoft.Xna.Framework;
 
 namespace Myra.Graphics2D.UI
 {
@@ -19,12 +19,14 @@ namespace Myra.Graphics2D.UI
 		private Grid _gridButtons;
 		private Panel _panelContent;
 		private TabSelectorPosition _selectorPosition;
-		private ObservableCollection<Proportion> _buttonProportions;
-		private ObservableCollection<Proportion> _contentProportions;
 
 		[Browsable(false)]
 		[XmlIgnore]
 		public TabControlStyle TabControlStyle { get; set; }
+
+		[Browsable(false)]
+		[XmlIgnore]
+		public override SelectionMode SelectionMode { get => base.SelectionMode; set => base.SelectionMode = value; }
 
 		[DefaultValue(HorizontalAlignment.Left)]
 		public override HorizontalAlignment HorizontalAlignment
@@ -62,94 +64,13 @@ namespace Myra.Graphics2D.UI
 			}
 			set
 			{
-				if (_selectorPosition != value)
+				if (value == _selectorPosition)
 				{
-					// Content proportions and widgets need to be reversed if switching between 
-					// right/bottom and top/left
-					bool newValueIsTopOrLeft = value == TabSelectorPosition.Top ||
-											   value == TabSelectorPosition.Left;
-					bool oldValueWasBottomOrRight = _selectorPosition == TabSelectorPosition.Bottom ||
-													_selectorPosition == TabSelectorPosition.Right;
-
-					bool newValueIsTopOrBottom = value == TabSelectorPosition.Top ||
-												 value == TabSelectorPosition.Bottom;
-					bool oldValueWasTopOrBottom = _selectorPosition == TabSelectorPosition.Top ||
-												  _selectorPosition == TabSelectorPosition.Bottom;
-
-					bool transposeContent = newValueIsTopOrLeft == oldValueWasBottomOrRight;
-					ObservableCollection<Proportion> newButtonProportions;
-					ObservableCollection<Proportion> newContentProportions;
-
-					if (newValueIsTopOrBottom)
-					{
-						newButtonProportions = _gridButtons.ColumnsProportions;
-						newContentProportions = InternalChild.RowsProportions;
-					}
-					else
-					{
-						newButtonProportions = _gridButtons.RowsProportions;
-						newContentProportions = InternalChild.ColumnsProportions;
-					}
-
-					Grid.SetColumn(_panelContent, value == TabSelectorPosition.Left ? 1 : 0);
-					Grid.SetRow(_panelContent, value == TabSelectorPosition.Top ? 1 : 0);
-
-					Grid.SetColumn(_gridButtons, value == TabSelectorPosition.Right ? 1 : 0);
-					Grid.SetRow(_gridButtons, value == TabSelectorPosition.Bottom ? 1 : 0);
-
-					if (newButtonProportions != _buttonProportions)
-					{
-						for (int i = 0; i < _buttonProportions.Count; i++)
-						{
-							newButtonProportions.Add(_buttonProportions[i]);
-						}
-
-						_buttonProportions.Clear();
-						_buttonProportions = newButtonProportions;
-					}
-
-					if (newContentProportions != _contentProportions)
-					{
-						for (int i = 0; i < _contentProportions.Count; i++)
-						{
-							newContentProportions.Add(_contentProportions[i]);
-						}
-
-						_contentProportions.Clear();
-						_contentProportions = newContentProportions;
-					}
-
-					if (transposeContent)
-					{
-						for (int i = 0; i < InternalChild.Widgets.Count; i++)
-						{
-							_contentProportions.Move(_contentProportions.Count - 1, i);
-							InternalChild.Widgets.Move(InternalChild.Widgets.Count - 1, i);
-						}
-					}
-
-					for (int i = 0; i < InternalChild.Widgets.Count; i++)
-					{
-						Widget w = InternalChild.Widgets[i];
-						if (newValueIsTopOrBottom)
-						{
-							Grid.SetColumn(w, 0);
-							Grid.SetRow(w, i);
-						}
-						else
-						{
-							Grid.SetColumn(w, i);
-							Grid.SetRow(w, 0);
-						}
-					}
-
-					_selectorPosition = value;
-
-					if (newValueIsTopOrBottom != oldValueWasTopOrBottom)
-					{
-						UpdateGridPositions();
-					}
+					return;
 				}
+
+				_selectorPosition = value;
+				UpdateSelectorPosition();
 			}
 		}
 
@@ -160,18 +81,18 @@ namespace Myra.Graphics2D.UI
 
 			_gridButtons = new Grid();
 			_panelContent = new Panel();
-			Grid.SetRow(_panelContent, 1);
 
-			// Default to Top selector position:
 			_selectorPosition = TabSelectorPosition.Top;
-			_buttonProportions = _gridButtons.ColumnsProportions;
-			_contentProportions = InternalChild.RowsProportions;
+			_gridButtons.DefaultColumnProportion = Proportion.Auto;
+			_gridButtons.DefaultRowProportion = Proportion.Auto;
 
-			// button, then content
-			_contentProportions.Add(new Proportion());
-			_contentProportions.Add(new Proportion(ProportionType.Fill));
+			InternalChild.DefaultColumnProportion = Proportion.Fill;
+			InternalChild.DefaultRowProportion = Proportion.Fill;
+
 			InternalChild.Widgets.Add(_gridButtons);
 			InternalChild.Widgets.Add(_panelContent);
+
+			UpdateSelectorPosition();
 
 			ClipToBounds = true;
 
@@ -194,11 +115,72 @@ namespace Myra.Graphics2D.UI
 			InvalidateMeasure();
 		}
 
-		private void UpdateGridPositions()
+		private void UpdateSelectorPosition()
+		{
+			switch (_selectorPosition)
+			{
+				case TabSelectorPosition.Top:
+					Grid.SetColumn(_gridButtons, 0);
+					Grid.SetRow(_gridButtons, 0);
+
+					Grid.SetColumn(_panelContent, 0);
+					Grid.SetRow(_panelContent, 1);
+
+					InternalChild.ColumnsProportions.Clear();
+					InternalChild.RowsProportions.Clear();
+					InternalChild.RowsProportions.Add(Proportion.Auto);
+					InternalChild.RowsProportions.Add(Proportion.Fill);
+					break;
+
+				case TabSelectorPosition.Right:
+					Grid.SetColumn(_gridButtons, 1);
+					Grid.SetRow(_gridButtons, 0);
+
+					Grid.SetColumn(_panelContent, 0);
+					Grid.SetRow(_panelContent, 0);
+
+					InternalChild.ColumnsProportions.Clear();
+					InternalChild.ColumnsProportions.Add(Proportion.Fill);
+					InternalChild.ColumnsProportions.Add(Proportion.Auto);
+					InternalChild.RowsProportions.Clear();
+					break;
+
+				case TabSelectorPosition.Bottom:
+					Grid.SetColumn(_gridButtons, 0);
+					Grid.SetRow(_gridButtons, 1);
+
+					Grid.SetColumn(_panelContent, 0);
+					Grid.SetRow(_panelContent, 0);
+
+
+					InternalChild.ColumnsProportions.Clear();
+					InternalChild.RowsProportions.Clear();
+					InternalChild.RowsProportions.Add(Proportion.Fill);
+					InternalChild.RowsProportions.Add(Proportion.Auto);
+					break;
+
+				case TabSelectorPosition.Left:
+					Grid.SetColumn(_gridButtons, 0);
+					Grid.SetRow(_gridButtons, 0);
+
+					Grid.SetColumn(_panelContent, 1);
+					Grid.SetRow(_panelContent, 0);
+
+					InternalChild.ColumnsProportions.Clear();
+					InternalChild.ColumnsProportions.Add(Proportion.Auto);
+					InternalChild.ColumnsProportions.Add(Proportion.Fill);
+					InternalChild.RowsProportions.Clear();
+					break;
+			}
+
+			UpdateButtonsGrid();
+		}
+
+		private void UpdateButtonsGrid()
 		{
 			bool tabSelectorIsLeftOrRight = TabSelectorPosition == TabSelectorPosition.Left ||
 											TabSelectorPosition == TabSelectorPosition.Right;
-			for (var i = 0; i < Items.Count; ++i)
+			for (var i = 0; i < _gridButtons.Widgets.Count; ++i)
 			{
 				var widget = _gridButtons.Widgets[i];
 				if (tabSelectorIsLeftOrRight)
@@ -234,7 +216,7 @@ namespace Myra.Graphics2D.UI
 			var panel = new HorizontalStackPanel
 			{
 				Spacing = item.ImageTextSpacing,
-				VerticalAlignment = item.ContentVerticalAlignment
+				VerticalAlignment = VerticalAlignment.Stretch
 			};
 
 			panel.Widgets.Add(image);
@@ -253,12 +235,11 @@ namespace Myra.Graphics2D.UI
 
 			button.Click += ButtonOnClick;
 
-			_buttonProportions.Insert(index, new Proportion(ProportionType.Auto));
 			_gridButtons.Widgets.Insert(index, button);
 
 			item.Button = button;
 
-			UpdateGridPositions();
+			UpdateButtonsGrid();
 
 			if (Items.Count == 1)
 			{
@@ -272,7 +253,6 @@ namespace Myra.Graphics2D.UI
 			item.Changed -= ItemOnChanged;
 
 			var index = _gridButtons.Widgets.IndexOf(item.Button);
-			_buttonProportions.RemoveAt(index);
 			_gridButtons.Widgets.RemoveAt(index);
 
 			if (SelectedItem == item)
@@ -280,7 +260,7 @@ namespace Myra.Graphics2D.UI
 				SelectedItem = null;
 			}
 
-			UpdateGridPositions();
+			UpdateButtonsGrid();
 		}
 
 		private void UpdateContent()
