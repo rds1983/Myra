@@ -308,6 +308,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			_gridButtons.Widgets.RemoveAt(index);
+			Items.RemoveAt(index);
 
 			if (SelectedItem == item)
 			{
