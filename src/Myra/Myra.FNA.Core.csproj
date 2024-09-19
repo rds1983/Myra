@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);FNA</DefineConstants>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>$(AppTargetFramework)</TargetFramework>
     <AssemblyName>Myra</AssemblyName>
     <PackageId>Myra.FNA.Core</PackageId>
     <OutputPath>bin\FNA.Core\$(Configuration)</OutputPath>

@@ -3,7 +3,7 @@
     <OutputType>WinExe</OutputType>
     <AssemblyName>Myra.Samples.AllWidgets</AssemblyName>
     <RootNamespace>Myra.Samples.AllWidgets</RootNamespace>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>$(AppTargetFramework)</TargetFramework>
     <DefineConstants>$(DefineConstants);PLATFORM_AGNOSTIC</DefineConstants>
   </PropertyGroup>
   <ItemGroup>

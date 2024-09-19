@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>$(AppTargetFramework)</TargetFramework>
     <OutputPath>bin\Stride\$(Configuration)</OutputPath>
     <DefineConstants>$(DefineConstants);STRIDE</DefineConstants>
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Stride.Engine" Version="4.2.0.2067" />
+    <PackageReference Include="Stride.Engine" Version="4.2.0.2188" />
   </ItemGroup>
 
   <ItemGroup>

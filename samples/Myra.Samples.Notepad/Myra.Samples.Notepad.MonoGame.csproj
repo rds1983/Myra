@@ -3,7 +3,7 @@
     <OutputType>Exe</OutputType>
     <AssemblyName>Myra.Samples.Notepad</AssemblyName>
     <RootNamespace>Myra.Samples.Notepad</RootNamespace>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>$(AppTargetFramework)</TargetFramework>
     <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
   </PropertyGroup>
 

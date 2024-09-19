@@ -103,9 +103,9 @@ namespace Myra.Graphics2D.UI
 				secondProportion = _layout.RowsProportions[handleIndex + 1];
 			}
 
-			if (fp >= 0)
+			var fp2 = firstProportion.Value + secondProportion.Value - fp;
+			if (fp >= 0 && fp2 >= 0)
 			{
-				var fp2 = firstProportion.Value + secondProportion.Value - fp;
 				firstProportion.Value = fp;
 				secondProportion.Value = fp2;
 				FireProportionsChanged();
