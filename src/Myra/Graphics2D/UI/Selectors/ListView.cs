@@ -550,7 +550,7 @@ namespace Myra.Graphics2D.UI
 			ListBoxStyle = listView.ListBoxStyle;
 			SelectionMode = listView.SelectionMode;
 
-			foreach(var child in listView.Widgets)
+			foreach (var child in listView.Widgets)
 			{
 				Widgets.Add(child.Clone());
 			}

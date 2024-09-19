@@ -2,30 +2,16 @@
 {
 	public class TabControlStyle : WidgetStyle
 	{
-		public ImageTextButtonStyle TabItemStyle
-		{
-			get; set;
-		}
+		public ImageTextButtonStyle TabItemStyle { get; set; }
 
-		public WidgetStyle ContentStyle
-		{
-			get; set;
-		}
+		public WidgetStyle ContentStyle { get; set; }
 
-		public int ButtonSpacing
-		{
-			get; set;
-		}
+		public int ButtonSpacing { get; set; }
 
-		public int HeaderSpacing
-		{
-			get; set;
-		}
+		public int HeaderSpacing { get; set; }
 
-		public TabSelectorPosition TabSelectorPosition
-		{
-			get; set;
-		}
+		public TabSelectorPosition TabSelectorPosition { get; set; }
+		public ImageButtonStyle CloseButtonStyle { get; set; }
 
 		public TabControlStyle()
 		{

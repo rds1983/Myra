@@ -73,6 +73,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[Category("Behavior")]
+		public bool CloseableTabs { get; set; }
+
 		public TabControl(string styleName = Stylesheet.DefaultStyleName) : base(new Grid())
 		{
 			HorizontalAlignment = HorizontalAlignment.Left;
@@ -227,16 +230,47 @@ namespace Myra.Graphics2D.UI
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
 				Height = item.Height,
-				Content = panel
+				Content = panel,
+				ButtonsContainer = _gridButtons
 			};
 
 			button.ApplyButtonStyle(TabControlStyle.TabItemStyle);
 
 			button.Click += ButtonOnClick;
 
-			_gridButtons.Widgets.Insert(index, button);
-
 			item.Button = button;
+
+			if (!CloseableTabs)
+			{
+				_gridButtons.Widgets.Insert(index, button);
+			} else
+			{
+				var topItemPanel = new HorizontalStackPanel();
+				topItemPanel.Widgets.Add(button);
+				StackPanel.SetProportionType(button, ProportionType.Fill);
+
+				var closeButton = new Button
+				{
+					Content = new Image(),
+					HorizontalAlignment = HorizontalAlignment.Right
+				};
+
+				closeButton.Click += (s, e) => RemoveItem(item);
+
+				var style = TabControlStyle;
+				if (style.CloseButtonStyle != null)
+				{
+					closeButton.ApplyButtonStyle(style.CloseButtonStyle);
+					if (style.CloseButtonStyle.ImageStyle != null)
+					{
+						var closeImage = (Image)closeButton.Content;
+						closeImage.ApplyPressableImageStyle(style.CloseButtonStyle.ImageStyle);
+					}
+				}
+
+				topItemPanel.Widgets.Add(closeButton);
+				_gridButtons.Widgets.Insert(index, topItemPanel);
+			}
 
 			UpdateButtonsGrid();
 
@@ -247,11 +281,32 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		private int GetButtonIndex(ListViewButton button)
+		{
+			var index = -1;
+			for (var i = 0; i < _gridButtons.Widgets.Count; ++i)
+			{
+				var widget = _gridButtons.Widgets[i];
+				if (widget == button || widget.FindChild<ListViewButton>() == button)
+				{
+					index = i;
+					break;
+				}
+			}
+
+			return index;
+		}
+
 		protected override void RemoveItem(TabItem item)
 		{
 			item.Changed -= ItemOnChanged;
 
-			var index = _gridButtons.Widgets.IndexOf(item.Button);
+			var index = GetButtonIndex(item.Button);
+			if (index < 0)
+			{
+				return;
+			}
+
 			_gridButtons.Widgets.RemoveAt(index);
 
 			if (SelectedItem == item)
@@ -287,8 +342,13 @@ namespace Myra.Graphics2D.UI
 
 		private void ButtonOnClick(object sender, EventArgs eventArgs)
 		{
-			var item = (ListViewButton)sender;
-			var index = _gridButtons.Widgets.IndexOf(item);
+			var button = (ListViewButton)sender;
+			var index = GetButtonIndex(button);
+			if (index < 0)
+			{
+				return;
+			}
+
 			SelectedIndex = index;
 		}
 

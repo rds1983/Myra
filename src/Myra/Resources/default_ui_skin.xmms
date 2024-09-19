@@ -98,6 +98,9 @@
 				<LabelStyle Font="default-font" TextColor="white" DisabledTextColor="gray" />
 			</TabItemStyle>
 			<ContentStyle Background="window" Padding="5" />
+			<CloseButtonStyle OverBackground="button-over" Padding="5, 0" PressedBackground="button-red">
+				<ImageStyle Image="icon-close" />
+			</CloseButtonStyle>
 		</TabControlStyle>
 	</TabControlStyles>
 	<TreeStyles>

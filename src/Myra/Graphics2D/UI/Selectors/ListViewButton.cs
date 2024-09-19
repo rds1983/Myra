@@ -2,6 +2,10 @@
 {
 	internal class ListViewButton : ToggleButton
 	{
+		public Widget ButtonsContainer { get; set; }
+		public Widget TopParent => ButtonsContainer ?? Parent;
+
+
 		public ListViewButton() : base(null)
 		{
 		}
@@ -17,12 +21,21 @@
 					// If this is last pressed button
 					// Don't allow it to be unpressed
 					var allow = false;
-					foreach (var child in Parent.ChildrenCopy)
+					foreach (var child in TopParent.ChildrenCopy)
 					{
 						var asListViewButton = child as ListViewButton;
-						if (asListViewButton == null || asListViewButton == this)
+						if (asListViewButton == this)
 						{
 							continue;
+						}
+
+						if (asListViewButton == null)
+						{
+							asListViewButton = child.FindChild<ListViewButton>();
+							if (asListViewButton == null || asListViewButton == this)
+							{
+								continue;
+							}
 						}
 
 						if (asListViewButton.IsPressed)
@@ -52,15 +65,24 @@
 			}
 
 			// Release other pressed radio buttons
-			foreach (var child in Parent.ChildrenCopy)
+			foreach (var child in TopParent.ChildrenCopy)
 			{
-				var asRadio = child as ListViewButton;
-				if (asRadio == null || asRadio == this)
+				var asListViewButton = child as ListViewButton;
+				if (asListViewButton == this)
 				{
 					continue;
 				}
 
-				asRadio.IsPressed = false;
+				if (asListViewButton == null)
+				{
+					asListViewButton = child.FindChild<ListViewButton>();
+					if (asListViewButton == null || asListViewButton == this)
+					{
+						continue;
+					}
+				}
+
+				asListViewButton.IsPressed = false;
 			}
 		}
 	}
