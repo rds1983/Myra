@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.GridContainer"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.SplitPaneContainer", "..\samples\Myra.Samples.SplitPaneContainer\Myra.Samples.SplitPaneContainer.csproj", "{15129613-1D63-4709-8B71-70E73BAB9C0B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.Notepad", "..\samples\Myra.Samples.Notepad\Myra.Samples.Notepad.csproj", "{C98D1921-8281-4FA4-B451-E648B59C23B5}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyraPad", "..\src\MyraPad\MyraPad.csproj", "{78E5B206-FC8A-42A3-A0DB-FB82D12183B6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.CustomWidgets", "..\samples\Myra.Samples.CustomWidgets\Myra.Samples.CustomWidgets.csproj", "{9E05B57F-EB02-420F-9CD5-7BA0CB14D99C}"
@@ -35,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.CustomUIStyles
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.TextRendering.MonoGame", "..\samples\Myra.Samples.TextRendering\Myra.Samples.TextRendering.MonoGame.csproj", "{39205279-736F-4474-BBBB-AD824E36744E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.Notepad.MonoGame", "..\samples\Myra.Samples.Notepad\Myra.Samples.Notepad.MonoGame.csproj", "{2388B303-FE21-45CC-80D2-3007E959EBCD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,10 +49,6 @@ Global
 		{15129613-1D63-4709-8B71-70E73BAB9C0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15129613-1D63-4709-8B71-70E73BAB9C0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15129613-1D63-4709-8B71-70E73BAB9C0B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C98D1921-8281-4FA4-B451-E648B59C23B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C98D1921-8281-4FA4-B451-E648B59C23B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C98D1921-8281-4FA4-B451-E648B59C23B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C98D1921-8281-4FA4-B451-E648B59C23B5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{78E5B206-FC8A-42A3-A0DB-FB82D12183B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{78E5B206-FC8A-42A3-A0DB-FB82D12183B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78E5B206-FC8A-42A3-A0DB-FB82D12183B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -101,6 +97,10 @@ Global
 		{39205279-736F-4474-BBBB-AD824E36744E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39205279-736F-4474-BBBB-AD824E36744E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39205279-736F-4474-BBBB-AD824E36744E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2388B303-FE21-45CC-80D2-3007E959EBCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2388B303-FE21-45CC-80D2-3007E959EBCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2388B303-FE21-45CC-80D2-3007E959EBCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2388B303-FE21-45CC-80D2-3007E959EBCD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,7 +108,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{E96FADDC-29FA-49F7-920D-4AD9F5FBD705} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{15129613-1D63-4709-8B71-70E73BAB9C0B} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
-		{C98D1921-8281-4FA4-B451-E648B59C23B5} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{9E05B57F-EB02-420F-9CD5-7BA0CB14D99C} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{4DA7A6EB-1A4F-4966-A534-2C52F01E4411} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{CA9509A6-31B2-44F4-A13D-01A794ABDD74} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
@@ -118,6 +117,7 @@ Global
 		{7A6283C5-C2CF-4CE0-877A-B8A95D391007} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{3016FB8F-2C41-4C8C-8B05-CECCD40526AB} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{39205279-736F-4474-BBBB-AD824E36744E} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{2388B303-FE21-45CC-80D2-3007E959EBCD} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35ACDF4E-2CE2-46B1-A19F-35DC131069A1}

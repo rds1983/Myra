@@ -49,14 +49,16 @@ namespace Myra.Samples.ObjectEditor
 
 			MyraEnvironment.Game = this;
 
-			_font = DefaultAssets.UIStylesheet.Fonts.Values.First();
+			_font = DefaultAssets.DefaultStylesheet.Fonts.Values.First();
 
 			var root = new Panel();
 
-			var showButton = new TextButton
+			var showButton = new ToggleButton
 			{
-				Text = "Show",
-				Toggleable = true
+				Content = new Label
+				{
+					Text = "Show",
+				}
 			};
 
 			showButton.PressedChanged += ShowButton_PressedChanged;
@@ -132,7 +134,7 @@ namespace Myra.Samples.ObjectEditor
 
 		private void ShowButton_PressedChanged(object sender, System.EventArgs e)
 		{
-			var button = (TextButton)sender;
+			var button = (ToggleButton)sender;
 			if (button.IsPressed)
 			{
 				_windowEditor.Show(_desktop, _lastPosition);

@@ -1,23 +1,23 @@
 <Project>
   <Project.ExportOptions Namespace="Myra.Samples.NonModalWindows.UI" Class="Window1" OutputPath="D:\Projects\Myra\samples\Myra.Samples.NonModalWindows\UI" />
-  <Window Title="Window 1" Left="353" Top="97">
+  <Window Title="Window 1" Left="494" Top="250">
     <VerticalStackPanel Spacing="8">
       <Label Text="You have 10 points left to distribute" />
       <Grid ColumnSpacing="8" RowSpacing="8">
         <Grid.DefaultColumnProportion Type="Auto" />
         <Grid.DefaultRowProportion Type="Auto" />
         <Label Text="Strength" />
-        <SpinButton Value="5" Width="50" GridColumn="1" />
-        <Label Text="Dexterity" GridRow="1" />
-        <SpinButton Value="5" Width="50" GridColumn="1" GridRow="1" />
-        <Label Text="Constitution" GridRow="2" />
-        <SpinButton Value="5" Width="50" GridColumn="1" GridRow="2" />
-        <Label Text="Intelligence" GridRow="3" />
-        <SpinButton Value="5" Width="50" GridColumn="1" GridRow="3" />
-        <Label Text="Wisdom" GridRow="4" />
-        <SpinButton Value="5" Width="50" GridColumn="1" GridRow="4" />
-        <Label Text="Charisma" GridRow="5" />
-        <SpinButton Value="5" Width="50" GridColumn="1" GridRow="5" />
+        <SpinButton Value="5" Width="50" Grid.Column="1" />
+        <Label Text="Dexterity" Grid.Row="1" />
+        <SpinButton Value="5" Width="50" Grid.Column="1" Grid.Row="1" />
+        <Label Text="Constitution" Grid.Row="2" />
+        <SpinButton Value="5" Width="50" Grid.Column="1" Grid.Row="2" />
+        <Label Text="Intelligence" Grid.Row="3" />
+        <SpinButton Value="5" Width="50" Grid.Column="1" Grid.Row="3" />
+        <Label Text="Wisdom" Grid.Row="4" />
+        <SpinButton Value="5" Width="50" Grid.Column="1" Grid.Row="4" />
+        <Label Text="Charisma" Grid.Row="5" />
+        <SpinButton Value="5" Width="50" Grid.Column="1" Grid.Row="5" />
       </Grid>
     </VerticalStackPanel>
   </Window>

@@ -1,0 +1,20 @@
+<Project>
+  <Project.ExportOptions />
+  <Panel>
+    <ListView Width="200" Height="200" HorizontalAlignment="Center" VerticalAlignment="Center">
+      <Label Text="test" />
+      <HorizontalSeparator />
+      <Label Text="test2" />
+      <VerticalStackPanel>
+        <Label Text="test3" />
+        <Label Text="test4" />
+      </VerticalStackPanel>
+      <HorizontalSeparator />
+      <VerticalStackPanel>
+        <Label Text="test5" />
+        <Label Text="test6" />
+        <Label Text="test7" />
+      </VerticalStackPanel>
+    </ListView>
+  </Panel>
+</Project>

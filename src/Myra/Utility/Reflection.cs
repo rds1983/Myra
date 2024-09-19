@@ -4,10 +4,7 @@ using System.Reflection;
 
 namespace Myra.Utility
 {
-	/// <summary>
-	/// Reflection Utility
-	/// </summary>
-	public static class Reflection
+	internal static class Reflection
 	{
 		public static T FindAttribute<T>(this MemberInfo property) where T : Attribute
 		{
@@ -27,6 +24,12 @@ namespace Myra.Utility
 		{
 			return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>) &&
 					type.GenericTypeArguments[0].IsPrimitive;
+		}
+
+		public static bool IsNullableEnum(this Type type)
+		{
+			return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>) &&
+					type.GenericTypeArguments[0].IsEnum;
 		}
 
 		public static Type GetNullableType(this Type type)
@@ -146,12 +149,6 @@ namespace Myra.Utility
 				default:
 					return false;
 			}
-		}
-
-		public static bool IsNullableEnum(this Type type)
-		{
-			return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>) &&
-					type.GenericTypeArguments[0].IsEnum;
 		}
 	}
 }

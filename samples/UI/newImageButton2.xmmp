@@ -1,0 +1,11 @@
+<Project>
+  <Project.ExportOptions />
+  <Panel>
+    <Button Width="100" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center">
+      <HorizontalStackPanel Spacing="8" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Image Renderable="tree1.png" />
+        <Label Text="Test" VerticalAlignment="Center" />
+      </HorizontalStackPanel>
+    </Button>
+  </Panel>
+</Project>

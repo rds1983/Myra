@@ -3,7 +3,7 @@
     <OutputType>Exe</OutputType>
     <AssemblyName>Myra.Samples.AllWidgets</AssemblyName>
     <RootNamespace>Myra.Samples.AllWidgets</RootNamespace>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>$(AppTargetFramework)</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

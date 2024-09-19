@@ -1,25 +1,21 @@
 <Project>
-  <Project.ExportOptions Namespace="Myra.Graphics2D.UI.File" Class="FileDialog" OutputPath="C:/Projects/Myra/src/Myra/Graphics2D/UI/File" />
-  <Dialog Title="Open File..." Left="286" Top="10" Width="600" Height="400">
+  <Project.ExportOptions Namespace="Myra.Graphics2D.UI.File" Class="FileDialog" OutputPath="D:/Projects/Myra/src/Myra/Graphics2D/UI/File" />
+  <Dialog Title="Open File..." Left="658" Top="131" Width="600" Height="400">
     <VerticalStackPanel Spacing="4">
-      <VerticalStackPanel.Proportions>
-        <Proportion Type="Auto" />
-        <Proportion Type="Fill" />
-      </VerticalStackPanel.Proportions>
-      <Grid ColumnSpacing="4">
-        <Grid.ColumnsProportions>
-          <Proportion Type="Auto" />
-          <Proportion Type="Auto" />
-          <Proportion Type="Fill" />
-          <Proportion Type="Auto" />
-        </Grid.ColumnsProportions>
-        <ImageButton HorizontalAlignment="Center" VerticalAlignment="Center" Id="_buttonBack" />
-        <ImageButton HorizontalAlignment="Center" VerticalAlignment="Center" GridColumn="1" Id="_buttonForward" />
-        <TextBox Readonly="True" VerticalAlignment="Center" GridColumn="2" Id="_textFieldPath" />
-        <ImageButton HorizontalAlignment="Center" VerticalAlignment="Center" GridColumn="3" Id="_buttonParent" />
-      </Grid>
-      <HorizontalSplitPane Id="_splitPane">
-        <ListBox HorizontalAlignment="Stretch" ClipToBounds="True" Id="_listBoxPlaces" />
+      <HorizontalStackPanel Spacing="4">
+        <Button HorizontalAlignment="Center" VerticalAlignment="Center" Id="_buttonBack">
+          <Image />
+        </Button>
+        <Button HorizontalAlignment="Center" VerticalAlignment="Center" Id="_buttonForward">
+          <Image />
+        </Button>
+        <TextBox Readonly="True" VerticalAlignment="Center" Id="_textFieldPath" StackPanel.ProportionType="Fill" />
+        <Button HorizontalAlignment="Center" VerticalAlignment="Center" Id="_buttonParent">
+          <Image />
+        </Button>
+      </HorizontalStackPanel>
+      <HorizontalSplitPane Id="_splitPane" StackPanel.ProportionType="Fill">
+        <ListView HorizontalAlignment="Stretch" ClipToBounds="True" Id="_listPlaces" />
         <ScrollViewer ShowHorizontalScrollBar="False" Id="_scrollPane">
           <Grid ColumnSpacing="4" RowSpacing="4" GridSelectionMode="Row" Id="_gridFiles">
             <Grid.ColumnsProportions>
@@ -29,14 +25,10 @@
           </Grid>
         </ScrollViewer>
       </HorizontalSplitPane>
-      <Grid ColumnSpacing="4">
-        <Grid.ColumnsProportions>
-          <Proportion Type="Auto" />
-          <Proportion Type="Fill" />
-        </Grid.ColumnsProportions>
+      <HorizontalStackPanel Spacing="4">
         <Label Text="File name" Id="_textBlockFileName" />
-        <TextBox GridColumn="1" Id="_textFieldFileName" />
-      </Grid>
+        <TextBox Readonly="True" Id="_textFieldFileName" StackPanel.ProportionType="Fill" />
+      </HorizontalStackPanel>
     </VerticalStackPanel>
   </Dialog>
 </Project>

@@ -3,6 +3,7 @@ using FontStashSharp;
 using Myra.Utility;
 using FontStashSharp.RichText;
 using FontStashSharp.Interfaces;
+using info.lundin.math;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -76,6 +77,35 @@ namespace Myra.Graphics2D
 		private TextureFiltering _textureFiltering = TextureFiltering.Nearest;
 		public Transform Transform;
 
+		internal Rectangle DeviceScissor
+		{
+			get
+			{
+#if MONOGAME || FNA
+				var device = _renderer.GraphicsDevice;
+				return device.ScissorRectangle;
+#elif STRIDE
+				return MyraEnvironment.Game.GraphicsContext.CommandList.Scissor;
+#else
+				return _renderer.Scissor;
+#endif
+			}
+
+			set
+			{
+#if MONOGAME || FNA
+				var device = _renderer.GraphicsDevice;
+				device.ScissorRectangle = value;
+#elif STRIDE
+				Flush();
+				MyraEnvironment.Game.GraphicsContext.CommandList.SetScissorRectangle(value);
+#else
+				_renderer.Scissor = value;
+#endif
+			}
+		}
+
+
 		public Rectangle Scissor
 		{
 			get
@@ -97,13 +127,12 @@ namespace Myra.Graphics2D
 				var device = _renderer.GraphicsDevice;
 				value.X += device.Viewport.X;
 				value.Y += device.Viewport.Y;
-				device.ScissorRectangle = value;
 #elif STRIDE
 				Flush();
-				MyraEnvironment.Game.GraphicsContext.CommandList.SetScissorRectangle(value);
 #else
-				_renderer.Scissor = value;
 #endif
+
+				DeviceScissor = value;
 			}
 		}
 
@@ -127,7 +156,6 @@ namespace Myra.Graphics2D
 				_fontStashRenderer2 = new FontStashRenderer2(_renderer);
 			}
 #endif
-			_scissor = GetDeviceScissor();
 		}
 
 		/// <summary>
@@ -137,23 +165,6 @@ namespace Myra.Graphics2D
 		public void AddOpacity(float opacity)
 		{
 			Opacity *= opacity;
-		}
-
-		private Rectangle GetDeviceScissor()
-		{
-#if MONOGAME || FNA
-			var device = _renderer.GraphicsDevice;
-			var rect = device.ScissorRectangle;
-
-			rect.X -= device.Viewport.X;
-			rect.Y -= device.Viewport.Y;
-
-			return rect;
-#elif STRIDE
-			return MyraEnvironment.Game.GraphicsContext.CommandList.Scissor;
-#else
-			return _renderer.Scissor;
-#endif
 		}
 
 		private void SetTextureFiltering(TextureFiltering value)
@@ -188,7 +199,15 @@ namespace Myra.Graphics2D
 #if MONOGAME || FNA || STRIDE
 				sz = new Vector2(texture.Width, texture.Height);
 #else
-				var p = _fontStashRenderer.TextureManager.GetTextureSize(texture);
+				Point p;
+				if (_fontStashRenderer != null)
+				{
+					p = _fontStashRenderer.TextureManager.GetTextureSize(texture);
+				} else
+				{
+					p = _fontStashRenderer2.TextureManager.GetTextureSize(texture);
+				}
+
 				sz = new Vector2(p.X, p.Y);
 #endif
 			}
@@ -243,9 +262,11 @@ namespace Myra.Graphics2D
 
 #if MONOGAME || FNA
 			position = Transform.Apply(position);
-			 _renderer.Draw(texture, position, sourceRectangle, color, rotation, Vector2.Zero, scale, SpriteEffects.None, depth);
+
+			_renderer.Draw(texture, position, sourceRectangle, color, rotation, Vector2.Zero, scale, SpriteEffects.None, depth);
 #elif STRIDE
 			position = Transform.Apply(position);
+
 			_renderer.Draw(texture, position, sourceRectangle, color, rotation, Vector2.Zero, scale, SpriteEffects.None, ImageOrientation.AsIs, depth);
 #else
 			if (_fontStashRenderer != null)
@@ -255,8 +276,18 @@ namespace Myra.Graphics2D
 			}
 			else
 			{
-				var size = new Vector2(scale.X * sourceRectangle.Value.Width, scale.Y * sourceRectangle.Value.Height);
-				_renderer.DrawQuad(texture, color, position, ref Transform.Matrix, depth, size, sourceRectangle.Value,
+				Rectangle r;
+				if (sourceRectangle != null)
+				{
+					r = sourceRectangle.Value;
+				} else
+				{
+					var textureSize = _fontStashRenderer2.TextureManager.GetTextureSize(texture);
+					r = new Rectangle(0, 0, textureSize.X, textureSize.Y);
+				}
+
+				var size = new Vector2(scale.X * r.Width, scale.Y * r.Height);
+				_renderer.DrawQuad(texture, color, position, ref Transform.Matrix, depth, size, r,
 					ref _topLeft, ref _topRight, ref _bottomLeft, ref _bottomRight);
 			}
 #endif
@@ -334,15 +365,15 @@ namespace Myra.Graphics2D
 			rotation += Transform.Rotation;
 
 #if MONOGAME || FNA || STRIDE
-			font.DrawText(_renderer, text, position, color, scale, rotation, Vector2.Zero, layerDepth);
+			font.DrawText(_renderer, text, position, color, rotation, Vector2.Zero, scale, layerDepth);
 #else
 			if (_fontStashRenderer != null)
 			{
-				font.DrawText(_fontStashRenderer, text, position, color, scale, rotation, Vector2.Zero);
+				font.DrawText(_fontStashRenderer, text, position, color, rotation, Vector2.Zero, scale);
 			}
 			else
 			{
-				font.DrawText(_fontStashRenderer2, text, position, color, scale, rotation, Vector2.Zero);
+				font.DrawText(_fontStashRenderer2, text, position, color, rotation, Vector2.Zero, scale);
 			}
 #endif
 		}
@@ -383,15 +414,15 @@ namespace Myra.Graphics2D
 			rotation += Transform.Rotation;
 
 #if MONOGAME || FNA || STRIDE
-			richText.Draw(_renderer, position, color, scale, rotation, Vector2.Zero, layerDepth, horizontalAlignment);
+			richText.Draw(_renderer, position, color, rotation, Vector2.Zero, scale, layerDepth, horizontalAlignment);
 #else
 			if (_fontStashRenderer != null)
 			{
-				richText.Draw(_fontStashRenderer, position, color, scale, rotation, Vector2.Zero, layerDepth, horizontalAlignment);
+				richText.Draw(_fontStashRenderer, position, color, rotation, Vector2.Zero, scale, layerDepth, horizontalAlignment);
 			}
 			else
 			{
-				richText.Draw(_fontStashRenderer2, position, color, scale, rotation, Vector2.Zero, layerDepth, horizontalAlignment);
+				richText.Draw(_fontStashRenderer2, position, color, rotation, Vector2.Zero, scale, layerDepth, horizontalAlignment);
 			}
 #endif
 		}

@@ -1,0 +1,23 @@
+<Project>
+  <Project.ExportOptions />
+  <Panel>
+    <VerticalStackPanel ShowGridLines="True" HorizontalAlignment="Center" VerticalAlignment="Center">
+      <RadioButton>
+        <Label Text="Text" />
+      </RadioButton>
+      <RadioButton>
+        <VerticalStackPanel>
+          <Label Text="Text1" />
+          <Label Text="Text2" />
+        </VerticalStackPanel>
+      </RadioButton>
+      <RadioButton>
+        <VerticalStackPanel>
+          <Label Text="Text1" />
+          <Label Text="Text2" />
+          <Label Text="Text3" />
+        </VerticalStackPanel>
+      </RadioButton>
+    </VerticalStackPanel>
+  </Panel>
+</Project>

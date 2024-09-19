@@ -2,27 +2,20 @@
   <Project.ExportOptions Namespace="Myra.Samples.TextRendering.UI" Class="MainPanel" OutputPath="D:\Projects\Myra\samples\Myra.Samples.TextRendering\UI" />
   <Panel>
     <VerticalStackPanel>
-      <VerticalStackPanel.Proportions>
-        <Proportion Type="Part" />
-        <Proportion Type="Auto" />
-        <Proportion Type="Auto" />
-        <Proportion Type="Auto" />
-        <Proportion Type="Part" />
-      </VerticalStackPanel.Proportions>
-      <Panel Background="#404040FF" ClipToBounds="True">
+      <Panel Background="#404040FF" ClipToBounds="True" StackPanel.ProportionType="Part">
         <Label TransformOrigin="0, 0" Id="_labelText" />
       </Panel>
       <HorizontalSeparator />
       <VerticalStackPanel Spacing="8" Padding="0, 8">
         <HorizontalStackPanel Spacing="8">
-          <HorizontalStackPanel.Proportions>
-            <Proportion Type="Auto" />
-            <Proportion Type="Fill" />
-          </HorizontalStackPanel.Proportions>
           <Label Text="Font:" />
-          <TextBox Text="(default)" Readonly="True" Id="_textBoxFont" />
-          <TextButton Text="Browse..." Id="_buttonBrowseFont" />
-          <TextButton Text="Reset" Id="_buttonReset" />
+          <TextBox Text="(default)" Readonly="True" Id="_textBoxFont" StackPanel.ProportionType="Fill" />
+          <Button Id="_buttonBrowseFont">
+            <Label Text="Browse..." />
+          </Button>
+          <Button Id="_buttonReset">
+            <Label Text="Reset" />
+          </Button>
         </HorizontalStackPanel>
         <HorizontalStackPanel Spacing="8">
           <Label Text="Font Size:" />
@@ -34,8 +27,20 @@
             <Label Text="5.4" HorizontalAlignment="Center" Id="_labelScaleValue" />
           </VerticalStackPanel>
           <Label Text="10" />
-          <CheckBox Text="Smooth Text" Id="_checkBoxSmoothText" />
-          <CheckBox IsChecked="True" Text="Show Texture" Id="_checkBoxShowTexture" />
+          <ComboView Id="_comboRasterizer">
+            <Label Text="StbTrueType" />
+            <Label Text="StbTrueType(Old Rasterizer)" />
+          </ComboView>
+          <ComboView Id="_comboRenderer">
+            <Label Text="Default" />
+            <Label Text="NoSmoothing" />
+          </ComboView>
+          <CheckButton Id="_checkBoxSmoothText">
+            <Label Text="Smooth Text" />
+          </CheckButton>
+          <CheckButton Id="_checkBoxShowTexture">
+            <Label Text="Show Texture" />
+          </CheckButton>
         </HorizontalStackPanel>
         <HorizontalStackPanel Spacing="8">
           <Label Text="Resolution Factor:" />
@@ -47,7 +52,7 @@
         </HorizontalStackPanel>
       </VerticalStackPanel>
       <HorizontalSeparator />
-      <HorizontalStackPanel>
+      <HorizontalStackPanel StackPanel.ProportionType="Part">
         <HorizontalStackPanel.DefaultProportion Type="Part" />
         <ScrollViewer>
           <TextBox Text="/tuThe quick brown/n/ts/c[blue]fox jumps over/n/td/c[green]the lazy dog" Multiline="True" Wrap="True" VerticalAlignment="Stretch" Id="_textBoxText" />

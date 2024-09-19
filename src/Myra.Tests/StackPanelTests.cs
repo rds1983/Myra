@@ -14,11 +14,11 @@ namespace Myra.Tests
 			var label2 = new Label();
 			var label3 = new Label();
 
-			stackPanel.AddChild(label1);
-			stackPanel.AddChild(label2);
-			stackPanel.AddChild(label3);
+			stackPanel.Widgets.Add(label1);
+			stackPanel.Widgets.Add(label2);
+			stackPanel.Widgets.Add(label3);
 
-			stackPanel.RemoveChild(label2);
+			stackPanel.Widgets.Remove(label2);
 
 			Assert.AreEqual(2, stackPanel.Widgets.Count);
 			Assert.AreEqual(label1, stackPanel.Widgets[0]);

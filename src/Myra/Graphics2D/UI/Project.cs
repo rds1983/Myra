@@ -13,10 +13,9 @@ using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.Brushes;
 using Myra.Graphics2D.UI.Properties;
 using FontStashSharp;
-using Myra.Assets;
 using Myra.Utility;
 using Myra.Graphics2D.UI.File;
-using System.IO;
+using AssetManagementBase;
 
 namespace Myra.Graphics2D.UI
 {
@@ -27,6 +26,20 @@ namespace Myra.Graphics2D.UI
 		public string OutputPath { get; set; }
 		public string TemplateDesigner { get; set; }
 		public string TemplateMain { get; set; }
+	}
+
+	public class ObjectPosition
+	{
+		public object Object { get; private set; }
+		public int Start { get; private set; }
+		public int End { get; private set; }
+
+		public ObjectPosition(object obj, int start, int end)
+		{
+			Object = obj;
+			Start = start;
+			End = end;
+		}
 	}
 
 	public class Project
@@ -76,9 +89,15 @@ namespace Myra.Graphics2D.UI
 		[FilePath(FileDialogMode.ChooseFolder)]
 		public string DesignerRtfAssetsPath { get; set; }
 
+		/// <summary>
+		/// Maps loaded objects to their respective xml nodes
+		/// </summary>
+		[Browsable(false)]
+		[XmlIgnore]
+		public List<Tuple<object, XElement>> ObjectsNodes { get; internal set; }
+
 		static Project()
 		{
-			LegacyClassNames["Button"] = "ImageTextButton";
 			LegacyClassNames["VerticalBox"] = "VerticalStackPanel";
 			LegacyClassNames["HorizontalBox"] = "HorizontalStackPanel";
 			LegacyClassNames["TextField"] = "TextBox";
@@ -178,11 +197,11 @@ namespace Myra.Graphics2D.UI
 				}
 				else if (t == typeof(IImage))
 				{
-					return assetManager.Load<TextureRegion>(name);
+					return assetManager.LoadTextureRegion(name);
 				}
 				else if (t == typeof(SpriteFontBase))
 				{
-					return assetManager.Load<SpriteFontBase>(name);
+					return assetManager.LoadFont(name);
 				}
 
 				throw new Exception(string.Format("Type {0} isn't supported", t.Name));
@@ -209,18 +228,18 @@ namespace Myra.Graphics2D.UI
 			return xDoc.ToString();
 		}
 
-		public static Project LoadFromXml<T>(XDocument xDoc, IAssetManager assetManager = null, T handler = null) where T : class
+		public static Project LoadFromXml<T>(XDocument xDoc, AssetManager assetManager = null, T handler = null) where T : class
 		{
 			var stylesheet = Stylesheet.Current;
 			var stylesheetPathAttr = xDoc.Root.Attribute("StylesheetPath");
 			if (stylesheetPathAttr != null)
 			{
-				stylesheet = assetManager.Load<Stylesheet>(stylesheetPathAttr.Value);
+				stylesheet = assetManager.LoadStylesheet(stylesheetPathAttr.Value);
 			}
 
 			var result = new Project();
 
-			if (stylesheet != null)
+			if (stylesheetPathAttr != null)
 			{
 				if (assetManager == null)
 				{
@@ -232,35 +251,37 @@ namespace Myra.Graphics2D.UI
 				{ 
 					var loadContext = CreateLoadContext(assetManager);
 					loadContext.Load(result, xDoc.Root, handler);
+					result.ObjectsNodes = loadContext.ObjectsNodes;
 				}
 			}
 			else
 			{
 				var loadContext = CreateLoadContext(assetManager);
 				loadContext.Load(result, xDoc.Root, handler);
+				result.ObjectsNodes = loadContext.ObjectsNodes;
 			}
 
 			return result;
 		}
 
-		public static Project LoadFromXml<T>(string data, IAssetManager assetManager = null, T handler = null) where T : class
+		public static Project LoadFromXml<T>(string data, AssetManager assetManager = null, T handler = null) where T : class
 		{
-			return LoadFromXml(XDocument.Parse(data), assetManager, handler);
+			return LoadFromXml(XDocument.Parse(data, LoadOptions.SetLineInfo), assetManager, handler);
 		}
 
-		public static Project LoadFromXml(XDocument xDoc, IAssetManager assetManager = null)
+		public static Project LoadFromXml(XDocument xDoc, AssetManager assetManager = null)
 		{
 			return LoadFromXml<object>(xDoc, assetManager, null);
 		}
 
-		public static Project LoadFromXml(string data, IAssetManager assetManager = null)
+		public static Project LoadFromXml(string data, AssetManager assetManager = null)
 		{
-			return LoadFromXml<object>(XDocument.Parse(data), assetManager, null);
+			return LoadFromXml<object>(XDocument.Parse(data, LoadOptions.SetLineInfo), assetManager, null);
 		}
 
-		public static object LoadObjectFromXml<T>(string data, IAssetManager assetManager = null, Stylesheet stylesheet = null, T handler = null) where T : class
+		public static object LoadObjectFromXml<T>(string data, AssetManager assetManager = null, Stylesheet stylesheet = null, T handler = null, Type parentType = null) where T : class
 		{
-			XDocument xDoc = XDocument.Parse(data);
+			XDocument xDoc = XDocument.Parse(data, LoadOptions.SetLineInfo);
 
 			var name = xDoc.Root.Name.ToString();
 			Type itemType;
@@ -277,8 +298,7 @@ namespace Myra.Graphics2D.UI
 					name = newName;
 				}
 
-				var itemNamespace = typeof(Widget).Namespace;
-				itemType = typeof(Widget).Assembly.GetType(itemNamespace + "." + name);
+				itemType = GetWidgetTypeByName(name);
 			}
 			else
 			{
@@ -310,20 +330,20 @@ namespace Myra.Graphics2D.UI
 			return item;
 		}
 
-		public static object LoadObjectFromXml(string data, IAssetManager assetManager, Stylesheet stylesheet)
+		public static object LoadObjectFromXml(string data, AssetManager assetManager, Stylesheet stylesheet)
 		{
 			return LoadObjectFromXml<object>(data, assetManager, stylesheet, null);
 		}
 
-		public object LoadObjectFromXml(string data, IAssetManager assetManager)
+		public object LoadObjectFromXml(string data, AssetManager assetManager)
 		{
 			return LoadObjectFromXml(data, assetManager, Stylesheet);
 		}
 
-		public string SaveObjectToXml(object obj, string tagName)
+		public string SaveObjectToXml(object obj, string tagName, Type parentType)
 		{
 			var saveContext = CreateSaveContext(Stylesheet);
-			return saveContext.Save(obj, true, tagName).ToString();
+			return saveContext.Save(obj, true, tagName, parentType).ToString();
 		}
 
 		private static object CreateItem(Type type, XElement element)
@@ -456,6 +476,12 @@ namespace Myra.Graphics2D.UI
 			}
 
 			return true;
+		}
+
+		public static Type GetWidgetTypeByName(string name)
+		{
+			var itemNamespace = typeof(Widget).Namespace;
+			return typeof(Widget).Assembly.GetType(itemNamespace + "." + name);
 		}
 	}
 }

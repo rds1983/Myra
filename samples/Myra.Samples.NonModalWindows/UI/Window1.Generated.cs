@@ -24,57 +24,57 @@ namespace Myra.Samples.NonModalWindows.UI
 			var spinButton1 = new SpinButton();
 			spinButton1.Value = 5;
 			spinButton1.Width = 50;
-			spinButton1.GridColumn = 1;
+			Grid.SetColumn(spinButton1, 1);
 
 			var label3 = new Label();
 			label3.Text = "Dexterity";
-			label3.GridRow = 1;
+			Grid.SetRow(label3, 1);
 
 			var spinButton2 = new SpinButton();
 			spinButton2.Value = 5;
 			spinButton2.Width = 50;
-			spinButton2.GridColumn = 1;
-			spinButton2.GridRow = 1;
+			Grid.SetColumn(spinButton2, 1);
+			Grid.SetRow(spinButton2, 1);
 
 			var label4 = new Label();
 			label4.Text = "Constitution";
-			label4.GridRow = 2;
+			Grid.SetRow(label4, 2);
 
 			var spinButton3 = new SpinButton();
 			spinButton3.Value = 5;
 			spinButton3.Width = 50;
-			spinButton3.GridColumn = 1;
-			spinButton3.GridRow = 2;
+			Grid.SetColumn(spinButton3, 1);
+			Grid.SetRow(spinButton3, 2);
 
 			var label5 = new Label();
 			label5.Text = "Intelligence";
-			label5.GridRow = 3;
+			Grid.SetRow(label5, 3);
 
 			var spinButton4 = new SpinButton();
 			spinButton4.Value = 5;
 			spinButton4.Width = 50;
-			spinButton4.GridColumn = 1;
-			spinButton4.GridRow = 3;
+			Grid.SetColumn(spinButton4, 1);
+			Grid.SetRow(spinButton4, 3);
 
 			var label6 = new Label();
 			label6.Text = "Wisdom";
-			label6.GridRow = 4;
+			Grid.SetRow(label6, 4);
 
 			var spinButton5 = new SpinButton();
 			spinButton5.Value = 5;
 			spinButton5.Width = 50;
-			spinButton5.GridColumn = 1;
-			spinButton5.GridRow = 4;
+			Grid.SetColumn(spinButton5, 1);
+			Grid.SetRow(spinButton5, 4);
 
 			var label7 = new Label();
 			label7.Text = "Charisma";
-			label7.GridRow = 5;
+			Grid.SetRow(label7, 5);
 
 			var spinButton6 = new SpinButton();
 			spinButton6.Value = 5;
 			spinButton6.Width = 50;
-			spinButton6.GridColumn = 1;
-			spinButton6.GridRow = 5;
+			Grid.SetColumn(spinButton6, 1);
+			Grid.SetRow(spinButton6, 5);
 
 			var grid1 = new Grid();
 			grid1.ColumnSpacing = 8;

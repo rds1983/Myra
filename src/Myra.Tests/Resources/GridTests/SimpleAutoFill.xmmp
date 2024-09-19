@@ -1,0 +1,16 @@
+﻿<Project>
+  <Grid>
+    <Grid.ColumnsProportions>
+      <Proportion Type="Auto" />
+      <Proportion Type="Fill" />
+    </Grid.ColumnsProportions>
+    <Grid.RowsProportions>
+      <Proportion Type="Fill" />
+      <Proportion Type="Auto" />
+    </Grid.RowsProportions>
+    <Label Text="Test" Width="100" Height="50" />
+    <Label Text="Test" Width="100" Height="50" Grid.Column="1" />
+    <Label Text="Test" Width="100" Height="50" Grid.Row="1" />
+    <Label Text="Test" Width="100" Height="50" Grid.Column="1" Grid.Row="1" />
+  </Grid>
+</Project>

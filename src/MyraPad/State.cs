@@ -24,8 +24,9 @@ namespace MyraPad
 		}
 
 		public Point Size { get; set; }
-		public float TopSplitterPosition { get; set; }
-		public float LeftSplitterPosition { get; set; }
+		public float TopSplitterPosition1 { get; set; } = 0.25f;
+		public float TopSplitterPosition2 { get; set; } = 0.75f;
+		public float CenterSplitterPosition { get; set; } = 0.5f;
 		public string EditedFile { get; set; }
 		public string LastFolder { get; set; }
 		public Color[] UserColors { get; set; }
@@ -74,14 +75,16 @@ namespace MyraPad
 				colors = string.Join(", ", from c in UserColors select c.ToHexString());
 			}
 			return string.Format("Size = {0}\n" +
-								 "TopSplitter = {1:0.##}\n" +
-								 "LeftSplitter= {2:0.##}\n" +
+								 "TopSplitter1 = {1:0.##}\n" +
+								 "TopSplitter2 = {2:0.##}\n" +
+								 "CenterSplitter = {2:0.##}\n" +
 								 "EditedFile = {3}\n" +
 								 "LastFolder = {4}\n" +
 								 "UserColors = {5}",
 				Size,
-				TopSplitterPosition,
-				LeftSplitterPosition,
+				TopSplitterPosition1,
+				TopSplitterPosition2,
+				CenterSplitterPosition,
 				EditedFile,
 				LastFolder,
 				colors);

@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 
 namespace Myra.MML
 {
-	public class BaseObject: IItemWithId
+	public class BaseObject: IItemWithId, INotifyAttachedPropertyChanged
 	{
 		private string _id = null;
 
@@ -30,6 +30,10 @@ namespace Myra.MML
 			}
 		}
 
+		[XmlIgnore]
+		[Browsable(false)]
+		public readonly Dictionary<int, object> AttachedPropertiesValues = new Dictionary<int, object>();
+
 		/// <summary>
 		/// Holds custom user attributes not mapped to the object
 		/// </summary>
@@ -49,6 +53,10 @@ namespace Myra.MML
 		protected internal virtual void OnIdChanged()
 		{
 			IdChanged.Invoke(this);
+		}
+
+		public virtual void OnAttachedPropertyChanged(BaseAttachedPropertyInfo propertyInfo)
+		{
 		}
 	}
 }

@@ -34,13 +34,17 @@ namespace Myra.Samples.SplitPaneContainer
 			// Top row is buttons
 			_root.RowsProportions.Add(new Proportion(ProportionType.Auto));
 
-			var topRow = new Grid();
-			topRow.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
-			topRow.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
-
-			var buttonSwitchOrientation = new ImageTextButton
+			var topRow = new HorizontalStackPanel
 			{
-				Text = "Switch Orientation"
+				Spacing = 8
+			};
+
+			var buttonSwitchOrientation = new Button
+			{
+				Content = new Label
+				{
+					Text = "Switch Orientation"
+				}
 			};
 
 			buttonSwitchOrientation.Click += (sender, args) =>
@@ -50,11 +54,14 @@ namespace Myra.Samples.SplitPaneContainer
 
 			topRow.Widgets.Add(buttonSwitchOrientation);
 
-			var buttonReset = new ImageTextButton
+			var buttonReset = new Button
 			{
-				Text = "Reset",
-				GridColumn = 1
+				Content = new Label
+				{
+					Text = "Reset"
+				}
 			};
+			Grid.SetColumn(buttonReset, 1);
 
 			buttonReset.Click += (sender, args) =>
 			{
@@ -84,7 +91,7 @@ namespace Myra.Samples.SplitPaneContainer
 			_splitPane =
 				orientation == Orientation.Horizontal ? (SplitPane)new HorizontalSplitPane() : new VerticalSplitPane();
 
-			_splitPane.GridRow = 1;
+			Grid.SetRow(_splitPane, 1);
 
 			_splitPane.ProportionsChanged += SplitPaneOnProportionsChanged;
 

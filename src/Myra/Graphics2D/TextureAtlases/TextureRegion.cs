@@ -1,5 +1,4 @@
 ﻿using System;
-using Myra.Assets;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -15,7 +14,6 @@ using Color = FontStashSharp.FSColor;
 
 namespace Myra.Graphics2D.TextureAtlases
 {
-	[AssetLoader(typeof(TextureRegionLoader))]
 	public class TextureRegion: IImage
 	{
 		private readonly Rectangle _bounds;

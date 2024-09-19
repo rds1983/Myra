@@ -19,7 +19,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '6.0.x'
+        dotnet-version: '8.0.x'
     - name: Build Myra.MonoGame
       run: dotnet build build\Myra.MonoGame.sln --configuration Release
     - name: Build Myra.Stride
@@ -32,11 +32,9 @@ jobs:
       shell: pwsh
       run: ./buildBinaryDistribution.ps1 ${{env.VERSION}}
     - name: Install NuGet
-      uses: NuGet/setup-nuget@v1
+      uses: NuGet/setup-nuget@v2
     - name: Publish Myra.MonoGame to MyGet
       run: nuget.exe push src\Myra\bin\MonoGame\Release\Myra.*.nupkg ${{secrets.MYGET_APIKEY}} -Source https://www.myget.org/F/abarim-games/api/v2/package
-    - name: Publish Myra.Stride to MyGet
-      run: nuget.exe push src\Myra\bin\Stride\Release\Myra.Stride.*.nupkg ${{secrets.MYGET_APIKEY}} -Source https://www.myget.org/F/abarim-games/api/v2/package
     - name: Publish Myra.PlatformAgnostic to MyGet
       run: nuget.exe push src\Myra\bin\PlatformAgnostic\Release\Myra.PlatformAgnostic.*.nupkg ${{secrets.MYGET_APIKEY}} -Source https://www.myget.org/F/abarim-games/api/v2/package
     - name: Publish Myra.MonoGame to NuGet

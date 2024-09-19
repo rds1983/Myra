@@ -1,12 +1,13 @@
 ﻿using Myra.Graphics2D.UI;
 using System;
 using System.Linq;
+using Myra.Graphics2D.UI.Styles;
+
 
 #if !STRIDE
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 #if ANDROID
-using Microsoft.Xna.Framework.GamerServices;
 #endif
 #else
 using System.Threading.Tasks;
@@ -64,6 +65,9 @@ namespace Myra.Samples.AllWidgets
 			base.LoadContent();
 
 			MyraEnvironment.Game = this;
+			MyraEnvironment.EnableModalDarkening = true;
+
+//			Stylesheet.Current = DefaultAssets.DefaultStylesheet2X;
 
 			_allWidgets = new AllWidgets();
 
@@ -110,28 +114,6 @@ namespace Myra.Samples.AllWidgets
 				_desktop.OnChar(a.Character);
 			};
 #endif
-
-#if ANDROID
-			_desktop.WidgetGotKeyboardFocus += (s, a) =>
-			{
-				var asTextBox = a.Data as TextBox;
-				if (asTextBox == null)
-				{
-					return;
-				}
-
-				Guide.BeginShowKeyboardInput(PlayerIndex.One,
-					"Title",
-					"Description",
-					asTextBox.Text,
-					new AsyncCallback(r =>
-					{
-						var text = Guide.EndShowKeyboardInput(r);
-						asTextBox.Text = text;
-					}),
-					null);
-			};
-#endif
 		}
 #endif
 
@@ -166,6 +148,7 @@ namespace Myra.Samples.AllWidgets
 			// Set render target
 			GraphicsContext.CommandList.SetRenderTargetAndViewport(GraphicsDevice.Presenter.DepthStencilBuffer, GraphicsDevice.Presenter.BackBuffer);
 #endif
+			_allWidgets._labelOverGui.Text = "Is mouse over GUI: " + _desktop.IsMouseOverGUI;
 			_desktop.Render();
 		}
 	}

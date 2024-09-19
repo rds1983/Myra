@@ -2,9 +2,17 @@
 using System;
 using System.Collections.Generic;
 
+#if MONOGAME || FNA
+using Microsoft.Xna.Framework;
+#elif STRIDE
+using Stride.Core.Mathematics;
+#else
+using System.Drawing;
+#endif
+
 namespace Myra.Utility
 {
-	public static class UIUtils
+	internal static class UIUtils
 	{
 		public static bool ProcessWidgets(this Widget root, Func<Widget, bool> operation)
 		{
@@ -19,15 +27,11 @@ namespace Myra.Utility
 				return false;
 			}
 
-			var asContainer = root as Container;
-			if (asContainer != null)
+			foreach (var w in root.ChildrenCopy)
 			{
-				foreach (var w in asContainer.ChildrenCopy)
+				if (!ProcessWidgets(w, operation))
 				{
-					if (!ProcessWidgets(w, operation))
-					{
-						return false;
-					}
+					return false;
 				}
 			}
 

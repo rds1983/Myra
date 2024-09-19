@@ -4,13 +4,13 @@ using System.Reflection;
 
 namespace Myra.Utility
 {
-	public static class PathUtils
+	internal static class PathUtils
 	{
 		public static string ExecutingAssemblyDirectory
 		{
 			get
 			{
-				string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+				string codeBase = Assembly.GetExecutingAssembly().Location;
 				UriBuilder uri = new UriBuilder(codeBase);
 				string path = Uri.UnescapeDataString(uri.Path);
 				return Path.GetDirectoryName(path);

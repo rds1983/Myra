@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);MONOGAME</DefineConstants>
-    <TargetFrameworks>net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>$(AppTargetFramework)-windows</TargetFrameworks>
     <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
     <OutputType>Library</OutputType>
     <RootNamespace>Myra.Tests</RootNamespace>
@@ -10,12 +10,6 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\**\*.*" />
-  </ItemGroup>  
-
-  <ItemGroup>
-    <None Update="userProfile.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
   <ItemGroup>

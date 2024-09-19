@@ -31,7 +31,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '6.0.x'
+        dotnet-version: '8.0.x'
     - name: Build Myra.MonoGame
       run: dotnet build build\Myra.MonoGame.sln --configuration Release --version-suffix ${{env.VERSION_SUFFIX}}
     - name: Build Myra.Stride
@@ -44,13 +44,13 @@ jobs:
       shell: pwsh
       run: ./buildBinaryDistribution.ps1 ${{env.VERSION}}
     - name: Archive production artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: Myra.${{env.VERSION}}.zip
         path: Myra.${{env.VERSION}}.zip
-        retention-days: 30
+        retention-days: 10
     - name: Install NuGet
-      uses: NuGet/setup-nuget@v1
+      uses: NuGet/setup-nuget@v2
     - name: Publish Myra.MonoGame to MyGet
       run: nuget.exe push src\Myra\bin\MonoGame\Release\Myra.*.nupkg ${{secrets.MYGET_APIKEY}} -Source https://www.myget.org/F/abarim-games/api/v2/package
       continue-on-error: true

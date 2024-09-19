@@ -3,20 +3,40 @@
   <Panel>
     <Label Text="Game Screen" Top="100" HorizontalAlignment="Center" />
     <HorizontalStackPanel Top="50">
-      <RadioButton Text="Radio 1" />
-      <RadioButton Text="Radio 2" />
-      <RadioButton Text="Radio 3" />
-      <RadioButton Text="Radio 4" />
+      <RadioButton>
+        <Label Text="Radio 1" />
+      </RadioButton>
+      <RadioButton>
+        <Label Text="Radio 2" />
+      </RadioButton>
+      <RadioButton>
+        <Label Text="Radio 3" />
+      </RadioButton>
+      <RadioButton>
+        <Label Text="Radio 4" />
+      </RadioButton>
     </HorizontalStackPanel>
     <HorizontalStackPanel Spacing="8" Top="300">
-      <TextButton Text="Button 1" />
-      <TextButton Text="Button 2" />
-      <TextButton Text="Button 3" />
-      <TextButton Text="Button 4" />
+      <Button>
+        <Label Text="Button 1" />
+      </Button>
+      <Button>
+        <Label Text="Button 2" />
+      </Button>
+      <Button>
+        <Label Text="Button 3" />
+      </Button>
+      <Button>
+        <Label Text="Button 4" />
+      </Button>
     </HorizontalStackPanel>
     <HorizontalStackPanel Spacing="8" VerticalAlignment="Bottom">
-      <TextButton Text="Show Debug Panel" Id="_buttonDebugPanel" />
-      <TextButton Text="Show Debug Panel Modal" Id="_buttonModalDebugPanel" />
+      <Button Id="_buttonDebugPanel">
+        <Label Text="Show Debug Panel" />
+      </Button>
+      <Button Id="_buttonModalDebugPanel">
+        <Label Text="Show Debug Panel Modal" />
+      </Button>
     </HorizontalStackPanel>
   </Panel>
 </Project>

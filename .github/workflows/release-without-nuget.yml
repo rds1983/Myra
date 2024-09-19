@@ -1,0 +1,53 @@
+name: Release Without Nuget
+
+on: [workflow_dispatch]
+
+jobs:
+  BuildAndPublish:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - name: Extract Version
+      shell: pwsh
+      run: |
+        $version = select-string -Path 'Directory.Build.Props' -Pattern '<VersionPrefix>(.*)<\/VersionPrefix>' -AllMatches | % { $_.Matches } | % { $_.Groups[1].Value }
+        echo "VERSION=$version"
+        echo "VERSION=$version" >> $Env:GITHUB_ENV
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0.x'
+    - name: Build Myra.MonoGame
+      run: dotnet build build\Myra.MonoGame.sln --configuration Release
+    - name: Build Myra.Stride
+      run: dotnet build build\Myra.Stride.sln --configuration Release
+    - name: Build Myra.PlatformAgnostic
+      run: dotnet build build\Myra.PlatformAgnostic.sln --configuration Release
+    - name: Test
+      run: dotnet test build\Myra.MonoGame.sln --verbosity normal
+    - name: Build Binary Distribution
+      shell: pwsh
+      run: ./buildBinaryDistribution.ps1 ${{env.VERSION}}
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: ${{ env.VERSION }}
+        release_name: ${{ env.VERSION }}
+        draft: false
+        prerelease: false
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        asset_path: ./Myra.${{ env.VERSION }}.zip
+        asset_name: Myra.${{ env.VERSION }}.zip
+        asset_content_type: application/zip

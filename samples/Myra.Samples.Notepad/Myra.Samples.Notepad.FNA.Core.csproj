@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>Myra.Samples.Notepad</AssemblyName>
+    <RootNamespace>Myra.Samples.Notepad</RootNamespace>
+    <TargetFramework>$(AppTargetFramework)</TargetFramework>
+    <DefineConstants>$(DefineConstants);FNA;</DefineConstants>
+    <OutputPath>bin\FNA.Core\$(Configuration)</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="hobbits.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Myra\Myra.FNA.Core.csproj" />
+  </ItemGroup>  
+</Project>

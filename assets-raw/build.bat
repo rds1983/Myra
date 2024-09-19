@@ -1,1 +1,0 @@
-MyraTexturePacker.exe . output\default_ui_skin.png 1024 1024

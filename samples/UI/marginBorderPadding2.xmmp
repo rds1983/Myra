@@ -1,7 +1,7 @@
 <Project>
   <Project.ExportOptions />
-  <Panel Background="#F9CC9DFF" >
-    <Panel Margin="48" BorderThickness="48" Padding="48" Background="#BBD6AFFF" Border="#FFF4C3FF" >
+  <Panel Background="#F9CC9DFF">
+    <Panel Margin="48" Border="#FFF4C3FF" BorderThickness="48" Padding="48" Background="#BBD6AFFF">
       <Panel Background="#9ABFE2FF" />
     </Panel>
   </Panel>

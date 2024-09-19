@@ -78,7 +78,7 @@ namespace MyraPad
 			return char.ToLowerInvariant(s[0]) + s.Substring(1);
 		}
 
-		public string ExportDesignerRecursive(IItemWithId w)
+		public string ExportDesignerRecursive(IItemWithId w, IItemWithId parent)
 		{
 			var properties = BuildProperties(w.GetType());
 			var simpleProperties = new List<PropertyInfo>();
@@ -105,22 +105,26 @@ namespace MyraPad
 
 				if (value is IItemWithId)
 				{
-					var subItemId = ExportDesignerRecursive((IItemWithId)value);
+					var subItemId = ExportDesignerRecursive((IItemWithId)value, w);
 					var subItemCode = string.Format("{0} = {1}", property.Name, subItemId);
 					subItems.Add(subItemCode);
 				}
 				else
 				{
-
+					// Type should be assignable to IList<T> in order to be serialized as container
 					var type = value.GetType();
-					var asList = value as IList;
+					var listInterface = (from i in type.GetInterfaces()
+										 where i.IsGenericType &&
+										 i.GetGenericTypeDefinition() == typeof(IList<>)
+										 select i).FirstOrDefault();
 
-					if (asList != null && type.IsGenericType &&
-						typeof(IItemWithId).IsAssignableFrom(type.GetGenericArguments()[0]))
+					if (listInterface != null &&
+						typeof(IItemWithId).IsAssignableFrom(listInterface.GetGenericArguments()[0]))
 					{
-						foreach (var comp in asList)
+						var asEnumerable = value as IEnumerable;
+						foreach (var comp in asEnumerable)
 						{
-							var subItemId = ExportDesignerRecursive((IItemWithId)comp);
+							var subItemId = ExportDesignerRecursive((IItemWithId)comp, w);
 							var subItemCode = string.Format("{0}.Add({1})", property.Name, subItemId);
 							subItems.Add(subItemCode);
 						}
@@ -203,6 +207,21 @@ namespace MyraPad
 				}
 			}
 
+			var asBaseObject = w as BaseObject;
+			if (parent != null && asBaseObject != null)
+			{
+				var attachedProperties = AttachedPropertiesRegistry.GetPropertiesOfType(parent.GetType());
+				foreach (var property in attachedProperties)
+				{
+					var value = property.GetValueObject(asBaseObject);
+					if (value != null && !value.Equals(property.DefaultValueObject))
+					{
+						value = BuildValue(value, converter);
+						sbBuild.Append($"\n\t\t\t{property.OwnerType.Name}.Set{property.Name}({id}, {value});");
+					}
+				}
+			}
+
 			foreach (var subItem in subItems)
 			{
 				sbBuild.Append("\n\t\t\t");
@@ -230,7 +249,7 @@ namespace MyraPad
 			sbBuild.Clear();
 
 			isFirst = true;
-			ExportDesignerRecursive(_project.Root);
+			ExportDesignerRecursive(_project.Root, null);
 
 			template = template.Replace("$fields$", sbFields.ToString());
 			template = template.Replace("$build$", sbBuild.ToString());
@@ -298,7 +317,11 @@ namespace MyraPad
 
 						if (property.PropertyType != typeof(IBrush))
 						{
-							strValue = "MyraEnvironment.DefaultAssetManager.Load<" + typeName + ">(\"" + s + "\")";
+							if (typeName == "SpriteFontBase")
+							{
+								typeName = "Font";
+							}
+							strValue = "MyraEnvironment.DefaultAssetManager.Load" + typeName + "(\"" + s + "\")";
 						}
 						else
 						{

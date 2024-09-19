@@ -1,8 +1,9 @@
 <Project>
-  <Window Title="Purchase Window" Width="280" Height="795" >
+  <Project.ExportOptions />
+  <Window Title="Purchase Window" Left="359" Width="280" Height="795">
     <VerticalStackPanel>
       <HorizontalStackPanel>
-        <Image Width="48" Height="48" Background="blue"/>
+        <Image Width="48" Height="48" Background="blue" />
         <VerticalStackPanel>
           <Label Text="Hat" />
           <Label Text="Replaced action TextBox.InputFilter with event ValueChanging. It could be used to cancel setting new text to the TextBox as well as to change it's appearance. I.e. following code will cancel setting text if it's equal to &quot;0&quot; and also capitalize all other set text:" Wrap="True" />

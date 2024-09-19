@@ -9,7 +9,9 @@
       <Proportion Type="Auto" />
       <Proportion Type="Auto" />
     </Grid.RowsProportions>
-    <ImageButton Image="MonoGameLogo.png" Id="spawnUnit1" />
-    <Label Id="label" Font="arial64.fnt" Text="Spawn Unit 1" HorizontalAlignment="Center" GridRow="1" />
+    <Button Id="spawnUnit1">
+      <Image Renderable="MonoGameLogo.png" />
+    </Button>
+    <Label Text="Spawn Unit 1" Font="arial64.fnt" HorizontalAlignment="Center" Id="label" Grid.Row="1" />
   </Grid>
 </Project>

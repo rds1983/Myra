@@ -24,6 +24,43 @@ namespace Myra.MML
 {
 	internal class LoadContext: BaseContext
 	{
+		struct SimplePropertyInfo
+		{
+			public PropertyInfo Property;
+			public BaseAttachedPropertyInfo AttachedProperty;
+			public string Name;
+			public Type PropertyType;
+
+			public SimplePropertyInfo(PropertyInfo property)
+			{
+				Property = property;
+				AttachedProperty = null;
+
+				Name = property.Name;
+				PropertyType = property.PropertyType;
+			}
+
+			public SimplePropertyInfo(BaseAttachedPropertyInfo property)
+			{
+				Property = null;
+				AttachedProperty = property;
+
+				Name = property.Name;
+				PropertyType = property.PropertyType;
+			}
+
+			public void SetValue(object obj, object value)
+			{
+				if (Property != null)
+				{
+					Property.SetValue(obj, value);
+				} else if (AttachedProperty != null && obj is BaseObject)
+				{
+					AttachedProperty.SetValueObject((BaseObject)obj, value);
+				}
+			}
+		}
+
 		public Dictionary<string, string> LegacyClassNames = null;
 		public Dictionary<string, string> LegacyPropertyNames = null;
 		public Dictionary<string, Color> Colors;
@@ -31,18 +68,21 @@ namespace Myra.MML
 		public Func<Type, XElement, object> ObjectCreator = (type, el) => Activator.CreateInstance(type);
 		public Dictionary<Assembly, string[]> Assemblies;
 		public Func<Type, string, object> ResourceGetter = null;
+		public readonly List<Tuple<object, XElement>> ObjectsNodes = new List<Tuple<object, XElement>>();
 
 		private const string UserDataAttributePrefix = "_";
 
 		public void Load<T>(object obj, XElement el, T handler) where T : class
 		{
+			ObjectsNodes.Add(new Tuple<object, XElement>(obj, el));
+
 			var type = obj.GetType();
 			var handlerType = typeof(T);
 
 			var baseObject = obj as BaseObject;
 
 			List<PropertyInfo> complexProperties, simpleProperties;
-			ParseProperties(type, out complexProperties, out simpleProperties);
+			ParseProperties(type, false, out complexProperties, out simpleProperties);
 
 			string newName;
 			foreach (var attr in el.Attributes())
@@ -53,21 +93,55 @@ namespace Myra.MML
 					propertyName = newName;
 				}
 
-				var property = (from p in simpleProperties where p.Name == propertyName select p).FirstOrDefault();
+				SimplePropertyInfo? simplePropertyInfo = null;
+				if (propertyName.Contains("."))
+				{
+					// Attached property
+					var parts = propertyName.Split('.');
+					if (parts.Length != 2)
+					{
+						throw new Exception($"Couldn't parse attached property {propertyName}");
+					}
+					var parentType = Project.GetWidgetTypeByName(parts[0].Trim());
+					if (parentType == null)
+					{
+						throw new Exception($"Couldn't find type {parts[0].Trim()} for attached property {propertyName}");
+					}
 
-				if (property != null)
+					var properties = AttachedPropertiesRegistry.GetPropertiesOfType(parentType);
+					var property = (from p in properties where p.Name == parts[1].Trim() select p).FirstOrDefault();
+					if (property == null)
+					{
+						throw new Exception($"Type {parentType.Name} doesn't have attached property {parts[1].Trim()}");
+					}
+
+					simplePropertyInfo = new SimplePropertyInfo(property);
+				} else
+				{
+					var property = (from p in simpleProperties where p.Name == propertyName select p).FirstOrDefault();
+					if (property != null)
+					{
+						simplePropertyInfo = new SimplePropertyInfo(property);
+					}
+				}
+
+				if (simplePropertyInfo != null)
 				{
 					object value = null;
 
-					var propertyType = property.PropertyType;
-
+					var propertyType = simplePropertyInfo.Value.PropertyType;
 					var serializer = FindSerializer(propertyType);
 					if (serializer != null)
 					{
 						value = serializer.Deserialize(attr.Value);
 					} else 
-					if (propertyType.IsEnum)
+					if (propertyType.IsEnum ||
+						propertyType.IsNullableEnum())
 					{
+						if (propertyType.IsNullableEnum())
+						{
+							propertyType = propertyType.GetNullableType();
+						}
 						value = Enum.Parse(propertyType, attr.Value);
 					}
 					else if (propertyType == typeof(Color) || propertyType == typeof(Color?))
@@ -102,7 +176,7 @@ namespace Myra.MML
 
 							if (baseObject != null)
 							{
-								baseObject.Resources[property.Name] = attr.Value;
+								baseObject.Resources[simplePropertyInfo.Value.Name] = attr.Value;
 							}
 						}
 						catch (Exception)
@@ -119,7 +193,7 @@ namespace Myra.MML
 						value = Convert.ChangeType(attr.Value, propertyType, CultureInfo.InvariantCulture);
 					}
 
-					property.SetValue(obj, value);
+					simplePropertyInfo.Value.SetValue(obj, value);
 				}
 				else if (handler != null && type.GetEvent(attr.Name.LocalName) != null)
 				{

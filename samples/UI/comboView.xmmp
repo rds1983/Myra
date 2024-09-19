@@ -1,0 +1,14 @@
+<Project>
+  <Project.ExportOptions />
+  <Panel>
+    <ComboView HorizontalAlignment="Center" VerticalAlignment="Center">
+      <Label Text="Test" />
+      <HorizontalStackPanel Spacing="8">
+        <Image Renderable="LogoOnly_64px.png" Width="16" Height="16" VerticalAlignment="Center" />
+        <Label Text="Test2" />
+      </HorizontalStackPanel>
+      <HorizontalSeparator />
+      <Label Text="Test3" TextColor="#0379FFFF" />
+    </ComboView>
+  </Panel>
+</Project>

@@ -1,0 +1,16 @@
+﻿<Project>
+  <Grid>
+    <Grid.ColumnsProportions>
+      <Proportion Type="Part" Value="1" />
+      <Proportion Type="Part" Value="3" />
+    </Grid.ColumnsProportions>
+    <Grid.RowsProportions>
+      <Proportion Type="Part" Value="1" />
+      <Proportion Type="Part" Value="1" />
+    </Grid.RowsProportions>
+    <Label Text="Test" />
+    <Label Text="Test" Grid.Column="1" />
+    <Label Text="Test" Grid.Row="1" />
+    <Label Text="Test" Grid.Column="1" Grid.Row="1" />
+  </Grid>
+</Project>

@@ -1,5 +1,8 @@
 <Project>
+  <Project.ExportOptions />
   <Panel>
-    <TextButton Text="Some Text" DragDirection="Both" />
+    <Button DragDirection="Both">
+      <Label Text="Some Text" />
+    </Button>
   </Panel>
 </Project>

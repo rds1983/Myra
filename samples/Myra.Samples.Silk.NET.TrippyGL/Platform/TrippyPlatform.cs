@@ -31,7 +31,7 @@ namespace Myra.Samples.AllWidgets
 		{
 			// Fill _keysMap matching names
 			var keysValues = Enum.GetValues(typeof(Keys));
-			foreach(Keys keys in keysValues)
+			foreach (Keys keys in keysValues)
 			{
 				var name = Enum.GetName(typeof(Keys), keys);
 
@@ -93,7 +93,8 @@ namespace Myra.Samples.AllWidgets
 				if (_keysMap.TryGetValue(ks, out key))
 				{
 					keys[i] = state.IsKeyPressed(key);
-				} else
+				}
+				else
 				{
 					keys[i] = false;
 				}
@@ -104,6 +105,10 @@ namespace Myra.Samples.AllWidgets
 		{
 			// Do not bother with accurately returning touch state for now
 			return TouchCollection.Empty;
+		}
+
+		public void SetMouseCursorType(MouseCursorType mouseCursorType)
+		{
 		}
 	}
 }

@@ -1,12 +1,13 @@
+using AssetManagementBase;
 using FontStashSharp;
 using Microsoft.Xna.Framework;
+using Myra.Events;
 using Myra.Graphics2D;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.File;
 using System;
 using System.IO;
-using System.Linq;
 
 namespace Myra.Samples.TextRendering.UI
 {
@@ -51,9 +52,23 @@ namespace Myra.Samples.TextRendering.UI
 
 			_buttonReset.Click += _buttonReset_Click;
 			_buttonBrowseFont.Click += _buttonBrowseFont_Click;
+
+			_comboRasterizer.SelectedIndex = 0;
+			_comboRasterizer.SelectedIndexChanged += (s, a) =>
+			{
+				FontSystem = null;
+				Update();
+			};
+
+			_comboRenderer.SelectedIndex = 0;
+			_comboRenderer.SelectedIndexChanged += (s, a) =>
+			{
+				FontSystem = null;
+				Update();
+			};
 		}
 
-		private void _spinButtonResolutionFactor_ValueChanged(object sender, Utility.ValueChangedEventArgs<float?> e)
+		private void _spinButtonResolutionFactor_ValueChanged(object sender, ValueChangedEventArgs<float?> e)
 		{
 			FontSystem = null;
 			Update();
@@ -79,6 +94,38 @@ namespace Myra.Samples.TextRendering.UI
 				KernelWidth = (int)_spinButtonKernelWidth.Value.Value,
 				KernelHeight = (int)_spinButtonKernelHeight.Value.Value
 			};
+
+			switch (_comboRasterizer.SelectedIndex)
+			{
+				case 1:
+					settings.StbTrueTypeUseOldRasterizer = true;
+					break;
+			}
+
+			switch (_comboRenderer.SelectedIndex)
+			{
+				case 1:
+					settings.GlyphRenderer = (input, output, options) =>
+					{
+						var size = options.Size.X * options.Size.Y;
+
+						for (var i = 0; i < size; i++)
+						{
+							var c = input[i];
+							var ci = i * 4;
+
+							if (c == 0)
+							{
+								output[ci] = output[ci + 1] = output[ci + 2] = output[ci + 3] = 0;
+							}
+							else
+							{
+								output[ci] = output[ci + 1] = output[ci + 2] = output[ci + 3] = 255;
+							}
+						}
+					};
+					break;
+			}
 
 			var result = new FontSystem(settings);
 			result.AddFont(data);
@@ -108,7 +155,7 @@ namespace Myra.Samples.TextRendering.UI
 					FontSystem = fontSystem;
 					Update();
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					var messageBox = Dialog.CreateMessageBox("Error", ex.Message);
 					messageBox.ShowModal(Desktop);
@@ -123,13 +170,23 @@ namespace Myra.Samples.TextRendering.UI
 		{
 			if (FontSystem == null)
 			{
+				var assembly = typeof(MainPanel).Assembly;
+				var assetManager = AssetManager.CreateResourceAssetManager(assembly, "Resources");
+
 				byte[] data;
 
-				using(var stream = DefaultAssets.OpenDefaultFontDataStream())
-				using(var ms = new MemoryStream())
+				if (string.IsNullOrEmpty(_textBoxFont.Text) || _textBoxFont.Text == "(default)")
 				{
-					stream.CopyTo(ms);
-					data = ms.ToArray();
+					using (var stream = assetManager.Open("Inter-Regular.ttf"))
+					using (var ms = new MemoryStream())
+					{
+						stream.CopyTo(ms);
+						data = ms.ToArray();
+					}
+				}
+				else
+				{
+					data = File.ReadAllBytes(_textBoxFont.Text);
 				}
 
 				FontSystem = LoadFontSystem(data);

@@ -1,7 +1,7 @@
 <Project>
   <Project.ExportOptions />
   <Panel>
-    <ListBox Top="100" MaxHeight="150" HorizontalAlignment="Center" Scale="1.5, 1.5" >
+    <ListBox Top="100" MaxHeight="150" HorizontalAlignment="Center" Scale="1.5, 1.5">
       <ListItem Text="ItemItemItem0" />
       <ListItem Text="ItemItemItem1" />
       <ListItem Text="ItemItemItem2" />

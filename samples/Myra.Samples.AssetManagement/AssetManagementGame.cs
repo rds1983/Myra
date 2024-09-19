@@ -1,8 +1,7 @@
 ﻿using Myra.Graphics2D.UI;
 using Microsoft.Xna.Framework;
 using System.IO;
-using Myra.Assets;
-using Myra.Utility;
+using AssetManagementBase;
 
 namespace Myra.Samples.AssetManagement
 {
@@ -29,7 +28,7 @@ namespace Myra.Samples.AssetManagement
 
 			MyraEnvironment.Game = this;
 
-			MyraEnvironment.DefaultAssetManager.AssetResolver = new FileAssetResolver(Path.Combine(PathUtils.ExecutingAssemblyDirectory, "Assets"));
+			MyraEnvironment.DefaultAssetManager = AssetManager.CreateFileAssetManager(Path.Combine(PathUtils.ExecutingAssemblyDirectory, "Assets"));
 
 			_mainForm = new MainForm();
 			_mainForm._mainMenu.HoverIndex = 0;

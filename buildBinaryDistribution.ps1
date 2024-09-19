@@ -12,9 +12,9 @@ New-Item -ItemType directory -Path "ZipPackage\Assets\fonts"
 New-Item -ItemType directory -Path "ZipPackage\Assets\images"
 
 function Copy-Sample([string]$SampleName) {
-	Copy-Item -Path "samples\Myra.Samples.$SampleName\bin\MonoGame\Release\net6.0\Myra.Samples.$SampleName.exe" -Destination "ZipPackage"
-	Copy-Item -Path "samples\Myra.Samples.$SampleName\bin\MonoGame\Release\net6.0\Myra.Samples.$SampleName.dll" -Destination "ZipPackage"
-	Copy-Item -Path "samples\Myra.Samples.$SampleName\bin\MonoGame\Release\net6.0\Myra.Samples.$SampleName.runtimeconfig.json" -Destination "ZipPackage"
+	Copy-Item -Path "samples\Myra.Samples.$SampleName\bin\MonoGame\Release\net8.0\Myra.Samples.$SampleName.exe" -Destination "ZipPackage"
+	Copy-Item -Path "samples\Myra.Samples.$SampleName\bin\MonoGame\Release\net8.0\Myra.Samples.$SampleName.dll" -Destination "ZipPackage"
+	Copy-Item -Path "samples\Myra.Samples.$SampleName\bin\MonoGame\Release\net8.0\Myra.Samples.$SampleName.runtimeconfig.json" -Destination "ZipPackage"
 }
 
 # Copy-Item -Path files
@@ -34,17 +34,20 @@ Copy-Sample "ObjectEditor"
 Copy-Item -Path "samples\Myra.Samples.ObjectEditor\image.png" -Destination "ZipPackage"
 Copy-Sample "TextRendering"
 Copy-Item -Path "samples\Stylesheets\*" -Destination "ZipPackage\Stylesheets\" -Recurse
-Copy-Item -Path "src\MyraPad\bin\Release\net6.0\System.CodeDom.dll" -Destination "ZipPackage"
-Copy-Item -Path "src\MyraPad\bin\Release\net6.0\MyraPad.exe" -Destination "ZipPackage"
-Copy-Item -Path "src\MyraPad\bin\Release\net6.0\MyraPad.dll" -Destination "ZipPackage"
-Copy-Item -Path "src\MyraPad\bin\Release\net6.0\MyraPad.runtimeconfig.json" -Destination "ZipPackage"
-Copy-Item -Path "src\MyraPad\bin\Release\net6.0\FontStashSharp.*" -Destination "ZipPackage"
-Copy-Item -Path "src\MyraPad\bin\Release\net6.0\StbImageSharp.dll" -Destination "ZipPackage"
-Copy-Item -Path "src\MyraPad\bin\Release\net6.0\StbTrueTypeSharp.dll" -Destination "ZipPackage"
-Copy-Item -Path "src\MyraPad\bin\Release\net6.0\Cyotek.Drawing.BitmapFont.dll" -Destination "ZipPackage"
-Copy-Item -Path "src\MyraPad\bin\Release\net6.0\info.lundin.math.dll" -Destination "ZipPackage"
-Copy-Item -Path "src\MyraPad\bin\Release\net6.0\MonoGame.Framework.dll" -Destination "ZipPackage"
-Copy-Item -Path "src\MyraPad\bin\Release\net6.0\runtimes" -Destination "ZipPackage" -Recurse
+Copy-Item -Path "src\MyraPad\bin\Release\net8.0\System.CodeDom.dll" -Destination "ZipPackage"
+Copy-Item -Path "src\MyraPad\bin\Release\net8.0\MyraPad.exe" -Destination "ZipPackage"
+Copy-Item -Path "src\MyraPad\bin\Release\net8.0\MyraPad.dll" -Destination "ZipPackage"
+Copy-Item -Path "src\MyraPad\bin\Release\net8.0\MyraPad.runtimeconfig.json" -Destination "ZipPackage"
+Copy-Item -Path "src\MyraPad\bin\Release\net8.0\FontStashSharp.*" -Destination "ZipPackage"
+Copy-Item -Path "src\MyraPad\bin\Release\net8.0\StbImageSharp.dll" -Destination "ZipPackage"
+Copy-Item -Path "src\MyraPad\bin\Release\net8.0\StbTrueTypeSharp.dll" -Destination "ZipPackage"
+Copy-Item -Path "src\MyraPad\bin\Release\net8.0\Cyotek.Drawing.BitmapFont.dll" -Destination "ZipPackage"
+Copy-Item -Path "src\MyraPad\bin\Release\net8.0\AssetManagementBase.dll" -Destination "ZipPackage"
+Copy-Item -Path "src\MyraPad\bin\Release\net8.0\DdsKtxXna.dll" -Destination "ZipPackage"
+Copy-Item -Path "src\MyraPad\bin\Release\net8.0\XNAssets.MonoGame.dll" -Destination "ZipPackage"
+Copy-Item -Path "src\MyraPad\bin\Release\net8.0\info.lundin.math.dll" -Destination "ZipPackage"
+Copy-Item -Path "src\MyraPad\bin\Release\net8.0\MonoGame.Framework.dll" -Destination "ZipPackage"
+Copy-Item -Path "src\MyraPad\bin\Release\net8.0\runtimes" -Destination "ZipPackage" -Recurse
 
 # Compress
 Rename-Item "ZipPackage" "Myra.$version"

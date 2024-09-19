@@ -16,6 +16,7 @@
   </ItemGroup>  
 
   <ItemGroup>
+    <PackageReference Include="AssetManagementBase" Version="0.6.6" />
     <PackageReference Include="FontStashSharp" Version="$(FontStashSharpVersion)" />
     <PackageReference Include="info.lundin.math.dll" Version="$(InfoLundinMathVersion)" />
   </ItemGroup>  

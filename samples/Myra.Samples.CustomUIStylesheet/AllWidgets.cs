@@ -2,6 +2,7 @@
 
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.ColorPicker;
+using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Samples.CustomUIStylesheet
 {
@@ -17,32 +18,113 @@ namespace Myra.Samples.CustomUIStylesheet
 				debugWindow.ShowModal(Desktop);
 			};
 
-			var tree = new Tree
+			var tree = new TreeView();
+			Grid.SetColumn(tree, 1);
+			Grid.SetRow(tree, 8);
+
+			var node1 = tree.AddSubNode(new Label
 			{
-				HasRoot = false,
-				GridColumn = 1,
-				GridRow = 8
+				Text = "node1"
+			});
+			var node2 = node1.AddSubNode(new Label
+			{
+				Text = "node2"
+			});
+
+			var node4 = node2.AddSubNode(new Label
+			{
+				Text = "node6"
+			});
+			node4.AddSubNode(new Label
+			{
+				Text = "node11"
+			});
+			node4.AddSubNode(new Label
+			{
+				Text = "node12"
+			});
+			node4.AddSubNode(new Label
+			{
+				Text = "node13"
+			});
+			node4.AddSubNode(new Label
+			{
+				Text = "node14"
+			});
+			node4.AddSubNode(new Label
+			{
+				Text = "node15"
+			});
+			node4.AddSubNode(new Label
+			{
+				Text = "node16"
+			});
+			node4.AddSubNode(new Label
+			{
+				Text = "node17"
+			});
+			node4.AddSubNode(new Label
+			{
+				Text = "node18"
+			});
+
+			var node3 = node2.AddSubNode(new CheckButton
+			{
+				Content = new Label
+				{
+					Text = "CheckButton node"
+				}
+			});
+			node3.AddSubNode(new Label
+			{
+				Text = "node4"
+			});
+			node3.AddSubNode(new CheckButton
+			{
+				Content = new Label { Text = "CheckButton node2" },
+				CheckPosition = CheckPosition.Right,
+				CheckContentSpacing = 8
+			});
+
+			var imageButtonContent = new HorizontalStackPanel
+			{
+				Spacing = 4
 			};
 
-			var node1 = tree.AddSubNode("node1");
-			var node2 = node1.AddSubNode("node2");
-			var node3 = node2.AddSubNode("node3");
-			node3.AddSubNode("node4");
-			node3.AddSubNode("node5");
-			node3.AddSubNode("node7");
-			node3.AddSubNode("node8");
-			node3.AddSubNode("node9");
-			node3.AddSubNode("node10");
+			imageButtonContent.Widgets.Add(new Image
+			{
+				Renderable = Stylesheet.Current.Atlas["plus"]
+			});
 
-			var node4 = node2.AddSubNode("node6");
-			node4.AddSubNode("node11");
-			node4.AddSubNode("node12");
-			node4.AddSubNode("node13");
-			node4.AddSubNode("node14");
-			node4.AddSubNode("node15");
-			node4.AddSubNode("node16");
-			node4.AddSubNode("node17");
-			node4.AddSubNode("node18");
+			imageButtonContent.Widgets.Add(new Label
+			{
+				Text = "Button node"
+			});
+			node3.AddSubNode(new Button
+			{
+				Content = imageButtonContent
+			});
+			node3.AddSubNode(new HorizontalSlider());
+
+			var imageButtonContent2 = new HorizontalStackPanel
+			{
+				Spacing = 4
+			};
+
+			imageButtonContent2.Widgets.Add(new Label
+			{
+				Text = "ToggleButton node"
+			});
+			imageButtonContent2.Widgets.Add(new Image
+			{
+				Renderable = Stylesheet.Current.Atlas["minus"]
+			});
+
+			node3.AddSubNode(new ToggleButton
+			{
+				Content = imageButtonContent2
+			});
+
 			_gridRight.Widgets.Add(tree);
 		}
 	}

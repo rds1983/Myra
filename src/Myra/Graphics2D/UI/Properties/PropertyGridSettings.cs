@@ -1,6 +1,7 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Xml.Serialization;
-using Myra.Assets;
+using AssetManagementBase;
 
 namespace Myra.Graphics2D.UI.Properties
 {
@@ -8,8 +9,11 @@ namespace Myra.Graphics2D.UI.Properties
 	{
 		[Browsable(false)]
 		[XmlIgnore]
-		public IAssetManager AssetManager;
+		public AssetManager AssetManager;
 
 		public string BasePath;
+
+		public Func<string, string> ImagePropertyValueGetter;
+		public Action<string, string> ImagePropertyValueSetter;
 	}
 }

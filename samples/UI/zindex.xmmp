@@ -1,7 +1,14 @@
 <Project>
+  <Project.ExportOptions />
   <Panel>
-    <TextButton Text="Button 3" Left="20"  />
-    <TextButton Text="Button 1" ZIndex="2" />
-    <TextButton Text="Button 2" Left="10" Top="10" ZIndex="4" />
+    <Button Left="20">
+      <Label Text="Button 3" />
+    </Button>
+    <Button ZIndex="2">
+      <Label Text="Button 1" />
+    </Button>
+    <Button Left="10" Top="10" ZIndex="4">
+      <Label Text="Button 2" />
+    </Button>
   </Panel>
 </Project>

@@ -40,6 +40,7 @@ namespace Myra.Samples.AllWidgets
 
 			_platform = new SilkPlatform(_window.CreateInput());
 			MyraEnvironment.Platform = _platform;
+			MyraEnvironment.EnableModalDarkening = true;
 			OnResize(_window.Size);
 
 			_allWidgets = new AllWidgets();

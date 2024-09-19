@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);FNA</DefineConstants>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>$(AppTargetFramework)</TargetFramework>
     <AssemblyName>Myra</AssemblyName>
     <PackageId>Myra.FNA.Core</PackageId>
     <OutputPath>bin\FNA.Core\$(Configuration)</OutputPath>
@@ -21,5 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\FontStashSharp\src\XNA\FontStashSharp.FNA.Core.csproj" />
+    <ProjectReference Include="..\..\..\XNAssets\src\XNAssets.FNA.Core.csproj" />
   </ItemGroup>
 </Project>

@@ -12,60 +12,63 @@ namespace Myra.Graphics2D.UI
 
 			BuildUI();
 
-			_checkBoxWidgetFrames.IsPressed = MyraEnvironment.DrawWidgetsFrames;
-			_checkBoxWidgetFrames.PressedChanged += (s, a) =>
+			_checkBoxWidgetFrames.IsChecked = MyraEnvironment.DrawWidgetsFrames;
+			_checkBoxWidgetFrames.IsCheckedChanged += (s, a) =>
 			{
-				MyraEnvironment.DrawWidgetsFrames = _checkBoxWidgetFrames.IsPressed;
+				MyraEnvironment.DrawWidgetsFrames = _checkBoxWidgetFrames.IsChecked;
 			};
 
-			_checkBoxKeyboardFocusedWidgetFrame.IsPressed = MyraEnvironment.DrawKeyboardFocusedWidgetFrame;
-			_checkBoxKeyboardFocusedWidgetFrame.PressedChanged += (s, a) =>
+			_checkBoxKeyboardFocusedWidgetFrame.IsChecked = MyraEnvironment.DrawKeyboardFocusedWidgetFrame;
+			_checkBoxKeyboardFocusedWidgetFrame.IsCheckedChanged += (s, a) =>
 			{
-				MyraEnvironment.DrawKeyboardFocusedWidgetFrame = _checkBoxKeyboardFocusedWidgetFrame.IsPressed;
+				MyraEnvironment.DrawKeyboardFocusedWidgetFrame = _checkBoxKeyboardFocusedWidgetFrame.IsChecked;
 			};
 
-			_checkBoxMouseInsideWidgetFrame.IsPressed = MyraEnvironment.DrawMouseHoveredWidgetFrame;
-			_checkBoxMouseInsideWidgetFrame.PressedChanged += (s, a) =>
+			_checkBoxMouseInsideWidgetFrame.IsChecked = MyraEnvironment.DrawMouseHoveredWidgetFrame;
+			_checkBoxMouseInsideWidgetFrame.IsCheckedChanged += (s, a) =>
 			{
-				MyraEnvironment.DrawMouseHoveredWidgetFrame = _checkBoxMouseInsideWidgetFrame.IsPressed;
+				MyraEnvironment.DrawMouseHoveredWidgetFrame = _checkBoxMouseInsideWidgetFrame.IsChecked;
 			};
 
-			_checkBoxGlyphFrames.IsPressed = MyraEnvironment.DrawTextGlyphsFrames;
-			_checkBoxGlyphFrames.PressedChanged += (s, a) =>
+			_checkBoxGlyphFrames.IsChecked = MyraEnvironment.DrawTextGlyphsFrames;
+			_checkBoxGlyphFrames.IsCheckedChanged += (s, a) =>
 			{
-				MyraEnvironment.DrawTextGlyphsFrames = _checkBoxGlyphFrames.IsPressed;
+				MyraEnvironment.DrawTextGlyphsFrames = _checkBoxGlyphFrames.IsChecked;
 			};
 
-			_checkBoxDisableClipping.IsPressed = MyraEnvironment.DisableClipping;
-			_checkBoxDisableClipping.PressedChanged += (s, a) =>
+			_checkBoxDisableClipping.IsChecked = MyraEnvironment.DisableClipping;
+			_checkBoxDisableClipping.IsCheckedChanged += (s, a) =>
 			{
-				MyraEnvironment.DisableClipping = _checkBoxDisableClipping.IsPressed;
+				MyraEnvironment.DisableClipping = _checkBoxDisableClipping.IsChecked;
 			};
 
-			_checkBoxSmoothText.IsPressed = MyraEnvironment.SmoothText;
-			_checkBoxSmoothText.PressedChanged += (s, a) =>
+			_checkBoxSmoothText.IsChecked = MyraEnvironment.SmoothText;
+			_checkBoxSmoothText.IsCheckedChanged += (s, a) =>
 			{
-				MyraEnvironment.SmoothText = _checkBoxSmoothText.IsPressed;
+				MyraEnvironment.SmoothText = _checkBoxSmoothText.IsChecked;
 			};
 		}
 
 		public void AddOption(string text, Action onEnabled, Action onDisabled)
 		{
-			var optionsCheckBox = new CheckBox
+			var optionsCheckBox = new CheckButton
 			{
-				Text = text,
-				ContentHorizontalAlignment = HorizontalAlignment.Stretch,
-				ContentVerticalAlignment = VerticalAlignment.Stretch,
 				Enabled = true,
 				HorizontalAlignment = HorizontalAlignment.Left,
 				VerticalAlignment = VerticalAlignment.Top,
-				GridRow = InternalChild.Widgets.Count,
-				Visible = true
+				Visible = true,
+				Content = new Label
+				{
+					HorizontalAlignment = HorizontalAlignment.Stretch,
+					VerticalAlignment = VerticalAlignment.Stretch,
+					Text = text
+				},
 			};
+			Grid.SetRow(optionsCheckBox, Children.Count);
 
-			optionsCheckBox.PressedChanged += (s, a) =>
+			optionsCheckBox.IsCheckedChanged += (s, a) =>
 			{
-				if (optionsCheckBox.IsPressed)
+				if (optionsCheckBox.IsChecked)
 				{
 					onEnabled();
 				}

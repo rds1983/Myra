@@ -1,0 +1,13 @@
+<Project>
+  <Project.ExportOptions Namespace="Test" Class="TestSeparator" OutputPath="D:\Temp\Output" />
+  <Panel>
+    <HorizontalStackPanel Spacing="8" HorizontalAlignment="Center" VerticalAlignment="Center">
+      <Label Text="Test" />
+      <VerticalSeparator />
+      <Label Text="Test2" />
+      <Label Text="Test3" />
+      <VerticalSeparator />
+      <Label Text="Test4" />
+    </HorizontalStackPanel>
+  </Panel>
+</Project>

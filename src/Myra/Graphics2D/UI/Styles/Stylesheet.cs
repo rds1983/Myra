@@ -7,7 +7,6 @@ using System.Collections;
 using System.Reflection;
 using FontStashSharp;
 using Myra.Graphics2D.TextureAtlases;
-using Myra.Assets;
 using FontStashSharp.RichText;
 using Myra.Graphics2D.Brushes;
 
@@ -22,7 +21,6 @@ using SolidBrush = Myra.Graphics2D.Brushes.SolidBrush;
 
 namespace Myra.Graphics2D.UI.Styles
 {
-	[AssetLoader(typeof(StylesheetLoader))]
 	public class Stylesheet
 	{
 		private static readonly Dictionary<string, string> LegacyClassNames = new Dictionary<string, string>();
@@ -38,7 +36,7 @@ namespace Myra.Graphics2D.UI.Styles
 			{
 				if (_current == null)
 				{
-					_current = DefaultAssets.UIStylesheet;
+					_current = DefaultAssets.DefaultStylesheet;
 				}
 
 				return _current;
@@ -51,6 +49,7 @@ namespace Myra.Graphics2D.UI.Styles
 		}
 
 		private readonly Dictionary<string, LabelStyle> _labelStyles = new Dictionary<string, LabelStyle>();
+		private readonly Dictionary<string, LabelStyle> _tooltipStyles = new Dictionary<string, LabelStyle>();
 		private readonly Dictionary<string, TextBoxStyle> _textBoxStyles = new Dictionary<string, TextBoxStyle>();
 		private readonly Dictionary<string, ButtonStyle> _buttonStyles = new Dictionary<string, ButtonStyle>();
 		private readonly Dictionary<string, ImageTextButtonStyle> _checkBoxStyles = new Dictionary<string, ImageTextButtonStyle>();
@@ -78,476 +77,252 @@ namespace Myra.Graphics2D.UI.Styles
 		private readonly Dictionary<string, MenuStyle> _horizontalMenuStyles = new Dictionary<string, MenuStyle>();
 		private readonly Dictionary<string, MenuStyle> _verticalMenuStyles = new Dictionary<string, MenuStyle>();
 		private readonly Dictionary<string, WindowStyle> _windowStyles = new Dictionary<string, WindowStyle>();
+		private readonly Dictionary<string, FileDialogStyle> _fileDialogStyles = new Dictionary<string, FileDialogStyle>();
+		private readonly Dictionary<string, ColorPickerDialogStyle> _colorPickerDialogStyles = new Dictionary<string, ColorPickerDialogStyle>();
+
+		private TextureRegion _whiteRegion;
 
 		public TextureRegionAtlas Atlas { get; private set; }
+
+		public TextureRegion WhiteRegion
+		{
+			get
+			{
+				if (_whiteRegion == null)
+				{
+					_whiteRegion = Atlas["white"];
+				}
+
+				return _whiteRegion;
+			}
+		}
+
 		public Dictionary<string, SpriteFontBase> Fonts { get; private set; }
 
-		public DesktopStyle DesktopStyle
-		{
-			get; set;
-		}
+		public DesktopStyle DesktopStyle { get; set; }
 
 		[XmlIgnore]
 		public LabelStyle LabelStyle
 		{
-			get
-			{
-				return GetDefaultStyle(_labelStyles);
-			}
-			set
-			{
-				SetDefaultStyle(_labelStyles, value);
-			}
+			get => GetDefaultStyle(_labelStyles);
+			set => SetDefaultStyle(_labelStyles, value);
+		}
+
+		[XmlIgnore]
+		public LabelStyle TooltipStyle
+		{
+			get => GetDefaultStyle(_tooltipStyles);
+			set => SetDefaultStyle(_tooltipStyles, value);
 		}
 
 		[XmlIgnore]
 		public TextBoxStyle TextBoxStyle
 		{
-			get
-			{
-				return GetDefaultStyle(_textBoxStyles);
-			}
-			set
-			{
-				SetDefaultStyle(_textBoxStyles, value);
-			}
+			get => GetDefaultStyle(_textBoxStyles);
+			set => SetDefaultStyle(_textBoxStyles, value);
 		}
 
 		[XmlIgnore]
 		public ButtonStyle ButtonStyle
 		{
-			get
-			{
-				return GetDefaultStyle(_buttonStyles);
-			}
-			set
-			{
-				SetDefaultStyle(_buttonStyles, value);
-			}
+			get => GetDefaultStyle(_buttonStyles);
+			set => SetDefaultStyle(_buttonStyles, value);
 		}
 
 		[XmlIgnore]
 		public ImageTextButtonStyle CheckBoxStyle
 		{
-			get
-			{
-				return GetDefaultStyle(_checkBoxStyles);
-			}
-			set
-			{
-				SetDefaultStyle(_checkBoxStyles, value);
-			}
+			get => GetDefaultStyle(_checkBoxStyles);
+			set => SetDefaultStyle(_checkBoxStyles, value);
 		}
 
 		[XmlIgnore]
 		public ImageTextButtonStyle RadioButtonStyle
 		{
-			get
-			{
-				return GetDefaultStyle(_radioButtonStyles);
-			}
-			set
-			{
-				SetDefaultStyle(_radioButtonStyles, value);
-			}
+			get => GetDefaultStyle(_radioButtonStyles);
+			set => SetDefaultStyle(_radioButtonStyles, value);
 		}
 
 		[XmlIgnore]
 		public SpinButtonStyle SpinButtonStyle
 		{
-			get
-			{
-				return GetDefaultStyle(_spinButtonStyles);
-			}
-			set
-			{
-				SetDefaultStyle(_spinButtonStyles, value);
-			}
+			get => GetDefaultStyle(_spinButtonStyles);
+			set => SetDefaultStyle(_spinButtonStyles, value);
 		}
 
 		[XmlIgnore]
 		public SliderStyle HorizontalSliderStyle
 		{
-			get
-			{
-				return GetDefaultStyle(_horizontalSliderStyles);
-			}
-			set
-			{
-				SetDefaultStyle(_horizontalSliderStyles, value);
-			}
+			get => GetDefaultStyle(_horizontalSliderStyles);
+			set => SetDefaultStyle(_horizontalSliderStyles, value);
 		}
 
 		[XmlIgnore]
 		public SliderStyle VerticalSliderStyle
 		{
-			get
-			{
-				return GetDefaultStyle(_verticalSliderStyles);
-			}
-			set
-			{
-				SetDefaultStyle(_verticalSliderStyles, value);
-			}
+			get => GetDefaultStyle(_verticalSliderStyles);
+			set => SetDefaultStyle(_verticalSliderStyles, value);
 		}
 
 		[XmlIgnore]
 		public ProgressBarStyle HorizontalProgressBarStyle
 		{
-			get
-			{
-				return GetDefaultStyle(_horizontalProgressBarStyles);
-			}
-			set
-			{
-				SetDefaultStyle(_horizontalProgressBarStyles, value);
-			}
+			get => GetDefaultStyle(_horizontalProgressBarStyles);
+			set => SetDefaultStyle(_horizontalProgressBarStyles, value);
 		}
 
 		[XmlIgnore]
 		public ProgressBarStyle VerticalProgressBarStyle
 		{
-			get
-			{
-				return GetDefaultStyle(_verticalProgressBarStyles);
-			}
-			set
-			{
-				SetDefaultStyle(_verticalProgressBarStyles, value);
-			}
+			get => GetDefaultStyle(_verticalProgressBarStyles);
+			set => SetDefaultStyle(_verticalProgressBarStyles, value);
 		}
 
 		[XmlIgnore]
 		public SeparatorStyle HorizontalSeparatorStyle
 		{
-			get
-			{
-				return GetDefaultStyle(_horizontalSeparatorStyles);
-			}
-			set
-			{
-				SetDefaultStyle(_horizontalSeparatorStyles, value);
-			}
+			get => GetDefaultStyle(_horizontalSeparatorStyles);
+			set => SetDefaultStyle(_horizontalSeparatorStyles, value);
 		}
 
 		[XmlIgnore]
 		public SeparatorStyle VerticalSeparatorStyle
 		{
-			get
-			{
-				return GetDefaultStyle(_verticalSeparatorStyles);
-			}
-			set
-			{
-				SetDefaultStyle(_verticalSeparatorStyles, value);
-			}
+			get => GetDefaultStyle(_verticalSeparatorStyles);
+			set => SetDefaultStyle(_verticalSeparatorStyles, value);
 		}
 
 		[XmlIgnore]
 		public ComboBoxStyle ComboBoxStyle
 		{
-			get
-			{
-				return GetDefaultStyle(_comboBoxStyles);
-			}
-			set
-			{
-				SetDefaultStyle(_comboBoxStyles, value);
-			}
+			get => GetDefaultStyle(_comboBoxStyles);
+			set => SetDefaultStyle(_comboBoxStyles, value);
 		}
 
 		[XmlIgnore]
 		public ListBoxStyle ListBoxStyle
 		{
-			get
-			{
-				return GetDefaultStyle(_listBoxStyles);
-			}
-			set
-			{
-				SetDefaultStyle(_listBoxStyles, value);
-			}
+			get => GetDefaultStyle(_listBoxStyles);
+			set => SetDefaultStyle(_listBoxStyles, value);
 		}
 
 		[XmlIgnore]
 		public TabControlStyle TabControlStyle
 		{
-			get
-			{
-				return GetDefaultStyle(_tabControlStyles);
-			}
-			set
-			{
-				SetDefaultStyle(_tabControlStyles, value);
-			}
+			get => GetDefaultStyle(_tabControlStyles);
+			set => SetDefaultStyle(_tabControlStyles, value);
 		}
 
 		[XmlIgnore]
 		public TreeStyle TreeStyle
 		{
-			get
-			{
-				return GetDefaultStyle(_treeStyles);
-			}
-			set
-			{
-				SetDefaultStyle(_treeStyles, value);
-			}
+			get => GetDefaultStyle(_treeStyles);
+			set => SetDefaultStyle(_treeStyles, value);
 		}
 
 		[XmlIgnore]
 		public SplitPaneStyle HorizontalSplitPaneStyle
 		{
-			get
-			{
-				return GetDefaultStyle(_horizontalSplitPaneStyles);
-			}
-			set
-			{
-				SetDefaultStyle(_horizontalSplitPaneStyles, value);
-			}
+			get => GetDefaultStyle(_horizontalSplitPaneStyles);
+			set => SetDefaultStyle(_horizontalSplitPaneStyles, value);
 		}
 
 		[XmlIgnore]
 		public SplitPaneStyle VerticalSplitPaneStyle
 		{
-			get
-			{
-				return GetDefaultStyle(_verticalSplitPaneStyles);
-			}
-			set
-			{
-				SetDefaultStyle(_verticalSplitPaneStyles, value);
-			}
+			get => GetDefaultStyle(_verticalSplitPaneStyles);
+			set => SetDefaultStyle(_verticalSplitPaneStyles, value);
 		}
 
 		[XmlIgnore]
 		public ScrollViewerStyle ScrollViewerStyle
 		{
-			get
-			{
-				return GetDefaultStyle(_scrollViewerStyles);
-			}
-			set
-			{
-				SetDefaultStyle(_scrollViewerStyles, value);
-			}
+			get => GetDefaultStyle(_scrollViewerStyles);
+			set => SetDefaultStyle(_scrollViewerStyles, value);
 		}
 
 		[XmlIgnore]
 		public MenuStyle HorizontalMenuStyle
 		{
-			get
-			{
-				return GetDefaultStyle(_horizontalMenuStyles);
-			}
-			set
-			{
-				SetDefaultStyle(_horizontalMenuStyles, value);
-			}
+			get => GetDefaultStyle(_horizontalMenuStyles);
+			set => SetDefaultStyle(_horizontalMenuStyles, value);
 		}
 
 		[XmlIgnore]
 		public MenuStyle VerticalMenuStyle
 		{
-			get
-			{
-				return GetDefaultStyle(_verticalMenuStyles);
-			}
-			set
-			{
-				SetDefaultStyle(_verticalMenuStyles, value);
-			}
+			get => GetDefaultStyle(_verticalMenuStyles);
+			set => SetDefaultStyle(_verticalMenuStyles, value);
 		}
 
 		[XmlIgnore]
 		public WindowStyle WindowStyle
 		{
-			get
-			{
-				return GetDefaultStyle(_windowStyles);
-			}
-			set
-			{
-				SetDefaultStyle(_windowStyles, value);
-			}
+			get => GetDefaultStyle(_windowStyles);
+			set => SetDefaultStyle(_windowStyles, value);
 		}
 
-		public Dictionary<string, LabelStyle> LabelStyles
+		public FileDialogStyle FileDialogStyle
 		{
-			get
-			{
-				return _labelStyles;
-			}
+			get => GetDefaultStyle(_fileDialogStyles);
+			set => SetDefaultStyle(_fileDialogStyles, value);
 		}
 
-		public Dictionary<string, TextBoxStyle> TextBoxStyles
+		public ColorPickerDialogStyle ColorPickerDialogStyle
 		{
-			get
-			{
-				return _textBoxStyles;
-			}
+			get => GetDefaultStyle(_colorPickerDialogStyles);
+			set => SetDefaultStyle(_colorPickerDialogStyles, value);
 		}
 
-		public Dictionary<string, ButtonStyle> ButtonStyles
-		{
-			get
-			{
-				return _buttonStyles;
-			}
-		}
+		public Dictionary<string, LabelStyle> LabelStyles => _labelStyles;
 
-		public Dictionary<string, ImageTextButtonStyle> CheckBoxStyles
-		{
-			get
-			{
-				return _checkBoxStyles;
-			}
-		}
+		public Dictionary<string, LabelStyle> TooltipStyles => _tooltipStyles;
 
-		public Dictionary<string, ImageTextButtonStyle> RadioButtonStyles
-		{
-			get
-			{
-				return _radioButtonStyles;
-			}
-		}
+		public Dictionary<string, TextBoxStyle> TextBoxStyles => _textBoxStyles;
 
-		public Dictionary<string, SpinButtonStyle> SpinButtonStyles
-		{
-			get
-			{
-				return _spinButtonStyles;
-			}
-		}
+		public Dictionary<string, ButtonStyle> ButtonStyles => _buttonStyles;
 
-		public Dictionary<string, SliderStyle> HorizontalSliderStyles
-		{
-			get
-			{
-				return _horizontalSliderStyles;
-			}
-		}
+		public Dictionary<string, ImageTextButtonStyle> CheckBoxStyles => _checkBoxStyles;
 
-		public Dictionary<string, SliderStyle> VerticalSliderStyles
-		{
-			get
-			{
-				return _verticalSliderStyles;
-			}
-		}
+		public Dictionary<string, ImageTextButtonStyle> RadioButtonStyles => _radioButtonStyles;
 
-		public Dictionary<string, ProgressBarStyle> HorizontalProgressBarStyles
-		{
-			get
-			{
-				return _horizontalProgressBarStyles;
-			}
-		}
+		public Dictionary<string, SpinButtonStyle> SpinButtonStyles => _spinButtonStyles;
 
-		public Dictionary<string, ProgressBarStyle> VerticalProgressBarStyles
-		{
-			get
-			{
-				return _verticalProgressBarStyles;
-			}
-		}
+		public Dictionary<string, SliderStyle> HorizontalSliderStyles => _horizontalSliderStyles;
 
-		public Dictionary<string, SeparatorStyle> HorizontalSeparatorStyles
-		{
-			get
-			{
-				return _horizontalSeparatorStyles;
-			}
-		}
+		public Dictionary<string, SliderStyle> VerticalSliderStyles => _verticalSliderStyles;
 
-		public Dictionary<string, SeparatorStyle> VerticalSeparatorStyles
-		{
-			get
-			{
-				return _verticalSeparatorStyles;
-			}
-		}
+		public Dictionary<string, ProgressBarStyle> HorizontalProgressBarStyles => _horizontalProgressBarStyles;
 
-		public Dictionary<string, ComboBoxStyle> ComboBoxStyles
-		{
-			get
-			{
-				return _comboBoxStyles;
-			}
-		}
+		public Dictionary<string, ProgressBarStyle> VerticalProgressBarStyles => _verticalProgressBarStyles;
 
-		public Dictionary<string, ListBoxStyle> ListBoxStyles
-		{
-			get
-			{
-				return _listBoxStyles;
-			}
-		}
+		public Dictionary<string, SeparatorStyle> HorizontalSeparatorStyles => _horizontalSeparatorStyles;
 
-		public Dictionary<string, TabControlStyle> TabControlStyles
-		{
-			get
-			{
-				return _tabControlStyles;
-			}
-		}
+		public Dictionary<string, SeparatorStyle> VerticalSeparatorStyles => _verticalSeparatorStyles;
 
-		public Dictionary<string, TreeStyle> TreeStyles
-		{
-			get
-			{
-				return _treeStyles;
-			}
-		}
+		public Dictionary<string, ComboBoxStyle> ComboBoxStyles => _comboBoxStyles;
 
-		public Dictionary<string, SplitPaneStyle> HorizontalSplitPaneStyles
-		{
-			get
-			{
-				return _horizontalSplitPaneStyles;
-			}
-		}
+		public Dictionary<string, ListBoxStyle> ListBoxStyles => _listBoxStyles;
 
-		public Dictionary<string, SplitPaneStyle> VerticalSplitPaneStyles
-		{
-			get
-			{
-				return _verticalSplitPaneStyles;
-			}
-		}
+		public Dictionary<string, TabControlStyle> TabControlStyles => _tabControlStyles;
 
-		public Dictionary<string, ScrollViewerStyle> ScrollViewerStyles
-		{
-			get
-			{
-				return _scrollViewerStyles;
-			}
-		}
+		public Dictionary<string, TreeStyle> TreeStyles => _treeStyles;
 
-		public Dictionary<string, MenuStyle> HorizontalMenuStyles
-		{
-			get
-			{
-				return _horizontalMenuStyles;
-			}
-		}
+		public Dictionary<string, SplitPaneStyle> HorizontalSplitPaneStyles => _horizontalSplitPaneStyles;
 
-		public Dictionary<string, MenuStyle> VerticalMenuStyles
-		{
-			get
-			{
-				return _verticalMenuStyles;
-			}
-		}
+		public Dictionary<string, SplitPaneStyle> VerticalSplitPaneStyles => _verticalSplitPaneStyles;
 
-		public Dictionary<string, WindowStyle> WindowStyles
-		{
-			get
-			{
-				return _windowStyles;
-			}
-		}
+		public Dictionary<string, ScrollViewerStyle> ScrollViewerStyles => _scrollViewerStyles;
+
+		public Dictionary<string, MenuStyle> HorizontalMenuStyles => _horizontalMenuStyles;
+
+		public Dictionary<string, MenuStyle> VerticalMenuStyles => _verticalMenuStyles;
+
+		public Dictionary<string, WindowStyle> WindowStyles => _windowStyles;
+
+		public Dictionary<string, FileDialogStyle> FileDialogStyles => _fileDialogStyles;
+
+		public Dictionary<string, ColorPickerDialogStyle> ColorPickerDialogStyles => _colorPickerDialogStyles;
 
 		static Stylesheet()
 		{
@@ -678,13 +453,13 @@ namespace Myra.Graphics2D.UI.Styles
 			return result.ToArray();
 		}
 
-		private void CloneStylesTo<T>(Stylesheet destStylesheet, Func<Stylesheet, Dictionary<string, T>> stylesGetter) where T: WidgetStyle
+		private void CloneStylesTo<T>(Stylesheet destStylesheet, Func<Stylesheet, Dictionary<string, T>> stylesGetter) where T : WidgetStyle
 		{
 			var src = stylesGetter(this);
 			var dest = stylesGetter(destStylesheet);
 
 			dest.Clear();
-			foreach(var pair in src)
+			foreach (var pair in src)
 			{
 				dest[pair.Key] = (T)pair.Value.Clone();
 			}
@@ -723,7 +498,7 @@ namespace Myra.Graphics2D.UI.Styles
 			CloneStylesTo(result, s => s.ScrollViewerStyles);
 			CloneStylesTo(result, s => s.WindowStyles);
 
-			foreach(var pair in Fonts)
+			foreach (var pair in Fonts)
 			{
 				result.Fonts[pair.Key] = pair.Value;
 			}

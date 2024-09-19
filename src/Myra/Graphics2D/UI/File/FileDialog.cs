@@ -1,12 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 
 namespace Myra.Graphics2D.UI.File
 {
 	public partial class FileDialog
 	{
+		private class PathInfo
+		{
+			public string Path { get; }
+			public bool IsDrive { get; }
+
+			public PathInfo(string path, bool isDrive)
+			{
+				Path = path;
+				IsDrive = isDrive;
+			}
+		}
+
 		private const int ImageTextSpacing = 4;
 
 		private static readonly string[] Folders =
@@ -21,30 +34,19 @@ namespace Myra.Graphics2D.UI.File
 
 		public string Folder
 		{
-			get { return _textFieldPath.Text; }
-
-			set
-			{
-				SetFolder(value, true);
-			}
+			get => _textFieldPath.Text;
+			set => SetFolder(value, true);
 		}
 
 		/// <summary>
 		/// File filter that is used as 2nd parameter for Directory.EnumerateFiles call
 		/// </summary>
-		public string Filter
-		{
-			get; set;
-		}
+		public string Filter { get; set; }
 
 		internal string FileName
 		{
-			get { return _textFieldFileName.Text; }
-
-			set
-			{
-				_textFieldFileName.Text = value;
-			}
+			get => _textFieldFileName.Text;
+			set => _textFieldFileName.Text = value;
 		}
 
 		public string FilePath
@@ -87,7 +89,7 @@ namespace Myra.Graphics2D.UI.File
 
 						if (asLabel.Text == FileName)
 						{
-							_gridFiles.SelectedRowIndex = asLabel.GridRow;
+							_gridFiles.SelectedRowIndex = Grid.GetRow(asLabel);
 							break;
 						}
 					}
@@ -97,7 +99,10 @@ namespace Myra.Graphics2D.UI.File
 
 		public bool AutoAddFilterExtension { get; set; }
 
-		public FileDialog(FileDialogMode mode)
+		public IImage IconFolder { get; set; }
+		public IImage IconDrive { get; set; }
+
+		public FileDialog(FileDialogMode mode) : base(null)
 		{
 			_mode = mode;
 
@@ -130,18 +135,12 @@ namespace Myra.Graphics2D.UI.File
 			_buttonForward.Background = null;
 			_buttonParent.Background = null;
 
-			_listBoxPlaces.Background = null;
-
-			_buttonBack.Image = DefaultAssets.UITextureRegionAtlas["icon-arrow-left"];
-			_buttonForward.Image = DefaultAssets.UITextureRegionAtlas["icon-arrow-right"];
-			_buttonParent.Image = DefaultAssets.UITextureRegionAtlas["icon-folder-parent"];
+			_listPlaces.Background = null;
 
 			var homePath = (Environment.OSVersion.Platform == PlatformID.Unix ||
 							Environment.OSVersion.Platform == PlatformID.MacOSX)
 				? Environment.GetEnvironmentVariable("HOME")
 				: Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
-
-			var iconFolder = DefaultAssets.UITextureRegionAtlas["icon-folder"];
 
 			var places = new List<string>
 			{
@@ -160,25 +159,19 @@ namespace Myra.Graphics2D.UI.File
 					continue;
 				}
 
-				_listBoxPlaces.Items.Add(new ListItem(Path.GetFileName(p), null, p)
-				{
-					Image = iconFolder,
-					ImageTextSpacing = ImageTextSpacing
-				});
+				var item = CreateListItem(Path.GetFileName(p), p, false);
+				_listPlaces.Widgets.Add(item);
 			}
 
-			if (_listBoxPlaces.Items.Count > 0)
+			if (_listPlaces.Widgets.Count > 0)
 			{
-				SetFolder((string)_listBoxPlaces.Items[0].Tag, false);
+				var pathInfo = (PathInfo)_listPlaces.Widgets[0].Tag;
+				SetFolder(pathInfo.Path, false);
 			}
 
-			_listBoxPlaces.Items.Add(new ListItem
-			{
-				IsSeparator = true
-			});
+			_listPlaces.Widgets.Add(new HorizontalSeparator());
 
 			var drives = DriveInfo.GetDrives();
-			var iconDrive = DefaultAssets.UITextureRegionAtlas["icon-drive"];
 			foreach (var d in drives)
 			{
 				if (d.DriveType == DriveType.Ram || d.DriveType == DriveType.Unknown)
@@ -195,21 +188,16 @@ namespace Myra.Graphics2D.UI.File
 						s += " (" + d.VolumeLabel + ")";
 					}
 
-					_listBoxPlaces.Items.Add(new ListItem(s, null, d.RootDirectory.FullName)
-					{
-						Image = iconDrive,
-						ImageTextSpacing = ImageTextSpacing
-					});
+					var item = CreateListItem(s, d.RootDirectory.FullName, true);
+					_listPlaces.Widgets.Add(item);
 				}
 				catch (Exception)
 				{
 				}
 			}
 
-			_listBoxPlaces.SelectedIndexChanged += OnPlacesSelectedIndexChanged;
+			_listPlaces.SelectedIndexChanged += OnPlacesSelectedIndexChanged;
 
-			_gridFiles.SelectionBackground = DefaultAssets.UITextureRegionAtlas["tree-selection"];
-			_gridFiles.SelectionHoverBackground = DefaultAssets.UITextureRegionAtlas["button-over"];
 			_gridFiles.SelectedIndexChanged += OnGridFilesSelectedIndexChanged;
 			_gridFiles.TouchDoubleClick += OnGridFilesDoubleClick;
 
@@ -220,7 +208,25 @@ namespace Myra.Graphics2D.UI.File
 			_buttonBack.Click += OnButtonBack;
 			_buttonForward.Click += OnButtonForward;
 
+			_textFieldFileName.Readonly = !(mode == FileDialogMode.SaveFile);
+
 			UpdateEnabled();
+
+			SetStyle(Stylesheet.DefaultStyleName);
+		}
+
+		private static Widget CreateListItem(string text, string path, bool isDrive)
+		{
+			var item = new HorizontalStackPanel
+			{
+				Spacing = ImageTextSpacing,
+				Tag = new PathInfo(path, isDrive)
+			};
+
+			item.Widgets.Add(new Image());
+			item.Widgets.Add(new Label { Text = text });
+
+			return item;
 		}
 
 		private void UpdateEnabled()
@@ -319,9 +325,10 @@ namespace Myra.Graphics2D.UI.File
 
 			if (Directory.Exists(path))
 			{
-				_listBoxPlaces.SelectedIndex = null;
+				_listPlaces.SelectedIndex = null;
 				Folder = path;
-			} else
+			}
+			else
 			{
 				OnOk();
 			}
@@ -334,7 +341,7 @@ namespace Myra.Graphics2D.UI.File
 				return;
 			}
 
-			_listBoxPlaces.SelectedIndex = null;
+			_listPlaces.SelectedIndex = null;
 
 			var path = _paths[_gridFiles.SelectedRowIndex.Value];
 			var fi = new FileInfo(path);
@@ -350,13 +357,13 @@ namespace Myra.Graphics2D.UI.File
 
 		private void OnPlacesSelectedIndexChanged(object sender, EventArgs args)
 		{
-			if (_listBoxPlaces.SelectedIndex == null)
+			if (_listPlaces.SelectedIndex == null)
 			{
 				return;
 			}
 
-			var path = (string)_listBoxPlaces.Items[_listBoxPlaces.SelectedIndex.Value].Tag;
-			Folder = path;
+			var pathInfo = (PathInfo)_listPlaces.Widgets[_listPlaces.SelectedIndex.Value].Tag;
+			Folder = pathInfo.Path;
 		}
 
 		private void UpdateFolder()
@@ -369,8 +376,6 @@ namespace Myra.Graphics2D.UI.File
 
 			var path = _textFieldPath.Text;
 			var folders = Directory.EnumerateDirectories(path);
-
-			var iconFolder = DefaultAssets.UITextureRegionAtlas["icon-folder"];
 
 			var gridY = 0;
 			foreach (var f in folders)
@@ -387,20 +392,20 @@ namespace Myra.Graphics2D.UI.File
 
 				var image = new Image
 				{
-					Renderable = iconFolder,
-					GridRow = gridY,
+					Renderable = IconFolder,
 					HorizontalAlignment = HorizontalAlignment.Center,
 					VerticalAlignment = VerticalAlignment.Center
 				};
+				Grid.SetRow(image, gridY);
 
 				_gridFiles.Widgets.Add(image);
 
 				var name = new Label
 				{
 					Text = Path.GetFileName(f),
-					GridColumn = 1,
-					GridRow = gridY
 				};
+				Grid.SetColumn(name, 1);
+				Grid.SetRow(name, gridY);
 
 				_gridFiles.Widgets.Add(name);
 
@@ -448,9 +453,9 @@ namespace Myra.Graphics2D.UI.File
 				var name = new Label
 				{
 					Text = Path.GetFileName(f),
-					GridColumn = 1,
-					GridRow = gridY
 				};
+				Grid.SetColumn(name, 1);
+				Grid.SetRow(name, gridY);
 
 				_gridFiles.Widgets.Add(name);
 
@@ -512,6 +517,40 @@ namespace Myra.Graphics2D.UI.File
 			}
 
 			return false;
+		}
+
+		public void ApplyFileDialogStyle(FileDialogStyle style)
+		{
+			ApplyWindowStyle(style);
+
+			_buttonBack.ApplyImageButtonStyle(style.BackButtonStyle);
+			_buttonForward.ApplyImageButtonStyle(style.ForwardButtonStyle);
+			_buttonParent.ApplyImageButtonStyle(style.ParentButtonStyle);
+
+			_gridFiles.SelectionBackground = style.SelectionBackground;
+			_gridFiles.SelectionHoverBackground = style.SelectionHoverBackground;
+
+			IconDrive = style.IconDrive;
+			IconFolder = style.IconFolder;
+
+			foreach (var widget in _listPlaces.Widgets)
+			{
+				var container = widget as Container;
+				if (container == null)
+				{
+					continue;
+				}
+
+				var pathInfo = (PathInfo)container.Tag;
+				var image = (Image)container.Widgets[0];
+
+				image.Renderable = pathInfo.IsDrive ? IconDrive : IconFolder;
+			}
+		}
+
+		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
+		{
+			ApplyFileDialogStyle(stylesheet.FileDialogStyles.SafelyGetStyle(name));
 		}
 	}
 }

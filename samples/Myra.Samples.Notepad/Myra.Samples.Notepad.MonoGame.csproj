@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>Myra.Samples.Notepad</AssemblyName>
+    <RootNamespace>Myra.Samples.Notepad</RootNamespace>
+    <TargetFramework>$(AppTargetFramework)</TargetFramework>
+    <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="$(AppMonoGameVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="hobbits.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Myra\Myra.MonoGame.csproj" />
+  </ItemGroup>
+</Project>

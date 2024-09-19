@@ -1,5 +1,7 @@
 ﻿using FontStashSharp.RichText;
 using System;
+using Myra.Graphics2D.UI.Styles;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -47,7 +49,7 @@ namespace Myra.Graphics2D.Brushes
 
 		public void Draw(RenderContext context, Rectangle dest, Color color)
 		{
-			var white = DefaultAssets.WhiteRegion;
+			var white = Stylesheet.Current.WhiteRegion;
 
 			if (color == Color.White)
 			{

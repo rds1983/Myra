@@ -1,0 +1,21 @@
+<Project>
+  <Project.ExportOptions />
+  <HorizontalStackPanel Spacing="8" HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Button Margin="4" Border="#4BD961FF" BorderThickness="1" Padding="4">
+      <VerticalStackPanel Spacing="8">
+        <Label Text="Test1" />
+        <Label Text="Test2" />
+        <Label Text="Test3" />
+        <Label Text="Test4" />
+      </VerticalStackPanel>
+    </Button>
+    <ToggleButton Margin="4" Border="#4BD961FF" BorderThickness="1" Padding="4">
+      <VerticalStackPanel Spacing="8">
+        <Label Text="Test1" />
+        <Label Text="Test2" />
+        <Label Text="Test3" />
+        <Label Text="Test4" />
+      </VerticalStackPanel>
+    </ToggleButton>
+  </HorizontalStackPanel>
+</Project>

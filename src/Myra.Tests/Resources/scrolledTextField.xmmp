@@ -1,0 +1,6 @@
+<Project>
+  <Project.ExportOptions />
+  <Panel>
+    <TextBox HorizontalAlignment="Center" Width="100" VerticalAlignment="Center" />
+  </Panel>
+</Project>

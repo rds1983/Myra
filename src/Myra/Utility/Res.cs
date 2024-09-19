@@ -7,7 +7,7 @@ namespace Myra.Utility
 	/// <summary>
 	/// Resource utility
 	/// </summary>
-	public static class Res
+	internal static class Res
 	{
 		/// <summary>
 		/// Open assembly resource stream by relative name

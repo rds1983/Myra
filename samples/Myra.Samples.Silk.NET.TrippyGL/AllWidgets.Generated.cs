@@ -113,86 +113,86 @@ namespace Myra.Samples.AllWidgets
 			_buttonSaveFile = new ImageTextButton();
 			_buttonSaveFile.Text = "Save File";
 			_buttonSaveFile.Padding = new Thickness(8, 0);
-			_buttonSaveFile.GridColumn = 1;
+			Grid.SetColumn(_buttonSaveFile, 1);
 			_buttonSaveFile.Id = "_buttonSaveFile";
 
 			_textSaveFile = new TextBox();
-			_textSaveFile.GridColumn = 2;
+			Grid.SetColumn(_textSaveFile, 2);
 			_textSaveFile.Id = "_textSaveFile";
 
 			var label2 = new Label();
 			label2.Text = "Another Button:";
-			label2.GridRow = 1;
+			Grid.SetRow(label2, 1);
 
 			_buttonOpenFile = new ImageTextButton();
 			_buttonOpenFile.Text = "Open File";
 			_buttonOpenFile.Padding = new Thickness(8, 0);
-			_buttonOpenFile.GridColumn = 1;
-			_buttonOpenFile.GridRow = 1;
+			Grid.SetColumn(_buttonOpenFile, 1);
+			Grid.SetRow(_buttonOpenFile, 1);
 			_buttonOpenFile.Id = "_buttonOpenFile";
 
 			_textOpenFile = new TextBox();
-			_textOpenFile.GridColumn = 2;
-			_textOpenFile.GridRow = 1;
+			Grid.SetColumn(_textOpenFile, 2);
+			Grid.SetRow(_textOpenFile, 1);
 			_textOpenFile.Id = "_textOpenFile";
 
 			var label3 = new Label();
 			label3.Text = "Blue Button:";
-			label3.GridRow = 2;
+			Grid.SetRow(label3, 2);
 
 			_buttonChooseFolder = new ImageTextButton("blue");
 			_buttonChooseFolder.Text = "Choose Folder";
 			_buttonChooseFolder.Padding = new Thickness(8, 0);
-			_buttonChooseFolder.GridColumn = 1;
-			_buttonChooseFolder.GridRow = 2;
+			Grid.SetColumn(_buttonChooseFolder, 1);
+			Grid.SetRow(_buttonChooseFolder, 2);
 			_buttonChooseFolder.Id = "_buttonChooseFolder";
 
 			_textChooseFolder = new TextBox();
-			_textChooseFolder.GridColumn = 2;
-			_textChooseFolder.GridRow = 2;
+			Grid.SetColumn(_textChooseFolder, 2);
+			Grid.SetRow(_textChooseFolder, 2);
 			_textChooseFolder.Id = "_textChooseFolder";
 
 			_textButtonLabel = new Label();
 			_textButtonLabel.Text = "Text Button:";
-			_textButtonLabel.GridRow = 3;
+			Grid.SetRow(_textButtonLabel, 3);
 			_textButtonLabel.Id = "_textButtonLabel";
 
 			_buttonChooseColor = new TextButton();
 			_buttonChooseColor.Text = "Choose Color";
 			_buttonChooseColor.Padding = new Thickness(8, 0);
-			_buttonChooseColor.GridColumn = 1;
-			_buttonChooseColor.GridRow = 3;
+			Grid.SetColumn(_buttonChooseColor, 1);
+			Grid.SetRow(_buttonChooseColor, 3);
 			_buttonChooseColor.Id = "_buttonChooseColor";
 
 			var label4 = new Label();
 			label4.Text = "Image Button:";
-			label4.GridRow = 4;
+			Grid.SetRow(label4, 4);
 
 			_imageButton = new ImageButton();
 			_imageButton.Padding = new Thickness(8, 0);
-			_imageButton.GridColumn = 1;
-			_imageButton.GridRow = 4;
+			Grid.SetColumn(_imageButton, 1);
+			Grid.SetRow(_imageButton, 4);
 			_imageButton.Id = "_imageButton";
 
 			var checkBox1 = new CheckBox();
 			checkBox1.Text = "This is checkbox";
 			checkBox1.ImageWidth = 10;
 			checkBox1.ImageHeight = 10;
-			checkBox1.GridRow = 5;
-			checkBox1.GridColumnSpan = 2;
+			Grid.SetRow(checkBox1, 5);
+			Grid.SetColumnSpan(checkBox1, 2);
 
 			var label5 = new Label();
 			label5.Text = "Horizontal Slider:";
-			label5.GridRow = 6;
+			Grid.SetRow(label5, 6);
 
 			var horizontalSlider1 = new HorizontalSlider();
-			horizontalSlider1.GridColumn = 1;
-			horizontalSlider1.GridRow = 6;
-			horizontalSlider1.GridColumnSpan = 2;
+			Grid.SetColumn(horizontalSlider1, 1);
+			Grid.SetRow(horizontalSlider1, 6);
+			Grid.SetColumnSpan(horizontalSlider1, 2);
 
 			var label6 = new Label();
 			label6.Text = "Combo Box:";
-			label6.GridRow = 7;
+			Grid.SetRow(label6, 7);
 
 			var listItem1 = new ListItem();
 			listItem1.Text = "Red";
@@ -208,35 +208,35 @@ namespace Myra.Samples.AllWidgets
 
 			var comboBox1 = new ComboBox();
 			comboBox1.Width = 200;
-			comboBox1.GridColumn = 1;
-			comboBox1.GridRow = 7;
-			comboBox1.GridColumnSpan = 2;
+			Grid.SetColumn(comboBox1, 1);
+			Grid.SetRow(comboBox1, 7);
+			Grid.SetColumnSpan(comboBox1, 2);
 			comboBox1.Items.Add(listItem1);
 			comboBox1.Items.Add(listItem2);
 			comboBox1.Items.Add(listItem3);
 
 			var label7 = new Label();
 			label7.Text = "Text Field:";
-			label7.GridRow = 8;
+			Grid.SetRow(label7, 8);
 
 			var textBox1 = new TextBox();
-			textBox1.GridColumn = 1;
-			textBox1.GridRow = 8;
-			textBox1.GridColumnSpan = 2;
+			Grid.SetColumn(textBox1, 1);
+			Grid.SetRow(textBox1, 8);
+			Grid.SetColumnSpan(textBox1, 2);
 
 			var label8 = new Label();
 			label8.Text = "Spin Button:";
-			label8.GridRow = 9;
+			Grid.SetRow(label8, 9);
 
 			var spinButton1 = new SpinButton();
 			spinButton1.Value = 1;
 			spinButton1.Width = 100;
-			spinButton1.GridColumn = 1;
-			spinButton1.GridRow = 9;
+			Grid.SetColumn(spinButton1, 1);
+			Grid.SetRow(spinButton1, 9);
 
 			var label9 = new Label();
 			label9.Text = "List Box:";
-			label9.GridRow = 10;
+			Grid.SetRow(label9, 10);
 
 			var listItem4 = new ListItem();
 			listItem4.Text = "Red";
@@ -252,16 +252,16 @@ namespace Myra.Samples.AllWidgets
 
 			var listBox1 = new ListBox();
 			listBox1.Width = 200;
-			listBox1.GridColumn = 1;
-			listBox1.GridRow = 10;
-			listBox1.GridColumnSpan = 2;
+			Grid.SetColumn(listBox1, 1);
+			Grid.SetRow(listBox1, 10);
+			Grid.SetColumnSpan(listBox1, 2);
 			listBox1.Items.Add(listItem4);
 			listBox1.Items.Add(listItem5);
 			listBox1.Items.Add(listItem6);
 
 			var label10 = new Label();
 			label10.Text = "Vertical Menu:";
-			label10.GridRow = 11;
+			Grid.SetRow(label10, 11);
 
 			var menuItem1 = new MenuItem();
 			menuItem1.Text = "Start New Game";
@@ -273,15 +273,15 @@ namespace Myra.Samples.AllWidgets
 			menuItem3.Text = "Quit";
 
 			var verticalMenu1 = new VerticalMenu();
-			verticalMenu1.GridColumn = 1;
-			verticalMenu1.GridRow = 11;
+			Grid.SetColumn(verticalMenu1, 1);
+			Grid.SetRow(verticalMenu1, 11);
 			verticalMenu1.Items.Add(menuItem1);
 			verticalMenu1.Items.Add(menuItem2);
 			verticalMenu1.Items.Add(menuItem3);
 
 			var label11 = new Label();
 			label11.Text = "Tree";
-			label11.GridRow = 12;
+			Grid.SetRow(label11, 12);
 
 			_gridRight = new Grid();
 			_gridRight.ColumnSpacing = 8;
@@ -339,7 +339,7 @@ namespace Myra.Samples.AllWidgets
 
 			var verticalSlider1 = new VerticalSlider();
 			verticalSlider1.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
-			verticalSlider1.GridRow = 1;
+			Grid.SetRow(verticalSlider1, 1);
 
 			var grid1 = new Grid();
 			grid1.RowSpacing = 8;
@@ -362,12 +362,12 @@ namespace Myra.Samples.AllWidgets
 			label13.Text = "Progress Bars:";
 
 			_horizontalProgressBar = new HorizontalProgressBar();
-			_horizontalProgressBar.GridRow = 1;
+			Grid.SetRow(_horizontalProgressBar, 1);
 			_horizontalProgressBar.Id = "_horizontalProgressBar";
 
 			_verticalProgressBar = new VerticalProgressBar();
 			_verticalProgressBar.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
-			_verticalProgressBar.GridRow = 2;
+			Grid.SetRow(_verticalProgressBar, 2);
 			_verticalProgressBar.Id = "_verticalProgressBar";
 
 			var grid2 = new Grid();
@@ -399,17 +399,9 @@ namespace Myra.Samples.AllWidgets
 			var horizontalSplitPane1 = new HorizontalSplitPane();
 			horizontalSplitPane1.Widgets.Add(scrollViewer1);
 			horizontalSplitPane1.Widgets.Add(verticalSplitPane1);
-
+			StackPanel.SetProportionType(horizontalSplitPane1, ProportionType.Fill);
 			
 			Spacing = 8;
-			Proportions.Add(new Proportion
-			{
-				Type = Myra.Graphics2D.UI.ProportionType.Auto,
-			});
-			Proportions.Add(new Proportion
-			{
-				Type = Myra.Graphics2D.UI.ProportionType.Fill,
-			});
 			Widgets.Add(_mainMenu);
 			Widgets.Add(horizontalSplitPane1);
 		}
