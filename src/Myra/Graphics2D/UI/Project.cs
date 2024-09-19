@@ -187,7 +187,7 @@ namespace Myra.Graphics2D.UI
 
 		public static Dictionary<Assembly, string[]> ExtraWidgetAssembliesAndNamespaces = new Dictionary<Assembly, string[]>();
 		
-		internal static LoadContext CreateLoadContext(IAssetManager assetManager)
+		internal static LoadContext CreateLoadContext(AssetManager assetManager)
 		{
 			Func<Type, string, object> resourceGetter = (t, name) =>
 			{
