@@ -53,6 +53,7 @@ namespace MyraPad
 					}
 					catch (Exception ex)
 					{
+						Studio.MainForm.QueueClearExplorer();
 						Studio.MainForm.QueueSetStatusText(ex.Message);
 					}
 
@@ -71,6 +72,7 @@ namespace MyraPad
 						}
 						catch (Exception ex)
 						{
+							Studio.MainForm.QueueClearExplorer();
 							Studio.MainForm.QueueSetStatusText(ex.Message);
 						}
 					}

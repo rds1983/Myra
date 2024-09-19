@@ -32,7 +32,7 @@ namespace Myra.Graphics2D.UI
 
 		public int ContentHeight => _layout.GetRowHeight(0);
 
-		public int ChildNodesCount =>  _childNodesStackPanel.Children.Count;
+		public int ChildNodesCount => _childNodesStackPanel.Children.Count;
 
 		internal bool RowVisible { get; set; }
 
@@ -157,9 +157,17 @@ namespace Myra.Graphics2D.UI
 		{
 			_childNodesStackPanel.Children.Remove(subNode);
 			_topTree.AllNodes.Remove(subNode);
-			if (_topTree != null && _topTree.SelectedRow == subNode)
+			if (_topTree != null)
 			{
-				_topTree.SelectedRow = null;
+				if (_topTree.SelectedNode == subNode)
+				{
+					_topTree.SelectedNode = null;
+				}
+
+				if (_topTree.HoverRow == subNode)
+				{
+					_topTree.HoverRow = null;
+				}
 			}
 		}
 
@@ -168,9 +176,9 @@ namespace Myra.Graphics2D.UI
 			var subNode = (TreeViewNode)_childNodesStackPanel.Children[index];
 			_childNodesStackPanel.Children.RemoveAt(index);
 			_topTree.AllNodes.Remove(subNode);
-			if (_topTree.SelectedRow == subNode)
+			if (_topTree.SelectedNode == subNode)
 			{
-				_topTree.SelectedRow = null;
+				_topTree.SelectedNode = null;
 			}
 		}
 

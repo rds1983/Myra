@@ -20,11 +20,11 @@ namespace MyraPad
 		private readonly GraphicsDeviceManager _graphicsDeviceManager;
 		private readonly State _state;
 		private Desktop _desktop;
-		private StudioWidget _ui;
+		private MainForm _ui;
 
 		public static Studio Instance => _instance;
 
-		public static StudioWidget MainForm => Instance._ui;
+		public static MainForm MainForm => Instance._ui;
 
 		public Project Project => _ui.Project;
 
@@ -87,7 +87,7 @@ namespace MyraPad
 
 			_desktop = new Desktop();
 
-			_ui = new StudioWidget(_state);
+			_ui = new MainForm(_state);
 			_desktop.Root = _ui;
 
 			if (_state != null && !string.IsNullOrEmpty(_state.EditedFile) && File.Exists(_state.EditedFile))

@@ -1,8 +1,8 @@
 <Project>
-  <Project.ExportOptions Namespace="MyraPad.UI" Class="StudioWidget" OutputPath="D:/Projects/Myra/src/MyraPad/UI" />
+  <Project.ExportOptions Namespace="MyraPad.UI" Class="MainForm" OutputPath="D:/Projects/Myra/src/MyraPad/UI" />
   <VerticalStackPanel>
     <HorizontalMenu Id="_mainMenu">
-      <MenuItem Text="&amp;File" Id="_menuFile">
+      <MenuItem Text="&amp;File" Id="_menuFile" >
         <MenuItem Text="&amp;New" ShortcutText="Ctrl+N" Id="_menuFileNew" />
         <MenuItem Text="&amp;Open" ShortcutText="Ctrl+O" Id="_menuFileOpen" />
         <MenuItem Text="&amp;Reload" ShortcutText="Ctrl+R" Id="_menuFileReload" />

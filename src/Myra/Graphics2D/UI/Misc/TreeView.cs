@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Myra.Graphics2D.UI.Styles;
 using System.ComponentModel;
+using System.Xml.Serialization;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -20,30 +22,42 @@ namespace Myra.Graphics2D.UI
 	{
 		private readonly StackPanelLayout _layout = new StackPanelLayout(Orientation.Vertical);
 		private readonly List<TreeViewNode> _allNodes = new List<TreeViewNode>();
-		private TreeViewNode _selectedRow;
+		private TreeViewNode _selectedNode;
 		private bool _rowInfosDirty = true;
 
 		internal List<TreeViewNode> AllNodes => _allNodes;
 
 		public int ChildNodesCount => Children.Count;
 
-		private TreeViewNode HoverRow { get; set; }
+		internal TreeViewNode HoverRow { get; set; }
 
+		[Browsable(false)]
+		[XmlIgnore]
+		[Obsolete("Use SelectedNode")]
 		public TreeViewNode SelectedRow
+		{
+			get => SelectedNode;
+
+			set => SelectedNode = value;
+		}
+
+		[Browsable(false)]
+		[XmlIgnore]
+		public TreeViewNode SelectedNode
 		{
 			get
 			{
-				return _selectedRow;
+				return _selectedNode;
 			}
 
 			set
 			{
-				if (value == _selectedRow)
+				if (value == _selectedNode)
 				{
 					return;
 				}
 
-				_selectedRow = value;
+				_selectedNode = value;
 
 				var ev = SelectionChanged;
 				if (ev != null)
@@ -74,17 +88,17 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnKeyDown(k);
 
-			if (SelectedRow == null)
+			if (SelectedNode == null)
 			{
 				return;
 			}
 
 			int index = 0;
 			IList<Widget> parentWidgets = null;
-			if (SelectedRow.ParentNode != null)
+			if (SelectedNode.ParentNode != null)
 			{
-				parentWidgets = SelectedRow.ParentNode.ChildNodesGrid.Widgets;
-				index = parentWidgets.IndexOf(SelectedRow);
+				parentWidgets = SelectedNode.ParentNode.ChildNodesGrid.Widgets;
+				index = parentWidgets.IndexOf(SelectedNode);
 				if (index == -1)
 				{
 					return;
@@ -94,26 +108,26 @@ namespace Myra.Graphics2D.UI
 			switch (k)
 			{
 				case Keys.Enter:
-					SelectedRow.IsExpanded = !SelectedRow.IsExpanded;
+					SelectedNode.IsExpanded = !SelectedNode.IsExpanded;
 					break;
 				case Keys.Up:
 					{
 						if (parentWidgets != null)
 						{
-							if (index == 0 && SelectedRow.ParentNode != null)
+							if (index == 0 && SelectedNode.ParentNode != null)
 							{
-								SelectedRow = SelectedRow.ParentNode;
+								SelectedNode = SelectedNode.ParentNode;
 							}
 							else if (index > 0)
 							{
 								var previousRow = (TreeViewNode)parentWidgets[index - 1];
 								if (!previousRow.IsExpanded || previousRow.ChildNodesCount == 0)
 								{
-									SelectedRow = previousRow;
+									SelectedNode = previousRow;
 								}
 								else
 								{
-									SelectedRow = (TreeViewNode)previousRow.ChildNodesGrid.Widgets[previousRow.ChildNodesCount - 1];
+									SelectedNode = (TreeViewNode)previousRow.ChildNodesGrid.Widgets[previousRow.ChildNodesCount - 1];
 								}
 							}
 						}
@@ -121,23 +135,23 @@ namespace Myra.Graphics2D.UI
 					break;
 				case Keys.Down:
 					{
-						if (SelectedRow.IsExpanded && SelectedRow.ChildNodesCount > 0)
+						if (SelectedNode.IsExpanded && SelectedNode.ChildNodesCount > 0)
 						{
-							SelectedRow = (TreeViewNode)SelectedRow.ChildNodesGrid.Widgets[0];
+							SelectedNode = (TreeViewNode)SelectedNode.ChildNodesGrid.Widgets[0];
 						}
 						else if (parentWidgets != null && index + 1 < parentWidgets.Count)
 						{
-							SelectedRow = (TreeViewNode)parentWidgets[index + 1];
+							SelectedNode = (TreeViewNode)parentWidgets[index + 1];
 						}
 						else if (parentWidgets != null && index + 1 >= parentWidgets.Count)
 						{
-							var parentOfParent = SelectedRow.ParentNode.ParentNode;
+							var parentOfParent = SelectedNode.ParentNode.ParentNode;
 							if (parentOfParent != null)
 							{
-								var parentIndex = parentOfParent.ChildNodesGrid.Widgets.IndexOf(SelectedRow.ParentNode);
+								var parentIndex = parentOfParent.ChildNodesGrid.Widgets.IndexOf(SelectedNode.ParentNode);
 								if (parentIndex + 1 < parentOfParent.ChildNodesCount)
 								{
-									SelectedRow = (TreeViewNode)parentOfParent.ChildNodesGrid.Widgets[parentIndex + 1];
+									SelectedNode = (TreeViewNode)parentOfParent.ChildNodesGrid.Widgets[parentIndex + 1];
 								}
 							}
 						}
@@ -159,7 +173,7 @@ namespace Myra.Graphics2D.UI
 
 			if (HoverRow != null && HoverRow.RowVisible)
 			{
-				SelectedRow = HoverRow;
+				SelectedNode = HoverRow;
 			}
 		}
 
@@ -249,10 +263,9 @@ namespace Myra.Graphics2D.UI
 
 		public void RemoveAllSubNodes()
 		{
+			HoverRow = SelectedNode = null;
 			Children.Clear();
 			_allNodes.Clear();
-			_selectedRow = null;
-			HoverRow = null;
 		}
 
 		private bool Iterate(TreeViewNode node, Func<TreeViewNode, bool> action)
@@ -328,18 +341,19 @@ namespace Myra.Graphics2D.UI
 			}
 			if (SelectionBackground != null)
 			{
-				if (HoverRow != null && HoverRow != SelectedRow && SelectionHoverBackground != null)
+				if (HoverRow != null && HoverRow != SelectedNode && SelectionHoverBackground != null)
 				{
 					var rect = BuildRowRect(HoverRow);
 					SelectionHoverBackground.Draw(context, rect);
 				}
 
-				if (SelectedRow != null && SelectedRow.RowVisible)
+				if (SelectedNode != null && SelectedNode.RowVisible)
 				{
-					var rect = BuildRowRect(SelectedRow);
+					var rect = BuildRowRect(SelectedNode);
 					SelectionBackground.Draw(context, rect);
 				}
-			} else
+			}
+			else
 			{
 				if (HoverRow != null && SelectionHoverBackground != null)
 				{
@@ -439,7 +453,7 @@ namespace Myra.Graphics2D.UI
 			SelectionBackground = treeView.SelectionBackground;
 			SelectionHoverBackground = treeView.SelectionHoverBackground;
 
-			foreach(TreeViewNode node in treeView.Children)
+			foreach (TreeViewNode node in treeView.Children)
 			{
 				AddSubNode(node.Content);
 			}

@@ -26,7 +26,7 @@ using System.Xml;
 
 namespace MyraPad.UI
 {
-	public partial class StudioWidget
+	public partial class MainForm
 	{
 		private const string RowsProportionsName = "RowsProportions";
 		private const string ColumnsProportionsName = "ColumnsProportions";
@@ -80,7 +80,7 @@ namespace MyraPad.UI
 		private readonly AsyncTasksQueue _queue = new AsyncTasksQueue();
 		private readonly ConcurrentQueue<Action> _uiActions = new ConcurrentQueue<Action>();
 
-		private bool _suppressProjectRefresh = false;
+		private bool _suppressProjectRefresh = false, _suppressExplorerRefresh = false;
 		private string _filePath;
 		private bool _isDirty;
 		private Project _project;
@@ -251,7 +251,7 @@ namespace MyraPad.UI
 		public string LastFolder { get; set; }
 		public Options Options { get; }
 
-		public StudioWidget(State state)
+		public MainForm(State state)
 		{
 			BuildUI();
 
@@ -801,12 +801,14 @@ namespace MyraPad.UI
 			_uiActions.Enqueue(action);
 		}
 
+		public void QueueClearExplorer()
+		{
+			QueueUIAction(() => _treeViewExplorer.RemoveAllSubNodes());
+		}
+
 		public void QueueSetStatusText(string text)
 		{
-			QueueUIAction(() =>
-			{
-				_textStatus.Text = text;
-			});
+			QueueUIAction(() => _textStatus.Text = text);
 		}
 
 		private static string ExtractTag(string source)
@@ -1433,6 +1435,36 @@ namespace MyraPad.UI
 					PropertyGrid.ParentType = ParentType;
 					PropertyGrid.Object = NewObject;
 
+					// Set the selected item in tree
+					try
+					{
+						_suppressExplorerRefresh = true;
+
+						// Determine selected item
+						object selectedItem = null;
+						foreach (var pair in Project.ObjectsNodes)
+						{
+							var lineInfo = (IXmlLineInfo)pair.Item2;
+							if (lineInfo.LineNumber - 1 > _line ||
+								(lineInfo.LineNumber - 1 == _line && lineInfo.LinePosition - 1 > _col))
+							{
+								break;
+							}
+
+							selectedItem = pair.Item1;
+						}
+
+						if (selectedItem != null)
+						{
+							var node = _treeViewExplorer.FindNode(n => n.Tag == selectedItem);
+							_treeViewExplorer.SelectedNode = node;
+						}
+					}
+					finally
+					{
+						_suppressExplorerRefresh = false;
+					}
+
 					_propertyGridPane.ResetScroll();
 					NewObject = null;
 				}
@@ -1641,6 +1673,13 @@ namespace MyraPad.UI
 
 		private void RefreshExplorer()
 		{
+			// Save selected index
+			int? selectedIndex = null;
+			if (_treeViewExplorer.SelectedNode != null)
+			{
+				selectedIndex = _treeViewExplorer.AllNodes.IndexOf(_treeViewExplorer.SelectedNode);
+			}
+
 			_treeViewExplorer.RemoveAllSubNodes();
 
 			if (Project == null || Project.Root == null)
@@ -1649,20 +1688,35 @@ namespace MyraPad.UI
 			}
 
 			BuildExplorerTreeRecursive(_treeViewExplorer, Project.Root);
+
+			// Restore selected index
+			if (selectedIndex != null && selectedIndex.Value < _treeViewExplorer.AllNodes.Count)
+			{
+				try
+				{
+					_suppressExplorerRefresh = true;
+
+					_treeViewExplorer.SelectedNode = _treeViewExplorer.AllNodes[selectedIndex.Value];
+				}
+				finally
+				{
+					_suppressExplorerRefresh = false;
+				}
+			}
 		}
 
 		private void _treeViewExplorer_SelectionChanged(object sender, EventArgs e)
 		{
-			if (_treeViewExplorer.SelectedRow == null || Project.ObjectsNodes == null)
+			if (_suppressExplorerRefresh || _treeViewExplorer.SelectedNode == null || Project.ObjectsNodes == null)
 			{
 				return;
 			}
 
 			// Try to find the corresponding node
 			Tuple<object, XElement> find = null;
-			foreach(var pair in Project.ObjectsNodes)
+			foreach (var pair in Project.ObjectsNodes)
 			{
-				if (pair.Item1 == _treeViewExplorer.SelectedRow.Tag)
+				if (pair.Item1 == _treeViewExplorer.SelectedNode.Tag)
 				{
 					find = pair;
 					break;
@@ -1679,7 +1733,7 @@ namespace MyraPad.UI
 			// Set the position
 			var currentLineNumber = 0;
 			var currentLinePosition = 0;
-			for(var pos = 0; pos < _textSource.Text.Length; ++pos)
+			for (var pos = 0; pos < _textSource.Text.Length; ++pos)
 			{
 				if (currentLineNumber > lineInfo.LineNumber - 1 ||
 					(currentLineNumber == lineInfo.LineNumber - 1 && currentLinePosition >= lineInfo.LinePosition - 1))
@@ -1691,7 +1745,7 @@ namespace MyraPad.UI
 				}
 
 				var c = _textSource.Text[pos];
-				switch(c)
+				switch (c)
 				{
 					case '\n':
 						// New line
