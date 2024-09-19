@@ -163,36 +163,40 @@ namespace Myra.Graphics2D.UI
 
 		private void GetProportions(int leftWidgetIndex,
 			out Proportion leftProportion,
-			out Proportion rightProportion)
+			out Proportion rightProportion,
+			out float total)
 		{
+			var allProps = Orientation == Orientation.Horizontal
+				? _layout.ColumnsProportions : _layout.RowsProportions;
+
+			total = 0;
+			for(var i = 0; i < allProps.Count; i += 2)
+			{
+				total += allProps[i].Value;
+			}
+
 			var baseIndex = leftWidgetIndex * 2;
-			leftProportion = Orientation == Orientation.Horizontal
-				? _layout.ColumnsProportions[baseIndex]
-				: _layout.RowsProportions[baseIndex];
-			rightProportion = Orientation == Orientation.Horizontal
-				? _layout.ColumnsProportions[baseIndex + 2]
-				: _layout.RowsProportions[baseIndex + 2];
+			leftProportion = allProps[baseIndex];
+			rightProportion = allProps[baseIndex + 2];
 		}
 
 		public float GetSplitterPosition(int leftWidgetIndex)
 		{
+			float total;
 			Proportion leftProportion, rightProportion;
-			GetProportions(leftWidgetIndex, out leftProportion, out rightProportion);
-
-			var total = leftProportion.Value + rightProportion.Value;
+			GetProportions(leftWidgetIndex, out leftProportion, out rightProportion, out total);
 
 			return leftProportion.Value / total;
 		}
 
 		public void SetSplitterPosition(int leftWidgetIndex, float proportion)
 		{
+			float total;
 			Proportion leftProportion, rightProportion;
-			GetProportions(leftWidgetIndex, out leftProportion, out rightProportion);
-
-			var total = leftProportion.Value + rightProportion.Value;
+			GetProportions(leftWidgetIndex, out leftProportion, out rightProportion, out total);
 
 			var fp = proportion * total;
-			var fp2 = total - fp;
+			var fp2 = leftProportion.Value + rightProportion.Value - fp;
 			leftProportion.Value = fp;
 			rightProportion.Value = fp2;
 		}

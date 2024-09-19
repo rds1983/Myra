@@ -286,7 +286,7 @@ namespace MyraPad.UI
 			PropertyGrid.CustomSetter = RecordSetter;
 			PropertyGrid.Settings.AssetManager = MyraEnvironment.DefaultAssetManager;
 
-			_topSplitPane.SetSplitterPosition(0, state != null ? state.TopSplitterPosition1 : 0.75f);
+			_topSplitPane.SetSplitterPosition(0, state != null ? state.TopSplitterPosition1 : 0.25f);
 			_topSplitPane.SetSplitterPosition(1, state != null ? state.TopSplitterPosition2 : 0.75f);
 			_leftSplitPane.SetSplitterPosition(0, state != null ? state.CenterSplitterPosition : 0.5f);
 
