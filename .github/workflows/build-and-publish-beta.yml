@@ -50,7 +50,7 @@ jobs:
         path: Myra.${{env.VERSION}}.zip
         retention-days: 10
     - name: Install NuGet
-      uses: NuGet/setup-nuget@v1
+      uses: NuGet/setup-nuget@v2
     - name: Publish Myra.MonoGame to MyGet
       run: nuget.exe push src\Myra\bin\MonoGame\Release\Myra.*.nupkg ${{secrets.MYGET_APIKEY}} -Source https://www.myget.org/F/abarim-games/api/v2/package
       continue-on-error: true
