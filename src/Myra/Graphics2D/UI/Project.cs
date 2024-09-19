@@ -185,7 +185,9 @@ namespace Myra.Graphics2D.UI
 			return CreateSaveContext(Stylesheet);
 		}
 
-		internal static LoadContext CreateLoadContext(AssetManager assetManager)
+		public static Dictionary<Assembly, string[]> ExtraWidgetAssembliesAndNamespaces = new Dictionary<Assembly, string[]>();
+		
+		internal static LoadContext CreateLoadContext(IAssetManager assetManager)
 		{
 			Func<Type, string, object> resourceGetter = (t, name) =>
 			{
@@ -205,13 +207,11 @@ namespace Myra.Graphics2D.UI
 				throw new Exception(string.Format("Type {0} isn't supported", t.Name));
 			};
 
+			Dictionary<Assembly, string[]> assemblies = new Dictionary<Assembly, string[]>(ExtraWidgetAssembliesAndNamespaces);
+			assemblies.Add(typeof(Widget).Assembly, new string[] { typeof(Widget).Namespace, typeof(PropertyGrid).Namespace });
 			return new LoadContext
 			{
-				Namespaces = new[]
-				{
-					typeof(Widget).Namespace,
-					typeof(PropertyGrid).Namespace,
-				},
+				Assemblies = assemblies,
 				LegacyClassNames = LegacyClassNames,
 				ObjectCreator = (t, el) => CreateItem(t, el),
 				ResourceGetter = resourceGetter

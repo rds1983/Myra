@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 using System.Xml.Linq;
 using Myra.MML;
 using System.Collections;
+using System.Reflection;
 using FontStashSharp;
 using Myra.Graphics2D.TextureAtlases;
 using FontStashSharp.RichText;
@@ -410,9 +411,9 @@ namespace Myra.Graphics2D.UI.Styles
 
 			var loadContext = new LoadContext
 			{
-				Namespaces = new[]
+				Assemblies = new Dictionary<Assembly, string[]>()
 				{
-					typeof(WidgetStyle).Namespace
+					{ typeof( WidgetStyle ).Assembly, new string[] { typeof( WidgetStyle ).Namespace } }
 				},
 				ResourceGetter = resourceGetter,
 				NodesToIgnore = new HashSet<string>(new[] { "Designer", "Colors", "Fonts" }),
