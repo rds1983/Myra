@@ -74,7 +74,11 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Behavior")]
+		[DefaultValue(false)]
 		public bool CloseableTabs { get; set; }
+
+		[DefaultValue(true)]
+		public override bool ClipToBounds { get => base.ClipToBounds; set => base.ClipToBounds = value; }
 
 		public TabControl(string styleName = Stylesheet.DefaultStyleName) : base(new Grid())
 		{
