@@ -259,7 +259,7 @@ namespace Myra.Graphics2D.UI
 					HorizontalAlignment = HorizontalAlignment.Right
 				};
 
-				closeButton.Click += (s, e) => RemoveItem(item);
+				closeButton.Click += (s, e) => Items.Remove(item);
 
 				var style = TabControlStyle;
 				if (style.CloseButtonStyle != null)
@@ -312,8 +312,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			_gridButtons.Widgets.RemoveAt(index);
-			Items.RemoveAt(index);
-
 			if (SelectedItem == item)
 			{
 				SelectedItem = null;
