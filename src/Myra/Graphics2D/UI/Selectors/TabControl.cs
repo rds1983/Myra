@@ -230,7 +230,6 @@ namespace Myra.Graphics2D.UI
 
 			var button = new ListViewButton
 			{
-				Tag = item,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
 				Height = item.Height,
@@ -246,10 +245,13 @@ namespace Myra.Graphics2D.UI
 
 			if (!CloseableTabs)
 			{
+				button.Tag = item;
 				_gridButtons.Widgets.Insert(index, button);
 			} else
 			{
 				var topItemPanel = new HorizontalStackPanel();
+				topItemPanel.Tag = item;
+
 				topItemPanel.Widgets.Add(button);
 				StackPanel.SetProportionType(button, ProportionType.Fill);
 

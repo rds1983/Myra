@@ -206,6 +206,8 @@ namespace Myra.Graphics2D.UI.Properties
 
 				_object = value;
 				Rebuild();
+
+				ObjectChanged?.Invoke(this, EventArgs.Empty);
 			}
 		}
 
@@ -340,6 +342,7 @@ namespace Myra.Graphics2D.UI.Properties
 		public Func<Record, object, Widget> CustomWidgetProvider;
 
 		public event EventHandler<GenericEventArgs<string>> PropertyChanged;
+		public event EventHandler ObjectChanged;
 
 		private PropertyGrid(TreeStyle style, string category, Record parentProperty, PropertyGrid parentGrid = null)
 		{
