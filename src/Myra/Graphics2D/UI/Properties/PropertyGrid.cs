@@ -687,7 +687,7 @@ namespace Myra.Graphics2D.UI.Properties
 					if (cv.SelectedIndex != -1)
 					{
 						SetValue(record, _object, cv.SelectedItem.Tag);
-						FireChanged(enumType.Name);
+						FireChanged(record.Name);
 					}
 				};
 			}
