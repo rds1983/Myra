@@ -1220,10 +1220,12 @@ namespace Myra.Graphics2D.UI.Properties
 				{
 					valueWidget = CreateFileEditor(record, hasSetter, "*.png|*.jpg|*.bmp|*.gif", name => Settings.AssetManager.LoadTexture2D(MyraEnvironment.GraphicsDevice, name));
 				}
+#if !STRIDE
 				else if (propertyType == typeof(TextureCube))
 				{
 					valueWidget = CreateFileEditor(record, hasSetter, "*.dds", name => Settings.AssetManager.LoadTexture2D(MyraEnvironment.GraphicsDevice, name));
 				}
+#endif
 #endif
 				else
 				{
