@@ -288,7 +288,13 @@ namespace Myra.Graphics2D.UI
 					return null;
 				}
 
-				return Widgets.IndexOf(_selectedItem);
+				var result = Widgets.IndexOf(_selectedItem);
+				if (result == -1)
+				{
+					return null;
+				}
+
+				return result;
 			}
 
 			set
