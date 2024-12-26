@@ -1,5 +1,4 @@
-﻿using Myra.Utility;
-using System;
+﻿using System;
 using System.Reflection;
 
 namespace Myra.Graphics2D.UI.Properties
@@ -18,6 +17,8 @@ namespace Myra.Graphics2D.UI.Properties
 			get { return _fieldInfo.FieldType; }
 		}
 
+		public override MemberInfo MemberInfo => _fieldInfo;
+
 		public FieldRecord(FieldInfo fieldInfo)
 		{
 			_fieldInfo = fieldInfo;
@@ -31,11 +32,6 @@ namespace Myra.Graphics2D.UI.Properties
 		public override void SetValue(object obj, object value)
 		{
 			_fieldInfo.SetValue(obj, value);
-		}
-
-		public override T FindAttribute<T>()
-		{
-			return _fieldInfo.FindAttribute<T>();
 		}
 	}
 }

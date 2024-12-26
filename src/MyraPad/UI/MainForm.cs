@@ -480,7 +480,7 @@ namespace MyraPad.UI
 			_propertyGridPane.ResetScroll();
 		}
 
-		private object[] RecordValuesProvider(Record record)
+		private CustomValues RecordValuesProvider(object obj, Record record)
 		{
 			if (record.Name != "StyleName")
 			{
@@ -501,7 +501,25 @@ namespace MyraPad.UI
 				styleNames = new string[0];
 			}
 
-			return (from s in styleNames select (object)s).ToArray();
+			var values = new List<CustomValue>();
+			int? selectedIndex = null;
+			var val = (string)record.GetValue(obj);
+			for(var i = 0; i < styleNames.Length; ++i)
+			{
+				var styleName = styleNames[i];
+
+				values.Add(new CustomValue(styleName, styleName));
+
+				if (styleName == val)
+				{
+					selectedIndex = i;
+				}
+			}
+
+			return new CustomValues(values)
+			{
+				SelectedIndex = selectedIndex
+			};
 		}
 
 		private bool RecordSetter(Record record, object obj, object value)

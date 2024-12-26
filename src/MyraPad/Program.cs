@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AssetManagementBase;
+using System;
 
 namespace MyraPad
 {
@@ -12,6 +13,7 @@ namespace MyraPad
 		{
 			try
 			{
+				AMBConfiguration.Logger = Console.WriteLine;
 				using (var studio = new Studio(args))
 				{
 					studio.Run();

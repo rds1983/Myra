@@ -331,7 +331,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public Func<Record, object[]> CustomValuesProvider;
+		public Func<object, Record, CustomValues> CustomValuesProvider;
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -416,31 +416,31 @@ namespace Myra.Graphics2D.UI.Properties
 			record.SetValue(obj, value);
 		}
 
-		private ComboView CreateCustomValuesEditor(Record record, object[] customValues, bool hasSetter)
+		private ComboView CreateCustomValuesEditor(Record record, CustomValues customValues, bool hasSetter)
 		{
 			var propertyType = record.Type;
 			var value = record.GetValue(_object);
 
 			var cv = new ComboView();
-			foreach (var v in customValues)
+			foreach (var v in customValues.Values)
 			{
 				var label = new Label
 				{
-					Text = v.ToString(),
-					Tag = v
+					Text = v.Name,
+					Tag = v.Value
 				};
 
 				cv.Widgets.Add(label);
 			}
 
-			cv.SelectedIndex = Array.IndexOf(customValues, value);
+			cv.SelectedIndex = customValues.SelectedIndex;
 			if (hasSetter)
 			{
 				cv.SelectedIndexChanged += (sender, args) =>
 				{
-					var item = cv.SelectedIndex != null ? customValues[cv.SelectedIndex.Value] : null;
+					var item = cv.SelectedIndex != null ? customValues.Values[cv.SelectedIndex.Value].Value : null;
 					SetValue(record, _object, item);
-					FireChanged(propertyType.Name);
+					FireChanged(record.Name);
 				};
 			}
 			else
@@ -1147,19 +1147,25 @@ namespace Myra.Graphics2D.UI.Properties
 				var propertyType = record.Type;
 
 				Proportion rowProportion;
-				object[] customValues = null;
+				CustomValues customValues = null;
+
+				var needsSubGrid = false;
 				if ((valueWidget = CustomWidgetProvider?.Invoke(record, _object)) != null)
 				{
 
 				}
-				else if (CustomValuesProvider != null && (customValues = CustomValuesProvider(record)) != null)
+				else if (CustomValuesProvider != null && (customValues = CustomValuesProvider(_object, record)) != null)
 				{
-					if (customValues.Length == 0)
+					if (customValues.Values.Length == 0)
 					{
 						continue;
 					}
 
 					valueWidget = CreateCustomValuesEditor(record, customValues, hasSetter);
+					if (value != null && !value.GetType().IsPrimitive && value.GetType() != typeof(string))
+					{
+						needsSubGrid = true;
+					}
 				}
 				else if (propertyType == typeof(bool))
 				{
@@ -1176,7 +1182,6 @@ namespace Myra.Graphics2D.UI.Properties
 				else if (propertyType.IsNumericType() ||
 						 (propertyType.IsNullablePrimitive() && propertyType.GetNullableType().IsNumericType()))
 				{
-
 					valueWidget = CreateNumericEditor(record, hasSetter);
 				}
 				else if (propertyType == typeof(string) && record.FindAttribute<FilePathAttribute>() != null)
@@ -1229,6 +1234,59 @@ namespace Myra.Graphics2D.UI.Properties
 #endif
 				else
 				{
+					if (value == null)
+					{
+						var tb = new Label();
+						tb.ApplyLabelStyle(PropertyGridStyle.LabelStyle);
+						tb.Text = "null";
+
+						valueWidget = tb;
+					} else
+					{
+						needsSubGrid = true;
+					}
+				}
+
+				if (valueWidget != null)
+				{
+					var name = record.Name;
+					var dn = record.FindAttribute<DisplayNameAttribute>();
+
+					if (dn != null)
+					{
+						name = dn.DisplayName;
+					}
+
+					if (!PassesFilter(name))
+					{
+						continue;
+					}
+
+					var nameLabel = new Label
+					{
+						Text = name,
+						VerticalAlignment = VerticalAlignment.Center,
+					};
+
+					Grid.SetColumn(nameLabel, 0);
+					Grid.SetRow(nameLabel, oldY);
+
+					Children.Add(nameLabel);
+
+					Grid.SetColumn(valueWidget, 1);
+					Grid.SetRow(valueWidget, oldY);
+					valueWidget.HorizontalAlignment = HorizontalAlignment.Stretch;
+					valueWidget.VerticalAlignment = VerticalAlignment.Top;
+
+					Children.Add(valueWidget);
+
+					rowProportion = new Proportion(ProportionType.Auto);
+					_layout.RowsProportions.Add(rowProportion);
+					++y;
+				}
+
+				if (needsSubGrid)
+				{
 					// Subgrid
 					if (value != null)
 					{
@@ -1247,52 +1305,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 						continue;
 					}
-
-					var tb = new Label();
-					tb.ApplyLabelStyle(PropertyGridStyle.LabelStyle);
-					tb.Text = "null";
-
-					valueWidget = tb;
 				}
-
-				if (valueWidget == null)
-				{
-					continue;
-				}
-
-				var name = record.Name;
-				var dn = record.FindAttribute<DisplayNameAttribute>();
-
-				if (dn != null)
-				{
-					name = dn.DisplayName;
-				}
-
-				if (!PassesFilter(name))
-				{
-					continue;
-				}
-
-				var nameLabel = new Label
-				{
-					Text = name,
-					VerticalAlignment = VerticalAlignment.Center,
-				};
-				Grid.SetColumn(nameLabel, 0);
-				Grid.SetRow(nameLabel, oldY);
-
-				Children.Add(nameLabel);
-
-				Grid.SetColumn(valueWidget, 1);
-				Grid.SetRow(valueWidget, oldY);
-				valueWidget.HorizontalAlignment = HorizontalAlignment.Stretch;
-				valueWidget.VerticalAlignment = VerticalAlignment.Top;
-
-				Children.Add(valueWidget);
-
-				rowProportion = new Proportion(ProportionType.Auto);
-				_layout.RowsProportions.Add(rowProportion);
-				++y;
 			}
 		}
 

@@ -1,5 +1,4 @@
-﻿using Myra.Utility;
-using System;
+﻿using System;
 using System.Reflection;
 
 namespace Myra.Graphics2D.UI.Properties
@@ -18,6 +17,8 @@ namespace Myra.Graphics2D.UI.Properties
 			get { return _propertyInfo.PropertyType; }
 		}
 
+		public override MemberInfo MemberInfo => _propertyInfo;
+
 		public PropertyRecord(PropertyInfo propertyInfo)
 		{
 			_propertyInfo = propertyInfo;
@@ -31,11 +32,6 @@ namespace Myra.Graphics2D.UI.Properties
 		public override void SetValue(object obj, object value)
 		{
 			_propertyInfo.SetValue(obj, value);
-		}
-
-		public override T FindAttribute<T>()
-		{
-			return _propertyInfo.FindAttribute<T>();
 		}
 	}
 }

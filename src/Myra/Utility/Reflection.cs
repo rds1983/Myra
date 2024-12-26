@@ -13,6 +13,11 @@ namespace Myra.Utility
 			return result;
 		}
 
+		public static T[] FindAttributes<T>(this MemberInfo property) where T : Attribute
+		{
+			return (from T a in property.GetCustomAttributes<T>(true) select a).ToArray();
+		}
+
 		public static T FindAttribute<T>(this Type type) where T : Attribute
 		{
 			var result = (from T a in type.GetCustomAttributes<T>(true) select a).FirstOrDefault();
