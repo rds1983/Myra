@@ -31,7 +31,9 @@ namespace Myra.Graphics2D.UI
 			SupportsCommands = false
 		};
 
-		[Category("Appearance")]
+        private bool _singleLine = false;
+
+        [Category("Appearance")]
 		[DefaultValue(0)]
 		public int VerticalSpacing
 		{
@@ -101,10 +103,31 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		/// <summary>
-		/// The method used to abbreviate overflowing text.
-		/// </summary>
-		[Category("Appearance")]
+        [Category("Appearance")]
+        [DefaultValue(false)]
+        public bool SingleLine
+        {
+            get
+            {
+                return _singleLine;
+            }
+
+            set
+            {
+                if (value == _singleLine)
+                {
+                    return;
+                }
+
+                _singleLine = value;
+                InvalidateMeasure();
+            }
+        }
+
+        /// <summary>
+        /// The method used to abbreviate overflowing text.
+        /// </summary>
+        [Category("Appearance")]
 		[DefaultValue(AutoEllipsisMethod.None)]
 		public AutoEllipsisMethod AutoEllipsisMethod
 		{
@@ -255,11 +278,24 @@ namespace Myra.Graphics2D.UI
 		{
 			base.InternalArrange();
 
-			_richText.Width = _wrap ? ActualBounds.Width : default(int?);
-			_richText.Height = _wrap ? ActualBounds.Height : default(int?);
-		}
+            if (_singleLine)
+            {
+                _richText.Width = ActualBounds.Width;
+                _richText.Height = Font.LineHeight;
+            }
+            else if (_wrap)
+            {
+                _richText.Width = ActualBounds.Width;
+                _richText.Height = ActualBounds.Height;
+            }
+            else
+            {
+                _richText.Width = _wrap ? ActualBounds.Width : default(int?);
+                _richText.Height = _wrap ? ActualBounds.Height : default(int?);
+            }
+        }
 
-		public void ApplyLabelStyle(LabelStyle style)
+        public void ApplyLabelStyle(LabelStyle style)
 		{
 			ApplyWidgetStyle(style);
 
