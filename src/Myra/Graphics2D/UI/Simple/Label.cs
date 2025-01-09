@@ -290,8 +290,8 @@ namespace Myra.Graphics2D.UI
             }
             else
             {
-                _richText.Width = _wrap ? ActualBounds.Width : default(int?);
-                _richText.Height = _wrap ? ActualBounds.Height : default(int?);
+                _richText.Width = default(int?);
+                _richText.Height = default(int?);
             }
         }
 
