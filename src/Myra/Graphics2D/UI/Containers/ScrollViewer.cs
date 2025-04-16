@@ -135,7 +135,13 @@ namespace Myra.Graphics2D.UI
 			get; set;
 		}
 
-		[Browsable(false)]
+		[Category("Appearance")]
+		public int ScrollMultiplier
+		{
+			get; set;
+		} = 10;
+
+        [Browsable(false)]
 		[Content]
 		public override Widget Content
 		{
@@ -395,7 +401,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var step = 10 * ScrollMaximum.Y / _thumbMaximumY;
+			var step = ScrollMultiplier * ScrollMaximum.Y / _thumbMaximumY;
 			if (delta < 0)
 			{
 				_scrollbarOrientation = Orientation.Vertical;
