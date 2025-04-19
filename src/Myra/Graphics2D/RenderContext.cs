@@ -25,15 +25,29 @@ namespace Myra.Graphics2D
 	public enum TextureFiltering
 	{
 		Nearest,
-		Linear
-	}
+		Linear,
+        Anisotropic
+    }
 
 	public partial class RenderContext : IDisposable
 	{
 #if MONOGAME || FNA
 		private static RasterizerState _uiRasterizerState;
+		private static SamplerState _textureFilteringAnisotropic = new SamplerState
+        {
+            Filter = TextureFilter.Anisotropic,
+            AddressU = TextureAddressMode.Clamp,
+            AddressV = TextureAddressMode.Clamp,
+            AddressW = TextureAddressMode.Clamp,
+            BorderColor = Color.Transparent,
+            MaxAnisotropy = 16,
+            MaxMipLevel = 16,
+            MipMapLevelOfDetailBias = 0f,
+            ComparisonFunction = CompareFunction.Never,
+            FilterMode = TextureFilterMode.Default
+        };
 
-		private static RasterizerState UIRasterizerState
+        private static RasterizerState UIRasterizerState
 		{
 			get
 			{
@@ -105,6 +119,7 @@ namespace Myra.Graphics2D
 			}
 		}
 
+        private bool _isAnisotropicFilteringOn;
 
 		public Rectangle Scissor
 		{
@@ -255,7 +270,7 @@ namespace Myra.Graphics2D
 		/// <param name="depth"></param>
 		public void Draw(Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 scale, float depth = 0.0f)
 		{
-			SetTextureFiltering(TextureFiltering.Nearest);
+			SetTextureFiltering(_isAnisotropicFilteringOn ? TextureFiltering.Anisotropic : TextureFiltering.Nearest);
 			color = CrossEngineStuff.MultiplyColor(color, Opacity);
 			scale *= Transform.Scale;
 			rotation += Transform.Rotation;
@@ -430,7 +445,7 @@ namespace Myra.Graphics2D
 		public void Begin()
 		{
 #if MONOGAME || FNA
-			var samplerState = _textureFiltering == TextureFiltering.Nearest ? SamplerState.PointClamp : SamplerState.LinearClamp;
+            var samplerState = SelectedSamplerState();
 
 			_renderer.Begin(SpriteSortMode.Deferred,
 				BlendState.AlphaBlend,
@@ -439,9 +454,8 @@ namespace Myra.Graphics2D
 				UIRasterizerState,
 				null);
 #elif STRIDE
-			var samplerState = _textureFiltering == TextureFiltering.Nearest ?
-				MyraEnvironment.Game.GraphicsDevice.SamplerStates.PointClamp :
-				MyraEnvironment.Game.GraphicsDevice.SamplerStates.LinearClamp;
+			var samplerState = SelectedSamplerState();
+
 			_renderer.Begin(MyraEnvironment.Game.GraphicsContext,
 				SpriteSortMode.Deferred,
 				BlendStates.AlphaBlend,
@@ -455,7 +469,39 @@ namespace Myra.Graphics2D
 			_beginCalled = true;
 		}
 
-		public void End()
+#if MONOGAME || FNA
+        private SamplerState SelectedSamplerState()
+        {
+            switch (_textureFiltering)
+            {
+                case TextureFiltering.Nearest:
+                    return SamplerState.PointClamp;
+                case TextureFiltering.Linear:
+                    return SamplerState.LinearClamp;
+                case TextureFiltering.Anisotropic:
+                    return _textureFilteringAnisotropic;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+#elif STRIDE
+        private SamplerState SelectedSamplerState()
+        {
+            switch (_textureFiltering)
+            {
+                case TextureFiltering.Nearest:
+                    return MyraEnvironment.Game.GraphicsDevice.SamplerStates.PointClamp;
+                case TextureFiltering.Linear:
+                    return MyraEnvironment.Game.GraphicsDevice.SamplerStates.LinearClamp;
+                case TextureFiltering.Anisotropic:
+                    return MyraEnvironment.Game.GraphicsDevice.SamplerStates.AnisotropicClamp;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+#endif
+
+        public void End()
 		{
 			_renderer.End();
 			_beginCalled = false;
@@ -489,5 +535,10 @@ namespace Myra.Graphics2D
 		{
 			ReleaseUnmanagedResources();
 		}
-	}
+
+        public void SetAnisotropicFilteringMode(bool isAnisotropicFiltering)
+        {
+            _isAnisotropicFilteringOn = isAnisotropicFiltering;
+        }
+    }
 }
