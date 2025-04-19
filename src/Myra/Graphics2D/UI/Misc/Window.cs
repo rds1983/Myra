@@ -144,7 +144,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(Keys.Escape)]
-		public Keys CloseKey { get; set; }
+		public Keys? CloseKey { get; set; }
 
 		private bool IsWindowPlaced { get; set; }
 
