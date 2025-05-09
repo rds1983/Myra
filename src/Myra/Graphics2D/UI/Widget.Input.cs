@@ -288,12 +288,25 @@ namespace Myra.Graphics2D.UI
 
 					_lastMouseMovement = null;
 
-					if (MyraEnvironment.SetMouseCursorFromWidget && MouseCursor != null)
-					{
-						MyraEnvironment.MouseCursorType = MyraEnvironment.DefaultMouseCursorType;
-					}
+                    if (MyraEnvironment.SetMouseCursorFromWidget && MouseCursor != null)
+                    {
+                        Widget ancestor = Parent;
+                        while (ancestor != null && !ancestor.IsMouseInside)
+                        {
+                            ancestor = ancestor.Parent;
+                        }
 
-					OnMouseLeft();
+                        if (ancestor != null && ancestor.MouseCursor != null)
+                        {
+                            MyraEnvironment.MouseCursorType = ancestor.MouseCursor.Value;
+                        }
+                        else
+                        {
+                            MyraEnvironment.MouseCursorType = MyraEnvironment.DefaultMouseCursorType;
+                        }
+                    }
+
+                    OnMouseLeft();
 					MouseLeft.Invoke(this);
 					break;
 				case InputEventType.MouseEntered:
