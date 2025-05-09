@@ -129,8 +129,9 @@ namespace Myra.Samples.AllWidgets
 			_buttonSaveFile.Id = "_buttonSaveFile";
 			Grid.SetColumn(_buttonSaveFile, 1);
 			_buttonSaveFile.Content = horizontalStackPanel1;
+            _buttonSaveFile.MouseCursor = MouseCursorType.Hand;
 
-			_textSaveFile = new TextBox();
+            _textSaveFile = new TextBox();
 			_textSaveFile.Id = "_textSaveFile";
 			Grid.SetColumn(_textSaveFile, 2);
 
