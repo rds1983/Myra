@@ -61,9 +61,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private static readonly Queue<InputEvent> _eventsQueue = new();
+        private static readonly Queue<InputEvent> _eventsQueue = new Queue<InputEvent>();
 
-		private static readonly Stack<InputEvent> _eventsStack = new();
+        private static readonly Stack<InputEvent> _eventsStack = new Stack<InputEvent>();
 
         public static void Queue(IInputEventsProcessor processor, InputEventType type)
 		{

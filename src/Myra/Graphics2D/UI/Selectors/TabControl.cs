@@ -1,10 +1,7 @@
-﻿using System.ComponentModel;
+﻿using Myra.Events;
 using Myra.Graphics2D.UI.Styles;
-using System;
+using System.ComponentModel;
 using System.Xml.Serialization;
-using Myra.Graphics2D.Brushes;
-using Microsoft.Xna.Framework;
-using Myra.Events;
 
 namespace Myra.Graphics2D.UI
 {
