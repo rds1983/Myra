@@ -388,23 +388,23 @@ namespace MyraPad.UI
 				{
 					if (Desktop.IsKeyDown(Keys.N))
 					{
-						NewItemOnClicked(this, EventArgs.Empty);
+						NewItemOnClicked(this, MyraEventArgs.Empty);
 					}
 					else if (Desktop.IsKeyDown(Keys.O))
 					{
-						OpenItemOnClicked(this, EventArgs.Empty);
+						OpenItemOnClicked(this, MyraEventArgs.Empty);
 					}
 					else if (Desktop.IsKeyDown(Keys.R))
 					{
-						OnMenuFileReloadSelected(this, EventArgs.Empty);
+						OnMenuFileReloadSelected(this, MyraEventArgs.Empty);
 					}
 					else if (Desktop.IsKeyDown(Keys.S))
 					{
-						SaveItemOnClicked(this, EventArgs.Empty);
+						SaveItemOnClicked(this, MyraEventArgs.Empty);
 					}
 					else if (Desktop.IsKeyDown(Keys.E))
 					{
-						ExportCsItemOnSelected(this, EventArgs.Empty);
+						ExportCsItemOnSelected(this, MyraEventArgs.Empty);
 					}
 					else if (Desktop.IsKeyDown(Keys.Q))
 					{
@@ -412,7 +412,7 @@ namespace MyraPad.UI
 					}
 					else if (Desktop.IsKeyDown(Keys.F))
 					{
-						_menuEditUpdateSource_Selected(this, EventArgs.Empty);
+						_menuEditUpdateSource_Selected(this, MyraEventArgs.Empty);
 					}
 				}
 			};
@@ -562,7 +562,7 @@ namespace MyraPad.UI
 			_textSource.ReplaceAll(data);
 		}
 
-		private void _menuEditUpdateSource_Selected(object sender, EventArgs e)
+		private void _menuEditUpdateSource_Selected(object sender, MyraEventArgs e)
 		{
 			try
 			{
@@ -1147,12 +1147,12 @@ namespace MyraPad.UI
 			}
 		}
 
-		private void _textSource_CursorPositionChanged(object sender, EventArgs e)
+		private void _textSource_CursorPositionChanged(object sender, MyraEventArgs e)
 		{
 			UpdateCursor();
 		}
 
-		private void OnMenuFileReloadSelected(object sender, EventArgs e)
+		private void OnMenuFileReloadSelected(object sender, MyraEventArgs e)
 		{
 			AssetManager.Cache.Clear();
 			_fontCache.Clear();
@@ -1160,7 +1160,7 @@ namespace MyraPad.UI
 			Load(FilePath);
 		}
 
-		private void OnMenuFileLoadStylesheet(object sender, EventArgs e)
+		private void OnMenuFileLoadStylesheet(object sender, MyraEventArgs e)
 		{
 			AssetManager.Cache.Clear();
 
@@ -1223,7 +1223,7 @@ namespace MyraPad.UI
 			dlg.ShowModal(Desktop);
 		}
 
-		private void OnMenuFileResetStylesheetSelected(object sender, EventArgs e)
+		private void OnMenuFileResetStylesheetSelected(object sender, MyraEventArgs e)
 		{
 			AssetManager.Cache.Clear();
 			Project.StylesheetPath = null;
@@ -1231,13 +1231,13 @@ namespace MyraPad.UI
 			UpdateMenuFile();
 		}
 
-		private void DebugOptionsItemOnSelected(object sender1, EventArgs eventArgs)
+		private void DebugOptionsItemOnSelected(object sender1, MyraEventArgs eventArgs)
 		{
 			var debugOptions = new DebugOptionsWindow();
 			debugOptions.ShowModal(Desktop);
 		}
 
-		private void ExportCsItemOnSelected(object sender1, EventArgs eventArgs)
+		private void ExportCsItemOnSelected(object sender1, MyraEventArgs eventArgs)
 		{
 			var dlg = new ExportOptionsDialog();
 			dlg.ShowModal(Desktop);
@@ -1307,7 +1307,7 @@ namespace MyraPad.UI
 			}
 		}
 
-		private void QuitItemOnDown(object sender, EventArgs eventArgs)
+		private void QuitItemOnDown(object sender, MyraEventArgs eventArgs)
 		{
 			var mb = Dialog.CreateMessageBox("Quit", "Are you sure?");
 
@@ -1322,23 +1322,23 @@ namespace MyraPad.UI
 			mb.ShowModal(Desktop);
 		}
 
-		private void AboutItemOnClicked(object sender, EventArgs eventArgs)
+		private void AboutItemOnClicked(object sender, MyraEventArgs eventArgs)
 		{
 			var messageBox = Dialog.CreateMessageBox("About", "MyraPad " + MyraEnvironment.Version);
 			messageBox.ShowModal(Desktop);
 		}
 
-		private void SaveAsItemOnClicked(object sender, EventArgs eventArgs)
+		private void SaveAsItemOnClicked(object sender, MyraEventArgs eventArgs)
 		{
 			Save(true);
 		}
 
-		private void SaveItemOnClicked(object sender, EventArgs eventArgs)
+		private void SaveItemOnClicked(object sender, MyraEventArgs eventArgs)
 		{
 			Save(false);
 		}
 
-		private void NewItemOnClicked(object sender, EventArgs eventArgs)
+		private void NewItemOnClicked(object sender, MyraEventArgs eventArgs)
 		{
 			var dlg = new NewProjectWizard();
 
@@ -1397,7 +1397,7 @@ namespace MyraPad.UI
 			dlg.ShowModal(Desktop);
 		}
 
-		private void OpenItemOnClicked(object sender, EventArgs eventArgs)
+		private void OpenItemOnClicked(object sender, MyraEventArgs eventArgs)
 		{
 			var dlg = new FileDialog(FileDialogMode.OpenFile)
 			{
@@ -1723,7 +1723,7 @@ namespace MyraPad.UI
 			}
 		}
 
-		private void _treeViewExplorer_SelectionChanged(object sender, EventArgs e)
+		private void _treeViewExplorer_SelectionChanged(object sender, MyraEventArgs e)
 		{
 			if (_suppressExplorerRefresh || _treeViewExplorer.SelectedNode == null || Project.ObjectsNodes == null)
 			{

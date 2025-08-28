@@ -1,4 +1,6 @@
-﻿namespace Myra.Samples.NonModalWindows
+﻿global using Myra.Events;
+
+namespace Myra.Samples.NonModalWindows
 {
 	class Program
 	{
