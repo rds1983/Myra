@@ -303,24 +303,24 @@ namespace Myra.Graphics2D.UI
 		/// Fires when the value is about to be changed
 		/// Set Cancel to true if you want to cancel the change
 		/// </summary>
-		public event EventHandler<ValueChangingEventArgs<string>> ValueChanging;
+		public event MyraEventHandler<ValueChangingEventArgs<string>> ValueChanging;
 
 		/// <summary>
 		/// Fires every time when the text had been changed
 		/// </summary>
-		public event EventHandler<ValueChangedEventArgs<string>> TextChanged;
+		public event MyraEventHandler<ValueChangedEventArgs<string>> TextChanged;
 
 		/// <summary>
 		/// Fires every time when the text had been changed by user(doesnt fire if it had been assigned through code)
 		/// </summary>
-		public event EventHandler<ValueChangedEventArgs<string>> TextChangedByUser;
+		public event MyraEventHandler<ValueChangedEventArgs<string>> TextChangedByUser;
 		
 		/// <summary>
 		/// Fires every time when the text had been deleted
 		/// </summary>
-		public event EventHandler<TextDeletedEventArgs> TextDeleted;
+		public event MyraEventHandler<TextDeletedEventArgs> TextDeleted;
 		
-		public event EventHandler CursorPositionChanged;
+		public event MyraEventHandler CursorPositionChanged;
 
 		public TextBox(string styleName = Stylesheet.DefaultStyleName)
 		{
@@ -1109,7 +1109,7 @@ namespace Myra.Graphics2D.UI
 			
 			UpdateScrolling();
 
-			CursorPositionChanged.Invoke(this);
+			CursorPositionChanged.Invoke(this, InputEventType.CursorPositionChanged);
 		}
 
 		public override void OnChar(char c)
@@ -1167,12 +1167,12 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void DesktopTouchUp(object sender, EventArgs args)
+		private void DesktopTouchUp(object sender, MyraEventArgs args)
 		{
 			_isTouchDown = false;
 		}
 
-		private void DesktopTouchDown(object sender, EventArgs e)
+		private void DesktopTouchDown(object sender, MyraEventArgs e)
 		{
 			if (!Enabled || !IsTouchInside || Length == 0)
 			{

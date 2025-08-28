@@ -6,6 +6,7 @@ using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
 using System.Collections.ObjectModel;
 using Myra.Attributes;
+using Myra.Events;
 
 namespace Myra.Graphics2D.UI
 {
@@ -30,7 +31,7 @@ namespace Myra.Graphics2D.UI
 		[Browsable(false)]
 		public SplitPanelButtonStyle HandleStyle { get; private set; }
 
-		public event EventHandler ProportionsChanged;
+		public event MyraEventHandler ProportionsChanged;
 
 		protected SplitPane(string styleName)
 		{
@@ -119,11 +120,11 @@ namespace Myra.Graphics2D.UI
 			var ev = ProportionsChanged;
 			if (ev != null)
 			{
-				ev(this, EventArgs.Empty);
+				ev(this, new MyraEventArgs(InputEventType.ProportionChanged));
 			}
 		}
 
-		private void HandleOnPressedChanged(object sender, EventArgs args)
+		private void HandleOnPressedChanged(object sender, MyraEventArgs args)
 		{
 			var handle = (Button)sender;
 

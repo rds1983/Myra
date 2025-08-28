@@ -98,7 +98,7 @@ namespace Myra.Graphics2D.UI
 			set => _listView.SelectedIndex = value;
 		}
 
-		public event EventHandler SelectedIndexChanged
+		public event MyraEventHandler SelectedIndexChanged
 		{
 			add
 			{
@@ -151,7 +151,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void InternalChild_PressedChanged(object sender, EventArgs e)
+		private void InternalChild_PressedChanged(object sender, MyraEventArgs e)
 		{
 			if (_listView.Widgets.Count == 0)
 			{

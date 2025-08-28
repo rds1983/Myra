@@ -5,6 +5,8 @@ using System.Xml.Serialization;
 using Myra.Attributes;
 using Myra.Utility;
 using Myra.MML;
+using Myra.Events;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -140,8 +142,8 @@ namespace Myra.Graphics2D.UI
 			set => _button.IsPressed = value;
 		}
 
-		public event EventHandler Changed;
-		public event EventHandler SelectedChanged;
+		public event MyraEventHandler Changed;
+		public event MyraEventHandler SelectedChanged;
 
 		public TabItem()
 		{
@@ -187,14 +189,14 @@ namespace Myra.Graphics2D.UI
 
 		protected void FireChanged()
 		{
-			Changed.Invoke(this);
+			Changed.Invoke(this, InputEventType.ValueChanged);
 		}
 
-		private void OnPressedChanged(object sender, EventArgs args)
+		private void OnPressedChanged(object sender, MyraEventArgs args)
 		{
 			if (_button.IsPressed)
 			{
-				SelectedChanged.Invoke(this);
+				SelectedChanged.Invoke(this, InputEventType.SelectionChanged);
 			}
 		}
 

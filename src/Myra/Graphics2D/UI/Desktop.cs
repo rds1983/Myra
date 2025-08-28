@@ -135,7 +135,7 @@ namespace Myra.Graphics2D.UI
 				{
 					if (WidgetLosingKeyboardFocus != null)
 					{
-						var args = new CancellableEventArgs<Widget>(oldValue);
+						var args = new CancellableEventArgs<Widget>(oldValue, InputEventType.KeyboardFocusLosing);
 						WidgetLosingKeyboardFocus(null, args);
 						if (oldValue.IsPlaced && args.Cancel)
 						{
@@ -153,7 +153,7 @@ namespace Myra.Graphics2D.UI
 				if (_focusedKeyboardWidget != null)
 				{
 					_focusedKeyboardWidget.OnGotKeyboardFocus();
-					WidgetGotKeyboardFocus.Invoke(_focusedKeyboardWidget);
+					WidgetGotKeyboardFocus.Invoke(_focusedKeyboardWidget, InputEventType.KeyboardFocusLosing);
 				}
 			}
 		}
@@ -299,11 +299,11 @@ namespace Myra.Graphics2D.UI
 
 		public IBrush Background { get; set; }
 
-		public event EventHandler<CancellableEventArgs<Widget>> ContextMenuClosing;
-		public event EventHandler<GenericEventArgs<Widget>> ContextMenuClosed;
+		public event MyraEventHandler<CancellableEventArgs<Widget>> ContextMenuClosing;
+		public event MyraEventHandler<GenericEventArgs<Widget>> ContextMenuClosed;
 
-		public event EventHandler<CancellableEventArgs<Widget>> WidgetLosingKeyboardFocus;
-		public event EventHandler<GenericEventArgs<Widget>> WidgetGotKeyboardFocus;
+		public event MyraEventHandler<CancellableEventArgs<Widget>> WidgetLosingKeyboardFocus;
+		public event MyraEventHandler<GenericEventArgs<Widget>> WidgetGotKeyboardFocus;
 
 		public Action<Keys> KeyDownHandler;
 
@@ -340,7 +340,7 @@ namespace Myra.Graphics2D.UI
 				var ev = ContextMenuClosing;
 				if (ev != null)
 				{
-					var args = new CancellableEventArgs<Widget>(ContextMenu);
+					var args = new CancellableEventArgs<Widget>(ContextMenu, InputEventType.ContextMenuClosing);
 					ev(null, args);
 
 					if (args.Cancel)
@@ -364,7 +364,7 @@ namespace Myra.Graphics2D.UI
 			Widgets.Remove(ContextMenu);
 			ContextMenu.Visible = false;
 
-			ContextMenuClosed.Invoke(ContextMenu);
+			ContextMenuClosed.Invoke(ContextMenu, InputEventType.ContextMenuClosing);
 			ContextMenu = null;
 
 			if (_previousKeyboardFocus != null)
@@ -784,7 +784,7 @@ namespace Myra.Graphics2D.UI
 
 		public void OnKeyDown(Keys key)
 		{
-			KeyDown.Invoke(key);
+			KeyDown.Invoke(key, InputEventType.KeyDown);
 
 			if (IsMenuBarActive)
 			{
@@ -835,7 +835,7 @@ namespace Myra.Graphics2D.UI
 				_focusedKeyboardWidget.OnChar(c);
 			}
 
-			Char.Invoke(c);
+			Char.Invoke(c, InputEventType.CharInput);
 		}
 
 		private void UpdateWidgetsCopy()

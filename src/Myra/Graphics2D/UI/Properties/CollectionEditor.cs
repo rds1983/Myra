@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Myra.Events;
+using System;
 using System.Collections;
 
 namespace Myra.Graphics2D.UI.Properties
@@ -107,23 +108,23 @@ namespace Myra.Graphics2D.UI.Properties
 			UpdateButtonsEnabled();
 		}
 
-		private void ButtonMoveDownOnUp(object sender, EventArgs eventArgs)
+		private void ButtonMoveDownOnUp(object sender, MyraEventArgs eventArgs)
 		{
 			MoveSelectedItem(_listItems.SelectedIndex.Value + 1);
 		}
 
-		private void ButtonMoveUpOnUp(object sender, EventArgs eventArgs)
+		private void ButtonMoveUpOnUp(object sender, MyraEventArgs eventArgs)
 		{
 			MoveSelectedItem(_listItems.SelectedIndex.Value - 1);
 		}
 
-		private void ButtonDeleteOnUp(object sender, EventArgs eventArgs)
+		private void ButtonDeleteOnUp(object sender, MyraEventArgs eventArgs)
 		{
 			_listItems.Widgets.Remove(_listItems.SelectedItem);
 			UpdateButtonsEnabled();
 		}
 
-		private void ButtonNewOnUp(object sender, EventArgs eventArgs)
+		private void ButtonNewOnUp(object sender, MyraEventArgs eventArgs)
 		{
 			var newItem = Activator.CreateInstance(_type);
 
@@ -138,7 +139,7 @@ namespace Myra.Graphics2D.UI.Properties
 			UpdateButtonsEnabled();
 		}
 
-		private void PropertyGridOnPropertyChanged(object sender, EventArgs eventArgs)
+		private void PropertyGridOnPropertyChanged(object sender, MyraEventArgs eventArgs)
 		{
 			if (_listItems.SelectedItem == null)
 			{
@@ -148,7 +149,7 @@ namespace Myra.Graphics2D.UI.Properties
 			((Label)_listItems.SelectedItem).Text = BuildItemText(_listItems.SelectedItem.Tag);
 		}
 
-		private void ListItemsOnSelectedIndexChanged(object sender, EventArgs eventArgs)
+		private void ListItemsOnSelectedIndexChanged(object sender, MyraEventArgs eventArgs)
 		{
 			if (_listItems.SelectedItem != null)
 			{

@@ -5,6 +5,8 @@ using Myra.Utility;
 using AssetManagementBase;
 using Myra.Graphics2D.UI;
 using System.Collections.Generic;
+using Myra.Events;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -84,6 +86,8 @@ namespace Myra
 		private static AssetManager _defaultAssetManager;
 
 		public static bool SetMouseCursorFromWidget { get; set; } = true;
+
+		public static EventHandlingStrategy EventHandlingModel { get; set; } = EventHandlingStrategy.EventCapturing;
 
 		public static MouseCursorType MouseCursorType
 		{

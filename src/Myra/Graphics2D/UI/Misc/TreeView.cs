@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Myra.Graphics2D.UI.Styles;
 using System.ComponentModel;
 using System.Xml.Serialization;
+using Myra.Events;
+
 
 
 #if MONOGAME || FNA
@@ -62,7 +64,7 @@ namespace Myra.Graphics2D.UI
 				var ev = SelectionChanged;
 				if (ev != null)
 				{
-					ev(this, EventArgs.Empty);
+					ev(this, new MyraEventArgs(InputEventType.SelectionChanged));
 				}
 			}
 		}
@@ -73,7 +75,7 @@ namespace Myra.Graphics2D.UI
 		[Category("Appearance")]
 		public IBrush SelectionHoverBackground { get; set; }
 
-		public event EventHandler SelectionChanged;
+		public event MyraEventHandler SelectionChanged;
 
 		public TreeView(string styleName = Stylesheet.DefaultStyleName)
 		{

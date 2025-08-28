@@ -1,5 +1,7 @@
 ﻿using System;
 using Myra.Graphics2D.UI.Styles;
+using Myra.Events;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -116,7 +118,7 @@ namespace Myra.Graphics2D.UI
 			UpdateMark();
 		}
 
-		private void MarkOnUp(object sender, EventArgs args)
+		private void MarkOnUp(object sender, MyraEventArgs args)
 		{
 			_childNodesStackPanel.Visible = false;
 		}
