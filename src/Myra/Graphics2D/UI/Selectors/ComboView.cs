@@ -133,7 +133,10 @@ namespace Myra.Graphics2D.UI
 
 			_listView._parentCombo = this;
 
-			HorizontalAlignment = HorizontalAlignment.Left;
+			if (MyraEnvironment.EventHandlingModel == EventHandlingStrategy.EventBubbling)
+				_button.TouchDown += InternalStopPropagation;
+
+            HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
 
 			DropdownMaximumHeight = 300;
@@ -141,7 +144,12 @@ namespace Myra.Graphics2D.UI
 			SetStyle(styleName);
 		}
 
-		private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Widget> genericEventArgs)
+		private void InternalStopPropagation(object sender, MyraEventArgs e)
+		{
+			e.StopPropagation();
+		}
+
+        private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Widget> genericEventArgs)
 		{
 			// Unpress the button only if mouse is outside
 			// As if it is inside, then it'll get unpressed naturally

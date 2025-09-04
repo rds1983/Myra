@@ -336,9 +336,18 @@ namespace Myra.Graphics2D.UI
 			BlinkIntervalInMs = 450;
 
 			MouseCursor = MouseCursorType.IBeam;
+
+			if (MyraEnvironment.EventHandlingModel == EventHandlingStrategy.EventBubbling)
+				this.TouchDoubleClick += TextBox_TouchDoubleClickStopPropagation;
 		}
-		
-		private void DeleteChars(int pos, int l)
+
+        private void TextBox_TouchDoubleClickStopPropagation(object sender, MyraEventArgs e)
+        {
+			e.StopPropagation();
+            InputEventsManager.StopPropagation(InputEventType.TouchDown);
+        }
+
+        private void DeleteChars(int pos, int l)
 		{
 			if (l == 0)
 				return;
@@ -1184,7 +1193,6 @@ namespace Myra.Graphics2D.UI
 			_lastCursorUpdate = DateTime.Now;
 			_isTouchDown = true;
 		}
-
 
 		public override void OnTouchDoubleClick()
 		{
