@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
+using Myra.Events;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -53,7 +55,7 @@ namespace Myra.Graphics2D.UI
 				var ev = SelectionChanged;
 				if (ev != null)
 				{
-					ev(this, EventArgs.Empty);
+					ev(this, new MyraEventArgs(InputEventType.SelectionChanged));
 				}
 			}
 		}
@@ -78,7 +80,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public event EventHandler SelectionChanged;
+		public event MyraEventHandler SelectionChanged;
 
 		public Tree(string styleName = Stylesheet.DefaultStyleName) : base(null, styleName)
 		{

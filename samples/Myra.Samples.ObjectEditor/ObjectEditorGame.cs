@@ -132,7 +132,7 @@ namespace Myra.Samples.ObjectEditor
 			_renderContext = new RenderContext();
 		}
 
-		private void ShowButton_PressedChanged(object sender, System.EventArgs e)
+		private void ShowButton_PressedChanged(object sender, MyraEventArgs e)
 		{
 			var button = (ToggleButton)sender;
 			if (button.IsPressed)

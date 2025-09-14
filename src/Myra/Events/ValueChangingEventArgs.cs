@@ -1,4 +1,6 @@
-﻿namespace Myra.Events
+﻿using Myra.Graphics2D.UI;
+
+namespace Myra.Events
 {
 	public class ValueChangingEventArgs<T> : CancellableEventArgs
 	{
@@ -12,7 +14,7 @@
 			get; set;
 		}
 
-		public ValueChangingEventArgs(T oldValue, T newValue)
+		public ValueChangingEventArgs(T oldValue, T newValue) : base(InputEventType.ValueChanged)
 		{
 			OldValue = oldValue;
 			NewValue = newValue;

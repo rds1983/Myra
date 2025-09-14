@@ -1,4 +1,5 @@
 ﻿using Myra.Attributes;
+using Myra.Events;
 using Myra.Graphics2D.UI.Styles;
 using System;
 using System.ComponentModel;
@@ -17,7 +18,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 
-		public event EventHandler IsCheckedChanged
+		public event MyraEventHandler IsCheckedChanged
 		{
 			add
 			{

@@ -223,17 +223,17 @@ namespace Myra.Graphics2D.UI
 		/// Fires when the value is about to be changed
 		/// Set Cancel to true if you want to cancel the change
 		/// </summary>
-		public event EventHandler<ValueChangingEventArgs<float?>> ValueChanging;
+		public event MyraEventHandler<ValueChangingEventArgs<float?>> ValueChanging;
 
 		/// <summary>
 		/// Fires when the value had been changed
 		/// </summary>
-		public event EventHandler<ValueChangedEventArgs<float?>> ValueChanged;
+		public event MyraEventHandler<ValueChangedEventArgs<float?>> ValueChanged;
 
 		/// <summary>
 		/// Fires only when the value had been changed by user(doesnt fire if it had been assigned through code)
 		/// </summary>
-		public event EventHandler<ValueChangedEventArgs<float?>> ValueChangedByUser;
+		public event MyraEventHandler<ValueChangedEventArgs<float?>> ValueChangedByUser;
 
 		public SpinButton(string styleName = Stylesheet.DefaultStyleName)
 		{
@@ -463,7 +463,7 @@ namespace Myra.Graphics2D.UI
 			ApplySpinButtonStyle(stylesheet.SpinButtonStyles.SafelyGetStyle(name));
 		}
 
-		private void UpButtonOnUp(object sender, EventArgs eventArgs)
+		private void UpButtonOnUp(object sender, MyraEventArgs eventArgs)
 		{
 			float value;
 			if (!float.TryParse(_textField.Text, out value))
@@ -487,7 +487,7 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 		}
-		private void DownButtonOnUp(object sender, EventArgs eventArgs)
+		private void DownButtonOnUp(object sender, MyraEventArgs eventArgs)
 		{
 			float value;
 			if (!float.TryParse(_textField.Text, out value))

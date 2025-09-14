@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Myra.Graphics2D.UI;
 
 namespace Myra.Events
 {
-	public class ValueChangedEventArgs<T> : EventArgs
+	public class ValueChangedEventArgs<T> : MyraEventArgs
 	{
 		public T OldValue
 		{
@@ -14,7 +14,7 @@ namespace Myra.Events
 			get; private set;
 		}
 
-		public ValueChangedEventArgs(T oldValue, T newValue)
+		public ValueChangedEventArgs(T oldValue, T newValue) : base(InputEventType.ValueChanged)
 		{
 			OldValue = oldValue;
 			NewValue = newValue;

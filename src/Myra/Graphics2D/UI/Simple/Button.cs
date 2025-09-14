@@ -2,6 +2,8 @@
 using Myra.Attributes;
 using System;
 using System.ComponentModel;
+using Myra.Events;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework.Input;
@@ -97,7 +99,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void DesktopTouchUp(object sender, EventArgs args)
+		private void DesktopTouchUp(object sender, MyraEventArgs args)
 		{
 			IsPressed = false;
 		}

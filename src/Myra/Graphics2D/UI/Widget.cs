@@ -6,6 +6,9 @@ using System.Xml.Serialization;
 using Myra.MML;
 using Myra.Graphics2D.UI.Properties;
 using Myra.Attributes;
+using Myra.Events;
+
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -383,7 +386,7 @@ namespace Myra.Graphics2D.UI
 					item.Enabled = value;
 				}
 
-				EnabledChanged.Invoke(this);
+				EnabledChanged.Invoke(this, InputEventType.EnabledChanged);
 			}
 		}
 
@@ -711,7 +714,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_isKeyboardFocused = value;
-				KeyboardFocusChanged?.Invoke(this, EventArgs.Empty);
+				KeyboardFocusChanged?.Invoke(this, InputEventType.KeyboardFocusChanged);
 			}
 		}
 
@@ -807,6 +810,9 @@ namespace Myra.Graphics2D.UI
 
 		public void BringToFront()
 		{
+			if (Desktop == null)
+				return;
+
 			var widgets = Parent != null ? Parent.Children : Desktop.Widgets;
 
 			if (widgets[widgets.Count - 1] == this) return;
@@ -1083,7 +1089,7 @@ namespace Myra.Graphics2D.UI
 			InvalidateTransform();
 
 			InternalArrange();
-			ArrangeUpdated.Invoke(this);
+			ArrangeUpdated.Invoke(this, InputEventType.ArrangeUpdated);
 
 			_arrangeDirty = false;
 		}
@@ -1203,7 +1209,7 @@ namespace Myra.Graphics2D.UI
 
 		protected void FireKeyDown(Keys k)
 		{
-			KeyDown.Invoke(this, k);
+			KeyDown.Invoke(this, k, InputEventType.KeyDown);
 		}
 
 		public virtual void OnKeyDown(Keys k)
@@ -1213,23 +1219,23 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnKeyUp(Keys k)
 		{
-			KeyUp.Invoke(this, k);
+			KeyUp.Invoke(this, k, InputEventType.KeyUp);
 		}
 
 		public virtual void OnChar(char c)
 		{
-			Char.Invoke(this, c);
+			Char.Invoke(this, c, InputEventType.CharInput);
 		}
 
 		protected virtual void OnPlacedChanged()
 		{
-			PlacedChanged?.Invoke(this);
+			PlacedChanged?.Invoke(this, InputEventType.PlacedChanged);
 		}
 
 		public virtual void OnVisibleChanged()
 		{
 			InvalidateMeasure();
-			VisibleChanged.Invoke(this);
+			VisibleChanged.Invoke(this, InputEventType.VisibleChanged);
 		}
 
 		public virtual void OnLostKeyboardFocus()
@@ -1259,12 +1265,12 @@ namespace Myra.Graphics2D.UI
 
 		private void FireLocationChanged()
 		{
-			LocationChanged.Invoke(this);
+			LocationChanged.Invoke(this, InputEventType.LocationChanged);
 		}
 
 		private void FireSizeChanged()
 		{
-			SizeChanged.Invoke(this);
+			SizeChanged.Invoke(this, InputEventType.SizeChanged);
 		}
 
 		public void SetKeyboardFocus()
@@ -1300,7 +1306,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void DesktopOnTouchMoved(object sender, EventArgs args)
+		private void DesktopOnTouchMoved(object sender, MyraEventArgs args)
 		{
 			if (_startPos == null || !IsDraggable || Desktop == null)
 			{
@@ -1377,7 +1383,7 @@ namespace Myra.Graphics2D.UI
 			return BorderBounds.Contains(localPos);
 		}
 
-		private void DesktopTouchUp(object sender, EventArgs args)
+		private void DesktopTouchUp(object sender, MyraEventArgs args)
 		{
 			_startPos = null;
 		}

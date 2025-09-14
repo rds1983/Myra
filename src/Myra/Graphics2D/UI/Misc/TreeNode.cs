@@ -3,6 +3,8 @@ using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
 using FontStashSharp;
+using Myra.Events;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -159,7 +161,7 @@ namespace Myra.Graphics2D.UI
 			UpdateMark();
 		}
 
-		private void MarkOnUp(object sender, EventArgs args)
+		private void MarkOnUp(object sender, MyraEventArgs args)
 		{
 			_childNodesGrid.Visible = false;
 		}

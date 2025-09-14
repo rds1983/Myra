@@ -462,7 +462,7 @@ namespace Myra.Graphics2D.UI
 			UpdateWidgets();
 		}
 
-		private void MenuItemOnChanged(object sender, EventArgs eventArgs)
+		private void MenuItemOnChanged(object sender, MyraEventArgs eventArgs)
 		{
 			SetMenuItem((MenuItem)sender);
 		}
@@ -563,7 +563,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void OnHoverIndexChanged(object sender, EventArgs eventArgs)
+		private void OnHoverIndexChanged(object sender, MyraEventArgs eventArgs)
 		{
 			var menuItem = GetMenuItem(HoverIndex);
 			if (menuItem == null && HoverIndexCanBeNull)
@@ -595,7 +595,7 @@ namespace Myra.Graphics2D.UI
 			OpenMenuItem = menuItem;
 		}
 
-		private void OnSelectedIndexChanged(object sender, EventArgs e)
+		private void OnSelectedIndexChanged(object sender, MyraEventArgs e)
 		{
 			if (OpenMenuItem != null)
 			{
@@ -621,7 +621,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void InternalChild_TouchUp(object sender, EventArgs e)
+		private void InternalChild_TouchUp(object sender, MyraEventArgs e)
 		{
 			var menuItem = SelectedMenuItem;
 			if (menuItem != null && !menuItem.CanOpen)

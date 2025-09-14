@@ -1,4 +1,5 @@
-﻿using AssetManagementBase;
+﻿global using Myra.Events;
+using AssetManagementBase;
 using System;
 
 namespace MyraPad

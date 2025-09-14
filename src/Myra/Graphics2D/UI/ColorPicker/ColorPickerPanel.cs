@@ -339,7 +339,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_activeState = ActiveState.None;
 		}
 
-		private void ButtonSaveColorDown(object sender, EventArgs e)
+		private void ButtonSaveColorDown(object sender, MyraEventArgs e)
 		{
 			var index = SelectedUserColorIndex;
 			if (index != null)
@@ -348,7 +348,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			}
 		}
 
-		private void GridUserColorsSelectedIndexChanged(object sender, EventArgs e)
+		private void GridUserColorsSelectedIndexChanged(object sender, MyraEventArgs e)
 		{
 			UpdateEnabled();
 
@@ -381,7 +381,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_saveColor.Enabled = SelectedUserColorIndex != null;
 		}
 
-		private void RgbInputChanged(object sender, EventArgs e)
+		private void RgbInputChanged(object sender, MyraEventArgs e)
 		{
 			if (string.IsNullOrEmpty(_inputRGB.Text))
 			{
@@ -401,7 +401,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			}
 		}
 
-		private void HsvInputChanged(object sender, EventArgs e)
+		private void HsvInputChanged(object sender, MyraEventArgs e)
 		{
 			if (string.IsNullOrEmpty(_inputHSV.Text))
 			{
@@ -431,7 +431,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			}
 		}
 
-		private void HexInputChanged(object sender, EventArgs e)
+		private void HexInputChanged(object sender, MyraEventArgs e)
 		{
 			if (string.IsNullOrEmpty(_inputHEX.Text) || _inputHEX.Text.Length < 6)
 			{
@@ -448,7 +448,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			}
 		}
 
-		private void AlphaInputChanged(object sender, EventArgs e)
+		private void AlphaInputChanged(object sender, MyraEventArgs e)
 		{
 			if (string.IsNullOrEmpty(_inputAlpha.Text))
 			{

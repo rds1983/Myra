@@ -74,7 +74,7 @@ namespace Myra.Samples.TextRendering.UI
 			Update();
 		}
 
-		private void _buttonReset_Click(object sender, EventArgs e)
+		private void _buttonReset_Click(object sender, MyraEventArgs e)
 		{
 			_sliderScale.Value = 1.0f;
 			_spinButtonFontSize.Value = 32;
@@ -133,7 +133,7 @@ namespace Myra.Samples.TextRendering.UI
 			return result;
 		}
 
-		private void _buttonBrowseFont_Click(object sender, EventArgs e)
+		private void _buttonBrowseFont_Click(object sender, MyraEventArgs e)
 		{
 			var dialog = new FileDialog(FileDialogMode.OpenFile)
 			{

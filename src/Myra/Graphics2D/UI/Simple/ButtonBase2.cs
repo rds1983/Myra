@@ -36,14 +36,14 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public event EventHandler Click;
-		public event EventHandler PressedChanged;
+		public event MyraEventHandler Click;
+		public event MyraEventHandler PressedChanged;
 
 		/// <summary>
 		/// Fires when the value is about to be changed
 		/// Set Cancel to true if you want to cancel the change
 		/// </summary>
-		public event EventHandler<ValueChangingEventArgs<bool>> PressedChangingByUser;
+		public event MyraEventHandler<ValueChangingEventArgs<bool>> PressedChangingByUser;
 
 
 		public void DoClick()
@@ -54,7 +54,7 @@ namespace Myra.Graphics2D.UI
 
 		public virtual void OnPressedChanged()
 		{
-			PressedChanged.Invoke(this);
+			PressedChanged.Invoke(this, InputEventType.PressedChanged);
 
 			var asPressable = Content as IPressable;
 			if (asPressable != null)
@@ -95,7 +95,7 @@ namespace Myra.Graphics2D.UI
 
 			if (_isClicked)
 			{
-				Click.Invoke(this);
+				Click.Invoke(this, InputEventType.TouchUp);
 				_isClicked = false;
 			}
 		}
