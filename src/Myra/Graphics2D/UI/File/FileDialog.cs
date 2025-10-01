@@ -171,30 +171,7 @@ namespace Myra.Graphics2D.UI.File
 
 			_listPlaces.Widgets.Add(new HorizontalSeparator());
 
-			var drives = DriveInfo.GetDrives();
-			foreach (var d in drives)
-			{
-				if (d.DriveType == DriveType.Ram || d.DriveType == DriveType.Unknown)
-				{
-					continue;
-				}
-
-				try
-				{
-					var s = d.RootDirectory.FullName;
-
-					if (!string.IsNullOrEmpty(d.VolumeLabel) && d.VolumeLabel != d.RootDirectory.FullName)
-					{
-						s += " (" + d.VolumeLabel + ")";
-					}
-
-					var item = CreateListItem(s, d.RootDirectory.FullName, true);
-					_listPlaces.Widgets.Add(item);
-				}
-				catch (Exception)
-				{
-				}
-			}
+			Platform.InitListedSystemDrives(_listPlaces.Widgets);
 
 			_listPlaces.SelectedIndexChanged += OnPlacesSelectedIndexChanged;
 
