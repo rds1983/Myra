@@ -51,7 +51,10 @@ namespace TextCopy
 
             if (CurrentPlatform.OS == OS.Linux)
             {
-                return LinuxClipboard.SetText;
+                if(LinuxClipboard.SystemIsCompatible())
+                    return LinuxClipboard.SetText;
+                Console.WriteLine(LinuxClipboard.GetCompatibilityProblem());
+                UseLocalClipboard = true;
             }
 
             return s => throw new NotSupportedException();
@@ -71,7 +74,10 @@ namespace TextCopy
 
             if (CurrentPlatform.OS == OS.Linux)
             {
-                return LinuxClipboard.GetText;
+                if(LinuxClipboard.SystemIsCompatible())
+                    return LinuxClipboard.GetText;
+                Console.WriteLine(LinuxClipboard.GetCompatibilityProblem());
+                UseLocalClipboard = true;
             }
 
             return () => throw new NotSupportedException();
