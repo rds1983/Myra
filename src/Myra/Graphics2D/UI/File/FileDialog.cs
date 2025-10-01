@@ -170,8 +170,13 @@ namespace Myra.Graphics2D.UI.File
 			}
 
 			_listPlaces.Widgets.Add(new HorizontalSeparator());
-
-			Platform.InitListedSystemDrives(_listPlaces.Widgets);
+			foreach (DeviceInfo drive in Platform.GetDrivesOnSystem()) //Add file system drives
+			{
+				string label = string.IsNullOrEmpty(drive.VolumeLabel) ? 
+					drive.Label :
+					$"{drive.Label} ({drive.VolumeLabel})";
+				_listPlaces.Widgets.Add( CreateListItem(label, drive.Path, true) );
+			}
 
 			_listPlaces.SelectedIndexChanged += OnPlacesSelectedIndexChanged;
 

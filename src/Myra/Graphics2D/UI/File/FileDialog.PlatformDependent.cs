@@ -8,96 +8,91 @@ namespace Myra.Graphics2D.UI.File
     // === Platform dependent code for FileDialog class
     public partial class FileDialog
     {
+        /// <summary>
+        /// Container for info about a browsable file system device.
+        /// </summary>
+        public readonly struct DeviceInfo
+        {
+            public DeviceInfo(string volume, string label, string path)
+            {
+                VolumeLabel = volume;
+                Label = label;
+                Path = path;
+            }
+            
+            public readonly string VolumeLabel;
+            public readonly string Label;
+            public readonly string Path;
+        }
+        
+        /// <summary>
+        /// Platform specific code
+        /// </summary>
         private static class Platform
         {
-            public static void InitListedSystemDrives(IList<Widget> widgets)
+            /// <summary>
+            /// Return a list of <see cref="DeviceInfo"/> for devices we can visit, depending on platform.
+            /// </summary>
+            /// <exception cref="PlatformNotSupportedException"></exception>
+            public static List<DeviceInfo> GetDrivesOnSystem()
             {
                 switch (CurrentPlatform.OS)
                 {
                     case OS.Windows:
-                        InitSysDrivesWindows(widgets);
-                        return;
+                        return _GetWindowsDevices();
                     case OS.MacOSX:
-                        //TODO mac specific - using old windows code for now!
-                        InitSysDrivesWindows(widgets);
-                        return;
+                        return _GetWindowsDevices(); //TODO Mac/OSX specific - using old windows code for now!
                     case OS.Linux:
-                        InitSysDrivesLinux(widgets);
-                        return;
+                        return _GetLinuxDevices();
+                    default:
+                        throw new PlatformNotSupportedException(CurrentPlatform.OS.ToString());
                 }
             }
 
 #region Windows
-            private static void InitSysDrivesWindows(IList<Widget> widgets)
+            private static List<DeviceInfo> _GetWindowsDevices()
             {
-                var drives = GetWindowsDevices();
-                foreach (var d in drives)
+                List<DeviceInfo> devices = new List<DeviceInfo>(8);
+                foreach (DriveInfo d in DriveInfo.GetDrives())
                 {
+                    switch (d.DriveType)
+                    {
+                        case DriveType.CDRom: //Acceptable
+                        case DriveType.Fixed:
+                        case DriveType.Network:
+                        case DriveType.Removable:
+                            break;
+                        case DriveType.NoRootDirectory: //Skip These
+                        case DriveType.Unknown:
+                        case DriveType.Ram:
+                        default:
+                            continue;
+                    }
+
                     try
                     {
-                        var s = d.RootDirectory.FullName;
-
-                        if (!string.IsNullOrEmpty(d.VolumeLabel) && d.VolumeLabel != d.RootDirectory.FullName) //VolumeLabel is only supported on win
-                        {
-                            s += " (" + d.VolumeLabel + ")";
-                        }
-
-                        var item = CreateListItem(s, d.RootDirectory.FullName, true);
-                        widgets.Add(item);
+                        string vol = string.Empty;
+                        if (!string.IsNullOrEmpty(d.VolumeLabel) && d.VolumeLabel != d.RootDirectory.FullName)
+                            vol = d.VolumeLabel;
+                        
+                        devices.Add(new DeviceInfo(vol, d.Name, d.RootDirectory.FullName));
                     }
                     catch (Exception)
                     {
                     }
                 }
-            }
-            private static List<DriveInfo> GetWindowsDevices()
-            {
-                bool TestDriveType(DriveType type)
-                {
-                    switch (type)
-                    {
-                        case DriveType.CDRom:
-                        case DriveType.Fixed:
-                        case DriveType.Network:
-                        case DriveType.Removable:
-                            return true;
-                        case DriveType.NoRootDirectory:
-                        case DriveType.Unknown:
-                        case DriveType.Ram:
-                        default:
-                            return false;
-                    }
-                }
-                
-                List<DriveInfo> result = new List<DriveInfo>(8);
-                foreach (var drive in DriveInfo.GetDrives())
-                {
-                    if(TestDriveType(drive.DriveType))
-                        result.Add(drive);
-                }
-                return result;
+                return devices;
             }
 #endregion Windows
 #region Linux
-            private static void InitSysDrivesLinux(IList<Widget> widgets)
+            private static List<DeviceInfo> _GetLinuxDevices()
             {
-                // Use bash 'lsblk' to collect device info
-                var drives = GetLinuxDevices();
-                
-                foreach (var d in drives)
-                {
-                    widgets.Add(CreateListItem($"({d.VolumeLabel}) {d.Label}", d.Path, true));
-                }
-            }
-
-            private static List<DeviceInfo> GetLinuxDevices()
-            {
-                const string RawSpace = @"\x20";
                 string tmpFileName = Path.GetTempFileName();
                 string[] bashResult;
                 try
                 {
-                    BashRunner.Run($"lsblk -n -o TYPE,NAME,LABEL,MOUNTPOINT --raw > {tmpFileName}"); //MODE,
+                    // The all caps words after o directly corelate to output string indexes. Some strings may return empty.
+                    BashRunner.Run($"lsblk -no TYPE,NAME,LABEL,MOUNTPOINT --raw > {tmpFileName}");
                     bashResult = System.IO.File.ReadAllLines(tmpFileName);
                 }
                 finally
@@ -105,13 +100,15 @@ namespace Myra.Graphics2D.UI.File
                     System.IO.File.Delete(tmpFileName);
                 }
                 
+                const string RawSpace = @"\x20";
+                
                 List<DeviceInfo> result = new List<DeviceInfo>(8);
                 foreach (string deviceLine in bashResult)
                 {
                     string[] splits = deviceLine.Split(new[] { ' ' }, StringSplitOptions.None);
                     
                     if(splits[0] != "part") //TYPE
-                        continue; // We only want partitioned for file systems.
+                        continue; // We only want partitioned file systems.
 
                     splits[2] = splits[2].Replace(RawSpace, " ");
                     if(string.Equals(splits[2], "System Reserved")) //LABEL
@@ -126,20 +123,8 @@ namespace Myra.Graphics2D.UI.File
                 return result;
             }
 #endregion Linux
-            private class DeviceInfo
-            {
-                public DeviceInfo(string volume, string label, string path)
-                {
-                    VolumeLabel = volume;
-                    Label = label;
-                    Path = path;
-                }
+            
 
-                public readonly string VolumeLabel;
-                public readonly string Label;
-                public readonly string Path;
-            }
         }
-
     }
 }
