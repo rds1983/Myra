@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using MonoGame.Utilities;
 
 namespace Myra.Graphics2D.UI.File
@@ -9,50 +10,129 @@ namespace Myra.Graphics2D.UI.File
     public partial class FileDialog
     {
         /// <summary>
-        /// Container for info about a browsable file system device.
+        /// Platform specific code for <see cref="FileDialog"/>
         /// </summary>
-        public readonly struct DeviceInfo
+        protected static class Platform
         {
-            public DeviceInfo(string volume, string label, string path)
+            private static IReadOnlyList<string> _userPaths;
+            /// <summary>
+            /// Return a predetermined list of directories under the user's HOME folder, depending on OS.
+            /// </summary>
+            public static IReadOnlyList<string> SystemUserPlacePaths
             {
-                VolumeLabel = volume;
-                Label = label;
-                Path = path;
+                get
+                {
+                    if (_userPaths == null)
+                    {
+                        switch (CurrentPlatform.OS)
+                        {
+                            case OS.Windows:
+                                _userPaths = _GetWindowsPlaces();
+                                break;
+                            case OS.MacOSX:
+                                _userPaths = _GetWindowsPlaces(); //TODO Mac/OSX specific - using old windows code for now!
+                                break;
+                            case OS.Linux:
+                                _userPaths = _GetLinuxPlaces();
+                                break;
+                            default:
+                                throw new PlatformNotSupportedException(CurrentPlatform.OS.ToString());
+                        }
+                    }
+                    return _userPaths;
+                }
+            }
+
+            private static string _homePath = string.Empty;
+            public static string UserHomePath
+            {
+                get
+                {
+                    if (string.IsNullOrEmpty(_homePath))
+                    {
+                        _homePath = (Environment.OSVersion.Platform == PlatformID.Unix || Environment.OSVersion.Platform == PlatformID.MacOSX)
+                            ? Environment.GetEnvironmentVariable("HOME")
+                            : Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
+                    }
+                    return _homePath;
+                }
             }
             
-            public readonly string VolumeLabel;
-            public readonly string Label;
-            public readonly string Path;
-        }
-        
-        /// <summary>
-        /// Platform specific code
-        /// </summary>
-        private static class Platform
-        {
+            private static string _osUser = string.Empty;
             /// <summary>
-            /// Return a list of <see cref="DeviceInfo"/> for devices we can visit, depending on platform.
+            /// Returns the name of the user logged into the system
+            /// </summary>
+            public static string SystemUsername
+            {
+                get
+                {
+                    if (string.IsNullOrEmpty(_osUser))
+                        _osUser = UserHomePath.Split(new char[]{Path.DirectorySeparatorChar}, StringSplitOptions.RemoveEmptyEntries).Last();
+                    return _osUser;
+                }
+            }
+            
+            /// <summary>
+            /// Append <see cref="Location"/> directories under the user's HOME directory.
+            /// </summary>
+            /// <param name="placeList">What folders to try to add relative to the HOME directory.</param>
+            public static void AppendUserPlacesOnSystem(List<Location> appendResult, IReadOnlyList<string> placeList)
+            {
+                ThrowIfNull(appendResult);
+                
+                string homePath = UserHomePath;
+                var places = new List<string>(placeList.Count);
+                
+                // Special label for HOME directory
+                if (CurrentPlatform.OS != OS.Windows)
+                    appendResult.Add(new Location("Home", SystemUsername, homePath, false ));
+                else
+                    places.Add(homePath);
+                
+                foreach (string folder in placeList)
+                {
+                    places.Add(Path.Combine(homePath, folder));
+                }
+                
+                foreach (string path in places)
+                {
+                    if (!Directory.Exists(path))
+                        continue;
+				    
+                    //TODO check permissions for those places here
+                    //Location.TryAccess(path);
+                    
+                    appendResult.Add(new Location(string.Empty, Path.GetFileName(path), path, false ));
+                }
+            }
+            
+            /// <summary>
+            /// Append a list of <see cref="Location"/> for devices we can visit, depending on platform.
             /// </summary>
             /// <exception cref="PlatformNotSupportedException"></exception>
-            public static List<DeviceInfo> GetDrivesOnSystem()
+            public static void AppendDrivesOnSystem(List<Location> appendResult)
             {
+                ThrowIfNull(appendResult);
+                
                 switch (CurrentPlatform.OS)
                 {
                     case OS.Windows:
-                        return _GetWindowsDevices();
+                        _GetWindowsDrives(appendResult);
+                        return;
                     case OS.MacOSX:
-                        return _GetWindowsDevices(); //TODO Mac/OSX specific - using old windows code for now!
+                        _GetWindowsDrives(appendResult); //TODO Mac/OSX specific - using old windows code for now!
+                        return;
                     case OS.Linux:
-                        return _GetLinuxDevices();
+                        _GetLinuxDrives(appendResult);
+                        return;
                     default:
                         throw new PlatformNotSupportedException(CurrentPlatform.OS.ToString());
                 }
             }
 
 #region Windows
-            private static List<DeviceInfo> _GetWindowsDevices()
+            private static void _GetWindowsDrives(List<Location> appendResult)
             {
-                List<DeviceInfo> devices = new List<DeviceInfo>(8);
                 foreach (DriveInfo d in DriveInfo.GetDrives())
                 {
                     switch (d.DriveType)
@@ -75,17 +155,20 @@ namespace Myra.Graphics2D.UI.File
                         if (!string.IsNullOrEmpty(d.VolumeLabel) && d.VolumeLabel != d.RootDirectory.FullName)
                             vol = d.VolumeLabel;
                         
-                        devices.Add(new DeviceInfo(vol, d.Name, d.RootDirectory.FullName));
+                        appendResult.Add(new Location(vol, d.Name, d.RootDirectory.FullName, true));
                     }
                     catch (Exception)
                     {
                     }
                 }
-                return devices;
+            }
+            private static IReadOnlyList<string> _GetWindowsPlaces()
+            {
+                return new[] { "Desktop", "Downloads", "Documents", "Pictures" };
             }
 #endregion Windows
 #region Linux
-            private static List<DeviceInfo> _GetLinuxDevices()
+            private static void _GetLinuxDrives(List<Location> appendResult)
             {
                 string tmpFileName = Path.GetTempFileName();
                 string[] bashResult;
@@ -101,8 +184,6 @@ namespace Myra.Graphics2D.UI.File
                 }
                 
                 const string RawSpace = @"\x20";
-                
-                List<DeviceInfo> result = new List<DeviceInfo>(8);
                 foreach (string deviceLine in bashResult)
                 {
                     string[] splits = deviceLine.Split(new[] { ' ' }, StringSplitOptions.None);
@@ -118,13 +199,20 @@ namespace Myra.Graphics2D.UI.File
                         continue;
                     splits[3] = splits[3].Replace(RawSpace, " ");; //MOUNTPOINT
                     
-                    result.Add(new DeviceInfo(splits[1], splits[2], splits[3]));
+                    appendResult.Add(new Location(splits[1], splits[2], splits[3], true));
                 }
-                return result;
+            }
+            private static IReadOnlyList<string> _GetLinuxPlaces()
+            {
+                return new[] { "Desktop", "Downloads", "Documents", "Pictures" };
             }
 #endregion Linux
             
-
+            private static void ThrowIfNull(List<Location> obj)
+            {
+                if (obj == null)
+                    throw new NullReferenceException();
+            }
         }
     }
 }
