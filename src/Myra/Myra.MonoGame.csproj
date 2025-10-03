@@ -17,6 +17,9 @@
 
   <ItemGroup>
     <Compile Remove="Platform\**\*.*" />
+    <Compile Update="Graphics2D\UI\File\FileDialog.PlatformDependent.cs">
+      <DependentUpon>FileDialog.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
