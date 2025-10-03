@@ -482,9 +482,15 @@ namespace Myra.Graphics2D.UI
 				}
 				else
 				{
-					menuItem.ImageWidget.ApplyPressableImageStyle(MenuStyle.ImageStyle);
+					if (MenuStyle.ImageStyle != null)
+					{
+						menuItem.ImageWidget.ApplyPressableImageStyle(MenuStyle.ImageStyle);
+					}
 					menuItem.Label.ApplyLabelStyle(MenuStyle.LabelStyle);
-					menuItem.Shortcut.ApplyLabelStyle(MenuStyle.ShortcutStyle);
+					if (MenuStyle.ShortcutStyle != null)
+					{
+						menuItem.Shortcut.ApplyLabelStyle(MenuStyle.ShortcutStyle);
+					}
 				}
 
 				// Add only label, as other widgets(image and shortcut) would be optionally added by SetMenuItem
