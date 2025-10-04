@@ -36,12 +36,6 @@ namespace Myra.Graphics2D.UI.File
 			public readonly string Label;
 			public readonly string Path;
 			public readonly bool IsDrive;
-			
-			public bool TryAccess() => TryAccess(this.Path);
-			public static bool TryAccess(string path)
-			{
-				throw new NotImplementedException();
-			}
 		}
 
 		private const int ImageTextSpacing = 4;
@@ -117,7 +111,8 @@ namespace Myra.Graphics2D.UI.File
 		}
 
 		public bool AutoAddFilterExtension { get; set; }
-
+		public bool ShowHiddenFiles { get; set; }
+		
 		public IImage IconFolder { get; set; }
 		public IImage IconDrive { get; set; }
 
@@ -182,6 +177,9 @@ namespace Myra.Graphics2D.UI.File
 			SetStyle(Stylesheet.DefaultStyleName);
 		}
 
+		/// <summary>
+		/// Create the navigation menu of places we can visit.
+		/// </summary>
 		protected virtual void PopulatePlacesListUI(ListView listView)
 		{
 			List<Location> placeList = new List<Location>(8);
@@ -201,6 +199,9 @@ namespace Myra.Graphics2D.UI.File
 				listView.Widgets.Add( CreateListItem(placeList[index]) );
 		}
 		
+		/// <summary>
+		/// Create a display widget for the given location
+		/// </summary>
 		protected virtual Widget CreateListItem(Location location)
 		{
 			var item = new HorizontalStackPanel
@@ -216,6 +217,44 @@ namespace Myra.Graphics2D.UI.File
 			item.Widgets.Add(new Image());
 			item.Widgets.Add(new Label { Text = label });
 			return item;
+		}
+
+		/// <summary>
+		/// Return true if <paramref name="path"/> is a valid directory, and we have permissions to access it.
+		/// </summary>
+		protected bool TryAccessDirectory(string path)
+		{
+			if (!Directory.Exists(path))
+				return false;
+			if (!TryGetFileAttributes(path, out FileAttributes att))
+				return false;
+			return FileAttributeFilter(att, _mode, ShowHiddenFiles);
+		}
+		
+		protected virtual bool FileAttributeFilter(FileAttributes attributes, FileDialogMode mode, bool showHidden)
+		{
+			bool discard =
+				attributes.HasFlag(FileAttributes.System)  |
+				attributes.HasFlag(FileAttributes.Offline) |
+				(attributes.HasFlag(FileAttributes.Hidden) & !showHidden);
+			
+			switch (mode)
+			{
+				case FileDialogMode.SaveFile:
+					discard |= attributes.HasFlag(FileAttributes.ReadOnly);
+					break;
+				case FileDialogMode.ChooseFolder:
+					discard |= !attributes.HasFlag(FileAttributes.Directory);
+					break;
+				default:
+					break;
+			}
+			return !discard;
+		}
+		
+		protected void ShowIOError(string path, string exceptionMsg)
+		{
+			CreateMessageBox("I/O Error", exceptionMsg);
 		}
 		
 		private void UpdateEnabled()
@@ -279,7 +318,7 @@ namespace Myra.Graphics2D.UI.File
 
 		private void SetFolder(string value, bool storeInHistory)
 		{
-			if (!Directory.Exists(value))
+			if (!TryAccessDirectory(value))
 			{
 				return;
 			}
@@ -362,23 +401,28 @@ namespace Myra.Graphics2D.UI.File
 			_paths.Clear();
 
 			_scrollPane.ScrollPosition = Mathematics.PointZero;
-
+			
 			var path = _textFieldPath.Text;
-			var folders = Directory.EnumerateDirectories(path);
-
-			var gridY = 0;
-			foreach (var f in folders)
+			
+			// Enumerate folders in directory
+			bool success = TryEnumerateDirectoryFolders(path, out IEnumerable<string> collection, out string exceptionMsg);
+			if (!success)
 			{
-				var fileInfo = new FileInfo(f);
-				if (fileInfo.Attributes.HasFlag(FileAttributes.Hidden))
-				{
+				ShowIOError(path, exceptionMsg);
+				return;
+			}
+			
+			var gridY = 0;
+			foreach (string folder in collection)
+			{
+				success = TryGetFileAttributes(folder, out FileAttributes att);
+				if (success)
+					success &= FileAttributeFilter(att, _mode, ShowHiddenFiles);
+				if (!success)
 					continue;
-				}
-
-				var prop = new Proportion();
-
-				_gridFiles.RowsProportions.Add(prop);
-
+				
+				_gridFiles.RowsProportions.Add(new Proportion());
+				
 				var image = new Image
 				{
 					Renderable = IconFolder,
@@ -391,14 +435,14 @@ namespace Myra.Graphics2D.UI.File
 
 				var name = new Label
 				{
-					Text = Path.GetFileName(f),
+					Text = Path.GetFileName(folder),
 				};
 				Grid.SetColumn(name, 1);
 				Grid.SetRow(name, gridY);
 
 				_gridFiles.Widgets.Add(name);
 
-				_paths.Add(f);
+				_paths.Add(folder);
 
 				++gridY;
 			}
@@ -408,47 +452,34 @@ namespace Myra.Graphics2D.UI.File
 				return;
 			}
 
-			IEnumerable<string> files;
-
-			if (string.IsNullOrEmpty(Filter))
+			// Enumerate files in directory
+			success = TryEnumerateDirectoryFiles(path, Filter, out collection, out exceptionMsg);
+			if (!success)
 			{
-				files = Directory.EnumerateFiles(path);
-			}
-			else
-			{
-				var parts = Filter.Split('|');
-				var result = new List<string>();
-
-				foreach (var part in parts)
-				{
-					result.AddRange(Directory.EnumerateFiles(path, part));
-				}
-
-				files = result;
+				ShowIOError(path, exceptionMsg);
+				return;
 			}
 
-			foreach (var f in files)
+			foreach (string file in collection)
 			{
-				var fileInfo = new FileInfo(f);
-				if (fileInfo.Attributes.HasFlag(FileAttributes.Hidden))
-				{
+				success = TryGetFileAttributes(file, out FileAttributes att);
+				if (success)
+					success &= FileAttributeFilter(att, _mode, ShowHiddenFiles);
+				if (!success)
 					continue;
-				}
-
-				var prop = new Proportion();
-
-				_gridFiles.RowsProportions.Add(prop);
+				
+				_gridFiles.RowsProportions.Add(new Proportion());
 
 				var name = new Label
 				{
-					Text = Path.GetFileName(f),
+					Text = Path.GetFileName(file),
 				};
 				Grid.SetColumn(name, 1);
 				Grid.SetRow(name, gridY);
 
 				_gridFiles.Widgets.Add(name);
 
-				_paths.Add(f);
+				_paths.Add(file);
 
 				++gridY;
 			}
@@ -536,7 +567,7 @@ namespace Myra.Graphics2D.UI.File
 				image.Renderable = pathInfo.IsDrive ? IconDrive : IconFolder;
 			}
 		}
-
+		
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
 		{
 			ApplyFileDialogStyle(stylesheet.FileDialogStyles.SafelyGetStyle(name));

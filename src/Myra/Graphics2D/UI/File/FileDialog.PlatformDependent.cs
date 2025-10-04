@@ -96,11 +96,8 @@ namespace Myra.Graphics2D.UI.File
                 
                 foreach (string path in places)
                 {
-                    if (!Directory.Exists(path))
+                    if (!TryGetFileAttributes(path, out _))
                         continue;
-				    
-                    //TODO check permissions for those places here
-                    //Location.TryAccess(path);
                     
                     appendResult.Add(new Location(string.Empty, Path.GetFileName(path), path, false ));
                 }
@@ -191,13 +188,22 @@ namespace Myra.Graphics2D.UI.File
                     if(splits[0] != "part") //TYPE
                         continue; // We only want partitioned file systems.
 
-                    splits[2] = splits[2].Replace(RawSpace, " ");
-                    if(string.Equals(splits[2], "System Reserved")) //LABEL
+                    splits[2] = splits[2].Replace(RawSpace, " "); //LABEL
+                    if(string.Equals(splits[2], "System Reserved")) 
                         continue;
+                    if (string.IsNullOrEmpty(splits[2]))
+                    {
+                        //Is this the main system partition?
+                        if (string.Equals(splits[3], "/home") || string.Equals(splits[3], "/"))
+                        {
+                            appendResult.Add(new Location(splits[1], "Linux System", "/", true));
+                            continue;
+                        }
+                    }
                     
                     if(string.IsNullOrEmpty(splits[3]) || string.Equals(splits[3], "/boot"))
                         continue;
-                    splits[3] = splits[3].Replace(RawSpace, " ");; //MOUNTPOINT
+                    splits[3] = splits[3].Replace(RawSpace, " "); //MOUNTPOINT
                     
                     appendResult.Add(new Location(splits[1], splits[2], splits[3], true));
                 }
