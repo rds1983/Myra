@@ -1,6 +1,6 @@
-﻿using System.ComponentModel;
+﻿using Myra.Events;
 using Myra.Graphics2D.UI.Styles;
-using System;
+using System.ComponentModel;
 using System.Xml.Serialization;
 
 namespace Myra.Graphics2D.UI
@@ -105,7 +105,7 @@ namespace Myra.Graphics2D.UI
 			SetStyle(styleName);
 		}
 
-		private void ItemOnChanged(object sender, EventArgs eventArgs)
+		private void ItemOnChanged(object sender, MyraEventArgs eventArgs)
 		{
 			var item = (TabItem)sender;
 
@@ -345,7 +345,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void ButtonOnClick(object sender, EventArgs eventArgs)
+		private void ButtonOnClick(object sender, MyraEventArgs eventArgs)
 		{
 			var button = (ListViewButton)sender;
 			var index = GetButtonIndex(button);

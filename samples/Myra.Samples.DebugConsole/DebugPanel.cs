@@ -14,7 +14,7 @@ namespace Myra.Samples.DebugConsole
 			_buttonHideDebug.Click += _buttonHideDebug_Click;
 		}
 
-		private void _buttonHideDebug_Click(object sender, System.EventArgs e)
+		private void _buttonHideDebug_Click(object sender, MyraEventArgs e)
 		{
 			RemoveFromDesktop();
 

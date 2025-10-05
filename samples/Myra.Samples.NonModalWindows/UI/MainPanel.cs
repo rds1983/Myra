@@ -41,7 +41,7 @@ namespace Myra.Samples.NonModalWindows.UI
 			_button3.IsPressed = true;
 		}
 
-		private void _button1_PressedChanged(object sender, System.EventArgs e)
+		private void _button1_PressedChanged(object sender, MyraEventArgs e)
 		{
 			if (_button1.IsPressed)
 			{
@@ -53,7 +53,7 @@ namespace Myra.Samples.NonModalWindows.UI
 			}
 		}
 
-		private void _button2_PressedChanged(object sender, System.EventArgs e)
+		private void _button2_PressedChanged(object sender, MyraEventArgs e)
 		{
 			if (_button2.IsPressed)
 			{
@@ -65,7 +65,7 @@ namespace Myra.Samples.NonModalWindows.UI
 			}
 		}
 
-		private void _button3_PressedChanged(object sender, System.EventArgs e)
+		private void _button3_PressedChanged(object sender, MyraEventArgs e)
 		{
 			if (_button3.IsPressed)
 			{

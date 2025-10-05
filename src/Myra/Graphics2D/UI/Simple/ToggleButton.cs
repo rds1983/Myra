@@ -2,6 +2,8 @@
 using Myra.Graphics2D.UI.Styles;
 using System.ComponentModel;
 using System;
+using Myra.Events;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework.Input;
@@ -35,7 +37,7 @@ namespace Myra.Graphics2D.UI
 			set => _layout.Child = value;
 		}
 
-		public event EventHandler IsToggledChanged
+		public event MyraEventHandler IsToggledChanged
 		{
 			add
 			{

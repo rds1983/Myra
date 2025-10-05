@@ -1,4 +1,6 @@
-﻿namespace Myra.Samples.ObjectEditor
+﻿global using Myra.Events;
+
+namespace Myra.Samples.ObjectEditor
 {
 	class Program
 	{

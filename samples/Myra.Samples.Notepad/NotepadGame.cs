@@ -115,15 +115,15 @@ namespace Myra.Samples.Notepad
 				{
 					if (_desktop.IsKeyDown(Keys.N))
 					{
-						NewItemOnDown(this, EventArgs.Empty);
+						NewItemOnDown(this, MyraEventArgs.Empty);
 					}
 					else if (_desktop.IsKeyDown(Keys.O))
 					{
-						OpenItemOnDown(this, EventArgs.Empty);
+						OpenItemOnDown(this, MyraEventArgs.Empty);
 					}
 					else if (_desktop.IsKeyDown(Keys.S))
 					{
-						SaveItemOnDown(this, EventArgs.Empty);
+						SaveItemOnDown(this, MyraEventArgs.Empty);
 					}
 					else if (_desktop.IsKeyDown(Keys.Q))
 					{
@@ -134,7 +134,7 @@ namespace Myra.Samples.Notepad
 		}
 
 
-		private void DebugOptionsOnDown(object sender, EventArgs e)
+		private void DebugOptionsOnDown(object sender, MyraEventArgs e)
 		{
 			var dlg = new DebugOptionsWindow();
 
@@ -161,7 +161,7 @@ namespace Myra.Samples.Notepad
 			return _filePath + " *";
 		}
 
-		private void TextBoxOnTextChanged(object sender, EventArgs eventArgs)
+		private void TextBoxOnTextChanged(object sender, MyraEventArgs eventArgs)
 		{
 			Dirty = true;
 		}
@@ -209,23 +209,23 @@ namespace Myra.Samples.Notepad
 			}
 		}
 
-		private void AboutItemOnDown(object sender, EventArgs eventArgs)
+		private void AboutItemOnDown(object sender, MyraEventArgs eventArgs)
 		{
 			var messageBox = Dialog.CreateMessageBox("Notepad", "Myra Notepad Sample " + MyraEnvironment.Version);
 			messageBox.ShowModal(_desktop);
 		}
 
-		private void SaveAsItemOnDown(object sender, EventArgs eventArgs)
+		private void SaveAsItemOnDown(object sender, MyraEventArgs eventArgs)
 		{
 			Save(true);
 		}
 
-		private void SaveItemOnDown(object sender, EventArgs eventArgs)
+		private void SaveItemOnDown(object sender, MyraEventArgs eventArgs)
 		{
 			Save(false);
 		}
 
-		private void OpenItemOnDown(object sender, EventArgs eventArgs)
+		private void OpenItemOnDown(object sender, MyraEventArgs eventArgs)
 		{
 			var dlg = new FileDialog(FileDialogMode.OpenFile)
 			{
@@ -258,13 +258,13 @@ namespace Myra.Samples.Notepad
 			dlg.ShowModal(_desktop);
 		}
 
-		private void NewItemOnDown(object sender, EventArgs eventArgs)
+		private void NewItemOnDown(object sender, MyraEventArgs eventArgs)
 		{
 			FilePath = string.Empty;
 			_textField.Text = string.Empty;
 		}
 
-		private void QuitItemOnDown(object sender, EventArgs genericEventArgs)
+		private void QuitItemOnDown(object sender, MyraEventArgs genericEventArgs)
 		{
 			Exit();
 		}

@@ -1,4 +1,5 @@
-﻿using Myra.Utility;
+﻿using Myra.Events;
+using Myra.Utility;
 using System;
 using System.ComponentModel;
 
@@ -51,7 +52,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public event EventHandler Changed;
+		public event MyraEventHandler Changed;
 
 		public Proportion()
 		{
@@ -89,7 +90,7 @@ namespace Myra.Graphics2D.UI
 			var ev = Changed;
 			if (ev != null)
 			{
-				ev(this, EventArgs.Empty);
+				ev(this, new MyraEventArgs(InputEventType.ProportionChanged));
 			}
 		}
 	}

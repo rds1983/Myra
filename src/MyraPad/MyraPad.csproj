@@ -4,7 +4,8 @@
     <TargetFramework>$(AppTargetFramework)</TargetFramework>
     <AssemblyName>MyraPad</AssemblyName>
     <RootNamespace>MyraPad</RootNamespace>
-    <DefineConstants>$(DefineConstants);MONOGAME</DefineConstants>	
+    <DefineConstants>$(DefineConstants);MONOGAME</DefineConstants>
+    <LangVersion>10.0</LangVersion>	
   </PropertyGroup>
 
   <ItemGroup>

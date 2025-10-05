@@ -79,7 +79,7 @@ namespace Myra.Graphics2D.UI
 		public override SelectionMode SelectionMode { get => _listBox.SelectionMode; set => _listBox.SelectionMode = value; }
 		public override int? SelectedIndex { get => _listBox.SelectedIndex; set => _listBox.SelectedIndex = value; }
 
-		public override event EventHandler SelectedIndexChanged
+		public override event MyraEventHandler SelectedIndexChanged
 		{
 			add
 			{
@@ -132,7 +132,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void InternalChild_PressedChanged(object sender, EventArgs e)
+		private void InternalChild_PressedChanged(object sender, MyraEventArgs e)
 		{
 			if (_listBox.Items.Count == 0)
 			{
@@ -152,7 +152,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void ItemOnChanged(object sender, EventArgs eventArgs)
+		private void ItemOnChanged(object sender, MyraEventArgs eventArgs)
 		{
 			var item = (ListItem)sender;
 

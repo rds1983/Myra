@@ -2,7 +2,7 @@
 
 namespace Myra.Events
 {
-    public class TextDeletedEventArgs : EventArgs
+    public class TextDeletedEventArgs : MyraEventArgs
     {
         public int StartPosition
         {
@@ -13,8 +13,8 @@ namespace Myra.Events
         {
             get;
         }
-        
-        public TextDeletedEventArgs(int startPosition, string value)
+
+        public TextDeletedEventArgs(int startPosition, string value) : base(Graphics2D.UI.InputEventType.TextDeleted)
         {
             StartPosition = startPosition;
             Value = value;

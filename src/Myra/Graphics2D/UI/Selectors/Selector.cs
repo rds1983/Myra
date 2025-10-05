@@ -1,4 +1,5 @@
 ﻿using Myra.Attributes;
+using Myra.Events;
 using Myra.Utility;
 using System;
 using System.Collections.ObjectModel;
@@ -33,7 +34,7 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		protected WidgetType InternalChild => _layout.Child;
 
-		public abstract event EventHandler SelectedIndexChanged;
+		public abstract event MyraEventHandler SelectedIndexChanged;
 
 		protected SelectorBase(WidgetType widget)
 		{
@@ -110,8 +111,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public override event EventHandler SelectedIndexChanged;
-		public event EventHandler ItemsCollectionChanged;
+		public override event MyraEventHandler SelectedIndexChanged;
+		public event MyraEventHandler ItemsCollectionChanged;
 
 		protected Selector(WidgetType widget): base(widget)
 		{
@@ -161,7 +162,7 @@ namespace Myra.Graphics2D.UI
 
 		protected virtual void OnItemCollectionChanged()
 		{
-			ItemsCollectionChanged.Invoke(this);
+			ItemsCollectionChanged.Invoke(this, InputEventType.ValueChanged);
 		}
 
 		protected virtual void OnSelectedItemChanged()
@@ -170,7 +171,7 @@ namespace Myra.Graphics2D.UI
 
 		private void FireSelectedIndexChanged()
 		{
-			SelectedIndexChanged.Invoke(this);
+			SelectedIndexChanged.Invoke(this, InputEventType.ValueChanged);
 		}
 
 		protected abstract void Reset();
