@@ -35,22 +35,24 @@ namespace Myra.Graphics2D.UI
 	{
 		private IImage _image, _overImage, _pressedImage;
 
-        private bool _isAnisotropicFiltering = false;
+#if MONOGAME
+		private bool _isAnisotropicFiltering = false;
 
-        public bool IsAnisotropicFiltering
-        {
-            get
-            {
-                return _isAnisotropicFiltering;
-            }
-            set
-            {
-                _isAnisotropicFiltering = value;
-                InvalidateMeasure();
-            }
-        }
+		public bool IsAnisotropicFiltering
+		{
+			get
+			{
+				return _isAnisotropicFiltering;
+			}
+			set
+			{
+				_isAnisotropicFiltering = value;
+				InvalidateMeasure();
+			}
+		}
+#endif
 
-        [Category("Appearance")]
+		[Category("Appearance")]
 		public IImage Renderable
 		{
 			get
@@ -179,10 +181,14 @@ namespace Myra.Graphics2D.UI
 					bounds.Height = (int)(bounds.Width * aspect);
 				}
 
-                context.SetAnisotropicFilteringMode(_isAnisotropicFiltering);
-                image.Draw(context, bounds, Color);
-                context.SetAnisotropicFilteringMode(false);
-            }
+#if MONOGAME
+				context.SetAnisotropicFilteringMode(_isAnisotropicFiltering);
+#endif
+				image.Draw(context, bounds, Color);
+#if MONOGAME
+				context.SetAnisotropicFilteringMode(false);
+#endif
+			}
 		}
 
 		public void ApplyPressableImageStyle(PressableImageStyle imageStyle)

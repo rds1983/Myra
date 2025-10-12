@@ -12,7 +12,7 @@
     <LangVersion>8.0</LangVersion>
     <InfoLundinMathVersion>1.2.6</InfoLundinMathVersion>
     <MonoGameVersion>3.8.0.1641</MonoGameVersion>
-    <AppMonoGameVersion>3.8.2.1105</AppMonoGameVersion>
+    <AppMonoGameVersion>3.8.4</AppMonoGameVersion>
     <StrideVersion>4.2.0.2067</StrideVersion>
     <AppTargetFramework>net8.0</AppTargetFramework>
   </PropertyGroup>

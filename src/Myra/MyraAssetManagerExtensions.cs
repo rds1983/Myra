@@ -243,7 +243,7 @@ namespace AssetManagementBase
 #endif
 		}
 
-		public static FontSystem LoadFontSystem(this AssetManager assetManager, string assetName, string[] additionalFonts = null, Texture2D existingTexture = null, Rectangle existingTextureUsedSpace = default(Rectangle))
+		internal static FontSystem LoadFontSystem(this AssetManager assetManager, string assetName, string[] additionalFonts = null, Texture2D existingTexture = null, Rectangle existingTextureUsedSpace = default(Rectangle))
 		{
 			FontSystemLoadingSettings settings = null;
 			if (additionalFonts != null || existingTexture != null)
@@ -259,7 +259,7 @@ namespace AssetManagementBase
 			return assetManager.UseLoader(_fontSystemLoader, assetName, settings);
 		}
 
-		public static StaticSpriteFont LoadStaticSpriteFont(this AssetManager assetManager, string assetName) => assetManager.UseLoader(_staticFontLoader, assetName);
+		internal static StaticSpriteFont LoadStaticSpriteFont(this AssetManager assetManager, string assetName) => assetManager.UseLoader(_staticFontLoader, assetName);
 
 		/// <summary>
 		/// Loads a font by either ttf name/size(i.e. 'font.ttf:32') or by fnt name(i.e. 'font.fnt')
@@ -267,7 +267,7 @@ namespace AssetManagementBase
 		/// <param name="assetManager"></param>
 		/// <param name="assetName"></param>
 		/// <returns></returns>
-		public static SpriteFontBase LoadFont(this AssetManager assetManager, string assetName)
+		internal static SpriteFontBase LoadFont(this AssetManager assetManager, string assetName)
 		{
 			if (assetName.Contains(".fnt"))
 			{
