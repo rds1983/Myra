@@ -177,6 +177,13 @@ namespace Myra.Graphics2D.UI.File
 			SetStyle(Stylesheet.DefaultStyleName);
 		}
 
+		protected override void OnPlacedChanged()
+		{
+			base.OnPlacedChanged();
+
+			UpdateFolder();
+		}
+
 		/// <summary>
 		/// Create the navigation menu of places we can visit.
 		/// </summary>
@@ -401,6 +408,11 @@ namespace Myra.Graphics2D.UI.File
 			_paths.Clear();
 
 			_scrollPane.ScrollPosition = Mathematics.PointZero;
+
+			if (Desktop == null)
+			{
+				return;
+			}
 			
 			var path = _textFieldPath.Text;
 			
