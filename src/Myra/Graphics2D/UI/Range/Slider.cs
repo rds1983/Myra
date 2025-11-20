@@ -133,12 +133,12 @@ namespace Myra.Graphics2D.UI
 		/// <summary>
 		/// Fires when the value had been changed
 		/// </summary>
-		public event EventHandler<ValueChangedEventArgs<float>> ValueChanged;
+		public event MyraEventHandler<ValueChangedEventArgs<float>> ValueChanged;
 
 		/// <summary>
 		/// Fires only when the value had been changed by user(doesnt fire if it had been assigned through code)
 		/// </summary>
-		public event EventHandler<ValueChangedEventArgs<float>> ValueChangedByUser;
+		public event MyraEventHandler<ValueChangedEventArgs<float>> ValueChangedByUser;
 
 		protected Slider(string styleName)
 		{
@@ -247,7 +247,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void DesktopTouchMoved(object sender, EventArgs args)
+		private void DesktopTouchMoved(object sender, MyraEventArgs args)
 		{
 			if (!ImageButton.IsPressed)
 			{

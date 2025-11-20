@@ -4,6 +4,8 @@ using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using System.Xml.Serialization;
 using Myra.Attributes;
+using Myra.Events;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -617,7 +619,7 @@ namespace Myra.Graphics2D.UI
 			ScrollPosition = Mathematics.PointZero;
 		}
 
-		private void DesktopTouchMoved(object sender, EventArgs args)
+		private void DesktopTouchMoved(object sender, MyraEventArgs args)
 		{
 			if (!_startBoundsPos.HasValue || Desktop == null)
 				return;
@@ -640,7 +642,7 @@ namespace Myra.Graphics2D.UI
 			MoveThumb(delta);
 		}
 
-		private void DesktopTouchUp(object sender, EventArgs args)
+		private void DesktopTouchUp(object sender, MyraEventArgs args)
 		{
 			_startBoundsPos = null;
 		}

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Myra.Events;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 
@@ -283,7 +284,7 @@ namespace Myra.Graphics2D.UI.File
 			ButtonOk.Enabled = enabled;
 		}
 
-		private void OnButtonParent(object sender, EventArgs args)
+		private void OnButtonParent(object sender, MyraEventArgs args)
 		{
 			if (string.IsNullOrEmpty(Folder))
 			{
@@ -295,7 +296,7 @@ namespace Myra.Graphics2D.UI.File
 			Folder = parentFolder;
 		}
 
-		private void OnButtonBack(object sender, EventArgs args)
+		private void OnButtonBack(object sender, MyraEventArgs args)
 		{
 			if (_historyPosition <= 0)
 			{
@@ -309,7 +310,7 @@ namespace Myra.Graphics2D.UI.File
 			}
 		}
 
-		private void OnButtonForward(object sender, EventArgs args)
+		private void OnButtonForward(object sender, MyraEventArgs args)
 		{
 			if (_historyPosition >= _history.Count - 1)
 			{
@@ -349,7 +350,7 @@ namespace Myra.Graphics2D.UI.File
 			_historyPosition = _history.Count - 1;
 		}
 
-		private void OnGridFilesDoubleClick(object sender, EventArgs args)
+		private void OnGridFilesDoubleClick(object sender, MyraEventArgs args)
 		{
 			if (_gridFiles.SelectedRowIndex == null)
 			{
@@ -369,7 +370,7 @@ namespace Myra.Graphics2D.UI.File
 			}
 		}
 
-		private void OnGridFilesSelectedIndexChanged(object sender, EventArgs args)
+		private void OnGridFilesSelectedIndexChanged(object sender, MyraEventArgs args)
 		{
 			if (_gridFiles.SelectedRowIndex == null)
 			{
@@ -390,7 +391,7 @@ namespace Myra.Graphics2D.UI.File
 			}
 		}
 
-		private void OnPlacesSelectedIndexChanged(object sender, EventArgs args)
+		private void OnPlacesSelectedIndexChanged(object sender, MyraEventArgs args)
 		{
 			if (_listPlaces.SelectedIndex == null)
 			{

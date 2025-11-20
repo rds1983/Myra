@@ -1,4 +1,5 @@
-﻿using Myra.Utility;
+﻿using Myra.Events;
+using Myra.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -48,11 +49,11 @@ namespace Myra.MML
 		[Browsable(false)]
 		public Dictionary<string, string> Resources { get; private set; } = new Dictionary<string, string>();
 
-		public event EventHandler IdChanged;
+		public event MyraEventHandler IdChanged;
 
 		protected internal virtual void OnIdChanged()
 		{
-			IdChanged.Invoke(this);
+			IdChanged.Invoke(this, Graphics2D.UI.InputEventType.ValueChanged);
 		}
 
 		public virtual void OnAttachedPropertyChanged(BaseAttachedPropertyInfo propertyInfo)

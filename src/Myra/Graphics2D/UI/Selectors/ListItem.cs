@@ -4,6 +4,8 @@ using System.Xml.Serialization;
 using Myra.MML;
 using System.Text;
 using Myra.Utility;
+using Myra.Events;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -127,8 +129,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public event EventHandler Changed;
-		public event EventHandler SelectedChanged;
+		public event MyraEventHandler Changed;
+		public event MyraEventHandler SelectedChanged;
 
 		public ListItem()
 		{
@@ -154,7 +156,7 @@ namespace Myra.Graphics2D.UI
 			var ev = SelectedChanged;
 			if (ev != null)
 			{
-				ev(this, EventArgs.Empty);
+				ev(this,new MyraEventArgs(InputEventType.SelectionChanged));
 			}
 		}
 
@@ -186,7 +188,7 @@ namespace Myra.Graphics2D.UI
 
 		protected void FireChanged()
 		{
-			Changed.Invoke(this);
+			Changed.Invoke(this, InputEventType.SelectionChanged);
 		}
 
 		public ListItem Clone()

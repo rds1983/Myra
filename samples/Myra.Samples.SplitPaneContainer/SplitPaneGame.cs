@@ -110,7 +110,7 @@ namespace Myra.Samples.SplitPaneContainer
 			_root.Widgets.Add(_splitPane);
 		}
 
-		private void SplitPaneOnProportionsChanged(object sender, EventArgs eventArgs)
+		private void SplitPaneOnProportionsChanged(object sender, MyraEventArgs eventArgs)
 		{
 			UpdateProportions();
 		}

@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Myra.Graphics2D.UI;
 
 namespace Myra.Events
 {
-	public class CancellableEventArgs : EventArgs
+	public class CancellableEventArgs : MyraEventArgs
 	{
 		public bool Cancel { get; set; }
 
-		public CancellableEventArgs()
+		public CancellableEventArgs(InputEventType inputEventType) : base(inputEventType)
 		{
 		}
 	}

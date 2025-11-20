@@ -1,4 +1,5 @@
-﻿using info.lundin.math;
+﻿global using Myra.Events;
+using info.lundin.math;
 using System;
 
 namespace Myra.Samples.Layout2D

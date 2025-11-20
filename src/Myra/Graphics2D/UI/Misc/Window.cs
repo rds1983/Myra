@@ -148,8 +148,8 @@ namespace Myra.Graphics2D.UI
 
 		private bool IsWindowPlaced { get; set; }
 
-		public event EventHandler<CancellableEventArgs> Closing;
-		public event EventHandler Closed;
+		public event MyraEventHandler<CancellableEventArgs> Closing;
+		public event MyraEventHandler Closed;
 
 		public Window(string styleName = Stylesheet.DefaultStyleName)
 		{
@@ -291,7 +291,7 @@ namespace Myra.Graphics2D.UI
 			var ev = Closing;
 			if (ev != null)
 			{
-				var args = new CancellableEventArgs();
+				var args = new CancellableEventArgs(InputEventType.Closing);
 				ev(this, args);
 				if (args.Cancel)
 				{
@@ -314,7 +314,7 @@ namespace Myra.Graphics2D.UI
 				RemoveFromParent();
 			}
 
-			Closed.Invoke(this);
+			Closed.Invoke(this, InputEventType.Closing);
 		}
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)

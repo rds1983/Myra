@@ -5,6 +5,8 @@ using System;
 using Myra.Attributes;
 using Myra.MML;
 using FontStashSharp.RichText;
+using Myra.Events;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -217,8 +219,8 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public int Index { get; set; }
 
-		public event EventHandler Selected;
-		public event EventHandler Changed;
+		public event MyraEventHandler Selected;
+		public event MyraEventHandler Changed;
 
 		public MenuItem(string id, string text, Color? color, object tag)
 		{
@@ -318,7 +320,7 @@ namespace Myra.Graphics2D.UI
 
 			if (ev != null)
 			{
-				ev(this, EventArgs.Empty);
+				ev(this, new MyraEventArgs(InputEventType.SelectionChanged));
 			}
 		}
 
@@ -334,7 +336,7 @@ namespace Myra.Graphics2D.UI
 			var ev = Changed;
 			if (ev != null)
 			{
-				ev(this, EventArgs.Empty);
+				ev(this, new MyraEventArgs(InputEventType.ValueChanged));
 			}
 		}
 	}

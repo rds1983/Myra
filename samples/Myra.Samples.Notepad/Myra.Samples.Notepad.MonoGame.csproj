@@ -5,6 +5,7 @@
     <RootNamespace>Myra.Samples.Notepad</RootNamespace>
     <TargetFramework>$(AppTargetFramework)</TargetFramework>
     <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
+    <LangVersion>10.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

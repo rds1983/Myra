@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.Xml.Serialization;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
+using Myra.Events;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -49,14 +51,14 @@ namespace Myra.Graphics2D.UI
 
 				_value = value;
 
-				ValueChanged.Invoke(this);
+				ValueChanged.Invoke(this, InputEventType.ValueChanged);
 			}
 		}
 
 		[Category("Appearance")]
 		public IBrush Filler { get; set; }
 
-		public event EventHandler ValueChanged;
+		public event MyraEventHandler ValueChanged;
 
 		protected ProgressBar(string styleName)
 		{

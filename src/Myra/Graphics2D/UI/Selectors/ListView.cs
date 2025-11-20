@@ -7,6 +7,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Myra.Utility;
 using System.Reflection;
+using Myra.Events;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -336,14 +338,14 @@ namespace Myra.Graphics2D.UI
 					}
 				}
 
-				SelectedIndexChanged.Invoke(this);
+				SelectedIndexChanged.Invoke(this, InputEventType.SelectedIndexChanged);
 				OnSelectedItemChanged();
 			}
 		}
 
 		private int ChildrenCount => _box.Children.Count;
 
-		public event EventHandler SelectedIndexChanged;
+		public event MyraEventHandler SelectedIndexChanged;
 
 		public ListView(string styleName = Stylesheet.DefaultStyleName)
 		{
@@ -363,7 +365,7 @@ namespace Myra.Graphics2D.UI
 			SetStyle(styleName);
 		}
 
-		private void ButtonOnClick(object sender, EventArgs eventArgs)
+		private void ButtonOnClick(object sender, MyraEventArgs eventArgs)
 		{
 			var button = (ListViewButton)sender;
 			if (!button.IsPressed)

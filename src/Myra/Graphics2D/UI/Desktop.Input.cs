@@ -123,18 +123,18 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public event EventHandler MouseMoved;
+		public event MyraEventHandler MouseMoved;
 
-		public event EventHandler TouchMoved;
-		public event EventHandler TouchDown;
-		public event EventHandler TouchUp;
-		public event EventHandler TouchDoubleClick;
+		public event MyraEventHandler TouchMoved;
+		public event MyraEventHandler TouchDown;
+		public event MyraEventHandler TouchUp;
+		public event MyraEventHandler TouchDoubleClick;
 
-		public event EventHandler<GenericEventArgs<float>> MouseWheelChanged;
+		public event MyraEventHandler<GenericEventArgs<float>> MouseWheelChanged;
 
-		public event EventHandler<GenericEventArgs<Keys>> KeyUp;
-		public event EventHandler<GenericEventArgs<Keys>> KeyDown;
-		public event EventHandler<GenericEventArgs<char>> Char;
+		public event MyraEventHandler<GenericEventArgs<Keys>> KeyUp;
+		public event MyraEventHandler<GenericEventArgs<Keys>> KeyDown;
+		public event MyraEventHandler<GenericEventArgs<char>> Char;
 
 		public void UpdateMouseInput()
 		{
@@ -229,7 +229,7 @@ namespace Myra.Graphics2D.UI
 				else if (!_downKeys[i] && _lastDownKeys[i])
 				{
 					// Key had been released
-					KeyUp.Invoke(key);
+					KeyUp.Invoke(key, InputEventType.KeyUp);
 					if (_focusedKeyboardWidget != null)
 					{
 						_focusedKeyboardWidget.OnKeyUp(key);
@@ -289,27 +289,27 @@ namespace Myra.Graphics2D.UI
 				case InputEventType.MouseEntered:
 					break;
 				case InputEventType.MouseMoved:
-					MouseMoved.Invoke(this);
+					MouseMoved.Invoke(this, InputEventType.MouseMoved);
 					break;
 				case InputEventType.MouseWheel:
-					MouseWheelChanged.Invoke(this, MouseWheelDelta);
+					MouseWheelChanged.Invoke(this, MouseWheelDelta, InputEventType.MouseWheel);
 					break;
 				case InputEventType.TouchLeft:
 					break;
 				case InputEventType.TouchEntered:
 					break;
 				case InputEventType.TouchMoved:
-					TouchMoved.Invoke(this);
+					TouchMoved.Invoke(this, eventType);
 					break;
 				case InputEventType.TouchDown:
 					InputOnTouchDown();
-					TouchDown.Invoke(this);
+					TouchDown.Invoke(this, eventType);
 					break;
 				case InputEventType.TouchUp:
-					TouchUp.Invoke(this);
+					TouchUp.Invoke(this, eventType);
 					break;
 				case InputEventType.TouchDoubleClick:
-					TouchDoubleClick.Invoke(this);
+					TouchDoubleClick.Invoke(this, eventType);
 					break;
 			}
 		}
