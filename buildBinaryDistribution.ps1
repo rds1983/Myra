@@ -44,6 +44,7 @@ Copy-Item -Path "src\MyraPad\bin\Release\net8.0\StbTrueTypeSharp.dll" -Destinati
 Copy-Item -Path "src\MyraPad\bin\Release\net8.0\Cyotek.Drawing.BitmapFont.dll" -Destination "ZipPackage"
 Copy-Item -Path "src\MyraPad\bin\Release\net8.0\AssetManagementBase.dll" -Destination "ZipPackage"
 Copy-Item -Path "src\MyraPad\bin\Release\net8.0\XNAssets.MonoGame.dll" -Destination "ZipPackage"
+Copy-Item -Path "src\MyraPad\bin\Release\net8.0\XNAssets.FontStashSharp.MonoGame.dll" -Destination "ZipPackage"
 Copy-Item -Path "src\MyraPad\bin\Release\net8.0\info.lundin.math.dll" -Destination "ZipPackage"
 Copy-Item -Path "src\MyraPad\bin\Release\net8.0\MonoGame.Framework.dll" -Destination "ZipPackage"
 Copy-Item -Path "src\MyraPad\bin\Release\net8.0\runtimes" -Destination "ZipPackage" -Recurse
