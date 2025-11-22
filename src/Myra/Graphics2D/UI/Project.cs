@@ -201,7 +201,7 @@ namespace Myra.Graphics2D.UI
 				}
 				else if (t == typeof(SpriteFontBase))
 				{
-					return assetManager.MyraLoadFont(name);
+					return assetManager.LoadFont(name);
 				}
 
 				throw new Exception(string.Format("Type {0} isn't supported", t.Name));

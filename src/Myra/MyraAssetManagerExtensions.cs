@@ -156,7 +156,7 @@ namespace AssetManagementBase
 		/// <param name="assetManager"></param>
 		/// <param name="assetName"></param>
 		/// <returns></returns>
-		internal static SpriteFontBase MyraLoadFont(this AssetManager assetManager, string assetName)
+		public static SpriteFontBase LoadFont(this AssetManager assetManager, string assetName)
 		{
 			if (assetName.Contains(".fnt"))
 			{
