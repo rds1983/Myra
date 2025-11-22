@@ -2,10 +2,10 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
+using Myra.Attributes;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
-using Myra.Attributes;
 #elif STRIDE
 using Stride.Core.Mathematics;
 #else
