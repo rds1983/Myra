@@ -61,8 +61,9 @@ namespace Myra.Graphics2D.UI.File
 		/// <summary>
 		/// Attempt to retreive permissions about a file or directory. Return value is indicative of success and a basic attribute filter.
 		/// </summary>
-		private static bool TryGetFileAttributes(string path, out FileAttributes attributes)
+		private static bool CheckAccess(string path, FileDialogMode mode, bool showHidden)
 		{
+			FileAttributes attributes;
 			try
 			{
 				attributes = new FileInfo(path).Attributes;
@@ -73,15 +74,6 @@ namespace Myra.Graphics2D.UI.File
 				return false;
 			}
 
-			bool discard =
-				attributes.HasFlag(FileAttributes.System) |
-				attributes.HasFlag(FileAttributes.Offline);
-
-			return !discard;
-		}
-
-		private static bool FileAttributeFilter(FileAttributes attributes, FileDialogMode mode, bool showHidden)
-		{
 			bool discard =
 				attributes.HasFlag(FileAttributes.System) |
 				attributes.HasFlag(FileAttributes.Offline) |
@@ -98,6 +90,7 @@ namespace Myra.Graphics2D.UI.File
 				default:
 					break;
 			}
+
 			return !discard;
 		}
 	}

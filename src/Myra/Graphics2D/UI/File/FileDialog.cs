@@ -194,7 +194,7 @@ namespace Myra.Graphics2D.UI.File
 			int index = 0;
 
 			//Add user directories
-			Platform.AppendUserPlacesOnSystem(placeList, Platform.SystemUserPlacePaths);
+			Platform.AppendUserPlacesOnSystem(placeList, Platform.SystemUserPlacePaths, _mode, ShowHiddenFiles);
 			for (; index < placeList.Count; index++)
 				listView.Widgets.Add(CreateListItem(placeList[index]));
 
@@ -241,9 +241,7 @@ namespace Myra.Graphics2D.UI.File
 				return true;
 			}
 
-			if (!TryGetFileAttributes(path, out FileAttributes att))
-				return false;
-			return FileAttributeFilter(att, _mode, ShowHiddenFiles);
+			return CheckAccess(path, _mode, ShowHiddenFiles);
 		}
 
 		protected void ShowIOError(string path, string exceptionMsg)
@@ -414,11 +412,10 @@ namespace Myra.Graphics2D.UI.File
 			var gridY = 0;
 			foreach (string folder in collection)
 			{
-				success = TryGetFileAttributes(folder, out FileAttributes att);
-				if (success)
-					success &= FileAttributeFilter(att, _mode, ShowHiddenFiles);
-				if (!success)
+				if (!CheckAccess(folder, _mode, ShowHiddenFiles))
+				{
 					continue;
+				}
 
 				_gridFiles.RowsProportions.Add(new Proportion());
 
@@ -461,11 +458,10 @@ namespace Myra.Graphics2D.UI.File
 
 			foreach (string file in collection)
 			{
-				success = TryGetFileAttributes(file, out FileAttributes att);
-				if (success)
-					success &= FileAttributeFilter(att, _mode, ShowHiddenFiles);
-				if (!success)
+				if (!CheckAccess(file, _mode, ShowHiddenFiles))
+				{
 					continue;
+				}
 
 				_gridFiles.RowsProportions.Add(new Proportion());
 

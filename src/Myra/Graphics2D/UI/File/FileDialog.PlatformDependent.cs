@@ -77,7 +77,7 @@ namespace Myra.Graphics2D.UI.File
 			/// Append <see cref="Location"/> directories under the user's HOME directory.
 			/// </summary>
 			/// <param name="placeList">What folders to try to add relative to the HOME directory.</param>
-			public static void AppendUserPlacesOnSystem(List<Location> appendResult, IReadOnlyList<string> placeList)
+			public static void AppendUserPlacesOnSystem(List<Location> appendResult, IReadOnlyList<string> placeList, FileDialogMode mode, bool showHidden)
 			{
 				ThrowIfNull(appendResult);
 
@@ -97,8 +97,10 @@ namespace Myra.Graphics2D.UI.File
 
 				foreach (string path in places)
 				{
-					if (!TryGetFileAttributes(path, out _))
+					if (!CheckAccess(path, mode, showHidden))
+					{
 						continue;
+					}
 
 					appendResult.Add(new Location(string.Empty, Path.GetFileName(path), path, false));
 				}
