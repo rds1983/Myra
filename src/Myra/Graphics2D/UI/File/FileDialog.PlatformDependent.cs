@@ -12,7 +12,7 @@ namespace Myra.Graphics2D.UI.File
 		/// <summary>
 		/// Platform specific code for <see cref="FileDialog"/>
 		/// </summary>
-		protected static class Platform
+		private static class Platform
 		{
 			private static IReadOnlyList<string> _userPaths;
 			/// <summary>
@@ -44,7 +44,7 @@ namespace Myra.Graphics2D.UI.File
 			}
 
 			private static string _homePath = string.Empty;
-			
+
 			public static string UserHomePath
 			{
 				get

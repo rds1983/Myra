@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using MonoGame.Utilities;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 
@@ -233,30 +234,16 @@ namespace Myra.Graphics2D.UI.File
 		{
 			if (!Directory.Exists(path))
 				return false;
+
+			// For Windows, existance check is enough
+			if (CurrentPlatform.OS == OS.Windows)
+			{
+				return true;
+			}
+
 			if (!TryGetFileAttributes(path, out FileAttributes att))
 				return false;
 			return FileAttributeFilter(att, _mode, ShowHiddenFiles);
-		}
-
-		protected virtual bool FileAttributeFilter(FileAttributes attributes, FileDialogMode mode, bool showHidden)
-		{
-			bool discard =
-				attributes.HasFlag(FileAttributes.System) |
-				attributes.HasFlag(FileAttributes.Offline) |
-				(attributes.HasFlag(FileAttributes.Hidden) & !showHidden);
-
-			switch (mode)
-			{
-				case FileDialogMode.SaveFile:
-					discard |= attributes.HasFlag(FileAttributes.ReadOnly);
-					break;
-				case FileDialogMode.ChooseFolder:
-					discard |= !attributes.HasFlag(FileAttributes.Directory);
-					break;
-				default:
-					break;
-			}
-			return !discard;
 		}
 
 		protected void ShowIOError(string path, string exceptionMsg)

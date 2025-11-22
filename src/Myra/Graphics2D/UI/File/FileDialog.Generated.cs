@@ -22,7 +22,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Myra.Graphics2D.UI.File
 {
-	partial class FileDialog: Dialog
+	partial class FileDialog : Dialog
 	{
 		private void BuildUI()
 		{
@@ -113,7 +113,7 @@ namespace Myra.Graphics2D.UI.File
 			verticalStackPanel1.Widgets.Add(_splitPane);
 			verticalStackPanel1.Widgets.Add(horizontalStackPanel2);
 
-			
+
 			Title = "Open File...";
 			Left = 658;
 			Top = 131;
@@ -122,7 +122,6 @@ namespace Myra.Graphics2D.UI.File
 			Content = verticalStackPanel1;
 		}
 
-		
 		public Button _buttonBack;
 		public Button _buttonForward;
 		public TextBox _textFieldPath;

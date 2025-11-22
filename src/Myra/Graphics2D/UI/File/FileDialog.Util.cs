@@ -10,7 +10,7 @@ namespace Myra.Graphics2D.UI.File
 		/// <summary>
 		/// Attempt to retrieve folders from the given directory <paramref name="path"/>. Result <paramref name="folders"/> is null if return value is false.
 		/// </summary>
-		protected static bool TryEnumerateDirectoryFolders(string path, out IEnumerable<string> folders, out string exceptionMsg)
+		private static bool TryEnumerateDirectoryFolders(string path, out IEnumerable<string> folders, out string exceptionMsg)
 		{
 			List<string> result = new List<string>(8);
 			try
@@ -33,7 +33,7 @@ namespace Myra.Graphics2D.UI.File
 		/// Attempt to retrieve files from the given directory <paramref name="path"/>. Result <paramref name="files"/> is null if return value is false.
 		/// <paramref name="searchPattern"/> can be null for a wildcard.
 		/// </summary>
-		protected static bool TryEnumerateDirectoryFiles(string path, string searchPattern, out IEnumerable<string> files, out string exceptionMsg)
+		private static bool TryEnumerateDirectoryFiles(string path, string searchPattern, out IEnumerable<string> files, out string exceptionMsg)
 		{
 			List<string> result = new List<string>(8);
 			try
@@ -61,7 +61,7 @@ namespace Myra.Graphics2D.UI.File
 		/// <summary>
 		/// Attempt to retreive permissions about a file or directory. Return value is indicative of success and a basic attribute filter.
 		/// </summary>
-		protected static bool TryGetFileAttributes(string path, out FileAttributes attributes)
+		private static bool TryGetFileAttributes(string path, out FileAttributes attributes)
 		{
 			try
 			{
@@ -77,6 +77,27 @@ namespace Myra.Graphics2D.UI.File
 				attributes.HasFlag(FileAttributes.System) |
 				attributes.HasFlag(FileAttributes.Offline);
 
+			return !discard;
+		}
+
+		private static bool FileAttributeFilter(FileAttributes attributes, FileDialogMode mode, bool showHidden)
+		{
+			bool discard =
+				attributes.HasFlag(FileAttributes.System) |
+				attributes.HasFlag(FileAttributes.Offline) |
+				(attributes.HasFlag(FileAttributes.Hidden) & !showHidden);
+
+			switch (mode)
+			{
+				case FileDialogMode.SaveFile:
+					discard |= attributes.HasFlag(FileAttributes.ReadOnly);
+					break;
+				case FileDialogMode.ChooseFolder:
+					discard |= !attributes.HasFlag(FileAttributes.Directory);
+					break;
+				default:
+					break;
+			}
 			return !discard;
 		}
 	}
