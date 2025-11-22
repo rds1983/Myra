@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AssetManagementBase;
+using System;
 
 namespace Myra.Samples.AssetManagement
 {
@@ -8,6 +9,7 @@ namespace Myra.Samples.AssetManagement
 		{
 			try
 			{
+				AMBConfiguration.Logger = Console.WriteLine;
 				using (var game = new AssetManagementGame())
 					game.Run();
 			}
