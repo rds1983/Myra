@@ -5,6 +5,8 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Xml.Serialization;
 using Myra.MML;
+using Myra.Attributes;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -28,13 +30,21 @@ namespace Myra.Graphics2D.UI
 	public class Grid : Container
 	{
 		public static readonly AttachedPropertyInfo<int> ColumnProperty = 
-			AttachedPropertiesRegistry.Create(typeof(Grid), "Column", 0, AttachedPropertyOption.AffectsArrange);
+			AttachedPropertiesRegistry.Create(typeof(Grid), "Column", 0, 
+				AttachedPropertyOption.AffectsArrange,
+				new Attribute[] { new RangeAttribute(0) });
 		public static readonly AttachedPropertyInfo<int> RowProperty = 
-			AttachedPropertiesRegistry.Create(typeof(Grid), "Row", 0, AttachedPropertyOption.AffectsArrange);
+			AttachedPropertiesRegistry.Create(typeof(Grid), "Row", 0,
+				AttachedPropertyOption.AffectsArrange,
+				new Attribute[] { new RangeAttribute(0) });
 		public static readonly AttachedPropertyInfo<int> ColumnSpanProperty = 
-			AttachedPropertiesRegistry.Create(typeof(Grid), "ColumnSpan", 1, AttachedPropertyOption.AffectsArrange);
+			AttachedPropertiesRegistry.Create(typeof(Grid), "ColumnSpan", 1,
+				AttachedPropertyOption.AffectsArrange,
+				new Attribute[] { new RangeAttribute(1) });
 		public static readonly AttachedPropertyInfo<int> RowSpanProperty = 
-			AttachedPropertiesRegistry.Create(typeof(Grid), "RowSpan", 1, AttachedPropertyOption.AffectsArrange);
+			AttachedPropertiesRegistry.Create(typeof(Grid), "RowSpan", 1,
+				AttachedPropertyOption.AffectsArrange,
+				new Attribute[] { new RangeAttribute(1) });
 
 		private readonly GridLayout _layout = new GridLayout();
 

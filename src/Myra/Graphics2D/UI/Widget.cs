@@ -474,7 +474,6 @@ namespace Myra.Graphics2D.UI
 				_scale = value;
 				InvalidateTransform();
 			}
-
 		}
 
 		[Category("Transform")]
@@ -582,6 +581,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Appearance")]
 		[DefaultValue(1.0f)]
+		[Range(0.0f, 1.0f)]
 		public float Opacity
 		{
 			get

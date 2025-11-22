@@ -717,6 +717,13 @@ namespace Myra.Graphics2D.UI.Properties
 				Value = value != null ? (float)Convert.ChangeType(value, typeof(float)) : default(float?)
 			};
 
+			var rangeAttribute = record.FindAttribute<RangeAttribute>();
+			if (rangeAttribute != null)
+			{
+				spinButton.Minimum = rangeAttribute.Minimum;
+				spinButton.Maximum = rangeAttribute.Maximum;
+			}
+
 			if (hasSetter)
 			{
 				spinButton.ValueChanged += (sender, args) =>

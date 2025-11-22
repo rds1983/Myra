@@ -23,10 +23,11 @@ namespace Myra.MML
 		public int Id { get; private set; }
 		public string Name { get; private set; }
 		public AttachedPropertyOption Option { get; private set; }
+		public Attribute[] Attributes { get; private set; }
 		public abstract Type PropertyType { get; }
 		public abstract object DefaultValueObject { get; }
 
-		protected BaseAttachedPropertyInfo(int id, string name, Type ownerType, AttachedPropertyOption option)
+		protected BaseAttachedPropertyInfo(int id, string name, Type ownerType, AttachedPropertyOption option, Attribute[] attributes = null)
 		{
 			if (string.IsNullOrEmpty(name))
 			{
@@ -37,6 +38,7 @@ namespace Myra.MML
 			Name = name;
 			Id = id;
 			Option = option;
+			Attributes = attributes;
 		}
 
 		public abstract object GetValueObject(BaseObject obj);
@@ -49,8 +51,8 @@ namespace Myra.MML
 		public override Type PropertyType => typeof(T);
 		public override object DefaultValueObject => DefaultValue;
 
-		public AttachedPropertyInfo(int id, string name, Type ownerType, T defaultValue, AttachedPropertyOption option) :
-			base(id, name, ownerType, option)
+		public AttachedPropertyInfo(int id, string name, Type ownerType, T defaultValue, AttachedPropertyOption option, Attribute[] attributes = null) :
+			base(id, name, ownerType, option, attributes)
 		{
 			DefaultValue = defaultValue;
 		}
@@ -103,9 +105,9 @@ namespace Myra.MML
 		private static readonly Dictionary<int, BaseAttachedPropertyInfo> _properties = new Dictionary<int, BaseAttachedPropertyInfo>();
 		private static readonly Dictionary<Type, BaseAttachedPropertyInfo[]> _propertiesByType = new Dictionary<Type, BaseAttachedPropertyInfo[]>();
 
-		public static AttachedPropertyInfo<T> Create<T>(Type type, string name, T defaultValue, AttachedPropertyOption option)
+		public static AttachedPropertyInfo<T> Create<T>(Type type, string name, T defaultValue, AttachedPropertyOption option, Attribute[] attributes = null)
 		{
-			var result = new AttachedPropertyInfo<T>(_properties.Count, name, type, defaultValue, option);
+			var result = new AttachedPropertyInfo<T>(_properties.Count, name, type, defaultValue, option, attributes);
 			_properties[result.Id] = result;
 
 			return result;
