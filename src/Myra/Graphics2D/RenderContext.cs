@@ -26,9 +26,7 @@ namespace Myra.Graphics2D
 	{
 		Nearest,
 		Linear,
-#if MONOGAME
 		Anisotropic
-#endif
 	}
 
 	public partial class RenderContext : IDisposable
@@ -508,11 +506,11 @@ namespace Myra.Graphics2D
 			switch (_textureFiltering)
 			{
 				case TextureFiltering.Nearest:
-					return MyraEnvironment.Game.GraphicsDevice.SamplerStates.PointClamp;
+					return MyraEnvironment.GraphicsDevice.SamplerStates.PointClamp;
 				case TextureFiltering.Linear:
-					return MyraEnvironment.Game.GraphicsDevice.SamplerStates.LinearClamp;
+					return MyraEnvironment.GraphicsDevice.SamplerStates.LinearClamp;
 				case TextureFiltering.Anisotropic:
-					return MyraEnvironment.Game.GraphicsDevice.SamplerStates.AnisotropicClamp;
+					return MyraEnvironment.GraphicsDevice.SamplerStates.AnisotropicClamp;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
