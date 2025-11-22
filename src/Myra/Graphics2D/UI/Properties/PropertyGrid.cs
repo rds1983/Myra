@@ -1210,7 +1210,7 @@ namespace Myra.Graphics2D.UI.Properties
 				}
 				else if (propertyType == typeof(SpriteFontBase))
 				{
-					valueWidget = CreateFileEditor(record, hasSetter, "*.fnt", name => Settings.AssetManager.LoadFont(name));
+					valueWidget = CreateFileEditor(record, hasSetter, "*.fnt", name => Settings.AssetManager.MyraLoadFont(name));
 				}
 				else if (propertyType == typeof(IBrush))
 				{

@@ -7,12 +7,11 @@
     <RootNamespace>Myra</RootNamespace>
     <Description>UI Library for MonoGame, FNA and Stride</Description>
     <VersionPrefix>1.5.10</VersionPrefix>
-    <XNAssetsVersion>0.7.7</XNAssetsVersion>
-    <FontStashSharpVersion>1.4.1</FontStashSharpVersion>
-    <LangVersion>8.0</LangVersion>
+    <XNAssetsVersion>0.8.2</XNAssetsVersion>
+    <FontStashSharpVersion>1.5.2</FontStashSharpVersion>
     <InfoLundinMathVersion>1.2.6</InfoLundinMathVersion>
     <MonoGameVersion>3.8.0.1641</MonoGameVersion>
-    <AppMonoGameVersion>3.8.4</AppMonoGameVersion>
+    <AppMonoGameVersion>3.8.4.1</AppMonoGameVersion>
     <StrideVersion>4.2.0.2067</StrideVersion>
     <AppTargetFramework>net8.0</AppTargetFramework>
   </PropertyGroup>
