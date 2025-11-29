@@ -38,6 +38,7 @@ namespace Myra.Graphics2D.UI
 #if MONOGAME
 		private bool _isAnisotropicFiltering = false;
 
+		[DefaultValue(false)]
 		public bool IsAnisotropicFiltering
 		{
 			get
