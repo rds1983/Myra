@@ -23,7 +23,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GdxSkinImport.MonoGdx;
 
-public class TextureAtlas : IDisposable
+public class TextureAtlas
 {
 	public class TextureAtlasData
 	{
@@ -271,57 +271,13 @@ public class TextureAtlas : IDisposable
 			Load(graphicsDevice, data);
 	}
 
-	public TextureAtlas(ContentManager contentManager, string packFile)
-		: this(contentManager, packFile, Path.GetDirectoryName(packFile))
-	{ }
-
-	public TextureAtlas(ContentManager contentManager, string packFile, bool flip)
-		: this(contentManager, packFile, Path.GetDirectoryName(packFile), flip)
-	{ }
-
-	public TextureAtlas(ContentManager contentManager, string packFile, string imagesDir)
-		: this(contentManager, packFile, imagesDir, false)
-	{ }
-
-	public TextureAtlas(ContentManager contentManager, string packFile, string imagesDir, bool flip)
-		: this(contentManager, new TextureAtlasData(Path.Combine(contentManager.RootDirectory, packFile), imagesDir, flip))
-	{ }
-
-	public TextureAtlas(ContentManager contentManager, TextureAtlasData data)
-	{
-		Textures = new HashSet<TextureContext>();
-		Regions = new List<AtlasRegion>();
-
-		if (data != null)
-			Load(contentManager, data);
-	}
-
-	private void Load(ContentManager contentManager, TextureAtlasData data)
-	{
-		Dictionary<TextureAtlasData.Page, TextureContext> pageToTexture = new Dictionary<TextureAtlasData.Page, TextureContext>();
-
-		foreach (var page in data.Pages)
-		{
-			TextureContext texture = page.Texture ?? new TextureContext(contentManager, page.TextureFile, false);
-
-			texture.Filter = page.Filter;
-			texture.WrapU = page.UWrap;
-			texture.WrapV = page.VWrap;
-
-			Textures.Add(texture);
-			pageToTexture[page] = texture;
-		}
-
-		LoadRegions(data, pageToTexture);
-	}
-
 	private void Load(GraphicsDevice graphicsDevice, TextureAtlasData data)
 	{
 		Dictionary<TextureAtlasData.Page, TextureContext> pageToTexture = new Dictionary<TextureAtlasData.Page, TextureContext>();
 
 		foreach (var page in data.Pages)
 		{
-			TextureContext texture = page.Texture ?? new TextureContext(graphicsDevice, page.TextureFile, true);
+			TextureContext texture = page.Texture ?? new TextureContext(graphicsDevice, page.TextureFile);
 
 			texture.Filter = page.Filter;
 			texture.WrapU = page.UWrap;
@@ -507,14 +463,6 @@ public class TextureAtlas : IDisposable
 	}
 
 	public HashSet<TextureContext> Textures { get; private set; }
-
-	public void Dispose()
-	{
-		foreach (TextureContext texture in Textures)
-			texture.Dispose();
-
-		Textures.Clear();
-	}
 
 	static int IndexComparator(TextureAtlasData.Region region1, TextureAtlasData.Region region2)
 	{

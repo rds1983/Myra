@@ -1,12 +1,9 @@
 ﻿using GdxSkinImport.MonoGdx;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
+using Myra;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
 using System.IO;
-using System.Text.Json;
 
 namespace GdxSkinImport;
 
@@ -35,18 +32,9 @@ public class Game1 : Game
 
 	protected override void LoadContent()
 	{
-		TextureAtlas atlas = null;
-		var atlasFile = Path.ChangeExtension(_inputFile, "atlas");
-		if (File.Exists(atlasFile))
-		{
-			atlas = new TextureAtlas(GraphicsDevice, atlasFile);
-		}
+		MyraEnvironment.Game = this;
 
-		Dictionary<string, object> data;
-		using (TextReader reader = new StreamReader(_inputFile))
-		{
-			data = Json.Deserialize(reader) as Dictionary<string, object>;
-		}
+		var stylesheet = Converter.ImportGdx(GraphicsDevice, _inputFile);
 
 		Exit();
 	}

@@ -17,90 +17,20 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace GdxSkinImport.MonoGdx;
 
-public class TextureContext : IDisposable
+public class TextureContext
 {
 	private static Dictionary<int, SamplerState> _samplerCache = new Dictionary<int, SamplerState>();
 
-	private Texture2D _texture;
 	private TextureFilter _filter = TextureFilter.Point;
 	private TextureAddressMode _wrapU = TextureAddressMode.Clamp;
 	private TextureAddressMode _wrapV = TextureAddressMode.Clamp;
 	private SamplerState _samplerState;
 
-	public TextureContext(Texture2D texture)
-	{
-		_texture = texture;
-	}
-
-	public TextureContext(GraphicsDevice graphicsDevice, Stream stream, bool premultiplyAlpha)
-	{
-		_texture = Texture2D.FromStream(graphicsDevice, stream);
-
-		if (premultiplyAlpha)
-			PremultiplyTexture(_texture);
-	}
-
-	public TextureContext(GraphicsDevice graphicsDevice, string file, bool premultiplyAlpha)
-	{
-		using (FileStream fs = File.OpenRead(file))
-		{
-			_texture = Texture2D.FromStream(graphicsDevice, fs);
-		}
-
-		if (premultiplyAlpha)
-			PremultiplyTexture(_texture);
-	}
-
-	public TextureContext(ContentManager contentManager, string assetName, bool premultiplyAlpha)
-	{
-		_texture = contentManager.Load<Texture2D>(assetName);
-
-		if (premultiplyAlpha)
-			PremultiplyTexture(_texture);
-	}
-
-	public void Dispose()
-	{
-		Dispose(true);
-		GC.SuppressFinalize(this);
-	}
-
-	protected virtual void Dispose(bool disposing)
-	{
-		if (disposing)
-		{
-			if (_texture != null)
-				_texture.Dispose();
-		}
-	}
-
-	private static void PremultiplyTexture(Texture2D tex)
-	{
-		byte[] data = new byte[tex.Width * tex.Height * 4];
-		tex.GetData(data);
-
-		for (int i = 0; i < data.Length; i += 4)
-		{
-			float a = data[i + 3] / 255f;
-			data[i + 0] = (byte)(data[i + 0] * a);
-			data[i + 1] = (byte)(data[i + 1] * a);
-			data[i + 2] = (byte)(data[i + 2] * a);
-			//data[i + 3] = (byte)(data[i + 3] * a);
-		}
-
-		tex.SetData(data);
-	}
-
-	public Texture2D Texture
-	{
-		get { return _texture; }
-		set { _texture = value; }
-	}
+	public string TexturePath { get; }
 
 	public TextureFilter Filter
 	{
@@ -163,18 +93,20 @@ public class TextureContext : IDisposable
 		}
 	}
 
-	public int Width
-	{
-		get { return _texture.Width; }
-	}
+	public Texture2D Texture { get; }
 
-	public int Height
-	{
-		get { return _texture.Height; }
-	}
+	public int Width => Texture.Width;
+
+	public int Height => Texture.Height;
 
 	private int Key
 	{
 		get { return (byte)Filter << 16 | (byte)WrapU << 8 | (byte)WrapV; }
+	}
+
+	public TextureContext(GraphicsDevice device, string texturePath)
+	{
+		TexturePath = texturePath;
+		Texture = Texture2D.FromFile(device, texturePath);
 	}
 }
