@@ -41,11 +41,24 @@ internal static class Utility
 		return path;
 	}
 
+	public static float ParseFloat(this Dictionary<string, object> data, string key, float def = 0.0f)
+	{
+		object obj;
+		if (!data.TryGetValue(key, out obj))
+		{
+			return def;
+		}
+
+		return float.Parse(obj.ToString());
+	}
+
 	public static Color ParseColor(this Dictionary<string, object> data)
 	{
-		return new Color(float.Parse(data["r"].ToString()),
-			float.Parse(data["g"].ToString()),
-			float.Parse(data["b"].ToString()),
-			float.Parse(data["a"].ToString()));
+		return new Color(data.ParseFloat("r"),
+			data.ParseFloat("g"),
+			data.ParseFloat("b"),
+			data.ParseFloat("a"));
 	}
+
+	public static string GetString(this Dictionary<string, object> data, string key) => data[key].ToString();
 }

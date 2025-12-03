@@ -34,7 +34,9 @@ public class Game1 : Game
 	{
 		MyraEnvironment.Game = this;
 
-		var stylesheet = Converter.ImportGdx(GraphicsDevice, _inputFile);
+		var converter = new Converter(GraphicsDevice, _inputFile);
+
+		var stylesheet = converter.Process();
 
 		Exit();
 	}
