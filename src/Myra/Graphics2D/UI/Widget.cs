@@ -850,19 +850,24 @@ namespace Myra.Graphics2D.UI
 			context.Transform = Transform;
 
 			Rectangle? oldScissorRectangle = null;
-			if (ClipToBounds && context.Transform.Rotation == 0)
+			if (context.Transform.Rotation.IsZero())
 			{
-				oldScissorRectangle = context.Scissor;
 				var absoluteBounds = context.Transform.Apply(Bounds);
-				var newScissorRectangle = Rectangle.Intersect(context.Scissor, absoluteBounds);
+				var scissorBounds = Rectangle.Intersect(context.Scissor, absoluteBounds);
 
-				if (newScissorRectangle.Width == 0 || newScissorRectangle.Height == 0)
+				if (scissorBounds.Width == 0 || scissorBounds.Height == 0)
 				{
+					// Culled by scissor
 					context.Transform = oldTransform;
 					return;
 				}
 
-				context.Scissor = newScissorRectangle;
+				if (ClipToBounds)
+				{
+					oldScissorRectangle = context.Scissor;
+
+					context.Scissor = scissorBounds;
+				}
 			}
 
 			var oldOpacity = context.Opacity;
@@ -1431,7 +1436,7 @@ namespace Myra.Graphics2D.UI
 			result.CopyFrom(this);
 
 			// Copy attached properties
-			foreach(var pair in AttachedPropertiesValues)
+			foreach (var pair in AttachedPropertiesValues)
 			{
 				result.AttachedPropertiesValues[pair.Key] = pair.Value;
 			}
