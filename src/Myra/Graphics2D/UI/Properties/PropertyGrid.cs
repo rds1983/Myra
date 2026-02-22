@@ -43,10 +43,10 @@ namespace Myra.Graphics2D.UI.Properties
 		private readonly List<Record> _recMemory = new List<Record>(ALLOC);
 		private readonly List<PropertyEditor> _editors = new List<PropertyEditor>(ALLOC);
 		private readonly HashSet<string> _expandedCategories = new HashSet<string>();
+		private readonly PropertyGridSettings _settings = new PropertyGridSettings();
 		private object _object;
 		private bool _ignoreCollections;
 		private bool _doFancyLayout = true;
-		private readonly PropertyGridSettings _settings = new PropertyGridSettings();
 		private string _filter;
 		private Type _parentType;
 		
@@ -315,145 +315,6 @@ namespace Myra.Graphics2D.UI.Properties
 
 			return cv;
 		}
-/*
-		private Grid CreateBrushEditor(Record record, bool hasSetter)
-		{
-			var propertyType = record.Type;
-
-			var value = record.GetValue(_object) as SolidBrush;
-
-			var subGrid = new Grid
-			{
-				ColumnSpacing = 8,
-				HorizontalAlignment = HorizontalAlignment.Stretch
-			};
-
-			subGrid.ColumnsProportions.Add(new Proportion());
-			subGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
-
-			var color = Color.Transparent;
-			if (value != null)
-			{
-				color = value.Color;
-			}
-
-			var image = new Image
-			{
-				Renderable = Stylesheet.Current.WhiteRegion,
-				VerticalAlignment = VerticalAlignment.Center,
-				Width = 32,
-				Height = 16,
-				Color = color
-			};
-
-			subGrid.Widgets.Add(image);
-
-			var button = new Button
-			{
-				Tag = value,
-				HorizontalAlignment = HorizontalAlignment.Stretch,
-				Content = new Label
-				{
-					Text = "Change...",
-					HorizontalAlignment = HorizontalAlignment.Center,
-				}
-			};
-			Grid.SetColumn(button, 1);
-
-			subGrid.Widgets.Add(button);
-
-			if (hasSetter)
-			{
-				button.Click += (sender, args) =>
-				{
-					var dlg = new ColorPickerDialog()
-					{
-						Color = image.Color
-					};
-
-					dlg.Closed += (s, a) =>
-					{
-						if (!dlg.Result)
-						{
-							return;
-						}
-
-						image.Color = dlg.Color;
-						SetValue(record, _object, new SolidBrush(dlg.Color));
-						var baseObject = _object as BaseObject;
-						if (baseObject != null)
-						{
-							baseObject.Resources[record.Name] = dlg.Color.ToHexString();
-						}
-						FireChanged(propertyType.Name);
-					};
-
-					dlg.ShowModal(Desktop);
-				};
-			}
-			else
-			{
-				button.Enabled = false;
-			}
-
-			return subGrid;
-		}
-
-		private Grid CreateCollectionEditor(Record record, Type itemType)
-		{
-			var value = record.GetValue(_object);
-
-			var items = (IList)value;
-
-			var subGrid = new Grid
-			{
-				ColumnSpacing = 8,
-				HorizontalAlignment = HorizontalAlignment.Stretch
-			};
-
-			subGrid.ColumnsProportions.Add(new Proportion());
-			subGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
-
-			var label = new Label
-			{
-				VerticalAlignment = VerticalAlignment.Center,
-			};
-			UpdateLabelCount(label, items.Count);
-
-			subGrid.Widgets.Add(label);
-
-			var button = new Button
-			{
-				Tag = value,
-				HorizontalAlignment = HorizontalAlignment.Stretch,
-				Content = new Label
-				{
-					Text = "Change...",
-					HorizontalAlignment = HorizontalAlignment.Center,
-				}
-			};
-			Grid.SetColumn(button, 1);
-
-			button.Click += (sender, args) =>
-			{
-				var collectionEditor = new CollectionEditor(items, itemType);
-
-				var dialog = Dialog.CreateMessageBox("Edit", collectionEditor);
-
-				dialog.ButtonOk.Click += (o, eventArgs) =>
-				{
-					collectionEditor.SaveChanges();
-					UpdateLabelCount(label, items.Count);
-				};
-
-				dialog.ShowModal(Desktop);
-			};
-
-			subGrid.Widgets.Add(button);
-
-			return subGrid;
-		}
-
 		private Grid CreateFileEditor<T>(Record record, bool hasSetter, string filter, Func<string, T> loader)
 		{
 			if (Settings.AssetManager == null)
@@ -555,7 +416,7 @@ namespace Myra.Graphics2D.UI.Properties
 								Settings.ImagePropertyValueSetter(record.Name, filePath);
 							}
 
-							FireChanged(propertyType.Name);
+							(this as IInspector).FireChanged(propertyType.Name);
 						}
 						catch (Exception)
 						{
@@ -573,34 +434,29 @@ namespace Myra.Graphics2D.UI.Properties
 
 			return subGrid;
 		}
-
-		private Widget CreateAttributeFileEditor(Record record, bool hasSetter, FilePathAttribute attribute)
+/*
+		private Grid CreateCollectionEditor(Record record, Type itemType)
 		{
-			var propertyType = record.Type;
 			var value = record.GetValue(_object);
 
-			var result = new HorizontalStackPanel
+			var items = (IList)value;
+
+			var subGrid = new Grid
 			{
-				Spacing = 8
+				ColumnSpacing = 8,
+				HorizontalAlignment = HorizontalAlignment.Stretch
 			};
 
-			TextBox path = null;
-			if (attribute.ShowPath)
+			subGrid.ColumnsProportions.Add(new Proportion());
+			subGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
+
+			var label = new Label
 			{
-				path = new TextBox
-				{
-					Readonly = true,
-					HorizontalAlignment = HorizontalAlignment.Stretch
-				};
+				VerticalAlignment = VerticalAlignment.Center,
+			};
+			UpdateLabelCount(label, items.Count);
 
-				if (value != null)
-				{
-					path.Text = value.ToString();
-				}
-
-				StackPanel.SetProportionType(path, ProportionType.Fill);
-				result.Widgets.Add(path);
-			}
+			subGrid.Widgets.Add(label);
 
 			var button = new Button
 			{
@@ -614,71 +470,26 @@ namespace Myra.Graphics2D.UI.Properties
 			};
 			Grid.SetColumn(button, 1);
 
-			if (hasSetter)
+			button.Click += (sender, args) =>
 			{
-				button.Click += (sender, args) =>
+				var collectionEditor = new CollectionEditor(items, itemType);
+
+				var dialog = Dialog.CreateMessageBox("Edit", collectionEditor);
+
+				dialog.ButtonOk.Click += (o, eventArgs) =>
 				{
-					var dlg = new FileDialog(attribute.DialogMode)
-					{
-						Filter = attribute.Filter
-					};
-
-					if (value != null)
-					{
-						var filePath = value.ToString();
-						if (!Path.IsPathRooted(filePath) && !string.IsNullOrEmpty(Settings.BasePath))
-						{
-							filePath = Path.Combine(Settings.BasePath, filePath);
-						}
-						dlg.FilePath = filePath;
-					}
-					else if (!string.IsNullOrEmpty(Settings.BasePath))
-					{
-						dlg.Folder = Settings.BasePath;
-					}
-
-					dlg.Closed += (s, a) =>
-					{
-						if (!dlg.Result)
-						{
-							return;
-						}
-
-						try
-						{
-							var filePath = dlg.FilePath;
-							if (!string.IsNullOrEmpty(Settings.BasePath))
-							{
-								filePath = PathUtils.TryToMakePathRelativeTo(filePath, Settings.BasePath);
-							}
-
-							if (path != null)
-							{
-								path.Text = filePath;
-							}
-
-							SetValue(record, _object, filePath);
-
-							FireChanged(propertyType.Name);
-						}
-						catch (Exception)
-						{
-						}
-					};
-
-					dlg.ShowModal(Desktop);
+					collectionEditor.SaveChanges();
+					UpdateLabelCount(label, items.Count);
 				};
-			}
-			else
-			{
-				button.Enabled = false;
-			}
 
-			result.Widgets.Add(button);
+				dialog.ShowModal(Desktop);
+			};
 
-			return result;
-		}
-*/
+			subGrid.Widgets.Add(button);
+
+			return subGrid;
+		}*/
+
 		private void FillSubGrid(ref int y, IReadOnlyList<Record> records)
 		{
 			for (var i = 0; i < records.Count; ++i)
@@ -718,23 +529,7 @@ namespace Myra.Graphics2D.UI.Properties
 					{
 						needsSubGrid = true;
 					}
-				}
-				else if (PropertyEditor.TryCreate(this, record, out PropertyEditor editor))
-				{
-					_editors.Add(editor);
-					valueWidget = editor.Widget;
-				}
-				
-				/*
-				else if (propertyType == typeof(string) && record.FindAttribute<FilePathAttribute>() != null)
-				{
-					var filePathAttr = record.FindAttribute<FilePathAttribute>();
-					valueWidget = CreateAttributeFileEditor(record, hasSetter, filePathAttr);
-				}
-				else if (propertyType == typeof(string) || propertyType.IsPrimitive || propertyType.IsNullablePrimitive())
-				{
-					valueWidget = CreateStringEditor(record, hasSetter);
-				}
+				} /*
 				else if (typeof(IList).IsAssignableFrom(propertyType))
 				{
 					if (!IgnoreCollections)
@@ -749,7 +544,7 @@ namespace Myra.Graphics2D.UI.Properties
 							}
 						}
 					}
-				}
+				}*/
 				else if (propertyType == typeof(SpriteFontBase))
 				{
 					valueWidget = CreateFileEditor(record, hasSetter, "*.fnt", name => Settings.AssetManager.LoadFont(name));
@@ -770,6 +565,11 @@ namespace Myra.Graphics2D.UI.Properties
 				}
 #endif
 #endif
+				else if (PropertyEditor.TryCreate(this, record, out PropertyEditor editor))
+				{
+					_editors.Add(editor);
+					valueWidget = editor.Widget;
+				}
 				else
 				{
 					if (value == null)
@@ -779,12 +579,13 @@ namespace Myra.Graphics2D.UI.Properties
 						tb.Text = "null";
 
 						valueWidget = tb;
-					} else
+					} 
+					else
 					{
 						needsSubGrid = true;
 					}
 				}
-				*/
+				
 				
 				if (valueWidget != null) //Add single value display
 				{
@@ -841,8 +642,6 @@ namespace Myra.Graphics2D.UI.Properties
 							_layout.RowsProportions.Add(rowProportion);
 							++y;
 						}
-
-						continue;
 					}
 				}
 			}

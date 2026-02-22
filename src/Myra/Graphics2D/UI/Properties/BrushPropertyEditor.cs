@@ -11,6 +11,7 @@ namespace Myra.Graphics2D.UI.Properties
 	[PropertyEditor(typeof(BrushPropertyEditor), typeof(IBrush))]
 	public class BrushPropertyEditor : PropertyEditor<IBrush>
 	{
+		private Image _imgDisplay;
 		public BrushPropertyEditor(IInspector owner, Record methodInfo) : base(owner, methodInfo)
 		{
 			
@@ -100,13 +101,22 @@ namespace Myra.Graphics2D.UI.Properties
 				button.Enabled = false;
 			}
 
-			widget = subGrid;
+			_imgDisplay = image;
+			Widget = widget = subGrid;
 			return true;
         }
         
         public override void SetWidgetValue(object value)
         {
-	        Console.WriteLine("BrushPropertyEditor SetWidgetValue Not implemented");
+	        if(_imgDisplay == null || value == null)
+		        return;
+	        
+	        if (value is Color color)
+		        _imgDisplay.Color = color;
+	        else if (value is SolidBrush sBrush)
+		        _imgDisplay.Color = sBrush.Color;
+	        else if(value is IBrush otherBrush)
+		        Console.WriteLine($"Can't display IBrush type: {otherBrush.GetType()}");
         }
 	}
 }

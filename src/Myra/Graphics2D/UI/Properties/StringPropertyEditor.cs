@@ -1,4 +1,7 @@
 using System;
+using System.IO;
+using Myra.Attributes;
+using Myra.Graphics2D.UI.File;
 using Myra.Utility;
 
 namespace Myra.Graphics2D.UI.Properties
@@ -6,15 +9,18 @@ namespace Myra.Graphics2D.UI.Properties
     [PropertyEditor(typeof(StringPropertyEditor), typeof(string))]
     public sealed class StringPropertyEditor : PropertyEditor<string>
     {
+        private readonly FilePathAttribute _filePath;
         public StringPropertyEditor(IInspector owner, Record methodInfo) : base(owner, methodInfo)
         {
-            
+            _filePath = methodInfo.FindAttribute<FilePathAttribute>();
         }
 
         protected override bool CreatorPicker(out WidgetCreatorDelegate creatorDelegate)
         {
-            creatorDelegate = CreateTextBox;
-            // CreateTextBoxAsFilePath
+            if (_filePath == null)
+                creatorDelegate = CreateTextBox;
+            else
+                creatorDelegate = CreateTextBoxAsFilePath;
             return true;
         }
         
@@ -93,20 +99,10 @@ namespace Myra.Graphics2D.UI.Properties
             return true;
         }
         
-        public override void SetWidgetValue(object value)
+        private bool CreateTextBoxAsFilePath(out Widget widget)
         {
-            var tb = Widget as TextBox;
-            if (value == null)
-                tb.Text = string.Empty;
-            else if (value is string str)
-                tb.Text = str;
-        }
-
-        /*
-        private bool CreateTextBoxAsFilePath(Record record, out Widget widget)
-        {
-            var propertyType = record.Type;
-            var value = record.GetValue(Owner.SelectedField);
+            var propertyType = _record.Type;
+            var value = _record.GetValue(_owner.SelectedField);
 
             var result = new HorizontalStackPanel
             {
@@ -114,7 +110,7 @@ namespace Myra.Graphics2D.UI.Properties
             };
 
             TextBox path = null;
-            if (attribute.ShowPath)
+            if (_filePath.ShowPath)
             {
                 path = new TextBox
                 {
@@ -143,27 +139,27 @@ namespace Myra.Graphics2D.UI.Properties
             };
             Grid.SetColumn(button, 1);
 
-            if (Record.HasSetter)
+            if (_record.HasSetter)
             {
                 button.Click += (sender, args) =>
                 {
-                    var dlg = new FileDialog(attribute.DialogMode)
+                    var dlg = new FileDialog(_filePath.DialogMode)
                     {
-                        Filter = attribute.Filter
+                        Filter = _filePath.Filter
                     };
 
                     if (value != null)
                     {
                         var filePath = value.ToString();
-                        if (!Path.IsPathRooted(filePath) && !string.IsNullOrEmpty(Owner.BasePath))
+                        if (!Path.IsPathRooted(filePath) && !string.IsNullOrEmpty(_owner.BasePath))
                         {
-                            filePath = Path.Combine(Owner.BasePath, filePath);
+                            filePath = Path.Combine(_owner.BasePath, filePath);
                         }
                         dlg.FilePath = filePath;
                     }
-                    else if (!string.IsNullOrEmpty(Owner.BasePath))
+                    else if (!string.IsNullOrEmpty(_owner.BasePath))
                     {
-                        dlg.Folder = Owner.BasePath;
+                        dlg.Folder = _owner.BasePath;
                     }
 
                     dlg.Closed += (s, a) =>
@@ -176,9 +172,9 @@ namespace Myra.Graphics2D.UI.Properties
                         try
                         {
                             var filePath = dlg.FilePath;
-                            if (!string.IsNullOrEmpty(Owner.BasePath))
+                            if (!string.IsNullOrEmpty(_owner.BasePath))
                             {
-                                filePath = PathUtils.TryToMakePathRelativeTo(filePath, Owner.BasePath);
+                                filePath = PathUtils.TryToMakePathRelativeTo(filePath, _owner.BasePath);
                             }
 
                             if (path != null)
@@ -186,16 +182,16 @@ namespace Myra.Graphics2D.UI.Properties
                                 path.Text = filePath;
                             }
 
-                            SetValue(record, _object, filePath);
+                            SetValue(_owner.SelectedField, filePath);
 
-                            Owner.FireChanged(propertyType.Name);
+                            _owner.FireChanged(propertyType.Name);
                         }
                         catch (Exception)
                         {
                         }
                     };
 
-                    dlg.ShowModal(Owner.Desktop);
+                    dlg.ShowModal(_owner.Desktop);
                 };
             }
             else
@@ -206,6 +202,15 @@ namespace Myra.Graphics2D.UI.Properties
             result.Widgets.Add(button);
             widget = result;
             return true;
-        }*/
+        }
+        
+        public override void SetWidgetValue(object value)
+        {
+            var tb = Widget as TextBox;
+            if (value == null)
+                tb.Text = string.Empty;
+            else if (value is string str)
+                tb.Text = str;
+        }
     }
 }
