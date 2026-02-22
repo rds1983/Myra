@@ -19,7 +19,7 @@
         </HorizontalStackPanel>
         <HorizontalStackPanel Spacing="8">
           <Label Text="Font Size:" />
-          <SpinButton Value="32" Width="40" Id="_spinButtonFontSize" />
+          <SpinButton GenericTypeArg="float" Value="32" Increment="1" Mul_Increment="1" DecimalPlaces="0" Width="40" Id="_spinButtonFontSize" />
           <Label Text="Scale:" />
           <Label Text="0.1" />
           <VerticalStackPanel>
@@ -44,17 +44,17 @@
         </HorizontalStackPanel>
         <HorizontalStackPanel Spacing="8">
           <Label Text="Resolution Factor:" />
-          <SpinButton Minimum="1" Value="1" Width="40" Id="_spinButtonResolutionFactor" />
+          <SpinButton GenericTypeArg="float" Minimum="1" Value="1" Increment="1" Mul_Increment="1" DecimalPlaces="0" Width="40" Id="_spinButtonResolutionFactor" />
           <Label Text="Kernel Width:" />
-          <SpinButton Minimum="0" Width="40" Id="_spinButtonKernelWidth" />
+          <SpinButton GenericTypeArg="float" Minimum="0" Value="0" Increment="1" Mul_Increment="1" DecimalPlaces="0" Width="40" Id="_spinButtonKernelWidth" />
           <Label Text="Kernel Height:" />
-          <SpinButton Minimum="0" Width="40" Id="_spinButtonKernelHeight" />
+          <SpinButton GenericTypeArg="float" Minimum="0" Value="0" Increment="1" Mul_Increment="1" DecimalPlaces="0" Width="40" Id="_spinButtonKernelHeight" />
         </HorizontalStackPanel>
       </VerticalStackPanel>
       <HorizontalSeparator />
       <HorizontalStackPanel StackPanel.ProportionType="Part">
         <HorizontalStackPanel.DefaultProportion Type="Part" />
-        <ScrollViewer>
+        <ScrollViewer ScrollMultiplier="10">
           <TextBox Text="/tuThe quick brown/n/ts/c[blue]fox jumps over/n/td/c[green]the lazy dog" Multiline="True" Wrap="True" VerticalAlignment="Stretch" Id="_textBoxText" />
         </ScrollViewer>
         <Image Id="_imageTexture" />

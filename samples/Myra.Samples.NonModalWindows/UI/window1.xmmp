@@ -7,17 +7,17 @@
         <Grid.DefaultColumnProportion Type="Auto" />
         <Grid.DefaultRowProportion Type="Auto" />
         <Label Text="Strength" />
-        <SpinButton Value="5" Width="50" Grid.Column="1" />
+        <SpinButton GenericTypeArg="float" Value="5" Increment="1" Mul_Increment="1" DecimalPlaces="0" Width="50" Grid.Column="1" />
         <Label Text="Dexterity" Grid.Row="1" />
-        <SpinButton Value="5" Width="50" Grid.Column="1" Grid.Row="1" />
+        <SpinButton GenericTypeArg="float" Value="5" Increment="1" Mul_Increment="1" DecimalPlaces="0" Width="50" Grid.Column="1" Grid.Row="1" />
         <Label Text="Constitution" Grid.Row="2" />
-        <SpinButton Value="5" Width="50" Grid.Column="1" Grid.Row="2" />
+        <SpinButton GenericTypeArg="float" Value="5" Increment="1" Mul_Increment="1" DecimalPlaces="0" Width="50" Grid.Column="1" Grid.Row="2" />
         <Label Text="Intelligence" Grid.Row="3" />
-        <SpinButton Value="5" Width="50" Grid.Column="1" Grid.Row="3" />
+        <SpinButton GenericTypeArg="float" Value="5" Increment="1" Mul_Increment="1" DecimalPlaces="0" Width="50" Grid.Column="1" Grid.Row="3" />
         <Label Text="Wisdom" Grid.Row="4" />
-        <SpinButton Value="5" Width="50" Grid.Column="1" Grid.Row="4" />
+        <SpinButton GenericTypeArg="float" Value="5" Increment="1" Mul_Increment="1" DecimalPlaces="0" Width="50" Grid.Column="1" Grid.Row="4" />
         <Label Text="Charisma" Grid.Row="5" />
-        <SpinButton Value="5" Width="50" Grid.Column="1" Grid.Row="5" />
+        <SpinButton GenericTypeArg="float" Value="5" Increment="1" Mul_Increment="1" DecimalPlaces="0" Width="50" Grid.Column="1" Grid.Row="5" />
       </Grid>
     </VerticalStackPanel>
   </Window>

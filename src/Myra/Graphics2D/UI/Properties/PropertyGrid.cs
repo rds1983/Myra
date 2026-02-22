@@ -280,7 +280,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 			record.SetValue(obj, value);
 		}
-/*
+
 		private ComboView CreateCustomValuesEditor(Record record, CustomValues customValues, bool hasSetter)
 		{
 			var propertyType = record.Type;
@@ -305,7 +305,7 @@ namespace Myra.Graphics2D.UI.Properties
 				{
 					var item = cv.SelectedIndex != null ? customValues.Values[cv.SelectedIndex.Value].Value : null;
 					SetValue(record, _object, item);
-					FireChanged(record.Name);
+					(this as IInspector).FireChanged(record.Name);
 				};
 			}
 			else
@@ -315,118 +315,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 			return cv;
 		}
-
-		private CheckButton CreateBooleanEditor(Record record, bool hasSetter)
-		{
-			var propertyType = record.Type;
-			var value = record.GetValue(_object);
-
-			var isChecked = (bool)value;
-			var cb = new CheckButton
-			{
-				IsChecked = isChecked
-			};
-
-			if (hasSetter)
-			{
-				cb.Click += (sender, args) =>
-				{
-					SetValue(record, _object, cb.IsChecked);
-					FireChanged(propertyType.Name);
-				};
-			}
-			else
-			{
-				cb.Enabled = false;
-			}
-
-			return cb;
-		}
-
-		private Grid CreateColorEditor(Record record, bool hasSetter)
-		{
-			var propertyType = record.Type;
-			var value = record.GetValue(_object);
-
-			var subGrid = new Grid
-			{
-				ColumnSpacing = 8,
-				HorizontalAlignment = HorizontalAlignment.Stretch
-			};
-
-			var isColor = propertyType == typeof(Color);
-
-			subGrid.ColumnsProportions.Add(new Proportion());
-			subGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
-
-			var color = Color.Transparent;
-			if (isColor)
-			{
-				color = (Color)value;
-			}
-			else if (value != null)
-			{
-				color = ((Color?)value).Value;
-			}
-
-			var image = new Image
-			{
-				Renderable = Stylesheet.Current.WhiteRegion,
-				VerticalAlignment = VerticalAlignment.Center,
-				Width = 32,
-				Height = 16,
-				Color = color
-			};
-
-			subGrid.Widgets.Add(image);
-
-			var button = new Button
-			{
-				Tag = value,
-				HorizontalAlignment = HorizontalAlignment.Stretch,
-				Content = new Label
-				{
-					HorizontalAlignment = HorizontalAlignment.Center,
-					Text = "Change..."
-				}
-			};
-			Grid.SetColumn(button, 1);
-
-			subGrid.Widgets.Add(button);
-
-			if (hasSetter)
-			{
-				button.Click += (sender, args) =>
-				{
-					var dlg = new ColorPickerDialog()
-					{
-						Color = image.Color
-					};
-
-					dlg.Closed += (s, a) =>
-					{
-						if (!dlg.Result)
-						{
-							return;
-						}
-
-						image.Color = dlg.Color;
-						SetValue(record, _object, dlg.Color);
-
-						FireChanged(propertyType.Name);
-					};
-
-					dlg.ShowModal(Desktop);
-				};
-			}
-			else
-			{
-				button.Enabled = false;
-			}
-
-			return subGrid;
-		}
-
+/*
 		private Grid CreateBrushEditor(Record record, bool hasSetter)
 		{
 			var propertyType = record.Type;
@@ -508,215 +397,6 @@ namespace Myra.Graphics2D.UI.Properties
 			}
 
 			return subGrid;
-		}
-
-		private ComboView CreateEnumEditor(Record record, bool hasSetter)
-		{
-			var propertyType = record.Type;
-			var value = record.GetValue(_object);
-
-			var isNullable = propertyType.IsNullableEnum();
-			var enumType = isNullable ? propertyType.GetNullableType() : propertyType;
-			var values = Enum.GetValues(enumType);
-
-			var cv = new ComboView();
-
-			if (isNullable)
-			{
-				cv.Widgets.Add(new Label
-				{
-					Text = string.Empty
-				});
-			}
-
-			foreach (var v in values)
-			{
-				cv.Widgets.Add(new Label
-				{
-					Text = v.ToString(),
-					Tag = v
-				});
-			}
-
-			var selectedIndex = Array.IndexOf(values, value);
-			if (isNullable)
-			{
-				++selectedIndex;
-			}
-			cv.SelectedIndex = selectedIndex;
-
-			if (hasSetter)
-			{
-				cv.SelectedIndexChanged += (sender, args) =>
-				{
-					if (cv.SelectedIndex != -1)
-					{
-						SetValue(record, _object, cv.SelectedItem.Tag);
-						FireChanged(record.Name);
-					}
-				};
-			}
-			else
-			{
-				cv.Enabled = false;
-			}
-
-			return cv;
-		}
-
-		private SpinButton CreateNumericEditor(Record record, bool hasSetter)
-		{
-			var propertyType = record.Type;
-			var value = record.GetValue(_object);
-
-			var numericType = propertyType;
-			if (propertyType.IsNullablePrimitive())
-			{
-				numericType = propertyType.GetNullableType();
-			}
-
-			var spinButton = new SpinButton
-			{
-				Integer = numericType.IsNumericInteger(),
-				Nullable = propertyType.IsNullablePrimitive(),
-				Value = value != null ? (float)Convert.ChangeType(value, typeof(float)) : default(float?)
-			};
-
-			var rangeAttribute = record.FindAttribute<RangeAttribute>();
-			if (rangeAttribute != null)
-			{
-				spinButton.Minimum = rangeAttribute.Minimum;
-				spinButton.Maximum = rangeAttribute.Maximum;
-			}
-
-			if (hasSetter)
-			{
-				spinButton.ValueChanged += (sender, args) =>
-				{
-					try
-					{
-						object result;
-
-						if (spinButton.Value != null)
-						{
-							result = Convert.ChangeType(spinButton.Value.Value, numericType);
-						}
-						else
-						{
-							result = null;
-						}
-
-						SetValue(record, _object, result);
-
-						if (record.Type.IsValueType)
-						{
-							// Handle structs
-							var tg = this;
-							var pg = tg._parentGrid;
-							while (pg != null && tg._parentProperty != null && tg._parentProperty.Type.IsValueType)
-							{
-								tg._parentProperty.SetValue(pg._object, tg._object);
-
-								if (!tg._parentProperty.Type.IsValueType)
-								{
-									break;
-								}
-
-								tg = pg;
-								pg = tg._parentGrid;
-							}
-						}
-
-						FireChanged(record.Name);
-					}
-					catch (InvalidCastException)
-					{
-						// TODO: Rework this ugly type conversion solution
-					}
-					catch (Exception ex)
-					{
-						spinButton.Value = args.OldValue;
-						var dialog = Dialog.CreateMessageBox("Error", ex.ToString());
-						dialog.ShowModal(Desktop);
-					}
-				};
-			}
-			else
-			{
-				spinButton.Enabled = false;
-			}
-
-			return spinButton;
-		}
-
-		private TextBox CreateStringEditor(Record record, bool hasSetter)
-		{
-			var propertyType = record.Type;
-			var value = record.GetValue(_object);
-
-			var tf = new TextBox
-			{
-				Text = value != null ? value.ToString() : string.Empty
-			};
-
-			if (hasSetter)
-			{
-				tf.TextChanged += (sender, args) =>
-				{
-					try
-					{
-						object result;
-
-						if (propertyType.IsNullablePrimitive())
-						{
-							if (string.IsNullOrEmpty(tf.Text))
-							{
-								result = null;
-							}
-							else
-							{
-								result = Convert.ChangeType(tf.Text, record.Type.GetNullableType());
-							}
-						}
-						else
-						{
-							result = Convert.ChangeType(tf.Text, record.Type);
-						}
-
-						SetValue(record, _object, result);
-
-						if (record.Type.IsValueType)
-						{
-							var tg = this;
-							var pg = tg._parentGrid;
-							while (pg != null && tg._parentProperty != null)
-							{
-								tg._parentProperty.SetValue(pg._object, tg._object);
-
-								if (!tg._parentProperty.Type.IsValueType)
-								{
-									break;
-								}
-
-								tg = pg;
-								pg = tg._parentGrid;
-							}
-						}
-
-						FireChanged(record.Name);
-					}
-					catch (Exception)
-					{
-						// TODO: Rework this ugly type conversion solution
-					}
-				};
-			}
-			else
-			{
-				tf.Enabled = false;
-			}
-
-			return tf;
 		}
 
 		private Grid CreateCollectionEditor(Record record, Type itemType)
@@ -1023,16 +703,8 @@ namespace Myra.Graphics2D.UI.Properties
 
 				var needsSubGrid = false;
 				
-				if (PropertyEditor.TryCreate(this, record, out PropertyEditor editor))
-				{
-					_editors.Add(editor);
-					valueWidget = editor.Widget;
-				}
-				
-				/*
 				if ((valueWidget = CustomWidgetProvider?.Invoke(record, _object)) != null)
 				{
-
 				}
 				else if (CustomValuesProvider != null && (customValues = CustomValuesProvider(_object, record)) != null)
 				{
@@ -1047,23 +719,13 @@ namespace Myra.Graphics2D.UI.Properties
 						needsSubGrid = true;
 					}
 				}
-				else if (propertyType == typeof(bool))
+				else if (PropertyEditor.TryCreate(this, record, out PropertyEditor editor))
 				{
-					valueWidget = CreateBooleanEditor(record, hasSetter);
+					_editors.Add(editor);
+					valueWidget = editor.Widget;
 				}
-				else if (propertyType == typeof(Color) || propertyType == typeof(Color?))
-				{
-					valueWidget = CreateColorEditor(record, hasSetter);
-				}
-				else if (propertyType.IsEnum || propertyType.IsNullableEnum())
-				{
-					valueWidget = CreateEnumEditor(record, hasSetter);
-				}
-				else if (propertyType.IsNumericType() ||
-						 (propertyType.IsNullablePrimitive() && propertyType.GetNullableType().IsNumericType()))
-				{
-					valueWidget = CreateNumericEditor(record, hasSetter);
-				}
+				
+				/*
 				else if (propertyType == typeof(string) && record.FindAttribute<FilePathAttribute>() != null)
 				{
 					var filePathAttr = record.FindAttribute<FilePathAttribute>();
@@ -1091,10 +753,6 @@ namespace Myra.Graphics2D.UI.Properties
 				else if (propertyType == typeof(SpriteFontBase))
 				{
 					valueWidget = CreateFileEditor(record, hasSetter, "*.fnt", name => Settings.AssetManager.LoadFont(name));
-				}
-				else if (propertyType == typeof(IBrush))
-				{
-					valueWidget = CreateBrushEditor(record, hasSetter);
 				}
 				else if (propertyType == typeof(IImage))
 				{

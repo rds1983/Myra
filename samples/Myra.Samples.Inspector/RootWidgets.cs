@@ -51,6 +51,7 @@ namespace Myra.Samples.Inspector
                 new SomeNumerics(),
                 new SomeNullableNumerics(),
                 _changingValues,
+                new SpinButton<int>(),
                 this,
                 propertyGrid,
                 InspectGame.Instance
