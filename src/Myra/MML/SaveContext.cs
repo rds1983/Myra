@@ -24,7 +24,7 @@ using Color = FontStashSharp.FSColor;
 
 namespace Myra.MML
 {
-	internal class SaveContext: BaseContext
+	internal class SaveContext : BaseContext
 	{
 		public Func<object, PropertyInfo, bool> ShouldSerializeProperty = HasDefaultValue;
 
@@ -62,22 +62,18 @@ namespace Myra.MML
 		public XElement Save(object obj, bool skipComplex = false, string tagName = null, Type parentType = null)
 		{
 			var type = obj.GetType();
-
 			var baseObject = obj as BaseObject;
 
 			List<PropertyInfo> complexProperties, simpleProperties;
 			ParseProperties(type, true, out complexProperties, out simpleProperties);
-
-			bool isGeneric = false;
-			if (tagName == null)
+			
+			if (string.IsNullOrEmpty(tagName))
 			{
 				tagName = type.Name;
-				if (type.IsGenericType)
-				{
-					TypeHelper.StripGenericFromString(ref tagName);
-					isGeneric = true;
-				}
 			}
+
+			bool isGeneric = type.IsGenericType;
+			TypeHelper.StripGenericFromString(ref tagName);
 			
 			XElement el = new XElement(tagName);
 
@@ -135,8 +131,7 @@ namespace Myra.MML
 			if (!skipComplex)
 			{
 				var contentProperty = (from p in complexProperties
-									   where p.FindAttribute<ContentAttribute>()
-									   != null
+									   where p.FindAttribute<ContentAttribute>() != null
 									   select p).FirstOrDefault();
 
 				foreach (var property in complexProperties)

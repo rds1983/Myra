@@ -16,11 +16,14 @@ using Myra.Graphics2D;
 using Myra.Graphics2D.UI;
 using Myra.MML;
 using Myra.Utility;
+using Myra.Utility.Types;
 
 namespace MyraPad
 {
 	public class ExporterCS : IDisposable
 	{
+		private const char Quote = '"';
+		
 		private readonly Project _project;
 		private readonly Dictionary<string, int> ids = new Dictionary<string, int>();
 		private readonly StringBuilder sbFields = new StringBuilder();
@@ -144,17 +147,18 @@ namespace MyraPad
 
 			isFirst = false;
 
-			string id;
-			var typeName = w.GetType().GetFriendlyName();
+			string varName; //Explictly named (ID'd) widgets
+			string typeName = w.GetType().GetFriendlyName();
 			if (_project.Root == w)
 			{
-				id = string.Empty;
+				varName = string.Empty;
 			}
 			else
 			{
-				id = w.Id;
-				if (string.IsNullOrEmpty(id))
+				varName = w.Id;
+				if (string.IsNullOrEmpty(varName))
 				{
+					//Unnamed widgets (without IDs)
 					var onlyTypeName = LowercaseFirstLetter(w.GetType().GetOnlyTypeName());
 					int count;
 					if (!ids.TryGetValue(onlyTypeName, out count))
@@ -167,9 +171,9 @@ namespace MyraPad
 					}
 					ids[onlyTypeName] = count;
 
-					id = onlyTypeName + count;
+					varName = onlyTypeName + count;
 
-					sbBuild.Append("var " + id);
+					sbBuild.Append("var " + varName);
 				}
 				else
 				{
@@ -177,20 +181,21 @@ namespace MyraPad
 				}
 			}
 
-			var idPrefix = string.IsNullOrEmpty(id) ? string.Empty : id + ".";
-			if (!string.IsNullOrEmpty(id))
+			var idPrefix = string.IsNullOrEmpty(varName) ? string.Empty : varName + '.';
+			if (!string.IsNullOrEmpty(varName))
 			{
-				sbBuild.Append(" = new " + typeName + "(" +
-					(string.IsNullOrEmpty(styleName) ? string.Empty : ("\"" + styleName + "\"")) + ");");
+				string style = string.IsNullOrEmpty(styleName) ? string.Empty : $"{Quote}{styleName}{Quote}";
+				sbBuild.Append($" = new {typeName}({style});");
 			}
 
+			// Widget-Variable declaration
 			if (!string.IsNullOrEmpty(w.Id) && _project.Root != w)
 			{
 				if (!isFirst)
 				{
 					sbFields.Append("\n\t\t");
 				}
-				sbFields.Append("public " + w.GetType().Name + " " + w.Id + ";");
+				sbFields.Append($"public {typeName} {w.Id};");
 			}
 
 			foreach (var property in simpleProperties)
@@ -217,7 +222,7 @@ namespace MyraPad
 					if (value != null && !value.Equals(property.DefaultValueObject))
 					{
 						value = BuildValue(value, converter);
-						sbBuild.Append($"\n\t\t\t{property.OwnerType.Name}.Set{property.Name}({id}, {value});");
+						sbBuild.Append($"\n\t\t\t{property.OwnerType.Name}.Set{property.Name}({varName}, {value});");
 					}
 				}
 			}
@@ -227,10 +232,10 @@ namespace MyraPad
 				sbBuild.Append("\n\t\t\t");
 				sbBuild.Append(idPrefix);
 				sbBuild.Append(subItem);
-				sbBuild.Append(";");
+				sbBuild.Append(';');
 			}
 
-			return id;
+			return varName;
 		}
 
 		public string ExportDesigner()
@@ -306,8 +311,7 @@ namespace MyraPad
 					property.PropertyType == typeof(SpriteFontBase))
 				{
 					var baseObject = o as BaseObject;
-					string s;
-					if (baseObject != null && baseObject.Resources.TryGetValue(property.Name, out s))
+					if (baseObject != null && baseObject.Resources.TryGetValue(property.Name, out string s))
 					{
 						var typeName = property.PropertyType.Name;
 						if (typeof(IImage).IsAssignableFrom(property.PropertyType))
@@ -321,18 +325,17 @@ namespace MyraPad
 							{
 								typeName = "Font";
 							}
-							strValue = "MyraEnvironment.DefaultAssetManager.Load" + typeName + "(\"" + s + "\")";
+							strValue = $"MyraEnvironment.DefaultAssetManager.Load{typeName}({Quote}{s}{Quote})";
 						}
 						else
 						{
-							strValue = "new SolidBrush(\"" + s + "\")";
+							strValue = $"new SolidBrush({Quote}{s}{Quote})";
 						}
 					}
 				}
 				else if (property.PropertyType == typeof(Thickness))
 				{
-					var thickness = (Thickness)value;
-					strValue = "new Thickness(" + thickness.ToString() + ")";
+					strValue = $"new Thickness({(Thickness)value})";
 				}
 				else
 				{
@@ -344,19 +347,14 @@ namespace MyraPad
 					return null;
 				}
 
-				sb.Append("\n\t\t\t" + idPrefix + property.Name);
-				sb.Append(" = ");
-				sb.Append(strValue);
-				sb.Append(";");
+				sb.Append($"\n\t\t\t{idPrefix}{property.Name} = {strValue};");
 			}
 			else
 			{
 				foreach (var comp in asList)
 				{
-					sb.Append("\n\t\t\t" + idPrefix + property.Name);
-					sb.Append(".Add(");
-					sb.Append(BuildValue(comp, converter));
-					sb.Append(");");
+					string strValue = BuildValue(comp, converter);
+					sb.Append($"\n\t\t\t{idPrefix}{property.Name}.Add({strValue});");
 				}
 			}
 
@@ -370,7 +368,8 @@ namespace MyraPad
 				return "null";
 			}
 
-			if (value is Color)
+			Type type = value.GetType();
+			if (type == typeof(Color))
 			{
 				var name = ((Color)value).GetColorName();
 				if (!string.IsNullOrEmpty(name))
@@ -385,24 +384,32 @@ namespace MyraPad
 				}
 			}
 
-			if (value is string || value.GetType().IsPrimitive)
+			if (type == typeof(string) || type == typeof(char) || type == typeof(bool))
 			{
 				return converter.PrimitiveToLiteral(value);
 			}
-
-			var sb = new StringBuilder();
-			if (value.GetType().IsEnum)
+			
+			if (type.IsPrimitive || type == typeof(decimal)) //Numerical types
 			{
-				sb.Append(value.GetType());
-				sb.Append(".");
-				sb.Append(value);
-				return sb.ToString().Replace("+", ".");
+				if (TypeHelper.TryGetValueSuffixLiteral(type, out string suffix))
+				{
+					return $"{value}{suffix}";
+				}
 			}
 
-			sb.Append("new " + value.GetType().GetFriendlyName());
+			var sb = new StringBuilder();
+			if (type.IsEnum) //Enum types
+			{
+				sb.Append(value.GetType());
+				sb.Append('.');
+				sb.Append(value);
+				return sb.ToString().Replace('+', '.');
+			}
+
+			sb.Append("new " + type.GetFriendlyName());
 
 			var isEmpty = true;
-			var properties = from p in value.GetType().GetProperties() select p;
+			var properties = from p in type.GetProperties() select p;
 			foreach (var property in properties)
 			{
 				if (property.GetGetMethod() == null ||
@@ -426,7 +433,7 @@ namespace MyraPad
 					continue;
 				}
 
-				if (value.GetType().Name == "Color" && property.Name == "PackedValue")
+				if (type.Name == "Color" && property.Name == "PackedValue")
 				{
 					// Skip unused properties of MG
 					continue;
@@ -438,10 +445,8 @@ namespace MyraPad
 					isEmpty = false;
 				}
 
-				sb.Append("\n\t\t\t\t" + property.Name);
-				sb.Append(" = ");
-				sb.Append(BuildValue(subValue, converter));
-				sb.Append(",");
+				string strValue = BuildValue(subValue, converter);
+				sb.Append($"\n\t\t\t\t{property.Name} = {strValue},");
 			}
 
 			if (!isEmpty)
@@ -502,19 +507,7 @@ namespace MyraPad
 			using (var writer = new StringWriter())
 			{
 				provider.GenerateCodeFromExpression(new CodePrimitiveExpression(input), writer, null);
-				var result = writer.ToString();
-
-				// Remove trailing 'f' from float
-				if (input is float && !string.IsNullOrEmpty(result))
-				{
-					result = result.ToLower();
-					if (result.EndsWith("f"))
-					{
-						result = result.Substring(0, result.Length - 1);
-					}
-				}
-
-				return result;
+				return writer.ToString();
 			}
 		}
 

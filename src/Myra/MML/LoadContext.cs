@@ -185,12 +185,8 @@ namespace Myra.MML
 					}
 					else
 					{
-						if (propertyType.IsNullablePrimitive())
-						{
-							propertyType = propertyType.GetNullableType();
-						}
-
-						value = Convert.ChangeType(attr.Value, propertyType, CultureInfo.InvariantCulture);
+						TypeHelper.GetNullableTypeOrPassThrough(ref propertyType);
+						value = Convert.ChangeType(attr.Value, propertyType, CultureInfo.InvariantCulture);	
 					}
 
 					simplePropertyInfo.Value.SetValue(obj, value);

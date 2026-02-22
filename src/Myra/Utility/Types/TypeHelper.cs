@@ -15,19 +15,34 @@ namespace Myra.Utility.Types
                 new KeyValuePair<string, string>("Double",  "double"),
                 new KeyValuePair<string, string>("Decimal", "decimal"),
                 
-                new KeyValuePair<string, string>("SByte",  "sbyte"),
-                new KeyValuePair<string, string>("Byte",   "byte"),
-                new KeyValuePair<string, string>("Int16",  "short"),
-                new KeyValuePair<string, string>("UInt16", "ushort"),
-                new KeyValuePair<string, string>("Int32",  "int"),
-                new KeyValuePair<string, string>("UInt32", "uint"),
-                new KeyValuePair<string, string>("Int64",  "long"),
-                new KeyValuePair<string, string>("UInt64", "ulong"),
+                new KeyValuePair<string, string>("SByte",   "sbyte"),
+                new KeyValuePair<string, string>("Byte",    "byte"),
+                new KeyValuePair<string, string>("Int16",   "short"),
+                new KeyValuePair<string, string>("UInt16",  "ushort"),
+                new KeyValuePair<string, string>("Int32",   "int"),
+                new KeyValuePair<string, string>("UInt32",  "uint"),
+                new KeyValuePair<string, string>("Int64",   "long"),
+                new KeyValuePair<string, string>("UInt64",  "ulong"),
                 
                 new KeyValuePair<string, string>("Boolean", "bool"),
                 new KeyValuePair<string, string>("Char",    "char"),
-                new KeyValuePair<string, string>("Object", "object"),
-                new KeyValuePair<string, string>("String", "string"),
+                new KeyValuePair<string, string>("Object",  "object"),
+                new KeyValuePair<string, string>("String",  "string"),
+            });
+        private static readonly ReadOnlyDictionary<Type, string> _typeSuffixLiterals = 
+            new ReadOnlyDictionary<Type, string>(new Dictionary<Type, string>
+            {
+                {typeof(float),   "f"},
+                {typeof(double),  "d"},
+                {typeof(decimal), "m"},
+                {typeof(byte),    string.Empty},
+                {typeof(sbyte),   string.Empty},
+                {typeof(short),   string.Empty},
+                {typeof(ushort),  string.Empty},
+                {typeof(int),     string.Empty},
+                {typeof(uint),    "u"},
+                {typeof(long),    "L"},
+                {typeof(ulong),   "uL"},
             });
         private static Dictionary<Type, Func<TypeInfo>> _lookup;
         
@@ -70,6 +85,7 @@ namespace Myra.Utility.Types
             }
             return changed;
         }
+        
 #region Strings
         private const string FrontendGeneric = "<>";
         private const string BackendGeneric = "`1";
@@ -77,11 +93,17 @@ namespace Myra.Utility.Types
         /// <summary>
         /// Returns if the string ends with a front-end C# generic pattern
         /// </summary>
-        public static bool IsGenericTypeName_FrontEnd(string str) => str.EndsWith(FrontendGeneric);
+        public static bool IsGenericTypeName_FrontEnd(string str)
+        {
+            return str.Contains(FrontendGeneric);
+        }
         /// <summary>
         /// Returns if the string ends with a back-end C# generic pattern
         /// </summary>
-        public static bool IsGenericTypeName_BackEnd(string str) => str.EndsWith(BackendGeneric);
+        public static bool IsGenericTypeName_BackEnd(string str)
+        {
+            return str.Contains(BackendGeneric);
+        }
         public static void SwapGenericTypeNameFormat(ref string str)
         {
             if (IsGenericTypeName_FrontEnd(str))
@@ -131,19 +153,21 @@ namespace Myra.Utility.Types
             
             str = str.Replace(BackendGeneric, $"<{genericTypeName}>");
         }
-
-        public static void StripGenericFromString(ref string str)
+        
+        public static void StripGenericFromString(ref string str, string replace = null)
         {
-            int subSplit;
+            if (string.IsNullOrEmpty(replace))
+            {
+                replace = string.Empty;
+            }
+
             if (IsGenericTypeName_BackEnd(str))
             {
-                subSplit = str.IndexOf('`');
-                str = str.Substring(0, subSplit);
+                str = str.Replace(BackendGeneric, replace);
             }
             else if (IsGenericTypeName_FrontEnd(str))
             {
-                subSplit = str.IndexOf('<');
-                str = str.Substring(0, subSplit);
+                str = str.Replace(FrontendGeneric, replace);
             }
         }
 
@@ -168,6 +192,16 @@ namespace Myra.Utility.Types
                     return;
                 }
             }
+        }
+        public static bool TryGetValueSuffixLiteral(Type forType, out string result)
+        {
+            if (_typeSuffixLiterals.TryGetValue(forType, out string str))
+            {
+                result = str;
+                return true;
+            }
+            result = string.Empty;
+            return false;
         }
 #endregion Strings
     }

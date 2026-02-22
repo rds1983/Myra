@@ -60,6 +60,7 @@ namespace Myra.MML
 					propertyType.IsEnum || 
 					propertyType.IsNullableEnum() ||
 					propertyType == typeof(string) ||
+					propertyType == typeof(decimal) ||
 					propertyType == typeof(Vector2) ||
 					propertyType == typeof(Color) ||
 					propertyType == typeof(Color?) ||
