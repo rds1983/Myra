@@ -15,6 +15,9 @@ using Stride.Input;
 #else
 using Myra.Platform;
 #endif
+#if MATH_IFACES
+using System.Numerics;
+#endif
 
 namespace Myra.Graphics2D.UI
 {
@@ -23,7 +26,12 @@ namespace Myra.Graphics2D.UI
 	/// </summary>
 	/// <typeparam name="TNum">The standard number-based value type to hold.</typeparam>
 	/// <exception cref="TypeLoadException">Generic <typeparamref name="TNum"/> cannot be <see cref="byte"/> or <see cref="sbyte"/> as they lack math operators and cannot be used.<para/>OR an unknown type was provided.</exception>
-	public class SpinButton<TNum> : Widget where TNum : struct
+	public class SpinButton<TNum> : Widget 
+#if MATH_IFACES
+		where TNum : struct, INumber<TNum>, IMinMaxValue<TNum>
+#else
+		where TNum : struct
+#endif
 	{
 #region Statics
 		private const string DefaultStringWhole = "0";

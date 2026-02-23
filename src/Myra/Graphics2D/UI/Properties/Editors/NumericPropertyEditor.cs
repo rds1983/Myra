@@ -1,6 +1,9 @@
 using System;
 using Myra.Utility.Types;
-using Generic.Math;
+#if MATH_IFACES
+using System.Numerics;
+#endif
+
 namespace Myra.Graphics2D.UI.Properties
 {
 	[PropertyEditor(typeof(NumericPropertyEditor<>), 
@@ -10,7 +13,12 @@ namespace Myra.Graphics2D.UI.Properties
 		typeof(long), typeof(ulong), typeof(long?), typeof(ulong?),
 		typeof(float), typeof(float?), typeof(double), typeof(double?), 
 		typeof(decimal), typeof(decimal?))]
-	public sealed class NumericPropertyEditor<TNum> : StructPropertyEditor<TNum>, INumberTypeRef<TNum> where TNum : struct
+	public sealed class NumericPropertyEditor<TNum> : StructPropertyEditor<TNum>, INumberTypeRef<TNum> 
+#if MATH_IFACES
+		where TNum : struct, INumber<TNum>, IMinMaxValue<TNum>
+#else
+		where TNum : struct
+#endif
 	{
 		private Type _underlyingType;
 		private bool _nullable;
@@ -118,7 +126,7 @@ namespace Myra.Graphics2D.UI.Properties
 	        var spinButton = new SpinButton<short>()
 	        {
 		        Nullable = _nullable,
-		        Value = GenericMath<TNum?, short?>.Convert(val),
+		        Value = NullableConvert(val),
 		        Minimum = 0,
 		        Maximum = 255,
 	        };
@@ -147,7 +155,7 @@ namespace Myra.Graphics2D.UI.Properties
 				        }
 				        
 				        newShort = MathHelper<short>.Clamp(newShort.Value, 0, 255);
-				        SetValue(_owner.SelectedField, GenericMath<short, TNum>.Convert(newShort.Value));
+				        SetValue(_owner.SelectedField, MathHelper<short, TNum>.Convert(newShort.Value));
 				        _owner.FireChanged(_record.Name);
 			        }
 			        catch (Exception ex)
@@ -178,10 +186,18 @@ namespace Myra.Graphics2D.UI.Properties
 		        }
 		        else
 		        {
-			        val = GenericMath<TNum?, short?>.Convert(value);
+			        val = NullableConvert(value);
 		        }
 		        dodge.Value = val;
 	        }
+        }
+
+        private static short? NullableConvert(TNum? value)
+        {
+	        short? convert = null;
+	        if (value.HasValue)
+		        convert = MathHelper<TNum, short>.Convert(value.Value);
+	        return convert;
         }
 	}
 }

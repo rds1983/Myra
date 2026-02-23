@@ -1,9 +1,3 @@
-#if NET7_0_OR_GREATER
-#define MATH_IFACES
-#else
-#undef MATH_IFACES
-#endif
-
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -27,9 +21,6 @@ namespace Myra.Utility.Types
         where TNum : struct
 #endif
     {
-        // TODO Use generic math interfaces instead of GenericMath<TNum> if the dotnet version supports it.
-        // The Generic.Math lib requires runtime codegen!
-
         private static readonly bool NumIsSigned;
         
         /// <summary>Value that represents 0 for <typeparamref name="TNum"/></summary>
@@ -37,7 +28,7 @@ namespace Myra.Utility.Types
         /// <summary>Value that represents 1 for <typeparamref name="TNum"/></summary>
         public static readonly TNum One;
         
-#if MATH_IFACES
+#if MATH_IFACES //TODO find a way to get these values without interfaces
         public static readonly TNum MinValue;
         public static readonly TNum MaxValue;
 #endif

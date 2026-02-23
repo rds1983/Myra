@@ -1,5 +1,9 @@
 using System;
 
+#if MATH_IFACES
+using System.Numerics;
+#endif
+
 namespace Myra.Utility.Types
 {
     /// <summary>
@@ -7,7 +11,7 @@ namespace Myra.Utility.Types
     /// </summary>
     public struct Range<TNum>
 #if MATH_IFACES
-        where TNum : struct, INumber<TNum>
+        where TNum : struct, INumber<TNum>, IMinMaxValue<TNum>
 #else
         where TNum : struct
 #endif
