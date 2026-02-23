@@ -498,7 +498,7 @@ namespace Myra.Graphics2D.UI
 
 			if (_range.IsInRange(newValue))
 			{
-				bool changed = MathHelper<TNum>.NotEqual(Value.GetValueOrDefault(), newValue);
+				bool changed = MathHelper<TNum>.UnEqual(Value.GetValueOrDefault(), newValue);
 				TNum? oldValue = Value;
 				Value = newValue;
 

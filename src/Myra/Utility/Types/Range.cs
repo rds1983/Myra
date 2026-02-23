@@ -5,7 +5,12 @@ namespace Myra.Utility.Types
     /// <summary>
     /// Represents a generic value range with optional minimum and maximum clamp.
     /// </summary>
-    public struct Range<TNum> where TNum : struct
+    public struct Range<TNum>
+#if MATH_IFACES
+        where TNum : struct, INumber<TNum>
+#else
+        where TNum : struct
+#endif
     {
         static Range()
         {
