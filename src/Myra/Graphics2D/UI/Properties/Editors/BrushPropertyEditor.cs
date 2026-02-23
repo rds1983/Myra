@@ -1,10 +1,17 @@
 using System;
-using Microsoft.Xna.Framework;
 using FontStashSharp.RichText;
 using Myra.Graphics2D.Brushes;
 using Myra.Graphics2D.UI.ColorPicker;
 using Myra.Graphics2D.UI.Styles;
 using Myra.MML;
+
+#if MONOGAME || FNA
+using Microsoft.Xna.Framework;
+#elif STRIDE
+using Stride.Core.Mathematics;
+#else
+using Color = FontStashSharp.FSColor;
+#endif
 
 namespace Myra.Graphics2D.UI.Properties
 {

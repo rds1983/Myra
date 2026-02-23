@@ -17,6 +17,9 @@
 
   <ItemGroup>
     <Compile Remove="Platform\**\*.*" />
+    <Compile Update="Graphics2D\UI\Properties\PropertyGrid.SubGrid.cs">
+      <DependentUpon>PropertyGrid.cs</DependentUpon>
+    </Compile>
   </ItemGroup>  
 
   <ItemGroup>

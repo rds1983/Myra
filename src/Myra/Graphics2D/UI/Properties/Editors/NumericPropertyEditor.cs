@@ -1,10 +1,6 @@
 using System;
-using Generic.Math;
-using Myra.Events;
-using Myra.Graphics2D.UI.Styles;
-using Myra.Utility;
 using Myra.Utility.Types;
-
+using Generic.Math;
 namespace Myra.Graphics2D.UI.Properties
 {
 	[PropertyEditor(typeof(NumericPropertyEditor<>), 
@@ -144,7 +140,7 @@ namespace Myra.Graphics2D.UI.Properties
 					        }
 					        else
 					        {
-						        SetValue(_owner.SelectedField, GenericMath<TNum>.Zero);
+						        SetValue(_owner.SelectedField, MathHelper<TNum>.Zero);
 						        _owner.FireChanged(_record.Name);
 						        return;
 					        }

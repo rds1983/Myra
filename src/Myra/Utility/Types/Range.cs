@@ -1,5 +1,4 @@
 using System;
-using Generic.Math;
 
 namespace Myra.Utility.Types
 {

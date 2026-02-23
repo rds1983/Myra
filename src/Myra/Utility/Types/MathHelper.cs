@@ -1,11 +1,22 @@
+#if NET7_0_OR_GREATER
+#define MATH_IFACES
+#else
+#undef MATH_IFACES
+#endif
+
 using System;
+
+#if MATH_IFACES
+using System.Numerics;
+#else
 using Generic.Math;
+#endif
 
 namespace Myra.Utility.Types
 {
     /// <summary>
     /// Generic math methods for <typeparamref name="TNum"/>.<para/>
-    /// Uses <see cref="GenericMath"/> which relies on Reflection.Emit and codegen.
+    /// If project is less than .net7, uses Generic.Math library which relies on Reflection.Emit and codegen.
     /// </summary>
     internal static class MathHelper<TNum> where TNum : struct
     {
@@ -214,6 +225,18 @@ namespace Myra.Utility.Types
             TNum d = b;
             b = c;
             a = d;
+        }
+    }
+
+    internal static class MathHelper<TNum, TResult>
+    {
+        public static TResult Convert(TNum value)
+        {
+#if MATH_IFACES
+            throw new NotImplementedException();
+#else
+            return GenericMath<TNum, TResult>.Convert(value);
+#endif
         }
     }
 }

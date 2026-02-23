@@ -62,7 +62,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 			set
 			{
-				// TODO send notification to active editors before 
+				// TODO send notification to active editors before changing selection
 				if (value == _object)
 				{
 					return;

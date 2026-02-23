@@ -1,7 +1,12 @@
 using System.ComponentModel;
 using System.Xml.Serialization;
-using Microsoft.Xna.Framework;
 using Myra.Attributes;
+
+#if MONOGAME || FNA
+using Microsoft.Xna.Framework;
+#elif STRIDE
+using Stride.Core.Mathematics;
+#endif
 
 namespace Myra.Graphics2D.UI.Properties
 {
