@@ -4,7 +4,7 @@ using Myra.Utility.Types;
 namespace Myra.Graphics2D.UI.Properties
 {
     [PropertyEditor(typeof(BooleanPropertyEditor), typeof(bool))]
-    public sealed class BooleanPropertyEditor : StructPropertyEditor<bool>, IStructTypeRef<bool>
+    public sealed class BooleanPropertyEditor : StructPropertyEditor<bool>
     {
         private readonly bool _hasSetter;
         private readonly bool _nullable;

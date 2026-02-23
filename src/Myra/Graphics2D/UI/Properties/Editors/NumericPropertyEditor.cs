@@ -13,7 +13,7 @@ namespace Myra.Graphics2D.UI.Properties
 		typeof(long), typeof(ulong), typeof(long?), typeof(ulong?),
 		typeof(float), typeof(float?), typeof(double), typeof(double?), 
 		typeof(decimal), typeof(decimal?))]
-	public sealed class NumericPropertyEditor<TNum> : StructPropertyEditor<TNum>, INumberTypeRef<TNum> 
+	public sealed class NumericPropertyEditor<TNum> : StructPropertyEditor<TNum>, INumberRecordReference<TNum> 
 #if MATH_IFACES
 		where TNum : struct, INumber<TNum>, IMinMaxValue<TNum>
 #else

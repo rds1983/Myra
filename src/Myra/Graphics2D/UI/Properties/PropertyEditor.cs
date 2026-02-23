@@ -17,52 +17,14 @@ namespace Myra.Graphics2D.UI.Properties
             this.attached = attached;
             this.editTypes = editTypes;
         }
-        internal EditorTypeRegistry GetRegistry() => new EditorTypeRegistry(attached, editTypes);
+        internal PropertyEditor.Registry GetRegistry() => new PropertyEditor.Registry(attached, editTypes);
     }
     
     /// <summary>
     /// Encapsulates a <see cref="Widget"/> (UI element) and <see cref="Record"/> (.Net property or field), for the purposes of display or editing by the user.
     /// </summary>
-    public abstract class PropertyEditor : IRecordReference
+    public abstract partial class PropertyEditor : IRecordReference
     {
-#region Statics
-        private static readonly Type[] ActivatorTypeArgs = { typeof(IInspector), typeof(Record) };
-        /// <summary>
-        /// Initialize the <see cref="PropertyEditor"/>-<see cref="Type"/> relationship registry.
-        /// </summary>
-        /// <param name="predictedCount">Internal editor-array alloc size.</param>
-        /// <param name="fromAssemblies">The assemblies which are scanned for concrete inheritors of <see cref="PropertyEditor"/>. Any <see cref="PropertyEditor"/> without <see cref="PropertyEditorAttribute"/> are ignored. Null will scan all assemblies in the current <see cref="AppDomain"/>.</param>
-        public static void InitializeRegistry(int predictedCount = 16, params System.Reflection.Assembly[] fromAssemblies)
-            => Editors.InitializeRegistry(predictedCount, fromAssemblies);
-        public static bool TryCreate(IInspector inspector, Record bindProperty, out PropertyEditor result)
-        {
-            if (Editors.TryGetEditorTypeForType(bindProperty.Type, out Type editorType))
-            {
-                // TODO mayble cache a lookup of known constructor-info objects?
-                var ctor = editorType.GetConstructor(ActivatorTypeArgs);
-                if (ctor != null)
-                {
-                    try
-                    {
-                        //This also creates the widget
-                        object obj = Activator.CreateInstance(editorType, inspector, bindProperty);
-                        result = obj as PropertyEditor;
-                        return result != null;
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine($"Activator Reflection Error: {e}");
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine("Could not find property editor for type: "+bindProperty.Type);
-            }
-            result = null;
-            return false;
-        }
-#endregion
         protected delegate bool WidgetCreatorDelegate(out Widget widget);
         
         protected readonly IInspector _owner;
@@ -144,7 +106,7 @@ namespace Myra.Graphics2D.UI.Properties
         }
     }
 
-    public abstract class StructPropertyEditor<T> : PropertyEditor<T>, IStructTypeRef<T> where T : struct
+    public abstract class StructPropertyEditor<T> : PropertyEditor<T>, IStructRecordReference<T> where T : struct
     {
         private bool _nullable;
         public bool IsNullable => _nullable;

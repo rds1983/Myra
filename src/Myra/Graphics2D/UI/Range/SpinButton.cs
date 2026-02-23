@@ -54,8 +54,7 @@ namespace Myra.Graphics2D.UI
 			_numTypeIsFloating = info.IsFractionalNumber;
 			_defaultString = _numTypeIsFloating ? DefaultStringFloat : DefaultStringWhole;
 			
-			// Assign strConverter depending on TNum type.
-			// object.ToString() can't accept IFormatProvider...
+			// Assign strConverter depending on TNum type. object.ToString() can't accept IFormatProvider...
 			switch (info.Code)
 			{
 				// Handle floating point types
@@ -612,32 +611,6 @@ namespace Myra.Graphics2D.UI
 			DecimalPlaces = spinButton.DecimalPlaces;
 			FixedNumberSize = spinButton.FixedNumberSize;
 			Mul_Increment = spinButton.Mul_Increment;
-		}
-	}
-	
-	// Helper static class for types
-	internal static class SpinButton
-	{
-		private static ReadOnlyDictionary<Type, Func<Widget>> _typeCtors = new ReadOnlyDictionary<Type, Func<Widget>>(new Dictionary<Type, Func<Widget>>
-		{
-			{ typeof(byte),   () => new SpinButton<byte>()   },
-			{ typeof(sbyte),  () => new SpinButton<sbyte>()  },
-			{ typeof(short),  () => new SpinButton<short>()  },
-			{ typeof(ushort), () => new SpinButton<ushort>() },
-			{ typeof(int),    () => new SpinButton<int>()    },
-			{ typeof(uint),   () => new SpinButton<uint>()   },
-			{ typeof(long),   () => new SpinButton<long>()   },
-			{ typeof(ulong),  () => new SpinButton<ulong>()  },
-			
-			{ typeof(float),   () => new SpinButton<float>()   },
-			{ typeof(double),  () => new SpinButton<double>()  },
-			{ typeof(decimal), () => new SpinButton<decimal>() },
-		});
-
-		public static bool TryCreate(Type numberType, out Widget spinButton)
-		{
-			spinButton = default;
-			return default;
 		}
 	}
 }

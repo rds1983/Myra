@@ -42,6 +42,12 @@
     <Compile Update="Graphics2D\UI\Properties\PropertyGrid.SubGrid.cs">
       <DependentUpon>PropertyGrid.cs</DependentUpon>
     </Compile>
+    <Compile Update="Graphics2D\UI\Properties\PropertyEditor.Statics.cs">
+      <DependentUpon>PropertyEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Graphics2D\UI\Properties\PropertyEditor.Registry.cs">
+      <DependentUpon>PropertyEditor.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

@@ -7,7 +7,7 @@ using System.Numerics;
 namespace Myra.Utility.Types
 {
     /// <summary>
-    /// Represents a generic value range with optional minimum and maximum clamp.
+    /// Represents a generic-number value range with optional minimum and maximum clamp.
     /// </summary>
     public struct Range<TNum>
 #if MATH_IFACES
@@ -26,6 +26,21 @@ namespace Myra.Utility.Types
             if(!info.IsNumber)
                 throw new ArgumentException($"Invalid Generic-Type Argument: '{arg}', Only numeric types are supported");
         }
+        /// <summary>
+        /// Returns a range that spans the entire TNum data type
+        /// </summary>
+        public static Range<TNum> ValueTypeRange
+        {
+#if MATH_IFACES
+            get => new Range<TNum>(MathHelper<TNum>.MinValue, MathHelper<TNum>.MaxValue);
+#else
+            get => new Range<TNum>(null, null);
+#endif
+        }
+        /// <summary>
+        /// Returns a range from zero to one.
+        /// </summary>
+        public static Range<TNum> ZeroOne => new Range<TNum>(MathHelper<TNum>.Zero, MathHelper<TNum>.One);
         
         public Range(TNum min, TNum max)
         {
