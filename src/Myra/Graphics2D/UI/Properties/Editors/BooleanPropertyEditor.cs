@@ -1,7 +1,7 @@
 using System;
 using Myra.Utility.Types;
 
-namespace Myra.Graphics2D.UI.Properties
+namespace Myra.Graphics2D.UI.Properties.Editors
 {
     [PropertyEditor(typeof(BooleanPropertyEditor), typeof(bool))]
     public sealed class BooleanPropertyEditor : StructPropertyEditor<bool>
@@ -52,6 +52,7 @@ namespace Myra.Graphics2D.UI.Properties
             return true;
         }
         
+        /// <inheritdoc />
         public override void SetWidgetValue(bool? value)
         {
             var cb = Widget as CheckButton;

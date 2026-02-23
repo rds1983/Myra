@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Myra.Graphics2D.UI.Properties
+namespace Myra.Graphics2D.UI.Properties.Editors
 {
 	[PropertyEditor(typeof(CollectionPropertyEditor), typeof(IList))]
 	public class CollectionPropertyEditor : PropertyEditor<IList>
@@ -11,7 +11,6 @@ namespace Myra.Graphics2D.UI.Properties
 	    
 		public CollectionPropertyEditor(IInspector owner, Record methodInfo) : base(owner, methodInfo)
 		{
-			//if(methodInfo.Type.isg)
 			collectionKind = methodInfo.Type.GenericTypeArguments[0];
 		}
 		
@@ -81,9 +80,16 @@ namespace Myra.Graphics2D.UI.Properties
 	        textBlock.Text = string.Format("{0} Items", count);
         }
         
+        /// <inheritdoc />
         public override void SetWidgetValue(object value)
         {
-	        Console.WriteLine("CollectionPropertyEditor SetWidgetValue Not implemented");
+	        Console.WriteLine("CollectionPropertyEditor SetWidgetValue Not implemented"); //TODO
+        }
+
+        /// <inheritdoc />
+        public override void SetWidgetValue(IList value)
+        {
+	        throw new NotImplementedException();
         }
 	}
 }

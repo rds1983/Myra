@@ -1,24 +1,22 @@
 ﻿using System;
-using System.Collections;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using Myra.Graphics2D.UI.ColorPicker;
-using Myra.Graphics2D.UI.Styles;
-using Myra.Utility;
 using System.Xml.Serialization;
-using Myra.MML;
-using Myra.Graphics2D.UI.File;
-using System.IO;
 using Myra.Attributes;
-using FontStashSharp;
-using FontStashSharp.RichText;
+using Myra.Utility;
+using Myra.MML;
+using Myra.Events;
+using Myra.Graphics2D.UI.File;
+using Myra.Graphics2D.UI.Styles;
+using Myra.Graphics2D.UI.Properties.Editors;
 using Myra.Graphics2D.Brushes;
 using AssetManagementBase;
-using Myra.Events;
+using FontStashSharp;
+using FontStashSharp.RichText;
 
 #if MONOGAME || FNA
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 #elif STRIDE
 using Stride.Core.Mathematics;

@@ -2,7 +2,7 @@ using System;
 using Myra.Utility;
 using Myra.Utility.Types;
 
-namespace Myra.Graphics2D.UI.Properties
+namespace Myra.Graphics2D.UI.Properties.Editors
 {
     [PropertyEditor(typeof(EnumPropertyEditor<>), typeof(Enum))]
     public sealed class EnumPropertyEditor<TEnum> : StructPropertyEditor<TEnum> where TEnum : struct, Enum

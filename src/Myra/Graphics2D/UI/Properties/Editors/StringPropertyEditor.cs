@@ -4,12 +4,13 @@ using Myra.Attributes;
 using Myra.Graphics2D.UI.File;
 using Myra.Utility;
 
-namespace Myra.Graphics2D.UI.Properties
+namespace Myra.Graphics2D.UI.Properties.Editors
 {
     [PropertyEditor(typeof(StringPropertyEditor), typeof(string))]
     public sealed class StringPropertyEditor : PropertyEditor<string>
     {
         private readonly FilePathAttribute _filePath;
+        
         public StringPropertyEditor(IInspector owner, Record methodInfo) : base(owner, methodInfo)
         {
             _filePath = methodInfo.FindAttribute<FilePathAttribute>();
@@ -204,6 +205,7 @@ namespace Myra.Graphics2D.UI.Properties
             return true;
         }
         
+        /// <inheritdoc />
         public override void SetWidgetValue(object value)
         {
             var tb = Widget as TextBox;
@@ -211,6 +213,16 @@ namespace Myra.Graphics2D.UI.Properties
                 tb.Text = string.Empty;
             else if (value is string str)
                 tb.Text = str;
+        }
+
+        /// <inheritdoc />
+        public override void SetWidgetValue(string value)
+        {
+            var tb = Widget as TextBox;
+            if (value == null)
+                tb.Text = string.Empty;
+            else
+                tb.Text = value;
         }
     }
 }

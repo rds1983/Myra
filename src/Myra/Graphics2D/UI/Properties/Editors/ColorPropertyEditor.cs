@@ -9,7 +9,7 @@ using Stride.Core.Mathematics;
 using Color = FontStashSharp.FSColor;
 #endif
 
-namespace Myra.Graphics2D.UI.Properties
+namespace Myra.Graphics2D.UI.Properties.Editors
 {
     [PropertyEditor(typeof(ColorPropertyEditor), typeof(Color))]
     public sealed class ColorPropertyEditor : StructPropertyEditor<Color>

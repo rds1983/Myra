@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Myra.Utility;
 
-namespace Myra.Graphics2D.UI.Properties
+namespace Myra.Graphics2D.UI.Properties.Editors
 {
     public partial class PropertyEditor
     {
+        /// <summary>
+        /// Relationship data for an editor and its supported types
+        /// </summary>
         internal sealed class Registry
         {
             private readonly Type _editorType;

@@ -13,7 +13,7 @@ using Stride.Core.Mathematics;
 using Color = FontStashSharp.FSColor;
 #endif
 
-namespace Myra.Graphics2D.UI.Properties
+namespace Myra.Graphics2D.UI.Properties.Editors
 {
 	[PropertyEditor(typeof(BrushPropertyEditor), typeof(IBrush))]
 	public class BrushPropertyEditor : PropertyEditor<IBrush>
@@ -113,6 +113,7 @@ namespace Myra.Graphics2D.UI.Properties
 			return true;
         }
         
+        /// <inheritdoc />
         public override void SetWidgetValue(object value)
         {
 	        if(_imgDisplay == null || value == null)
@@ -120,7 +121,17 @@ namespace Myra.Graphics2D.UI.Properties
 	        
 	        if (value is Color color)
 		        _imgDisplay.Color = color;
-	        else if (value is SolidBrush sBrush)
+	        else if(value is IBrush brush)
+		        SetWidgetValue(brush);
+        }
+
+        /// <inheritdoc />
+        public override void SetWidgetValue(IBrush value)
+        {
+	        if(_imgDisplay == null)
+		        return;
+	        
+	        if (value is SolidBrush sBrush)
 		        _imgDisplay.Color = sBrush.Color;
 	        else if(value is IBrush otherBrush)
 		        Console.WriteLine($"Can't display IBrush type: {otherBrush.GetType()}");

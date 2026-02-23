@@ -4,7 +4,7 @@ using Myra.Utility.Types;
 using System.Numerics;
 #endif
 
-namespace Myra.Graphics2D.UI.Properties
+namespace Myra.Graphics2D.UI.Properties.Editors
 {
 	[PropertyEditor(typeof(NumericPropertyEditor<>), 
 		typeof(byte), typeof(sbyte), typeof(byte?), typeof(sbyte?),

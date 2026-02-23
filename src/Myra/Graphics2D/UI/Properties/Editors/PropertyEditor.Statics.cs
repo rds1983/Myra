@@ -6,11 +6,13 @@ using System.Reflection;
 using Myra.Utility;
 using Myra.Utility.Types;
 
-namespace Myra.Graphics2D.UI.Properties
+namespace Myra.Graphics2D.UI.Properties.Editors
 {
     public partial class PropertyEditor
     {
         // Statics/internals for PropertyEditor types
+        
+        protected delegate bool WidgetCreatorDelegate(out Widget widget);
         
         private static readonly Type[] ActivatorTypeArgs = { typeof(IInspector), typeof(Record) };
         private static ReadOnlyCollection<Registry> _registry;
@@ -20,21 +22,25 @@ namespace Myra.Graphics2D.UI.Properties
         {
             if (TryGetEditorTypeForType(bindProperty.Type, out Type editorType))
             {
-                // TODO mayble cache a lookup of known constructor-info objects?
-                var ctor = editorType.GetConstructor(ActivatorTypeArgs);
-                if (ctor != null)
+                // TODO mayble cache a lookup of known constructor-info objects instead of calling GetConstructor each time?
+                ConstructorInfo ctor = editorType.GetConstructor(ActivatorTypeArgs);
+                if (ctor == null)
                 {
-                    try
-                    {
-                        //This also creates the widget
-                        object obj = Activator.CreateInstance(editorType, inspector, bindProperty);
-                        result = obj as PropertyEditor;
-                        return result != null;
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine($"Activator Reflection Error: {e}");
-                    }
+                    Console.WriteLine($"PropertyEditor type '{editorType}' has an invalid constructor pattern. Expected: public ctor({ActivatorTypeArgs[0]}, {ActivatorTypeArgs[1]})");
+                    result = null;
+                    return false;
+                }
+
+                try
+                {
+                    //This also creates the widget
+                    object obj = Activator.CreateInstance(editorType, inspector, bindProperty);
+                    result = obj as PropertyEditor;
+                    return result != null;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Activator Reflection Error: {e}");
                 }
             }
             else
@@ -89,7 +95,7 @@ namespace Myra.Graphics2D.UI.Properties
                 //maybe ensure fromAssemblies contains Myra (this) assembly?
             }
             
-            Reflective_LoadTypeRegistry(predictedCount, scanAsm, out List<PropertyEditor.Registry> registry);
+            Reflective_LoadTypeRegistry(predictedCount, scanAsm, out List<Registry> registry);
 
             _registry = registry.AsReadOnly();
             _init = true;

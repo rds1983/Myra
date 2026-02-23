@@ -1,7 +1,7 @@
 using System;
 using Myra.Utility.Types;
 
-namespace Myra.Graphics2D.UI.Properties
+namespace Myra.Graphics2D.UI.Properties.Editors
 {
     /// <summary>
     /// Attribute that ties a concrete <see cref="PropertyEditor"/> to one or more property types.
@@ -25,8 +25,6 @@ namespace Myra.Graphics2D.UI.Properties
     /// </summary>
     public abstract partial class PropertyEditor : IRecordReference
     {
-        protected delegate bool WidgetCreatorDelegate(out Widget widget);
-        
         protected readonly IInspector _owner;
         protected readonly Record _record;
         
@@ -40,23 +38,37 @@ namespace Myra.Graphics2D.UI.Properties
         {
             _owner = owner;
             _record = methodInfo ?? throw new NullReferenceException(nameof(methodInfo));
-            DoInit();
-            if (TryCreateWidget(out Widget editor))
+            _DoInit();
+            if (_TryCreateWidget(out Widget editor))
                 Widget = editor;
         }
         
-        private void DoInit() => Initialize();
+        private void _DoInit() => Initialize();
         protected virtual void Initialize() { }
 
-        private bool TryCreateWidget(out Widget widget) => TryCreateEditorWidget(out widget);
-        protected abstract bool TryCreateEditorWidget(out Widget widget);
+        private bool _TryCreateWidget(out Widget widget) => TryCreateWidget(out widget);
+        /// <summary>
+        /// Attempt to create a widget with the current setup.
+        /// </summary>
+        protected abstract bool TryCreateWidget(out Widget widget);
+        /// <summary>
+        /// Tell the widget to update the displayed data to <paramref name="value"/>.
+        /// </summary>
+        /// <param name="value">data to set</param>
+        public abstract void SetWidgetValue(object value);
         
+        /// <summary>
+        /// Changes the data in the record
+        /// </summary>
         public void SetValue(object field, object value)
         {
             _record.SetValue(field, value);
             _owner.FireChanged(_record.Name);
         }
-        public abstract void SetWidgetValue(object value);
+        
+        /// <summary>
+        /// Updates the widget's displayed value to be what's in the record
+        /// </summary>
         public void UpdateDisplay()
         {
             if(Widget.Desktop.FocusedKeyboardWidget == Widget)
@@ -76,7 +88,7 @@ namespace Myra.Graphics2D.UI.Properties
         {
         }
         
-        protected sealed override bool TryCreateEditorWidget(out Widget widget)
+        protected sealed override bool TryCreateWidget(out Widget widget)
         {
             if (CreatorPicker(out var func))
                 return func.Invoke(out widget);
@@ -101,26 +113,43 @@ namespace Myra.Graphics2D.UI.Properties
         /// </summary>
         public virtual void SetValue(object field, T value)
         {
-            _record.SetValue(field, value);
-            _owner.FireChanged(_record.Name);
-        }
-    }
-
-    public abstract class StructPropertyEditor<T> : PropertyEditor<T>, IStructRecordReference<T> where T : struct
-    {
-        private bool _nullable;
-        public bool IsNullable => _nullable;
-        
-        protected StructPropertyEditor(IInspector owner, Record methodInfo) : base(owner, methodInfo)
-        {
+            base.SetValue(field, value);
         }
         
-        public sealed override void SetWidgetValue(object value)
+        /// <inheritdoc />
+        public override void SetWidgetValue(object value)
         {
             if(value is T kind)
                 SetWidgetValue(kind);
         }
 
+        /// <inheritdoc cref="SetWidgetValue(object)"/>
+        public abstract void SetWidgetValue(T value);
+    }
+
+    public abstract class StructPropertyEditor<T> : PropertyEditor<T>, IStructRecordReference<T> where T : struct
+    {
+        public bool IsNullable { get; }
+        
+        protected StructPropertyEditor(IInspector owner, Record methodInfo) : base(owner, methodInfo)
+        {
+            Type type = methodInfo.Type;
+            IsNullable = TypeHelper.GetNullableTypeOrPassThrough(ref type);
+        }
+        
+        /// <inheritdoc />
+        public sealed override void SetWidgetValue(object value)
+        {
+            if(value == null)
+                SetWidgetValue(null);
+            if(value is T kind)
+                SetWidgetValue(kind);
+        }
+        
+        /// <inheritdoc />
+        public sealed override void SetWidgetValue(T value) => SetWidgetValue(value);
+
+        /// <inheritdoc cref="SetWidgetValue(object)"/>
         public abstract void SetWidgetValue(T? value);
     }
 }
