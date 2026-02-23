@@ -45,8 +45,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FontStashSharp.Monogame" Version="1.5.2" />
-    <PackageReference Include="AssetManagementBase" Version="0.7.1" />
     <PackageReference Include="XNAssets.MonoGame" Version="$(XNAssetsVersion)" />
     <PackageReference Include="XNAssets.FontStashSharp.MonoGame" Version="$(XNAssetsVersion)" />
     <PackageReference Include="info.lundin.math.dll" Version="$(InfoLundinMathVersion)" />

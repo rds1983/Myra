@@ -7,6 +7,22 @@
     <OutputPath>bin\Stride\$(Configuration)</OutputPath>
   </PropertyGroup>
 
+  <Choose>
+    <!-- Define MATH_IFACES if net 7, 8, 9, or 10 -->
+    <When Condition="'$(TargetFramework.TrimEnd(`0123456789.`))' == 'net' And ('$(TargetFramework)' == 'net7.0' Or '$(TargetFramework)' == 'net8.0' Or '$(TargetFramework)' == 'net9.0' Or '$(TargetFramework)' == 'net10.0')">
+      <PropertyGroup>
+        <DefineConstants>$(DefineConstants);MATH_IFACES</DefineConstants>
+      </PropertyGroup>
+    </When>
+
+    <!-- Include Generic.Math lib if MATH_IFACES is NOT defined -->
+    <When Condition="!$([System.Text.RegularExpressions.Regex]::IsMatch($(DefineConstants), '^(.*;)*MATH_IFACES(;.*)*$'))">
+      <ItemGroup>
+        <PackageReference Include="Generic.Math" Version="1.0.2" />
+      </ItemGroup>
+    </When>
+  </Choose>
+  
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>

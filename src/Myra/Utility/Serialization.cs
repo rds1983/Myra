@@ -88,7 +88,7 @@ namespace Myra.Utility
 				throw new Exception("Rectangle should consist of 4 numbers");
 			}
 
-			Rectangle result;
+			Rectangle result = default;
 			result.X = int.Parse(parts[0].Trim());
 			result.Y = int.Parse(parts[1].Trim());
 			result.Width = int.Parse(parts[2].Trim());

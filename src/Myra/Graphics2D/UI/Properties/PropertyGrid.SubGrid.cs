@@ -6,6 +6,8 @@ using Myra.Attributes;
 using Microsoft.Xna.Framework;
 #elif STRIDE
 using Stride.Core.Mathematics;
+#elif PLATFORM_AGNOSTIC
+using System.Drawing;
 #endif
 
 namespace Myra.Graphics2D.UI.Properties
