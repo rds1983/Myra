@@ -18,7 +18,8 @@ namespace Myra.Graphics2D.UI
 	{
 		private readonly SingleItemLayout<Button> _layout;
 
-		private float _value;
+		private float _value, _wheelStep;
+		private bool _wheelAdjustment;
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -65,6 +66,34 @@ namespace Myra.Graphics2D.UI
 				SyncHintWithValue();
 
 				ValueChanged?.Invoke(this, new ValueChangedEventArgs<float>(oldValue, value));
+			}
+		}
+
+		[Category("Behavior")]
+		[DefaultValue(false)]
+		public bool WheelAdjustment
+		{
+			get 
+			{
+				return _wheelAdjustment;
+			}
+			set
+			{
+				_wheelAdjustment = value;
+			}
+		}
+
+		[Category("Behavior")]
+		[DefaultValue(1.0f)]
+		public float WheelStep
+		{
+			get
+			{
+				return _wheelStep;
+			}
+			set
+			{
+				_wheelStep = value;
 			}
 		}
 
@@ -205,6 +234,34 @@ namespace Myra.Graphics2D.UI
 
 			UpdateHint();
 			ImageButton.IsPressed = true;
+		}
+
+		public override void OnMouseWheel(float delta)
+		{
+			base.OnMouseWheel(delta);
+			
+			if(_wheelAdjustment)
+			{
+				var prevValue = _value;
+				
+				if (delta < 0)
+				{
+					Value -= WheelStep;
+				}				
+				else
+				{
+					Value += WheelStep;
+				}
+
+				if (Value != prevValue)
+				{
+					var ev = ValueChanged;
+					ev?.Invoke(this, new ValueChangedEventArgs<float>(prevValue, _value));
+
+					ev = ValueChangedByUser;
+					ev?.Invoke(this, new ValueChangedEventArgs<float>(prevValue, _value));
+				}
+			}
 		}
 
 		private void UpdateHint()
