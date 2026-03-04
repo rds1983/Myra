@@ -19,7 +19,7 @@ namespace Myra.Graphics2D.UI
 		private readonly SingleItemLayout<Button> _layout;
 
 		private float _value, _wheelStep;
-		private bool _wheelAdjustment;
+		private bool _wheelAdjustment, _acceptWheelInput;
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -80,6 +80,7 @@ namespace Myra.Graphics2D.UI
 			set
 			{
 				_wheelAdjustment = value;
+				_acceptWheelInput = value;
 			}
 		}
 
@@ -94,6 +95,13 @@ namespace Myra.Graphics2D.UI
 			set
 			{
 				_wheelStep = value;
+			}
+		}
+
+		protected internal override bool AcceptsMouseWheel {
+			get
+			{
+				return _acceptWheelInput;
 			}
 		}
 
