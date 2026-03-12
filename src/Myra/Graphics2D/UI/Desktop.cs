@@ -93,33 +93,33 @@ namespace Myra.Graphics2D.UI
 
 		public Func<Rectangle> BoundsFetcher = DefaultBoundsFetcher;
 
-        private Func<MyraViewportAdapter> _viewportAdapterFetcher;
-        public Func<MyraViewportAdapter> ViewportAdapterFetcher
-        {
-            get => _viewportAdapterFetcher;
+		private Func<MyraViewportAdapter> _viewportAdapterFetcher;
+		public Func<MyraViewportAdapter> ViewportAdapterFetcher
+		{
+			get => _viewportAdapterFetcher;
 
-            set
-            {
-                _viewportAdapterFetcher = value;
-                BoundsFetcher = () =>
-                {
-                    if (ViewportAdapter.HasValue)
-                    {
-                        var viewAdapter = ViewportAdapter.Value;
-                        return new Rectangle(viewAdapter.X, viewAdapter.Y, viewAdapter.VirtualWidth, viewAdapter.VirtualHeight);
-                    }
-                    else
-                    {
-                        return DefaultBoundsFetcher();
-                    }
-                };
-            }
-        }
+			set
+			{
+				_viewportAdapterFetcher = value;
+				BoundsFetcher = () =>
+				{
+					if (ViewportAdapter.HasValue)
+					{
+						var viewAdapter = ViewportAdapter.Value;
+						return new Rectangle(viewAdapter.X, viewAdapter.Y, viewAdapter.VirtualWidth, viewAdapter.VirtualHeight);
+					}
+					else
+					{
+						return DefaultBoundsFetcher();
+					}
+				};
+			}
+		}
 
-        public MyraViewportAdapter? ViewportAdapter { get; private set; }
+		public MyraViewportAdapter? ViewportAdapter { get; private set; }
 
 
-        internal Rectangle InternalBounds
+		internal Rectangle InternalBounds
 		{
 			get => _bounds;
 
@@ -514,12 +514,12 @@ namespace Myra.Graphics2D.UI
 			// Disable transform during setting the scissor rectangle for the Desktop
 			_renderContext.Transform = Transform;
 
-            if (ViewportAdapter.HasValue)
-            {
-                _renderContext.Transform = new Transform(ViewportAdapter.Value.TransformMatrix, Vector2.One, 0f);
-            }
+			if (ViewportAdapter.HasValue)
+			{
+				_renderContext.Transform = new Transform(ViewportAdapter.Value.TransformMatrix, Vector2.One, 0f);
+			}
 
-            var bounds = _renderContext.Transform.Apply(LayoutBounds);
+			var bounds = _renderContext.Transform.Apply(LayoutBounds);
 			_renderContext.Scissor = bounds;
 			_renderContext.Opacity = Opacity;
 
@@ -548,14 +548,16 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public void Render()
-        {
-            ViewportAdapter = ViewportAdapterFetcher?.Invoke();
+		{
+			ViewportAdapter = ViewportAdapterFetcher?.Invoke();
 
-            if (ViewportAdapter.HasValue)
-                _renderContext.TransformMatrix = ViewportAdapter.Value.TransformMatrix;
+			if (ViewportAdapter.HasValue)
+			{
+				_renderContext.TransformMatrix = ViewportAdapter.Value.TransformMatrix;
+			}
 
-            // Layout run
-            UpdateLayout();
+			// Layout run
+			UpdateLayout();
 
 			// First input run: set Desktop/Widgets input states and schedule input events
 			UpdateInput();
@@ -582,8 +584,8 @@ namespace Myra.Graphics2D.UI
 			// Do another layout run, since an input event could cause the layout change
 			UpdateLayout();
 
-            // Render run
-            RenderVisual();
+			// Render run
+			RenderVisual();
 		}
 
 		private void InvalidateTransform()

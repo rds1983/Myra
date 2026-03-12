@@ -18,7 +18,7 @@ using Myra.Platform;
 
 namespace Myra.Graphics2D.UI
 {
-	partial class Widget: IInputEventsProcessor
+	partial class Widget : IInputEventsProcessor
 	{
 		private DateTime? _lastTouchDown;
 		private DateTime? _lastMouseMovement;
@@ -288,25 +288,25 @@ namespace Myra.Graphics2D.UI
 
 					_lastMouseMovement = null;
 
-                    if (MyraEnvironment.SetMouseCursorFromWidget && MouseCursor != null)
-                    {
-                        Widget ancestor = Parent;
-                        while (ancestor != null && !ancestor.IsMouseInside)
-                        {
-                            ancestor = ancestor.Parent;
-                        }
+					if (MyraEnvironment.SetMouseCursorFromWidget && MouseCursor != null)
+					{
+						Widget ancestor = Parent;
+						while (ancestor != null && !ancestor.IsMouseInside)
+						{
+							ancestor = ancestor.Parent;
+						}
 
-                        if (ancestor != null && ancestor.MouseCursor != null)
-                        {
-                            MyraEnvironment.MouseCursorType = ancestor.MouseCursor.Value;
-                        }
-                        else
-                        {
-                            MyraEnvironment.MouseCursorType = MyraEnvironment.DefaultMouseCursorType;
-                        }
-                    }
+						if (ancestor != null && ancestor.MouseCursor != null)
+						{
+							MyraEnvironment.MouseCursorType = ancestor.MouseCursor.Value;
+						}
+						else
+						{
+							MyraEnvironment.MouseCursorType = MyraEnvironment.DefaultMouseCursorType;
+						}
+					}
 
-                    OnMouseLeft();
+					OnMouseLeft();
 					MouseLeft.Invoke(this);
 					break;
 				case InputEventType.MouseEntered:

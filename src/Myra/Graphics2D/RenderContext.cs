@@ -106,7 +106,7 @@ namespace Myra.Graphics2D
 		public Matrix? TransformMatrix { get; set; }
 
 #if MONOGAME
-        private bool _isAnisotropicFilteringOn;
+		private bool _isAnisotropicFilteringOn;
 #endif
 
 		internal Rectangle DeviceScissor
@@ -473,7 +473,7 @@ namespace Myra.Graphics2D
 				null,
 				UIRasterizerState,
 				null,
-                TransformMatrix);
+				TransformMatrix);
 #elif FNA
 			var samplerState = SelectedSamplerState();
 

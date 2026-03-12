@@ -30,7 +30,7 @@ namespace Myra.Graphics2D.UI
 		public float Wheel;
 	}
 
-	partial class Desktop: IInputEventsProcessor
+	partial class Desktop : IInputEventsProcessor
 	{
 		private MouseInfo _lastMouseInfo;
 		private DateTime? _lastKeyDown;
@@ -145,11 +145,11 @@ namespace Myra.Graphics2D.UI
 
 			var mouseInfo = MyraEnvironment.MouseInfoGetter();
 
-            Vector2 mousePos = Vector2.Zero;
-            if (ViewportAdapter.HasValue)
-            {
+			Vector2 mousePos = Vector2.Zero;
+			if (ViewportAdapter.HasValue)
+			{
 #if PLATFORM_AGNOSTIC
-                Matrix.Invert(ViewportAdapter.Value.TransformMatrix, out var inv);
+				Matrix.Invert(ViewportAdapter.Value.TransformMatrix, out var inv);
 #else
 				var inv = Matrix.Invert(ViewportAdapter.Value.TransformMatrix);
 #endif
@@ -158,19 +158,19 @@ namespace Myra.Graphics2D.UI
                 mousePos = new Vector2(transformed.X, transformed.Y);
 #else
 
-                mousePos = Vector2.Transform(mouseInfo.Position.ToVector2(), inv);
+				mousePos = Vector2.Transform(mouseInfo.Position.ToVector2(), inv);
 #endif
-            }
-            else
-            {
-                mousePos = mouseInfo.Position.ToVector2();
-            }
+			}
+			else
+			{
+				mousePos = mouseInfo.Position.ToVector2();
+			}
 
-            // Mouse Position
-            MousePosition = mousePos.ToPoint();
+			// Mouse Position
+			MousePosition = mousePos.ToPoint();
 
-            // Touch Position
-            Point? touchPosition = null;
+			// Touch Position
+			Point? touchPosition = null;
 			if (mouseInfo.IsLeftButtonDown || mouseInfo.IsRightButtonDown || mouseInfo.IsMiddleButtonDown)
 			{
 				// Touch by mouse
@@ -214,17 +214,17 @@ namespace Myra.Graphics2D.UI
 			{
 				var pos = touchState[0].Position;
 
-                if (ViewportAdapter.HasValue)
-                {
+				if (ViewportAdapter.HasValue)
+				{
 #if PLATFORM_AGNOSTIC
-                    Matrix.Invert(ViewportAdapter.Value.TransformMatrix, out var inv);
+					Matrix.Invert(ViewportAdapter.Value.TransformMatrix, out var inv);
 #else
 					var inv = Matrix.Invert(ViewportAdapter.Value.TransformMatrix);
 #endif
-                    pos = Vector2.Transform(new Vector2(pos.X, pos.Y), inv);
-                }
+					pos = Vector2.Transform(new Vector2(pos.X, pos.Y), inv);
+				}
 
-                TouchPosition = new Point((int)pos.X, (int)pos.Y);
+				TouchPosition = new Point((int)pos.X, (int)pos.Y);
 			}
 			else
 			{
