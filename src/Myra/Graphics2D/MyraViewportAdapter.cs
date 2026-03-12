@@ -10,16 +10,16 @@ using Matrix = System.Numerics.Matrix3x2;
 
 namespace Myra.Graphics2D
 {
-    public struct MyraViewportAdapter
-    {
-        public int VirtualWidth { get; set; }
+	public struct MyraViewportAdapter
+	{
+		public int VirtualWidth { get; set; }
 
-        public int VirtualHeight { get; set; }
+		public int VirtualHeight { get; set; }
 
-        public int X { get; set; }
+		public int X { get; set; }
 
-        public int Y { get; set; }
+		public int Y { get; set; }
 
-        public Matrix TransformMatrix { get; set; }
-    }
+		public Matrix TransformMatrix { get; set; }
+	}
 }

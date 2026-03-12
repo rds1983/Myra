@@ -854,14 +854,14 @@ namespace Myra.Graphics2D.UI
 			{
 				var absoluteBounds = context.Transform.Apply(Bounds);
 
-                if (Desktop.ViewportAdapter.HasValue)
-                {
-                    // position stored in context.Transform, so we need apply Transform twice
-                    var scaledTransform = new Transform(context.TransformMatrix.Value, Vector2.One, 0);
-                    absoluteBounds = scaledTransform.Apply(absoluteBounds);
-                }
+				if (Desktop.ViewportAdapter.HasValue)
+				{
+					// position stored in context.Transform, so we need apply Transform twice
+					var scaledTransform = new Transform(context.TransformMatrix.Value, Vector2.One, 0);
+					absoluteBounds = scaledTransform.Apply(absoluteBounds);
+				}
 
-                var scissorBounds = Rectangle.Intersect(context.Scissor, absoluteBounds);
+				var scissorBounds = Rectangle.Intersect(context.Scissor, absoluteBounds);
 
 				if (scissorBounds.Width == 0 || scissorBounds.Height == 0)
 				{
