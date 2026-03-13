@@ -1,0 +1,93 @@
+using System;
+
+#if MATH_IFACES
+using System.Numerics;
+#endif
+
+namespace Myra.Utility.Types
+{
+    /// <summary>
+    /// Represents a generic-number value range with optional minimum and maximum clamp.
+    /// </summary>
+    public struct Range<TNum>
+#if MATH_IFACES
+        where TNum : struct, INumber<TNum>, IMinMaxValue<TNum>
+#else
+        where TNum : struct
+#endif
+    {
+        static Range()
+        {
+            Type arg = typeof(TNum);
+            TypeInfo info = TypeHelper<TNum>.Info;
+            
+            if(info.IsNullable)
+                throw new ArgumentException($"Invalid Generic-Type Argument: '{arg}', Nullable types are unsupported");
+            if(!info.IsNumber)
+                throw new ArgumentException($"Invalid Generic-Type Argument: '{arg}', Only numeric types are supported");
+        }
+        /// <summary>
+        /// Returns a range that spans the entire TNum data type
+        /// </summary>
+        public static Range<TNum> ValueTypeRange
+        {
+#if MATH_IFACES
+            get => new Range<TNum>(MathHelper<TNum>.MinValue, MathHelper<TNum>.MaxValue);
+#else
+            get => new Range<TNum>(null, null);
+#endif
+        }
+        /// <summary>
+        /// Returns a range from zero to one.
+        /// </summary>
+        public static Range<TNum> ZeroOne => new Range<TNum>(MathHelper<TNum>.Zero, MathHelper<TNum>.One);
+        
+        public Range(TNum min, TNum max)
+        {
+            _min = min;
+            _max = max;
+        }
+        public Range(TNum? min = null, TNum? max = null)
+        {
+            _min = min;
+            _max = max;
+        }
+        
+        private TNum? _min, _max;
+
+        public TNum? Min
+        {
+            get => _min;
+            set => _min = value;
+        }
+        public TNum? Max
+        {
+            get => _max;
+            set => _max = value;
+        }
+
+        public bool InsideMinBound(TNum value)
+        {
+            if (_min.HasValue && MathHelper<TNum>.LessThan(value, _min.Value))
+                return false;
+            return true;
+        }
+        public bool InsideMaxBound(TNum value)
+        {
+            if (_max.HasValue && MathHelper<TNum>.GreaterThan(value, _max.Value))
+                return false;
+            return true;
+        }
+        
+        public bool IsInRange(TNum value)
+        {
+            if (_min.HasValue && MathHelper<TNum>.LessThan(value, _min.Value))
+                return false;
+            if (_max.HasValue && MathHelper<TNum>.GreaterThan(value, _max.Value))
+                return false;
+            return true;
+        }
+        /// <inheritdoc cref="MathHelper{TNum}.Clamp(TNum, TNum?, TNum?)"/>
+        public TNum Clamp(TNum value) => MathHelper<TNum>.Clamp(value, _min, _max);
+    }
+}

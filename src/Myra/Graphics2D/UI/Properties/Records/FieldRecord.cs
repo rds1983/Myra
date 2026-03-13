@@ -7,16 +7,8 @@ namespace Myra.Graphics2D.UI.Properties
 	{
 		private readonly FieldInfo _fieldInfo;
 
-		public override string Name
-		{
-			get { return _fieldInfo.Name; }
-		}
-
-		public override Type Type
-		{
-			get { return _fieldInfo.FieldType; }
-		}
-
+		public override string Name => _fieldInfo.Name;
+		public override Type Type => _fieldInfo.FieldType;
 		public override MemberInfo MemberInfo => _fieldInfo;
 
 		public FieldRecord(FieldInfo fieldInfo)
@@ -24,14 +16,14 @@ namespace Myra.Graphics2D.UI.Properties
 			_fieldInfo = fieldInfo;
 		}
 
-		public override object GetValue(object obj)
+		public override object GetValue(object field)
 		{
-			return _fieldInfo.GetValue(obj);
+			return _fieldInfo.GetValue(field);
 		}
 
-		public override void SetValue(object obj, object value)
+		public override void SetValue(object field, object value)
 		{
-			_fieldInfo.SetValue(obj, value);
+			_fieldInfo.SetValue(field, value);
 		}
 	}
 }

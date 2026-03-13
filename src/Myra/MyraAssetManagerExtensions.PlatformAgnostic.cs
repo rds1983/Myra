@@ -10,7 +10,7 @@ using Texture2D = System.Object;
 
 namespace AssetManagementBase
 {
-	partial class MyraAssetManagerExtensions
+	public static partial class MyraAssetManagerExtensions
 	{
 		internal class Texture2DWrapper
 		{

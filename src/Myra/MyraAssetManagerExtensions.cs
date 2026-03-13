@@ -168,7 +168,7 @@ namespace AssetManagementBase
 				var parts = assetName.Split(':');
 				if (parts.Length < 2)
 				{
-					throw new Exception("Missing font size");
+					throw new ArgumentException("Missing font size");
 				}
 
 				var fontSize = int.Parse(parts[1].Trim());
@@ -177,7 +177,7 @@ namespace AssetManagementBase
 				return fontSystem.GetFont(fontSize);
 			}
 
-			throw new Exception(string.Format("Can't load font '{0}'", assetName));
+			throw new ArgumentException(string.Format("Can't load font '{0}'", assetName));
 		}
 
 		public static Stylesheet LoadStylesheet(this AssetManager assetManager, string assetName) => assetManager.UseLoader(_stylesheetLoader, assetName);

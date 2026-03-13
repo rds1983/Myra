@@ -133,7 +133,7 @@ namespace Myra.Samples.AllWidgets
 				Content = imageButtonContent
 			});
 			node3.AddSubNode(new HorizontalSlider());
-			node3.AddSubNode(new SpinButton());
+			node3.AddSubNode(new SpinButton<float>());
 
 			var imageButtonContent2 = new HorizontalStackPanel
 			{

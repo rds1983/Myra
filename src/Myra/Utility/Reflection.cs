@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using Myra.Utility.Types;
 
 namespace Myra.Utility
 {
@@ -78,6 +79,7 @@ namespace Myra.Utility
 				for (int i = 0; i < typeParameters.Length; ++i)
 				{
 					string typeParamName = typeParameters[i].Name;
+					TypeHelper.NameSwap_DotNetToKeyword(ref typeParamName);
 					friendlyName += (i == 0 ? typeParamName : "," + typeParamName);
 				}
 				friendlyName += ">";
@@ -120,9 +122,14 @@ namespace Myra.Utility
 			return FindGenericType(baseType, genericType);
 		}
 
-		public static bool IsNumericInteger(this Type t)
+		public static bool IsNumericType(this Type t) => IsNumericType(Type.GetTypeCode(t));
+		public static bool IsNumericType(this TypeCode t) => IsNumericInteger(t) || IsNumericFractional(t);
+		
+		public static bool IsNumericInteger(this Type t) => IsNumericInteger(Type.GetTypeCode(t));
+		public static bool IsNumericFractional(this Type t) => IsNumericFractional(Type.GetTypeCode(t));
+		public static bool IsNumericInteger(this TypeCode t)
 		{
-			switch (Type.GetTypeCode(t))
+			switch (t)
 			{
 				case TypeCode.Byte:
 				case TypeCode.SByte:
@@ -137,15 +144,9 @@ namespace Myra.Utility
 					return false;
 			}
 		}
-
-		public static bool IsNumericType(this Type t)
+		public static bool IsNumericFractional(this TypeCode t)
 		{
-			if (IsNumericInteger(t))
-			{
-				return true;
-			}
-
-			switch (Type.GetTypeCode(t))
+			switch (t)
 			{
 				case TypeCode.Decimal:
 				case TypeCode.Double:
@@ -154,6 +155,23 @@ namespace Myra.Utility
 				default:
 					return false;
 			}
+		}
+		public static bool IsSigned(this TypeCode t)
+		{
+			// https://learn.microsoft.com/en-us/dotnet/api/system.typecode
+			int val = (int)t;
+			if (val < 5)
+				return false;
+			
+			if (val > 12)
+			{
+				if (val <= 15) // 13-15 are floating point
+					return true;
+				return false;
+			}
+			
+			val -= 5;
+			return val % 2 == 0; // Test even/odd
 		}
 	}
 }

@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using System;
 using Myra.MML;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Myra.Attributes;
 using System.Linq;
 using Myra.Graphics2D.TextureAtlases;
@@ -44,7 +45,7 @@ namespace Myra.Graphics2D.UI
 
 	public class Project
 	{
-		private struct StylesheetChanger: IDisposable
+		private struct StylesheetChanger : IDisposable
 		{
 			private readonly Stylesheet _oldStylesheet;
 
@@ -64,8 +65,21 @@ namespace Myra.Graphics2D.UI
 		public const string DefaultProportionName = "DefaultProportion";
 		public const string DefaultColumnProportionName = "DefaultColumnProportion";
 		public const string DefaultRowProportionName = "DefaultRowProportion";
-
-		private static readonly Dictionary<string, string> LegacyClassNames = new Dictionary<string, string>();
+		
+		public const string GenericTypeArgName = "GenericTypeArg";
+		internal const char LegacySeparator = ':';
+		internal const string LegacyClassToGeneric = "TO_GENERIC";
+		internal const string LegacyToGenericDefaultType = "DEFAULT_TYPE";
+		private static readonly ReadOnlyDictionary<string, string> LegacyClassNames = new ReadOnlyDictionary<string, string>(new Dictionary<string, string>
+		{
+			{"VerticalBox",   "VerticalStackPanel"},
+			{"HorizontalBox", "HorizontalStackPanel"},
+			{"TextField",     "TextBox"},
+			{"TextBlock",     "Label"},
+			{"ScrollPane",    "ScrollViewer"},
+			// SpinButton was made generic, default to SpinButton<float> if using legacy format:
+			{"SpinButton", $"{LegacyClassToGeneric}{LegacySeparator}SpinButton<>{LegacySeparator}{LegacyToGenericDefaultType}{LegacySeparator}Single"},
+		});
 
 		private readonly ExportOptions _exportOptions = new ExportOptions();
 
@@ -95,16 +109,7 @@ namespace Myra.Graphics2D.UI
 		[Browsable(false)]
 		[XmlIgnore]
 		public List<Tuple<object, XElement>> ObjectsNodes { get; internal set; }
-
-		static Project()
-		{
-			LegacyClassNames["VerticalBox"] = "VerticalStackPanel";
-			LegacyClassNames["HorizontalBox"] = "HorizontalStackPanel";
-			LegacyClassNames["TextField"] = "TextBox";
-			LegacyClassNames["TextBlock"] = "Label";
-			LegacyClassNames["ScrollPane"] = "ScrollViewer";
-		}
-
+		
 		public Project()
 		{
 			Stylesheet = Stylesheet.Current;
@@ -208,11 +213,12 @@ namespace Myra.Graphics2D.UI
 			};
 
 			Dictionary<Assembly, string[]> assemblies = new Dictionary<Assembly, string[]>(ExtraWidgetAssembliesAndNamespaces);
+			assemblies.Add(typeof(float).Assembly, new string[] { typeof(float).Namespace });
 			assemblies.Add(typeof(Widget).Assembly, new string[] { typeof(Widget).Namespace, typeof(PropertyGrid).Namespace });
 			return new LoadContext
 			{
 				Assemblies = assemblies,
-				LegacyClassNames = LegacyClassNames,
+				LegacyClassNames = new Dictionary<string, string>(LegacyClassNames),
 				ObjectCreator = (t, el) => CreateItem(t, el),
 				ResourceGetter = resourceGetter
 			};

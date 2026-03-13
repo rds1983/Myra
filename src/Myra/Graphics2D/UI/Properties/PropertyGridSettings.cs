@@ -5,6 +5,7 @@ using AssetManagementBase;
 
 namespace Myra.Graphics2D.UI.Properties
 {
+	[Obsolete("Properties moved to IInspector")]
 	public class PropertyGridSettings
 	{
 		[Browsable(false)]

@@ -222,10 +222,10 @@ namespace Myra.Samples.GridContainer
 
 			grid.Widgets.Add(textField);
 
-			var spinButton2 = new SpinButton
+			var spinButton2 = new SpinButton<int>
 			{
 				Width = 100,
-				Integer = true
+				Value = 0,
 			};
 			Grid.SetColumn(spinButton2, 5);
 			Grid.SetRow(spinButton2, 2);

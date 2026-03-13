@@ -11,6 +11,8 @@ using Myra.Graphics2D;
 using FontStashSharp;
 using FontStashSharp.RichText;
 using info.lundin.math;
+using Myra.Graphics2D.UI;
+using Myra.Utility.Types;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -22,16 +24,15 @@ using Color = FontStashSharp.FSColor;
 
 namespace Myra.MML
 {
-	internal class SaveContext: BaseContext
+	internal class SaveContext : BaseContext
 	{
 		public Func<object, PropertyInfo, bool> ShouldSerializeProperty = HasDefaultValue;
 
 		private static string SaveSimpleProperty(BaseObject baseObject, object value, Type propertyType, string propertyName)
 		{
 			string str = null;
-
-			var serializer = FindSerializer(propertyType);
-			if (serializer != null)
+			
+			if (Serialization.TryFindSerializer(propertyType, out var serializer))
 			{
 				str = serializer.Serialize(value);
 			}
@@ -39,8 +40,7 @@ namespace Myra.MML
 			{
 				str = ((Color?)value).Value.ToHexString();
 			}
-			else
-			if (propertyType == typeof(Color))
+			else if (propertyType == typeof(Color))
 			{
 				str = ((Color)value).ToHexString();
 			}
@@ -62,14 +62,28 @@ namespace Myra.MML
 		public XElement Save(object obj, bool skipComplex = false, string tagName = null, Type parentType = null)
 		{
 			var type = obj.GetType();
-
 			var baseObject = obj as BaseObject;
 
 			List<PropertyInfo> complexProperties, simpleProperties;
 			ParseProperties(type, true, out complexProperties, out simpleProperties);
+			
+			if (string.IsNullOrEmpty(tagName))
+			{
+				tagName = type.Name;
+			}
 
-			var el = new XElement(tagName ?? type.Name);
+			bool isGeneric = type.IsGenericType;
+			TypeHelper.StripGenericFromString(ref tagName);
+			
+			XElement el = new XElement(tagName);
 
+			if (isGeneric)
+			{
+				string genericTypeArg = type.GenericTypeArguments[0].Name.Split('.').Last();
+				TypeHelper.NameSwap_DotNetToKeyword(ref genericTypeArg);
+				el.SetAttributeValue(Project.GenericTypeArgName, genericTypeArg);
+			}
+			
 			foreach (var property in simpleProperties)
 			{
 				if (!ShouldSerializeProperty(obj, property))
@@ -117,8 +131,7 @@ namespace Myra.MML
 			if (!skipComplex)
 			{
 				var contentProperty = (from p in complexProperties
-									   where p.FindAttribute<ContentAttribute>()
-									   != null
+									   where p.FindAttribute<ContentAttribute>() != null
 									   select p).FirstOrDefault();
 
 				foreach (var property in complexProperties)
@@ -139,7 +152,7 @@ namespace Myra.MML
 					var asList = value as IList;
 					if (asList == null)
 					{
-						el.Add(isContent?Save(value):Save(value, false, propertyName));
+						el.Add(isContent ? Save(value) : Save(value, false, propertyName));
 					}
 					else
 					{

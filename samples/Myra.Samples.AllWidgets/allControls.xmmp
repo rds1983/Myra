@@ -23,7 +23,7 @@
         </MenuItem>
       </HorizontalMenu>
       <HorizontalSplitPane StackPanel.ProportionType="Fill">
-        <ScrollViewer ShowHorizontalScrollBar="False">
+        <ScrollViewer ScrollMultiplier="10" ShowHorizontalScrollBar="False">
           <Grid ColumnSpacing="8" RowSpacing="8" Id="_gridRight">
             <Grid.DefaultRowProportion Type="Auto" />
             <Grid.ColumnsProportions>
@@ -77,7 +77,7 @@
             <Label Text="Text Field:" Grid.Row="8" />
             <TextBox Grid.Column="1" Grid.Row="8" Grid.ColumnSpan="2" />
             <Label Text="Spin Button:" Grid.Row="9" />
-            <SpinButton Value="1" Width="100" Grid.Column="1" Grid.Row="9" />
+            <SpinButton GenericTypeArg="int" Value="5" DecimalPlaces="0" Width="100" Grid.Column="1" Grid.Row="9" />
             <Label Text="List View:" Grid.Row="10" />
             <ListView Width="200" Grid.Column="1" Grid.Row="10" Grid.ColumnSpan="2">
               <Label Text="Red" TextColor="#FF0000FF" />

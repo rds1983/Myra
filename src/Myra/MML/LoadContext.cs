@@ -11,6 +11,7 @@ using Myra.Attributes;
 using FontStashSharp;
 using Myra.Utility;
 using FontStashSharp.RichText;
+using Myra.Utility.Types;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -22,7 +23,7 @@ using Color = FontStashSharp.FSColor;
 
 namespace Myra.MML
 {
-	internal class LoadContext: BaseContext
+	internal class LoadContext : BaseContext
 	{
 		struct SimplePropertyInfo
 		{
@@ -71,6 +72,7 @@ namespace Myra.MML
 		public readonly List<Tuple<object, XElement>> ObjectsNodes = new List<Tuple<object, XElement>>();
 
 		private const string UserDataAttributePrefix = "_";
+		private static readonly char[] LegacySplitChar = new char[] { Project.LegacySeparator };
 
 		public void Load<T>(object obj, XElement el, T handler) where T : class
 		{
@@ -83,9 +85,9 @@ namespace Myra.MML
 
 			List<PropertyInfo> complexProperties, simpleProperties;
 			ParseProperties(type, false, out complexProperties, out simpleProperties);
-
+			
 			string newName;
-			foreach (var attr in el.Attributes())
+			foreach (XAttribute attr in el.Attributes())
 			{
 				var propertyName = attr.Name.ToString();
 				if (LegacyPropertyNames != null && LegacyPropertyNames.TryGetValue(propertyName, out newName))
@@ -130,13 +132,11 @@ namespace Myra.MML
 					object value = null;
 
 					var propertyType = simplePropertyInfo.Value.PropertyType;
-					var serializer = FindSerializer(propertyType);
-					if (serializer != null)
+					if (Serialization.TryFindSerializer(propertyType, out var serializer))
 					{
 						value = serializer.Deserialize(attr.Value);
-					} else 
-					if (propertyType.IsEnum ||
-						propertyType.IsNullableEnum())
+					}
+					else if (propertyType.IsEnum || propertyType.IsNullableEnum())
 					{
 						if (propertyType.IsNullableEnum())
 						{
@@ -185,12 +185,8 @@ namespace Myra.MML
 					}
 					else
 					{
-						if (propertyType.IsNullablePrimitive())
-						{
-							propertyType = propertyType.GetNullableType();
-						}
-
-						value = Convert.ChangeType(attr.Value, propertyType, CultureInfo.InvariantCulture);
+						TypeHelper.GetNullableTypeOrPassThrough(ref propertyType);
+						value = Convert.ChangeType(attr.Value, propertyType, CultureInfo.InvariantCulture);	
 					}
 
 					simplePropertyInfo.Value.SetValue(obj, value);
@@ -217,14 +213,13 @@ namespace Myra.MML
 				}
 			}
 			
-
 			var contentProperty = (from p in complexProperties
-								   where p.FindAttribute<ContentAttribute>() 
-								   != null select p).FirstOrDefault();
+								   where p.FindAttribute<ContentAttribute>() != null 
+								   select p).FirstOrDefault();
 
-			foreach (var child in el.Elements())
+			foreach (XElement child in el.Elements())
 			{
-				var childName = child.Name.ToString();
+				string childName = child.Name.ToString();
 				if (NodesToIgnore != null && NodesToIgnore.Contains(childName))
 				{
 					continue;
@@ -305,31 +300,39 @@ namespace Myra.MML
 					// Property not found
 					if (isProperty)
 					{
-						throw new Exception(string.Format("Class {0} doesnt have property {1}", type.Name, childName));
+						throw new Exception($"Class '{type.Name}' doesn't have property '{childName}'");
 					}
 
 					// Should be widget class name then
-					var widgetName = childName;
-					if (LegacyClassNames != null && LegacyClassNames.TryGetValue(widgetName, out newName))
+					string widgetName = childName;
+					bool isGeneric = TypeHelper.IsGenericTypeName_FrontEnd(widgetName);
+					string genericTypeArgName = null;
+					
+					LegacyClassNameReplace(child, ref widgetName, ref isGeneric, ref genericTypeArgName);
+					
+					Type itemType;
+					if (isGeneric)
 					{
-						widgetName = newName;
-					}
-
-					Type itemType = null;
-					foreach (var pair in Assemblies)
-					{
-						foreach (var ns in pair.Value)
+						if (!TryResolveType(widgetName, out itemType))
 						{
-							var widgetType = pair.Key.GetType(ns + "." + widgetName);
-							if (widgetType != null)
+							throw new Exception($"Could not resolve open-generic type name: '{widgetName}'");
+						}
+						if (!TryResolveType(genericTypeArgName, out Type genericTypeArg))
+						{
+							// The type might be a keyword, convert it to internal and try again
+							TypeHelper.NameSwap_KeywordToDotNet(ref genericTypeArgName);
+							if (!TryResolveType(genericTypeArgName, out genericTypeArg))
 							{
-								itemType = widgetType;
-								break;
+								throw new Exception($"Could not resolve generic argument type: '{genericTypeArgName}' of '{widgetName}'");
 							}
 						}
 
-						if (itemType != null)
-							break;
+						TypeHelper.SwapGenericTypeNameFormat(ref widgetName);
+						itemType = itemType.MakeGenericType(genericTypeArg);
+					}
+					else
+					{
+						TryResolveType(widgetName, out itemType);
 					}
 
 					if (itemType != null)
@@ -339,7 +342,7 @@ namespace Myra.MML
 
 						if (contentProperty == null)
 						{
-							throw new Exception(string.Format("Class {0} lacks property marked with ContentAttribute", type.Name));
+							throw new Exception($"Class '{type.Name}' lacks property marked with ContentAttribute");
 						}
 
 						var containerValue = contentProperty.GetValue(obj);
@@ -348,7 +351,8 @@ namespace Myra.MML
 						{
 							// List
 							asList.Add(item);
-						} else
+						} 
+						else
 						{
 							// Simple
 							contentProperty.SetValue(obj, item);
@@ -356,8 +360,69 @@ namespace Myra.MML
 					}
 					else
 					{
-						throw new Exception(string.Format("Could not resolve tag '{0}'", widgetName));
+						throw new Exception($"Could not resolve type '{widgetName}'");
 					}
+				}
+			}
+		}
+
+		private bool TryResolveType(string typeName, out Type itemType)
+		{
+			itemType = null;
+			foreach (var pair in Assemblies)
+			{
+				foreach (var ns in pair.Value)
+				{
+					var type = pair.Key.GetType(ns + "." + typeName);
+					if (type != null)
+					{
+						itemType = type;
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+		
+		private void LegacyClassNameReplace(XElement element, ref string typeName, ref bool isGeneric, ref string genericTypeArgName)
+		{
+			if(LegacyClassNames == null)
+				return;
+			
+			if (LegacyClassNames.TryGetValue(typeName, out string replace))
+			{
+				if (!replace.StartsWith(Project.LegacyClassToGeneric))
+				{
+					typeName = replace;
+					return;
+				}
+
+				string[] split = replace.Split(LegacySplitChar, StringSplitOptions.RemoveEmptyEntries);
+				
+				isGeneric = TypeHelper.IsGenericTypeName(split[1]);
+				if (isGeneric)
+				{
+					XAttribute attr = element.Attribute(Project.GenericTypeArgName);
+					if (attr == null)
+					{
+						for (int i = 0; i < split.Length - 1; i++)
+						{
+							if (split[i] == Project.LegacyToGenericDefaultType)
+								genericTypeArgName = split[i + 1]; //Set a default fallback type arg (LEGACY)
+						}
+						
+						if (!string.IsNullOrEmpty(genericTypeArgName))
+						{
+							element.SetAttributeValue(Project.GenericTypeArgName, genericTypeArgName);
+						}
+					}
+					else
+					{
+						genericTypeArgName = attr.Value;
+					}
+					
+					typeName = split[1];
+					TypeHelper.SwapGenericTypeNameFormat(ref typeName); //Swap end "<>" -> "`1"
 				}
 			}
 		}
