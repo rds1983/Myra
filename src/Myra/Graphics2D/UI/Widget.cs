@@ -61,9 +61,9 @@ namespace Myra.Graphics2D.UI
 		private Vector2 _scale = Vector2.One;
 		private Vector2 _transformOrigin = new Vector2(0.5f, 0.5f);
 		private float _rotation = 0.0f;
-		private Transform? _transform;
-		private Matrix _inverseMatrix;
-		private bool _inverseMatrixDirty = true;
+		private bool _transformDirty = true;
+		private Transform _transform;
+		private Matrix _fullMatrix, _inverseFullMatrix;
 
 		/// <summary>
 		/// Internal use only. (MyraPad)
@@ -719,34 +719,9 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				if (_transform == null)
-				{
-					var p = new Point(_layoutBounds.X + Left, _layoutBounds.Y + Top);
+				UpdateTransform();
 
-					var localTransform = new Transform(p.ToVector2(),
-						TransformOrigin * _layoutBounds.Size().ToVector2(),
-						Scale,
-						Rotation * (float)Math.PI / 180);
-
-					if (Parent != null)
-					{
-						var transform = Parent.Transform;
-						transform.AddTransform(ref localTransform);
-						_transform = transform;
-					}
-					else if (Desktop != null)
-					{
-						var transform = Desktop.Transform;
-						transform.AddTransform(ref localTransform);
-						_transform = transform;
-					}
-					else
-					{
-						_transform = localTransform;
-					}
-				}
-
-				return _transform.Value;
+				return _transform;
 			}
 		}
 
@@ -852,15 +827,7 @@ namespace Myra.Graphics2D.UI
 			Rectangle? oldScissorRectangle = null;
 			if (context.Transform.Rotation.IsZero())
 			{
-				var absoluteBounds = context.Transform.Apply(Bounds);
-
-				if (Desktop.ViewportAdapter.HasValue)
-				{
-					// position stored in context.Transform, so we need apply Transform twice
-					var scaledTransform = new Transform(context.TransformMatrix.Value, Vector2.One, 0);
-					absoluteBounds = scaledTransform.Apply(absoluteBounds);
-				}
-
+				var absoluteBounds = Bounds.Transform(ref _fullMatrix);
 				var scissorBounds = Rectangle.Intersect(context.Scissor, absoluteBounds);
 
 				if (scissorBounds.Width == 0 || scissorBounds.Height == 0)
@@ -1146,8 +1113,7 @@ namespace Myra.Graphics2D.UI
 
 		internal virtual void InvalidateTransform()
 		{
-			_transform = null;
-			_inverseMatrixDirty = true;
+			_transformDirty = true;
 
 			foreach (var child in ChildrenCopy)
 			{
@@ -1336,7 +1302,7 @@ namespace Myra.Graphics2D.UI
 				newTop = _startLeftTop.Y + (int)delta.Y;
 			}
 
-			var parentBounds = Parent != null ? Parent.Bounds : Desktop.InternalBounds;
+			var parentBounds = Parent != null ? Parent.Bounds : Desktop.InternalViewport.Bounds;
 			if (newLeft < 0)
 			{
 				newLeft = 0;
@@ -1361,25 +1327,25 @@ namespace Myra.Graphics2D.UI
 			Top = newTop;
 		}
 
-		public Vector2 ToGlobal(Vector2 pos) => Transform.Apply(pos);
+		public Vector2 ToGlobal(Vector2 pos)
+		{
+			UpdateTransform();
 
-		public Point ToGlobal(Point pos) => Transform.Apply(pos);
+			return pos.Transform(ref _fullMatrix);
+		}
+
+		public Point ToGlobal(Point source)
+		{
+			UpdateTransform();
+
+			return new Vector2(source.X, source.Y).Transform(ref _fullMatrix).ToPoint();
+		}
 
 		public Vector2 ToLocal(Vector2 source)
 		{
-			if (_inverseMatrixDirty)
-			{
-#if MONOGAME || FNA || STRIDE
-				_inverseMatrix = Matrix.Invert(Transform.Matrix);
-#else
-				Matrix inverse = Matrix.Identity;
-				Matrix.Invert(Transform.Matrix, out inverse);
-				_inverseMatrix = inverse;
-#endif
-				_inverseMatrixDirty = false;
-			}
+			UpdateTransform();
 
-			return source.Transform(ref _inverseMatrix);
+			return source.Transform(ref _inverseFullMatrix);
 		}
 
 		public Point ToLocal(Point pos) => ToLocal(new Vector2(pos.X, pos.Y)).ToPoint();
@@ -1389,6 +1355,58 @@ namespace Myra.Graphics2D.UI
 			var localPos = ToLocal(globalPos);
 			return BorderBounds.Contains(localPos);
 		}
+
+		private void UpdateTransform()
+		{
+			if (!_transformDirty)
+			{
+				return;
+			}
+
+			var p = new Point(_layoutBounds.X + Left, _layoutBounds.Y + Top);
+
+			var localTransform = new Transform(p.ToVector2(),
+				TransformOrigin * _layoutBounds.Size().ToVector2(),
+				Scale,
+				Rotation * (float)Math.PI / 180);
+
+			if (Parent != null)
+			{
+				var transform = Parent.Transform;
+				transform.AddTransform(ref localTransform);
+				_transform = transform;
+			}
+			else if (Desktop != null)
+			{
+				var transform = Desktop.Transform;
+				transform.AddTransform(ref localTransform);
+				_transform = transform;
+			}
+			else
+			{
+				_transform = localTransform;
+			}
+
+			if (Desktop != null)
+			{
+				_fullMatrix = _transform.Matrix * Desktop.InternalViewport.Transform;
+			}
+			else
+			{
+				_fullMatrix = _transform.Matrix;
+			}
+
+#if MONOGAME || FNA || STRIDE
+			_inverseFullMatrix = Matrix.Invert(_fullMatrix);
+#else
+			Matrix inverse = Matrix.Identity;
+			Matrix.Invert(_fullMatrix, out inverse);
+			_inverseFullMatrix = inverse;
+#endif
+
+			_transformDirty = false;
+		}
+
 
 		private void DesktopTouchUp(object sender, EventArgs args)
 		{

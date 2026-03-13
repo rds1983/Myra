@@ -145,29 +145,10 @@ namespace Myra.Graphics2D.UI
 
 			var mouseInfo = MyraEnvironment.MouseInfoGetter();
 
-			Vector2 mousePos = Vector2.Zero;
-			if (ViewportAdapter.HasValue)
-			{
-#if PLATFORM_AGNOSTIC
-				Matrix.Invert(ViewportAdapter.Value.TransformMatrix, out var inv);
-#else
-				var inv = Matrix.Invert(ViewportAdapter.Value.TransformMatrix);
-#endif
-#if STRIDE
-				var transformed = Vector2.Transform(mouseInfo.Position.ToVector2(), inv);
-                mousePos = new Vector2(transformed.X, transformed.Y);
-#else
-
-				mousePos = Vector2.Transform(mouseInfo.Position.ToVector2(), inv);
-#endif
-			}
-			else
-			{
-				mousePos = mouseInfo.Position.ToVector2();
-			}
+			var mousePos = ToLocal(mouseInfo.Position);
 
 			// Mouse Position
-			MousePosition = mousePos.ToPoint();
+			MousePosition = mousePos;
 
 			// Touch Position
 			Point? touchPosition = null;
@@ -212,18 +193,7 @@ namespace Myra.Graphics2D.UI
 
 			if (touchState.IsConnected && touchState.Count > 0)
 			{
-				var pos = touchState[0].Position;
-
-				if (ViewportAdapter.HasValue)
-				{
-#if PLATFORM_AGNOSTIC
-					Matrix.Invert(ViewportAdapter.Value.TransformMatrix, out var inv);
-#else
-					var inv = Matrix.Invert(ViewportAdapter.Value.TransformMatrix);
-#endif
-					pos = Vector2.Transform(new Vector2(pos.X, pos.Y), inv);
-				}
-
+				var pos = ToLocal(touchState[0].Position);
 				TouchPosition = new Point((int)pos.X, (int)pos.Y);
 			}
 			else

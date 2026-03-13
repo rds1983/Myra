@@ -102,8 +102,9 @@ namespace Myra.Graphics2D
 		private bool _beginCalled;
 		private Rectangle _scissor;
 		private TextureFiltering _textureFiltering = TextureFiltering.Nearest;
-		public Transform Transform;
-		public Matrix? TransformMatrix { get; set; }
+
+		internal Transform Transform;
+		internal Matrix BaseMatrix;
 
 #if MONOGAME
 		private bool _isAnisotropicFilteringOn;
@@ -473,7 +474,7 @@ namespace Myra.Graphics2D
 				null,
 				UIRasterizerState,
 				null,
-				TransformMatrix);
+				BaseMatrix);
 #elif FNA
 			var samplerState = SelectedSamplerState();
 
@@ -483,7 +484,7 @@ namespace Myra.Graphics2D
 				null,
 				UIRasterizerState,
 				null,
-				TransformMatrix ?? Matrix.Identity);
+				BaseMatrix);
 #elif STRIDE
 			var samplerState = SelectedSamplerState();
 

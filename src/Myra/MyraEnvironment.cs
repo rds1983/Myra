@@ -291,12 +291,12 @@ namespace Myra
 #if MONOGAME || FNA
 			var state = Mouse.GetState();
 
-            var pos = new Point(state.X - GraphicsDevice.Viewport.X, state.Y - GraphicsDevice.Viewport.Y);
+			var pos = new Point(state.X - GraphicsDevice.Viewport.X, state.Y - GraphicsDevice.Viewport.Y);
 
-            return new MouseInfo
-            {
-                Position = pos,
-                IsLeftButtonDown = Game.IsActive && state.LeftButton == ButtonState.Pressed,
+			return new MouseInfo
+			{
+				Position = pos,
+				IsLeftButtonDown = Game.IsActive && state.LeftButton == ButtonState.Pressed,
 				IsMiddleButtonDown = Game.IsActive && state.MiddleButton == ButtonState.Pressed,
 				IsRightButtonDown = Game.IsActive && state.RightButton == ButtonState.Pressed,
 				Wheel = state.ScrollWheelValue

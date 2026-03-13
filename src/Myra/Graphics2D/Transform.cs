@@ -13,20 +13,17 @@ using Matrix = System.Numerics.Matrix3x2;
 
 namespace Myra.Graphics2D
 {
-	public struct Transform
+	/// <summary>
+	/// Internal transform struct
+	/// It encapsulates the transform matrix along with its scale and rotation
+	/// It is required to store latter in order to pass them to SpriteBatch.Draw
+	/// </summary>
+	internal struct Transform
 	{
 		public Vector2 Scale { get; private set; }
 		public float Rotation { get; private set; }
 
 		public Matrix Matrix;
-
-		public Transform(Matrix newMatrix, Vector2 scale, float rotation)
-		{
-			Matrix = newMatrix;
-
-			Scale = scale;
-			Rotation = rotation;
-		}
 
 		public Transform(Vector2 offset, Vector2 origin, Vector2 scale, float rotation)
 		{
