@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.1.32328.378
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11520.95 d18.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{EAB0AA24-7185-4897-A866-AE87AF3F2E0B}"
 EndProject
@@ -36,6 +36,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.Notepad.MonoGame", "..\samples\Myra.Samples.Notepad\Myra.Samples.Notepad.MonoGame.csproj", "{2388B303-FE21-45CC-80D2-3007E959EBCD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.GdxSkinImport", "..\src\Myra.GdxSkinImport\Myra.GdxSkinImport.csproj", "{D51F8D7C-BB67-E4AC-0037-7DA5C6156E2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.Viewports.MonoGame", "..\samples\Myra.Samples.Viewports\Myra.Samples.Viewports.MonoGame.csproj", "{70C94A72-D44D-33FC-2591-B001C8C82634}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -107,6 +109,10 @@ Global
 		{D51F8D7C-BB67-E4AC-0037-7DA5C6156E2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D51F8D7C-BB67-E4AC-0037-7DA5C6156E2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D51F8D7C-BB67-E4AC-0037-7DA5C6156E2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70C94A72-D44D-33FC-2591-B001C8C82634}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70C94A72-D44D-33FC-2591-B001C8C82634}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70C94A72-D44D-33FC-2591-B001C8C82634}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70C94A72-D44D-33FC-2591-B001C8C82634}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -124,6 +130,7 @@ Global
 		{3016FB8F-2C41-4C8C-8B05-CECCD40526AB} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{39205279-736F-4474-BBBB-AD824E36744E} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{2388B303-FE21-45CC-80D2-3007E959EBCD} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{70C94A72-D44D-33FC-2591-B001C8C82634} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35ACDF4E-2CE2-46B1-A19F-35DC131069A1}

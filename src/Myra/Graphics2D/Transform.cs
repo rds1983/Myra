@@ -20,16 +20,17 @@ namespace Myra.Graphics2D
 	/// </summary>
 	internal struct Transform
 	{
+		private Matrix _matrix, _inverseMatrix;
+
 		public Vector2 Scale { get; private set; }
 		public float Rotation { get; private set; }
-
-		public Matrix Matrix;
 
 		public Transform(Vector2 offset, Vector2 origin, Vector2 scale, float rotation)
 		{
 			Matrix newMatrix;
 			BuildTransform(offset, origin, scale, rotation, out newMatrix);
-			Matrix = newMatrix;
+			_matrix = newMatrix;
+			Mathematics.CalculateInverse(ref _matrix, out _inverseMatrix);
 
 			Scale = scale;
 			Rotation = rotation;
@@ -74,16 +75,21 @@ namespace Myra.Graphics2D
 
 		public void AddTransform(ref Transform newTransform)
 		{
-			Matrix = newTransform.Matrix * Matrix;
+			_matrix = newTransform._matrix * _matrix;
+			Mathematics.CalculateInverse(ref _matrix, out _inverseMatrix);
 
 			Scale *= newTransform.Scale;
 			Rotation += newTransform.Rotation;
 		}
 
-		public Vector2 Apply(Vector2 source) => source.Transform(ref Matrix);
+		public Vector2 Apply(Vector2 source) => source.Transform(ref _matrix);
 
 		public Point Apply(Point source) => Apply(new Vector2(source.X, source.Y)).ToPoint();
 
-		public Rectangle Apply(Rectangle source) => source.Transform(ref Matrix);
+		public Vector2 InverseApply(Vector2 source) => source.Transform(ref _inverseMatrix);
+
+		public Point InverseApply(Point source) => InverseApply(new Vector2(source.X, source.Y)).ToPoint();
+
+		public Rectangle Apply(Rectangle source) => source.Transform(ref _matrix);
 	}
 }

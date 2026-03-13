@@ -63,7 +63,6 @@ namespace Myra.Graphics2D.UI
 		private float _rotation = 0.0f;
 		private bool _transformDirty = true;
 		private Transform _transform;
-		private Matrix _fullMatrix, _inverseFullMatrix;
 
 		/// <summary>
 		/// Internal use only. (MyraPad)
@@ -827,7 +826,7 @@ namespace Myra.Graphics2D.UI
 			Rectangle? oldScissorRectangle = null;
 			if (context.Transform.Rotation.IsZero())
 			{
-				var absoluteBounds = Bounds.Transform(ref _fullMatrix);
+				var absoluteBounds = Transform.Apply(Bounds);
 				var scissorBounds = Rectangle.Intersect(context.Scissor, absoluteBounds);
 
 				if (scissorBounds.Width == 0 || scissorBounds.Height == 0)
@@ -1302,7 +1301,7 @@ namespace Myra.Graphics2D.UI
 				newTop = _startLeftTop.Y + (int)delta.Y;
 			}
 
-			var parentBounds = Parent != null ? Parent.Bounds : Desktop.InternalViewport.Bounds;
+			var parentBounds = Parent != null ? Parent.Bounds : Desktop.InternalBounds;
 			if (newLeft < 0)
 			{
 				newLeft = 0;
@@ -1331,21 +1330,21 @@ namespace Myra.Graphics2D.UI
 		{
 			UpdateTransform();
 
-			return pos.Transform(ref _fullMatrix);
+			return Transform.Apply(pos);
 		}
 
-		public Point ToGlobal(Point source)
+		public Point ToGlobal(Point pos)
 		{
 			UpdateTransform();
 
-			return new Vector2(source.X, source.Y).Transform(ref _fullMatrix).ToPoint();
+			return Transform.Apply(pos);
 		}
 
-		public Vector2 ToLocal(Vector2 source)
+		public Vector2 ToLocal(Vector2 pos)
 		{
 			UpdateTransform();
 
-			return source.Transform(ref _inverseFullMatrix);
+			return Transform.InverseApply(pos);
 		}
 
 		public Point ToLocal(Point pos) => ToLocal(new Vector2(pos.X, pos.Y)).ToPoint();
@@ -1386,23 +1385,6 @@ namespace Myra.Graphics2D.UI
 			{
 				_transform = localTransform;
 			}
-
-			if (Desktop != null)
-			{
-				_fullMatrix = _transform.Matrix * Desktop.InternalViewport.Transform;
-			}
-			else
-			{
-				_fullMatrix = _transform.Matrix;
-			}
-
-#if MONOGAME || FNA || STRIDE
-			_inverseFullMatrix = Matrix.Invert(_fullMatrix);
-#else
-			Matrix inverse = Matrix.Identity;
-			Matrix.Invert(_fullMatrix, out inverse);
-			_inverseFullMatrix = inverse;
-#endif
 
 			_transformDirty = false;
 		}

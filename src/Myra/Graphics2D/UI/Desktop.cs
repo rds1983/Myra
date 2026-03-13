@@ -5,6 +5,8 @@ using System.Collections.Specialized;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using Myra.Events;
+using MonoGame.Utilities;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -23,15 +25,13 @@ namespace Myra.Graphics2D.UI
 {
 	public partial class Desktop : ITransformable, IDisposable
 	{
-		private Func<Rectangle> _boundsFetcher;
-		private MyraViewport _lastViewport;
+		private Rectangle _lastBounds;
 		private Vector2 _scale = Vector2.One;
 		private Vector2 _transformOrigin = new Vector2(0.5f, 0.5f);
 		private float _rotation = 0.0f;
 
 		private bool _transformDirty = true;
 		private Transform _transform;
-		private Matrix _fullMatrix, _inverseFullMatrix;
 
 		private readonly InputContext _inputContext = new InputContext();
 		private readonly RenderContext _renderContext = new RenderContext();
@@ -47,19 +47,7 @@ namespace Myra.Graphics2D.UI
 
 		private bool _isDisposed = false;
 
-		[Obsolete("Use ViewportFetcher instead")]
-		public Func<Rectangle> BoundsFetcher
-		{
-			get => _boundsFetcher;
-
-			set
-			{
-				_boundsFetcher = value;
-				ViewportFetcher = () => new MyraViewport(_boundsFetcher(), Matrix.Identity);
-			}
-		}
-
-		public Func<MyraViewport> ViewportFetcher { get; set; } = MyraViewport.CreateDefault;
+		public Func<Rectangle> BoundsFetcher { get; set; } = DefaultBoundsFetcher;
 
 		/// <summary>
 		/// Root Widget
@@ -107,18 +95,18 @@ namespace Myra.Graphics2D.UI
 
 		public ObservableCollection<Widget> Widgets { get; } = new ObservableCollection<Widget>();
 
-		internal MyraViewport InternalViewport
+		internal Rectangle InternalBounds
 		{
-			get => _lastViewport;
+			get => _lastBounds;
 
 			set
 			{
-				if (_lastViewport == value)
+				if (_lastBounds == value)
 				{
 					return;
 				}
 
-				_lastViewport = value;
+				_lastBounds = value;
 
 				InvalidateLayout();
 				InvalidateTransform();
@@ -129,8 +117,7 @@ namespace Myra.Graphics2D.UI
 		{
 			get
 			{
-				var InternalBounds = _lastViewport.Bounds;
-				return new Rectangle(0, 0, InternalBounds.Width, InternalBounds.Height);
+				return new Rectangle(0, 0, _lastBounds.Width, _lastBounds.Height);
 			}
 		}
 
@@ -186,7 +173,7 @@ namespace Myra.Graphics2D.UI
 			get => _scale;
 			set
 			{
-				if (value == _scale)
+				if (value.EpsilonEquals(_scale))
 				{
 					return;
 				}
@@ -202,7 +189,7 @@ namespace Myra.Graphics2D.UI
 			get => _transformOrigin;
 			set
 			{
-				if (value == _transformOrigin)
+				if (value.EpsilonEquals(_transformOrigin))
 				{
 					return;
 				}
@@ -218,7 +205,7 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (value == _rotation)
+				if (value.EpsilonEquals(_rotation))
 				{
 					return;
 				}
@@ -421,7 +408,7 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-
+			position = ToLocal(position);
 			FixOverWidgetPosition(menu, position);
 
 			ContextMenu.Visible = true;
@@ -500,10 +487,9 @@ namespace Myra.Graphics2D.UI
 
 			_renderContext.Begin();
 
-			_renderContext.BaseMatrix = _lastViewport.Transform;
 			_renderContext.Transform = Transform;
 
-			var bounds = LayoutBounds.Transform(ref _fullMatrix);
+			var bounds = Transform.Apply(LayoutBounds);
 			_renderContext.Scissor = bounds;
 			_renderContext.Opacity = Opacity;
 
@@ -519,7 +505,7 @@ namespace Myra.Graphics2D.UI
 
 					if (MyraEnvironment.EnableModalDarkening && widget.IsModal)
 					{
-						_renderContext.FillRectangle(bounds, MyraEnvironment.DarkeningColor);
+						_renderContext.FillRectangle(LayoutBounds, MyraEnvironment.DarkeningColor);
 					}
 
 					widget.Render(_renderContext);
@@ -579,21 +565,21 @@ namespace Myra.Graphics2D.UI
 		{
 			UpdateTransform();
 
-			return pos.Transform(ref _fullMatrix);
+			return Transform.Apply(pos);
 		}
 
-		public Point ToGlobal(Point source)
+		public Point ToGlobal(Point pos)
 		{
 			UpdateTransform();
 
-			return new Vector2(source.X, source.Y).Transform(ref _fullMatrix).ToPoint();
+			return Transform.Apply(pos);
 		}
 
-		public Vector2 ToLocal(Vector2 source)
+		public Vector2 ToLocal(Vector2 pos)
 		{
 			UpdateTransform();
 
-			return source.Transform(ref _inverseFullMatrix);
+			return Transform.InverseApply(pos);
 		}
 
 		public Point ToLocal(Point pos) => ToLocal(new Vector2(pos.X, pos.Y)).ToPoint();
@@ -605,9 +591,8 @@ namespace Myra.Graphics2D.UI
 
 		public void UpdateLayout()
 		{
-			InternalViewport = ViewportFetcher();
-
-			var bounds = InternalViewport.Bounds;
+			var bounds = BoundsFetcher();
+			InternalBounds = bounds;
 			if (bounds.IsEmpty)
 			{
 				return;
@@ -884,21 +869,11 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var bounds = InternalViewport.Bounds;
+			var bounds = InternalBounds;
 			_transform = new Transform(bounds.Location.ToVector2(),
 				TransformOrigin * bounds.Size().ToVector2(),
 				Scale,
 				Rotation * (float)Math.PI / 180);
-
-			_fullMatrix = _transform.Matrix * InternalViewport.Transform;
-
-#if MONOGAME || FNA || STRIDE
-			_inverseFullMatrix = Matrix.Invert(_fullMatrix);
-#else
-			Matrix inverse = Matrix.Identity;
-			Matrix.Invert(_fullMatrix, out inverse);
-			_inverseFullMatrix = inverse;
-#endif
 
 			_transformDirty = false;
 		}
@@ -924,6 +899,13 @@ namespace Myra.Graphics2D.UI
 		~Desktop()
 		{
 			ReleaseUnmanagedResources();
+		}
+
+		public static Rectangle DefaultBoundsFetcher()
+		{
+			var size = CrossEngineStuff.ViewSize;
+
+			return new Rectangle(0, 0, size.X, size.Y);
 		}
 	}
 }

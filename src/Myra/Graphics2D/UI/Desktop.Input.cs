@@ -145,7 +145,7 @@ namespace Myra.Graphics2D.UI
 
 			var mouseInfo = MyraEnvironment.MouseInfoGetter();
 
-			var mousePos = ToLocal(mouseInfo.Position);
+			var mousePos = mouseInfo.Position;
 
 			// Mouse Position
 			MousePosition = mousePos;
@@ -193,7 +193,7 @@ namespace Myra.Graphics2D.UI
 
 			if (touchState.IsConnected && touchState.Count > 0)
 			{
-				var pos = ToLocal(touchState[0].Position);
+				var pos = touchState[0].Position;
 				TouchPosition = new Point((int)pos.X, (int)pos.Y);
 			}
 			else
