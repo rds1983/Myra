@@ -489,8 +489,12 @@ namespace Myra.Graphics2D.UI
 
 			_renderContext.Transform = Transform;
 
-			var bounds = Transform.Apply(LayoutBounds);
-			_renderContext.Scissor = bounds;
+			if (Rotation.IsZero())
+			{
+				var bounds = Transform.Apply(LayoutBounds);
+				_renderContext.Scissor = bounds;
+			}
+
 			_renderContext.Opacity = Opacity;
 
 			if (Background != null)
