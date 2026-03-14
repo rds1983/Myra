@@ -2,13 +2,14 @@
   <Project.ExportOptions Namespace="MyraPad.UI" Class="MainForm" OutputPath="D:/Projects/Myra/src/MyraPad/UI" />
   <VerticalStackPanel>
     <HorizontalMenu Id="_mainMenu">
-      <MenuItem Text="&amp;File" Id="_menuFile" >
+      <MenuItem Text="&amp;File" Id="_menuFile">
         <MenuItem Text="&amp;New" ShortcutText="Ctrl+N" Id="_menuFileNew" />
         <MenuItem Text="&amp;Open" ShortcutText="Ctrl+O" Id="_menuFileOpen" />
         <MenuItem Text="&amp;Reload" ShortcutText="Ctrl+R" Id="_menuFileReload" />
         <MenuItem Text="&amp;Save" ShortcutText="Ctrl+S" Id="_menuFileSave" />
         <MenuItem Text="Save &amp;As..." Id="_menuFileSaveAs" />
         <MenuItem Text="&amp;Export To C#..." ShortcutText="Ctrl+E" Id="_menuFileExportToCS" />
+        <MenuItem Text="&amp;Export To C# Light..." ShortcutText="Ctrl+W" Id="_menuFileExportToCSLight" />
         <MenuSeparator />
         <MenuItem Text="&amp;Load Stylesheet" Id="_menuFileLoadStylesheet" />
         <MenuItem Text="Rese&amp;t Stylesheet" Id="_menuFileResetStylesheet" />

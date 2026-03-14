@@ -78,7 +78,7 @@ namespace MyraPad
 			return char.ToLowerInvariant(s[0]) + s.Substring(1);
 		}
 
-		public string ExportDesignerRecursive(IItemWithId w, IItemWithId parent)
+		public string ExportDesignerRecursive(IItemWithId w, IItemWithId parent, bool light)
 		{
 			var properties = BuildProperties(w.GetType());
 			var simpleProperties = new List<PropertyInfo>();
@@ -105,7 +105,7 @@ namespace MyraPad
 
 				if (value is IItemWithId)
 				{
-					var subItemId = ExportDesignerRecursive((IItemWithId)value, w);
+					var subItemId = ExportDesignerRecursive((IItemWithId)value, w, light);
 					var subItemCode = string.Format("{0} = {1}", property.Name, subItemId);
 					subItems.Add(subItemCode);
 				}
@@ -124,7 +124,7 @@ namespace MyraPad
 						var asEnumerable = value as IEnumerable;
 						foreach (var comp in asEnumerable)
 						{
-							var subItemId = ExportDesignerRecursive((IItemWithId)comp, w);
+							var subItemId = ExportDesignerRecursive((IItemWithId)comp, w, light);
 							var subItemCode = string.Format("{0}.Add({1})", property.Name, subItemId);
 							subItems.Add(subItemCode);
 						}
@@ -139,14 +139,23 @@ namespace MyraPad
 			// Write code of this item
 			if (!isFirst)
 			{
-				sbBuild.Append("\n\n\t\t\t");
+				if (!light)
+				{
+					sbBuild.Append("\n\n\t\t\t");
+
+				}
+				else
+				{
+					sbBuild.Append("\n\n");
+
+				}
 			}
 
 			isFirst = false;
 
 			string id;
 			var typeName = w.GetType().GetFriendlyName();
-			if (_project.Root == w)
+			if (_project.Root == w && !light)
 			{
 				id = string.Empty;
 			}
@@ -168,7 +177,10 @@ namespace MyraPad
 					ids[onlyTypeName] = count;
 
 					id = onlyTypeName + count;
+				}
 
+				if (string.IsNullOrEmpty(w.Id) || light)
+				{
 					sbBuild.Append("var " + id);
 				}
 				else
@@ -200,7 +212,7 @@ namespace MyraPad
 					continue;
 				}
 
-				var propertyCode = BuildPropertyCode(property, w, idPrefix);
+				var propertyCode = BuildPropertyCode(property, w, idPrefix, light);
 				if (!string.IsNullOrEmpty(propertyCode))
 				{
 					sbBuild.Append(propertyCode);
@@ -217,14 +229,26 @@ namespace MyraPad
 					if (value != null && !value.Equals(property.DefaultValueObject))
 					{
 						value = BuildValue(value, converter);
-						sbBuild.Append($"\n\t\t\t{property.OwnerType.Name}.Set{property.Name}({id}, {value});");
+
+						sbBuild.Append("\n");
+						if (!light)
+						{
+							sbBuild.Append("\t\t\t");
+						}
+
+						sbBuild.Append($"{property.OwnerType.Name}.Set{property.Name}({id}, {value});");
 					}
 				}
 			}
 
 			foreach (var subItem in subItems)
 			{
-				sbBuild.Append("\n\t\t\t");
+				sbBuild.Append("\n");
+				if (!light)
+				{
+					sbBuild.Append("\t\t\t");
+				}
+
 				sbBuild.Append(idPrefix);
 				sbBuild.Append(subItem);
 				sbBuild.Append(";");
@@ -233,12 +257,8 @@ namespace MyraPad
 			return id;
 		}
 
-		public string ExportDesigner()
+		public string ExportDesignerCode(string template, bool light)
 		{
-			var template = string.IsNullOrWhiteSpace(_project.ExportOptions.TemplateDesigner) ?
-				Resources.ExportCSDesigner :
-				File.ReadAllText(_project.ExportOptions.TemplateDesigner);
-
 			template = template.Replace("$namespace$", _project.ExportOptions.Namespace);
 			template = template.Replace("$class$", _project.ExportOptions.Class);
 			template = template.Replace("$parentClass$", _project.Root.GetType().Name);
@@ -249,11 +269,21 @@ namespace MyraPad
 			sbBuild.Clear();
 
 			isFirst = true;
-			ExportDesignerRecursive(_project.Root, null);
+			ExportDesignerRecursive(_project.Root, null, light);
 
 			template = template.Replace("$fields$", sbFields.ToString());
 			template = template.Replace("$build$", sbBuild.ToString());
 
+			return template;
+		}
+
+		public string ExportDesigner()
+		{
+			var template = string.IsNullOrWhiteSpace(_project.ExportOptions.TemplateDesigner) ?
+				Resources.ExportCSDesigner :
+				File.ReadAllText(_project.ExportOptions.TemplateDesigner);
+
+			template = ExportDesignerCode(template, false);
 
 			var path = Path.Combine(ExportPath, _project.ExportOptions.Class + ".Generated.cs");
 			File.WriteAllText(path, template);
@@ -292,7 +322,7 @@ namespace MyraPad
 			return result;
 		}
 
-		private string BuildPropertyCode(PropertyInfo property, object o, string idPrefix)
+		private string BuildPropertyCode(PropertyInfo property, object o, string idPrefix, bool light)
 		{
 			var sb = new StringBuilder();
 
@@ -344,7 +374,12 @@ namespace MyraPad
 					return null;
 				}
 
-				sb.Append("\n\t\t\t" + idPrefix + property.Name);
+				sbBuild.Append("\n");
+				if (!light)
+				{
+					sbBuild.Append("\t\t\t");
+				}
+				sb.Append(idPrefix + property.Name);
 				sb.Append(" = ");
 				sb.Append(strValue);
 				sb.Append(";");
@@ -353,7 +388,13 @@ namespace MyraPad
 			{
 				foreach (var comp in asList)
 				{
-					sb.Append("\n\t\t\t" + idPrefix + property.Name);
+					sbBuild.Append("\n");
+					if (!light)
+					{
+						sbBuild.Append("\t\t\t");
+					}
+
+					sb.Append(idPrefix + property.Name);
 					sb.Append(".Add(");
 					sb.Append(BuildValue(comp, converter));
 					sb.Append(");");

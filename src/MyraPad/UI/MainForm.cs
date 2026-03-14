@@ -261,6 +261,7 @@ namespace MyraPad.UI
 			_menuFileSave.Selected += SaveItemOnClicked;
 			_menuFileSaveAs.Selected += SaveAsItemOnClicked;
 			_menuFileExportToCS.Selected += ExportCsItemOnSelected;
+			_menuFileExportToCSLight.Selected += ExportCsLightItemOnSelected;
 			_menuFileLoadStylesheet.Selected += OnMenuFileLoadStylesheet;
 			_menuFileResetStylesheet.Selected += OnMenuFileResetStylesheetSelected;
 			_menuFileDebugOptions.Selected += DebugOptionsItemOnSelected;
@@ -406,6 +407,10 @@ namespace MyraPad.UI
 					{
 						ExportCsItemOnSelected(this, EventArgs.Empty);
 					}
+					else if (Desktop.IsKeyDown(Keys.W))
+					{
+						ExportCsLightItemOnSelected(this, EventArgs.Empty);
+					}
 					else if (Desktop.IsKeyDown(Keys.Q))
 					{
 						Studio.Instance.Exit();
@@ -504,7 +509,7 @@ namespace MyraPad.UI
 			var values = new List<CustomValue>();
 			int? selectedIndex = null;
 			var val = (string)record.GetValue(obj);
-			for(var i = 0; i < styleNames.Length; ++i)
+			for (var i = 0; i < styleNames.Length; ++i)
 			{
 				var styleName = styleNames[i];
 
@@ -1277,6 +1282,30 @@ namespace MyraPad.UI
 			};
 		}
 
+		private void ExportCsLightItemOnSelected(object sender1, EventArgs eventArgs)
+		{
+			try
+			{
+				string code;
+				using (var export = new ExporterCS(Project))
+				{
+					code = export.ExportDesignerCode(MyraPad.Resources.ExportCSLight, true);
+				}
+
+				var dlg = new ExportLightWindow
+				{
+					Code = code
+				};
+
+				dlg.ShowModal(Desktop);
+			}
+			catch (Exception ex)
+			{
+				var msg = Dialog.CreateMessageBox("Error", ex.Message);
+				msg.ShowModal(Desktop);
+			}
+		}
+
 		private void PropertyGridOnPropertyChanged(object sender, GenericEventArgs<string> eventArgs)
 		{
 			IsDirty = true;
@@ -1355,38 +1384,31 @@ namespace MyraPad.UI
 				{
 					rootType = "HorizontalStackPanel";
 				}
-				else
-				if (dlg._radioButtonVerticalStackPanel.IsPressed)
+				else if (dlg._radioButtonVerticalStackPanel.IsPressed)
 				{
 					rootType = "VerticalStackPanel";
 				}
-				else
-				if (dlg._radioButtonPanel.IsPressed)
+				else if (dlg._radioButtonPanel.IsPressed)
 				{
 					rootType = "Panel";
 				}
-				else
-				if (dlg._radioButtonScrollViewer.IsPressed)
+				else if (dlg._radioButtonScrollViewer.IsPressed)
 				{
 					rootType = "ScrollViewer";
 				}
-				else
-				if (dlg._radioButtonHorizontalSplitPane.IsPressed)
+				else if (dlg._radioButtonHorizontalSplitPane.IsPressed)
 				{
 					rootType = "HorizontalSplitPane";
 				}
-				else
-				if (dlg._radioButtonVerticalSplitPane.IsPressed)
+				else if (dlg._radioButtonVerticalSplitPane.IsPressed)
 				{
 					rootType = "VerticalSplitPane";
 				}
-				else
-				if (dlg._radioButtonWindow.IsPressed)
+				else if (dlg._radioButtonWindow.IsPressed)
 				{
 					rootType = "Window";
 				}
-				else
-				if (dlg._radioButtonDialog.IsPressed)
+				else if (dlg._radioButtonDialog.IsPressed)
 				{
 					rootType = "Dialog";
 				}

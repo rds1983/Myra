@@ -136,12 +136,10 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
-		public int ScrollMultiplier
-		{
-			get; set;
-		} = 10;
+		[DefaultValue(10)]
+		public int ScrollMultiplier { get; set; } = 10;
 
-        [Browsable(false)]
+		[Browsable(false)]
 		[Content]
 		public override Widget Content
 		{

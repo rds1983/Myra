@@ -5,7 +5,7 @@ namespace MyraPad
 {
 	public static class Resources
 	{
-		private static string _exportCsDesigner, _exportCsMain, _newProjectTemplate;
+		private static string _exportCsDesigner, _exportCsLight, _exportCsMain, _newProjectTemplate;
 
 		private static Assembly Assembly
 		{
@@ -25,6 +25,19 @@ namespace MyraPad
 				}
 
 				return _exportCsDesigner;
+			}
+		}
+
+		public static string ExportCSLight
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(_exportCsLight))
+				{
+					_exportCsLight = Assembly.ReadResourceAsString("MyraPad.Resources.ExportCSLight.cstemplate");
+				}
+
+				return _exportCsLight;
 			}
 		}
 
