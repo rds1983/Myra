@@ -77,9 +77,7 @@ namespace Myra.Utility
 #if MONOGAME || FNA || STRIDE
 			Matrix.Invert(ref source, out result);
 #else
-			Matrix inverse = Matrix.Identity;
-			Matrix.Invert(_fullMatrix, out inverse);
-			_inverseFullMatrix = inverse;
+			Matrix.Invert(source, out result);
 #endif
 		}
 	}
