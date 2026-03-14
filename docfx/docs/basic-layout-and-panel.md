@@ -8,37 +8,46 @@ Width/Height|int?|null|Width/Height of the widget, if set to null, then it is au
 HorizontalAlignment/VerticalAlignment|enum|Depends on a widget, it's either Stretch or Left/Top|How control is horizontally/vertically aligned in the container
 Margin/Border/Padding|Thickness||[Margin, Border, Padding](margin-border-padding.md)
 
-**Note**. Properties which names start with 'Grid' are used only in the Grid container.
-
 # Panel
 Panel is simple container. Following code demonstrates usage of layout properties with it:
 ```C#
-    var panel = new Panel();
-    var positionedText = new Label();
-    positionedText.Text = "Positioned Text";
-    positionedText.Left = 50;
-    positionedText.Top = 100;
-    panel.Widgets.Add(positionedText);
+var panel = new Panel();
+var positionedText = new Label();
+positionedText.Text = "Positioned Text";
+positionedText.Left = 50;
+positionedText.Top = 100;
+panel.Widgets.Add(positionedText);
 
-    var paddedCenteredButton = new TextButton();
-    paddedCenteredButton.Text = "Padded Centered Button";
-    paddedCenteredButton.HorizontalAlignment = HorizontalAlignment.Center;
-    paddedCenteredButton.VerticalAlignment = VerticalAlignment.Center;
-    panel.Widgets.Add(paddedCenteredButton);
+var label1 = new Label();
+label1.Text = "Padded Centered Button";
 
-    var rightBottomText = new Label();
-    rightBottomText.Text = "Right Bottom Text";
-    rightBottomText.Left = -30;
-    rightBottomText.Top = -20;
-    rightBottomText.HorizontalAlignment = HorizontalAlignment.Right;
-    rightBottomText.VerticalAlignment = VerticalAlignment.Bottom;
-    panel.Widgets.Add(rightBottomText);
+var paddedCenteredButton = new Button();
+paddedCenteredButton.HorizontalAlignment = HorizontalAlignment.Center;
+paddedCenteredButton.VerticalAlignment = VerticalAlignment.Center;
+paddedCenteredButton.Id = "paddedCenteredButton";
+paddedCenteredButton.Content = label1;
+panel.Widgets.Add(paddedCenteredButton);
 
-    var fixedSizeButton = new TextButton();
-    fixedSizeButton.Text = "Fixed Size Button";
-    fixedSizeButton.Width = 110;
-    fixedSizeButton.Height = 80;
-    panel.Widgets.Add(fixedSizeButton);
+var rightBottomText = new Label();
+rightBottomText.Text = "Right Bottom Text";
+rightBottomText.Left = -30;
+rightBottomText.Top = -20;
+rightBottomText.HorizontalAlignment = HorizontalAlignment.Right;
+rightBottomText.VerticalAlignment = VerticalAlignment.Bottom;
+panel.Widgets.Add(rightBottomText);
+
+var label2 = new Label();
+label2.Text = "Fixed Size Button";
+label2.Wrap = true;
+label2.HorizontalAlignment = HorizontalAlignment.Center;
+label2.VerticalAlignment = VerticalAlignment.Center;
+
+var fixedSizeButton = new Button();
+fixedSizeButton.Width = 110;
+fixedSizeButton.Height = 80;
+fixedSizeButton.Id = "fixedSizeButton";
+fixedSizeButton.Content = label2;
+panel.Widgets.Add(fixedSizeButton);
 ```
 
 It is equivalent to the following [MML](MML.md):
@@ -46,9 +55,13 @@ It is equivalent to the following [MML](MML.md):
 <Project>
   <Panel>
     <Label Text="Positioned Text" Left="50" Top="100" />
-    <TextButton Text="Padded Centered Button" HorizontalAlignment="Center" VerticalAlignment="Center" />
+    <Button HorizontalAlignment="Center" VerticalAlignment="Center">
+      <Label Text="Padded Centered Button" />
+    </Button>
     <Label Text="Right Bottom Text" Left="-30" Top="-20" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
-    <TextButton Text="Fixed Size Button" Width="110" Height="80" />
+    <Button Width="110" Height="80">
+      <Label Text="Fixed Size Button" Wrap="True" HorizontalAlignment="Center" VerticalAlignment="Center" />
+    </Button>
   </Panel>
 </Project>
 ```

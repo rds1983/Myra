@@ -23,16 +23,17 @@ Also it could be set through [MML](MML.md).
 
 I.e. following MML:
 ```xml
-  <Project>
-    <Panel>
-      <HorizontalStackPanel Spacing="8" >
-        <Panel Width="100" Height="50" Background="#FF0000FF" >
-        </Panel>
-        <Label Text="Label" Background="#0000FF" />
-        <TextButton Text="Push Me" Background="YellowGreen" />
-      </HorizontalStackPanel>
-    </Panel>
-  </Project>
+<Project>
+  <Panel>
+    <HorizontalStackPanel Spacing="8">
+      <Panel Width="100" Height="50" Background="#FF0000FF" />
+      <Label Text="Label" Background="#0000FF" />
+      <Button Background="YellowGreen">
+        <Label Text="Push Me" />
+      </Button>
+    </HorizontalStackPanel>
+  </Panel>
+</Project>
 ```
 Would result in following image:
 

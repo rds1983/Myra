@@ -3,33 +3,39 @@ Window can be dragged across the desktop and closed either by clicking 'x' or pr
 
 I.e. following code creates and show simple window with button inside:
 ```c#
-    Window window = new Window
+Window window = new Window
+{
+    Title = "Simple Window"
+};
+
+Button button = new Button
+{
+    Content = new Label
     {
-        Title = "Simple Window"
-    };
+        Text = "Push Me!"
+    },
+    HorizontalAlignment = HorizontalAlignment.Center
+};
 
-    TextButton button = new TextButton
-    {
-        Text = "Push Me!",
-        HorizontalAlignment = HorizontalAlignment.Center
-    };
+window.Content = button;
 
-    window.Content = button;
+window.Closed += (s, a) =>
+{
+    // Called when window is closed
+};
 
-    window.Closed += (s, a) => {
-      // Called when window is closed
-    };
-
-    window.ShowModal(_desktop);
+window.ShowModal(_desktop);
 ```
 It is equivalent to the [MML](MML.md):
 ```xml
-    <Project>
-      <Project.ExportOptions Namespace="Test" Class="Test" OutputPath="D:\Temp" />
-      <Window Title="Simple Window" Left="408" Top="193">
-        <TextButton Text="Push Me!" HorizontalAlignment="Center" />
-      </Window>
-    </Project>
+<Project>
+  <Project.ExportOptions Namespace="Test" Class="Test" OutputPath="D:\Temp" />
+  <Window Title="Simple Window" Left="678" Top="298">
+    <Button HorizontalAlignment="Center">
+      <Label Text="Push Me!" />
+    </Button>
+  </Window>
+</Project>
 ```
 And would result in following:
 
@@ -39,40 +45,40 @@ And would result in following:
 Dialog is enhanced version of Window that also have "Ok" and "Cancel" button. It has Result(bool) property that indicates whether "Ok"(it also fires if Enter key is down) or "Cancel" was clicked.
 Following code creates simple "Enter Your Name" dialog:
 ```c#
-    Dialog dialog = new Dialog
+Dialog dialog = new Dialog
+{
+    Title = "Enter Your Name"
+};
+
+var stackPanel = new HorizontalStackPanel
+{
+    Spacing = 8
+};
+
+var label1 = new Label
+{
+    Text = "Name:"
+};
+stackPanel.Widgets.Add(label1);
+
+var textBox1 = new TextBox();
+StackPanel.SetProportionType(textBox1, ProportionType.Fill);
+stackPanel.Widgets.Add(textBox1);
+
+dialog.Content = stackPanel;
+
+dialog.Closed += (s, a) => {
+    if (!dialog.Result)
     {
-        Title = "Enter Your Name"
-    };
+        // Dialog was either closed or "Cancel" clicked
+        return;
+    }
 
-    var stackPanel = new HorizontalStackPanel
-    {
-        Spacing = 8
-    };
+    // "Ok" was clicked or Enter key pressed
+    // ...
+};
 
-    var label1 = new Label
-    {
-        Text = "Name:"
-    };
-    stackPanel.Widgets.Add(label1);
-
-    var textBox1 = new TextBox();
-    StackPanel.SetProportionType(textBox1, ProportionType.Fill);
-    stackPanel.Widgets.Add(textBox1);
-
-    dialog.Content = stackPanel;
-
-    dialog.Closed += (s, a) => {
-        if (!dialog.Result)
-        {
-            // Dialog was either closed or "Cancel" clicked
-            return;
-        }
-
-        // "Ok" was clicked or Enter key pressed
-        // ...
-    };
-
-    dialog.ShowModal(_desktop);
+dialog.ShowModal(_desktop);
 ```
 It is equivalent to the following [MML](MML.md):
 ```xml

@@ -15,8 +15,10 @@ It would be rendered:
 Or if we take MML:
 ```xml
 <Project>
-  <Panel>    
-   <TextButton Text="E=mc/v[-8]2/n/vdMass–energy equivalence." HorizontalAlignment="Center" VerticalAlignment="Center"/>
+  <Panel>
+    <Button HorizontalAlignment="Center" VerticalAlignment="Center">
+      <Label Text="E=mc/v[-8]2/n/vdMass–energy equivalence." />
+    </Button>
   </Panel>
 </Project>
 ```

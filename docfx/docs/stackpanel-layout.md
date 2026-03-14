@@ -2,34 +2,47 @@
 HorizontalStackPanel/VerticalStackPanel are containers that layout children horizontally/vertically in one line/row.
 I.e. following code layouts 3 widgets in one line:
 ```c#
-    var horizontalStackPanel = new HorizontalStackPanel
-    {
-        horizontalStackPanel.ShowGridLines = true,
-        horizontalStackPanel.Spacing = 8
-    };
+var horizontalStackPanel = new HorizontalStackPanel
+{
+  ShowGridLines = true,
+  Spacing = 8
+};
 
-    var textBlock1 = new Label();
-    textBlock1.Text = "First Text";
-    horizontalStackPanel.Widgets.Add(textBlock1);
+var textBlock1 = new Label();
+textBlock1.Text = "First Text";
+horizontalStackPanel.Widgets.Add(textBlock1);
 
-    var textButton1 = new TextButton();
-    textButton1.Text = "Second Button";
-    horizontalStackPanel.Widgets.Add(textButton1);
+var textButton1 = new Button
+{
+  Content = new Label
+  {
+    Text = "Second Button"
+  }
+};
+horizontalStackPanel.Widgets.Add(textButton1);
 
-    var checkStackPanel1 = new CheckBox();
-    checkStackPanel1.Text = "Third Checkbox";
-
-    horizontalStackPanel.Widgets.Add(checkStackPanel1);
+var check1 = new CheckButton
+{
+  Content = new Label
+  {
+    Text = "Third Checkbox"
+  }
+};
+horizontalStackPanel.Widgets.Add(check1);
 ```
 It is equivalent to the following [MML](MML.md):
 ```xml
-    <Project>
-      <HorizontalStackPanel ShowGridLines="True" Spacing="8">
-        <Label Text="First Text" />
-        <TextButton Text="Second Button" />
-        <CheckBox Text="Third Checkbox" />
-      </HorizontalStackPanel>
-    </Project>
+<Project>
+  <HorizontalStackPanel ShowGridLines="True" Spacing="8">
+    <Label Text="First Text" />
+    <Button>
+      <Label Text="Second Button" />
+    </Button>
+    <CheckButton>
+      <Label Text="Third Checkbox" />
+    </CheckButton>
+  </HorizontalStackPanel>
+</Project>
 ```
 It would result in following:
 
@@ -42,34 +55,47 @@ It is possible to specify proportions for StackPanel's widgets through the attac
 
 I.e. following code will make 2nd widget fill all available height:
 ```c#
-    var verticalStackPanel = new VerticalStackPanel
-    {
-        ShowGridLines = true,
-        Spacing = 8
-    };
+var verticalStackPanel = new VerticalStackPanel
+{
+  ShowGridLines = true,
+  Spacing = 8
+};
 
-    var textBlock1 = new Label();
-    textBlock1.Text = "First Text";
-    verticalStackPanel.Widgets.Add(textBlock1);
+var textBlock1 = new Label();
+textBlock1.Text = "First Text";
+verticalStackPanel.Widgets.Add(textBlock1);
 
-    var textButton1 = new TextButton();
-    textButton1.Text = "Second Button";
-    textButton1.VerticalAlignment = VerticalAlignment.Center;
-    StackPanel.SetProportionType(textButton1, ProportionType.Fill);
-    verticalStackPanel.Widgets.Add(textButton1);
+var textButton1 = new Button
+{
+  Content = new Label
+  {
+    Text = "Second Button"
+  }
+};
+textButton1.VerticalAlignment = VerticalAlignment.Center;
+StackPanel.SetProportionType(textButton1, ProportionType.Fill);
+verticalStackPanel.Widgets.Add(textButton1);
 
-    var checkStackPanel1 = new CheckBox();
-    checkStackPanel1.Text = "Third Checkbox";
-    verticalStackPanel.Widgets.Add(checkStackPanel1);
+var checkButton1 = new CheckButton
+{
+  Content = new Label
+  {
+    Text = "Third Checkbox"
+  }
+};
+verticalStackPanel.Widgets.Add(checkButton1);
 ```
 It is equivalent to the following [MML](MML.md):
 ```xml
 <Project>
-  <Project.ExportOptions />
   <VerticalStackPanel ShowGridLines="True" Spacing="8">
     <Label Text="First Text" />
-    <TextButton Text="Second Button" VerticalAlignment="Center" StackPanel.ProportionType="Fill" />
-    <CheckBox Text="Third Checkbox" />
+    <Button VerticalAlignment="Center" StackPanel.ProportionType="Fill">
+      <Label Text="Second Button" />
+    </Button>
+    <CheckButton>
+      <Label Text="Third Checkbox" />
+    </CheckButton>
   </VerticalStackPanel>
 </Project>
 ```
