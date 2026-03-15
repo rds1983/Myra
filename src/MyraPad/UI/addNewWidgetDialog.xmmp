@@ -1,12 +1,12 @@
 <Project>
-  <Project.ExportOptions />
+  <Project.ExportOptions Namespace="MyraPad.UI" Class="AddNewWidgetDialog" OutputPath="D:\Projects\Myra\src\MyraPad\UI" />
   <Dialog Title="Add New Widget" Left="564" Top="28" Width="400" Height="600">
     <VerticalStackPanel Spacing="8">
       <HorizontalStackPanel Spacing="8">
         <Label Text="Filter:" />
         <TextBox Id="_textFilter" StackPanel.ProportionType="Fill" />
       </HorizontalStackPanel>
-      <ListView HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Id="_listWidgets" StackPanel.ProportionType="Fill" >
+      <ListView HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Id="_listWidgets" StackPanel.ProportionType="Fill">
         <Label Text="Button" />
         <Label Text="Grid" />
       </ListView>

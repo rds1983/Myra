@@ -1,28 +1,29 @@
 using AssetManagementBase;
+using FontStashSharp;
+using FontStashSharp.RichText;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework;
+using Myra;
+using Myra.Attributes;
 using Myra.Events;
+using Myra.Graphics2D;
+using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.File;
 using Myra.Graphics2D.UI.Properties;
-using Myra.Graphics2D.UI;
-using Myra.Graphics2D;
-using Myra;
+using Myra.Graphics2D.UI.Styles;
+using Myra.MML;
 using Myra.Utility;
+using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using System;
-using FontStashSharp;
-using FontStashSharp.RichText;
-using Myra.MML;
 using System.Reflection;
-using Myra.Attributes;
-using System.Collections;
-using System.Xml.Linq;
+using System.Text.RegularExpressions;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace MyraPad.UI
 {
@@ -358,6 +359,115 @@ namespace MyraPad.UI
 			}
 		}
 
+		private void DefaultCreate(object parent, Type t)
+		{
+			IItemWithId child;
+
+			var constructor = t.GetConstructor(Type.EmptyTypes);
+			if (constructor != null)
+			{
+				child = (IItemWithId)Activator.CreateInstance(t);
+			}
+			else
+			{
+				// Try with stylename constructor
+				child = (IItemWithId)Activator.CreateInstance(t, Stylesheet.DefaultStyleName);
+			}
+
+			do
+			{
+				var asContentControl = parent as IContent;
+				if (asContentControl != null)
+				{
+					asContentControl.Content = (Widget)child;
+					break;
+				}
+
+				var asContainer = parent as IContainer;
+				if (asContainer != null)
+				{
+					asContainer.Widgets.Add((Widget)child);
+					break;
+				}
+
+				var asMenu = parent as Menu;
+				if (asMenu != null)
+				{
+					asMenu.Items.Add((IMenuItem)child);
+					break;
+				}
+
+				var asTabControl = parent as TabControl;
+				if (asTabControl != null)
+				{
+					asTabControl.Items.Add((TabItem)child);
+					break;
+				}
+			}
+			while (false);
+
+			// This will make the new item to appear in the explorer
+			RefreshExplorer();
+
+			// Schedule selection of the new item in the explorer after project refresh
+			for (var i = 0; i < _treeViewExplorer.TotalNodesCount; ++i)
+			{
+				var node = _treeViewExplorer.GetNodeByAbsoluteIndex(i);
+				if (node.Tag == child)
+				{
+					NewProjectSelectedNodeIndex = i;
+					break;
+				}
+			}
+
+			// Update the mml and schedule the project refresh
+			_textSource.Text = _project.Save();
+		}
+
+		private ChildCreator CreateNewItemAction(Widget parent, Type childType) => new ChildCreator(childType.Name, () => DefaultCreate(parent, childType));
+
+		private ChildCreator[] CreateNewItemActions(Widget parent, IEnumerable<Type> childTypes)
+		{
+			var result = new List<ChildCreator>();
+
+			foreach (var childType in childTypes)
+			{
+				result.Add(CreateNewItemAction(parent, childType));
+			}
+
+			return result.ToArray();
+		}
+
+		private List<ChildCreator> BuildAddActions(Widget parent)
+		{
+			var result = new List<ChildCreator>();
+			if (parent == null)
+			{
+				return result;
+			}
+
+			var widgetTypeName = parent.GetType().Name;
+			if (Containers.Contains(widgetTypeName) || widgetTypeName == "Window" || widgetTypeName == "Dialog")
+			{
+				result.AddRange(CreateNewItemActions(parent, SimpleWidgets));
+				result.AddRange(CreateNewItemActions(parent, Containers));
+				result.AddRange(CreateNewItemActions(parent, SpecialContainers));
+			}
+			else if (widgetTypeName.EndsWith("Menu"))
+			{
+				result.Add(CreateNewItemAction(parent, typeof(MenuItem)));
+				result.Add(CreateNewItemAction(parent, typeof(MenuSeparator)));
+			}
+			else if (widgetTypeName == "TabControl")
+			{
+				result.Add(CreateNewItemAction(parent, typeof(TabItem)));
+			}
+
+			result = result.OrderBy(s => s.Name).ToList();
+
+			return result;
+		}
+
 		private void _treeViewExplorer_TouchDown(object sender, EventArgs e)
 		{
 			var state = Mouse.GetState();
@@ -375,7 +485,6 @@ namespace MyraPad.UI
 
 			try
 			{
-
 				var selectedWidget = (Widget)_treeViewExplorer.SelectedNode.Tag;
 
 				var addActions = BuildAddActions(selectedWidget);
@@ -385,36 +494,40 @@ namespace MyraPad.UI
 				}
 
 				var verticalMenu = new VerticalMenu();
-				foreach (var addAction in addActions)
+
+				if (addActions.Count < 5)
 				{
-					var menuItem = new MenuItem
+					// Simply show all actions in the context menu
+					foreach (var addAction in addActions)
 					{
-						Text = "Add " + addAction.Name
-					};
-
-					menuItem.Selected += (s, a) =>
-					{
-						var newItem = addAction.Creator(selectedWidget);
-
-						// This will make the new item to appear in the explorer
-						RefreshExplorer();
-
-						// Schedule selection of the new item in the explorer after project refresh
-						for (var i = 0; i < _treeViewExplorer.TotalNodesCount; ++i)
+						var menuItem = new MenuItem
 						{
-							var node = _treeViewExplorer.GetNodeByAbsoluteIndex(i);
-							if (node.Tag == newItem)
-							{
-								NewProjectSelectedNodeIndex = i;
-								break;
-							}
+							Text = "Add " + addAction.Name
+						};
+
+						menuItem.Selected += (s, a) => addAction.Creator();
+						verticalMenu.Items.Add(menuItem);
+					}
+				} else
+				{
+					// Use special dialog
+					var addNewWidgetDialog = new AddNewWidgetDialog();
+					addNewWidgetDialog.SetNames((from a in addActions select a.Name).ToArray());
+
+					addNewWidgetDialog.Closed += (s, a) => 
+					{
+						if (!addNewWidgetDialog.Result)
+						{
+							// Dialog was either closed or "Cancel" clicked
+							return;
 						}
 
-						// Update the mml and schedule the project refresh
-						_textSource.Text = _project.Save();
+						// "Ok" was clicked or Enter key pressed
+						var addAction = addActions[addNewWidgetDialog.SelectedIndex];
+						addAction.Creator();
 					};
 
-					verticalMenu.Items.Add(menuItem);
+					addNewWidgetDialog.ShowModal(Desktop);
 				}
 
 				Desktop.ShowContextMenu(verticalMenu, Desktop.MousePosition);
@@ -1208,36 +1321,6 @@ namespace MyraPad.UI
 			}
 
 			result = result.OrderBy(s => !s.Contains('.')).ThenBy(s => s).ToList();
-
-			return result;
-		}
-
-		private List<ChildCreator> BuildAddActions(Widget parent)
-		{
-			var result = new List<ChildCreator>();
-			if (parent == null)
-			{
-				return result;
-			}
-
-			var widgetTypeName = parent.GetType().Name;
-			if (Containers.Contains(widgetTypeName) || widgetTypeName == "Window" || widgetTypeName == "Dialog")
-			{
-				result.AddRange(SimpleWidgets.ToCreators());
-				result.AddRange(Containers.ToCreators());
-				result.AddRange(SpecialContainers.ToCreators());
-			}
-			else if (widgetTypeName.EndsWith("Menu"))
-			{
-				result.Add(typeof(MenuItem).ToCreator());
-				result.Add(typeof(MenuSeparator).ToCreator());
-			}
-			else if (widgetTypeName == "TabControl")
-			{
-				result.Add(typeof(TabItem).ToCreator());
-			}
-
-			result = result.OrderBy(s => s.Name).ToList();
 
 			return result;
 		}
