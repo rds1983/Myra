@@ -21,7 +21,7 @@ using Myra.Platform;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ListView : Widget
+	public class ListView : Widget, IContainer
 	{
 		private class WidgetsEnumerator : IEnumerator<Widget>, IEnumerator
 		{

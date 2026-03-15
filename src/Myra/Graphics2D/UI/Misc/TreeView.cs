@@ -29,6 +29,8 @@ namespace Myra.Graphics2D.UI
 
 		public int ChildNodesCount => Children.Count;
 
+		public int TotalNodesCount => _allNodes.Count;
+
 		internal TreeViewNode HoverRow { get; set; }
 
 		[Browsable(false)]
@@ -260,6 +262,9 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public TreeViewNode GetSubNode(int index) => (TreeViewNode)Children[index];
+
+		public TreeViewNode GetNodeByAbsoluteIndex(int index) => _allNodes[index];
+
 
 		public void RemoveAllSubNodes()
 		{

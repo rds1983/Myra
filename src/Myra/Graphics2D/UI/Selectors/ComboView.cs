@@ -19,7 +19,7 @@ using Myra.Platform;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ComboView: Widget
+	public class ComboView: Widget, IContainer
 	{
 		private readonly ToggleButton _button;
 		private readonly ListView _listView = new ListView(null);

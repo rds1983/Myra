@@ -70,6 +70,7 @@ namespace MyraPad
 				{
 					_objectXmls.TryDequeue(out objectXml);
 				}
+
 				if (!string.IsNullOrEmpty(objectXml))
 				{
 					if (Studio.MainForm.Project != null)

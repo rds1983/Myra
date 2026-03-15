@@ -398,6 +398,11 @@ namespace Myra.Graphics2D.UI
 			widget.Top = position.Y;
 		}
 
+		/// <summary>
+		/// Shows the context menu
+		/// </summary>
+		/// <param name="menu">Widget to show</param>
+		/// <param name="position">Show position in the global coordinates</param>
 		public void ShowContextMenu(Widget menu, Point position)
 		{
 			HideContextMenu();

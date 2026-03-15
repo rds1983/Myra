@@ -34,45 +34,44 @@ namespace MyraPad.UI
 		private const string MenuItemName = "MenuItem";
 		private const string ListItemName = "ListItem";
 
-		private static readonly string[] SimpleWidgets = new[]
+		private static readonly Type[] SimpleWidgets = new[]
 		{
-			"ImageTextButton",
-			"SpinButton",
-			"HorizontalProgressBar",
-			"VerticalProgressBar",
-			"HorizontalSeparator",
-			"VerticalSeparator",
-			"HorizontalSlider",
-			"VerticalSlider",
-			"Image",
-			"Label",
-			"TextBox",
-			"PropertyGrid",
+			typeof(ImageTextButton),
+			typeof(SpinButton),
+			typeof(HorizontalProgressBar),
+			typeof(VerticalProgressBar),
+			typeof(HorizontalSeparator),
+			typeof(VerticalSeparator),
+			typeof(HorizontalSlider),
+			typeof(VerticalSlider),
+			typeof(Image),
+			typeof(Label),
+			typeof(TextBox),
+			typeof(PropertyGrid),
 		};
 
-		private static readonly string[] Containers = new[]
+		private static readonly Type[] Containers = new[]
 		{
-			"Button",
-			"ToggleButton",
-			"CheckButton",
-			"RadioButton",
-			"Window",
-			"Grid",
-			"Panel",
-			"ScrollViewer",
-			"VerticalSplitPane",
-			"HorizontalSplitPane",
-			"VerticalStackPanel",
-			"HorizontalStackPanel",
-			"ListView",
-			"ComboView"
+			typeof(Button),
+			typeof(ToggleButton),
+			typeof(CheckButton),
+			typeof(RadioButton),
+			typeof(Grid),
+			typeof(Panel),
+			typeof(ScrollViewer),
+			typeof(VerticalSplitPane),
+			typeof(HorizontalSplitPane),
+			typeof(VerticalStackPanel),
+			typeof(HorizontalStackPanel),
+			typeof(ListView),
+			typeof(ComboView)
 		};
 
-		private static readonly string[] SpecialContainers = new[]
+		private static readonly Type[] SpecialContainers = new[]
 {
-			"HorizontalMenu",
-			"VerticalMenu",
-			"TabControl",
+			typeof(HorizontalMenu),
+			typeof(VerticalMenu),
+			typeof(TabControl),
 		};
 
 		private static readonly Regex TagResolver = new Regex("<([A-Za-z0-9\\.]+)");
@@ -94,8 +93,8 @@ namespace MyraPad.UI
 		private readonly Dictionary<string, FontSystem> _fontCache = new Dictionary<string, FontSystem>();
 		private readonly Dictionary<string, Texture2D> _textureCache = new Dictionary<string, Texture2D>();
 		private readonly TreeView _treeViewExplorer;
-
 		private VerticalMenu _autoCompleteMenu = null;
+		private bool _rightClick;
 
 		public string FilePath
 		{
@@ -248,6 +247,8 @@ namespace MyraPad.UI
 		public object NewObject { get; set; }
 		public Project NewProject { get; set; }
 
+		public int? NewProjectSelectedNodeIndex { get; set; }
+
 		public string LastFolder { get; set; }
 		public Options Options { get; }
 
@@ -300,6 +301,8 @@ namespace MyraPad.UI
 			};
 
 			_treeViewExplorer.SelectionChanged += _treeViewExplorer_SelectionChanged;
+			_treeViewExplorer.TouchDown += _treeViewExplorer_TouchDown;
+			_treeViewExplorer.TouchUp += _treeViewExplorer_TouchUp;
 
 			_panelExplorer.Content = _treeViewExplorer;
 
@@ -352,6 +355,74 @@ namespace MyraPad.UI
 			else
 			{
 				Options = new Options();
+			}
+		}
+
+		private void _treeViewExplorer_TouchDown(object sender, EventArgs e)
+		{
+			var state = Mouse.GetState();
+
+			_rightClick = state.RightButton == ButtonState.Pressed;
+		}
+
+		private void _treeViewExplorer_TouchUp(object sender, EventArgs e)
+		{
+			if (!_rightClick || Desktop.ContextMenu != null)
+			{
+				// Dont show if it's already shown
+				return;
+			}
+
+			try
+			{
+
+				var selectedWidget = (Widget)_treeViewExplorer.SelectedNode.Tag;
+
+				var addActions = BuildAddActions(selectedWidget);
+				if (addActions.Count == 0)
+				{
+					return;
+				}
+
+				var verticalMenu = new VerticalMenu();
+				foreach (var addAction in addActions)
+				{
+					var menuItem = new MenuItem
+					{
+						Text = "Add " + addAction.Name
+					};
+
+					menuItem.Selected += (s, a) =>
+					{
+						var newItem = addAction.Creator(selectedWidget);
+
+						// This will make the new item to appear in the explorer
+						RefreshExplorer();
+
+						// Schedule selection of the new item in the explorer after project refresh
+						for (var i = 0; i < _treeViewExplorer.TotalNodesCount; ++i)
+						{
+							var node = _treeViewExplorer.GetNodeByAbsoluteIndex(i);
+							if (node.Tag == newItem)
+							{
+								NewProjectSelectedNodeIndex = i;
+								break;
+							}
+						}
+
+						// Update the mml and schedule the project refresh
+						_textSource.Text = _project.Save();
+					};
+
+					verticalMenu.Items.Add(menuItem);
+				}
+
+				Desktop.ShowContextMenu(verticalMenu, Desktop.MousePosition);
+			}
+			catch (Exception ex)
+			{
+				var msg = Dialog.CreateMessageBox("Error", ex.Message);
+				msg.ShowModal(Desktop);
 			}
 		}
 
@@ -1009,6 +1080,7 @@ namespace MyraPad.UI
 				{
 					var lastStartPos = _currentTagStart.Value;
 					var lastEndPos = cursorPos;
+
 					// Build context menu
 					_autoCompleteMenu = new VerticalMenu();
 					foreach (var a in all)
@@ -1094,14 +1166,15 @@ namespace MyraPad.UI
 
 			if (_parentTag == "Project")
 			{
-				result.AddRange(Containers);
+				result.AddRange(Containers.ToStringList());
+				result.Add("Window");
 				result.Add("Dialog");
 			}
-			else if (Containers.Contains(_parentTag) || _parentTag == "Dialog")
+			else if (Containers.Contains(_parentTag) || _parentTag == "Window" || _parentTag == "Dialog")
 			{
-				result.AddRange(SimpleWidgets);
-				result.AddRange(Containers);
-				result.AddRange(SpecialContainers);
+				result.AddRange(SimpleWidgets.ToStringList());
+				result.AddRange(Containers.ToStringList());
+				result.AddRange(SpecialContainers.ToStringList());
 			}
 			else if (_parentTag.EndsWith(RowsProportionsName) || _parentTag.EndsWith(ColumnsProportionsName) || _parentTag.EndsWith(ProportionsName))
 			{
@@ -1110,6 +1183,7 @@ namespace MyraPad.UI
 			else if (_parentTag.EndsWith("Menu"))
 			{
 				result.Add("MenuItem");
+				result.Add("MenuSeparator");
 			}
 			else if (_parentTag == "ListBox" || _parentTag == "ComboBox")
 			{
@@ -1131,10 +1205,39 @@ namespace MyraPad.UI
 			if (_parentTag == "VerticalStackPanel" || _parentTag == "HorizontalStackPanel")
 			{
 				result.Add(_parentTag + "." + Project.DefaultProportionName);
-				result.Add(_parentTag + "." + ProportionsName);
 			}
 
 			result = result.OrderBy(s => !s.Contains('.')).ThenBy(s => s).ToList();
+
+			return result;
+		}
+
+		private List<ChildCreator> BuildAddActions(Widget parent)
+		{
+			var result = new List<ChildCreator>();
+			if (parent == null)
+			{
+				return result;
+			}
+
+			var widgetTypeName = parent.GetType().Name;
+			if (Containers.Contains(widgetTypeName) || widgetTypeName == "Window" || widgetTypeName == "Dialog")
+			{
+				result.AddRange(SimpleWidgets.ToCreators());
+				result.AddRange(Containers.ToCreators());
+				result.AddRange(SpecialContainers.ToCreators());
+			}
+			else if (widgetTypeName.EndsWith("Menu"))
+			{
+				result.Add(typeof(MenuItem).ToCreator());
+				result.Add(typeof(MenuSeparator).ToCreator());
+			}
+			else if (widgetTypeName == "TabControl")
+			{
+				result.Add(typeof(TabItem).ToCreator());
+			}
+
+			result = result.OrderBy(s => s.Name).ToList();
 
 			return result;
 		}
@@ -1521,6 +1624,14 @@ namespace MyraPad.UI
 					{
 						_projectHolder.Background = null;
 					}
+
+					NewProject = null;
+				}
+
+				if (NewProjectSelectedNodeIndex != null)
+				{
+					_treeViewExplorer.SelectedNode = _treeViewExplorer.GetNodeByAbsoluteIndex(NewProjectSelectedNodeIndex.Value);
+					NewProjectSelectedNodeIndex = null;
 				}
 			}
 			catch (Exception ex)

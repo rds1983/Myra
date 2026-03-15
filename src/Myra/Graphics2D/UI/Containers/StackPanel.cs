@@ -57,7 +57,6 @@ namespace Myra.Graphics2D.UI
 			set => _layout.DefaultProportion = value;
 		}
 
-
 		[Browsable(false)]
 		[Obsolete("Use StackPanel.GetProportion/StackPanel.SetProportion")]
 		[SkipSave]

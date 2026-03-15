@@ -1,7 +1,10 @@
 using Myra.Attributes;
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.ComponentModel;
+
+
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -13,11 +16,16 @@ using System.Drawing;
 
 namespace Myra.Graphics2D.UI
 {
-	public abstract class Container : Widget
+	public interface IContainer
+	{
+		IList<Widget> Widgets { get; }
+	}
+
+	public abstract class Container : Widget, IContainer
 	{
 		[Content]
 		[Browsable(false)]
-		public virtual ObservableCollection<Widget> Widgets => Children;
+		public virtual IList<Widget> Widgets => Children;
 
 		[DefaultValue(HorizontalAlignment.Stretch)]
 		public override HorizontalAlignment HorizontalAlignment

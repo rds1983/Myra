@@ -40,9 +40,20 @@ namespace Myra.Graphics2D.UI
 		private Point? _touchPosition;
 		private float _mouseWheelDelta;
 
+		/// <summary>
+		/// Previous mouse position in the global coordinates
+		/// </summary>
 		public Point PreviousMousePosition { get; private set; }
+
+		/// <summary>
+		/// Previous touch position in the global coordinates
+		/// Null if there was no touch
+		/// </summary>
 		public Point? PreviousTouchPosition { get; private set; }
 
+		/// <summary>
+		/// Current mouse position in the global coordinates
+		/// </summary>
 		public Point MousePosition
 		{
 			get => _mousePosition;
@@ -58,6 +69,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Current touch position in the global coordinates
+		/// Null if there is no touch
+		/// </summary>
 		public Point? TouchPosition
 		{
 			get => _touchPosition;
