@@ -31,9 +31,9 @@ namespace Myra.Graphics2D.UI
 			SupportsCommands = false
 		};
 
-        private bool _singleLine = false;
+		private bool _singleLine = false;
 
-        [Category("Appearance")]
+		[Category("Appearance")]
 		[DefaultValue(0)]
 		public int VerticalSpacing
 		{
@@ -103,31 +103,31 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-        [Category("Appearance")]
-        [DefaultValue(false)]
-        public bool SingleLine
-        {
-            get
-            {
-                return _singleLine;
-            }
+		[Category("Appearance")]
+		[DefaultValue(false)]
+		public bool SingleLine
+		{
+			get
+			{
+				return _singleLine;
+			}
 
-            set
-            {
-                if (value == _singleLine)
-                {
-                    return;
-                }
+			set
+			{
+				if (value == _singleLine)
+				{
+					return;
+				}
 
-                _singleLine = value;
-                InvalidateMeasure();
-            }
-        }
+				_singleLine = value;
+				InvalidateMeasure();
+			}
+		}
 
-        /// <summary>
-        /// The method used to abbreviate overflowing text.
-        /// </summary>
-        [Category("Appearance")]
+		/// <summary>
+		/// The method used to abbreviate overflowing text.
+		/// </summary>
+		[Category("Appearance")]
 		[DefaultValue(AutoEllipsisMethod.None)]
 		public AutoEllipsisMethod AutoEllipsisMethod
 		{
@@ -278,24 +278,24 @@ namespace Myra.Graphics2D.UI
 		{
 			base.InternalArrange();
 
-            if (_singleLine)
-            {
-                _richText.Width = ActualBounds.Width;
-                _richText.Height = Font.LineHeight;
-            }
-            else if (_wrap)
-            {
-                _richText.Width = ActualBounds.Width;
-                _richText.Height = ActualBounds.Height;
-            }
-            else
-            {
-                _richText.Width = default(int?);
-                _richText.Height = default(int?);
-            }
-        }
+			if (_singleLine)
+			{
+				_richText.Width = ActualBounds.Width;
+				_richText.Height = Font.LineHeight;
+			}
+			else if (_wrap)
+			{
+				_richText.Width = ActualBounds.Width;
+				_richText.Height = ActualBounds.Height;
+			}
+			else
+			{
+				_richText.Width = default(int?);
+				_richText.Height = default(int?);
+			}
+		}
 
-        public void ApplyLabelStyle(LabelStyle style)
+		public void ApplyLabelStyle(LabelStyle style)
 		{
 			ApplyWidgetStyle(style);
 
@@ -326,8 +326,8 @@ namespace Myra.Graphics2D.UI
 			TextAlign = label.TextAlign;
 			TextColor = label.TextColor;
 			DisabledTextColor = label.DisabledTextColor;
-			OverTextColor= label.OverTextColor;
-			PressedTextColor= label.PressedTextColor;
+			OverTextColor = label.OverTextColor;
+			PressedTextColor = label.PressedTextColor;
 		}
 	}
 }
