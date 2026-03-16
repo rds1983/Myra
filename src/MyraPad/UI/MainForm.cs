@@ -18,6 +18,7 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -361,67 +362,75 @@ namespace MyraPad.UI
 
 		private void DefaultCreate(object parent, Type t)
 		{
-			IItemWithId child;
-
-			var constructor = t.GetConstructor(Type.EmptyTypes);
-			if (constructor != null)
+			try
 			{
-				child = (IItemWithId)Activator.CreateInstance(t);
+				IItemWithId child;
+
+				var constructor = t.GetConstructor(Type.EmptyTypes);
+				if (constructor != null)
+				{
+					child = (IItemWithId)Activator.CreateInstance(t);
+				}
+				else
+				{
+					// Try with stylename constructor
+					child = (IItemWithId)Activator.CreateInstance(t, Stylesheet.DefaultStyleName);
+				}
+
+				do
+				{
+					var asContentControl = parent as IContent;
+					if (asContentControl != null)
+					{
+						asContentControl.Content = (Widget)child;
+						break;
+					}
+
+					var asContainer = parent as IContainer;
+					if (asContainer != null)
+					{
+						asContainer.Widgets.Add((Widget)child);
+						break;
+					}
+
+					var asMenu = parent as Menu;
+					if (asMenu != null)
+					{
+						asMenu.Items.Add((IMenuItem)child);
+						break;
+					}
+
+					var asTabControl = parent as TabControl;
+					if (asTabControl != null)
+					{
+						asTabControl.Items.Add((TabItem)child);
+						break;
+					}
+				}
+				while (false);
+
+				// This will make the new item to appear in the explorer
+				RefreshExplorer();
+
+				// Schedule selection of the new item in the explorer after project refresh
+				for (var i = 0; i < _treeViewExplorer.TotalNodesCount; ++i)
+				{
+					var node = _treeViewExplorer.GetNodeByAbsoluteIndex(i);
+					if (node.Tag == child)
+					{
+						NewProjectSelectedNodeIndex = i;
+						break;
+					}
+				}
+
+				// Update the mml and schedule the project refresh
+				_textSource.Text = _project.Save();
 			}
-			else
+			catch (Exception ex)
 			{
-				// Try with stylename constructor
-				child = (IItemWithId)Activator.CreateInstance(t, Stylesheet.DefaultStyleName);
+				var msg = Dialog.CreateMessageBox("Error", ex.Message);
+				msg.ShowModal(Desktop);
 			}
-
-			do
-			{
-				var asContentControl = parent as IContent;
-				if (asContentControl != null)
-				{
-					asContentControl.Content = (Widget)child;
-					break;
-				}
-
-				var asContainer = parent as IContainer;
-				if (asContainer != null)
-				{
-					asContainer.Widgets.Add((Widget)child);
-					break;
-				}
-
-				var asMenu = parent as Menu;
-				if (asMenu != null)
-				{
-					asMenu.Items.Add((IMenuItem)child);
-					break;
-				}
-
-				var asTabControl = parent as TabControl;
-				if (asTabControl != null)
-				{
-					asTabControl.Items.Add((TabItem)child);
-					break;
-				}
-			}
-			while (false);
-
-			// This will make the new item to appear in the explorer
-			RefreshExplorer();
-
-			// Schedule selection of the new item in the explorer after project refresh
-			for (var i = 0; i < _treeViewExplorer.TotalNodesCount; ++i)
-			{
-				var node = _treeViewExplorer.GetNodeByAbsoluteIndex(i);
-				if (node.Tag == child)
-				{
-					NewProjectSelectedNodeIndex = i;
-					break;
-				}
-			}
-
-			// Update the mml and schedule the project refresh
-			_textSource.Text = _project.Save();
 		}
 
 		private ChildCreator CreateNewItemAction(Widget parent, Type childType) => new ChildCreator(childType.Name, () => DefaultCreate(parent, childType));
@@ -493,41 +502,67 @@ namespace MyraPad.UI
 					return;
 				}
 
-				var verticalMenu = new VerticalMenu();
+				var asContent = selectedWidget as IContent;
 
+				var verticalMenu = new VerticalMenu();
 				if (addActions.Count < 5)
 				{
+					var prefix = "Add ";
+					if (asContent != null && asContent.Content != null)
+					{
+						prefix = "Replace Content With ";
+					}
+
 					// Simply show all actions in the context menu
 					foreach (var addAction in addActions)
 					{
 						var menuItem = new MenuItem
 						{
-							Text = "Add " + addAction.Name
+							Text = prefix + addAction.Name
 						};
 
 						menuItem.Selected += (s, a) => addAction.Creator();
 						verticalMenu.Items.Add(menuItem);
 					}
-				} else
+				}
+				else
 				{
-					// Use special dialog
-					var addNewWidgetDialog = new AddNewWidgetDialog();
-					addNewWidgetDialog.SetNames((from a in addActions select a.Name).ToArray());
+					var prefix = "Add New Widget";
 
-					addNewWidgetDialog.Closed += (s, a) => 
+					if (asContent != null && asContent.Content != null)
 					{
-						if (!addNewWidgetDialog.Result)
-						{
-							// Dialog was either closed or "Cancel" clicked
-							return;
-						}
-
-						// "Ok" was clicked or Enter key pressed
-						var addAction = addActions[addNewWidgetDialog.SelectedIndex];
-						addAction.Creator();
+						prefix = "Replace Content With New Widget";
+					}
+					var menuItem = new MenuItem
+					{
+						Text = prefix + "..."
 					};
 
-					addNewWidgetDialog.ShowModal(Desktop);
+					menuItem.Selected += (sender, args) =>
+					{
+						// Use special dialog
+						var addNewWidgetDialog = new AddNewWidgetDialog();
+						addNewWidgetDialog.Title = prefix;
+
+						addNewWidgetDialog.SetNames((from a in addActions select a.Name).ToArray());
+
+						addNewWidgetDialog.Closed += (s, a) =>
+						{
+							if (!addNewWidgetDialog.Result)
+							{
+								// Dialog was either closed or "Cancel" clicked
+								return;
+							}
+
+							// "Ok" was clicked or Enter key pressed
+							var addAction = addActions[addNewWidgetDialog.SelectedIndex];
+							addAction.Creator();
+						};
+
+						addNewWidgetDialog.ShowModal(Desktop);
+					};
+
+					verticalMenu.Items.Add(menuItem);
 				}
 
 				Desktop.ShowContextMenu(verticalMenu, Desktop.MousePosition);
@@ -1708,12 +1743,13 @@ namespace MyraPad.UI
 						_projectHolder.Background = null;
 					}
 
-					NewProject = null;
-				}
+					if (NewProjectSelectedNodeIndex != null)
+					{
+						Debug.WriteLine(NewProjectSelectedNodeIndex);
+						_treeViewExplorer.SelectedNode = _treeViewExplorer.GetNodeByAbsoluteIndex(NewProjectSelectedNodeIndex.Value);
+					}
 
-				if (NewProjectSelectedNodeIndex != null)
-				{
-					_treeViewExplorer.SelectedNode = _treeViewExplorer.GetNodeByAbsoluteIndex(NewProjectSelectedNodeIndex.Value);
+					NewProject = null;
 					NewProjectSelectedNodeIndex = null;
 				}
 			}
