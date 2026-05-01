@@ -146,6 +146,10 @@ public class WrapPanel : Container
         ChildrenLayout = _layout;
     }
 
+    /// <summary>
+    /// Copies the properties from another widget into this one.
+    /// </summary>
+    /// <param name="w">The widget to copy from.</param>
     protected internal override void CopyFrom(Widget w)
     {
         base.CopyFrom(w);

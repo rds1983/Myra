@@ -57,6 +57,9 @@ public class WrapPanelLayout : ILayout
     /// <summary>
     /// Calculates the uniform size for all widgets based on the largest widget's measurements.
     /// </summary>
+    /// <param name="widgets">The collection of widgets from which to determine the 'max' widget size </param>
+    /// <param name="availableSize">The available size for measurement.</param>
+    /// <returns>The uniform size for widgets.</returns>
     private static Point GetUniformSize(IEnumerable<Widget> widgets, Point availableSize)
     {
         int maxChildWidth = 0;
@@ -78,7 +81,28 @@ public class WrapPanelLayout : ILayout
     /// <summary>
     /// Measures the total size required for the widgets given the available size.
     /// </summary>
+    /// <param name="widgets">The collection of widgets to measure.</param>
+    /// <param name="availableSize">The available size for measurement.</param>
+    /// <returns>The required size for the layout.</returns>
     public Point Measure(IEnumerable<Widget> widgets, Point availableSize)
+    {
+        // The measurement methods are pretty difficult to keep DRY;
+        // We either it somewhat duplicated or we start having to pass around
+        // many parameters.
+        return Orientation == Orientation.Horizontal
+            ? MeasureWithHorizontalBias(widgets, availableSize)
+            : MeasureWithVerticalBias(widgets, availableSize);
+    }
+
+    /// <summary>
+    /// Measures the total size required for the widgets given the available size.
+    /// This has a horizontal bias, meaning it'll attempt to use whatever horizontal space is
+    /// available prior to wrapping into a new row
+    /// </summary>
+    /// <param name="widgets">The collection of widgets to measure.</param>
+    /// <param name="availableSize">The available size for measurement.</param>
+    /// <returns>The required size for the layout.</returns>
+    private Point MeasureWithHorizontalBias(IEnumerable<Widget> widgets, Point availableSize)
     {
         Point result = Point.Zero;
         int rowWidth = 0;
@@ -86,83 +110,106 @@ public class WrapPanelLayout : ILayout
 
         Point effectiveAvailableSize = GetEffectiveAvailableSize(availableSize);
         Widget[] widgetsArr = widgets.ToArray();
+
         // Determine the uniform size if uniform sizing is enabled
         Point uniformSize = UniformSizing ? GetUniformSize(widgetsArr, effectiveAvailableSize) : Point.Zero;
 
-        if (Orientation == Orientation.Horizontal)
+        bool firstInRow = true;
+        foreach (Widget widget in widgetsArr)
         {
-            bool firstInRow = true;
-            foreach (Widget widget in widgetsArr)
+            if (!widget.Visible)
+                continue;
+
+            Point widgetSize = UniformSizing ? uniformSize : widget.Measure(effectiveAvailableSize);
+
+            // Check if the current widget exceeds the available row width
+            if (!firstInRow && effectiveAvailableSize.X > 0 &&
+                rowWidth + HorizontalSpacing + widgetSize.X > effectiveAvailableSize.X)
             {
-                if (!widget.Visible) continue;
-
-                Point size = UniformSizing ? uniformSize : widget.Measure(effectiveAvailableSize);
-
-                // Check if the current widget exceeds the available row width
-                if (!firstInRow && effectiveAvailableSize.X > 0 &&
-                    rowWidth + HorizontalSpacing + size.X > effectiveAvailableSize.X)
-                {
-                    // Move to the next row
-                    result.X = Math.Max(result.X, rowWidth);
-                    result.Y += rowHeight + VerticalSpacing;
-                    rowWidth = size.X;
-                    rowHeight = size.Y;
-                    firstInRow = true;
-                }
-                else
-                {
-                    // Add widget to the current row
-                    if (!firstInRow) rowWidth += HorizontalSpacing;
-                    rowWidth += size.X;
-                    rowHeight = Math.Max(rowHeight, size.Y);
-                    firstInRow = false;
-                }
+                // Move to the next row
+                result.X = Math.Max(result.X, rowWidth);
+                result.Y += rowHeight + VerticalSpacing;
+                rowWidth = widgetSize.X;
+                rowHeight = widgetSize.Y;
+            }
+            else
+            {
+                // Add widget to the current row
+                if (!firstInRow)
+                    rowWidth += HorizontalSpacing;
+                rowWidth += widgetSize.X;
+                rowHeight = Math.Max(rowHeight, widgetSize.Y);
             }
 
-            // Finalize measurement for the last row
-            result.X = Math.Max(result.X, rowWidth);
-            result.Y += rowHeight;
-
-            if (PreferredWidth.HasValue && availableSize.X is <= 0 or >= 1000000)
-                result.X = Math.Max(result.X, PreferredWidth.Value);
+            firstInRow = false;
         }
-        else
+
+        // Finalize measurement for the last row
+        result.X = Math.Max(result.X, rowWidth);
+        result.Y += rowHeight;
+
+        if (PreferredWidth.HasValue && availableSize.X is <= 0 or >= 1000000)
+            result.X = Math.Max(result.X, PreferredWidth.Value);
+
+        return result;
+    }
+
+    /// <summary>
+    /// Measures the total size required for the widgets given the available size.
+    /// This has a vertical bias, meaning it'll attempt to use whatever vertical space is
+    /// available prior to wrapping into a new column
+    /// </summary>
+    /// <param name="widgets">The collection of widgets to measure.</param>
+    /// <param name="availableSize">The available size for measurement.</param>
+    /// <returns>The required size for the layout.</returns>
+    private Point MeasureWithVerticalBias(IEnumerable<Widget> widgets, Point availableSize)
+    {
+        Point result = Point.Zero;
+        int rowWidth = 0;
+        int rowHeight = 0;
+
+        Point effectiveAvailableSize = GetEffectiveAvailableSize(availableSize);
+        Widget[] widgetsArr = widgets.ToArray();
+
+        // Determine the uniform size if uniform sizing is enabled
+        Point uniformSize = UniformSizing ? GetUniformSize(widgetsArr, effectiveAvailableSize) : Point.Zero;
+
+        bool firstInCol = true;
+        foreach (Widget widget in widgetsArr)
         {
-            bool firstInCol = true;
-            foreach (Widget widget in widgetsArr)
+            if (!widget.Visible)
+                continue;
+
+            Point widgetSize = UniformSizing ? uniformSize : widget.Measure(effectiveAvailableSize);
+
+            // Check if the current widget exceeds the available column height
+            if (!firstInCol && effectiveAvailableSize.Y > 0 &&
+                rowHeight + VerticalSpacing + widgetSize.Y > effectiveAvailableSize.Y)
             {
-                if (!widget.Visible) continue;
-
-                Point size = UniformSizing ? uniformSize : widget.Measure(effectiveAvailableSize);
-
-                // Check if the current widget exceeds the available column height
-                if (!firstInCol && effectiveAvailableSize.Y > 0 &&
-                    rowHeight + VerticalSpacing + size.Y > effectiveAvailableSize.Y)
-                {
-                    // Move to the next column
-                    result.Y = Math.Max(result.Y, rowHeight);
-                    result.X += rowWidth + HorizontalSpacing;
-                    rowHeight = size.Y;
-                    rowWidth = size.X;
-                    firstInCol = true;
-                }
-                else
-                {
-                    // Add widget to the current column
-                    if (!firstInCol) rowHeight += VerticalSpacing;
-                    rowHeight += size.Y;
-                    rowWidth = Math.Max(rowWidth, size.X);
-                    firstInCol = false;
-                }
+                // Move to the next column
+                result.Y = Math.Max(result.Y, rowHeight);
+                result.X += rowWidth + HorizontalSpacing;
+                rowHeight = widgetSize.Y;
+                rowWidth = widgetSize.X;
+            }
+            else
+            {
+                // Add widget to the current column
+                if (!firstInCol)
+                    rowHeight += VerticalSpacing;
+                rowHeight += widgetSize.Y;
+                rowWidth = Math.Max(rowWidth, widgetSize.X);
             }
 
-            // Finalize measurement for the last column
-            result.Y = Math.Max(result.Y, rowHeight);
-            result.X += rowWidth;
-
-            if (PreferredHeight.HasValue && availableSize.Y is <= 0 or >= 1000000)
-                result.Y = Math.Max(result.Y, PreferredHeight.Value);
+            firstInCol = false;
         }
+
+        // Finalize measurement for the last column
+        result.Y = Math.Max(result.Y, rowHeight);
+        result.X += rowWidth;
+
+        if (PreferredHeight.HasValue && availableSize.Y is <= 0 or >= 1000000)
+            result.Y = Math.Max(result.Y, PreferredHeight.Value);
 
         return result;
     }
@@ -170,12 +217,15 @@ public class WrapPanelLayout : ILayout
     /// <summary>
     /// Gets the effective available size, considering the preferred width/height and orientation.
     /// </summary>
+    /// <param name="availableSize">The original available size.</param>
+    /// <returns>The effective available size for layout calculations.</returns>
     private Point GetEffectiveAvailableSize(Point availableSize)
     {
         Point effectiveAvailableSize = availableSize;
         switch (Orientation)
         {
             case Orientation.Horizontal:
+            default:
             {
                 if (PreferredWidth.HasValue)
                     effectiveAvailableSize.X = availableSize.X is <= 0 or >= 1000000
@@ -199,6 +249,8 @@ public class WrapPanelLayout : ILayout
     /// <summary>
     /// Arranges the widgets within the specified bounds.
     /// </summary>
+    /// <param name="widgets">The collection of widgets to arrange.</param>
+    /// <param name="bounds">The bounds to arrange the widgets within.</param>
     public void Arrange(IEnumerable<Widget> widgets, Rectangle bounds)
     {
         if (Orientation == Orientation.Horizontal)
@@ -210,6 +262,8 @@ public class WrapPanelLayout : ILayout
     /// <summary>
     /// Arranges widgets horizontally in rows.
     /// </summary>
+    /// <param name="widgets">The collection of widgets to arrange.</param>
+    /// <param name="bounds">The bounds to arrange the widgets within.</param>
     private void ArrangeHorizontal(IEnumerable<Widget> widgets, Rectangle bounds)
     {
         Point actualAvailableSize = bounds.Size();
@@ -224,9 +278,11 @@ public class WrapPanelLayout : ILayout
         int y = bounds.Y;
         int rowHeight = 0;
         var rowWidgets = new List<Widget>();
-        Point uniformSize = UniformSizing ? GetUniformSize(widgets, effectiveAvailableSize) : Point.Zero;
 
-        foreach (Widget widget in widgets)
+        Widget[] widgetsArr = widgets.ToArray();
+        Point uniformSize = UniformSizing ? GetUniformSize(widgetsArr, effectiveAvailableSize) : Point.Zero;
+
+        foreach (Widget widget in widgetsArr)
         {
             if (!widget.Visible) continue;
 
@@ -260,6 +316,8 @@ public class WrapPanelLayout : ILayout
     /// <summary>
     /// Arranges widgets vertically in columns.
     /// </summary>
+    /// <param name="widgets">The collection of widgets to arrange.</param>
+    /// <param name="bounds">The bounds to arrange the widgets within.</param>
     private void ArrangeVertical(IEnumerable<Widget> widgets, Rectangle bounds)
     {
         Point actualAvailableSize = bounds.Size();
@@ -274,9 +332,11 @@ public class WrapPanelLayout : ILayout
         int y = bounds.Y;
         int rowWidth = 0;
         var colWidgets = new List<Widget>();
-        Point uniformSize = UniformSizing ? GetUniformSize(widgets, effectiveAvailableSize) : Point.Zero;
 
-        foreach (Widget widget in widgets)
+        Widget[] widgetsArr = widgets.ToArray();
+        Point uniformSize = UniformSizing ? GetUniformSize(widgetsArr, effectiveAvailableSize) : Point.Zero;
+
+        foreach (Widget widget in widgetsArr)
         {
             if (!widget.Visible) continue;
 
@@ -310,6 +370,12 @@ public class WrapPanelLayout : ILayout
     /// <summary>
     /// Finalizes the arrangement of a single row.
     /// </summary>
+    /// <param name="widgets">The widgets in the row.</param>
+    /// <param name="x">The starting X coordinate.</param>
+    /// <param name="y">The starting Y coordinate.</param>
+    /// <param name="rowHeight">The height of the row.</param>
+    /// <param name="availableSize">The total available size for measurement.</param>
+    /// <param name="uniformSize">The uniform size for widgets, if enabled.</param>
     private void ArrangeRow(List<Widget> widgets, int x, int y, int rowHeight, Point availableSize, Point uniformSize)
     {
         foreach (Widget widget in widgets)
@@ -326,6 +392,12 @@ public class WrapPanelLayout : ILayout
     /// <summary>
     /// Finalizes the arrangement of a single column.
     /// </summary>
+    /// <param name="widgets">The widgets in the column.</param>
+    /// <param name="x">The starting X coordinate.</param>
+    /// <param name="y">The starting Y coordinate.</param>
+    /// <param name="colWidth">The width of the column.</param>
+    /// <param name="availableSize">The total available size for measurement.</param>
+    /// <param name="uniformSize">The uniform size for widgets, if enabled.</param>
     private void ArrangeCol(List<Widget> widgets, int x, int y, int colWidth, Point availableSize, Point uniformSize)
     {
         foreach (Widget widget in widgets)
