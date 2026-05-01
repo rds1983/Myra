@@ -5,10 +5,16 @@ using Container = Myra.Graphics2D.UI.Container;
 
 namespace Myra.Graphics2D.UI.WrapPanel;
 
+/// <summary>
+/// A container that arranges its child widgets in a sequence that wraps at the edge of the container.
+/// </summary>
 public class WrapPanel : Container
 {
     private readonly WrapPanelLayout _layout = new();
 
+    /// <summary>
+    /// Gets or sets the orientation of the layout (Horizontal or Vertical).
+    /// </summary>
     [Category("Layout")]
     [DefaultValue(Orientation.Horizontal)]
     public Orientation Orientation
@@ -24,6 +30,9 @@ public class WrapPanel : Container
         }
     }
 
+    /// <summary>
+    /// Gets or sets the horizontal spacing between child widgets.
+    /// </summary>
     [Category("Layout")]
     [DefaultValue(0)]
     public int HorizontalSpacing
@@ -39,6 +48,9 @@ public class WrapPanel : Container
         }
     }
 
+    /// <summary>
+    /// Gets or sets the vertical spacing between child widgets.
+    /// </summary>
     [Category("Layout")]
     [DefaultValue(0)]
     public int VerticalSpacing
@@ -54,6 +66,9 @@ public class WrapPanel : Container
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether child widgets in a row/column should be aligned to the row height/column width.
+    /// </summary>
     [Category("Layout")]
     [DefaultValue(true)]
     public bool Aligned
@@ -69,6 +84,9 @@ public class WrapPanel : Container
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether all child widgets should have the same size, based on the largest child.
+    /// </summary>
     [Category("Layout")]
     [DefaultValue(true)]
     public bool UniformSizing
@@ -84,6 +102,9 @@ public class WrapPanel : Container
         }
     }
 
+    /// <summary>
+    /// Gets or sets the preferred width of the wrap panel.
+    /// </summary>
     [Category("Layout")]
     [DefaultValue(null)]
     public int? PreferredWidth
@@ -99,6 +120,9 @@ public class WrapPanel : Container
         }
     }
 
+    /// <summary>
+    /// Gets or sets the preferred height of the wrap panel.
+    /// </summary>
     [Category("Layout")]
     [DefaultValue(null)]
     public int? PreferredHeight
@@ -114,6 +138,9 @@ public class WrapPanel : Container
         }
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="WrapPanel"/> class.
+    /// </summary>
     public WrapPanel()
     {
         ChildrenLayout = _layout;
