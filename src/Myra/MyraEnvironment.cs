@@ -5,6 +5,7 @@ using Myra.Utility;
 using AssetManagementBase;
 using Myra.Graphics2D.UI;
 using System.Collections.Generic;
+using FontStashSharp;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -229,6 +230,8 @@ namespace Myra
 		public static bool DrawKeyboardFocusedWidgetFrame { get; set; }
 		public static bool DrawMouseHoveredWidgetFrame { get; set; }
 		public static bool DrawTextGlyphsFrames { get; set; }
+		public static bool DrawMouseHoveredWidgetInfo { get; set; }
+		public static SpriteFontBase DefaultDebugFont { get; set; }
 		public static bool DisableClipping { get; set; }
 
 		public static Func<MouseInfo> MouseInfoGetter { get; set; } = DefaultMouseInfoGetter;
