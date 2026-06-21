@@ -608,12 +608,12 @@ namespace Myra.Graphics2D.UI
 			)
 				return;
 
-			// Look for the deepest child being hit. That'd be the actual widget we're hovering over
-			// as opposed to one of its parents
+			// Look for the deepest child being hit. That'd be the actual widget we're hovering over as opposed to one of its parents
 			Widget widget = null;
-			foreach (Widget child in ChildrenCopy)
+			var children = ChildrenCopy;
+			for (var i = children.Count - 1; i >= 0; --i)
 			{
-				Widget w = child.HitTest(MousePosition);
+				var w = children[i].HitTest(MousePosition);
 				if (w != null)
 				{
 					widget = w;
@@ -633,7 +633,7 @@ namespace Myra.Graphics2D.UI
 				Text = $"""
 				        {GetDebugTypeName(widget.GetType())}
 				        eH: {widget.Height ?? transformedPos.Height}
-				        eW: {widget.Height ?? transformedPos.Width}
+				        eW: {widget.Width ?? transformedPos.Width}
 				        eX: {transformedPos.X}
 				        eY: {transformedPos.Y}
 				        """,
