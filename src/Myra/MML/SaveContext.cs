@@ -7,6 +7,8 @@ using System.Reflection;
 using System.Xml.Linq;
 using Myra.Attributes;
 using System.Linq;
+using System.ComponentModel;
+
 
 
 #if MONOGAME || FNA
@@ -184,6 +186,16 @@ namespace Myra.MML
 					{
 						el.Add(new XAttribute(property.Name(), str));
 					}
+					else
+					{
+						var defaultAttr = property.FindAttribute<DefaultValueAttribute>();
+						if (defaultAttr != null && defaultAttr.Value != null && !string.IsNullOrEmpty(defaultAttr.Value.ToString()))
+						{
+							// If the property has a default value attribute that is not empty and the property value is empty,
+							// Then do the serialize
+							el.Add(new XAttribute(property.Name(), string.Empty));
+						}
+					}
 				}
 			}
 
@@ -231,12 +243,8 @@ namespace Myra.MML
 		public static bool HasDefaultValue(object w, PropertyInfo property)
 		{
 			var value = property.GetValue(w);
-			if (property.HasDefaultValue(value))
-			{
-				return true;
-			}
 
-			return false;
+			return property.HasDefaultValue(value);
 		}
 	}
 }

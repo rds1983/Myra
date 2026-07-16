@@ -37,8 +37,6 @@ namespace Myra.Graphics2D.UI
 			SupportsCommands = false
 		};
 
-		private bool _singleLine = false;
-
 		/// <summary>
 		/// Gets or sets the vertical spacing in pixels between lines of text.
 		/// </summary>
@@ -122,30 +120,6 @@ namespace Myra.Graphics2D.UI
 		}
 
 		/// <summary>
-		/// Gets or sets a value indicating whether the text is constrained to a single line.
-		/// </summary>
-		[Category("Appearance")]
-		[DefaultValue(false)]
-		public bool SingleLine
-		{
-			get
-			{
-				return _singleLine;
-			}
-
-			set
-			{
-				if (value == _singleLine)
-				{
-					return;
-				}
-
-				_singleLine = value;
-				InvalidateMeasure();
-			}
-		}
-
-		/// <summary>
 		/// The method used to abbreviate overflowing text.
 		/// </summary>
 		[Category("Appearance")]
@@ -153,7 +127,16 @@ namespace Myra.Graphics2D.UI
 		public AutoEllipsisMethod AutoEllipsisMethod
 		{
 			get => _richText.AutoEllipsisMethod;
-			set => _richText.AutoEllipsisMethod = value;
+			set
+			{
+				if (value == _richText.AutoEllipsisMethod)
+				{
+					return;
+				}
+
+				_richText.AutoEllipsisMethod = value;
+				InvalidateMeasure();
+			}
 		}
 
 		/// <summary>
@@ -164,7 +147,16 @@ namespace Myra.Graphics2D.UI
 		public string AutoEllipsisString
 		{
 			get => _richText.AutoEllipsisString;
-			set => _richText.AutoEllipsisString = value;
+			set
+			{
+				if (value == _richText.AutoEllipsisString)
+				{
+					return;
+				}
+
+				_richText.AutoEllipsisString = value;
+				InvalidateMeasure();
+			}
 		}
 
 		/// <summary>
@@ -349,20 +341,23 @@ namespace Myra.Graphics2D.UI
 		{
 			base.InternalArrange();
 
-			if (_singleLine)
-			{
-				_richText.Width = ActualBounds.Width;
-				_richText.Height = Font.LineHeight;
-			}
-			else if (_wrap)
+			if (_wrap)
 			{
 				_richText.Width = ActualBounds.Width;
 				_richText.Height = ActualBounds.Height;
 			}
 			else
 			{
-				_richText.Width = default(int?);
-				_richText.Height = default(int?);
+				if (AutoEllipsisMethod != AutoEllipsisMethod.None)
+				{
+					_richText.Width = ActualBounds.Width;
+					_richText.Height = Font.LineHeight;
+				}
+				else
+				{
+					_richText.Width = default(int?);
+					_richText.Height = default(int?);
+				}
 			}
 		}
 

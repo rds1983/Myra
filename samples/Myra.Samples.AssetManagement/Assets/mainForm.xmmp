@@ -1,8 +1,8 @@
 <Project>
   <Project.ExportOptions Namespace="Myra.Samples.AssetManagement" Class="MainForm" OutputPath="D:\Projects\Myra\samples\Myra.Samples.AssetManagement" />
   <Panel Background="#C78100FF">
-    <Label Text="My Game" Font="fonts/arial64.fnt" TextColor="#ADD8E6FF" HorizontalAlignment="Center" />
-    <VerticalMenu HorizontalAlignment="Center" VerticalAlignment="Center" LabelFont="fonts/comicSans48.fnt" LabelColor="#4B0082FF" SelectionHoverBackground="#808000FF" SelectionBackground="#FFA500FF" LabelHorizontalAlignment="Center" HoverIndexCanBeNull="False" Border="#00000000" Background="#00000000" Id="_mainMenu">
+    <Label Text="My Game" Font="fonts/arial64.fnt" TextColor="LightBlue" HorizontalAlignment="Center" />
+    <VerticalMenu HorizontalAlignment="Center" VerticalAlignment="Center" LabelFont="fonts/comicSans48.fnt" LabelColor="Indigo" SelectionHoverBackground="Olive" SelectionBackground="Orange" LabelHorizontalAlignment="Center" HoverIndexCanBeNull="False" Background="Transparent" Border="Transparent" Id="_mainMenu">
       <MenuItem Text="Start New Game" Id="_menuItemStartNewGame" />
       <MenuItem Text="Options" Id="_menuItemOptions" />
       <MenuItem Text="Quit" Id="_menuItemQuit" />
