@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyraViewer", "..\src\MyraVi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.CustomWidgets.SkiaSharp", "..\samples\Myra.Samples.CustomWidgets.SkiaSharp\Myra.Samples.CustomWidgets.SkiaSharp.csproj", "{9006BD71-C83C-AA6D-BD75-1223C9260BC1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.CustomWidgets.ScottPlot", "..\samples\Myra.Samples.CustomWidgets.ScottPlot\Myra.Samples.CustomWidgets.ScottPlot.csproj", "{649CA0D2-B07C-6A13-9CEF-396FC33DA3F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -131,6 +133,10 @@ Global
 		{9006BD71-C83C-AA6D-BD75-1223C9260BC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9006BD71-C83C-AA6D-BD75-1223C9260BC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9006BD71-C83C-AA6D-BD75-1223C9260BC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{649CA0D2-B07C-6A13-9CEF-396FC33DA3F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{649CA0D2-B07C-6A13-9CEF-396FC33DA3F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{649CA0D2-B07C-6A13-9CEF-396FC33DA3F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{649CA0D2-B07C-6A13-9CEF-396FC33DA3F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -151,6 +157,7 @@ Global
 		{D368AB94-DCCF-497F-769D-81B69F07D8A5} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{27B545C3-942F-0E69-1438-C30B4859EFA4} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{9006BD71-C83C-AA6D-BD75-1223C9260BC1} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{649CA0D2-B07C-6A13-9CEF-396FC33DA3F7} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35ACDF4E-2CE2-46B1-A19F-35DC131069A1}

@@ -100,6 +100,13 @@ This sample implements a `Scene3D` widget that performs 3D rendering using XNA F
 
 This sample demonstrates integrating SkiaSharp with Myra to create a custom widget that renders SkiaSharp 2D graphics within the Myra UI framework. The `SKCanvasWidget` bridges SkiaSharp's powerful vector graphics capabilities with Myra's widget system, allowing developers to use SkiaSharp's drawing API (circles, text, paths, etc.) to render content inside Myra widgets. The sample shows a split-pane layout with a SkiaSharp-rendered canvas alongside a text box, illustrating how third-party graphics libraries can be seamlessly integrated into Myra applications.
 
+### ScottPlot
+[View on GitHub](https://github.com/MyraUI/Myra/tree/master/samples/Myra.Samples.CustomWidgets.ScottPlot)
+
+![ScottPlot Sample](~/images/samples/CustomWidgets.ScottPlot.png)
+
+This sample demonstrates integrating ScottPlot, a .NET charting library, with Myra to create interactive data visualization widgets. It introduces a `MyraPlot` widget that inherits from `SKCanvasWidget` and implements ScottPlot's `IPlotControl` interface, providing full interactive features including mouse/keyboard input processing, context menus, and plot manipulation. The sample displays a signal plot with interactive features alongside a text input, showing how data visualization libraries can be seamlessly embedded into Myra applications for building dashboards and analytical tools.
+
 ### PlatformAgnostic Family
 
 The PlatformAgnostic samples demonstrate how to use Myra.PlatformAgnostic, a cross-platform graphics abstraction layer. Multiple backend implementations are provided to show integration with different graphics frameworks.
