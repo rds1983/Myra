@@ -6,7 +6,7 @@ using SkiaSharp;
 using System;
 using System.ComponentModel;
 
-namespace Myra.SkiaSharp;
+namespace Myra.Samples.SkiaSharp;
 
 public class SKCanvasWidget : Widget
 {
