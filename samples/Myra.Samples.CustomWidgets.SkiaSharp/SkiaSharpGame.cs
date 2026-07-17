@@ -10,7 +10,7 @@ namespace Myra.Samples.SkiaSharp
 	{
 		private readonly GraphicsDeviceManager _graphics;
 		private Desktop _desktop;
-		private PropertyGrid _propertyGrid;
+		private TextBox _textBox;
 
 		public SkiaSharpGame()
 		{
@@ -29,12 +29,28 @@ namespace Myra.Samples.SkiaSharp
 
 			MyraEnvironment.Game = this;
 
-			var canvas = new SKCanvasWidget();
-			canvas.PaintHandler = PaintHandler;
+			var canvas = new SKCanvasWidget
+			{
+				PaintHandler = PaintHandler
+			};
+
+			_textBox = new TextBox
+			{
+				Text = "Hello, Myra!",
+				Width = 200,
+				Height = 30
+			};
+
+			var topPanel = new HorizontalSplitPane();
+
+			topPanel.Widgets.Add(canvas);
+			topPanel.Widgets.Add(_textBox);
+
+			topPanel.SetSplitterPosition(0, 0.75f);
 
 			_desktop = new Desktop
 			{
-				Root = canvas
+				Root = topPanel
 			};
 		}
 
@@ -59,7 +75,7 @@ namespace Myra.Samples.SkiaSharp
 				paint.Color = new SKColor(0x42, 0x81, 0xA4);
 				paint.IsStroke = false;
 
-				canvas.DrawText("Skia", size.X / 2f, 64.0f, SKTextAlign.Left, font, paint);
+				canvas.DrawText(_textBox.Text, size.X / 2f, 64.0f, SKTextAlign.Left, font, paint);
 			}
 
 			canvas.Flush();
