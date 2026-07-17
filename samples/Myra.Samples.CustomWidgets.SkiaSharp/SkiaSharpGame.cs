@@ -32,38 +32,9 @@ namespace Myra.Samples.SkiaSharp
 			var canvas = new SKCanvasWidget();
 			canvas.PaintHandler = PaintHandler;
 
-			var scrollViewer = new ScrollViewer
-			{
-				ShowHorizontalScrollBar = false
-			};
-
-			_propertyGrid = new PropertyGrid
-			{
-				Object = canvas
-			};
-
-			scrollViewer.Content = _propertyGrid;
-
-			var topPanel = new HorizontalSplitPane();
-
-			topPanel.Widgets.Add(canvas);
-			topPanel.Widgets.Add(scrollViewer);
-
-			topPanel.SetSplitterPosition(0, 0.75f);
-
 			_desktop = new Desktop
 			{
-				Root = topPanel,
-
-				// Inform Myra that external text input is available
-				// So it stops translating Keys to chars
-				HasExternalTextInput = true
-			};
-
-			// Provide that text input
-			Window.TextInput += (s, a) =>
-			{
-				_desktop.OnChar(a.Character);
+				Root = canvas
 			};
 		}
 
