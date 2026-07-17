@@ -85,6 +85,11 @@ public class SKCanvasWidget : Widget
 		// Create or recreate the XNA texture when widget size changes
 		if (_texture == null || _texture.Width != bounds.Width || _texture.Height != bounds.Height)
 		{
+			if (_texture != null)
+			{
+				_texture.Dispose();
+			}
+
 			_texture = new Texture2D(MyraEnvironment.GraphicsDevice, bounds.Width, bounds.Height);
 			_bytes = new byte[bounds.Width * bounds.Height * 4];
 		}
