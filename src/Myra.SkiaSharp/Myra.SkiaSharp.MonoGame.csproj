@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);MONOGAME</DefineConstants>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>Myra.SkiaSharp</AssemblyName>
+    <PackageId>Myra.SkiaSharp</PackageId>
+    <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Myra\Myra.MonoGame.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="MonoGame.Framework.DesktopGL" PrivateAssets="All" Version="$(MonoGameVersion)" />
+    <PackageReference Include="SkiaSharp" Version="4.150.1" />
+  </ItemGroup>
+</Project>
