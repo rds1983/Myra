@@ -7,8 +7,6 @@ using Myra.Events;
 using System.Collections;
 using Myra.Attributes;
 
-
-
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
 #elif STRIDE

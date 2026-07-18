@@ -765,16 +765,8 @@ namespace Myra.Graphics2D.UI
 
 		internal override bool CanStyleBeNull => true;
 
-		/// <summary>
-		/// Applies the specified widget style to this grid.
-		/// </summary>
-		/// <param name="style">The widget style to apply.</param>
-		protected override void ApplyStyle(WidgetStyle style)
+		internal void ApplyOnlyGridStyle(GridStyle gridStyle)
 		{
-			base.ApplyStyle(style);
-
-			var gridStyle = (GridStyle)style;
-
 			ShowGridLines = gridStyle.ShowGridLines;
 			GridLinesColor = gridStyle.GridLinesColor;
 			ColumnSpacing = gridStyle.ColumnSpacing;
@@ -784,6 +776,18 @@ namespace Myra.Graphics2D.UI
 			GridSelectionMode = gridStyle.GridSelectionMode;
 			HoverIndexCanBeNull = gridStyle.HoverIndexCanBeNull;
 			CanSelectNothing = gridStyle.CanSelectNothing;
+		}
+
+		/// <summary>
+		/// Applies the specified widget style to this grid.
+		/// </summary>
+		/// <param name="style">The widget style to apply.</param>
+		protected override void ApplyStyle(WidgetStyle style)
+		{
+			base.ApplyStyle(style);
+
+			var gridStyle = (GridStyle)style;
+			ApplyOnlyGridStyle(gridStyle);
 		}
 
 		/// <summary>

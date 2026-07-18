@@ -901,6 +901,8 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		protected bool SuppressInvalidateMeasure { get; set; } = false;
+
 		internal Transform Transform
 		{
 			get
@@ -1400,6 +1402,11 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		public virtual void InvalidateMeasure()
 		{
+			if (SuppressInvalidateMeasure)
+			{
+				return;
+			}
+
 			_measureDirty = true;
 
 			InvalidateArrange();
