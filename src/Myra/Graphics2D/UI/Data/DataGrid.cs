@@ -861,10 +861,9 @@ namespace Myra.Graphics2D.UI.Data
 		/// <inheritdoc/>
 		public override void OnMouseLeft()
 		{
-			if (_resizingColumnIndex < 0)
-			{
-				base.OnMouseLeft();
-			}
+			base.OnMouseLeft();
+
+			_resizingColumnIndex = null;
 		}
 
 		private void DesktopColumnResizeMoved(object sender, MyraEventArgs args)
