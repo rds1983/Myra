@@ -296,6 +296,9 @@ namespace Myra.Graphics2D.UI.Styles
 			set => SetDefaultStyle(ScrollViewerStyles, value);
 		}
 
+		/// <summary>
+		/// Gets or sets the default style applied to DataGrid widgets.
+		/// </summary>
 		[XmlIgnore]
 		public DataGridStyle DataGridStyle
 		{
@@ -485,6 +488,9 @@ namespace Myra.Graphics2D.UI.Styles
 		/// </summary>
 		public Dictionary<string, ScrollViewerStyle> ScrollViewerStyles { get; } = new Dictionary<string, ScrollViewerStyle>();
 
+		/// <summary>
+		/// Gets the dictionary of named DataGrid styles, keyed by style identifier.
+		/// </summary>
 		public Dictionary<string, DataGridStyle> DataGridStyles { get; } = new Dictionary<string, DataGridStyle>();
 
 		/// <summary>

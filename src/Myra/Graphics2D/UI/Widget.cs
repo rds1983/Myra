@@ -901,6 +901,11 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets a value indicating whether layout invalidation is temporarily suppressed.
+		/// When set to <c>true</c>, calls to <see cref="InvalidateMeasure"/> have no effect, allowing batch updates
+		/// without triggering repeated layout passes.
+		/// </summary>
 		protected bool SuppressInvalidateMeasure { get; set; } = false;
 
 		internal Transform Transform
