@@ -113,10 +113,11 @@ Property|Description
 `CanSelectNothing`|Whether clicking an already-selected row deselects it (default `false`)
 
 ## Sorting
-Clicking a header cell sorts the data by that column. Clicking the same header again reverses the sort direction.
+When `SortableHeaders` is `true` (default), clicking a header cell sorts the data by that column. Clicking the same header again reverses the sort direction. Set `SortableHeaders = false` to disable interactive sorting while still allowing programmatic sorting.
 
 Property|Description
 --------|-----------
+`SortableHeaders`|Whether header cells are clickable and trigger sorting (default `true`)
 `SortColumn`|Zero-based index of the column being sorted, or `null` when no sort is applied
 `SortDirection`|`Ascending` or `Descending` (default `Ascending`)
 `SortAscendingImage`|Image displayed next to the header when sorted ascending

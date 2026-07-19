@@ -3,7 +3,6 @@ using Myra.Graphics2D.UI.Styles;
 using System;
 using System.Collections;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
 using Myra.Utility;
 using System.Xml.Serialization;
@@ -63,7 +62,7 @@ namespace Myra.Graphics2D.UI.Data
 		private ListSortDirection _sortDirection;
 		private int? _sortColumn;
 		private int? _selectedRowIndex;
-		private bool _hasHeader = true;
+		private bool _hasHeader = true, _sortableHeaders = true;
 		private readonly List<int> _visibleRowsIndices = new List<int>();
 
 		/// <summary>
@@ -370,6 +369,7 @@ namespace Myra.Graphics2D.UI.Data
 		/// Gets or sets a value indicating whether a row-number index column is displayed as the first column.
 		/// </summary>
 		[Category("Behavior")]
+		[DefaultValue(true)]
 		public bool HasIndexColumn
 		{
 			get => _hasIndexColumn;
@@ -386,10 +386,32 @@ namespace Myra.Graphics2D.UI.Data
 		}
 
 		/// <summary>
-		/// Gets or sets the sort direction applied to <see cref="SortColumn"/>.
+		/// Gets or sets a value indicating whether clicking a header cell sorts the column.
+		/// When <c>true</c> (default), header cells are clickable buttons that toggle sorting.
 		/// </summary>
 		[Category("Behavior")]
-		[DefaultValue(ListSortDirection.Ascending)]
+		[DefaultValue(true)]
+		public bool SortableHeaders
+		{
+			get => _sortableHeaders;
+
+			set
+			{
+				if (value == _sortableHeaders)
+				{
+					return;
+				}
+
+				_sortableHeaders = value;
+				InvalidateVisualData();
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the sort direction applied to <see cref="SortColumn"/>.
+		/// </summary>
+		[Browsable(false)]
+		[XmlIgnore]
 		public ListSortDirection SortDirection
 		{
 			get => _sortDirection;
@@ -409,7 +431,8 @@ namespace Myra.Graphics2D.UI.Data
 		/// <summary>
 		/// Gets or sets the zero-based index of the column currently used for sorting, or <c>null</c> when no sort is applied.
 		/// </summary>
-		[Category("Behavior")]
+		[Browsable(false)]
+		[XmlIgnore]
 		public int? SortColumn
 		{
 			get => _sortColumn;
@@ -697,15 +720,24 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				cellContent.HorizontalAlignment = HorizontalAlignment.Center;
-				var headerCell = new Button
-				{
-					Content = cellContent,
-					HorizontalAlignment = HorizontalAlignment.Stretch,
-					ClipToBounds = true,
-					Tag = i
-				};
 
-				headerCell.Click += HeaderCell_Click;
+				Widget headerCell;
+				if (SortableHeaders)
+				{
+					var headerButton = new Button
+					{
+						Content = cellContent,
+						HorizontalAlignment = HorizontalAlignment.Stretch,
+						ClipToBounds = true,
+						Tag = i
+					};
+
+					headerButton.Click += HeaderCell_Click;
+					headerCell = headerButton;
+				} else
+				{
+					headerCell = cellContent;
+				}
 
 				Grid.SetRow(headerCell, 0);
 				Grid.SetColumn(headerCell, HasIndexColumn ? i + 1 : i);
