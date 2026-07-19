@@ -521,7 +521,10 @@ namespace Myra.Graphics2D.UI.Data
 					++count;
 				}
 
-				RowsPerPage = count;
+				if (StartRow == 0)
+				{
+					RowsPerPage = count;
+				}
 
 				if (VerticalScrollingOn)
 				{
@@ -564,27 +567,15 @@ namespace Myra.Graphics2D.UI.Data
 			RebuildGrid();
 		}
 
-
-		/// <summary>
-		/// Populates the grid with data from the specified enumerable. Each item becomes a row,
-		/// and property values are extracted using reflection based on the <see cref="Columns"/> definitions.
-		/// </summary>
-		/// <param name="data">An enumerable of data objects to display in the grid.</param>
-		public void Build(object data)
+		public void Build(IEnumerable data)
 		{
 			if (Columns == null || Columns.Length == 0)
 			{
 				throw new Exception("Columns must be defined before building the DataGrid.");
 			}
 
-			var asEnumerable = data as IEnumerable;
-			if (asEnumerable == null)
-			{
-				throw new Exception("Data must be an IEnumerable.");
-			}
-
 			var row = 0;
-			foreach (var item in asEnumerable)
+			foreach (var item in data)
 			{
 				++row;
 			}
@@ -592,7 +583,7 @@ namespace Myra.Graphics2D.UI.Data
 			_data = new object[row, Columns.Length];
 
 			row = 0;
-			foreach (var item in asEnumerable)
+			foreach (var item in data)
 			{
 				var type = item.GetType();
 				for (var col = 0; col < Columns.Length; ++col)
