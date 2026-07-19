@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using Myra.Utility;
 using System.Xml.Serialization;
+using System.Collections.Generic;
 
 
 
@@ -29,11 +30,13 @@ namespace Myra.Graphics2D.UI.Data
 	{
 		private class RowData
 		{
+			public int Index { get; }
 			public object Value { get; }
 			public object[] GridValues { get; }
 
-			public RowData(object value, object[] gridValues)
+			public RowData(int index, object value, object[] gridValues)
 			{
+				Index = index;
 				Value = value;
 				GridValues = gridValues;
 			}
@@ -59,6 +62,8 @@ namespace Myra.Graphics2D.UI.Data
 		private IList _data;
 		private ListSortDirection _sortDirection;
 		private int? _sortColumn;
+		private int? _selectedRowIndex;
+		private readonly List<int> _visibleRowsIndices = new List<int>();
 
 		/// <summary>
 		/// Gets the number of data rows visible per page, based on the current layout size.
@@ -239,37 +244,27 @@ namespace Myra.Graphics2D.UI.Data
 		[XmlIgnore]
 		public int? SelectedRowIndex
 		{
-			get
-			{
-				if (_grid.SelectedRowIndex == null)
-				{
-					return null;
-				}
-
-				var result = _grid.SelectedRowIndex.Value;
-				if (HasHeader)
-				{
-					--result;
-				}
-
-				return result;
-			}
+			get => _selectedRowIndex;
 
 			set
 			{
 				if (value == null)
 				{
 					_grid.SelectedRowIndex = null;
-					return;
 				}
-
-				var newValue = value.Value;
-				if (HasHeader)
+				else
 				{
-					++newValue;
+					for (var i = 0; i < _visibleRowsIndices.Count; ++i)
+					{
+						if (value == _visibleRowsIndices[i])
+						{
+							_grid.SelectedRowIndex = i;
+							break;
+						}
+					}
 				}
 
-				_grid.SelectedRowIndex = newValue;
+				_selectedRowIndex = value;
 			}
 		}
 
@@ -460,7 +455,7 @@ namespace Myra.Graphics2D.UI.Data
 						gridValues[col] = val;
 					}
 
-					_sourceData[row] = new RowData(item, gridValues);
+					_sourceData[row] = new RowData(row, item, gridValues);
 				}
 
 				InvalidateVisualData();
@@ -754,6 +749,8 @@ namespace Myra.Graphics2D.UI.Data
 			{
 				SuppressInvalidateMeasure = true;
 
+				var oldSelectedRowIndex = SelectedRowIndex;
+
 				_grid.Widgets.Clear();
 
 				if (Columns == null || Columns.Length == 0)
@@ -774,9 +771,10 @@ namespace Myra.Graphics2D.UI.Data
 
 				UpdateVisualData();
 
-				var count = 0;
+				_visibleRowsIndices.Clear();
 				for (var row = StartRow; row < _visualData.Length; ++row)
 				{
+					var count = _visibleRowsIndices.Count;
 					var gridRow = hasHeader ? count + 1 : count;
 
 					if (HasIndexColumn)
@@ -791,10 +789,11 @@ namespace Myra.Graphics2D.UI.Data
 						_grid.Widgets.Add(cell);
 					}
 
+					var rowData = _visualData[row];
 					for (var col = 0; col < Columns.Length; ++col)
 					{
 						var column = Columns[col];
-						var value = _visualData[row].GridValues[col];
+						var value = rowData.GridValues[col];
 						if (value == null)
 						{
 							continue;
@@ -810,18 +809,18 @@ namespace Myra.Graphics2D.UI.Data
 						_grid.Widgets.Add(cell);
 					}
 
+					_visibleRowsIndices.Add(rowData.Index);
+
 					var sz = _grid.Measure(size);
 					if (sz.Y > size.Y)
 					{
 						break;
 					}
-
-					++count;
 				}
 
 				if (StartRow == 0)
 				{
-					RowsPerPage = count;
+					RowsPerPage = _visibleRowsIndices.Count;
 				}
 
 				if (VerticalScrollingOn)
@@ -835,7 +834,7 @@ namespace Myra.Graphics2D.UI.Data
 						vsWidth,
 						bh);
 
-					var thumbHeight = Math.Max(VerticalScrollKnob.Size.Y, count * bh / TotalRows);
+					var thumbHeight = Math.Max(VerticalScrollKnob.Size.Y, RowsPerPage * bh / TotalRows);
 					_verticalScrollbarThumb = new Rectangle(
 						bounds.Left + bounds.Width - vsWidth,
 						bounds.Top,
@@ -850,6 +849,8 @@ namespace Myra.Graphics2D.UI.Data
 
 					_grid.Width = size.X - vsWidth;
 				}
+
+				SelectedRowIndex = oldSelectedRowIndex;
 			}
 			finally
 			{
@@ -1051,6 +1052,10 @@ namespace Myra.Graphics2D.UI.Data
 			if (HasHeader && _grid.SelectedRowIndex == 0)
 			{
 				_grid.SelectedRowIndex = null;
+			}
+			else if (_grid.SelectedRowIndex != null && _grid.SelectedRowIndex.Value < _visibleRowsIndices.Count)
+			{
+				_selectedRowIndex = _visibleRowsIndices[_grid.SelectedRowIndex.Value];
 			}
 		}
 
