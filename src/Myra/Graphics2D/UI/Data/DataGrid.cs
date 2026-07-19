@@ -277,12 +277,12 @@ namespace Myra.Graphics2D.UI.Data
 		{
 			get
 			{
-				if (SelectedRowIndex == null || _visualData == null)
+				if (SelectedRowIndex == null || _data == null)
 				{
 					return null;
 				}
 
-				return _visualData[SelectedRowIndex.Value].Value;
+				return _data[SelectedRowIndex.Value];
 			}
 		}
 
@@ -1053,9 +1053,15 @@ namespace Myra.Graphics2D.UI.Data
 			{
 				_grid.SelectedRowIndex = null;
 			}
-			else if (_grid.SelectedRowIndex != null && _grid.SelectedRowIndex.Value < _visibleRowsIndices.Count)
+			else if (_grid.SelectedRowIndex != null)
 			{
-				_selectedRowIndex = _visibleRowsIndices[_grid.SelectedRowIndex.Value];
+				var val = _grid.SelectedRowIndex.Value;
+				if (HasHeader)
+				{
+					--val;
+				}
+
+				_selectedRowIndex = _visibleRowsIndices[val];
 			}
 		}
 
@@ -1118,6 +1124,7 @@ namespace Myra.Graphics2D.UI.Data
 		private void InvalidateVisualData()
 		{
 			_visualData = null;
+			SelectedRowIndex = null;
 			InvalidateArrange();
 		}
 
