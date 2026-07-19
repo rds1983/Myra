@@ -577,6 +577,10 @@ namespace Myra.Graphics2D.UI.Data
 			RebuildGrid();
 		}
 
+		/// <summary>
+		/// Populates the grid with rows by reading property values from each item in the collection.
+		/// </summary>
+		/// <param name="data">The collection of objects to display as rows.</param>
 		public void Build(IEnumerable data)
 		{
 			if (Columns == null || Columns.Length == 0)

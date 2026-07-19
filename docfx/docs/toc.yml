@@ -38,6 +38,8 @@
   href: context-menus.md
 - name: PropertyGrid
   href: property-grid.md
+- name: DataGrid
+  href: data-grid.md
 - name: External Assets in MML
   href: external-assets-in-mml.md
 - name: Restyling Through Code
