@@ -1,11 +1,21 @@
-﻿using Microsoft.Xna.Framework;
-using Myra.Events;
+﻿using Myra.Events;
 using Myra.Graphics2D.UI.Styles;
 using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using Myra.Utility;
+
+
+#if MONOGAME || FNA
+using Microsoft.Xna.Framework;
+#elif STRIDE
+using Stride.Core.Mathematics;
+#else
+using System.Drawing;
+using Color = FontStashSharp.FSColor;
+#endif
 
 namespace Myra.Graphics2D.UI.Data
 {
@@ -635,7 +645,7 @@ namespace Myra.Graphics2D.UI.Data
 				var r = _verticalScrollbarThumb;
 
 				var bh = ActualBounds.Height;
-				r.Y += (StartRow * bh / TotalRows);
+				r.Y += StartRow * bh / TotalRows;
 				VerticalScrollKnob.Draw(context, r);
 			}
 		}
@@ -657,7 +667,7 @@ namespace Myra.Graphics2D.UI.Data
 			}
 
 			var newStartRow = StartRow + step;
-			newStartRow = MathHelper.Clamp(newStartRow, 0, TotalRows - RowsPerPage);
+			newStartRow = Mathematics.Clamp(newStartRow, 0, TotalRows - RowsPerPage);
 
 			StartRow = newStartRow;
 		}
@@ -688,7 +698,7 @@ namespace Myra.Graphics2D.UI.Data
 				{
 					var fraction = (float)(touchPosition.Y - _verticalScrollbarFrame.Top) / bh;
 					var targetRow = (int)(fraction * TotalRows);
-					targetRow = MathHelper.Clamp(targetRow, 0, TotalRows - RowsPerPage);
+					targetRow = Mathematics.Clamp(targetRow, 0, TotalRows - RowsPerPage);
 					StartRow = targetRow;
 
 					_startBoundsPos = Desktop.TouchPosition.Value.Y;
@@ -740,8 +750,8 @@ namespace Myra.Graphics2D.UI.Data
 			var delta = (touchPosition.Value.Y - _startBoundsPos.Value) * TotalRows / bh;
 			_startBoundsPos = touchPosition.Value.Y;
 
-			var newStartRow = StartRow + (int)delta;
-			newStartRow = MathHelper.Clamp(newStartRow, 0, TotalRows - RowsPerPage);
+			var newStartRow = StartRow + delta;
+			newStartRow = Mathematics.Clamp(newStartRow, 0, TotalRows - RowsPerPage);
 
 			StartRow = newStartRow;
 		}
