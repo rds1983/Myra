@@ -109,7 +109,7 @@
   </ScrollViewerStyles>
   <DataGridStyles>
     <DataGridStyle ShowGridLines="True" GridLinesColor="White" ColumnSpacing="8" RowSpacing="8" SelectionBackground="button-down" SelectionHoverBackground="button-over" GridSelectionMode="Row" HoverIndexCanBeNull="False" CanSelectNothing="False"
-                   VerticalScrollBackground="scroll" VerticalScrollKnob="scroll-knob-vertical" />
+                   VerticalScrollBackground="scroll" VerticalScrollKnob="scroll-knob-vertical" SortAscendingImage="select-up" SortDescendingImage="select-down" />
   </DataGridStyles>
   <HorizontalMenuStyles>
     <MenuStyle SelectionHoverBackground="button-over" SelectionBackground="button-down" SpecialCharColor="Red" Background="button">

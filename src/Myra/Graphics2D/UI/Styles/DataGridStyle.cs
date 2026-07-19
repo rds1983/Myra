@@ -16,6 +16,16 @@
 		public IImage VerticalScrollKnob { get; set; }
 
 		/// <summary>
+		/// Gets or sets the image displayed next to the header of the currently sorted column when sorted ascending.
+		/// </summary>
+		public IImage SortAscendingImage { get; set; }
+
+		/// <summary>
+		/// Gets or sets the image displayed next to the header of the currently sorted column when sorted descending.
+		/// </summary>
+		public IImage SortDescendingImage { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="DataGridStyle"/> class with default values.
 		/// </summary>
 		public DataGridStyle()
@@ -30,6 +40,8 @@
 		{
 			VerticalScrollBackground = style.VerticalScrollBackground;
 			VerticalScrollKnob = style.VerticalScrollKnob;
+			SortAscendingImage = style.SortAscendingImage;
+			SortDescendingImage = style.SortDescendingImage;
 		}
 
 		/// <summary>

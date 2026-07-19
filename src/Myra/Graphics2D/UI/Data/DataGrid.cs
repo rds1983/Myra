@@ -34,7 +34,8 @@ namespace Myra.Graphics2D.UI.Data
 		private readonly SingleItemLayout<Grid> _layout;
 		private Rectangle _verticalScrollbarFrame, _verticalScrollbarThumb;
 		private int _startRow;
-		private object[,] _gridData;
+		private object[][] _gridData;
+		private object[][] _sortedGridData;
 		private DataGridColumnBase[] _columns;
 		private bool _hasIndexColumn = true;
 		private int? _startBoundsPos;
@@ -44,6 +45,8 @@ namespace Myra.Graphics2D.UI.Data
 		private int _resizeStartX;
 		private int _resizeOriginalWidth;
 		private IList _data;
+		private ListSortDirection _sortDirection;
+		private int? _sortColumn;
 
 		/// <summary>
 		/// Gets the number of data rows visible per page, based on the current layout size.
@@ -82,7 +85,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_startRow = value;
-				RebuildGrid();
+				InvalidateArrange();
 			}
 		}
 
@@ -242,7 +245,7 @@ namespace Myra.Graphics2D.UI.Data
 
 			set
 			{
-				if(value == null)
+				if (value == null)
 				{
 					_grid.SelectedRowIndex = null;
 					return;
@@ -287,6 +290,18 @@ namespace Myra.Graphics2D.UI.Data
 		/// </summary>
 		[Category("Appearance")]
 		public IImage VerticalScrollKnob { get; set; }
+
+		/// <summary>
+		/// Gets or sets the image displayed next to the header of the currently sorted column when sorted ascending.
+		/// </summary>
+		[Category("Appearance")]
+		public IImage SortAscendingImage { get; set; }
+
+		/// <summary>
+		/// Gets or sets the image displayed next to the header of the currently sorted column when sorted descending.
+		/// </summary>
+		[Category("Appearance")]
+		public IImage SortDescendingImage { get; set; }
 
 		/// <summary>
 		/// Gets or sets the number of rows to scroll per mouse wheel tick or touch drag step.
@@ -341,6 +356,49 @@ namespace Myra.Graphics2D.UI.Data
 		}
 
 		/// <summary>
+		/// Gets or sets the sort direction applied to <see cref="SortColumn"/>.
+		/// </summary>
+		[Category("Behavior")]
+		[DefaultValue(ListSortDirection.Ascending)]
+		public ListSortDirection SortDirection
+		{
+			get => _sortDirection;
+
+			set
+			{
+				if (value == _sortDirection)
+				{
+					return;
+				}
+
+				_sortDirection = value;
+				_sortedGridData = null;
+				InvalidateArrange();
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the zero-based index of the column currently used for sorting, or <c>null</c> when no sort is applied.
+		/// </summary>
+		[Category("Behavior")]
+		public int? SortColumn
+		{
+			get => _sortColumn;
+
+			set
+			{
+				if (value == _sortColumn)
+				{
+					return;
+				}
+
+				_sortColumn = value;
+				_sortedGridData = null;
+				InvalidateArrange();
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets the collection of data objects displayed as rows.
 		/// Property values are resolved by name via reflection when the collection is assigned.
 		/// </summary>
@@ -361,12 +419,14 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_data = value;
-				_gridData = new object[value.Count, Columns.Length];
+				_gridData = new object[value.Count][];
 
-				var row = 0;
-				foreach (var item in _data)
+				for (var row = 0; row < value.Count; ++row)
 				{
+					var item = value[row];
 					var type = item.GetType();
+
+					_gridData[row] = new object[Columns.Length];
 					for (var col = 0; col < Columns.Length; ++col)
 					{
 						var column = Columns[col];
@@ -387,14 +447,13 @@ namespace Myra.Graphics2D.UI.Data
 							continue;
 						}
 
-						_gridData[row, col] = val;
+						_gridData[row][col] = val;
 					}
-
-					++row;
 				}
 
-				RebuildGrid();
+				_sortedGridData = null;
 
+				InvalidateArrange();
 			}
 		}
 
@@ -540,7 +599,7 @@ namespace Myra.Graphics2D.UI.Data
 
 			_grid.ColumnsProportions.Add(Proportion.Fill);
 
-			RebuildGrid();
+			InvalidateArrange();
 		}
 
 		private bool BuildHeader()
@@ -576,16 +635,48 @@ namespace Myra.Graphics2D.UI.Data
 					continue;
 				}
 
+				Widget cellContent;
+				if (i == SortColumn)
+				{
+					var panel = new HorizontalStackPanel
+					{
+						Spacing = 8
+					};
+
+					var label = new Label
+					{
+						Text = column.Header
+					};
+					panel.Widgets.Add(label);
+
+					var image = new Image
+					{
+						Renderable = SortDirection == ListSortDirection.Ascending ? SortAscendingImage : SortDescendingImage,
+						VerticalAlignment = VerticalAlignment.Center
+					};
+					panel.Widgets.Add(image);
+
+					cellContent = panel;
+
+				}
+				else
+				{
+					cellContent = new Label
+					{
+						Text = column.Header
+					};
+				}
+
+				cellContent.HorizontalAlignment = HorizontalAlignment.Center;
 				var headerCell = new Button
 				{
-					Content = new Label
-					{
-						Text = column.Header,
-						HorizontalAlignment = HorizontalAlignment.Center
-					},
+					Content = cellContent,
 					HorizontalAlignment = HorizontalAlignment.Stretch,
-					ClipToBounds = true
+					ClipToBounds = true,
+					Tag = i
 				};
+
+				headerCell.Click += HeaderCell_Click;
 
 				Grid.SetRow(headerCell, 0);
 				Grid.SetColumn(headerCell, HasIndexColumn ? i + 1 : i);
@@ -593,6 +684,29 @@ namespace Myra.Graphics2D.UI.Data
 			}
 
 			return true;
+		}
+
+		private void HeaderCell_Click(object sender, MyraEventArgs e)
+		{
+			var button = (Button)sender;
+			var i = (int)button.Tag;
+
+			if (i == SortColumn)
+			{
+				if (SortDirection == ListSortDirection.Ascending)
+				{
+					SortDirection = ListSortDirection.Descending;
+				}
+				else
+				{
+					SortDirection = ListSortDirection.Ascending;
+				}
+			}
+			else
+			{
+				SortColumn = i;
+				SortDirection = ListSortDirection.Ascending;
+			}
 		}
 
 		private void RebuildGrid()
@@ -619,6 +733,19 @@ namespace Myra.Graphics2D.UI.Data
 					return;
 				}
 
+				if (_sortedGridData == null)
+				{
+					if (SortColumn == null)
+					{
+						_sortedGridData = _gridData;
+					}
+					else
+					{
+						_sortedGridData = _gridData.CloneArray();
+						_sortedGridData.SortByColumn(SortColumn.Value, SortDirection == ListSortDirection.Ascending);
+					}
+				}
+
 				var count = 0;
 				for (var row = StartRow; row < TotalRows; ++row)
 				{
@@ -639,7 +766,7 @@ namespace Myra.Graphics2D.UI.Data
 					for (var col = 0; col < Columns.Length; ++col)
 					{
 						var column = Columns[col];
-						var value = _gridData[row, col];
+						var value = _sortedGridData[row][col];
 
 						if (value == null)
 						{
@@ -867,6 +994,8 @@ namespace Myra.Graphics2D.UI.Data
 			CanSelectNothing = dataGridStyle.CanSelectNothing;
 			VerticalScrollBackground = dataGridStyle.VerticalScrollBackground;
 			VerticalScrollKnob = dataGridStyle.VerticalScrollKnob;
+			SortAscendingImage = dataGridStyle.SortAscendingImage;
+			SortDescendingImage = dataGridStyle.SortDescendingImage;
 		}
 
 		private bool IsInHeaderRow(Point localPos)

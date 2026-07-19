@@ -86,6 +86,23 @@ Property|Description
 `HoverIndexCanBeNull`|Whether the hover highlight clears when the pointer leaves the grid (default `true`)
 `CanSelectNothing`|Whether clicking an already-selected row deselects it (default `false`)
 
+## Sorting
+Clicking a header cell sorts the data by that column. Clicking the same header again reverses the sort direction.
+
+Property|Description
+--------|-----------
+`SortColumn`|Zero-based index of the column being sorted, or `null` when no sort is applied
+`SortDirection`|`Ascending` or `Descending` (default `Ascending`)
+`SortAscendingImage`|Image displayed next to the header when sorted ascending
+`SortDescendingImage`|Image displayed next to the header when sorted descending
+
+Sorting can also be applied programmatically:
+
+```c#
+dataGrid.SortColumn = 2;           // Sort by the third column
+dataGrid.SortDirection = ListSortDirection.Descending;
+```
+
 ## Header Row
 When at least one column has a non-empty `Header`, the first row is treated as a header. It is excluded from hover highlighting and selection and is always visible regardless of the scroll position. Header cells are rendered as buttons.
 
@@ -102,6 +119,8 @@ Property|Description
 `SelectionHoverBackground`|Brush used for the hovered row/column/cell
 `VerticalScrollBackground`|Image for the scrollbar track
 `VerticalScrollKnob`|Image for the scrollbar thumb
+`SortAscendingImage`|Image for the ascending sort indicator in column headers
+`SortDescendingImage`|Image for the descending sort indicator in column headers
 
 Apply a custom style in code:
 
