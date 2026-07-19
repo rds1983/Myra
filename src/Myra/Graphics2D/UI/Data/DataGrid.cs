@@ -6,6 +6,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Myra.Utility;
+using System.Xml.Serialization;
+
 
 
 #if MONOGAME || FNA
@@ -32,7 +34,7 @@ namespace Myra.Graphics2D.UI.Data
 		private readonly SingleItemLayout<Grid> _layout;
 		private Rectangle _verticalScrollbarFrame, _verticalScrollbarThumb;
 		private int _startRow;
-		private object[,] _data;
+		private object[,] _gridData;
 		private DataGridColumnBase[] _columns;
 		private bool _hasIndexColumn = true;
 		private int? _startBoundsPos;
@@ -41,6 +43,7 @@ namespace Myra.Graphics2D.UI.Data
 		private int? _resizingColumnIndex = null;
 		private int _resizeStartX;
 		private int _resizeOriginalWidth;
+		private IList _data;
 
 		/// <summary>
 		/// Gets the number of data rows visible per page, based on the current layout size.
@@ -59,7 +62,7 @@ namespace Myra.Graphics2D.UI.Data
 					return 0;
 				}
 
-				return _data.GetLength(0);
+				return _data.Count;
 			}
 		}
 
@@ -214,6 +217,66 @@ namespace Myra.Graphics2D.UI.Data
 		}
 
 		/// <summary>
+		/// Gets or sets the zero-based index of the selected data row, adjusted for the header row.
+		/// Returns <c>null</c> when no row is selected.
+		/// </summary>
+		[Browsable(false)]
+		[XmlIgnore]
+		public int? SelectedRowIndex
+		{
+			get
+			{
+				if (_grid.SelectedRowIndex == null)
+				{
+					return null;
+				}
+
+				var result = _grid.SelectedRowIndex.Value;
+				if (HasHeader)
+				{
+					--result;
+				}
+
+				return result;
+			}
+
+			set
+			{
+				if(value == null)
+				{
+					_grid.SelectedRowIndex = null;
+					return;
+				}
+
+				var newValue = value.Value;
+				if (HasHeader)
+				{
+					++newValue;
+				}
+
+				_grid.SelectedRowIndex = newValue;
+			}
+		}
+
+		/// <summary>
+		/// Gets the data object associated with the currently selected row, or <c>null</c> if none is selected.
+		/// </summary>
+		[Browsable(false)]
+		[XmlIgnore]
+		public object SelectedItem
+		{
+			get
+			{
+				if (SelectedRowIndex == null || _data == null)
+				{
+					return null;
+				}
+
+				return _data[SelectedRowIndex.Value];
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets the image used for the vertical scrollbar track background.
 		/// </summary>
 		[Category("Appearance")]
@@ -274,6 +337,64 @@ namespace Myra.Graphics2D.UI.Data
 
 				_hasIndexColumn = value;
 				RebuildColumns();
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the collection of data objects displayed as rows.
+		/// Property values are resolved by name via reflection when the collection is assigned.
+		/// </summary>
+		public IList Data
+		{
+			get => _data;
+
+			set
+			{
+				if (Columns == null || Columns.Length == 0)
+				{
+					throw new Exception("Columns must be defined before building the DataGrid.");
+				}
+
+				if (value == null)
+				{
+					throw new ArgumentNullException(nameof(value));
+				}
+
+				_data = value;
+				_gridData = new object[value.Count, Columns.Length];
+
+				var row = 0;
+				foreach (var item in _data)
+				{
+					var type = item.GetType();
+					for (var col = 0; col < Columns.Length; ++col)
+					{
+						var column = Columns[col];
+						if (string.IsNullOrEmpty(column.Property))
+						{
+							throw new Exception("Column property must be defined. Index: " + col);
+						}
+
+						var property = type.GetProperty(column.Property, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+						if (property == null)
+						{
+							throw new Exception($"Property not found: {column.Property} in type {type.FullName}");
+						}
+
+						var val = property.GetValue(item);
+						if (val == null)
+						{
+							continue;
+						}
+
+						_gridData[row, col] = val;
+					}
+
+					++row;
+				}
+
+				RebuildGrid();
+
 			}
 		}
 
@@ -358,6 +479,15 @@ namespace Myra.Graphics2D.UI.Data
 		}
 
 		/// <summary>
+		/// Occurs when the selected row index changes.
+		/// </summary>
+		public event MyraEventHandler SelectedIndexChanged
+		{
+			add => _grid.SelectedIndexChanged += value;
+			remove => _grid.SelectedIndexChanged -= value;
+		}
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="DataGrid"/> class with the specified stylesheet and style name.
 		/// </summary>
 		/// <param name="stylesheet">The stylesheet to use for applying styles.</param>
@@ -426,7 +556,6 @@ namespace Myra.Graphics2D.UI.Data
 				return false;
 			}
 
-
 			if (HasIndexColumn)
 			{
 				var indexHeaderCell = new Label
@@ -447,9 +576,14 @@ namespace Myra.Graphics2D.UI.Data
 					continue;
 				}
 
-				var headerCell = new Label
+				var headerCell = new Button
 				{
-					Text = column.Header,
+					Content = new Label
+					{
+						Text = column.Header,
+						HorizontalAlignment = HorizontalAlignment.Center
+					},
+					HorizontalAlignment = HorizontalAlignment.Stretch,
 					ClipToBounds = true
 				};
 
@@ -480,7 +614,7 @@ namespace Myra.Graphics2D.UI.Data
 
 				var bounds = ActualBounds;
 				var size = new Point(bounds.Width, bounds.Height);
-				if (size.X == 0 || size.Y == 0 || _data == null)
+				if (size.X == 0 || size.Y == 0 || _gridData == null)
 				{
 					return;
 				}
@@ -505,7 +639,7 @@ namespace Myra.Graphics2D.UI.Data
 					for (var col = 0; col < Columns.Length; ++col)
 					{
 						var column = Columns[col];
-						var value = _data[row, col];
+						var value = _gridData[row, col];
 
 						if (value == null)
 						{
@@ -573,58 +707,6 @@ namespace Myra.Graphics2D.UI.Data
 		protected override void InternalArrange()
 		{
 			base.InternalArrange();
-
-			RebuildGrid();
-		}
-
-		/// <summary>
-		/// Populates the grid with rows by reading property values from each item in the collection.
-		/// </summary>
-		/// <param name="data">The collection of objects to display as rows.</param>
-		public void Build(IEnumerable data)
-		{
-			if (Columns == null || Columns.Length == 0)
-			{
-				throw new Exception("Columns must be defined before building the DataGrid.");
-			}
-
-			var row = 0;
-			foreach (var item in data)
-			{
-				++row;
-			}
-
-			_data = new object[row, Columns.Length];
-
-			row = 0;
-			foreach (var item in data)
-			{
-				var type = item.GetType();
-				for (var col = 0; col < Columns.Length; ++col)
-				{
-					var column = Columns[col];
-					if (string.IsNullOrEmpty(column.Property))
-					{
-						throw new Exception("Column property must be defined. Index: " + col);
-					}
-
-					var property = type.GetProperty(column.Property, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-					if (property == null)
-					{
-						throw new Exception($"Property not found: {column.Property} in type {type.FullName}");
-					}
-
-					var value = property.GetValue(item);
-					if (value == null)
-					{
-						continue;
-					}
-
-					_data[row, col] = value;
-				}
-
-				++row;
-			}
 
 			RebuildGrid();
 		}
@@ -869,6 +951,7 @@ namespace Myra.Graphics2D.UI.Data
 			base.OnMouseLeft();
 
 			_resizingColumnIndex = null;
+			MyraEnvironment.MouseCursorType = MouseCursor ?? MyraEnvironment.DefaultMouseCursorType;
 		}
 
 		private void DesktopColumnResizeMoved(object sender, MyraEventArgs args)

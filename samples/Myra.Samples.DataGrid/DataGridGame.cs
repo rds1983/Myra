@@ -46,7 +46,7 @@ public class DataGridGame : Game
 
 		var csvPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "customers-10000.csv");
 		var records = ParseCsv(csvPath);
-		dataGrid.Build(records);
+		dataGrid.Data = records;
 
 		_desktop = new Desktop { Root = dataGrid };
 	}

@@ -10,6 +10,19 @@ Property|Description
 `Property`|Name of the public field or property on the data object to display
 `Width`|Initial width in pixels
 
+Both types also provide convenience constructors:
+
+```c#
+// Using object initializer
+var col = new DataGridTextColumn { Header = "Name", Property = "Name", Width = 120 };
+
+// Using constructor with property, header, and optional width
+var col2 = new DataGridTextColumn("Name", "Name", 120);
+
+// Using constructor with property only (uses property name as header)
+var col3 = new DataGridTextColumn("Name", 120);
+```
+
 ## Index Column
 DataGrid optionally displays a row-number index column as the first column (enabled by default). Control it with:
 
@@ -26,7 +39,7 @@ var dataGrid = new DataGrid
 ```
 
 ## Binding Data
-Call [Build](~/api/Myra.Graphics2D.UI.Data.DataGrid.yml#Myra_Graphics2D_UI_Data_DataGrid_Build_System_Collections_IEnumerable) with an `IEnumerable` of objects. Each object becomes a row and its properties are resolved by name via reflection.
+Assign a collection to the [Data](~/api/Myra.Graphics2D.UI.Data.DataGrid.yml#Myra_Graphics2D_UI_Data_DataGrid_Data) property. Each object becomes a row and its property values are resolved by name via reflection.
 
 ```c#
 var dataGrid = new DataGrid
@@ -36,11 +49,9 @@ var dataGrid = new DataGrid
         new DataGridTextColumn { Header = "First Name", Property = "FirstName", Width = 120 },
         new DataGridTextColumn { Header = "Last Name", Property = "LastName", Width = 120 },
         new DataGridTextColumn { Header = "Company", Property = "Company", Width = 200 },
-    }
+    },
+    Data = GetCustomers() // IList of objects
 };
-
-var customers = GetCustomers(); // List<Customer>
-dataGrid.Build(customers);
 ```
 
 *Note.* `Property` must match a public instance field or property name on the object exactly.
@@ -57,7 +68,7 @@ Property|Description
 `VerticalScrollKnob`|Image for the scrollbar thumb
 `ScrollMultiplier`|Rows scrolled per mouse wheel tick (default `10`)
 
-## Row Selection
+## Selection
 Set [GridSelectionMode](~/api/Myra.Graphics2D.UI.Data.DataGrid.yml#Myra_Graphics2D_UI_Data_DataGrid_GridSelectionMode) to control selection behavior.
 
 Value|Description
@@ -67,15 +78,16 @@ Value|Description
 `Column`|Entire columns can be selected
 `Cell`|Individual cells can be selected
 
-The selected row index is exposed through the internal grid's `SelectedRowIndex` property.
-
-Behavior property|Description
------------------|-----------
+Property|Description
+--------|-----------
+`SelectedRowIndex`|Zero-based index of the selected data row, or `null` when no row is selected
+`SelectedItem`|The data object of the selected row, or `null` when no row is selected
+`SelectedIndexChanged`|Event raised when the selected row index changes
 `HoverIndexCanBeNull`|Whether the hover highlight clears when the pointer leaves the grid (default `true`)
 `CanSelectNothing`|Whether clicking an already-selected row deselects it (default `false`)
 
 ## Header Row
-When at least one column has a non-empty `Header`, the first row is treated as a header. It is excluded from hover highlighting and selection and is always visible regardless of the scroll position.
+When at least one column has a non-empty `Header`, the first row is treated as a header. It is excluded from hover highlighting and selection and is always visible regardless of the scroll position. Header cells are rendered as buttons.
 
 ## Styling
 DataGrid look and feel is controlled through a [DataGridStyle](~/api/Myra.Graphics2D.UI.Styles.DataGridStyle.yml), which inherits from [GridStyle](~/api/Myra.Graphics2D.UI.Styles.GridStyle.yml), assigned via the active [Stylesheet](~/api/Myra.Graphics2D.UI.Styles.Stylesheet.yml).
@@ -140,10 +152,9 @@ var dataGrid = new DataGrid
         new DataGridTextColumn { Header = "Company", Property = "Company", Width = 200 },
         new DataGridTextColumn { Header = "City", Property = "City", Width = 150 },
         new DataGridTextColumn { Header = "Country", Property = "Country", Width = 100 },
-    }
+    },
+    Data = customers
 };
-
-dataGrid.Build(customers);
 
 _desktop = new Desktop { Root = dataGrid };
 ```
