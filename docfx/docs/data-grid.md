@@ -2,7 +2,7 @@
 DataGrid displays data in a tabular format with resizable columns, vertical scrolling, and row selection.
 
 ## Columns
-Columns are defined by creating an array of [DataGridColumnBase](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.yml) subclasses. Currently the only concrete type is [DataGridTextColumn](~/api/Myra.Graphics2D.UI.Data.DataGridTextColumn.yml), which renders cells as text.
+Columns are defined by creating an array of [DataGridColumnBase](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.yml) subclasses. The base class is abstract. The built-in [DataGridTextColumn](~/api/Myra.Graphics2D.UI.Data.DataGridTextColumn.yml) renders cells as text.
 
 Property|Description
 --------|-----------
@@ -10,14 +10,20 @@ Property|Description
 `Property`|Name of the public field or property on the data object to display
 `Width`|Initial width in pixels
 
-Both types also provide convenience constructors:
+`DataGridTextColumn` adds:
+
+Property|Description
+--------|-----------
+`Format`|Optional format string applied to the value (e.g. `"{0:C2}"`). When `null`, `ToString()` is used.
+
+Both types provide convenience constructors:
 
 ```c#
 // Using object initializer
 var col = new DataGridTextColumn { Header = "Name", Property = "Name", Width = 120 };
 
-// Using constructor with property, header, and optional width
-var col2 = new DataGridTextColumn("Name", "Name", 120);
+// Using constructor with property, header, width, and optional format
+var col2 = new DataGridTextColumn("Price", "Price", 100, "{0:C2}");
 
 // Using constructor with property only (uses property name as header)
 var col3 = new DataGridTextColumn("Name", 120);
@@ -36,6 +42,26 @@ var dataGrid = new DataGrid
 {
     HasIndexColumn = false
 };
+```
+
+## Custom Columns
+Subclass [DataGridColumnBase](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.yml) and override [CreateWidget](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.yml#Myra_Graphics2D_UI_Data_DataGridColumnBase_CreateWidget_System_Object_) to control how each cell is rendered:
+
+```c#
+public class DataGridBoolColumn : DataGridColumnBase
+{
+    public override Widget CreateWidget(object value)
+    {
+        if (value == null)
+            return null;
+
+        return new CheckButton
+        {
+            IsChecked = (bool)value,
+            Enabled = false
+        };
+    }
+}
 ```
 
 ## Binding Data

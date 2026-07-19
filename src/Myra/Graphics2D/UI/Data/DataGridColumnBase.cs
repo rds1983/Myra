@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Defines the base configuration for a DataGrid column, including its header text, bound property name, and width.
 	/// </summary>
-	public class DataGridColumnBase
+	public abstract class DataGridColumnBase
 	{
 		/// <summary>
 		/// Gets or sets the name of the property on the data item to bind this column to.
@@ -49,5 +49,12 @@
 		public DataGridColumnBase(string property, int width = 100) : this(property, property, width)
 		{
 		}
+
+		/// <summary>
+		/// Creates the widget used to render a cell value in the grid.
+		/// </summary>
+		/// <param name="value">The data value to display.</param>
+		/// <returns>A <see cref="Widget"/> representing the cell, or <c>null</c> if the value should not be rendered.</returns>
+		public abstract Widget CreateWidget(object value);
 	}
 }

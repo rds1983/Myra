@@ -794,16 +794,14 @@ namespace Myra.Graphics2D.UI.Data
 					{
 						var column = Columns[col];
 						var value = rowData.GridValues[col];
-						if (value == null)
+						var cell = column.CreateWidget(value);
+						if (cell == null)
 						{
 							continue;
 						}
 
-						var cell = new Label
-						{
-							Text = value.ToString(),
-							ClipToBounds = true
-						};
+						cell.ClipToBounds = true;
+
 						Grid.SetRow(cell, gridRow);
 						Grid.SetColumn(cell, HasIndexColumn ? col + 1 : col);
 						_grid.Widgets.Add(cell);
