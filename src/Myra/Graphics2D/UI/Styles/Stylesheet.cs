@@ -297,6 +297,16 @@ namespace Myra.Graphics2D.UI.Styles
 		}
 
 		/// <summary>
+		/// Gets or sets the default style applied to DataGrid widgets.
+		/// </summary>
+		[XmlIgnore]
+		public DataGridStyle DataGridStyle
+		{
+			get => GetDefaultStyle(DataGridStyles);
+			set => SetDefaultStyle(DataGridStyles, value);
+		}
+
+		/// <summary>
 		/// Gets or sets the default style for horizontal menu widgets.
 		/// </summary>
 		[XmlIgnore]
@@ -479,6 +489,11 @@ namespace Myra.Graphics2D.UI.Styles
 		public Dictionary<string, ScrollViewerStyle> ScrollViewerStyles { get; } = new Dictionary<string, ScrollViewerStyle>();
 
 		/// <summary>
+		/// Gets the dictionary of named DataGrid styles, keyed by style identifier.
+		/// </summary>
+		public Dictionary<string, DataGridStyle> DataGridStyles { get; } = new Dictionary<string, DataGridStyle>();
+
+		/// <summary>
 		/// Gets the dictionary of named horizontal menu styles, keyed by style identifier.
 		/// </summary>
 		public Dictionary<string, MenuStyle> HorizontalMenuStyles { get; } = new Dictionary<string, MenuStyle>();
@@ -615,6 +630,7 @@ namespace Myra.Graphics2D.UI.Styles
 			CloneStylesTo(result, s => s.TabControlStyles);
 			CloneStylesTo(result, s => s.TreeStyles);
 			CloneStylesTo(result, s => s.ScrollViewerStyles);
+			CloneStylesTo(result, s => s.DataGridStyles);
 			CloneStylesTo(result, s => s.GridStyles);
 			CloneStylesTo(result, s => s.PanelStyles);
 			CloneStylesTo(result, s => s.WindowStyles);
