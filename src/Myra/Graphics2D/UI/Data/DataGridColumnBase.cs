@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace Myra.Graphics2D.UI.Data
 {
@@ -27,7 +28,14 @@ namespace Myra.Graphics2D.UI.Data
 		/// <summary>
 		/// Gets a value indicating whether this column type supports filtering.
 		/// </summary>
-		public abstract bool HasFilter { get; }
+		public abstract bool CanFilter { get; }
+
+		/// <summary>
+		/// Gets or sets whether this column shows a filter input in the filter row. Defaults to <c>true</c>.
+		/// Ignored when <see cref="CanFilter"/> is <c>false</c>.
+		/// </summary>
+		[DefaultValue(true)]
+		public bool HasFilter { get; set; } = true;
 
 		/// <summary>
 		/// Gets or sets the filter text applied to this column. Rows whose cell value does not contain
@@ -39,7 +47,7 @@ namespace Myra.Graphics2D.UI.Data
 
 			set
 			{
-				if (!HasFilter)
+				if (!CanFilter)
 				{
 					throw new Exception($"Column of type {GetType()} doesn't support filtering.");
 				}
@@ -47,6 +55,12 @@ namespace Myra.Graphics2D.UI.Data
 				_filter = value;
 			}
 		}
+
+		/// <summary>
+		/// Gets or sets the string comparison used when matching filter text against cell values for this column.
+		/// When <c>null</c>, the DataGrid's <see cref="DataGrid.FiltersStringComparison"/> is used instead.
+		/// </summary>
+		public StringComparison? FilterStringComparison { get; set; } = null;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DataGridColumnBase"/> class with default values.

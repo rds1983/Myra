@@ -315,13 +315,6 @@ namespace Myra.Graphics2D.UI.Data
 		public IImage SortDescendingImage { get; set; }
 
 		/// <summary>
-		/// Gets or sets the number of rows to scroll per mouse wheel tick or touch drag step.
-		/// </summary>
-		[Category("Appearance")]
-		[DefaultValue(10)]
-		public int ScrollMultiplier { get; set; } = 10;
-
-		/// <summary>
 		/// Gets or sets the width in pixels of the optional row-index column displayed at the far left.
 		/// </summary>
 		[Category("Appearance")]
@@ -353,7 +346,7 @@ namespace Myra.Graphics2D.UI.Data
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(true)]
-		public bool ResizeableColumns { get; set; } = true;
+		public bool ResizableColumns { get; set; } = true;
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the header row is displayed.
@@ -395,6 +388,13 @@ namespace Myra.Graphics2D.UI.Data
 				RebuildColumns();
 			}
 		}
+
+		/// <summary>
+		/// Gets or sets the number of rows to scroll per mouse wheel tick or touch drag step.
+		/// </summary>
+		[Category("Behavior")]
+		[DefaultValue(10)]
+		public int ScrollMultiplier { get; set; } = 10;
 
 		/// <summary>
 		/// Gets or sets a value indicating whether clicking a header cell sorts the column.
@@ -513,11 +513,6 @@ namespace Myra.Graphics2D.UI.Data
 
 			set
 			{
-				if (Columns == null || Columns.Length == 0)
-				{
-					throw new Exception("Columns must be defined before building the DataGrid.");
-				}
-
 				if (value == null)
 				{
 					throw new ArgumentNullException(nameof(value));
@@ -875,7 +870,7 @@ namespace Myra.Graphics2D.UI.Data
 			for (var i = 0; i < Columns.Length; ++i)
 			{
 				var column = Columns[i];
-				if (!column.HasFilter)
+				if (!column.CanFilter || !column.HasFilter)
 				{
 					continue;
 				}
@@ -939,7 +934,9 @@ namespace Myra.Graphics2D.UI.Data
 						}
 
 						var val = s.GridValues[j].ToString();
-						if (val.IndexOf(col.Filter, FiltersStringComparison) == -1)
+
+						var stringComparison = col.FilterStringComparison ?? FiltersStringComparison;
+						if (val.IndexOf(col.Filter, stringComparison) == -1)
 						{
 							add = false;
 							break;
@@ -1196,7 +1193,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 			}
 
-			if (ResizeableColumns)
+			if (ResizableColumns)
 			{
 				var localPos = LocalTouchPosition;
 				if (localPos != null && IsInHeaderRow(localPos.Value))
@@ -1347,7 +1344,7 @@ namespace Myra.Graphics2D.UI.Data
 				return;
 			}
 
-			if (ResizeableColumns)
+			if (ResizableColumns)
 			{
 				if (_resizingColumnIndex != null)
 				{
@@ -1369,7 +1366,7 @@ namespace Myra.Graphics2D.UI.Data
 		{
 			base.OnMouseLeft();
 
-			if (ResizeableColumns)
+			if (ResizableColumns)
 			{
 				_resizingColumnIndex = null;
 				MyraEnvironment.MouseCursorType = MouseCursor ?? MyraEnvironment.DefaultMouseCursorType;

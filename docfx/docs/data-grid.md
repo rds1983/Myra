@@ -61,7 +61,7 @@ Subclass [DataGridColumnBase](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.y
 ```c#
 public class DataGridBoolColumn : DataGridColumnBase
 {
-    public override bool HasFilter => false;
+    public override bool CanFilter => false;
 
     public override Widget CreateWidget(object value)
     {
@@ -96,7 +96,7 @@ var dataGrid = new DataGrid
 *Note.* `Property` must match a public instance field or property name on the object exactly.
 
 ## Column Resizing
-When `ResizeableColumns` is `true` (default), columns can be resized interactively by dragging the boundary between two header cells. The cursor changes to a horizontal resize indicator (`SizeWE`) when hovering over a boundary. The minimum column width is 20 pixels. Set `ResizeableColumns = false` to disable interactive resizing.
+When `ResizableColumns` is `true` (default), columns can be resized interactively by dragging the boundary between two header cells. The cursor changes to a horizontal resize indicator (`SizeWE`) when hovering over a boundary. The minimum column width is 20 pixels. Set `ResizableColumns = false` to disable interactive resizing.
 
 ## Scrolling
 DataGrid provides a vertical scrollbar when the data exceeds the visible area. Mouse wheel and touch-drag scrolling are supported.
@@ -113,7 +113,17 @@ When `HasFilters` is `true` (default), a filter row is displayed below the heade
 Property|Description
 --------|-----------
 `HasFilters`|Whether filter inputs are displayed below the header (default `true`)
-`FiltersStringComparison`|String comparison used when matching filter text against cell values (default `CurrentCultureIgnoreCase`)
+`FiltersStringComparison`|Default string comparison used when matching filter text against cell values (default `CurrentCultureIgnoreCase`)
+
+A column type must override `CanFilter` to return `true` to support filtering. `DataGridTextColumn` does this by default. Custom columns that don't support filtering override it to return `false`:
+
+```c#
+public class DataGridBoolColumn : DataGridColumnBase
+{
+    public override bool CanFilter => false;
+    ...
+}
+```
 
 Per-column filtering is controlled by the [Filter](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.yml#Myra_Graphics2D_UI_Data_DataGridColumnBase_Filter) property on each column:
 
@@ -123,6 +133,16 @@ countryColumn.Filter = "US";
 
 // Clear the filter
 countryColumn.Filter = null;
+```
+
+Each column can be individually enabled or disabled for filtering via [HasFilter](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.yml#Myra_Graphics2D_UI_Data_DataGridColumnBase_HasFilter), and can override the DataGrid-level string comparison via [FilterStringComparison](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.yml#Myra_Graphics2D_UI_Data_DataGridColumnBase_FilterStringComparison):
+
+```c#
+// Disable filter input for this column even though DataGrid.HasFilters is true
+countryColumn.HasFilter = false;
+
+// Use case-sensitive matching for this column only
+countryColumn.FilterStringComparison = StringComparison.Ordinal;
 ```
 
 ## Selection
