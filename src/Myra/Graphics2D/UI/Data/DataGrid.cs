@@ -27,6 +27,18 @@ namespace Myra.Graphics2D.UI.Data
 	/// </summary>
 	public class DataGrid : Widget
 	{
+		private class RowData
+		{
+			public object Value { get; }
+			public object[] GridValues { get; }
+
+			public RowData(object value, object[] gridValues)
+			{
+				Value = value;
+				GridValues = gridValues;
+			}
+		}
+
 		private const int ColumnResizeHandleWidth = 4;
 		private const int MinColumnWidth = 20;
 
@@ -34,8 +46,8 @@ namespace Myra.Graphics2D.UI.Data
 		private readonly SingleItemLayout<Grid> _layout;
 		private Rectangle _verticalScrollbarFrame, _verticalScrollbarThumb;
 		private int _startRow;
-		private object[][] _gridData;
-		private object[][] _sortedGridData;
+		private RowData[] _sourceData;
+		private RowData[] _visualData;
 		private DataGridColumnBase[] _columns;
 		private bool _hasIndexColumn = true;
 		private int? _startBoundsPos;
@@ -60,15 +72,15 @@ namespace Myra.Graphics2D.UI.Data
 		{
 			get
 			{
-				if (_data == null)
+				UpdateVisualData();
+				if (_visualData == null)
 				{
 					return 0;
 				}
 
-				return _data.Count;
+				return _visualData.Length;
 			}
 		}
-
 
 		/// <summary>
 		/// Gets or sets the zero-based index of the first visible data row, used for vertical scrolling.
@@ -270,12 +282,12 @@ namespace Myra.Graphics2D.UI.Data
 		{
 			get
 			{
-				if (SelectedRowIndex == null || _data == null)
+				if (SelectedRowIndex == null || _visualData == null)
 				{
 					return null;
 				}
 
-				return _data[SelectedRowIndex.Value];
+				return _visualData[SelectedRowIndex.Value].Value;
 			}
 		}
 
@@ -372,8 +384,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_sortDirection = value;
-				_sortedGridData = null;
-				InvalidateArrange();
+				InvalidateVisualData();
 			}
 		}
 
@@ -393,8 +404,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_sortColumn = value;
-				_sortedGridData = null;
-				InvalidateArrange();
+				InvalidateVisualData();
 			}
 		}
 
@@ -419,14 +429,14 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_data = value;
-				_gridData = new object[value.Count][];
 
+				_sourceData = new RowData[value.Count];
 				for (var row = 0; row < value.Count; ++row)
 				{
 					var item = value[row];
 					var type = item.GetType();
 
-					_gridData[row] = new object[Columns.Length];
+					var gridValues = new object[Columns.Length];
 					for (var col = 0; col < Columns.Length; ++col)
 					{
 						var column = Columns[col];
@@ -447,13 +457,13 @@ namespace Myra.Graphics2D.UI.Data
 							continue;
 						}
 
-						_gridData[row][col] = val;
+						gridValues[col] = val;
 					}
+
+					_sourceData[row] = new RowData(item, gridValues);
 				}
 
-				_sortedGridData = null;
-
-				InvalidateArrange();
+				InvalidateVisualData();
 			}
 		}
 
@@ -709,6 +719,35 @@ namespace Myra.Graphics2D.UI.Data
 			}
 		}
 
+		private void UpdateVisualData()
+		{
+			if (_sourceData == null || _visualData != null)
+			{
+				return;
+			}
+
+			if (SortColumn == null)
+			{
+				_visualData = _sourceData;
+				return;
+			}
+
+			_visualData = new RowData[_sourceData.Length];
+			for (var i = 0; i < _visualData.Length; ++i)
+			{
+				_visualData[i] = _sourceData[i];
+			}
+
+			// Sort
+			var columnIndex = SortColumn.Value;
+			Array.Sort(_visualData, (a, b) =>
+			{
+				var compare = ((IComparable)a.GridValues[columnIndex]).CompareTo(b.GridValues[columnIndex]);
+
+				return SortDirection == ListSortDirection.Ascending ? compare : -compare;
+			});
+		}
+
 		private void RebuildGrid()
 		{
 			try
@@ -728,26 +767,15 @@ namespace Myra.Graphics2D.UI.Data
 
 				var bounds = ActualBounds;
 				var size = new Point(bounds.Width, bounds.Height);
-				if (size.X == 0 || size.Y == 0 || _gridData == null)
+				if (size.X == 0 || size.Y == 0 || _sourceData == null)
 				{
 					return;
 				}
 
-				if (_sortedGridData == null)
-				{
-					if (SortColumn == null)
-					{
-						_sortedGridData = _gridData;
-					}
-					else
-					{
-						_sortedGridData = _gridData.CloneArray();
-						_sortedGridData.SortByColumn(SortColumn.Value, SortDirection == ListSortDirection.Ascending);
-					}
-				}
+				UpdateVisualData();
 
 				var count = 0;
-				for (var row = StartRow; row < TotalRows; ++row)
+				for (var row = StartRow; row < _visualData.Length; ++row)
 				{
 					var gridRow = hasHeader ? count + 1 : count;
 
@@ -766,8 +794,7 @@ namespace Myra.Graphics2D.UI.Data
 					for (var col = 0; col < Columns.Length; ++col)
 					{
 						var column = Columns[col];
-						var value = _sortedGridData[row][col];
-
+						var value = _visualData[row].GridValues[col];
 						if (value == null)
 						{
 							continue;
@@ -1081,6 +1108,12 @@ namespace Myra.Graphics2D.UI.Data
 
 			_resizingColumnIndex = null;
 			MyraEnvironment.MouseCursorType = MouseCursor ?? MyraEnvironment.DefaultMouseCursorType;
+		}
+
+		private void InvalidateVisualData()
+		{
+			_visualData = null;
+			InvalidateArrange();
 		}
 
 		private void DesktopColumnResizeMoved(object sender, MyraEventArgs args)
