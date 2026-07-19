@@ -108,12 +108,12 @@ Property|Description
 `ScrollMultiplier`|Rows scrolled per mouse wheel tick (default `10`)
 
 ## Filtering
-When `HasFilters` is `true` (default), a filter row is displayed below the header. Each column that supports filtering (e.g. `DataGridTextColumn`) shows a text input where you can type to filter rows. Set `HasFilters = false` to hide filter inputs.
+When `HasFilter` is `true` (default), a filter row is displayed below the header. Each column that supports filtering (e.g. `DataGridTextColumn`) shows a text input where you can type to filter rows. Set `HasFilter = false` to hide filter inputs.
 
 Property|Description
 --------|-----------
-`HasFilters`|Whether filter inputs are displayed below the header (default `true`)
-`FiltersStringComparison`|Default string comparison used when matching filter text against cell values (default `CurrentCultureIgnoreCase`)
+`HasFilter`|Whether filter inputs are displayed below the header (default `true`)
+`FilterStringComparison`|Default string comparison used when matching filter text against cell values (default `CurrentCultureIgnoreCase`)
 
 A column type must override `CanFilter` to return `true` to support filtering. `DataGridTextColumn` does this by default. Custom columns that don't support filtering override it to return `false`:
 
@@ -138,7 +138,7 @@ countryColumn.Filter = null;
 Each column can be individually enabled or disabled for filtering via [HasFilter](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.yml#Myra_Graphics2D_UI_Data_DataGridColumnBase_HasFilter), and can override the DataGrid-level string comparison via [FilterStringComparison](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.yml#Myra_Graphics2D_UI_Data_DataGridColumnBase_FilterStringComparison):
 
 ```c#
-// Disable filter input for this column even though DataGrid.HasFilters is true
+// Disable filter input for this column even though DataGrid.HasFilter is true
 countryColumn.HasFilter = false;
 
 // Use case-sensitive matching for this column only

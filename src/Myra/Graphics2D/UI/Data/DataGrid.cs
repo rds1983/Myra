@@ -465,7 +465,7 @@ namespace Myra.Graphics2D.UI.Data
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(true)]
-		public bool HasFilters
+		public bool HasFilter
 		{
 			get => _hasFilters;
 
@@ -487,7 +487,7 @@ namespace Myra.Graphics2D.UI.Data
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(StringComparison.CurrentCultureIgnoreCase)]
-		public StringComparison FiltersStringComparison
+		public StringComparison FilterStringComparison
 		{
 			get => _filtersStringComparison;
 
@@ -663,7 +663,7 @@ namespace Myra.Graphics2D.UI.Data
 					++result;
 				}
 
-				if (HasFilters)
+				if (HasFilter)
 				{
 					++result;
 				}
@@ -860,7 +860,7 @@ namespace Myra.Graphics2D.UI.Data
 				throw new Exception("Columns must be defined before building the DataGrid.");
 			}
 
-			if (!HasFilters)
+			if (!HasFilter)
 			{
 				return;
 			}
@@ -935,7 +935,7 @@ namespace Myra.Graphics2D.UI.Data
 
 						var val = s.GridValues[j].ToString();
 
-						var stringComparison = col.FilterStringComparison ?? FiltersStringComparison;
+						var stringComparison = col.FilterStringComparison ?? FilterStringComparison;
 						if (val.IndexOf(col.Filter, stringComparison) == -1)
 						{
 							add = false;

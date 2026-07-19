@@ -58,7 +58,7 @@ namespace Myra.Graphics2D.UI.Data
 
 		/// <summary>
 		/// Gets or sets the string comparison used when matching filter text against cell values for this column.
-		/// When <c>null</c>, the DataGrid's <see cref="DataGrid.FiltersStringComparison"/> is used instead.
+		/// When <c>null</c>, the DataGrid's <see cref="DataGrid.FilterStringComparison"/> is used instead.
 		/// </summary>
 		public StringComparison? FilterStringComparison { get; set; } = null;
 
