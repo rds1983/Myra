@@ -345,6 +345,13 @@ namespace Myra.Graphics2D.UI.Data
 		}
 
 		/// <summary>
+		/// Gets or sets a value indicating whether columns can be resized by dragging the boundary between header cells.
+		/// </summary>
+		[Category("Behavior")]
+		[DefaultValue(true)]
+		public bool ResizeableColumns { get; set; } = true;
+
+		/// <summary>
 		/// Gets or sets a value indicating whether the header row is displayed.
 		/// </summary>
 		[Category("Behavior")]
@@ -734,7 +741,8 @@ namespace Myra.Graphics2D.UI.Data
 
 					headerButton.Click += HeaderCell_Click;
 					headerCell = headerButton;
-				} else
+				}
+				else
 				{
 					headerCell = cellContent;
 				}
@@ -998,16 +1006,19 @@ namespace Myra.Graphics2D.UI.Data
 				}
 			}
 
-			var localPos = LocalTouchPosition;
-			if (localPos != null && IsInHeaderRow(localPos.Value))
+			if (ResizeableColumns)
 			{
-				var boundaryIndex = GetColumnBoundaryIndex(localPos.Value);
-				if (boundaryIndex != null)
+				var localPos = LocalTouchPosition;
+				if (localPos != null && IsInHeaderRow(localPos.Value))
 				{
-					_resizingColumnIndex = boundaryIndex.Value;
-					_resizeStartX = Desktop.TouchPosition.Value.X;
-					_resizeOriginalWidth = _grid.ColWidths[boundaryIndex.Value];
-					Desktop.TouchMoved += DesktopColumnResizeMoved;
+					var boundaryIndex = GetColumnBoundaryIndex(localPos.Value);
+					if (boundaryIndex != null)
+					{
+						_resizingColumnIndex = boundaryIndex.Value;
+						_resizeStartX = Desktop.TouchPosition.Value.X;
+						_resizeOriginalWidth = _grid.ColWidths[boundaryIndex.Value];
+						Desktop.TouchMoved += DesktopColumnResizeMoved;
+					}
 				}
 			}
 		}
@@ -1019,9 +1030,9 @@ namespace Myra.Graphics2D.UI.Data
 
 			_startBoundsPos = null;
 
-			if (_resizingColumnIndex >= 0)
+			if (_resizingColumnIndex != null)
 			{
-				_resizingColumnIndex = -1;
+				_resizingColumnIndex = null;
 
 				if (Desktop != null)
 				{
@@ -1147,17 +1158,20 @@ namespace Myra.Graphics2D.UI.Data
 				return;
 			}
 
-			if (_resizingColumnIndex >= 0)
+			if (ResizeableColumns)
 			{
-				MyraEnvironment.MouseCursorType = MouseCursorType.SizeWE;
-			}
-			else if (IsInHeaderRow(localPos.Value) && GetColumnBoundaryIndex(localPos.Value) >= 0)
-			{
-				MyraEnvironment.MouseCursorType = MouseCursorType.SizeWE;
-			}
-			else
-			{
-				MyraEnvironment.MouseCursorType = MouseCursor ?? MyraEnvironment.DefaultMouseCursorType;
+				if (_resizingColumnIndex != null)
+				{
+					MyraEnvironment.MouseCursorType = MouseCursorType.SizeWE;
+				}
+				else if (IsInHeaderRow(localPos.Value) && GetColumnBoundaryIndex(localPos.Value) >= 0)
+				{
+					MyraEnvironment.MouseCursorType = MouseCursorType.SizeWE;
+				}
+				else
+				{
+					MyraEnvironment.MouseCursorType = MouseCursor ?? MyraEnvironment.DefaultMouseCursorType;
+				}
 			}
 		}
 
@@ -1166,8 +1180,11 @@ namespace Myra.Graphics2D.UI.Data
 		{
 			base.OnMouseLeft();
 
-			_resizingColumnIndex = null;
-			MyraEnvironment.MouseCursorType = MouseCursor ?? MyraEnvironment.DefaultMouseCursorType;
+			if (ResizeableColumns)
+			{
+				_resizingColumnIndex = null;
+				MyraEnvironment.MouseCursorType = MouseCursor ?? MyraEnvironment.DefaultMouseCursorType;
+			}
 		}
 
 		private void InvalidateVisualData()

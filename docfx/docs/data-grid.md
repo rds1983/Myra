@@ -83,7 +83,7 @@ var dataGrid = new DataGrid
 *Note.* `Property` must match a public instance field or property name on the object exactly.
 
 ## Column Resizing
-Columns can be resized interactively by dragging the boundary between two header cells. The cursor changes to a horizontal resize indicator (`SizeWE`) when hovering over a boundary. The minimum column width is 20 pixels.
+When `ResizeableColumns` is `true` (default), columns can be resized interactively by dragging the boundary between two header cells. The cursor changes to a horizontal resize indicator (`SizeWE`) when hovering over a boundary. The minimum column width is 20 pixels. Set `ResizeableColumns = false` to disable interactive resizing.
 
 ## Scrolling
 DataGrid provides a vertical scrollbar when the data exceeds the visible area. Mouse wheel and touch-drag scrolling are supported.
