@@ -11,7 +11,6 @@ using System.Linq;
 
 
 
-
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
 #elif STRIDE
@@ -921,16 +920,17 @@ namespace Myra.Graphics2D.UI.Data
 				{
 					_visualData[i] = _sourceData[i];
 				}
-			} else
+			}
+			else
 			{
 				// Filter
 				var vd = new List<RowData>();
-				for(var i = 0; i < _sourceData.Length; ++i)
+				for (var i = 0; i < _sourceData.Length; ++i)
 				{
 					var s = _sourceData[i];
 
 					var add = true;
-					for(var j = 0; j < Columns.Length; ++j)
+					for (var j = 0; j < Columns.Length; ++j)
 					{
 						var col = Columns[j];
 						if (string.IsNullOrEmpty(col.Filter))
@@ -989,10 +989,11 @@ namespace Myra.Graphics2D.UI.Data
 					BuildHeader();
 					BuildFilters();
 					_fullRebuild = false;
-				} else
+				}
+				else
 				{
 					// Only data widgets needs to be rebuilt
-					foreach(var widget in _dataWidgets)
+					foreach (var widget in _dataWidgets)
 					{
 						_grid.Widgets.Remove(widget);
 					}
