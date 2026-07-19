@@ -7,6 +7,8 @@ using System.Reflection;
 using Myra.Utility;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.Linq;
+
 
 
 
@@ -62,8 +64,11 @@ namespace Myra.Graphics2D.UI.Data
 		private ListSortDirection _sortDirection;
 		private int? _sortColumn;
 		private int? _selectedRowIndex;
-		private bool _hasHeader = true, _sortableHeaders = true;
+		private bool _hasHeader = true, _sortableHeaders = true, _hasFilters = true;
+		private StringComparison _filtersStringComparison = StringComparison.CurrentCultureIgnoreCase;
 		private readonly List<int> _visibleRowsIndices = new List<int>();
+		private readonly List<Widget> _dataWidgets = new List<Widget>();
+		private bool _fullRebuild = true;
 
 		/// <summary>
 		/// Gets the number of data rows visible per page, based on the current layout size.
@@ -457,6 +462,49 @@ namespace Myra.Graphics2D.UI.Data
 		}
 
 		/// <summary>
+		/// Gets or sets a value indicating whether filter rows are displayed below the header, allowing per-column text filtering.
+		/// </summary>
+		[Category("Behavior")]
+		[DefaultValue(true)]
+		public bool HasFilters
+		{
+			get => _hasFilters;
+
+			set
+			{
+				if (value == _hasFilters)
+				{
+					return;
+				}
+
+				_hasFilters = value;
+				InvalidateVisualData();
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the string comparison mode used when matching filter text against cell values.
+		/// Defaults to <see cref="StringComparison.CurrentCultureIgnoreCase"/>.
+		/// </summary>
+		[Category("Behavior")]
+		[DefaultValue(StringComparison.CurrentCultureIgnoreCase)]
+		public StringComparison FiltersStringComparison
+		{
+			get => _filtersStringComparison;
+
+			set
+			{
+				if (value == _filtersStringComparison)
+				{
+					return;
+				}
+
+				_filtersStringComparison = value;
+				InvalidateVisualData();
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets the collection of data objects displayed as rows.
 		/// Property values are resolved by name via reflection when the collection is assigned.
 		/// </summary>
@@ -589,6 +637,41 @@ namespace Myra.Graphics2D.UI.Data
 				if (VerticalScrollKnob != null && VerticalScrollKnob.Size.X > result)
 				{
 					result = VerticalScrollKnob.Size.X;
+				}
+
+				return result;
+			}
+		}
+
+		private int ColumnShift
+		{
+			get
+			{
+				var result = 0;
+
+				if (HasIndexColumn)
+				{
+					++result;
+				}
+
+				return result;
+			}
+		}
+
+		private int RowShift
+		{
+			get
+			{
+				var result = 0;
+
+				if (HasHeader)
+				{
+					++result;
+				}
+
+				if (HasFilters)
+				{
+					++result;
 				}
 
 				return result;
@@ -748,7 +831,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				Grid.SetRow(headerCell, 0);
-				Grid.SetColumn(headerCell, HasIndexColumn ? i + 1 : i);
+				Grid.SetColumn(headerCell, i + ColumnShift);
 				_grid.Widgets.Add(headerCell);
 			}
 		}
@@ -776,33 +859,114 @@ namespace Myra.Graphics2D.UI.Data
 			}
 		}
 
-		private void UpdateVisualData()
+		private void BuildFilters()
 		{
-			if (_sourceData == null || _visualData != null)
+			if (Columns == null || Columns.Length == 0)
+			{
+				throw new Exception("Columns must be defined before building the DataGrid.");
+			}
+
+			if (!HasFilters)
 			{
 				return;
 			}
 
-			if (SortColumn == null)
+			var row = HasHeader ? 1 : 0;
+
+			for (var i = 0; i < Columns.Length; ++i)
+			{
+				var column = Columns[i];
+				if (!column.HasFilter)
+				{
+					continue;
+				}
+
+				var filterCell = new TextBox
+				{
+					HorizontalAlignment = HorizontalAlignment.Stretch,
+					Text = column.Filter
+				};
+
+				filterCell.TextChangedByUser += (s, a) =>
+				{
+					column.Filter = filterCell.Text;
+					InvalidateVisualData(false);
+					StartRow = 0;
+				};
+
+				Grid.SetRow(filterCell, row);
+				Grid.SetColumn(filterCell, i + ColumnShift);
+				_grid.Widgets.Add(filterCell);
+			}
+		}
+
+		private void UpdateVisualData()
+		{
+			if (_sourceData == null || _visualData != null || Columns == null)
+			{
+				return;
+			}
+
+			var hasFilters = (from col in Columns where !string.IsNullOrEmpty(col.Filter) select col).Any();
+			if (SortColumn == null && !hasFilters)
 			{
 				_visualData = _sourceData;
 				return;
 			}
 
-			_visualData = new RowData[_sourceData.Length];
-			for (var i = 0; i < _visualData.Length; ++i)
+			if (!hasFilters)
 			{
-				_visualData[i] = _sourceData[i];
+				_visualData = new RowData[_sourceData.Length];
+				for (var i = 0; i < _visualData.Length; ++i)
+				{
+					_visualData[i] = _sourceData[i];
+				}
+			} else
+			{
+				// Filter
+				var vd = new List<RowData>();
+				for(var i = 0; i < _sourceData.Length; ++i)
+				{
+					var s = _sourceData[i];
+
+					var add = true;
+					for(var j = 0; j < Columns.Length; ++j)
+					{
+						var col = Columns[j];
+						if (string.IsNullOrEmpty(col.Filter))
+						{
+							continue;
+						}
+
+						var val = s.GridValues[j].ToString();
+						if (val.IndexOf(col.Filter, FiltersStringComparison) == -1)
+						{
+							add = false;
+							break;
+						}
+					}
+
+					if (add)
+					{
+						vd.Add(s);
+					}
+				}
+
+				_visualData = vd.ToArray();
 			}
 
-			// Sort
-			var columnIndex = SortColumn.Value;
-			Array.Sort(_visualData, (a, b) =>
-			{
-				var compare = ((IComparable)a.GridValues[columnIndex]).CompareTo(b.GridValues[columnIndex]);
 
-				return SortDirection == ListSortDirection.Ascending ? compare : -compare;
-			});
+			if (SortColumn != null)
+			{
+				// Sort
+				var columnIndex = SortColumn.Value;
+				Array.Sort(_visualData, (a, b) =>
+				{
+					var compare = ((IComparable)a.GridValues[columnIndex]).CompareTo(b.GridValues[columnIndex]);
+
+					return SortDirection == ListSortDirection.Ascending ? compare : -compare;
+				});
+			}
 		}
 
 		private void RebuildGrid()
@@ -813,16 +977,34 @@ namespace Myra.Graphics2D.UI.Data
 
 				var oldSelectedRowIndex = SelectedRowIndex;
 
-				_grid.Widgets.Clear();
-
-				if (Columns == null || Columns.Length == 0)
+				if (_fullRebuild)
 				{
-					return;
+					// Full rebuild is required
+					_grid.Widgets.Clear();
+					if (Columns == null || Columns.Length == 0)
+					{
+						return;
+					}
+
+					BuildHeader();
+					BuildFilters();
+					_fullRebuild = false;
+				} else
+				{
+					// Only data widgets needs to be rebuilt
+					foreach(var widget in _dataWidgets)
+					{
+						_grid.Widgets.Remove(widget);
+					}
+					_dataWidgets.Clear();
+
+					if (Columns == null || Columns.Length == 0)
+					{
+						return;
+					}
 				}
 
 				_grid.Width = null;
-
-				BuildHeader();
 
 				var bounds = ActualBounds;
 				var size = new Point(bounds.Width, bounds.Height);
@@ -833,11 +1015,14 @@ namespace Myra.Graphics2D.UI.Data
 
 				UpdateVisualData();
 
+				_dataWidgets.Clear();
 				_visibleRowsIndices.Clear();
+
+				var fits = true;
 				for (var row = StartRow; row < _visualData.Length; ++row)
 				{
 					var count = _visibleRowsIndices.Count;
-					var gridRow = HasHeader ? count + 1 : count;
+					var gridRow = count + RowShift;
 
 					if (HasIndexColumn)
 					{
@@ -849,6 +1034,7 @@ namespace Myra.Graphics2D.UI.Data
 						Grid.SetRow(cell, gridRow);
 						Grid.SetColumn(cell, 0);
 						_grid.Widgets.Add(cell);
+						_dataWidgets.Add(cell);
 					}
 
 					var rowData = _visualData[row];
@@ -865,8 +1051,9 @@ namespace Myra.Graphics2D.UI.Data
 						cell.ClipToBounds = true;
 
 						Grid.SetRow(cell, gridRow);
-						Grid.SetColumn(cell, HasIndexColumn ? col + 1 : col);
+						Grid.SetColumn(cell, col + ColumnShift);
 						_grid.Widgets.Add(cell);
+						_dataWidgets.Add(cell);
 					}
 
 					_visibleRowsIndices.Add(rowData.Index);
@@ -874,13 +1061,15 @@ namespace Myra.Graphics2D.UI.Data
 					var sz = _grid.Measure(size);
 					if (sz.Y > size.Y)
 					{
+						fits = false;
 						break;
 					}
 				}
 
-				if (StartRow == 0)
+				RowsPerPage = _visibleRowsIndices.Count;
+				if (!fits)
 				{
-					RowsPerPage = _visibleRowsIndices.Count;
+					--RowsPerPage;
 				}
 
 				if (VerticalScrollingOn)
@@ -1101,7 +1290,7 @@ namespace Myra.Graphics2D.UI.Data
 
 		private void OnGridHoverIndexChanged(object sender, MyraEventArgs args)
 		{
-			if (HasHeader && _grid.HoverRowIndex == 0)
+			if (_grid.HoverRowIndex < RowShift)
 			{
 				_grid.HoverRowIndex = null;
 			}
@@ -1109,19 +1298,18 @@ namespace Myra.Graphics2D.UI.Data
 
 		private void OnGridSelectedIndexChanged(object sender, MyraEventArgs args)
 		{
-			if (HasHeader && _grid.SelectedRowIndex == 0)
+			if (_grid.SelectedRowIndex < RowShift)
 			{
 				_grid.SelectedRowIndex = null;
 			}
 			else if (_grid.SelectedRowIndex != null)
 			{
-				var val = _grid.SelectedRowIndex.Value;
-				if (HasHeader)
-				{
-					--val;
-				}
+				var val = _grid.SelectedRowIndex.Value - RowShift;
 
-				_selectedRowIndex = _visibleRowsIndices[val];
+				if (val >= 0 && val < _visibleRowsIndices.Count)
+				{
+					_selectedRowIndex = _visibleRowsIndices[val];
+				}
 			}
 		}
 
@@ -1187,10 +1375,11 @@ namespace Myra.Graphics2D.UI.Data
 			}
 		}
 
-		private void InvalidateVisualData()
+		private void InvalidateVisualData(bool fullRebuild = true)
 		{
 			_visualData = null;
 			SelectedRowIndex = null;
+			_fullRebuild = fullRebuild;
 			InvalidateArrange();
 		}
 

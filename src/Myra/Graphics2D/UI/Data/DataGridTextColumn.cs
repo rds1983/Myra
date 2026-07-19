@@ -13,6 +13,9 @@ namespace Myra.Graphics2D.UI.Data
 		/// </summary>
 		public string Format { get; set; }
 
+		/// <inheritdoc/>
+		public override bool HasFilter => true;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DataGridTextColumn"/> class with default values.
 		/// </summary>

@@ -1,10 +1,14 @@
-﻿namespace Myra.Graphics2D.UI.Data
+﻿using System;
+
+namespace Myra.Graphics2D.UI.Data
 {
 	/// <summary>
 	/// Defines the base configuration for a DataGrid column, including its header text, bound property name, and width.
 	/// </summary>
 	public abstract class DataGridColumnBase
 	{
+		private string _filter;
+
 		/// <summary>
 		/// Gets or sets the name of the property on the data item to bind this column to.
 		/// </summary>
@@ -19,6 +23,30 @@
 		/// Gets or sets the width of the column in pixels.
 		/// </summary>
 		public int Width { get; set; } = 100;
+
+		/// <summary>
+		/// Gets a value indicating whether this column type supports filtering.
+		/// </summary>
+		public abstract bool HasFilter { get; }
+
+		/// <summary>
+		/// Gets or sets the filter text applied to this column. Rows whose cell value does not contain
+		/// this text are hidden. Setting this property on a column that does not support filtering throws an exception.
+		/// </summary>
+		public string Filter
+		{
+			get => _filter;
+
+			set
+			{
+				if (!HasFilter)
+				{
+					throw new Exception($"Column of type {GetType()} doesn't support filtering.");
+				}
+
+				_filter = value;
+			}
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DataGridColumnBase"/> class with default values.

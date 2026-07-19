@@ -1,5 +1,16 @@
 ## Overview
-DataGrid displays data in a tabular format with resizable columns, vertical scrolling, and row selection.
+DataGrid displays data in a tabular format with support for:
+
+- **Columns** — customizable column definitions with abstract cell rendering
+- **Index column** — optional row-number column
+- **Header row** — clickable header buttons excluded from selection
+- **Data binding** — reflection-based property binding from any `IList`
+- **Column resizing** — interactive drag-to-resize on header boundaries
+- **Vertical scrolling** — automatic scrollbar with mouse wheel and touch-drag support
+- **Selection** — row, column, or cell selection modes
+- **Sorting** — interactive header-click sorting with ascending/descending indicators
+- **Filtering** — per-column text filter inputs with configurable string comparison
+- **Styling** — fully customizable through `DataGridStyle` and `Stylesheet`
 
 ## Columns
 Columns are defined by creating an array of [DataGridColumnBase](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.yml) subclasses. The base class is abstract. The built-in [DataGridTextColumn](~/api/Myra.Graphics2D.UI.Data.DataGridTextColumn.yml) renders cells as text.
@@ -25,7 +36,7 @@ var col = new DataGridTextColumn { Header = "Name", Property = "Name", Width = 1
 // Using constructor with property, header, width, and optional format
 var col2 = new DataGridTextColumn("Price", "Price", 100, "{0:C2}");
 
-// Using constructor with property only (uses property name as header)
+// Using constructor with property and width only (no header)
 var col3 = new DataGridTextColumn("Name", 120);
 ```
 
@@ -50,6 +61,8 @@ Subclass [DataGridColumnBase](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.y
 ```c#
 public class DataGridBoolColumn : DataGridColumnBase
 {
+    public override bool HasFilter => false;
+
     public override Widget CreateWidget(object value)
     {
         if (value == null)
@@ -93,6 +106,24 @@ Property|Description
 `VerticalScrollBackground`|Image for the scrollbar track
 `VerticalScrollKnob`|Image for the scrollbar thumb
 `ScrollMultiplier`|Rows scrolled per mouse wheel tick (default `10`)
+
+## Filtering
+When `HasFilters` is `true` (default), a filter row is displayed below the header. Each column that supports filtering (e.g. `DataGridTextColumn`) shows a text input where you can type to filter rows. Set `HasFilters = false` to hide filter inputs.
+
+Property|Description
+--------|-----------
+`HasFilters`|Whether filter inputs are displayed below the header (default `true`)
+`FiltersStringComparison`|String comparison used when matching filter text against cell values (default `CurrentCultureIgnoreCase`)
+
+Per-column filtering is controlled by the [Filter](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.yml#Myra_Graphics2D_UI_Data_DataGridColumnBase_Filter) property on each column:
+
+```c#
+// Programmatically filter the "Country" column to show only rows containing "US"
+countryColumn.Filter = "US";
+
+// Clear the filter
+countryColumn.Filter = null;
+```
 
 ## Selection
 Set [GridSelectionMode](~/api/Myra.Graphics2D.UI.Data.DataGrid.yml#Myra_Graphics2D_UI_Data_DataGrid_GridSelectionMode) to control selection behavior.
@@ -149,20 +180,12 @@ Property|Description
 `SortAscendingImage`|Image for the ascending sort indicator in column headers
 `SortDescendingImage`|Image for the descending sort indicator in column headers
 
-Apply a custom style in code:
+Apply a custom style in code (before creating any DataGrid instances):
 
 ```c#
-var style = new DataGridStyle
-{
-    ShowGridLines = true,
-    GridLinesColor = Color.Gray,
-    SelectionHoverBackground = new SolidBrush(Color.FromArgb(40, Color.White))
-};
-
-var dataGrid = new DataGrid
-{
-    GridStyle = style
-};
+Stylesheet.Current.DataGridStyle.ShowGridLines = true;
+Stylesheet.Current.DataGridStyle.GridLinesColor = Color.Gray;
+Stylesheet.Current.DataGridStyle.SelectionHoverBackground = new SolidBrush(Color.FromArgb(40, Color.White));
 ```
 
 ## Example
