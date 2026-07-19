@@ -46,7 +46,7 @@
 		/// </summary>
 		/// <param name="property">The name of the property on the data object to bind to.</param>
 		/// <param name="width">The width of the column in pixels.</param>
-		public DataGridColumnBase(string property, int width = 100) : this(property, property, width)
+		public DataGridColumnBase(string property, int width = 100) : this(property, null, width)
 		{
 		}
 

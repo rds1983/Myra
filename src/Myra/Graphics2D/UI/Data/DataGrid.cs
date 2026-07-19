@@ -63,6 +63,7 @@ namespace Myra.Graphics2D.UI.Data
 		private ListSortDirection _sortDirection;
 		private int? _sortColumn;
 		private int? _selectedRowIndex;
+		private bool _hasHeader = true;
 		private readonly List<int> _visibleRowsIndices = new List<int>();
 
 		/// <summary>
@@ -339,7 +340,29 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_indexColumnWidth = value;
+				InvalidateArrange();
 				RebuildColumns();
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the header row is displayed.
+		/// </summary>
+		[Category("Behavior")]
+		[DefaultValue(true)]
+		public bool HasHeader
+		{
+			get => _hasHeader;
+
+			set
+			{
+				if (value == _hasHeader)
+				{
+					return;
+				}
+
+				_hasHeader = value;
+				InvalidateVisualData();
 			}
 		}
 
@@ -607,17 +630,16 @@ namespace Myra.Graphics2D.UI.Data
 			InvalidateArrange();
 		}
 
-		private bool BuildHeader()
+		private void BuildHeader()
 		{
 			if (Columns == null || Columns.Length == 0)
 			{
 				throw new Exception("Columns must be defined before building the DataGrid.");
 			}
 
-			var hasHeader = (from column in Columns where !string.IsNullOrEmpty(column.Header) select column).Any();
-			if (!hasHeader)
+			if (!HasHeader)
 			{
-				return false;
+				return;
 			}
 
 			if (HasIndexColumn)
@@ -641,6 +663,8 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				Widget cellContent;
+
+				var header = string.IsNullOrEmpty(column.Header) ? column.Property : column.Header;
 				if (i == SortColumn)
 				{
 					var panel = new HorizontalStackPanel
@@ -650,7 +674,7 @@ namespace Myra.Graphics2D.UI.Data
 
 					var label = new Label
 					{
-						Text = column.Header
+						Text = header
 					};
 					panel.Widgets.Add(label);
 
@@ -668,7 +692,7 @@ namespace Myra.Graphics2D.UI.Data
 				{
 					cellContent = new Label
 					{
-						Text = column.Header
+						Text = header
 					};
 				}
 
@@ -687,8 +711,6 @@ namespace Myra.Graphics2D.UI.Data
 				Grid.SetColumn(headerCell, HasIndexColumn ? i + 1 : i);
 				_grid.Widgets.Add(headerCell);
 			}
-
-			return true;
 		}
 
 		private void HeaderCell_Click(object sender, MyraEventArgs e)
@@ -760,7 +782,7 @@ namespace Myra.Graphics2D.UI.Data
 
 				_grid.Width = null;
 
-				var hasHeader = BuildHeader();
+				BuildHeader();
 
 				var bounds = ActualBounds;
 				var size = new Point(bounds.Width, bounds.Height);
@@ -775,7 +797,7 @@ namespace Myra.Graphics2D.UI.Data
 				for (var row = StartRow; row < _visualData.Length; ++row)
 				{
 					var count = _visibleRowsIndices.Count;
-					var gridRow = hasHeader ? count + 1 : count;
+					var gridRow = HasHeader ? count + 1 : count;
 
 					if (HasIndexColumn)
 					{
@@ -1033,9 +1055,6 @@ namespace Myra.Graphics2D.UI.Data
 
 			return localPos.Y >= 0 && localPos.Y < _grid.RowHeights[0];
 		}
-
-		private bool HasHeader => Columns != null &&
-			(from column in Columns where !string.IsNullOrEmpty(column.Header) select column).Any();
 
 		private void OnGridHoverIndexChanged(object sender, MyraEventArgs args)
 		{
