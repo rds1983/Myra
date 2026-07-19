@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using Myra.Utility;
+﻿using AssetManagementBase;
+using System.Reflection;
 
 namespace MyraPad
 {
@@ -7,21 +7,14 @@ namespace MyraPad
 	{
 		private static string _exportCsDesigner, _exportCsLight, _exportCsMain, _newProjectTemplate;
 
-		private static Assembly Assembly
-		{
-			get
-			{
-				return typeof(Resources).Assembly;
-			}
-		}
-
 		public static string ExportCSDesigner
 		{
 			get
 			{
 				if (string.IsNullOrEmpty(_exportCsDesigner))
 				{
-					_exportCsDesigner = Assembly.ReadResourceAsString("MyraPad.Resources.ExportCSDesigner.cstemplate");
+					var assetManager = CreateAssetManager();
+					_exportCsDesigner = assetManager.ReadAsString("ExportCSDesigner.cstemplate");
 				}
 
 				return _exportCsDesigner;
@@ -34,7 +27,8 @@ namespace MyraPad
 			{
 				if (string.IsNullOrEmpty(_exportCsLight))
 				{
-					_exportCsLight = Assembly.ReadResourceAsString("MyraPad.Resources.ExportCSLight.cstemplate");
+					var assetManager = CreateAssetManager();
+					_exportCsLight = assetManager.ReadAsString("ExportCSLight.cstemplate");
 				}
 
 				return _exportCsLight;
@@ -47,7 +41,8 @@ namespace MyraPad
 			{
 				if (string.IsNullOrEmpty(_exportCsMain))
 				{
-					_exportCsMain = Assembly.ReadResourceAsString("MyraPad.Resources.ExportCSMain.cstemplate");
+					var assetManager = CreateAssetManager();
+					_exportCsMain = assetManager.ReadAsString("ExportCSMain.cstemplate");
 				}
 
 				return _exportCsMain;
@@ -60,11 +55,14 @@ namespace MyraPad
 			{
 				if (string.IsNullOrEmpty(_newProjectTemplate))
 				{
-					_newProjectTemplate = Assembly.ReadResourceAsString("MyraPad.Resources.NewProject.xmmptemplate");
+					var assetManager = CreateAssetManager();
+					_newProjectTemplate = assetManager.ReadAsString("NewProject.xmmptemplate");
 				}
 
 				return _newProjectTemplate;
 			}
 		}
+
+		private static AssetManager CreateAssetManager() => AssetManager.CreateResourceAssetManager(typeof(Resources).Assembly, "MyraPad.Resources", false);
 	}
 }

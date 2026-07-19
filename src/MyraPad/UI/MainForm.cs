@@ -1746,7 +1746,7 @@ namespace MyraPad.UI
 				string code;
 				using (var export = new ExporterCS(Project))
 				{
-					code = export.ExportDesignerCode(MyraPad.Resources.ExportCSLight, true);
+					code = export.ExportDesignerCode(Resources.ExportCSLight, true);
 				}
 
 				var dlg = new ExportLightWindow
