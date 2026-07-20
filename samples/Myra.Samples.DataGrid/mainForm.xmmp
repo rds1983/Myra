@@ -2,36 +2,36 @@
   <Project.ExportOptions Namespace="Myra.Samples" Class="MainForm" OutputPath="D:\Projects\Myra\samples\Myra.Samples.DataGrid" />
   <VerticalStackPanel>
     <HorizontalStackPanel Spacing="4">
-      <Label Text="10" Id="_labelIndex" />
-      <VerticalSeparator />
-      <Label Text="436b9c41cfb1fa3" Id="_labelCustomerId" />
-      <VerticalSeparator />
-      <Label Text="Brendan" Id="_labelFirstName" />
-      <VerticalSeparator />
-      <Label Text="Franco" Id="_labelLastName" />
-      <VerticalSeparator />
-      <Label Text="Schaefer, Blair and Shaffer" Id="_labelCompany" />
-      <VerticalSeparator />
-      <Label Text="New Rickey" Id="_labelCity" />
-      <VerticalSeparator />
-      <Label Text="Ukraine" Id="_labelCountry" />
-      <VerticalSeparator />
-      <Label Text="001-315-224-3556" Id="_labelPhone1" />
-      <VerticalSeparator />
-      <Label Text="254-621-7128x7573" Id="_labelPhone2" />
-      <VerticalSeparator />
-      <Label Text="kentryan@stone-oneill.com" Id="_labelEmail" />
-      <VerticalSeparator />
-      <Label Text="2021-06-29" Id="_labelSubscriptionDate" />
-      <VerticalSeparator />
-      <Label Text="http://ruiz.com/" Id="_labelWebsite" />
+      <CheckButton Id="_checkShowGridLines">
+        <Label Text="Show Grid Lines" />
+      </CheckButton>
+      <CheckButton Id="_checkResizableColumns">
+        <Label Text="ResizableColumns" />
+      </CheckButton>
+      <CheckButton Id="_checkHasHeader">
+        <Label Text="Has Header" />
+      </CheckButton>
+      <CheckButton Id="_checkHasIndexColumn">
+        <Label />
+      </CheckButton>
     </HorizontalStackPanel>
     <HorizontalSeparator />
     <HorizontalSplitPane Id="_splitPane" StackPanel.ProportionType="Fill">
       <Panel Id="_panelDataGrid" />
-      <ScrollViewer ShowHorizontalScrollBar="False">
-        <PropertyGrid Id="_propertyGrid" />
-      </ScrollViewer>
+      <VerticalStackPanel>
+        <Label Text="10" Id="_labelIndex" />
+        <Label Text="436b9c41cfb1fa3" Id="_labelCustomerId" />
+        <Label Text="Brendan" Id="_labelFirstName" />
+        <Label Text="Franco" Id="_labelLastName" />
+        <Label Text="Schaefer, Blair and Shaffer" Id="_labelCompany" />
+        <Label Text="New Rickey" Id="_labelCity" />
+        <Label Text="Ukraine" Id="_labelCountry" />
+        <Label Text="001-315-224-3556" Id="_labelPhone1" />
+        <Label Text="254-621-7128x7573" Id="_labelPhone2" />
+        <Label Text="kentryan@stone-oneill.com" Id="_labelEmail" />
+        <Label Text="2021-06-29" Id="_labelSubscriptionDate" />
+        <Label Text="http://ruiz.com/" Id="_labelWebsite" />
+      </VerticalStackPanel>
     </HorizontalSplitPane>
   </VerticalStackPanel>
 </Project>

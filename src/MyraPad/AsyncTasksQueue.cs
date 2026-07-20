@@ -9,7 +9,6 @@ namespace MyraPad
 	{
 		private bool _running = true;
 		private readonly ConcurrentQueue<string> _projectXmls = new ConcurrentQueue<string>();
-		private readonly ConcurrentQueue<string> _objectXmls = new ConcurrentQueue<string>();
 
 		private readonly AutoResetEvent _refreshProjectEvent = new AutoResetEvent(false);
 		private readonly AutoResetEvent _waitForQuitEvent = new AutoResetEvent(false);
@@ -22,12 +21,6 @@ namespace MyraPad
 		public void QueueLoadProject(string xml)
 		{
 			_projectXmls.Enqueue(xml);
-			_refreshProjectEvent.Set();
-		}
-
-		public void QueueLoadObject(string xml)
-		{
-			_objectXmls.Enqueue(xml);
 			_refreshProjectEvent.Set();
 		}
 
@@ -63,33 +56,6 @@ namespace MyraPad
 					{
 						Studio.MainForm.QueueClearExplorer();
 						Studio.MainForm.QueueSetStatusText(ex.Message);
-					}
-
-					// Skip object refresh if we reloaded the whole project
-					_objectXmls.Clear();
-				}
-
-				var objectXml = string.Empty;
-				while (_objectXmls.Count > 0)
-				{
-					_objectXmls.TryDequeue(out objectXml);
-				}
-
-				if (!string.IsNullOrEmpty(objectXml))
-				{
-					if (Studio.MainForm.Project != null)
-					{
-						try
-						{
-							Studio.MainForm.QueueSetStatusText("Reloading Object...");
-							Studio.MainForm.NewObject = Project.LoadObjectFromXml(objectXml, Studio.MainForm.AssetManager, Studio.MainForm.Project.Stylesheet);
-							Studio.MainForm.QueueSetStatusText(string.Empty);
-						}
-						catch (Exception ex)
-						{
-							Studio.MainForm.QueueClearExplorer();
-							Studio.MainForm.QueueSetStatusText(ex.Message);
-						}
 					}
 				}
 			}

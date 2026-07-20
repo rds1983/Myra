@@ -168,12 +168,7 @@ namespace Myra.Graphics2D.UI
 		{
 		}
 
-		/// <summary>
-		/// Determines whether the specified name is a proportion property name.
-		/// </summary>
-		/// <param name="s">The name to check.</param>
-		/// <returns>true if the name is a proportion name; otherwise, false.</returns>
-		public static bool IsProportionName(string s)
+		internal static bool IsProportionName(string s)
 		{
 			return s.EndsWith(ProportionName) ||
 				s.EndsWith(DefaultProportionName) ||
@@ -181,15 +176,7 @@ namespace Myra.Graphics2D.UI
 				s.EndsWith(DefaultRowProportionName);
 		}
 
-		/// <summary>
-		/// Determines whether a property should be serialized for the specified object.
-		/// Omits properties that have default values, match stylesheet, or are auto-managed layout properties.
-		/// </summary>
-		/// <param name="stylesheet">The stylesheet to use for comparison.</param>
-		/// <param name="o">The object containing the property.</param>
-		/// <param name="p">The property information.</param>
-		/// <returns>true if the property should be serialized; otherwise, false.</returns>
-		public static bool ShouldSerializeProperty(Stylesheet stylesheet, object o, PropertyInfo p)
+		internal static bool ShouldSerializeProperty(Stylesheet stylesheet, object o, PropertyInfo p)
 		{
 			// Skip auto-assigned GridRow/GridColumn when widget is in a SplitPane or StackPanel container
 			var asWidget = o as Widget;
@@ -242,13 +229,7 @@ namespace Myra.Graphics2D.UI
 			return true;
 		}
 
-		/// <summary>
-		/// Determines whether a property should be serialized for the specified object using this project's stylesheet.
-		/// </summary>
-		/// <param name="o">The object containing the property.</param>
-		/// <param name="p">The property information.</param>
-		/// <returns>true if the property should be serialized; otherwise, false.</returns>
-		public bool ShouldSerializeProperty(object o, PropertyInfo p)
+		internal bool ShouldSerializeProperty(object o, PropertyInfo p)
 		{
 			return ShouldSerializeProperty(Stylesheet, o, p);
 		}
@@ -353,72 +334,6 @@ namespace Myra.Graphics2D.UI
 			result.ObjectsNodes = loadContext.ObjectsNodes;
 
 			return result;
-		}
-
-		/// <summary>
-		/// Loads a single object from XML string data.
-		/// Determines object type from XML tag name, resolving legacy names and special types.
-		/// </summary>
-		/// <param name="data">The XML data as a string.</param>
-		/// <param name="assetManager">The asset manager for loading resources.</param>
-		/// <param name="stylesheet">The stylesheet to apply to loaded objects.</param>
-		/// <param name="parentType">The parent type context for loading.</param>
-		/// <returns>The loaded object.</returns>
-		public static object LoadObjectFromXml(string data, AssetManager assetManager = null, Stylesheet stylesheet = null, Type parentType = null)
-		{
-			XDocument xDoc = XDocument.Parse(data, LoadOptions.SetLineInfo);
-
-			var name = xDoc.Root.Name.ToString();
-			Type itemType;
-
-			// Determine type from XML tag name
-			if (name == "PropertyGrid")
-			{
-				itemType = typeof(PropertyGrid);
-			}
-			else if (!IsProportionName(name))
-			{
-				// Check if it's a legacy name and get modern name
-				string newName;
-				if (LegacyClassNames.TryGetValue(name, out newName))
-				{
-					name = newName;
-				}
-
-				// Look up widget type by name in Myra assemblies
-				itemType = GetWidgetTypeByName(name);
-			}
-			else
-			{
-				// It's a Proportion (layout configuration)
-				itemType = typeof(Proportion);
-			}
-
-			if (itemType == null)
-			{
-				return null;
-			}
-
-			// Create and load object, applying stylesheet context if provided
-			var item = CreateItem(itemType, xDoc.Root, stylesheet);
-			var loadContext = CreateLoadContext(assetManager, stylesheet);
-			loadContext.Load(item, xDoc.Root);
-
-			return item;
-		}
-
-		/// <summary>
-		/// Saves an object to an XML string using this project's stylesheet.
-		/// Serializes only properties that differ from stylesheet defaults.
-		/// </summary>
-		/// <param name="obj">The object to save.</param>
-		/// <param name="tagName">The XML tag name for the object.</param>
-		/// <param name="parentType">The parent type context for saving.</param>
-		/// <returns>An XML string representation of the object.</returns>
-		public string SaveObjectToXml(object obj, string tagName, Type parentType)
-		{
-			var saveContext = CreateSaveContext(Stylesheet);
-			return saveContext.Save(obj, true, tagName, parentType).ToString();
 		}
 
 		// Instantiates an object of the given type, handling special case of Widget constructors that accept StyleName parameter

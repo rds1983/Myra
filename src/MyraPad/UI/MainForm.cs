@@ -300,8 +300,6 @@ namespace MyraPad.UI
 			}
 		}
 
-		// A newly loaded widget object to be displayed in the property grid
-		public object NewObject { get; set; }
 		// A newly loaded project to be displayed in the visual preview
 		public Project NewProject { get; set; }
 
@@ -1384,27 +1382,7 @@ namespace MyraPad.UI
 				_textLocation.Text += ", Parent: " + _parentTag;
 			}
 
-			// If the current tag changed, load its widget object in the property grid
-			if ((lastStart != _currentTagStart || lastEnd != _currentTagEnd))
-			{
-				PropertyGrid.Object = null;
-				_propertyGridPane.ResetScroll();
-				if (!string.IsNullOrEmpty(currentTag))
-				{
-					var xml = currentTag;
-
-					// Add the closing tag for complete XML
-					if (_needsCloseTag)
-					{
-						var tag = ExtractTag(currentTag);
-						xml += "</" + tag + ">";
-					}
-
-					// Queue the object loading in the async task queue
-					_queue.QueueLoadObject(xml);
-				}
-			}
-
+			UpdateEplorerSelection();
 			HandleAutoComplete();
 		}
 
@@ -1774,36 +1752,14 @@ namespace MyraPad.UI
 			}
 			else
 			{
-				// Project property changed
-				// Serialize the modified widget object back to XML
-				var xml = _project.SaveObjectToXml(PropertyGrid.Object, ExtractTag(CurrentTag), ParentType);
-
-				// If the original tag needs a closing tag, ensure the new XML has one too
-				if (_needsCloseTag)
+				try
 				{
-					xml = xml.Replace("/>", ">");
+					_suppressProjectRefresh = true;
+					_textSource.Text = _project.ToXml();
 				}
-
-				// Replace the old XML tag with the new serialized XML
-				if (_currentTagStart != null && _currentTagEnd != null)
+				finally
 				{
-					try
-					{
-						_suppressProjectRefresh = true;
-
-						// Replace the current tag with the updated XML
-						_textSource.Replace(_currentTagStart.Value,
-							_currentTagEnd.Value - _currentTagStart.Value + 1,
-							xml);
-						QueueRefreshProject();
-					}
-					finally
-					{
-						_suppressProjectRefresh = false;
-					}
-
-					// Update the end position of the current tag after replacement
-					_currentTagEnd = _currentTagStart.Value + xml.Length - 1;
+					_suppressProjectRefresh = false;
 				}
 			}
 		}
@@ -1936,6 +1892,44 @@ namespace MyraPad.UI
 			dlg.ShowModal(Desktop);
 		}
 
+		private void UpdateEplorerSelection()
+		{
+			if (Project == null)
+			{
+				return;
+			}
+
+			// Automatically select the corresponding node in the explorer tree
+			try
+			{
+				_suppressExplorerRefresh = true;
+
+				// Find the node by matching line/column position in the XML
+				object selectedItem = null;
+				foreach (var pair in Project.ObjectsNodes)
+				{
+					var lineInfo = (IXmlLineInfo)pair.Item2;
+					if (lineInfo.LineNumber - 1 > _line ||
+						(lineInfo.LineNumber - 1 == _line && lineInfo.LinePosition - 1 > _col))
+					{
+						break;
+					}
+
+					selectedItem = pair.Item1;
+				}
+
+				if (selectedItem != null)
+				{
+					var node = _treeViewExplorer.FindNode(n => n.Tag == selectedItem);
+					_treeViewExplorer.SelectedNode = node;
+				}
+			}
+			finally
+			{
+				_suppressExplorerRefresh = false;
+			}
+		}
+
 		/// <summary>
 		/// Updates game logic, processes queued UI actions, and handles async project/object loading results
 		/// </summary>
@@ -1955,46 +1949,6 @@ namespace MyraPad.UI
 					Action action;
 					_uiActions.TryDequeue(out action);
 					action();
-				}
-
-				// Update property grid with newly loaded object from async queue
-				if (NewObject != null)
-				{
-					PropertyGrid.ParentType = ParentType;
-					PropertyGrid.Object = NewObject;
-
-					// Automatically select the corresponding node in the explorer tree
-					try
-					{
-						_suppressExplorerRefresh = true;
-
-						// Find the node by matching line/column position in the XML
-						object selectedItem = null;
-						foreach (var pair in Project.ObjectsNodes)
-						{
-							var lineInfo = (IXmlLineInfo)pair.Item2;
-							if (lineInfo.LineNumber - 1 > _line ||
-								(lineInfo.LineNumber - 1 == _line && lineInfo.LinePosition - 1 > _col))
-							{
-								break;
-							}
-
-							selectedItem = pair.Item1;
-						}
-
-						if (selectedItem != null)
-						{
-							var node = _treeViewExplorer.FindNode(n => n.Tag == selectedItem);
-							_treeViewExplorer.SelectedNode = node;
-						}
-					}
-					finally
-					{
-						_suppressExplorerRefresh = false;
-					}
-
-					_propertyGridPane.ResetScroll();
-					NewObject = null;
 				}
 
 				// Update the visual preview with newly loaded project from async queue
@@ -2028,6 +1982,8 @@ namespace MyraPad.UI
 						Debug.WriteLine(NewProjectSelectedNodeIndex);
 						_treeViewExplorer.SelectedNode = _treeViewExplorer.GetNodeByAbsoluteIndex(NewProjectSelectedNodeIndex.Value);
 					}
+
+					UpdateEplorerSelection();
 
 					NewProject = null;
 					NewProjectSelectedNodeIndex = null;
@@ -2289,6 +2245,15 @@ namespace MyraPad.UI
 		// Handles explorer tree node selection by moving the cursor to the corresponding position in the XML editor
 		private void _treeViewExplorer_SelectionChanged(object sender, MyraEventArgs e)
 		{
+			if (_treeViewExplorer.SelectedNode != null)
+			{
+				_propertyGrid.Object = _treeViewExplorer.SelectedNode.Tag;
+			}
+			else
+			{
+				_propertyGrid.Object = null;
+			}
+
 			// Don't respond to selection changes made by programmatic updates
 			if (_suppressExplorerRefresh || _treeViewExplorer.SelectedNode == null || Project.ObjectsNodes == null)
 			{
