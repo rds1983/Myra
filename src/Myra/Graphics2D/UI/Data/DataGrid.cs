@@ -50,9 +50,6 @@ namespace Myra.Graphics2D.UI.Data
 			}
 		}
 
-		private const int ColumnResizeHandleWidth = 4;
-		private const int MinColumnWidth = 20;
-
 		private readonly Grid _grid;
 		private readonly SingleItemLayout<Grid> _layout;
 		private Rectangle _verticalScrollbarFrame, _verticalScrollbarThumb;
@@ -356,6 +353,20 @@ namespace Myra.Graphics2D.UI.Data
 		[Category("Behavior")]
 		[DefaultValue(true)]
 		public bool ResizableColumns { get; set; } = true;
+
+		/// <summary>
+		/// Gets or sets the width in pixels of the hit-test area around a column boundary for initiating a resize drag.
+		/// </summary>
+		[Category("Behavior")]
+		[DefaultValue(4)]
+		public int ColumnResizeHandleWidth { get; set; } = 4;
+
+		/// <summary>
+		/// Gets or sets the minimum width in pixels a column can be resized to.
+		/// </summary>
+		[Category("Behavior")]
+		[DefaultValue(20)]
+		public int MinColumnWidth { get; set; } = 20;
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the header row is displayed.
