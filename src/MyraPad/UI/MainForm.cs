@@ -1755,7 +1755,10 @@ namespace MyraPad.UI
 				try
 				{
 					_suppressProjectRefresh = true;
+
+					var oldScrollPosition = _scrollViewerText.ScrollPosition;
 					_textSource.Text = _project.ToXml();
+					_scrollViewerText.ScrollPosition = oldScrollPosition;
 				}
 				finally
 				{

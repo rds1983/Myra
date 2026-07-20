@@ -47,7 +47,7 @@
       <VerticalStackPanel>
         <VerticalSplitPane Id="_leftSplitPane" StackPanel.ProportionType="Fill">
           <Panel Id="_projectHolder" />
-          <ScrollViewer>
+          <ScrollViewer Id="_scrollViewerText">
             <TextBox Multiline="True" Wrap="True" VerticalAlignment="Stretch" Id="_textSource" />
           </ScrollViewer>
         </VerticalSplitPane>
