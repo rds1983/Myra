@@ -39,7 +39,31 @@ namespace Myra.Samples
 
 			_splitPane.SetSplitterPosition(0, 0.75f);
 
-			_propertyGrid.Object = _dataGrid;
+			_checkShowGridLines.IsChecked = _dataGrid.ShowGridLines;
+			_checkResizableColumns.IsChecked = _dataGrid.ResizableColumns;
+			_checkHasHeader.IsChecked = _dataGrid.HasHeader;
+			_checkHasIndexColumn.IsChecked = _dataGrid.HasIndexColumn;
+			_checkSortableHeaders.IsChecked = _dataGrid.SortableHeaders;
+			_checkHasFilter.IsChecked = _dataGrid.HasFilter;
+
+			_checkShowGridLines.IsCheckedChanged += (s, a) => _dataGrid.ShowGridLines = _checkShowGridLines.IsChecked;
+			_checkResizableColumns.IsCheckedChanged += (s, a) => _dataGrid.ResizableColumns = _checkResizableColumns.IsChecked;
+			_checkHasHeader.IsCheckedChanged += (s, a) => _dataGrid.HasHeader = _checkHasHeader.IsChecked;
+			_checkHasIndexColumn.IsCheckedChanged += (s, a) => _dataGrid.HasIndexColumn = _checkHasIndexColumn.IsChecked;
+			_checkSortableHeaders.IsCheckedChanged += (s, a) => _dataGrid.SortableHeaders = _checkSortableHeaders.IsChecked;
+			_checkHasFilter.IsCheckedChanged += (s, a) => _dataGrid.HasFilter = _checkHasFilter.IsChecked;
+
+			_comboFillColumn.SelectedIndexChanged += (s, a) =>
+			{
+				if (_comboFillColumn.SelectedIndex == null || _comboFillColumn.SelectedIndex == 0)
+				{
+					_dataGrid.FillColumnIndex = null;
+				}
+				else
+				{
+					_dataGrid.FillColumnIndex = _comboFillColumn.SelectedIndex.Value - 1;
+				}
+			};
 
 			UpdateSelection();
 		}

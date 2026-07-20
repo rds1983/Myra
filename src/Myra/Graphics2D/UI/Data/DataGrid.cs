@@ -59,12 +59,14 @@ namespace Myra.Graphics2D.UI.Data
 		private int? _resizingColumnIndex = null;
 		private int _resizeStartX;
 		private int _resizeOriginalWidth;
+		private int _resizeNextWidth;
 		private IList _data;
 		private ListSortDirection _sortDirection;
 		private int? _sortColumn;
 		private int? _selectedRowIndex;
-		private bool _hasHeader = true, _sortableHeaders = true, _hasFilters = true;
+		private bool _hasHeader = true, _sortableHeaders = true, _hasFilter = true;
 		private StringComparison _filtersStringComparison = StringComparison.CurrentCultureIgnoreCase;
+		private int? _fillColumnIndex = null;
 		private readonly List<int> _visibleRowsIndices = new List<int>();
 		private readonly List<Widget> _dataWidgets = new List<Widget>();
 		private bool _fullRebuild = true;
@@ -262,7 +264,7 @@ namespace Myra.Graphics2D.UI.Data
 					{
 						if (value == _visibleRowsIndices[i])
 						{
-							_grid.SelectedRowIndex = i;
+							_grid.SelectedRowIndex = i + RowShift;
 							break;
 						}
 					}
@@ -467,16 +469,16 @@ namespace Myra.Graphics2D.UI.Data
 		[DefaultValue(true)]
 		public bool HasFilter
 		{
-			get => _hasFilters;
+			get => _hasFilter;
 
 			set
 			{
-				if (value == _hasFilters)
+				if (value == _hasFilter)
 				{
 					return;
 				}
 
-				_hasFilters = value;
+				_hasFilter = value;
 				InvalidateVisualData();
 			}
 		}
@@ -500,6 +502,27 @@ namespace Myra.Graphics2D.UI.Data
 
 				_filtersStringComparison = value;
 				InvalidateVisualData();
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the zero-based index of the column that fills the remaining horizontal space,
+		/// or <c>null</c> to append a fill column after all data columns.
+		/// </summary>
+		[Category("Behavior")]
+		public int? FillColumnIndex
+		{
+			get => _fillColumnIndex;
+
+			set
+			{
+				if (value == _fillColumnIndex)
+				{
+					return;
+				}
+
+				_fillColumnIndex = value;
+				RebuildColumns();
 			}
 		}
 
@@ -729,10 +752,20 @@ namespace Myra.Graphics2D.UI.Data
 
 			for (var i = 0; i < _columns.Length; ++i)
 			{
-				_grid.ColumnsProportions.Add(new Proportion(ProportionType.Pixels, _columns[i].Width));
+				if (i != FillColumnIndex)
+				{
+					_grid.ColumnsProportions.Add(new Proportion(ProportionType.Pixels, _columns[i].Width));
+				}
+				else
+				{
+					_grid.ColumnsProportions.Add(Proportion.Fill);
+				}
 			}
 
-			_grid.ColumnsProportions.Add(Proportion.Fill);
+			if (FillColumnIndex == null)
+			{
+				_grid.ColumnsProportions.Add(Proportion.Fill);
+			}
 
 			InvalidateArrange();
 		}
@@ -1204,6 +1237,12 @@ namespace Myra.Graphics2D.UI.Data
 						_resizingColumnIndex = boundaryIndex.Value;
 						_resizeStartX = Desktop.TouchPosition.Value.X;
 						_resizeOriginalWidth = _grid.ColWidths[boundaryIndex.Value];
+
+						if (boundaryIndex.Value < _grid.ColWidths.Count - 1)
+						{
+							_resizeNextWidth = _grid.ColWidths[boundaryIndex.Value + 1];
+						}
+
 						Desktop.TouchMoved += DesktopColumnResizeMoved;
 					}
 				}
@@ -1368,7 +1407,6 @@ namespace Myra.Graphics2D.UI.Data
 
 			if (ResizableColumns)
 			{
-				_resizingColumnIndex = null;
 				MyraEnvironment.MouseCursorType = MouseCursor ?? MyraEnvironment.DefaultMouseCursorType;
 			}
 		}
@@ -1383,21 +1421,36 @@ namespace Myra.Graphics2D.UI.Data
 
 		private void DesktopColumnResizeMoved(object sender, MyraEventArgs args)
 		{
-			if (_resizingColumnIndex < 0 || Desktop == null)
+			if (_resizingColumnIndex == null || Desktop == null)
 			{
 				return;
 			}
 
 			var deltaX = Desktop.TouchPosition.Value.X - _resizeStartX;
-			var newWidth = _resizeOriginalWidth + deltaX;
-			if (newWidth < MinColumnWidth)
+
+			var rci = _resizingColumnIndex.Value;
+			var rcis = rci - ColumnShift;
+			if (rcis != FillColumnIndex)
 			{
-				newWidth = MinColumnWidth;
+				var newWidth = _resizeOriginalWidth + deltaX;
+				if (newWidth < MinColumnWidth)
+				{
+					newWidth = MinColumnWidth;
+				}
+
+				_grid.ColumnsProportions[rci].Value = newWidth;
 			}
 
-			if (_resizingColumnIndex != null)
+			if (FillColumnIndex != null && rcis < _grid.ColumnsProportions.Count - 1)
 			{
-				_grid.ColumnsProportions[_resizingColumnIndex.Value].Value = newWidth;
+				// Next column should be resized too
+				var newWidth = _resizeNextWidth - deltaX;
+				if (newWidth < MinColumnWidth)
+				{
+					newWidth = MinColumnWidth;
+				}
+
+				_grid.ColumnsProportions[rci + 1].Value = newWidth;
 			}
 		}
 	}

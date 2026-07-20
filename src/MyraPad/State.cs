@@ -6,7 +6,6 @@ using System.Xml;
 using System.Xml.Serialization;
 using FontStashSharp.RichText;
 using Microsoft.Xna.Framework;
-using Myra.Utility;
 
 namespace MyraPad
 {

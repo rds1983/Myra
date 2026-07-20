@@ -12,8 +12,27 @@
         <Label Text="Has Header" />
       </CheckButton>
       <CheckButton Id="_checkHasIndexColumn">
-        <Label />
+        <Label Text="Has Index Column" />
       </CheckButton>
+      <CheckButton Id="_checkSortableHeaders">
+        <Label Text="Sortable Headers" />
+      </CheckButton>
+      <CheckButton Id="_checkHasFilter">
+        <Label Text="Has Filter" />
+      </CheckButton>
+      <HorizontalStackPanel Spacing="4">
+        <Label Text="Fill Column:" />
+        <ComboView Id="_comboFillColumn">
+          <Label />
+          <Label Text="First Name" />
+          <Label Text="Last Name" />
+          <Label Text="Company" />
+          <Label Text="City" />
+          <Label Text="Country" />
+          <Label Text="Email" />
+          <Label Text="Phone 1" />
+        </ComboView>
+      </HorizontalStackPanel>
     </HorizontalStackPanel>
     <HorizontalSeparator />
     <HorizontalSplitPane Id="_splitPane" StackPanel.ProportionType="Fill">

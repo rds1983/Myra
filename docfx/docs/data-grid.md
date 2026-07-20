@@ -20,6 +20,7 @@ Property|Description
 `Header`|Text displayed in the column header
 `Property`|Name of the public field or property on the data object to display
 `Width`|Initial width in pixels
+`FillColumnIndex`|Zero-based index of the column that fills the remaining horizontal space. When set, that column uses `Proportion.Fill` instead of a fixed pixel width. When `null` (default), a fill column is appended after all data columns.
 
 `DataGridTextColumn` adds:
 
@@ -97,6 +98,8 @@ var dataGrid = new DataGrid
 
 ## Column Resizing
 When `ResizableColumns` is `true` (default), columns can be resized interactively by dragging the boundary between two header cells. The cursor changes to a horizontal resize indicator (`SizeWE`) when hovering over a boundary. The minimum column width is 20 pixels. Set `ResizableColumns = false` to disable interactive resizing.
+
+When [FillColumnIndex](~/api/Myra.Graphics2D.UI.Data.DataGrid.yml#Myra_Graphics2D_UI_Data_DataGrid_FillColumnIndex) is set, dragging the boundary adjacent to the fill column also resizes the neighbouring fixed-width column so the fill column remains flexible.
 
 ## Scrolling
 DataGrid provides a vertical scrollbar when the data exceeds the visible area. Mouse wheel and touch-drag scrolling are supported.
