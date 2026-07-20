@@ -28,6 +28,14 @@ namespace Myra.Graphics2D.UI.Data
 	/// </summary>
 	public class DataGrid : Widget
 	{
+		[Flags]
+		private enum InvalidateFlags
+		{
+			Default = 0,
+			Header = 1 << 0,
+			Columns = 1 << 1
+		}
+
 		private class RowData
 		{
 			public int Index { get; }
@@ -69,7 +77,7 @@ namespace Myra.Graphics2D.UI.Data
 		private int? _fillColumnIndex = null;
 		private readonly List<int> _visibleRowsIndices = new List<int>();
 		private readonly List<Widget> _dataWidgets = new List<Widget>();
-		private bool _fullRebuild = true;
+		private bool _headersDirty = true, _columnsDirty = true;
 
 		/// <summary>
 		/// Gets the number of data rows visible per page, based on the current layout size.
@@ -147,7 +155,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_columns = value;
-				RebuildColumns();
+				Invalidate(InvalidateFlags.Columns | InvalidateFlags.Header);
 			}
 		}
 
@@ -338,8 +346,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_indexColumnWidth = value;
-				InvalidateArrange();
-				RebuildColumns();
+				Invalidate(InvalidateFlags.Columns);
 			}
 		}
 
@@ -367,7 +374,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_hasHeader = value;
-				InvalidateVisualData();
+				Invalidate();
 			}
 		}
 
@@ -387,7 +394,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_hasIndexColumn = value;
-				RebuildColumns();
+				Invalidate(InvalidateFlags.Columns);
 			}
 		}
 
@@ -416,7 +423,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_sortableHeaders = value;
-				InvalidateVisualData();
+				Invalidate();
 			}
 		}
 
@@ -437,7 +444,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_sortDirection = value;
-				InvalidateVisualData();
+				Invalidate();
 			}
 		}
 
@@ -458,7 +465,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_sortColumn = value;
-				InvalidateVisualData();
+				Invalidate();
 			}
 		}
 
@@ -479,7 +486,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_hasFilter = value;
-				InvalidateVisualData();
+				Invalidate();
 			}
 		}
 
@@ -501,7 +508,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_filtersStringComparison = value;
-				InvalidateVisualData();
+				Invalidate();
 			}
 		}
 
@@ -522,7 +529,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_fillColumnIndex = value;
-				RebuildColumns();
+				Invalidate(InvalidateFlags.Columns);
 			}
 		}
 
@@ -576,7 +583,7 @@ namespace Myra.Graphics2D.UI.Data
 					_sourceData[row] = new RowData(row, item, gridValues);
 				}
 
-				InvalidateVisualData();
+				Invalidate();
 			}
 		}
 
@@ -745,6 +752,11 @@ namespace Myra.Graphics2D.UI.Data
 		{
 			_grid.ColumnsProportions.Clear();
 
+			if (Columns == null)
+			{
+				return;
+			}
+
 			if (HasIndexColumn)
 			{
 				_grid.ColumnsProportions.Add(new Proportion(ProportionType.Pixels, IndexColumnWidth));
@@ -766,8 +778,6 @@ namespace Myra.Graphics2D.UI.Data
 			{
 				_grid.ColumnsProportions.Add(Proportion.Fill);
 			}
-
-			InvalidateArrange();
 		}
 
 		private void BuildHeader()
@@ -917,7 +927,7 @@ namespace Myra.Graphics2D.UI.Data
 				filterCell.TextChangedByUser += (s, a) =>
 				{
 					column.Filter = filterCell.Text;
-					InvalidateVisualData(false);
+					Invalidate(InvalidateFlags.Default);
 					StartRow = 0;
 				};
 
@@ -1007,18 +1017,24 @@ namespace Myra.Graphics2D.UI.Data
 
 				var oldSelectedRowIndex = SelectedRowIndex;
 
-				if (_fullRebuild)
+				if (_columnsDirty)
+				{
+					RebuildColumns();
+					_columnsDirty = false;
+				}
+
+				if (_headersDirty)
 				{
 					// Full rebuild is required
 					_grid.Widgets.Clear();
-					if (Columns == null || Columns.Length == 0)
+					if (Columns == null)
 					{
 						return;
 					}
 
 					BuildHeader();
 					BuildFilters();
-					_fullRebuild = false;
+					_headersDirty = false;
 				}
 				else
 				{
@@ -1029,7 +1045,7 @@ namespace Myra.Graphics2D.UI.Data
 					}
 					_dataWidgets.Clear();
 
-					if (Columns == null || Columns.Length == 0)
+					if (Columns == null)
 					{
 						return;
 					}
@@ -1411,11 +1427,21 @@ namespace Myra.Graphics2D.UI.Data
 			}
 		}
 
-		private void InvalidateVisualData(bool fullRebuild = true)
+		private void Invalidate(InvalidateFlags flags = InvalidateFlags.Header)
 		{
 			_visualData = null;
 			SelectedRowIndex = null;
-			_fullRebuild = fullRebuild;
+
+			if (flags.HasFlag(InvalidateFlags.Header))
+			{
+				_headersDirty = true;
+			}
+
+			if (flags.HasFlag(InvalidateFlags.Columns))
+			{
+				_columnsDirty = true;
+			}
+
 			InvalidateArrange();
 		}
 
