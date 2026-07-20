@@ -1429,8 +1429,8 @@ namespace Myra.Graphics2D.UI.Data
 			var deltaX = Desktop.TouchPosition.Value.X - _resizeStartX;
 
 			var rci = _resizingColumnIndex.Value;
-			var rcis = rci - ColumnShift;
-			if (rcis != FillColumnIndex)
+
+			if (FillColumnIndex == null)
 			{
 				var newWidth = _resizeOriginalWidth + deltaX;
 				if (newWidth < MinColumnWidth)
@@ -1440,17 +1440,18 @@ namespace Myra.Graphics2D.UI.Data
 
 				_grid.ColumnsProportions[rci].Value = newWidth;
 			}
-
-			if (FillColumnIndex != null && rcis < _grid.ColumnsProportions.Count - 1)
+			else
 			{
-				// Next column should be resized too
-				var newWidth = _resizeNextWidth - deltaX;
-				if (newWidth < MinColumnWidth)
-				{
-					newWidth = MinColumnWidth;
-				}
+				// We need to make sure sum of the resized column and next remains the same
+				var totalWidth = _resizeOriginalWidth + _resizeNextWidth;
+				var newWidth = _resizeOriginalWidth + deltaX;
+				newWidth = Mathematics.Clamp(newWidth, MinColumnWidth, totalWidth - MinColumnWidth);
+				_grid.ColumnsProportions[rci].Value = newWidth;
 
-				_grid.ColumnsProportions[rci + 1].Value = newWidth;
+				if (rci < _grid.ColumnsProportions.Count - 1)
+				{
+					_grid.ColumnsProportions[rci + 1].Value = totalWidth - newWidth;
+				}
 			}
 		}
 	}
