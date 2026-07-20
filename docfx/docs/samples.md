@@ -72,6 +72,13 @@ A practical example of building a text editor application with file operations, 
 
 Demonstrates the use of viewport-based rendering for displaying content in constrained areas of the UI.
 
+### DataGrid
+[View on GitHub](https://github.com/MyraUI/Myra/tree/master/samples/Myra.Samples.DataGrid)
+
+![DataGrid Sample](~/images/samples/DataGrid.png)
+
+This sample demonstrates the `DataGrid` widget with a large CSV data set. It loads 10,000 customer records and displays them in a scrollable, sortable, and filterable grid. The sample showcases column definitions, data binding via reflection, header-click sorting, per-column filtering, row selection with detail display, interactive column resizing, and toggling grid features (grid lines, resizable columns, header visibility, index column, sortable headers, and filtering) through a top panel with checkboxes.
+
 ### Arrow
 [View on GitHub](https://github.com/MyraUI/Myra/tree/master/samples/Myra.Samples.CustomWidgets.Arrow)
 
