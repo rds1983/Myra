@@ -96,7 +96,7 @@ var dataGrid = new DataGrid
 *Note.* `Property` must match a public instance field or property name on the object exactly.
 
 ## Column Resizing
-When `ResizableColumns` is `true` (default), columns can be resized interactively by dragging the boundary between two header cells. The cursor changes to a horizontal resize indicator (`SizeWE`) when hovering over a boundary. The minimum column width is 20 pixels. Set `ResizableColumns = false` to disable interactive resizing.
+When `ResizableColumns` is `true` (default), columns can be resized interactively by dragging the boundary between two header cells.
 
 By default a fill column is appended after all data columns and takes up any remaining horizontal space. Setting [FillColumnIndex](~/api/Myra.Graphics2D.UI.Data.DataGrid.yml#Myra_Graphics2D_UI_Data_DataGrid_FillColumnIndex) to a column index makes that column fill the remaining space instead. When dragging the boundary adjacent to the fill column, the neighbouring fixed-width column also resizes so the fill column remains flexible.
 
