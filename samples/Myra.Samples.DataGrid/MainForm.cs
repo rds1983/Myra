@@ -16,16 +16,16 @@ namespace Myra.Samples
 
 			_dataGrid = new DataGrid();
 
-			var columns = new List<DataGridColumnBase>
-		{
-			new DataGridTextColumn { Header = "First Name", Property = "FirstName", Width = 100 },
-			new DataGridTextColumn { Header = "Last Name", Property = "LastName", Width = 100 },
-			new DataGridTextColumn { Header = "Company", Property = "Company", Width = 200 },
-			new DataGridTextColumn { Header = "City", Property = "City", Width = 200 },
-			new DataGridTextColumn { Header = "Country", Property = "Country", Width = 200 },
-			new DataGridTextColumn { Header = "Email", Property = "Email", Width = 200 },
-			new DataGridTextColumn { Header = "Phone 1", Property = "Phone1", Width = 200 },
-		};
+			var columns = new DataGridColumnBase[]
+			{
+				new DataGridTextColumn { Header = "First Name", Property = "FirstName", Width = 100 },
+				new DataGridTextColumn { Header = "Last Name", Property = "LastName", Width = 100 },
+				new DataGridTextColumn { Header = "Company", Property = "Company", Width = 200 },
+				new DataGridTextColumn { Header = "City", Property = "City", Width = 200 },
+				new DataGridTextColumn { Header = "Country", Property = "Country", Width = 200 },
+				new DataGridTextColumn { Header = "Email", Property = "Email", Width = 200 },
+				new DataGridTextColumn { Header = "Phone 1", Property = "Phone1", Width = 200 },
+			};
 
 			_dataGrid.Columns = columns.ToArray();
 
