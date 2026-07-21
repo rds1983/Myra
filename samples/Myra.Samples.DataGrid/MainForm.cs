@@ -37,7 +37,7 @@ namespace Myra.Samples
 
 			_panelDataGrid.Widgets.Add(_dataGrid);
 
-			_splitPane.SetSplitterPosition(0, 0.75f);
+			_splitPane.SetSplitterPosition(0, 0.8f);
 
 			_checkShowGridLines.IsChecked = _dataGrid.ShowGridLines;
 			_checkResizableColumns.IsChecked = _dataGrid.ResizableColumns;

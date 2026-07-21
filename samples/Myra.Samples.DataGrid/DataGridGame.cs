@@ -22,8 +22,8 @@ public class DataGridGame : Game
 	{
 		_graphics = new GraphicsDeviceManager(this)
 		{
-			PreferredBackBufferWidth = 1200,
-			PreferredBackBufferHeight = 800
+			PreferredBackBufferWidth = 1800,
+			PreferredBackBufferHeight = 1200
 		};
 		Window.AllowUserResizing = true;
 		IsMouseVisible = true;
