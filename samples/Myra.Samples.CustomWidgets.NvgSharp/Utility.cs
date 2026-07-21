@@ -2,6 +2,10 @@
 
 namespace Myra.Samples;
 
+/// <summary>
+/// Colour and math helpers used by the NvgSharp demo drawing routines.
+/// Provides platform-agnostic colour construction and HSL-to-RGB conversion.
+/// </summary>
 internal static class Utility
 {
 	public static float Mod(float a, float b)
@@ -14,6 +18,10 @@ internal static class Utility
 		return (float)((a) < (mn) ? mn : ((a) > (mx) ? mx : a));
 	}
 
+	/// <summary>
+	/// Computes a single HSL channel component given a hue value and two mix constants.
+	/// Used internally by <see cref="HSLA"/>.
+	/// </summary>
 	public static float Hue(float h, float m1, float m2)
 	{
 		if ((h) < (0))
@@ -29,6 +37,10 @@ internal static class Utility
 		return (float)(m1);
 	}
 
+	/// <summary>
+	/// Converts HSL (hue, saturation, lightness) plus alpha to an RGBA <see cref="Color"/>.
+	/// All inputs are in the 0-1 range except alpha which is 0-255.
+	/// </summary>
 	public static Color HSLA(float h, float s, float l, byte a)
 	{
 		h = (float)(Mod((float)(h), (float)(1.0f)));
@@ -57,6 +69,10 @@ internal static class Utility
 		return (float)(rad / 3.14159274 * 180.0f);
 	}
 
+	/// <summary>
+	/// Creates a platform-specific <see cref="Color"/> from RGBA byte components,
+	/// handling differences between MonoGame/FNA/Stride and other frameworks.
+	/// </summary>
 	public static Color FromRGBA(byte r, byte g, byte b, byte a)
 	{
 #if MONOGAME || FNA || STRIDE

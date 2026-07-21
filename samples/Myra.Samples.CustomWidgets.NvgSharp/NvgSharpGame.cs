@@ -7,11 +7,13 @@ using NvgSharp;
 namespace Myra.Samples;
 
 /// <summary>
-/// This is the main type for your game.
+/// Sample game demonstrating integration of NvgSharp vector graphics with Myra.
+/// Creates a <see cref="NvgCanvasWidget"/> that renders a NanoVG demo scene inside
+/// a Myra UI layout, with interactive controls for toggling rendering options.
 /// </summary>
 public class NvgSharpGame : Game
 {
-	GraphicsDeviceManager _graphics;
+	private readonly GraphicsDeviceManager _graphics;
 
 	private Demo _demo;
 	private PerfGraph _perfGraph;
@@ -25,6 +27,7 @@ public class NvgSharpGame : Game
 		{
 			PreferredBackBufferWidth = 1200,
 			PreferredBackBufferHeight = 800,
+			// Depth24Stencil8 is required by NvgSharp for stencil-based stroke rendering
 			PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8
 		};
 
@@ -36,18 +39,21 @@ public class NvgSharpGame : Game
 	}
 
 	/// <summary>
-	/// LoadContent will be called once per game and is the place to load
-	/// all of your content.
+	/// Builds the Myra UI layout and initialises the NvgSharp demo resources.
+	/// The layout consists of a checkbox row for toggling edge antialiasing,
+	/// a separator, and the NvgSharp canvas filling the remaining space.
 	/// </summary>
 	protected override void LoadContent()
 	{
 		MyraEnvironment.Game = this;
 
+		// Create the NvgSharp canvas widget and assign the draw callback
 		_nvgCanvasWidget = new NvgCanvasWidget
 		{
 			PaintHandler = PaintHandler
 		};
 
+		// Build a small controls panel at the top
 		var buttonsPanel = new HorizontalStackPanel
 		{
 			Spacing = 8
@@ -64,6 +70,7 @@ public class NvgSharpGame : Game
 		checkEdgeAntialiasing.IsCheckedChanged += (s, a) => _nvgCanvasWidget.EdgeAntialiasing = checkEdgeAntialiasing.IsChecked;
 		buttonsPanel.Widgets.Add(checkEdgeAntialiasing);
 
+		// Stack: controls panel, separator, canvas (fill)
 		var topPanel = new VerticalStackPanel();
 		topPanel.Widgets.Add(buttonsPanel);
 		topPanel.Widgets.Add(new HorizontalSeparator());
@@ -89,6 +96,10 @@ public class NvgSharpGame : Game
 		_gameTime = gameTime;
 	}
 
+	/// <summary>
+	/// Rendering callback passed to <see cref="NvgCanvasWidget.PaintHandler"/>.
+	/// Draws the NanoVG demo scene and the frame-time performance graph.
+	/// </summary>
 	private void PaintHandler(NvgContext nvgContext, Point size)
 	{
 		var t = (float)_gameTime.TotalGameTime.TotalSeconds;
@@ -105,18 +116,16 @@ public class NvgSharpGame : Game
 			false);
 
 		_perfGraph.Render(nvgContext, 5, 5);
-
 	}
 
 	/// <summary>
-	/// This is called when the game should draw itself.
+	/// Clears the screen and renders the Myra desktop, which in turn triggers
+	/// <see cref="NvgCanvasWidget.InternalRender"/> for the canvas widget.
 	/// </summary>
-	/// <param name="gameTime">Provides a snapshot of timing values.</param>
 	protected override void Draw(GameTime gameTime)
 	{
 		GraphicsDevice.Clear(new Color(0.1f, 0.1f, 0.1f));
 
-		// TODO: Add your drawing code here
 		_desktop.Render();
 	}
 }

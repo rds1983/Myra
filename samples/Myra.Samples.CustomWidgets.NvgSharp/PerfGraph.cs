@@ -4,12 +4,23 @@ using NvgSharp;
 
 namespace Myra.Samples;
 
+/// <summary>
+/// A small frame-rate / frame-time performance graph rendered via NvgSharp.
+/// Maintains a circular buffer of recent frame timings and draws a filled
+/// area chart with text overlays showing the current metric.
+/// </summary>
 public class PerfGraph
 {
+	/// <summary>
+	/// Determines which metric the graph displays.
+	/// </summary>
 	public enum Style
 	{
+		/// <summary>Frames per second.</summary>
 		GRAPH_RENDER_FPS,
+		/// <summary>Frame time in milliseconds.</summary>
 		GRAPH_RENDER_MS,
+		/// <summary>Frame time as a percentage of a budget.</summary>
 		GRAPH_RENDER_PERCENT,
 	};
 
@@ -26,12 +37,19 @@ public class PerfGraph
 		_fontSystem = fontSystem;
 	}
 
+	/// <summary>
+	/// Records a new frame time sample into the circular buffer.
+	/// </summary>
+	/// <param name="frameTime">Elapsed time in seconds for the current frame.</param>
 	public void Update(float frameTime)
 	{
 		_head = (_head + 1) % _values.Length;
 		_values[_head] = frameTime;
 	}
 
+	/// <summary>
+	/// Returns the arithmetic mean of all stored frame-time samples.
+	/// </summary>
 	public float GetAverage()
 	{
 		float avg = 0;
@@ -42,6 +60,11 @@ public class PerfGraph
 		return avg / _values.Length;
 	}
 
+	/// <summary>
+	/// Draws the performance graph at the given position using the provided NvgSharp context.
+	/// Renders a semi-transparent background, a filled area chart of recent values,
+	/// and text labels showing the current metric.
+	/// </summary>
 	public void Render(NvgContext vg, float x, float y)
 	{
 		int i;

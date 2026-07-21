@@ -4,6 +4,9 @@ using FontStashSharp;
 
 namespace NvgSharp;
 
+/// <summary>
+/// Horizontal text alignment options.
+/// </summary>
 public enum TextHorizontalAlignment
 {
 	/// <summary>
@@ -22,6 +25,9 @@ public enum TextHorizontalAlignment
 	Right
 }
 
+/// <summary>
+/// Vertical text alignment options.
+/// </summary>
 public enum TextVerticalAlignment
 {
 	/// <summary>
@@ -40,8 +46,16 @@ public enum TextVerticalAlignment
 	Bottom
 }
 
+/// <summary>
+/// Extension methods on <see cref="NvgContext"/> for drawing aligned text.
+/// </summary>
 internal static class NvgExtensions
 {
+	/// <summary>
+	/// Draws a string at the specified position with horizontal and vertical alignment.
+	/// The position is adjusted based on the measured text size and the requested alignment
+	/// before calling into the NvgSharp text drawing API.
+	/// </summary>
 	public static void TextAligned(this NvgContext context, SpriteFontBase font, string text, float x, float y, Vector2 scale,
 		TextHorizontalAlignment horizontalAlignment = TextHorizontalAlignment.Left, TextVerticalAlignment verticalAlignment = TextVerticalAlignment.Top,
 		float layerDepth = 0.0f, float characterSpacing = 0.0f, float lineSpacing = 0.0f, FontSystemEffect effect = FontSystemEffect.Stroked,
@@ -77,6 +91,11 @@ internal static class NvgExtensions
 		context.Text(font, text, x, y, scale, layerDepth, characterSpacing, lineSpacing, effect, effectAmount);
 	}
 
+	/// <summary>
+	/// Draws a <see cref="StringBuilder"/> at the specified position with horizontal and vertical alignment.
+	/// Overload of <see cref="TextAligned(NvgContext, SpriteFontBase, string, float, float, Vector2, TextHorizontalAlignment, TextVerticalAlignment, float, float, float, FontSystemEffect, int)"/>
+	/// for <see cref="StringBuilder"/> to avoid string allocation.
+	/// </summary>
 	public static void TextAligned(this NvgContext context, SpriteFontBase font, StringBuilder text, float x, float y, Vector2 scale,
 			TextHorizontalAlignment horizontalAlignment = TextHorizontalAlignment.Left, TextVerticalAlignment verticalAlignment = TextVerticalAlignment.Top,
 		float layerDepth = 0.0f, float characterSpacing = 0.0f, float lineSpacing = 0.0f, FontSystemEffect effect = FontSystemEffect.Stroked,

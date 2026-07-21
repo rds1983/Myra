@@ -10,6 +10,11 @@ namespace Myra.Samples;
 
 using TextHorizontalAlignment = NvgSharp.TextHorizontalAlignment;
 
+/// <summary>
+/// Port of the NanoVG demo scene, rendering various vector-graphics widgets
+/// (windows, sliders, buttons, thumbnails, colour wheel, graphs, etc.) via NvgSharp.
+/// Each draw* method is a self-contained routine that renders one visual element.
+/// </summary>
 public class Demo
 {
 	private static readonly string ICON_SEARCH = char.ConvertFromUtf32(0x1F50D);
@@ -39,6 +44,9 @@ public class Demo
 		return col == Color.Transparent;
 	}
 
+	/// <summary>
+	/// Loads image textures and font systems required by the demo scene.
+	/// </summary>
 	public Demo()
 	{
 		var device = MyraEnvironment.GraphicsDevice;
@@ -65,6 +73,9 @@ public class Demo
 		rtLayout.Font = fontSans20;
 	}
 
+	/// <summary>
+	/// Draws a rounded-corner window with a drop shadow and a gradient header bar.
+	/// </summary>
 	public void drawWindow(NvgContext vg, string title, float x, float y, float w, float h)
 	{
 		float cornerRadius = 3.0f;
@@ -111,6 +122,9 @@ public class Demo
 		vg.RestoreState();
 	}
 
+	/// <summary>
+	/// Draws a rounded search box with a magnifying glass icon and a clear button.
+	/// </summary>
 	public void drawSearchBox(NvgContext vg, string text, float x, float y, float w, float h)
 	{
 		Paint bg;
@@ -136,6 +150,9 @@ public class Demo
 		vg.TextAligned(fontIcons, ICON_CIRCLED_CROSS, x + w - h * 0.55f, y + h * 0.55f, Vector2.One, TextHorizontalAlignment.Center, TextVerticalAlignment.Center);
 	}
 
+	/// <summary>
+	/// Draws a drop-down selector with gradient background, text, and chevron icon.
+	/// </summary>
 	public void drawDropDown(NvgContext vg, string text, float x, float y, float w, float h)
 	{
 		Paint bg;
@@ -162,6 +179,9 @@ public class Demo
 			TextHorizontalAlignment.Center, TextVerticalAlignment.Center);
 	}
 
+	/// <summary>
+	/// Draws a simple text label.
+	/// </summary>
 	public void drawLabel(NvgContext vg, string text, float x, float y, float w, float h)
 	{
 		vg.FillColor(Utility.FromRGBA(255, 255, 255, 128));
@@ -169,6 +189,9 @@ public class Demo
 			TextVerticalAlignment.Center);
 	}
 
+	/// <summary>
+	/// Draws the base of an edit box: an inset rounded rectangle with a subtle gradient fill and border.
+	/// </summary>
 	public static void drawEditBoxBase(NvgContext vg, float x, float y, float w, float h)
 	{
 		Paint bg;
@@ -186,6 +209,9 @@ public class Demo
 		vg.Stroke();
 	}
 
+	/// <summary>
+	/// Draws a text edit box with an inset background and placeholder text.
+	/// </summary>
 	public void drawEditBox(NvgContext vg, string text, float x, float y, float w, float h)
 	{
 		drawEditBoxBase(vg, x, y, w, h);
@@ -195,6 +221,9 @@ public class Demo
 			TextVerticalAlignment.Center);
 	}
 
+	/// <summary>
+	/// Draws a numeric edit box with value text right-aligned and unit label.
+	/// </summary>
 	public void drawEditBoxNum(NvgContext vg, string text, string units, float x, float y, float w, float h)
 	{
 		drawEditBoxBase(vg, x, y, w, h);
@@ -210,6 +239,9 @@ public class Demo
 			TextHorizontalAlignment.Right, TextVerticalAlignment.Center);
 	}
 
+	/// <summary>
+	/// Draws a checkbox with a tick icon and label text.
+	/// </summary>
 	public void drawCheckBox(NvgContext vg, string text, float x, float y, float w, float h)
 	{
 		Paint bg;
@@ -231,6 +263,9 @@ public class Demo
 			TextVerticalAlignment.Center);
 	}
 
+	/// <summary>
+	/// Draws a button with optional pre-icon, gradient background, and text.
+	/// </summary>
 	public void drawButton(NvgContext vg, string preicon, string text, float x, float y, float w, float h,
 		Color col)
 	{
@@ -279,6 +314,9 @@ public class Demo
 			TextHorizontalAlignment.Left, TextVerticalAlignment.Center);
 	}
 
+	/// <summary>
+	/// Draws a horizontal slider with a slot track, gradient knob, and drop shadow.
+	/// </summary>
 	public static void drawSlider(NvgContext vg, float pos, float x, float y, float w, float h)
 	{
 		Paint bg, knob;
@@ -324,6 +362,9 @@ public class Demo
 		vg.RestoreState();
 	}
 
+	/// <summary>
+	/// Draws a FontStashSharp rich-text layout string with NvgSharp styling.
+	/// </summary>
 	public static void drawFssRtl(NvgContext vg, RichTextLayout rtl, float x, float y, int w, string text)
 	{
 		rtl.Text = text;
@@ -331,6 +372,9 @@ public class Demo
 		vg.Text(rtl, x, y, Vector2.One, 0);
 	}
 
+	/// <summary>
+	/// Draws a pair of animated eyes that follow the mouse cursor, with blinking and gloss highlights.
+	/// </summary>
 	public static void drawEyes(NvgContext vg, float x, float y, float w, float h, float mx, float my, float t)
 	{
 		Paint gloss, bg;
@@ -407,6 +451,9 @@ public class Demo
 		vg.Fill();
 	}
 
+	/// <summary>
+	/// Draws an animated bezier-curve graph with filled background, shadow line, and data points.
+	/// </summary>
 	public static void drawGraph(NvgContext vg, float x, float y, float w, float h, float t)
 	{
 		Paint bg;
@@ -481,6 +528,9 @@ public class Demo
 		vg.StrokeWidth(1.0f);
 	}
 
+	/// <summary>
+	/// Draws an animated rotating spinner (loading indicator) with a gradient arc.
+	/// </summary>
 	public static void drawSpinner(NvgContext vg, float cx, float cy, float r, float t)
 	{
 		float a0 = 0.0f + t * 6;
@@ -507,6 +557,9 @@ public class Demo
 		vg.RestoreState();
 	}
 
+	/// <summary>
+	/// Draws a thumbnail grid inside a drop-shadow window with animated scrolling, fade overlays, and a scrollbar.
+	/// </summary>
 	public static void drawThumbnails(NvgContext vg, float x, float y, float w, float h, Texture2D[] images,
 		float t)
 	{
@@ -642,6 +695,9 @@ public class Demo
 		vg.RestoreState();
 	}
 
+	/// <summary>
+	/// Draws an animated colour wheel with hue ring, central saturation/lightness triangle, and selector.
+	/// </summary>
 	public static void drawColorwheel(NvgContext vg, float x, float y, float w, float h, float t)
 	{
 		int i;
@@ -752,6 +808,9 @@ public class Demo
 		vg.RestoreState();
 	}
 
+	/// <summary>
+	/// Draws a grid of animated lines demonstrating all combinations of line cap and line join styles.
+	/// </summary>
 	public static void drawLines(NvgContext vg, float x, float y, float w, float h, float t)
 	{
 		int i, j;
@@ -807,6 +866,9 @@ public class Demo
 		vg.RestoreState();
 	}
 
+	/// <summary>
+	/// Loads a TrueType font from disk into a <see cref="FontSystem"/>.
+	/// </summary>
 	private static FontSystem LoadFont(string path)
 	{
 		var result = new FontSystem();
@@ -818,6 +880,9 @@ public class Demo
 		return result;
 	}
 
+	/// <summary>
+	/// Draws lines of increasing width to demonstrate stroke width rendering.
+	/// </summary>
 	public static void drawWidths(NvgContext vg, float x, float y, float width)
 	{
 		int i;
@@ -840,6 +905,9 @@ public class Demo
 		vg.RestoreState();
 	}
 
+	/// <summary>
+	/// Draws lines demonstrating the three line cap styles: butt, round, and square.
+	/// </summary>
 	public static void drawCaps(NvgContext vg, float x, float y, float width)
 	{
 		int i;
@@ -872,6 +940,10 @@ public class Demo
 		vg.RestoreState();
 	}
 
+	/// <summary>
+	/// Demonstrates NvgSharp's scissoring feature by drawing overlapping rectangles
+	/// with intersecting clip regions.
+	/// </summary>
 	public static void drawScissor(NvgContext vg, float x, float y, float t)
 	{
 		vg.SaveState();
@@ -908,6 +980,12 @@ public class Demo
 		vg.RestoreState();
 	}
 
+	/// <summary>
+	/// Renders the complete NanoVG demo scene, compositing all visual elements
+	/// (eyes, graph, colour wheel, rich text, lines, widgets, thumbnails) at their
+	/// respective positions. When <paramref name="blowup"/> is true the entire scene
+	/// is rotated and scaled for debugging.
+	/// </summary>
 	public void renderDemo(NvgContext vg, float mx, float my, float width, float height,
 		float t, bool blowup)
 	{
