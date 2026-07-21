@@ -95,6 +95,11 @@ namespace MyraPad.UI
 
 		// Flags to prevent recursive refresh cycles when updating the project or explorer
 		private bool _suppressProjectRefresh = false, _suppressExplorerRefresh = false;
+		
+		// Setting this flag to true before writing the XML and clearing it once the explorer has finished
+		// rebuilding ensures the property grid keeps its active selection across the refresh.
+		private bool _suppressPropertyGridRefresh = false;
+
 		// Path to the currently open project file
 		private string _filePath;
 		// Flag indicating whether the current project has unsaved changes
@@ -218,6 +223,13 @@ namespace MyraPad.UI
 				UpdateMenuFile();
 			}
 		}
+
+		// Snapshot of the project at the moment the property grid was assigned its current
+		// object via explorer selection. OnPropertyChanged uses this to serialise the XML
+		// text, ensuring the XML reflects the state of the same project instance that the
+		// property grid is editing, even if _project has been replaced by a reload in the
+		// meantime.
+		private Project PropertyGridProject { get; set; }
 
 		/// <summary>
 		/// The complete XML opening tag string at the current cursor position
@@ -1750,20 +1762,13 @@ namespace MyraPad.UI
 				// Stylesheet property changed
 				QueueRefreshProject();
 			}
-			else
+			else if (PropertyGridProject != null)
 			{
-				try
-				{
-					_suppressProjectRefresh = true;
+				_suppressPropertyGridRefresh = true;
 
-					var oldScrollPosition = _scrollViewerText.ScrollPosition;
-					_textSource.Text = _project.ToXml();
-					_scrollViewerText.ScrollPosition = oldScrollPosition;
-				}
-				finally
-				{
-					_suppressProjectRefresh = false;
-				}
+				var oldScrollPosition = _scrollViewerText.ScrollPosition;
+				_textSource.Text = PropertyGridProject.ToXml();
+				_scrollViewerText.ScrollPosition = oldScrollPosition;
 			}
 		}
 
@@ -2223,6 +2228,7 @@ namespace MyraPad.UI
 
 			if (Project == null || Project.Root == null)
 			{
+				_suppressPropertyGridRefresh = false;
 				return;
 			}
 
@@ -2243,18 +2249,27 @@ namespace MyraPad.UI
 					_suppressExplorerRefresh = false;
 				}
 			}
+
+			_suppressPropertyGridRefresh = false;
 		}
 
 		// Handles explorer tree node selection by moving the cursor to the corresponding position in the XML editor
 		private void _treeViewExplorer_SelectionChanged(object sender, MyraEventArgs e)
 		{
+			object newObject;
 			if (_treeViewExplorer.SelectedNode != null)
 			{
-				_propertyGrid.Object = _treeViewExplorer.SelectedNode.Tag;
+				newObject = _treeViewExplorer.SelectedNode.Tag;
 			}
 			else
 			{
-				_propertyGrid.Object = null;
+				newObject = null;
+			}
+
+			if (!_suppressPropertyGridRefresh)
+			{
+				_propertyGrid.Object = newObject;
+				PropertyGridProject = Project;
 			}
 
 			// Don't respond to selection changes made by programmatic updates
