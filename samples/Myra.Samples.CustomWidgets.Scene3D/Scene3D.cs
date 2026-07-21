@@ -10,6 +10,13 @@ using System.IO;
 
 namespace Myra.Samples.CustomWidgets
 {
+	/// <summary>
+	/// A custom Myra widget that renders a 3D mesh using XNA's <see cref="BasicEffect"/>.
+	/// Hooks into the Myra render pipeline to set up a perspective projection, apply
+	/// directional lighting and texturing, and draw indexed primitives within the widget's bounds.
+	/// Properties exposed via <see cref="Myra.Graphics2D.UI.Properties.PropertyGrid"/> allow
+	/// real-time tweaking of colour, specular power, scale, and rotation speed.
+	/// </summary>
 	public class Scene3D : Widget
 	{
 		private const float NearPlaneDistance = 0.1f;
@@ -19,19 +26,34 @@ namespace Myra.Samples.CustomWidgets
 		private BasicEffect _basicEffect;
 		private DateTime? _lastDt = null;
 
+		/// <summary>
+		/// Gets or sets the diffuse colour applied to the mesh via <see cref="BasicEffect.DiffuseColor"/>.
+		/// </summary>
 		[Category("3D")]
 		public Color Color { get; set; } = Color.Green;
 
+		/// <summary>
+		/// Gets or sets the specular exponent used by <see cref="BasicEffect.SpecularPower"/>.
+		/// Higher values produce a tighter, more focused highlight.
+		/// </summary>
 		[Category("3D")]
 		public float SpecularPower { get; set; } = 50.0f;
 
+		/// <summary>
+		/// Gets or sets the uniform scale applied to the mesh before rendering.
+		/// </summary>
 		[Category("3D")]
 		public float MeshScale { get; set; } = 2.0f;
 
+		/// <summary>
+		/// Gets or sets the rotation speed in degrees per second around the Y axis.
+		/// </summary>
 		[Category("3D")]
 		public float DegreesPerSecond { get; set; } = 10.0f;
 
-
+		/// <summary>
+		/// Gets or sets the mesh geometry to render. Set to <c>null</c> to disable rendering.
+		/// </summary>
 		[Browsable(false)]
 		public DrMeshPart Mesh { get; set; }
 
@@ -39,6 +61,10 @@ namespace Myra.Samples.CustomWidgets
 
 		private Texture2D Texture { get; set; }
 
+		/// <summary>
+		/// Initialises the widget, stretches to fill the parent container, and loads
+		/// the checker-board texture used for mesh texturing.
+		/// </summary>
 		public Scene3D()
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -48,6 +74,13 @@ namespace Myra.Samples.CustomWidgets
 			Texture = assetManager.LoadTexture2D(MyraEnvironment.GraphicsDevice, "Textures/checker.dds");
 		}
 
+		/// <summary>
+		/// Renders the 3D mesh inside the widget's bounds. Temporarily suspends Myra's
+		/// render context, saves and replaces all relevant GPU device states (viewport,
+		/// depth-stencil, rasteriser, blend, sampler), sets up a perspective camera with
+		/// directional lighting, draws the indexed primitives, then restores every device
+		/// state before returning control to Myra.
+		/// </summary>
 		public override void InternalRender(RenderContext context)
 		{
 			base.InternalRender(context);
@@ -59,6 +92,7 @@ namespace Myra.Samples.CustomWidgets
 
 			var device = MyraEnvironment.GraphicsDevice;
 
+			// Lazily create the BasicEffect with a single directional light
 			if (_basicEffect == null)
 			{
 				_basicEffect = new BasicEffect(device)
@@ -72,6 +106,7 @@ namespace Myra.Samples.CustomWidgets
 				_basicEffect.DirectionalLight0.SpecularColor = Color.White.ToVector3();
 			}
 
+			// Suspend the Myra render context so we can issue raw GPU commands
 			context.End();
 
 			// Save current device state
@@ -90,11 +125,11 @@ namespace Myra.Samples.CustomWidgets
 			device.BlendState = BlendState.AlphaBlend;
 			device.SamplerStates[0] = SamplerState.LinearWrap;
 
-			// Set vertex/index buffers
+			// Bind the mesh vertex and index buffers to the device
 			device.SetVertexBuffer(Mesh.VertexBuffer);
 			device.Indices = Mesh.IndexBuffer;
 
-			// Calculate and set effect params
+			// Build view, projection, and world matrices for the 3D scene
 			var view = Matrix.CreateLookAt(new Vector3(0, 0, 5), Vector3.Zero, Vector3.Up);
 			var projection = Matrix.CreatePerspectiveFieldOfView(
 				MathHelper.ToRadians(ViewAngle),
@@ -102,6 +137,7 @@ namespace Myra.Samples.CustomWidgets
 				NearPlaneDistance, FarPlaneDistance
 			);
 
+			// World matrix combines the current rotation and uniform scale
 			var world = Matrix.CreateRotationY(MathHelper.ToRadians(RotationAngle)) * Matrix.CreateScale(MeshScale);
 
 			_basicEffect.View = view;
@@ -114,7 +150,7 @@ namespace Myra.Samples.CustomWidgets
 			_basicEffect.Texture = Texture;
 			_basicEffect.TextureEnabled = true;
 
-			// Render
+			// Draw the mesh for every effect pass (typically one pass for BasicEffect)
 			foreach (EffectPass pass in _basicEffect.CurrentTechnique.Passes)
 			{
 				pass.Apply();
@@ -130,7 +166,7 @@ namespace Myra.Samples.CustomWidgets
 #endif
 			}
 
-			// Update the rotation angle
+			// Advance the rotation angle based on elapsed real time
 			var now = DateTime.Now;
 			if (_lastDt != null)
 			{
@@ -141,14 +177,14 @@ namespace Myra.Samples.CustomWidgets
 
 			_lastDt = now;
 
-			// Restore the device state
+			// Restore the device state so Myra continues rendering correctly
 			device.Viewport = oldViewPort;
 			device.DepthStencilState = oldDepthStencilState;
 			device.RasterizerState = oldRasterizerState;
 			device.BlendState = oldBlendState;
 			device.SamplerStates[0] = oldSamplesState;
 
-			// Don't forget to start the context again
+			// Restart the Myra render context
 			context.Begin();
 		}
 	}
