@@ -259,6 +259,8 @@ namespace Myra.Graphics2D.UI.Data
 
 			set
 			{
+				_selectedRowIndex = value;
+
 				if (value == null)
 				{
 					_grid.SelectedRowIndex = null;
@@ -274,8 +276,6 @@ namespace Myra.Graphics2D.UI.Data
 						}
 					}
 				}
-
-				_selectedRowIndex = value;
 			}
 		}
 
