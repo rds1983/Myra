@@ -95,6 +95,13 @@ namespace Myra.MML
 		}
 
 		/// <summary>
+		/// Returns <c>true</c> if the specified object has a value stored for this attached property.
+		/// </summary>
+		/// <param name="obj">The object to check.</param>
+		/// <returns><c>true</c> if a value exists; otherwise <c>false</c>.</returns>
+		public bool HasValue(BaseObject obj) => obj.AttachedPropertiesValues.ContainsKey(Id);
+
+		/// <summary>
 		/// Gets the property value from the specified object.
 		/// </summary>
 		/// <param name="obj">The object to get the property value from.</param>

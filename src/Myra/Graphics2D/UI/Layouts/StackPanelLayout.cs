@@ -106,7 +106,14 @@ namespace Myra.Graphics2D.UI
 					Grid.SetRow(widget, index);
 				}
 
-				Proportions.Add(new Proportion(StackPanel.GetProportionType(widget), StackPanel.GetProportionValue(widget)));
+				if (StackPanel.ProportionTypeProperty.HasValue(widget) || DefaultProportion == null)
+				{
+					Proportions.Add(new Proportion(StackPanel.GetProportionType(widget), StackPanel.GetProportionValue(widget)));
+				}
+				else
+				{
+					Proportions.Add(DefaultProportion);
+				}
 
 				++index;
 			}
