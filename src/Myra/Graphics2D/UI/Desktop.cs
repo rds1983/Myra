@@ -798,9 +798,6 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			// Pass 3: Process 2D layout expressions (relative positioning, etc.)
-			UpdateRecursiveLayout(ChildrenCopy);
-
 			_layoutDirty = false;
 		}
 
@@ -814,22 +811,6 @@ namespace Myra.Graphics2D.UI
 				{
 					return;
 				}
-			}
-		}
-
-		// Recursively processes 2D layout expressions (if defined) for widget and all descendants
-		private void UpdateRecursiveLayout(IEnumerable<Widget> widgets)
-		{
-			foreach (var i in widgets)
-			{
-				// Parse 2D layout expression if widget has one (e.g., "relative positioning")
-				if (!i.Layout2d.Nullable)
-				{
-					ExpressionParser.Parse(i, ChildrenCopy);
-				}
-
-				// Recurse to children
-				UpdateRecursiveLayout(i.ChildrenCopy);
 			}
 		}
 

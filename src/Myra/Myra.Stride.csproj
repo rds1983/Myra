@@ -24,6 +24,5 @@
     <PackageReference Include="Stride.Engine" Version="$(StrideVersion)" />
     <PackageReference Include="XNAssets.Stride" Version="$(XNAssetsVersion)" />
     <PackageReference Include="XNAssets.FontStashSharp.Stride" Version="$(XNAssetsVersion)" />
-    <PackageReference Include="info.lundin.math.dll" Version="$(InfoLundinMathVersion)" />
   </ItemGroup>  
 </Project>

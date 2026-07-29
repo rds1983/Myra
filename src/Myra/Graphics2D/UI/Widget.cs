@@ -665,13 +665,6 @@ namespace Myra.Graphics2D.UI
 		}
 
 		/// <summary>
-		/// Dynamic layout expression
-		/// </summary>
-		[XmlIgnore]
-		[Browsable(false)]
-		public Layout2D Layout2d { get; set; } = Layout2D.NullLayout;
-
-		/// <summary>
 		/// Gets or sets the brush used to draw the background of the widget in its normal state.
 		/// </summary>
 		[Category("Appearance/Background")]

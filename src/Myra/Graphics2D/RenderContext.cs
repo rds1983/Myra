@@ -3,7 +3,6 @@ using FontStashSharp;
 using Myra.Utility;
 using FontStashSharp.RichText;
 using FontStashSharp.Interfaces;
-using info.lundin.math;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
