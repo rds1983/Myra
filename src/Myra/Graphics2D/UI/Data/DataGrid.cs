@@ -28,12 +28,11 @@ namespace Myra.Graphics2D.UI.Data
 	/// </summary>
 	public class DataGrid : Widget
 	{
-		[Flags]
-		private enum InvalidateFlags
+		private enum InvalidateLevelData
 		{
-			Default = 0,
-			Header = 1 << 0,
-			Columns = 1 << 1
+			None,
+			VisualData,
+			SourceData
 		}
 
 		private class RowData
@@ -54,8 +53,6 @@ namespace Myra.Graphics2D.UI.Data
 		private readonly SingleItemLayout<Grid> _layout;
 		private Rectangle _verticalScrollbarFrame, _verticalScrollbarThumb;
 		private int _startRow;
-		private RowData[] _sourceData;
-		private RowData[] _visualData;
 		private DataGridColumnBase[] _columns;
 		private bool _hasIndexColumn = true;
 		private int? _startBoundsPos;
@@ -73,8 +70,11 @@ namespace Myra.Graphics2D.UI.Data
 		private StringComparison _filtersStringComparison = StringComparison.CurrentCultureIgnoreCase;
 		private int? _fillColumnIndex = null;
 		private readonly List<int> _visibleRowsIndices = new List<int>();
+		private bool _headerDirty = true;
+		private RowData[] _sourceData;
+		private RowData[] _visualData;
 		private readonly List<Widget> _dataWidgets = new List<Widget>();
-		private bool _headersDirty = true, _columnsDirty = true;
+		private Point? _lastArrangeSize = null;
 
 		/// <summary>
 		/// Gets the number of data rows visible per page, based on the current layout size.
@@ -88,7 +88,7 @@ namespace Myra.Graphics2D.UI.Data
 		{
 			get
 			{
-				UpdateVisualData();
+				UpdateData();
 				if (_visualData == null)
 				{
 					return 0;
@@ -113,7 +113,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_startRow = value;
-				InvalidateArrange();
+				Invalidate(false);
 			}
 		}
 
@@ -152,7 +152,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_columns = value;
-				Invalidate(InvalidateFlags.Columns | InvalidateFlags.Header);
+				Invalidate(true);
 			}
 		}
 
@@ -343,7 +343,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_indexColumnWidth = value;
-				Invalidate(InvalidateFlags.Columns);
+				Invalidate(true);
 			}
 		}
 
@@ -385,7 +385,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_hasHeader = value;
-				Invalidate();
+				Invalidate(true);
 			}
 		}
 
@@ -405,7 +405,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_hasIndexColumn = value;
-				Invalidate(InvalidateFlags.Columns);
+				Invalidate(true);
 			}
 		}
 
@@ -434,7 +434,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_sortableHeaders = value;
-				Invalidate();
+				Invalidate(true);
 			}
 		}
 
@@ -455,7 +455,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_sortDirection = value;
-				Invalidate();
+				Invalidate(true, InvalidateLevelData.VisualData);
 			}
 		}
 
@@ -476,7 +476,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_sortColumn = value;
-				Invalidate();
+				Invalidate(true, InvalidateLevelData.VisualData);
 			}
 		}
 
@@ -497,7 +497,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_hasFilter = value;
-				Invalidate();
+				Invalidate(true);
 			}
 		}
 
@@ -519,7 +519,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_filtersStringComparison = value;
-				Invalidate();
+				Invalidate(false, InvalidateLevelData.VisualData);
 			}
 		}
 
@@ -540,7 +540,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_fillColumnIndex = value;
-				Invalidate(InvalidateFlags.Columns);
+				Invalidate(true);
 			}
 		}
 
@@ -560,41 +560,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_data = value;
-
-				_sourceData = new RowData[value.Count];
-				for (var row = 0; row < value.Count; ++row)
-				{
-					var item = value[row];
-					var type = item.GetType();
-
-					var gridValues = new object[Columns.Length];
-					for (var col = 0; col < Columns.Length; ++col)
-					{
-						var column = Columns[col];
-						if (string.IsNullOrEmpty(column.Property))
-						{
-							throw new Exception("Column property must be defined. Index: " + col);
-						}
-
-						var property = type.GetProperty(column.Property, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-						if (property == null)
-						{
-							throw new Exception($"Property not found: {column.Property} in type {type.FullName}");
-						}
-
-						var val = property.GetValue(item);
-						if (val == null)
-						{
-							continue;
-						}
-
-						gridValues[col] = val;
-					}
-
-					_sourceData[row] = new RowData(row, item, gridValues);
-				}
-
-				Invalidate();
+				Invalidate(false, InvalidateLevelData.SourceData);
 			}
 		}
 
@@ -763,11 +729,6 @@ namespace Myra.Graphics2D.UI.Data
 		{
 			_grid.ColumnsProportions.Clear();
 
-			if (Columns == null)
-			{
-				return;
-			}
-
 			if (HasIndexColumn)
 			{
 				_grid.ColumnsProportions.Add(new Proportion(ProportionType.Pixels, IndexColumnWidth));
@@ -791,13 +752,8 @@ namespace Myra.Graphics2D.UI.Data
 			}
 		}
 
-		private void BuildHeader()
+		private void RebuildHeader()
 		{
-			if (Columns == null || Columns.Length == 0)
-			{
-				throw new Exception("Columns must be defined before building the DataGrid.");
-			}
-
 			if (!HasHeader)
 			{
 				return;
@@ -907,13 +863,8 @@ namespace Myra.Graphics2D.UI.Data
 			}
 		}
 
-		private void BuildFilters()
+		private void RebuildFilters()
 		{
-			if (Columns == null || Columns.Length == 0)
-			{
-				throw new Exception("Columns must be defined before building the DataGrid.");
-			}
-
 			if (!HasFilter)
 			{
 				return;
@@ -938,7 +889,7 @@ namespace Myra.Graphics2D.UI.Data
 				filterCell.TextChangedByUser += (s, a) =>
 				{
 					column.Filter = filterCell.Text;
-					Invalidate(InvalidateFlags.Default);
+					Invalidate(false, InvalidateLevelData.VisualData);
 					StartRow = 0;
 				};
 
@@ -948,9 +899,50 @@ namespace Myra.Graphics2D.UI.Data
 			}
 		}
 
+		private void UpdateSourceData()
+		{
+			if (_sourceData != null)
+			{
+				return;
+			}
+
+			_sourceData = new RowData[_data.Count];
+			for (var row = 0; row < _data.Count; ++row)
+			{
+				var item = _data[row];
+				var type = item.GetType();
+
+				var gridValues = new object[Columns.Length];
+				for (var col = 0; col < Columns.Length; ++col)
+				{
+					var column = Columns[col];
+					if (string.IsNullOrEmpty(column.Property))
+					{
+						throw new Exception("Column property must be defined. Index: " + col);
+					}
+
+					var property = type.GetProperty(column.Property, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+					if (property == null)
+					{
+						throw new Exception($"Property not found: {column.Property} in type {type.FullName}");
+					}
+
+					var val = property.GetValue(item);
+					if (val == null)
+					{
+						continue;
+					}
+
+					gridValues[col] = val;
+				}
+
+				_sourceData[row] = new RowData(row, item, gridValues);
+			}
+		}
+
 		private void UpdateVisualData()
 		{
-			if (_sourceData == null || _visualData != null || Columns == null)
+			if (_visualData != null)
 			{
 				return;
 			}
@@ -1006,7 +998,6 @@ namespace Myra.Graphics2D.UI.Data
 				_visualData = vd.ToArray();
 			}
 
-
 			if (SortColumn != null)
 			{
 				// Sort
@@ -1020,58 +1011,68 @@ namespace Myra.Graphics2D.UI.Data
 			}
 		}
 
-		private void RebuildGrid()
+		private void UpdateData()
 		{
+			UpdateSourceData();
+			UpdateVisualData();
+		}
+
+		private void Update()
+		{
+			var bounds = ActualBounds;
+			var size = new Point(bounds.Width, bounds.Height);
+
 			try
 			{
+				if (size == _lastArrangeSize)
+				{
+					return;
+				}
+
+				if (Columns == null)
+				{
+					if (Data != null)
+					{
+						throw new Exception("DataGrid: Columns aren't set, while Data is set.");
+					}
+					else
+					{
+						return;
+					}
+				}
+
 				SuppressInvalidateMeasure = true;
 
 				var oldSelectedRowIndex = SelectedRowIndex;
 
-				if (_columnsDirty)
-				{
-					RebuildColumns();
-					_columnsDirty = false;
-				}
-
-				if (_headersDirty)
+				if (_headerDirty)
 				{
 					// Full rebuild is required
-					_grid.Widgets.Clear();
-					if (Columns == null)
-					{
-						return;
-					}
+					RebuildColumns();
 
-					BuildHeader();
-					BuildFilters();
-					_headersDirty = false;
-				}
-				else
+					_grid.Widgets.Clear();
+					RebuildHeader();
+					RebuildFilters();
+					_headerDirty = false;
+				} else
 				{
 					// Only data widgets needs to be rebuilt
 					foreach (var widget in _dataWidgets)
 					{
 						_grid.Widgets.Remove(widget);
 					}
-					_dataWidgets.Clear();
 
-					if (Columns == null)
-					{
-						return;
-					}
+					_dataWidgets.Clear();
 				}
 
 				_grid.Width = null;
 
-				var bounds = ActualBounds;
-				var size = new Point(bounds.Width, bounds.Height);
-				if (size.X == 0 || size.Y == 0 || _sourceData == null)
+				if (size.X == 0 || size.Y == 0 || _data == null)
 				{
 					return;
 				}
 
-				UpdateVisualData();
+				UpdateData();
 
 				_dataWidgets.Clear();
 				_visibleRowsIndices.Clear();
@@ -1161,6 +1162,7 @@ namespace Myra.Graphics2D.UI.Data
 			}
 			finally
 			{
+				_lastArrangeSize = size;
 				SuppressInvalidateMeasure = false;
 			}
 		}
@@ -1170,7 +1172,7 @@ namespace Myra.Graphics2D.UI.Data
 		{
 			base.InternalArrange();
 
-			RebuildGrid();
+			Update();
 		}
 
 		/// <inheritdoc/>
@@ -1438,21 +1440,26 @@ namespace Myra.Graphics2D.UI.Data
 			}
 		}
 
-		private void Invalidate(InvalidateFlags flags = InvalidateFlags.Header)
+		private void Invalidate(bool headerDirty, InvalidateLevelData level = InvalidateLevelData.None)
 		{
-			_visualData = null;
+			if (headerDirty)
+			{
+				_headerDirty = true;
+			}
+
 			SelectedRowIndex = null;
 
-			if (flags.HasFlag(InvalidateFlags.Header))
+			if (level >= InvalidateLevelData.VisualData)
 			{
-				_headersDirty = true;
+				_visualData = null;
 			}
 
-			if (flags.HasFlag(InvalidateFlags.Columns))
+			if (level >= InvalidateLevelData.SourceData)
 			{
-				_columnsDirty = true;
+				_sourceData = null;
 			}
 
+			_lastArrangeSize = null;
 			InvalidateArrange();
 		}
 
