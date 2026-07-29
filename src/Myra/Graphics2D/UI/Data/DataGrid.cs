@@ -1059,7 +1059,8 @@ namespace Myra.Graphics2D.UI.Data
 					RebuildHeader();
 					RebuildFilters();
 					_headerDirty = false;
-				} else
+				}
+				else
 				{
 					// Only data widgets needs to be rebuilt
 					foreach (var widget in _dataWidgets)
@@ -1505,6 +1506,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_grid.ColumnsProportions[rci].Value = newWidth;
+				Columns[rci - ColumnShift].Width = newWidth;
 			}
 			else
 			{
@@ -1513,10 +1515,12 @@ namespace Myra.Graphics2D.UI.Data
 				var newWidth = _resizeOriginalWidth + deltaX;
 				newWidth = Mathematics.Clamp(newWidth, MinColumnWidth, totalWidth - MinColumnWidth);
 				_grid.ColumnsProportions[rci].Value = newWidth;
+				Columns[rci - ColumnShift].Width = newWidth;
 
 				if (rci < _grid.ColumnsProportions.Count - 1)
 				{
 					_grid.ColumnsProportions[rci + 1].Value = totalWidth - newWidth;
+					Columns[rci + 1 - ColumnShift].Width = totalWidth - newWidth;
 				}
 			}
 		}
