@@ -1445,9 +1445,8 @@ namespace Myra.Graphics2D.UI.Data
 			if (headerDirty)
 			{
 				_headerDirty = true;
+				SelectedRowIndex = null;
 			}
-
-			SelectedRowIndex = null;
 
 			if (level >= InvalidateLevelData.VisualData)
 			{
