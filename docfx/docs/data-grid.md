@@ -95,6 +95,15 @@ var dataGrid = new DataGrid
 
 *Note.* `Property` must match a public instance field or property name on the object exactly.
 
+After modifying a bound property on an existing data row, call [InvalidateDataRow](~/api/Myra.Graphics2D.UI.Data.DataGrid.yml#Myra_Graphics2D_UI_Data_DataGrid_InvalidateDataRow_System_Int32_) to re-read the property values and refresh the display for that row:
+
+```c#
+// Modify a row in-place
+var customer = (Customer)dataGrid.Data[3];
+customer.Company = "New Company Name";
+dataGrid.InvalidateDataRow(3);
+```
+
 ## Column Resizing
 When `ResizableColumns` is `true` (default), columns can be resized interactively by dragging the boundary between two header cells.
 
