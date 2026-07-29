@@ -1,10 +1,6 @@
 ﻿using Myra.Graphics2D.UI;
 using Microsoft.Xna.Framework;
 using Myra.Graphics2D.UI.Data;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace Myra.Samples;
 

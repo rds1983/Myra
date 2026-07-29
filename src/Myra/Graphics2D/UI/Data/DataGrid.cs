@@ -899,6 +899,38 @@ namespace Myra.Graphics2D.UI.Data
 			}
 		}
 
+		private void UpdateSourceDataRow(int row)
+		{
+			var item = _data[row];
+			var type = item.GetType();
+
+			var gridValues = new object[Columns.Length];
+			for (var col = 0; col < Columns.Length; ++col)
+			{
+				var column = Columns[col];
+				if (string.IsNullOrEmpty(column.Property))
+				{
+					throw new Exception("Column property must be defined. Index: " + col);
+				}
+
+				var property = type.GetProperty(column.Property, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+				if (property == null)
+				{
+					throw new Exception($"Property not found: {column.Property} in type {type.FullName}");
+				}
+
+				var val = property.GetValue(item);
+				if (val == null)
+				{
+					continue;
+				}
+
+				gridValues[col] = val;
+			}
+
+			_sourceData[row] = new RowData(row, item, gridValues);
+		}
+
 		private void UpdateSourceData()
 		{
 			if (_sourceData != null)
@@ -909,34 +941,7 @@ namespace Myra.Graphics2D.UI.Data
 			_sourceData = new RowData[_data.Count];
 			for (var row = 0; row < _data.Count; ++row)
 			{
-				var item = _data[row];
-				var type = item.GetType();
-
-				var gridValues = new object[Columns.Length];
-				for (var col = 0; col < Columns.Length; ++col)
-				{
-					var column = Columns[col];
-					if (string.IsNullOrEmpty(column.Property))
-					{
-						throw new Exception("Column property must be defined. Index: " + col);
-					}
-
-					var property = type.GetProperty(column.Property, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-					if (property == null)
-					{
-						throw new Exception($"Property not found: {column.Property} in type {type.FullName}");
-					}
-
-					var val = property.GetValue(item);
-					if (val == null)
-					{
-						continue;
-					}
-
-					gridValues[col] = val;
-				}
-
-				_sourceData[row] = new RowData(row, item, gridValues);
+				UpdateSourceDataRow(row);
 			}
 		}
 
@@ -1438,6 +1443,24 @@ namespace Myra.Graphics2D.UI.Data
 			{
 				MyraEnvironment.MouseCursorType = MouseCursor ?? MyraEnvironment.DefaultMouseCursorType;
 			}
+		}
+
+		/// <summary>
+		/// Re-evaluates the source values for the given data row and marks the visual
+		/// data as needing a refresh. Call this after modifying a row's bound properties
+		/// to reflect the changes in the grid display.
+		/// </summary>
+		/// <param name="rowIndex">The zero-based index of the row in the <see cref="Data"/> collection.</param>
+		public void InvalidateDataRow(int rowIndex)
+		{
+			if (_sourceData == null)
+			{
+				// Full rebuild is scheduled anyway
+				return;
+			}
+
+			UpdateSourceDataRow(rowIndex);
+			Invalidate(false, InvalidateLevelData.VisualData);
 		}
 
 		private void Invalidate(bool headerDirty, InvalidateLevelData level = InvalidateLevelData.None)

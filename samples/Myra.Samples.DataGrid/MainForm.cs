@@ -4,198 +4,181 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Myra.Samples
+namespace Myra.Samples;
+
+public partial class MainForm
 {
-	public partial class MainForm
+	private readonly DataGrid _dataGrid;
+	private readonly List<Record> _records;
+
+	public MainForm()
 	{
-		private readonly DataGrid _dataGrid;
+		BuildUI();
 
-		public MainForm()
+		_dataGrid = new DataGrid();
+
+		var columns = new DataGridColumnBase[]
 		{
-			BuildUI();
+			new DataGridTextColumn { Header = "First Name", Property = "FirstName", Width = 100 },
+			new DataGridTextColumn { Header = "Last Name", Property = "LastName", Width = 100 },
+			new DataGridTextColumn { Header = "Company", Property = "Company", Width = 200 },
+			new DataGridTextColumn { Header = "City", Property = "City", Width = 200 },
+			new DataGridTextColumn { Header = "Country", Property = "Country", Width = 200 },
+			new DataGridTextColumn { Header = "Email", Property = "Email", Width = 200 },
+			new DataGridTextColumn { Header = "Phone 1", Property = "Phone1", Width = 200 },
+		};
 
-			_dataGrid = new DataGrid();
+		_dataGrid.Columns = columns.ToArray();
 
-			var columns = new DataGridColumnBase[]
-			{
-				new DataGridTextColumn { Header = "First Name", Property = "FirstName", Width = 100 },
-				new DataGridTextColumn { Header = "Last Name", Property = "LastName", Width = 100 },
-				new DataGridTextColumn { Header = "Company", Property = "Company", Width = 200 },
-				new DataGridTextColumn { Header = "City", Property = "City", Width = 200 },
-				new DataGridTextColumn { Header = "Country", Property = "Country", Width = 200 },
-				new DataGridTextColumn { Header = "Email", Property = "Email", Width = 200 },
-				new DataGridTextColumn { Header = "Phone 1", Property = "Phone1", Width = 200 },
-			};
+		var csvPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "customers-10000.csv");
+		_records = ParseCsv(csvPath);
+		_dataGrid.Data = _records;
 
-			_dataGrid.Columns = columns.ToArray();
+		_dataGrid.SelectedIndexChanged += _dataGrid_SelectedIndexChanged;
 
-			var csvPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "customers-10000.csv");
-			var records = ParseCsv(csvPath);
-			_dataGrid.Data = records;
+		_panelDataGrid.Widgets.Add(_dataGrid);
 
-			_dataGrid.SelectedIndexChanged += _dataGrid_SelectedIndexChanged;
+		_splitPane.SetSplitterPosition(0, 0.8f);
 
-			_panelDataGrid.Widgets.Add(_dataGrid);
+		_checkShowGridLines.IsChecked = _dataGrid.ShowGridLines;
+		_checkResizableColumns.IsChecked = _dataGrid.ResizableColumns;
+		_checkHasHeader.IsChecked = _dataGrid.HasHeader;
+		_checkHasIndexColumn.IsChecked = _dataGrid.HasIndexColumn;
+		_checkSortableHeaders.IsChecked = _dataGrid.SortableHeaders;
+		_checkHasFilter.IsChecked = _dataGrid.HasFilter;
 
-			_splitPane.SetSplitterPosition(0, 0.8f);
+		_checkShowGridLines.IsCheckedChanged += (s, a) => _dataGrid.ShowGridLines = _checkShowGridLines.IsChecked;
+		_checkResizableColumns.IsCheckedChanged += (s, a) => _dataGrid.ResizableColumns = _checkResizableColumns.IsChecked;
+		_checkHasHeader.IsCheckedChanged += (s, a) => _dataGrid.HasHeader = _checkHasHeader.IsChecked;
+		_checkHasIndexColumn.IsCheckedChanged += (s, a) => _dataGrid.HasIndexColumn = _checkHasIndexColumn.IsChecked;
+		_checkSortableHeaders.IsCheckedChanged += (s, a) => _dataGrid.SortableHeaders = _checkSortableHeaders.IsChecked;
+		_checkHasFilter.IsCheckedChanged += (s, a) => _dataGrid.HasFilter = _checkHasFilter.IsChecked;
 
-			_checkShowGridLines.IsChecked = _dataGrid.ShowGridLines;
-			_checkResizableColumns.IsChecked = _dataGrid.ResizableColumns;
-			_checkHasHeader.IsChecked = _dataGrid.HasHeader;
-			_checkHasIndexColumn.IsChecked = _dataGrid.HasIndexColumn;
-			_checkSortableHeaders.IsChecked = _dataGrid.SortableHeaders;
-			_checkHasFilter.IsChecked = _dataGrid.HasFilter;
-
-			_checkShowGridLines.IsCheckedChanged += (s, a) => _dataGrid.ShowGridLines = _checkShowGridLines.IsChecked;
-			_checkResizableColumns.IsCheckedChanged += (s, a) => _dataGrid.ResizableColumns = _checkResizableColumns.IsChecked;
-			_checkHasHeader.IsCheckedChanged += (s, a) => _dataGrid.HasHeader = _checkHasHeader.IsChecked;
-			_checkHasIndexColumn.IsCheckedChanged += (s, a) => _dataGrid.HasIndexColumn = _checkHasIndexColumn.IsChecked;
-			_checkSortableHeaders.IsCheckedChanged += (s, a) => _dataGrid.SortableHeaders = _checkSortableHeaders.IsChecked;
-			_checkHasFilter.IsCheckedChanged += (s, a) => _dataGrid.HasFilter = _checkHasFilter.IsChecked;
-
-			_comboFillColumn.SelectedIndexChanged += (s, a) =>
-			{
-				if (_comboFillColumn.SelectedIndex == null || _comboFillColumn.SelectedIndex == 0)
-				{
-					_dataGrid.FillColumnIndex = null;
-				}
-				else
-				{
-					_dataGrid.FillColumnIndex = _comboFillColumn.SelectedIndex.Value - 1;
-				}
-			};
-
-			UpdateSelection();
-		}
-
-		private void _dataGrid_SelectedIndexChanged(object sender, Events.MyraEventArgs e)
+		_comboFillColumn.SelectedIndexChanged += (s, a) =>
 		{
-			UpdateSelection();
-		}
-
-		private void UpdateSelection()
-		{
-			var record = (Record)_dataGrid.SelectedItem;
-
-			if (record != null)
+			if (_comboFillColumn.SelectedIndex == null || _comboFillColumn.SelectedIndex == 0)
 			{
-				_labelIndex.Text = record.Index.ToString();
-				_labelCustomerId.Text = record.CustomerId;
-				_labelFirstName.Text = record.FirstName;
-				_labelLastName.Text = record.LastName;
-				_labelCompany.Text = record.Company;
-				_labelCity.Text = record.City;
-				_labelCountry.Text = record.Country;
-				_labelPhone1.Text = record.Phone1;
-				_labelPhone2.Text = record.Phone2;
-				_labelEmail.Text = record.Email;
-				_labelSubscriptionDate.Text = record.SubscriptionDate;
-				_labelWebsite.Text = record.Website;
+				_dataGrid.FillColumnIndex = null;
 			}
 			else
 			{
-				_labelIndex.Text = string.Empty;
-				_labelCustomerId.Text = string.Empty;
-				_labelFirstName.Text = string.Empty;
-				_labelLastName.Text = string.Empty;
-				_labelCompany.Text = string.Empty;
-				_labelCity.Text = string.Empty;
-				_labelCountry.Text = string.Empty;
-				_labelPhone1.Text = string.Empty;
-				_labelPhone2.Text = string.Empty;
-				_labelEmail.Text = string.Empty;
-				_labelSubscriptionDate.Text = string.Empty;
-				_labelWebsite.Text = string.Empty;
+				_dataGrid.FillColumnIndex = _comboFillColumn.SelectedIndex.Value - 1;
 			}
+		};
+
+		_propertyGrid.PropertyChanged += _propertyGrid_PropertyChanged;
+		
+		UpdateSelection();
+	}
+
+	private void _propertyGrid_PropertyChanged(object sender, Events.GenericEventArgs<string> e)
+	{
+		if (_propertyGrid.Object == null)
+		{
+			return;
 		}
 
-		/// <summary>
-		/// Parses a CSV file into a list of <see cref="Record"/> objects, skipping the header line.
-		/// </summary>
-		/// <param name="path">The full path to the CSV file.</param>
-		/// <returns>A list of parsed customer records.</returns>
-		private static List<Record> ParseCsv(string path)
+		var record = (Record)_propertyGrid.Object;
+		var index = _records.IndexOf(record);
+		_dataGrid.InvalidateDataRow(index);
+	}
+
+	private void _dataGrid_SelectedIndexChanged(object sender, Events.MyraEventArgs e)
+	{
+		UpdateSelection();
+	}
+
+	private void UpdateSelection()
+	{
+		_propertyGrid.Object = _dataGrid.SelectedItem;
+	}
+
+	/// <summary>
+	/// Parses a CSV file into a list of <see cref="Record"/> objects, skipping the header line.
+	/// </summary>
+	/// <param name="path">The full path to the CSV file.</param>
+	/// <returns>A list of parsed customer records.</returns>
+	private static List<Record> ParseCsv(string path)
+	{
+		var records = new List<Record>();
+		var lines = File.ReadAllLines(path);
+
+		foreach (var line in lines.Skip(1))
 		{
-			var records = new List<Record>();
-			var lines = File.ReadAllLines(path);
+			var fields = ParseCsvLine(line);
+			if (fields.Count < 12)
+				continue;
 
-			foreach (var line in lines.Skip(1))
+			records.Add(new Record
 			{
-				var fields = ParseCsvLine(line);
-				if (fields.Count < 12)
-					continue;
-
-				records.Add(new Record
-				{
-					Index = int.Parse(fields[0]),
-					CustomerId = fields[1],
-					FirstName = fields[2],
-					LastName = fields[3],
-					Company = fields[4],
-					City = fields[5],
-					Country = fields[6],
-					Phone1 = fields[7],
-					Phone2 = fields[8],
-					Email = fields[9],
-					SubscriptionDate = fields[10],
-					Website = fields[11]
-				});
-			}
-
-			return records;
+				Index = int.Parse(fields[0]),
+				CustomerId = fields[1],
+				FirstName = fields[2],
+				LastName = fields[3],
+				Company = fields[4],
+				City = fields[5],
+				Country = fields[6],
+				Phone1 = fields[7],
+				Phone2 = fields[8],
+				Email = fields[9],
+				SubscriptionDate = fields[10],
+				Website = fields[11]
+			});
 		}
 
-		/// <summary>
-		/// Splits a single CSV line into fields, correctly handling quoted values with escaped double-quotes.
-		/// </summary>
-		/// <param name="line">A single line of CSV text.</param>
-		/// <returns>A list of field values.</returns>
-		private static List<string> ParseCsvLine(string line)
+		return records;
+	}
+
+	/// <summary>
+	/// Splits a single CSV line into fields, correctly handling quoted values with escaped double-quotes.
+	/// </summary>
+	/// <param name="line">A single line of CSV text.</param>
+	/// <returns>A list of field values.</returns>
+	private static List<string> ParseCsvLine(string line)
+	{
+		var fields = new List<string>();
+		var current = new System.Text.StringBuilder();
+		bool inQuotes = false;
+
+		for (int i = 0; i < line.Length; i++)
 		{
-			var fields = new List<string>();
-			var current = new System.Text.StringBuilder();
-			bool inQuotes = false;
+			char c = line[i];
 
-			for (int i = 0; i < line.Length; i++)
+			if (inQuotes)
 			{
-				char c = line[i];
-
-				if (inQuotes)
+				if (c == '"' && i + 1 < line.Length && line[i + 1] == '"')
 				{
-					if (c == '"' && i + 1 < line.Length && line[i + 1] == '"')
-					{
-						current.Append('"');
-						i++;
-					}
-					else if (c == '"')
-					{
-						inQuotes = false;
-					}
-					else
-					{
-						current.Append(c);
-					}
+					current.Append('"');
+					i++;
+				}
+				else if (c == '"')
+				{
+					inQuotes = false;
 				}
 				else
 				{
-					if (c == '"')
-					{
-						inQuotes = true;
-					}
-					else if (c == ',')
-					{
-						fields.Add(current.ToString());
-						current.Clear();
-					}
-					else
-					{
-						current.Append(c);
-					}
+					current.Append(c);
 				}
 			}
-
-			fields.Add(current.ToString());
-			return fields;
+			else
+			{
+				if (c == '"')
+				{
+					inQuotes = true;
+				}
+				else if (c == ',')
+				{
+					fields.Add(current.ToString());
+					current.Clear();
+				}
+				else
+				{
+					current.Append(c);
+				}
+			}
 		}
+
+		fields.Add(current.ToString());
+		return fields;
 	}
 }
