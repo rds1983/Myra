@@ -34,7 +34,7 @@ public partial class MainForm
 		_records = ParseCsv(csvPath);
 		_dataGrid.Data = _records;
 
-		_dataGrid.SelectedIndexChanged += _dataGrid_SelectedIndexChanged;
+		_dataGrid.SelectedIndexChanged += (s, a) => _propertyGrid.Object = _dataGrid.SelectedItem;
 
 		_panelDataGrid.Widgets.Add(_dataGrid);
 
@@ -67,8 +67,6 @@ public partial class MainForm
 		};
 
 		_propertyGrid.PropertyChanged += _propertyGrid_PropertyChanged;
-		
-		UpdateSelection();
 	}
 
 	private void _propertyGrid_PropertyChanged(object sender, Events.GenericEventArgs<string> e)
@@ -81,16 +79,6 @@ public partial class MainForm
 		var record = (Record)_propertyGrid.Object;
 		var index = _records.IndexOf(record);
 		_dataGrid.InvalidateDataRow(index);
-	}
-
-	private void _dataGrid_SelectedIndexChanged(object sender, Events.MyraEventArgs e)
-	{
-		UpdateSelection();
-	}
-
-	private void UpdateSelection()
-	{
-		_propertyGrid.Object = _dataGrid.SelectedItem;
 	}
 
 	/// <summary>
