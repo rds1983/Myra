@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Xna.Framework;
 using Myra.Utility.Types;
 #if MATH_IFACES
 using System.Numerics;
@@ -90,6 +91,8 @@ namespace Myra.Graphics2D.UI.Properties.Editors
 	        {
 		        Nullable = _nullable,
 		        Value = val,
+		        Minimum = MathHelper<TNum>.Minimum,
+		        Maximum = MathHelper<TNum>.Maximum,
 	        };
 
 	        if (_record.HasSetter)
@@ -155,7 +158,9 @@ namespace Myra.Graphics2D.UI.Properties.Editors
 				        }
 				        
 				        newShort = MathHelper<short>.Clamp(newShort.Value, 0, 255);
-				        SetValue(_owner.SelectedField, MathHelper<short, TNum>.Convert(newShort.Value));
+				        TNum value = MathHelper<short>.ConvertTo<TNum>(newShort.Value);
+				        
+				        SetValue(_owner.SelectedField, value);
 				        _owner.FireChanged(_record.Name);
 			        }
 			        catch (Exception ex)
@@ -196,7 +201,7 @@ namespace Myra.Graphics2D.UI.Properties.Editors
         {
 	        short? convert = null;
 	        if (value.HasValue)
-		        convert = MathHelper<TNum, short>.Convert(value.Value);
+		        convert = MathHelper<TNum>.ConvertTo<short>(value.Value);
 	        return convert;
         }
 	}

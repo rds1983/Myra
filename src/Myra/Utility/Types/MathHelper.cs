@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using BigInt = System.Numerics.BigInteger;
 
 #if MATH_IFACES
 using System.Numerics;
@@ -11,52 +12,175 @@ using Generic.Math;
 namespace Myra.Utility.Types
 {
     /// <summary>
-    /// Generic math methods for <typeparamref name="TNum"/>.<para/>
+    /// Generic math methods and constants for <typeparamref name="TNum"/>.<para/>
     /// If project is less than .net7, uses Generic.Math library which relies on Reflection.Emit and codegen.
     /// </summary>
-    internal static class MathHelper<TNum>
+    public static class MathHelper<TNum>
 #if MATH_IFACES
         where TNum : struct, INumber<TNum>, IMinMaxValue<TNum>
 #else
         where TNum : struct
 #endif
     {
-        private static readonly bool NumIsSigned;
+        public static readonly TypeInfo Info;
         
         /// <summary>Value that represents 0 for <typeparamref name="TNum"/></summary>
         public static readonly TNum Zero;
         /// <summary>Value that represents 1 for <typeparamref name="TNum"/></summary>
         public static readonly TNum One;
-        
-#if MATH_IFACES //TODO find a way to get these values without interfaces
-        public static readonly TNum MinValue;
-        public static readonly TNum MaxValue;
-#endif
+        /// <summary>
+        /// Value that represents the smallest value for TNum. This excludes <see cref="NegInfinity"/>
+        /// </summary>
+        public static readonly TNum Minimum;
+        /// <summary>
+        /// Value that represents the largest value for TNum. This excludes <see cref="Infinity"/>
+        /// </summary>
+        public static readonly TNum Maximum;
+        /// <summary>
+        /// Value that represents negative infinity. Undefined for integer types.
+        /// </summary>
+        public static readonly TNum? NegInfinity;
+        /// <summary>
+        /// Value that represents infinity. Undefined for integer types.
+        /// </summary>
+        public static readonly TNum? Infinity;
         
         static MathHelper()
         {
             Type arg = typeof(TNum);
-            TypeInfo info = TypeHelper<TNum>.Info;
+            Info = TypeHelper<TNum>.Info;
             
-            if(info.IsNullable)
+            if(Info.IsNullable)
                 throw new ArgumentException($"Invalid Generic-Type Argument: '{arg}', Nullable types are not supported");
-            if(!info.IsNumber)
+            if(!Info.IsNumber)
                 throw new ArgumentException($"Invalid Generic-Type Argument: '{arg}', Only numeric types are supported");
-            if(arg == typeof(byte) || arg == typeof(sbyte))
-                throw new ArgumentException($"Invalid Generic-Type Argument: '{arg}' does not have full math support. Convert to another type first");
-
-            NumIsSigned = info.IsSignedNumber;
-
+//            if(arg == typeof(byte) || arg == typeof(sbyte))
+//                throw new ArgumentException($"Invalid Generic-Type Argument: '{arg}' does not have full math support. Convert to another type first");
+            
 #if MATH_IFACES
             Zero = TNum.Zero;
             One = TNum.One;
-            MinValue = TNum.MinValue;
-            MaxValue = TNum.MaxValue;
+            Minimum = TNum.MinValue;
+            Maximum = TNum.MaxValue;
 #else
             Zero = GenericMath<TNum>.Zero;
-            One = MathHelper<int, TNum>.Convert( 1 );
+            One = MathHelper<int>.ConvertTo<TNum>( 1 );
+            
+            if (Info.IsWholeNumber)
+            {
+                SquashFoundLimitsIntoIntType(out TNum min, out TNum max);
+                Minimum = min;
+                Maximum = max;
+            }
+#endif
+            if (Info.IsWholeNumber)
+            {
+                Infinity = null;
+                NegInfinity = null;
+            }
+            else if(Info.IsFractionalNumber)
+            {
+                //TODO find minimum and maximums
+            }
+
+#if !MATH_IFACES
+            void SquashFoundLimitsIntoIntType(out TNum min, out TNum max)
+            {
+                ulong permutations;
+                int steps;
+                if (!FindMaxBitValue(out permutations, out steps))
+                {
+                    min = Zero;
+                    max = One;
+                }
+                
+                if (Info.IsSignedNumber)
+                {
+                    // Signed integer value type
+                    long half;
+                    if (steps == 4) // 64 bits?
+                    {
+                        half = (long)((permutations / 2uL) + 1);
+                    }
+                    else
+                    {
+                        half = (long)(permutations / 2uL);
+                    }
+                    min = MathHelper<long>.ConvertTo<TNum>(-half);
+                    max = MathHelper<long>.ConvertTo<TNum>(half - 1);
+                }
+                else 
+                {
+                    // Unsigned integer value type
+                    min = Zero;
+                    if (steps == 4) // 64 bits?
+                    {
+                        max = MathHelper<ulong>.ConvertTo<TNum>(permutations);
+                    }
+                    else
+                    {
+                        max = MathHelper<ulong>.ConvertTo<TNum>(permutations - 1);
+                    }
+                }
+            }
+            
+            bool FindMaxBitValue(out ulong permutations, out int steps)
+            {
+                permutations = 0uL;
+                int? size = Info.Code.GetTypeSize();
+                if (!size.HasValue)
+                {
+                    steps = -1;
+                    return false;
+                }
+                
+                bool found = false;
+                int bitsInType = size.Value * 8;
+                int n = 8;
+                steps = 1;
+                
+                do
+                {
+                    if (n == bitsInType)
+                    {
+                        permutations = MathHelper<ulong>.Pow(2, n);
+                        found = true;
+                        break;
+                    }
+
+                    steps++;
+                    n *= 2;
+                    
+                } while (n < 128); //Only check up to 128 bits
+
+                if (steps >= 4)
+                    permutations = ulong.MaxValue;
+                return found;
+            }
 #endif
         }
+/*
+        private static void TestPow(int value, int exp, float expected)
+        {
+            TNum num = MathHelper<int, TNum>.Convert(value);
+            TestPow(num, exp, out TNum result);
+            float compare = MathHelper<TNum, float>.Convert(result);
+            if(compare != expected)
+                Console.WriteLine($"POW FAILURE! Got {compare}, Expected {expected}");
+        }
+        private static void TestPow(TNum value, int exp, out TNum result)
+        {
+            try
+            {
+                result = Pow(value, exp);
+                Console.WriteLine($"MathHelper<{typeof(TNum).Name}>.Pow( {value}, {exp} ) = {result}");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                result = Zero;
+            }
+        }*/
         
 #region Internals
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -152,7 +276,60 @@ namespace Myra.Utility.Types
         /// Equivalent to operator: <paramref name="lhs"/> /= <paramref name="rhs"/>
         /// </summary>
         public static void Divide(ref TNum lhs, TNum rhs) => lhs = Divide_Internal(lhs, rhs);
-
+        /// <summary>
+        /// Returns <paramref name="value"/> raised to the <paramref name="exponent"/>-th power.
+        /// </summary>
+        /// <exception cref="ArithmeticException">
+        /// Thrown if the result is too small to fit into the integer-based value type <typeparamref name="TNum"/>.
+        /// Without this exception, this method would return zero for all negative <paramref name="exponent"/> inputs.
+        /// </exception>
+        /// <exception cref="DivideByZeroException">
+        /// Thrown if <paramref name="value"/> is zero and <paramref name="exponent"/> is negative.
+        /// </exception>
+        public static TNum Pow(TNum value, int exponent)
+        {
+            if (Info.IsWholeNumber & exponent < 0)
+                throw new ArithmeticException($"Pow result will always be less than one and cannot be properly respresented as {typeof(TNum)}");
+            
+            if (Equal(value, Zero))
+            {
+                if (exponent < 0)
+                    throw new DivideByZeroException(nameof(exponent));
+                return Zero;
+            }
+            
+            if (exponent == 0)
+                return One;
+            
+            TNum result = One;
+            if (exponent > 0)
+            {
+                // Do multiply op
+                do
+                {
+                    result = Multiply_Internal(result, value);
+                    exponent--;
+                }
+                while (exponent > 0);
+            }
+            else
+            {
+                // Do divide op
+                exponent = -exponent;
+                do
+                {
+                    result = Divide_Internal(result, value);
+                    exponent--;
+                }
+                while (exponent > 0);
+            }
+            return result;
+        }
+        /// <summary>
+        /// Returns <paramref name="value"/> raised to the second power.
+        /// </summary>
+        public static TNum Pow2(TNum value) => Pow(value, 2);
+        
 #region Compare
         /// <summary>
         /// Equivalent to operator: <paramref name="lhs"/> == <paramref name="rhs"/>
@@ -218,7 +395,7 @@ namespace Myra.Utility.Types
 #if MATH_IFACES
             return TNum.Abs(value);
 #else
-            if (NumIsSigned && LessThan(value, Zero))
+            if (Info.IsSignedNumber && LessThan(value, Zero))
                 value = Negate_Internal(value);
             return value;
 #endif
@@ -369,31 +546,31 @@ namespace Myra.Utility.Types
             return value;
 #endif
         }
+        
+        /// <summary>
+        /// Convert number type '<typeparamref name="TNum"/>' to another number type '<typeparamref name="TResult"/>'.
+        /// </summary>
+        /// <typeparam name="TNum">The type to convert from.</typeparam>
+        /// <typeparam name="TResult">The type to convert to.</typeparam>
+        public static TResult ConvertTo<TResult>(TNum value)
+#if MATH_IFACES
+            where TResult : struct, INumber<TResult>
+        {
+            return TResult.CreateTruncating<TNum>(value);
+        }
+#else
+            where TResult : struct
+        {
+            return GenericMath<TNum, TResult>.Convert(value);
+        }
+#endif
+        
         private static void SwapValues(ref TNum a, ref TNum b)
         {
             TNum c = a;
             TNum d = b;
             b = c;
             a = d;
-        }
-    }
-
-    internal static class MathHelper<TNum, TResult>
-#if MATH_IFACES
-        where TNum    : struct, INumber<TNum>
-        where TResult : struct, INumber<TResult>
-#else
-        where TNum    : struct
-        where TResult : struct
-#endif
-    {
-        public static TResult Convert(TNum value)
-        {
-#if MATH_IFACES
-            return TResult.CreateTruncating<TNum>(value);
-#else
-            return GenericMath<TNum, TResult>.Convert(value);
-#endif
         }
     }
 }

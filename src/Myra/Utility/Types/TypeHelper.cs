@@ -44,6 +44,7 @@ namespace Myra.Utility.Types
                 {typeof(long),    "L"},
                 {typeof(ulong),   "uL"},
             });
+        
         private static Dictionary<Type, Func<TypeInfo>> _lookup;
         
         internal static void RegisterHelperForType<T>()
@@ -86,6 +87,46 @@ namespace Myra.Utility.Types
             return changed;
         }
         
+        public static int? GetTypeSize(this TypeCode code)
+        {
+            switch (code)
+            {
+                case TypeCode.Boolean:
+                    return sizeof(bool);
+                case TypeCode.Char:
+                    return sizeof(char);
+                
+                case TypeCode.Decimal:
+                    return sizeof(decimal);
+                case TypeCode.Double:
+                    return sizeof(double);
+                case TypeCode.Single:
+                    return sizeof(float);
+                
+                case TypeCode.Byte:
+                    return sizeof(byte);
+                case TypeCode.SByte:
+                    return sizeof(sbyte);
+                
+                case TypeCode.Int16:
+                    return sizeof(short);
+                case TypeCode.Int32:
+                    return sizeof(int);
+                case TypeCode.Int64:
+                    return sizeof(long);
+                
+                case TypeCode.UInt16:
+                    return sizeof(ushort);
+                case TypeCode.UInt32:
+                    return sizeof(uint);
+                case TypeCode.UInt64:
+                    return sizeof(ulong);
+                
+                default:
+                    return null;
+            }
+        }
+
 #region Strings
         private const string FrontendGeneric = "<>";
         private const string BackendGeneric = "`1";

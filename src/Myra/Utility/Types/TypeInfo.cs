@@ -77,5 +77,10 @@ namespace Myra.Utility.Types
                 }
             }
         }
+        
+        public int? GetTypeCodeDataSize()
+        {
+            return Code.GetTypeSize();
+        }
     }
 }

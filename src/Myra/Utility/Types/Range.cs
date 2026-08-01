@@ -29,14 +29,7 @@ namespace Myra.Utility.Types
         /// <summary>
         /// Returns a range that spans the entire TNum data type
         /// </summary>
-        public static Range<TNum> ValueTypeRange
-        {
-#if MATH_IFACES
-            get => new Range<TNum>(MathHelper<TNum>.MinValue, MathHelper<TNum>.MaxValue);
-#else
-            get => new Range<TNum>(null, null);
-#endif
-        }
+        public static Range<TNum> ValueTypeRange => new Range<TNum>(MathHelper<TNum>.Minimum, MathHelper<TNum>.Maximum);
         /// <summary>
         /// Returns a range from zero to one.
         /// </summary>

@@ -374,6 +374,7 @@ namespace Myra.Graphics2D.UI
 			Value = MathHelper<TNum>.Zero;
 			Increment = MathHelper<TNum>.One;
 			Mul_Increment = MathHelper<TNum>.One;
+			_range = Range<TNum>.ValueTypeRange;
 		}
 
 		private static TNum? StringToNumber(string str, bool isNullable)
@@ -497,22 +498,49 @@ namespace Myra.Graphics2D.UI
 				delta = MathHelper<TNum>.Multiply(_increment, Mul_Increment);
 			else
 				delta = _increment;
-
+			
+			bool overflow = false; // Try to detect and limit overflows near the TNum value boundary
 			if (spinUpward)
-				MathHelper<TNum>.Add(ref newValue, delta);
-			else
-				MathHelper<TNum>.Subtract(ref newValue, delta);
-
-			if (_range.IsInRange(newValue))
 			{
-				bool changed = MathHelper<TNum>.UnEqual(Value.GetValueOrDefault(), newValue);
-				TNum? oldValue = Value;
-				Value = newValue;
-
-				if (changed)
+				MathHelper<TNum>.Add(ref newValue, delta);
+				
+				if (Maximum.HasValue && MathHelper<TNum>.Equal(Maximum.Value, MathHelper<TNum>.Maximum))
 				{
-					ValueChangedByUser?.Invoke(this, new ValueChangedEventArgs<TNum?>(oldValue, newValue));
+					// Did we overflow?
+					if (MathHelper<TNum>.LessThan(newValue, Value.GetValueOrDefault()))
+					{
+						newValue = MathHelper<TNum>.Maximum;
+						overflow = true;
+					}
 				}
+			}
+			else
+			{
+				MathHelper<TNum>.Subtract(ref newValue, delta);
+				
+				if (Minimum.HasValue && MathHelper<TNum>.Equal(Minimum.Value, MathHelper<TNum>.Minimum))
+				{
+					// Did we overflow?
+					if (MathHelper<TNum>.GreaterThan(newValue, Value.GetValueOrDefault()))
+					{
+						newValue = MathHelper<TNum>.Minimum;
+						overflow = true;
+					}
+				}
+			}
+
+			if (!overflow)
+			{
+				newValue = _range.Clamp(newValue);
+			}
+			
+			bool changed = MathHelper<TNum>.UnEqual(Value.GetValueOrDefault(), newValue);
+			TNum? oldValue = Value;
+			Value = newValue;
+
+			if (changed)
+			{
+				ValueChangedByUser?.Invoke(this, new ValueChangedEventArgs<TNum?>(oldValue, newValue));
 			}
 		}
 		private void UpButtonOnUp(object sender, EventArgs eventArgs) 
