@@ -4,6 +4,33 @@ using System.ComponentModel;
 namespace Myra.Graphics2D.UI.Data
 {
 	/// <summary>
+	/// Flags describing which grid capabilities a column type supports.
+	/// </summary>
+	[Flags]
+	public enum DataGridColumnFlags
+	{
+		/// <summary>
+		/// No capabilities.
+		/// </summary>
+		None = 0,
+
+		/// <summary>
+		/// The column supports per-column text filtering.
+		/// </summary>
+		CanFilter = 1 << 0,
+
+		/// <summary>
+		/// The column supports sorting by its values.
+		/// </summary>
+		CanSort = 1 << 1,
+
+		/// <summary>
+		/// The column supports both filtering and sorting.
+		/// </summary>
+		All = CanFilter | CanSort
+	}
+
+	/// <summary>
 	/// Defines the base configuration for a DataGrid column, including its header text, bound property name, and width.
 	/// </summary>
 	public abstract class DataGridColumnBase
@@ -26,13 +53,20 @@ namespace Myra.Graphics2D.UI.Data
 		public int Width { get; set; } = 100;
 
 		/// <summary>
-		/// Gets a value indicating whether this column type supports filtering.
+		/// Gets the <see cref="DataGridColumnFlags"/> describing which capabilities this column type supports.
 		/// </summary>
-		public abstract bool CanFilter { get; }
+		public abstract DataGridColumnFlags Flags { get; }
+
+		/// <summary>
+		/// Gets or sets whether this column participates in sorting. Defaults to <c>true</c>.
+		/// Ignored when the column does not have the <see cref="DataGridColumnFlags.CanSort"/> flag.
+		/// </summary>
+		[DefaultValue(true)]
+		public bool HasSorting { get; set; } = true;
 
 		/// <summary>
 		/// Gets or sets whether this column shows a filter input in the filter row. Defaults to <c>true</c>.
-		/// Ignored when <see cref="CanFilter"/> is <c>false</c>.
+		/// Ignored when the column does not have the <see cref="DataGridColumnFlags.CanFilter"/> flag.
 		/// </summary>
 		[DefaultValue(true)]
 		public bool HasFilter { get; set; } = true;
@@ -47,7 +81,7 @@ namespace Myra.Graphics2D.UI.Data
 
 			set
 			{
-				if (!CanFilter)
+				if (!Flags.HasFlag(DataGridColumnFlags.CanFilter))
 				{
 					throw new Exception($"Column of type {GetType()} doesn't support filtering.");
 				}

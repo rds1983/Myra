@@ -27,7 +27,15 @@ Property|Description
 --------|-----------
 `Format`|Optional format string applied to the value (e.g. `"{0:C2}"`). When `null`, `ToString()` is used.
 
-Both types provide convenience constructors:
+Additional built-in column types are provided:
+
+Type|Description|Flags
+----|-----------|-----
+`DataGridTextColumn`|Renders cell values as text|`DataGridColumnFlags.All`
+`DataGridCheckBoxColumn`|Renders boolean values as read-only check boxes; throws when bound to a non-boolean value|`DataGridColumnFlags.CanSort`
+`DataGridImageColumn`|Renders `IImage` values as 32×32 thumbnails; throws when bound to a non-image value|`DataGridColumnFlags.None`
+
+Both text and check box columns provide convenience constructors:
 
 ```c#
 // Using object initializer
@@ -38,6 +46,9 @@ var col2 = new DataGridTextColumn("Price", "Price", 100, "{0:C2}");
 
 // Using constructor with property and width only (no header)
 var col3 = new DataGridTextColumn("Name", 120);
+
+// Check box column bound to an Active boolean property
+var col4 = new DataGridCheckBoxColumn("Active", "Active", 60);
 ```
 
 ## Index Column
@@ -56,12 +67,12 @@ var dataGrid = new DataGrid
 ```
 
 ## Custom Columns
-Subclass [DataGridColumnBase](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.yml) and override [CreateWidget](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.yml#Myra_Graphics2D_UI_Data_DataGridColumnBase_CreateWidget_System_Object_) to control how each cell is rendered:
+Subclass [DataGridColumnBase](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.yml), override [CreateWidget](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.yml#Myra_Graphics2D_UI_Data_DataGridColumnBase_CreateWidget_System_Object_) to control how each cell is rendered, and override [Flags](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.yml#Myra_Graphics2D_UI_Data_DataGridColumnBase_Flags) to declare which grid capabilities the column supports:
 
 ```c#
 public class DataGridBoolColumn : DataGridColumnBase
 {
-    public override bool CanFilter => false;
+    public override DataGridColumnFlags Flags => DataGridColumnFlags.None;
 
     public override Widget CreateWidget(object value)
     {
@@ -128,12 +139,12 @@ Property|Description
 `HasFilter`|Whether filter inputs are displayed below the header (default `true`)
 `FilterStringComparison`|Default string comparison used when matching filter text against cell values (default `CurrentCultureIgnoreCase`)
 
-A column type must override `CanFilter` to return `true` to support filtering. `DataGridTextColumn` does this by default. Custom columns that don't support filtering override it to return `false`:
+A column type must declare the `DataGridColumnFlags.CanFilter` flag in its `Flags` override to support filtering. `DataGridTextColumn` does this by default. Custom columns that don't support filtering return `DataGridColumnFlags.None`:
 
 ```c#
 public class DataGridBoolColumn : DataGridColumnBase
 {
-    public override bool CanFilter => false;
+    public override DataGridColumnFlags Flags => DataGridColumnFlags.None;
     ...
 }
 ```
@@ -187,6 +198,13 @@ Property|Description
 `SortAscendingImage`|Image displayed next to the header when sorted ascending
 `SortDescendingImage`|Image displayed next to the header when sorted descending
 
+A column only becomes sortable when it declares the `DataGridColumnFlags.CanSort` flag in its `Flags` override and `HasSorting` is `true`. Each column can be individually disabled for sorting via `HasSorting` even when sorting is globally enabled:
+
+```c#
+// Disable interactive sorting for the "Image" column
+imageColumn.HasSorting = false;
+```
+
 Sorting can also be applied programmatically:
 
 ```c#
@@ -195,7 +213,7 @@ dataGrid.SortDirection = ListSortDirection.Descending;
 ```
 
 ## Header Row
-When at least one column has a non-empty `Header`, the first row is treated as a header. It is excluded from hover highlighting and selection and is always visible regardless of the scroll position. Header cells are rendered as buttons.
+The first row is always treated as a header. It is excluded from hover highlighting and selection and is always visible regardless of the scroll position. Header cells are rendered as buttons; when `SortableHeaders` is enabled and the column supports sorting (declared via `Flags` and `HasSorting`), clicking a header cell sorts the data by that column.
 
 ## Styling
 DataGrid look and feel is controlled through a [DataGridStyle](~/api/Myra.Graphics2D.UI.Styles.DataGridStyle.yml), which inherits from [GridStyle](~/api/Myra.Graphics2D.UI.Styles.GridStyle.yml), assigned via the active [Stylesheet](~/api/Myra.Graphics2D.UI.Styles.Stylesheet.yml).

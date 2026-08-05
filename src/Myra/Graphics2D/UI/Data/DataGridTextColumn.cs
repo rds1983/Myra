@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace Myra.Graphics2D.UI.Data
+﻿namespace Myra.Graphics2D.UI.Data
 {
 	/// <summary>
 	/// A DataGrid column that displays text values, inheriting configuration from <see cref="DataGridColumnBase"/>.
@@ -14,7 +12,7 @@ namespace Myra.Graphics2D.UI.Data
 		public string Format { get; set; }
 
 		/// <inheritdoc/>
-		public override bool CanFilter => true;
+		public override DataGridColumnFlags Flags => DataGridColumnFlags.All;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DataGridTextColumn"/> class with default values.

@@ -774,10 +774,6 @@ namespace Myra.Graphics2D.UI.Data
 			for (var i = 0; i < Columns.Length; ++i)
 			{
 				var column = Columns[i];
-				if (string.IsNullOrEmpty(column.Header))
-				{
-					continue;
-				}
 
 				Widget cellContent;
 
@@ -815,28 +811,26 @@ namespace Myra.Graphics2D.UI.Data
 
 				cellContent.HorizontalAlignment = HorizontalAlignment.Center;
 
-				Widget headerCell;
-				if (SortableHeaders)
+				var headerButton = new Button
 				{
-					var headerButton = new Button
-					{
-						Content = cellContent,
-						HorizontalAlignment = HorizontalAlignment.Stretch,
-						ClipToBounds = true,
-						Tag = i
-					};
+					Content = cellContent,
+					HorizontalAlignment = HorizontalAlignment.Stretch,
+					ClipToBounds = true,
+					Tag = i
+				};
 
+				if (SortableHeaders && column.Flags.HasFlag(DataGridColumnFlags.CanSort) && column.HasSorting)
+				{
 					headerButton.Click += HeaderCell_Click;
-					headerCell = headerButton;
 				}
 				else
 				{
-					headerCell = cellContent;
+					headerButton.ReadOnly = true;
 				}
 
-				Grid.SetRow(headerCell, 0);
-				Grid.SetColumn(headerCell, i + ColumnShift);
-				_grid.Widgets.Add(headerCell);
+				Grid.SetRow(headerButton, 0);
+				Grid.SetColumn(headerButton, i + ColumnShift);
+				_grid.Widgets.Add(headerButton);
 			}
 		}
 
@@ -875,7 +869,7 @@ namespace Myra.Graphics2D.UI.Data
 			for (var i = 0; i < Columns.Length; ++i)
 			{
 				var column = Columns[i];
-				if (!column.CanFilter || !column.HasFilter)
+				if (!column.Flags.HasFlag(DataGridColumnFlags.CanFilter) || !column.HasFilter)
 				{
 					continue;
 				}

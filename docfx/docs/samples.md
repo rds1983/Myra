@@ -121,6 +121,11 @@ This sample demonstrates integrating ScottPlot, a .NET charting library, with My
 
 This sample demonstrates integrating NvgSharp with Myra to create a custom widget that renders NanoVG-style 2D vector graphics within the Myra UI framework. The `NvgCanvasWidget` bridges NvgSharp's vector drawing capabilities with Myra's widget system, allowing developers to use NanoVG's drawing API for shapes, gradients, text, and images inside Myra widgets. The sample displays a split-pane layout with an NvgSharp-rendered canvas alongside interactive controls, showing how third-party vector graphics libraries can be seamlessly integrated into Myra applications.
 
+### TextureAtlasViewer
+[View on GitHub](https://github.com/MyraUI/Myra/tree/master/samples/Myra.Samples.TextureAtlasViewer)
+
+This sample loads a texture atlas (`.xmat`) from the command line and displays every region in a `DataGrid`. It demonstrates the built-in image and check box column types: each row shows the region rendered as a 32×32 thumbnail via `DataGridImageColumn`, its size as text, whether it is a nine-patch region via a read-only `DataGridCheckBoxColumn`, and its name. The grid occupies the left half of the window with a fixed width, while a detail panel on the right displays the image of the selected row, updated through the grid's `SelectedIndexChanged` event.
+
 ### PlatformAgnostic Family
 
 The PlatformAgnostic samples demonstrate how to use Myra.PlatformAgnostic, a cross-platform graphics abstraction layer. Multiple backend implementations are provided to show integration with different graphics frameworks.

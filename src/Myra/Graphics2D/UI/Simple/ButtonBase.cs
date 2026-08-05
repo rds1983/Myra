@@ -1,6 +1,7 @@
 ﻿using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using Myra.Events;
+using System.ComponentModel;
 
 namespace Myra.Graphics2D.UI
 {
@@ -10,6 +11,13 @@ namespace Myra.Graphics2D.UI
 	public abstract class ButtonBase : ContentControl
 	{
 		private bool _isClicked = false;
+
+		/// <summary>
+		/// Gets or sets whether the button ignores input. When <c>true</c>, the button cannot be
+		/// pressed, clicked, or toggled, though it remains fully rendered.
+		/// </summary>
+		[DefaultValue(false)]
+		public bool ReadOnly { get; set; }
 
 		/// <summary>
 		/// Occurs when the button is clicked.
@@ -41,7 +49,7 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnTouchUp();
 
-			if (!Enabled)
+			if (!Enabled || ReadOnly)
 			{
 				return;
 			}
@@ -62,7 +70,7 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnTouchDown();
 
-			if (!Enabled)
+			if (!Enabled || ReadOnly)
 			{
 				return;
 			}
