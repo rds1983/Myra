@@ -1,96 +1,81 @@
+using Myra.Graphics2D;
 using Myra.Graphics2D.TextureAtlases;
-using Myra.Graphics2D.UI;
+using Myra.Graphics2D.UI.Data;
 using Myra.Graphics2D.UI.Styles;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MyraPad.UI
 {
 	public partial class ChooseTextureRegionDialog
 	{
-		private readonly Dictionary<int, string> _keys = new Dictionary<int, string>();
+		private class Record
+		{
+			private readonly TextureRegion _region;
+
+			public TextureRegion Image => _region;
+
+			public string Size => $"{_region.Size.X}x{_region.Size.Y}";
+
+			public bool NP => _region is NinePatchRegion;
+
+			public string Name => _region.Name;
+
+			/// <summary>
+			/// Initializes a new instance of the <see cref="Record"/> class wrapping the specified region.
+			/// </summary>
+			/// <param name="region">The texture atlas region to display.</param>
+			public Record(TextureRegion region)
+			{
+				_region = region ?? throw new ArgumentNullException(nameof(region));
+			}
+		}
+
+		private readonly DataGrid _dataGrid;
 
 		private Stylesheet Stylesheet => Studio.Instance.Project.Stylesheet;
 
-		public TextureRegion Image => Stylesheet.Atlas.Regions[_keys[_gridData.SelectedRowIndex.Value]];
+		public TextureRegion Image => ((Record)_dataGrid.SelectedItem).Image;
 
 
 		public ChooseTextureRegionDialog()
 		{
 			BuildUI();
 
-			RebuildList();
+			// Build the grid with an image thumbnail, size text, nine-patch check box, and name columns
+			_dataGrid = new DataGrid();
+			var columns = new DataGridColumnBase[]
+			{
+				new DataGridImageColumn("Image"),
+				new DataGridTextColumn("Size"),
+				new DataGridCheckBoxColumn("NP"),
+				new DataGridTextColumn("Name")
+			};
 
-			_textFilter.TextChanged += (s, a) => RebuildList();
-			_gridData.SelectedIndexChanged += (s, a) => UpdateEnabled();
+			_dataGrid.Columns = columns.ToArray();
+
+			// Make the name column fill the remaining space
+			_dataGrid.FillColumnIndex = 3;
+
+			var data = new List<Record>();
+			foreach (var pair in Stylesheet.Atlas.Regions)
+			{
+				data.Add(new Record(pair.Value));
+			}
+
+			_dataGrid.Data = data;
+
+			_dataGrid.SelectedIndexChanged += (s, a) => UpdateEnabled();
+
+			Content = _dataGrid;
 
 			UpdateEnabled();
 		}
 
-		private void RebuildList()
-		{
-			_gridData.Widgets.Clear();
-			_keys.Clear();
-
-			var row = 0;
-			foreach (var pair in Stylesheet.Atlas.Regions)
-			{
-				var region = pair.Value;
-
-				if (!string.IsNullOrEmpty(_textFilter.Text) && !region.Name.Contains(_textFilter.Text))
-				{
-					continue;
-				}
-
-				var image = new Image
-				{
-					Width = 32,
-					Height = 32,
-					Renderable = region
-				};
-
-				Grid.SetRow(image, row);
-				_gridData.Widgets.Add(image);
-
-				var labelSize = new Label
-				{
-					Text = $"{region.Size.X}x{region.Size.Y}",
-					VerticalAlignment = VerticalAlignment.Center
-				};
-
-				Grid.SetColumn(labelSize, 1);
-				Grid.SetRow(labelSize, row);
-				_gridData.Widgets.Add(labelSize);
-
-				var checkNinePatch = new CheckButton
-				{
-					IsChecked = region is NinePatchRegion,
-					Enabled = false,
-					VerticalAlignment = VerticalAlignment.Center
-				};
-
-				Grid.SetColumn(checkNinePatch, 2);
-				Grid.SetRow(checkNinePatch, row);
-				_gridData.Widgets.Add(checkNinePatch);
-
-				var labelName = new Label
-				{
-					Text = region.Name,
-					VerticalAlignment = VerticalAlignment.Center
-				};
-
-				Grid.SetColumn(labelName, 3);
-				Grid.SetRow(labelName, row);
-				_gridData.Widgets.Add(labelName);
-
-				_keys[row] = pair.Key;
-
-				++row;
-			}
-		}
-
 		private void UpdateEnabled()
 		{
-			ButtonOk.Enabled = _gridData.SelectedRowIndex != null;
+			ButtonOk.Enabled = _dataGrid.SelectedRowIndex != null;
 		}
 	}
 }
