@@ -124,6 +124,8 @@ This sample demonstrates integrating NvgSharp with Myra to create a custom widge
 ### TextureAtlasViewer
 [View on GitHub](https://github.com/MyraUI/Myra/tree/master/samples/Myra.Samples.TextureAtlasViewer)
 
+![TextureAtlasViewer Sample](~/images/samples/TextureAtlasViewer.png)
+
 This sample loads a texture atlas (`.xmat`) from the command line and displays every region in a `DataGrid`. It demonstrates the built-in image and check box column types: each row shows the region rendered as a 32×32 thumbnail via `DataGridImageColumn`, its size as text, whether it is a nine-patch region via a read-only `DataGridCheckBoxColumn`, and its name. The grid occupies the left half of the window with a fixed width, while a detail panel on the right displays the image of the selected row, updated through the grid's `SelectedIndexChanged` event.
 
 ### PlatformAgnostic Family
