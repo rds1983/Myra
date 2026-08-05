@@ -53,8 +53,8 @@ public class TextureAtlasViewerGame : Game
 		var columns = new DataGridColumnBase[]
 		{
 			new DataGridImageColumn("Image"),
-			new DataGridTextColumn("Size"),
-			new DataGridCheckBoxColumn("IsNinePatch"),
+			new DataGridTextColumn("Size") { HasFilter = false, HasSorting = false },
+			new DataGridCheckBoxColumn("NP"),
 			new DataGridTextColumn("Name")
 		};
 

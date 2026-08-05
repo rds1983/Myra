@@ -24,7 +24,7 @@ public class Record
 	/// <summary>
 	/// Gets whether the region is a nine-patch region.
 	/// </summary>
-	public bool IsNinePatch => _region is NinePatchRegion;
+	public bool NP => _region is NinePatchRegion;
 
 	/// <summary>
 	/// Gets the name of the region.
