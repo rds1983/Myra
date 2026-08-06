@@ -363,7 +363,11 @@ namespace Myra.Graphics2D.UI.Data
 			}
 		}
 
-		[Category("Appearance")]
+		/// <summary>
+		/// Gets or sets the width of the row-number index column. Defaults to <c>50</c>.
+		/// Set to <c>null</c> to hide the index column.
+		/// </summary>
+		[Category("Behavior")]
 		[DefaultValue(50)]
 		public int? IndexColumnWidth
 		{
@@ -386,6 +390,18 @@ namespace Myra.Graphics2D.UI.Data
 				InvalidateMeasure();
 			}
 		}
+
+		/// <summary>
+		/// Gets or sets the horizontal alignment of the index column header text. Defaults to <see cref="HorizontalAlignment.Left"/>.
+		/// </summary>
+		[DefaultValue(HorizontalAlignment.Left)]
+		public HorizontalAlignment IndexColumnHeaderHorizontalAlignment { get; set; } = HorizontalAlignment.Left;
+
+		/// <summary>
+		/// Gets or sets the horizontal alignment of the index column cell numbers. Defaults to <see cref="HorizontalAlignment.Left"/>.
+		/// </summary>
+		[DefaultValue(HorizontalAlignment.Left)]
+		public HorizontalAlignment IndexColumnCellHorizontalAlignment { get; set; } = HorizontalAlignment.Left;
 
 		/// <summary>
 		/// Gets or sets the number of rows to scroll per mouse wheel tick or touch drag step.
@@ -743,7 +759,8 @@ namespace Myra.Graphics2D.UI.Data
 				var indexHeaderCell = new Label
 				{
 					Text = "#",
-					ClipToBounds = true
+					ClipToBounds = true,
+					HorizontalAlignment = IndexColumnHeaderHorizontalAlignment
 				};
 				Grid.SetRow(indexHeaderCell, 0);
 				Grid.SetColumn(indexHeaderCell, 0);
@@ -1068,7 +1085,8 @@ namespace Myra.Graphics2D.UI.Data
 						var cell = new Label
 						{
 							Text = row.ToString(),
-							ClipToBounds = true
+							ClipToBounds = true,
+							HorizontalAlignment = IndexColumnHeaderHorizontalAlignment
 						};
 						Grid.SetRow(cell, gridRow);
 						Grid.SetColumn(cell, 0);
@@ -1176,7 +1194,7 @@ namespace Myra.Graphics2D.UI.Data
 				}
 			}
 
-			for(var i = 0; i < Columns.Length; ++i)
+			for (var i = 0; i < Columns.Length; ++i)
 			{
 				var column = Columns[i];
 				result.X += column.Width;

@@ -52,17 +52,18 @@ var col4 = new DataGridCheckBoxColumn("Active", "Active", 60);
 ```
 
 ## Index Column
-DataGrid optionally displays a row-number index column as the first column (enabled by default). Control it with:
+DataGrid optionally displays a row-number index column as the first column (enabled by default). Set `IndexColumnWidth` to `null` to hide it.
 
 Property|Description
 --------|-----------
-`HasIndexColumn`|Set to `false` to hide the index column
-`IndexColumnWidth`|Width of the index column in pixels (default `50`)
+`IndexColumnWidth`|Width of the index column in pixels (default `50`); set to `null` to hide the index column
+`IndexColumnHeaderHorizontalAlignment`|Horizontal alignment of the index column header text (default `Left`)
+`IndexColumnCellHorizontalAlignment`|Horizontal alignment of the index column cell numbers (default `Left`)
 
 ```c#
 var dataGrid = new DataGrid
 {
-    HasIndexColumn = false
+    IndexColumnWidth = null // Hide the index column
 };
 ```
 

@@ -50,12 +50,32 @@ public class TextureAtlasViewerGame : Game
 
 		// Build the grid with an image thumbnail, size text, nine-patch check box, and name columns
 		_dataGrid = new DataGrid();
+		_dataGrid.IndexColumnHeaderHorizontalAlignment = _dataGrid.IndexColumnHeaderHorizontalAlignment = HorizontalAlignment.Center;
+
 		var columns = new DataGridColumnBase[]
 		{
-			new DataGridImageColumn("Image"),
-			new DataGridTextColumn("Size") { HasFilter = false, HasSorting = false },
-			new DataGridCheckBoxColumn("NP"),
+			new DataGridImageColumn("Image")
+			{
+				HeaderHorizontalAlignment = HorizontalAlignment.Center,
+				CellHorizontalAlignment = HorizontalAlignment.Center
+			},
+			new DataGridTextColumn("Size")
+			{
+				HasFilter = false,
+				HasSorting = false,
+				HeaderHorizontalAlignment = HorizontalAlignment.Center,
+				CellHorizontalAlignment = HorizontalAlignment.Center
+			},
+			new DataGridCheckBoxColumn("NP")
+			{
+				HeaderHorizontalAlignment = HorizontalAlignment.Center,
+				CellHorizontalAlignment = HorizontalAlignment.Center
+			},
 			new DataGridTextColumn("Name", 300)
+						{
+				HeaderHorizontalAlignment = HorizontalAlignment.Center,
+				CellHorizontalAlignment = HorizontalAlignment.Center
+			}
 		};
 
 		_dataGrid.Columns = columns.ToArray();
