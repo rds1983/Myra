@@ -925,24 +925,11 @@ namespace Myra.Graphics2D.UI.Data
 			_sourceData[row] = new RowData(row, item, gridValues);
 		}
 
-		private void UpdateSourceData()
-		{
-			if (_sourceData != null)
-			{
-				return;
-			}
-
-			_sourceData = new RowData[_data.Count];
-			for (var row = 0; row < _data.Count; ++row)
-			{
-				UpdateSourceDataRow(row);
-			}
-		}
-
 		private void UpdateVisualData()
 		{
-			if (_visualData != null)
+			if (_visualData != null || _sourceData == null)
 			{
+				// Visual data is already up to date or source data is not available yet
 				return;
 			}
 
@@ -1012,7 +999,21 @@ namespace Myra.Graphics2D.UI.Data
 
 		private void UpdateData()
 		{
-			UpdateSourceData();
+			if (_data == null)
+			{
+				// No data to process
+				return;
+			}
+
+			if (_sourceData == null)
+			{
+				_sourceData = new RowData[_data.Count];
+				for (var row = 0; row < _data.Count; ++row)
+				{
+					UpdateSourceDataRow(row);
+				}
+			}
+
 			UpdateVisualData();
 		}
 
