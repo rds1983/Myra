@@ -43,14 +43,14 @@ public partial class MainForm
 		_checkShowGridLines.IsChecked = _dataGrid.ShowGridLines;
 		_checkResizableColumns.IsChecked = _dataGrid.ResizableColumns;
 		_checkHasHeader.IsChecked = _dataGrid.HasHeader;
-		_checkHasIndexColumn.IsChecked = _dataGrid.HasIndexColumn;
+		_checkHasIndexColumn.IsChecked = _dataGrid.IndexColumnWidth != null;
 		_checkSortableHeaders.IsChecked = _dataGrid.SortableHeaders;
 		_checkHasFilter.IsChecked = _dataGrid.HasFilter;
 
 		_checkShowGridLines.IsCheckedChanged += (s, a) => _dataGrid.ShowGridLines = _checkShowGridLines.IsChecked;
 		_checkResizableColumns.IsCheckedChanged += (s, a) => _dataGrid.ResizableColumns = _checkResizableColumns.IsChecked;
 		_checkHasHeader.IsCheckedChanged += (s, a) => _dataGrid.HasHeader = _checkHasHeader.IsChecked;
-		_checkHasIndexColumn.IsCheckedChanged += (s, a) => _dataGrid.HasIndexColumn = _checkHasIndexColumn.IsChecked;
+		_checkHasIndexColumn.IsCheckedChanged += (s, a) => _dataGrid.IndexColumnWidth = _checkHasIndexColumn.IsChecked ? 50 : null;
 		_checkSortableHeaders.IsCheckedChanged += (s, a) => _dataGrid.SortableHeaders = _checkSortableHeaders.IsChecked;
 		_checkHasFilter.IsCheckedChanged += (s, a) => _dataGrid.HasFilter = _checkHasFilter.IsChecked;
 

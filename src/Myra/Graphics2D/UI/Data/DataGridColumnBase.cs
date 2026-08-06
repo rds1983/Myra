@@ -72,6 +72,18 @@ namespace Myra.Graphics2D.UI.Data
 		public bool HasFilter { get; set; } = true;
 
 		/// <summary>
+		/// Gets or sets the horizontal alignment of the column header text. Defaults to <see cref="HorizontalAlignment.Left"/>.
+		/// </summary>
+		[DefaultValue(HorizontalAlignment.Left)]
+		public HorizontalAlignment HeaderHorizontalAlignment { get; set; } = HorizontalAlignment.Left;
+
+		/// <summary>
+		/// Gets or sets the horizontal alignment of the cell content in this column. Defaults to <see cref="HorizontalAlignment.Left"/>.
+		/// </summary>
+		[DefaultValue(HorizontalAlignment.Left)]
+		public HorizontalAlignment CellHorizontalAlignment { get; set; } = HorizontalAlignment.Left;
+
+		/// <summary>
 		/// Gets or sets the filter text applied to this column. Rows whose cell value does not contain
 		/// this text are hidden. Setting this property on a column that does not support filtering throws an exception.
 		/// </summary>

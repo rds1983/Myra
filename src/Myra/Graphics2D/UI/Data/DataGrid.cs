@@ -54,10 +54,9 @@ namespace Myra.Graphics2D.UI.Data
 		private Rectangle _verticalScrollbarFrame, _verticalScrollbarThumb;
 		private int _startRow;
 		private DataGridColumnBase[] _columns;
-		private bool _hasIndexColumn = true;
 		private int? _startBoundsPos;
 		private int _thumbMaximumY;
-		private int _indexColumnWidth = 50;
+		private int? _indexColumnWidth = 50;
 		private int? _resizingColumnIndex = null;
 		private int _resizeStartX;
 		private int _resizeOriginalWidth;
@@ -323,33 +322,6 @@ namespace Myra.Graphics2D.UI.Data
 		public IImage SortDescendingImage { get; set; }
 
 		/// <summary>
-		/// Gets or sets the width in pixels of the optional row-index column displayed at the far left.
-		/// </summary>
-		[Category("Appearance")]
-		[DefaultValue(50)]
-		public int IndexColumnWidth
-		{
-			get => _indexColumnWidth;
-
-			set
-			{
-				if (value <= 0)
-				{
-					throw new ArgumentOutOfRangeException(nameof(value));
-				}
-
-				if (value == _indexColumnWidth)
-				{
-					return;
-				}
-
-				_indexColumnWidth = value;
-				Invalidate(true);
-				InvalidateMeasure();
-			}
-		}
-
-		/// <summary>
 		/// Gets or sets a value indicating whether columns can be resized by dragging the boundary between header cells.
 		/// </summary>
 		[Category("Behavior")]
@@ -391,22 +363,25 @@ namespace Myra.Graphics2D.UI.Data
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets a value indicating whether a row-number index column is displayed as the first column.
-		/// </summary>
-		[Category("Behavior")]
-		[DefaultValue(true)]
-		public bool HasIndexColumn
+		[Category("Appearance")]
+		[DefaultValue(50)]
+		public int? IndexColumnWidth
 		{
-			get => _hasIndexColumn;
+			get => _indexColumnWidth;
+
 			set
 			{
-				if (value == _hasIndexColumn)
+				if (value != null && value.Value <= 0)
+				{
+					throw new ArgumentOutOfRangeException(nameof(value));
+				}
+
+				if (value == _indexColumnWidth)
 				{
 					return;
 				}
 
-				_hasIndexColumn = value;
+				_indexColumnWidth = value;
 				Invalidate(true);
 				InvalidateMeasure();
 			}
@@ -654,7 +629,7 @@ namespace Myra.Graphics2D.UI.Data
 			{
 				var result = 0;
 
-				if (HasIndexColumn)
+				if (IndexColumnWidth != null)
 				{
 					++result;
 				}
@@ -733,9 +708,9 @@ namespace Myra.Graphics2D.UI.Data
 		{
 			_grid.ColumnsProportions.Clear();
 
-			if (HasIndexColumn)
+			if (IndexColumnWidth != null)
 			{
-				_grid.ColumnsProportions.Add(new Proportion(ProportionType.Pixels, IndexColumnWidth));
+				_grid.ColumnsProportions.Add(new Proportion(ProportionType.Pixels, IndexColumnWidth.Value));
 			}
 
 			for (var i = 0; i < _columns.Length; ++i)
@@ -763,7 +738,7 @@ namespace Myra.Graphics2D.UI.Data
 				return;
 			}
 
-			if (HasIndexColumn)
+			if (IndexColumnWidth != null)
 			{
 				var indexHeaderCell = new Label
 				{
@@ -813,7 +788,7 @@ namespace Myra.Graphics2D.UI.Data
 					};
 				}
 
-				cellContent.HorizontalAlignment = HorizontalAlignment.Center;
+				cellContent.HorizontalAlignment = column.HeaderHorizontalAlignment;
 
 				var headerButton = new Button
 				{
@@ -1088,7 +1063,7 @@ namespace Myra.Graphics2D.UI.Data
 					var count = _visibleRowsIndices.Count;
 					var gridRow = count + RowShift;
 
-					if (HasIndexColumn)
+					if (IndexColumnWidth != null)
 					{
 						var cell = new Label
 						{
@@ -1111,6 +1086,8 @@ namespace Myra.Graphics2D.UI.Data
 						{
 							continue;
 						}
+
+						cell.HorizontalAlignment = column.CellHorizontalAlignment;
 
 						cell.ClipToBounds = true;
 
@@ -1189,9 +1166,9 @@ namespace Myra.Graphics2D.UI.Data
 				return result;
 			}
 
-			if (HasIndexColumn)
+			if (IndexColumnWidth != null)
 			{
-				result.X += IndexColumnWidth;
+				result.X += IndexColumnWidth.Value;
 
 				if (Columns.Length > 0)
 				{
@@ -1543,7 +1520,11 @@ namespace Myra.Graphics2D.UI.Data
 				}
 
 				_grid.ColumnsProportions[rci].Value = newWidth;
-				Columns[rci - ColumnShift].Width = newWidth;
+
+				if (rci >= ColumnShift)
+				{
+					Columns[rci - ColumnShift].Width = newWidth;
+				}
 			}
 			else
 			{
@@ -1552,7 +1533,10 @@ namespace Myra.Graphics2D.UI.Data
 				var newWidth = _resizeOriginalWidth + deltaX;
 				newWidth = Mathematics.Clamp(newWidth, MinColumnWidth, totalWidth - MinColumnWidth);
 				_grid.ColumnsProportions[rci].Value = newWidth;
-				Columns[rci - ColumnShift].Width = newWidth;
+				if (rci >= ColumnShift)
+				{
+					Columns[rci - ColumnShift].Width = newWidth;
+				}
 
 				if (rci < _grid.ColumnsProportions.Count - 1)
 				{
