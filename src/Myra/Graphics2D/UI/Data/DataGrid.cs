@@ -1183,7 +1183,7 @@ namespace Myra.Graphics2D.UI.Data
 		/// <inheritdoc/>
 		protected override Point InternalMeasure(Point availableSize)
 		{
-			var result = Point.Zero;
+			var result = Mathematics.PointZero;
 			if (Columns == null)
 			{
 				return result;
