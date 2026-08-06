@@ -153,6 +153,7 @@ namespace Myra.Graphics2D.UI.Data
 
 				_columns = value;
 				Invalidate(true);
+				InvalidateMeasure();
 			}
 		}
 
@@ -344,6 +345,7 @@ namespace Myra.Graphics2D.UI.Data
 
 				_indexColumnWidth = value;
 				Invalidate(true);
+				InvalidateMeasure();
 			}
 		}
 
@@ -406,6 +408,7 @@ namespace Myra.Graphics2D.UI.Data
 
 				_hasIndexColumn = value;
 				Invalidate(true);
+				InvalidateMeasure();
 			}
 		}
 
@@ -561,6 +564,7 @@ namespace Myra.Graphics2D.UI.Data
 
 				_data = value;
 				Invalidate(false, InvalidateLevelData.SourceData);
+				InvalidateMeasure();
 			}
 		}
 
@@ -1174,6 +1178,44 @@ namespace Myra.Graphics2D.UI.Data
 			base.InternalArrange();
 
 			Update();
+		}
+
+		/// <inheritdoc/>
+		protected override Point InternalMeasure(Point availableSize)
+		{
+			var result = Point.Zero;
+			if (Columns == null)
+			{
+				return result;
+			}
+
+			if (HasIndexColumn)
+			{
+				result.X += IndexColumnWidth;
+
+				if (Columns.Length > 0)
+				{
+					result.X += ColumnSpacing;
+				}
+			}
+
+			for(var i = 0; i < Columns.Length; ++i)
+			{
+				var column = Columns[i];
+				result.X += column.Width;
+
+				if (i < Columns.Length - 1)
+				{
+					result.X += ColumnSpacing;
+				}
+			}
+
+			if (VerticalScrollingOn)
+			{
+				result.X += VerticalScrollbarWidth;
+			}
+
+			return result;
 		}
 
 		/// <inheritdoc/>

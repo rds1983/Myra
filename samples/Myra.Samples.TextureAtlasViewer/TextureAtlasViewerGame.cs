@@ -55,13 +55,10 @@ public class TextureAtlasViewerGame : Game
 			new DataGridImageColumn("Image"),
 			new DataGridTextColumn("Size") { HasFilter = false, HasSorting = false },
 			new DataGridCheckBoxColumn("NP"),
-			new DataGridTextColumn("Name")
+			new DataGridTextColumn("Name", 300)
 		};
 
 		_dataGrid.Columns = columns.ToArray();
-
-		// Make the name column fill the remaining space
-		_dataGrid.FillColumnIndex = 3;
 
 		// Wrap each region in a Record so it can be bound to the grid by property name
 		var data = new List<Record>();
@@ -76,8 +73,6 @@ public class TextureAtlasViewerGame : Game
 		var rootContainer = new HorizontalStackPanel();
 
 		rootContainer.Widgets.Add(_dataGrid);
-		StackPanel.SetProportionType(_dataGrid, ProportionType.Pixels);
-		StackPanel.SetProportionValue(_dataGrid, 800);
 
 		rootContainer.Widgets.Add(new VerticalSeparator());
 
@@ -111,7 +106,14 @@ public class TextureAtlasViewerGame : Game
 	{
 		var record = (Record)_dataGrid.SelectedItem;
 
-		_image.Renderable = record.Image;
+		if (record != null)
+		{
+			_image.Renderable = record.Image;
+		}
+		else
+		{
+			_image.Renderable = null;
+		}
 	}
 
 	/// <summary>
