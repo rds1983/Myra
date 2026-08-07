@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 
 namespace Myra.Graphics2D.UI
@@ -11,29 +11,33 @@ namespace Myra.Graphics2D.UI
 		Percent
 	}
 
-	/// <summary>
-	/// Represents a widget dimension independent of the legacy nullable pixel width/height properties.
-	/// </summary>
 	public struct Dimension : IEquatable<Dimension>
 	{
-		public static readonly Dimension Auto = new Dimension(DimensionType.Auto);
-		public static readonly Dimension Fill = new Dimension(DimensionType.Fill);
+		public static Dimension Auto => new Dimension(DimensionType.Auto);
+		public static Dimension Fill => new Dimension(DimensionType.Fill);
 
-		public DimensionType Type { get; }
+		public DimensionType Type { get; set; }
+		public float Value { get; set; }
 
-		public float Value { get; }
-
-
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Dimension"/> struct.
+		/// </summary>
+		/// <param name="type">The dimension type.</param>
+		/// <param name="value">The dimension value.</param>
 		public Dimension(DimensionType type, float value = 0.0f)
 		{
 			Type = type;
 			Value = value;
 		}
+
 		public static Dimension Pixel(float value) => new Dimension(DimensionType.Pixel, value);
+
 		public static Dimension Percent(float value) => new Dimension(DimensionType.Percent, value);
+		
+		public static implicit operator Dimension(int value) => Pixel(value);
 
+		public static implicit operator Dimension(float value) => Pixel(value);
 
-		// Returns type based off suffix
 		public static Dimension Parse(string value)
 		{
 			if (value == null)
@@ -59,12 +63,14 @@ namespace Myra.Graphics2D.UI
 
 			if (value.EndsWith("%", StringComparison.Ordinal))
 			{
-				return Percent(ParseFloat(value.Substring(0, value.Length - 1)) / 100.0f);
+				var percent = ParseFloat(value.Substring(0, value.Length - 1));
+				return Percent(percent / 100.0f);
 			}
 
 			if (value.EndsWith("px", StringComparison.OrdinalIgnoreCase))
 			{
-				return Pixel(ParseFloat(value.Substring(0, value.Length - 2)));
+				var pixels = ParseFloat(value.Substring(0, value.Length - 2));
+				return Pixel(pixels);
 			}
 
 			return Pixel(ParseFloat(value));
@@ -80,13 +86,13 @@ namespace Myra.Graphics2D.UI
 				case DimensionType.Percent:
 					return FormatFloat(Value * 100.0f) + "%";
 				default:
-					return FormatFloat(Value) + "px";
+					return FormatFloat(Value);
 			}
 		}
 
 		public bool Equals(Dimension other) => Type == other.Type && Value.Equals(other.Value);
-		public override bool Equals(object obj) => obj is Dimension other && Equals(other);
 
+		public override bool Equals(object obj) => obj is Dimension other && Equals(other);
 
 		public static bool operator ==(Dimension left, Dimension right) => left.Equals(right);
 

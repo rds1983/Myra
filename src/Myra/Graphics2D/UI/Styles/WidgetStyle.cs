@@ -14,22 +14,16 @@ namespace Myra.Graphics2D.UI.Styles
 		public string Id { get; set; }
 
 		/// <summary>
-		/// Gets or sets the fixed width of the widget in pixels, or null for auto-sizing.
+		/// Gets or sets the width of the widget, or null for auto-sizing.
 		/// </summary>
 		[Category("Layout")]
-		public int? Width { get; set; }
-
-		[Category("Layout")]
-		public Dimension? WidthDimension { get; set; }
+		public Dimension? Width { get; set; }
 
 		/// <summary>
-		/// Gets or sets the fixed height of the widget in pixels, or null for auto-sizing.
+		/// Gets or sets the height of the widget, or null for auto-sizing.
 		/// </summary>
 		[Category("Layout")]
-		public int? Height { get; set; }
-
-		[Category("Layout")]
-		public Dimension? HeightDimension { get; set; }
+		public Dimension? Height { get; set; }
 
 		/// <summary>
 		/// Gets or sets the minimum width of the widget in pixels, or null for no minimum.
@@ -148,8 +142,6 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			Width = style.Width;
 			Height = style.Height;
-			WidthDimension = style.WidthDimension;
-			HeightDimension = style.HeightDimension;
 			MinWidth = style.MinWidth;
 			MinHeight = style.MinHeight;
 			MaxWidth = style.MaxWidth;

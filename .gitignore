@@ -264,3 +264,4 @@ __pycache__/
 docfx/api
 !docfx/api/index.md
 docfx/_site
+/src/Myra/Properties/launchSettings.json

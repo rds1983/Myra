@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.Styles;
 using Myra.MML;
@@ -40,25 +40,26 @@ namespace Myra.Tests
 
 			Assert.NotNull(serializer);
 			Assert.Equal(Dimension.Pixel(32), serializer.Deserialize("32px"));
+			Assert.Equal("32", serializer.Serialize(Dimension.Pixel(32)));
 			Assert.Equal("25%", serializer.Serialize(Dimension.Percent(0.25f)));
 		}
 
 		[Fact]
-		public void PixelDimensionsMeasureLikeLegacyWidthAndHeight()
+		public void PixelWidthAndHeightMeasureToFixedSize()
 		{
 			var panel = new Panel
 			{
-				WidthDimension = Dimension.Pixel(80),
-				HeightDimension = Dimension.Pixel(24)
+				Width = Dimension.Pixel(80),
+				Height = Dimension.Pixel(24)
 			};
 
-			Assert.Null(panel.Width);
-			Assert.Null(panel.Height);
+			Assert.Equal(Dimension.Pixel(80), panel.Width);
+			Assert.Equal(Dimension.Pixel(24), panel.Height);
 			Assert.Equal(new Point(80, 24), panel.Measure(new Point(500, 500)));
 		}
 
 		[Fact]
-		public void LegacyWidthAndHeightStillMeasureAsPixels()
+		public void NumericWidthAndHeightStillMeasureAsPixels()
 		{
 			var panel = new Panel
 			{
@@ -66,25 +67,25 @@ namespace Myra.Tests
 				Height = 24
 			};
 
-			Assert.Equal(Dimension.Auto, panel.WidthDimension);
-			Assert.Equal(Dimension.Auto, panel.HeightDimension);
+			Assert.Equal(Dimension.Pixel(80), panel.Width);
+			Assert.Equal(Dimension.Pixel(24), panel.Height);
 			Assert.Equal(new Point(80, 24), panel.Measure(new Point(500, 500)));
 		}
 
 		[Fact]
-		public void LegacyWidthAndHeightClearExplicitDimensions()
+		public void NumericWidthAndHeightReplacePreviousDimensions()
 		{
 			var panel = new Panel
 			{
-				WidthDimension = Dimension.Pixel(80),
-				HeightDimension = Dimension.Pixel(24)
+				Width = Dimension.Percent(0.5f),
+				Height = Dimension.Fill
 			};
 
 			panel.Width = 120;
 			panel.Height = 36;
 
-			Assert.Equal(Dimension.Auto, panel.WidthDimension);
-			Assert.Equal(Dimension.Auto, panel.HeightDimension);
+			Assert.Equal(Dimension.Pixel(120), panel.Width);
+			Assert.Equal(Dimension.Pixel(36), panel.Height);
 			Assert.Equal(new Point(120, 36), panel.Measure(new Point(500, 500)));
 		}
 
@@ -102,11 +103,11 @@ namespace Myra.Tests
 				Height = 24
 			});
 
-			panel.WidthDimension = Dimension.Auto;
-			panel.HeightDimension = Dimension.Auto;
+			panel.Width = Dimension.Auto;
+			panel.Height = Dimension.Auto;
 
-			Assert.Null(panel.Width);
-			Assert.Null(panel.Height);
+			Assert.Equal(Dimension.Auto, panel.Width);
+			Assert.Equal(Dimension.Auto, panel.Height);
 			Assert.Equal(new Point(80, 24), panel.Measure(new Point(500, 500)));
 		}
 
@@ -115,8 +116,8 @@ namespace Myra.Tests
 		{
 			var panel = new Panel
 			{
-				WidthDimension = Dimension.Fill,
-				HeightDimension = Dimension.Fill
+				Width = Dimension.Fill,
+				Height = Dimension.Fill
 			};
 
 			Assert.Equal(new Point(200, 100), panel.Measure(new Point(200, 100)));
@@ -131,8 +132,8 @@ namespace Myra.Tests
 		{
 			var panel = new Panel
 			{
-				WidthDimension = Dimension.Percent(0.5f),
-				HeightDimension = Dimension.Percent(0.25f)
+				Width = Dimension.Percent(0.5f),
+				Height = Dimension.Percent(0.25f)
 			};
 
 			Assert.Equal(new Point(100, 25), panel.Measure(new Point(200, 100)));
@@ -145,42 +146,40 @@ namespace Myra.Tests
 		[Fact]
 		public void CanLoadPixelDimensionsFromMML()
 		{
-			var project = Project.LoadFromXml("<Project><Panel WidthDimension=\"80px\" HeightDimension=\"24px\" /></Project>");
+			var project = Project.LoadFromXml("<Project><Panel Width=\"80px\" Height=\"24px\" /></Project>");
 			var panel = Assert.IsType<Panel>(project.Root);
 
-			Assert.Equal(Dimension.Pixel(80), panel.WidthDimension);
-			Assert.Equal(Dimension.Pixel(24), panel.HeightDimension);
-			Assert.Null(panel.Width);
-			Assert.Null(panel.Height);
+			Assert.Equal(Dimension.Pixel(80), panel.Width);
+			Assert.Equal(Dimension.Pixel(24), panel.Height);
 			Assert.Equal(new Point(80, 24), panel.Measure(new Point(500, 500)));
 		}
 
 		[Fact]
 		public void CanLoadFillAndPercentDimensionsFromMML()
 		{
-			var project = Project.LoadFromXml("<Project><Panel WidthDimension=\"Fill\" HeightDimension=\"25%\" /></Project>");
+			var project = Project.LoadFromXml("<Project><Panel Width=\"Fill\" Height=\"25%\" /></Project>");
 			var panel = Assert.IsType<Panel>(project.Root);
 
-			Assert.Equal(Dimension.Fill, panel.WidthDimension);
-			Assert.Equal(Dimension.Percent(0.25f), panel.HeightDimension);
+			Assert.Equal(Dimension.Fill, panel.Width);
+			Assert.Equal(Dimension.Percent(0.25f), panel.Height);
 			Assert.Equal(new Point(200, 25), panel.Measure(new Point(200, 100)));
 		}
 
 		[Fact]
 		public void SavesImplementedDimensionAttributes()
 		{
-			var project = Project.LoadFromXml("<Project><Panel WidthDimension=\"Fill\" HeightDimension=\"25%\" /></Project>");
+			var project = Project.LoadFromXml("<Project><Panel Width=\"Fill\" Height=\"25%\" /></Project>");
 
 			var element = XDocument.Parse(project.ToXml()).Root.Element("Panel");
 
-			Assert.Equal("Fill", element.Attribute("WidthDimension").Value);
-			Assert.Equal("25%", element.Attribute("HeightDimension").Value);
-			Assert.Null(element.Attribute("Width"));
-			Assert.Null(element.Attribute("Height"));
+			Assert.Equal("Fill", element.Attribute("Width").Value);
+			Assert.Equal("25%", element.Attribute("Height").Value);
+			Assert.Null(element.Attribute("WidthDimension"));
+			Assert.Null(element.Attribute("HeightDimension"));
 		}
 
 		[Fact]
-		public void LegacyWidthMMLDoesNotSaveDimensionAttributes()
+		public void NumericWidthMMLSavesPlainPixelAttributes()
 		{
 			var project = Project.LoadFromXml("<Project><Panel Width=\"80\" Height=\"24\" /></Project>");
 
@@ -198,8 +197,8 @@ namespace Myra.Tests
 			var panel = new Panel();
 			panel.ApplyWidgetStyle(new WidgetStyle
 			{
-				WidthDimension = Dimension.Percent(0.5f),
-				HeightDimension = Dimension.Fill
+				Width = Dimension.Percent(0.5f),
+				Height = Dimension.Fill
 			});
 
 			Assert.Equal(new Point(100, 100), panel.Measure(new Point(200, 100)));
