@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
@@ -68,6 +68,7 @@ namespace Myra.Graphics2D.UI
 		private Thickness _margin, _borderThickness, _padding;
 		private int _left, _top;
 		private int? _minWidth, _minHeight, _maxWidth, _maxHeight, _width, _height;
+		private Dimension _widthDimension, _heightDimension;
 		private int _zIndex;
 		private HorizontalAlignment _horizontalAlignment = HorizontalAlignment.Left;
 		private VerticalAlignment _verticalAlignment = VerticalAlignment.Top;
@@ -199,12 +200,36 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (value == _width)
+				if (value == _width && _widthDimension == Dimension.Auto)
 				{
 					return;
 				}
 
 				_width = value;
+				_widthDimension = Dimension.Auto;
+				InvalidateMeasure();
+				FireSizeChanged();
+			}
+		}
+
+		[Category("Layout")]
+		[DefaultValue("Auto")]
+		public Dimension WidthDimension
+		{
+			get
+			{
+				return _widthDimension;
+			}
+
+			set
+			{
+				if (value == _widthDimension && (!value.Equals(Dimension.Auto) || !_width.HasValue))
+				{
+					return;
+				}
+
+				_widthDimension = value;
+				_width = null;
 				InvalidateMeasure();
 				FireSizeChanged();
 			}
@@ -266,12 +291,36 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (value == _height)
+				if (value == _height && _heightDimension == Dimension.Auto)
 				{
 					return;
 				}
 
 				_height = value;
+				_heightDimension = Dimension.Auto;
+				InvalidateMeasure();
+				FireSizeChanged();
+			}
+		}
+
+		[Category("Layout")]
+		[DefaultValue("Auto")]
+		public Dimension HeightDimension
+		{
+			get
+			{
+				return _heightDimension;
+			}
+
+			set
+			{
+				if (value == _heightDimension && (!value.Equals(Dimension.Auto) || !_height.HasValue))
+				{
+					return;
+				}
+
+				_heightDimension = value;
+				_height = null;
 				InvalidateMeasure();
 				FireSizeChanged();
 			}
@@ -1172,6 +1221,31 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		private int? ResolveWidthDimension(int availableWidth)
+		{
+			return ResolveDimension(_widthDimension, _width, availableWidth);
+		}
+
+		private int? ResolveHeightDimension(int availableHeight)
+		{
+			return ResolveDimension(_heightDimension, _height, availableHeight);
+		}
+
+		private static int? ResolveDimension(Dimension dimension, int? legacy, int availableSize)
+		{
+			switch (dimension.Type)
+			{
+				case DimensionType.Pixel:
+					return (int)dimension.Value;
+				case DimensionType.Fill:
+					return availableSize;
+				case DimensionType.Percent:
+					return (int)(availableSize * dimension.Value);
+				default:
+					return legacy;
+			}
+		}
+
 		/// <summary>
 		/// Measures the widget to determine its desired size based on available space.
 		/// </summary>
@@ -1186,19 +1260,22 @@ namespace Myra.Graphics2D.UI
 
 			Point result;
 
+			var width = ResolveWidthDimension(availableSize.X);
+			var height = ResolveHeightDimension(availableSize.Y);
+
 			// Lerp available size by Width/Height or MaxWidth/MaxHeight
-			if (Width != null && availableSize.X > Width.Value)
+			if (width != null && availableSize.X > width.Value)
 			{
-				availableSize.X = Width.Value;
+				availableSize.X = width.Value;
 			}
 			else if (MaxWidth != null && availableSize.X > MaxWidth.Value)
 			{
 				availableSize.X = MaxWidth.Value;
 			}
 
-			if (Height != null && availableSize.Y > Height.Value)
+			if (height != null && availableSize.Y > height.Value)
 			{
-				availableSize.Y = Height.Value;
+				availableSize.Y = height.Value;
 			}
 			else if (MaxHeight != null && availableSize.Y > MaxHeight.Value)
 			{
@@ -1218,9 +1295,9 @@ namespace Myra.Graphics2D.UI
 			result.Y += MBPHeight;
 
 			// Result lerp
-			if (Width.HasValue)
+			if (width.HasValue)
 			{
-				result.X = Width.Value;
+				result.X = width.Value;
 			}
 			else
 			{
@@ -1235,9 +1312,9 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 
-			if (Height.HasValue)
+			if (height.HasValue)
 			{
-				result.Y = Height.Value;
+				result.Y = height.Value;
 			}
 			else
 			{
@@ -1308,14 +1385,16 @@ namespace Myra.Graphics2D.UI
 
 			// Resolve possible conflict beetween Alignment set to Streth and Size explicitly set
 			var containerSize = _containerBounds.Size();
-			if (HorizontalAlignment == HorizontalAlignment.Stretch && Width != null && Width.Value < containerSize.X)
+			var width = ResolveWidthDimension(containerSize.X);
+			var height = ResolveHeightDimension(containerSize.Y);
+			if (HorizontalAlignment == HorizontalAlignment.Stretch && width != null && width.Value < containerSize.X)
 			{
-				containerSize.X = Width.Value;
+				containerSize.X = width.Value;
 			}
 
-			if (VerticalAlignment == VerticalAlignment.Stretch && Height != null && Height.Value < containerSize.Y)
+			if (VerticalAlignment == VerticalAlignment.Stretch && height != null && height.Value < containerSize.Y)
 			{
-				containerSize.Y = Height.Value;
+				containerSize.Y = height.Value;
 			}
 
 			// Align
@@ -1494,6 +1573,15 @@ namespace Myra.Graphics2D.UI
 		{
 			Width = style.Width;
 			Height = style.Height;
+			if (style.WidthDimension.HasValue)
+			{
+				WidthDimension = style.WidthDimension.Value;
+			}
+
+			if (style.HeightDimension.HasValue)
+			{
+				HeightDimension = style.HeightDimension.Value;
+			}
 			MinWidth = style.MinWidth;
 			MinHeight = style.MinHeight;
 			MaxWidth = style.MaxWidth;
@@ -1909,10 +1997,26 @@ namespace Myra.Graphics2D.UI
 			Top = w.Top;
 			MinWidth = w.MinWidth;
 			MaxWidth = w.MaxWidth;
-			Width = w.Width;
+			if (w.WidthDimension != Dimension.Auto)
+			{
+				WidthDimension = w.WidthDimension;
+			}
+			else
+			{
+				Width = w.Width;
+			}
+
 			MinHeight = w.MinHeight;
 			MaxHeight = w.MaxHeight;
-			Height = w.Height;
+			if (w.HeightDimension != Dimension.Auto)
+			{
+				HeightDimension = w.HeightDimension;
+			}
+			else
+			{
+				Height = w.Height;
+			}
+
 			Margin = w.Margin;
 			BorderThickness = w.BorderThickness;
 			Padding = w.Padding;
