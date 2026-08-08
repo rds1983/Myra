@@ -1,6 +1,7 @@
-﻿#if MONOGAME || FNA
+﻿using System.ComponentModel;
+
+#if MONOGAME || FNA
 using Microsoft.Xna.Framework;
-using System.ComponentModel;
 #elif STRIDE
 using Stride.Core.Mathematics;
 #else
