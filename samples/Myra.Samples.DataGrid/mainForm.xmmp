@@ -39,6 +39,22 @@
           <Label Text="Phone 1" />
         </ComboView>
       </HorizontalStackPanel>
+      <HorizontalStackPanel Spacing="4">
+        <Label Text="Header Alignment:" />
+        <ComboView Id="_comboHeaderAlignment">
+          <Label Text="Left" />
+          <Label Text="Center" />
+          <Label Text="Right" />
+        </ComboView>
+      </HorizontalStackPanel>
+      <HorizontalStackPanel Spacing="4">
+        <Label Text="Cell Alignment:" />
+        <ComboView Id="_comboCellAlignment">
+          <Label Text="Left" />
+          <Label Text="Center" />
+          <Label Text="Right" />
+        </ComboView>
+      </HorizontalStackPanel>
     </HorizontalStackPanel>
     <HorizontalSeparator />
     <HorizontalSplitPane Id="_splitPane" StackPanel.ProportionType="Fill">

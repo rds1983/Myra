@@ -5,7 +5,7 @@ namespace Myra.Graphics2D.UI.Styles
 	/// <summary>
 	/// Style class for split pane splitter handle buttons.
 	/// </summary>
-	public class SplitPanelButtonStyle : ButtonStyle
+	public class SplitPanelButtonStyle : WidgetStyle
 	{
 		/// <summary>
 		/// Gets or sets the width or height of the splitter handle in pixels, or null for default sizing.

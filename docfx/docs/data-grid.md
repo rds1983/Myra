@@ -20,6 +20,8 @@ Property|Description
 `Header`|Text displayed in the column header
 `Property`|Name of the public field or property on the data object to display
 `Width`|Initial width in pixels
+`HeaderHorizontalAlignment`|Horizontal alignment of this column's header text; when `null`, the grid-wide `DataGrid.HeaderHorizontalAlignment` is used
+`CellHorizontalAlignment`|Horizontal alignment of this column's cells; when `null`, the grid-wide `DataGrid.CellHorizontalAlignment` is used
 
 `DataGridTextColumn` adds:
 
@@ -64,8 +66,8 @@ DataGrid optionally displays a row-number index column as the first column (enab
 Property|Description
 --------|-----------
 `IndexColumnWidth`|Width of the index column in pixels (default `50`); set to `null` to hide the index column
-`IndexColumnHeaderHorizontalAlignment`|Horizontal alignment of the index column header text (default `Left`)
-`IndexColumnCellHorizontalAlignment`|Horizontal alignment of the index column cell numbers (default `Left`)
+`IndexColumnHeaderHorizontalAlignment`|Horizontal alignment of the index column header text; when `null`, `HeaderHorizontalAlignment` is used
+`IndexColumnCellHorizontalAlignment`|Horizontal alignment of the index column cell numbers; when `null`, `CellHorizontalAlignment` is used
 
 ```c#
 var dataGrid = new DataGrid
@@ -75,14 +77,14 @@ var dataGrid = new DataGrid
 ```
 
 ## Custom Columns
-Subclass [DataGridColumnBase](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.yml), override [CreateWidget](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.yml#Myra_Graphics2D_UI_Data_DataGridColumnBase_CreateWidget_System_Object_) to control how each cell is rendered, and override [Flags](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.yml#Myra_Graphics2D_UI_Data_DataGridColumnBase_Flags) to declare which grid capabilities the column supports:
+Subclass [DataGridColumnBase](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.yml), override [CreateWidget](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.yml#Myra_Graphics2D_UI_Data_DataGridColumnBase_CreateWidget_System_Object_Myra_Graphics2D_UI_Styles_DataGridStyle_) to control how each cell is rendered, and override [Flags](~/api/Myra.Graphics2D.UI.Data.DataGridColumnBase.yml#Myra_Graphics2D_UI_Data_DataGridColumnBase_Flags) to declare which grid capabilities the column supports:
 
 ```c#
 public class DataGridBoolColumn : DataGridColumnBase
 {
     public override DataGridColumnFlags Flags => DataGridColumnFlags.None;
 
-    public override Widget CreateWidget(object value)
+    public override Widget CreateWidget(object value, DataGridStyle style)
     {
         if (value == null)
             return null;
@@ -93,6 +95,20 @@ public class DataGridBoolColumn : DataGridColumnBase
             Enabled = false
         };
     }
+}
+```
+
+`CreateWidget` receives the current [DataGridStyle](~/api/Myra.Graphics2D.UI.Styles.DataGridStyle.yml) so custom cells can respect the active stylesheet. Use the style-driven helpers (`Widget.ApplyWidgetStyle`, `ButtonBase.ApplyButtonStyle`, `LabelWidget.ApplyLabelStyle`, `ImageButton.ApplyImageButtonStyle`) with the style's `TextCellStyle`, `CheckCellStyle`, `ImageCellStyle`, and `HeaderStyle` members:
+
+```c#
+public override Widget CreateWidget(object value, DataGridStyle style)
+{
+    if (value == null)
+        return null;
+
+    var label = new Label { Text = value.ToString() };
+    label.ApplyLabelStyle(style.TextCellStyle);
+    return label;
 }
 ```
 
@@ -135,9 +151,9 @@ DataGrid provides a vertical scrollbar when the data exceeds the visible area. M
 
 Property|Description
 --------|-----------
-`VerticalScrollBackground`|Image for the scrollbar track
-`VerticalScrollKnob`|Image for the scrollbar thumb
 `ScrollMultiplier`|Rows scrolled per mouse wheel tick (default `10`)
+
+The scrollbar appearance is controlled through `DataGridStyle.VerticalScrollBackground` and `DataGridStyle.VerticalScrollKnob` (see [Styling](#styling)).
 
 ## Filtering
 When `HasFilter` is `true` (default), a filter row is displayed below the header. Each column that supports filtering (e.g. `DataGridTextColumn`) shows a text input where you can type to filter rows. Set `HasFilter = false` to hide filter inputs.
@@ -203,8 +219,8 @@ Property|Description
 `SortableHeaders`|Whether header cells are clickable and trigger sorting (default `true`)
 `SortColumn`|Zero-based index of the column being sorted, or `null` when no sort is applied
 `SortDirection`|`Ascending` or `Descending` (default `Ascending`)
-`SortAscendingImage`|Image displayed next to the header when sorted ascending
-`SortDescendingImage`|Image displayed next to the header when sorted descending
+
+The sort indicator images are configured through `DataGridStyle.HeaderStyle.SortAscendingImage` and `DataGridStyle.HeaderStyle.SortDescendingImage` (see [Styling](#styling)).
 
 A column only becomes sortable when it declares the `DataGridColumnFlags.CanSort` flag in its `Flags` override and `HasSorting` is `true`. Each column can be individually disabled for sorting via `HasSorting` even when sorting is globally enabled:
 
@@ -228,6 +244,11 @@ DataGrid look and feel is controlled through a [DataGridStyle](~/api/Myra.Graphi
 
 Property|Description
 --------|-----------
+`HeaderStyle`|[DataGridHeaderStyle](~/api/Myra.Graphics2D.UI.Styles.DataGridHeaderStyle.yml) applied to header cells, including the label style, sort indicator images and spacing, and content padding
+`FilterStyle`|[TextBoxStyle](~/api/Myra.Graphics2D.UI.Styles.TextBoxStyle.yml) applied to the filter row text inputs
+`TextCellStyle`|[LabelStyle](~/api/Myra.Graphics2D.UI.Styles.LabelStyle.yml) applied to text cell content
+`CheckCellStyle`|[ImageButtonStyle](~/api/Myra.Graphics2D.UI.Styles.ImageButtonStyle.yml) applied to check box cell content
+`ImageCellStyle`|[WidgetStyle](~/api/Myra.Graphics2D.UI.Styles.WidgetStyle.yml) applied to image cell content
 `ShowGridLines`|Whether grid lines are drawn between cells
 `GridLinesColor`|Color of the grid lines
 `ColumnSpacing`|Horizontal padding inside each cell
@@ -236,15 +257,16 @@ Property|Description
 `SelectionHoverBackground`|Brush used for the hovered row/column/cell
 `VerticalScrollBackground`|Image for the scrollbar track
 `VerticalScrollKnob`|Image for the scrollbar thumb
-`SortAscendingImage`|Image for the ascending sort indicator in column headers
-`SortDescendingImage`|Image for the descending sort indicator in column headers
 
 Apply a custom style in code (before creating any DataGrid instances):
 
 ```c#
-Stylesheet.Current.DataGridStyle.ShowGridLines = true;
-Stylesheet.Current.DataGridStyle.GridLinesColor = Color.Gray;
-Stylesheet.Current.DataGridStyle.SelectionHoverBackground = new SolidBrush(Color.FromArgb(40, Color.White));
+var dataGridStyle = Stylesheet.Current.DataGridStyle;
+dataGridStyle.ShowGridLines = true;
+dataGridStyle.GridLinesColor = Color.Gray;
+dataGridStyle.SelectionHoverBackground = new SolidBrush(Color.FromArgb(40, Color.White));
+dataGridStyle.HeaderStyle.SortAscendingImage = mySortUpImage;
+dataGridStyle.TextCellStyle.TextColor = Color.White;
 ```
 
 ## Example

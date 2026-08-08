@@ -1,4 +1,7 @@
-﻿namespace Myra.Graphics2D.UI.Data
+﻿using Myra.Graphics2D.UI.Styles;
+using System;
+
+namespace Myra.Graphics2D.UI.Data
 {
 	/// <summary>
 	/// A DataGrid column that displays text values, inheriting configuration from <see cref="DataGridColumnBase"/>.
@@ -45,11 +48,16 @@
 		}
 
 		/// <inheritdoc/>
-		public override Widget CreateWidget(object value)
+		public override Widget CreateWidget(object value, DataGridStyle style)
 		{
 			if (value == null)
 			{
 				return null;
+			}
+
+			if (style.TextCellStyle == null)
+			{
+				throw new Exception("TextCellStyle is null");
 			}
 
 			string strValue;
@@ -62,10 +70,14 @@
 				strValue = string.Format(Format, value);
 			}
 
-			return new Label
+			var result = new Label(null)
 			{
 				Text = strValue
 			};
+
+			result.ApplyLabelStyle(style.TextCellStyle);
+
+			return result;
 		}
 	}
 }

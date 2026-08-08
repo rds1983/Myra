@@ -67,6 +67,7 @@ namespace Myra.Graphics2D.UI.Styles
 		{
 			TextColor = style.TextColor;
 			DisabledTextColor = style.DisabledTextColor;
+			FocusedTextColor = style.FocusedTextColor;
 			OverTextColor = style.OverTextColor;
 			PressedTextColor = style.PressedTextColor;
 			Font = style.Font;

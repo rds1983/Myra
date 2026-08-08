@@ -53,6 +53,7 @@ namespace Myra.Graphics2D.UI.Styles
 			Image = style.Image;
 			DisabledImage = style.DisabledImage;
 			OverImage = style.OverImage;
+			FocusedImage = style.FocusedImage;
 			PressedImage = style.PressedImage;
 		}
 

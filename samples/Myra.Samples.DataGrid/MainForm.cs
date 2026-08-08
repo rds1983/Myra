@@ -1,3 +1,4 @@
+using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.Data;
 using System;
 using System.Collections.Generic;
@@ -19,11 +20,11 @@ public partial class MainForm
 
 		var columns = new DataGridColumnBase[]
 		{
-			new DataGridTextColumn { Header = "First Name", Property = "FirstName", Width = 100 },
-			new DataGridTextColumn { Header = "Last Name", Property = "LastName", Width = 100 },
-			new DataGridTextColumn { Header = "Company", Property = "Company", Width = 200 },
-			new DataGridTextColumn { Header = "City", Property = "City", Width = 200 },
-			new DataGridTextColumn { Header = "Country", Property = "Country", Width = 200 },
+			new DataGridTextColumn { Header = "First Name", Property = "FirstName", Width = 150 },
+			new DataGridTextColumn { Header = "Last Name", Property = "LastName", Width = 150 },
+			new DataGridTextColumn { Header = "Company", Property = "Company", Width = 150 },
+			new DataGridTextColumn { Header = "City", Property = "City", Width = 150 },
+			new DataGridTextColumn { Header = "Country", Property = "Country", Width = 150 },
 			new DataGridTextColumn { Header = "Email", Property = "Email", Width = 200 },
 			new DataGridTextColumn { Header = "Phone 1", Property = "Phone1", Width = 200 },
 		};
@@ -46,6 +47,8 @@ public partial class MainForm
 		_checkHasIndexColumn.IsChecked = _dataGrid.IndexColumnWidth != null;
 		_checkSortableHeaders.IsChecked = _dataGrid.SortableHeaders;
 		_checkHasFilter.IsChecked = _dataGrid.HasFilter;
+		_comboHeaderAlignment.SelectedIndex = (int)_dataGrid.HeaderHorizontalAlignment;
+		_comboCellAlignment.SelectedIndex = (int)_dataGrid.CellHorizontalAlignment;
 
 		_checkShowGridLines.IsCheckedChanged += (s, a) => _dataGrid.ShowGridLines = _checkShowGridLines.IsChecked;
 		_checkResizableColumns.IsCheckedChanged += (s, a) => _dataGrid.ResizableColumns = _checkResizableColumns.IsChecked;
@@ -53,6 +56,8 @@ public partial class MainForm
 		_checkHasIndexColumn.IsCheckedChanged += (s, a) => _dataGrid.IndexColumnWidth = _checkHasIndexColumn.IsChecked ? 50 : null;
 		_checkSortableHeaders.IsCheckedChanged += (s, a) => _dataGrid.SortableHeaders = _checkSortableHeaders.IsChecked;
 		_checkHasFilter.IsCheckedChanged += (s, a) => _dataGrid.HasFilter = _checkHasFilter.IsChecked;
+		_comboHeaderAlignment.SelectedIndexChanged += (s, a) => _dataGrid.HeaderHorizontalAlignment = (HorizontalAlignment)_comboHeaderAlignment.SelectedIndex;
+		_comboCellAlignment.SelectedIndexChanged += (s, a) => _dataGrid.CellHorizontalAlignment = (HorizontalAlignment)_comboCellAlignment.SelectedIndex;
 
 		_comboFillColumn.SelectedIndexChanged += (s, a) =>
 		{

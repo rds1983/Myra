@@ -11,7 +11,7 @@ namespace Myra.Graphics2D.UI.Styles
 		/// Gets or sets the style applied to list box items.
 		/// </summary>
 		[Browsable(false)]
-		public ButtonStyle ListItemStyle { get; set; }
+		public WidgetStyle ListItemStyle { get; set; }
 
 		/// <summary>
 		/// Gets or sets the style applied to separator lines between list items.
@@ -32,7 +32,7 @@ namespace Myra.Graphics2D.UI.Styles
 		/// <param name="style">The source list box style to copy from.</param>
 		public ListBoxStyle(ListBoxStyle style) : base(style)
 		{
-			ListItemStyle = style.ListItemStyle != null ? new ButtonStyle(style.ListItemStyle) : null;
+			ListItemStyle = style.ListItemStyle != null ? new WidgetStyle(style.ListItemStyle) : null;
 			SeparatorStyle = style.SeparatorStyle != null ? new SeparatorStyle(style.SeparatorStyle) : null;
 		}
 

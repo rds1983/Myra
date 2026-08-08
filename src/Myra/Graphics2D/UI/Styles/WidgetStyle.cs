@@ -151,11 +151,13 @@ namespace Myra.Graphics2D.UI.Styles
 			OverBackground = style.OverBackground;
 			DisabledBackground = style.DisabledBackground;
 			FocusedBackground = style.FocusedBackground;
+			PressedBackground = style.PressedBackground;
 
 			Border = style.Border;
 			OverBorder = style.OverBorder;
 			DisabledBorder = style.DisabledBorder;
 			FocusedBorder = style.FocusedBorder;
+			PressedBorder = style.PressedBorder;
 
 			Margin = style.Margin;
 			BorderThickness = style.BorderThickness;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Myra.Graphics2D.UI.Styles;
+using System;
 using System.ComponentModel;
 
 namespace Myra.Graphics2D.UI.Data
@@ -72,16 +73,16 @@ namespace Myra.Graphics2D.UI.Data
 		public bool HasFilter { get; set; } = true;
 
 		/// <summary>
-		/// Gets or sets the horizontal alignment of the column header text. Defaults to <see cref="HorizontalAlignment.Left"/>.
+		/// Gets or sets the horizontal alignment of this column's header text.
+		/// When <c>null</c>, the DataGrid's <see cref="DataGrid.HeaderHorizontalAlignment"/> is used instead.
 		/// </summary>
-		[DefaultValue(HorizontalAlignment.Left)]
-		public HorizontalAlignment HeaderHorizontalAlignment { get; set; } = HorizontalAlignment.Left;
+		public HorizontalAlignment? HeaderHorizontalAlignment { get; set; } = null;
 
 		/// <summary>
-		/// Gets or sets the horizontal alignment of the cell content in this column. Defaults to <see cref="HorizontalAlignment.Left"/>.
+		/// Gets or sets the horizontal alignment of this column's cell content.
+		/// When <c>null</c>, the DataGrid's <see cref="DataGrid.CellHorizontalAlignment"/> is used instead.
 		/// </summary>
-		[DefaultValue(HorizontalAlignment.Left)]
-		public HorizontalAlignment CellHorizontalAlignment { get; set; } = HorizontalAlignment.Left;
+		public HorizontalAlignment? CellHorizontalAlignment { get; set; } = null;
 
 		/// <summary>
 		/// Gets or sets the filter text applied to this column. Rows whose cell value does not contain
@@ -139,10 +140,12 @@ namespace Myra.Graphics2D.UI.Data
 		}
 
 		/// <summary>
-		/// Creates the widget used to render a cell value in the grid.
+		/// Creates the widget used to display the cell value. The <see cref="DataGridStyle"/>
+		/// is provided so the column can apply the appropriate cell style.
 		/// </summary>
-		/// <param name="value">The data value to display.</param>
-		/// <returns>A <see cref="Widget"/> representing the cell, or <c>null</c> if the value should not be rendered.</returns>
-		public abstract Widget CreateWidget(object value);
+		/// <param name="value">The bound property value of the cell.</param>
+		/// <param name="style">The active DataGrid style.</param>
+		/// <returns>The widget to display, or <c>null</c> for an empty cell.</returns>
+		public abstract Widget CreateWidget(object value, DataGridStyle style);
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Myra.Graphics2D.UI.Styles;
+using System;
 using System.ComponentModel;
 
 namespace Myra.Graphics2D.UI.Data
@@ -45,7 +46,7 @@ namespace Myra.Graphics2D.UI.Data
 		}
 
 		/// <inheritdoc/>
-		public override Widget CreateWidget(object value)
+		public override Widget CreateWidget(object value, DataGridStyle style)
 		{
 			var asImage = value as IImage;
 			if (asImage == null)
@@ -53,12 +54,20 @@ namespace Myra.Graphics2D.UI.Data
 				throw new Exception("DataGridImageColumn can only be used with image values.");
 			}
 
-			return new Image
+			var result = new Image
 			{
-				Width = ImageWidth,
-				Height = ImageHeight,
 				Renderable = asImage
 			};
+
+			if (style.ImageCellStyle != null)
+			{
+				result.ApplyWidgetStyle(style.ImageCellStyle);
+			}
+
+			result.Width = ImageWidth;
+			result.Height = ImageHeight;
+
+			return result;
 		}
 	}
 }

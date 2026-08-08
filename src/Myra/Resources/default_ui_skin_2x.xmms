@@ -109,7 +109,16 @@
   </ScrollViewerStyles>
   <DataGridStyles>
     <DataGridStyle GridLinesColor="Gray" ColumnSpacing="8" RowSpacing="8" SelectionBackground="button-down" SelectionHoverBackground="button-over" GridSelectionMode="Row" HoverIndexCanBeNull="True" CanSelectNothing="False"
-                   VerticalScrollBackground="scroll" VerticalScrollKnob="scroll-knob-vertical" SortAscendingImage="select-up" SortDescendingImage="select-down" />
+      VerticalScrollBackground="scroll" VerticalScrollKnob="scroll-knob-vertical">
+      <HeaderStyle Background="button" OverBackground="button-over" PressedBackground="button-down"
+        SortAscendingImage="select-up" SortDescendingImage="select-down" SortImageTextSpacing="8" ContentPadding="8, 0">
+        <LabelStyle TextColor="White" Font="default-font" />
+      </HeaderStyle>
+      <FilterStyle TextColor="White" Font="default-font" Cursor="cursor" Selection="selection" Background="textfield" />
+      <TextCellStyle TextColor="White" Font="default-font"/>
+      <CheckCellStyle PressedImage="vis-check-tick" Background="vis-check" OverBackground="vis-check-over" />
+      <ImageCellStyle/>
+    </DataGridStyle>
   </DataGridStyles>
   <HorizontalMenuStyles>
     <MenuStyle SelectionHoverBackground="button-over" SelectionBackground="button-down" SpecialCharColor="Red" Background="button">

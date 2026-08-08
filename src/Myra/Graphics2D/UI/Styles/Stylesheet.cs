@@ -130,7 +130,7 @@ namespace Myra.Graphics2D.UI.Styles
 		/// Gets or sets the default style for button widgets.
 		/// </summary>
 		[XmlIgnore]
-		public ButtonStyle ButtonStyle
+		public WidgetStyle ButtonStyle
 		{
 			get => GetDefaultStyle(ButtonStyles);
 			set => SetDefaultStyle(ButtonStyles, value);
@@ -406,7 +406,7 @@ namespace Myra.Graphics2D.UI.Styles
 		/// <summary>
 		/// Gets the dictionary of named button styles, keyed by style identifier.
 		/// </summary>
-		public Dictionary<string, ButtonStyle> ButtonStyles { get; } = new Dictionary<string, ButtonStyle>();
+		public Dictionary<string, WidgetStyle> ButtonStyles { get; } = new Dictionary<string, WidgetStyle>();
 
 		/// <summary>
 		/// Gets the dictionary of named checkbox styles, keyed by style identifier.

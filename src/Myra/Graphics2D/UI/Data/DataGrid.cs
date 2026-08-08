@@ -74,6 +74,11 @@ namespace Myra.Graphics2D.UI.Data
 		private RowData[] _visualData;
 		private readonly List<Widget> _dataWidgets = new List<Widget>();
 		private Point? _lastArrangeSize = null;
+		private DataGridStyle _style;
+		private HorizontalAlignment _headerHorizontalAlignment = HorizontalAlignment.Left;
+		private HorizontalAlignment _cellHorizontalAlignment = HorizontalAlignment.Left;
+		private HorizontalAlignment? _indexColumnHeaderHorizontalAlignment = null;
+		private HorizontalAlignment? _indexColumnCellHorizontalAlignment = null;
 
 		/// <summary>
 		/// Gets the number of data rows visible per page, based on the current layout size.
@@ -298,30 +303,6 @@ namespace Myra.Graphics2D.UI.Data
 		}
 
 		/// <summary>
-		/// Gets or sets the image used for the vertical scrollbar track background.
-		/// </summary>
-		[Category("Appearance")]
-		public IImage VerticalScrollBackground { get; set; }
-
-		/// <summary>
-		/// Gets or sets the image used for the vertical scrollbar thumb (knob).
-		/// </summary>
-		[Category("Appearance")]
-		public IImage VerticalScrollKnob { get; set; }
-
-		/// <summary>
-		/// Gets or sets the image displayed next to the header of the currently sorted column when sorted ascending.
-		/// </summary>
-		[Category("Appearance")]
-		public IImage SortAscendingImage { get; set; }
-
-		/// <summary>
-		/// Gets or sets the image displayed next to the header of the currently sorted column when sorted descending.
-		/// </summary>
-		[Category("Appearance")]
-		public IImage SortDescendingImage { get; set; }
-
-		/// <summary>
 		/// Gets or sets a value indicating whether columns can be resized by dragging the boundary between header cells.
 		/// </summary>
 		[Category("Behavior")]
@@ -392,16 +373,44 @@ namespace Myra.Graphics2D.UI.Data
 		}
 
 		/// <summary>
-		/// Gets or sets the horizontal alignment of the index column header text. Defaults to <see cref="HorizontalAlignment.Left"/>.
+		/// Gets or sets the horizontal alignment of the index column header text.
+		/// When <c>null</c>, the DataGrid's <see cref="HeaderHorizontalAlignment"/> is used instead.
 		/// </summary>
-		[DefaultValue(HorizontalAlignment.Left)]
-		public HorizontalAlignment IndexColumnHeaderHorizontalAlignment { get; set; } = HorizontalAlignment.Left;
+		public HorizontalAlignment? IndexColumnHeaderHorizontalAlignment
+		{
+			get => _indexColumnHeaderHorizontalAlignment;
+
+			set
+			{
+				if (value == _indexColumnHeaderHorizontalAlignment)
+				{
+					return;
+				}
+
+				_indexColumnHeaderHorizontalAlignment = value;
+				Invalidate(true);
+			}
+		}
 
 		/// <summary>
-		/// Gets or sets the horizontal alignment of the index column cell numbers. Defaults to <see cref="HorizontalAlignment.Left"/>.
+		/// Gets or sets the horizontal alignment of the index column cell numbers.
+		/// When <c>null</c>, the DataGrid's <see cref="CellHorizontalAlignment"/> is used instead.
 		/// </summary>
-		[DefaultValue(HorizontalAlignment.Left)]
-		public HorizontalAlignment IndexColumnCellHorizontalAlignment { get; set; } = HorizontalAlignment.Left;
+		public HorizontalAlignment? IndexColumnCellHorizontalAlignment
+		{
+			get => _indexColumnCellHorizontalAlignment;
+
+			set
+			{
+				if (value == _indexColumnCellHorizontalAlignment)
+				{
+					return;
+				}
+
+				_indexColumnCellHorizontalAlignment = value;
+				Invalidate(true);
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the number of rows to scroll per mouse wheel tick or touch drag step.
@@ -559,6 +568,53 @@ namespace Myra.Graphics2D.UI.Data
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the default horizontal alignment of header text. Defaults to <see cref="HorizontalAlignment.Left"/>.
+		/// Individual columns can override this via <see cref="DataGridColumnBase.HeaderHorizontalAlignment"/>.
+		/// </summary>
+		[DefaultValue(HorizontalAlignment.Left)]
+		public HorizontalAlignment HeaderHorizontalAlignment
+		{
+			get => _headerHorizontalAlignment;
+
+			set
+			{
+				if (value == _headerHorizontalAlignment)
+				{
+					return;
+				}
+
+				_headerHorizontalAlignment = value;
+				Invalidate(true);
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the default horizontal alignment of cell content. Defaults to <see cref="HorizontalAlignment.Left"/>.
+		/// Individual columns can override this via <see cref="DataGridColumnBase.CellHorizontalAlignment"/>.
+		/// </summary>
+		[DefaultValue(HorizontalAlignment.Left)]
+		public HorizontalAlignment CellHorizontalAlignment
+		{
+			get => _cellHorizontalAlignment;
+
+			set
+			{
+				if (value == _cellHorizontalAlignment)
+				{
+					return;
+				}
+
+				_cellHorizontalAlignment = value;
+				Invalidate(true);
+			}
+		}
+
+		/// <summary>
+		/// Gets the cloned <see cref="DataGridStyle"/> currently applied to this DataGrid.
+		/// </summary>
+		public DataGridStyle Style => _style;
+
 		/// <inheritdoc/>
 		[DefaultValue(HorizontalAlignment.Stretch)]
 		public override HorizontalAlignment HorizontalAlignment
@@ -619,6 +675,10 @@ namespace Myra.Graphics2D.UI.Data
 		}
 
 		private bool VerticalScrollingOn => RowsPerPage < TotalRows;
+
+		private IImage VerticalScrollBackground => _style.VerticalScrollBackground;
+
+		private IImage VerticalScrollKnob => _style.VerticalScrollKnob;
 
 		private int VerticalScrollbarWidth
 		{
@@ -690,6 +750,11 @@ namespace Myra.Graphics2D.UI.Data
 		/// <param name="styleName">The name of the style to apply from the stylesheet.</param>
 		public DataGrid(Stylesheet stylesheet, string styleName = Stylesheet.DefaultStyleName)
 		{
+			if (stylesheet == null || styleName == null)
+			{
+				throw new Exception("Style can't be null for DataGrid");
+			}
+
 			ClipToBounds = true;
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
@@ -754,14 +819,27 @@ namespace Myra.Graphics2D.UI.Data
 				return;
 			}
 
+			if (Style.HeaderStyle == null)
+			{
+				throw new Exception("HeaderStyle is null");
+			}
+
+			if (Style.HeaderStyle.LabelStyle == null)
+			{
+				throw new Exception("HeaderStyle.LabelStyle is null");
+			}
+
 			if (IndexColumnWidth != null)
 			{
-				var indexHeaderCell = new Label
+				var indexHeaderCell = new Label(null)
 				{
 					Text = "#",
 					ClipToBounds = true,
-					HorizontalAlignment = IndexColumnHeaderHorizontalAlignment
+					HorizontalAlignment = IndexColumnHeaderHorizontalAlignment ?? HeaderHorizontalAlignment
 				};
+				indexHeaderCell.ApplyLabelStyle(Style.HeaderStyle.LabelStyle);
+				indexHeaderCell.Padding = Style.HeaderStyle.ContentPadding;
+
 				Grid.SetRow(indexHeaderCell, 0);
 				Grid.SetColumn(indexHeaderCell, 0);
 				_grid.Widgets.Add(indexHeaderCell);
@@ -778,42 +856,49 @@ namespace Myra.Graphics2D.UI.Data
 				{
 					var panel = new HorizontalStackPanel
 					{
-						Spacing = 8
+						Spacing = Style.HeaderStyle.SortImageTextSpacing,
+						Padding = Style.HeaderStyle.ContentPadding
 					};
 
-					var label = new Label
+					var label = new Label(null)
 					{
 						Text = header
 					};
+
+					label.ApplyLabelStyle(Style.HeaderStyle.LabelStyle);
 					panel.Widgets.Add(label);
 
-					var image = new Image
+					var image = new Image()
 					{
-						Renderable = SortDirection == ListSortDirection.Ascending ? SortAscendingImage : SortDescendingImage,
+						Renderable = SortDirection == ListSortDirection.Ascending ? Style.HeaderStyle.SortAscendingImage : Style.HeaderStyle.SortDescendingImage,
 						VerticalAlignment = VerticalAlignment.Center
 					};
 					panel.Widgets.Add(image);
 
 					cellContent = panel;
-
 				}
 				else
 				{
-					cellContent = new Label
+					var label = new Label(null)
 					{
 						Text = header
 					};
+					label.ApplyLabelStyle(Style.HeaderStyle.LabelStyle);
+					label.Padding = Style.HeaderStyle.ContentPadding;
+
+					cellContent = label;
 				}
 
-				cellContent.HorizontalAlignment = column.HeaderHorizontalAlignment;
+				cellContent.HorizontalAlignment = column.HeaderHorizontalAlignment ?? HeaderHorizontalAlignment;
 
-				var headerButton = new Button
+				var headerButton = new Button(null)
 				{
 					Content = cellContent,
 					HorizontalAlignment = HorizontalAlignment.Stretch,
 					ClipToBounds = true,
 					Tag = i
 				};
+				headerButton.ApplyButtonStyle(Style.HeaderStyle);
 
 				if (SortableHeaders && column.Flags.HasFlag(DataGridColumnFlags.CanSort) && column.HasSorting)
 				{
@@ -860,8 +945,12 @@ namespace Myra.Graphics2D.UI.Data
 				return;
 			}
 
-			var row = HasHeader ? 1 : 0;
+			if (Style.FilterStyle == null)
+			{
+				throw new Exception("FilterStyle is null");
+			}
 
+			var row = HasHeader ? 1 : 0;
 			for (var i = 0; i < Columns.Length; ++i)
 			{
 				var column = Columns[i];
@@ -870,11 +959,13 @@ namespace Myra.Graphics2D.UI.Data
 					continue;
 				}
 
-				var filterCell = new TextBox
+				var filterCell = new TextBox(null)
 				{
 					HorizontalAlignment = HorizontalAlignment.Stretch,
 					Text = column.Filter
 				};
+
+				filterCell.ApplyTextBoxStyle(Style.FilterStyle);
 
 				filterCell.TextChangedByUser += (s, a) =>
 				{
@@ -1082,12 +1173,19 @@ namespace Myra.Graphics2D.UI.Data
 
 					if (IndexColumnWidth != null)
 					{
-						var cell = new Label
+						if (Style.TextCellStyle == null)
+						{
+							throw new Exception("TextCellStyle is null");
+						}
+
+						var cell = new Label(null)
 						{
 							Text = row.ToString(),
 							ClipToBounds = true,
-							HorizontalAlignment = IndexColumnHeaderHorizontalAlignment
+							HorizontalAlignment = IndexColumnCellHorizontalAlignment ?? CellHorizontalAlignment
 						};
+						cell.ApplyLabelStyle(Style.TextCellStyle);
+
 						Grid.SetRow(cell, gridRow);
 						Grid.SetColumn(cell, 0);
 						_grid.Widgets.Add(cell);
@@ -1099,13 +1197,13 @@ namespace Myra.Graphics2D.UI.Data
 					{
 						var column = Columns[col];
 						var value = rowData.GridValues[col];
-						var cell = column.CreateWidget(value);
+						var cell = column.CreateWidget(value, Style);
 						if (cell == null)
 						{
 							continue;
 						}
 
-						cell.HorizontalAlignment = column.CellHorizontalAlignment;
+						cell.HorizontalAlignment = column.CellHorizontalAlignment ?? CellHorizontalAlignment;
 
 						cell.ClipToBounds = true;
 
@@ -1367,6 +1465,7 @@ namespace Myra.Graphics2D.UI.Data
 
 			var dataGridStyle = (DataGridStyle)style;
 
+			_style = (DataGridStyle)dataGridStyle.Clone();
 			ShowGridLines = dataGridStyle.ShowGridLines;
 			GridLinesColor = dataGridStyle.GridLinesColor;
 			ColumnSpacing = dataGridStyle.ColumnSpacing;
@@ -1376,10 +1475,6 @@ namespace Myra.Graphics2D.UI.Data
 			GridSelectionMode = dataGridStyle.GridSelectionMode;
 			HoverIndexCanBeNull = dataGridStyle.HoverIndexCanBeNull;
 			CanSelectNothing = dataGridStyle.CanSelectNothing;
-			VerticalScrollBackground = dataGridStyle.VerticalScrollBackground;
-			VerticalScrollKnob = dataGridStyle.VerticalScrollKnob;
-			SortAscendingImage = dataGridStyle.SortAscendingImage;
-			SortDescendingImage = dataGridStyle.SortDescendingImage;
 		}
 
 		private bool IsInHeaderRow(Point localPos)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Myra.Graphics2D.UI.Styles;
+using System;
 
 namespace Myra.Graphics2D.UI.Data
 {
@@ -32,19 +33,26 @@ namespace Myra.Graphics2D.UI.Data
 		}
 
 		/// <inheritdoc/>
-		public override Widget CreateWidget(object value)
+		public override Widget CreateWidget(object value, DataGridStyle style)
 		{
 			if (!(value is bool))
 			{
 				throw new Exception("DataGridCheckBoxColumn can only be used with boolean values.");
 			}
 
-			var check = new CheckButton
+			if (style.CheckCellStyle == null)
+			{
+				throw new Exception("CheckCellStyle is null");
+			}
+
+			var check = new CheckButton(null)
 			{
 				IsChecked = (bool)value,
 				HorizontalAlignment = HorizontalAlignment.Center,
 				ReadOnly = true
 			};
+
+			check.ApplyImageButtonStyle(style.CheckCellStyle);
 
 			return check;
 		}

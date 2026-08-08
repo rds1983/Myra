@@ -5,7 +5,7 @@ namespace Myra.Graphics2D.UI.Styles
 	/// <summary>
 	/// Style class that defines the visual appearance of image button widgets.
 	/// </summary>
-	public class ImageButtonStyle : ButtonStyle
+	public class ImageButtonStyle : WidgetStyle
 	{
 		/// <summary>
 		/// Gets or sets the style applied to the button's image display.
@@ -27,14 +27,6 @@ namespace Myra.Graphics2D.UI.Styles
 		public ImageButtonStyle(ImageButtonStyle style) : base(style)
 		{
 			ImageStyle = style.ImageStyle != null ? new ImageStyle(style.ImageStyle) : null;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ImageButtonStyle"/> class by copying properties from a button style.
-		/// </summary>
-		/// <param name="buttonStyle">The base button style to copy from.</param>
-		public ImageButtonStyle(ButtonStyle buttonStyle) : base(buttonStyle)
-		{
 		}
 
 		/// <summary>

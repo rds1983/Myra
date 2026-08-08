@@ -1487,10 +1487,11 @@ namespace Myra.Graphics2D.UI
 		}
 
 		/// <summary>
-		/// Applies the specified widget style to this widget.
+		/// Applies the specified widget style to this widget, copying its sizing, background,
+		/// border, and margin properties.
 		/// </summary>
 		/// <param name="style">The widget style to apply.</param>
-		protected virtual void ApplyStyle(WidgetStyle style)
+		public void ApplyWidgetStyle(WidgetStyle style)
 		{
 			Width = style.Width;
 			Height = style.Height;
@@ -1516,11 +1517,12 @@ namespace Myra.Graphics2D.UI
 			Padding = style.Padding;
 		}
 
+
 		/// <summary>
-		/// Applies the base widget style properties to this widget.
+		/// Applies the specified widget style to this widget.
 		/// </summary>
 		/// <param name="style">The widget style to apply.</param>
-		public void ApplyWidgetStyle(WidgetStyle style) => ApplyStyle(style);
+		protected virtual void ApplyStyle(WidgetStyle style) => ApplyWidgetStyle(style);
 
 		/// <summary>
 		/// Fires the KeyDown event for the specified key.

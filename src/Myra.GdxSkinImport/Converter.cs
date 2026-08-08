@@ -126,9 +126,9 @@ public class Converter
 		}
 	}
 
-	private ButtonStyle LoadButtonStyle(Dictionary<string, object> data)
+	private WidgetStyle LoadButtonStyle(Dictionary<string, object> data)
 	{
-		var style = new ButtonStyle();
+		var style = new WidgetStyle();
 
 		if (data.TryGetValue("up", out var upObj))
 		{
@@ -313,7 +313,7 @@ public class Converter
 		}
 
 		// Load list item style
-		var listItemStyle = new ButtonStyle();
+		var listItemStyle = new WidgetStyle();
 
 		if (data.TryGetValue("selection", out var selectionObj))
 		{

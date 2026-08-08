@@ -84,7 +84,7 @@ namespace Myra.Graphics2D.UI
 		/// Applies the specified button style to this button.
 		/// </summary>
 		/// <param name="style">The button style to apply.</param>
-		public void ApplyButtonStyle(ButtonStyle style) => ApplyStyle(style);
+		public void ApplyButtonStyle(WidgetStyle style) => ApplyWidgetStyle(style);
 
 		/// <summary>
 		/// Applies the specified image button style to the button.
@@ -92,7 +92,7 @@ namespace Myra.Graphics2D.UI
 		/// <param name="style">The image button style to apply.</param>
 		public void ApplyImageButtonStyle(ImageButtonStyle style)
 		{
-			ApplyStyle(style);
+			ApplyButtonStyle(style);
 
 			if (style.ImageStyle != null)
 			{

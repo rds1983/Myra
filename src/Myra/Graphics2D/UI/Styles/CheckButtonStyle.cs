@@ -14,16 +14,16 @@ namespace Myra.Graphics2D.UI.Styles
 		public int ImageTextSpacing { get; set; }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ButtonStyle"/> class.
+		/// Initializes a new instance of the <see cref="CheckButtonStyle"/> class.
 		/// </summary>
 		public CheckButtonStyle()
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ButtonStyle"/> class by copying properties from another style.
+		/// Initializes a new instance of the <see cref="CheckButtonStyle"/> class as a deep copy of the specified style.
 		/// </summary>
-		/// <param name="style">The source button style to copy from.</param>
+		/// <param name="style">The style to copy.</param>
 		public CheckButtonStyle(CheckButtonStyle style) : base(style)
 		{
 			ImageTextSpacing = style.ImageTextSpacing;
