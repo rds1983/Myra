@@ -80,6 +80,10 @@ namespace Myra.Graphics2D.UI
 			_isClicked = true;
 		}
 
+		/// <summary>
+		/// Applies the specified button style to this button.
+		/// </summary>
+		/// <param name="style">The button style to apply.</param>
 		public void ApplyButtonStyle(ButtonStyle style) => ApplyWidgetStyle(style);
 
 		/// <summary>
