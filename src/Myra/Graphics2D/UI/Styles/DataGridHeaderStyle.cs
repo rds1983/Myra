@@ -6,7 +6,7 @@ namespace Myra.Graphics2D.UI.Styles
 	/// Defines the visual style of DataGrid header cells, including the header label appearance
 	/// and the images used for the sort indicators.
 	/// </summary>
-	public class DataGridHeaderStyle : WidgetStyle
+	public class DataGridHeaderStyle : ButtonStyle
 	{
 		/// <summary>
 		/// Gets or sets the style applied to the header text labels.

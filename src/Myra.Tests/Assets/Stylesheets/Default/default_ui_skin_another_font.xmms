@@ -159,7 +159,7 @@
     </ColorPickerDialogStyle>
   </ColorPickerDialogStyles>
   <GridStyles>
-    <GridStyle ShowGridLines="False" GridLinesColor="Transparent" ColumnSpacing="0" RowSpacing="0" SelectionBackground="button-down" SelectionHoverBackground="button-over" GridSelectionMode="None" HoverIndexCanBeNull="False" CanSelectNothing="False" />
+    <GridStyle GridLinesColor="Transparent" SelectionBackground="button-down" SelectionHoverBackground="button-over" />
   </GridStyles>
   <PanelStyles>
     <WidgetStyle />

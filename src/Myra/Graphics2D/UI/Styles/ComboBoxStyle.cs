@@ -5,7 +5,7 @@ namespace Myra.Graphics2D.UI.Styles
 	/// <summary>
 	/// Style class that defines the visual appearance of combo box widgets.
 	/// </summary>
-	public class ComboBoxStyle : WidgetStyle
+	public class ComboBoxStyle : ButtonStyle
 	{
 		/// <summary>
 		/// Gets or sets the style applied to the combo box's dropdown list.

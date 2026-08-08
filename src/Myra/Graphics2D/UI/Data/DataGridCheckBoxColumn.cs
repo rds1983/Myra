@@ -45,14 +45,11 @@ namespace Myra.Graphics2D.UI.Data
 				throw new Exception("CheckCellStyle is null");
 			}
 
-			var check = new CheckButton(null)
+			var check = new Image
 			{
-				IsChecked = (bool)value,
-				HorizontalAlignment = HorizontalAlignment.Center,
-				ReadOnly = true
+				IsPressed = (bool)value
 			};
-
-			check.ApplyImageButtonStyle(style.CheckCellStyle);
+			check.ApplyImageStyle(style.CheckCellStyle);
 
 			return check;
 		}

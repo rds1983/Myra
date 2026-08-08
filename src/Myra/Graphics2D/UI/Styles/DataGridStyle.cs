@@ -34,7 +34,7 @@
 		/// <summary>
 		/// Gets or sets the style applied to check box cell content.
 		/// </summary>
-		public ImageButtonStyle CheckCellStyle { get; set; }
+		public ImageStyle CheckCellStyle { get; set; }
 
 		/// <summary>
 		/// Gets or sets the style applied to image cell content.
@@ -59,7 +59,7 @@
 			HeaderStyle = style.HeaderStyle != null ? new DataGridHeaderStyle(style.HeaderStyle) : null;
 			FilterStyle = style.FilterStyle != null ? new TextBoxStyle(style.FilterStyle) : null;
 			TextCellStyle = style.TextCellStyle != null ? new LabelStyle(style.TextCellStyle) : null;
-			CheckCellStyle = style.CheckCellStyle != null ? new ImageButtonStyle(style.CheckCellStyle) : null;
+			CheckCellStyle = style.CheckCellStyle != null ? new ImageStyle(style.CheckCellStyle) : null;
 			ImageCellStyle = style.ImageCellStyle != null ? new WidgetStyle(style.ImageCellStyle) : null;
 		}
 

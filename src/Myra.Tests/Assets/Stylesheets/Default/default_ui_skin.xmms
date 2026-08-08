@@ -110,6 +110,17 @@
   <ScrollViewerStyles>
     <ScrollViewerStyle HorizontalScrollBackground="scroll-horizontal" HorizontalScrollKnob="scroll-knob-horizontal" VerticalScrollBackground="scroll" VerticalScrollKnob="scroll-knob-vertical" />
   </ScrollViewerStyles>
+  <DataGridStyles>
+    <DataGridStyle VerticalScrollBackground="scroll" VerticalScrollKnob="scroll-knob-vertical" GridLinesColor="Gray" ColumnSpacing="8" RowSpacing="8" SelectionBackground="button-down" SelectionHoverBackground="button-over" GridSelectionMode="Row" HoverIndexCanBeNull="True">
+      <HeaderStyle SortImageTextSpacing="8" SortAscendingImage="select-up" SortDescendingImage="select-down" ContentPadding="8, 0" Background="button" OverBackground="button-over" PressedBackground="button-down">
+        <LabelStyle TextColor="White" Font="default-font" />
+      </HeaderStyle>
+      <FilterStyle TextColor="White" Font="default-font" Cursor="cursor" Selection="selection" Background="textfield" />
+      <TextCellStyle TextColor="White" Font="default-font" />
+      <CheckCellStyle PressedImage="vis-check-tick" Background="vis-check" OverBackground="vis-check-over" />
+      <ImageCellStyle />
+    </DataGridStyle>
+  </DataGridStyles>
   <HorizontalMenuStyles>
     <MenuStyle SelectionHoverBackground="button-over" SelectionBackground="button-down" SpecialCharColor="Red" Background="button">
       <LabelStyle TextColor="White" DisabledTextColor="Gray" Font="default-font" Padding="10, 0" />
@@ -158,7 +169,7 @@
     </ColorPickerDialogStyle>
   </ColorPickerDialogStyles>
   <GridStyles>
-    <GridStyle ShowGridLines="False" GridLinesColor="Transparent" ColumnSpacing="0" RowSpacing="0" SelectionBackground="button-down" SelectionHoverBackground="button-over" GridSelectionMode="None" HoverIndexCanBeNull="False" CanSelectNothing="False" />
+    <GridStyle GridLinesColor="Transparent" SelectionBackground="button-down" SelectionHoverBackground="button-over" />
   </GridStyles>
   <PanelStyles>
     <WidgetStyle />
