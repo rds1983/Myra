@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace Myra.Graphics2D.UI.Data
 {
@@ -10,6 +11,18 @@ namespace Myra.Graphics2D.UI.Data
 	{
 		/// <inheritdoc/>
 		public override DataGridColumnFlags Flags => DataGridColumnFlags.None;
+
+		/// <summary>
+		/// Gets or sets the width of the rendered image thumbnail in pixels. Defaults to <c>32</c>.
+		/// </summary>
+		[DefaultValue(32)]
+		public int ImageWidth { get; set; } = 32;
+
+		/// <summary>
+		/// Gets or sets the height of the rendered image thumbnail in pixels. Defaults to <c>32</c>.
+		/// </summary>
+		[DefaultValue(32)]
+		public int ImageHeight { get; set; } = 32;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DataGridImageColumn"/> class with the specified property, header, and width.
@@ -42,8 +55,8 @@ namespace Myra.Graphics2D.UI.Data
 
 			return new Image
 			{
-				Width = 32,
-				Height = 32,
+				Width = ImageWidth,
+				Height = ImageHeight,
 				Renderable = asImage
 			};
 		}

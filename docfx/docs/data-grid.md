@@ -27,13 +27,20 @@ Property|Description
 --------|-----------
 `Format`|Optional format string applied to the value (e.g. `"{0:C2}"`). When `null`, `ToString()` is used.
 
+`DataGridImageColumn` adds:
+
+Property|Description
+--------|-----------
+`ImageWidth`|Width of the rendered image thumbnail in pixels (default `32`)
+`ImageHeight`|Height of the rendered image thumbnail in pixels (default `32`)
+
 Additional built-in column types are provided:
 
 Type|Description|Flags
 ----|-----------|-----
 `DataGridTextColumn`|Renders cell values as text|`DataGridColumnFlags.All`
 `DataGridCheckBoxColumn`|Renders boolean values as read-only check boxes; throws when bound to a non-boolean value|`DataGridColumnFlags.CanSort`
-`DataGridImageColumn`|Renders `IImage` values as 32×32 thumbnails; throws when bound to a non-image value|`DataGridColumnFlags.None`
+`DataGridImageColumn`|Renders `IImage` values as image thumbnails; throws when bound to a non-image value|`DataGridColumnFlags.None`
 
 Both text and check box columns provide convenience constructors:
 
