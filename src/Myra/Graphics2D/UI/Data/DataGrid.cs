@@ -1000,13 +1000,7 @@ namespace Myra.Graphics2D.UI.Data
 					throw new Exception($"Property not found: {column.Property} in type {type.FullName}");
 				}
 
-				var val = property.GetValue(item);
-				if (val == null)
-				{
-					continue;
-				}
-
-				gridValues[col] = val;
+				gridValues[col] = property.GetValue(item);
 			}
 
 			_sourceData[row] = new RowData(row, item, gridValues);
@@ -1197,6 +1191,7 @@ namespace Myra.Graphics2D.UI.Data
 					{
 						var column = Columns[col];
 						var value = rowData.GridValues[col];
+						
 						var cell = column.CreateWidget(value, Style);
 						if (cell == null)
 						{

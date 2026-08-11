@@ -35,7 +35,21 @@ namespace Myra.Graphics2D.UI.Data
 		/// <inheritdoc/>
 		public override Widget CreateWidget(object value, DataGridStyle style)
 		{
-			if (!(value is bool))
+			if (value == null)
+			{
+				return null;
+			}
+
+			var val = false;
+			if (value is bool)
+			{
+				val = (bool)value;
+			}
+			else if (value is bool?)
+			{
+				val = ((bool?)value).Value;
+			}
+			else
 			{
 				throw new Exception("DataGridCheckBoxColumn can only be used with boolean values.");
 			}

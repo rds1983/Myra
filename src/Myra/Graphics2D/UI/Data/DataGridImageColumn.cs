@@ -48,6 +48,11 @@ namespace Myra.Graphics2D.UI.Data
 		/// <inheritdoc/>
 		public override Widget CreateWidget(object value, DataGridStyle style)
 		{
+			if (value == null)
+			{
+				return null;
+			}
+
 			var asImage = value as IImage;
 			if (asImage == null)
 			{
