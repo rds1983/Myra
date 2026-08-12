@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace Myra.Graphics2D.UI.WrapPanel
+namespace Myra.Graphics2D.UI
 {
 	/// <summary>
 	/// A container that arranges its child widgets in a sequence that wraps at the edge of the container.

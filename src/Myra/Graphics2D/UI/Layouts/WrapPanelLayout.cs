@@ -11,7 +11,7 @@ using Stride.Core.Mathematics;
 using System.Drawing;
 #endif
 
-namespace Myra.Graphics2D.UI.WrapPanel
+namespace Myra.Graphics2D.UI
 {
 
 	/// <summary>
