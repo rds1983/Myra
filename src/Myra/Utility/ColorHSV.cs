@@ -50,12 +50,10 @@ namespace Myra.Utility
 
 
 		/// <summary>
-		/// Converts RGB to HSV color system
+		/// Converts an RGB color to HSV color system.
 		/// </summary>
-		/// <param name="r"></param>
-		/// <param name="g"></param>
-		/// <param name="b"></param>
-		/// <returns>hue(0-360), saturation(0-100) and value(0-100)</returns>
+		/// <param name="color">The RGB color to convert.</param>
+		/// <returns>A ColorHSV with hue(0-360), saturation(0-100) and value(0-100).</returns>
 		public static ColorHSV FromRGB(Color color)
 		{
 			var r = color.R / 255.0f;

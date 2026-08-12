@@ -1,0 +1,65 @@
+<Project>
+  <Project.ExportOptions Namespace="Myra.Samples" Class="MainForm" OutputPath="D:\Projects\Myra\samples\Myra.Samples.DataGrid" />
+  <VerticalStackPanel>
+    <HorizontalStackPanel Spacing="4">
+      <CheckButton Id="_checkShowGridLines">
+        <Label Text="Show Grid Lines" />
+      </CheckButton>
+      <VerticalSeparator />
+      <CheckButton Id="_checkResizableColumns">
+        <Label Text="ResizableColumns" />
+      </CheckButton>
+      <VerticalSeparator />
+      <CheckButton Id="_checkHasHeader">
+        <Label Text="Has Header" />
+      </CheckButton>
+      <VerticalSeparator />
+      <CheckButton Id="_checkHasIndexColumn">
+        <Label Text="Has Index Column" />
+      </CheckButton>
+      <VerticalSeparator />
+      <CheckButton Id="_checkSortableHeaders">
+        <Label Text="Sortable Headers" />
+      </CheckButton>
+      <VerticalSeparator />
+      <CheckButton Id="_checkHasFilter">
+        <Label Text="Has Filter" />
+      </CheckButton>
+      <VerticalSeparator />
+      <HorizontalStackPanel Spacing="4">
+        <Label Text="Fill Column:" />
+        <ComboView Id="_comboFillColumn">
+          <Label />
+          <Label Text="First Name" />
+          <Label Text="Last Name" />
+          <Label Text="Company" />
+          <Label Text="City" />
+          <Label Text="Country" />
+          <Label Text="Email" />
+          <Label Text="Phone 1" />
+        </ComboView>
+      </HorizontalStackPanel>
+      <HorizontalStackPanel Spacing="4">
+        <Label Text="Header Alignment:" />
+        <ComboView Id="_comboHeaderAlignment">
+          <Label Text="Left" />
+          <Label Text="Center" />
+          <Label Text="Right" />
+        </ComboView>
+      </HorizontalStackPanel>
+      <HorizontalStackPanel Spacing="4">
+        <Label Text="Cell Alignment:" />
+        <ComboView Id="_comboCellAlignment">
+          <Label Text="Left" />
+          <Label Text="Center" />
+          <Label Text="Right" />
+        </ComboView>
+      </HorizontalStackPanel>
+    </HorizontalStackPanel>
+    <HorizontalSeparator />
+    <HorizontalSplitPane Id="_splitPane" StackPanel.ProportionType="Fill">
+      <Panel Id="_panelDataGrid" />
+      <PropertyGrid Id="_propertyGrid" />
+    </HorizontalSplitPane>
+  </VerticalStackPanel>
+</Project>

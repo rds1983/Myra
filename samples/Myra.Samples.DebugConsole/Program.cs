@@ -1,4 +1,6 @@
-﻿namespace Myra.Samples.DebugConsole
+﻿global using Myra.Events;
+
+namespace Myra.Samples.DebugConsole
 {
 	class Program
 	{

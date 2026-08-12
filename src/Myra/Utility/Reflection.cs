@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Myra.Attributes;
+using System;
 using System.Linq;
 using System.Reflection;
 
@@ -6,36 +7,32 @@ namespace Myra.Utility
 {
 	internal static class Reflection
 	{
-		public static T FindAttribute<T>(this MemberInfo property) where T : Attribute
+		public static T FindAttribute<T>(this MemberInfo property, bool inherit = true) where T : Attribute
 		{
-			var result = (from T a in property.GetCustomAttributes<T>(true) select a).FirstOrDefault();
+			var result = (from T a in property.GetCustomAttributes<T>(inherit) select a).FirstOrDefault();
 
 			return result;
 		}
 
-		public static T[] FindAttributes<T>(this MemberInfo property) where T : Attribute
+		public static T[] FindAttributes<T>(this MemberInfo property, bool inherit = true) where T : Attribute
 		{
-			return (from T a in property.GetCustomAttributes<T>(true) select a).ToArray();
+			return (from T a in property.GetCustomAttributes<T>(inherit) select a).ToArray();
 		}
 
-		public static T FindAttribute<T>(this Type type) where T : Attribute
+		public static T FindAttribute<T>(this Type type, bool inherit = true) where T : Attribute
 		{
-			var result = (from T a in type.GetCustomAttributes<T>(true) select a).FirstOrDefault();
+			var result = (from T a in type.GetCustomAttributes<T>(inherit) select a).FirstOrDefault();
 
 			return result;
 		}
 
-		public static bool IsNullablePrimitive(this Type type)
-		{
-			return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>) &&
-					type.GenericTypeArguments[0].IsPrimitive;
-		}
+		public static bool HasAttribute<T>(this MemberInfo property, bool inherit = true) where T : Attribute => FindAttribute<T>(property, inherit) != null;
 
-		public static bool IsNullableEnum(this Type type)
-		{
-			return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>) &&
-					type.GenericTypeArguments[0].IsEnum;
-		}
+		public static bool IsNullable(this Type type) => type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+
+		public static bool IsNullablePrimitive(this Type type) => type.IsNullable() && type.GenericTypeArguments[0].IsPrimitive;
+
+		public static bool IsNullableEnum(this Type type) => type.IsNullable() && type.GenericTypeArguments[0].IsEnum;
 
 		public static Type GetNullableType(this Type type)
 		{
@@ -73,6 +70,7 @@ namespace Myra.Utility
 				{
 					friendlyName = friendlyName.Remove(iBacktick);
 				}
+
 				friendlyName += "<";
 				Type[] typeParameters = type.GetGenericArguments();
 				for (int i = 0; i < typeParameters.Length; ++i)
@@ -154,6 +152,17 @@ namespace Myra.Utility
 				default:
 					return false;
 			}
+		}
+
+		public static string Name(this PropertyInfo property)
+		{
+			var attr = property.FindAttribute<XmlNameAttribute>();
+			if (attr != null)
+			{
+				return attr.XmlName;
+			}
+
+			return property.Name;
 		}
 	}
 }

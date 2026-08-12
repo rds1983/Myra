@@ -11,28 +11,17 @@ namespace Myra.Samples.AllWidgets
 		{
 			BuildUI();
 
-			_menuItemOpenFile.Image = Stylesheet.Current.Atlas["icon-folder"];
-			_menuItemSaveFile.Image = Stylesheet.Current.Atlas["icon-folder-new"];
-
 			_menuItemOpenFile.Selected += (s, a) => OpenFile();
 			_menuItemSaveFile.Selected += (s, a) => SaveFile();
 			_menuItemChooseColor.Selected += (s, a) => ChooseColor();
 			_menuItemChooseFolder.Selected += (s, a) => ChooseFolder();
 			_menuItemQuit.Selected += (s, a) => Quit();
 
-			_imageOpenFile.Renderable = Stylesheet.Current.Atlas["icon-star"];
 			_buttonOpenFile.Click += (sender, args) => OpenFile();
-
-			_imageSaveFile.Renderable = Stylesheet.Current.Atlas["icon-star"];
 			_buttonSaveFile.Click += (sender, args) => SaveFile();
-
-			_imageChooseFolder.Renderable = Stylesheet.Current.Atlas["icon-star"];
 			_buttonChooseFolder.Click += (sender, args) => ChooseFolder();
-
 			_buttonChooseColor.Click += (sender, args) => ChooseColor();
 
-			var image = (Image)_imageButton.Content;
-			image.Renderable = Stylesheet.Current.Atlas["icon-star-outline"];
 			_imageButton.Click += (sender, args) =>
 			{
 				var debugWindow = new DebugOptionsWindow();

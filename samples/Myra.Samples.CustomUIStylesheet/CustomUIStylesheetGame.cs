@@ -1,7 +1,6 @@
 ﻿using AssetManagementBase;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.Styles;
 
@@ -39,11 +38,6 @@ namespace Myra.Samples.CustomUIStylesheet
 			Stylesheet.Current = assetManager.LoadStylesheet("ui_stylesheet.xmms");
 
 			_allWidgets = new AllWidgets();
-			var textureAtlas = assetManager.LoadTextureRegionAtlas("ui_stylesheet.xmat");
-			_allWidgets._image.Renderable = textureAtlas["music-off"];
-
-			var image = (Image)_allWidgets._imageButton.Content;
-			image.Renderable = textureAtlas["sound-off"];
 
 			_desktop = new Desktop
 			{

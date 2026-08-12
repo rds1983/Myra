@@ -2,7 +2,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>$(AppTargetFramework)</TargetFramework>
-    <AssemblyName>MyraPad</AssemblyName>
+    <AssemblyName>myrapad</AssemblyName>
     <RootNamespace>MyraPad</RootNamespace>
     <OutputPath>bin\FNA.Core\$(Configuration)</OutputPath>
     <DefineConstants>$(DefineConstants);FNA;CORE</DefineConstants>	

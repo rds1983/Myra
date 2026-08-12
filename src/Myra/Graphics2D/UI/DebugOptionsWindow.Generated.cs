@@ -85,12 +85,19 @@ namespace Myra.Graphics2D.UI
 		}
 
 		
+		/// <summary>Checkbox for toggling widget frames display.</summary>
 		public CheckButton _checkBoxWidgetFrames;
+		/// <summary>Checkbox for toggling keyboard focused widget frame display.</summary>
 		public CheckButton _checkBoxKeyboardFocusedWidgetFrame;
+		/// <summary>Checkbox for toggling mouse inside widget frame display.</summary>
 		public CheckButton _checkBoxMouseInsideWidgetFrame;
+		/// <summary>Checkbox for toggling glyph frames display.</summary>
 		public CheckButton _checkBoxGlyphFrames;
+		/// <summary>Checkbox for toggling clipping display.</summary>
 		public CheckButton _checkBoxDisableClipping;
+		/// <summary>Checkbox for toggling smooth text rendering.</summary>
 		public CheckButton _checkBoxSmoothText;
+		/// <summary>The root vertical stack panel containing the options.</summary>
 		public VerticalStackPanel Root;
 	}
 }

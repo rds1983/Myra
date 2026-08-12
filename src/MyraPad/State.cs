@@ -18,7 +18,8 @@ namespace MyraPad
 		{
 			get
 			{
-				var result = Path.Combine(PathUtils.ExecutingAssemblyDirectory, StateFileName);
+				var configDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".config");
+				var result = Path.Combine(configDir, StateFileName);
 				return result;
 			}
 		}
@@ -39,6 +40,9 @@ namespace MyraPad
 
 		public void Save()
 		{
+			var configDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".config");
+			Directory.CreateDirectory(configDir);
+
 			using (var fileStream = File.Create(StateFilePath))
 			{
 				var xmlWriter = new XmlTextWriter(fileStream, Encoding.UTF8)

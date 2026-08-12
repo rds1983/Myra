@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Myra.GdxSkinImport": {
+      "commandName": "Project",
+      "commandLineArgs": "D:\\Projects\\chaos\\gdx-skins\\biological-attack\\skin\\biological-attack-ui.json"
+    }
+  }
+}

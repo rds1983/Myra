@@ -1,6 +1,6 @@
-All widgets except TextBox do support [FontStashSharp rich text syntax](https://fontstashsharp.github.io/FontStashSharp/docs/rich-text.html).
+All widgets except TextBox support [FontStashSharp rich text syntax](https://fontstashsharp.github.io/FontStashSharp/docs/rich-text.html).
 
-I.e. if we take following MML:
+For example, if we take the following MML:
 ```xml
 <Project>
   <Panel>
@@ -12,24 +12,26 @@ It would be rendered:
 
 ![alt text](~/images/rich-text-1.png)
 
-Or if we take MML:
+Or if we take the following MML:
 ```xml
 <Project>
-  <Panel>    
-   <TextButton Text="E=mc/v[-8]2/n/vdMass–energy equivalence." HorizontalAlignment="Center" VerticalAlignment="Center"/>
+  <Panel>
+    <Button HorizontalAlignment="Center" VerticalAlignment="Center">
+      <Label Text="E=mc/v[-8]2/n/vdMass–energy equivalence." />
+    </Button>
   </Panel>
 </Project>
 ```
 
-It would result in:
+It would result in the following:
 
 ![alt text](~/images/rich-text-2.png)
 
-If we want to use commands that require external resources('/f' and '/i'), then we would need to set RichTextDefaults.FontResolver and RichTextDefaults.ImageResolver.
+If you want to use commands that require external resources ('/f' and '/i'), you must set RichTextDefaults.FontResolver and RichTextDefaults.ImageResolver.
 
-However there are special rules for the rtf resource resolving when using MyraPad. It requires resources to be either available in the same folder as the edited xmmp file. Or the resource folder path must be specified in the attribute DesignerRtfAssetsPath of the root tag Project. The resource folder path could be either absolute or relative to the location of the edited xmmp.
+However, there are special rules for RTF resource resolving when using MyraPad. Resources must be either available in the same folder as the edited xmmp file, or the resource folder path must be specified in the DesignerRtfAssetsPath attribute of the root Project tag. The resource folder path can be either absolute or relative to the location of the edited xmmp file.
 
-I.e. if we load following MML in the MyraPad:
+For example, if we load the following MML in MyraPad:
 ```xml
 <Project DesignerRtfAssetsPath="../../../tiles/releases/Nov-2015/dngn/trees">
   <Project.ExportOptions />
@@ -43,13 +45,13 @@ I.e. if we load following MML in the MyraPad:
 </Project>
 ```
 
-It would render following(assuming we have corresponding images mangrove*.png in the corresponding folder):
+It would render the following(assuming we have corresponding images mangrove*.png in the corresponding folder):
 
 ![alt text](~/images/rich-text-3.png)
 
-The '/f' command parameter must be passed in form 'fontFileName, size'.
+The '/f' command parameter must be passed in the form 'fontFileName, size'.
 
-I.e. if we load following MML:
+For example, if we load the following MML:
 ```xml
 <Project DesignerRtfAssetsPath="C:\Windows\Fonts">
   <Project.ExportOptions />
@@ -59,8 +61,8 @@ I.e. if we load following MML:
 </Project>
 ```
 
-It would render following:
+It would render the following:
 
 ![alt text](~/images/rich-text-4.png)
 
-  **Note**. Above resource resolving rules work only in the MyraPad. The property DesignerRtfAssetsPath is ignored in the run-time. Thus its developer responsibility to set RichTextDefaults.FontResolver and RichTextDefaults.ImageResolver, if they want to use external resources in the rich text during the run-time.
+  **Note:** The above resource resolving rules only work in MyraPad. The property DesignerRtfAssetsPath is ignored at runtime. It is the developer's responsibility to set RichTextDefaults.FontResolver and RichTextDefaults.ImageResolver if you want to use external resources in rich text at runtime.

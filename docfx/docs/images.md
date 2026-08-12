@@ -10,31 +10,32 @@ This entry describes in detail how Myra deals with images.
   }
 ```
 
-Many widgets properties such as Widget.Background or Menu.SelectionBackground have IBrush type.
-The most simple implementation of IBrush is [SolidBrush](https://github.com/rds1983/Myra/blob/master/src/Myra/Graphics2D/Brushes/SolidBrush.cs).
+Many widget properties, such as Widget.Background or Menu.SelectionBackground, have the IBrush type.
+The simplest implementation of IBrush is [SolidBrush](https://github.com/rds1983/Myra/blob/master/src/Myra/Graphics2D/Brushes/SolidBrush.cs).
 
-I.e. following code sets SolidBrush as widget.Background:
+The following code sets a SolidBrush as widget.Background:
 ```c#
   widget.Background = new SolidBrush(Color.Red); // SolidBrush from Color
   widget.Background = new SolidBrush("#808000FF"); // SolidBrush from RGBA string
   widget.Background = new SolidBrush("#FFA500"); // SolidBrush from RGB string
 ```
-Also it could be set through [MML](MML.md).
+It can also be set through [MML](MML.md).
 
-I.e. following MML:
+The following MML:
 ```xml
-  <Project>
-    <Panel>
-      <HorizontalStackPanel Spacing="8" >
-        <Panel Width="100" Height="50" Background="#FF0000FF" >
-        </Panel>
-        <Label Text="Label" Background="#0000FF" />
-        <TextButton Text="Push Me" Background="YellowGreen" />
-      </HorizontalStackPanel>
-    </Panel>
-  </Project>
+<Project>
+  <Panel>
+    <HorizontalStackPanel Spacing="8">
+      <Panel Width="100" Height="50" Background="#FF0000FF" />
+      <Label Text="Label" Background="#0000FF" />
+      <Button Background="YellowGreen">
+        <Label Text="Push Me" />
+      </Button>
+    </HorizontalStackPanel>
+  </Panel>
+</Project>
 ```
-Would result in following image:
+Would result in the following image:
 
 ![alt text](~/images/images.png)
 
@@ -64,10 +65,10 @@ Also following:
 // If 2nd parameter is omitted, then TextureRegion covers the whole texture
 image.Renderable = new TextureRegion(texture);
 ```
-  _**Note**. It's also possible to use TextureRegion as IBrush. However usually it wont make much sense, since it would result in the TextureRegion streched over the rectangle IBrush is drawn at._
+  _**Note**. It's also possible to use TextureRegion as IBrush. However usually it won't make much sense, since it would result in the TextureRegion stretched over the rectangle IBrush is drawn at._
 
 ### NinePatchRegion
-[NinePatchRegion](https://github.com/rds1983/Myra/blob/master/src/Myra/Graphics2D/TextureAtlases/NinePatchRegion.cs) represents region with unstrechable border and strechable center. 
+[NinePatchRegion](https://github.com/rds1983/Myra/blob/master/src/Myra/Graphics2D/TextureAtlases/NinePatchRegion.cs) represents region with unstretchable border and stretchable center. 
 
 It could be used following way:
 ```c#

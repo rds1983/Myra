@@ -1,264 +1,117 @@
-﻿using System;
-using System.ComponentModel;
-using Myra.Graphics2D.UI.Styles;
-using System.Xml.Serialization;
+﻿using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using Myra.Events;
-
-#if MONOGAME || FNA
-using Microsoft.Xna.Framework.Input;
-#elif STRIDE
-using Stride.Input;
-#else
-using Myra.Platform;
-#endif
+using System.ComponentModel;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ButtonBase<T> : Widget where T : Widget
+	/// <summary>
+	/// An abstract base class for button-like content controls that can be pressed and respond to click events.
+	/// </summary>
+	public abstract class ButtonBase : ContentControl
 	{
-		private readonly SingleItemLayout<T> _layout;
-
-		private bool _isPressed = false;
 		private bool _isClicked = false;
 
-		[Category("Appearance")]
-		[DefaultValue(HorizontalAlignment.Center)]
-		public virtual HorizontalAlignment ContentHorizontalAlignment
-		{
-			get { return InternalChild.HorizontalAlignment; }
-			set { InternalChild.HorizontalAlignment = value; }
-		}
-
-		[Category("Appearance")]
-		[DefaultValue(VerticalAlignment.Center)]
-		public virtual VerticalAlignment ContentVerticalAlignment
-		{
-			get { return InternalChild.VerticalAlignment; }
-			set { InternalChild.VerticalAlignment = value; }
-		}
-
-		[Category("Appearance")]
-		public virtual IBrush PressedBackground { get; set; }
-
-		[Category("Behavior")]
+		/// <summary>
+		/// Gets or sets whether the button ignores input. When <c>true</c>, the button cannot be
+		/// pressed, clicked, or toggled, though it remains fully rendered.
+		/// </summary>
 		[DefaultValue(false)]
-		public virtual bool Toggleable { get; set; }
-
-		[Browsable(false)]
-		[XmlIgnore]
-		public virtual bool IsPressed
-		{
-			get
-			{
-				return _isPressed;
-			}
-
-			set
-			{
-				if (value == _isPressed)
-				{
-					return;
-				}
-
-				_isPressed = value;
-				OnPressedChanged();
-			}
-		}
-
-		internal bool ReleaseOnTouchLeft;
-
-		public override Desktop Desktop
-		{
-			get
-			{
-				return base.Desktop;
-			}
-
-			internal set
-			{
-				// If we're not releasing the button on touch left,
-				// we have to do it on touch up
-				if (!ReleaseOnTouchLeft && Desktop != null)
-				{
-					Desktop.TouchUp -= DesktopTouchUp;
-				}
-
-				base.Desktop = value;
-
-				if (!ReleaseOnTouchLeft && Desktop != null)
-				{
-					Desktop.TouchUp += DesktopTouchUp;
-				}
-			}
-		}
-
-		public event EventHandler Click;
-		public event EventHandler PressedChanged;
+		public bool ReadOnly { get; set; }
 
 		/// <summary>
-		/// Fires when the value is about to be changed
-		/// Set Cancel to true if you want to cancel the change
+		/// Occurs when the button is clicked.
 		/// </summary>
-		public event EventHandler<ValueChangingEventArgs<bool>> PressedChangingByUser;
+		public event MyraEventHandler Click;
 
-		protected T InternalChild
-		{
-			get => _layout.Child;
-			set => _layout.Child = value;
-		}
-
-		public ButtonBase()
-		{
-			_layout = new SingleItemLayout<T>(this);
-			ChildrenLayout = _layout;
-			Toggleable = false;
-			ReleaseOnTouchLeft = true;
-		}
-
+		/// <summary>
+		/// Simulates a click on the button by firing touch down and touch up events.
+		/// </summary>
 		public void DoClick()
 		{
 			OnTouchDown();
 			OnTouchUp();
 		}
 
-		public virtual void OnPressedChanged()
-		{
-			PressedChanged.Invoke(this);
-		}
+		/// <summary>
+		/// Called when a touch point is released on the button. Derived classes should override to implement custom touch up behavior.
+		/// </summary>
+		protected abstract void InternalOnTouchUp();
+		/// <summary>
+		/// Called when a touch point is pressed on the button. Derived classes should override to implement custom touch down behavior.
+		/// </summary>
+		protected abstract void InternalOnTouchDown();
 
-		private void SetValueByUser(bool value)
-		{
-			if (value != IsPressed && PressedChangingByUser != null)
-			{
-				var args = new ValueChangingEventArgs<bool>(_isPressed, value);
-				PressedChangingByUser(this, args);
-
-				if (args.Cancel)
-				{
-					return;
-				}
-			}
-
-			IsPressed = value;
-		}
-
-		public override void OnTouchLeft()
-		{
-			base.OnTouchLeft();
-
-			if (ReleaseOnTouchLeft && !Toggleable)
-			{
-				SetValueByUser(false);
-			}
-		}
-
+		/// <summary>
+		/// Handles touch up events on the button.
+		/// </summary>
 		public override void OnTouchUp()
 		{
 			base.OnTouchUp();
 
-			if (!Enabled)
+			if (!Enabled || ReadOnly)
 			{
 				return;
 			}
 
-			if (ReleaseOnTouchLeft && !Toggleable)
-			{
-				SetValueByUser(false);
-			}
+			InternalOnTouchUp();
 
 			if (_isClicked)
 			{
-				Click.Invoke(this);
+				Click.Invoke(this, InputEventType.TouchUp);
 				_isClicked = false;
 			}
 		}
 
+		/// <summary>
+		/// Handles touch down events on the button.
+		/// </summary>
 		public override void OnTouchDown()
 		{
 			base.OnTouchDown();
 
-			if (!Enabled)
+			if (!Enabled || ReadOnly)
 			{
 				return;
 			}
 
-			if (!Toggleable)
-			{
-				SetValueByUser(true);
-			}
-			else
-			{
-				SetValueByUser(!IsPressed);
-			}
+			InternalOnTouchDown();
 
 			_isClicked = true;
 		}
 
-		public override void OnKeyDown(Keys k)
+		/// <summary>
+		/// Applies the specified button style to this button.
+		/// </summary>
+		/// <param name="style">The button style to apply.</param>
+		public void ApplyButtonStyle(ButtonStyle style) => ApplyWidgetStyle(style);
+
+		/// <summary>
+		/// Applies the specified image button style to the button.
+		/// </summary>
+		/// <param name="style">The image button style to apply.</param>
+		public void ApplyImageButtonStyle(ImageButtonStyle style)
 		{
-			base.OnKeyDown(k);
+			ApplyButtonStyle(style);
 
-			if (!Enabled)
+			if (style.ImageStyle != null)
 			{
-				return;
-			}
-
-			if (k == Keys.Space)
-			{
-				if (!Toggleable)
-				{
-					// Emulate click
-					DoClick();
-				}
-				else
-				{
-					SetValueByUser(!IsPressed);
-				}
+				var image = (Image)Content;
+				image.ApplyImageStyle(style.ImageStyle);
 			}
 		}
 
-		public override IBrush GetCurrentBackground()
+		/// <summary>
+		/// Copies the button properties from another button.
+		/// </summary>
+		/// <param name="w">The source button to copy from.</param>
+		protected internal override void CopyFrom(Widget w)
 		{
-			var result = base.GetCurrentBackground();
+			base.CopyFrom(w);
 
-			if (Enabled)
-			{
-				if (IsPressed && PressedBackground != null)
-				{
-					result = PressedBackground;
-				}
-				else if (IsMouseInside && OverBackground != null)
-				{
-					result = OverBackground;
-				}
-			}
-			else
-			{
-				if (DisabledBackground != null)
-				{
-					result = DisabledBackground;
-				}
-			}
-
-			return result;
-		}
-
-		public void ApplyButtonStyle(ButtonStyle style)
-		{
-			ApplyWidgetStyle(style);
-
-			PressedBackground = style.PressedBackground;
-		}
-
-		private void DesktopTouchUp(object sender, EventArgs args)
-		{
-			IsPressed = false;
-		}
-
-		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
-		{
-			ApplyButtonStyle(stylesheet.ButtonStyles.SafelyGetStyle(name));
+			var buttonBase = (ButtonBase)w;
+			PressedBackground = buttonBase.PressedBackground;
+			IsPressed = buttonBase.IsPressed;
 		}
 	}
 }

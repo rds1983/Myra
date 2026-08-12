@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿global using Myra.Events;
 
 namespace Myra.Samples.SplitPaneContainer
 {

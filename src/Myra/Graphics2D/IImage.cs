@@ -8,8 +8,14 @@ using System.Drawing;
 
 namespace Myra.Graphics2D
 {
-	public interface IImage: IBrush
+	/// <summary>
+	/// Represents an image that can be drawn and has a defined size.
+	/// </summary>
+	public interface IImage : IBrush
 	{
+		/// <summary>
+		/// Gets the size of the image in pixels.
+		/// </summary>
 		Point Size { get; }
 	}
 }

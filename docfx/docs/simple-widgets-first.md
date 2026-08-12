@@ -21,7 +21,7 @@ It would display following:
 
 ## Button
 
-Button can have any content. I.e. following code creates a Button with a Label:
+Button can have any content. The following code creates a Button with a Label:
 ```c#
 Button button = new Button
 {

@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
+using System.Collections;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework.Input;
@@ -11,8 +13,14 @@ using Myra.Platform;
 
 namespace Myra.Graphics2D.UI
 {
+	/// <summary>
+	/// A menu control that displays menu items vertically in a column.
+	/// </summary>
 	public class VerticalMenu : Menu
 	{
+		/// <summary>
+		/// Gets the orientation of the menu, which is always vertical.
+		/// </summary>
 		public override Orientation Orientation
 		{
 			get
@@ -21,6 +29,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the horizontal alignment of the menu.
+		/// </summary>
 		[DefaultValue(HorizontalAlignment.Left)]
 		public override HorizontalAlignment HorizontalAlignment
 		{
@@ -34,6 +45,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the vertical alignment of the menu.
+		/// </summary>
 		[DefaultValue(VerticalAlignment.Top)]
 		public override VerticalAlignment VerticalAlignment
 		{
@@ -47,12 +61,31 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public VerticalMenu(string styleName = Stylesheet.DefaultStyleName) : base(styleName)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="VerticalMenu"/> class with the specified stylesheet and style.
+		/// </summary>
+		/// <param name="stylesheet">The stylesheet to use for applying the style.</param>
+		/// <param name="styleName">The name of the style to apply. Defaults to the default stylesheet style.</param>
+		public VerticalMenu(Stylesheet stylesheet, string styleName = Stylesheet.DefaultStyleName) : base(stylesheet, styleName)
 		{
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Top;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="VerticalMenu"/> class with the specified style.
+		/// </summary>
+		/// <param name="styleName">The name of the style to apply. Defaults to the default stylesheet style.</param>
+		public VerticalMenu(string styleName = Stylesheet.DefaultStyleName) : this(Stylesheet.Current, styleName)
+		{
+		}
+
+		internal override IDictionary GetStylesDictionary(Stylesheet stylesheet) => stylesheet.VerticalMenuStyles;
+
+		/// <summary>
+		/// Handles keyboard input for vertical menu navigation using up and down arrow keys.
+		/// </summary>
+		/// <param name="k">The key being pressed.</param>
 		public override void OnKeyDown(Keys k)
 		{
 			base.OnKeyDown(k);
@@ -66,11 +99,6 @@ namespace Myra.Graphics2D.UI
 					MoveHover(1);
 					break;
 			}
-		}
-
-		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
-		{
-			ApplyMenuStyle(stylesheet.VerticalMenuStyles.SafelyGetStyle(name));
 		}
 	}
 }

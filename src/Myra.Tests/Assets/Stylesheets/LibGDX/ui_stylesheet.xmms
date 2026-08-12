@@ -1,0 +1,104 @@
+<Stylesheet TextureRegionAtlas="ui_stylesheet.xmat">
+  <Fonts>
+    <Font Id="ui_font" File="ui_font.fnt" />
+  </Fonts>
+  <LabelStyles>
+    <LabelStyle TextColor="White" DisabledTextColor="Gray" Font="ui_font" />
+  </LabelStyles>
+  <TextBoxStyles>
+    <TextBoxStyle TextColor="White" DisabledTextColor="Gray" Font="ui_font" Cursor="cursor" Selection="selection" Background="textfield" />
+  </TextBoxStyles>
+  <ButtonStyles>
+    <ButtonStyle PressedBackground="default-round-down" Background="default-round" Padding="5, 0" />
+  </ButtonStyles>
+  <CheckBoxStyles>
+    <CheckButtonStyle>
+      <ImageStyle PressedImage="check-on" Image="check-off" />
+    </CheckButtonStyle>
+  </CheckBoxStyles>
+  <SpinButtonStyles>
+    <SpinButtonStyle Background="textfield">
+      <UpButtonStyle PressedBackground="default-round-down" Background="default-round">
+        <ImageStyle Image="tree-plus" />
+      </UpButtonStyle>
+      <DownButtonStyle PressedBackground="default-round-down" Background="default-round">
+        <ImageStyle Image="tree-minus" />
+      </DownButtonStyle>
+      <TextBoxStyle TextColor="White" DisabledTextColor="Gray" Font="ui_font" Cursor="cursor" Selection="selection" />
+    </SpinButtonStyle>
+  </SpinButtonStyles>
+  <HorizontalSliderStyles>
+    <SliderStyle Background="default-slider">
+      <KnobStyle>
+        <ImageStyle Image="default-slider-knob" />
+      </KnobStyle>
+    </SliderStyle>
+  </HorizontalSliderStyles>
+  <VerticalSliderStyles>
+    <SliderStyle Background="default-slider">
+      <KnobStyle>
+        <ImageStyle Image="default-slider-knob" />
+      </KnobStyle>
+    </SliderStyle>
+  </VerticalSliderStyles>
+  <HorizontalProgressBarStyles>
+    <ProgressBarStyle Filler="default-round-down" Background="default-round" />
+  </HorizontalProgressBarStyles>
+  <VerticalProgressBarStyles>
+    <ProgressBarStyle Filler="default-round-down" Background="default-round" />
+  </VerticalProgressBarStyles>
+  <ComboBoxStyles>
+    <ComboBoxStyle Background="default-select">
+      <ListBoxStyle Background="default-rect">
+        <ListItemStyle PressedBackground="default-select-selection" />
+      </ListBoxStyle>
+      <LabelStyle TextColor="White" Font="ui_font" />
+    </ComboBoxStyle>
+  </ComboBoxStyles>
+  <ListBoxStyles>
+    <ListBoxStyle Background="default-rect">
+      <ListItemStyle PressedBackground="default-select-selection" Padding="5, 0" />
+    </ListBoxStyle>
+  </ListBoxStyles>
+  <TreeStyles>
+    <TreeStyle>
+      <MarkStyle>
+        <ImageStyle PressedImage="tree-minus" Image="tree-plus" />
+      </MarkStyle>
+      <LabelStyle TextColor="White" DisabledTextColor="Gray" Font="ui_font" />
+    </TreeStyle>
+  </TreeStyles>
+  <HorizontalSplitPaneStyles>
+    <SplitPaneStyle>
+      <HandleStyle Background="default-splitpane" />
+    </SplitPaneStyle>
+  </HorizontalSplitPaneStyles>
+  <VerticalSplitPaneStyles>
+    <SplitPaneStyle>
+      <HandleStyle Background="default-splitpane-vertical" />
+    </SplitPaneStyle>
+  </VerticalSplitPaneStyles>
+  <ScrollViewerStyles>
+    <ScrollViewerStyle HorizontalScrollBackground="default-scroll" HorizontalScrollKnob="default-round-large" VerticalScrollBackground="default-scroll" VerticalScrollKnob="default-round-large" />
+  </ScrollViewerStyles>
+  <HorizontalMenuStyles>
+    <MenuStyle SelectionBackground="default-round-down" Background="default-round">
+      <LabelStyle TextColor="White" DisabledTextColor="Gray" Font="ui_font" Padding="5, 0, 5, 2" />
+      <SeparatorStyle Image="default-round" Thickness="3" />
+    </MenuStyle>
+  </HorizontalMenuStyles>
+  <VerticalMenuStyles>
+    <MenuStyle SelectionBackground="default-round-down" Background="default-round">
+      <LabelStyle TextColor="White" DisabledTextColor="Gray" Font="ui_font" Padding="5, 2" />
+      <SeparatorStyle Image="default-round" Thickness="4" Padding="0, 0, 2, 2" />
+    </MenuStyle>
+  </VerticalMenuStyles>
+  <WindowStyles>
+    <WindowStyle Background="default-window" Padding="2, 0">
+      <TitleStyle TextColor="White" Font="ui_font" Padding="5, 0" />
+      <CloseButtonStyle>
+        <ImageStyle PressedImage="default-round-down" Image="default-round" />
+      </CloseButtonStyle>
+    </WindowStyle>
+  </WindowStyles>
+</Stylesheet>

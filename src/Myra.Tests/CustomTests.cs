@@ -1,20 +1,20 @@
-﻿using Myra.Graphics2D.TextureAtlases;
+using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
-using NUnit.Framework;
+using Xunit;
 using System;
 using System.Collections.Generic;
 
 namespace Myra.Tests
 {
-	[TestFixture]
+	[Collection("Myra Tests")]
 	public class CustomTests
 	{
 		/// <summary>
 		/// Ensures exception is thrown if a label is created without default style set in the stylesheet
 		/// </summary>
-		[Test]
+		[Fact]
 		public void NoDefaultStyleLabel()
 		{
 			// Store current stylesheet
@@ -35,7 +35,7 @@ namespace Myra.Tests
 		/// <summary>
 		/// Tests that stylesheet is correctly recreated after MyraEnvironment.Reset() call
 		/// </summary>
-		[Test]
+		[Fact]
 		public void MyraEnvironmentReset()
 		{
 			var oldStylesheet = Stylesheet.Current;
@@ -48,11 +48,11 @@ namespace Myra.Tests
 			button = new Button();
 			var newTexture = ((TextureRegion)button.Background).Texture;
 
-			Assert.AreNotEqual(oldStylesheet, newStylesheet);
-			Assert.AreNotEqual(oldTexture, newTexture);
+			Assert.NotEqual(oldStylesheet, newStylesheet);
+			Assert.NotEqual(oldTexture, newTexture);
 		}
 
-		[Test]
+		[Fact]
 		public void TestZIndexSort()
 		{
 			var widgets = new List<Widget>();
@@ -81,10 +81,12 @@ namespace Myra.Tests
 			widgets.SortWidgetsByZIndex();
 
 			// The list should become reversed
-			Assert.AreEqual(widgets[0], button4);
-			Assert.AreEqual(widgets[1], button3);
-			Assert.AreEqual(widgets[2], button2);
-			Assert.AreEqual(widgets[3], button1);
+			Assert.Equal(widgets[0], button4);
+			Assert.Equal(widgets[1], button3);
+			Assert.Equal(widgets[2], button2);
+			Assert.Equal(widgets[3], button1);
 		}
 	}
 }
+
+

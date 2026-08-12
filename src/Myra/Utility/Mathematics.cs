@@ -33,6 +33,11 @@ namespace Myra.Utility
 			return Math.Abs(left - right) <= epsilon;
 		}
 
+		public static bool EpsilonEquals(this Vector2 left, Vector2 right, float epsilon = ZeroTolerance)
+		{
+			return left.X.EpsilonEquals(right.X, epsilon) && left.Y.EpsilonEquals(right.Y, epsilon);
+		}
+
 		public static bool IsZero(this float a)
 		{
 			return a.EpsilonEquals(0.0f);
@@ -66,5 +71,45 @@ namespace Myra.Utility
 
 			return new Rectangle((int)position.X, (int)position.Y, (int)scale.X, (int)scale.Y);
 		}
+
+		public static void CalculateInverse(ref Matrix source, out Matrix result)
+		{
+#if MONOGAME || FNA || STRIDE
+			Matrix.Invert(ref source, out result);
+#else
+			Matrix.Invert(source, out result);
+#endif
+		}
+
+		public static int Clamp(int value, int min, int max)
+		{
+			if (value < min)
+			{
+				return min;
+			}
+
+			if (value > max)
+			{
+				return max;
+			}
+
+			return value;
+		}
+
+		public static float Clamp(float value, float min, float max)
+		{
+			if (value < min)
+			{
+				return min;
+			}
+
+			if (value > max)
+			{
+				return max;
+			}
+
+			return value;
+		}
+
 	}
 }

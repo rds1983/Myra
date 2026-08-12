@@ -5,6 +5,7 @@
     <AssemblyName>Myra</AssemblyName>
     <PackageId>Myra</PackageId>
     <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
@@ -28,7 +29,6 @@
   <ItemGroup>
     <PackageReference Include="XNAssets.MonoGame" Version="$(XNAssetsVersion)" />
     <PackageReference Include="XNAssets.FontStashSharp.MonoGame" Version="$(XNAssetsVersion)" />
-    <PackageReference Include="info.lundin.math.dll" Version="$(InfoLundinMathVersion)" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" PrivateAssets="All" Version="$(MonoGameVersion)" />
   </ItemGroup>
 </Project>

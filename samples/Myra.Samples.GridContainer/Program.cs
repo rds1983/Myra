@@ -1,4 +1,7 @@
-﻿namespace Myra.Samples.GridContainer
+﻿using AssetManagementBase;
+using System;
+
+namespace Myra.Samples.GridContainer
 {
 	internal class Program
 	{

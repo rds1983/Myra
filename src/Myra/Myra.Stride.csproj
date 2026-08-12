@@ -5,6 +5,7 @@
     <PackageId>Myra.Stride</PackageId>
     <AssemblyName>Myra</AssemblyName>
     <OutputPath>bin\Stride\$(Configuration)</OutputPath>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
@@ -23,6 +24,5 @@
     <PackageReference Include="Stride.Engine" Version="$(StrideVersion)" />
     <PackageReference Include="XNAssets.Stride" Version="$(XNAssetsVersion)" />
     <PackageReference Include="XNAssets.FontStashSharp.Stride" Version="$(XNAssetsVersion)" />
-    <PackageReference Include="info.lundin.math.dll" Version="$(InfoLundinMathVersion)" />
   </ItemGroup>  
 </Project>

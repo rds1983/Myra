@@ -11,7 +11,7 @@
         <Label Text="Button:" />
         <Button Id="_button" Grid.Column="1">
           <HorizontalStackPanel>
-            <Image Id="_image" />
+            <Image Renderable="music-off" Id="_image" />
             <Label Text="Button" />
           </HorizontalStackPanel>
         </Button>
@@ -21,7 +21,7 @@
         </Button>
         <Label Text="Image Button:" Grid.Row="2" />
         <Button Id="_imageButton" Grid.Column="1" Grid.Row="2">
-          <Image />
+          <Image Renderable="sound-off" />
         </Button>
         <CheckButton Grid.Row="3" Grid.ColumnSpan="2">
           <Label Text="This is checkbox" />
@@ -30,17 +30,17 @@
         <HorizontalSlider Grid.Column="1" Grid.Row="4" />
         <Label Text="Combo View:" Grid.Row="5" />
         <ComboView Width="200" Grid.Column="1" Grid.Row="5">
-          <Label Text="Red" TextColor="#FF0000FF" />
-          <Label Text="Green" TextColor="#00FF00FF" />
-          <Label Text="Blue" TextColor="#0000FFFF" />
+          <Label Text="Red" TextColor="Red" />
+          <Label Text="Green" TextColor="Lime" />
+          <Label Text="Blue" TextColor="Blue" />
         </ComboView>
         <Label Text="Text Field:" Grid.Row="6" />
         <TextBox Grid.Column="1" Grid.Row="6" />
         <Label Text="List View:" Grid.Row="7" />
         <ListView Width="200" Grid.Column="1" Grid.Row="7">
-          <Label Text="Red" TextColor="#FF0000FF" />
-          <Label Text="Green" TextColor="#00FF00FF" />
-          <Label Text="Blue" TextColor="#0000FFFF" />
+          <Label Text="Red" TextColor="Red" />
+          <Label Text="Green" TextColor="Lime" />
+          <Label Text="Blue" TextColor="Blue" />
         </ListView>
         <Label Text="Tree" Grid.Row="8" />
       </Grid>

@@ -1,111 +1,102 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Stylesheet TextureRegionAtlas="ui_stylesheet.xmat">
   <Fonts>
-    <Font Id="ui_font" File="ui_font.fnt"/>
+    <Font Id="ui_font" File="ui_font.fnt" />
   </Fonts>
-  <TextBlockStyles>
-    <TextBlockStyle Font="ui_font" TextColor="white" DisabledTextColor="gray" />
-  </TextBlockStyles>
-  <TextFieldStyles>
-    <TextFieldStyle Background="textfield" TextColor="white" DisabledTextColor="gray" Font="ui_font" Cursor="cursor" Selection="selection" />
-  </TextFieldStyles>
-  <ScrollPaneStyles>
-    <ScrollPaneStyle Background="default-rect" HorizontalScrollBackground="default-scroll" HorizontalScrollKnob="default-round-large" VerticalScrollBackground="default-scroll" VerticalScrollKnob="default-round-large" />
-  </ScrollPaneStyles>
+  <LabelStyles>
+    <LabelStyle TextColor="White" DisabledTextColor="Gray" Font="ui_font" />
+  </LabelStyles>
+  <TextBoxStyles>
+    <TextBoxStyle TextColor="White" DisabledTextColor="Gray" Font="ui_font" Cursor="cursor" Selection="selection" Background="textfield" />
+  </TextBoxStyles>
   <ButtonStyles>
-    <ButtonStyle Background="default-round" Padding="5, 0" PressedBackground="default-round-down">
-      <TextBlockStyle Font="ui_font" TextColor="white" DisabledTextColor="gray" />
-    </ButtonStyle>
+    <ButtonStyle PressedBackground="default-round-down" Background="default-round" Padding="5, 0" />
   </ButtonStyles>
   <CheckBoxStyles>
-    <CheckBoxStyle>
-      <LabelStyle Font="ui_font" TextColor="white" />
-      <ImageStyle Image="check-off" PressedImage="check-on" />
-    </CheckBoxStyle>
+    <CheckButtonStyle>
+      <ImageStyle PressedImage="check-on" Image="check-off" />
+    </CheckButtonStyle>
   </CheckBoxStyles>
   <SpinButtonStyles>
     <SpinButtonStyle Background="textfield">
-      <TextFieldStyle TextColor="white" DisabledTextColor="gray" Font="ui_font" Cursor="cursor" Selection="selection" />
-      <UpButtonStyle Background="default-round" PressedBackground="default-round-down">
+      <UpButtonStyle PressedBackground="default-round-down" Background="default-round">
         <ImageStyle Image="tree-plus" />
       </UpButtonStyle>
-      <DownButtonStyle Background="default-round" PressedBackground="default-round-down">
+      <DownButtonStyle PressedBackground="default-round-down" Background="default-round">
         <ImageStyle Image="tree-minus" />
       </DownButtonStyle>
+      <TextBoxStyle TextColor="White" DisabledTextColor="Gray" Font="ui_font" Cursor="cursor" Selection="selection" />
     </SpinButtonStyle>
   </SpinButtonStyles>
   <HorizontalSliderStyles>
-    <HorizontalSliderStyle Background="default-slider">
+    <SliderStyle Background="default-slider">
       <KnobStyle>
         <ImageStyle Image="default-slider-knob" />
       </KnobStyle>
-    </HorizontalSliderStyle>
+    </SliderStyle>
   </HorizontalSliderStyles>
   <VerticalSliderStyles>
-    <VerticalSliderStyle Background="default-slider">
+    <SliderStyle Background="default-slider">
       <KnobStyle>
         <ImageStyle Image="default-slider-knob" />
       </KnobStyle>
-    </VerticalSliderStyle>
+    </SliderStyle>
   </VerticalSliderStyles>
   <HorizontalProgressBarStyles>
-    <HorizontalProgressBarStyle Background="default-round" Filler="default-round-down" />
+    <ProgressBarStyle Filler="default-round-down" Background="default-round" />
   </HorizontalProgressBarStyles>
   <VerticalProgressBarStyles>
-    <VerticalProgressBarStyle Background="default-round" Filler="default-round-down" />
+    <ProgressBarStyle Filler="default-round-down" Background="default-round" />
   </VerticalProgressBarStyles>
   <ComboBoxStyles>
     <ComboBoxStyle Background="default-select">
-      <LabelStyle Font="ui_font" TextColor="white" />
       <ListBoxStyle Background="default-rect">
-        <ListItemStyle PressedBackground="default-select-selection">
-          <LabelStyle Font="ui_font" TextColor="white" />
-        </ListItemStyle>
+        <ListItemStyle PressedBackground="default-select-selection" />
       </ListBoxStyle>
     </ComboBoxStyle>
   </ComboBoxStyles>
   <ListBoxStyles>
     <ListBoxStyle Background="default-rect">
-      <ListItemStyle Padding="5, 0" PressedBackground="default-select-selection">
-        <LabelStyle Font="ui_font" TextColor="white" DisabledTextColor="gray" />
-      </ListItemStyle>
+      <ListItemStyle PressedBackground="default-select-selection" Padding="5, 0" />
     </ListBoxStyle>
   </ListBoxStyles>
   <TreeStyles>
     <TreeStyle>
       <MarkStyle>
-        <ImageStyle Image="tree-plus" PressedImage="tree-minus" />
+        <ImageStyle PressedImage="tree-minus" Image="tree-plus" />
       </MarkStyle>
-      <LabelStyle Font="ui_font" TextColor="white" DisabledTextColor="gray" />
+      <LabelStyle TextColor="White" DisabledTextColor="Gray" Font="ui_font" />
     </TreeStyle>
   </TreeStyles>
   <HorizontalSplitPaneStyles>
-    <HorizontalSplitPaneStyle>
+    <SplitPaneStyle>
       <HandleStyle Background="default-splitpane" />
-    </HorizontalSplitPaneStyle>
+    </SplitPaneStyle>
   </HorizontalSplitPaneStyles>
   <VerticalSplitPaneStyles>
-    <VerticalSplitPaneStyle>
+    <SplitPaneStyle>
       <HandleStyle Background="default-splitpane-vertical" />
-    </VerticalSplitPaneStyle>
+    </SplitPaneStyle>
   </VerticalSplitPaneStyles>
+  <ScrollViewerStyles>
+    <ScrollViewerStyle HorizontalScrollBackground="default-scroll" HorizontalScrollKnob="default-round-large" VerticalScrollBackground="default-scroll" VerticalScrollKnob="default-round-large" />
+  </ScrollViewerStyles>
   <HorizontalMenuStyles>
-    <HorizontalMenuStyle Background="default-round" SelectionBackground="default-round-down">
-      <LabelStyle Padding="5, 0, 5, 2" Font="ui_font" TextColor="white" DisabledTextColor="gray" />
-      <SeparatorStyle Image="default-round" Thickness="3" />
-    </HorizontalMenuStyle>
+    <MenuStyle SelectionBackground="default-round-down" Background="default-round">
+      <LabelStyle TextColor="White" DisabledTextColor="Gray" Font="ui_font" Padding="5, 0, 5, 2" />
+      <SeparatorStyle Thickness="3" Image="default-round" />
+    </MenuStyle>
   </HorizontalMenuStyles>
   <VerticalMenuStyles>
-    <VerticalMenuStyle Background="default-round" SelectionBackground="default-round-down">
-      <LabelStyle Padding="5, 2" Font="ui_font" TextColor="white" DisabledTextColor="gray" />
-      <SeparatorStyle Padding="0, 0, 2, 2" Image="default-round" Thickness="4" />
-    </VerticalMenuStyle>
+    <MenuStyle SelectionBackground="default-round-down" Background="default-round">
+      <LabelStyle TextColor="White" DisabledTextColor="Gray" Font="ui_font" Padding="5, 2" />
+      <SeparatorStyle Thickness="4" Image="default-round" Padding="0, 0, 2, 2" />
+    </MenuStyle>
   </VerticalMenuStyles>
   <WindowStyles>
     <WindowStyle Background="default-window" Padding="2, 0">
-      <TitleStyle Padding="5, 0" Font="ui_font" TextColor="white" />
+      <TitleStyle TextColor="White" Font="ui_font" Padding="5, 0" />
       <CloseButtonStyle>
-        <ImageStyle Image="default-round" PressedImage="default-round-down" />
+        <ImageStyle PressedImage="default-round-down" Image="default-round" />
       </CloseButtonStyle>
     </WindowStyle>
   </WindowStyles>

@@ -1,6 +1,6 @@
-MML(Myra Markup Language) is XML based declarative language to describe UI.
+MML (Myra Markup Language) is an XML-based declarative language to describe UI.
 
-I.e. following MML is equivalent to the UI from [Getting Started](../index.md):
+The following MML is equivalent to the UI from [Getting Started](../index.md):
 ```xml
 <Project>
   <Project.ExportOptions />
@@ -25,21 +25,21 @@ I.e. following MML is equivalent to the UI from [Getting Started](../index.md):
 </Project>
 ```
 
-".xmmp" is preferred extension for files with MML.
+".xmmp" is the preferred extension for files containing MML.
 
-Following code loads Project from MML:
+The following code loads a Project from MML:
 ```c#
 string data = File.ReadAllText(filePath);
 Project project = Project.LoadFromXml(data);
 ```
 
-Following code saves it:	
-```c#	
-string data = project.Save();	
-File.WriteAllText(filePath, data);	
+The following code saves it:
+```c#
+string data = project.Save();
+File.WriteAllText(filePath, data);
 ```
 
-Following code is used to obtain a reference to the element by id (used to attach event handlers):
+The following code is used to obtain a reference to the element by ID (used to attach event handlers):
 ```c#
 Label label = (Label) project.Root.FindChildById("label");
 ```

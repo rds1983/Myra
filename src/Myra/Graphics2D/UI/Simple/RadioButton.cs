@@ -1,40 +1,17 @@
-﻿using Myra.Attributes;
-using Myra.Graphics2D.UI.Styles;
-using System;
-using System.ComponentModel;
-using System.Xml.Serialization;
+﻿using Myra.Graphics2D.UI.Styles;
+using System.Collections;
 
 namespace Myra.Graphics2D.UI
 {
-	[StyleTypeName("RadioButton")]
+	/// <summary>
+	/// A radio button widget that can be part of a group where only one button can be selected at a time.
+	/// </summary>
 	public class RadioButton : CheckButtonBase
 	{
-		private string _text;
-
-		[Obsolete("Set Content to Label instead")]
-		[Browsable(false)]
-		[XmlIgnore]
-		[Category("Appearance")]
-		public string Text
-		{
-			get => _text;
-			set
-			{
-				if (_text == value)
-				{
-					return;
-				}
-
-				Content = new Label
-				{
-					Text = value
-				};
-
-				_text = value;
-			}
-		}
-
-
+		/// <summary>
+		/// Gets or sets a value indicating whether this radio button is pressed/selected.
+		/// Only one radio button in a group can be pressed at a time.
+		/// </summary>
 		public override bool IsPressed
 		{
 			get => base.IsPressed;
@@ -71,11 +48,29 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public RadioButton(string styleName = Stylesheet.DefaultStyleName)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RadioButton"/> class with the specified stylesheet and style.
+		/// </summary>
+		/// <param name="stylesheet">The stylesheet to use for applying the style.</param>
+		/// <param name="styleName">The name of the style to apply. Defaults to the default stylesheet style.</param>
+		public RadioButton(Stylesheet stylesheet, string styleName = Stylesheet.DefaultStyleName)
 		{
-			SetStyle(styleName);
+			SetStyle(stylesheet, styleName);
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RadioButton"/> class with the specified style.
+		/// </summary>
+		/// <param name="styleName">The name of the style to apply. Defaults to the default stylesheet style.</param>
+		public RadioButton(string styleName = Stylesheet.DefaultStyleName) : this(Stylesheet.Current, styleName)
+		{
+		}
+
+		internal override IDictionary GetStylesDictionary(Stylesheet stylesheet) => stylesheet.RadioButtonStyles;
+
+		/// <summary>
+		/// Handles the pressed state change, deselecting other radio buttons in the same parent when this button is pressed.
+		/// </summary>
 		public override void OnPressedChanged()
 		{
 			base.OnPressedChanged();
@@ -97,11 +92,6 @@ namespace Myra.Graphics2D.UI
 
 				asRadio.IsPressed = false;
 			}
-		}
-
-		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
-		{
-			ApplyCheckButtonStyle(stylesheet.RadioButtonStyles.SafelyGetStyle(name));
 		}
 	}
 }

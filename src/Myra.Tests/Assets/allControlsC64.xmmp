@@ -1,0 +1,75 @@
+<Project StylesheetPath="Stylesheets/Commodore64/ui_stylesheet.xmms">
+  <Project.ExportOptions />
+  <HorizontalSplitPane>
+    <ScrollViewer ShowHorizontalScrollBar="False">
+      <Grid ColumnSpacing="8" RowSpacing="8" Id="_gridRight">
+        <Grid.DefaultRowProportion Type="Auto" />
+        <Grid.ColumnsProportions>
+          <Proportion Type="Auto" />
+          <Proportion Type="Fill" />
+        </Grid.ColumnsProportions>
+        <Label Text="Button:" />
+        <Button Id="_button" Grid.Column="1">
+          <HorizontalStackPanel>
+            <Image Renderable="music-off" Id="_image" />
+            <Label Text="Button" />
+          </HorizontalStackPanel>
+        </Button>
+        <Label Text="Text Button:" Id="_textButtonLabel" Grid.Row="1" />
+        <Button Id="_textButton" Grid.Column="1" Grid.Row="1">
+          <Label Text="Button 2" />
+        </Button>
+        <Label Text="Image Button:" Grid.Row="2" />
+        <Button Id="_imageButton" Grid.Column="1" Grid.Row="2">
+          <Image Renderable="sound-off" />
+        </Button>
+        <CheckButton Grid.Row="3" Grid.ColumnSpan="2">
+          <Label Text="This is checkbox" />
+        </CheckButton>
+        <Label Text="Horizontal Slider:" Grid.Row="4" />
+        <HorizontalSlider Grid.Column="1" Grid.Row="4" />
+        <Label Text="Combo View:" Grid.Row="5" />
+        <ComboView Width="200" Grid.Column="1" Grid.Row="5">
+          <Label Text="Red" TextColor="Red" />
+          <Label Text="Green" TextColor="Lime" />
+          <Label Text="Blue" TextColor="Blue" />
+        </ComboView>
+        <Label Text="Text Field:" Grid.Row="6" />
+        <TextBox Grid.Column="1" Grid.Row="6" />
+        <Label Text="List View:" Grid.Row="7" />
+        <ListView Width="200" Grid.Column="1" Grid.Row="7">
+          <Label Text="Red" TextColor="Red" />
+          <Label Text="Green" TextColor="Lime" />
+          <Label Text="Blue" TextColor="Blue" />
+        </ListView>
+        <Label Text="Tree" Grid.Row="8" />
+      </Grid>
+    </ScrollViewer>
+    <VerticalSplitPane>
+      <Grid RowSpacing="8">
+        <Grid.ColumnsProportions>
+          <Proportion Type="Fill" />
+        </Grid.ColumnsProportions>
+        <Grid.RowsProportions>
+          <Proportion Type="Auto" />
+          <Proportion Type="Fill" />
+        </Grid.RowsProportions>
+        <Label Text="Vertical Slider:" />
+        <VerticalSlider HorizontalAlignment="Center" Grid.Row="1" />
+      </Grid>
+      <Grid RowSpacing="8">
+        <Grid.ColumnsProportions>
+          <Proportion Type="Fill" />
+        </Grid.ColumnsProportions>
+        <Grid.RowsProportions>
+          <Proportion Type="Auto" />
+          <Proportion Type="Auto" />
+          <Proportion Type="Fill" />
+        </Grid.RowsProportions>
+        <Label Text="Progress Bars:" />
+        <HorizontalProgressBar Id="_horizontalProgressBar" Grid.Row="1" />
+        <VerticalProgressBar HorizontalAlignment="Center" Id="_verticalProgressBar" Grid.Row="2" />
+      </Grid>
+    </VerticalSplitPane>
+  </HorizontalSplitPane>
+</Project>

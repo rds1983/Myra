@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
+using Myra.Attributes;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -13,31 +15,35 @@ using Color = FontStashSharp.FSColor;
 
 namespace Myra.Graphics2D.UI
 {
+	/// <summary>
+	/// Specifies how an image is resized to fit available space.
+	/// </summary>
 	public enum ImageResizeMode
 	{
 		/// <summary>
-		/// Simply Stretch
+		/// Stretch the image to fill available space without preserving aspect ratio.
 		/// </summary>
 		Stretch,
 
 		/// <summary>
-		/// Keep Aspect Ratio
+		/// Resize the image while maintaining its aspect ratio.
 		/// </summary>
 		KeepAspectRatio
 	}
 
-	internal interface IPressable
+	/// <summary>
+	/// An image widget that displays a texture region with optional resize modes.
+	/// </summary>
+	public class Image : Widget
 	{
-		bool IsPressed { get; set; }
-	}
-
-	public class Image : Widget, IPressable
-	{
-		private IImage _image, _overImage, _pressedImage;
+		private IImage[] _renderables = new IImage[WidgetVisualStateTotal];
 
 #if MONOGAME
 		private bool _isAnisotropicFiltering = false;
 
+		/// <summary>
+		/// Gets or sets a value indicating whether anisotropic filtering is applied to the image.
+		/// </summary>
 		[DefaultValue(false)]
 		public bool IsAnisotropicFiltering
 		{
@@ -53,165 +59,237 @@ namespace Myra.Graphics2D.UI
 		}
 #endif
 
-		[Category("Appearance")]
+		/// <summary>
+		/// Gets or sets the renderable to display in the image widget's normal state.
+		/// </summary>
+		[Category("Appearance/Renderable")]
+		[StylePropertyPath("Image")]
 		public IImage Renderable
 		{
 			get
 			{
-				return _image;
+				return _renderables[WidgetVisualStateNormal];
 			}
 
 			set
 			{
-				if (value == _image)
+				if (value == _renderables[WidgetVisualStateNormal])
 				{
 					return;
 				}
 
-				_image = value;
+				_renderables[WidgetVisualStateNormal] = value;
 				InvalidateMeasure();
 			}
 		}
 
-		[Category("Appearance")]
+		/// <summary>
+		/// Gets or sets the renderable to display when the image widget is disabled.
+		/// </summary>
+		[Category("Appearance/Renderable")]
+		[StylePropertyPath("DisabledImage")]
+		public IImage DisabledRenderable
+		{
+			get
+			{
+				return _renderables[WidgetVisualStateDisabled];
+			}
+
+			set
+			{
+				if (value == _renderables[WidgetVisualStateDisabled])
+				{
+					return;
+				}
+
+				_renderables[WidgetVisualStateDisabled] = value;
+				InvalidateMeasure();
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the renderable to display when the mouse is over the image widget.
+		/// </summary>
+		[Category("Appearance/Renderable")]
+		[StylePropertyPath("OverImage")]
 		public IImage OverRenderable
 		{
 			get
 			{
-				return _overImage;
+				return _renderables[WidgetVisualStateOver];
 			}
 
 			set
 			{
-				if (value == _overImage)
+				if (value == _renderables[WidgetVisualStateOver])
 				{
 					return;
 				}
 
-				_overImage = value;
+				_renderables[WidgetVisualStateOver] = value;
 				InvalidateMeasure();
 			}
 		}
 
-		[Category("Appearance")]
+		/// <summary>
+		/// Gets or sets the renderable to display when the image widget has focus.
+		/// </summary>
+		[Category("Appearance/Renderable")]
+		[StylePropertyPath("FocusedImage")]
+		public IImage FocusedRenderable
+		{
+			get
+			{
+				return _renderables[WidgetVisualStateFocused];
+			}
+
+			set
+			{
+				if (value == _renderables[WidgetVisualStateFocused])
+				{
+					return;
+				}
+
+				_renderables[WidgetVisualStateFocused] = value;
+				InvalidateMeasure();
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the renderable to display when the image widget is pressed.
+		/// </summary>
+		[Category("Appearance/Renderable")]
+		[StylePropertyPath("PressedImage")]
 		public IImage PressedRenderable
 		{
 			get
 			{
-				return _pressedImage;
+				return _renderables[WidgetVisualStatePressed];
 			}
 
 			set
 			{
-				if (value == _pressedImage)
+				if (value == _renderables[WidgetVisualStatePressed])
 				{
 					return;
 				}
 
-				_pressedImage = value;
+				_renderables[WidgetVisualStatePressed] = value;
 				InvalidateMeasure();
 			}
 		}
 
-		internal bool IsPressed { get; set; }
-
-		bool IPressable.IsPressed
-		{
-			get => IsPressed;
-			set => IsPressed = value;
-		}
-
+		/// <summary>
+		/// Gets or sets the color multiplier applied when rendering the image.
+		/// </summary>
 		[Category("Appearance")]
 		[DefaultValue("#FFFFFFFF")]
 		public Color Color { get; set; } = Color.White;
 
+		/// <summary>
+		/// Gets or sets how the image is resized to fit available space.
+		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(ImageResizeMode.Stretch)]
 		public ImageResizeMode ResizeMode { get; set; }
 
+		/// <summary>
+		/// Measures the size required for the image, considering all image states (normal, over, pressed).
+		/// </summary>
+		/// <param name="availableSize">The available size for the image.</param>
+		/// <returns>The measured size needed for the image.</returns>
 		protected override Point InternalMeasure(Point availableSize)
 		{
-			var result = _image != null ? _image.Size : Mathematics.PointZero;
+			var result = Mathematics.PointZero;
 
-			var overSize = _overImage != null ? _overImage.Size : Mathematics.PointZero;
-			if (overSize.X > result.X)
+			for (var i = 0; i < WidgetVisualStateTotal; ++i)
 			{
-				result.X = overSize.X;
-			}
+				if (_renderables[i] != null)
+				{
+					var sz = _renderables[i].Size;
 
-			if (overSize.Y > result.Y)
-			{
-				result.Y = overSize.Y;
-			}
+					if (sz.X > result.X)
+					{
+						result.X = sz.X;
+					}
 
-			var pressedSize = _pressedImage != null ? _pressedImage.Size : Mathematics.PointZero;
-			if (pressedSize.X > result.X)
-			{
-				result.X = pressedSize.X;
-			}
-
-			if (pressedSize.Y > result.Y)
-			{
-				result.Y = pressedSize.Y;
+					if (sz.Y > result.Y)
+					{
+						result.Y = sz.Y;
+					}
+				}
 			}
 
 			return result;
 		}
 
+		/// <summary>
+		/// Renders the image with the appropriate state-based image (normal, over, or pressed).
+		/// </summary>
+		/// <param name="context">The render context to draw with.</param>
 		public override void InternalRender(RenderContext context)
 		{
-			var image = Renderable;
-
-			if (IsMouseInside && OverRenderable != null)
+			var image = GetCurrentVisual(_renderables);
+			if (image == null)
 			{
-				image = OverRenderable;
+				return;
 			}
 
-			if (IsPressed && PressedRenderable != null)
+			var bounds = ActualBounds;
+			if (ResizeMode == ImageResizeMode.KeepAspectRatio)
 			{
-				image = PressedRenderable;
+				var aspect = (float)image.Size.X / image.Size.Y;
+				bounds.Height = (int)(bounds.Width * aspect);
 			}
-
-			if (image != null)
-			{
-				var bounds = ActualBounds;
-
-				if (ResizeMode == ImageResizeMode.KeepAspectRatio)
-				{
-					var aspect = (float)image.Size.X / image.Size.Y;
-					bounds.Height = (int)(bounds.Width * aspect);
-				}
 
 #if MONOGAME
-				context.SetAnisotropicFilteringMode(_isAnisotropicFiltering);
+			context.SetAnisotropicFilteringMode(_isAnisotropicFiltering);
 #endif
-				image.Draw(context, bounds, Color);
+			image.Draw(context, bounds, Color);
 #if MONOGAME
-				context.SetAnisotropicFilteringMode(false);
+			context.SetAnisotropicFilteringMode(false);
 #endif
-			}
 		}
 
-		public void ApplyPressableImageStyle(PressableImageStyle imageStyle)
+		/// <summary>
+		/// Applies the specified widget style to this image.
+		/// </summary>
+		/// <param name="style">The widget style to apply.</param>
+		protected override void ApplyStyle(WidgetStyle style)
 		{
-			ApplyWidgetStyle(imageStyle);
+			base.ApplyStyle(style);
 
+			var imageStyle = (ImageStyle)style;
 			Renderable = imageStyle.Image;
+			DisabledRenderable = imageStyle.DisabledImage;
+			FocusedRenderable = imageStyle.FocusedImage;
 			OverRenderable = imageStyle.OverImage;
 			PressedRenderable = imageStyle.PressedImage;
 		}
 
+		/// <summary>
+		/// Applies the specified pressable image style to this image.
+		/// </summary>
+		/// <param name="style">The pressable image style to apply.</param>
+		public void ApplyImageStyle(ImageStyle style) => ApplyStyle(style);
+
+		/// <summary>
+		/// Copies all properties from another widget to this image.
+		/// </summary>
+		/// <param name="w">The widget to copy properties from.</param>
 		protected internal override void CopyFrom(Widget w)
 		{
 			base.CopyFrom(w);
 
 			var image = (Image)w;
 
-			Renderable = image.Renderable;
-			OverRenderable = image.OverRenderable;
-			PressedRenderable = image.PressedRenderable;
 			Color = image.Color;
 			ResizeMode = image.ResizeMode;
+
+			for (var i = 0; i < WidgetVisualStateTotal; ++i)
+			{
+				_renderables[i] = image._renderables[i];
+			}
 		}
 	}
 }

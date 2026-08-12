@@ -102,6 +102,15 @@ namespace AssetManagementBase
 		internal static Texture2DWrapper LoadTexture2D(this AssetManager assetManager, string assetName) =>
 				assetManager.UseLoader(_textureLoader, assetName);
 
+		/// <summary>
+		/// Loads a font system from a font asset file.
+		/// </summary>
+		/// <param name="assetManager">The asset manager instance.</param>
+		/// <param name="assetName">The name of the font asset to load.</param>
+		/// <param name="additionalFonts">Optional array of additional font files to include in the font system.</param>
+		/// <param name="existingTexture">Optional existing texture to use for font atlasing.</param>
+		/// <param name="existingTextureUsedSpace">The rectangle representing the used space in the existing texture.</param>
+		/// <returns>The loaded font system.</returns>
 		public static FontSystem LoadFontSystem(this AssetManager assetManager, string assetName, string[] additionalFonts = null, Texture2D existingTexture = null, Rectangle existingTextureUsedSpace = default(Rectangle))
 		{
 			FontSystemLoadingSettings settings = null;

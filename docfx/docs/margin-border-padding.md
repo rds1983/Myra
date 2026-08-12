@@ -1,12 +1,12 @@
-Myra uses following box model:
+Myra uses the following box model:
 
 ![alt text](~/images/margin-border-padding1.png)
 
-Background is being rendered at Content+Padding.
+The background is rendered at Content + Padding.
 
-[Thickness](https://github.com/rds1983/Myra/blob/master/src/Myra/Graphics2D/Thickness.cs) is structure that sets size of all four sides. It could be initialized either with one parameter(one size for all sides), two parameters(first for Left and Right, second for Top and Bottom) and four parameters(Left, Top, Right, Bottom).
+[Thickness](https://github.com/rds1983/Myra/blob/master/src/Myra/Graphics2D/Thickness.cs) is a structure that sets the size of all four sides. It can be initialized with one parameter (one size for all sides), two parameters (first for Left and Right, second for Top and Bottom), or four parameters (Left, Top, Right, Bottom).
 
-Consider following code:
+Consider the following code:
 ```c#
     var topPanel = new Panel
     {
@@ -31,7 +31,7 @@ Consider following code:
     childPanel.Widgets.Add(label1);
     topPanel.Widgets.Add(childPanel);
 ```
-It would be equivalent to following [MML](MML.md):
+It would be equivalent to the following [MML](MML.md):
 ```xml
     <Project>
       <Panel Background="#ADD8E6FF">
@@ -41,6 +41,6 @@ It would be equivalent to following [MML](MML.md):
       </Panel>
     </Project>
 ```
-And would result in following image:
+And would result in the following image:
 
 ![alt text](~/images/margin-border-padding2.png)

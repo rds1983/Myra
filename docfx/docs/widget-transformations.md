@@ -1,9 +1,9 @@
-Every widget has following transformation properties:
+Every widget has the following transformation properties:
 
 Name|Type|Default|Description
 ----|----|-------|-----------
 Scale|Vector2|1, 1|Scaling
 Rotate|float|0|Rotation angle in degrees
-TransformOrigin|Vector2|0.5, 0.5|Normalized origin of every transform. Default value(0.5, 0.5) means that it is set to the center of the widget
+TransformOrigin|Vector2|0.5, 0.5|Normalized origin of each transform. The default value (0.5, 0.5) means that it is set to the center of the widget.
 
-Desktop has same set of properties. Though default value for the TransformOrigin is (0, 0), which is top-left corner.
+Desktop has the same set of properties.

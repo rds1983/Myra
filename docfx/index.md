@@ -1,21 +1,21 @@
-1. Create MonoGame/FNA project.
-2. Reference Myra for MonoGame from nuget: https://www.nuget.org/packages/Myra
+1. Create a MonoGame/FNA project.
+2. Reference Myra for MonoGame from NuGet: https://www.nuget.org/packages/Myra
 
-   See [this](docs/adding-reference-to-fna.md) on how reference Myra for a FNA project.
+   See [this](docs/adding-reference-to-fna.md) for information on how to reference Myra for an FNA project.
 3. Add the following using statements:
 ```c#
   using Myra;
   using Myra.Graphics2D.UI;
 ```
-4. Add following code to the `Game1` constructor to make the mouse cursor visible:
+4. Add the following code to the `Game1` constructor to make the mouse cursor visible:
 ```c#
   IsMouseVisible = true;
 ```
-5. Add following field to the Game class:
+5. Add the following field to the Game class:
 ```c#
   private Desktop _desktop;
 ```
-6. Add following code in the LoadContent method, which will create 2x2 grid and populate it with some widgets:
+6. Add the following code in the LoadContent method to create a 2x2 grid and populate it with some widgets:
 ```c# 
   MyraEnvironment.Game = this;
 
@@ -82,7 +82,7 @@
   _desktop = new Desktop();
   _desktop.Root = grid;
 ```
-7. Add following code to the Draw method:
+7. Add the following code to the Draw method:
 ```c#
   GraphicsDevice.Clear(Color.Black);
   _desktop.Render();

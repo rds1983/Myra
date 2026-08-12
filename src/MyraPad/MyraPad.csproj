@@ -2,9 +2,17 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>$(AppTargetFramework)</TargetFramework>
-    <AssemblyName>MyraPad</AssemblyName>
+    <PackAsTool>true</PackAsTool>
     <RootNamespace>MyraPad</RootNamespace>
-    <DefineConstants>$(DefineConstants);MONOGAME</DefineConstants>	
+    <AssemblyName>myrapad</AssemblyName>
+    <PackageId>myrapad</PackageId>
+    <ToolCommandName>myrapad</ToolCommandName>
+    <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
+    <DefineConstants>$(DefineConstants);MONOGAME</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>

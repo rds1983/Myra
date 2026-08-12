@@ -4,17 +4,17 @@
 
 ![alt text](~/images/using-myra-in-stride-engine-tutorial1.png)
 
-3. Close Stride Game Studio, so there won't be conflicts with Visual Studio over the MyGame.csproj
+3. Close Stride Game Studio so there won't be conflicts with Visual Studio over the MyGame.csproj.
 
-4. Open MyGame in the Visual Studio:
+4. Open MyGame in Visual Studio:
 
 ![alt text](~/images/using-myra-in-stride-engine-tutorial2.png)
 
-5. Add latest Myra.Stride package reference to MyGame from nuget:
+5. Add the latest Myra.Stride package reference to MyGame from NuGet:
 
 ![alt text](~/images/using-myra-in-stride-engine-tutorial3.png)
 
-6. Create new code file MyraRenderer.cs in the MyGame's root folder with following contents:
+6. Create a new code file MyraRenderer.cs in the MyGame root folder with the following contents:
 ```c#
 using Stride.Rendering;
 using Stride.Graphics;

@@ -1,13 +1,18 @@
-﻿using Myra.Attributes;
+﻿using Myra.Events;
 using Myra.Graphics2D.UI.Styles;
-using System;
 using System.ComponentModel;
+using System.Collections;
 
 namespace Myra.Graphics2D.UI
 {
-	[StyleTypeName("CheckBox")]
+	/// <summary>
+	/// A check button widget that can be checked or unchecked independently.
+	/// </summary>
 	public class CheckButton : CheckButtonBase
 	{
+		/// <summary>
+		/// Gets or sets a value indicating whether the check button is checked.
+		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(false)]
 		public bool IsChecked
@@ -16,8 +21,10 @@ namespace Myra.Graphics2D.UI
 			set => IsPressed = value;
 		}
 
-
-		public event EventHandler IsCheckedChanged
+		/// <summary>
+		/// Occurs when the checked state of the check button changes.
+		/// </summary>
+		public event MyraEventHandler IsCheckedChanged
 		{
 			add
 			{
@@ -30,17 +37,24 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public CheckButton(string styleName = Stylesheet.DefaultStyleName)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CheckButton"/> class with the specified stylesheet and style.
+		/// </summary>
+		/// <param name="stylesheet">The stylesheet to use for applying the style.</param>
+		/// <param name="styleName">The name of the style to apply. Defaults to the default stylesheet style.</param>
+		public CheckButton(Stylesheet stylesheet, string styleName = Stylesheet.DefaultStyleName)
 		{
-			SetStyle(styleName);
+			SetStyle(stylesheet, styleName);
 		}
 
-		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CheckButton"/> class with the specified style.
+		/// </summary>
+		/// <param name="styleName">The name of the style to apply. Defaults to the default stylesheet style.</param>
+		public CheckButton(string styleName = Stylesheet.DefaultStyleName) : this(Stylesheet.Current, styleName)
 		{
-			base.InternalSetStyle(stylesheet, name);
-
-			var style = stylesheet.CheckBoxStyles.SafelyGetStyle(name);
-			ApplyCheckButtonStyle(style);
 		}
+
+		internal override IDictionary GetStylesDictionary(Stylesheet stylesheet) => stylesheet.CheckBoxStyles;
 	}
 }

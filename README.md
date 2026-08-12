@@ -3,37 +3,35 @@
 [![Build & Publish Beta](https://github.com/rds1983/Myra/actions/workflows/build-and-publish-beta.yml/badge.svg)](https://github.com/rds1983/Myra/actions/workflows/build-and-publish-beta.yml)
 [![Chat](https://img.shields.io/discord/628186029488340992.svg)](https://discord.gg/ZeHxhCY)
 
-Myra is UI Library for [MonoGame](http://www.monogame.net/), [FNA](https://github.com/FNA-XNA/FNA) and [Stride](https://github.com/stride3d/stride).  
+Myra is a UI library for [MonoGame](http://www.monogame.net/), [FNA](https://github.com/FNA-XNA/FNA), and [Stride](https://github.com/stride3d/stride).  
 
 ## Features
-* **Rich Set of Widgets.** Myra has following widgets: Button, CheckBox, ComboBox, ListBox, TabControl, Grid, Image, Menu, ProgressBar, ScrollPane, SplitPane(with arbitrary number of splitters), Slider, TextBlock, TextField, SpinButton, Tree, Window, Dialog, FileDialog, ColorPickerDialog and PropertyGrid.
-* **MML(Myra Markup Language).** XML based declarative language to describe UI ([example](/samples/Myra.Samples.AllWidgets/allControls.xmmp)).
-* **Skinning.**  The default skin(it had been borrowed from [VisUI](https://github.com/kotcrab/vis-ui)) could be replaced with a custom skin loaded from the XML ([example](/samples/Myra.Samples.CustomUIStylesheet/Resources/ui_stylesheet.xmms)).
+* **Rich Set of Widgets.** Myra has the following widgets: Label, Button, ToggleButton, CheckButton, RadioButton, TextBox, Image, Separator, ComboView, ListView, Menu, TabControl, Slider, ProgressBar, SpinButton, Grid, HorizontalStackPanel, VerticalStackPanel, Panel, ScrollViewer, SplitPane (with arbitrary number of splitters), TreeView, Window, Dialog, FileDialog, ColorPickerDialog, PropertyGrid.
+* **MML (Myra Markup Language).** An XML-based declarative language to describe UI ([example](/samples/Myra.Samples.AllWidgets/allControls.xmmp)).
+* **Skinning.** The default skin (borrowed from [VisUI](https://github.com/kotcrab/vis-ui)) can be replaced with a custom skin loaded from XML ([example](/samples/Myra.Samples.CustomUIStylesheet/Resources/ui_stylesheet.xmms)).
 * **MyraPad.** Standalone WYSIWYG MML based UI designer.
 * **Myra.PlatformAgnostic.** Version of the library that could be used in any C# game engine.
 
-## Demo
-If you would like to see Myra in action, download the binary release(Myra.v.v.v.v.zip from the latest release at [Releases](https://github.com/rds1983/Myra/releases)), unpack it and run samples.
-
 ## Documentation
-[https://rds1983.github.io/Myra](https://rds1983.github.io/Myra)
+[https://myraui.github.io/Myra/](https://myraui.github.io/Myra/)
 
 ## Support
-Use following resources if you need help with Myra or have other questions:
+Use the following resources if you need help with Myra or have any questions:
 * [Myra Discord](https://discord.gg/ZeHxhCY)
-* [Myra Topic at MonoGame Community Forum](http://community.monogame.net/t/myra-ui-library-for-the-monogame)
-* [Myra Topic at gamedev.ru (Russian)](https://gamedev.ru/code/forum/?id=241617)
 
-## Building From Source Code
-1. Clone this repo.
+## Building From Source
+1. Clone this repository.
 2. Open a solution from the "build" folder.
 
 ## Sponsor
-https://www.patreon.com/rds1983
+If this project is useful for you, you can support development:
+- Boosty: https://boosty.to/rds1983
+- Telegram Wallet: https://t.me/rds1983
 
-https://boosty.to/rds1983
+### Crypto
+USDT (TON): `UQCQy6tFInPvqinE44zHY4R0rYS3niaBikkqiSyGmyoAMwyO`
 
-bitcoin: 3GeKFcv8X1cn8WqH1mr8i7jgPBkQjQuyN1
+TON: `UQCQy6tFInPvqinE44zHY4R0rYS3niaBikkqiSyGmyoAMwyO`
 
 ## Gallery
 All Widgets Sample

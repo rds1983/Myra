@@ -27,7 +27,6 @@ namespace Myra.Graphics2D
 		/// <summary>
 		///     Draws a filled rectangle
 		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
 		/// <param name="rectangle">The rectangle to draw</param>
 		/// <param name="color">The color to draw the rectangle in</param>
 		public void FillRectangle(Rectangle rectangle, Color color) =>
@@ -36,7 +35,6 @@ namespace Myra.Graphics2D
 		/// <summary>
 		///     Draws a filled rectangle
 		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
 		/// <param name="location">Where to draw</param>
 		/// <param name="size">The size of the rectangle</param>
 		/// <param name="color">The color to draw the rectangle in</param>
@@ -48,7 +46,6 @@ namespace Myra.Graphics2D
 		/// <summary>
 		///     Draws a filled rectangle
 		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
 		/// <param name="x">The X coord of the left side</param>
 		/// <param name="y">The Y coord of the upper side</param>
 		/// <param name="width">Width</param>
@@ -60,7 +57,6 @@ namespace Myra.Graphics2D
 		/// <summary>
 		///     Draws a rectangle with the thickness provided
 		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
 		/// <param name="rectangle">The rectangle to draw</param>
 		/// <param name="color">The color to draw the rectangle in</param>
 		/// <param name="thickness">The thickness of the lines</param>
@@ -87,7 +83,6 @@ namespace Myra.Graphics2D
 		/// <summary>
 		///     Draws a rectangle with the thickness provided
 		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
 		/// <param name="location">Where to draw</param>
 		/// <param name="size">The size of the rectangle</param>
 		/// <param name="color">The color to draw the rectangle in</param>
@@ -101,8 +96,6 @@ namespace Myra.Graphics2D
 		/// <summary>
 		///     Draws a closed polygon from an array of points
 		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
-		/// ///
 		/// <param name="offset">Where to offset the points</param>
 		/// <param name="points">The points to connect with lines</param>
 		/// <param name="color">The color to use</param>
@@ -139,7 +132,6 @@ namespace Myra.Graphics2D
 		/// <summary>
 		///     Draws a line from point1 to point2 with an offset
 		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
 		/// <param name="x1">The X coord of the first point</param>
 		/// <param name="y1">The Y coord of the first point</param>
 		/// <param name="x2">The X coord of the second point</param>
@@ -152,7 +144,6 @@ namespace Myra.Graphics2D
 		/// <summary>
 		///     Draws a line from point1 to point2 with an offset
 		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
 		/// <param name="point1">The first point</param>
 		/// <param name="point2">The second point</param>
 		/// <param name="color">The color to use</param>
@@ -171,7 +162,6 @@ namespace Myra.Graphics2D
 		/// <summary>
 		///     Draws a line from point1 to point2 with an offset
 		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
 		/// <param name="point">The starting point</param>
 		/// <param name="length">The length of the line</param>
 		/// <param name="angle">The angle of this line from the starting point</param>
@@ -210,7 +200,6 @@ namespace Myra.Graphics2D
 		/// <summary>
 		///     Draw a circle
 		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
 		/// <param name="center">The center of the circle</param>
 		/// <param name="radius">The radius of the circle</param>
 		/// <param name="sides">The number of sides to generate</param>
@@ -222,7 +211,6 @@ namespace Myra.Graphics2D
 		/// <summary>
 		///     Draw a circle
 		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
 		/// <param name="x">The center X of the circle</param>
 		/// <param name="y">The center Y of the circle</param>
 		/// <param name="radius">The radius of the circle</param>
@@ -235,29 +223,27 @@ namespace Myra.Graphics2D
 		/// <summary>
 		///     Draw an Arc
 		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
 		/// <param name="center">The center of the Arc</param>
 		/// <param name="radius">The radius of the Arc</param>
 		/// <param name="sides">The number of sides to generate</param>
 		/// <param name="color">The color of the Arc</param>
-		/// <param name="thickness">The thickness of the lines used</param>
 		/// <param name="startAngle">The start angle of the line in radians</param>
 		/// <param name="endAngle">The end angle of the line in radians</param>
+		/// <param name="thickness">The thickness of the lines used</param>
 		public void DrawArc(Vector2 center, float radius, int sides, Color color, float startAngle, float endAngle, float thickness = 1f) =>
 			DrawPolygon(center, CreateArc(radius, sides, startAngle, endAngle), color, thickness);
 
 		/// <summary>
 		///     Draw a Arc
 		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
 		/// <param name="x">The center X of the Arc</param>
 		/// <param name="y">The center Y of the Arc</param>
 		/// <param name="radius">The radius of the Arc</param>
 		/// <param name="sides">The number of sides to generate</param>
 		/// <param name="color">The color of the Arc</param>
-		/// <param name="thickness">The thickness of the line</param>
 		/// <param name="startAngle">The start angle of the line in radians</param>
 		/// <param name="endAngle">The end angle of the line in radians</param>
+		/// <param name="thickness">The thickness of the line</param>
 		public void DrawArc(float x, float y, float radius, int sides, Color color, float startAngle, float endAngle, float thickness = 1f) =>
 			DrawPolygon(new Vector2(x, y), CreateArc(radius, sides, startAngle, endAngle), color, thickness);
 

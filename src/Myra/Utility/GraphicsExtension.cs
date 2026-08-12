@@ -1,4 +1,6 @@
 ﻿using System;
+using FontStashSharp.RichText;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -21,6 +23,17 @@ namespace Myra.Utility
 		public static Point Size(this Rectangle r)
 		{
 			return new Point(r.Width, r.Height);
+		}
+
+		public static string ToColorString(this Color c)
+		{
+			var name = ColorStorage.GetColorName(c);
+			if (!string.IsNullOrEmpty(name))
+			{
+				return name;
+			}
+
+			return c.ToHexString();
 		}
 
 #if PLATFORM_AGNOSTIC

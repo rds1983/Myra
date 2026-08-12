@@ -17,7 +17,11 @@ namespace Myra.Samples.SplitPaneContainer
 
 		public SplitPaneGame()
 		{
-			graphics = new GraphicsDeviceManager(this);
+			graphics = new GraphicsDeviceManager(this)
+			{
+				PreferredBackBufferWidth = 1200,
+				PreferredBackBufferHeight = 800
+			};
 
 			IsMouseVisible = true;
 			Window.AllowUserResizing = true;
@@ -110,7 +114,7 @@ namespace Myra.Samples.SplitPaneContainer
 			_root.Widgets.Add(_splitPane);
 		}
 
-		private void SplitPaneOnProportionsChanged(object sender, EventArgs eventArgs)
+		private void SplitPaneOnProportionsChanged(object sender, MyraEventArgs eventArgs)
 		{
 			UpdateProportions();
 		}

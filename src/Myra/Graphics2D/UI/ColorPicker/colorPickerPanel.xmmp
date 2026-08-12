@@ -4,7 +4,7 @@
     <HorizontalStackPanel Spacing="8">
       <Panel HorizontalAlignment="Left" VerticalAlignment="Top">
         <Image Id="_colorWheel" />
-        <Image Border="#000000" BorderThickness="1" Padding="4" HorizontalAlignment="Center" VerticalAlignment="Center" Enabled="False" Background="#FFFFFFFF" Id="_hsPicker" />
+        <Image Border="Black" BorderThickness="1" Padding="4" HorizontalAlignment="Center" VerticalAlignment="Center" Enabled="False" Background="White" Id="_hsPicker" />
       </Panel>
       <VerticalSlider Id="_vPicker" />
       <Grid ColumnSpacing="8" RowSpacing="6" VerticalAlignment="Top" StackPanel.ProportionType="Fill">
@@ -21,7 +21,7 @@
           <Proportion Type="Auto" />
           <Proportion Type="Auto" />
         </Grid.RowsProportions>
-        <Image Width="40" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="#FFFFFFFF" Id="_colorBackground" Grid.ColumnSpan="3" />
+        <Image Width="40" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="White" Id="_colorBackground" Grid.ColumnSpan="3" />
         <Image Width="40" HorizontalAlignment="Center" VerticalAlignment="Stretch" Id="_colorDisplay" Grid.ColumnSpan="3" />
         <Label Text="RGB" Grid.Row="1" />
         <TextBox Id="_inputRGB" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" />

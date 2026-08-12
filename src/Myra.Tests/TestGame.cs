@@ -2,7 +2,7 @@
 
 namespace Myra.Tests
 {
-	class TestGame: Game
+	class TestGame : Game
 	{
 		private readonly GraphicsDeviceManager _graphics;
 

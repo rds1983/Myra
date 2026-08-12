@@ -421,8 +421,6 @@ public static class Json
 					cachedString = word;
 					return TOKEN.STRING;
 			}
-
-			return TOKEN.NONE;
 		}
 	}
 

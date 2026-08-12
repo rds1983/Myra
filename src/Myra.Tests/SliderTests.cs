@@ -1,13 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Myra.Graphics2D.UI;
-using NUnit.Framework;
+using Xunit;
 
 namespace Myra.Tests
 {
-	[TestFixture]
+	[Collection("Myra Tests")]
 	public class SliderTests
 	{
-		[Test]
+		[Fact]
 		public void TestMinMax()
 		{
 			var slider = new HorizontalSlider
@@ -30,10 +30,12 @@ namespace Myra.Tests
 			desktop.Render();
 
 			slider.Value = 0.5f;
-			Assert.AreEqual(slider.Hint, 0);
+			Assert.Equal(0, slider.Hint);
 
 			slider.Value = 2.0f;
-			Assert.AreEqual(slider.Hint, slider.MaxHint);
+			Assert.Equal(slider.Hint, slider.MaxHint);
 		}
 	}
 }
+
+

@@ -16,24 +16,28 @@
           <Proportion Type="Auto" />
         </Grid.RowsProportions>
         <Label Text="Button:" />
-        <ImageTextButton Text="Button" Id="_button" Grid.Column="1" />
-        <CheckBox Text="This is checkbox" Grid.Row="1" Grid.ColumnSpan="2" />
+        <Button Id="_button" Grid.Column="1">
+          <Label Text="Button" />
+        </Button>
+        <CheckButton Grid.Row="1" Grid.ColumnSpan="2">
+          <Label Text="This is checkbox" />
+        </CheckButton>
         <Label Text="Slider:" Grid.Row="2" />
         <HorizontalSlider Grid.Column="1" Grid.Row="2" />
-        <Label Text="Combo Box:" Grid.Row="3" />
-        <ComboBox Grid.Column="1" Grid.Row="3">
-          <ListItem Text="Item 1" />
-          <ListItem Text="Item 2" />
-          <ListItem Text="Item 3" />
-        </ComboBox>
+        <Label Text="Combo View:" Grid.Row="3" />
+        <ComboView Grid.Column="1" Grid.Row="3">
+          <Label Text="Item 1" />
+          <Label Text="Item 2" />
+          <Label Text="Item 3" />
+        </ComboView>
         <Label Text="Text Field:" Grid.Row="4" />
         <TextBox Grid.Column="1" Grid.Row="4" />
-        <Label Text="List Box:" Grid.Row="5" />
-        <ListBox Grid.Column="1" Grid.Row="5">
-          <ListItem Text="Item 1" />
-          <ListItem Text="Item 2" />
-          <ListItem Text="Item 3" />
-        </ListBox>
+        <Label Text="List View:" Grid.Row="5" />
+        <ListView Grid.Column="1" Grid.Row="5">
+          <Label Text="Item 1" />
+          <Label Text="Item 2" />
+          <Label Text="Item 3" />
+        </ListView>
       </Grid>
     </ScrollViewer>
     <VerticalSplitPane>

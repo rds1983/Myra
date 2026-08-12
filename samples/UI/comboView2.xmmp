@@ -1,0 +1,17 @@
+<Project>
+  <Project.ExportOptions />
+  <Panel>
+    <ComboView DropdownMaximumHeight="150">
+      <Label Text="ItemItemItem0" />
+      <Label Text="ItemItemItem1" />
+      <Label Text="ItemItemItem2" />
+      <Label Text="ItemItemItem3" />
+      <Label Text="ItemItemItem4" />
+      <Label Text="ItemItemItem5" />
+      <Label Text="ItemItemItem6" />
+      <Label Text="ItemItemItem7" />
+      <Label Text="ItemItemItem8" />
+      <Label Text="ItemItemItem9" />
+    </ComboView>
+  </Panel>
+</Project>

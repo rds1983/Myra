@@ -1,17 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.1.32328.378
+# Visual Studio Version 18
+VisualStudioVersion = 18.6.11819.183
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{EAB0AA24-7185-4897-A866-AE87AF3F2E0B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.PlatformAgnostic", "..\src\Myra\Myra.PlatformAgnostic.csproj", "{09296F2D-2AB0-4B9C-B6EF-73389BABBDC8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.PlatformAgnostic", "..\samples\Myra.Samples.PlatformAgnostic\Myra.Samples.PlatformAgnostic.csproj", "{0D553344-A5D2-42F6-947B-30139A27A9F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.PlatformAgnostic.MonoGame", "..\samples\Myra.Samples.PlatformAgnostic.MonoGame\Myra.Samples.PlatformAgnostic.MonoGame.csproj", "{974C5499-7E21-899B-C20E-C1F453C81CCD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.Silk.NET", "..\samples\Myra.Samples.Silk.NET\Myra.Samples.Silk.NET.csproj", "{B661A371-75A8-43AD-B285-DCD0FD7EC93B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.PlatformAgnostic.Silk.NET", "..\samples\Myra.Samples.PlatformAgnostic.Silk.NET\Myra.Samples.PlatformAgnostic.Silk.NET.csproj", "{57D634B7-151E-0F47-4BEA-2D01389E9E5F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.Silk.NET.TrippyGL", "..\samples\Myra.Samples.Silk.NET.TrippyGL\Myra.Samples.Silk.NET.TrippyGL.csproj", "{28D35517-E469-4A95-904B-AF225A54774C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.PlatformAgnostic.Silk.NET.TrippyGL", "..\samples\Myra.Samples.PlatformAgnostic.Silk.NET.TrippyGL\Myra.Samples.PlatformAgnostic.Silk.NET.TrippyGL.csproj", "{E6252604-9C7E-6D35-02ED-5F9ADF46DC0D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.PlatformAgnostic.Raylib", "..\samples\Myra.Samples.PlatformAgnostic.Raylib\Myra.Samples.PlatformAgnostic.Raylib.csproj", "{78C94641-E361-E752-03DE-8FD04C85FB73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.PlatformAgnostic.OpenTK", "..\samples\Myra.Samples.PlatformAgnostic.OpenTK\Myra.Samples.PlatformAgnostic.OpenTK.csproj", "{E23331EF-F95E-1259-6E2C-965DF05B66CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,26 +27,36 @@ Global
 		{09296F2D-2AB0-4B9C-B6EF-73389BABBDC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09296F2D-2AB0-4B9C-B6EF-73389BABBDC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09296F2D-2AB0-4B9C-B6EF-73389BABBDC8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0D553344-A5D2-42F6-947B-30139A27A9F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0D553344-A5D2-42F6-947B-30139A27A9F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0D553344-A5D2-42F6-947B-30139A27A9F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0D553344-A5D2-42F6-947B-30139A27A9F4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B661A371-75A8-43AD-B285-DCD0FD7EC93B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B661A371-75A8-43AD-B285-DCD0FD7EC93B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B661A371-75A8-43AD-B285-DCD0FD7EC93B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B661A371-75A8-43AD-B285-DCD0FD7EC93B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{28D35517-E469-4A95-904B-AF225A54774C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{28D35517-E469-4A95-904B-AF225A54774C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{28D35517-E469-4A95-904B-AF225A54774C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{28D35517-E469-4A95-904B-AF225A54774C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{974C5499-7E21-899B-C20E-C1F453C81CCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{974C5499-7E21-899B-C20E-C1F453C81CCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{974C5499-7E21-899B-C20E-C1F453C81CCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{974C5499-7E21-899B-C20E-C1F453C81CCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57D634B7-151E-0F47-4BEA-2D01389E9E5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57D634B7-151E-0F47-4BEA-2D01389E9E5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57D634B7-151E-0F47-4BEA-2D01389E9E5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57D634B7-151E-0F47-4BEA-2D01389E9E5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6252604-9C7E-6D35-02ED-5F9ADF46DC0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6252604-9C7E-6D35-02ED-5F9ADF46DC0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6252604-9C7E-6D35-02ED-5F9ADF46DC0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6252604-9C7E-6D35-02ED-5F9ADF46DC0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78C94641-E361-E752-03DE-8FD04C85FB73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78C94641-E361-E752-03DE-8FD04C85FB73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78C94641-E361-E752-03DE-8FD04C85FB73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78C94641-E361-E752-03DE-8FD04C85FB73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E23331EF-F95E-1259-6E2C-965DF05B66CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E23331EF-F95E-1259-6E2C-965DF05B66CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E23331EF-F95E-1259-6E2C-965DF05B66CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E23331EF-F95E-1259-6E2C-965DF05B66CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{0D553344-A5D2-42F6-947B-30139A27A9F4} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
-		{B661A371-75A8-43AD-B285-DCD0FD7EC93B} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
-		{28D35517-E469-4A95-904B-AF225A54774C} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{974C5499-7E21-899B-C20E-C1F453C81CCD} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{57D634B7-151E-0F47-4BEA-2D01389E9E5F} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{E6252604-9C7E-6D35-02ED-5F9ADF46DC0D} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{78C94641-E361-E752-03DE-8FD04C85FB73} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{E23331EF-F95E-1259-6E2C-965DF05B66CF} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35ACDF4E-2CE2-46B1-A19F-35DC131069A1}

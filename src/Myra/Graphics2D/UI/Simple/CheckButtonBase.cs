@@ -14,13 +14,21 @@ using Myra.Platform;
 
 namespace Myra.Graphics2D.UI
 {
+	/// <summary>
+	/// Specifies the position of the check box image relative to the content in a check button.
+	/// </summary>
 	public enum CheckPosition
 	{
+		/// <summary>The check box image is positioned to the left of the content.</summary>
 		Left,
+		/// <summary>The check box image is positioned to the right of the content.</summary>
 		Right
 	}
 
-	public class CheckButtonBase : ButtonBase2
+	/// <summary>
+	/// An abstract base class for check button widgets that display a checkbox image and content with toggle functionality.
+	/// </summary>
+	public class CheckButtonBase : ButtonBase
 	{
 		private class CheckImageInternal : Image
 		{
@@ -49,6 +57,9 @@ namespace Myra.Graphics2D.UI
 		private Widget _content;
 		private IImage _checkedImage, _uncheckedImage;
 
+		/// <summary>
+		/// Gets or sets the position of the check box image relative to the content.
+		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(CheckPosition.Left)]
 		public CheckPosition CheckPosition
@@ -63,15 +74,23 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the spacing in pixels between the check box image and the content.
+		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(0)]
+		[StylePropertyPath("ImageTextSpacing")]
 		public int CheckContentSpacing
 		{
 			get => _layout.Spacing;
 			set => _layout.Spacing = value;
 		}
 
+		/// <summary>
+		/// Gets or sets the image displayed when the check button is unchecked.
+		/// </summary>
 		[Category("Appearance")]
+		[StylePropertyPath("ImageStyle/Image")]
 		public IImage UncheckedImage
 		{
 			get => _uncheckedImage;
@@ -87,7 +106,11 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the image displayed when the check button is checked.
+		/// </summary>
 		[Category("Appearance")]
+		[StylePropertyPath("ImageStyle/PressedImage")]
 		public IImage CheckedImage
 		{
 			get => _checkedImage;
@@ -103,6 +126,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the content widget displayed next to the check box.
+		/// </summary>
 		[Browsable(false)]
 		[Content]
 		public override Widget Content
@@ -118,10 +144,16 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Gets the image widget that displays the check box visual.
+		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
 		public Image CheckImage => _check;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CheckButtonBase"/> class.
+		/// </summary>
 		protected CheckButtonBase()
 		{
 			ChildrenLayout = _layout;
@@ -129,15 +161,24 @@ namespace Myra.Graphics2D.UI
 			UpdateChildren();
 		}
 
+		/// <summary>
+		/// Called when a touch point is released on the check button base.
+		/// </summary>
 		protected override void InternalOnTouchUp()
 		{
 		}
 
+		/// <summary>
+		/// Called when a touch point is pressed on the check button base, toggling its state.
+		/// </summary>
 		protected override void InternalOnTouchDown()
 		{
-			SetValueByUser(!IsPressed);
+			SetIsPressedByUser(!IsPressed);
 		}
 
+		/// <summary>
+		/// Handles the pressed state change and updates the check image.
+		/// </summary>
 		public override void OnPressedChanged()
 		{
 			base.OnPressedChanged();
@@ -145,6 +186,10 @@ namespace Myra.Graphics2D.UI
 			_check.IsPressed = IsPressed;
 		}
 
+		/// <summary>
+		/// Handles keyboard input, toggling the check state when Space is pressed.
+		/// </summary>
+		/// <param name="k">The key being pressed.</param>
 		public override void OnKeyDown(Keys k)
 		{
 			base.OnKeyDown(k);
@@ -156,23 +201,28 @@ namespace Myra.Graphics2D.UI
 
 			if (k == Keys.Space)
 			{
-				SetValueByUser(!IsPressed);
+				SetIsPressedByUser(!IsPressed);
 			}
 		}
 
-		public void ApplyCheckButtonStyle(ImageTextButtonStyle style)
+		/// <summary>
+		/// Applies the specified widget style to this check button.
+		/// </summary>
+		/// <param name="style">The widget style to apply.</param>
+		protected override void ApplyStyle(WidgetStyle style)
 		{
-			ApplyButtonStyle(style);
+			base.ApplyStyle(style);
 
-			if (style.ImageStyle != null)
+			var checkButtonStyle = (CheckButtonStyle)style;
+			if (checkButtonStyle.ImageStyle != null)
 			{
-				_check.ApplyPressableImageStyle(style.ImageStyle);
+				_check.ApplyImageStyle(checkButtonStyle.ImageStyle);
 
-				UncheckedImage = style.ImageStyle.Image;
-				CheckedImage = style.ImageStyle.PressedImage;
+				UncheckedImage = checkButtonStyle.ImageStyle.Image;
+				CheckedImage = checkButtonStyle.ImageStyle.PressedImage;
 			}
 
-			CheckContentSpacing = style.ImageTextSpacing;
+			CheckContentSpacing = checkButtonStyle.ImageTextSpacing;
 		}
 
 		private void UpdateChildren()
@@ -201,6 +251,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Copies the check button properties from another check button.
+		/// </summary>
+		/// <param name="w">The source check button to copy from.</param>
 		protected internal override void CopyFrom(Widget w)
 		{
 			base.CopyFrom(w);

@@ -1,185 +1,300 @@
-﻿using System.Collections.Generic;
-using System.Xml.Linq;
-using System;
-using FontStashSharp;
+﻿using FontStashSharp;
+using FontStashSharp.RichText;
 using Myra;
+using Myra.Graphics2D;
+using Myra.Graphics2D.Brushes;
 using Myra.Graphics2D.TextureAtlases;
+using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.Styles;
-using Myra.MML;
-using Myra.Utility;
+using System;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 #elif STRIDE
 using Stride.Core.Mathematics;
-using Texture2D = Stride.Graphics.Texture;
 #else
 using System.Drawing;
-using Texture2D = System.Object;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace AssetManagementBase
 {
+	/// <summary>
+	/// Provides extension methods for the AssetManager class to load Myra-specific assets like texture atlases, fonts, and stylesheets.
+	/// </summary>
 	public static partial class MyraAssetManagerExtensions
 	{
-		private static AssetLoader<TextureRegionAtlas> _atlasLoader = (manager, assetName, settings, tag) =>
-		{
-			var data = manager.ReadAsString(assetName);
-
-#if !PLATFORM_AGNOSTIC
-			return TextureRegionAtlas.Load(data, name => manager.LoadTexture2D(MyraEnvironment.GraphicsDevice, name, true));
-#else
-			return TextureRegionAtlas.Load(data, name => manager.LoadTexture2D(name).Texture);
-#endif
-		};
-
 		private static AssetLoader<StaticSpriteFont> _staticFontLoader = (manager, assetName, settings, tag) =>
 		{
 			var fontData = manager.ReadAsString(assetName);
 
-			return StaticSpriteFont.FromBMFont(fontData,
+			var result = StaticSpriteFont.FromBMFont(fontData,
 						name =>
 						{
 							var region = LoadTextureRegion(manager, name);
 							return new TextureWithOffset(region.Texture, region.Bounds.Location);
 						});
+
+			result.Name = assetName;
+
+			return result;
 		};
 
-		private static AssetLoader<Stylesheet> _stylesheetLoader = (manager, assetName, settings, tag) =>
+		private static AssetLoader<TextureRegionAtlas> _atlasLoader = (manager, assetName, settings, tag) =>
 		{
-			var xml = manager.ReadAsString(assetName);
+			var data = manager.ReadAsString(assetName);
 
-			var xDoc = XDocument.Parse(xml);
-			var attr = xDoc.Root.Attribute("TextureRegionAtlas");
-			if (attr == null)
-			{
-				throw new Exception("Mandatory attribute 'TextureRegionAtlas' doesnt exist");
-			}
+#if !PLATFORM_AGNOSTIC
+			var result = TextureRegionAtlas.FromXml(data, name => manager.LoadTexture2D(MyraEnvironment.GraphicsDevice, name, true));
+#else
+			var result = TextureRegionAtlas.FromXml(data, name => manager.LoadTexture2D(name).Texture);
+#endif
 
-			var textureRegionAtlas = manager.LoadTextureRegionAtlas(attr.Value);
+			result.Name = assetName;
 
-			// Load fonts
-			var fonts = new Dictionary<string, SpriteFontBase>();
-			var fontsNode = xDoc.Root.Element("Fonts");
-
-			var usedSpaceAttr = fontsNode.Attribute("UsedSpace");
-			Texture2D existingTexture = null;
-			var existingTextureUsedSpace = Rectangle.Empty;
-			if (usedSpaceAttr != null)
-			{
-				var usedSpace = usedSpaceAttr.Value.ParseRectangle();
-
-				existingTexture = textureRegionAtlas.Texture;
-				existingTextureUsedSpace = usedSpace;
-			}
-
-			foreach (var el in fontsNode.Elements())
-			{
-				SpriteFontBase font = null;
-
-				var fontFile = el.Attribute("File").Value;
-				if (fontFile.EndsWith(".ttf") || fontFile.EndsWith(".otf"))
-				{
-					var parts = new List<string>()
-					{
-						fontFile
-					};
-
-					var typeAttribute = el.Attribute("Effect");
-					if (typeAttribute != null)
-					{
-						parts.Add(typeAttribute.Value);
-
-						var amountAttribute = el.Attribute("Amount");
-						parts.Add(amountAttribute.Value);
-					}
-
-					if (el.Attribute("Size") == null)
-					{
-						throw new Exception($"Can't load stylesheet ttf font '{fontFile}', since Size isn't specified.");
-					}
-
-					parts.Add(el.Attribute("Size").Value);
-					var fontSystem = manager.LoadFontSystem(fontFile, existingTexture: existingTexture, existingTextureUsedSpace: existingTextureUsedSpace);
-					font = fontSystem.GetFont(float.Parse(el.Attribute("Size").Value));
-				}
-				else if (fontFile.EndsWith(".fnt"))
-				{
-					font = manager.MyraLoadStaticSpriteFont(fontFile);
-				}
-				else
-				{
-					throw new Exception(string.Format("Font '{0}' isn't supported", fontFile));
-				}
-
-				fonts[el.Attribute(BaseContext.IdName).Value] = font;
-			}
-
-			return Stylesheet.LoadFromSource(xml, textureRegionAtlas, fonts);
+			return result;
 		};
 
+		private static AssetLoader<Project> _projectLoader = (manager, assetName, settings, tag) =>
+		{
+			var data = manager.ReadAsString(assetName);
+
+			return Project.LoadFromXml(data, manager);
+		};
+
+		/// <summary>
+		/// Loads a texture region atlas from an XML asset file.
+		/// </summary>
+		/// <param name="assetManager">The asset manager instance.</param>
+		/// <param name="assetName">The name of the atlas asset to load.</param>
+		/// <returns>The loaded texture region atlas.</returns>
 		public static TextureRegionAtlas LoadTextureRegionAtlas(this AssetManager assetManager, string assetName) => assetManager.UseLoader(_atlasLoader, assetName);
 
 		/// <summary>
-		/// Loads texture region by either image name(i.e. 'image.png') or atlas name/id(i.e. 'atlas.xmat:id')
+		/// Loads a Myra project from an XML asset file.
 		/// </summary>
-		/// <param name="assetManager"></param>
-		/// <param name="assetName"></param>
-		/// <returns></returns>
-		public static TextureRegion LoadTextureRegion(this AssetManager assetManager, string assetName)
+		/// <param name="assetManager">The asset manager instance.</param>
+		/// <param name="assetName">The name of the project asset to load.</param>
+		/// <returns>The loaded project.</returns>
+		public static Project LoadProject(this AssetManager assetManager, string assetName) => assetManager.UseLoader(_projectLoader, assetName);
+
+		/// <summary>
+		/// Loads a texture region from an asset, with optional stylesheet context for resolving atlas references.
+		/// </summary>
+		/// <param name="assetManager">The asset manager instance.</param>
+		/// <param name="assetName">The name of the texture region asset to load. Can be an atlas reference, atlas name:region format, or file path.</param>
+		/// <param name="stylesheet">The stylesheet context for resolving atlas names. If null, loads as file.</param>
+		/// <returns>The loaded texture region.</returns>
+		public static TextureRegion LoadTextureRegion(this AssetManager assetManager, string assetName, Stylesheet stylesheet)
 		{
-			if (assetName.Contains(":"))
+			string regionName;
+			if (TextureRegionAtlas.TryGetRegionName(ref assetName, out regionName))
 			{
-				// First part is texture region atlas name
-				// Second part is texture region name
-				var parts = assetName.Split(':');
-				var textureRegionAtlas = assetManager.LoadTextureRegionAtlas(parts[0]);
-				return textureRegionAtlas[parts[1]];
+				var textureRegionAtlas = assetManager.LoadTextureRegionAtlas(assetName);
+				return textureRegionAtlas[regionName];
+			}
+
+			if (stylesheet != null && !assetName.Contains("."))
+			{
+				// If there's no extension, assume it's a texture region atlas with id equal to the asset name
+				var textureRegionAtlas = stylesheet.Atlas;
+				return textureRegionAtlas[assetName];
 			}
 
 			// Ordinary texture
 #if MONOGAME || FNA || STRIDE
 			var texture = assetManager.LoadTexture2D(MyraEnvironment.GraphicsDevice, assetName);
-			return new TextureRegion(texture, new Rectangle(0, 0, texture.Width, texture.Height));
+			var result = new TextureRegion(texture, new Rectangle(0, 0, texture.Width, texture.Height));
 #else
 			var texture = assetManager.LoadTexture2D(assetName);
-			return new TextureRegion(texture.Texture, new Rectangle(0, 0, texture.Width, texture.Height));
+			var result = new TextureRegion(texture.Texture, new Rectangle(0, 0, texture.Width, texture.Height));
 #endif
-		}
 
-		internal static StaticSpriteFont MyraLoadStaticSpriteFont(this AssetManager assetManager, string assetName) => assetManager.UseLoader(_staticFontLoader, assetName);
+			result.Name = assetName;
+
+			return result;
+		}
 
 		/// <summary>
-		/// Loads a font by either ttf name/size(i.e. 'font.ttf:32') or by fnt name(i.e. 'font.fnt')
+		/// Loads a texture region from an asset using the current stylesheet context.
 		/// </summary>
-		/// <param name="assetManager"></param>
-		/// <param name="assetName"></param>
-		/// <returns></returns>
-		public static SpriteFontBase LoadFont(this AssetManager assetManager, string assetName)
+		/// <param name="assetManager">The asset manager instance.</param>
+		/// <param name="assetName">The name of the texture region asset to load.</param>
+		/// <returns>The loaded texture region.</returns>
+		public static TextureRegion LoadTextureRegion(this AssetManager assetManager, string assetName) => LoadTextureRegion(assetManager, assetName, Stylesheet.Current);
+
+		/// <summary>
+		/// Loads an image asset with optional color tinting, with stylesheet context for resolving atlas references.
+		/// </summary>
+		/// <param name="assetManager">The asset manager instance.</param>
+		/// <param name="assetName">The name of the image asset to load. Can include color tint separated by '/'.</param>
+		/// <param name="stylesheet">The stylesheet context for resolving atlas names.</param>
+		/// <returns>The loaded image, or a tinted version if a color tint was specified.</returns>
+		public static IImage LoadImage(this AssetManager assetManager, string assetName, Stylesheet stylesheet)
 		{
-			if (assetName.Contains(".fnt"))
+			var parts = assetName.Split(TintedRegion.Separator);
+			Color? color = null;
+			if (parts.Length > 1)
 			{
-				return assetManager.MyraLoadStaticSpriteFont(assetName);
-			}
-			else if (assetName.Contains(".ttf"))
-			{
-
-				var parts = assetName.Split(':');
-				if (parts.Length < 2)
+				color = ColorStorage.FromName(parts[1]);
+				if (color == null)
 				{
-					throw new Exception("Missing font size");
+					throw new Exception($"Could not parse color name '{parts[1]}'");
 				}
-
-				var fontSize = int.Parse(parts[1].Trim());
-				var fontSystem = assetManager.LoadFontSystem(parts[0].Trim());
-
-				return fontSystem.GetFont(fontSize);
+				assetName = parts[0];
 			}
 
-			throw new Exception(string.Format("Can't load font '{0}'", assetName));
+			var region = assetManager.LoadTextureRegion(assetName, stylesheet);
+			if (color == null)
+			{
+				return region;
+			}
+
+			return new TintedRegion(region, color.Value);
 		}
 
-		public static Stylesheet LoadStylesheet(this AssetManager assetManager, string assetName) => assetManager.UseLoader(_stylesheetLoader, assetName);
+		/// <summary>
+		/// Loads an image asset with optional color tinting using the current stylesheet context.
+		/// </summary>
+		/// <param name="assetManager">The asset manager instance.</param>
+		/// <param name="assetName">The name of the image asset to load.</param>
+		/// <returns>The loaded image, or a tinted version if a color tint was specified.</returns>
+		public static IImage LoadImage(this AssetManager assetManager, string assetName) => LoadImage(assetManager, assetName, Stylesheet.Current);
+
+		/// <summary>
+		/// Loads a brush asset, resolving color names or atlas region references with stylesheet context.
+		/// </summary>
+		/// <param name="assetManager">The asset manager instance.</param>
+		/// <param name="assetName">The name of the brush asset to load. Can be a color name or image reference.</param>
+		/// <param name="stylesheet">The stylesheet context for resolving atlas references.</param>
+		/// <returns>The loaded brush, either a SolidBrush for colors or an image-based brush.</returns>
+		public static IBrush LoadBrush(this AssetManager assetManager, string assetName, Stylesheet stylesheet)
+		{
+			if (!assetName.Contains(".") && assetName.IndexOf(TintedRegion.Separator) == -1 && assetName.IndexOf(StylesheetFont.Separator) == -1)
+			{
+				// It's either a default stylesheet texture atlas region or color name
+				if (stylesheet == null || !stylesheet.Atlas.Regions.TryGetValue(assetName, out var region))
+				{
+					// Color
+					var color = ColorStorage.FromName(assetName);
+					if (color == null)
+					{
+						throw new Exception($"Could not parse brush name '{assetName}'");
+					}
+
+					return new SolidBrush(color.Value);
+				}
+			}
+
+			return assetManager.LoadImage(assetName, stylesheet);
+		}
+
+		/// <summary>
+		/// Loads a brush asset using the current stylesheet context.
+		/// </summary>
+		/// <param name="assetManager">The asset manager instance.</param>
+		/// <param name="assetName">The name of the brush asset to load.</param>
+		/// <returns>The loaded brush.</returns>
+		public static IBrush LoadBrush(this AssetManager assetManager, string assetName) => LoadBrush(assetManager, assetName, Stylesheet.Current);
+
+		/// <summary>
+		/// Loads a static sprite font (BMFont) from an asset file.
+		/// </summary>
+		/// <param name="assetManager">The asset manager instance.</param>
+		/// <param name="assetName">The name of the font asset to load.</param>
+		/// <returns>The loaded static sprite font.</returns>
+		private static StaticSpriteFont MyraLoadStaticSpriteFont(this AssetManager assetManager, string assetName) => assetManager.UseLoader(_staticFontLoader, assetName);
+
+		/// <summary>
+		/// Loads a font asset, supporting BMFont files, TrueType fonts, and stylesheet-defined fonts.
+		/// </summary>
+		/// <param name="assetManager">The asset manager instance.</param>
+		/// <param name="assetName">The name of the font asset to load. Can be a file path or stylesheet font name.</param>
+		/// <param name="stylesheet">The stylesheet context for resolving font names.</param>
+		/// <returns>The loaded sprite font.</returns>
+		public static SpriteFontBase LoadFont(this AssetManager assetManager, string assetName, Stylesheet stylesheet)
+		{
+			int? fontSize = null;
+			string parameter;
+
+			var originalAssetName = assetName;
+			if (StylesheetFont.TryGetParameter(ref assetName, out parameter))
+			{
+				int fs;
+				if (!int.TryParse(parameter, out fs) || fs <= 0)
+				{
+					throw new Exception($"Invalid font size {fontSize}.");
+				}
+
+				fontSize = fs;
+			}
+
+			SpriteFontBase result = null;
+
+			do
+			{
+				if (stylesheet != null && !assetName.Contains("."))
+				{
+					// If there's no extension, assume it's a current stylesheet font
+					if (!stylesheet.Fonts.TryGetValue(assetName, out var font))
+					{
+						throw new Exception($"Font '{assetName}' not found in current stylesheet.");
+					}
+
+					result = font.Font;
+					if (fontSize != null)
+					{
+						var asDynamicFont = result as DynamicSpriteFont;
+						if (asDynamicFont != null)
+						{
+							// Custom font size
+							result = asDynamicFont.FontSystem.GetFont(fontSize.Value);
+						}
+						else
+						{
+							throw new Exception($"Font '{assetName}' size can't be modified.");
+						}
+					}
+
+					break;
+				}
+
+				if (assetName.Contains(".fnt"))
+				{
+					result = assetManager.MyraLoadStaticSpriteFont(assetName);
+					break;
+				}
+
+				if (assetName.Contains(".ttf") || assetName.Contains(".otf"))
+				{
+					if (fontSize == null)
+					{
+						throw new Exception("Missing font size.");
+					}
+
+					var fontSystem = assetManager.LoadFontSystem(assetName);
+					result = fontSystem.GetFont(fontSize.Value);
+					break;
+				}
+			}
+			while (false);
+
+			if (result == null)
+			{
+				throw new Exception(string.Format("Can't load font '{0}'", assetName));
+			}
+
+			result.Name = originalAssetName;
+
+			return result;
+		}
+
+		/// <summary>
+		/// Loads a font asset using the current stylesheet context.
+		/// </summary>
+		/// <param name="assetManager">The asset manager instance.</param>
+		/// <param name="assetName">The name of the font asset to load.</param>
+		/// <returns>The loaded sprite font.</returns>
+		public static SpriteFontBase LoadFont(this AssetManager assetManager, string assetName) => LoadFont(assetManager, assetName, Stylesheet.Current);
 	}
 }

@@ -6,18 +6,29 @@ using Color = FontStashSharp.FSColor;
 
 namespace Myra.Platform
 {
+	/// <summary>
+	/// Specifies the type of rendering backend to use.
+	/// </summary>
 	public enum RendererType
 	{
+		/// <summary>Uses sprite-based rendering.</summary>
 		Sprite,
+		/// <summary>Uses quad-based rendering.</summary>
 		Quad
 	}
 
+	/// <summary>
+	/// Provides rendering functionality for the Myra UI framework.
+	/// </summary>
 	public interface IMyraRenderer
 	{
+		/// <summary>
+		/// Gets the texture manager for loading and managing textures.
+		/// </summary>
 		ITexture2DManager TextureManager { get; }
 
 		/// <summary>
-		/// Renderer Type
+		/// Gets the type of renderer being used.
 		/// </summary>
 		RendererType RendererType { get; }
 

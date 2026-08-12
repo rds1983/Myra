@@ -16,7 +16,7 @@ namespace MyraPad.UI
 			_buttonChangeOutputPath.Click += ButtonChangeOutputPathOnClick;
 		}
 
-		private void ButtonChangeOutputPathOnClick(object sender, EventArgs eventArgs)
+		private void ButtonChangeOutputPathOnClick(object sender, MyraEventArgs eventArgs)
 		{
 			var dlg = new FileDialog(FileDialogMode.ChooseFolder)
 			{

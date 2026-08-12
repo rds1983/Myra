@@ -3,7 +3,6 @@ using FontStashSharp;
 using Myra.Utility;
 using FontStashSharp.RichText;
 using FontStashSharp.Interfaces;
-using info.lundin.math;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -26,13 +25,22 @@ using Matrix = System.Numerics.Matrix3x2;
 
 namespace Myra.Graphics2D
 {
+	/// <summary>
+	/// Specifies the texture filtering mode used during rendering.
+	/// </summary>
 	public enum TextureFiltering
 	{
+		/// <summary>Nearest neighbor filtering (fastest but less smooth).</summary>
 		Nearest,
+		/// <summary>Linear filtering (bilinear interpolation).</summary>
 		Linear,
+		/// <summary>Anisotropic filtering (highest quality).</summary>
 		Anisotropic
 	}
 
+	/// <summary>
+	/// Provides rendering context for drawing 2D graphics including shapes, text, and textured regions.
+	/// </summary>
 	public partial class RenderContext : IDisposable
 	{
 #if MONOGAME
@@ -50,6 +58,10 @@ namespace Myra.Graphics2D
 			FilterMode = TextureFilterMode.Default
 		};
 
+		/// <summary>
+		/// Sets whether anisotropic filtering mode is enabled.
+		/// </summary>
+		/// <param name="isAnisotropicFiltering">True to enable anisotropic filtering; false to disable.</param>
 		public void SetAnisotropicFilteringMode(bool isAnisotropicFiltering)
 		{
 			_isAnisotropicFilteringOn = isAnisotropicFiltering;
@@ -102,11 +114,11 @@ namespace Myra.Graphics2D
 		private bool _beginCalled;
 		private Rectangle _scissor;
 		private TextureFiltering _textureFiltering = TextureFiltering.Nearest;
-		public Transform Transform;
-		public Matrix? TransformMatrix { get; set; }
+
+		internal Transform Transform;
 
 #if MONOGAME
-        private bool _isAnisotropicFilteringOn;
+		private bool _isAnisotropicFilteringOn;
 #endif
 
 		internal Rectangle DeviceScissor
@@ -137,6 +149,9 @@ namespace Myra.Graphics2D
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the scissor rectangle for clipping rendered output.
+		/// </summary>
 		public Rectangle Scissor
 		{
 			get
@@ -167,8 +182,14 @@ namespace Myra.Graphics2D
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the opacity (alpha) value for rendering, ranging from 0.0 (fully transparent) to 1.0 (fully opaque).
+		/// </summary>
 		public float Opacity { get; set; }
 
+		/// <summary>
+		/// Initializes a new instance of the RenderContext class.
+		/// </summary>
 		public RenderContext()
 		{
 #if MONOGAME || FNA || STRIDE
@@ -283,6 +304,7 @@ namespace Myra.Graphics2D
 		/// <param name="sourceRectangle"></param>
 		/// <param name="color"></param>
 		/// <param name="rotation"></param>
+		/// <param name="scale"></param>
 		/// <param name="depth"></param>
 		public void Draw(Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 scale, float depth = 0.0f)
 		{
@@ -384,11 +406,12 @@ namespace Myra.Graphics2D
 		/// <summary>
 		/// Draws a text
 		/// </summary>
+		/// <param name="font">The font to use for drawing.</param>
 		/// <param name="text">The text which will be drawn.</param>
 		/// <param name="position">The drawing location on screen.</param>
 		/// <param name="color">A color mask.</param>
-		/// <param name="rotation">A rotation of this text in radians.</param>
 		/// <param name="scale">A scaling of this text.</param>
+		/// <param name="rotation">A rotation of this text in radians.</param>
 		/// <param name="layerDepth">A depth of the layer of this string.</param>
 		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color color, Vector2 scale, float rotation, float layerDepth = 0.0f)
 		{
@@ -413,12 +436,22 @@ namespace Myra.Graphics2D
 #endif
 		}
 
+		/// <summary>
+		/// Draws a text
+		/// </summary>
+		/// <param name="font">The font to use for drawing.</param>
+		/// <param name="text">The text which will be drawn.</param>
+		/// <param name="position">The drawing location on screen.</param>
+		/// <param name="color">A color mask.</param>
+		/// <param name="scale">A scaling of this text.</param>
+		/// <param name="layerDepth">A depth of the layer of this string.</param>
 		public void DrawString(SpriteFontBase font, string text, Vector2 position, Color color, Vector2 scale, float layerDepth = 0.0f) =>
 			DrawString(font, text, position, color, scale, 0, layerDepth);
 
 		/// <summary>
 		/// Draws a text
 		/// </summary>
+		/// <param name="font">The font to use for drawing.</param>
 		/// <param name="text">The text which will be drawn.</param>
 		/// <param name="position">The drawing location on screen.</param>
 		/// <param name="color">A color mask.</param>
@@ -435,6 +468,7 @@ namespace Myra.Graphics2D
 		/// <param name="sourceScale">A scaling of this text.</param>
 		/// <param name="rotation">A rotation of this text in radians.</param>
 		/// <param name="layerDepth">A depth of the layer of this string.</param>
+		/// <param name="horizontalAlignment">The horizontal alignment of the text.</param>
 		public void DrawRichText(RichTextLayout richText, Vector2 position, Color color,
 			Vector2? sourceScale = null, float rotation = 0, float layerDepth = 0.0f,
 			TextHorizontalAlignment horizontalAlignment = TextHorizontalAlignment.Left)
@@ -462,6 +496,9 @@ namespace Myra.Graphics2D
 #endif
 		}
 
+		/// <summary>
+		/// Begins rendering.
+		/// </summary>
 		public void Begin()
 		{
 #if MONOGAME
@@ -472,8 +509,7 @@ namespace Myra.Graphics2D
 				samplerState,
 				null,
 				UIRasterizerState,
-				null,
-                TransformMatrix);
+				null);
 #elif FNA
 			var samplerState = SelectedSamplerState();
 
@@ -482,8 +518,7 @@ namespace Myra.Graphics2D
 				samplerState,
 				null,
 				UIRasterizerState,
-				null,
-				TransformMatrix ?? Matrix.Identity);
+				null);
 #elif STRIDE
 			var samplerState = SelectedSamplerState();
 
@@ -534,12 +569,18 @@ namespace Myra.Graphics2D
 		}
 #endif
 
+		/// <summary>
+		/// Ends rendering.
+		/// </summary>
 		public void End()
 		{
 			_renderer.End();
 			_beginCalled = false;
 		}
 
+		/// <summary>
+		/// Flushes pending render operations.
+		/// </summary>
 		public void Flush()
 		{
 			if (!_beginCalled)
@@ -558,12 +599,18 @@ namespace Myra.Graphics2D
 #endif
 		}
 
+		/// <summary>
+		/// Disposes resources used by the RenderContext.
+		/// </summary>
 		public void Dispose()
 		{
 			ReleaseUnmanagedResources();
 			GC.SuppressFinalize(this);
 		}
 
+		/// <summary>
+		/// Finalizer that releases unmanaged resources.
+		/// </summary>
 		~RenderContext()
 		{
 			ReleaseUnmanagedResources();

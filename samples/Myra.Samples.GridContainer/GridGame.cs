@@ -1,12 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Myra.Graphics2D.UI;
-using System.Reflection.PortableExecutable;
 
 namespace Myra.Samples.GridContainer
 {
 	public class GridGame : Game
 	{
-		private readonly GraphicsDeviceManager graphics;
+		private readonly GraphicsDeviceManager _graphics;
 
 		private Window _window;
 		private HorizontalProgressBar _horizontalProgressBar;
@@ -15,7 +14,11 @@ namespace Myra.Samples.GridContainer
 
 		public GridGame()
 		{
-			graphics = new GraphicsDeviceManager(this);
+			_graphics = new GraphicsDeviceManager(this)
+			{
+				PreferredBackBufferWidth = 1200,
+				PreferredBackBufferHeight = 800
+			};
 
 			IsMouseVisible = true;
 			Window.AllowUserResizing = true;

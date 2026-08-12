@@ -1,7 +1,9 @@
 ﻿using Myra.Graphics2D.UI.Styles;
-using Myra.Attributes;
-using System;
 using System.ComponentModel;
+using Myra.Events;
+using System.Collections;
+using Myra.Attributes;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework.Input;
@@ -13,12 +15,17 @@ using Myra.Platform;
 
 namespace Myra.Graphics2D.UI
 {
-	[StyleTypeName("Button")]
-	public class Button : ButtonBase2
+	/// <summary>
+	/// A clickable button widget that can contain any widget as its content.
+	/// </summary>
+	public class Button : ButtonBase
 	{
 		private readonly SingleItemLayout<Widget> _layout;
 		internal bool ReleaseOnTouchLeft;
 
+		/// <summary>
+		/// Gets or sets the desktop that contains this button.
+		/// </summary>
 		public override Desktop Desktop
 		{
 			get
@@ -44,6 +51,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the content widget displayed inside the button.
+		/// </summary>
 		[Browsable(false)]
 		[Content]
 		public override Widget Content
@@ -52,35 +62,63 @@ namespace Myra.Graphics2D.UI
 			set => _layout.Child = value;
 		}
 
-		public Button(string styleName = Stylesheet.DefaultStyleName)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Button"/> class with the specified stylesheet and style.
+		/// </summary>
+		/// <param name="stylesheet">The stylesheet to use for applying the style.</param>
+		/// <param name="styleName">The name of the style to apply. Defaults to the default stylesheet style.</param>
+		public Button(Stylesheet stylesheet, string styleName = Stylesheet.DefaultStyleName)
 		{
 			_layout = new SingleItemLayout<Widget>(this);
 			ChildrenLayout = _layout;
 			ReleaseOnTouchLeft = true;
 
-			SetStyle(styleName);
+			SetStyle(stylesheet, styleName);
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Button"/> class with the specified style.
+		/// </summary>
+		/// <param name="styleName">The name of the style to apply. Defaults to the default stylesheet style.</param>
+		public Button(string styleName = Stylesheet.DefaultStyleName) : this(Stylesheet.Current, styleName)
+		{
+		}
+
+		internal override IDictionary GetStylesDictionary(Stylesheet stylesheet) => stylesheet.ButtonStyles;
+
+		/// <summary>
+		/// Handles the event when the cursor/touch leaves the button.
+		/// </summary>
 		public override void OnTouchLeft()
 		{
 			base.OnTouchLeft();
 
 			if (ReleaseOnTouchLeft)
 			{
-				SetValueByUser(false);
+				SetIsPressedByUser(false);
 			}
 		}
 
+		/// <summary>
+		/// Called when a touch point is released on the button.
+		/// </summary>
 		protected override void InternalOnTouchUp()
 		{
-			SetValueByUser(false);
+			SetIsPressedByUser(false);
 		}
 
+		/// <summary>
+		/// Called when a touch point is pressed on the button.
+		/// </summary>
 		protected override void InternalOnTouchDown()
 		{
-			SetValueByUser(true);
+			SetIsPressedByUser(true);
 		}
 
+		/// <summary>
+		/// Handles keyboard input for the button, simulating a click when Space is pressed.
+		/// </summary>
+		/// <param name="k">The key being pressed.</param>
 		public override void OnKeyDown(Keys k)
 		{
 			base.OnKeyDown(k);
@@ -97,16 +135,16 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void DesktopTouchUp(object sender, EventArgs args)
+		private void DesktopTouchUp(object sender, MyraEventArgs args)
 		{
 			IsPressed = false;
 		}
 
-		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
-		{
-			ApplyButtonStyle(stylesheet.ButtonStyles.SafelyGetStyle(name));
-		}
-
+		/// <summary>
+		/// Creates a button with a text label as its content.
+		/// </summary>
+		/// <param name="text">The text to display on the button.</param>
+		/// <returns>A new Button with a text label.</returns>
 		public static Button CreateTextButton(string text)
 		{
 			return new Button

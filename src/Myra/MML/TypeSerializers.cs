@@ -1,5 +1,9 @@
 ﻿using System.Globalization;
 using Myra.Graphics2D;
+using Myra.Utility;
+using FontStashSharp.RichText;
+using System;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -8,23 +12,63 @@ using Stride.Core.Mathematics;
 #else
 using System.Drawing;
 using System.Numerics;
+using Color = FontStashSharp.FSColor;
 #endif
 
 namespace Myra.MML
 {
+	/// <summary>
+	/// Defines the interface for serializing and deserializing types to and from strings.
+	/// </summary>
 	public interface ITypeSerializer
 	{
+		/// <summary>
+		/// Serializes an object to a string.
+		/// </summary>
+		/// <param name="obj">The object to serialize.</param>
+		/// <returns>The serialized string representation.</returns>
 		string Serialize(object obj);
+
+		/// <summary>
+		/// Deserializes a string to an object.
+		/// </summary>
+		/// <param name="str">The string to deserialize.</param>
+		/// <returns>The deserialized object.</returns>
 		object Deserialize(string str);
 	}
 
+	/// <summary>
+	/// Abstract base class for type serializers that serialize and deserialize generic types.
+	/// </summary>
+	/// <typeparam name="T">The type being serialized/deserialized.</typeparam>
 	public abstract class TypeSerializer<T> : ITypeSerializer
 	{
+		/// <summary>
+		/// Deserializes a string to an object.
+		/// </summary>
+		/// <param name="str">The string to deserialize.</param>
+		/// <returns>The deserialized object.</returns>
 		public object Deserialize(string str) => DeserializeT(str);
 
+		/// <summary>
+		/// Serializes an object to a string.
+		/// </summary>
+		/// <param name="obj">The object to serialize.</param>
+		/// <returns>The serialized string representation.</returns>
 		public string Serialize(object obj) => SerializeT((T)obj);
 
+		/// <summary>
+		/// Deserializes a string to a typed value.
+		/// </summary>
+		/// <param name="str">The string to deserialize.</param>
+		/// <returns>The deserialized typed value.</returns>
 		public abstract T DeserializeT(string str);
+
+		/// <summary>
+		/// Serializes a typed value to a string.
+		/// </summary>
+		/// <param name="obj">The typed value to serialize.</param>
+		/// <returns>The serialized string representation.</returns>
 		public abstract string SerializeT(T obj);
 	}
 
@@ -44,6 +88,22 @@ namespace Myra.MML
 		}
 	}
 
+	internal sealed class ColorSerializer : TypeSerializer<Color>
+	{
+		public override Color DeserializeT(string str)
+		{
+			var color = ColorStorage.FromName(str);
+			if (color == null)
+			{
+				throw new Exception(string.Format("Could not find parse color '{0}'", str));
+			}
+
+			return color.Value;
+		}
+
+		public override string SerializeT(Color obj) => obj.ToColorString();
+	}
+
 	internal sealed class ThicknessSerializer : TypeSerializer<Thickness>
 	{
 		public override Thickness DeserializeT(string str)
@@ -55,5 +115,12 @@ namespace Myra.MML
 		{
 			return obj.ToString();
 		}
+	}
+
+	internal sealed class RectangleSerializer : TypeSerializer<Rectangle>
+	{
+		public override Rectangle DeserializeT(string str) => str.ParseRectangle();
+
+		public override string SerializeT(Rectangle obj) => obj.RectangleToString();
 	}
 }

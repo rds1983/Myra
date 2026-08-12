@@ -1,0 +1,71 @@
+<Project>
+  <Project.ExportOptions Namespace="MyraPad.UI" Class="MainForm" OutputPath="D:/Projects/Myra/src/MyraPad/UI" />
+  <VerticalStackPanel>
+    <HorizontalMenu Id="_mainMenu">
+      <MenuItem Text="&amp;File" Id="_menuFile">
+        <MenuItem Text="&amp;New" ShortcutText="Ctrl+N" Id="_menuFileNew" />
+        <MenuItem Text="&amp;Open" ShortcutText="Ctrl+O" Id="_menuFileOpen" />
+        <MenuItem Text="&amp;Reload" ShortcutText="Ctrl+R" Id="_menuFileReload" />
+        <MenuItem Text="&amp;Save" ShortcutText="Ctrl+S" Id="_menuFileSave" />
+        <MenuItem Text="Save &amp;As..." Id="_menuFileSaveAs" />
+        <MenuItem Text="&amp;Export To C#..." ShortcutText="Ctrl+E" Id="_menuFileExportToCS" />
+        <MenuItem Text="&amp;Export To C# Light..." ShortcutText="Ctrl+W" Id="_menuFileExportToCSLight" />
+        <MenuSeparator />
+        <MenuItem Text="&amp;Load Stylesheet" Id="_menuFileLoadStylesheet" />
+        <MenuItem Text="Rese&amp;t Stylesheet" Id="_menuFileResetStylesheet" />
+        <MenuSeparator />
+        <MenuItem Text="&amp;UI Debug Options" Id="_menuFileDebugOptions" />
+        <MenuSeparator />
+        <MenuItem Text="&amp;Quit" ShortcutText="Ctrl+Q" Id="_menuFileQuit" />
+      </MenuItem>
+      <MenuItem Text="&amp;Edit">
+        <MenuItem Text="Select &amp;All" ShortcutText="Ctrl+A" Id="_menuItemSelectAll" />
+        <MenuItem Text="&amp;Copy" ShortcutText="Ctrl+Insert, Ctrl+C" Id="_menuItemCopy" />
+        <MenuItem Text="&amp;Paste" ShortcutText="Shift+Insert, Ctrl+V" Id="_menuItemPaste" />
+        <MenuItem Text="Cu&amp;t" ShortcutText="Ctrl+X" Id="_menuItemCut" />
+        <MenuItem Text="Duplicate" ShortcutText="Ctrl+D" Id="_menuItemDuplicate" />
+        <MenuSeparator />
+        <MenuItem Text="&amp;Format Source" ShortcutText="Ctrl+F" Id="_menuEditFormatSource" />
+      </MenuItem>
+      <MenuItem Text="&amp;Help">
+        <MenuItem Text="&amp;About" Id="_menuHelpAbout" />
+      </MenuItem>
+    </HorizontalMenu>
+    <HorizontalSeparator />
+    <HorizontalSplitPane Id="_topSplitPane" StackPanel.ProportionType="Fill">
+      <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Id="_tabControlLeft">
+        <TabItem Text="Project">
+          <ScrollViewer Id="_panelExplorer" />
+        </TabItem>
+        <TabItem Text="Stylesheet" Id="_tabStylesheet">
+          <VerticalSplitPane>
+            <ScrollViewer Id="_panelStyles" />
+            <ScrollViewer Id="_panelStyleExplorer" />
+          </VerticalSplitPane>
+        </TabItem>
+      </TabControl>
+      <VerticalStackPanel>
+        <VerticalSplitPane Id="_leftSplitPane" StackPanel.ProportionType="Fill">
+          <Panel Id="_projectHolder" />
+          <ScrollViewer>
+            <TextBox Multiline="True" Wrap="True" VerticalAlignment="Stretch" Id="_textSource" />
+          </ScrollViewer>
+        </VerticalSplitPane>
+        <HorizontalSeparator />
+        <Label Text="Reloading..." Id="_textStatus" />
+      </VerticalStackPanel>
+      <VerticalStackPanel Background="Black">
+        <HorizontalStackPanel Spacing="8">
+          <Label Text="Filter:" />
+          <TextBox Id="_textBoxFilter" StackPanel.ProportionType="Fill" />
+        </HorizontalStackPanel>
+        <HorizontalSeparator />
+        <ScrollViewer ShowHorizontalScrollBar="False" Id="_propertyGridPane" StackPanel.ProportionType="Fill">
+          <PropertyGrid Id="_propertyGrid" />
+        </ScrollViewer>
+        <HorizontalSeparator />
+        <Label Text="Line: 1, Column: 2, Indent: 3" Id="_textLocation" />
+      </VerticalStackPanel>
+    </HorizontalSplitPane>
+  </VerticalStackPanel>
+</Project>

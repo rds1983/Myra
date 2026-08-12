@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 using FontStashSharp;
 using Myra.Utility;
 using Myra.Attributes;
+using Myra.Graphics2D.TextureAtlases;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -22,9 +23,16 @@ namespace Myra.MML
 	{
 		public const string IdName = "Id";
 
+		public static bool IsTypeExternalAsset(Type type)
+		{
+			return typeof(IBrush).IsAssignableFrom(type) ||
+					typeof(SpriteFontBase).IsAssignableFrom(type) ||
+					type == typeof(TextureRegionAtlas);
+		}
+
 		public static ITypeSerializer FindSerializer(Type type)
 		{
-			if (type.IsNullablePrimitive())
+			if (type.IsNullable())
 			{
 				type = type.GetNullableType();
 			}
@@ -38,8 +46,8 @@ namespace Myra.MML
 			return null;
 		}
 
-		protected static void ParseProperties(Type type, bool checkSkipSave,
-			out List<PropertyInfo> complexProperties, 
+		protected static void ParseProperties(Type type, bool isSave,
+			out List<PropertyInfo> complexProperties,
 			out List<PropertyInfo> simpleProperties)
 		{
 			complexProperties = new List<PropertyInfo>();
@@ -55,36 +63,25 @@ namespace Myra.MML
 					continue;
 				}
 
-				Attribute attr = property.FindAttribute<XmlIgnoreAttribute>();
-				if (attr != null)
+				if (property.HasAttribute<XmlIgnoreAttribute>() ||
+					(isSave && (property.HasAttribute<SkipSaveAttribute>() || property.HasAttribute<ObsoleteAttribute>())) ||
+					(!isSave && property.HasAttribute<SkipLoadAttribute>()))
 				{
 					continue;
 				}
 
-				if (checkSkipSave)
-				{
-					attr = property.FindAttribute<SkipSaveAttribute>();
-					if (attr != null)
-					{
-						continue;
-					}
-				}
-
 				var propertyType = property.PropertyType;
-				if (propertyType.IsPrimitive || 
+				if (propertyType.IsPrimitive ||
 					propertyType.IsNullablePrimitive() ||
-					propertyType.IsEnum || 
+					propertyType.IsEnum ||
 					propertyType.IsNullableEnum() ||
 					propertyType == typeof(string) ||
-					propertyType == typeof(Vector2) ||
-					propertyType == typeof(Color) ||
-					propertyType == typeof(Color?) ||
-					typeof(IBrush).IsAssignableFrom(propertyType) ||
-					propertyType == typeof(SpriteFontBase) ||
-					propertyType == typeof(Thickness))
+					FindSerializer(propertyType) != null ||
+					IsTypeExternalAsset(propertyType))
 				{
 					simpleProperties.Add(property);
-				} else
+				}
+				else
 				{
 					complexProperties.Add(property);
 				}

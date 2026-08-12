@@ -1,11 +1,11 @@
 Restyling through code is quite easy. There's a static object **Stylesheet.Current** that contains all default widget styles.  
-I.e. following code will make all Labels - green:
+For example, the following code will make all Labels green:
 ```c#
   Stylesheet.Current.LabelStyle.TextColor = Color.Green;
 ```
 
-  _**Note**. The default style is being applied to the widget in the moment of the creation. Therefore all changes 
-to **Stylesheet.Current** should be done before the UI is created._
+  **Note:** The default style is applied to the widget at the moment of creation. Therefore, all changes 
+to **Stylesheet.Current** should be made before the UI is created.
 
 
 

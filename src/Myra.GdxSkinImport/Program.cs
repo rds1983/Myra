@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AssetManagementBase;
+using System;
 
 namespace GdxSkinImport;
 
@@ -21,6 +22,7 @@ class Program
 
 	static int Process(string[] args)
 	{
+		AMBConfiguration.Logger = Console.WriteLine;
 		if (args == null || args.Length == 0)
 		{
 			ShowUsage();

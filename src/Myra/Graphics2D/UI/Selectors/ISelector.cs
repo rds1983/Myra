@@ -1,8 +1,12 @@
-﻿using System;
+﻿using Myra.Events;
+using System;
 using System.Collections.ObjectModel;
 
 namespace Myra.Graphics2D.UI
 {
+	/// <summary>
+	/// Specifies how many items can be selected in a selector widget.
+	/// </summary>
 	public enum SelectionMode
 	{
 		/// <summary>
@@ -21,7 +25,7 @@ namespace Myra.Graphics2D.UI
 		SelectionMode SelectionMode { get; set; }
 		int? SelectedIndex { get; set; }
 
-		event EventHandler SelectedIndexChanged;
+		event MyraEventHandler SelectedIndexChanged;
 	}
 
 	internal interface ISelectorT<ItemType>: ISelector

@@ -5,6 +5,7 @@ on:
         branches:
             - master    
         paths:
+            - '.github/**'
             - 'src/**'
             - 'build/**'
             - 'samples/**'
@@ -40,15 +41,6 @@ jobs:
       run: dotnet build build\Myra.PlatformAgnostic.sln --configuration Release --version-suffix ${{env.VERSION_SUFFIX}}
     - name: Test
       run: dotnet test build\Myra.MonoGame.sln --verbosity normal
-    - name: Build Binary Distribution
-      shell: pwsh
-      run: ./buildBinaryDistribution.ps1 ${{env.VERSION}}
-    - name: Archive production artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: Myra.${{env.VERSION}}.zip
-        path: Myra.${{env.VERSION}}.zip
-        retention-days: 10
     - name: Install NuGet
       uses: NuGet/setup-nuget@v2
     - name: Publish Myra.MonoGame to MyGet

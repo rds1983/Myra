@@ -1,18 +1,18 @@
 # Overview
-Desktop class has following API that could be used to show context menus:
+The Desktop class has the following API that can be used to show context menus:
 ```c#
   public void ShowContextMenu(Widget menu, Point position);
   public void HideContextMenu();
 ```
 
 # Usage
-Following code demonstrates usage of the context menu:
+The following code demonstrates how to use the context menu:
 ```c#
 private void ShowContextMenu()
 {
     if (Desktop.ContextMenu != null)
     {
-        // Dont show if it's already shown
+        // Don't show if it's already shown
         return;
     }
 

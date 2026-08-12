@@ -1,7 +1,7 @@
 <Project>
   <Project.ExportOptions />
   <Panel>
-    <TabControl HorizontalAlignment="Center" VerticalAlignment="Center" TabSelectorPosition="Left" Width="350" Height="260" ClipToBounds="True">
+    <TabControl HorizontalAlignment="Center" VerticalAlignment="Center" TabSelectorPosition="Left" Width="350" Height="260">
       <TabItem Text="Character">
         <Grid ColumnSpacing="8" RowSpacing="8">
           <Grid.DefaultColumnProportion Type="Auto" />
@@ -9,19 +9,19 @@
           <Label Text="Name" />
           <TextBox Width="200" Grid.Column="1" />
           <Label Text="Race" Grid.Row="1" />
-          <ComboBox Width="200" Grid.Column="1" Grid.Row="1">
-            <ListItem Text="Human" />
-            <ListItem Text="Dwarf" />
-            <ListItem Text="Elf" />
-            <ListItem Text="Hobbit" />
-          </ComboBox>
+          <ComboView Width="200" Grid.Column="1" Grid.Row="1">
+            <Label Text="Human" />
+            <Label Text="Dwarf" />
+            <Label Text="Elf" />
+            <Label Text="Hobbit" />
+          </ComboView>
           <Label Text="Class" Grid.Row="2" />
-          <ComboBox Width="200" Grid.Column="1" Grid.Row="2">
-            <ListItem Text="Warrior" />
-            <ListItem Text="Mage" />
-            <ListItem Text="Priest" />
-            <ListItem Text="Rogue" />
-          </ComboBox>
+          <ComboView Width="200" Grid.Column="1" Grid.Row="2">
+            <Label Text="Warrior" />
+            <Label Text="Mage" />
+            <Label Text="Priest" />
+            <Label Text="Rogue" />
+          </ComboView>
         </Grid>
       </TabItem>
       <TabItem Text="Skills">
@@ -46,11 +46,21 @@
       <TabItem Text="Feats">
         <VerticalStackPanel Spacing="8">
           <Label Text="You have 2 feats left to choose" />
-          <ImageTextButton Text="Swordsman" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" />
-          <ImageTextButton Text="Salesman" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" />
-          <ImageTextButton Text="Trapsmith" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" />
-          <ImageTextButton Text="Cunning" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" />
-          <ImageTextButton Text="Empathy" ContentHorizontalAlignment="Center" Toggleable="True" Width="100" />
+          <ToggleButton Width="100">
+            <Label Text="Swordsman" />
+          </ToggleButton>
+          <ToggleButton Width="100">
+            <Label Text="Salesman" />
+          </ToggleButton>
+          <ToggleButton Width="100">
+            <Label Text="Trapsmith" />
+          </ToggleButton>
+          <ToggleButton Width="100">
+            <Label Text="Cunning" />
+          </ToggleButton>
+          <ToggleButton Width="100">
+            <Label Text="Empathy" />
+          </ToggleButton>
         </VerticalStackPanel>
       </TabItem>
     </TabControl>

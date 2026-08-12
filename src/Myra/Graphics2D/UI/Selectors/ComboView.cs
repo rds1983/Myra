@@ -1,10 +1,11 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
 using Myra.Events;
-using Myra.Attributes;
 using System.Collections.Generic;
+using System.Collections;
+using Myra.Attributes;
+using System;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -19,11 +20,18 @@ using Myra.Platform;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ComboView: Widget
+	/// <summary>
+	/// A combo view widget that displays a list of widget items in a dropdown menu and supports selection.
+	/// </summary>
+	public class ComboView : Widget, IContainer
 	{
 		private readonly ToggleButton _button;
-		private readonly ListView _listView = new ListView(null);
+		private readonly ListView _listView;
+		private readonly Label _labelPlaceholder = new Label();
 
+		/// <summary>
+		/// Gets or sets the maximum height of the dropdown list in pixels.
+		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(300)]
 		public int? DropdownMaximumHeight
@@ -39,10 +47,16 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether the dropdown list is currently visible.
+		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
 		public bool IsExpanded => _button.IsPressed;
 
+		/// <summary>
+		/// Gets or sets the desktop that manages this combo view and its dropdown menu.
+		/// </summary>
 		public override Desktop Desktop
 		{
 			get
@@ -66,22 +80,34 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Gets the list view that displays the dropdown items.
+		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
 		public ListView ListView => _listView;
 
+		/// <summary>
+		/// Gets the collection of items in the combo view.
+		/// </summary>
 		[Content]
 		[Browsable(false)]
 		public IList<Widget> Widgets => _listView.Widgets;
 
+		/// <summary>
+		/// Gets or sets the currently selected item.
+		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
 		public Widget SelectedItem
 		{
-			get => _listView.SelectedItem; 
+			get => _listView.SelectedItem;
 			set => _listView.SelectedItem = value;
 		}
 
+		/// <summary>
+		/// Gets or sets whether items can be selected individually or in multiple selections.
+		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(SelectionMode.Single)]
 		public SelectionMode SelectionMode
@@ -90,6 +116,9 @@ namespace Myra.Graphics2D.UI
 			set => _listView.SelectionMode = value;
 		}
 
+		/// <summary>
+		/// Gets or sets the index of the currently selected item, or null if no item is selected.
+		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
 		public int? SelectedIndex
@@ -98,7 +127,10 @@ namespace Myra.Graphics2D.UI
 			set => _listView.SelectedIndex = value;
 		}
 
-		public event EventHandler SelectedIndexChanged
+		/// <summary>
+		/// Occurs when the selected item changes.
+		/// </summary>
+		public event MyraEventHandler SelectedIndexChanged
 		{
 			add
 			{
@@ -111,16 +143,21 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public ComboView(string styleName = Stylesheet.DefaultStyleName)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ComboView"/> class with the specified stylesheet and style.
+		/// </summary>
+		/// <param name="stylesheet">The stylesheet to use for applying the style.</param>
+		/// <param name="styleName">The name of the style to apply to the combo view.</param>
+		public ComboView(Stylesheet stylesheet, string styleName = Stylesheet.DefaultStyleName)
 		{
 			_button = new ToggleButton(null)
 			{
 				HorizontalAlignment = HorizontalAlignment.Stretch,
-				Content = new Label
-				{
-					Text = string.Empty
-				}
+				VerticalAlignment = VerticalAlignment.Stretch
 			};
+
+			// Add placeholder label that is required so the combo wont disappear if style height is null
+			_button.Content = _labelPlaceholder;
 
 			ChildrenLayout = new SingleItemLayout<ToggleButton>(this)
 			{
@@ -131,6 +168,7 @@ namespace Myra.Graphics2D.UI
 
 			_button.PressedChanged += InternalChild_PressedChanged;
 
+			_listView = new ListView(stylesheet);
 			_listView._parentCombo = this;
 
 			HorizontalAlignment = HorizontalAlignment.Left;
@@ -138,7 +176,15 @@ namespace Myra.Graphics2D.UI
 
 			DropdownMaximumHeight = 300;
 
-			SetStyle(styleName);
+			SetStyle(stylesheet, styleName);
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ComboView"/> class.
+		/// </summary>
+		/// <param name="styleName">The name of the style to apply to the combo view.</param>
+		public ComboView(string styleName = Stylesheet.DefaultStyleName) : this(Stylesheet.Current, styleName)
+		{
 		}
 
 		private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Widget> genericEventArgs)
@@ -151,7 +197,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void InternalChild_PressedChanged(object sender, EventArgs e)
+		private void InternalChild_PressedChanged(object sender, MyraEventArgs e)
 		{
 			if (_listView.Widgets.Count == 0)
 			{
@@ -176,18 +222,37 @@ namespace Myra.Graphics2D.UI
 			_button.Content = SelectedItem.Clone();
 		}
 
-		public void ApplyComboViewStyle(ComboBoxStyle style)
+		internal override IDictionary GetStylesDictionary(Stylesheet stylesheet) => stylesheet.ComboBoxStyles;
+
+		/// <summary>
+		/// Applies the specified widget style to this combo view.
+		/// </summary>
+		/// <param name="style">The widget style to apply.</param>
+		protected override void ApplyStyle(WidgetStyle style)
 		{
-			if (style.ListBoxStyle != null)
+			base.ApplyStyle(style);
+
+			var comboBoxStyle = (ComboBoxStyle)style;
+			if (comboBoxStyle.ListBoxStyle == null)
 			{
-				var dropdownMaximumHeight = DropdownMaximumHeight;
-				_listView.ApplyListBoxStyle(style.ListBoxStyle);
-				DropdownMaximumHeight = dropdownMaximumHeight;
+				throw new Exception("ComboBoxStyle.ListBoxStyle can't be null.");
 			}
 
-			_button.ApplyButtonStyle(style);
+			var dropdownMaximumHeight = DropdownMaximumHeight;
+			_listView.ApplyListViewStyle(comboBoxStyle.ListBoxStyle);
+			DropdownMaximumHeight = dropdownMaximumHeight;
+
+			if (comboBoxStyle.LabelStyle != null)
+			{
+				_labelPlaceholder.ApplyLabelStyle(comboBoxStyle.LabelStyle);
+			}
 		}
 
+		/// <summary>
+		/// Measures the size required for the combo view, considering the dropdown list width.
+		/// </summary>
+		/// <param name="availableSize">The available size for the combo view.</param>
+		/// <returns>The measured size needed for the combo view.</returns>
 		protected override Point InternalMeasure(Point availableSize)
 		{
 			// Measure by the longest string
@@ -217,6 +282,9 @@ namespace Myra.Graphics2D.UI
 			return result;
 		}
 
+		/// <summary>
+		/// Arranges the combo view and its dropdown list within the measured bounds.
+		/// </summary>
 		protected override void InternalArrange()
 		{
 			base.InternalArrange();
@@ -224,6 +292,10 @@ namespace Myra.Graphics2D.UI
 			_listView.Width = BorderBounds.Width;
 		}
 
+		/// <summary>
+		/// Handles keyboard input and delegates it to the dropdown list.
+		/// </summary>
+		/// <param name="k">The key being pressed.</param>
 		public override void OnKeyDown(Keys k)
 		{
 			base.OnKeyDown(k);
@@ -231,11 +303,10 @@ namespace Myra.Graphics2D.UI
 			_listView.OnKeyDown(k);
 		}
 
-		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
-		{
-			ApplyComboViewStyle(stylesheet.ComboBoxStyles.SafelyGetStyle(name));
-		}
-
+		/// <summary>
+		/// Copies the style and items from another combo view.
+		/// </summary>
+		/// <param name="w">The source combo view to copy from.</param>
 		protected internal override void CopyFrom(Widget w)
 		{
 			base.CopyFrom(w);
@@ -244,7 +315,7 @@ namespace Myra.Graphics2D.UI
 			SelectionMode = comboView.SelectionMode;
 			DropdownMaximumHeight = comboView.DropdownMaximumHeight;
 
-			foreach(var child in comboView.Widgets)
+			foreach (var child in comboView.Widgets)
 			{
 				Widgets.Add(child.Clone());
 			}

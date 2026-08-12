@@ -14,14 +14,23 @@ namespace Myra.Graphics2D.UI
 		private bool _childrenDirty = true;
 		private readonly List<Widget> _childrenCopy = new List<Widget>();
 
+		/// <summary>
+		/// Gets or sets the layout that arranges this widget's child widgets.
+		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
 		public ILayout ChildrenLayout { get; set; }
 
+		/// <summary>
+		/// Gets the collection of child widgets.
+		/// </summary>
 		[Browsable(false)]
 		[Content]
 		protected internal ObservableCollection<Widget> Children { get; } = new ObservableCollection<Widget>();
 
+		/// <summary>
+		/// Gets a copy of the children collection sorted by Z-index.
+		/// </summary>
 		protected internal IEnumerable<Widget> ChildrenCopy
 		{
 			get
@@ -61,12 +70,20 @@ namespace Myra.Graphics2D.UI
 			InvalidateChildren();
 		}
 
+		/// <summary>
+		/// Called when a child widget is added to this widget.
+		/// </summary>
+		/// <param name="w">The child widget that was added.</param>
 		protected virtual void OnChildAdded(Widget w)
 		{
 			w.Desktop = Desktop;
 			w.Parent = this;
 		}
 
+		/// <summary>
+		/// Called when a child widget is removed from this widget.
+		/// </summary>
+		/// <param name="w">The child widget that was removed.</param>
 		protected virtual void OnChildRemoved(Widget w)
 		{
 			w.Desktop = null;
@@ -92,12 +109,20 @@ namespace Myra.Graphics2D.UI
 			_childrenDirty = false;
 		}
 
-		private void InvalidateChildren()
+		/// <summary>
+		/// Invalidates the child layout, marking it as needing recalculation.
+		/// </summary>
+		protected virtual void InvalidateChildren()
 		{
 			InvalidateMeasure();
 			_childrenDirty = true;
 		}
 
+		/// <summary>
+		/// Calculates the total number of child widgets, optionally including only visible children and their descendants.
+		/// </summary>
+		/// <param name="visibleOnly">If true, only counts visible widgets; if false, counts all widgets.</param>
+		/// <returns>The total count of child widgets.</returns>
 		public int CalculateTotalChildCount(bool visibleOnly)
 		{
 			var result = _childrenCopy.Count;
@@ -249,13 +274,5 @@ namespace Myra.Graphics2D.UI
 			return null;
 		}
 
-		/// <summary>
-		/// Finds the first widget with matching <paramref name="Id"/>
-		/// </summary>
-		/// <param name="Id">Id to match on</param>
-		/// <returns>Widget instance if found otherwise null</returns>
-
-		[Obsolete("Use FindChildById")]
-		public Widget FindWidgetById(string Id) => FindChildById(Id);
 	}
 }

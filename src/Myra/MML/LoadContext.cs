@@ -11,6 +11,10 @@ using Myra.Attributes;
 using FontStashSharp;
 using Myra.Utility;
 using FontStashSharp.RichText;
+using AssetManagementBase;
+using Myra.Graphics2D.TextureAtlases;
+using Myra.Graphics2D.UI.Styles;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -22,14 +26,17 @@ using Color = FontStashSharp.FSColor;
 
 namespace Myra.MML
 {
-	internal class LoadContext: BaseContext
+	// Deserializes objects from XML elements to .NET objects.
+	// Handles properties, events, resources, enums, colors, and complex nested structures.
+	internal class LoadContext : BaseContext
 	{
-		struct SimplePropertyInfo
+		// Wrapper for either regular property or attached property with unified interface
+		class SimplePropertyInfo
 		{
-			public PropertyInfo Property;
-			public BaseAttachedPropertyInfo AttachedProperty;
-			public string Name;
-			public Type PropertyType;
+			public PropertyInfo Property;  // Regular property info, or null if attached
+			public BaseAttachedPropertyInfo AttachedProperty;  // Attached property info, or null if regular
+			public string Name;  // Property name
+			public Type PropertyType;  // Property's type
 
 			public SimplePropertyInfo(PropertyInfo property)
 			{
@@ -49,182 +56,268 @@ namespace Myra.MML
 				PropertyType = property.PropertyType;
 			}
 
+			// Sets value on either regular or attached property
 			public void SetValue(object obj, object value)
 			{
 				if (Property != null)
 				{
-					Property.SetValue(obj, value);
-				} else if (AttachedProperty != null && obj is BaseObject)
+					try
+					{
+						Property.SetValue(obj, value);
+					}
+					catch (TargetInvocationException ex)
+					{
+						if (ex.InnerException != null)
+						{
+							throw ex.InnerException;
+						}
+
+						throw ex;
+					}
+				}
+				else if (AttachedProperty != null && obj is BaseObject)
 				{
 					AttachedProperty.SetValueObject((BaseObject)obj, value);
 				}
 			}
 		}
 
+		// Backward compatibility: maps old class names to new names (e.g., "TextField" → "TextBox")
 		public Dictionary<string, string> LegacyClassNames = null;
+
+		// Backward compatibility: maps old property names to new names
 		public Dictionary<string, string> LegacyPropertyNames = null;
-		public Dictionary<string, Color> Colors;
+
+		// XML element names to skip during deserialization
 		public HashSet<string> NodesToIgnore = null;
+
+		// Factory function for instantiating objects from XML elements (allows custom construction)
 		public Func<Type, XElement, object> ObjectCreator = (type, el) => Activator.CreateInstance(type);
+
+		// Widget assemblies and namespaces to search when looking up widget types by name
 		public Dictionary<Assembly, string[]> Assemblies;
-		public Func<Type, string, object> ResourceGetter = null;
+
+		// Loads external resources (brushes, fonts, textures) by name using asset manager
+		public AssetManager AssetManager = null;
+
+		public Stylesheet Stylesheet = null;
+
+		public bool DemandContentProperty = true;  // Whether to require [Content] attribute for implicit child addition
+
+		// Mapping of deserialized objects to their source XML elements (for debugging/position tracking)
 		public readonly List<Tuple<object, XElement>> ObjectsNodes = new List<Tuple<object, XElement>>();
 
-		private const string UserDataAttributePrefix = "_";
+		private const string UserDataAttributePrefix = "_";  // Prefix for custom user attributes
 
-		public void Load<T>(object obj, XElement el, T handler) where T : class
+		private static SimplePropertyInfo LocateSimpleProperty(List<PropertyInfo> simpleProperties, string propertyName)
 		{
+			SimplePropertyInfo simplePropertyInfo = null;
+			if (propertyName.Contains("."))
+			{
+				// Attached property: "ClassName.PropertyName" syntax
+				var parts = propertyName.Split('.');
+				if (parts.Length != 2)
+				{
+					throw new Exception($"Couldn't parse attached property {propertyName}");
+				}
+				var parentType = Project.GetWidgetTypeByName(parts[0].Trim());
+				if (parentType == null)
+				{
+					throw new Exception($"Couldn't find type {parts[0].Trim()} for attached property {propertyName}");
+				}
+
+				var properties = AttachedPropertiesRegistry.GetPropertiesOfType(parentType);
+				var property = (from p in properties where p.Name == parts[1].Trim() select p).FirstOrDefault();
+				if (property == null)
+				{
+					throw new Exception($"Type {parentType.Name} doesn't have attached property {parts[1].Trim()}");
+				}
+
+				simplePropertyInfo = new SimplePropertyInfo(property);
+			}
+			else
+			{
+				// Regular property
+				var property = (from p in simpleProperties where p.Name == propertyName select p).FirstOrDefault();
+				if (property != null)
+				{
+					simplePropertyInfo = new SimplePropertyInfo(property);
+				}
+			}
+
+			return simplePropertyInfo;
+		}
+
+		private void LoadSimpleProperty(object obj, SimplePropertyInfo simplePropertyInfo, XAttribute attr)
+		{
+			object value = null;
+
+			var propertyType = simplePropertyInfo.PropertyType;
+
+			do
+			{
+				var serializer = FindSerializer(propertyType);
+				if (serializer != null)
+				{
+					// Custom serializer (e.g., for Vector2, Rectangle)
+					value = serializer.Deserialize(attr.Value);
+					break;
+				}
+
+				if (propertyType.IsEnum ||
+					propertyType.IsNullableEnum())
+				{
+					// Enum parsing
+					if (propertyType.IsNullableEnum())
+					{
+						propertyType = propertyType.GetNullableType();
+					}
+					value = Enum.Parse(propertyType, attr.Value);
+					break;
+				}
+
+				if (typeof(IBrush).IsAssignableFrom(propertyType))
+				{
+					value = AssetManager.LoadBrush(attr.Value, Stylesheet);
+					break;
+				}
+
+				if (typeof(SpriteFontBase).IsAssignableFrom(propertyType))
+				{
+					value = AssetManager.LoadFont(attr.Value, Stylesheet);
+					break;
+				}
+
+				if (typeof(TextureRegionAtlas) == propertyType)
+				{
+					value = AssetManager.LoadTextureRegionAtlas(attr.Value);
+				}
+
+				// Primitive type conversion (int, float, string, etc.)
+				if (propertyType.IsNullablePrimitive())
+				{
+					propertyType = propertyType.GetNullableType();
+				}
+
+				value = Convert.ChangeType(attr.Value, propertyType, CultureInfo.InvariantCulture);
+			}
+			while (false);
+
+			simplePropertyInfo.SetValue(obj, value);
+		}
+
+		private void LoadComplexProperty(object obj, PropertyInfo property, XElement child)
+		{
+			// Handle different property types: List, Dict, or single object
+			do
+			{
+				var value = property.GetValue(obj);
+				var asList = value as IList;
+				if (asList != null)
+				{
+					// List property: each child element is a list item
+					foreach (var child2 in child.Elements())
+					{
+						var item = ObjectCreator(property.PropertyType.GenericTypeArguments[0], child2);
+						Load(item, child2);
+						asList.Add(item);
+					}
+
+					break;
+				}
+
+				var asDict = value as IDictionary;
+				if (asDict != null)
+				{
+					// Dictionary property: each child element is a dict value with optional id key
+					foreach (var child2 in child.Elements())
+					{
+						var item = ObjectCreator(property.PropertyType.GenericTypeArguments[1], child2);
+						Load(item, child2);
+
+						var id = string.Empty;
+						if (child2.Attribute(IdName) != null)
+						{
+							id = child2.Attribute(IdName).Value;
+						}
+
+						asDict[id] = item;
+					}
+
+					break;
+				}
+
+				// Single object property
+				if (property.SetMethod == null)
+				{
+					// Read-only property: load into existing value
+					Load(value, child);
+				}
+				else
+				{
+					// Writable property: create and assign new value
+					var newValue = ObjectCreator(property.PropertyType, child);
+					Load(newValue, child);
+					property.SetValue(obj, newValue);
+				}
+
+			} while (false);
+		}
+
+		// Deserializes an object from XML element, recursively loading children and properties
+		public void Load(object obj, XElement el)
+		{
+			// Track object and its source XML for debugging/introspection
 			ObjectsNodes.Add(new Tuple<object, XElement>(obj, el));
 
 			var type = obj.GetType();
-			var handlerType = typeof(T);
 
 			var baseObject = obj as BaseObject;
 
+			// Separate properties into simple (attributes) and complex (elements)
 			List<PropertyInfo> complexProperties, simpleProperties;
 			ParseProperties(type, false, out complexProperties, out simpleProperties);
 
+			// Process XML attributes as simple properties
 			string newName;
 			foreach (var attr in el.Attributes())
 			{
 				var propertyName = attr.Name.ToString();
+
+				// Apply legacy name mapping for backward compatibility
 				if (LegacyPropertyNames != null && LegacyPropertyNames.TryGetValue(propertyName, out newName))
 				{
 					propertyName = newName;
 				}
 
-				SimplePropertyInfo? simplePropertyInfo = null;
-				if (propertyName.Contains("."))
-				{
-					// Attached property
-					var parts = propertyName.Split('.');
-					if (parts.Length != 2)
-					{
-						throw new Exception($"Couldn't parse attached property {propertyName}");
-					}
-					var parentType = Project.GetWidgetTypeByName(parts[0].Trim());
-					if (parentType == null)
-					{
-						throw new Exception($"Couldn't find type {parts[0].Trim()} for attached property {propertyName}");
-					}
-
-					var properties = AttachedPropertiesRegistry.GetPropertiesOfType(parentType);
-					var property = (from p in properties where p.Name == parts[1].Trim() select p).FirstOrDefault();
-					if (property == null)
-					{
-						throw new Exception($"Type {parentType.Name} doesn't have attached property {parts[1].Trim()}");
-					}
-
-					simplePropertyInfo = new SimplePropertyInfo(property);
-				} else
-				{
-					var property = (from p in simpleProperties where p.Name == propertyName select p).FirstOrDefault();
-					if (property != null)
-					{
-						simplePropertyInfo = new SimplePropertyInfo(property);
-					}
-				}
-
+				var simplePropertyInfo = LocateSimpleProperty(simpleProperties, propertyName);
 				if (simplePropertyInfo != null)
 				{
-					object value = null;
-
-					var propertyType = simplePropertyInfo.Value.PropertyType;
-					var serializer = FindSerializer(propertyType);
-					if (serializer != null)
-					{
-						value = serializer.Deserialize(attr.Value);
-					} else 
-					if (propertyType.IsEnum ||
-						propertyType.IsNullableEnum())
-					{
-						if (propertyType.IsNullableEnum())
-						{
-							propertyType = propertyType.GetNullableType();
-						}
-						value = Enum.Parse(propertyType, attr.Value);
-					}
-					else if (propertyType == typeof(Color) || propertyType == typeof(Color?))
-					{
-						Color color;
-						if (Colors != null && Colors.TryGetValue(attr.Value, out color))
-						{
-							value = color;
-						}
-						else
-						{
-							value = ColorStorage.FromName(attr.Value);
-							if (value == null)
-							{
-								throw new Exception(string.Format("Could not find parse color '{0}'", attr.Value));
-							}
-						}
-					}
-					else if ((typeof(IBrush).IsAssignableFrom(propertyType) ||
-							 propertyType == typeof(SpriteFontBase)) &&
-							 !string.IsNullOrEmpty(attr.Value) &&
-							 ResourceGetter != null)
-					{
-						try
-						{
-							var texture = ResourceGetter(propertyType, attr.Value);
-							if (texture == null)
-							{
-								throw new Exception(string.Format("Could not find resource '{0}'", attr.Value));
-							}
-							value = texture;
-
-							if (baseObject != null)
-							{
-								baseObject.Resources[simplePropertyInfo.Value.Name] = attr.Value;
-							}
-						}
-						catch (Exception)
-						{
-						}
-					}
-					else
-					{
-						if (propertyType.IsNullablePrimitive())
-						{
-							propertyType = propertyType.GetNullableType();
-						}
-
-						value = Convert.ChangeType(attr.Value, propertyType, CultureInfo.InvariantCulture);
-					}
-
-					simplePropertyInfo.Value.SetValue(obj, value);
-				}
-				else if (handler != null && type.GetEvent(attr.Name.LocalName) != null)
-				{
-					var method = handlerType.GetMethod(attr.Value, BindingFlags.Public | BindingFlags.Instance);
-					var eventHandler = type.GetEvent(attr.Name.LocalName);
-					if (method == null)
-					{
-						throw new InvalidOperationException($"Handler of type '{handlerType}' does not contain method '{attr.Value}'. If it does, ensure the method is both public and non-static.");
-					}
-
-					var delegateMethod = method.CreateDelegate(eventHandler.EventHandlerType, handler);
-					eventHandler.AddEventHandler(obj, delegateMethod);
+					LoadSimpleProperty(obj, simplePropertyInfo, attr);
 				}
 				else
 				{
-					// Stow away custom user attributes
+					// Custom user attributes with "_" prefix
 					if (propertyName.StartsWith(UserDataAttributePrefix) && baseObject != null)
 					{
 						baseObject.UserData.Add(propertyName, attr.Value);
 					}
 				}
 			}
-			
 
+
+			// Find content property: [Content] marked property for implicit child addition
 			var contentProperty = (from p in complexProperties
-								   where p.FindAttribute<ContentAttribute>() 
-								   != null select p).FirstOrDefault();
+								   where p.FindAttribute<ContentAttribute>()
+								   != null
+								   select p).FirstOrDefault();
 
+			// Process XML child elements
 			foreach (var child in el.Elements())
 			{
 				var childName = child.Name.ToString();
+
+				// Skip explicitly ignored node names
 				if (NodesToIgnore != null && NodesToIgnore.Contains(childName))
 				{
 					continue;
@@ -233,88 +326,40 @@ namespace Myra.MML
 				var isProperty = false;
 				if (childName.Contains("."))
 				{
-					// Property name
+					// Property element: "ClassName.PropertyName" or "PropertyName" syntax
 					var parts = childName.Split('.');
 					childName = parts[1];
 					isProperty = true;
 				}
 
+				// Apply legacy property name mapping
 				if (LegacyPropertyNames != null && LegacyPropertyNames.TryGetValue(childName, out newName))
 				{
 					childName = newName;
 				}
 
-				// Find property
+				// Try to match property name
 				var property = (from p in complexProperties where p.Name == childName select p).FirstOrDefault();
 				if (property != null)
 				{
-					do
-					{
-						var value = property.GetValue(obj);
-						var asList = value as IList;
-						if (asList != null)
-						{
-							// List
-							foreach (var child2 in child.Elements())
-							{
-								var item = ObjectCreator(property.PropertyType.GenericTypeArguments[0], child2);
-								Load(item, child2, handler);
-								asList.Add(item);
-							}
-
-							break;
-						}
-
-						var asDict = value as IDictionary;
-						if (asDict != null)
-						{
-							// Dict
-							foreach (var child2 in child.Elements())
-							{
-								var item = ObjectCreator(property.PropertyType.GenericTypeArguments[1], child2);
-								Load(item, child2, handler);
-
-								var id = string.Empty;
-								if (child2.Attribute(IdName) != null)
-								{
-									id = child2.Attribute(IdName).Value;
-								}
-
-								asDict[id] = item;
-							}
-
-							break;
-						}
-
-						if (property.SetMethod == null)
-						{
-							// Readonly
-							Load(value, child, handler);
-						}
-						else
-						{
-							var newValue = ObjectCreator(property.PropertyType, child);
-							Load(newValue, child, handler);
-							property.SetValue(obj, newValue);
-						}
-						break;
-					} while (true);
+					LoadComplexProperty(obj, property, child);
 				}
 				else
 				{
-					// Property not found
+					// Not a property: must be a widget class name
 					if (isProperty)
 					{
 						throw new Exception(string.Format("Class {0} doesnt have property {1}", type.Name, childName));
 					}
 
-					// Should be widget class name then
+					// Look up widget type by name (with legacy name support)
 					var widgetName = childName;
 					if (LegacyClassNames != null && LegacyClassNames.TryGetValue(widgetName, out newName))
 					{
 						widgetName = newName;
 					}
 
+					// Search for widget type in configured assemblies and namespaces
 					Type itemType = null;
 					foreach (var pair in Assemblies)
 					{
@@ -334,23 +379,33 @@ namespace Myra.MML
 
 					if (itemType != null)
 					{
+						// Create and load widget, then add to content property
 						var item = ObjectCreator(itemType, child);
-						Load(item, child, handler);
+						Load(item, child);
 
 						if (contentProperty == null)
 						{
-							throw new Exception(string.Format("Class {0} lacks property marked with ContentAttribute", type.Name));
+							if (DemandContentProperty)
+							{
+								throw new Exception(string.Format("Class {0} lacks property marked with ContentAttribute", type.Name));
+							}
+							else
+							{
+								// If no content property is required, then skip this item
+								continue;
+							}
 						}
 
 						var containerValue = contentProperty.GetValue(obj);
 						var asList = containerValue as IList;
 						if (asList != null)
 						{
-							// List
+							// Content property is a list
 							asList.Add(item);
-						} else
+						}
+						else
 						{
-							// Simple
+							// Content property is a single value
 							contentProperty.SetValue(obj, item);
 						}
 					}

@@ -4,6 +4,8 @@ using System.Linq;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
 using Myra.Events;
+using System.Collections;
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework.Input;
@@ -15,6 +17,9 @@ using Myra.Platform;
 
 namespace Myra.Graphics2D.UI
 {
+	/// <summary>
+	/// A spin button widget for entering numeric values with increment/decrement buttons.
+	/// </summary>
 	public class SpinButton : Widget
 	{
 		private readonly GridLayout _layout = new GridLayout();
@@ -25,18 +30,30 @@ namespace Myra.Graphics2D.UI
 		private int _decimalPlaces = 0;
 		private float _increment = 1f;
 
+		/// <summary>
+		/// Gets or sets a value indicating whether null is an acceptable value for this spin button. Default is false.
+		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(false)]
 		public bool Nullable { get; set; }
 
+		/// <summary>
+		/// Gets or sets the maximum value allowed in the spin button, or null for no maximum limit.
+		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(null)]
 		public float? Maximum { get; set; }
 
+		/// <summary>
+		/// Gets or sets the minimum value allowed in the spin button, or null for no minimum limit.
+		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(null)]
 		public float? Minimum { get; set; }
 
+		/// <summary>
+		/// Gets or sets the horizontal alignment of the spin button. Default is Left.
+		/// </summary>
 		[DefaultValue(HorizontalAlignment.Left)]
 		public override HorizontalAlignment HorizontalAlignment
 		{
@@ -50,6 +67,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the vertical alignment of the spin button. Default is Top.
+		/// </summary>
 		[DefaultValue(VerticalAlignment.Top)]
 		public override VerticalAlignment VerticalAlignment
 		{
@@ -63,6 +83,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the current numeric value of the spin button. Default is 0.0.
+		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(0.0f)]
 		public float? Value
@@ -85,21 +108,6 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (value == null && !Nullable)
-				{
-					throw new Exception("value can't be null when Nullable is false");
-				}
-
-				if (value.HasValue && Minimum.HasValue && value.Value < Minimum.Value)
-				{
-					throw new Exception("Value can't be lower than Minimum");
-				}
-
-				if (value.HasValue && Maximum.HasValue && value.Value > Maximum.Value)
-				{
-					throw new Exception("Value can't be higher than Maximum");
-				}
-
 				if (FixedNumberSize)
 				{
 					string MajorString = "";
@@ -141,6 +149,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the amount to increment or decrement the value when using the up/down buttons. Default is 1.0.
+		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(1f)]
 		public float Increment
@@ -163,6 +174,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the number of decimal places to display for floating-point values. Default is 0.
+		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(0)]
 		public int DecimalPlaces
@@ -185,10 +199,16 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets a value indicating whether the spin button should use fixed-width number formatting.
+		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(false)]
 		public bool FixedNumberSize { get; set; }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether the spin button should only accept integer values.
+		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(false)]
 		public bool Integer
@@ -209,33 +229,46 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the multiplier applied to the increment when using the mouse wheel. Default is 1.0.
+		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(1f)]
 		public float Mul_Increment { get; set; } = 1f;
 
+		/// <summary>
+		/// Gets the text box widget that contains the spin button's text input.
+		/// </summary>
 		[XmlIgnore]
 		[Browsable(false)]
 		public TextBox TextBox => _textField;
 
+		/// <summary>
+		/// Gets a value indicating whether the spin button accepts mouse wheel input.
+		/// </summary>
 		protected internal override bool AcceptsMouseWheel => true;
 
 		/// <summary>
-		/// Fires when the value is about to be changed
-		/// Set Cancel to true if you want to cancel the change
+		/// Occurs before the value is changed. Set Cancel to true to prevent the change.
 		/// </summary>
-		public event EventHandler<ValueChangingEventArgs<float?>> ValueChanging;
+		public event MyraEventHandler<ValueChangingEventArgs<float?>> ValueChanging;
 
 		/// <summary>
-		/// Fires when the value had been changed
+		/// Occurs when the value changes, regardless of whether it was changed by user input or programmatically.
 		/// </summary>
-		public event EventHandler<ValueChangedEventArgs<float?>> ValueChanged;
+		public event MyraEventHandler<ValueChangedEventArgs<float?>> ValueChanged;
 
 		/// <summary>
-		/// Fires only when the value had been changed by user(doesnt fire if it had been assigned through code)
+		/// Occurs when the value changes due to user interaction (buttons or mouse wheel). Does not fire for programmatic value changes.
 		/// </summary>
-		public event EventHandler<ValueChangedEventArgs<float?>> ValueChangedByUser;
+		public event MyraEventHandler<ValueChangedEventArgs<float?>> ValueChangedByUser;
 
-		public SpinButton(string styleName = Stylesheet.DefaultStyleName)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SpinButton"/> class with the specified stylesheet and style.
+		/// </summary>
+		/// <param name="stylesheet">The stylesheet to use for applying the style.</param>
+		/// <param name="styleName">The name of the style to apply. Defaults to the default stylesheet style.</param>
+		public SpinButton(Stylesheet stylesheet, string styleName = Stylesheet.DefaultStyleName)
 		{
 			ChildrenLayout = _layout;
 			AcceptsKeyboardFocus = true;
@@ -292,10 +325,20 @@ namespace Myra.Graphics2D.UI
 			_downButton.Click += DownButtonOnUp;
 			Children.Add(_downButton);
 
-			SetStyle(styleName);
+			SetStyle(stylesheet, styleName);
 
 			Value = 0;
 		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SpinButton"/> class with the specified style.
+		/// </summary>
+		/// <param name="styleName">The name of the style to apply. Defaults to the default stylesheet style.</param>
+		public SpinButton(string styleName = Stylesheet.DefaultStyleName) : this(Stylesheet.Current, styleName)
+		{
+		}
+
+		internal override IDictionary GetStylesDictionary(Stylesheet stylesheet) => stylesheet.SpinButtonStyles;
 
 		private static float? StringToFloat(string s)
 		{
@@ -438,32 +481,32 @@ namespace Myra.Graphics2D.UI
 			return true;
 		}
 
-		public void ApplySpinButtonStyle(SpinButtonStyle style)
+		/// <summary>
+		/// Applies the specified widget style to this spin button.
+		/// </summary>
+		/// <param name="style">The widget style to apply.</param>
+		protected override void ApplyStyle(WidgetStyle style)
 		{
-			ApplyWidgetStyle(style);
+			base.ApplyStyle(style);
 
-			if (style.TextBoxStyle != null)
+			var spinButtonStyle = (SpinButtonStyle)style;
+			if (spinButtonStyle.TextBoxStyle != null)
 			{
-				_textField.ApplyTextBoxStyle(style.TextBoxStyle);
+				_textField.ApplyTextBoxStyle(spinButtonStyle.TextBoxStyle);
 			}
 
-			if (style.UpButtonStyle != null)
+			if (spinButtonStyle.UpButtonStyle != null)
 			{
-				_upButton.ApplyImageButtonStyle(style.UpButtonStyle);
+				_upButton.ApplyImageButtonStyle(spinButtonStyle.UpButtonStyle);
 			}
 
-			if (style.DownButtonStyle != null)
+			if (spinButtonStyle.DownButtonStyle != null)
 			{
-				_downButton.ApplyImageButtonStyle(style.DownButtonStyle);
+				_downButton.ApplyImageButtonStyle(spinButtonStyle.DownButtonStyle);
 			}
 		}
 
-		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
-		{
-			ApplySpinButtonStyle(stylesheet.SpinButtonStyles.SafelyGetStyle(name));
-		}
-
-		private void UpButtonOnUp(object sender, EventArgs eventArgs)
+		private void UpButtonOnUp(object sender, MyraEventArgs eventArgs)
 		{
 			float value;
 			if (!float.TryParse(_textField.Text, out value))
@@ -487,7 +530,7 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 		}
-		private void DownButtonOnUp(object sender, EventArgs eventArgs)
+		private void DownButtonOnUp(object sender, MyraEventArgs eventArgs)
 		{
 			float value;
 			if (!float.TryParse(_textField.Text, out value))
@@ -513,6 +556,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Handles mouse wheel input to adjust the spin button value when the wheel adjustment multiplier is applied.
+		/// </summary>
+		/// <param name="delta">The mouse wheel delta value (positive for up/forward, negative for down/back).</param>
 		public override void OnMouseWheel(float delta)
 		{
 			base.OnMouseWheel(delta);
@@ -554,6 +601,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Handles gaining keyboard focus by delegating focus to the text box input.
+		/// </summary>
 		public override void OnGotKeyboardFocus()
 		{
 			base.OnGotKeyboardFocus();
@@ -561,6 +611,9 @@ namespace Myra.Graphics2D.UI
 			_textField.OnGotKeyboardFocus();
 		}
 
+		/// <summary>
+		/// Handles losing keyboard focus by delegating to the text box and applying a default value if needed.
+		/// </summary>
 		public override void OnLostKeyboardFocus()
 		{
 			base.OnLostKeyboardFocus();
@@ -583,6 +636,10 @@ namespace Myra.Graphics2D.UI
 			_textField.OnLostKeyboardFocus();
 		}
 
+		/// <summary>
+		/// Handles keyboard key down events by delegating to the text box input.
+		/// </summary>
+		/// <param name="k">The key being pressed.</param>
 		public override void OnKeyDown(Keys k)
 		{
 			base.OnKeyDown(k);
@@ -590,6 +647,10 @@ namespace Myra.Graphics2D.UI
 			_textField.OnKeyDown(k);
 		}
 
+		/// <summary>
+		/// Handles character input by delegating to the text box input.
+		/// </summary>
+		/// <param name="c">The character being entered.</param>
 		public override void OnChar(char c)
 		{
 			base.OnChar(c);
@@ -597,6 +658,10 @@ namespace Myra.Graphics2D.UI
 			_textField.OnChar(c);
 		}
 
+		/// <summary>
+		/// Copies the properties from another spin button widget.
+		/// </summary>
+		/// <param name="w">The source spin button widget to copy from.</param>
 		protected internal override void CopyFrom(Widget w)
 		{
 			base.CopyFrom(w);

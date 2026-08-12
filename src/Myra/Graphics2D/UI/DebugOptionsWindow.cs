@@ -2,10 +2,19 @@ using System;
 
 namespace Myra.Graphics2D.UI
 {
+	/// <summary>
+	/// A window that provides options for debugging the UI framework.
+	/// </summary>
 	public partial class DebugOptionsWindow
 	{
+		/// <summary>
+		/// Gets or sets a value indicating whether debug information should be displayed.
+		/// </summary>
 		public bool ShowDebugInfo { get; set; }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DebugOptionsWindow"/> class.
+		/// </summary>
 		public DebugOptionsWindow()
 		{
 			Title = "UI Debug Options";
@@ -49,6 +58,12 @@ namespace Myra.Graphics2D.UI
 			};
 		}
 
+		/// <summary>
+		/// Adds a debug option with callbacks for when it's enabled or disabled.
+		/// </summary>
+		/// <param name="text">The text label for the option.</param>
+		/// <param name="onEnabled">The action to call when the option is enabled.</param>
+		/// <param name="onDisabled">The action to call when the option is disabled.</param>
 		public void AddOption(string text, Action onEnabled, Action onDisabled)
 		{
 			var optionsCheckBox = new CheckButton

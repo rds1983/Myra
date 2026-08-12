@@ -1,10 +1,17 @@
-﻿using System.ComponentModel;
-using Myra.Graphics2D.UI.Styles;
+﻿using Myra.Graphics2D.UI.Styles;
+using System.ComponentModel;
+using System.Collections;
 
 namespace Myra.Graphics2D.UI
 {
+	/// <summary>
+	/// A slider control that allows users to select a value from a vertical range.
+	/// </summary>
 	public class VerticalSlider : Slider
 	{
+		/// <summary>
+		/// Gets the orientation of the slider, which is always vertical.
+		/// </summary>
 		public override Orientation Orientation
 		{
 			get
@@ -13,6 +20,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the horizontal alignment of the slider.
+		/// </summary>
 		[DefaultValue(HorizontalAlignment.Left)]
 		public override HorizontalAlignment HorizontalAlignment
 		{
@@ -26,6 +36,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the vertical alignment of the slider.
+		/// </summary>
 		[DefaultValue(VerticalAlignment.Stretch)]
 		public override VerticalAlignment VerticalAlignment
 		{
@@ -39,15 +52,25 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public VerticalSlider(string styleName = Stylesheet.DefaultStyleName): base(styleName)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="VerticalSlider"/> class with the specified stylesheet and style.
+		/// </summary>
+		/// <param name="stylesheet">The stylesheet to use for applying the style.</param>
+		/// <param name="styleName">The name of the style to apply. Defaults to the default stylesheet style.</param>
+		public VerticalSlider(Stylesheet stylesheet, string styleName = Stylesheet.DefaultStyleName) : base(stylesheet, styleName)
 		{
 			HorizontalAlignment = HorizontalAlignment.Left;
 			VerticalAlignment = VerticalAlignment.Stretch;
 		}
 
-		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="VerticalSlider"/> class with the specified style.
+		/// </summary>
+		/// <param name="styleName">The name of the style to apply. Defaults to the default stylesheet style.</param>
+		public VerticalSlider(string styleName = Stylesheet.DefaultStyleName) : this(Stylesheet.Current, styleName)
 		{
-			ApplySliderStyle(stylesheet.VerticalSliderStyles.SafelyGetStyle(name));
 		}
+
+		internal override IDictionary GetStylesDictionary(Stylesheet stylesheet) => stylesheet.VerticalSliderStyles;
 	}
 }

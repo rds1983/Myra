@@ -16,11 +16,20 @@ using Color = FontStashSharp.FSColor;
 
 namespace Myra.Graphics2D.UI
 {
+	/// <summary>
+	/// Base class for containers that arrange children in a stack (either horizontally or vertically).
+	/// </summary>
 	public abstract class StackPanel : Container
 	{
+		/// <summary>
+		/// Attached property that specifies the proportion type for a child element in a stack panel.
+		/// </summary>
 		public static readonly AttachedPropertyInfo<ProportionType> ProportionTypeProperty =
 			AttachedPropertiesRegistry.Create(typeof(StackPanel), "ProportionType",
 				ProportionType.Auto, AttachedPropertyOption.AffectsMeasure);
+		/// <summary>
+		/// Attached property that specifies the proportion value for a child element in a stack panel.
+		/// </summary>
 		public static readonly AttachedPropertyInfo<float> ProportionValueProperty =
 			AttachedPropertiesRegistry.Create(typeof(StackPanel), "ProportionValue",
 				1.0f, AttachedPropertyOption.AffectsMeasure,
@@ -30,18 +39,30 @@ namespace Myra.Graphics2D.UI
 		private readonly ObservableCollection<Proportion> _proportions = new ObservableCollection<Proportion>();
 		private bool _childrenDirty = true;
 
+		/// <summary>
+		/// Gets the orientation of the stack panel (horizontal or vertical).
+		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
 		public abstract Orientation Orientation { get; }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether grid lines should be shown for debugging.
+		/// </summary>
 		[Category("Debug")]
 		[DefaultValue(false)]
 		public bool ShowGridLines { get; set; }
 
+		/// <summary>
+		/// Gets or sets the color of the grid lines shown for debugging.
+		/// </summary>
 		[Category("Debug")]
 		[DefaultValue("White")]
 		public Color GridLinesColor { get; set; }
 
+		/// <summary>
+		/// Gets or sets the spacing between child elements.
+		/// </summary>
 		[Category("Layout")]
 		[DefaultValue(0)]
 		public int Spacing
@@ -50,6 +71,9 @@ namespace Myra.Graphics2D.UI
 			set => _layout.Spacing = value;
 		}
 
+		/// <summary>
+		/// Gets or sets the default proportion for child elements.
+		/// </summary>
 		[Browsable(false)]
 		public Proportion DefaultProportion
 		{
@@ -57,28 +81,33 @@ namespace Myra.Graphics2D.UI
 			set => _layout.DefaultProportion = value;
 		}
 
-
-		[Browsable(false)]
-		[Obsolete("Use StackPanel.GetProportion/StackPanel.SetProportion")]
-		[SkipSave]
-		public ObservableCollection<Proportion> Proportions => _proportions;
-
+		/// <summary>
+		/// Initializes a new instance of the <see cref="StackPanel"/> class.
+		/// </summary>
 		protected StackPanel()
 		{
 			_layout = new StackPanelLayout(Orientation);
 			ChildrenLayout = _layout;
 			GridLinesColor = Color.White;
 
-			_proportions.CollectionChanged += (s, e) => InvalidateChildren();
+			_proportions.CollectionChanged += (s, e) => InvalidateProportions();
 		}
 
+		/// <summary>
+		/// Gets the size of the cell at the specified index.
+		/// </summary>
+		/// <param name="index">The zero-based index of the cell.</param>
+		/// <returns>The size of the cell.</returns>
 		public int GetCellSize(int index) => _layout.GetCellSize(index);
 
-		private void InvalidateChildren()
+		private void InvalidateProportions()
 		{
 			_childrenDirty = true;
 		}
 
+		/// <summary>
+		/// Updates the proportions of child elements in the stack panel.
+		/// </summary>
 		protected void UpdateChildren()
 		{
 			if (!_childrenDirty)
@@ -102,6 +131,11 @@ namespace Myra.Graphics2D.UI
 			_childrenDirty = false;
 		}
 
+		/// <summary>
+		/// Measures the size required for all child elements in the stack panel.
+		/// </summary>
+		/// <param name="availableSize">The available size for measurement.</param>
+		/// <returns>The measured size of the stack panel.</returns>
 		protected override Point InternalMeasure(Point availableSize)
 		{
 			UpdateChildren();
@@ -109,6 +143,9 @@ namespace Myra.Graphics2D.UI
 			return base.InternalMeasure(availableSize);
 		}
 
+		/// <summary>
+		/// Arranges child elements in the stack panel according to the stack orientation.
+		/// </summary>
 		protected override void InternalArrange()
 		{
 			UpdateChildren();
@@ -116,9 +153,12 @@ namespace Myra.Graphics2D.UI
 			base.InternalArrange();
 		}
 
+		/// <summary>
+		/// Renders the stack panel and optionally its grid lines for debugging.
+		/// </summary>
+		/// <param name="context">The render context.</param>
 		public override void InternalRender(RenderContext context)
 		{
-
 			base.InternalRender(context);
 
 			if (!ShowGridLines)
@@ -142,6 +182,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Handles changes to attached properties on the stack panel.
+		/// </summary>
+		/// <param name="propertyInfo">Information about the changed property.</param>
 		public override void OnAttachedPropertyChanged(BaseAttachedPropertyInfo propertyInfo)
 		{
 			base.OnAttachedPropertyChanged(propertyInfo);
@@ -149,10 +193,14 @@ namespace Myra.Graphics2D.UI
 			if (propertyInfo.Id == ProportionTypeProperty.Id ||
 				propertyInfo.Id == ProportionValueProperty.Id)
 			{
-				InvalidateChildren();
+				InvalidateProportions();
 			}
 		}
 
+		/// <summary>
+		/// Copies properties from another stack panel to this one.
+		/// </summary>
+		/// <param name="w">The source stack panel to copy from.</param>
 		protected internal override void CopyFrom(Widget w)
 		{
 			base.CopyFrom(w);
@@ -165,9 +213,32 @@ namespace Myra.Graphics2D.UI
 			DefaultProportion = stackPanel.DefaultProportion;
 		}
 
+		/// <summary>
+		/// Gets the proportion type for a widget in a stack panel.
+		/// </summary>
+		/// <param name="widget">The widget.</param>
+		/// <returns>The proportion type of the widget.</returns>
 		public static ProportionType GetProportionType(Widget widget) => ProportionTypeProperty.GetValue(widget);
+
+		/// <summary>
+		/// Sets the proportion type for a widget in a stack panel.
+		/// </summary>
+		/// <param name="widget">The widget.</param>
+		/// <param name="value">The proportion type to set.</param>
 		public static void SetProportionType(Widget widget, ProportionType value) => ProportionTypeProperty.SetValue(widget, value);
+
+		/// <summary>
+		/// Gets the proportion value for a widget in a stack panel.
+		/// </summary>
+		/// <param name="widget">The widget.</param>
+		/// <returns>The proportion value of the widget.</returns>
 		public static float GetProportionValue(Widget widget) => ProportionValueProperty.GetValue(widget);
+
+		/// <summary>
+		/// Sets the proportion value for a widget in a stack panel.
+		/// </summary>
+		/// <param name="widget">The widget.</param>
+		/// <param name="value">The proportion value to set.</param>
 		public static void SetProportionValue(Widget widget, float value) => ProportionValueProperty.SetValue(widget, value);
 	}
 }

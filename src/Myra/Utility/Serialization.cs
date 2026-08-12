@@ -24,6 +24,8 @@ namespace Myra.Utility
 		{
 			{typeof(Vector2), new Vector2Serializer()},
 			{typeof(Thickness), new ThicknessSerializer()},
+			{typeof(Color), new ColorSerializer()},
+			{typeof(Rectangle), new RectangleSerializer()}
 		};
 
 		public static bool HasDefaultValue(this PropertyInfo property, object value)
@@ -45,8 +47,8 @@ namespace Myra.Utility
 					defaultAttributeValue = ColorStorage.FromName(defaultAttributeValue.ToString()).Value;
 				}
 
-				if (property.PropertyType == typeof(string) && 
-					string.IsNullOrEmpty((string)defaultAttributeValue) && 
+				if (property.PropertyType == typeof(string) &&
+					string.IsNullOrEmpty((string)defaultAttributeValue) &&
 					string.IsNullOrEmpty((string)value))
 				{
 					// Skip empty/null string
@@ -60,7 +62,7 @@ namespace Myra.Utility
 				}
 
 				if (defaultAttributeValue != null &&
-					defaultAttributeValue.GetType() == typeof(string) && 
+					defaultAttributeValue.GetType() == typeof(string) &&
 					_serializers.TryGetValue(property.PropertyType, out ITypeSerializer typeSerializer) &&
 					(string)defaultAttributeValue == typeSerializer.Serialize(value))
 				{
@@ -70,6 +72,8 @@ namespace Myra.Utility
 
 			return false;
 		}
+
+		public static string RectangleToString(this Rectangle r) => $"{r.X}, {r.Y}, {r.Width}, {r.Height}";
 
 		public static Rectangle ParseRectangle(this string s)
 		{

@@ -1,19 +1,11 @@
-﻿using System.Reflection;
-using Myra.Utility;
+﻿using AssetManagementBase;
+using System.Reflection;
 
 namespace MyraPad
 {
 	public static class Resources
 	{
-		private static string _exportCsDesigner, _exportCsMain, _newProjectTemplate;
-
-		private static Assembly Assembly
-		{
-			get
-			{
-				return typeof(Resources).Assembly;
-			}
-		}
+		private static string _exportCsDesigner, _exportCsLight, _exportCsMain, _newProjectTemplate;
 
 		public static string ExportCSDesigner
 		{
@@ -21,10 +13,25 @@ namespace MyraPad
 			{
 				if (string.IsNullOrEmpty(_exportCsDesigner))
 				{
-					_exportCsDesigner = Assembly.ReadResourceAsString("MyraPad.Resources.ExportCSDesigner.cstemplate");
+					var assetManager = CreateAssetManager();
+					_exportCsDesigner = assetManager.ReadAsString("ExportCSDesigner.cstemplate");
 				}
 
 				return _exportCsDesigner;
+			}
+		}
+
+		public static string ExportCSLight
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(_exportCsLight))
+				{
+					var assetManager = CreateAssetManager();
+					_exportCsLight = assetManager.ReadAsString("ExportCSLight.cstemplate");
+				}
+
+				return _exportCsLight;
 			}
 		}
 
@@ -34,7 +41,8 @@ namespace MyraPad
 			{
 				if (string.IsNullOrEmpty(_exportCsMain))
 				{
-					_exportCsMain = Assembly.ReadResourceAsString("MyraPad.Resources.ExportCSMain.cstemplate");
+					var assetManager = CreateAssetManager();
+					_exportCsMain = assetManager.ReadAsString("ExportCSMain.cstemplate");
 				}
 
 				return _exportCsMain;
@@ -47,11 +55,14 @@ namespace MyraPad
 			{
 				if (string.IsNullOrEmpty(_newProjectTemplate))
 				{
-					_newProjectTemplate = Assembly.ReadResourceAsString("MyraPad.Resources.NewProject.xmmptemplate");
+					var assetManager = CreateAssetManager();
+					_newProjectTemplate = assetManager.ReadAsString("NewProject.xmmptemplate");
 				}
 
 				return _newProjectTemplate;
 			}
 		}
+
+		private static AssetManager CreateAssetManager() => AssetManager.CreateResourceAssetManager(typeof(Resources).Assembly, "MyraPad.Resources", false);
 	}
 }

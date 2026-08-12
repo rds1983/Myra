@@ -2,11 +2,13 @@
 using System.ComponentModel;
 using System.Xml.Serialization;
 using Myra.Graphics2D.UI.Styles;
-using Myra.Attributes;
 using System.Collections;
 using System.Collections.Generic;
 using Myra.Utility;
-using System.Reflection;
+using Myra.Events;
+using Myra.Attributes;
+
+
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -21,7 +23,10 @@ using Myra.Platform;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ListView : Widget
+	/// <summary>
+	/// A list view widget that displays a scrollable collection of items and supports single or multiple selection.
+	/// </summary>
+	public class ListView : Widget, IContainer
 	{
 		private class WidgetsEnumerator : IEnumerator<Widget>, IEnumerator
 		{
@@ -261,22 +266,37 @@ namespace Myra.Graphics2D.UI
 
 		internal ComboView _parentCombo;
 
+		/// <summary>
+		/// Gets or sets the style applied to the list view.
+		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
 		public ListBoxStyle ListBoxStyle { get; set; }
 
+		/// <summary>
+		/// Gets or sets whether items can be selected individually or in multiple selections.
+		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(SelectionMode.Single)]
 		public SelectionMode SelectionMode { get; set; }
 
+		/// <summary>
+		/// Gets the scroll viewer that manages scrolling for the list view items.
+		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
 		public ScrollViewer ScrollViewer => _scrollViewer;
 
+		/// <summary>
+		/// Gets the collection of items in the list view.
+		/// </summary>
 		[Content]
 		[Browsable(false)]
 		public IList<Widget> Widgets => _widgets;
 
+		/// <summary>
+		/// Gets or sets the zero-based index of the currently selected item, or null if no item is selected.
+		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
 		public int? SelectedIndex
@@ -309,6 +329,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the currently selected item widget, or null if no item is selected.
+		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
 		public Widget SelectedItem
@@ -336,18 +359,26 @@ namespace Myra.Graphics2D.UI
 					}
 				}
 
-				SelectedIndexChanged.Invoke(this);
+				SelectedIndexChanged.Invoke(this, InputEventType.SelectedIndexChanged);
 				OnSelectedItemChanged();
 			}
 		}
 
 		private int ChildrenCount => _box.Children.Count;
 
-		public event EventHandler SelectedIndexChanged;
+		/// <summary>
+		/// Occurs when the selected item changes.
+		/// </summary>
+		public event MyraEventHandler SelectedIndexChanged;
 
-		public ListView(string styleName = Stylesheet.DefaultStyleName)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ListView"/> class with the specified stylesheet and style.
+		/// </summary>
+		/// <param name="stylesheet">The stylesheet to use for applying the style.</param>
+		/// <param name="styleName">The name of the style to apply to the list view.</param>
+		public ListView(Stylesheet stylesheet, string styleName = Stylesheet.DefaultStyleName)
 		{
-			_scrollViewer = new ScrollViewer();
+			_scrollViewer = new ScrollViewer(stylesheet);
 			ChildrenLayout = new SingleItemLayout<ScrollViewer>(this)
 			{
 				Child = _scrollViewer
@@ -360,10 +391,18 @@ namespace Myra.Graphics2D.UI
 
 			_widgets = new WidgetsCollection(this);
 
-			SetStyle(styleName);
+			SetStyle(stylesheet, styleName);
 		}
 
-		private void ButtonOnClick(object sender, EventArgs eventArgs)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ListView"/> class.
+		/// </summary>
+		/// <param name="styleName">The name of the style to apply to the list view.</param>
+		public ListView(string styleName = Stylesheet.DefaultStyleName) : this(Stylesheet.Current, styleName)
+		{
+		}
+
+		private void ButtonOnClick(object sender, MyraEventArgs eventArgs)
 		{
 			var button = (ListViewButton)sender;
 			if (!button.IsPressed)
@@ -387,6 +426,9 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Raises the selected item changed event and updates the parent combo box if present.
+		/// </summary>
 		protected void OnSelectedItemChanged()
 		{
 			if (_parentCombo != null)
@@ -395,6 +437,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Handles keyboard input for navigation (Up, Down, Enter keys).
+		/// </summary>
+		/// <param name="k">The key being pressed.</param>
 		public override void OnKeyDown(Keys k)
 		{
 			base.OnKeyDown(k);
@@ -457,11 +503,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		private void OnItemCollectionChanged()
-		{
-			_scrollViewer.ResetScroll();
-		}
-
 		private void UpdateScrolling()
 		{
 			if (SelectedItem == null)
@@ -475,7 +516,7 @@ namespace Myra.Graphics2D.UI
 			var widget = SelectedItem;
 			var p = _box.ToLocal(widget.ToGlobal(widget.Bounds.Location));
 
-			var lineHeight = ListBoxStyle.ListItemStyle.LabelStyle.Font.LineHeight;
+			var lineHeight = widget.ActualBounds.Height;
 
 			var sp = _scrollViewer.ScrollPosition;
 
@@ -492,6 +533,10 @@ namespace Myra.Graphics2D.UI
 			_scrollViewer.ScrollPosition = sp;
 		}
 
+		/// <summary>
+		/// Handles mouse wheel scrolling for the list view.
+		/// </summary>
+		/// <param name="delta">The mouse wheel delta value.</param>
 		public override void OnMouseWheel(float delta)
 		{
 			base.OnMouseWheel(delta);
@@ -499,25 +544,33 @@ namespace Myra.Graphics2D.UI
 			_scrollViewer.OnMouseWheel(delta);
 		}
 
-		public void ApplyListBoxStyle(ListBoxStyle style)
-		{
-			ApplyWidgetStyle(style);
+		/// <summary>
+		/// Applies the specified list box style to this list view.
+		/// </summary>
+		/// <param name="listBoxStyle">The list box style to apply.</param>
+		public void ApplyListViewStyle(ListBoxStyle listBoxStyle) => ApplyStyle(listBoxStyle);
 
-			ListBoxStyle = style;
+		internal override IDictionary GetStylesDictionary(Stylesheet stylesheet) => stylesheet.ListBoxStyles;
+
+		/// <summary>
+		/// Applies the specified widget style to this list view.
+		/// </summary>
+		/// <param name="style">The widget style to apply.</param>
+		protected override void ApplyStyle(WidgetStyle style)
+		{
+			base.ApplyStyle(style);
+
+			var listBoxStyle = (ListBoxStyle)style;
+			ListBoxStyle = new ListBoxStyle(listBoxStyle);
 
 			foreach (var item in Widgets)
 			{
 				var asButton = item.Parent as ListViewButton;
 				if (asButton != null)
 				{
-					asButton.ApplyButtonStyle(style.ListItemStyle);
+					asButton.ApplyButtonStyle(listBoxStyle.ListItemStyle);
 				}
 			}
-		}
-
-		protected override void InternalSetStyle(Stylesheet stylesheet, string name)
-		{
-			ApplyListBoxStyle(stylesheet.ListBoxStyles.SafelyGetStyle(name));
 		}
 
 		private Widget GetChildByIndex(int index)
@@ -548,6 +601,10 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <summary>
+		/// Copies the style and items from another list view.
+		/// </summary>
+		/// <param name="w">The source list view to copy from.</param>
 		protected internal override void CopyFrom(Widget w)
 		{
 			base.CopyFrom(w);

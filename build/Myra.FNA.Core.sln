@@ -1,21 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.1.32328.378
+# Visual Studio Version 18
+VisualStudioVersion = 18.6.11819.183 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{D17FD092-A553-4770-A7A5-822661193436}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.FNA.Core", "..\src\Myra\Myra.FNA.Core.csproj", "{032CDE6F-256B-4545-BD4C-4396E90AF5CF}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Tests.FNA.Core", "..\src\Myra.Tests\Myra.Tests.FNA.Core.csproj", "{088FC617-30F8-4ED8-BB4E-076C3107E0B2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.AllWidgets.FNA.Core", "..\samples\Myra.Samples.AllWidgets\Myra.Samples.AllWidgets.FNA.Core.csproj", "{08F5F0B8-6573-46DF-BBCB-AB8E22731880}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FontStashSharp.FNA.Core", "..\..\FontStashSharp\src\XNA\FontStashSharp.FNA.Core.csproj", "{94F1DDDF-5DF9-4033-B60C-1B33E963AEA5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyraPad.FNA.Core", "..\src\MyraPad\MyraPad.FNA.Core.csproj", "{1FC2F781-2F83-4FDC-9D9F-DCF487AAC42D}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.TextRendering.FNA.Core", "..\samples\Myra.Samples.TextRendering\Myra.Samples.TextRendering.FNA.Core.csproj", "{D963B41E-DF39-44A3-878B-857C8A3CB5F6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.Notepad.FNA.Core", "..\samples\Myra.Samples.Notepad\Myra.Samples.Notepad.FNA.Core.csproj", "{F7D9FC22-B28D-494B-873D-96920E477552}"
 EndProject
@@ -39,10 +35,6 @@ Global
 		{032CDE6F-256B-4545-BD4C-4396E90AF5CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{032CDE6F-256B-4545-BD4C-4396E90AF5CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{032CDE6F-256B-4545-BD4C-4396E90AF5CF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{088FC617-30F8-4ED8-BB4E-076C3107E0B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{088FC617-30F8-4ED8-BB4E-076C3107E0B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{088FC617-30F8-4ED8-BB4E-076C3107E0B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{088FC617-30F8-4ED8-BB4E-076C3107E0B2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{08F5F0B8-6573-46DF-BBCB-AB8E22731880}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{08F5F0B8-6573-46DF-BBCB-AB8E22731880}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08F5F0B8-6573-46DF-BBCB-AB8E22731880}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -55,10 +47,6 @@ Global
 		{1FC2F781-2F83-4FDC-9D9F-DCF487AAC42D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FC2F781-2F83-4FDC-9D9F-DCF487AAC42D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FC2F781-2F83-4FDC-9D9F-DCF487AAC42D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D963B41E-DF39-44A3-878B-857C8A3CB5F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D963B41E-DF39-44A3-878B-857C8A3CB5F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D963B41E-DF39-44A3-878B-857C8A3CB5F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D963B41E-DF39-44A3-878B-857C8A3CB5F6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F7D9FC22-B28D-494B-873D-96920E477552}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F7D9FC22-B28D-494B-873D-96920E477552}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7D9FC22-B28D-494B-873D-96920E477552}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -86,7 +74,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{08F5F0B8-6573-46DF-BBCB-AB8E22731880} = {D17FD092-A553-4770-A7A5-822661193436}
 		{94F1DDDF-5DF9-4033-B60C-1B33E963AEA5} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
-		{D963B41E-DF39-44A3-878B-857C8A3CB5F6} = {D17FD092-A553-4770-A7A5-822661193436}
 		{F7D9FC22-B28D-494B-873D-96920E477552} = {D17FD092-A553-4770-A7A5-822661193436}
 		{41A030C8-B98D-425A-9E62-AE069255D7E9} = {D17FD092-A553-4770-A7A5-822661193436}
 		{D05855F7-6D79-4646-94D8-C17662F2E8AB} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}

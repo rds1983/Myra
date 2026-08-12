@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AssetManagementBase;
+using System;
 
 namespace Myra.Samples.CustomUIStylesheet
 {
@@ -15,6 +16,7 @@ namespace Myra.Samples.CustomUIStylesheet
 		{
 			try
 			{
+				AMBConfiguration.Logger = Console.WriteLine;
 				using (var game = new CustomUIStylesheetGame())
 					game.Run();
 			}

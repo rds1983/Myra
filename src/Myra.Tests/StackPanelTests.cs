@@ -1,12 +1,12 @@
-﻿using Myra.Graphics2D.UI;
-using NUnit.Framework;
+using Myra.Graphics2D.UI;
+using Xunit;
 
 namespace Myra.Tests
 {
-	[TestFixture]
+	[Collection("Myra Tests")]
 	public class StackPanelTests
 	{
-		[Test]
+		[Fact]
 		public void AddRemove()
 		{
 			var stackPanel = new VerticalStackPanel();
@@ -20,9 +20,11 @@ namespace Myra.Tests
 
 			stackPanel.Widgets.Remove(label2);
 
-			Assert.AreEqual(2, stackPanel.Widgets.Count);
-			Assert.AreEqual(label1, stackPanel.Widgets[0]);
-			Assert.AreEqual(label3, stackPanel.Widgets[1]);
+			Assert.Equal(2, stackPanel.Widgets.Count);
+			Assert.Equal(label1, stackPanel.Widgets[0]);
+			Assert.Equal(label3, stackPanel.Widgets[1]);
 		}
 	}
 }
+
+

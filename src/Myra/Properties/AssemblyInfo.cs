@@ -2,3 +2,5 @@
 
 [assembly: InternalsVisibleTo("Myra.Tests")]
 [assembly: InternalsVisibleTo("MyraPad")]
+[assembly: InternalsVisibleTo("Myra.GdxSkinImport")]
+

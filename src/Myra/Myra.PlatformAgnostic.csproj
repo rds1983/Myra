@@ -5,6 +5,7 @@
     <AssemblyName>Myra</AssemblyName>
     <PackageId>Myra.PlatformAgnostic</PackageId>
     <OutputPath>bin\PlatformAgnostic\$(Configuration)</OutputPath>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
@@ -16,8 +17,7 @@
   </ItemGroup>  
 
   <ItemGroup>
-    <PackageReference Include="AssetManagementBase" Version="0.7.1" />
+    <PackageReference Include="AssetManagementBase" Version="$(AMBVersion)" />
     <PackageReference Include="FontStashSharp.PlatformAgnostic" Version="$(FontStashSharpVersion)" />
-    <PackageReference Include="info.lundin.math.dll" Version="$(InfoLundinMathVersion)" />
   </ItemGroup>  
 </Project>

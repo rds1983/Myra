@@ -1,0 +1,20 @@
+<Project>
+  <Project.ExportOptions Namespace="MyraPad.UI" Class="ImageEditorDialog" OutputPath="D:\Projects\Myra\src\MyraPad\UI" />
+  <Dialog Title="Image Editor" Left="458" Top="358">
+    <VerticalStackPanel Spacing="8">
+      <TextBox Readonly="True" Width="400" Id="_textValue" />
+      <HorizontalStackPanel Spacing="8" HorizontalAlignment="Left">
+        <Panel Width="32" Height="32" Margin="4" Background="#FFCC01FF" Id="_panelColor" />
+        <Button VerticalAlignment="Center" Id="_buttonChangeColor">
+          <Label Text="Change..." />
+        </Button>
+      </HorizontalStackPanel>
+      <Button Id="_buttomSetFromStylesheet">
+        <Label Text="Set Image From Stylesheet" />
+      </Button>
+      <Button Id="_buttonSetFromFile">
+        <Label Text="Set Image From External File" />
+      </Button>
+    </VerticalStackPanel>
+  </Dialog>
+</Project>

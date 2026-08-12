@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using System.IO;
 using AssetManagementBase;
+using System;
 
 namespace Myra.Samples.AssetManagement
 {
@@ -28,7 +29,7 @@ namespace Myra.Samples.AssetManagement
 
 			MyraEnvironment.Game = this;
 
-			MyraEnvironment.DefaultAssetManager = AssetManager.CreateFileAssetManager(Path.Combine(PathUtils.ExecutingAssemblyDirectory, "Assets"));
+			MyraEnvironment.DefaultAssetManager = AssetManager.CreateFileAssetManager(Path.Combine(AppContext.BaseDirectory, "Assets"));
 
 			_mainForm = new MainForm();
 			_mainForm._mainMenu.HoverIndex = 0;
