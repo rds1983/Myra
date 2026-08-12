@@ -269,6 +269,7 @@ namespace MyraPad.UI
 			_menuFileExportToCSLight.Selected += ExportCsLightItemOnSelected;
 			_menuFileLoadStylesheet.Selected += OnMenuFileLoadStylesheet;
 			_menuFileResetStylesheet.Selected += OnMenuFileResetStylesheetSelected;
+			_menuFileSaveStylesheet.Selected += (s, a) => SaveStylesheet();
 			_menuFileDebugOptions.Selected += DebugOptionsItemOnSelected;
 			_menuFileQuit.Selected += QuitItemOnDown;
 
@@ -935,19 +936,7 @@ namespace MyraPad.UI
 			// Write the XML content to the file
 			File.WriteAllText(filePath, _textSource.Text);
 
-			if (HasCustomStylesheet)
-			{
-				// Save stylesheet too
-				var stylesheetPath = Project.StylesheetPath;
-				if (!Path.IsPathRooted(stylesheetPath))
-				{
-					var folder = Path.GetDirectoryName(filePath);
-					stylesheetPath = Path.Combine(folder, stylesheetPath);
-				}
-
-				var stylesheetData = Project.Stylesheet.ToXml();
-				File.WriteAllText(stylesheetPath, stylesheetData);
-			}
+			SaveStylesheet();
 
 			// Update the project path and state
 			FilePath = filePath;
@@ -959,6 +948,14 @@ namespace MyraPad.UI
 		{
 			if (string.IsNullOrEmpty(FilePath) || setFileName)
 			{
+				if (setFileName && HasCustomStylesheet && !Path.IsPathRooted(Project.StylesheetPath))
+				{
+					var dialog = Dialog.CreateMessageBox("Error", "Can't change path of a project with a custom stylesheet.");
+					dialog.ShowModal(Desktop);
+
+					return;
+				}
+
 				var dlg = new FileDialog(FileDialogMode.SaveFile)
 				{
 					Filter = "*.xmmp"
@@ -1045,6 +1042,7 @@ namespace MyraPad.UI
 		private void UpdateMenuFile()
 		{
 			_menuFileReload.Enabled = !string.IsNullOrEmpty(FilePath);
+			_menuFileSaveStylesheet.Enabled = HasCustomStylesheet;
 		}
 
 		// Shuts down the async task queue when the application closes

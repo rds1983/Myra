@@ -13,6 +13,7 @@
         <MenuSeparator />
         <MenuItem Text="&amp;Load Stylesheet" Id="_menuFileLoadStylesheet" />
         <MenuItem Text="Rese&amp;t Stylesheet" Id="_menuFileResetStylesheet" />
+        <MenuItem Text="Save St&amp;ylesheet" Id="_menuFileSaveStylesheet" />
         <MenuSeparator />
         <MenuItem Text="&amp;UI Debug Options" Id="_menuFileDebugOptions" />
         <MenuSeparator />

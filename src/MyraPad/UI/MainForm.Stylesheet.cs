@@ -226,4 +226,22 @@ partial class MainForm
 		UpdateSource();
 		UpdateMenuFile();
 	}
+
+	private void SaveStylesheet()
+	{
+		if (!HasCustomStylesheet)
+		{
+			return;
+		}
+
+		var stylesheetPath = Project.StylesheetPath;
+		if (!Path.IsPathRooted(stylesheetPath))
+		{
+			var folder = Path.GetDirectoryName(FilePath);
+			stylesheetPath = Path.Combine(folder, stylesheetPath);
+		}
+
+		var stylesheetData = Project.Stylesheet.ToXml();
+		File.WriteAllText(stylesheetPath, stylesheetData);
+	}
 }
