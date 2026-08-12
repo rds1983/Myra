@@ -26,6 +26,8 @@
   href: grid-layout.md
 - name: StackPanel Layout
   href: stackpanel-layout.md
+- name: WrapPanel
+  href: wrap-panel.md
 - name: Simple Widgets. Label, Button, ToggleButton, RadioButton, CheckButton
   href: simple-widgets-first.md
 - name: Simple Widgets. Part 2. Image, Separator, TextBox

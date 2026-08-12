@@ -1,0 +1,9 @@
+<Project>
+  <Project.ExportOptions />
+  <WrapPanel HorizontalSpacing="8" Width="100" Height="50" >
+    <Label Text="Test1" />
+    <Label Text="Test2" TextColor="#4CD961FF" />
+    <Label Text="Test3" TextColor="#5756D5FF" />
+    <Label Text="Test4" />
+  </WrapPanel>
+</Project>

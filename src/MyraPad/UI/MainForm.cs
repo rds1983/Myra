@@ -64,6 +64,7 @@ namespace MyraPad.UI
 			typeof(HorizontalSplitPane),
 			typeof(VerticalStackPanel),
 			typeof(HorizontalStackPanel),
+			typeof(WrapPanel),
 			typeof(ListView),
 			typeof(ComboView)
 		};
@@ -762,6 +763,10 @@ namespace MyraPad.UI
 				else if (dlg._radioButtonPanel.IsPressed)
 				{
 					rootType = "Panel";
+				}
+				else if (dlg._radioButtonWrapPanel.IsPressed)
+				{
+					rootType = "WrapPanel";
 				}
 				else if (dlg._radioButtonScrollViewer.IsPressed)
 				{
