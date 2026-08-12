@@ -11,6 +11,7 @@ namespace Myra
 	public static class DefaultAssets
 	{
 		private static AssetManager _assetManager;
+		private static SpriteFontBase _debugFont;
 		private static Stylesheet _defaultStylesheet, _defaultStylesheet2x;
 		private static TextureRegion _whiteRegion;
 
@@ -24,6 +25,22 @@ namespace Myra
 				}
 
 				return _assetManager;
+			}
+		}
+
+		/// <summary>
+		/// Gets the font used for rendering debug information, such as the widget info overlay.
+		/// </summary>
+		public static SpriteFontBase DebugFont
+		{
+			get
+			{
+				if (_debugFont == null)
+				{
+					_debugFont = AssetManager.LoadFont("Inter-Regular.ttf:32");
+				}
+
+				return _debugFont;
 			}
 		}
 

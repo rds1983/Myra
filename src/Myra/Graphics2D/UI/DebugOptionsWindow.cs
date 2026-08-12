@@ -56,6 +56,12 @@ namespace Myra.Graphics2D.UI
 			{
 				MyraEnvironment.SmoothText = _checkBoxSmoothText.IsChecked;
 			};
+
+			_checkBoxDrawMouseHoveredWidgetInfo.IsChecked = MyraEnvironment.DrawMouseHoveredWidgetInfo;
+			_checkBoxDrawMouseHoveredWidgetInfo.IsCheckedChanged += (s, a) =>
+			{
+				MyraEnvironment.DrawMouseHoveredWidgetInfo = _checkBoxDrawMouseHoveredWidgetInfo.IsChecked;
+			};
 		}
 
 		/// <summary>

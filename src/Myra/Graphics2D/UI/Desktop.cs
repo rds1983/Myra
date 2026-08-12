@@ -691,11 +691,10 @@ namespace Myra.Graphics2D.UI
 		/// <param name="context">The current render context</param>
 		private void RenderDebugInfo(RenderContext context)
 		{
-			if (!MyraEnvironment.DrawMouseHoveredWidgetInfo ||
-			    MyraEnvironment.DefaultDebugFont == null ||
-			    MousePosition == null
-			)
+			if (!MyraEnvironment.DrawMouseHoveredWidgetInfo || MousePosition == null)
+			{
 				return;
+			}
 
 			// Look for the deepest child being hit. That'd be the actual widget we're hovering over as opposed to one of its parents
 			Widget widget = null;
@@ -712,7 +711,9 @@ namespace Myra.Graphics2D.UI
 
 			// Nothing under the cursor, nothing to render
 			if (widget == null)
+			{
 				return;
+			}
 
 			// Get the widget's current transformed rectangle; That should effectively be the actual on-screen position and size
 			// in the context of the monitor being used (i.e., ignores other monitors)
@@ -725,14 +726,12 @@ namespace Myra.Graphics2D.UI
 					$"eW: {widget.Width ?? transformedPos.Width}",
 					$"eX: {transformedPos.X}",
 					$"eY: {transformedPos.Y}"),
-				Font = MyraEnvironment.DefaultDebugFont
+				Font = DefaultAssets.DebugFont
 			};
 
-			context.DrawRichText(
-				text,
+			context.DrawRichText(text,
 				new Vector2(MousePosition.X - 60, MousePosition.Y - 30),
-				Color.Yellow
-			);
+				Color.Yellow);
 		}
 
 		/// <summary>

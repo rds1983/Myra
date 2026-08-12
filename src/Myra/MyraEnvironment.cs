@@ -291,12 +291,6 @@ namespace Myra
 		}
 		
 		/// <summary>
-		/// The default font to use when rendering text in overlays.
-		/// If unset, some debug overlays may not work.
-		/// </summary>
-		public static SpriteFontBase DefaultDebugFont { get; set; }
-
-		/// <summary>
 		/// Gets or sets the delay in milliseconds before showing a tooltip.
 		/// </summary>
 		public static int TooltipDelayInMs { get; set; } = 500;
