@@ -1,8 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
 using Myra.Utility;
+
+#if MONOGAME || FNA
+using Microsoft.Xna.Framework;
+#elif STRIDE
+using Stride.Core.Mathematics;
+#else
+using System.Drawing;
+#endif
 
 namespace Myra.Graphics2D.UI.WrapPanel
 {
@@ -104,7 +111,7 @@ namespace Myra.Graphics2D.UI.WrapPanel
 		/// <returns>The required size for the layout.</returns>
 		private Point MeasureWithHorizontalBias(IEnumerable<Widget> widgets, Point availableSize)
 		{
-			Point result = Point.Zero;
+			Point result = Mathematics.PointZero;
 			int rowWidth = 0;
 			int rowHeight = 0;
 
@@ -112,7 +119,7 @@ namespace Myra.Graphics2D.UI.WrapPanel
 			Widget[] widgetsArr = widgets.ToArray();
 
 			// Determine the uniform size if uniform sizing is enabled
-			Point uniformSize = UniformSizing ? GetUniformSize(widgetsArr, effectiveAvailableSize) : Point.Zero;
+			Point uniformSize = UniformSizing ? GetUniformSize(widgetsArr, effectiveAvailableSize) : Mathematics.PointZero;
 
 			bool firstInRow = true;
 			foreach (Widget widget in widgetsArr)
@@ -164,7 +171,7 @@ namespace Myra.Graphics2D.UI.WrapPanel
 		/// <returns>The required size for the layout.</returns>
 		private Point MeasureWithVerticalBias(IEnumerable<Widget> widgets, Point availableSize)
 		{
-			Point result = Point.Zero;
+			Point result = Mathematics.PointZero;
 			int rowWidth = 0;
 			int rowHeight = 0;
 
@@ -172,7 +179,7 @@ namespace Myra.Graphics2D.UI.WrapPanel
 			Widget[] widgetsArr = widgets.ToArray();
 
 			// Determine the uniform size if uniform sizing is enabled
-			Point uniformSize = UniformSizing ? GetUniformSize(widgetsArr, effectiveAvailableSize) : Point.Zero;
+			Point uniformSize = UniformSizing ? GetUniformSize(widgetsArr, effectiveAvailableSize) : Mathematics.PointZero;
 
 			bool firstInCol = true;
 			foreach (Widget widget in widgetsArr)
@@ -280,7 +287,7 @@ namespace Myra.Graphics2D.UI.WrapPanel
 			var rowWidgets = new List<Widget>();
 
 			Widget[] widgetsArr = widgets.ToArray();
-			Point uniformSize = UniformSizing ? GetUniformSize(widgetsArr, effectiveAvailableSize) : Point.Zero;
+			Point uniformSize = UniformSizing ? GetUniformSize(widgetsArr, effectiveAvailableSize) : Mathematics.PointZero;
 
 			foreach (Widget widget in widgetsArr)
 			{
@@ -334,7 +341,7 @@ namespace Myra.Graphics2D.UI.WrapPanel
 			var colWidgets = new List<Widget>();
 
 			Widget[] widgetsArr = widgets.ToArray();
-			Point uniformSize = UniformSizing ? GetUniformSize(widgetsArr, effectiveAvailableSize) : Point.Zero;
+			Point uniformSize = UniformSizing ? GetUniformSize(widgetsArr, effectiveAvailableSize) : Mathematics.PointZero;
 
 			foreach (Widget widget in widgetsArr)
 			{
