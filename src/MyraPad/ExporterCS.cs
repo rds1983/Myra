@@ -40,6 +40,7 @@ namespace MyraPad
 		private readonly PrimitiveConverter converter = new PrimitiveConverter();
 		// Tracks whether the current item is the first (for formatting)
 		private bool isFirst = true;
+		private string _fieldsVisibility;
 
 		/// <summary>
 		/// Initializes a new instance of the ExporterCS class with the project to export
@@ -52,6 +53,7 @@ namespace MyraPad
 			}
 
 			_project = project;
+			_fieldsVisibility = _project.ExportOptions.FieldsVisibility.ToString().ToLower();
 		}
 
 		/// <summary>
@@ -240,7 +242,7 @@ namespace MyraPad
 					sbFields.Append("\n\t\t");
 				}
 
-				sbFields.Append("public " + w.GetType().Name + " " + w.Id + ";");
+				sbFields.Append(_fieldsVisibility + " " + w.GetType().Name + " " + w.Id + ";");
 			}
 
 			// Generate property assignments for simple properties

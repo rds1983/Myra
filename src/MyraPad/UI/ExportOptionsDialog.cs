@@ -1,4 +1,5 @@
 ﻿using System;
+using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.File;
 
 namespace MyraPad.UI
@@ -9,11 +10,23 @@ namespace MyraPad.UI
 		{
 			BuildUI();
 
-			_textNamespace.Text = Studio.Instance.Project.ExportOptions.Namespace;
-			_textClassName.Text = Studio.Instance.Project.ExportOptions.Class;
-			_textOutputPath.Text = Studio.Instance.Project.ExportOptions.OutputPath;
-
 			_buttonChangeOutputPath.Click += ButtonChangeOutputPathOnClick;
+		}
+
+		public void SetOptions(ExportOptions options)
+		{
+			_textNamespace.Text = options.Namespace;
+			_textClassName.Text = options.Class;
+			_textOutputPath.Text = options.OutputPath;
+			_comboFieldsVisibility.SelectedIndex = (int)options.FieldsVisibility;
+		}
+
+		public void GetOptions(ExportOptions options)
+		{
+			options.Namespace = _textNamespace.Text;
+			options.Class = _textClassName.Text;
+			options.OutputPath = _textOutputPath.Text;
+			options.FieldsVisibility = (ExportOptionsFieldsVisibility)_comboFieldsVisibility.SelectedIndex;
 		}
 
 		private void ButtonChangeOutputPathOnClick(object sender, MyraEventArgs eventArgs)

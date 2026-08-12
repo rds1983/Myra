@@ -15,6 +15,25 @@ using AssetManagementBase;
 namespace Myra.Graphics2D.UI
 {
 	/// <summary>
+	/// Specifies the visibility of the fields in the exported code.
+	/// </summary>
+	public enum ExportOptionsFieldsVisibility
+	{
+		/// <summary>
+		/// The fields are public.
+		/// </summary>
+		Public,
+		/// <summary>
+		/// The fields are protected.
+		/// </summary>
+		Protected,
+		/// <summary>
+		/// The fields are private.
+		/// </summary>
+		Private
+	}
+
+	/// <summary>
 	/// Options for exporting a UI project.
 	/// </summary>
 	public class ExportOptions
@@ -43,6 +62,12 @@ namespace Myra.Graphics2D.UI
 		/// Gets or sets the template for the main file.
 		/// </summary>
 		public string TemplateMain { get; set; }
+
+		/// <summary>
+		/// Gets or sets the visibility of the fields in the exported code.
+		/// </summary>
+		[DefaultValue(ExportOptionsFieldsVisibility.Public)]
+		public ExportOptionsFieldsVisibility FieldsVisibility { get; set; } = ExportOptionsFieldsVisibility.Public;
 	}
 
 	/// <summary>

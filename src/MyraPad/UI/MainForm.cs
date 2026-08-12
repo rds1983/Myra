@@ -623,6 +623,8 @@ namespace MyraPad.UI
 		private void ExportCsItemOnSelected(object sender1, MyraEventArgs eventArgs)
 		{
 			var dlg = new ExportOptionsDialog();
+
+			dlg.SetOptions(Project.ExportOptions);
 			dlg.ShowModal(Desktop);
 
 			dlg.Closed += (s, a) =>
@@ -634,9 +636,7 @@ namespace MyraPad.UI
 
 				try
 				{
-					Project.ExportOptions.Namespace = dlg._textNamespace.Text;
-					Project.ExportOptions.OutputPath = dlg._textOutputPath.Text;
-					Project.ExportOptions.Class = dlg._textClassName.Text;
+					dlg.GetOptions(Project.ExportOptions);
 
 					UpdateSource();
 
