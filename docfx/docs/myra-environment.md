@@ -39,6 +39,7 @@ All properties are static and can be accessed as `MyraEnvironment.<PropertyName>
 | `DrawWidgetsFrames` | `bool` | Gets or sets a value indicating whether to draw debug frames around all widgets. |
 | `DrawKeyboardFocusedWidgetFrame` | `bool` | Gets or sets a value indicating whether to draw a debug frame around the keyboard-focused widget. |
 | `DrawMouseHoveredWidgetFrame` | `bool` | Gets or sets a value indicating whether to draw a debug frame around the widget under the mouse cursor. |
+| `DrawMouseHoveredWidgetInfo` | `bool` | Gets or sets a value indicating whether to draw information about the widget under the mouse cursor. |
 | `DrawTextGlyphsFrames` | `bool` | Gets or sets a value indicating whether to draw debug frames around text glyphs. |
 | `DisableClipping` | `bool` | Gets or sets a value indicating whether clipping is disabled (useful for debugging). |
 
