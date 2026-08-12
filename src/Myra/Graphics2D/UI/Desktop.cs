@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
+using FontStashSharp.RichText;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using Myra.Events;
@@ -630,7 +632,11 @@ namespace Myra.Graphics2D.UI
 					widget.Render(_renderContext);
 				}
 			}
-
+			
+#if DEBUG
+			RenderDebugInfo(_renderContext);
+#endif
+			
 			_renderContext.End();
 
 			_renderContext.DeviceScissor = oldDeviceScissor;
@@ -672,6 +678,82 @@ namespace Myra.Graphics2D.UI
 
 			// Pass 5: Render all visible widgets to screen
 			RenderVisual();
+		}
+		
+		/// <summary>
+		/// Draws debug information on the screen.
+		/// This function can be called after the normal render procedures conclude
+		/// and before the context is closed.
+		///
+		/// This allows us to render on top of everything else.
+		/// </summary>
+		/// <param name="context">The current render context</param>
+		private void RenderDebugInfo(RenderContext context)
+		{
+			if (!MyraEnvironment.DrawMouseHoveredWidgetInfo ||
+			    MyraEnvironment.DefaultDebugFont == null ||
+			    MousePosition == null
+			)
+				return;
+
+			// Look for the deepest child being hit. That'd be the actual widget we're hovering over as opposed to one of its parents
+			Widget widget = null;
+			var children = ChildrenCopy;
+			for (var i = children.Count - 1; i >= 0; --i)
+			{
+				var w = children[i].HitTest(MousePosition);
+				if (w != null)
+				{
+					widget = w;
+					break;
+				}
+			}
+
+			// Nothing under the cursor, nothing to render
+			if (widget == null)
+				return;
+
+			// Get the widget's current transformed rectangle; That should effectively be the actual on-screen position and size
+			// in the context of the monitor being used (i.e., ignores other monitors)
+			Rectangle transformedPos = widget.Transform.Apply(widget.Bounds);
+			var text = new RichTextLayout
+			{
+				Text = string.Join("\n",
+					GetDebugTypeName(widget.GetType()),
+					$"eH: {widget.Height ?? transformedPos.Height}",
+					$"eW: {widget.Width ?? transformedPos.Width}",
+					$"eX: {transformedPos.X}",
+					$"eY: {transformedPos.Y}"),
+				Font = MyraEnvironment.DefaultDebugFont
+			};
+
+			context.DrawRichText(
+				text,
+				new Vector2(MousePosition.X - 60, MousePosition.Y - 30),
+				Color.Yellow
+			);
+		}
+
+		/// <summary>
+		/// Gets a type's 'clean' name, replacing generic type arguments with their actual types
+		/// </summary>
+		/// <param name="type">The type to get the name of</param>
+		/// <returns>The type's clean display name</returns>
+		private static string GetDebugTypeName(Type type)
+		{
+			if (!type.IsGenericType)
+			{
+				return type.Name;
+			}
+
+			var name = type.Name;
+			var tickIndex = name.IndexOf('`');
+			if (tickIndex >= 0)
+			{
+				name = name.Substring(0, tickIndex);
+			}
+
+			return $"{name}<{string.Join(", ", type.GetGenericArguments().Select(GetDebugTypeName))}>";
 		}
 
 		// Marks transform as dirty and cascades to all children, forcing recalculation on next access

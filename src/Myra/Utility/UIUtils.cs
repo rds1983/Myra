@@ -39,6 +39,17 @@ namespace Myra.Utility
 		}
 
 		/// <summary>
+		/// Determines whether the given size value should be treated as unbounded.
+		/// Values less than or equal to zero or greater than or equal to 1000000 indicate an unbounded size.
+		/// </summary>
+		/// <param name="size">The size value to check.</param>
+		/// <returns><c>true</c> if the size is unbounded; otherwise, <c>false</c>.</returns>
+		public static bool IsUnboundedSize(this int size)
+		{
+			return size <= 0 || size >= 1000000;
+		}
+
+		/// <summary>
 		/// Sorts widgets by ZIndex using bubble sort
 		/// </summary>
 		/// <param name="list"></param>

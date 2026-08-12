@@ -5,6 +5,7 @@ using Myra.Utility;
 using AssetManagementBase;
 using Myra.Graphics2D.UI;
 using System.Collections.Generic;
+using FontStashSharp;
 using Myra.Events;
 
 
@@ -288,6 +289,12 @@ namespace Myra
 				_defaultAssetManager = value;
 			}
 		}
+		
+		/// <summary>
+		/// The default font to use when rendering text in overlays.
+		/// If unset, some debug overlays may not work.
+		/// </summary>
+		public static SpriteFontBase DefaultDebugFont { get; set; }
 
 		/// <summary>
 		/// Gets or sets the delay in milliseconds before showing a tooltip.

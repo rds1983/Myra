@@ -28,7 +28,7 @@ namespace Myra.Graphics2D.UI
 	public class Window : ContentControl
 	{
 		private readonly StackPanelLayout _layout = new StackPanelLayout(Orientation.Vertical);
-		private readonly Label _titleLabel;
+		protected readonly Label _titleLabel;
 		private Widget _content;
 		private Widget _previousKeyboardFocus;
 

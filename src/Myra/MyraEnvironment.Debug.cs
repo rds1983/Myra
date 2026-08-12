@@ -18,6 +18,11 @@
 		public static bool DrawMouseHoveredWidgetFrame { get; set; }
 
 		/// <summary>
+		/// Gets or sets a value indicating whether to draw information about the widget under the mouse cursor.
+		/// </summary>
+		public static bool DrawMouseHoveredWidgetInfo { get; set; }
+
+		/// <summary>
 		/// Gets or sets a value indicating whether to draw debug frames around text glyphs.
 		/// </summary>
 		public static bool DrawTextGlyphsFrames { get; set; }
