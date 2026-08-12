@@ -6,7 +6,6 @@ using AssetManagementBase;
 using Myra.Graphics2D.UI;
 using System.Collections.Generic;
 using Myra.Events;
-using MonoGame.Framework.Utilities;
 
 
 
@@ -14,6 +13,11 @@ using MonoGame.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+#if MONOGAME
+using MonoGame.Framework.Utilities;
+#endif
+
 #if FNA
 using static SDL2.SDL;
 using MouseCursor = System.Nullable<System.IntPtr>;
