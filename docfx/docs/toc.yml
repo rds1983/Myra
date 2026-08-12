@@ -34,6 +34,8 @@
   href: windows-and-dialogs.md
 - name: Event System
   href: event-system.md
+- name: MyraEnvironment
+  href: myra-environment.md
 - name: Context Menus
   href: context-menus.md
 - name: PropertyGrid
