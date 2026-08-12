@@ -48,14 +48,6 @@ namespace Myra.Graphics2D.UI
 		private Widget _focusedKeyboardWidget;  // Widget currently receiving keyboard input
 		private readonly List<Widget> _widgetsCopy = new List<Widget>();  // Sorted copy of Widgets for iteration (avoids modifications during enumeration)
 		private Widget _previousKeyboardFocus;  // Widget to restore focus to after context menu closes
-
-#if MONOGAME || PLATFORM_AGNOSTIC
-		/// <summary>
-		/// Gets or sets a value indicating whether external text input is available.
-		/// </summary>
-		public bool HasExternalTextInput = false;
-#endif
-
 		private bool _isDisposed = false;  // Disposal flag to prevent double-dispose
 
 		/// <summary>
@@ -391,12 +383,6 @@ namespace Myra.Graphics2D.UI
 
 			// Set default keyboard handler
 			KeyDownHandler = OnKeyDown;
-
-#if FNA
-			// Enable text input for FNA framework
-			TextInputEXT.StartTextInput();
-			TextInputEXT.TextInput += OnChar;
-#endif
 
 			// Apply default background from stylesheet if available
 			if (Stylesheet.Current.DesktopStyle != null)
@@ -965,25 +951,18 @@ namespace Myra.Graphics2D.UI
 					// Send key event to focused widget
 					_focusedKeyboardWidget.OnKeyDown(key);
 
-#if STRIDE
-					// Stride: convert key to character immediately
-					var ch = key.ToChar(IsKeyDown(Keys.LeftShift) ||
-										IsKeyDown(Keys.RightShift));
-					if (ch != null)
-					{
-						_focusedKeyboardWidget.OnChar(ch.Value);
-					}
-#elif MONOGAME || PLATFORM_AGNOSTIC
-					// MonoGame: only convert printable keys to characters (skip if control/alt modifiers)
 					if (!HasExternalTextInput && !IsControlDown && !IsAltDown)
 					{
+#if STRIDE
+						var c = key.ToChar(IsKeyDown(Keys.LeftShift) || IsKeyDown(Keys.RightShift));
+#else
 						var c = key.ToChar(IsShiftDown);
+#endif
 						if (c != null)
 						{
 							OnChar(c.Value);
 						}
 					}
-#endif
 				}
 			}
 

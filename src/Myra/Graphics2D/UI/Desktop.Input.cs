@@ -154,30 +154,29 @@ namespace Myra.Graphics2D.UI
 		public bool[] DownKeys => _downKeys;
 
 		/// <summary>
-		/// Gets or sets the delay in milliseconds before key repeat starts.
+		/// Gets or sets the delay in milliseconds before a pressed key starts repeating.
 		/// </summary>
-		public int RepeatKeyDownStartInMs { get; set; } = 500;
+		[Obsolete("Use MyraEnvironment.RepeatKeyDownStartInMs instead.")]
+		public int RepeatKeyDownStartInMs
+		{
+			get => MyraEnvironment.RepeatKeyDownStartInMs;
+			set => MyraEnvironment.RepeatKeyDownStartInMs = value;
+		}
 
 		/// <summary>
 		/// Gets or sets the interval in milliseconds between key repeat events.
 		/// </summary>
-		public int RepeatKeyDownInternalInMs { get; set; } = 50;
+		[Obsolete("Use MyraEnvironment.RepeatKeyDownInternalInMs instead.")]
+		public int RepeatKeyDownInternalInMs
+		{
+			get => MyraEnvironment.RepeatKeyDownInternalInMs;
+			set => MyraEnvironment.RepeatKeyDownInternalInMs = value;
+		}
 
 		/// <summary>
-		/// Gets a value indicating whether the current platform is a mobile platform.
+		/// Gets or sets a value indicating whether text input is handled by an external mechanism.
 		/// </summary>
-		public static bool IsMobile
-		{
-			get
-			{
-#if MONOGAME
-				return PlatformInfo.MonoGamePlatform == MonoGamePlatform.Android ||
-					PlatformInfo.MonoGamePlatform == MonoGamePlatform.iOS;
-#else
-				return false;
-#endif
-			}
-		}
+		public bool HasExternalTextInput { get; set; } = false;
 
 		/// <summary>
 		/// Occurs when the mouse moves.
@@ -340,8 +339,8 @@ namespace Myra.Graphics2D.UI
 				else if (_downKeys[i] && _lastDownKeys[i])
 				{
 					if (_lastKeyDown != null &&
-									  ((_keyDownCount == 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownStartInMs) ||
-									  (_keyDownCount > 0 && (now - _lastKeyDown.Value).TotalMilliseconds > RepeatKeyDownInternalInMs)))
+									  ((_keyDownCount == 0 && (now - _lastKeyDown.Value).TotalMilliseconds > MyraEnvironment.RepeatKeyDownStartInMs) ||
+									  (_keyDownCount > 0 && (now - _lastKeyDown.Value).TotalMilliseconds > MyraEnvironment.RepeatKeyDownInternalInMs)))
 					{
 						KeyDownHandler?.Invoke(key);
 
@@ -364,7 +363,7 @@ namespace Myra.Graphics2D.UI
 			PreviousMousePosition = MousePosition;
 			PreviousTouchPosition = TouchPosition;
 
-			if (!IsMobile)
+			if (!MyraEnvironment.IsMobile)
 			{
 				UpdateMouseInput();
 			}

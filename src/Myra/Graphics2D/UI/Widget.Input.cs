@@ -291,7 +291,7 @@ namespace Myra.Graphics2D.UI
 				var oldContainsTouch = inputContext.ParentContainsTouch;
 
 				// Hit-test mouse on non-mobile platforms
-				if (!Desktop.IsMobile)
+				if (!MyraEnvironment.IsMobile)
 				{
 					if (inputContext.ParentContainsMouse)
 					{
@@ -357,7 +357,7 @@ namespace Myra.Graphics2D.UI
 				else
 				{
 					// Non-modal: mark as handled if input is over this widget and doesn't fall through
-					if (!Desktop.IsMobile)
+					if (!MyraEnvironment.IsMobile)
 					{
 						if (IsMouseInside && !InputFallsThrough(LocalMousePosition.Value))
 						{
@@ -380,7 +380,7 @@ namespace Myra.Graphics2D.UI
 			else
 			{
 				// Input already handled by another widget: clear local positions and continue recursion for children
-				if (!Desktop.IsMobile)
+				if (!MyraEnvironment.IsMobile)
 				{
 					LocalMousePosition = null;
 				}

@@ -6,6 +6,8 @@ using AssetManagementBase;
 using Myra.Graphics2D.UI;
 using System.Collections.Generic;
 using Myra.Events;
+using MonoGame.Framework.Utilities;
+
 
 
 #if MONOGAME || FNA
@@ -33,7 +35,7 @@ namespace Myra
 	/// <summary>
 	/// Provides global configuration and utility methods for Myra UI framework.
 	/// </summary>
-	public static class MyraEnvironment
+	public static partial class MyraEnvironment
 	{
 #if MONOGAME
 		private static readonly Dictionary<MouseCursorType, MouseCursor> _mouseCursors = new Dictionary<MouseCursorType, MouseCursor>
@@ -89,14 +91,28 @@ namespace Myra
 		private static AssetManager _defaultAssetManager;
 
 		/// <summary>
-		/// Gets or sets a value indicating whether the mouse cursor type should be automatically changed based on the hovered widget.
+		/// Gets the version number of Myra.
 		/// </summary>
-		public static bool SetMouseCursorFromWidget { get; set; } = true;
+		public static string Version
+		{
+			get
+			{
+				var assembly = typeof(MyraEnvironment).Assembly;
+				var name = new AssemblyName(assembly.FullName);
+
+				return name.Version.ToString();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the event handling strategy used for input events (event capturing or event bubbling).
 		/// </summary>
 		public static EventHandlingStrategy EventHandlingModel { get; set; } = EventHandlingStrategy.EventCapturing;
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the mouse cursor type should be automatically changed based on the hovered widget.
+		/// </summary>
+		public static bool SetMouseCursorFromWidget { get; set; } = true;
 
 		/// <summary>
 		/// Gets or sets the current mouse cursor type displayed.
@@ -228,6 +244,22 @@ namespace Myra
 #endif
 
 		/// <summary>
+		/// Gets a value indicating whether the current platform is a mobile platform.
+		/// </summary>
+		public static bool IsMobile
+		{
+			get
+			{
+#if MONOGAME
+				return PlatformInfo.MonoGamePlatform == MonoGamePlatform.Android ||
+					PlatformInfo.MonoGamePlatform == MonoGamePlatform.iOS;
+#else
+				return false;
+#endif
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets the asset manager used to load default assets.
 		/// </summary>
 		public static AssetManager DefaultAssetManager
@@ -252,51 +284,6 @@ namespace Myra
 				_defaultAssetManager = value;
 			}
 		}
-
-		/// <summary>
-		/// Gets or sets a value indicating whether to draw debug frames around all widgets.
-		/// </summary>
-		public static bool DrawWidgetsFrames { get; set; }
-
-		/// <summary>
-		/// Gets or sets a value indicating whether to draw a debug frame around the keyboard-focused widget.
-		/// </summary>
-		public static bool DrawKeyboardFocusedWidgetFrame { get; set; }
-
-		/// <summary>
-		/// Gets or sets a value indicating whether to draw a debug frame around the widget under the mouse cursor.
-		/// </summary>
-		public static bool DrawMouseHoveredWidgetFrame { get; set; }
-
-		/// <summary>
-		/// Gets or sets a value indicating whether to draw debug frames around text glyphs.
-		/// </summary>
-		public static bool DrawTextGlyphsFrames { get; set; }
-
-		/// <summary>
-		/// Gets or sets a value indicating whether clipping is disabled (useful for debugging).
-		/// </summary>
-		public static bool DisableClipping { get; set; }
-
-		/// <summary>
-		/// Gets or sets the function used to retrieve the current mouse information.
-		/// </summary>
-		public static Func<MouseInfo> MouseInfoGetter { get; set; } = DefaultMouseInfoGetter;
-
-		/// <summary>
-		/// Gets or sets the function used to retrieve which keys are currently pressed.
-		/// </summary>
-		public static Action<bool[]> DownKeysGetter { get; set; } = DefaultDownKeysGetter;
-
-		/// <summary>
-		/// Gets or sets the time interval in milliseconds for double-click detection.
-		/// </summary>
-		public static int DoubleClickIntervalInMs { get; set; } = 500;
-
-		/// <summary>
-		/// Gets or sets the pixel radius within which a second click is considered a double-click.
-		/// </summary>
-		public static int DoubleClickRadius { get; set; } = 2;
 
 		/// <summary>
 		/// Gets or sets the delay in milliseconds before showing a tooltip.
@@ -353,80 +340,6 @@ namespace Myra
 			Stylesheet.Current = null;
 		}
 
-		/// <summary>
-		/// Gets the version number of Myra.
-		/// </summary>
-		public static string Version
-		{
-			get
-			{
-				var assembly = typeof(MyraEnvironment).Assembly;
-				var name = new AssemblyName(assembly.FullName);
-
-				return name.Version.ToString();
-			}
-		}
-
 		internal static string InternalClipboard;
-
-		/// <summary>
-		/// Gets the current mouse information from the game instance.
-		/// </summary>
-		/// <returns>A MouseInfo struct containing the current mouse position and button states.</returns>
-		public static MouseInfo DefaultMouseInfoGetter()
-		{
-#if MONOGAME || FNA
-			var state = Mouse.GetState();
-
-			var pos = new Point(state.X - GraphicsDevice.Viewport.X, state.Y - GraphicsDevice.Viewport.Y);
-
-			return new MouseInfo
-			{
-				Position = pos,
-				IsLeftButtonDown = Game.IsActive && state.LeftButton == ButtonState.Pressed,
-				IsMiddleButtonDown = Game.IsActive && state.MiddleButton == ButtonState.Pressed,
-				IsRightButtonDown = Game.IsActive && state.RightButton == ButtonState.Pressed,
-				Wheel = state.ScrollWheelValue
-			};
-#elif STRIDE
-			var input = Game.Input;
-
-			var v = input.AbsoluteMousePosition;
-
-			return new MouseInfo
-			{
-				Position = new Point((int)v.X, (int)v.Y),
-				IsLeftButtonDown = input.IsMouseButtonDown(MouseButton.Left),
-				IsMiddleButtonDown = input.IsMouseButtonDown(MouseButton.Middle),
-				IsRightButtonDown = input.IsMouseButtonDown(MouseButton.Right),
-				Wheel = input.MouseWheelDelta
-			};
-#else
-			return Platform.GetMouseInfo();
-#endif
-		}
-
-		/// <summary>
-		/// Gets which keyboard keys are currently pressed from the game instance.
-		/// </summary>
-		/// <param name="keys">An array to be filled with boolean values indicating which keys are pressed.</param>
-		public static void DefaultDownKeysGetter(bool[] keys)
-		{
-#if MONOGAME || FNA
-			var state = Keyboard.GetState();
-			for (var i = 0; i < keys.Length; ++i)
-			{
-				keys[i] = state.IsKeyDown((Keys)i);
-			}
-#elif STRIDE
-			var input = Game.Input;
-			for (var i = 0; i < keys.Length; ++i)
-			{
-				keys[i] = input.IsKeyDown((Keys)i);
-			}
-#else
-			Platform.SetKeysDown(keys);
-#endif
-		}
 	}
 }
