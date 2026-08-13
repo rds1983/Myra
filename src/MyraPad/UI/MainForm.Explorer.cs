@@ -69,12 +69,21 @@ partial class MainForm
 					break;
 				}
 
+				var asMenuItem = parent as MenuItem;
+				if (asMenuItem != null)
+				{
+					asMenuItem.Items.Add((IMenuItem)child);
+					break;
+				}
+
 				var asTabControl = parent as TabControl;
 				if (asTabControl != null)
 				{
 					asTabControl.Items.Add((TabItem)child);
 					break;
 				}
+
+				throw new Exception($"Cannot add child of type {t.Name} to parent of type {parent.GetType().Name}.");
 			}
 			while (false);
 
@@ -102,9 +111,9 @@ partial class MainForm
 		}
 	}
 
-	private ChildCreator CreateNewItemAction(Widget parent, Type childType) => new ChildCreator(childType.Name, () => DefaultCreate(parent, childType));
+	private ChildCreator CreateNewItemAction(object parent, Type childType) => new ChildCreator(childType.Name, () => DefaultCreate(parent, childType));
 
-	private ChildCreator[] CreateNewItemActions(Widget parent, IEnumerable<Type> childTypes)
+	private ChildCreator[] CreateNewItemActions(object parent, IEnumerable<Type> childTypes)
 	{
 		var result = new List<ChildCreator>();
 
@@ -119,7 +128,7 @@ partial class MainForm
 	/// <summary>
 	/// Builds a list of available child widget types that can be added to the specified parent widget
 	/// </summary>
-	private List<ChildCreator> BuildAddActions(Widget parent)
+	private List<ChildCreator> BuildAddActions(object parent)
 	{
 		var result = new List<ChildCreator>();
 		if (parent == null)
@@ -137,7 +146,7 @@ partial class MainForm
 			result.AddRange(CreateNewItemActions(parent, Containers));
 			result.AddRange(CreateNewItemActions(parent, SpecialContainers));
 		}
-		else if (widgetTypeName.EndsWith("Menu"))
+		else if (widgetTypeName.Contains("Menu"))
 		{
 			// Menus can only contain menu items and separators
 			result.Add(CreateNewItemAction(parent, typeof(MenuItem)));
@@ -176,7 +185,7 @@ partial class MainForm
 
 		try
 		{
-			var selectedWidget = (Widget)_treeViewExplorer.SelectedNode.Tag;
+			var selectedWidget = _treeViewExplorer.SelectedNode.Tag;
 
 			// Get the list of widgets that can be added to this widget
 			var addActions = BuildAddActions(selectedWidget);
