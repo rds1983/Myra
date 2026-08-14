@@ -50,8 +50,6 @@
   href: restyling-through-code.md
 - name: Restyling Through XML
   href: restyling-through-xml.md
-- name: Editing Stylesheet Using MyraPad
-  href: editing-stylesheet-using-myrapad.md
 - name: Style Variants
   href: style-variants.md
 - name: TextBox and MonoGame TextInput
