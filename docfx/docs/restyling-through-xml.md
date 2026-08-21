@@ -101,6 +101,8 @@ If the stylesheet is edited with an external editor, use **File/Reload** (**Ctrl
 
 **File/Reset Stylesheet** removes the link to the custom stylesheet and reverts the project to the default stylesheet.
 
+> [!Video https://youtu.be/SlbhYioEL0I]
+
 ## Loading a Stylesheet
 Actual stylesheet loading is done through [XNAssets](https://github.com/rds1983/XNAssets).
 Example code:
