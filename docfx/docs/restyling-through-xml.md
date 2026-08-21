@@ -79,7 +79,7 @@ The most important implications:
   * It can reference a texture region in the atlas (e.g. `file="ui_stylesheet.xmat:commodore-64"`). The glyphs then live in the atlas texture, and no new texture is created.
   * It can reference a separate image file (e.g. `file="commodore-64.png"`). In this case a new texture is created for the font.
 
-See FontStashSharp's [How To Use Existing Texture As Font Glyphs Atlas](https://github.com/MyraUI/FontStashSharp/wiki/How-To-Use-Existing-Texture-As-Font-Glyphs-Atlas) for more details.
+See FontStashSharp's [How To Use Existing Texture As Font Glyphs Atlas](https://fontstashsharp.github.io/FontStashSharp/docs/using-existing-texture-as-font-glyphs-atlas.html) for more details.
 
 ## Editing a Stylesheet in MyraPad
 MyraPad can edit the stylesheet of a project visually.
