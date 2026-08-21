@@ -1,4 +1,4 @@
 <Project>
-  <Project.ExportOptions Namespace="MyraPad.UI" Class="ChooseTextureRegionDialog" OutputPath="D:\Projects\Myra\src\MyraPad\UI" />
+  <Project.ExportOptions Namespace="MyraPad.UI" Class="ChooseTextureRegionDialog" OutputPath="D:\Projects\Myra\src\MyraPad\UI" FieldsVisibility="Private" />
   <Dialog Title="Choose Texture Region" Left="357" Top="125" Width="800" Height="600" />
 </Project>

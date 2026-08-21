@@ -1,6 +1,6 @@
 <Project>
-  <Project.ExportOptions Namespace="MyraPad.UI" Class="ExportLightWindow" OutputPath="D:\Projects\Myra\src\MyraPad\UI" />
-  <Window Title="Export To C# Light" Left="364" Top="28" Width="800" Height="600">
+  <Project.ExportOptions Namespace="MyraPad.UI" Class="ExportLightWindow" OutputPath="D:\Projects\Myra\src\MyraPad\UI" FieldsVisibility="Private" />
+  <Window Title="Export To C# Light" Left="357" Top="125" Width="800" Height="600">
     <VerticalStackPanel Spacing="8">
       <HorizontalStackPanel>
         <Button Id="_buttonCopyToClipboard">

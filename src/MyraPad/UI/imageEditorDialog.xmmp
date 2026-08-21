@@ -1,6 +1,6 @@
 <Project>
-  <Project.ExportOptions Namespace="MyraPad.UI" Class="ImageEditorDialog" OutputPath="D:\Projects\Myra\src\MyraPad\UI" />
-  <Dialog Title="Image Editor" Left="458" Top="358">
+  <Project.ExportOptions Namespace="MyraPad.UI" Class="ImageEditorDialog" OutputPath="D:\Projects\Myra\src\MyraPad\UI" FieldsVisibility="Private" />
+  <Dialog Title="Image Editor" Left="552" Top="333">
     <VerticalStackPanel Spacing="8">
       <TextBox Readonly="True" Width="400" Id="_textValue" />
       <HorizontalStackPanel Spacing="8" HorizontalAlignment="Left">
