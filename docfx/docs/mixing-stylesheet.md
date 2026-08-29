@@ -15,15 +15,6 @@ Stylesheet.Current = assetManager.LoadStylesheet("ui_stylesheet.xmms");
 var dialog = new FileDialog(FileDialogMode.OpenFile);
 ```
 
-The reason is that the constructor that doesn't take a stylesheet uses **Stylesheet.Current**, and when the current stylesheet has no style for the widget, an exception is thrown:
-
-```c#
-public FileDialog(FileDialogMode mode, string styleName = Stylesheet.DefaultStyleName)
-    : this(mode, Stylesheet.Current, styleName)
-{
-}
-```
-
 ## Creating Widgets With an Explicit Stylesheet
 The solution is to pass the stylesheet that defines the widget's style explicitly.
 
@@ -31,12 +22,9 @@ A FileDialog created with the default stylesheet works even if the current style
 
 ```c#
 var dialog = new FileDialog(FileDialogMode.OpenFile, DefaultAssets.DefaultStylesheet);
-dialog.ShowModal(Desktop);
 ```
 
 The same approach applies to any widget, not only FileDialog. For example, ColorPickerDialog can be created the same way.
-
-  _**Note**. **DefaultAssets** is defined here: https://github.com/rds1983/Myra/blob/master/src/Myra/DefaultAssets.cs_
 
 ## Myra.Samples.CustomUIStylesheet
 [Myra.Samples.CustomUIStylesheet](https://github.com/rds1983/Myra/tree/master/samples/Myra.Samples.CustomUIStylesheet) is an example of mixing stylesheets.
