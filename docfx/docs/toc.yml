@@ -38,6 +38,8 @@
   href: event-system.md
 - name: MyraEnvironment
   href: myra-environment.md
+- name: DefaultAssets
+  href: default-assets.md
 - name: Context Menus
   href: context-menus.md
 - name: PropertyGrid
@@ -50,6 +52,8 @@
   href: restyling-through-code.md
 - name: Restyling Through XML
   href: restyling-through-xml.md
+- name: Mixing Stylesheet
+  href: mixing-stylesheet.md
 - name: Style Variants
   href: style-variants.md
 - name: TextBox and MonoGame TextInput
