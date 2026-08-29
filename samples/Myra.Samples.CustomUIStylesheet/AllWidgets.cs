@@ -2,21 +2,16 @@
 
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.ColorPicker;
+using Myra.Graphics2D.UI.File;
 using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Samples.CustomUIStylesheet
 {
-	public partial class AllWidgets: HorizontalSplitPane
+	public partial class AllWidgets : HorizontalSplitPane
 	{
 		public AllWidgets()
 		{
 			BuildUI();
-
-			_imageButton.Click += (sender, args) =>
-			{
-				var debugWindow = new DebugOptionsWindow();
-				debugWindow.ShowModal(Desktop);
-			};
 
 			var tree = new TreeView();
 			Grid.SetColumn(tree, 1);
@@ -126,6 +121,48 @@ namespace Myra.Samples.CustomUIStylesheet
 			});
 
 			_gridRight.Widgets.Add(tree);
+
+			_button.Click += (sender, args) => OpenFile();
+			_textButton.Click += (sender, args) => ChooseColor();
+
+			_imageButton.Click += (sender, args) =>
+			{
+				var debugWindow = new DebugOptionsWindow();
+				debugWindow.ShowModal(Desktop);
+			};
+		}
+
+		public void OpenFile()
+		{
+			var fileDialog = new FileDialog(FileDialogMode.OpenFile, DefaultAssets.DefaultStylesheet);
+			fileDialog.ShowModal(Desktop);
+
+			fileDialog.Closed += (s, a) =>
+			{
+				if (!fileDialog.Result)
+				{
+					return;
+				}
+
+				//				_textOpenFile.Text = fileDialog.FilePath;
+			};
+		}
+
+		public void ChooseColor()
+		{
+			var colorWindow = new ColorPickerDialog(DefaultAssets.DefaultStylesheet);
+			colorWindow.Color = _textButtonLabel.TextColor;
+			colorWindow.ShowModal(Desktop);
+
+			colorWindow.Closed += (s, a) =>
+			{
+				if (!colorWindow.Result)
+				{
+					return;
+				}
+
+				_textButtonLabel.TextColor = colorWindow.Color;
+			};
 		}
 	}
 }

@@ -86,6 +86,7 @@ namespace Myra.Graphics2D.UI.File
 		private readonly List<string> _history = new List<string>();
 		private int _historyPosition;
 		private readonly FileDialogMode _mode;
+		private readonly Stylesheet _stylesheet;
 
 		/// <summary>
 		/// Gets or sets the current folder path being browsed.
@@ -191,7 +192,7 @@ namespace Myra.Graphics2D.UI.File
 		{
 			_mode = mode;
 
-			BuildUI();
+			BuildUI(stylesheet);
 
 			switch (mode)
 			{
@@ -246,6 +247,8 @@ namespace Myra.Graphics2D.UI.File
 			UpdateEnabled();
 
 			SetStyle(stylesheet, styleName);
+
+			_stylesheet = stylesheet;
 		}
 
 		/// <summary>
@@ -282,7 +285,7 @@ namespace Myra.Graphics2D.UI.File
 				listView.Widgets.Add(CreateListItem(placeList[index]));
 
 			if (_listPlaces.Widgets.Count > 0)
-				listView.Widgets.Add(new HorizontalSeparator());
+				listView.Widgets.Add(new HorizontalSeparator(_stylesheet));
 
 			//Add file system drives
 			Platform.AppendDrivesOnSystem(placeList);
@@ -297,7 +300,7 @@ namespace Myra.Graphics2D.UI.File
 		/// <returns>A widget displaying the location with icon and label.</returns>
 		protected virtual Widget CreateListItem(Location location)
 		{
-			var item = new HorizontalStackPanel
+			var item = new HorizontalStackPanel(_stylesheet)
 			{
 				Spacing = ImageTextSpacing,
 				Tag = new PathInfo(location.Path, location.IsDrive)
@@ -308,7 +311,7 @@ namespace Myra.Graphics2D.UI.File
 				: $"[{location.VolumeLabel}] {location.Label}";
 
 			item.Widgets.Add(new Image());
-			item.Widgets.Add(new Label { Text = label });
+			item.Widgets.Add(new Label(_stylesheet) { Text = label });
 			return item;
 		}
 
@@ -521,7 +524,7 @@ namespace Myra.Graphics2D.UI.File
 
 				_gridFiles.Widgets.Add(image);
 
-				var name = new Label
+				var name = new Label(_stylesheet)
 				{
 					Text = Path.GetFileName(folder),
 				};
@@ -557,7 +560,7 @@ namespace Myra.Graphics2D.UI.File
 
 				_gridFiles.RowsProportions.Add(new Proportion());
 
-				var name = new Label
+				var name = new Label(_stylesheet)
 				{
 					Text = Path.GetFileName(file),
 				};

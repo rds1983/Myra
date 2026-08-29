@@ -230,8 +230,15 @@ namespace MyraPad
 			var idPrefix = string.IsNullOrEmpty(id) ? string.Empty : id + ".";
 			if (!string.IsNullOrEmpty(id))
 			{
-				sbBuild.Append(" = new " + typeName + "(" +
-					(string.IsNullOrEmpty(styleName) ? string.Empty : ("\"" + styleName + "\"")) + ");");
+				if (w.GetType().IsStyleable())
+				{
+					sbBuild.Append(" = new " + typeName + "(stylesheet" +
+						(string.IsNullOrEmpty(styleName) ? string.Empty : (", \"" + styleName + "\"")) + ");");
+				} else
+				{
+					sbBuild.Append(" = new " + typeName + "(" +
+						(string.IsNullOrEmpty(styleName) ? string.Empty : ("\"" + styleName + "\"")) + ");");
+				}
 			}
 
 			// Generate public field declarations for named widgets

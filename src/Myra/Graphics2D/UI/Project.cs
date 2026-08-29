@@ -449,22 +449,7 @@ namespace Myra.Graphics2D.UI
 		{
 			if (typeof(Widget).IsAssignableFrom(type))
 			{
-				// Check if widget constructor accepts a style name parameter (string)
-				var acceptsStyle = false;
-				foreach (var c in type.GetConstructors())
-				{
-					var p = c.GetParameters();
-					if (p != null && p.Length == 2)
-					{
-						if (p[0].ParameterType == typeof(Stylesheet) && p[1].ParameterType == typeof(string))
-						{
-							acceptsStyle = true;
-							break;
-						}
-					}
-				}
-
-				if (acceptsStyle)
+				if (type.IsStyleable())
 				{
 					if (stylesheet == null)
 					{

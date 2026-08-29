@@ -1478,7 +1478,6 @@ namespace Myra.Graphics2D.UI
 			}
 
 			var style = GetStyle(stylesheet, name);
-
 			if (style != null)
 			{
 				StyleName = name;
