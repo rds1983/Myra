@@ -1,5 +1,5 @@
 <Project>
-  <Project.ExportOptions Namespace="Myra.Graphics2D.UI.ColorPicker" Class="ColorPickerPanel" OutputPath="D:\Projects\Myra\src\Myra\Graphics2D\UI\ColorPicker" FieldsVisibility="Private" />
+  <Project.ExportOptions Namespace="Myra.Graphics2D.UI.ColorPicker" Class="ColorPickerPanel" OutputPath="D:\Projects\Myra\src\Myra\Graphics2D\UI\ColorPicker" FieldsVisibility="Private" IsStyleable="True" />
   <VerticalStackPanel Spacing="8">
     <HorizontalStackPanel Spacing="8">
       <Panel HorizontalAlignment="Left" VerticalAlignment="Top">

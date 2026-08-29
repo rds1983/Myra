@@ -25,7 +25,7 @@ namespace $namespace$
 {
 	partial class $class$: $parentClass$
 	{
-		private void BuildUI(Stylesheet stylesheet)
+		private void BuildUI($stylesheet$)
 		{
 			$build$
 		}

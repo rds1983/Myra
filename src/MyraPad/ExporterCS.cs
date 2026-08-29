@@ -230,11 +230,12 @@ namespace MyraPad
 			var idPrefix = string.IsNullOrEmpty(id) ? string.Empty : id + ".";
 			if (!string.IsNullOrEmpty(id))
 			{
-				if (w.GetType().IsStyleable())
+				if (_project.ExportOptions.IsStyleable && w.GetType().IsStyleable())
 				{
 					sbBuild.Append(" = new " + typeName + "(stylesheet" +
 						(string.IsNullOrEmpty(styleName) ? string.Empty : (", \"" + styleName + "\"")) + ");");
-				} else
+				}
+				else
 				{
 					sbBuild.Append(" = new " + typeName + "(" +
 						(string.IsNullOrEmpty(styleName) ? string.Empty : ("\"" + styleName + "\"")) + ");");
@@ -317,6 +318,7 @@ namespace MyraPad
 			template = template.Replace("$class$", _project.ExportOptions.Class);
 			template = template.Replace("$parentClass$", _project.Root.GetType().Name);
 			template = template.Replace("$generationDate$", DateTime.Now.ToString());
+			template = template.Replace("$stylesheet$", _project.ExportOptions.IsStyleable ? "Stylesheet stylesheet" : string.Empty);
 
 			// Clear state from previous exports
 			ids.Clear();

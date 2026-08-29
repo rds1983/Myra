@@ -5,13 +5,9 @@ namespace $namespace$
 {
 	public partial class $class$
 	{
-		public $class$(Stylesheet stylesheet)
+		public $class$()
 		{
-			BuildUI(stylesheet);
-		}
-
-		public $class$(): this(Stylesheet.Current)
-		{
+			BuildUI();
 		}
 	}
 }

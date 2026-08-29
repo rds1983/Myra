@@ -68,6 +68,12 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[DefaultValue(ExportOptionsFieldsVisibility.Public)]
 		public ExportOptionsFieldsVisibility FieldsVisibility { get; set; } = ExportOptionsFieldsVisibility.Public;
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the exported code receives a <see cref="Stylesheet"/> parameter and passes it to the styled widgets.
+		/// </summary>
+		[DefaultValue(false)]
+		public bool IsStyleable { get; set; } = false;
 	}
 
 	/// <summary>
