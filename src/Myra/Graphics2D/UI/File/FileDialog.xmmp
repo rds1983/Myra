@@ -1,5 +1,5 @@
 <Project>
-  <Project.ExportOptions Namespace="Myra.Graphics2D.UI.File" Class="FileDialog" OutputPath="D:/Projects/Myra/src/Myra/Graphics2D/UI/File" FieldsVisibility="Private" />
+  <Project.ExportOptions Namespace="Myra.Graphics2D.UI.File" Class="FileDialog" OutputPath="D:/Projects/Myra/src/Myra/Graphics2D/UI/File" FieldsVisibility="Private" IsStyleable="True" />
   <Dialog Title="Open File..." Left="457" Top="225" Width="600" Height="400">
     <VerticalStackPanel Spacing="4">
       <HorizontalStackPanel Spacing="4">
