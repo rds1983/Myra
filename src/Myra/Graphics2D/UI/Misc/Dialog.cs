@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
-using System.Collections;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework.Input;
@@ -48,15 +47,15 @@ namespace Myra.Graphics2D.UI
 		{
 			ConfirmKey = Keys.Enter;
 
-			var buttonsPanel = new HorizontalStackPanel()
+			var buttonsPanel = new HorizontalStackPanel(stylesheet)
 			{
 				Spacing = 8,
 				HorizontalAlignment = HorizontalAlignment.Right
 			};
 
-			ButtonOk = new Button
+			ButtonOk = new Button(stylesheet)
 			{
-				Content = new Label
+				Content = new Label(stylesheet)
 				{
 					Text = "Ok"
 				}
@@ -69,9 +68,9 @@ namespace Myra.Graphics2D.UI
 
 			buttonsPanel.Widgets.Add(ButtonOk);
 
-			ButtonCancel = new Button
+			ButtonCancel = new Button(stylesheet)
 			{
-				Content = new Label
+				Content = new Label(stylesheet)
 				{
 					Text = "Cancel",
 				}
@@ -150,7 +149,6 @@ namespace Myra.Graphics2D.UI
 			var dialog = (Dialog)w;
 			ConfirmKey = dialog.ConfirmKey;
 		}
-
 
 		/// <summary>
 		/// Creates a message box dialog with the specified title and content widget.

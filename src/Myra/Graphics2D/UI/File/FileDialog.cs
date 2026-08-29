@@ -191,6 +191,7 @@ namespace Myra.Graphics2D.UI.File
 		public FileDialog(FileDialogMode mode, Stylesheet stylesheet, string styleName = Stylesheet.DefaultStyleName) : base(stylesheet, null)
 		{
 			_mode = mode;
+			_stylesheet = stylesheet;
 
 			BuildUI(stylesheet);
 
@@ -247,8 +248,6 @@ namespace Myra.Graphics2D.UI.File
 			UpdateEnabled();
 
 			SetStyle(stylesheet, styleName);
-
-			_stylesheet = stylesheet;
 		}
 
 		/// <summary>

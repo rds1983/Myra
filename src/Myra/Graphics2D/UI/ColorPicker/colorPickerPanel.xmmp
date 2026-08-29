@@ -1,10 +1,10 @@
 <Project>
-  <Project.ExportOptions Namespace="Myra.Graphics2D.UI.ColorPicker" Class="ColorPickerPanel" OutputPath="D:\Projects\Myra\src\Myra\Graphics2D\UI\ColorPicker" />
+  <Project.ExportOptions Namespace="Myra.Graphics2D.UI.ColorPicker" Class="ColorPickerPanel" OutputPath="D:\Projects\Myra\src\Myra\Graphics2D\UI\ColorPicker" FieldsVisibility="Private" />
   <VerticalStackPanel Spacing="8">
     <HorizontalStackPanel Spacing="8">
       <Panel HorizontalAlignment="Left" VerticalAlignment="Top">
         <Image Id="_colorWheel" />
-        <Image Border="Black" BorderThickness="1" Padding="4" HorizontalAlignment="Center" VerticalAlignment="Center" Enabled="False" Background="White" Id="_hsPicker" />
+        <Image BorderThickness="1" Padding="4" HorizontalAlignment="Center" VerticalAlignment="Center" Enabled="False" Background="White" Border="Black" Id="_hsPicker" />
       </Panel>
       <VerticalSlider Id="_vPicker" />
       <Grid ColumnSpacing="8" RowSpacing="6" VerticalAlignment="Top" StackPanel.ProportionType="Fill">

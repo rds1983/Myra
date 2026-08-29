@@ -144,11 +144,13 @@ namespace Myra.Graphics2D.UI.ColorPicker
 		private ColorHSV colorHSV;
 
 		/// <summary>
-		/// Initializes a new instance of the ColorPickerPanel class.
+		/// Initializes a new instance of the <see cref="ColorPickerPanel"/> class with the specified stylesheet and style name.
 		/// </summary>
-		public ColorPickerPanel()
+		/// <param name="stylesheet">The stylesheet to use for applying the style.</param>
+		/// <param name="styleName">The name of the style to apply.</param>
+		public ColorPickerPanel(Stylesheet stylesheet, string styleName = Stylesheet.DefaultStyleName) : base(stylesheet, null)
 		{
-			BuildUI();
+			BuildUI(stylesheet);
 
 			// Users colors
 			for (int row = 0; row < Rows; ++row)
@@ -223,6 +225,14 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_vPicker.ValueChanged += (s, e) => VPickerMove();
 
 			OnColorChanged(Color.White);
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ColorPickerPanel"/> class with the specified style name.
+		/// </summary>
+		/// <param name="styleName">The name of the style to apply.</param>
+		public ColorPickerPanel(string styleName = Stylesheet.DefaultStyleName) : this(Stylesheet.Current, styleName)
+		{
 		}
 
 		private void _inputHEX_ValueChanging(object sender, ValueChangingEventArgs<string> e)
@@ -564,7 +574,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 		public void ApplyColorPickerDialogStyle(ColorPickerDialogStyle style)
 		{
 			ApplyStyle(style);
-			
+
 			foreach (var image in _userColorBackgrounds)
 			{
 				image.Renderable = style.CheckerBoard;
