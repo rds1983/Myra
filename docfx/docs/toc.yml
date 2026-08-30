@@ -52,8 +52,8 @@
   href: restyling-through-code.md
 - name: Restyling Through XML
   href: restyling-through-xml.md
-- name: Mixing Stylesheet
-  href: mixing-stylesheet.md
+- name: Mixing Stylesheets
+  href: mixing-stylesheets.md
 - name: Style Variants
   href: style-variants.md
 - name: TextBox and MonoGame TextInput

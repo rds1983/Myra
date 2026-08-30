@@ -11,7 +11,7 @@
     <FontStashSharpVersion>1.5.6</FontStashSharpVersion>
     <XNAssetsVersion>0.8.5</XNAssetsVersion>
     <MonoGameVersion>3.8.0.1641</MonoGameVersion>
-    <AppMonoGameVersion>3.8.4.1</AppMonoGameVersion>
+    <AppMonoGameVersion>3.8.5.1</AppMonoGameVersion>
     <StrideVersion>4.2.0.2067</StrideVersion>
     <AppTargetFramework>net8.0</AppTargetFramework>
   </PropertyGroup>
