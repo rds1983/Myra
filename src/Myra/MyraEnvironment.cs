@@ -14,6 +14,8 @@ using Myra.Events;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Myra.Graphics2D;
+
 
 #if MONOGAME
 using MonoGame.Framework.Utilities;
@@ -36,6 +38,19 @@ using Color = FontStashSharp.FSColor;
 
 namespace Myra
 {
+	/// <summary>
+	/// Specifies the texture filtering mode used during rendering.
+	/// </summary>
+	public enum TextureFiltering
+	{
+		/// <summary>Nearest neighbor filtering (fastest but less smooth).</summary>
+		Nearest,
+		/// <summary>Linear filtering (bilinear interpolation).</summary>
+		Linear,
+		/// <summary>Anisotropic filtering (highest quality).</summary>
+		Anisotropic
+	}
+
 	/// <summary>
 	/// Provides global configuration and utility methods for Myra UI framework.
 	/// </summary>
@@ -315,10 +330,22 @@ namespace Myra
 			return tooltip;
 		};
 
+		public static TextureFiltering ImageTextureFiltering { get; set; } = TextureFiltering.Nearest;
+		public static TextureFiltering TextTextureFiltering { get; set; } = TextureFiltering.Nearest;
+
 		/// <summary>
 		/// Gets or sets a value indicating whether text rendering should be smoothed (especially when scaling) at the cost of performance.
 		/// </summary>
-		public static bool SmoothText { get; set; }
+		[Obsolete("Use TextTextureFiltering")]
+		public static bool SmoothText
+		{
+			get => TextTextureFiltering == TextureFiltering.Linear;
+
+			set
+			{
+				TextTextureFiltering = value ? TextureFiltering.Linear : TextureFiltering.Nearest;
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets a value indicating whether modal dialogs should darken the background.

@@ -8,7 +8,7 @@ class Program
 	static void Main(string[] args)
 	{
 		AMBConfiguration.Logger = Console.WriteLine;
-		using (var game = new AllWidgetsGame())
+		using (var game = new ScalingGame())
 			game.Run();
 	}
 }

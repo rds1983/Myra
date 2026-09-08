@@ -7,7 +7,6 @@ using FontStashSharp.RichText;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using Myra.Events;
-using MonoGame.Utilities;
 
 
 #if MONOGAME || FNA
@@ -596,7 +595,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		public void RenderVisual()
 		{
-			var oldDeviceScissor = _renderContext.DeviceScissor;
+			var oldDeviceScissor = CrossEngineStuff.Scissor;
 
 			_renderContext.Begin();
 
@@ -633,14 +632,14 @@ namespace Myra.Graphics2D.UI
 					widget.Render(_renderContext);
 				}
 			}
-			
+
 #if DEBUG
 			RenderDebugInfo(_renderContext);
 #endif
-			
+
 			_renderContext.End();
 
-			_renderContext.DeviceScissor = oldDeviceScissor;
+			CrossEngineStuff.Scissor = oldDeviceScissor;
 		}
 
 		/// <summary>
@@ -680,7 +679,7 @@ namespace Myra.Graphics2D.UI
 			// Pass 5: Render all visible widgets to screen
 			RenderVisual();
 		}
-		
+
 		/// <summary>
 		/// Draws debug information on the screen.
 		/// This function can be called after the normal render procedures conclude

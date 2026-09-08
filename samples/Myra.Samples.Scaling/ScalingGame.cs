@@ -5,13 +5,13 @@ using System.Linq;
 
 namespace Myra.Samples;
 
-public class AllWidgetsGame : Game
+public class ScalingGame : Game
 {
 	private readonly GraphicsDeviceManager _graphics;
 	private Desktop _desktop;
 	private SpriteBatch _spriteBatch;
 
-	public AllWidgetsGame()
+	public ScalingGame()
 	{
 		_graphics = new GraphicsDeviceManager(this)
 		{
@@ -28,6 +28,8 @@ public class AllWidgetsGame : Game
 
 		MyraEnvironment.Game = this;
 		MyraEnvironment.EnableModalDarkening = true;
+		MyraEnvironment.ImageTextureFiltering = TextureFiltering.Linear;
+		MyraEnvironment.TextTextureFiltering = TextureFiltering.Linear;
 
 		//			Stylesheet.Current = DefaultAssets.DefaultStylesheet2X;
 
@@ -64,7 +66,7 @@ public class AllWidgetsGame : Game
 
 		var atlas = DefaultAssets.DefaultStylesheet.Fonts.First().Font.FontSystem.Atlases[0].Texture;
 
-		_spriteBatch.Draw(atlas, Vector2.Zero, Color.White);
+		// _spriteBatch.Draw(atlas, Vector2.Zero, Color.White);
 
 		_spriteBatch.End();
 	}

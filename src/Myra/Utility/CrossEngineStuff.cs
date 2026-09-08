@@ -16,6 +16,34 @@ namespace Myra.Utility
 {
 	internal static class CrossEngineStuff
 	{
+		public static Rectangle Scissor
+		{
+			get
+			{
+#if MONOGAME || FNA
+				var device = MyraEnvironment.GraphicsDevice;
+				return device.ScissorRectangle;
+#elif STRIDE
+				return MyraEnvironment.Game.GraphicsContext.CommandList.Scissor;
+#else
+				return _renderer.Scissor;
+#endif
+			}
+
+			set
+			{
+#if MONOGAME || FNA
+				var device = MyraEnvironment.GraphicsDevice;
+				device.ScissorRectangle = value;
+#elif STRIDE
+				Flush();
+				MyraEnvironment.Game.GraphicsContext.CommandList.SetScissorRectangle(value);
+#else
+				_renderer.Scissor = value;
+#endif
+			}
+		}
+
 		public static Point ViewSize
 		{
 			get
