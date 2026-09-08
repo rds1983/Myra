@@ -28,7 +28,7 @@ public class ScalingGame : Game
 
 		MyraEnvironment.Game = this;
 		MyraEnvironment.EnableModalDarkening = true;
-		MyraEnvironment.ImageTextureFiltering = TextureFiltering.Linear;
+		MyraEnvironment.ImageTextureFiltering = TextureFiltering.Nearest;
 		MyraEnvironment.TextTextureFiltering = TextureFiltering.Linear;
 
 		//			Stylesheet.Current = DefaultAssets.DefaultStylesheet2X;

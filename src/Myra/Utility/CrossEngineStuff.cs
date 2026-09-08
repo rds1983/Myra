@@ -26,7 +26,7 @@ namespace Myra.Utility
 #elif STRIDE
 				return MyraEnvironment.Game.GraphicsContext.CommandList.Scissor;
 #else
-				return _renderer.Scissor;
+				return MyraEnvironment.Platform.Renderer.Scissor;
 #endif
 			}
 
@@ -39,7 +39,7 @@ namespace Myra.Utility
 				Flush();
 				MyraEnvironment.Game.GraphicsContext.CommandList.SetScissorRectangle(value);
 #else
-				_renderer.Scissor = value;
+				MyraEnvironment.Platform.Renderer.Scissor = value;
 #endif
 			}
 		}

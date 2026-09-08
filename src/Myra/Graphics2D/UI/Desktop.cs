@@ -597,6 +597,8 @@ namespace Myra.Graphics2D.UI
 		{
 			var oldDeviceScissor = CrossEngineStuff.Scissor;
 
+			_renderContext.ImageTextureFiltering = MyraEnvironment.ImageTextureFiltering;
+			_renderContext.TextTextureFiltering = MyraEnvironment.TextTextureFiltering;
 			_renderContext.Begin();
 
 			// Set desktop-level transform (scale, rotation, translation)

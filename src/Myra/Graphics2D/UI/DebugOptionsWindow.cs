@@ -51,12 +51,6 @@ namespace Myra.Graphics2D.UI
 				MyraEnvironment.DisableClipping = _checkBoxDisableClipping.IsChecked;
 			};
 
-			_checkBoxSmoothText.IsChecked = MyraEnvironment.SmoothText;
-			_checkBoxSmoothText.IsCheckedChanged += (s, a) =>
-			{
-				MyraEnvironment.SmoothText = _checkBoxSmoothText.IsChecked;
-			};
-
 			_checkBoxDrawMouseHoveredWidgetInfo.IsChecked = MyraEnvironment.DrawMouseHoveredWidgetInfo;
 			_checkBoxDrawMouseHoveredWidgetInfo.IsCheckedChanged += (s, a) =>
 			{

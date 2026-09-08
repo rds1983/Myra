@@ -3,6 +3,7 @@ using FontStashSharp;
 using Myra.Utility;
 using FontStashSharp.RichText;
 
+
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,7 +18,6 @@ using Myra.Platform;
 using System.Numerics;
 using Texture2D = System.Object;
 using Color = FontStashSharp.FSColor;
-using Matrix = System.Numerics.Matrix3x2;
 #endif
 
 
@@ -135,6 +135,9 @@ namespace Myra.Graphics2D
 
 		public float Opacity { get; set; }
 
+		public TextureFiltering ImageTextureFiltering { get; set; }
+		public TextureFiltering TextTextureFiltering { get; set; }
+
 #if MONOGAME || FNA
 
 		private SDFTextBatch SDFTextBatch
@@ -193,7 +196,7 @@ namespace Myra.Graphics2D
 
 		public void Draw(Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color, float rotation, float depth = 0.0f)
 		{
-			SetState(ModeType.Sprite, MyraEnvironment.ImageTextureFiltering);
+			SetState(ModeType.Sprite, ImageTextureFiltering);
 
 			Vector2 sz;
 			if (sourceRectangle != null)
@@ -225,7 +228,7 @@ namespace Myra.Graphics2D
 
 		public void Draw(Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 scale, float depth = 0.0f)
 		{
-			SetState(ModeType.Sprite, MyraEnvironment.ImageTextureFiltering);
+			SetState(ModeType.Sprite, ImageTextureFiltering);
 
 			color = CrossEngineStuff.MultiplyColor(color, Opacity);
 			scale *= Transform.Scale;
@@ -405,7 +408,12 @@ namespace Myra.Graphics2D
 				null,
 				_uiRasterizerState);
 #else
-			_renderer.Begin(_textureFiltering);
+			if (_textureFiltering == null)
+			{
+				throw new Exception("TextureFiltering can'be null in Sprite mode.");
+			}
+
+			_renderer.Begin(_textureFiltering.Value);
 #endif
 		}
 
@@ -458,7 +466,7 @@ namespace Myra.Graphics2D
 			switch (font.FontRasterizationMode)
 			{
 				case FontRasterizationMode.Standard:
-					SetState(ModeType.Sprite, MyraEnvironment.TextTextureFiltering);
+					SetState(ModeType.Sprite, TextTextureFiltering);
 					break;
 				case FontRasterizationMode.SDF:
 					SetState(ModeType.SDF, null);

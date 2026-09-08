@@ -38,27 +38,6 @@ namespace Myra.Graphics2D.UI
 	{
 		private IImage[] _renderables = new IImage[WidgetVisualStateTotal];
 
-#if MONOGAME
-		private bool _isAnisotropicFiltering = false;
-
-		/// <summary>
-		/// Gets or sets a value indicating whether anisotropic filtering is applied to the image.
-		/// </summary>
-		[DefaultValue(false)]
-		public bool IsAnisotropicFiltering
-		{
-			get
-			{
-				return _isAnisotropicFiltering;
-			}
-			set
-			{
-				_isAnisotropicFiltering = value;
-				InvalidateMeasure();
-			}
-		}
-#endif
-
 		/// <summary>
 		/// Gets or sets the renderable to display in the image widget's normal state.
 		/// </summary>
@@ -194,6 +173,11 @@ namespace Myra.Graphics2D.UI
 		public ImageResizeMode ResizeMode { get; set; }
 
 		/// <summary>
+		/// Gets or sets the texture filtering override for this image, or null to use the global default.
+		/// </summary>
+		public TextureFiltering? TextureFiltering { get; set; }
+
+		/// <summary>
 		/// Measures the size required for the image, considering all image states (normal, over, pressed).
 		/// </summary>
 		/// <param name="availableSize">The available size for the image.</param>
@@ -242,13 +226,17 @@ namespace Myra.Graphics2D.UI
 				bounds.Height = (int)(bounds.Width * aspect);
 			}
 
-#if MONOGAME
-			context.SetAnisotropicFilteringMode(_isAnisotropicFiltering);
-#endif
+			var oldTextureFiltering = context.ImageTextureFiltering;
+			if (TextureFiltering != null)
+			{
+				context.ImageTextureFiltering = TextureFiltering.Value;
+			}
 			image.Draw(context, bounds, Color);
-#if MONOGAME
-			context.SetAnisotropicFilteringMode(false);
-#endif
+
+			if (TextureFiltering != null)
+			{
+				context.ImageTextureFiltering = oldTextureFiltering;
+			}
 		}
 
 		/// <summary>

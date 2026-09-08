@@ -51,6 +51,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.CustomWidgets.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.TextureAtlasViewer", "..\samples\Myra.Samples.TextureAtlasViewer\Myra.Samples.TextureAtlasViewer.csproj", "{1EBED21D-5997-F703-681E-3D4AC10B11C0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.Scaling.MonoGame", "..\samples\Myra.Samples.Scaling\Myra.Samples.Scaling.MonoGame.csproj", "{B5884E84-C88E-75F5-FA92-357A028D4830}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -149,6 +151,10 @@ Global
 		{1EBED21D-5997-F703-681E-3D4AC10B11C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1EBED21D-5997-F703-681E-3D4AC10B11C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1EBED21D-5997-F703-681E-3D4AC10B11C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5884E84-C88E-75F5-FA92-357A028D4830}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5884E84-C88E-75F5-FA92-357A028D4830}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5884E84-C88E-75F5-FA92-357A028D4830}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5884E84-C88E-75F5-FA92-357A028D4830}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -172,6 +178,7 @@ Global
 		{1D2546B8-ECB4-786C-1FA0-11F8AF5270A7} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{5B20CFF6-44F0-F0D7-A299-7DF86B8F6AE1} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 		{1EBED21D-5997-F703-681E-3D4AC10B11C0} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
+		{B5884E84-C88E-75F5-FA92-357A028D4830} = {EAB0AA24-7185-4897-A866-AE87AF3F2E0B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35ACDF4E-2CE2-46B1-A19F-35DC131069A1}

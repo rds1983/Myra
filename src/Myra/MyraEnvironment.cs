@@ -330,7 +330,13 @@ namespace Myra
 			return tooltip;
 		};
 
+		/// <summary>
+		/// Gets or sets the default texture filtering mode for images.
+		/// </summary>
 		public static TextureFiltering ImageTextureFiltering { get; set; } = TextureFiltering.Nearest;
+		/// <summary>
+		/// Gets or sets the default texture filtering mode for text.
+		/// </summary>
 		public static TextureFiltering TextTextureFiltering { get; set; } = TextureFiltering.Nearest;
 
 		/// <summary>

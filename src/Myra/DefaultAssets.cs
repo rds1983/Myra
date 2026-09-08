@@ -98,6 +98,9 @@ namespace Myra
 			}
 		}
 
+		/// <summary>
+		/// Resets all cached default assets, forcing them to be reloaded on next access.
+		/// </summary>
 		public static void Reset()
 		{
 			_defaultStylesheet = null;

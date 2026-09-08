@@ -1,6 +1,4 @@
-﻿using System;
-using FontStashSharp.RichText;
-
+﻿using FontStashSharp.RichText;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
