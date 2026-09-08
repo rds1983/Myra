@@ -69,7 +69,7 @@
             <Label Text="Horizontal Slider:" Grid.Row="6" />
             <HorizontalSlider Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="2" />
             <Label Text="Combo View:" Grid.Row="7" />
-            <ComboView Width="200" Grid.Column="1" Grid.Row="7" Grid.ColumnSpan="2">
+            <ComboView Width="200" Id="_combo" Grid.Column="1" Grid.Row="7" Grid.ColumnSpan="2">
               <Label Text="Red" TextColor="Red" />
               <Label Text="Green" TextColor="Lime" />
               <Label Text="Blue" TextColor="Blue" />

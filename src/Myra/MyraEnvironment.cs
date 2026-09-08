@@ -20,8 +20,7 @@ using MonoGame.Framework.Utilities;
 #endif
 
 #if FNA
-using static SDL2.SDL;
-using MouseCursor = System.Nullable<System.IntPtr>;
+using static SDL3.SDL;
 #endif
 
 #elif STRIDE
@@ -77,18 +76,18 @@ namespace Myra
 
 		private static readonly Dictionary<MouseCursorType, SDL_SystemCursor> _mouseCursors = new Dictionary<MouseCursorType, SDL_SystemCursor>
 		{
-			[MouseCursorType.Arrow] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_ARROW,
-			[MouseCursorType.IBeam] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_IBEAM,
+			[MouseCursorType.Arrow] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_DEFAULT,
+			[MouseCursorType.IBeam] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_TEXT,
 			[MouseCursorType.Wait] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_WAIT,
 			[MouseCursorType.Crosshair] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_CROSSHAIR,
-			[MouseCursorType.WaitArrow] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_WAITARROW,
-			[MouseCursorType.SizeNWSE] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_SIZENWSE,
-			[MouseCursorType.SizeNESW] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_SIZENESW,
-			[MouseCursorType.SizeWE] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_SIZEWE,
-			[MouseCursorType.SizeNS] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_SIZENS,
-			[MouseCursorType.SizeAll] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_SIZEALL,
-			[MouseCursorType.No] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_NO,
-			[MouseCursorType.Hand] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_HAND,
+			[MouseCursorType.WaitArrow] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_PROGRESS,
+			[MouseCursorType.SizeNWSE] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_NWSE_RESIZE,
+			[MouseCursorType.SizeNESW] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_NESW_RESIZE,
+			[MouseCursorType.SizeWE] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_EW_RESIZE,
+			[MouseCursorType.SizeNS] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_NS_RESIZE,
+			[MouseCursorType.SizeAll] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_MOVE,
+			[MouseCursorType.No] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_NOT_ALLOWED,
+			[MouseCursorType.Hand] = SDL_SystemCursor.SDL_SYSTEM_CURSOR_POINTER,
 		};
 #endif
 
@@ -149,7 +148,7 @@ namespace Myra
 				}
 
 				var mouseCursorPtr = GetSystemCursor(mouseCursor);
-				SDL2.SDL.SDL_SetCursor(mouseCursorPtr);
+				SDL_SetCursor(mouseCursorPtr);
 #elif PLATFORM_AGNOSTIC
 				Platform.SetMouseCursorType(value);
 #endif
