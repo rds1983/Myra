@@ -1,0 +1,28 @@
+<Project>
+  <Project.ExportOptions Namespace="Myra.Samples" Class="MainForm" OutputPath="D:\Projects\Myra\samples\Myra.Samples.Scaling" FieldsVisibility="Private" />
+  <VerticalStackPanel>
+    <ScrollViewer Id="_panelContainer" StackPanel.ProportionType="Fill" />
+    <HorizontalSeparator />
+    <HorizontalStackPanel Spacing="8">
+      <Grid ColumnSpacing="8" RowSpacing="8">
+        <Grid.DefaultRowProportion Type="Auto" />
+        <Grid.ColumnsProportions>
+          <Proportion Type="Auto" />
+          <Proportion Type="Fill" />
+        </Grid.ColumnsProportions>
+        <Label Text="Text Scaling:" />
+        <ComboView Id="_comboTextScaling" Grid.Column="1">
+          <Label Text="None" />
+          <Label Text="Supersampling" />
+          <Label Text="SDF" />
+        </ComboView>
+        <Label Text="Scale" VerticalAlignment="Center" Grid.Row="1" />
+        <HorizontalStackPanel Spacing="8" Grid.Column="1" Grid.Row="1">
+          <HorizontalSlider Minimum="0.2" Maximum="4" Value="1" Width="500" Id="_sliderScale" />
+          <Label Text="3" Id="_labelScale" />
+        </HorizontalStackPanel>
+      </Grid>
+      <PropertyGrid Id="_propertyGridParameters" />
+    </HorizontalStackPanel>
+  </VerticalStackPanel>
+</Project>

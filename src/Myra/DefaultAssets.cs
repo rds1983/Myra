@@ -98,10 +98,11 @@ namespace Myra
 			}
 		}
 
-		internal static void Dispose()
+		public static void Reset()
 		{
 			_defaultStylesheet = null;
 			_defaultStylesheet2x = null;
+			_debugFont = null;
 
 			if (_assetManager != null)
 			{

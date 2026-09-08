@@ -1087,7 +1087,6 @@ namespace Myra.Graphics2D.UI
 				if (ClipToBounds)
 				{
 					oldScissorRectangle = context.Scissor;
-
 					context.Scissor = scissorBounds;
 				}
 			}

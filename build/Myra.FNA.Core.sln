@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.6.11819.183 stable
+VisualStudioVersion = 18.6.11819.183
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{D17FD092-A553-4770-A7A5-822661193436}"
 EndProject
@@ -24,6 +24,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNAssets.FNA.Core", "..\..\XNAssets\src\XNAssets\XNAssets.FNA.Core.csproj", "{11F5497E-0369-6518-2932-1CBC719F9555}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNAssets.FontStashSharp.FNA.Core", "..\..\XNAssets\src\XNAssets.FontStashSharp\XNAssets.FontStashSharp.FNA.Core.csproj", "{B4DF4D50-A964-9562-86A1-5568854CF7DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.Scaling.FNA.Core", "..\samples\Myra.Samples.Scaling\Myra.Samples.Scaling.FNA.Core.csproj", "{D879B44C-C486-3C11-6E47-218796F25901}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,10 @@ Global
 		{B4DF4D50-A964-9562-86A1-5568854CF7DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4DF4D50-A964-9562-86A1-5568854CF7DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4DF4D50-A964-9562-86A1-5568854CF7DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D879B44C-C486-3C11-6E47-218796F25901}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D879B44C-C486-3C11-6E47-218796F25901}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D879B44C-C486-3C11-6E47-218796F25901}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D879B44C-C486-3C11-6E47-218796F25901}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +85,7 @@ Global
 		{D05855F7-6D79-4646-94D8-C17662F2E8AB} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{11F5497E-0369-6518-2932-1CBC719F9555} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{B4DF4D50-A964-9562-86A1-5568854CF7DE} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{D879B44C-C486-3C11-6E47-218796F25901} = {D17FD092-A553-4770-A7A5-822661193436}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A9C9D369-EE58-4E9D-B9FE-63023B644741}

@@ -340,7 +340,7 @@ namespace Myra
 		/// </summary>
 		public static void Reset()
 		{
-			DefaultAssets.Dispose();
+			DefaultAssets.Reset();
 			Stylesheet.Current = null;
 		}
 

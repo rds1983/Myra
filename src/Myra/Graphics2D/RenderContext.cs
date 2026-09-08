@@ -34,8 +34,10 @@ namespace Myra.Graphics2D
 		Nearest,
 		/// <summary>Linear filtering (bilinear interpolation).</summary>
 		Linear,
+#if MONOGAME
 		/// <summary>Anisotropic filtering (highest quality).</summary>
 		Anisotropic
+#endif
 	}
 
 	/// <summary>
@@ -115,6 +117,10 @@ namespace Myra.Graphics2D
 		private Rectangle _scissor;
 		private TextureFiltering _textureFiltering = TextureFiltering.Nearest;
 
+#if MONOGAME || FNA
+		private SDFTextBatch _sdfTextBatch;
+#endif
+
 		internal Transform Transform;
 
 #if MONOGAME
@@ -186,6 +192,21 @@ namespace Myra.Graphics2D
 		/// Gets or sets the opacity (alpha) value for rendering, ranging from 0.0 (fully transparent) to 1.0 (fully opaque).
 		/// </summary>
 		public float Opacity { get; set; }
+
+#if MONOGAME || FNA
+		private SDFTextBatch SDFTextBatch
+		{
+			get
+			{
+				if (_sdfTextBatch == null)
+				{
+					_sdfTextBatch = new SDFTextBatch(MyraEnvironment.GraphicsDevice);
+				}
+
+				return _sdfTextBatch;
+			}
+		}
+#endif
 
 		/// <summary>
 		/// Initializes a new instance of the RenderContext class.
@@ -483,7 +504,21 @@ namespace Myra.Graphics2D
 			rotation += Transform.Rotation;
 
 #if MONOGAME || FNA || STRIDE
+			if (richText.Font.FontRasterizationMode == FontRasterizationMode.Standard)
+			{
+				richText.Draw(_renderer, position, color, rotation, Vector2.Zero, scale, layerDepth, horizontalAlignment);
+			}
+			else
+			{
+#if MONOGAME || FNA
+				var sdfBatch = SDFTextBatch;
+				sdfBatch.Begin();
+				richText.Draw(sdfBatch, position, color, rotation, Vector2.Zero, scale, layerDepth, horizontalAlignment);
+				sdfBatch.End();
+#else
 			richText.Draw(_renderer, position, color, rotation, Vector2.Zero, scale, layerDepth, horizontalAlignment);
+#endif
+			}
 #else
 			if (_fontStashRenderer != null)
 			{
@@ -592,28 +627,20 @@ namespace Myra.Graphics2D
 			Begin();
 		}
 
-		private void ReleaseUnmanagedResources()
-		{
-#if MONOGAME || FNA || STRIDE
-			_renderer?.Dispose();
-#endif
-		}
-
 		/// <summary>
 		/// Disposes resources used by the RenderContext.
 		/// </summary>
 		public void Dispose()
 		{
-			ReleaseUnmanagedResources();
-			GC.SuppressFinalize(this);
-		}
+#if MONOGAME || FNA || STRIDE
+			_renderer?.Dispose();
+#endif
 
-		/// <summary>
-		/// Finalizer that releases unmanaged resources.
-		/// </summary>
-		~RenderContext()
-		{
-			ReleaseUnmanagedResources();
+#if MONOGAME || FNA
+			SDFTextBatch?.Dispose();
+#endif
+
+			GC.SuppressFinalize(this);
 		}
 	}
 }
