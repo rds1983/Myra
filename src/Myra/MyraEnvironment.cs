@@ -288,7 +288,7 @@ namespace Myra
 				_defaultAssetManager = value;
 			}
 		}
-		
+
 		/// <summary>
 		/// Gets or sets the delay in milliseconds before showing a tooltip.
 		/// </summary>

@@ -482,7 +482,7 @@ namespace Myra.Graphics2D.UI
 							throw ex.InnerException;
 						}
 
-						throw ex;
+						throw;
 					}
 				}
 			}

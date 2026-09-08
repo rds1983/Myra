@@ -691,7 +691,7 @@ namespace Myra.Graphics2D.UI
 		/// <param name="context">The current render context</param>
 		private void RenderDebugInfo(RenderContext context)
 		{
-			if (!MyraEnvironment.DrawMouseHoveredWidgetInfo || MousePosition == null)
+			if (!MyraEnvironment.DrawMouseHoveredWidgetInfo)
 			{
 				return;
 			}

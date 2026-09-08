@@ -72,7 +72,7 @@ namespace Myra.MML
 							throw ex.InnerException;
 						}
 
-						throw ex;
+						throw;
 					}
 				}
 				else if (AttachedProperty != null && obj is BaseObject)
