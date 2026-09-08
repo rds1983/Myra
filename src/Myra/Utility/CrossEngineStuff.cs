@@ -36,7 +36,6 @@ namespace Myra.Utility
 				var device = MyraEnvironment.GraphicsDevice;
 				device.ScissorRectangle = value;
 #elif STRIDE
-				Flush();
 				MyraEnvironment.Game.GraphicsContext.CommandList.SetScissorRectangle(value);
 #else
 				MyraEnvironment.Platform.Renderer.Scissor = value;

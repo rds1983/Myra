@@ -45,7 +45,7 @@ namespace Myra.Graphics2D
 #elif STRIDE
 		private static readonly RasterizerStateDescription _uiRasterizerState;
 
-		static RenderContext()
+		static Renderer()
 		{
 			var rs = new RasterizerStateDescription();
 			rs.SetDefault();
@@ -120,15 +120,14 @@ namespace Myra.Graphics2D
 					return;
 				}
 
-#if MONOGAME || FNA
 				Flush();
+
+#if MONOGAME || FNA
 				var device = _renderer.GraphicsDevice;
 				value.X += device.Viewport.X;
 				value.Y += device.Viewport.Y;
-#elif STRIDE
-				Flush();
-#else
 #endif
+
 				CrossEngineStuff.Scissor = value;
 			}
 		}

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);STRIDE</DefineConstants>
-    <TargetFramework>$(AppTargetFramework)</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <PackageId>Myra.Stride</PackageId>
     <AssemblyName>Myra</AssemblyName>
     <OutputPath>bin\Stride\$(Configuration)</OutputPath>
