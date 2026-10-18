@@ -51,9 +51,11 @@ namespace Myra.Graphics2D
 
 			static Renderer()
 			{
-				var rs = new RasterizerStateDescription();
-				rs.SetDefault();
-				rs.ScissorTestEnable = true;
+				var rs = new RasterizerStateDescription
+				{
+					ScissorTestEnable = true
+				};
+				
 				_uiRasterizerState = rs;
 			}
 #endif
